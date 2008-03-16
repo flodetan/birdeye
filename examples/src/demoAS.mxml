@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * The MIT License
+ *
+ * Copyright (c) 2008
+ * United Nations Office at Geneva
+ * Center for Advanced Visual Analytics
+ * http://cava.unog.ch
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ -->
+ 
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
+	xmlns:geomap="org.un.cava.birdeye.geo.views.maps.world.*">
+	
+	<mx:Script><![CDATA[
+		import org.un.cava.birdeye.geo.views.maps.usa.USStates;
+	import org.un.cava.birdeye.geo.views.maps.world.*;
+	import mx.controls.Alert;
+	import mx.events.ListEvent;
+	import mx.events.FlexEvent;
+	
+	private function init():void{
+		//Alert.show(typeOfProjection.selectedLabel);
+		//var test:WorldMap = new WorldMap();
+		//var test:AfricaMap=new AfricaMap();
+		//var test:NorthAmericaMap=new NorthAmericaMap();
+		//var test:SouthAmericaMap=new SouthAmericaMap();
+		//var test:AsiaMap=new AsiaMap();
+		//var test:OceaniaMap=new OceaniaMap();
+		//var test:AntarticaMap=new AntarticaMap();
+		//cnvstest.addChild(test);
+	}
+	
+	 [Bindable]
+        public var arrProjWorld:Array = new Array("Geographic", "Mollweide", "WinkelTripel", "Miller cylindrical","EckertIV","EckertVI","Goode","Robinson","Sinsoidal","Lambert equal area" );
+ 	[Bindable]
+        public var arrProjUSA:Array = new Array("Geographic");
+ 
+private function onLoadProgress(e:ProgressEvent):void{ 
+   progressBar.visible = true; 
+   //createMap();
+  //myProgress.setProgress(e.bytesLoaded, e.bytesTotal); 
+} 
+            
+private function onLoadComplete(e:*):void{ 
+  progressBar.visible = false; 
+}
+
+	private function buildMap(e:ListEvent):void{
+		progressBar.visible=true;
+		if(cmbRegion.selectedLabel=="World"){
+			
+			var test:WorldMap = new WorldMap();
+			test.projection=typeOfProjection.selectedLabel;
+		    map.removeAllChildren();
+		    map.addChild(test);
+		    
+		}else{
+			var test1:USStates = new USStates();
+			test1.projection=typeOfProjection.selectedLabel;
+		    map.removeAllChildren();
+		    map.addChild(test1);
+		}
+	    progressBar.visible=false;
+	}
+		
+	private function bindcomboBox(e:ListEvent):void{
+		if(e.currentTarget.selectedLabel=="World"){
+			
+			typeOfProjection.dataProvider=arrProjWorld;
+		}else{
+			typeOfProjection.dataProvider=arrProjUSA;
+		}
+	    progressBar.visible=false;
+	}
+		
+	
+	]]>
+</mx:Script>
+<mx:Style source="styles/main.css"/>
+<mx:Fade id="fadeOut" duration="1000" alphaFrom="1.0" alphaTo="0.0" />
+<mx:Fade id="fadeIn" duration="1000" alphaFrom="0.0" alphaTo="1.0"/>
+	
+<mx:VBox id="TP" top="50" left="50">
+<mx:HBox>
+<mx:Label text="Region:"/>
+<mx:ComboBox id="cmbRegion"  prompt="Select..." change="bindcomboBox(event)">
+        <mx:dataProvider>
+            <mx:Array>
+                <mx:Object label="World" />
+                <mx:Object label="USA" />
+            </mx:Array>
+        </mx:dataProvider>
+    </mx:ComboBox>
+<mx:Label text="Type of projection:"/>
+<mx:ComboBox id="typeOfProjection" prompt="Select..." change="buildMap(event)"/>
+</mx:HBox>
+<mx:ProgressBar id="progressBar" indeterminate="true" visible="false" />
+<mx:VBox id="map" >
+</mx:VBox>
+</mx:VBox> 
+</mx:Application>
