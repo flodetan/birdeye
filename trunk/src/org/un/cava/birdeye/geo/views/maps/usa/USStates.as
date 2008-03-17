@@ -28,16 +28,18 @@
 
 package org.un.cava.birdeye.geo.views.maps.usa
 {
-	import org.un.cava.birdeye.geo.dictionary.USARegionTypes;
 	import org.un.cava.birdeye.geo.core.GeoFrame;
+	import org.un.cava.birdeye.geo.dictionary.USARegionTypes;
 	/**
 	* View for US States map
 	**/
 	public class USStates extends GeoFrame
 	{
+		public var region:String;
 		public function USStates()
 		{
 			super(USARegionTypes.REGION_USA);
+			region=USARegionTypes.REGION_USA
 		}
 
 	}

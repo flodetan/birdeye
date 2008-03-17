@@ -27,6 +27,8 @@
 
 package org.un.cava.birdeye.geo.projections
 {
+	import org.un.cava.birdeye.geo.projections.world.*;
+	import org.un.cava.birdeye.geo.projections.usa.*;
 	import mx.controls.Alert;
 	[ExcludeClass]
 	/**
@@ -39,7 +41,7 @@ package org.un.cava.birdeye.geo.projections
 		public static function getData(proj:String, region:String):Object{
 			var GeoData:Object;
 			if(region=="World"){
-				import org.un.cava.birdeye.geo.projections.world.*;
+				
 				if(proj=="Geographic"){
 					GeoData = new org.un.cava.birdeye.geo.projections.world.Geographic();
 				}else if(proj=="Lambert equal area"){
@@ -66,7 +68,7 @@ package org.un.cava.birdeye.geo.projections
 					//GeoData = new WorldCountriesData();
 				}
 			}else if(region=="USA"){
-				import org.un.cava.birdeye.geo.projections.usa.*;
+				
 				if(proj=="Geographic"){
 					GeoData = new org.un.cava.birdeye.geo.projections.usa.Geographic();
 				}
