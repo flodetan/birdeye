@@ -270,10 +270,13 @@
 
 		<!-- Map Panel -->
 		<mx:Canvas id="mapCnvs" borderStyle="solid" borderColor="#CCCCCC" backgroundColor="#FFFFFF" width="100%" height="100%" verticalScrollPolicy="off" >		
-			<geomap:USStates id="map" projection="Geographic" x="100" y="50" scaleX="{zoomer.value}" scaleY="{zoomer.value}" >
-				<features:Features foid="CT" fillItem="0xFF0000" alpha="0.6" toolTip="USA" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
-				<features:Features foid="AK" fillItem="0xFFFF00" alpha="0.6" toolTip="FRA" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
-				<features:Features foid="TX" fillItem="0xAAAA00" alpha="0.6" toolTip="RUS" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
+			<geomap:USStates id="map" projection="Geographic" x="20" y="10" scaleX="{zoomer.value}" scaleY="{zoomer.value}" >
+				<features:Features foid="CT" fillItem="0x6699FF" alpha="0.6" toolTip="Connecticut" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
+				<features:Features foid="AK" fillItem="0xCCCCFF" alpha="0.6" toolTip="Alaska" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
+				<features:Features foid="TX" fillItem="0x3366CC" alpha="0.6" toolTip="Texas" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
+				<features:Features foid="CA" fillItem="0x003399" alpha="0.6" toolTip="California" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
+				<features:Features foid="VA" fillItem="0x336699" alpha="0.6" toolTip="Virginia" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
+				<features:Features foid="MN" fillItem="0x9999FF" alpha="0.6" toolTip="Minnesota" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
 			</geomap:USStates>
 			
 			<!-- Window shade -->
