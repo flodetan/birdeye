@@ -6,6 +6,8 @@ Component enabling users to create complex data visualization interfaces for the
 
 == Status ==
 
+Project is nearing version 1.0 and will be migrated to BirdEye shortly.
+
   * Project home: [http://code.google.com/p/flexvizgraphlib/ here]
   * Demonstration: [http://flexvizgraphlib.googlecode.com/svn/trunk/vgExplorer/bin/VGExplorer.html here]
   * Group: [http://groups.google.com/group/flexvizgraphlib here]
