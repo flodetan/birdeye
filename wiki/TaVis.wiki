@@ -1,4 +1,4 @@
-#summary Temporal Analysis
+#summary Temporal Analysis Component
 
 === Introduction ===
 
