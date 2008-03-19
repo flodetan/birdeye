@@ -5,3 +5,7 @@
 Component enabling users to create complex data visualization interfaces for the analysis of relational data sets such as social networks, organization trees, navigation systems, taxonomies, db schemas, and other link-based phenomena. The library is purposely extendable and provides for separation of base, interface, and layout code. Additional layout algorithms can be readily integrated as an extended class containing only the mathematical calculations and controls needed specifically for the layout.
 
 == Status ==
+
+  * Project home: [http://code.google.com/p/flexvizgraphlib/ here]
+  * Demonstration: [http://flexvizgraphlib.googlecode.com/svn/trunk/vgExplorer/bin/VGExplorer.html here]
+  * Group: [http://groups.google.com/group/flexvizgraphlib here]
