@@ -6,7 +6,7 @@ Rendering of vector-based maps with control and functions to facilitate analysis
 
 === Status ===
 
-Concept development (pre-Alpha): 19 March 2008
+Unstable: highly dynamic concept development (pre-Alpha): 19 March 2008
 
 === Explorer ===
 
