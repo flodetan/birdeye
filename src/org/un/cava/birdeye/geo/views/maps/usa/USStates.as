@@ -39,7 +39,7 @@ package org.un.cava.birdeye.geo.views.maps.usa
 		public function USStates()
 		{
 			super(USARegionTypes.REGION_USA);
-			region=USARegionTypes.REGION_USA
+			region=USARegionTypes.REGION_USA;
 		}
 
 	}

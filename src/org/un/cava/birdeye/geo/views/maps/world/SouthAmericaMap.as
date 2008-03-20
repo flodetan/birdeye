@@ -33,9 +33,11 @@ package org.un.cava.birdeye.geo.views.maps.world
 	
 	public class SouthAmericaMap extends GeoFrame
 	{
+		public var region:String;
 		public function SouthAmericaMap()
 		{
 			super(WorldRegionTypes.REGION_SOUTH_AMERICA);
+			region=WorldRegionTypes.REGION_SOUTH_AMERICA;
 		}
 	}
 }

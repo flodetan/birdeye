@@ -5,9 +5,11 @@ package org.un.cava.birdeye.geo.views.maps.world
 	
 	public class AntarticaMap extends GeoFrame
 	{
+		public var region:String;
 		public function AntarticaMap()
 		{
 			super(WorldRegionTypes.REGION_ANTARTICA);
+			region=WorldRegionTypes.REGION_ANTARTICA;
 		}
 	}
 }

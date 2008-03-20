@@ -172,7 +172,6 @@ package org.un.cava.birdeye.geo.core
 			getChildValues();
 
 			wcData = Projections.getData(_projection, _region);
-			
 			listOfCountry = wcData.getCountriesListByRegion(_region);
 			
 			surf=new Surface();
