@@ -30,22 +30,28 @@ package org.un.cava.birdeye.geo.dictionary
 	public class WorldCountries
 	{
 		import flash.utils.Dictionary;
+		import mx.controls.Alert;
 		
-		private var arrRegion:Array=[WorldRegionTypes.REGION_AFRICA, WorldRegionTypes.REGION_NORTH_AMERICA, WorldRegionTypes.REGION_SOUTH_AMERICA, WorldRegionTypes.REGION_ASIA, WorldRegionTypes.REGION_EUROPE, WorldRegionTypes.REGION_OCEANIA, WorldRegionTypes.REGION_WORLD];
-		private var arrSubRegion:Array=["Africa", "NorthAmerica", "SouthAmerica","Asia", "Europe", "Oceania", "World"];//"Antartica", 
+		private var arrRegion:Array=[WorldRegionTypes.REGION_AFRICA, WorldRegionTypes.REGION_NORTH_AMERICA, WorldRegionTypes.REGION_SOUTH_AMERICA, WorldRegionTypes.REGION_ASIA, WorldRegionTypes.REGION_EUROPE, WorldRegionTypes.REGION_OCEANIA, WorldRegionTypes.REGION_WORLD, WorldRegionTypes.REGION_CIS];
+		private var arrSubRegion:Array=[WorldRegionTypes.SUBREGION_NORTHAFRICA, WorldRegionTypes.SUBREGION_SUBSAHARA, WorldRegionTypes.SUBREGION_EASTERNASIA, WorldRegionTypes.SUBREGION_SOUTHERNASIA, WorldRegionTypes.SUBREGION_SOUTHEASTERNASIA, WorldRegionTypes.SUBREGION_WESTERNASIA];//"Antartica", 
 		
 		//Regions
 		private var arrWorld:Array=["ZWE","ZMB","ZAF","YEM","WSM","VUT","VNM","VIR","VGB","VEN","VCT","VAT","UZB","USA","URY","UKR","UGA","TZA","TWN","TUV","TUR","TUN","TTO","TON","TLS","TKM","TKL","TJK","THA","TGO","TCD","TCA","SYR","SYC","SWZ","SWE","SVN","SVK","SUR","STP","SRB","SOM","SMR","SLV","SLE","SLB","SJM","SGP","SEN","SDN","SAU","RWA","RUS","ROU","REU","QAT","PYF","PRY","PRT","PRK","PRI","POL","PNG","PLW","PHL","PER","PCN","PAN","PAK","OMN","NZL","NRU","NPL","NOR","NLD","NIU","NIC","NGA","NFK","NER","NCL","NAM","MYT","MYS","MWI","MUS","MTQ","MSR","MRT","MOZ","MNP","MNG","MNE","MMR","MLT","MLI","MKD","MHL","MEX","MDV","MDG","MDA","MCO","MAR","MAC","LVA","LUX","LTU","LSO","LKA","LIE","LCA","LBY","LBR","LBN","LAO","KWT","KOR","KNA","KIR","KHM","KGZ","KEN","KAZ","JPN","JOR","JAM","ITA","ISR","ISL","IRQ","IRN","IRL","IOT","IND","IMY","IDN","HUN","HTI","HRV","HND","HMD","HKG","GUY","GUM","GUF","GTM","GRL","GRD","GRC","GNQ","GNB","GMB","GLP","GIN","GIB","GHA","GEO","GBR","GAB","FSM","FRO","FRA","FLK","FJI","FIN","ETH","EST","ESP","ESH","ERI","EGY","ECU","DZA","DOM","DNK","DMA","DJI","DEU","CZE","CYP","CYM","CXR","CUB","CRI","CPV","COM","COL","COK","COG","COD","CMR","CIV","CHN","CHL","CHE","CCK","CAN","CAF","BWA","BVT","BTN","BRN","BRB","BRA","BOL","BMU","BLZ","BLR","BIH","BHS","BHR","BGR","BGD","BFA","BEN","BEL","BDI","AZE","AUT","AUS","ATG","ATF","ASM","ARM","ARG","ARE","ANT","AND","ALB","AIA","AGO","AFG","ABW"]
-		//private var arrWorld:Array=["AFG","ALB","DZA","ASM","AND","AGO","AIA","ATG","ARG","ARM","ABW","AUS","AUT","AZE","BHS","BHR","BGD","BRB","BLR","BEL","BLZ","BEN","BMU","BTN","BOL","BIH","BWA","BVT","BRA","IOT","BRN","BGR","BFA","BDI","KHM","CMR","CAN","CPV","CYM","CAF","TCD","CHL","CHN","CXR","CCK","COL","COM","COG","COK","CRI","CIV","HRV","CUB","CYP","CZE","DNK","DJI","DMA","DOM","TMP","ECU","EGY","SLV","GNQ","ERI","EST","ETH","FLK","FRO","FJI","FIN","FRA","FXX","GUF","PYF","GAB","GMB","GEO","DEU","GHA","GIB","GRC","GRL","GRD","GLP","GUM","GTM","GIN","GNB","GUY","HTI","HMD","HND","HKG","HUN","ISL","IND","IDN","IRN","IRQ","IRL","ISR","ITA","JAM","JPN","JOR","KAZ","KEN","KIR","PRK","KOR","KWT","KGZ","LAO","LVA","LBN","LSO","LBR","LBY","LIE","LTU","LUX","MKD","MAC","MDG","MWI","MYS","MDV","MLI","MLT","MHL","MTQ","MRT","MUS","MYT","MEX","FSM","MDA","MCO","MNG","MSR","MAR","MOZ","MMR","NAM","NRU","NPL","NLD","ANT","NCL","NZL","NIC","NER","NGA","NIU","NFK","MNP","NOR","OMN","PAK","PLW","PAN","PNG","PRY","PER","PHL","PCN","POL","PRT","PRI","QAT","REU","ROM","RUS","RWA","LCA","WSM","SMR","STP","SAU","SEN","SYC","SLE","SGP","SVK","SVN","SLB","SOM","ZAF","SGS","ESP","LKA","SHN","SPM","KNA","VCT","SDN","SUR","SJM","SWZ","SWE","CHE","SYR","TWN","TJK","TZA","THA","TGO","TKL","TON","TTO","TUN","TUR","TKM","TCA","TUV","UGA","UKR","ARE","GBR","USA","UMI","URY","UZB","VUT","VAT","VEN","VNM","VGB","VIR","WLF","ESH","YEM","YUG","ZAR","ZMB","ZWE"];//"ATA","ATF",
-		private var arrAfrica:Array=["DZA", "AGO", "BEN", "BWA", "BVT", "BFA", "BDI", "CMR", "CPV", "CAF", "TCD", "COM", "COG", "CIV", "DJI", "EGY", "GNQ", "ERI", "ETH", "GAB", "GMB", "GHA", "GIN", "GNB", "KEN", "LSO", "LBR", "LBY", "MDG", "MWI", "MLI", "MRT", "MUS", "MYT", "MAR", "MOZ", "NAM", "NER", "NGA", "PCN", "REU", "RWA", "STP", "SEN", "SYC", "SLE", "SOM", "ZAF", "SHN", "SDN", "SWZ", "TZA", "TGO", "TUN", "UGA", "ESH", "ZAR", "ZMB", "ZWE"];
-		private var arrAntartica:Array=["ATA","ATF"];
-		private var arrNorthAmerica:Array=["AIA", "ATG", "ABW", "BHS", "BRB", "BLZ", "BMU", "CAN", "CYM", "CRI", "CUB", "DMA", "DOM", "SLV", "GRD", "GLP", "GTM", "HTI", "HND", "JAM", "MTQ", "MEX", "NIC", "PAN", "PRI", "LCA", "SPM", "KNA", "VCT", "TCA", "USA", "UMI", "VGB", "VIR"];
-		private var arrSouthAmerica:Array=["ARG", "BOL", "BRA", "CHL", "COL", "ECU", "FLK", "GUF", "GUY", "MSR", "ANT", "PRY", "PER", "SGS", "SUR", "TTO", "URY", "VEN"];
-		private var arrAsia:Array=["AFG", "ASM", "BHR", "BGD", "BTN", "IOT", "BRN", "KHM", "CHN", "CXR", "CCK", "COK", "TMP", "FJI", "PYF", "GEO", "GUM", "HMD", "HKG", "IND", "IDN", "IRN", "IRQ", "ISR", "JPN", "JOR", "KAZ", "KIR", "PRK", "KOR", "KWT", "KGZ", "LAO", "LBN", "MAC", "MYS", "MDV", "MHL", "FSM", "MNG", "MMR", "NRU", "NPL", "NCL", "NIU", "NFK", "MNP", "OMN", "PAK", "PLW", "PNG", "PHL", "QAT", "RUS", "WSM", "SAU", "SGP", "SLB", "LKA", "SYR", "TWN", "TJK", "THA", "TKL", "TON", "TKM", "TUV", "ARE", "UZB", "VUT", "VNM", "WLF", "YEM"];
-		private var arrEurope:Array=["ALB", "AND", "ARM", "AUT", "AZE", "BLR", "BEL", "BIH", "BGR", "HRV", "CYP", "CZE", "DNK", "EST", "FRO", "FIN", "FRA", "FXX", "DEU", "GIB", "GRC", "GRL", "HUN", "ISL", "IRL", "ITA", "LVA", "LIE", "LTU", "LUX", "MKD", "MLT", "MDA", "MCO", "NLD", "NOR", "POL", "PRT", "ROM", "SMR", "SVK", "SVN", "ESP", "SJM", "SWE", "CHE", "TUR", "UKR", "GBR", "VAT", "YUG"];
+		private var arrAfrica:Array=["DZA", "AGO", "BEN", "BWA", "BVT", "BFA", "BDI", "CMR", "CPV", "CAF", "TCD", "COM", "COG", "CIV", "DJI", "EGY", "GNQ", "ERI", "ETH", "GAB", "GMB", "GHA", "GIN", "GNB", "KEN", "LSO", "LBR", "LBY", "MDG", "MWI", "MLI", "MRT", "MUS", "MYT", "MAR", "MOZ", "NAM", "NER", "NGA", "PCN", "REU", "RWA", "STP", "SEN", "SYC", "SLE", "SOM", "ZAF", "SDN", "SWZ", "TZA", "TGO", "TUN", "UGA", "ESH",  "ZMB", "ZWE"];//"SHN", "ZAR",
+		private var arrAntartica:Array=["ATF"];//"ATA",
+		private var arrNorthAmerica:Array=["AIA", "ATG", "ABW", "BHS", "BRB", "BLZ", "BMU", "CAN", "CYM", "CRI", "CUB", "DMA", "DOM", "SLV", "GRD", "GLP", "GTM", "HTI", "HND", "JAM", "MTQ", "MEX", "NIC", "PAN", "PRI", "LCA", "KNA", "VCT", "TCA", "USA", "VGB", "VIR"];//"SPM", "UMI", 
+		private var arrSouthAmerica:Array=["ARG", "BOL", "BRA", "CHL", "COL", "ECU", "FLK", "GUF", "GUY", "MSR", "ANT", "PRY", "PER", "SUR", "TTO", "URY", "VEN"];//"SGS", 
+		private var arrAsia:Array=["AFG", "ASM", "BHR", "BGD", "BTN", "IOT", "BRN", "KHM", "CHN", "CXR", "CCK", "COK", "FJI", "PYF", "GEO", "GUM", "HMD", "HKG", "IND", "IDN", "IRN", "IRQ", "ISR", "JPN", "JOR", "KAZ", "KIR", "PRK", "KOR", "KWT", "KGZ", "LAO", "LBN", "MAC", "MYS", "MDV", "MHL", "FSM", "MNG", "MMR", "NRU", "NPL", "NCL", "NIU", "NFK", "MNP", "OMN", "PAK", "PLW", "PNG", "PHL", "QAT", "RUS", "WSM", "SAU", "SGP", "SLB", "LKA", "SYR", "TWN", "TJK", "THA", "TKL", "TON", "TKM", "TUV", "ARE", "UZB", "VUT", "VNM", "YEM"];// "WLF", "TMP", 
+		private var arrEurope:Array=["ALB", "AND", "ARM", "AUT", "AZE", "BLR", "BEL", "BIH", "BGR", "HRV", "CYP", "CZE", "DNK", "EST", "FRO", "FIN", "FRA",  "DEU", "GIB", "GRC", "GRL", "HUN", "ISL", "IRL", "ITA", "LVA", "LIE", "LTU", "LUX", "MKD", "MLT", "MDA", "MCO", "NLD", "NOR", "POL", "PRT", "SMR", "SVK", "SVN", "ESP", "SJM", "SWE", "CHE", "TUR", "UKR", "GBR", "VAT"];//, "FXX","ROM", "YUG"
 		private var arrOceania:Array=["AUS","NZL"];
-		
+		private var arrCIS:Array=["ARM","AZE","BLR","GEO","KAZ","KGZ","MDA","RUS","TJK","UKR","UZB","TKM"];
 		//SubRegions
+		private var arrNorthAfrica:Array=["MAR","ESH","DZA","LBY","TUN","EGY"];
+		private var arrSubSahara:Array=["AGO", "BEN", "BWA", "BVT", "BFA", "BDI", "CMR", "CPV", "CAF", "TCD", "COM", "COG", "CIV", "DJI", "GNQ", "ERI", "ETH", "GAB", "GMB", "GHA", "GIN", "GNB", "KEN", "LSO", "LBR", "MDG", "MWI", "MLI", "MRT", "MUS", "MYT", "MOZ", "NAM", "NER", "NGA", "PCN", "REU", "RWA", "STP", "SEN", "SYC", "SLE", "SOM", "ZAF", "SDN", "SWZ", "TZA", "TGO", "UGA", "ZMB", "ZWE"];
+		private var arrEasternAsia:Array=["MNG","CHN","KOR","PRK"];
+		private var arrSouthernAsia:Array=["IND","NPL","BTN","BGD","PAK","AFG","IRN","LKA","MDV"];
+		private var arrSouthEasternAsia:Array=["MMR","THA","LAO","KHM","VNM","MYS","IDN","PHL"];
+		private var arrWesternAsia:Array=["TUR","IRQ","SYR","LBN","ISR","JOR","SAU","OMN","YEM","ARE","QAT","KWT","CYP"];
 		
 		private var dicCountriesNames:Dictionary= new Dictionary();
 		
@@ -324,6 +330,20 @@ package org.un.cava.birdeye.geo.dictionary
       			arrRet=arrEurope;
       		}else if(RegionKey=="Oceania"){
       			arrRet=arrOceania;
+      		}else if(RegionKey=="CIS"){
+      			arrRet=arrCIS;
+      		}else if(RegionKey=="NorthAfrica"){
+      			arrRet=arrNorthAfrica;
+      		}else if(RegionKey=="SubSahara"){
+      			arrRet=arrSubSahara;
+      		}else if(RegionKey=="EasternAsia"){
+      			arrRet=arrEasternAsia;
+      		}else if(RegionKey=="SouthernAsia"){
+      			arrRet=arrSouthernAsia;
+      		}else if(RegionKey=="SouthEasternAsia"){
+      			arrRet=arrSouthEasternAsia;
+      		}else if(RegionKey=="WesternAsia"){
+      			arrRet=arrWesternAsia;
       		}
       		return arrRet;
     	}

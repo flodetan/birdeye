@@ -40,8 +40,7 @@ package org.un.cava.birdeye.geo.projections
 	{
 		public static function getData(proj:String, region:String):Object{
 			var GeoData:Object;
-			if(region=="World"){
-				
+			if(region=="World" || region=="Africa" || region=="NorthAmerica" || region=="SouthAmerica" || region=="Asia" || region=="Europe" || region=="Oceania" || region=="Antartica" || region=="CIS" || region=="NorthAfrica" || region=="SubSahara" || region=="EasternAsia" || region=="SouthernAsia" || region=="SouthEasternAsia" || region=="WesternAsia"){
 				if(proj=="Geographic"){
 					GeoData = new org.un.cava.birdeye.geo.projections.world.Geographic();
 				}else if(proj=="Lambert equal area"){
@@ -72,6 +71,7 @@ package org.un.cava.birdeye.geo.projections
 				if(proj=="Geographic"){
 					GeoData = new org.un.cava.birdeye.geo.projections.usa.Geographic();
 				}
+			
 			}
 			return GeoData;
 		}

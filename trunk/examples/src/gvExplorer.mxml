@@ -38,14 +38,92 @@
 
 <mx:Script>
 	<![CDATA[
+		import mx.events.StateChangeEvent;
+		import mx.events.FlexEvent;
+		import mx.events.ChildExistenceChangedEvent;
+		import mx.events.ListEvent;
+		import mx.controls.Alert;
 		
+		import org.un.cava.birdeye.geo.views.maps.usa.*
+		import org.un.cava.birdeye.geo.views.maps.world.*
 		import org.un.cava.birdeye.geo.features.*
 		
+		[Bindable]
+        public var arrProjWorld:Array = new Array("Geographic", "Mollweide", "WinkelTripel", "Miller cylindrical","EckertIV","EckertVI","Goode","Robinson","Sinsoidal","Lambert equal area" );
+ 		[Bindable]
+        public var arrProjUSA:Array = new Array("Geographic");
+ 
+ 		private var myMap:Object;
+		
 		public function init():void{
-							
+						
 		}
 		
+		private function layout_Selected(e:ListEvent):void{
+			if(e.currentTarget.selectedLabel=="-- USA (States)"){
+				projectionSelector.dataProvider=arrProjUSA;
+			}else{
+				projectionSelector.dataProvider=arrProjWorld;
+			}
+			projectionSelector.selectedIndex=-1;		
+		}
 		
+		private function projection_Selected(e:ListEvent):void{
+			progressBar.visible=true;
+			mapCnvs.addEventListener(FlexEvent.UPDATE_COMPLETE, createNewMap);
+			mapCnvs.removeChild(mapCnvs.getChildByName("map"));
+			//createNewMap()
+		}
+		
+		private function createNewMap(event:FlexEvent):void{
+			
+			if (layoutSelector.selectedLabel=="World"){
+				myMap=new WorldMap();
+			}else if (layoutSelector.selectedLabel=="Africa"){
+				myMap=new AfricaMap();
+			}else if (layoutSelector.selectedLabel=="-- USA (States)"){
+				myMap=new USStates();
+			}else if (layoutSelector.selectedLabel=="North America"){
+				myMap=new NorthAmericaMap();
+			}else if (layoutSelector.selectedLabel=="South America"){
+				myMap=new SouthAmericaMap();
+			}else if (layoutSelector.selectedLabel=="Asia"){
+				myMap=new AsiaMap();
+			}else if (layoutSelector.selectedLabel=="Oceania"){
+				myMap=new OceaniaMap();
+			}else if (layoutSelector.selectedLabel=="Europe"){
+				myMap=new EuropeMap();
+			}else if (layoutSelector.selectedLabel=="CIS"){
+				myMap=new CISMap();
+			}else if (layoutSelector.selectedLabel=="-- North"){
+				myMap=new NorthAfricaMap();
+			}else if (layoutSelector.selectedLabel=="-- Sub-Saharan"){
+				myMap=new SubSaharaMap();
+			}else if (layoutSelector.selectedLabel=="-- Eastern"){
+				myMap=new EasternMap();
+			}else if (layoutSelector.selectedLabel=="-- Southern"){
+				myMap=new SouthernMap();
+			}else if (layoutSelector.selectedLabel=="-- South-eastern"){
+				myMap=new SouthEasternMap();
+			}else if (layoutSelector.selectedLabel=="-- Western"){
+				myMap=new WesternMap();
+			}
+			myMap.name="map";
+			myMap.projection=projectionSelector.selectedLabel;
+			myMap.x="10"; 
+			myMap.y="10"; 
+			myMap.scaleX=zoomer.value; 
+			myMap.scaleY=zoomer.value; 
+			mapCnvs.removeEventListener(FlexEvent.UPDATE_COMPLETE, createNewMap);
+			progressBar.visible=false;
+			mapCnvs.addChild((myMap as Canvas));
+		}
+		
+		private function changeSize():void{
+		 (myMap as Canvas).scaleX=zoomer.value;
+		 (myMap as Canvas).scaleY=zoomer.value;
+	  	}
+
 	]]>
 </mx:Script>
 <mx:Style source="styles/main.css" />
@@ -86,7 +164,7 @@
 								</mx:ComboBox>
 								<mx:HBox width="100%" >
 								<mx:Label text="Scale:" />
-								<mx:HSlider id="zoomer" value="0.9" minimum="0.8" maximum="2" />
+								<mx:HSlider id="zoomer" value="0.9" minimum="0.8" maximum="2" change="changeSize()" allowTrackClick="true"  />
 								</mx:HBox>
 								<mx:HBox width="100%" >
 								<mx:Label text="Nearest Neighbor" />
@@ -99,15 +177,15 @@
 							<flexlib:WindowShade id="layoutCnvs" styleName="linkButtonWindowShade" 
       							label="Layout" width="100%" opened="true" horizontalAlign="center" paddingBottom="5" >
 							<mx:VBox width="97%" horizontalAlign="center" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" borderColor="#666666" borderThickness="1" cornerRadius="5" borderStyle="solid" backgroundColor="#FFFFFF" backgroundAlpha=".8" >
-							<mx:HBox width="100%" >
+							<!--<mx:HBox width="100%" >
 								<mx:Label text="Base Map:" />
 								<mx:RadioButtonGroup id="baseMap" labelPlacement="right" />
 									<mx:RadioButton groupName="baseMap" id="worldRB" value="World" 
             							label="World" />
         							<mx:RadioButton groupName="baseMap" id="usaRB" value="USA" 
             							label="USA" selected="true" />
-        					</mx:HBox>
-							<mx:ComboBox id="layoutSelector" prompt="Select map..." width="95%" toolTip="Some layouts are under construction" >
+        					</mx:HBox>-->
+							<mx:ComboBox id="layoutSelector" prompt="Select map..." width="95%" toolTip="Some layouts are under construction" change="layout_Selected(event)" >
 								<mx:ArrayCollection>
 							         <mx:Object label="World" data="World" />
 							         <mx:Object label="Africa" data="Africa" />
@@ -126,9 +204,9 @@
 							         <mx:Object label="South America" data="SouthAmerica" />
 							     </mx:ArrayCollection>
 							</mx:ComboBox>
-							<mx:ComboBox id="projectionSelector" prompt="Select projection..." width="95%" toolTip="Set projection" >
+							<mx:ComboBox id="projectionSelector" prompt="Select projection..." width="95%" toolTip="Set projection" change="projection_Selected(event)" >
 								<mx:Array>
-                						<mx:Object label="Geographic" />
+                						<!--<mx:Object label="Geographic" />
                 						<mx:Object label="AlbertsEqualArea" />
                 						<mx:Object label="Mollweide" />
                 						<mx:Object label="WinkelTripel" />
@@ -138,7 +216,7 @@
                 						<mx:Object label="Goode" />
                 						<mx:Object label="LambertEqualArea" />
                 						<mx:Object label="Robinson" />
-                						<mx:Object label="Sinsoidal" />
+                						<mx:Object label="Sinsoidal" />-->
             					</mx:Array>
 								
 							</mx:ComboBox>	
@@ -269,8 +347,9 @@
 		</mx:HBox>
 
 		<!-- Map Panel -->
-		<mx:Canvas id="mapCnvs" borderStyle="solid" borderColor="#CCCCCC" backgroundColor="#FFFFFF" width="100%" height="100%" verticalScrollPolicy="off" >		
-			<geomap:USStates id="map" projection="Geographic" x="20" y="10" scaleX="{zoomer.value}" scaleY="{zoomer.value}" >
+		<mx:Canvas id="mapCnvs" borderStyle="solid" borderColor="#CCCCCC" backgroundColor="#FFFFFF" width="100%" height="100%" verticalScrollPolicy="off">		
+			<mx:ProgressBar id="progressBar" indeterminate="true" visible="false"/>
+			<geomap:USStates id="map" name="map" projection="Geographic" x="10" y="10" scaleX="{zoomer.value}" scaleY="{zoomer.value}" >
 				<features:Features foid="CT" fillItem="0x6699FF" alpha="0.6" toolTip="Connecticut" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
 				<features:Features foid="AK" fillItem="0xCCCCFF" alpha="0.6" toolTip="Alaska" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
 				<features:Features foid="TX" fillItem="0x3366CC" alpha="0.6" toolTip="Texas" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
@@ -278,7 +357,6 @@
 				<features:Features foid="VA" fillItem="0x336699" alpha="0.6" toolTip="Virginia" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
 				<features:Features foid="MN" fillItem="0x9999FF" alpha="0.6" toolTip="Minnesota" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
 			</geomap:USStates>
-			
 			<!-- Window shade -->
 			<mx:VBox width="100%" height="150" left="5" right="5" bottom="5" 
         	verticalAlign="top" horizontalAlign="center" horizontalScrollPolicy="off" verticalScrollPolicy="off">
@@ -288,6 +366,7 @@
             	
 			</mx:HBox>
         	</mx:VBox>
+			
 		</mx:Canvas>
 		<!-- End of Graph Panel -->
 	</mx:HBox>

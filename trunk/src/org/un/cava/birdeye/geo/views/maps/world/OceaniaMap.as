@@ -5,9 +5,11 @@ package org.un.cava.birdeye.geo.views.maps.world
 	
 	public class OceaniaMap extends GeoFrame
 	{
+		public var region:String;
 		public function OceaniaMap()
 		{
 			super(WorldRegionTypes.REGION_OCEANIA);
+			region=WorldRegionTypes.REGION_OCEANIA;
 		}
 	}
 }

@@ -33,9 +33,11 @@ package org.un.cava.birdeye.geo.views.maps.world
 	
 	public class WorldMap extends GeoFrame
 	{
+		public var region:String;
 		public function WorldMap()
 		{
 			super(WorldRegionTypes.REGION_WORLD);
+			region=WorldRegionTypes.REGION_WORLD;
 		}
 	}
 }

@@ -37,5 +37,13 @@ package org.un.cava.birdeye.geo.dictionary
 		public static var REGION_OCEANIA:String =  "Oceania";
 		public static var REGION_WORLD:String =  "World";
 		public static var REGION_ANTARTICA:String = "Antartica";
+		public static var REGION_CIS:String = "CIS";
+		
+		public static var SUBREGION_NORTHAFRICA:String = "NorthAfrica";
+      	public static var SUBREGION_SUBSAHARA:String = "SubSahara";
+      	public static var SUBREGION_EASTERNASIA:String = "EasternAsia";
+      	public static var SUBREGION_SOUTHERNASIA:String = "SouthernAsia";
+      	public static var SUBREGION_SOUTHEASTERNASIA:String = "SouthEasternAsia";
+      	public static var SUBREGION_WESTERNASIA:String = "WesternAsia";
 	}
 }
