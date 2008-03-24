@@ -1,5 +1,7 @@
 #summary General Utility Components.
 
+http://birdeye.googlecode.com/svn/trunk/images/BirdEyeLogoGuVis100.png
+
 = Introduction =
 
 = Details =
