@@ -2,6 +2,6 @@
 
 http://birdeye.googlecode.com/svn/trunk/images/BirdEyeLogoGuVis100.png
 
-= Introduction =
+=== Introduction ===
 
-= Details =
+=== Details ===
