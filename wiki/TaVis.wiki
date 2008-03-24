@@ -1,5 +1,4 @@
 #summary Temporal Analysis Components
-#labels Featured
 
 http://birdeye.googlecode.com/svn/trunk/images/BirdEyeLogoTaVis100.png
 
