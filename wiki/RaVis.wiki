@@ -1,4 +1,5 @@
 #summary Relational Analysis Components
+#labels Featured
 
 http://birdeye.googlecode.com/svn/trunk/images/BirdEyeLogoRaVis100.png
 
