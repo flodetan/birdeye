@@ -1,5 +1,7 @@
 #summary GeoSpatial Analysis Components
 
+http://birdeye.googlecode.com/svn/trunk/images/BirdEyeLogoGeoVis100.png
+
 === Introduction ===
 
 Rendering of vector-based maps with control and functions to facilitate analysis of geospatial data.
