@@ -4,7 +4,4 @@ http://birdeye.googlecode.com/svn/trunk/images/BirdEyeLogoQaVis100.png
 
 === Introduction ===
 
-
-
-
-=== Status ===
+=== Details ===
