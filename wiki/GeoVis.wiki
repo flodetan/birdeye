@@ -1,4 +1,5 @@
 #summary GeoSpatial Analysis Components
+#labels Featured
 
 http://birdeye.googlecode.com/svn/trunk/images/BirdEyeLogoGeoVis100.png
 
