@@ -1,4 +1,4 @@
-/* 
+/*  
  * The MIT License
  *
  * Copyright (c) 2008
@@ -28,12 +28,14 @@
 package org.un.cava.birdeye.geo.features
 {
 	import com.degrafa.GeometryGroup;
+	import com.degrafa.IGeometry;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.Path;
+	import com.degrafa.geometry.Polygon;
 	import com.degrafa.paint.*;
 	
+	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
-	import flash.geom.Matrix;
 	import flash.utils.*;
 	
 	import mx.containers.Canvas;
@@ -122,8 +124,17 @@ package org.un.cava.birdeye.geo.features
 			var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
 			var proj:String=(this.parent as dynamicClassRef).projection;
 			var region:String=(this.parent as dynamicClassRef).region;
+			//trace(GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName("CA")).geometryCollection.getItemAt(0).data)
+			var myCoo:IGeometry;
 			
 			GeoData=Projections.getData(proj,region);
+			if(GeoData.getCoordinates(foid)!=null){
+					if(isNaN(GeoData.getCoordinates(foid).substr(0,1))){
+						myCoo = Path(GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foid)).geometryCollection.getItemAt(0));
+					}else{
+						myCoo = Polygon(GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foid)).geometryCollection.getItemAt(0));
+					}	
+			}
 			
 			if(foid!=""){
 				if(getStyle("fillItem")){
@@ -141,48 +152,28 @@ package org.un.cava.birdeye.geo.features
 					}
 					stkItem= new SolidStroke(arrStrokeItem[0],arrStrokeItem[1],arrStrokeItem[2]);
 				}
-				var surf:Surface=new Surface();
-			    //surf.percentWidth=100; 
-				//surf.percentHeight=100;
-				surf.setStyle("verticalCenter",0);
-			    //surf.scaleX=2;
-			    //surf.scaleY=2;
-				var GPGeom:GeometryGroup=new GeometryGroup();
 				
-				// The equivalent of the svg transform for flash. This will apply the flip and reposition the item.
-				// taken from SVG as translate(0,174.8) scale(1, -1) and multiplied by 2 for magnification
-	    		// GPGeom.transform.matrix = new Matrix(GeoData.scaleX,0,0,GeoData.scaleY,GeoData.translateX,1*GeoData.translateY);
-				GPGeom.target=surf;
-				GPGeom.name=foid;
-				GPGeom.addEventListener(MouseEvent.MOUSE_OVER,handleMouseOverEvent);
-				//GPGeom.addEventListener(MouseEvent.MOUSE_OUT,handleMouseOutEvent);
-					
-				surf.graphicsCollection.addItem(GPGeom);
 				
-				var cntry:Path=new Path();
-				cntry.data=GeoData.getCoordinates(foid);
+							
 				if(getStyle("gradientItemFill")){
 					gradItemFill=getStyle("gradientItemFill");
 					if(gradItemFill.length!=0){
 						if(gradItemFill[2]==0){
-							cntry.fill=GeoStyles.setRadialGradient(gradItemFill);
+							myCoo.fill=GeoStyles.setRadialGradient(gradItemFill);
 						}else{
-							cntry.fill=GeoStyles.setLinearGradient(gradItemFill);
+							myCoo.fill=GeoStyles.setLinearGradient(gradItemFill);
 						}
 					}
 				}else{
 					if(colorItem){
-						cntry.fill=colorItem;
+						myCoo.fill=colorItem;
 					}
 				}
 				
 				if(stkItem){
-					cntry.stroke=stkItem;
+					myCoo.stroke=stkItem;
 				}
 				
-				GPGeom.geometryCollection.addItem(cntry);
-				GPGeom.draw(null,null);
-				this.addChild(surf);
 			}
         }
 		

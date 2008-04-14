@@ -35,7 +35,7 @@ package org.un.cava.birdeye.geo.dictionary
 		private var arrRegion:Array=[USARegionTypes.REGION_USA];
 		
 		//Regions
-		private var arrUSA:Array=["HI","AK","FL","SC","GA","AL","NC","TN","RI","CT","MA","ME","NH","VT","NY","NJ","PA","DE","MD","WV","KY","OH","MI","WY","MT","ID","WA","TX","CA","AZ","NV","UT","CO","NM","OR","ND","SD","NE","IA","MS","IN","IL","MN","WI","MO","AR","OK","KN","LA","VA","DC"];//"ATA","ATF",
+		private var arrUSA:Array=["HI","AK","FL","SC","GA","AL","NC","TN","RI","CT","MA","ME","NH","VT","NY","NJ","PA","DE","MD","WV","KY","OH","MI","WY","MT","ID","WA","TX","CA","AZ","NV","UT","CO","NM","OR","ND","SD","NE","IA","MS","IN","IL","MN","WI","MO","AR","OK","LA","VA","DC"];//"KN",
 		
 		//SubRegions
 		

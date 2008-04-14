@@ -1,4 +1,4 @@
-/* 
+/*  
  * The MIT License
  *
  * Copyright (c) 2008
@@ -27,6 +27,7 @@
 package org.un.cava.birdeye.geo.core
 {	
 	import com.degrafa.GeometryGroup;
+	import com.degrafa.IGeometry;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.Polygon;
@@ -36,12 +37,10 @@ package org.un.cava.birdeye.geo.core
 	import flash.utils.*;
 	
 	import mx.containers.Canvas;
-	import mx.controls.Alert;
 	
 	import org.un.cava.birdeye.geo.features.Features;
 	import org.un.cava.birdeye.geo.projections.Projections;
 	import org.un.cava.birdeye.geo.styles.GeoStyles;
-
 		
 	[Event(name="ItemClick", type="org.un.cava.birdeye.geo.events.GeoMapEvents")]
 	[Style(name="gradientFill",type="Array",format="Color",inherit="no")]
@@ -69,6 +68,8 @@ package org.un.cava.birdeye.geo.core
 		private var _geoGroup:Array;
 		private var _stroke:SolidStroke=new SolidStroke(0x000000,1,1);
 		private var _gradientFill:Array=new Array();
+		private var _scaleX:Number;
+		private var _scaleY:Number;
 		private var listOfCountry:Array=new Array();
     	private var arrChildColors:Dictionary=new Dictionary();
     	private var arrChildStrokes:Dictionary=new Dictionary();
@@ -93,27 +94,53 @@ package org.un.cava.birdeye.geo.core
 		
     	override public function set scaleX(value:Number):void
     	{
+    		_scaleX=value;
 			// Draw composite GeometryGroup collection 
 			for each (var gpGeom:GeometryGroup in _geoGroup)
 			{
 				gpGeom.scaleX = value;			
 			}
 			
+			if(surf!=null){
+				for (var n:int = 0; n<surf.numChildren; n++) 
+				{
+					surf.getChildAt(n).x=surf.getChildAt(n).x*value/surf.scaleX;
+					surf.getChildAt(n).scaleX=value;
+				}
+				surf.scaleX=value;
+			}
 			invalidateDisplayList();
+    	}
+    	
+    	//override public function get scaleX():Number
+    	override public function get scaleX():Number
+    	{
+				return _scaleX;
     	}
     	
     	override public function set scaleY(value:Number):void
     	{
+    		_scaleY=value;
 			// Draw composite GeometryGroup collection 
 			for each (var gpGeom:GeometryGroup in _geoGroup)
 			{
 				gpGeom.scaleY = value;
 			}
-			
+			if(surf!=null){
+				for (var n:int = 0; n<surf.numChildren; n++) 
+				{
+					surf.getChildAt(n).y=surf.getChildAt(n).y*value/surf.scaleY;
+					surf.getChildAt(n).scaleY=value;
+				}
+				surf.scaleY=value;
+			}
 			invalidateDisplayList();
     	}
     	
-    		
+    	override public function get scaleY():Number
+    	{
+				return _scaleY;
+    	}
     	/**
 		* The type of projection used to draw the map.  
 		* If not specified a default projection of "No projection" is used. 
@@ -127,6 +154,11 @@ package org.un.cava.birdeye.geo.core
 			_geoGroup = new Array();
 			
 			this.mouseEnabled=false;
+			//this.creationPolicy="queued";
+			/*this.verticalScrollPolicy="off";
+			this.horizontalScrollPolicy="off";
+			this.percentHeight=100;
+			this.percentWidth=100;*/
 		}
 
 		/**
@@ -176,11 +208,11 @@ package org.un.cava.birdeye.geo.core
 			
 			surf=new Surface();
 			surf.name="Surface";
-		    surf.percentWidth=100; 
-			surf.percentHeight=100;
-			surf.setStyle("verticalCenter",0);
-		    //surf.scaleX=2;
-		    //surf.scaleY=2;
+		    //surf.percentWidth=100; 
+			//surf.percentHeight=100;
+			//surf.setStyle("verticalCenter",0);
+		    //surf.scaleX=0.5;
+		    //surf.scaleY=0.5;
 
 			for each (var country:String in listOfCountry)
 			{
@@ -206,14 +238,19 @@ package org.un.cava.birdeye.geo.core
 					surf.graphicsCollection.addItem(countryGeom);
 					
 					//check if it is a path or a polygone
-					if(isNaN(wcData.getCoordinates(country).substr(0,1))){
-						var countryPath:Path = new Path();
+					var myCoo:IGeometry;
+					if(wcData.getCoordinates(country)!=null){
+						if(isNaN(wcData.getCoordinates(country).substr(0,1))){
+							myCoo = new Path();
+						}else{
+							myCoo = new Polygon();
+						}
 						
-						countryPath.data = wcData.getCoordinates(country);
+						myCoo.data = wcData.getCoordinates(country);
 						
 						if(arrChildStrokes[country]===undefined)
 						{
-							countryPath.stroke=_stroke;
+							myCoo.stroke=_stroke;
 						}
 						
 						
@@ -228,11 +265,11 @@ package org.un.cava.birdeye.geo.core
 									{
 										if(_gradientFill[2]==0)
 										{
-											countryPath.fill=GeoStyles.setRadialGradient(_gradientFill);
+											myCoo.fill=GeoStyles.setRadialGradient(_gradientFill);
 										}
 										else
 										{
-											countryPath.fill=GeoStyles.setLinearGradient(_gradientFill);
+											myCoo.fill=GeoStyles.setLinearGradient(_gradientFill);
 										}
 									}
 								}
@@ -240,54 +277,14 @@ package org.un.cava.birdeye.geo.core
 								{
 									if(_color)
 									{
-										countryPath.fill=_color;
+										myCoo.fill=_color;
 									}
 								}
 							}
 						}
 						
-						countryGeom.geometryCollection.addItem(countryPath);
-					}else{//It is a polygone
-						var countryPoly:Polygon = new Polygon();
-						
-						countryPoly.data = wcData.getCoordinates(country);
-						
-						if(arrChildStrokes[country]===undefined)
-						{
-							countryPoly.stroke=_stroke;
-						}
-						
-						
-						if(arrChildGradients[country]===undefined)
-						{
-							if(arrChildColors[country]===undefined)
-							{
-							
-								if(getStyle("gradientFill")){
-									_gradientFill=getStyle("gradientFill");
-									if(_gradientFill.length!=0)
-									{
-										if(_gradientFill[2]==0)
-										{
-											countryPoly.fill=GeoStyles.setRadialGradient(_gradientFill);
-										}
-										else
-										{
-											countryPoly.fill=GeoStyles.setLinearGradient(_gradientFill);
-										}
-									}
-								}
-								else
-								{
-									if(_color)
-									{
-										countryPoly.fill=_color;
-									}
-								}
-							}
-						}
-						
-						countryGeom.geometryCollection.addItem(countryPoly); 
+						countryGeom.geometryCollection.addItem(myCoo);
+					
 					}
 					_geoGroup.push(countryGeom);
 				}
@@ -312,6 +309,7 @@ package org.un.cava.birdeye.geo.core
 	     *  <code>scaleY</code> property of the component.
 		 * 
 		 */		
+		 
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
