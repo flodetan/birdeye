@@ -34,7 +34,7 @@
 	xmlns:degrafa="com.degrafa.*"
     xmlns:paint="com.degrafa.paint.*" xmlns:geometry="com.degrafa.geometry.*"
 	backgroundGradientColors="[#333333,#999999]" layout="vertical"
-	width="100%" height="100%" applicationComplete="init()">
+	width="100%" height="100%" applicationComplete="init()" xmlns:symbols="org.un.cava.birdeye.geo.symbols.*">
 
 <mx:Script>
 	<![CDATA[
@@ -43,7 +43,9 @@
 		import mx.events.ChildExistenceChangedEvent;
 		import mx.events.ListEvent;
 		import mx.controls.Alert;
-		
+		import mx.collections.ArrayCollection;
+
+
 		import org.un.cava.birdeye.geo.views.maps.usa.*
 		import org.un.cava.birdeye.geo.views.maps.world.*
 		import org.un.cava.birdeye.geo.features.*
@@ -109,6 +111,7 @@
 				myMap=new WesternMap();
 			}
 			myMap.name="map";
+			myMap.id="map";
 			myMap.projection=projectionSelector.selectedLabel;
 			myMap.x="10"; 
 			myMap.y="10"; 
@@ -120,9 +123,23 @@
 		}
 		
 		private function changeSize():void{
-		 (myMap as Canvas).scaleX=zoomer.value;
-		 (myMap as Canvas).scaleY=zoomer.value;
+			 if((myMap as Canvas)==null){
+			 	map.scaleX=zoomer.value;
+			 	map.scaleY=zoomer.value;
+			 }else{
+			 	(myMap as Canvas).scaleX=zoomer.value;
+			 	(myMap as Canvas).scaleY=zoomer.value;
+			 }
 	  	}
+		
+		[Bindable]
+	    public var expenses:ArrayCollection = new ArrayCollection([        {Expense: "Taxes", Amount: 2000},
+	        {Expense: "Rent", Amount: 1000},
+	        {Expense: "Bills", Amount: 100},
+	        {Expense: "Car", Amount: 450},
+	        {Expense: "Gas", Amount: 100},
+	        {Expense: "Food", Amount: 200}
+	    ]);
 
 	]]>
 </mx:Script>
@@ -347,15 +364,40 @@
 		</mx:HBox>
 
 		<!-- Map Panel -->
-		<mx:Canvas id="mapCnvs" borderStyle="solid" borderColor="#CCCCCC" backgroundColor="#FFFFFF" width="100%" height="100%" verticalScrollPolicy="off">		
-			<mx:ProgressBar id="progressBar" indeterminate="true" visible="false"/>
+		
+		<mx:Canvas id="mapCnvs" borderStyle="solid" borderColor="#CCCCCC" backgroundColor="#FFFFFF"  width="100%" height="100%" verticalScrollPolicy="off">		
+		<mx:ProgressBar id="progressBar" indeterminate="true" visible="false"/>
 			<geomap:USStates id="map" name="map" projection="Geographic" x="10" y="10" scaleX="{zoomer.value}" scaleY="{zoomer.value}" >
-				<features:Features foid="CT" fillItem="0x6699FF" alpha="0.6" toolTip="Connecticut" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
-				<features:Features foid="AK" fillItem="0xCCCCFF" alpha="0.6" toolTip="Alaska" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
-				<features:Features foid="TX" fillItem="0x3366CC" alpha="0.6" toolTip="Texas" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
-				<features:Features foid="CA" fillItem="0x003399" alpha="0.6" toolTip="California" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
-				<features:Features foid="VA" fillItem="0x336699" alpha="0.6" toolTip="Virginia" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
-				<features:Features foid="MN" fillItem="0x9999FF" alpha="0.6" toolTip="Minnesota" scaleX="{zoomer.value}" scaleY="{zoomer.value}" />
+				<features:Features foid="CT" fillItem="0x6699FF" alpha="0.6" toolTip="Connecticut"/>
+				<features:Features foid="AK" fillItem="0xCCCCFF" alpha="0.6" toolTip="Alaska" />
+				<features:Features foid="TX" fillItem="0xFFFFCC" alpha="0.6" toolTip="Texas"/>
+				<features:Features foid="CA" fillItem="0x003399" alpha="0.6" toolTip="California"/>
+				<features:Features foid="VA" fillItem="0x336699" alpha="0.6" toolTip="Virginia"/>
+				<features:Features foid="MN" fillItem="0x9999FF" alpha="0.6" toolTip="Minnesota"/>
+				<symbols:Symbols key="TX">
+					<mx:PieChart id="pie" width="150" height="150" dataProvider="{expenses}" showDataTips="true">
+			            <mx:series>
+			                <mx:PieSeries field="Amount" nameField="Expense"
+			                    labelPosition="callout"/>
+			            </mx:series>
+        			</mx:PieChart>
+			</symbols:Symbols>
+			<symbols:Symbols key="WI">
+					<mx:PieChart id="pie1" width="150" height="150" dataProvider="{expenses}" showDataTips="true">
+			            <mx:series>
+			                <mx:PieSeries field="Amount" nameField="Expense"
+			                    labelPosition="callout"/>
+			            </mx:series>
+        			</mx:PieChart>
+			</symbols:Symbols>
+			<symbols:Symbols key="WY">
+					<mx:PieChart id="pie2" width="150" height="150" dataProvider="{expenses}" showDataTips="true">
+			            <mx:series>
+			                <mx:PieSeries field="Amount" nameField="Expense"
+			                    labelPosition="callout"/>
+			            </mx:series>
+        			</mx:PieChart>
+			</symbols:Symbols>
 			</geomap:USStates>
 			<!-- Window shade -->
 			<mx:VBox width="100%" height="150" left="5" right="5" bottom="5" 
@@ -367,6 +409,7 @@
 			</mx:HBox>
         	</mx:VBox>
 			
+		
 		</mx:Canvas>
 		<!-- End of Graph Panel -->
 	</mx:HBox>
