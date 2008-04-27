@@ -29,12 +29,12 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:ui="ui.*"
 	xmlns:flexlib="http://code.google.com/p/flexlib/" 
-	xmlns:geomap="org.un.cava.birdeye.geo.views.maps.usa.*"
-	xmlns:features="org.un.cava.birdeye.geo.features.*"
-	xmlns:degrafa="com.degrafa.*"
-    xmlns:paint="com.degrafa.paint.*" xmlns:geometry="com.degrafa.geometry.*"
+	xmlns:geomap="org.un.cava.birdeye.geovis.views.maps.usa.*"
+	xmlns:features="org.un.cava.birdeye.geovis.features.*"
+	xmlns:symbols="org.un.cava.birdeye.geovis.symbols.*"
+	xmlns:sparks="org.un.cava.birdeye.qavis.sparklines.*"
 	backgroundGradientColors="[#333333,#999999]" layout="vertical"
-	width="100%" height="100%" applicationComplete="init()" xmlns:symbols="org.un.cava.birdeye.geo.symbols.*">
+	width="100%" height="100%" applicationComplete="init()" >
 
 <mx:Script>
 	<![CDATA[
@@ -45,12 +45,12 @@
 		import mx.controls.Alert;
 		import mx.collections.ArrayCollection;
 
-
-		import org.un.cava.birdeye.geo.views.maps.usa.*
-		import org.un.cava.birdeye.geo.views.maps.world.*
-		import org.un.cava.birdeye.geo.features.*
-		
-		[Bindable]
+		import org.un.cava.birdeye.geovis.views.maps.usa.*
+		import org.un.cava.birdeye.geovis.views.maps.world.*
+		import org.un.cava.birdeye.geovis.features.*
+		import org.un.cava.birdeye.qavis.sparklines.*
+		 
+		[Bindable] 
         public var arrProjWorld:Array = new Array("Geographic", "Mollweide", "WinkelTripel", "Miller cylindrical","EckertIV","EckertVI","Goode","Robinson","Sinsoidal","Lambert equal area" );
  		[Bindable]
         public var arrProjUSA:Array = new Array("Geographic");
@@ -79,44 +79,44 @@
 		
 		private function createNewMap(event:FlexEvent):void{
 			
-			if (layoutSelector.selectedLabel=="World"){
+			if (layoutWorldSelector.selectedLabel=="World"){
 				myMap=new WorldMap();
-			}else if (layoutSelector.selectedLabel=="Africa"){
+			}else if (layoutWorldSelector.selectedLabel=="Africa"){
 				myMap=new AfricaMap();
-			}else if (layoutSelector.selectedLabel=="-- USA (States)"){
+			}else if (layoutWorldSelector.selectedLabel=="-- USA (States)"){
 				myMap=new USStates();
-			}else if (layoutSelector.selectedLabel=="North America"){
+			}else if (layoutWorldSelector.selectedLabel=="North America"){
 				myMap=new NorthAmericaMap();
-			}else if (layoutSelector.selectedLabel=="South America"){
+			}else if (layoutWorldSelector.selectedLabel=="South America"){
 				myMap=new SouthAmericaMap();
-			}else if (layoutSelector.selectedLabel=="Asia"){
+			}else if (layoutWorldSelector.selectedLabel=="Asia"){
 				myMap=new AsiaMap();
-			}else if (layoutSelector.selectedLabel=="Oceania"){
+			}else if (layoutWorldSelector.selectedLabel=="Oceania"){
 				myMap=new OceaniaMap();
-			}else if (layoutSelector.selectedLabel=="Europe"){
+			}else if (layoutWorldSelector.selectedLabel=="Europe"){
 				myMap=new EuropeMap();
-			}else if (layoutSelector.selectedLabel=="CIS"){
+			}else if (layoutWorldSelector.selectedLabel=="CIS"){
 				myMap=new CISMap();
-			}else if (layoutSelector.selectedLabel=="-- North"){
+			}else if (layoutWorldSelector.selectedLabel=="-- North"){
 				myMap=new NorthAfricaMap();
-			}else if (layoutSelector.selectedLabel=="-- Sub-Saharan"){
+			}else if (layoutWorldSelector.selectedLabel=="-- Sub-Saharan"){
 				myMap=new SubSaharaMap();
-			}else if (layoutSelector.selectedLabel=="-- Eastern"){
+			}else if (layoutWorldSelector.selectedLabel=="-- Eastern"){
 				myMap=new EasternMap();
-			}else if (layoutSelector.selectedLabel=="-- Southern"){
+			}else if (layoutWorldSelector.selectedLabel=="-- Southern"){
 				myMap=new SouthernMap();
-			}else if (layoutSelector.selectedLabel=="-- South-eastern"){
+			}else if (layoutWorldSelector.selectedLabel=="-- South-eastern"){
 				myMap=new SouthEasternMap();
-			}else if (layoutSelector.selectedLabel=="-- Western"){
+			}else if (layoutWorldSelector.selectedLabel=="-- Western"){
 				myMap=new WesternMap();
 			}
 			myMap.name="map";
 			myMap.id="map";
 			myMap.projection=projectionSelector.selectedLabel;
 			myMap.x="10"; 
-			myMap.y="10"; 
-			myMap.scaleX=zoomer.value; 
-			myMap.scaleY=zoomer.value; 
+			myMap.y="100"; 
+			myMap.scaleX=0.9; 
+			myMap.scaleY=0.9; 
 			mapCnvs.removeEventListener(FlexEvent.UPDATE_COMPLETE, createNewMap);
 			progressBar.visible=false;
 			mapCnvs.addChild((myMap as Canvas));
@@ -131,16 +131,23 @@
 			 	(myMap as Canvas).scaleY=zoomer.value;
 			 }
 	  	}
-		
-		[Bindable]
-	    public var expenses:ArrayCollection = new ArrayCollection([        {Expense: "Taxes", Amount: 2000},
-	        {Expense: "Rent", Amount: 1000},
-	        {Expense: "Bills", Amount: 100},
-	        {Expense: "Car", Amount: 450},
-	        {Expense: "Gas", Amount: 100},
-	        {Expense: "Food", Amount: 200}
-	    ]);
+			    
+	    	[Bindable] 
+	    	private var sales1:ArrayCollection = new ArrayCollection( [
+	            { media: "CD", unit1: 1000000, unit2: 600000, unit3: 40000, unit4: 200000 },
+	            { media: "Ringtones", unit1: 500000, unit2: 1000000, unit3: 800000, unit4: 30000},
+	            { media: "MP3", unit1: 2000000, unit2: 1500000, unit3: 800000, unit4: 200000 },
+	            { media: "Tapes", unit1: 750000, unit2: 200000, unit3: 1500000, unit4: 900000 } ]);
+            [Bindable] 
+			private var gradColors:Array = [
+				[0x6959cd, 0x473c8b],
+				[0x3a5fcd, 0x27408b],
+				[0xffff00, 0xffd700],
+				[0xcd2626, 0x8b1a1a],
+				[0xcd1076, 0x8b0a50],
+				[0x7d26cd, 0x551a8b]];
 
+			
 	]]>
 </mx:Script>
 <mx:Style source="styles/main.css" />
@@ -149,11 +156,15 @@
 	<mx:WipeLeft id="wipeLeft" duration="1000" />
 	<mx:WipeRight id="wipeRight" duration="1000" />
 	
-	<mx:VBox width="100%" height="100%" verticalGap="10" >
-	<mx:ApplicationControlBar width="100%" height="45" >
-		<mx:VBox width="100%" paddingLeft="5" paddingRight="5" >
-			<mx:Label text="GeoVis Explorer" fontWeight="bold" color="#FFFFFF" fontSize="16" />
-		</mx:VBox>
+	
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+		
+	<mx:VBox width="1024" height="100%" verticalGap="10" >
+	<mx:ApplicationControlBar width="100%" height="85" >
+		<mx:HBox width="100%" verticalAlign="middle" paddingLeft="5" paddingRight="5" >
+			<mx:Image source="assets/icons/BirdEyeLogoGeoVis75.png" />
+			<mx:Label text="BIRDEYE: GeoVis Explorer" color="#FFFFFF" fontSize="16" />
+			</mx:HBox>
 	</mx:ApplicationControlBar>	
 	
 	<mx:HBox id="DivNavRB" width="100%" height="100%" paddingBottom="5" horizontalGap="5">
@@ -173,19 +184,30 @@
 							<mx:VBox width="97%" horizontalAlign="center" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" borderColor="#666666" borderThickness="1" cornerRadius="5" borderStyle="solid" backgroundColor="#FFFFFF" backgroundAlpha=".8" >
 							<mx:ComboBox id="zoomSelector" prompt="Select zoom focus..." width="95%" toolTip="Some layouts are under construction" >
 									<mx:ArrayCollection>
-										<mx:String>World</mx:String>
-										<mx:String>---Regions---</mx:String>
-										<mx:String>Africa</mx:String>
-										<mx:String>SingleCycleCircle</mx:String>
-									</mx:ArrayCollection>
+									 <mx:Object label="World" data="World" />
+							         <mx:Object label="Africa" data="Africa" />
+							         <mx:Object label="-- North" data="North" />
+							         <mx:Object label="-- Sub-Saharan" data="Sub-Sahara" />
+							         <mx:Object label="Asia" data="Asia" />
+							         <mx:Object label="-- Eastern" data="Eastern" />
+							         <mx:Object label="-- Southern" data="Southern" />
+							         <mx:Object label="-- South-eastern" data="South-eastern" />
+							         <mx:Object label="-- Western" data="Western" />
+							         <mx:Object label="CIS" data="CIS" />
+							         <mx:Object label="Europe" data="Europe" />
+							         <mx:Object label="North America" data="NorthAmerica" />
+							         <mx:Object label="-- USA (States)" data="USStates" />
+							         <mx:Object label="Oceania" data="Oceania" />
+							         <mx:Object label="South America" data="SouthAmerica" />
+							     	</mx:ArrayCollection>
 								</mx:ComboBox>
 								<mx:HBox width="100%" >
 								<mx:Label text="Scale:" />
 								<mx:HSlider id="zoomer" value="0.9" minimum="0.8" maximum="2" change="changeSize()" allowTrackClick="true"  />
 								</mx:HBox>
 								<mx:HBox width="100%" >
-								<mx:Label text="Nearest Neighbor" />
-								<mx:HSlider  />
+								<mx:Label text="Nearest Neighbor"  />
+								<mx:HSlider id="nearestNeighbor" tickInterval="1" snapInterval="1" value="2" minimum="1" maximum="3"  allowTrackClick="true" />
 								</mx:HBox>
 							</mx:VBox>
 							</flexlib:WindowShade>
@@ -194,15 +216,15 @@
 							<flexlib:WindowShade id="layoutCnvs" styleName="linkButtonWindowShade" 
       							label="Layout" width="100%" opened="true" horizontalAlign="center" paddingBottom="5" >
 							<mx:VBox width="97%" horizontalAlign="center" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" borderColor="#666666" borderThickness="1" cornerRadius="5" borderStyle="solid" backgroundColor="#FFFFFF" backgroundAlpha=".8" >
-							<!--<mx:HBox width="100%" >
+							<mx:HBox width="100%" >
 								<mx:Label text="Base Map:" />
 								<mx:RadioButtonGroup id="baseMap" labelPlacement="right" />
 									<mx:RadioButton groupName="baseMap" id="worldRB" value="World" 
             							label="World" />
         							<mx:RadioButton groupName="baseMap" id="usaRB" value="USA" 
             							label="USA" selected="true" />
-        					</mx:HBox>-->
-							<mx:ComboBox id="layoutSelector" prompt="Select map..." width="95%" toolTip="Some layouts are under construction" change="layout_Selected(event)" >
+        					</mx:HBox>
+							<mx:ComboBox id="layoutWorldSelector" prompt="Select map..." width="95%" toolTip="Select region" change="layout_Selected(event)" >
 								<mx:ArrayCollection>
 							         <mx:Object label="World" data="World" />
 							         <mx:Object label="Africa" data="Africa" />
@@ -219,6 +241,25 @@
 							         <mx:Object label="-- USA (States)" data="USStates" />
 							         <mx:Object label="Oceania" data="Oceania" />
 							         <mx:Object label="South America" data="SouthAmerica" />
+							     </mx:ArrayCollection>
+							</mx:ComboBox>
+							<mx:ComboBox id="layoutUSASelector" prompt="Select map..." width="95%" toolTip="Select region" change="layout_Selected(event)" >
+								<mx:ArrayCollection>
+							         <mx:Object label="USA (OCONUS)" data="OCONUS" />
+							         <mx:Object label="USA (CONUS)" data="CONUS" />
+							         <mx:Object label="Northeast" data="Northeast" />
+							         <mx:Object label="-- New England" data="NewEngland" />
+							         <mx:Object label="-- Middle Atlantic" data="MiddleAtlantic" />
+							         <mx:Object label="Midwest" data="Midwest" />
+							         <mx:Object label="-- East North Central" data="EastNorthCentral" />
+							         <mx:Object label="-- West North Central" data="WestNorthCentral" />
+							         <mx:Object label="South" data="South" />
+							         <mx:Object label="-- South Atlantic" data="SouthAtlantic" />
+							         <mx:Object label="-- East South Central" data="EastSouthCentral" />
+							         <mx:Object label="-- West South Central" data="WestSouthCentral" />
+							         <mx:Object label="West" data="West" />
+							         <mx:Object label="-- Mountain" data="Mountain" />
+							         <mx:Object label="-- Pacific" data="Pacific" />
 							     </mx:ArrayCollection>
 							</mx:ComboBox>
 							<mx:ComboBox id="projectionSelector" prompt="Select projection..." width="95%" toolTip="Set projection" change="projection_Selected(event)" >
@@ -251,7 +292,15 @@
 										<mx:String>Y</mx:String>
 										<mx:String>Z</mx:String>
 									</mx:ArrayCollection>
-							</mx:ComboBox>	
+							</mx:ComboBox>
+							<mx:ComboBox id="colorBrewerSelector" height="20" width="95%" prompt="Color scheme..." toolTip="Select the orientation of tree layout" >
+									<mx:ArrayCollection>
+										<mx:String>Sequential</mx:String>
+										<mx:String>Qualitative</mx:String>
+										<mx:String>Diverging</mx:String>
+									</mx:ArrayCollection>
+							</mx:ComboBox>
+							<mx:CheckBox label="Color Range Control" />	
 							</mx:VBox>
 							</flexlib:WindowShade>
 							
@@ -259,7 +308,7 @@
 							<flexlib:WindowShade id="symbolsCnvs" styleName="linkButtonWindowShade" 
       							label="Symbols" width="100%" opened="true" horizontalAlign="center" paddingBottom="5" >
 							<mx:VBox width="97%" horizontalAlign="center" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" borderColor="#666666" borderThickness="1" cornerRadius="5" borderStyle="solid" backgroundColor="#FFFFFF" backgroundAlpha=".8" >
-							<mx:ComboBox id="symbolSelector" height="20" width="95%" prompt="Add Symbols..." toolTip="Select the orientation of tree layout" >
+							<mx:ComboBox id="symbolTypeSelector" height="20" width="95%" prompt="Add Symbols..." toolTip="Select the orientation of tree layout" >
 									<mx:ArrayCollection>
 										<mx:String>Bubble</mx:String>
 										<mx:String>Chart</mx:String>
@@ -267,22 +316,30 @@
 										<mx:String>Glyph</mx:String>
 									</mx:ArrayCollection>
 							</mx:ComboBox>	
+							<mx:ComboBox id="symbolFieldSelector" height="20" width="95%" prompt="Based on..." toolTip="Select the orientation of tree layout" >
+									<mx:ArrayCollection>
+										<mx:String>X</mx:String>
+										<mx:String>Y</mx:String>
+										<mx:String>Z</mx:String>
+									</mx:ArrayCollection>
+							</mx:ComboBox>	
 							</mx:VBox>
 							</flexlib:WindowShade>
 							
 							<!-- Surrounds Styles -->
 							<flexlib:WindowShade id="surroundsCnvs" styleName="linkButtonWindowShade" 
-      							label="Surrounds" width="100%" opened="true" horizontalAlign="center" paddingBottom="5" >
-							<mx:VBox width="97%" horizontalAlign="left" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" borderColor="#666666" borderThickness="1" cornerRadius="5" borderStyle="solid" backgroundColor="#FFFFFF" backgroundAlpha=".8" >
-							<mx:CheckBox label="Show Legend" />
-							<mx:CheckBox label="Show Grid" />
-							<mx:CheckBox label="Show Scale" />
-							</mx:VBox>
+      							label="Surrounds" width="100%" opened="false" horizontalAlign="center" paddingBottom="5" >
+							<mx:HBox width="97%" horizontalAlign="left" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" borderColor="#666666" borderThickness="1" cornerRadius="5" borderStyle="solid" backgroundColor="#FFFFFF" backgroundAlpha=".8" >
+							<mx:CheckBox label="Title" />
+							<mx:CheckBox label="Legend" />
+							<mx:CheckBox label="Grid" />
+							<mx:CheckBox label="Scale" />
+							</mx:HBox>
 							</flexlib:WindowShade>
 							
 							<!-- View Controls -->
 							<flexlib:WindowShade id="viewCnvs" styleName="linkButtonWindowShade" 
-      							label="View" width="100%" opened="true" horizontalAlign="center" paddingBottom="5" >
+      							label="View" width="100%" opened="false" horizontalAlign="center" paddingBottom="5" >
 							<mx:VBox width="97%" horizontalAlign="center" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" borderColor="#666666" borderThickness="1" cornerRadius="5" borderStyle="solid" backgroundColor="#FFFFFF" backgroundAlpha=".8" >
 							
 							<mx:HBox width="100%" >
@@ -345,11 +402,7 @@
 							</mx:HBox>
 							</mx:VBox>
 							</flexlib:WindowShade>
-							
 							<mx:Spacer height="100%" />
-							
-							
-							
 						</mx:VBox>		
 					</mx:Canvas>
 					<mx:Canvas id="searchcnvs" label="Search/Filter Nodes" height="100%" width="100%">
@@ -367,46 +420,93 @@
 		
 		<mx:Canvas id="mapCnvs" borderStyle="solid" borderColor="#CCCCCC" backgroundColor="#FFFFFF"  width="100%" height="100%" verticalScrollPolicy="off">		
 		<mx:ProgressBar id="progressBar" indeterminate="true" visible="false"/>
-			<geomap:USStates id="map" name="map" projection="Geographic" x="10" y="10" scaleX="{zoomer.value}" scaleY="{zoomer.value}" >
-				<features:Features foid="CT" fillItem="0x6699FF" alpha="0.6" toolTip="Connecticut"/>
-				<features:Features foid="AK" fillItem="0xCCCCFF" alpha="0.6" toolTip="Alaska" />
-				<features:Features foid="TX" fillItem="0xFFFFCC" alpha="0.6" toolTip="Texas"/>
-				<features:Features foid="CA" fillItem="0x003399" alpha="0.6" toolTip="California"/>
-				<features:Features foid="VA" fillItem="0x336699" alpha="0.6" toolTip="Virginia"/>
-				<features:Features foid="MN" fillItem="0x9999FF" alpha="0.6" toolTip="Minnesota"/>
-				<symbols:Symbols key="TX">
-					<mx:PieChart id="pie" width="150" height="150" dataProvider="{expenses}" showDataTips="true">
-			            <mx:series>
-			                <mx:PieSeries field="Amount" nameField="Expense"
-			                    labelPosition="callout"/>
-			            </mx:series>
-        			</mx:PieChart>
+			<mx:Label text="US States (Choropleth with Symbols)" y="20" fontSize="16" fontWeight="bold" horizontalCenter="0" />
+			<geomap:USStates id="map" name="map" projection="Geographic" x="15" y="100" scaleX="{zoomer.value}" scaleY="{zoomer.value}" >
+				
+			<!-- Features -->
+				<features:Features foid="AL" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="AK" fillItem="0xbae4b3" alpha="0.6" />
+				<features:Features foid="AS" fillItem="0x74c476" alpha="0.6" />
+				<features:Features foid="AR" fillItem="0x74c476" alpha="0.6" />
+				<features:Features foid="AZ" fillItem="0x6d2c" alpha="0.6" />
+				<features:Features foid="CA" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="CT" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="CO" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="DE" fillItem="0xbae4b3" alpha="0.6" />
+				<features:Features foid="DC" fillItem="0x74c476" alpha="0.6" />
+				<features:Features foid="FL" fillItem="0x74c476" alpha="0.6" />
+				<features:Features foid="GA" fillItem="0x6d2c" alpha="0.6" />
+				<features:Features foid="HI" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="ID" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="IL" fillItem="0xbae4b3" alpha="0.6" />
+				<features:Features foid="IN" fillItem="0x74c476" alpha="0.6" />
+				<features:Features foid="IA" fillItem="0x74c476" alpha="0.6" />
+				<features:Features foid="KS" fillItem="0x6d2c" alpha="0.6" />
+				<features:Features foid="KY" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="LA" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="ME" fillItem="0x74c476" alpha="0.6" />
+				<features:Features foid="MD" fillItem="0x74c476" alpha="0.6" />
+				<features:Features foid="MA" fillItem="0x6d2c" alpha="0.6" />
+				<features:Features foid="MI" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="MN" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="MS" fillItem="0xbae4b3" alpha="0.6" />
+				<features:Features foid="MO" fillItem="0x74c476" alpha="0.6" />
+				<features:Features foid="MT" fillItem="0x74c476" alpha="0.6" />
+				<features:Features foid="NE" fillItem="0x6d2c" alpha="0.6" />
+				<features:Features foid="NV" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="NH" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="NJ" fillItem="0xbae4b3" alpha="0.6" />
+				<features:Features foid="NY" fillItem="0x74c476" alpha="0.6" />
+				<features:Features foid="NM" fillItem="0x74c476" alpha="0.6" />
+				<features:Features foid="NC" fillItem="0x6d2c" alpha="0.6" />
+				<features:Features foid="ND" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="OH" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="OK" fillItem="0xbae4b3" alpha="0.6" />
+				<features:Features foid="OR" fillItem="0x74c476" alpha="0.6" />
+				<features:Features foid="PA" fillItem="0x74c476" alpha="0.6" />
+				<features:Features foid="RI" fillItem="0x6d2c" alpha="0.6" />
+				<features:Features foid="SC" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="SD" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="TN" fillItem="0xbae4b3" alpha="0.6" />
+				<!-- RollOverEffect not working -->
+				<features:Features foid="TX" fillItem="0x74c476" alpha="0.6" rollOverEffect="{wipeLeft}" />
+				<features:Features foid="UT" fillItem="0x74c476" alpha="0.6" />
+				<features:Features foid="VT" fillItem="0x6d2c" alpha="0.6" />
+				<features:Features foid="NV" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="VA" fillItem="0xbae4b3" alpha="0.6" />
+				<features:Features foid="WA" fillItem="0x74c476" alpha="0.6" />
+				<features:Features foid="WV" fillItem="0x74c476" alpha="0.6" />
+				<features:Features foid="WI" fillItem="0x6d2c" alpha="0.6" />
+				<features:Features foid="WY" fillItem="0xedf8e9" alpha="0.6" />
+			
+			<!-- Symbols -->
+			<symbols:Symbols key="PA">
+					<sparks:PieSpark id="Pie1" width="125" height="125" dataProvider="{sales1}" dataField="unit1" gradientColors="{gradColors}" />
 			</symbols:Symbols>
-			<symbols:Symbols key="WI">
-					<mx:PieChart id="pie1" width="150" height="150" dataProvider="{expenses}" showDataTips="true">
-			            <mx:series>
-			                <mx:PieSeries field="Amount" nameField="Expense"
-			                    labelPosition="callout"/>
-			            </mx:series>
-        			</mx:PieChart>
+			<symbols:Symbols key="IA">
+					<sparks:PieSpark id="Pie2" width="125" height="125" dataProvider="{sales1}" dataField="unit2" gradientColors="{gradColors}" />
 			</symbols:Symbols>
-			<symbols:Symbols key="WY">
-					<mx:PieChart id="pie2" width="150" height="150" dataProvider="{expenses}" showDataTips="true">
-			            <mx:series>
-			                <mx:PieSeries field="Amount" nameField="Expense"
-			                    labelPosition="callout"/>
-			            </mx:series>
-        			</mx:PieChart>
+			<symbols:Symbols key="GA">
+					<sparks:PieSpark id="Pie3" width="125" height="125" dataProvider="{sales1}" dataField="unit3" gradientColors="{gradColors}" />
 			</symbols:Symbols>
+			<symbols:Symbols key="NV">
+					<sparks:PieSpark id="Pie4" width="125" height="125" dataProvider="{sales1}" dataField="unit4" gradientColors="{gradColors}" />
+			</symbols:Symbols>
+			<symbols:Symbols key="AK">
+					<sparks:PieSpark id="Pie5" width="125" height="125" dataProvider="{sales1}" dataField="unit2" gradientColors="{gradColors}" />
+			</symbols:Symbols>
+			
 			</geomap:USStates>
-			<!-- Window shade -->
+			
+			
+			<!-- Dashboard -->
 			<mx:VBox width="100%" height="150" left="5" right="5" bottom="5" 
         	verticalAlign="top" horizontalAlign="center" horizontalScrollPolicy="off" verticalScrollPolicy="off">
         	<mx:HBox width="100%" height="100%" paddingTop="5" paddingLeft="5" paddingRight="5" paddingBottom="5" 
         		cornerRadius="12" borderStyle="solid" borderThickness="2" borderColor="#CCCCCC" backgroundColor="#CCCCCC" backgroundAlpha="0.3"
-        		>
-            	
-			</mx:HBox>
+        		horizontalAlign="center">
+        	<mx:Label text="Dashboard" fontSize="11" fontWeight="bold"/>
+            </mx:HBox>
         	</mx:VBox>
 			
 		
@@ -414,7 +514,8 @@
 		<!-- End of Graph Panel -->
 	</mx:HBox>
 </mx:VBox>
-		
+</mx:VBox>
+	
 	<mx:states>
        <mx:State name="showCntrlPanel">
 			<mx:SetProperty target="{sideBar}" name="width" value="300" />
