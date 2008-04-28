@@ -25,7 +25,7 @@
  * THE SOFTWARE.
  */
 
-package org.un.cava.birdeye.geo.features
+package org.un.cava.birdeye.geovis.features
 {
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
@@ -41,8 +41,8 @@ package org.un.cava.birdeye.geo.features
 	import mx.containers.Canvas;
 	import mx.events.FlexEvent;
 	
-	import org.un.cava.birdeye.geo.projections.Projections;
-	import org.un.cava.birdeye.geo.styles.GeoStyles;
+	import org.un.cava.birdeye.geovis.projections.Projections;
+	import org.un.cava.birdeye.geovis.styles.GeoStyles;
 	
 	[Style(name="gradientItemFill",type="Array",format="Color",inherit="no")]
 	[Style(name="strokeItem",type="Array",format="Color",inherit="no")]

@@ -24,7 +24,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.un.cava.birdeye.geo.core
+package org.un.cava.birdeye.geovis.core
 {	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
@@ -40,9 +40,9 @@ package org.un.cava.birdeye.geo.core
 	import mx.containers.Canvas;
 	import mx.core.UIComponent;
 	
-	import org.un.cava.birdeye.geo.features.Features;
-	import org.un.cava.birdeye.geo.projections.Projections;
-	import org.un.cava.birdeye.geo.styles.GeoStyles;
+	import org.un.cava.birdeye.geovis.features.Features;
+	import org.un.cava.birdeye.geovis.projections.Projections;
+	import org.un.cava.birdeye.geovis.styles.GeoStyles;
 		
 	[Event(name="ItemClick", type="org.un.cava.birdeye.geo.events.GeoMapEvents")]
 	[Style(name="gradientFill",type="Array",format="Color",inherit="no")]
