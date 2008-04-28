@@ -424,60 +424,59 @@
 			<geomap:USStates id="map" name="map" projection="Geographic" x="15" y="100" scaleX="{zoomer.value}" scaleY="{zoomer.value}" >
 				
 			<!-- Features -->
-				<features:Features foid="AL" fillItem="0xedf8e9" alpha="0.6" />
-				<features:Features foid="AK" fillItem="0xbae4b3" alpha="0.6" />
-				<features:Features foid="AS" fillItem="0x74c476" alpha="0.6" />
-				<features:Features foid="AR" fillItem="0x74c476" alpha="0.6" />
-				<features:Features foid="AZ" fillItem="0x6d2c" alpha="0.6" />
-				<features:Features foid="CA" fillItem="0xedf8e9" alpha="0.6" />
-				<features:Features foid="CT" fillItem="0xedf8e9" alpha="0.6" />
-				<features:Features foid="CO" fillItem="0xedf8e9" alpha="0.6" />
-				<features:Features foid="DE" fillItem="0xbae4b3" alpha="0.6" />
-				<features:Features foid="DC" fillItem="0x74c476" alpha="0.6" />
-				<features:Features foid="FL" fillItem="0x74c476" alpha="0.6" />
-				<features:Features foid="GA" fillItem="0x6d2c" alpha="0.6" />
-				<features:Features foid="HI" fillItem="0xedf8e9" alpha="0.6" />
-				<features:Features foid="ID" fillItem="0xedf8e9" alpha="0.6" />
-				<features:Features foid="IL" fillItem="0xbae4b3" alpha="0.6" />
-				<features:Features foid="IN" fillItem="0x74c476" alpha="0.6" />
-				<features:Features foid="IA" fillItem="0x74c476" alpha="0.6" />
-				<features:Features foid="KS" fillItem="0x6d2c" alpha="0.6" />
-				<features:Features foid="KY" fillItem="0xedf8e9" alpha="0.6" />
-				<features:Features foid="LA" fillItem="0xedf8e9" alpha="0.6" />
-				<features:Features foid="ME" fillItem="0x74c476" alpha="0.6" />
-				<features:Features foid="MD" fillItem="0x74c476" alpha="0.6" />
-				<features:Features foid="MA" fillItem="0x6d2c" alpha="0.6" />
-				<features:Features foid="MI" fillItem="0xedf8e9" alpha="0.6" />
-				<features:Features foid="MN" fillItem="0xedf8e9" alpha="0.6" />
-				<features:Features foid="MS" fillItem="0xbae4b3" alpha="0.6" />
-				<features:Features foid="MO" fillItem="0x74c476" alpha="0.6" />
-				<features:Features foid="MT" fillItem="0x74c476" alpha="0.6" />
-				<features:Features foid="NE" fillItem="0x6d2c" alpha="0.6" />
-				<features:Features foid="NV" fillItem="0xedf8e9" alpha="0.6" />
-				<features:Features foid="NH" fillItem="0xedf8e9" alpha="0.6" />
-				<features:Features foid="NJ" fillItem="0xbae4b3" alpha="0.6" />
-				<features:Features foid="NY" fillItem="0x74c476" alpha="0.6" />
-				<features:Features foid="NM" fillItem="0x74c476" alpha="0.6" />
-				<features:Features foid="NC" fillItem="0x6d2c" alpha="0.6" />
-				<features:Features foid="ND" fillItem="0xedf8e9" alpha="0.6" />
-				<features:Features foid="OH" fillItem="0xedf8e9" alpha="0.6" />
-				<features:Features foid="OK" fillItem="0xbae4b3" alpha="0.6" />
-				<features:Features foid="OR" fillItem="0x74c476" alpha="0.6" />
-				<features:Features foid="PA" fillItem="0x74c476" alpha="0.6" />
-				<features:Features foid="RI" fillItem="0x6d2c" alpha="0.6" />
-				<features:Features foid="SC" fillItem="0xedf8e9" alpha="0.6" />
-				<features:Features foid="SD" fillItem="0xedf8e9" alpha="0.6" />
-				<features:Features foid="TN" fillItem="0xbae4b3" alpha="0.6" />
-				<!-- RollOverEffect not working -->
-				<features:Features foid="TX" fillItem="0x74c476" alpha="0.6" rollOverEffect="{wipeLeft}" />
-				<features:Features foid="UT" fillItem="0x74c476" alpha="0.6" />
-				<features:Features foid="VT" fillItem="0x6d2c" alpha="0.6" />
-				<features:Features foid="NV" fillItem="0xedf8e9" alpha="0.6" />
-				<features:Features foid="VA" fillItem="0xbae4b3" alpha="0.6" />
-				<features:Features foid="WA" fillItem="0x74c476" alpha="0.6" />
-				<features:Features foid="WV" fillItem="0x74c476" alpha="0.6" />
-				<features:Features foid="WI" fillItem="0x6d2c" alpha="0.6" />
-				<features:Features foid="WY" fillItem="0xedf8e9" alpha="0.6" />
+				<features:Features foid="AK" fillItem="0xbae4b3" alpha="0.6" toolTip="ALASKA"/>
+				<features:Features foid="AL" fillItem="0xedf8e9" alpha="0.6" toolTip="ALABAMA"/>
+				<features:Features foid="AR" fillItem="0x74c476" alpha="0.6" toolTip="ARKANSAS"/>
+				<features:Features foid="AS" fillItem="0x74c476" alpha="0.6" toolTip="AMERICAN SAMOA"/>
+				<features:Features foid="AZ" fillItem="0x6d2c" alpha="0.6" toolTip="ARIZONA "/>
+				<features:Features foid="CA" fillItem="0xedf8e9" alpha="0.6" toolTip="CALIFORNIA "/>
+				<features:Features foid="CO" fillItem="0xedf8e9" alpha="0.6" toolTip="COLORADO"/>
+				<features:Features foid="CT" fillItem="0xedf8e9" alpha="0.6" toolTip="CONNECTICUT"/>
+				<features:Features foid="DC" fillItem="0x74c476" alpha="0.6" toolTip="DISTRICT OF COLUMBIA"/>
+				<features:Features foid="DE" fillItem="0xbae4b3" alpha="0.6" toolTip="DELAWARE"/>
+				<features:Features foid="FL" fillItem="0x74c476" alpha="0.6" toolTip="FLORIDA"/>
+				<features:Features foid="GA" fillItem="0x6d2c" alpha="0.6" toolTip="GEORGIA"/>
+				<features:Features foid="HI" fillItem="0xedf8e9" alpha="0.6" toolTip="HAWAII"/>
+				<features:Features foid="IA" fillItem="0x74c476" alpha="0.6" toolTip="IOWA"/>
+				<features:Features foid="ID" fillItem="0xedf8e9" alpha="0.6" toolTip="IDAHO"/>
+				<features:Features foid="IL" fillItem="0xbae4b3" alpha="0.6" toolTip="ILLINOIS"/>
+				<features:Features foid="IN" fillItem="0x74c476" alpha="0.6" toolTip="INDIANA"/>
+				<features:Features foid="KS" fillItem="0x6d2c" alpha="0.6" toolTip="KANSAS"/>
+				<features:Features foid="KY" fillItem="0xedf8e9" alpha="0.6" toolTip="KENTUCKY"/>
+				<features:Features foid="LA" fillItem="0xedf8e9" alpha="0.6" toolTip="LOUISIANA"/>
+				<features:Features foid="MA" fillItem="0x6d2c" alpha="0.6" toolTip="MASSACHUSETTS"/>
+				<features:Features foid="MD" fillItem="0x74c476" alpha="0.6" toolTip="MARYLAND"/>
+				<features:Features foid="ME" fillItem="0x74c476" alpha="0.6" toolTip="MAINE"/>
+				<features:Features foid="MI" fillItem="0xedf8e9" alpha="0.6" toolTip="MICHIGAN"/>
+				<features:Features foid="MN" fillItem="0xedf8e9" alpha="0.6" toolTip="MINNESOTA"/>
+				<features:Features foid="MO" fillItem="0x74c476" alpha="0.6" toolTip="MISSOURI"/>
+				<features:Features foid="MS" fillItem="0xbae4b3" alpha="0.6" toolTip="MISSISSIPPI"/>
+				<features:Features foid="MT" fillItem="0x74c476" alpha="0.6" toolTip="MONTANA"/>
+				<features:Features foid="NC" fillItem="0x6d2c" alpha="0.6" toolTip="NORTH CAROLINA"/>
+				<features:Features foid="ND" fillItem="0xedf8e9" alpha="0.6" toolTip="NORTH DAKOTA"/>
+				<features:Features foid="NE" fillItem="0x6d2c" alpha="0.6" toolTip="NEBRASKA"/>
+				<features:Features foid="NH" fillItem="0xedf8e9" alpha="0.6" toolTip="NEW HAMPSHIRE"/>
+				<features:Features foid="NJ" fillItem="0xbae4b3" alpha="0.6" toolTip="NEW JERSEY"/>
+				<features:Features foid="NM" fillItem="0x74c476" alpha="0.6" toolTip="NEW MEXICO"/>
+				<features:Features foid="NV" fillItem="0xedf8e9" alpha="0.6" toolTip="NEVADA"/>
+				<features:Features foid="NY" fillItem="0x74c476" alpha="0.6" toolTip="NEW YORK"/>
+				<features:Features foid="OH" fillItem="0xedf8e9" alpha="0.6" toolTip="OHIO"/>
+				<features:Features foid="OK" fillItem="0xbae4b3" alpha="0.6" toolTip="OKLAHOMA"/>
+				<features:Features foid="OR" fillItem="0x74c476" alpha="0.6" toolTip="OREGON"/>
+				<features:Features foid="PA" fillItem="0x74c476" alpha="0.6" toolTip="PENNSYLVANIA"/>
+				<features:Features foid="RI" fillItem="0x6d2c" alpha="0.6" toolTip="RHODE ISLAND"/>
+				<features:Features foid="SC" fillItem="0xedf8e9" alpha="0.6" toolTip="SOUTH CAROLINA"/>
+				<features:Features foid="SD" fillItem="0xedf8e9" alpha="0.6" toolTip="SOUTH DAKOTA"/>
+				<features:Features foid="TN" fillItem="0xbae4b3" alpha="0.6" toolTip="TENNESSEE"/>
+				<features:Features foid="TX" fillItem="0x74c476" alpha="0.6" toolTip="TEXAS" rollOverEffect="{wipeLeft}" />
+				<features:Features foid="UT" fillItem="0x74c476" alpha="0.6" toolTip="UTAH"/>
+				<features:Features foid="VA" fillItem="0xbae4b3" alpha="0.6" toolTip="VIRGINIA "/>
+				<features:Features foid="VT" fillItem="0x6d2c" alpha="0.6" toolTip="VERMONT"/>
+				<features:Features foid="WA" fillItem="0x74c476" alpha="0.6" toolTip="WASHINGTON"/>
+				<features:Features foid="WI" fillItem="0x6d2c" alpha="0.6" toolTip="WISCONSIN"/>
+				<features:Features foid="WV" fillItem="0x74c476" alpha="0.6" toolTip="WEST VIRGINIA"/>
+				<features:Features foid="WY" fillItem="0xedf8e9" alpha="0.6" toolTip="WYOMING"/>
+
 			
 			<!-- Symbols -->
 			<symbols:Symbols key="PA">

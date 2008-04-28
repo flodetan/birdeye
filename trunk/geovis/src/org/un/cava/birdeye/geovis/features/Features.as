@@ -25,7 +25,7 @@
  * THE SOFTWARE.
  */
 
-package org.un.cava.birdeye.geovis.features
+package org.un.cava.birdeye.geo.features
 {
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
@@ -41,9 +41,8 @@ package org.un.cava.birdeye.geovis.features
 	import mx.containers.Canvas;
 	import mx.events.FlexEvent;
 	
-	import org.un.cava.birdeye.geovis.projections.Projections;
-	import org.un.cava.birdeye.geovis.styles.GeoStyles;
-	
+	import org.un.cava.birdeye.geo.projections.Projections;
+	import org.un.cava.birdeye.geo.styles.GeoStyles;
 	
 	[Style(name="gradientItemFill",type="Array",format="Color",inherit="no")]
 	[Style(name="strokeItem",type="Array",format="Color",inherit="no")]
@@ -65,13 +64,15 @@ package org.un.cava.birdeye.geovis.features
 */
 	public class Features extends Canvas
 	{
-		public var colorItem:SolidFill;
+		public var colorItem:SolidFill=new SolidFill(0xFFFFFF);
 		public var stkItem:SolidStroke;
 		
 		public var gradItemFill:Array;
 		
 		[Inspectable(defaultValue="")]
 		public var foid:String;
+		
+		private var _toolTip:String;
 		
 		/**
 		* Set the color of a particular item for example a country of the map. 
@@ -115,9 +116,12 @@ package org.un.cava.birdeye.geovis.features
 		{
 			super();
 			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
-			
 		}
-		
+		/*override public function set toolTip(value:String):void 
+		{
+    		_toolTip=value;
+    		this.toolTip=_toolTip;
+    	}*/
 		
 		private function creationCompleteHandler (event:FlexEvent):void{
 			var dynamicClassName:String=getQualifiedClassName(this.parent);
@@ -126,14 +130,13 @@ package org.un.cava.birdeye.geovis.features
 			var region:String=(this.parent as dynamicClassRef).region;
 			//trace(GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName("CA")).geometryCollection.getItemAt(0).data)
 			var myCoo:IGeometry;
-			
 			GeoData=Projections.getData(proj,region);
 			if(GeoData.getCoordinates(foid)!=null){
-					if(isNaN(GeoData.getCoordinates(foid).substr(0,1))){
-						myCoo = Path(GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foid)).geometryCollection.getItemAt(0));
-					}else{
-						myCoo = Polygon(GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foid)).geometryCollection.getItemAt(0));
-					}	
+				if(isNaN(GeoData.getCoordinates(foid).substr(0,1))){
+					myCoo = Path(GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foid)).geometryCollection.getItemAt(0));
+				}else{
+					myCoo = Polygon(GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foid)).geometryCollection.getItemAt(0));
+				}	
 			}
 			
 			if(foid!=""){
@@ -175,19 +178,36 @@ package org.un.cava.birdeye.geovis.features
 				}
 				
 			}
+			
+			//ToolTipManager.enabled=true;
+		//this.toolTip=toolTip;
+		var geom:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foid));
+		//geom.mouseChildren=true;
+		geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
+		geom.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
+		geom.addEventListener(MouseEvent.MOUSE_OVER,handleMouseOverEvent);
         }
 		
+		private function onRollOver(event:MouseEvent):void{
+			trace('MouseOver'+toolTip);
+			Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).toolTip=toolTip;
+	    }
+	    private function onRollOut(event:MouseEvent):void{
+	    	trace('MouseOut'+toolTip);
+	    	Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).toolTip = "";
+	    }
+
 		private function handleMouseOverEvent(eventObj:MouseEvent):void {
         	eventObj.target.useHandCursor=true;
         	eventObj.target.buttonMode=true;
-        	eventObj.target.mouseChildren=false;
+        	//eventObj.target.mouseChildren=false;
         	//GeometryGroup(eventObj.target).filters=[new GlowFilter(0xFFFFFF,0.5,32,32,255,3,true,true)];
 		}
 		
 		private function handleMouseOutEvent(eventObj:MouseEvent):void {
-        	eventObj.target.useHandCursor=true;
-        	eventObj.target.buttonMode=true;
-        	eventObj.target.mouseChildren=false;
+        	eventObj.target.useHandCursor=false;
+        	eventObj.target.buttonMode=false;
+        	//eventObj.target.mouseChildren=false;
         	//GeometryGroup(eventObj.target).filters=[new GlowFilter(0xFFFFFF,1,6,6,2,1,false,false)];
         }
 	}

@@ -24,7 +24,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.un.cava.birdeye.geovis.core
+package org.un.cava.birdeye.geo.core
 {	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
@@ -35,14 +35,16 @@ package org.un.cava.birdeye.geovis.core
 	
 	import flash.events.MouseEvent;
 	import flash.utils.*;
+	import flash.filters.GlowFilter;
 	
 	import mx.containers.Canvas;
+	import mx.core.UIComponent;
 	
-	import org.un.cava.birdeye.geovis.features.Features;
-	import org.un.cava.birdeye.geovis.projections.Projections;
-	import org.un.cava.birdeye.geovis.styles.GeoStyles;
+	import org.un.cava.birdeye.geo.features.Features;
+	import org.un.cava.birdeye.geo.projections.Projections;
+	import org.un.cava.birdeye.geo.styles.GeoStyles;
 		
-	[Event(name="ItemClick", type="org.un.cava.birdeye.geovis.events.GeoMapEvents")]
+	[Event(name="ItemClick", type="org.un.cava.birdeye.geo.events.GeoMapEvents")]
 	[Style(name="gradientFill",type="Array",format="Color",inherit="no")]
 	[Style(name="stroke",type="Array",format="Color",inherit="no")]
 	[Style(name="fill",type="uint",format="Color",inherit="no")]
@@ -229,9 +231,10 @@ package org.un.cava.birdeye.geovis.core
 						
 					//countryGeom.addEventListener(MouseEvent.CLICK,handleClickEvent);
 					//countryGeom.addEventListener(MouseEvent.CLICK,handleClickEvent);
-					countryGeom.addEventListener(MouseEvent.MOUSE_OVER,handleMouseOverEvent);
+					///countryGeom.addEventListener(MouseEvent.MOUSE_OVER,handleMouseOverEvent);
 					//countryGeom.addEventListener(MouseEvent.MOUSE_OUT,handleMouseOutEvent);
 					//countryGeom.addEventListener(MouseEvent.CLICK, handleClickEvent);
+					
 					//countryGeom.addEventListener(MouseEvent.ROLL_OVER, handleRollOverEvent);
 					//countryGeom.addEventListener(MouseEvent.ROLL_OUT, handleRollOutEvent);
 					
@@ -333,35 +336,37 @@ package org.un.cava.birdeye.geovis.core
 		}
 
       
-		private function handleMouseOverEvent(eventObj:MouseEvent):void {
+		/*private function handleMouseOverEvent(eventObj:MouseEvent):void {
         	eventObj.target.useHandCursor=true;
         	eventObj.target.buttonMode=true;
-        	eventObj.target.mouseChildren=false;
+        	//eventObj.target.mouseChildren=false;
         	//GeometryGroup(eventObj.target).filters=[new GlowFilter(0xFFFFFF,0.5,32,32,255,3,true,true)];
 		}
 		
 		private function handleMouseOutEvent(eventObj:MouseEvent):void {
         	eventObj.target.useHandCursor=true;
         	eventObj.target.buttonMode=true;
-        	eventObj.target.mouseChildren=false;
+        	//eventObj.target.mouseChildren=false;
         	//GeometryGroup(eventObj.target).filters=[new GlowFilter(0xFFFFFF,1,6,6,2,1,false,false)];
-        }
+        }*/
 		
 		/*private function handleClickEvent(eventObj:MouseEvent):void {
         	dispatchEvent(new MouseEvent("click"));
-		}
+		}*/
 		private function handleRollOverEvent(eventObj:MouseEvent):void {
-			dispatchEvent(new MouseEvent("rollover"));
+			//dispatchEvent(new MouseEvent("rollover"));
+			highlightSeries(eventObj.target);
 		}
 		private function handleRollOutEvent(eventObj:MouseEvent):void {
-        	dispatchEvent(new MouseEvent("rollout"));
-		}*/
+        	//dispatchEvent(new MouseEvent("rollout"));
+        	eventObj.target.filters=[];
+		}
 
 		private function getChildValues():void{
 			for(var numOfChildren:int=0; numOfChildren<this.numChildren; numOfChildren++){
 				var ClassName:String=getQualifiedClassName(this.getChildAt(numOfChildren));
 				//Alert.show(ClassName);
-				if(ClassName=="org.un.cava.birdeye.geovis.features::Features"){
+				if(ClassName=="org.un.cava.birdeye.geo.features::Features"){
 					if(Features(this.getChildAt(numOfChildren)).colorItem){
 						arrChildColors[Features(this.getChildAt(numOfChildren)).foid.toString()]=Features(this.getChildAt(numOfChildren)).colorItem;
 					}
@@ -389,5 +394,29 @@ package org.un.cava.birdeye.geovis.core
 				childNumber++;
 			}
 		}*/
+		private function highlightSeries(Ser:Object):void{
+	            //set filter
+	            var filter:GlowFilter = getBitmapFilter();
+	            var myFilters:Array = new Array();
+	            myFilters.push(filter);
+	            Ser.filters = myFilters;
+	           
+    			// blink series
+    			var target:Array = new Array();
+    			target.push(Ser);
+	        }
+	
+	        private function getBitmapFilter():GlowFilter {
+	            var color:Number = 0xCCCCCC;
+	            var alpha:Number = 1;
+	            var blurX:Number = 4;
+	            var blurY:Number = 4;
+	            var strength:Number = 5;
+	            var inner:Boolean = false;
+	            var knockout:Boolean = false;
+	            var quality:Number = 5;
+	
+	            return new GlowFilter(color, alpha, blurX, blurY, strength, quality, inner, knockout);
+	        }
 	}
 }
