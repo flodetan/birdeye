@@ -427,9 +427,8 @@
 				<features:Features foid="AK" fillItem="0xbae4b3" alpha="0.6" toolTip="ALASKA"/>
 				<features:Features foid="AL" fillItem="0xedf8e9" alpha="0.6" toolTip="ALABAMA"/>
 				<features:Features foid="AR" fillItem="0x74c476" alpha="0.6" toolTip="ARKANSAS"/>
-				<features:Features foid="AS" fillItem="0x74c476" alpha="0.6" toolTip="AMERICAN SAMOA"/>
-				<features:Features foid="AZ" fillItem="0x6d2c" alpha="0.6" toolTip="ARIZONA "/>
-				<features:Features foid="CA" fillItem="0xedf8e9" alpha="0.6" toolTip="CALIFORNIA "/>
+				<features:Features foid="AZ" fillItem="0x6d2c" alpha="0.6" toolTip="ARIZONA"/>
+				<features:Features foid="CA" fillItem="0xedf8e9" alpha="0.6" toolTip="CALIFORNIA"/>
 				<features:Features foid="CO" fillItem="0xedf8e9" alpha="0.6" toolTip="COLORADO"/>
 				<features:Features foid="CT" fillItem="0xedf8e9" alpha="0.6" toolTip="CONNECTICUT"/>
 				<features:Features foid="DC" fillItem="0x74c476" alpha="0.6" toolTip="DISTRICT OF COLUMBIA"/>
