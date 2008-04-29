@@ -7,9 +7,9 @@ http://birdeye.googlecode.com/svn/trunk/images/BirdEyeLogoQaVis100.png
 
 This library is focused on conventional and novel approaches to the analysis, interpretation, explanation, and presentation of numerical data.  Components include:
 
-* Sparklines
-* Treemaps
-* Conventional charting such as bar, column, pie, line, plot, x/y.
+  * Sparklines
+  * Treemaps
+  * Conventional charting such as bar, column, pie, line, plot, x/y.
 
 === Status ===
 
