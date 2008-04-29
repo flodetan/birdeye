@@ -45,7 +45,7 @@ package org.un.cava.birdeye.geovis.symbols
 	import com.degrafa.geometry.Polygon;
 	
 	import org.un.cava.birdeye.geovis.projections.Projections;
-	import org.un.cava.birdeye.qavis.sparklines.PieSpark;
+	import org.un.cava.birdeye.qavis.sparklines.*;
 	
 	[Inspectable("key")] 
 	public class Symbols extends VBox	//Canvas
