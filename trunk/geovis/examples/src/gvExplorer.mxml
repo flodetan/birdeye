@@ -147,7 +147,15 @@
 				[0xcd1076, 0x8b0a50],
 				[0x7d26cd, 0x551a8b]];
 
-			
+			[Bindable]
+        public var myData:XML=
+            <root>
+                <sales media="CD" unit1="1000000" unit2="600000" unit3="40000" unit4="200000"/>
+                <sales media="Ringtones" unit1="500000" unit2="1000000" unit3="800000" unit4="30000"/>
+                <sales media="MP3" unit1="2000000" unit2="1500000" unit3="800000" unit4="200000"/>
+                <sales media="Tapes" unit1="750000" unit2="200000" unit3="1500000" unit4="900000"/>
+            </root>;
+
 	]]>
 </mx:Script>
 <mx:Style source="styles/main.css" />
@@ -479,19 +487,19 @@
 			
 			<!-- Symbols -->
 			<symbols:Symbols key="PA">
-					<sparks:PieSpark id="Pie1" width="125" height="125" dataProvider="{sales1}" dataField="unit1" gradientColors="{gradColors}" />
+					<sparks:PieSpark id="Pie1" width="125" height="125" dataProvider="{sales1}" dataField="unit1" gradientColors="{gradColors}" showDataTips="true"/>
 			</symbols:Symbols>
 			<symbols:Symbols key="IA">
-					<sparks:PieSpark id="Pie2" width="125" height="125" dataProvider="{sales1}" dataField="unit2" gradientColors="{gradColors}" />
+					<sparks:PieSpark id="Pie2" width="125" height="125" dataProvider="{myData}" dataField="@unit2" gradientColors="{gradColors}" showDataTips="true" />
 			</symbols:Symbols>
 			<symbols:Symbols key="GA">
-					<sparks:PieSpark id="Pie3" width="125" height="125" dataProvider="{sales1}" dataField="unit3" gradientColors="{gradColors}" />
+					<sparks:PieSpark id="Pie3" width="125" height="125" dataProvider="{sales1}" dataField="unit3" gradientColors="{gradColors}" showDataTips="true" />
 			</symbols:Symbols>
 			<symbols:Symbols key="NV">
-					<sparks:PieSpark id="Pie4" width="125" height="125" dataProvider="{sales1}" dataField="unit4" gradientColors="{gradColors}" />
+					<sparks:PieSpark id="Pie4" width="125" height="125" dataProvider="{myData}" dataField="@unit4" gradientColors="{gradColors}" showDataTips="true" />
 			</symbols:Symbols>
 			<symbols:Symbols key="AK">
-					<sparks:PieSpark id="Pie5" width="125" height="125" dataProvider="{sales1}" dataField="unit2" gradientColors="{gradColors}" />
+					<sparks:PieSpark id="Pie5" width="125" height="125" dataProvider="{sales1}" dataField="unit2" gradientColors="{gradColors}" showDataTips="true" />
 			</symbols:Symbols>
 			
 			</geomap:USStates>
