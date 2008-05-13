@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:treemap="views.treemap.*"
+	xmlns:sparklines="views.sparklines.*"
+	xmlns:charts="views.charts.*"
+	backgroundGradientColors="[#333333,#999999]" layout="vertical"
+	width="100%" height="100%">
+
+<mx:Style source="styles/main.css" />
+	
+<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+		
+	<mx:VBox width="1024" height="100%" verticalGap="10" >
+	<mx:ApplicationControlBar width="100%" height="85" >
+		<mx:HBox width="100%" verticalAlign="middle" paddingLeft="5" paddingRight="5" >
+			<mx:Image source="assets/icons/BirdEyeLogoQaVis75.png" />
+			<mx:Label text="BIRDEYE: QaVis Explorer" color="#FFFFFF" fontSize="16" />
+			</mx:HBox>
+	</mx:ApplicationControlBar>	
+	
+	<mx:TabNavigator width="100%" height="100%" paddingLeft="5" creationPolicy="all" >
+		
+		<sparklines:Sparklines label="Sparklines" width="100%" height="100%" />
+		<treemap:TreeMap label="Treemap" width="100%" height="100%" />
+		<charts:Charts label="Charts" width="100%" height="100%" />
+		
+	</mx:TabNavigator>
+		
+	
+	</mx:VBox>
+
+</mx:VBox>
+	
+</mx:Application>

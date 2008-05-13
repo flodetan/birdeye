@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ *
+ * The MIT License
+ *
+ * Copyright (c) 2008
+ * United Nations Office at Geneva
+ * Center for Advanced Visual Analytics
+ * http://cava.unog.ch
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+-->
+<mx:ComboBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	height="20"
+	width="97%"
+	color="#CCCCCC"
+	prompt="Select edge style."
+	toolTip="Select the style of line drawn between nodes."
+	creationComplete="initData()"
+	change="changeEdgeRenderer()" >
+	
+	<mx:ArrayCollection id="ervalues">
+		<mx:String>Default</mx:String>
+		<mx:String>Directed</mx:String>
+		<mx:String>Orthogonal</mx:String>
+		<mx:String>Flow</mx:String>
+		<mx:String>Bezier</mx:String>
+	</mx:ArrayCollection>
+	
+	<mx:Script>	
+		<![CDATA[
+			import mx.events.ListEvent;
+			import mx.utils.ObjectUtil;
+			import utils.GlobalParams;
+			import utils.GlobalParamsVGraph;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.IEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.DefaultEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.DirectedEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.FlowCurveEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.FlowEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.OrthogonalEdgeRenderer;
+			
+			/**
+			 * When enabling or disabling this component, we also
+			 * perform some specific tasks.
+			 * Attention do completely disable interaction
+			 * there is also the mouseEnabled property.
+			 * 
+			 * @inheritDoc
+			 * */
+			override public function set enabled(e:Boolean):void {
+				if(e == true) {
+					this.setStyle("color",0x000000);
+					this.alpha=1;
+				} else {
+					this.setStyle("color",0xCCCCCC);
+					this.alpha=0.3;
+				}
+				/* call superclass (ComboBox) */
+				super.enabled = e;
+			}
+
+			/**
+			 * Set the selected EdgeLabelRenderer.
+			 * */
+			public function changeEdgeRenderer():void {
+				
+				var er:String;
+				var vgraph:IVisualGraph = GlobalParams.vgraph;
+				
+				/* get the currently selected EdgeRenderer */
+				er = this.selectedItem as String;
+				
+				if(vgraph != null) {
+					switch(er) {
+						case "Default":
+							vgraph.edgeRenderer = new DefaultEdgeRenderer;
+							break;
+						case "Directed":
+							vgraph.edgeRenderer = new DirectedEdgeRenderer;
+							break;
+						case "Orthogonal":
+							vgraph.edgeRenderer = new OrthogonalEdgeRenderer;
+							break;
+						case "Flow":
+							vgraph.edgeRenderer = new FlowEdgeRenderer;
+							break;
+						case "Bezier":
+							vgraph.edgeRenderer = new FlowCurveEdgeRenderer;
+							break;
+					default:
+							trace("Illegal EdgeLabelRenderer selected:"+er);
+							vgraph.edgeRenderer = new DefaultEdgeRenderer;
+							break;
+					}
+					vgraph.refresh();
+				} else {
+					trace("EdgeRenderer NOT CHANGED, no valid vgraph in GlobalParams, not redrawing!");
+				}
+			}
+			
+			/**
+			 * Refresh the selector with the current EdgeLabelRenderer.
+			 * */
+			public function refreshSelector():void {
+				
+
+				var vgraph:IVisualGraph = GlobalParams.vgraph;
+				
+				if(vgraph != null) {
+					switch(ObjectUtil.getClassInfo(vgraph.edgeRenderer).name) {
+						case "DefaultEdgeRenderer":
+							this.selectedIndex = 0;
+							break;
+						case "DirectedEdgeRenderer":
+							this.selectedIndex = 1;
+							break;
+						case "OrthogonalEdgeRenderer":
+							this.selectedIndex = 2;
+							break;
+						case "FlowEdgeRenderer":
+							this.selectedIndex = 3;
+							break;
+						case "FlowCurveEdgeRenderer":
+							this.selectedIndex = 4;
+							break;
+						default:
+							trace("Illegal EdgeRenderer class received:"+
+								ObjectUtil.getClassInfo(vgraph.edgeRenderer).name);
+							break;
+					}
+				} else {
+					trace("EdgeRenderer NOT refreshed, no valid vgraph in GlobalParams!");
+				}
+			}
+			
+			/**
+			 * initialise the selection data.
+			 * It is a bit unclear, why this seems to be necessary.
+			 * */
+			private function initData():void {
+				this.dataProvider = ervalues;
+				/* register ourselves */
+				GlobalParamsVGraph.edgeRendererSelectorControl = this;
+			}
+		]]>
+	</mx:Script>
+</mx:ComboBox>

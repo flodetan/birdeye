@@ -24,14 +24,14 @@
 
 package org.un.cava.birdeye.qavis.treemap.controls.treeMapClasses
 {
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	
+	import mx.collections.ArrayCollection;
 	import mx.collections.ICollectionView;
 	import mx.collections.IViewCursor;
-	import flash.utils.Dictionary;
-	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
-	import flash.geom.Point;
 	
 	/**
 	 * Squarify layout algorithm for the TreeMap component. The squarify
@@ -96,11 +96,15 @@ package org.un.cava.birdeye.qavis.treemap.controls.treeMapClasses
 		/**
 		 * @copy ITreeMapLayoutStrategy#updateLayout()
 		 */
-		public function updateLayout(branchData:TreeMapBranchData, bounds:Rectangle):void
+		public function updateLayout(branchRenderer:ITreeMapBranchRenderer, bounds:Rectangle):void
 		{
-			if(branchData.itemCount == 0) return;
-			this._dataProvider = new ArrayCollection(branchData.itemsToArray());
+			//there's no point in trying to layout nothing
+			if(branchRenderer.itemCount == 0)
+			{
+				return;
+			}
 			
+			this._dataProvider = new ArrayCollection(branchRenderer.itemsToArray());
 			var weightSum:Number = this.calculateTotalWeightSum(this._dataProvider);
 			
 			var sortWeights:Sort = new Sort();
@@ -251,7 +255,10 @@ package org.un.cava.birdeye.qavis.treemap.controls.treeMapClasses
 					{
 						ratio = 1 / dataInRow.length;
 					}
-					else ratio = 0;
+					else
+					{
+						ratio = 0;
+					}
 				}
 				
 				var lengthOfShorterSide:Number = this._shorterSide * ratio;
@@ -268,11 +275,9 @@ package org.un.cava.birdeye.qavis.treemap.controls.treeMapClasses
 				{
 					currentData.x = mapBounds.x + currentDistance;
 					currentData.y = mapBounds.y;
-					currentData.width = Math.max(0, lengthOfShorterSide);
-					currentData.height = Math.max(0, lengthOfLongerSide);
+					currentData.width = lengthOfShorterSide;
+					currentData.height = lengthOfLongerSide;
 				}
-				currentData.x;
-				currentData.y;
 				currentDistance += lengthOfShorterSide;
 				this._numDrawnNodes++;
 			}
@@ -289,12 +294,12 @@ package org.un.cava.birdeye.qavis.treemap.controls.treeMapClasses
 			if(mapBounds.width > mapBounds.height)
 			{
 				mapBounds.x += modifier;
-				mapBounds.width -= modifier;
+				mapBounds.width = Math.max(0, mapBounds.width - modifier);
 			}
 			else
 			{
 				mapBounds.y += modifier;
-				mapBounds.height -= modifier;
+				mapBounds.height = Math.max(0, mapBounds.height - modifier);
 			}
 			
 			return mapBounds;

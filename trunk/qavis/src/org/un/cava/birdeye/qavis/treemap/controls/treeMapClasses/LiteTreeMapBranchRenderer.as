@@ -26,12 +26,12 @@ package org.un.cava.birdeye.qavis.treemap.controls.treeMapClasses
 {
 	import org.un.cava.birdeye.qavis.treemap.controls.TreeMap;
 	import org.un.cava.birdeye.qavis.treemap.events.TreeMapEvent;
+	import org.un.cava.birdeye.qavis.treemap.utils.FlexFontUtil;
 	
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
-	import flash.ui.Keyboard;
+	import flash.text.TextField;
 	
-	import mx.core.UITextField;
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
 	
@@ -105,6 +105,7 @@ include "../../styles/metadata/TextStyles.inc"
 				this.textRollOverColor = 0x2b333c;
 				
 				this.fontSize = 10;
+				this.fontWeight = "bold";
 			}
 			
 			StyleManager.setStyleDeclaration("LiteTreeMapBranchRenderer", selector, false);
@@ -131,7 +132,7 @@ include "../../styles/metadata/TextStyles.inc"
 	//  Properties
 	//--------------------------------------
 	
-		protected var headerText:UITextField;
+		protected var headerText:TextField;
 		
 		override public function set selected(value:Boolean):void
 		{
@@ -156,9 +157,9 @@ include "../../styles/metadata/TextStyles.inc"
 			
 			if(!this.headerText)
 			{
-				this.headerText = new UITextField();
+				this.headerText = new TextField();
 				this.headerText.mouseEnabled = false;
-				this.headerText.styleName = this;
+				this.headerText.selectable = false;
 				this.addChild(this.headerText);
 			}
 		}
@@ -170,11 +171,11 @@ include "../../styles/metadata/TextStyles.inc"
 		{
 			super.commitProperties();
 			
-			if(this.treeMapBranchData)
+			if(this.treeMapBranchData && this.headerText.text != this.treeMapBranchData.label)
 			{
 				this.headerText.text = this.treeMapBranchData.label;
-				this.headerText.enabled = this.enabled && this.treeMapBranchData.showLabel;
 			}
+			FlexFontUtil.applyTextStyles(this.headerText, this);
 		}
 		
 		/**
@@ -190,19 +191,20 @@ include "../../styles/metadata/TextStyles.inc"
 			var paddingRight:Number = this.getStyle("paddingRight");
 			
 			//update the header
-			var headerWidth:Number = this.unscaledWidth - paddingLeft - paddingRight;
+			var headerWidth:Number = Math.max(0, this.unscaledWidth - paddingLeft - paddingRight);
 			var headerHeight:Number = 0;
 			if(this.treeMapBranchData && this.treeMapBranchData.closed)
 			{
-				headerHeight = this.unscaledHeight - paddingTop - paddingBottom;
+				headerHeight = Math.max(0, this.unscaledHeight - paddingTop - paddingBottom);
 			}
 			else
 			{
-				headerHeight = this.treeMapBranchData.showLabel ? this.headerText.getExplicitOrMeasuredHeight() : 0;
+				headerHeight = Math.min(unscaledHeight, !this.treeMapBranchData.displaySimple ? (this.headerText.textHeight + 4) : 0);
 			}
 			this.headerText.x = paddingLeft;
 			this.headerText.y = paddingTop;
-			this.headerText.setActualSize(headerWidth, headerHeight);
+			this.headerText.width = headerWidth;
+			this.headerText.height = headerHeight;
 			
 			//draw the background
 			var backgroundColor:uint = this.getStyle("backgroundColor");

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
+
+<mx:XML id="sampleData" source="data/qavis.xml" />
+	
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" >
+	<mx:ApplicationControlBar width="100%" height="35" >
+		<mx:Label fontSize="11" fontWeight="bold" text="Sparkline Type:"/>
+		<mx:RadioButtonGroup id="sparkSelect" />
+		<mx:RadioButton groupName="sparkSelect" label="PieSpark" selected="true"/>
+		<mx:RadioButton groupName="sparkSelect" label="BarSpark" />
+		<mx:RadioButton groupName="sparkSelect" label="ColumnSpark" />
+		<mx:RadioButton groupName="sparkSelect" label="LineSpark" />
+		<mx:RadioButton groupName="sparkSelect" label="BulletSpark" />
+		<mx:RadioButton groupName="sparkSelect" label="GlyphSpark" />
+		<mx:RadioButton groupName="sparkSelect" label="WinLoseSpark" />
+	</mx:ApplicationControlBar>
+	
+	<mx:ViewStack width="100%" height="100%" >
+		
+		<mx:Canvas id="pieSparkView" width="95%" height="95%" >
+		<mx:DataGrid dataProvider="{ sampleData..child }" width="100%" height="100%" >
+        <mx:columns>
+            <mx:DataGridColumn headerText="PieSpark" dataField="@x" itemRenderer="views.sparklines.renderers.PieSpark"/>
+            <mx:DataGridColumn headerText="Item" dataField="@name" />
+            <mx:DataGridColumn headerText="X" dataField="@x" />
+            <mx:DataGridColumn headerText="Y" dataField="@y" />
+            <mx:DataGridColumn headerText="Z" dataField="@z" />
+        </mx:columns>
+    	</mx:DataGrid>
+		</mx:Canvas>
+		
+		
+	</mx:ViewStack>
+		
+		
+	</mx:VBox>
+	
+	
+</mx:Canvas>
