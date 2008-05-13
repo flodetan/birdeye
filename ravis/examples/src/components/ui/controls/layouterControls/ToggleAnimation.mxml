@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ *
+ * The MIT License
+ *
+ * Copyright (c) 2008
+ * United Nations Office at Geneva
+ * Center for Advanced Visual Analytics
+ * http://cava.unog.ch
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+-->
+<mx:CheckBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	selected="false"
+	label="Disable Animations"
+	toolTip="If checked, animations are bypassed."
+	initialize="registerWithGlobal()"
+	click="toggleAnimation()" >
+	
+	<mx:Script>
+		<![CDATA[
+			
+			import utils.GlobalParams;
+			import utils.GlobalParamsLayout;
+			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
+
+			/**
+			 * We need a custom constructor to register this
+			 * instance with the GlobalParams class
+			 * */
+			private function registerWithGlobal():void {
+				/* register ourselves */
+				GlobalParamsLayout.animationControl = this;
+			}
+			
+			/**
+			 * toggles if we want smooth animation (enabled per default)
+			 * or not, as a feature of most layouters.
+			 * */
+			public function toggleAnimation():void {
+				
+				var layouter:ILayoutAlgorithm;
+				
+				/* check if we have a layouter at all */
+				if(GlobalParams.layouter == null) {
+					trace("Cannot enable toggleAnimation on null layouter");
+					return;
+				}
+				
+				/* set the local layouter reference */
+				layouter = GlobalParams.layouter;
+				layouter.resetAll(); // to kill any timers
+				layouter.disableAnimation = this.selected;
+			}
+			
+			/**
+			 * This refreshes the current value of the
+			 * checkbox with the value in the layouter.
+			 * */
+			public function refreshAnimCheckbox():void {
+				var layouter:ILayoutAlgorithm;
+				
+				/* check if we have a layouter at all */
+				if(GlobalParams.layouter == null) {
+					trace("Cannot update Anim checkbox from null layouter");
+					return;
+				}
+				/* refresh the value */
+				this.selected = GlobalParams.layouter.disableAnimation;
+			}
+			
+		]]>
+	</mx:Script>
+</mx:CheckBox>

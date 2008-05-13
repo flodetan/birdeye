@@ -24,7 +24,6 @@
 
 package org.un.cava.birdeye.qavis.treemap.controls.treeMapClasses
 {
-	import org.un.cava.birdeye.qavis.treemap.controls.treeMapClasses.TreeMapBranchData;
 	import flash.geom.Rectangle;
 		
 	/**
@@ -43,8 +42,8 @@ package org.un.cava.birdeye.qavis.treemap.controls.treeMapClasses
 	//--------------------------------------
 	
 		/**
-		 * Updates the size and positions of a TreeMap branch's renderers.
+		 * Updates the size and positions of a TreeMap branch renderer's child items.
 		 */
-		function updateLayout(branchData:TreeMapBranchData, bounds:Rectangle):void
+		function updateLayout(branchRenderer:ITreeMapBranchRenderer, bounds:Rectangle):void
 	}
 }

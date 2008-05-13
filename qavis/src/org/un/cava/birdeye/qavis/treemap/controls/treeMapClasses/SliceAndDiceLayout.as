@@ -59,10 +59,16 @@ package org.un.cava.birdeye.qavis.treemap.controls.treeMapClasses
 		/**
 		 * @copy ITreeMapLayoutStrategy#updateLayout()
 		 */
-		public function updateLayout(branchData:TreeMapBranchData, bounds:Rectangle):void
+		public function updateLayout(branchRenderer:ITreeMapBranchRenderer, bounds:Rectangle):void
 		{	
-			var dataProvider:ICollectionView = new ArrayCollection(branchData.itemsToArray());
-			var totalWeight:Number = this.calculateTotalWeightSum(dataProvider);
+			if(branchRenderer.itemCount == 0)
+			{
+				return;
+			}
+			
+			var items:Array = branchRenderer.itemsToArray();
+			var totalWeight:Number = this.sumWeights(items);
+			var dataProvider:ICollectionView = new ArrayCollection(items);
 			var dataIterator:IViewCursor = dataProvider.createCursor();
 			
 			var lengthOfLongSide:Number = Math.max(bounds.width, bounds.height);
@@ -89,19 +95,18 @@ package org.un.cava.birdeye.qavis.treemap.controls.treeMapClasses
 				var nodeBounds:Rectangle;
 				if(lengthOfLongSide == bounds.width)
 				{
-					nodeBounds = new Rectangle(bounds.left + position, bounds.top,
-						oppositeLength, lengthOfShortSide);
+					currentData.x = bounds.left + position;
+					currentData.y = bounds.top;
+					currentData.width = oppositeLength;
+					currentData.height = lengthOfShortSide;
 				}
 				else
 				{
-					nodeBounds = new Rectangle(bounds.left, bounds.top + position,
-						lengthOfShortSide, oppositeLength);
+					currentData.x = bounds.left;
+					currentData.y = bounds.top + position;
+					currentData.width = lengthOfShortSide;
+					currentData.height = oppositeLength;
 				}
-				
-				currentData.x = nodeBounds.x;
-				currentData.y = nodeBounds.y;
-				currentData.width = nodeBounds.width;
-				currentData.height = nodeBounds.height;
 				
 				position += oppositeLength;
 				dataIterator.moveNext()
@@ -116,17 +121,15 @@ package org.un.cava.birdeye.qavis.treemap.controls.treeMapClasses
 		 * @private
 		 * Calculates the sum of item weights.
 		 */
-		private function calculateTotalWeightSum(data:ICollectionView):Number
+		private function sumWeights(data:Array):Number
 		{
 			var sum:Number = 0;
-			var iterator:IViewCursor = data.createCursor();
-			do
+			var itemCount:int = data.length;
+			for(var i:int = 0; i < itemCount; i++)
 			{
-				var currentData:TreeMapItemLayoutData = iterator.current;
-				var weight:Number = currentData.weight;
-				sum += weight;
+				var currentData:TreeMapItemLayoutData = TreeMapItemLayoutData(data[i]);
+				sum += currentData.weight;
 			}
-			while(iterator.moveNext());
 			return sum;
 		}
 	

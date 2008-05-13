@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:spark="org.un.cava.birdeye.qavis.sparklines.*" >
+	 
+	<spark:PieSpark width="30" height="30" dataProvider="{data}" dataField="@x" />
+	
+</mx:Canvas>
