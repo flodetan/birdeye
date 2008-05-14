@@ -29,19 +29,22 @@ package org.un.cava.birdeye.geovis.dictionary
 {
 	public class USARegionTypes
 	{
-		public static var REGION_EASTNORTHCENTRAL:String = "East North Central";
-		public static var REGION_EASTSOUTHCENTRAL:String = "East South Central";
-		public static var REGION_MIDDLEATLANTIC:String = "Middle Atlantic";
-		public static var REGION_MIDWEST:String = "Midwest";
-		public static var REGION_MOUNTAIN:String = "Mountain";
-		public static var REGION_NEWENGLAND:String = "New England";
-		public static var REGION_NORTHEAST:String = "NorthEast";
-		public static var REGION_PACIFIC:String = "Pacific";
-		public static var REGION_SOUTH:String = "South";
-		public static var REGION_SOUTHATLANTIC:String = "South Atlantic";
 		public static var REGION_USA:String = "USA";
-		public static var REGION_WEST:String = "West";
-		public static var REGION_WESTNORTHCENTRAL:String = "West North Central";
-		public static var REGION_WESTSOUTHCENTRAL:String = "West South Central";
+		public static var REGION_CONUS:String = "CONUS";
+		public static var REGION_OCONUS:String = "OCONUS";
+		public static var REGION_NORTHEAST:String = "NorthEast";
+		public static var REGION_MIDWEST:String =  "Midwest";
+		public static var REGION_SOUTH:String =  "South";
+		public static var REGION_WEST:String =  "West";
+		
+		public static var SUBREGION_NEWENGLAND:String = "NewEngland";
+      	public static var SUBREGION_MIDDLEATLANTIC:String = "MiddleAtlantic";
+      	public static var SUBREGION_EASTNORTHCENTRAL:String = "EastNorthCentral";
+      	public static var SUBREGION_WESTNORTHCENTRAL:String = "WestNorthCentral";
+      	public static var SUBREGION_SOUTHATLANTIC:String = "SouthAtlantic";
+      	public static var SUBREGION_EASTSOUTHCENTRAL:String = "EastSouthCentral";
+      	public static var SUBREGION_WESTSOUTHCENTRAL:String = "WestSouthCentral";
+      	public static var SUBREGION_MOUNTAIN:String = "Mountain";
+      	public static var SUBREGION_PACIFIC:String = "Pacific";
 	}
 }
