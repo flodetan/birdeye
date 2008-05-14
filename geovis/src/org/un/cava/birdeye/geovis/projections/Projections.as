@@ -66,7 +66,7 @@ package org.un.cava.birdeye.geovis.projections
 				//}else{
 					//GeoData = new WorldCountriesData();
 				}
-			}else if(region=="USA"){
+			}else if(region=="USA" || region=="CONUS" || region=="OCONUS" || region=="NorthEast" || region=="Midwest" || region=="South" || region=="West" || region=="NewEngland" || region=="MiddleAtlantic" || region=="EastNorthCentral" || region=="WestNorthCentral" || region=="SouthAtlantic" || region=="EastSouthCentral" || region=="WestSouthCentral" || region=="Mountain" || region=="Pacific") {
 				
 				if(proj=="Geographic"){
 					GeoData = new org.un.cava.birdeye.geovis.projections.usa.Geographic();

@@ -51,65 +51,135 @@
 		import org.un.cava.birdeye.qavis.sparklines.*
 		 
 		[Bindable] 
-        public var arrProjWorld:Array = new Array("Geographic", "Mollweide", "WinkelTripel", "Miller cylindrical","EckertIV","EckertVI","Goode","Robinson","Sinsoidal","Lambert equal area" );
+        private var arrProjWorld:Array = new Array("Geographic", "Mollweide", "WinkelTripel", "Miller cylindrical","EckertIV","EckertVI","Goode","Robinson","Sinsoidal","Lambert equal area" );
  		[Bindable]
-        public var arrProjUSA:Array = new Array("Geographic");
+        private var arrProjUSA:Array = new Array("Geographic");
+ 		[Bindable]
+ 		private var ArrWorld:Array=
+ 			[{label:"World", data:"World"},
+            {label:"Africa", data:"Africa"},
+            {label:"-- North", data:"North"},
+            {label:"-- Sub-Saharan", data:"Sub-Sahara"},
+            {label:"Asia", data:"Asia"},
+            {label:"-- Eastern", data:"Eastern"},
+            {label:"-- Southern", data:"Southern"},
+            {label:"-- South-eastern", data:"South-eastern"},
+            {label:"-- Western", data:"Western"},
+            {label:"CIS", data:"CIS"},
+            {label:"Europe", data:"Europe"},
+            {label:"North America", data:"NorthAmerica"},
+            {label:"-- USA (States)", data:"USStates"},
+            {label:"Oceania", data:"Oceania"},
+            {label:"South America", data:"SouthAmerica"}];
  
+ 		[Bindable]
+ 		private var ArrUSA:Array= 
+            [{label:"USA (OCONUS)", data:"OCONUS"},
+            {label:"USA (CONUS)", data:"CONUS"},
+            {label:"Northeast", data:"Northeast"},
+            {label:"-- New England", data:"NewEngland"},
+            {label:"-- Middle Atlantic", data:"MiddleAtlantic"},
+            {label:"Midwest", data:"Midwest"},
+            {label:"-- East North Central", data:"EastNorthCentral"},
+            {label:"-- West North Central", data:"WestNorthCentral"},
+            {label:"South", data:"South"},
+            {label:"-- South Atlantic", data:"SouthAtlantic"},
+            {label:"-- East South Central", data:"EastSouthCentral"},
+            {label:"-- West South Central", data:"WestSouthCentral"},
+            {label:"West", data:"West"},
+            {label:"-- Mountain", data:"Mountain"},
+            {label:"-- Pacific", data:"Pacific"}];
+            
  		private var myMap:Object;
 		
 		public function init():void{
-						
+			projectionSelector.dataProvider=arrProjUSA;
+	  		layoutSelector.dataProvider=ArrUSA;
+	  		zoomSelector.dataProvider=ArrUSA;	
 		}
 		
 		private function layout_Selected(e:ListEvent):void{
-			if(e.currentTarget.selectedLabel=="-- USA (States)"){
-				projectionSelector.dataProvider=arrProjUSA;
-			}else{
-				projectionSelector.dataProvider=arrProjWorld;
-			}
-			projectionSelector.selectedIndex=-1;		
+			if(projectionSelector.selectedIndex>=0){
+				showMap();
+			}	
 		}
 		
 		private function projection_Selected(e:ListEvent):void{
-			progressBar.visible=true;
-			mapCnvs.addEventListener(FlexEvent.UPDATE_COMPLETE, createNewMap);
-			mapCnvs.removeChild(mapCnvs.getChildByName("map"));
+			if(layoutSelector.selectedIndex>=0){
+				showMap();
+			}
 			//createNewMap()
 		}
 		
+		private function showMap():void{
+			progressBar.visible=true;
+			mapCnvs.addEventListener(FlexEvent.UPDATE_COMPLETE, createNewMap);
+			mapCnvs.removeChild(mapCnvs.getChildByName("map"));
+		}
 		private function createNewMap(event:FlexEvent):void{
 			
-			if (layoutWorldSelector.selectedLabel=="World"){
+			if (layoutSelector.selectedLabel=="World"){
 				myMap=new WorldMap();
-			}else if (layoutWorldSelector.selectedLabel=="Africa"){
+			}else if (layoutSelector.selectedLabel=="Africa"){
 				myMap=new AfricaMap();
-			}else if (layoutWorldSelector.selectedLabel=="-- USA (States)"){
+			}else if (layoutSelector.selectedLabel=="-- USA (States)"){
 				myMap=new USStates();
-			}else if (layoutWorldSelector.selectedLabel=="North America"){
+			}else if (layoutSelector.selectedLabel=="North America"){
 				myMap=new NorthAmericaMap();
-			}else if (layoutWorldSelector.selectedLabel=="South America"){
+			}else if (layoutSelector.selectedLabel=="South America"){
 				myMap=new SouthAmericaMap();
-			}else if (layoutWorldSelector.selectedLabel=="Asia"){
+			}else if (layoutSelector.selectedLabel=="Asia"){
 				myMap=new AsiaMap();
-			}else if (layoutWorldSelector.selectedLabel=="Oceania"){
+			}else if (layoutSelector.selectedLabel=="Oceania"){
 				myMap=new OceaniaMap();
-			}else if (layoutWorldSelector.selectedLabel=="Europe"){
+			}else if (layoutSelector.selectedLabel=="Europe"){
 				myMap=new EuropeMap();
-			}else if (layoutWorldSelector.selectedLabel=="CIS"){
+			}else if (layoutSelector.selectedLabel=="CIS"){
 				myMap=new CISMap();
-			}else if (layoutWorldSelector.selectedLabel=="-- North"){
+			}else if (layoutSelector.selectedLabel=="-- North"){
 				myMap=new NorthAfricaMap();
-			}else if (layoutWorldSelector.selectedLabel=="-- Sub-Saharan"){
+			}else if (layoutSelector.selectedLabel=="-- Sub-Saharan"){
 				myMap=new SubSaharaMap();
-			}else if (layoutWorldSelector.selectedLabel=="-- Eastern"){
+			}else if (layoutSelector.selectedLabel=="-- Eastern"){
 				myMap=new EasternMap();
-			}else if (layoutWorldSelector.selectedLabel=="-- Southern"){
+			}else if (layoutSelector.selectedLabel=="-- Southern"){
 				myMap=new SouthernMap();
-			}else if (layoutWorldSelector.selectedLabel=="-- South-eastern"){
+			}else if (layoutSelector.selectedLabel=="-- South-eastern"){
 				myMap=new SouthEasternMap();
-			}else if (layoutWorldSelector.selectedLabel=="-- Western"){
+			}else if (layoutSelector.selectedLabel=="-- Western"){
 				myMap=new WesternMap();
+			}else if (layoutSelector.selectedLabel=="USA (OCONUS)"){
+				myMap=new OconusMap();
+			}else if (layoutSelector.selectedLabel=="USA (CONUS)"){
+				myMap=new ConusMap();
+			}else if (layoutSelector.selectedLabel=="Northeast"){
+				myMap=new NortheastMap();
+			}else if (layoutSelector.selectedLabel=="-- New England"){
+				myMap=new NewEnglandMap();
+			}else if (layoutSelector.selectedLabel=="-- Middle Atlantic"){
+				myMap=new MiddleAtlanticMap();
+			}else if (layoutSelector.selectedLabel=="Midwest"){
+				myMap=new MidwestMap();
+			}else if (layoutSelector.selectedLabel=="-- East North Central"){
+				myMap=new EastNorthCentralMap();
+			}else if (layoutSelector.selectedLabel=="-- West North Central"){
+				myMap=new WestNorthCentralMap();
+			}else if (layoutSelector.selectedLabel=="South"){
+				myMap=new SouthMap();
+			}else if (layoutSelector.selectedLabel=="-- South Atlantic"){
+				myMap=new SouthAtlanticMap();
+			}else if (layoutSelector.selectedLabel=="-- East South Central"){
+				myMap=new EastSouthCentralMap();
+			}else if (layoutSelector.selectedLabel=="-- West South Central"){
+				myMap=new WestSouthCentralMap();
+			}else if (layoutSelector.selectedLabel=="West"){
+				myMap=new WestMap();
+			}else if (layoutSelector.selectedLabel=="-- Mountain"){
+				myMap=new MountainMap();
+			}else if (layoutSelector.selectedLabel=="-- Pacific"){
+				myMap=new PacificMap();
 			}
+			
 			myMap.name="map";
 			myMap.id="map";
 			myMap.projection=projectionSelector.selectedLabel;
@@ -130,6 +200,19 @@
 			 	(myMap as Canvas).scaleX=zoomer.value;
 			 	(myMap as Canvas).scaleY=zoomer.value;
 			 }
+	  	}
+	  	
+	  	private function baseMapSel(e:Event):void{
+	  		trace(e.currentTarget.id)
+	  		if(e.currentTarget.id=='rbWorld'){
+	  			projectionSelector.dataProvider=arrProjWorld;
+	  			layoutSelector.dataProvider=ArrWorld;
+	  			zoomSelector.dataProvider=ArrWorld;
+	  		}else{
+	  			projectionSelector.dataProvider=arrProjUSA;
+	  			layoutSelector.dataProvider=ArrUSA;
+	  			zoomSelector.dataProvider=ArrUSA;
+	  		}
 	  	}
 			    
 	    	[Bindable] 
@@ -191,23 +274,7 @@
       							label="Zoom" width="100%" opened="false" horizontalAlign="center" paddingBottom="5" >
 							<mx:VBox width="97%" horizontalAlign="center" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" borderColor="#666666" borderThickness="1" cornerRadius="5" borderStyle="solid" backgroundColor="#FFFFFF" backgroundAlpha=".8" >
 							<mx:ComboBox id="zoomSelector" prompt="Select zoom focus..." width="95%" toolTip="Some layouts are under construction" >
-									<mx:ArrayCollection>
-									 <mx:Object label="World" data="World" />
-							         <mx:Object label="Africa" data="Africa" />
-							         <mx:Object label="-- North" data="North" />
-							         <mx:Object label="-- Sub-Saharan" data="Sub-Sahara" />
-							         <mx:Object label="Asia" data="Asia" />
-							         <mx:Object label="-- Eastern" data="Eastern" />
-							         <mx:Object label="-- Southern" data="Southern" />
-							         <mx:Object label="-- South-eastern" data="South-eastern" />
-							         <mx:Object label="-- Western" data="Western" />
-							         <mx:Object label="CIS" data="CIS" />
-							         <mx:Object label="Europe" data="Europe" />
-							         <mx:Object label="North America" data="NorthAmerica" />
-							         <mx:Object label="-- USA (States)" data="USStates" />
-							         <mx:Object label="Oceania" data="Oceania" />
-							         <mx:Object label="South America" data="SouthAmerica" />
-							     	</mx:ArrayCollection>
+									
 								</mx:ComboBox>
 								<mx:HBox width="100%" >
 								<mx:Label text="Scale:" />
@@ -226,64 +293,16 @@
 							<mx:VBox width="97%" horizontalAlign="center" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" borderColor="#666666" borderThickness="1" cornerRadius="5" borderStyle="solid" backgroundColor="#FFFFFF" backgroundAlpha=".8" >
 							<mx:HBox width="100%" >
 								<mx:Label text="Base Map:" />
-								<mx:RadioButtonGroup id="baseMap" labelPlacement="right" />
-									<mx:RadioButton groupName="baseMap" id="worldRB" value="World" 
-            							label="World" />
-        							<mx:RadioButton groupName="baseMap" id="usaRB" value="USA" 
-            							label="USA" selected="true" />
+								<mx:RadioButtonGroup id="rbgBaseMap" labelPlacement="right" />
+									<mx:RadioButton groupName="baseMap" id="rbWorld" value="World" 
+            							label="World" change="baseMapSel(event)"/>
+        							<mx:RadioButton groupName="baseMap" id="rbUSA" value="USA" 
+            							label="USA" selected="true" change="baseMapSel(event)" />
         					</mx:HBox>
-							<mx:ComboBox id="layoutWorldSelector" prompt="Select map..." width="95%" toolTip="Select region" change="layout_Selected(event)" >
-								<mx:ArrayCollection>
-							         <mx:Object label="World" data="World" />
-							         <mx:Object label="Africa" data="Africa" />
-							         <mx:Object label="-- North" data="North" />
-							         <mx:Object label="-- Sub-Saharan" data="Sub-Sahara" />
-							         <mx:Object label="Asia" data="Asia" />
-							         <mx:Object label="-- Eastern" data="Eastern" />
-							         <mx:Object label="-- Southern" data="Southern" />
-							         <mx:Object label="-- South-eastern" data="South-eastern" />
-							         <mx:Object label="-- Western" data="Western" />
-							         <mx:Object label="CIS" data="CIS" />
-							         <mx:Object label="Europe" data="Europe" />
-							         <mx:Object label="North America" data="NorthAmerica" />
-							         <mx:Object label="-- USA (States)" data="USStates" />
-							         <mx:Object label="Oceania" data="Oceania" />
-							         <mx:Object label="South America" data="SouthAmerica" />
-							     </mx:ArrayCollection>
+							<mx:ComboBox id="layoutSelector" prompt="Select map..." width="95%" toolTip="Select region" change="layout_Selected(event)" >
 							</mx:ComboBox>
-							<mx:ComboBox id="layoutUSASelector" prompt="Select map..." width="95%" toolTip="Select region" change="layout_Selected(event)" >
-								<mx:ArrayCollection>
-							         <mx:Object label="USA (OCONUS)" data="OCONUS" />
-							         <mx:Object label="USA (CONUS)" data="CONUS" />
-							         <mx:Object label="Northeast" data="Northeast" />
-							         <mx:Object label="-- New England" data="NewEngland" />
-							         <mx:Object label="-- Middle Atlantic" data="MiddleAtlantic" />
-							         <mx:Object label="Midwest" data="Midwest" />
-							         <mx:Object label="-- East North Central" data="EastNorthCentral" />
-							         <mx:Object label="-- West North Central" data="WestNorthCentral" />
-							         <mx:Object label="South" data="South" />
-							         <mx:Object label="-- South Atlantic" data="SouthAtlantic" />
-							         <mx:Object label="-- East South Central" data="EastSouthCentral" />
-							         <mx:Object label="-- West South Central" data="WestSouthCentral" />
-							         <mx:Object label="West" data="West" />
-							         <mx:Object label="-- Mountain" data="Mountain" />
-							         <mx:Object label="-- Pacific" data="Pacific" />
-							     </mx:ArrayCollection>
-							</mx:ComboBox>
+							
 							<mx:ComboBox id="projectionSelector" prompt="Select projection..." width="95%" toolTip="Set projection" change="projection_Selected(event)" >
-								<mx:Array>
-                						<!--<mx:Object label="Geographic" />
-                						<mx:Object label="AlbertsEqualArea" />
-                						<mx:Object label="Mollweide" />
-                						<mx:Object label="WinkelTripel" />
-                						<mx:Object label="MillerCylindrical" />
-                						<mx:Object label="EckertIV" />
-                						<mx:Object label="EckertVI" />
-                						<mx:Object label="Goode" />
-                						<mx:Object label="LambertEqualArea" />
-                						<mx:Object label="Robinson" />
-                						<mx:Object label="Sinsoidal" />-->
-            					</mx:Array>
 								
 							</mx:ComboBox>	
 				
@@ -501,7 +520,12 @@
 			<symbols:Symbols key="AK">
 					<sparks:PieSpark id="Pie5" width="125" height="125" dataProvider="{sales1}" dataField="unit2" gradientColors="{gradColors}" showDataTips="true" />
 			</symbols:Symbols>
-			
+			<!--<symbols:Symbols key="IL">
+					<sparks:BubbleSpark radius="17"/>
+			</symbols:Symbols>
+			<symbols:Symbols key="WY">
+					<sparks:BubbleSpark radius="17"/>
+			</symbols:Symbols>-->
 			</geomap:USStates>
 			
 			

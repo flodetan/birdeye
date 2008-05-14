@@ -32,13 +32,27 @@ package org.un.cava.birdeye.geovis.dictionary
 		import flash.utils.Dictionary;
 		import org.un.cava.birdeye.geovis.dictionary.USARegionTypes;
 		
-		private var arrRegion:Array=[USARegionTypes.REGION_USA];
-		
+		private var arrRegion:Array=[USARegionTypes.REGION_USA,USARegionTypes.REGION_CONUS,USARegionTypes.REGION_OCONUS,USARegionTypes.REGION_NORTHEAST,USARegionTypes.REGION_MIDWEST,USARegionTypes.REGION_SOUTH,USARegionTypes.REGION_WEST];
+		private var arrSubRegion:Array=[USARegionTypes.SUBREGION_EASTNORTHCENTRAL,USARegionTypes.SUBREGION_EASTSOUTHCENTRAL,USARegionTypes.SUBREGION_MIDDLEATLANTIC,USARegionTypes.SUBREGION_MOUNTAIN,USARegionTypes.SUBREGION_NEWENGLAND,USARegionTypes.SUBREGION_PACIFIC,USARegionTypes.SUBREGION_SOUTHATLANTIC,USARegionTypes.SUBREGION_WESTNORTHCENTRAL,USARegionTypes.SUBREGION_WESTSOUTHCENTRAL];
 		//Regions
-		private var arrUSA:Array=["HI","AK","FL","SC","GA","AL","NC","TN","RI","CT","MA","ME","NH","VT","NY","NJ","PA","DE","MD","WV","KY","OH","MI","WY","MT","ID","WA","TX","CA","AZ","NV","UT","CO","NM","OR","ND","SD","NE","IA","MS","IN","IL","MN","WI","MO","AR","OK","LA","VA","DC"];//"KN",
-		
+		private var arrUSA:Array=["HI","AK","FL","SC","GA","AL","NC","TN","RI","CT","MA","ME","NH","VT","NY","NJ","PA","DE","MD","WV","KY","OH","MI","WY","MT","ID","WA","TX","CA","AZ","NV","UT","CO","NM","OR","ND","SD","NE","IA","MS","IN","IL","MN","WI","MO","AR","OK","LA","VA","DC","KS"];//"KN",
+		private var arrCONUS:Array=["FL","SC","GA","AL","NC","TN","RI","CT","MA","ME","NH","VT","NY","NJ","PA","DE","MD","WV","KY","OH","MI","WY","MT","ID","WA","TX","CA","AZ","NV","UT","CO","NM","OR","ND","SD","NE","IA","MS","IN","IL","MN","WI","MO","AR","OK","LA","VA","DC","KS"];
+		private var arrOCONUS:Array=["HI","AK"];
+		private var arrNorthEast:Array=["ME","NH","VT","MA","NY","PA","NJ","CT","RI"];
+		private var arrMidWest:Array=["ND","SD","MN","WI","NE","IA","IL","IN","OH","MI","KS","MO"];
+		private var arrSouth:Array=["DE","MD","WV","VA","KY","TN","NC","SC","AR","OK","TX","LA","MS","AL","GA","FL"];
+		private var arrWest:Array=["WA","OR","ID","MT","WY","CA","NV","UT","CO","AZ","NM"];
 		//SubRegions
-		
+		private var arrNewEngland:Array=["ME","NH","VT","MA","CT","RI"];
+      	private var arrMiddleAtlantic:Array=["NY","NJ","PA"];
+      	private var arrEastNorthCentral:Array=["WI","IL","IN","OH","MI"];
+      	private var arrWestNorthCentral:Array=["ND","SD","MN","IA","NE","KS","MO"];
+      	private var arrSouthAtlantic:Array=["FL","GA","SC","NC","VA","VW","DE","MD","WA"];
+      	private var arrEastSouthCentral:Array=["KY","TN","MS","AL"];
+      	private var arrWestSouthCentral:Array=["TX","OK","AR","LA"];
+      	private var arrMountain:Array=["ID","MT","WY"];
+      	private var arrPacific:Array=["WA","OR","CA"];
+      	
 		private var dicCountriesNames:Dictionary= new Dictionary();
 		
 		/**
@@ -56,17 +70,17 @@ package org.un.cava.birdeye.geovis.dictionary
 			dicCountriesNames["AL"]="ALABAMA"
 			dicCountriesNames["AK"]="ALASKA"
 			dicCountriesNames["AS"]="AMERICAN SAMOA"
-			dicCountriesNames["AZ"]="ARIZONA "
+			dicCountriesNames["AZ"]="ARIZONA"
 			dicCountriesNames["AR"]="ARKANSAS"
-			dicCountriesNames["CA"]="CALIFORNIA "
-			dicCountriesNames["CO"]="COLORADO "
+			dicCountriesNames["CA"]="CALIFORNIA"
+			dicCountriesNames["CO"]="COLORADO"
 			dicCountriesNames["CT"]="CONNECTICUT"
 			dicCountriesNames["DE"]="DELAWARE"
 			dicCountriesNames["DC"]="DISTRICT OF COLUMBIA"
 			dicCountriesNames["FM"]="FEDERATED STATES OF MICRONESIA"
 			dicCountriesNames["FL"]="FLORIDA"
 			dicCountriesNames["GA"]="GEORGIA"
-			dicCountriesNames["GU"]="GUAM "
+			dicCountriesNames["GU"]="GUAM"
 			dicCountriesNames["HI"]="HAWAII"
 			dicCountriesNames["ID"]="IDAHO"
 			dicCountriesNames["IL"]="ILLINOIS"
@@ -107,7 +121,7 @@ package org.un.cava.birdeye.geovis.dictionary
 			dicCountriesNames["UT"]="UTAH"
 			dicCountriesNames["VT"]="VERMONT"
 			dicCountriesNames["VI"]="VIRGIN ISLANDS"
-			dicCountriesNames["VA"]="VIRGINIA "
+			dicCountriesNames["VA"]="VIRGINIA"
 			dicCountriesNames["WA"]="WASHINGTON"
 			dicCountriesNames["WV"]="WEST VIRGINIA"
 			dicCountriesNames["WI"]="WISCONSIN"
@@ -122,6 +136,36 @@ package org.un.cava.birdeye.geovis.dictionary
       		var arrRet:Array=new Array();
       		if(RegionKey=="USA"){
       			arrRet=arrUSA;
+      		}else if(RegionKey=="CONUS"){
+      			arrRet=arrCONUS;
+      		}else if(RegionKey=="OCONUS"){
+      			arrRet=arrOCONUS;
+      		}else if(RegionKey=="NorthEast"){
+      			arrRet=arrNorthEast;
+      		}else if(RegionKey=="MidWest"){
+      			arrRet=arrMidWest;
+      		}else if(RegionKey=="South"){
+      			arrRet=arrSouth;
+      		}else if(RegionKey=="West"){
+      			arrRet=arrWest;
+      		}else if(RegionKey=="West"){
+      			arrRet=arrNewEngland;
+      		}else if(RegionKey=="MiddleAtlantic"){
+      			arrRet=arrMiddleAtlantic;
+      		}else if(RegionKey=="EastNorthCentral"){
+      			arrRet=arrEastNorthCentral;
+      		}else if(RegionKey=="WestNorthCentral"){
+      			arrRet=arrWestNorthCentral;
+      		}else if(RegionKey=="SouthAtlantic"){
+      			arrRet=arrSouthAtlantic;
+      		}else if(RegionKey=="EastSouthCentral"){
+      			arrRet=arrEastSouthCentral;
+      		}else if(RegionKey=="WestSouthCentral"){
+      			arrRet=arrWestSouthCentral;
+      		}else if(RegionKey=="Mountain"){
+      			arrRet=arrMountain;
+      		}else if(RegionKey=="Pacific"){
+      			arrRet=arrPacific;
       		}
       		return arrRet;
     	}
