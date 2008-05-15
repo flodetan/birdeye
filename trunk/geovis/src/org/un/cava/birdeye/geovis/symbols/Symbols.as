@@ -60,8 +60,6 @@ package org.un.cava.birdeye.geovis.symbols
 		public function Symbols()
 		{
 			super();
-			this.mouseEnabled=false;
-			this.mouseChildren=false;
 			myUIComp=new UIComponent();
 			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
 		}
