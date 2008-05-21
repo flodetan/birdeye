@@ -12,5 +12,5 @@ Component enabling users to create complex data visualization interfaces for the
 Stable: Project is nearing version 1.0 and will be migrated to BirdEye shortly; : 19 March 2008
 
   * Project home: [http://code.google.com/p/flexvizgraphlib/ here]
-  * Demonstration: [http://flexvizgraphlib.googlecode.com/svn/trunk/vgExplorer/bin/VGExplorer.html here]
+  * Demonstration: [http://birdeye.googlecode.com/svn/trunk/ravis/examples/bin/RaVisExplorer.html here]
   * Group: [http://groups.google.com/group/flexvizgraphlib here]
