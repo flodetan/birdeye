@@ -32,12 +32,15 @@
 	xmlns:geomap="org.un.cava.birdeye.geovis.views.maps.usa.*"
 	xmlns:features="org.un.cava.birdeye.geovis.features.*"
 	xmlns:symbols="org.un.cava.birdeye.geovis.symbols.*"
+	xmlns:flows="org.un.cava.birdeye.geovis.analysis.*"
 	xmlns:sparks="org.un.cava.birdeye.qavis.sparklines.*"
 	backgroundGradientColors="[#333333,#999999]" layout="vertical"
 	width="100%" height="100%" applicationComplete="init()" >
 
 <mx:Script>
 	<![CDATA[
+		import org.un.cava.birdeye.geovis.symbols.Symbols;
+		import org.un.cava.birdeye.geovis.analysis.Flow;
 		import mx.events.StateChangeEvent;
 		import mx.events.FlexEvent;
 		import mx.events.ChildExistenceChangedEvent;
@@ -50,6 +53,10 @@
 		import org.un.cava.birdeye.geovis.features.*
 		import org.un.cava.birdeye.qavis.sparklines.*
 		 
+		private var XMLLoader:URLLoader;
+		private var XMLFile:String;
+		[Bindable] 
+		public var Maps:XML;
 		[Bindable] 
         private var arrProjWorld:Array = new Array("Geographic", "Mollweide", "WinkelTripel", "Miller cylindrical","EckertIV","EckertVI","Goode","Robinson","Sinsoidal","Lambert equal area" );
  		[Bindable]
@@ -74,8 +81,9 @@
  
  		[Bindable]
  		private var ArrUSA:Array= 
-            [{label:"USA (OCONUS)", data:"OCONUS"},
-            {label:"USA (CONUS)", data:"CONUS"},
+            [{label:"All States", data:"USStates"},
+            {label:"OCONUS", data:"OCONUS"},
+            {label:"CONUS", data:"CONUS"},
             {label:"Northeast", data:"Northeast"},
             {label:"-- New England", data:"NewEngland"},
             {label:"-- Middle Atlantic", data:"MiddleAtlantic"},
@@ -89,13 +97,36 @@
             {label:"West", data:"West"},
             {label:"-- Mountain", data:"Mountain"},
             {label:"-- Pacific", data:"Pacific"}];
-            
+        
+        [Bindable] 
+        private var arrColorByUSA:Array = new Array("Populations", "Housing", "Households");
+ 		[Bindable] 
+        private var arrColorByWorld:Array = new Array("Populations", "Area", "Density");
+ 		    
  		private var myMap:Object;
 		
 		public function init():void{
 			projectionSelector.dataProvider=arrProjUSA;
+			projectionSelector.selectedIndex=0;
+			featureSelector.dataProvider=arrColorByUSA;
+			featureSelector.selectedIndex=0;
 	  		layoutSelector.dataProvider=ArrUSA;
-	  		zoomSelector.dataProvider=ArrUSA;	
+	  		layoutSelector.selectedIndex=0;
+	  		zoomSelector.dataProvider=ArrUSA;
+	  		symbolTypeSelector.selectedIndex=1;
+			XMLLoader=new URLLoader();
+			XMLFile="data/usstates.xml";
+			XMLLoader.addEventListener(Event.COMPLETE, loadXML); 
+			XMLLoader.load(new URLRequest(XMLFile));	
+			progressBar.visible=true;
+  		}
+  		
+  		public function loadXML(e:Event):void{
+			Maps=new XML(e.target.data);
+			createMap();
+			colorize();
+			//createFlows();
+			createPies();
 		}
 		
 		private function layout_Selected(e:ListEvent):void{
@@ -108,21 +139,36 @@
 			if(layoutSelector.selectedIndex>=0){
 				showMap();
 			}
-			//createNewMap()
 		}
 		
+		private function symbolsSel(e:ListEvent):void{
+			if(e.currentTarget.selectedIndex==1){
+				myMap.removeAllChildren();
+				createMap();
+				colorize();
+				createPies();
+			}else if(e.currentTarget.selectedIndex==2){
+				myMap.removeAllChildren();
+				createMap();
+				colorize();
+				createFlows();
+			}
+		}
 		private function showMap():void{
 			progressBar.visible=true;
 			mapCnvs.addEventListener(FlexEvent.UPDATE_COMPLETE, createNewMap);
 			mapCnvs.removeChild(mapCnvs.getChildByName("map"));
 		}
 		private function createNewMap(event:FlexEvent):void{
-			
+			createMap()
+		}
+		
+		private function createMap():void{
 			if (layoutSelector.selectedLabel=="World"){
 				myMap=new WorldMap();
 			}else if (layoutSelector.selectedLabel=="Africa"){
 				myMap=new AfricaMap();
-			}else if (layoutSelector.selectedLabel=="-- USA (States)"){
+			}else if (layoutSelector.selectedLabel=="-- USA (States)" || layoutSelector.selectedLabel=="All States"){
 				myMap=new USStates();
 			}else if (layoutSelector.selectedLabel=="North America"){
 				myMap=new NorthAmericaMap();
@@ -148,9 +194,9 @@
 				myMap=new SouthEasternMap();
 			}else if (layoutSelector.selectedLabel=="-- Western"){
 				myMap=new WesternMap();
-			}else if (layoutSelector.selectedLabel=="USA (OCONUS)"){
+			}else if (layoutSelector.selectedLabel=="OCONUS"){
 				myMap=new OconusMap();
-			}else if (layoutSelector.selectedLabel=="USA (CONUS)"){
+			}else if (layoutSelector.selectedLabel=="CONUS"){
 				myMap=new ConusMap();
 			}else if (layoutSelector.selectedLabel=="Northeast"){
 				myMap=new NortheastMap();
@@ -185,33 +231,88 @@
 			myMap.projection=projectionSelector.selectedLabel;
 			myMap.x="10"; 
 			myMap.y="100"; 
-			myMap.scaleX=0.9; 
-			myMap.scaleY=0.9; 
+			myMap.scaleX=zoomer.value; 
+			myMap.scaleY=zoomer.value; 
 			mapCnvs.removeEventListener(FlexEvent.UPDATE_COMPLETE, createNewMap);
 			progressBar.visible=false;
 			mapCnvs.addChild((myMap as Canvas));
+			if(rbWorld.selected){	
+				lblTitle.text="World Map " + layoutSelector.selectedLabel + " (" + projectionSelector.selectedLabel + ")";
+			}else{
+				lblTitle.text="USA Map " + layoutSelector.selectedLabel + " (" + projectionSelector.selectedLabel + ")";
+			}
+		}
+		
+		private function colorize():void{
+			var states:XMLList=Maps.states.state;
+			for each (var statesElement:XML in states) {
+				var ft:Features=new Features();
+				ft.foid=statesElement.@id;
+				ft.toolTip=statesElement.@name;
+				if(statesElement.@population<1000000){
+					ft.setStyle("fillItem","0xedf8e9")
+				}else if(statesElement.@population>=1000000 && statesElement.@population<5000000){
+					ft.setStyle("fillItem","0xbae4b3")
+				}else if(statesElement.@population>=5000000 && statesElement.@population<10000000){
+					ft.setStyle("fillItem","0x74c476")
+				}else if(statesElement.@population>=1500000){
+					ft.setStyle("fillItem","0x6d2c")
+				}
+				myMap.addChild(ft);
+			}
+		}
+		
+		private function createFlows():void{
+			var flows:XMLList=Maps.flows;
+			var fw:Flow=new Flow();
+			fw.showDataTips=true;
+			fw.dataProvider=flows;
+			fw.fromField="@fromKey";
+			fw.toField="@toKey";
+			fw.valueField="@description";
+			
+			myMap.addChild(fw);
+		}
+		
+		private function createPies():void{
+			var SymbList:XMLList=Maps.symbols.symbol
+			trace(SymbList)
+			for each (var symbolsElement:XML in SymbList) {
+				var sym:Symbols=new Symbols();
+				sym.key=symbolsElement.@id;
+				var pie:PieSpark=new PieSpark();
+				pie.width=125;
+				pie.height=125;
+				pie.dataProvider=symbolsElement;
+				pie.dataField="@unit";
+				pie.gradientColors=gradColors; 
+				pie.showDataTips=true;
+				sym.addChild(pie);
+				myMap.addChild(sym);
+			}
 		}
 		
 		private function changeSize():void{
-			 if((myMap as Canvas)==null){
+			/* if((myMap as Canvas)==null){
 			 	map.scaleX=zoomer.value;
 			 	map.scaleY=zoomer.value;
-			 }else{
+			 }else{*/
 			 	(myMap as Canvas).scaleX=zoomer.value;
 			 	(myMap as Canvas).scaleY=zoomer.value;
-			 }
+			// }
 	  	}
 	  	
 	  	private function baseMapSel(e:Event):void{
-	  		trace(e.currentTarget.id)
 	  		if(e.currentTarget.id=='rbWorld'){
 	  			projectionSelector.dataProvider=arrProjWorld;
 	  			layoutSelector.dataProvider=ArrWorld;
 	  			zoomSelector.dataProvider=ArrWorld;
+	  			featureSelector.dataProvider=arrColorByWorld;
 	  		}else{
 	  			projectionSelector.dataProvider=arrProjUSA;
 	  			layoutSelector.dataProvider=ArrUSA;
 	  			zoomSelector.dataProvider=ArrUSA;
+	  			featureSelector.dataProvider=arrColorByUSA;
 	  		}
 	  	}
 			    
@@ -238,6 +339,13 @@
                 <sales media="MP3" unit1="2000000" unit2="1500000" unit3="800000" unit4="200000"/>
                 <sales media="Tapes" unit1="750000" unit2="200000" unit3="1500000" unit4="900000"/>
             </root>;
+            
+            [Bindable]
+        public var myFlowData:XML=
+            <flows>
+                <flow fromKey="AK" toKey="ID" description="Hello" />
+                <flow fromKey="LA" toKey="NY" description="GoodBye" />
+            </flows>;
 
 	]]>
 </mx:Script>
@@ -313,13 +421,7 @@
 							<flexlib:WindowShade id="featuresCnvs" styleName="linkButtonWindowShade" 
       							label="Features" width="100%" opened="true" horizontalAlign="center" paddingBottom="5" >
 							<mx:VBox width="97%" horizontalAlign="center" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" borderColor="#666666" borderThickness="1" cornerRadius="5" borderStyle="solid" backgroundColor="#FFFFFF" backgroundAlpha=".8" >
-							<mx:ComboBox id="featureSelector" height="20" width="95%" prompt="Color by..." toolTip="Select the orientation of tree layout" >
-									<mx:ArrayCollection>
-										<mx:String>X</mx:String>
-										<mx:String>Y</mx:String>
-										<mx:String>Z</mx:String>
-									</mx:ArrayCollection>
-							</mx:ComboBox>
+							<mx:ComboBox id="featureSelector" height="20" width="95%" prompt="Color by..." toolTip="Select the orientation of tree layout" />
 							<mx:ComboBox id="colorBrewerSelector" height="20" width="95%" prompt="Color scheme..." toolTip="Select the orientation of tree layout" >
 									<mx:ArrayCollection>
 										<mx:String>Sequential</mx:String>
@@ -335,7 +437,7 @@
 							<flexlib:WindowShade id="symbolsCnvs" styleName="linkButtonWindowShade" 
       							label="Symbols" width="100%" opened="true" horizontalAlign="center" paddingBottom="5" >
 							<mx:VBox width="97%" horizontalAlign="center" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" borderColor="#666666" borderThickness="1" cornerRadius="5" borderStyle="solid" backgroundColor="#FFFFFF" backgroundAlpha=".8" >
-							<mx:ComboBox id="symbolTypeSelector" height="20" width="95%" prompt="Add Symbols..." toolTip="Select the orientation of tree layout" >
+							<mx:ComboBox id="symbolTypeSelector" height="20" width="95%" prompt="Add Symbols..." toolTip="Select the type of symbols" change="symbolsSel(event)" >
 									<mx:ArrayCollection>
 										<mx:String>Bubble</mx:String>
 										<mx:String>Chart</mx:String>
@@ -443,14 +545,13 @@
 			</mx:VBox>		
 		</mx:HBox>
 
-		<!-- Map Panel -->
-		
+		<!-- Map Panel-->
 		<mx:Canvas id="mapCnvs" borderStyle="solid" borderColor="#CCCCCC" backgroundColor="#FFFFFF"  width="100%" height="100%" verticalScrollPolicy="off">		
-		<mx:ProgressBar id="progressBar" indeterminate="true" visible="false"/>
-			<mx:Label text="US States (Choropleth with Symbols)" y="20" fontSize="16" fontWeight="bold" horizontalCenter="0" />
-			<geomap:USStates id="map" name="map" projection="Geographic" x="15" y="100" scaleX="{zoomer.value}" scaleY="{zoomer.value}" >
+			<mx:ProgressBar id="progressBar" x="{mapCnvs.width/2-progressBar.width/2}" y="{mapCnvs.height/2-vbDashbox.height}" indeterminate="true" visible="false"/>
+			<mx:Label id="lblTitle" text="US States (Choropleth with Symbols)" y="20" fontSize="16" fontWeight="bold" horizontalCenter="0" />
+			<!--<geomap:USStates id="map" name="map" projection="Geographic" x="15" y="100" scaleX="{zoomer.value}" scaleY="{zoomer.value}" >
 				
-			<!-- Features -->
+			
 				<features:Features foid="AK" fillItem="0xbae4b3" alpha="0.6" toolTip="ALASKA"/>
 				<features:Features foid="AL" fillItem="0xedf8e9" alpha="0.6" toolTip="ALABAMA"/>
 				<features:Features foid="AR" fillItem="0x74c476" alpha="0.6" toolTip="ARKANSAS"/>
@@ -502,9 +603,9 @@
 				<features:Features foid="WI" fillItem="0x6d2c" alpha="0.6" toolTip="WISCONSIN"/>
 				<features:Features foid="WV" fillItem="0x74c476" alpha="0.6" toolTip="WEST VIRGINIA"/>
 				<features:Features foid="WY" fillItem="0xedf8e9" alpha="0.6" toolTip="WYOMING"/>
-
+ 
 			
-			<!-- Symbols -->
+			
 			<symbols:Symbols key="PA">
 					<sparks:PieSpark id="Pie1" width="125" height="125" dataProvider="{sales1}" dataField="unit1" gradientColors="{gradColors}" showDataTips="true"/>
 			</symbols:Symbols>
@@ -520,17 +621,19 @@
 			<symbols:Symbols key="AK">
 					<sparks:PieSpark id="Pie5" width="125" height="125" dataProvider="{sales1}" dataField="unit2" gradientColors="{gradColors}" showDataTips="true" />
 			</symbols:Symbols>
-			<!--<symbols:Symbols key="IL">
-					<sparks:BubbleSpark radius="17"/>
+			<symbols:Symbols key="IL">
+					<sparks:BubbleSpark radius="17" styleName="redBubble" />
 			</symbols:Symbols>
 			<symbols:Symbols key="WY">
-					<sparks:BubbleSpark radius="17"/>
-			</symbols:Symbols>-->
-			</geomap:USStates>
+					<sparks:BubbleSpark radius="17" fill="0xFF00FF" alpha="0.8" ratio="1"/>
+			</symbols:Symbols>
 			
+			<flows:Flow dataProvider="{myFlowData}" fromField="@fromKey" toField="@toKey" valueField="@description"/>
+			
+			</geomap:USStates>-->
 			
 			<!-- Dashboard -->
-			<mx:VBox width="100%" height="150" left="5" right="5" bottom="5" 
+			<mx:VBox id="vbDashbox" width="100%" height="150" left="5" right="5" bottom="5" 
         	verticalAlign="top" horizontalAlign="center" horizontalScrollPolicy="off" verticalScrollPolicy="off">
         	<mx:HBox width="100%" height="100%" paddingTop="5" paddingLeft="5" paddingRight="5" paddingBottom="5" 
         		cornerRadius="12" borderStyle="solid" borderThickness="2" borderColor="#CCCCCC" backgroundColor="#CCCCCC" backgroundAlpha="0.3"
@@ -538,10 +641,8 @@
         	<mx:Label text="Dashboard" fontSize="11" fontWeight="bold"/>
             </mx:HBox>
         	</mx:VBox>
-			
-		
 		</mx:Canvas>
-		<!-- End of Graph Panel -->
+	 <!--End of Graph Panel -->
 	</mx:HBox>
 </mx:VBox>
 </mx:VBox>

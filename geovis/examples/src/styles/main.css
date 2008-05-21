@@ -60,4 +60,9 @@ USStates {
     background-color : #FFFFFF;
   	stroke : #333333;
   }
-
+  
+.redBubble{
+	fill:#FF0000;
+	alpha:0.8;
+	ratio:1;
+}
