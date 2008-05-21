@@ -34,12 +34,12 @@ package org.un.cava.birdeye.geovis.core
 	import com.degrafa.paint.*;
 	
 	import flash.events.MouseEvent;
-	import flash.utils.*;
 	import flash.filters.GlowFilter;
+	import flash.utils.*;
 	
 	import mx.containers.Canvas;
-	import mx.core.UIComponent;
 	
+	import org.un.cava.birdeye.geovis.analysis.*;
 	import org.un.cava.birdeye.geovis.features.Features;
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.geovis.styles.GeoStyles;
@@ -112,6 +112,7 @@ package org.un.cava.birdeye.geovis.core
 				surf.scaleX=value;
 			}
 			invalidateDisplayList();
+			
     	}
     	
     	//override public function get scaleX():Number
@@ -136,7 +137,9 @@ package org.un.cava.birdeye.geovis.core
 				}
 				surf.scaleY=value;
 			}
+			
 			invalidateDisplayList();
+			
     	}
     	
     	override public function get scaleY():Number
@@ -156,11 +159,6 @@ package org.un.cava.birdeye.geovis.core
 			_geoGroup = new Array();
 			
 			this.mouseEnabled=false;
-			//this.creationPolicy="queued";
-			/*this.verticalScrollPolicy="off";
-			this.horizontalScrollPolicy="off";
-			this.percentHeight=100;
-			this.percentWidth=100;*/
 		}
 
 		/**
@@ -170,8 +168,7 @@ package org.un.cava.birdeye.geovis.core
 	    override protected function createChildren():void
 	    {
 	        super.createChildren();
-	        
-			createMap();
+	        createMap();
 	    }
 		
 		/**
@@ -210,18 +207,16 @@ package org.un.cava.birdeye.geovis.core
 			
 			surf=new Surface();
 			surf.name="Surface";
-		    //surf.percentWidth=100; 
-			//surf.percentHeight=100;
-			//surf.setStyle("verticalCenter",0);
-		    //surf.scaleX=0.5;
-		    //surf.scaleY=0.5;
-
+		    surf.scaleX=_scaleX;
+		    surf.scaleY=_scaleY;
+		    
 			for each (var country:String in listOfCountry)
 			{
 				if(wcData.getCoordinates(country)!="")
 				{
 					var countryGeom:GeometryGroup = new GeometryGroup();
-					
+					countryGeom.scaleX=_scaleX;
+					countryGeom.scaleY=_scaleY;
 					countryGeom.name = country;
 					
 					// The equivalent of the svg transform for flash. This will apply the flip and reposition the item.

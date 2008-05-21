@@ -29,6 +29,7 @@ package org.un.cava.birdeye.geovis.analysis
 	import com.degrafa.Surface;
 	
 	import flash.display.DisplayObjectContainer;
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.utils.*;
 	import flash.xml.XMLNode;
@@ -188,18 +189,19 @@ package org.un.cava.birdeye.geovis.analysis
 				{
 					var fromKey:String=cursor.current[_fromField];
 					var toKey:String=cursor.current[_toField];
+					var desc:String=cursor.current[_valueField];
 					cooFrom=GeoData.getBarryCenter(fromKey);
 					var arrPosFrom:Array=cooFrom.split(',');
 					cooTo=GeoData.getBarryCenter(toKey);
 					var arrPosTo:Array=cooTo.split(',')
-					drawFlow(arrPosFrom,arrPosTo, fromKey, toKey);
+					drawFlow(arrPosFrom,arrPosTo, fromKey, toKey, desc);
 				    i++;
 				    cursor.moveNext();      
 				}  
     	}
    
   
-	   	private function drawFlow(cooFrom:Array, cooTo:Array, fromDest:String, toDest:String):void{
+	   	private function drawFlow(cooFrom:Array, cooTo:Array, fromDest:String, toDest:String, description:String):void{
 	   		flows = new UIComponent();
 	   	  	flows.name="flow"+fromDest+toDest;
 		  	cntrlpt = new UIComponent();
@@ -245,8 +247,10 @@ package org.un.cava.birdeye.geovis.analysis
 		      // target back to source + flow value (or static constant as 10)
 		      flows.graphics.curveTo(cntrlpoint.x, cntrlpoint.y, p1.x, p1.y+10);
 		      flows.graphics.endFill();
+		      flows.addEventListener(MouseEvent.MOUSE_OVER,handleMouseOverEvent);
+		      flows.addEventListener(MouseEvent.MOUSE_OUT, handleMouseOutEvent);
 		      if(_showDataTips==true){
-		      	flows.toolTip="From: " + strFrom + "\r" + "To: " + strTo
+		      	flows.toolTip=description;//"From: " + strFrom + "\r" + "To: " + strTo
 		      }
 		      // control point
 		      // need to add drag and drop capability here
@@ -259,7 +263,16 @@ package org.un.cava.birdeye.geovis.analysis
 		      cntrlpt.graphics.moveTo(cntrlpoint.x, cntrlpoint.y);
 		      cntrlpt.graphics.lineTo(p2.x, p2.y);   
 	   }
-   
+   		
+   		private function handleMouseOverEvent(eventObj:MouseEvent):void {
+        	eventObj.target.useHandCursor=true;
+        	eventObj.target.buttonMode=true;
+		}
+		
+		private function handleMouseOutEvent(eventObj:MouseEvent):void {
+        	eventObj.target.useHandCursor=false;
+        	eventObj.target.buttonMode=false;
+        }
 	/*override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 	{
 		trace('updateDisplayList');
