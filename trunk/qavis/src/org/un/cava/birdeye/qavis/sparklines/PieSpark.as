@@ -1,4 +1,31 @@
-package org.un.cava.birdeye.qavis.sparklines
+/*  
+ * The MIT License
+ *
+ * Copyright (c) 2008
+ * United Nations Office at Geneva
+ * Center for Advanced Visual Analytics
+ * http://cava.unog.ch
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+ 
+ package org.un.cava.birdeye.qavis.sparklines
 {
 	import com.degrafa.*;
 	import com.degrafa.geometry.*;
@@ -6,6 +33,9 @@ package org.un.cava.birdeye.qavis.sparklines
 	
 	import flash.filters.DropShadowFilter;
 	import flash.xml.XMLNode;
+	import flash.display.DisplayObjectContainer;
+	import flash.utils.getDefinitionByName;
+	import flash.utils.getQualifiedClassName;
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.ICollectionView;
@@ -24,23 +54,19 @@ package org.un.cava.birdeye.qavis.sparklines
 			private var values:Array;
 			private var interpolate: Object;
 			private var GG:GeometryGroup;
-			//private var _dataProvider:ArrayCollection;
-			private var _dataProvider:ICollectionView//ListCollectionView;// = new ArrayCollection();
+			private var _dataProvider:ICollectionView;
 			private var _colors:Array;
 			private var _gradientColors:Array;
 			private var _dataField:String;
 			private var _showDataTips:Boolean=false;
 			public var Surf:Surface;
 			
-			/*[Bindable]
-			public var dataProvider:ArrayCollection;
-			*/
 			[Bindable]
 			private var tweenDataProvider:ArrayCollection;
 			
 			private static var SLICES:int = 0;
 			
-			[Inspectable(showDataTips="true,false")]
+		[Inspectable(showDataTips="true,false")]
 		public function set showDataTips(value:Boolean):void
 		{
 			_showDataTips = value;
@@ -58,7 +84,6 @@ package org.un.cava.birdeye.qavis.sparklines
 		
 		public function set dataProvider(value:Object):void
 		{
-			trace('type:'+typeof(value));
 			//_dataProvider = value;
 			if(typeof(value) == "string")
 	    	{
@@ -73,7 +98,7 @@ package org.un.cava.birdeye.qavis.sparklines
 			else if(value is XMLList)
 			{
 				//XMLLists become XMLListCollections
-				value = new XMLListCollection(value as XMLList);
+				value = new XMLListCollection(value.children() as XMLList);
 			}
 			else if(value is Array)
 			{
@@ -84,8 +109,7 @@ package org.un.cava.birdeye.qavis.sparklines
 			{
 				var list:XMLList = new XMLList();
 				list += value;
-				this._dataProvider = new XMLListCollection(list.children());//.attribute('unit2')
-				trace(_dataProvider);
+				this._dataProvider = new XMLListCollection(list.children());
 			}
 			//if already a collection dont make new one
 	        else if(value is ICollectionView)
@@ -136,10 +160,17 @@ package org.un.cava.birdeye.qavis.sparklines
 				GG.filters=[DSF];
 				
 				Surf.addChild(GG);
-				this.addChild(Surf);
 				
-				createSlices();
-			
+				var dynamicClassName:String=getQualifiedClassName(this.parent);
+				var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
+				var key:String=(this.parent as dynamicClassRef).key;
+				
+				var geom:GeometryGroup=GeometryGroup(Surface((this.parent.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(key));
+				
+				if(geom!=null){
+					this.addChild(Surf);
+					createSlices();
+				}
 			}
 			private function createSlices():void 
 			{
@@ -154,22 +185,12 @@ package org.un.cava.birdeye.qavis.sparklines
 					var slice:PieSparkSlice = createSlice(cursor.current[_dataField],Surf);
 					data[i] = cursor.current[_dataField];
 					total += Number(data[i]);
-				    trace('wjm2: '+ cursor.current[_dataField]);
 				    i++;
 				    cursor.moveNext();      
 
 				}
 
-				/*for (var i:int=0;i<_dataProvider.length;i++)
-				{
-					
-					trace('wjm'+_dataProvider.getItemAt(i))
-					trace('wjm'+_dataProvider.getItemAt(i)[_dataField])
-					var slice:PieSparkSlice = createSlice(i,Surf);
-					data[i] = _dataProvider.getItemAt(i)[_dataField];
-					total += data[i];
-				
-				}*/
+		
 				SLICES = _dataProvider.length;
 				
 				redraw(data, total);
@@ -212,9 +233,6 @@ package org.un.cava.birdeye.qavis.sparklines
 			private function redraw(data:Array, total:Number):void 
 			{
 				var angle:Number = 0;
-trace(data)
-trace(total)
-trace(SLICES)
 				for (var i:int=0;i<SLICES;i++)
 				{
 					var value:Number = data[i];

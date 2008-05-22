@@ -86,7 +86,7 @@
             [{label:"All States", data:"USStates"},
             {label:"OCONUS", data:"OCONUS"},
             {label:"CONUS", data:"CONUS"},
-            {label:"Northeast", data:"Northeast"},
+            {label:"NorthEast", data:"NorthEast"},
             {label:"-- New England", data:"NewEngland"},
             {label:"-- Middle Atlantic", data:"MiddleAtlantic"},
             {label:"MidWest", data:"MidWest"},
@@ -149,7 +149,6 @@
 				createMap();
 				colorize();
 				createBubbles();
-				trace('bubbles');
 			}else if(e.currentTarget.selectedIndex==1){
 				myMap.removeAllChildren();
 				createMap();
@@ -172,6 +171,9 @@
 		}
 		
 		private function createMap():void{
+			if(mapCnvs.getChildByName("map")){
+				mapCnvs.removeChild(mapCnvs.getChildByName("map"));
+			}
 			if (layoutSelector.selectedLabel=="World"){
 				myMap=new WorldMap();
 			}else if (layoutSelector.selectedLabel=="Africa"){
@@ -206,7 +208,7 @@
 				myMap=new OconusMap();
 			}else if (layoutSelector.selectedLabel=="CONUS"){
 				myMap=new ConusMap();
-			}else if (layoutSelector.selectedLabel=="Northeast"){
+			}else if (layoutSelector.selectedLabel=="NorthEast"){
 				myMap=new NortheastMap();
 			}else if (layoutSelector.selectedLabel=="-- New England"){
 				myMap=new NewEnglandMap();
@@ -251,6 +253,14 @@
 			}
 			
 			colorize();
+			
+			if(symbolTypeSelector.selectedIndex==0){
+				createBubbles();
+			}else if(symbolTypeSelector.selectedIndex==1){
+				createPies();
+			}else if(symbolTypeSelector.selectedIndex==2){
+				createFlows();
+			}
 		}
 		
 		private function colorize():void{

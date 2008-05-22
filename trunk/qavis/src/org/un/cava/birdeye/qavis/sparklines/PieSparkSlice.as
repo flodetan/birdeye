@@ -1,4 +1,31 @@
-package org.un.cava.birdeye.qavis.sparklines
+/*  
+ * The MIT License
+ *
+ * Copyright (c) 2008
+ * United Nations Office at Geneva
+ * Center for Advanced Visual Analytics
+ * http://cava.unog.ch
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+ 
+ package org.un.cava.birdeye.qavis.sparklines
 {
 	import com.degrafa.*;
 	import com.degrafa.geometry.*;
@@ -12,15 +39,6 @@ package org.un.cava.birdeye.qavis.sparklines
 	public class PieSparkSlice extends GeometryGroup
 	{
 		
-		/*[Bindable]
-		public var field:String;
-		[Bindable]
-		public var showdtTips:Boolean;
-		[Bindable]
-		public var toolTip:String;
-		[Bindable]
-		public var surf:Surface;
-		*/
 		public var Arc:EllipticalArc;
 		
 		private var _surf:Surface;
@@ -72,19 +90,15 @@ package org.un.cava.birdeye.qavis.sparklines
 			trace ('moue out: '+ this);
 		}*/
 		private function onRollOver(event:MouseEvent):void{
-			trace('MouseOver'+_toolTip);
 			_surf.toolTip=_toolTip;
 	    }
 	    private function onRollOut(event:MouseEvent):void{
-	    	trace('MouseOut');
 	    	_surf.toolTip = "";
 	    }
 		
 		private function handleMouseOverEvent(eventObj:MouseEvent):void {
         	eventObj.target.useHandCursor=true;
         	eventObj.target.buttonMode=true;
-        	//eventObj.target.mouseChildren=false;
-        	//GeometryGroup(eventObj.target).filters=[new GlowFilter(0xFFFFFF,0.5,32,32,255,3,true,true)];
-		}
+       }
 	}
 }
