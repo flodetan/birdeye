@@ -148,7 +148,7 @@ package org.un.cava.birdeye.geovis.dictionary
       			arrRet=arrSouth;
       		}else if(RegionKey=="West"){
       			arrRet=arrWest;
-      		}else if(RegionKey=="West"){
+      		}else if(RegionKey=="NewEngland"){
       			arrRet=arrNewEngland;
       		}else if(RegionKey=="MiddleAtlantic"){
       			arrRet=arrMiddleAtlantic;

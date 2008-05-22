@@ -87,7 +87,7 @@
             {label:"Northeast", data:"Northeast"},
             {label:"-- New England", data:"NewEngland"},
             {label:"-- Middle Atlantic", data:"MiddleAtlantic"},
-            {label:"Midwest", data:"Midwest"},
+            {label:"Midwest", data:"MidWest"},
             {label:"-- East North Central", data:"EastNorthCentral"},
             {label:"-- West North Central", data:"WestNorthCentral"},
             {label:"South", data:"South"},
@@ -204,7 +204,7 @@
 				myMap=new NewEnglandMap();
 			}else if (layoutSelector.selectedLabel=="-- Middle Atlantic"){
 				myMap=new MiddleAtlanticMap();
-			}else if (layoutSelector.selectedLabel=="Midwest"){
+			}else if (layoutSelector.selectedLabel=="MidWest"){
 				myMap=new MidwestMap();
 			}else if (layoutSelector.selectedLabel=="-- East North Central"){
 				myMap=new EastNorthCentralMap();

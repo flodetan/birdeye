@@ -33,7 +33,7 @@ package org.un.cava.birdeye.geovis.dictionary
 		public static var REGION_CONUS:String = "CONUS";
 		public static var REGION_OCONUS:String = "OCONUS";
 		public static var REGION_NORTHEAST:String = "NorthEast";
-		public static var REGION_MIDWEST:String =  "Midwest";
+		public static var REGION_MIDWEST:String =  "MidWest";
 		public static var REGION_SOUTH:String =  "South";
 		public static var REGION_WEST:String =  "West";
 		
