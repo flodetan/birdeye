@@ -55,6 +55,8 @@
 		 
 		private var XMLLoader:URLLoader;
 		private var XMLFile:String;
+		private var maxxValue:Number;
+		private const maxRadius:Number=15;
 		[Bindable] 
 		public var Maps:XML;
 		[Bindable] 
@@ -87,7 +89,7 @@
             {label:"Northeast", data:"Northeast"},
             {label:"-- New England", data:"NewEngland"},
             {label:"-- Middle Atlantic", data:"MiddleAtlantic"},
-            {label:"Midwest", data:"MidWest"},
+            {label:"MidWest", data:"MidWest"},
             {label:"-- East North Central", data:"EastNorthCentral"},
             {label:"-- West North Central", data:"WestNorthCentral"},
             {label:"South", data:"South"},
@@ -142,7 +144,13 @@
 		}
 		
 		private function symbolsSel(e:ListEvent):void{
-			if(e.currentTarget.selectedIndex==1){
+			if(e.currentTarget.selectedIndex==0){
+				myMap.removeAllChildren();
+				createMap();
+				colorize();
+				createBubbles();
+				trace('bubbles');
+			}else if(e.currentTarget.selectedIndex==1){
 				myMap.removeAllChildren();
 				createMap();
 				colorize();
@@ -241,6 +249,8 @@
 			}else{
 				lblTitle.text="USA Map " + layoutSelector.selectedLabel + " (" + projectionSelector.selectedLabel + ")";
 			}
+			
+			colorize();
 		}
 		
 		private function colorize():void{
@@ -275,8 +285,7 @@
 		}
 		
 		private function createPies():void{
-			var SymbList:XMLList=Maps.symbols.symbol
-			trace(SymbList)
+			var SymbList:XMLList=Maps.symbols.symbol;
 			for each (var symbolsElement:XML in SymbList) {
 				var sym:Symbols=new Symbols();
 				sym.key=symbolsElement.@id;
@@ -290,6 +299,51 @@
 				sym.addChild(pie);
 				myMap.addChild(sym);
 			}
+		}
+		
+		private function createBubbles():void{
+			var bubList:XMLList=Maps.bubbles.bubble;
+			FindMaxValue(bubList);
+			var ratio:Number=maxRadius/maxxValue;
+			var radius:Number;
+			trace(maxRadius + ' / ' + maxxValue);
+			for each (var bubblesElement:XML in bubList) {
+				radius=Number(bubblesElement.@housingd)*ratio;
+				if(radius<5){
+					radius=5;
+				}
+				//trace(Number(bubblesElement.@housingd)*ratio)
+				var sym:Symbols=new Symbols();
+				sym.key=bubblesElement.@id;
+				var bub:BubbleSpark=new BubbleSpark;
+				bub.radius=radius;
+				bub.showDataTips=true;
+				bub.dataTips=bubblesElement.@housingd;
+				if(bubblesElement.@housingd<100){
+					bub.setStyle("fill","0x6959cd")
+				}else if(bubblesElement.@housingd>=100 && bubblesElement.@housingd<500){
+					bub.setStyle("fill","0xffff00")
+				}else if(bubblesElement.@housingd>=500 && bubblesElement.@housingd<1000){
+					bub.setStyle("fill","0xcd2626")
+				}else if(bubblesElement.@housingd>=1000 && bubblesElement.@housingd<2000){
+					bub.setStyle("fill","0xcd1076")
+				}else if(bubblesElement.@housingd>=2000){
+					bub.setStyle("fill","0x7d26cd")
+				}
+				sym.addChild(bub);
+				myMap.addChild(sym);
+			}
+		}
+		
+		private function FindMaxValue(List:XMLList):void{
+			var arrValues:Array=new Array();
+			var i:int=0;
+			for each (var Element:XML in List) {
+				arrValues[i]=Number(Element.@housingd);
+				i++;
+			} 
+			arrValues.sort(Array.NUMERIC);
+			maxxValue=arrValues[arrValues.length-1];
 		}
 		
 		private function changeSize():void{

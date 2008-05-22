@@ -90,4 +90,56 @@
 	        <sales media="Tapes" unit="250000" />
 	    </symbol>
 	</symbols>
+	<bubbles>
+		<bubble id="AL"  housingd="387" />
+		<bubble id="AK"  housingd="05" />
+		<bubble id="AZ"  housingd="193" />
+		<bubble id="AR"  housingd="225" />
+		<bubble id="CA"  housingd="783" />
+		<bubble id="CO"  housingd="174" />
+		<bubble id="CT"  housingd="2861" />
+		<bubble id="DE"  housingd="1756" />
+		<bubble id="FL"  housingd="1354" />
+		<bubble id="GA"  housingd="567" />
+		<bubble id="HI"  housingd="717" />
+		<bubble id="ID"  housingd="64" />
+		<bubble id="IL"  housingd="879" />
+		<bubble id="IN"  housingd="706" />
+		<bubble id="IA"  housingd="221" />
+		<bubble id="KS"  housingd="138" />
+		<bubble id="KY"  housingd="441" />
+		<bubble id="LA"  housingd="424" />
+		<bubble id="ME"  housingd="211" />
+		<bubble id="MD"  housingd="2195" />
+		<bubble id="MA"  housingd="3344" />
+		<bubble id="MI"  housingd="745" />
+		<bubble id="MN"  housingd="26" />
+		<bubble id="MS"  housingd="248" />
+		<bubble id="MO"  housingd="355" />
+		<bubble id="MT"  housingd="28" />
+		<bubble id="NE"  housingd="94" />
+		<bubble id="NV"  housingd="75" />
+		<bubble id="NH"  housingd="61" />
+		<bubble id="NJ"  housingd="4463" />
+		<bubble id="NM"  housingd="64" />
+		<bubble id="NY"  housingd="1626" />
+		<bubble id="NC"  housingd="723" />
+		<bubble id="ND"  housingd="42" />
+		<bubble id="OH"  housingd="1168" />
+		<bubble id="OK"  housingd="221" />
+		<bubble id="OR"  housingd="151" />
+		<bubble id="PA"  housingd="1171" />
+		<bubble id="RI"  housingd="4209" />
+		<bubble id="SC"  housingd="582" />
+		<bubble id="SD"  housingd="43" />
+		<bubble id="TN"  housingd="592" />
+		<bubble id="TX"  housingd="312" />
+		<bubble id="UT"  housingd="94" />
+		<bubble id="VT"  housingd="318" />
+		<bubble id="VA"  housingd="733" />
+		<bubble id="WA"  housingd="368" />
+		<bubble id="WV"  housingd="351" />
+		<bubble id="WI"  housingd="427" />
+		<bubble id="WY"  housingd="23" />
+	</bubbles>
 </map>

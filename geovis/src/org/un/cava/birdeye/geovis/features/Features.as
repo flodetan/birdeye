@@ -64,7 +64,7 @@ package org.un.cava.birdeye.geovis.features
 */
 	public class Features extends Canvas
 	{
-		public var colorItem:SolidFill=new SolidFill(0xFFFFFF);
+		public var colorItem:SolidFill;//=new SolidFill(0xFFFFFF);
 		public var stkItem:SolidStroke;
 		
 		public var gradItemFill:Array;
@@ -128,72 +128,72 @@ package org.un.cava.birdeye.geovis.features
 			var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
 			var proj:String=(this.parent as dynamicClassRef).projection;
 			var region:String=(this.parent as dynamicClassRef).region;
+			var geom:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foid));
 			//trace(GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName("CA")).geometryCollection.getItemAt(0).data)
-			var myCoo:IGeometry;
-			GeoData=Projections.getData(proj,region);
-			if(GeoData.getCoordinates(foid)!=null){
-				if(isNaN(GeoData.getCoordinates(foid).substr(0,1))){
-					myCoo = Path(GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foid)).geometryCollection.getItemAt(0));
-				}else{
-					myCoo = Polygon(GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foid)).geometryCollection.getItemAt(0));
-				}	
-			}
-			
-			if(foid!=""){
-				if(getStyle("fillItem")){
-					colorItem=new SolidFill(getStyle("fillItem"),1);
-				}
-				if(getStyle("strokeItem")){
-					if(typeof(getStyle("strokeItem"))=="number"){
-						arrStrokeItem.push(getStyle("strokeItem"));
-					}else{
-						arrStrokeItem=getStyle("strokeItem");
+			if(geom!=null){
+					var myCoo:IGeometry;
+					GeoData=Projections.getData(proj,region);
+					if(GeoData.getCoordinates(foid)!=null){
+						if(isNaN(GeoData.getCoordinates(foid).substr(0,1))){
+							myCoo = Path(GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foid)).geometryCollection.getItemAt(0));
+						}else{
+							myCoo = Polygon(GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foid)).geometryCollection.getItemAt(0));
+						}	
 					}
 					
-					while (arrStrokeItem.length<3) { 
-						arrStrokeItem.push(1); 
-					}
-					stkItem= new SolidStroke(arrStrokeItem[0],arrStrokeItem[1],arrStrokeItem[2]);
-				}
-				
-				
-							
-				if(getStyle("gradientItemFill")){
-					gradItemFill=getStyle("gradientItemFill");
-					if(gradItemFill.length!=0){
-						if(gradItemFill[2]==0){
-							myCoo.fill=GeoStyles.setRadialGradient(gradItemFill);
-						}else{
-							myCoo.fill=GeoStyles.setLinearGradient(gradItemFill);
+					if(foid!=""){
+						if(getStyle("fillItem")){
+							colorItem=new SolidFill(getStyle("fillItem"),1);
 						}
+						if(getStyle("strokeItem")){
+							if(typeof(getStyle("strokeItem"))=="number"){
+								arrStrokeItem.push(getStyle("strokeItem"));
+							}else{
+								arrStrokeItem=getStyle("strokeItem");
+							}
+							
+							while (arrStrokeItem.length<3) { 
+								arrStrokeItem.push(1); 
+							}
+							stkItem= new SolidStroke(arrStrokeItem[0],arrStrokeItem[1],arrStrokeItem[2]);
+						}
+						
+						
+							if(getStyle("gradientItemFill")){
+								gradItemFill=getStyle("gradientItemFill");
+								if(gradItemFill.length!=0){
+									if(gradItemFill[2]==0){
+										myCoo.fill=GeoStyles.setRadialGradient(gradItemFill);
+									}else{
+										myCoo.fill=GeoStyles.setLinearGradient(gradItemFill);
+									}
+								}
+							}else{
+								if(colorItem){
+									myCoo.fill=colorItem;
+								}
+							}
+							
+							if(stkItem){
+								myCoo.stroke=stkItem;
+							}
+						
 					}
-				}else{
-					if(colorItem){
-						myCoo.fill=colorItem;
-					}
-				}
+					
+					//ToolTipManager.enabled=true;
+				//this.toolTip=toolTip;
 				
-				if(stkItem){
-					myCoo.stroke=stkItem;
-				}
-				
+				//geom.mouseChildren=true;
+				geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
+				geom.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
+				geom.addEventListener(MouseEvent.MOUSE_OVER,handleMouseOverEvent);
 			}
-			
-			//ToolTipManager.enabled=true;
-		//this.toolTip=toolTip;
-		var geom:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foid));
-		//geom.mouseChildren=true;
-		geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
-		geom.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
-		geom.addEventListener(MouseEvent.MOUSE_OVER,handleMouseOverEvent);
         }
 		
 		private function onRollOver(event:MouseEvent):void{
-			trace('MouseOver'+toolTip);
 			Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).toolTip=toolTip;
 	    }
 	    private function onRollOut(event:MouseEvent):void{
-	    	trace('MouseOut'+toolTip);
 	    	Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).toolTip = "";
 	    }
 
