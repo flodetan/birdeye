@@ -27,12 +27,15 @@
 package org.un.cava.birdeye.geovis.analysis
 {
 	import com.degrafa.Surface;
-	
+	import com.degrafa.GeometryGroup;
+
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.utils.*;
 	import flash.xml.XMLNode;
+	import flash.utils.getDefinitionByName;
+	import flash.utils.getQualifiedClassName;
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.ICollectionView;
@@ -185,19 +188,26 @@ package org.un.cava.birdeye.geovis.analysis
 				var cooTo:String;
 				var i:int=0;
 				var cursor:IViewCursor = _dataProvider.createCursor();
-				while(!cursor.afterLast)
-				{
-					var fromKey:String=cursor.current[_fromField];
-					var toKey:String=cursor.current[_toField];
-					var desc:String=cursor.current[_valueField];
-					cooFrom=GeoData.getBarryCenter(fromKey);
-					var arrPosFrom:Array=cooFrom.split(',');
-					cooTo=GeoData.getBarryCenter(toKey);
-					var arrPosTo:Array=cooTo.split(',')
+			while(!cursor.afterLast)
+			{
+				var fromKey:String=cursor.current[_fromField];
+				var toKey:String=cursor.current[_toField];
+				var desc:String=cursor.current[_valueField];
+				cooFrom=GeoData.getBarryCenter(fromKey);
+				var arrPosFrom:Array=cooFrom.split(',');
+				cooTo=GeoData.getBarryCenter(toKey);
+				var arrPosTo:Array=cooTo.split(',')
+						
+				var geom1:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(fromKey));
+				var geom2:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(toKey));
+				
+				if(geom1!=null && geom2!=null){
 					drawFlow(arrPosFrom,arrPosTo, fromKey, toKey, desc);
-				    i++;
-				    cursor.moveNext();      
-				}  
+				}
+				    
+				i++;
+				cursor.moveNext();  
+			}  
     	}
    
   
