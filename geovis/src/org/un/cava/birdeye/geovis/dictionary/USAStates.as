@@ -37,7 +37,7 @@ package org.un.cava.birdeye.geovis.dictionary
 		//Regions
 		private var arrUSA:Array=["HI","AK","FL","SC","GA","AL","NC","TN","RI","CT","MA","ME","NH","VT","NY","NJ","PA","DE","MD","WV","KY","OH","MI","WY","MT","ID","WA","TX","CA","AZ","NV","UT","CO","NM","OR","ND","SD","NE","IA","MS","IN","IL","MN","WI","MO","AR","OK","LA","VA","DC","KS"];//"KN",
 		private var arrCONUS:Array=["FL","SC","GA","AL","NC","TN","RI","CT","MA","ME","NH","VT","NY","NJ","PA","DE","MD","WV","KY","OH","MI","WY","MT","ID","WA","TX","CA","AZ","NV","UT","CO","NM","OR","ND","SD","NE","IA","MS","IN","IL","MN","WI","MO","AR","OK","LA","VA","DC","KS"];
-		private var arrOCONUS:Array=["HI","AK"];
+		private var arrOCONUS:Array=["FL","SC","GA","AL","NC","TN","RI","CT","MA","ME","NH","VT","NY","NJ","PA","DE","MD","WV","KY","OH","MI","WY","MT","ID","WA","TX","CA","AZ","NV","UT","CO","NM","OR","ND","SD","NE","IA","MS","IN","IL","MN","WI","MO","AR","OK","LA","VA","DC","KS","HI","AK"];
 		private var arrNorthEast:Array=["ME","NH","VT","MA","NY","PA","NJ","CT","RI"];
 		private var arrMidWest:Array=["ND","SD","MN","WI","NE","IA","IL","IN","OH","MI","KS","MO"];
 		private var arrSouth:Array=["DE","MD","WV","VA","KY","TN","NC","SC","AR","OK","TX","LA","MS","AL","GA","FL"];
