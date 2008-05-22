@@ -1,0 +1,11 @@
+#summary Credit is due to those who have provided source and published works critical to the design of the library.
+
+=== Attributions ===
+
+BirdEye is based on the works of others, specifically: 
+
+  * Mark Shepherd's SpringGraph component
+  * Josh Tynjala's Treemap Visualization component
+  * Degrafa
+
+Thank you!!!
