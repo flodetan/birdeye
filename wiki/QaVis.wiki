@@ -16,4 +16,4 @@ This library is focused on conventional and novel approaches to the analysis, in
 Currently under development
 
 === Demos ===
-  * Check out the QaVisExplorer [http:// here] (work in progress)
+  * Check out the QaVisExplorer [http://birdeye.googlecode.com/svn/trunk/qavis/examples/bin/QaVisExplorer.html here] (work in progress)
