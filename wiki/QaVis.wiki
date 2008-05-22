@@ -14,3 +14,6 @@ This library is focused on conventional and novel approaches to the analysis, in
 === Status ===
 
 Currently under development
+
+=== Demos ===
+  * Check out the QaVisExplorer [http:// here] (work in progress)
