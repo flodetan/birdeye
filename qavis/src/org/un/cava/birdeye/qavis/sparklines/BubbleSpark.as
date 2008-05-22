@@ -37,6 +37,9 @@
 	import mx.events.FlexEvent;
 	import mx.styles.StyleManager;
 	
+	import flash.display.DisplayObjectContainer;
+	import flash.utils.getDefinitionByName;
+	import flash.utils.getQualifiedClassName;
 	
 	[Inspectable("radius")]
 	[Inspectable("showDataTips")]	
@@ -188,7 +191,16 @@
 					GPGeom.geometryCollection.addItem(bubble);
 					GPGeom.draw(null,null);
 					//vertBox.addChild(ref);
-					this.addChild(ref);
+					
+					var dynamicClassName:String=getQualifiedClassName(this.parent);
+					var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
+					var key:String=(this.parent as dynamicClassRef).key;
+				
+					var geom:GeometryGroup=GeometryGroup(Surface((this.parent.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(key));
+				
+					if(geom!=null){
+						this.addChild(ref);
+					}
 		    	} 
 			
 			
