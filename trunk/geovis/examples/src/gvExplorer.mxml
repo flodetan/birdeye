@@ -386,8 +386,12 @@
 		
 		private function showDetails(e:GeoMapEvents):void {
 	      try {
-	      	trace(e.key)
-	      	trace(e.feature.foid)
+	      	txtDashboard.text=Maps.states.state.(@id==e.key).@name + ' ('+ Maps.states.state.(@id==e.key).@id + ')'
+	   	  	txtDashboard.text+='\r'+'Population: '+ Maps.states.state.(@id==e.key).@population;
+	   	  	txtDashboard.text+='\r'+'Housing: '+ Maps.states.state.(@id==e.key).@housing;
+	   	  	txtDashboard.text+='\r'+'Total Area: '+ Maps.states.state.(@id==e.key).@totalarea;
+	   	  	txtDashboard.text+='\r'+'Land Area: '+ Maps.states.state.(@id==e.key).@landarea;
+	   	  	txtDashboard.text+='\r'+'Water Area: '+ Maps.states.state.(@id==e.key).@waterarea;
 	   	  }
 	   	  catch (errObject:Error){
 	   		return;
@@ -723,8 +727,13 @@
         	<mx:HBox width="100%" height="100%" paddingTop="5" paddingLeft="5" paddingRight="5" paddingBottom="5" 
         		cornerRadius="12" borderStyle="solid" borderThickness="2" borderColor="#CCCCCC" backgroundColor="#CCCCCC" backgroundAlpha="0.3"
         		horizontalAlign="center">
-        	<mx:Label text="Dashboard" fontSize="11" fontWeight="bold"/>
+        	<mx:VBox>
+        		<mx:Label text="Dashboard"  fontSize="11" fontWeight="bold"/>
+        	<mx:Text id="txtDashboard" />
+        	</mx:VBox>
+        	
             </mx:HBox>
+            
         	</mx:VBox>
 		</mx:Canvas>
 	 <!--End of Graph Panel -->
