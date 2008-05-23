@@ -40,10 +40,11 @@ package org.un.cava.birdeye.geovis.core
 	import mx.containers.Canvas;
 	
 	import org.un.cava.birdeye.geovis.analysis.*;
+	import org.un.cava.birdeye.geovis.events.GeoMapEvents;
 	import org.un.cava.birdeye.geovis.features.Features;
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.geovis.styles.GeoStyles;
-		
+	
 	[Event(name="ItemClick", type="org.un.cava.birdeye.geo.events.GeoMapEvents")]
 	[Style(name="gradientFill",type="Array",format="Color",inherit="no")]
 	[Style(name="stroke",type="Array",format="Color",inherit="no")]
@@ -215,6 +216,10 @@ package org.un.cava.birdeye.geovis.core
 				if(wcData.getCoordinates(country)!="")
 				{
 					var countryGeom:GeometryGroup = new GeometryGroup();
+					countryGeom.addEventListener(MouseEvent.CLICK, itemClkEv);
+					countryGeom.addEventListener(MouseEvent.DOUBLE_CLICK, itemDblClkEv);
+					countryGeom.addEventListener(MouseEvent.ROLL_OVER, itemRollOverEv);
+					countryGeom.addEventListener(MouseEvent.ROLL_OUT, itemRollOutEv);
 					countryGeom.scaleX=_scaleX;
 					countryGeom.scaleY=_scaleY;
 					countryGeom.name = country;
@@ -292,8 +297,18 @@ package org.un.cava.birdeye.geovis.core
 			this.addChild(surf);
 		}
 		
-	    
-	    
+	    private function itemClkEv(e:MouseEvent):void{
+	    	dispatchEvent(new GeoMapEvents(GeoMapEvents.ITEM_CLICKED,e.currentTarget.name,Features(this.getChildByName('feat'+e.currentTarget.name))))
+	    }
+	    private function itemDblClkEv(e:MouseEvent):void{
+	    	dispatchEvent(new GeoMapEvents(GeoMapEvents.ITEM_DOUBLECLICKED,e.currentTarget.name,Features(this.getChildByName('feat'+e.currentTarget.name))))
+	    }
+	    private function itemRollOverEv(e:MouseEvent):void{
+	    	dispatchEvent(new GeoMapEvents(GeoMapEvents.ITEM_ROLLOVER,e.currentTarget.name,Features(this.getChildByName('feat'+e.currentTarget.name))))
+	    }
+	    private function itemRollOutEv(e:MouseEvent):void{
+	    	dispatchEvent(new GeoMapEvents(GeoMapEvents.ITEM_ROLLOUT,e.currentTarget.name,Features(this.getChildByName('feat'+e.currentTarget.name))))
+	    }
 	    
 		/**
 		 * Draw child elements.

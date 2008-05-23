@@ -41,6 +41,7 @@
 	<![CDATA[
 		import org.un.cava.birdeye.geovis.symbols.Symbols;
 		import org.un.cava.birdeye.geovis.analysis.Flow;
+		import org.un.cava.birdeye.geovis.events.GeoMapEvents;
 		import mx.events.StateChangeEvent;
 		import mx.events.FlexEvent;
 		import mx.events.ChildExistenceChangedEvent;
@@ -243,6 +244,9 @@
 			myMap.y="100"; 
 			myMap.scaleX=zoomer.value; 
 			myMap.scaleY=zoomer.value; 
+			myMap.addEventListener(GeoMapEvents.ITEM_CLICKED,showDetails);
+			myMap.addEventListener(GeoMapEvents.ITEM_ROLLOVER,rollOver);
+			myMap.addEventListener(GeoMapEvents.ITEM_ROLLOUT,rollOut);
 			mapCnvs.removeEventListener(FlexEvent.UPDATE_COMPLETE, createNewMap);
 			progressBar.visible=false;
 			mapCnvs.addChild((myMap as Canvas));
@@ -316,7 +320,6 @@
 			FindMaxValue(bubList);
 			var ratio:Number=maxRadius/maxxValue;
 			var radius:Number;
-			trace(maxRadius + ' / ' + maxxValue);
 			for each (var bubblesElement:XML in bubList) {
 				radius=Number(bubblesElement.@housingd)*ratio;
 				if(radius<5){
@@ -379,7 +382,25 @@
 	  			featureSelector.dataProvider=arrColorByUSA;
 	  		}
 	  	}
-			    
+		
+		
+		private function showDetails(e:GeoMapEvents):void {
+	      try {
+	      	trace(e.key)
+	      	trace(e.feature.foid)
+	   	  }
+	   	  catch (errObject:Error){
+	   		return;
+	   	  }
+   	 	}
+   	 	    
+	    private function rollOut(e:GeoMapEvents):void {
+	      e.feature.highlighted = false; 
+	     }
+  
+	    private function rollOver(e:GeoMapEvents):void {
+	      e.feature.highlighted = true;
+	    }
 	    	[Bindable] 
 	    	private var sales1:ArrayCollection = new ArrayCollection( [
 	            { media: "CD", unit1: 1000000, unit2: 600000, unit3: 40000, unit4: 200000 },
@@ -613,7 +634,7 @@
 		<mx:Canvas id="mapCnvs" borderStyle="solid" borderColor="#CCCCCC" backgroundColor="#FFFFFF"  width="100%" height="100%" verticalScrollPolicy="off">		
 			<mx:ProgressBar id="progressBar" x="{mapCnvs.width/2-progressBar.width/2}" y="{mapCnvs.height/2-vbDashbox.height}" indeterminate="true" visible="false"/>
 			<mx:Label id="lblTitle" text="US States (Choropleth with Symbols)" y="20" fontSize="16" fontWeight="bold" horizontalCenter="0" />
-			<!--<geomap:USStates id="map" name="map" projection="Geographic" x="15" y="100" scaleX="{zoomer.value}" scaleY="{zoomer.value}" >
+			<!--<geomap:USStates ro id="map" name="map" projection="Geographic" x="15" y="100" scaleX="{zoomer.value}" scaleY="{zoomer.value}" >
 				
 			
 				<features:Features foid="AK" fillItem="0xbae4b3" alpha="0.6" toolTip="ALASKA"/>

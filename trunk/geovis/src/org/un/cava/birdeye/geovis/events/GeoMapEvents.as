@@ -28,29 +28,28 @@
 package org.un.cava.birdeye.geovis.events
 {
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 	
-	import mx.controls.Label;
+	import org.un.cava.birdeye.geovis.features.Features;
 	
-	public class GeoMapEvents extends MouseEvent
+	public class GeoMapEvents extends Event
 	{
-		public function GeoMapEvents(type:String, isEnabled:Boolean=false) {
+		public function GeoMapEvents(type:String,key:String, feature:Features) {
                 super(type);
-                
-                this.isEnabled = isEnabled;
+                this.key=key;
+                this.feature=feature;
         }
 
         public static const ITEM_CLICKED:String = "ItemClick";
+        public static const ITEM_DOUBLECLICKED:String = "ItemDoubleClick";
         public static const ITEM_ROLLOVER:String = "ItemRollOver";
         public static const ITEM_ROLLOUT:String = "ItemRollOut";
             
-        public var isEnabled:Boolean;
-
-        override public function clone():Event {
-            return new GeoMapEvents(type, isEnabled);
-        }
-
+        public var key:String;
+		public var feature:Features;
 		
+        override public function clone():Event {
+            return new GeoMapEvents(type, key, feature);
+        }
 
 	}
 }

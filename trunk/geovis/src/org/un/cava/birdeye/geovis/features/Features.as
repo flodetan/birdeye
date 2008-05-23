@@ -36,6 +36,7 @@ package org.un.cava.birdeye.geovis.features
 	
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
+	import flash.filters.GlowFilter;
 	import flash.utils.*;
 	
 	import mx.containers.Canvas;
@@ -47,6 +48,7 @@ package org.un.cava.birdeye.geovis.features
 	[Style(name="gradientItemFill",type="Array",format="Color",inherit="no")]
 	[Style(name="strokeItem",type="Array",format="Color",inherit="no")]
 	[Style(name="fillItem",type="uint",format="Color",inherit="no")]
+	[Inspectable("highlighted")]
 	[Inspectable("foid")] 
 	[Exclude(name="gradItemFill", kind="property")]
 	[Exclude(name="color", kind="property")]
@@ -72,7 +74,11 @@ package org.un.cava.birdeye.geovis.features
 		[Inspectable(defaultValue="")]
 		public var foid:String;
 		
+		[Inspectable(defaultValue=false)]
+		public var highlighted:Boolean;
+		
 		private var _toolTip:String;
+		private var surface:Surface;
 		
 		/**
 		* Set the color of a particular item for example a country of the map. 
@@ -124,20 +130,21 @@ package org.un.cava.birdeye.geovis.features
     	}*/
 		
 		private function creationCompleteHandler (event:FlexEvent):void{
+			this.name='feat'+foid;
 			var dynamicClassName:String=getQualifiedClassName(this.parent);
 			var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
 			var proj:String=(this.parent as dynamicClassRef).projection;
 			var region:String=(this.parent as dynamicClassRef).region;
-			var geom:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foid));
-			//trace(GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName("CA")).geometryCollection.getItemAt(0).data)
+			surface=Surface((this.parent as DisplayObjectContainer).getChildByName("Surface"))
+			var geom:GeometryGroup=GeometryGroup(surface.getChildByName(foid));
 			if(geom!=null){
 					var myCoo:IGeometry;
 					GeoData=Projections.getData(proj,region);
 					if(GeoData.getCoordinates(foid)!=null){
 						if(isNaN(GeoData.getCoordinates(foid).substr(0,1))){
-							myCoo = Path(GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foid)).geometryCollection.getItemAt(0));
+							myCoo = Path(GeometryGroup(surface.getChildByName(foid)).geometryCollection.getItemAt(0));
 						}else{
-							myCoo = Polygon(GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foid)).geometryCollection.getItemAt(0));
+							myCoo = Polygon(GeometryGroup(surface.getChildByName(foid)).geometryCollection.getItemAt(0));
 						}	
 					}
 					
@@ -190,11 +197,29 @@ package org.un.cava.birdeye.geovis.features
 			}
         }
 		
-		private function onRollOver(event:MouseEvent):void{
-			Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).toolTip=toolTip;
+		private function onRollOver(e:MouseEvent):void{
+			surface.toolTip=toolTip;
+			if(highlighted==true){
+				var glowColor:uint=0xFFFFFF;
+				var glowGradFill:Array;
+				if(getStyle("gradientItemFill")){
+					glowGradFill=getStyle("gradientItemFill");
+					if(glowGradFill.length!=0){
+						glowColor=uint(glowGradFill[0]);
+					}
+				}else{
+					if(getStyle("fillItem")){
+						glowColor=uint(colorItem.color);
+					}
+				}
+				GeometryGroup(e.target).filters=[new GlowFilter(glowColor,0.5,32,32,255,3,true,true)];
+			}
 	    }
-	    private function onRollOut(event:MouseEvent):void{
-	    	Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).toolTip = "";
+	    private function onRollOut(e:MouseEvent):void{
+	    	surface.toolTip = "";
+	    	if(highlighted==false){
+	    		GeometryGroup(e.target).filters=null;
+	    	}
 	    }
 
 		private function handleMouseOverEvent(eventObj:MouseEvent):void {
