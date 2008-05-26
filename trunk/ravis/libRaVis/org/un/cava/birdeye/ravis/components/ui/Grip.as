@@ -29,6 +29,7 @@ package org.un.cava.birdeye.ravis.components.ui {
 	import mx.containers.VBox;
 	import mx.controls.Button;
 	import flash.events.MouseEvent;
+	import flash.events.Event;
 	
 	/**
 	 * This is an extended VBox that allows to hide
