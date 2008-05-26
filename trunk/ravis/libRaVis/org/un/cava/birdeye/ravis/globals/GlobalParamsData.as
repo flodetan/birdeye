@@ -26,8 +26,6 @@
  */
 package org.un.cava.birdeye.ravis.globals {
 	
-	import flexlib.containers.WindowShade;
-	
 	import mx.controls.CheckBox;
 	import mx.controls.Text;
 	
@@ -103,7 +101,7 @@ package org.un.cava.birdeye.ravis.globals {
 		
 		public static var visualNodeLabel:CheckBox;
 		
-		public static var visualShade:WindowShade;
+		//public static var visualShade:WindowShade;
 		
 	}
 }
