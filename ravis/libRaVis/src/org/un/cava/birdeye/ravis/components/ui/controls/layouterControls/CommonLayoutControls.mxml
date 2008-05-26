@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ *
+ * The MIT License
+ *
+ * Copyright (c) 2008
+ * United Nations Office at Geneva
+ * Center for Advanced Visual Analytics
+ * http://cava.unog.ch
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+-->
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:local="org.un.cava.birdeye.ravis.components.ui.controls.layouterControls.*"
+	width="97%"
+	horizontalAlign="left"
+	paddingLeft="5"
+	paddingRight="5"
+	paddingBottom="5"
+	paddingTop="5"
+	borderColor="#666666"
+	borderThickness="1"
+	cornerRadius="5"
+	borderStyle="solid"
+	backgroundColor="#CCCCCC"
+	backgroundAlpha=".2"
+	initialize="registerWithGlobal()"
+	creationComplete="registerComplete()"
+	 >
+	
+	<local:LinkLength id="linklengthctl" />
+	<local:ToggleAnimation id="toggleanim" />
+	<local:ToggleAutoFit id="toggleaf" />
+	
+	<mx:Script>
+		<![CDATA[
+			import org.un.cava.birdeye.ravis.globals.GlobalParamsLayout;
+			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
+			import flexlib.scheduling.scheduleClasses.layout.ILayout;
+			import org.un.cava.birdeye.ravis.globals.GlobalParams;
+
+			/* to be set if creation was complete */
+			private var _complete:Boolean = false;
+
+			/**
+			 * We need a custom constructor to register this
+			 * instance with the GlobalParams class
+			 * */
+			private function registerWithGlobal():void {
+				/* register ourselves */
+				GlobalParamsLayout.commonLayoutControls = this;
+			}
+
+			/**
+			 * When enabling or disabling this component, we also
+			 * perform some specific tasks.
+			 * Attention do completely disable interaction
+			 * there is also the mouseEnabled property.
+			 * 
+			 * @inheritDoc
+			 * */
+			override public function set enabled(e:Boolean):void {
+				
+				/* only do this if creation was complete including children */
+				if(_complete) {
+					/* disable children */
+					linklengthctl.enabled = e;
+					toggleanim.enabled = e;
+					toggleaf.enabled = e;
+				}
+				
+				/* do it for the super class */
+				super.enabled = e;
+				
+				/* if disabled remove from view and vice versa */
+				this.visible = e;
+				this.includeInLayout = e;
+			}
+			
+			/**
+			 * This method applies the current values of all controls to
+			 * the layouter set in GlobalParams
+			 * */
+			public function applyValues():void {
+				var layouter:ILayoutAlgorithm;
+				
+				if(GlobalParams.layouter == null) {
+					trace("GP layouter is null, doing nothing");
+					return;
+				}
+				
+				/* this is a direct version, but less transparent */
+				layouter = GlobalParams.layouter;
+				
+				layouter.disableAnimation = toggleanim.selected;
+				layouter.autoFitEnabled = toggleaf.selected;
+				
+				/* have to do it like this, because is compound already */
+				linklengthctl.updateLinkLength();
+				
+				/* the following would use the update methods provided
+				 * the layouter is not done, since the calling of that
+				 * might call vgraph.draw() which could result in a crash....
+				 * have to investigate ... XXX */
+				 
+				/*
+				toggleanim.toggleAnimation();
+				toggleaf.toggleAutoFit();
+				*/
+			}
+			
+			/**
+			 * This method refreshed the current values of all controls with
+			 * those of the layouter set in GlobalParams
+			 * */
+			public function refreshValues():void {
+				var layouter:ILayoutAlgorithm;
+				
+				if(GlobalParams.layouter == null) {
+					trace("GP layouter is null, doing nothing");
+					return;
+				}
+		
+				/* this is a direct version, but less transparent */
+				layouter = GlobalParams.layouter;
+				
+				toggleanim.selected = layouter.disableAnimation;
+				toggleaf.selected = layouter.autoFitEnabled;
+				
+				/* the following would use the update methods provided
+				 * the layouter is not done, since the calling of that
+				 * might call vgraph.draw() which could result in a crash....
+				 * have to investigate ... XXX */
+				
+				linklengthctl.refreshSlider();
+				/*
+				toggleanim.refreshAnimCheckbox();
+				toggleaf.refreshAFCheckbox();
+				*/
+			}
+			
+			/**
+			 * register that we are complete
+			 * */
+			private function registerComplete():void {
+				_complete = true;
+			}
+		]]>
+	</mx:Script>
+</mx:VBox>
