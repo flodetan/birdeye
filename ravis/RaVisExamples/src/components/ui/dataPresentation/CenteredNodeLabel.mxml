@@ -43,8 +43,8 @@
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			
-			import utils.GlobalParams;
-			import utils.GlobalParamsData;
+			import org.un.cava.birdeye.ravis.globals.GlobalParams;
+			import org.un.cava.birdeye.ravis.globals.GlobalParamsData;
 
 			/**
 			 * register that we are complete
