@@ -31,7 +31,10 @@ package org.un.cava.birdeye.ravis.assets.icons {
 	public class EmbeddedIcons {
 		
 		// UI Icons
-		
+		[Bindable]
+		[Embed(source="ui/BirdEyeLogoRaVis75.png")]
+	 	static public var ravisIcon:Class;
+	 	
 		[Bindable]
 		[Embed(source="ui/refresh.png")]
 	 	static public var refreshIcon:Class;
@@ -291,7 +294,10 @@ package org.un.cava.birdeye.ravis.assets.icons {
 	 		img.height = size;
 	 		
 			switch(type) {
-						
+					
+				case "ravis":
+					img.source = EmbeddedIcons.ravisIcon;	
+					break;
 			 	case "refresh":
 			 		img.source = EmbeddedIcons.refreshIcon;
 			 		break;
