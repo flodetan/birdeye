@@ -7,11 +7,18 @@ http://birdeye.googlecode.com/svn/trunk/images/BirdEyeLogoRaVis100.png
 
 Component enabling users to create complex data visualization interfaces for the analysis of relational data sets such as social networks, organization trees, navigation systems, taxonomies, db schemas, and other link-based phenomena. The library is purposely extendable and provides for separation of base, interface, and layout code. Additional layout algorithms can be readily integrated as an extended class containing only the mathematical calculations and controls needed specifically for the layout.
 
+== News ==
+
+27 March 2008:
+All code and development migrated from flexvizgraphlib project.
+
 == Status ==
 
-Stable: Project is at RC1; 19 March 2008
+Stable: Project is at RC2; 27 May 2008
 
 == Demos ==
+  * You can download a precompiled snapshot of the library [http://birdeye.googlecode.com/svn/trunk/ravis/libRaVis/released-binaries/ here].
+
   * Try the RaVis Explorer: [http://birdeye.googlecode.com/svn/trunk/ravis/RaVisExamples/example-binaries/RaVisExplorer.html here] (work in progress)
 
 == Support ==
