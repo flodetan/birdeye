@@ -1,0 +1,528 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print">
+<meta content="ILayoutAlgorithm,org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm,animInProgress,autoFitEnabled,disableAnimation,graph,layoutChanged,linkLength,vgraph,bgDragContinue,bgDragEvent,bgDropEvent,dragContinue,dragEvent,dropEvent,layoutPass,refreshInit,resetAll" name="keywords">
+<title>org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'ILayoutAlgorithm - API Documentation';
+				var baseRef = '../../../../../../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/graphLayout/layout/ILayoutAlgorithm.html&amp;org/un/cava/birdeye/ravis/graphLayout/layout/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Interface&nbsp;ILayoutAlgorithm</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Interface ILayoutAlgorithm"); titleBar_setSubNav(false,true,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">org.un.cava.birdeye.ravis.graphLayout.layout</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Interface</td><td class="classSignature">public interface ILayoutAlgorithm extends <a href="none">flash.events.IEventDispatcher</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Subinterfaces</td><td><a href="../layout/IAngularLayouter.html">IAngularLayouter</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Implementors</td><td><a href="../layout/AnimatedBaseLayouter.html">AnimatedBaseLayouter</a>, <a href="../layout/BaseLayouter.html">BaseLayouter</a>, <a href="../layout/ConcentricRadialLayouter.html">ConcentricRadialLayouter</a>, <a href="../layout/DirectPlacementLayouter.html">DirectPlacementLayouter</a>, <a href="../layout/ForceDirectedLayouter.html">ForceDirectedLayouter</a>, <a href="../layout/HierarchicalLayouter.html">HierarchicalLayouter</a>, <a href="../layout/Hyperbolic2DLayouter.html">Hyperbolic2DLayouter</a>, <a href="../layout/ISOMLayouter.html">ISOMLayouter</a>, <a href="../layout/IterativeBaseLayouter.html">IterativeBaseLayouter</a></td>
+</tr>
+</table>
+<p></p>
+  The interface to all layout algorithms that should work
+  with VisualGraph components and underlying Graph data
+  structures. This interface defines all the methods required
+  to control the aspects of a layouter.
+  <p></p>
+<br>
+<hr>
+</div>
+<a name="propertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Properties</div>
+<table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#animInProgress">animInProgress</a> : Boolean<div class="summaryTableDescription">[read-only]
+   Indicator if currently an animation sequence is still
+   in progress.</div>
+</td><td class="summaryTableOwnerCol">ILayoutAlgorithm</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#autoFitEnabled">autoFitEnabled</a> : Boolean<div class="summaryTableDescription">
+   Flag to indicate whether the Layouter should attempt
+   to automatically fit the layout to the screen.</div>
+</td><td class="summaryTableOwnerCol">ILayoutAlgorithm</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#disableAnimation">disableAnimation</a> : Boolean<div class="summaryTableDescription">
+   If set to true, animation is disabled and direct
+   node location setting occurs (instantaneously).</div>
+</td><td class="summaryTableOwnerCol">ILayoutAlgorithm</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#graph">graph</a> : <a href="../data/IGraph.html">IGraph</a>
+<div class="summaryTableDescription">[write-only]
+   Assign a Graph datastructure object to the
+   layouter, every layouter will need one to work
+   and some may allow to set it in their constructor
+   </div>
+</td><td class="summaryTableOwnerCol">ILayoutAlgorithm</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#layoutChanged">layoutChanged</a> : Boolean<div class="summaryTableDescription">
+   Indicator if the layout has changed or not.</div>
+</td><td class="summaryTableOwnerCol">ILayoutAlgorithm</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#linkLength">linkLength</a> : Number<div class="summaryTableDescription">
+   Access to a value that controls the length
+   of links (or rather edges).</div>
+</td><td class="summaryTableOwnerCol">ILayoutAlgorithm</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#vgraph">vgraph</a> : <a href="../visual/IVisualGraph.html">IVisualGraph</a>
+<div class="summaryTableDescription">[write-only]
+   Assign a VisualGraph object to the layouter,
+   every layouter will need one to work, some may
+   also offer to set it in their constructor.</div>
+</td><td class="summaryTableOwnerCol">ILayoutAlgorithm</td>
+</tr>
+</table>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#bgDragContinue()">bgDragContinue</a>(event:MouseEvent):void</div>
+<div class="summaryTableDescription">
+   Notifies the layouter of a background drag-in-process event, in case
+   it wants to react to that in special way.</div>
+</td><td class="summaryTableOwnerCol">ILayoutAlgorithm</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#bgDragEvent()">bgDragEvent</a>(event:MouseEvent):void</div>
+<div class="summaryTableDescription">
+   Notifies the layouter of a backgroung drag event, in case
+   it wants to react to that in special way.</div>
+</td><td class="summaryTableOwnerCol">ILayoutAlgorithm</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#bgDropEvent()">bgDropEvent</a>(event:MouseEvent):void</div>
+<div class="summaryTableDescription">
+   Notifies the layouter of a background drop event, in case
+   it wants to react to that in special way.</div>
+</td><td class="summaryTableOwnerCol">ILayoutAlgorithm</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#dragContinue()">dragContinue</a>(event:MouseEvent, vn:<a href="../visual/IVisualNode.html">IVisualNode</a>):void</div>
+<div class="summaryTableDescription">
+   Notifies the layouter of a node dragging-in-process event, in case
+   it wants to react to that in special way.</div>
+</td><td class="summaryTableOwnerCol">ILayoutAlgorithm</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#dragEvent()">dragEvent</a>(event:MouseEvent, vn:<a href="../visual/IVisualNode.html">IVisualNode</a>):void</div>
+<div class="summaryTableDescription">
+   Notifies the layouter of a node drag event, in case
+   it wants to react to that in special way.</div>
+</td><td class="summaryTableOwnerCol">ILayoutAlgorithm</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#dropEvent()">dropEvent</a>(event:MouseEvent, vn:<a href="../visual/IVisualNode.html">IVisualNode</a>):void</div>
+<div class="summaryTableDescription">
+   Notifies the layouter of a node drop event, in case
+   it wants to react to that in special way.</div>
+</td><td class="summaryTableOwnerCol">ILayoutAlgorithm</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#layoutPass()">layoutPass</a>():Boolean</div>
+<div class="summaryTableDescription">
+   This is the main method of the layouter, that actually
+   implements the calculation of the layout.</div>
+</td><td class="summaryTableOwnerCol">ILayoutAlgorithm</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#refreshInit()">refreshInit</a>():void</div>
+<div class="summaryTableDescription">
+   This is an initialisation method to do any kind
+   of initialisation before a layout pass.</div>
+</td><td class="summaryTableOwnerCol">ILayoutAlgorithm</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#resetAll()">resetAll</a>():void</div>
+<div class="summaryTableDescription">
+   This should reset all parameters of the layouter,
+   which might not be needed for all layouters, and it is
+   up to each layouter to do something with it.</div>
+</td><td class="summaryTableOwnerCol">ILayoutAlgorithm</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="propertyDetail"></a>
+<div class="detailSectionHeader">Property detail</div>
+<a name="animInProgress"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">animInProgress</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>animInProgress:Boolean</code>&nbsp;&nbsp;[read-only]<p>
+   Indicator if currently an animation sequence is still
+   in progress. During certain animation sequences, drag&drop
+   might be disabled
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get animInProgress():Boolean</code>
+<br>
+</div>
+<a name="autoFitEnabled"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">autoFitEnabled</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>autoFitEnabled:Boolean</code>&nbsp;&nbsp;[read-write]<p>
+   Flag to indicate whether the Layouter should attempt
+   to automatically fit the layout to the screen.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get autoFitEnabled():Boolean</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set autoFitEnabled(value:Boolean):void</code>
+<br>
+</div>
+<a name="disableAnimation"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">disableAnimation</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>disableAnimation:Boolean</code>&nbsp;&nbsp;[read-write]<p>
+   If set to true, animation is disabled and direct
+   node location setting occurs (instantaneously).
+   </p><p>The default value is <code>false</code>.</p>
+<span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get disableAnimation():Boolean</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set disableAnimation(value:Boolean):void</code>
+<br>
+</div>
+<a name="graph"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">graph</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>graph:<a href="../data/IGraph.html">IGraph</a></code>&nbsp;&nbsp;[write-only]<p>
+   Assign a Graph datastructure object to the
+   layouter, every layouter will need one to work
+   and some may allow to set it in their constructor
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set graph(value:<a href="../data/IGraph.html">IGraph</a>):void</code>
+<br>
+</div>
+<a name="layoutChanged"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">layoutChanged</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>layoutChanged:Boolean</code>&nbsp;&nbsp;[read-write]<p>
+   Indicator if the layout has changed or not. This
+   can be used to notify the layouter, that some external
+   means (like dragging & dropping a node) has changed the
+   layout, and it will also be set by the layouter itself
+   when the layouter updated the layout. This is used by
+   the VisualGraphs "updateDisplayList()" method, to see
+   whether to redraw all edges using the EdgeRenderer.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get layoutChanged():Boolean</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set layoutChanged(value:Boolean):void</code>
+<br>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../visual/VisualGraph.html#updateDisplayList()" target="">org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph.updateDisplayList()</a>
+</div>
+</div>
+<a name="linkLength"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">linkLength</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>linkLength:Number</code>&nbsp;&nbsp;[read-write]<p>
+   Access to a value that controls the length
+   of links (or rather edges). It is up to the
+   layouter what to do with it, and some may ignore
+   this value under certain circumstances (like autoFit).
+   The interface requires the value to be between 0 and 100;
+   </p><p>The default value is <code>10</code>.</p>
+<span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get linkLength():Number</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set linkLength(value:Number):void</code>
+<br>
+</div>
+<a name="vgraph"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">vgraph</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>vgraph:<a href="../visual/IVisualGraph.html">IVisualGraph</a></code>&nbsp;&nbsp;[write-only]<p>
+   Assign a VisualGraph object to the layouter,
+   every layouter will need one to work, some may
+   also offer to set it in their constructor.
+   The layouter may choose to implicitly also set the
+   graph object if it is found within the VisualGraph object.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set vgraph(value:<a href="../visual/IVisualGraph.html">IVisualGraph</a>):void</code>
+<br>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../visual/VisualGraph.html#graph" target="">org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph.graph</a>
+</div>
+</div>
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="bgDragContinue()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">bgDragContinue</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function bgDragContinue(event:MouseEvent):void</code><p>
+   Notifies the layouter of a background drag-in-process event, in case
+   it wants to react to that in special way.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">event</span>:MouseEvent</code></td>
+</tr>
+</table>
+</div>
+<a name="bgDragEvent()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">bgDragEvent</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function bgDragEvent(event:MouseEvent):void</code><p>
+   Notifies the layouter of a backgroung drag event, in case
+   it wants to react to that in special way.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">event</span>:MouseEvent</code></td>
+</tr>
+</table>
+</div>
+<a name="bgDropEvent()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">bgDropEvent</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function bgDropEvent(event:MouseEvent):void</code><p>
+   Notifies the layouter of a background drop event, in case
+   it wants to react to that in special way.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">event</span>:MouseEvent</code></td>
+</tr>
+</table>
+</div>
+<a name="dragContinue()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">dragContinue</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function dragContinue(event:MouseEvent, vn:<a href="../visual/IVisualNode.html">IVisualNode</a>):void</code><p>
+   Notifies the layouter of a node dragging-in-process event, in case
+   it wants to react to that in special way.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">event</span>:MouseEvent</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">vn</span>:<a href="../visual/IVisualNode.html">IVisualNode</a></code></td>
+</tr>
+</table>
+</div>
+<a name="dragEvent()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">dragEvent</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function dragEvent(event:MouseEvent, vn:<a href="../visual/IVisualNode.html">IVisualNode</a>):void</code><p>
+   Notifies the layouter of a node drag event, in case
+   it wants to react to that in special way.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">event</span>:MouseEvent</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">vn</span>:<a href="../visual/IVisualNode.html">IVisualNode</a></code></td>
+</tr>
+</table>
+</div>
+<a name="dropEvent()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">dropEvent</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function dropEvent(event:MouseEvent, vn:<a href="../visual/IVisualNode.html">IVisualNode</a>):void</code><p>
+   Notifies the layouter of a node drop event, in case
+   it wants to react to that in special way.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">event</span>:MouseEvent</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">vn</span>:<a href="../visual/IVisualNode.html">IVisualNode</a></code></td>
+</tr>
+</table>
+</div>
+<a name="layoutPass()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">layoutPass</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function layoutPass():Boolean</code><p>
+   This is the main method of the layouter, that actually
+   implements the calculation of the layout. It will be called
+   by the VisualGraph on any significant change that will
+   require a layout to be recomputed.
+   </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code> &mdash; true if something was done successfully, false otherwise.
+   </td>
+</tr>
+</table>
+</div>
+<a name="refreshInit()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">refreshInit</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function refreshInit():void</code><p>
+   This is an initialisation method to do any kind
+   of initialisation before a layout pass. Not all 
+   layouters may require this and thus implement it
+   meaningfully.
+   </p></div>
+<a name="resetAll()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">resetAll</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function resetAll():void</code><p>
+   This should reset all parameters of the layouter,
+   which might not be needed for all layouters, and it is
+   up to each layouter to do something with it.
+   It would also stop any existing layouting loops/timers.
+   </p></div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->

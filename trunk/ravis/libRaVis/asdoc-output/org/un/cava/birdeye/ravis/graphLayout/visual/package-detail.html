@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print">
+<title>org.un.cava.birdeye.ravis.graphLayout.visual Summary</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'org.un.cava.birdeye.ravis.graphLayout.visual Package - API Documentation';
+				var baseRef = '../../../../../../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/graphLayout/visual/package-detail.html&amp;org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Package&nbsp;org.un.cava.birdeye.ravis.graphLayout.visual</td><td align="right" id="subNav" class="titleTableSubNav"><a href="package-detail.html#interfaceSummary">Interfaces</a>&nbsp;| <a href="package-detail.html#classSummary">Classes</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Package org.un.cava.birdeye.ravis.graphLayout.visual"); titleBar_setSubNav(false,false,false,false,false,false,false,false,false,false,false,true,true,false);}
+--></script>
+<div class="MainContent">
+<br>
+<br>
+<hr>
+<a name="interfaceSummary"></a>
+<div class="summaryTableTitle">Interfaces</div>
+<table class="summaryTable" cellspacing="0" cellpadding="3">
+<tr>
+<th>&nbsp;</th><th width="30%">Interface</th><th width="70%">Description</th>
+</tr>
+<tr class="prow1">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><i><a href="IEdgeRenderer.html">IEdgeRenderer</a></i></td><td class="summaryTableLastCol">
+  Interface for any Edge renderers,
+  basically this is very simple as it just
+  requires a draw() method.</td>
+</tr>
+<tr class="prow0">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><i><a href="IVisualEdge.html">IVisualEdge</a></i></td><td class="summaryTableLastCol"> 
+  Interface for a visual edge.</td>
+</tr>
+<tr class="prow1">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><i><a href="IVisualGraph.html">IVisualGraph</a></i></td><td class="summaryTableLastCol">
+  Interface to the VisualGraph Flex Component,
+  which also has to implement the IUIComponent
+  and the IInvalidating interface.</td>
+</tr>
+<tr class="prow0">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><i><a href="IVisualItem.html">IVisualItem</a></i></td><td class="summaryTableLastCol">
+  Interface for any visual item, provides
+  access to an internal id, a data object
+  and a related VisualGraph.</td>
+</tr>
+<tr class="prow1">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><i><a href="IVisualNode.html">IVisualNode</a></i></td><td class="summaryTableLastCol"> 
+  The visual node interface, this includes
+  lots of access methods for location properties,
+  movement properties.</td>
+</tr>
+</table>
+<a name="classSummary"></a>
+<div class="summaryTableTitle">Classes</div>
+<table class="summaryTable" cellspacing="0" cellpadding="3">
+<tr>
+<th>&nbsp;</th><th width="30%">Class</th><th width="70%">Description</th>
+</tr>
+<tr class="prow1">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="CircularEdgeRenderer.html">CircularEdgeRenderer</a></td><td class="summaryTableLastCol">
+  This is the edge renderer for circular layout, which draws the edges
+  as curved lines from one node to another.</td>
+</tr>
+<tr class="prow0">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="DefaultEdgeRenderer.html">DefaultEdgeRenderer</a></td><td class="summaryTableLastCol">
+  This is the default edge renderer, which draws the edges
+  as straight lines from one node to another.</td>
+</tr>
+<tr class="prow1">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="DirectedEdgeRenderer.html">DirectedEdgeRenderer</a></td><td class="summaryTableLastCol">
+  This is a directed edge renderer, which draws the edges
+  with slim ballon like curves that indicate a source.</td>
+</tr>
+<tr class="prow0">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="FlowCurveEdgeRenderer.html">FlowCurveEdgeRenderer</a></td><td class="summaryTableLastCol">
+  This is a variant of the flow edge renderer.</td>
+</tr>
+<tr class="prow1">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="FlowEdgeRenderer.html">FlowEdgeRenderer</a></td><td class="summaryTableLastCol">
+  This is a flow edge renderer.</td>
+</tr>
+<tr class="prow0">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="HyperbolicEdgeRenderer.html">HyperbolicEdgeRenderer</a></td><td class="summaryTableLastCol">
+  This is an edge renderer for Hyperbolic2DLayout, which draws the edges
+  as curved lines from one node to another.</td>
+</tr>
+<tr class="prow1">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="OrthogonalEdgeRenderer.html">OrthogonalEdgeRenderer</a></td><td class="summaryTableLastCol">
+  This edge renderer draws rectangular edge arrows.</td>
+</tr>
+<tr class="prow0">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="VisualEdge.html">VisualEdge</a></td><td class="summaryTableLastCol">
+  A visual edge is just a representation of a graph edge
+  in the VisualGraph context.</td>
+</tr>
+<tr class="prow1">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="VisualGraph.html">VisualGraph</a></td><td class="summaryTableLastCol">
+  This component can visualize and layout a graph data structure in 
+  a Flex application.</td>
+</tr>
+<tr class="prow0">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="VisualNode.html">VisualNode</a></td><td class="summaryTableLastCol">
+  The VisualNode to be used in the Graph.</td>
+</tr>
+</table>
+<p></p>
+<div>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</div>
+</body>
+</html>
+<!-- -->
