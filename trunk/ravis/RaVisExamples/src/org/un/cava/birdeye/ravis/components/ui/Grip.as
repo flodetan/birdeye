@@ -24,7 +24,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package components.ui {
+package org.un.cava.birdeye.ravis.components.ui {
 	
 	import mx.containers.VBox;
 	import mx.controls.Button;
