@@ -1,0 +1,548 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../../../print.css" type="text/css" media="print">
+<meta content="Geometry,org.un.cava.birdeye.ravis.utils.Geometry,arcosh,arsinh,cartFromPolar,cartFromPolarDeg,cosh,deg2rad,normaliseAngle,normaliseAngleDeg,polarAngle,polarAngleDeg,polarRadius,rad2deg,sinh" name="keywords">
+<title>org.un.cava.birdeye.ravis.utils.Geometry</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'Geometry - API Documentation';
+				var baseRef = '../../../../../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../all-classes.html')" href="../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../all-classes.html')" href="../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../index-list.html')" href="../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../index.html?org/un/cava/birdeye/ravis/utils/Geometry.html&amp;org/un/cava/birdeye/ravis/utils/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;Geometry</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#methodSummary">Methods</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class Geometry"); titleBar_setSubNav(false,false,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">org.un.cava.birdeye.ravis.utils</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class Geometry</td>
+</tr>
+</table>
+<p></p>
+  This is a class to provide some static functions
+  to help with angles and geometry.
+  <p></p>
+<br>
+<hr>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#arcosh()">arcosh</a>(x:Number):Number</div>
+<div class="summaryTableDescription">[static]
+    Returns inverse of the sine hyperbolic function:
+   <code>arcosh(x) = ln(x+sqrt(x^2-1))</code>.</div>
+</td><td class="summaryTableOwnerCol">Geometry</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#arsinh()">arsinh</a>(x:Number):Number</div>
+<div class="summaryTableDescription">[static]
+   Returns inverse of the sine hyperbolic function:
+   <code>arsinh(x) = ln(x+sqrt(x^2+1))</code>.</div>
+</td><td class="summaryTableOwnerCol">Geometry</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#cartFromPolar()">cartFromPolar</a>(r:Number, a:Number):Point</div>
+<div class="summaryTableDescription">[static]
+   Calculate cartesian coordinates from polar coordinates,
+   again this uses the polar method from the Point class,
+   here for completeness.</div>
+</td><td class="summaryTableOwnerCol">Geometry</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#cartFromPolarDeg()">cartFromPolarDeg</a>(r:Number, a:Number):Point</div>
+<div class="summaryTableDescription">[static]
+   Calculate cartesian coordinates from polar coordinates,
+   again this uses the polar method from the Point class,
+   here for completeness.</div>
+</td><td class="summaryTableOwnerCol">Geometry</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#cosh()">cosh</a>(x:Number):Number</div>
+<div class="summaryTableDescription">[static]
+   Returns cosine hyperbolic function:
+   <code>cosh(x) = 0.5e^x+e^(-x))</code>.</div>
+</td><td class="summaryTableOwnerCol">Geometry</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#deg2rad()">deg2rad</a>(a:Number):Number</div>
+<div class="summaryTableDescription">[static]
+   Turns an angle given in degrees into radians.</div>
+</td><td class="summaryTableOwnerCol">Geometry</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#normaliseAngle()">normaliseAngle</a>(a:Number):Number</div>
+<div class="summaryTableDescription">[static]
+   Normalizes angles to be within the range of 0 to 2I
+   by adding or subtracting 2 PI until the angle is within
+   the range.</div>
+</td><td class="summaryTableOwnerCol">Geometry</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#normaliseAngleDeg()">normaliseAngleDeg</a>(a:Number):Number</div>
+<div class="summaryTableDescription">[static]
+   Normalizes angles to be within the range of 0 to 360
+   by adding or subtracting 360 until the angle is within
+   the range.</div>
+</td><td class="summaryTableOwnerCol">Geometry</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#polarAngle()">polarAngle</a>(p:Point):Number</div>
+<div class="summaryTableDescription">[static]
+   Calculate the polar Angle of a Point.</div>
+</td><td class="summaryTableOwnerCol">Geometry</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#polarAngleDeg()">polarAngleDeg</a>(p:Point):Number</div>
+<div class="summaryTableDescription">[static]
+   Calculate the polar Angle of a Point in degrees.</div>
+</td><td class="summaryTableOwnerCol">Geometry</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#polarRadius()">polarRadius</a>(p:Point):Number</div>
+<div class="summaryTableDescription">[static]
+   Calculate the polar radius for a given point.</div>
+</td><td class="summaryTableOwnerCol">Geometry</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#rad2deg()">rad2deg</a>(a:Number):Number</div>
+<div class="summaryTableDescription">[static]
+   Turns an angle given in radians into degrees
+   </div>
+</td><td class="summaryTableOwnerCol">Geometry</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#sinh()">sinh</a>(x:Number):Number</div>
+<div class="summaryTableDescription">[static]
+   Returns sine hyperbolic function:
+   <code>sinh(x) = 0.5e^x-e^(-x))</code>.</div>
+</td><td class="summaryTableOwnerCol">Geometry</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="arcosh()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">arcosh</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function arcosh(x:Number):Number</code><p>
+    Returns inverse of the sine hyperbolic function:
+   <code>arcosh(x) = ln(x+sqrt(x^2-1))</code>.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">x</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code></td>
+</tr>
+</table>
+</div>
+<a name="arsinh()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">arsinh</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function arsinh(x:Number):Number</code><p>
+   Returns inverse of the sine hyperbolic function:
+   <code>arsinh(x) = ln(x+sqrt(x^2+1))</code>.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">x</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code></td>
+</tr>
+</table>
+</div>
+<a name="cartFromPolar()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">cartFromPolar</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function cartFromPolar(r:Number, a:Number):Point</code><p>
+   Calculate cartesian coordinates from polar coordinates,
+   again this uses the polar method from the Point class,
+   here for completeness.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">r</span>:Number</code> &mdash; The polar radius.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">a</span>:Number</code> &mdash; The polar angle in radians.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Point</code> &mdash; A Point object with the cartesian coordinates.
+   </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">Point.polar()</div>
+</div>
+<a name="cartFromPolarDeg()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">cartFromPolarDeg</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function cartFromPolarDeg(r:Number, a:Number):Point</code><p>
+   Calculate cartesian coordinates from polar coordinates,
+   again this uses the polar method from the Point class,
+   here for completeness.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">r</span>:Number</code> &mdash; The polar radius.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">a</span>:Number</code> &mdash; The polar angle in degrees.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Point</code> &mdash; A Point object with the cartesian coordinates.
+   </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">Point.polar()</div>
+</div>
+<a name="cosh()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">cosh</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function cosh(x:Number):Number</code><p>
+   Returns cosine hyperbolic function:
+   <code>cosh(x) = 0.5e^x+e^(-x))</code>.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">x</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code></td>
+</tr>
+</table>
+</div>
+<a name="deg2rad()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">deg2rad</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function deg2rad(a:Number):Number</code><p>
+   Turns an angle given in degrees into radians.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">a</span>:Number</code> &mdash; The angle given in degrees.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The angle in radians.
+   </td>
+</tr>
+</table>
+</div>
+<a name="normaliseAngle()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">normaliseAngle</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function normaliseAngle(a:Number):Number</code><p>
+   Normalizes angles to be within the range of 0 to 2I
+   by adding or subtracting 2 PI until the angle is within
+   the range.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">a</span>:Number</code> &mdash; The angle to normalise in radians.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The normalized angle.
+   </td>
+</tr>
+</table>
+</div>
+<a name="normaliseAngleDeg()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">normaliseAngleDeg</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function normaliseAngleDeg(a:Number):Number</code><p>
+   Normalizes angles to be within the range of 0 to 360
+   by adding or subtracting 360 until the angle is within
+   the range.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">a</span>:Number</code> &mdash; The angle to normalise in degrees.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The normalized angle.
+   </td>
+</tr>
+</table>
+</div>
+<a name="polarAngle()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">polarAngle</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function polarAngle(p:Point):Number</code><p>
+   Calculate the polar Angle of a Point.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">p</span>:Point</code> &mdash; The Point to which the Angle is needed.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The polar angle in radians. The range is from 0 to 2 PI. Returns 0 for the origin.
+   </td>
+</tr>
+</table>
+</div>
+<a name="polarAngleDeg()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">polarAngleDeg</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function polarAngleDeg(p:Point):Number</code><p>
+   Calculate the polar Angle of a Point in degrees.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">p</span>:Point</code> &mdash; The Point to which the Angle is needed.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The polar angle in degrees. The range is from 0 to 360. Returns 0 for the origin.
+   </td>
+</tr>
+</table>
+</div>
+<a name="polarRadius()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">polarRadius</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function polarRadius(p:Point):Number</code><p>
+   Calculate the polar radius for a given point. This just calles
+   the length method of the Point object, which is the same. It is
+   part of this class for consistency.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">p</span>:Point</code> &mdash; The point to receive the polar radius from.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The polar radius.
+   </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">Point.length</div>
+</div>
+<a name="rad2deg()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">rad2deg</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function rad2deg(a:Number):Number</code><p>
+   Turns an angle given in radians into degrees
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">a</span>:Number</code> &mdash; The angle given in radians.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The angle in degrees.
+   </td>
+</tr>
+</table>
+</div>
+<a name="sinh()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">sinh</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function sinh(x:Number):Number</code><p>
+   Returns sine hyperbolic function:
+   <code>sinh(x) = 0.5e^x-e^(-x))</code>.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">x</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code></td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->

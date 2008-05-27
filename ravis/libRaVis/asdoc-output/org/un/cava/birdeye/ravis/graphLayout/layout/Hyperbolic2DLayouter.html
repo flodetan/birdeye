@@ -1,0 +1,613 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print">
+<meta content="Hyperbolic2DLayouter,org.un.cava.birdeye.ravis.graphLayout.layout.Hyperbolic2DLayouter,ANIMATION_STEPS,_animInProgress,projector,animate,bgDragContinue,bgDragEvent,calculateLayout,dropEvent,isStable,refreshInit,resetAll" name="keywords">
+<title>org.un.cava.birdeye.ravis.graphLayout.layout.Hyperbolic2DLayouter</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'Hyperbolic2DLayouter - API Documentation';
+				var baseRef = '../../../../../../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/graphLayout/layout/Hyperbolic2DLayouter.html&amp;org/un/cava/birdeye/ravis/graphLayout/layout/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;Hyperbolic2DLayouter</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a>&nbsp;| <a href="#constantSummary">Constants</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class Hyperbolic2DLayouter"); titleBar_setSubNav(true,true,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">org.un.cava.birdeye.ravis.graphLayout.layout</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class Hyperbolic2DLayouter</td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">Hyperbolic2DLayouter <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../../../../images/inherit-arrow.gif"> <a href="IterativeBaseLayouter.html">IterativeBaseLayouter</a> <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../../../../images/inherit-arrow.gif"> <a href="BaseLayouter.html">BaseLayouter</a> <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../../../../images/inherit-arrow.gif"> flash.events.EventDispatcher</td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Implements</td><td><a href="ILayoutAlgorithm.html">ILayoutAlgorithm</a></td>
+</tr>
+</table>
+<p></p>
+  This is an implementation of the Hyperbolic 2D layouting algorithm.<br>
+  For this iterative layout, most of default mouse behavior, namely:<br>
+  (1) scrolling while background drag, and <br>
+  (2) node drag-drop<br>
+  should be turned-off in <code>VisualGraph</code>. 
+  <hr>
+  The implementation is a rewrite of Jens Kanschik's Hypergraph
+  implementation in Java. However, apart from the general idea 
+  and some variable names, this code improves on hypergraph 
+  and also implements additional functionality.
+  
+  Copyright (C) 2003  Jens Kanschik,
+  mail : jensKanschik<p></p>
+<br>
+<hr>
+</div>
+<a name="propertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Properties</div>
+<div class="showHideLinks">
+<div class="hideInheritedProperty" id="hideInheritedProperty">
+<a onclick="javascript:setInheritedVisible(false,'Property');" href="#propertySummary" class="showHideLink"><img src="../../../../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Public Properties</a>
+</div>
+<div class="showInheritedProperty" id="showInheritedProperty">
+<a onclick="javascript:setInheritedVisible(true,'Property');" href="#propertySummary" class="showHideLink"><img src="../../../../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Public Properties</a>
+</div>
+</div>
+<table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#animInProgress">animInProgress</a> : Boolean<div class="summaryTableDescription">
+   
+   Indicator if currently an animation sequence is still
+   in progress.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#autoFitEnabled">autoFitEnabled</a> : Boolean<div class="summaryTableDescription">
+   
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#disableAnimation">disableAnimation</a> : Boolean<div class="summaryTableDescription">
+   
+   If set to true, animation is disabled and direct
+   node location setting occurs (instantaneously).</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#graph">graph</a> : <a href="../data/IGraph.html">IGraph</a>
+<div class="summaryTableDescription">
+   
+   Assign a Graph datastructure object to the
+   layouter, every layouter will need one to work
+   and some may allow to set it in their constructor
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#layoutChanged">layoutChanged</a> : Boolean<div class="summaryTableDescription">
+   
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#linkLength">linkLength</a> : Number<div class="summaryTableDescription">
+   This is a NOP in the BaseLayouter class.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#projector">projector</a> : <a href="../../utils/geom/IProjector.html">IProjector</a>
+<div class="summaryTableDescription">[read-only]  Helper Methods - Node Animation, Misc.</div>
+</td><td class="summaryTableOwnerCol">Hyperbolic2DLayouter</td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#vgraph">vgraph</a> : <a href="../visual/IVisualGraph.html">IVisualGraph</a>
+<div class="summaryTableDescription">
+   
+   Assign a VisualGraph object to the layouter,
+   every layouter will need one to work, some may
+   also offer to set it in their constructor.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+</table>
+</div>
+<a name="protectedPropertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Protected Properties</div>
+<div class="showHideLinks">
+<div class="hideInheritedProtectedProperty" id="hideInheritedProtectedProperty">
+<a onclick="javascript:setInheritedVisible(false,'ProtectedProperty');" href="#protectedPropertySummary" class="showHideLink"><img src="../../../../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Protected Properties</a>
+</div>
+<div class="showInheritedProtectedProperty" id="showInheritedProtectedProperty">
+<a onclick="javascript:setInheritedVisible(true,'ProtectedProperty');" href="#protectedPropertySummary" class="showHideLink"><img src="../../../../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Protected Properties</a>
+</div>
+</div>
+<table id="summaryTableProtectedProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_animInProgress">_animInProgress</a> : Boolean = false<div class="summaryTableDescription">
+   Indicator if there is currently an animation in progress
+   </div>
+</td><td class="summaryTableOwnerCol">Hyperbolic2DLayouter</td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#_autoFitEnabled">_autoFitEnabled</a> : Boolean = false<div class="summaryTableDescription">
+   The indicator if AutoFit should currently be used or not.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#currentDrawing">currentDrawing</a> : <a href="../layout/BaseLayoutDrawing.html">BaseLayoutDrawing</a>
+<div class="summaryTableDescription">
+   Allow to set the reference to the drawing object from
+   derived classes.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#_disableAnimation">_disableAnimation</a> : Boolean = false<div class="summaryTableDescription">
+   If set to true, animation is disabled and direct
+   node location setting occurs (instantaneously).</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="IterativeBaseLayouter.html#_dragNode">_dragNode</a> : <a href="../visual/IVisualNode.html">IVisualNode</a> = null<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="IterativeBaseLayouter.html">IterativeBaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#_graph">_graph</a> : <a href="../data/IGraph.html">IGraph</a> = null<div class="summaryTableDescription">
+   All layouters need access to the Graph.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#_layoutChanged">_layoutChanged</a> : Boolean = false<div class="summaryTableDescription">
+   This keeps track if the layout has changed
+   and can be accessed by any derived layouter.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#_root">_root</a> : <a href="../data/INode.html">INode</a>
+<div class="summaryTableDescription">
+   The current root node of the layout.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#_stree">_stree</a> : <a href="../data/IGTree.html">IGTree</a>
+<div class="summaryTableDescription"> 
+   A spanning tree of the graph, since probably every layout 
+   will work on a spanning tree, we keep this one in this
+   base class.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#_vgraph">_vgraph</a> : <a href="../visual/IVisualGraph.html">IVisualGraph</a> = null<div class="summaryTableDescription">
+   All layouters need access to the VisualGraph.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+</table>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<div class="showHideLinks">
+<div class="hideInheritedMethod" id="hideInheritedMethod">
+<a onclick="javascript:setInheritedVisible(false,'Method');" href="#methodSummary" class="showHideLink"><img src="../../../../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Public Methods</a>
+</div>
+<div class="showInheritedMethod" id="showInheritedMethod">
+<a onclick="javascript:setInheritedVisible(true,'Method');" href="#methodSummary" class="showHideLink"><img src="../../../../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Public Methods</a>
+</div>
+</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#Hyperbolic2DLayouter()">Hyperbolic2DLayouter</a>(vg:<a href="../visual/IVisualGraph.html">IVisualGraph</a> = null)</div>
+<div class="summaryTableDescription">  Initialization - Constructors, resets
+  </div>
+</td><td class="summaryTableOwnerCol">Hyperbolic2DLayouter</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#bgDragContinue()">bgDragContinue</a>(event:MouseEvent):void</div>
+<div class="summaryTableDescription">
+   
+   Notifies the layouter of a background drag-in-process event, in case
+   it wants to react to that in special way.</div>
+</td><td class="summaryTableOwnerCol">Hyperbolic2DLayouter</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#bgDragEvent()">bgDragEvent</a>(event:MouseEvent):void</div>
+<div class="summaryTableDescription">
+   
+   Notifies the layouter of a backgroung drag event, in case
+   it wants to react to that in special way.</div>
+</td><td class="summaryTableOwnerCol">Hyperbolic2DLayouter</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseLayouter.html#bgDropEvent()">bgDropEvent</a>(event:MouseEvent):void</div>
+<div class="summaryTableDescription">
+   This is a NOP for this layouter.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseLayouter.html#dragContinue()">dragContinue</a>(event:MouseEvent, vn:<a href="../visual/IVisualNode.html">IVisualNode</a>):void</div>
+<div class="summaryTableDescription">
+   This is a NOP for this layouter.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="IterativeBaseLayouter.html#dragEvent()">dragEvent</a>(event:MouseEvent, vn:<a href="../visual/IVisualNode.html">IVisualNode</a>):void</div>
+<div class="summaryTableDescription">
+   This method notifies the layouter about a drag/drop
+   operation.</div>
+</td><td class="summaryTableOwnerCol"><a href="IterativeBaseLayouter.html">IterativeBaseLayouter</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#dropEvent()">dropEvent</a>(event:MouseEvent, vn:<a href="../visual/IVisualNode.html">IVisualNode</a>):void</div>
+<div class="summaryTableDescription">  Mouse Event Handling Methods
+  </div>
+</td><td class="summaryTableOwnerCol">Hyperbolic2DLayouter</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="IterativeBaseLayouter.html#layoutPass()">layoutPass</a>():Boolean</div>
+<div class="summaryTableDescription">
+   This is the actual method that does a layout pass.</div>
+</td><td class="summaryTableOwnerCol"><a href="IterativeBaseLayouter.html">IterativeBaseLayouter</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#refreshInit()">refreshInit</a>():void</div>
+<div class="summaryTableDescription">
+   
+   This is an initialisation method to do any kind
+   of initialisation before a layout pass.</div>
+</td><td class="summaryTableOwnerCol">Hyperbolic2DLayouter</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#resetAll()">resetAll</a>():void</div>
+<div class="summaryTableDescription">
+   
+   This should reset all parameters of the layouter,
+   which might not be needed for all layouters, and it is
+   up to each layouter to do something with it.</div>
+</td><td class="summaryTableOwnerCol">Hyperbolic2DLayouter</td>
+</tr>
+</table>
+</div>
+<a name="protectedMethodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Protected Methods</div>
+<div class="showHideLinks">
+<div class="hideInheritedProtectedMethod" id="hideInheritedProtectedMethod">
+<a onclick="javascript:setInheritedVisible(false,'ProtectedMethod');" href="#protectedMethodSummary" class="showHideLink"><img src="../../../../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Protected Methods</a>
+</div>
+<div class="showInheritedProtectedMethod" id="showInheritedProtectedMethod">
+<a onclick="javascript:setInheritedVisible(true,'ProtectedMethod');" href="#protectedMethodSummary" class="showHideLink"><img src="../../../../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Protected Methods</a>
+</div>
+</div>
+<table id="summaryTableProtectedMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#animate()">animate</a>():void</div>
+<div class="summaryTableDescription">
+   Performs one animation step.</div>
+</td><td class="summaryTableOwnerCol">Hyperbolic2DLayouter</td>
+</tr>
+<tr class="hideInheritedProtectedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseLayouter.html#applyTargetCoordinates()">applyTargetCoordinates</a>(n:<a href="../data/INode.html">INode</a>):void</div>
+<div class="summaryTableDescription">
+   Sets the current absolute target coordinates of a node
+   in the node's vnode.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedProtectedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseLayouter.html#applyTargetToNodes()">applyTargetToNodes</a>(vns:Dictionary):void</div>
+<div class="summaryTableDescription">
+   Applies the target coordinates to all nodes that
+   are in the Dictionary object passed as argument.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#calculateLayout()">calculateLayout</a>():void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">Hyperbolic2DLayouter</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#isStable()">isStable</a>():Boolean</div>
+<div class="summaryTableDescription">  Layout Methods - Computations
+  </div>
+</td><td class="summaryTableOwnerCol">Hyperbolic2DLayouter</td>
+</tr>
+<tr class="hideInheritedProtectedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="IterativeBaseLayouter.html#layoutIteration()">layoutIteration</a>():Boolean</div>
+<div class="summaryTableDescription">
+   Do a full calculation iteration of the layout.</div>
+</td><td class="summaryTableOwnerCol"><a href="IterativeBaseLayouter.html">IterativeBaseLayouter</a></td>
+</tr>
+</table>
+</div>
+<a name="constantSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Constants</div>
+<div class="showHideLinks">
+<div class="hideInheritedConstant" id="hideInheritedConstant">
+<a onclick="javascript:setInheritedVisible(false,'Constant');" href="#constantSummary" class="showHideLink"><img src="../../../../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Public Constants</a>
+</div>
+<div class="showInheritedConstant" id="showInheritedConstant">
+<a onclick="javascript:setInheritedVisible(true,'Constant');" href="#constantSummary" class="showHideLink"><img src="../../../../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Public Constants</a>
+</div>
+</div>
+<table id="summaryTableConstant" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Constant</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#ANIMATION_STEPS">ANIMATION_STEPS</a> : int = 10<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Hyperbolic2DLayouter</td>
+</tr>
+<tr class="hideInheritedConstant">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#DEFAULT_MARGIN">DEFAULT_MARGIN</a> : Number = 30<div class="summaryTableDescription">[static]
+   The default margin to be considered when using
+   autoFit.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedConstant">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#MINIMUM_NODE_HEIGHT">MINIMUM_NODE_HEIGHT</a> : Number = 5<div class="summaryTableDescription">[static]
+   The default minimum node height to be used if the exact node
+   height cannot be determined yet.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedConstant">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#MINIMUM_NODE_WIDTH">MINIMUM_NODE_WIDTH</a> : Number = 5<div class="summaryTableDescription">[static]
+   The default minimum node width to be used if the exact node
+   height cannot be determined yet.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="propertyDetail"></a>
+<div class="detailSectionHeader">Property detail</div>
+<a name="_animInProgress"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">_animInProgress</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var _animInProgress:Boolean = false</code><p>
+   Indicator if there is currently an animation in progress
+   </p></div>
+<a name="projector"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">projector</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>projector:<a href="../../utils/geom/IProjector.html">IProjector</a></code>&nbsp;&nbsp;[read-only]<p>  Helper Methods - Node Animation, Misc.
+  </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get projector():<a href="../../utils/geom/IProjector.html">IProjector</a></code>
+<br>
+</div>
+<a name="constructorDetail"></a>
+<div class="detailSectionHeader">Constructor detail</div>
+<a name="Hyperbolic2DLayouter()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">Hyperbolic2DLayouter</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">constructor</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function Hyperbolic2DLayouter(vg:<a href="../visual/IVisualGraph.html">IVisualGraph</a> = null)</code><p>  Initialization - Constructors, resets
+  </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">vg</span>:<a href="../visual/IVisualGraph.html">IVisualGraph</a></code> (default = <code>null</code>)<code></code></td>
+</tr>
+</table>
+</div>
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="animate()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">animate</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function animate():void</code><p>
+   Performs one animation step.
+   </p></div>
+<a name="bgDragContinue()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">bgDragContinue</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function bgDragContinue(event:MouseEvent):void</code><p>
+   
+   Notifies the layouter of a background drag-in-process event, in case
+   it wants to react to that in special way.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">event</span>:MouseEvent</code></td>
+</tr>
+</table>
+</div>
+<a name="bgDragEvent()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">bgDragEvent</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function bgDragEvent(event:MouseEvent):void</code><p>
+   
+   Notifies the layouter of a backgroung drag event, in case
+   it wants to react to that in special way.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">event</span>:MouseEvent</code></td>
+</tr>
+</table>
+</div>
+<a name="calculateLayout()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">calculateLayout</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected override function calculateLayout():void</code>
+</div>
+<a name="dropEvent()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">dropEvent</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function dropEvent(event:MouseEvent, vn:<a href="../visual/IVisualNode.html">IVisualNode</a>):void</code><p>  Mouse Event Handling Methods
+  </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">event</span>:MouseEvent</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">vn</span>:<a href="../visual/IVisualNode.html">IVisualNode</a></code></td>
+</tr>
+</table>
+</div>
+<a name="isStable()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">isStable</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected override function isStable():Boolean</code><p>  Layout Methods - Computations
+  </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code></td>
+</tr>
+</table>
+</div>
+<a name="refreshInit()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">refreshInit</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function refreshInit():void</code><p>
+   
+   This is an initialisation method to do any kind
+   of initialisation before a layout pass. Not all 
+   layouters may require this and thus implement it
+   meaningfully.
+   </p></div>
+<a name="resetAll()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">resetAll</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function resetAll():void</code><p>
+   
+   This should reset all parameters of the layouter,
+   which might not be needed for all layouters, and it is
+   up to each layouter to do something with it.
+   It would also stop any existing layouting loops/timers.
+   </p></div>
+<a name="constantDetail"></a>
+<div class="detailSectionHeader">Constant detail</div>
+<a name="ANIMATION_STEPS"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ANIMATION_STEPS</td><td class="detailHeaderType">constant</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const ANIMATION_STEPS:int = 10</code>
+</div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->
