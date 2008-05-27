@@ -12,7 +12,7 @@ Component enabling users to create complex data visualization interfaces for the
 Stable: Project is at RC1; 19 March 2008
 
 == Demos ==
-  * Try the RaVis Explorer: [http://birdeye.googlecode.com/svn/trunk/ravis/examples/bin/RaVisExplorer.html here] (work in progress)
+  * Try the RaVis Explorer: [http://birdeye.googlecode.com/svn/trunk/ravis/RaVisExamples/bin/RaVisExplorer.html here] (work in progress)
 
 == Support ==
   * Check out the User Group: [http://groups.google.com/group/flexvizgraphlib here]
