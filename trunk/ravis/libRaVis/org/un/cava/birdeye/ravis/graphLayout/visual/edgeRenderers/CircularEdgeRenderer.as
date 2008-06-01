@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright (c) 2007 The SixDegrees Project Team
+ * Copyright (c) 2008 The SixDegrees Project Team
  * (Jason Bellone, Juan Rodriguez, Segolene de Basquiat, Daniel Lang).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,34 +27,41 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	import flash.display.Graphics;
 	import flash.geom.Point;
 	
-	import mx.controls.Label;
-	
-	import org.un.cava.birdeye.ravis.graphLayout.visual.IEdgeRenderer;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
-	import org.un.cava.birdeye.ravis.utils.Geometry;
+	import org.un.cava.birdeye.ravis.utils.GraphicUtils;
+
 
 	/**
-	 * This is the default edge renderer, which draws the edges
-	 * as straight lines from one node to another.
+	 * This is the edge renderer for circular layout, which draws the edges
+	 * as curved lines from one node to another.
 	 * */
-	public class BaseEdgeRenderer implements IEdgeRenderer {
+	public class CircularEdgeRenderer extends BaseEdgeRenderer {
 		
 		/* constructor does nothing and is therefore omitted
 		 */
 		
 		/**
 		 * The draw function, i.e. the main function to be used.
-		 * Draws a straight line from one node of the edge to the other.
-		 * The edge style can be specified as XML attributes to the Edge XML Tag
+		 * Draws a curved line from one node of the edge to the other.
+		 * The colour is determined by the "disting" parameter and
+		 * a set of edge parameters, which are stored in an edge object.
 		 * 
 		 * @inheritDoc
 		 * */
-		public function draw(g:Graphics, vedge:IVisualEdge):void {
+		override public function draw(g:Graphics, vedge:IVisualEdge):void {
 			
 			/* first get the corresponding visual object */
 			var fromNode:IVisualNode = vedge.edge.node1.vnode;
 			var toNode:IVisualNode = vedge.edge.node2.vnode;
+						
+			var vgCenter:Point = vedge.vgraph.center;
+			
+			/* calculate the midpoint used as curveTo anchor point */
+			var anchor:Point = new Point(
+				(fromNode.viewCenter.x + vedge.vgraph.center.x) / 2.0,
+				(fromNode.viewCenter.y + vedge.vgraph.center.y) / 2.0
+				);
 			
 			/* apply the line style */
 			ERGlobals.applyLineStyle(vedge,g);
@@ -62,7 +69,15 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			/* now we actually draw */
 			g.beginFill(0);
 			g.moveTo(fromNode.viewCenter.x, fromNode.viewCenter.y);			
-			g.lineTo(toNode.viewCenter.x, toNode.viewCenter.y);
+			
+			//g.curveTo(centreX, centreY, toX, toY);
+			g.curveTo(
+				anchor.x,
+				anchor.y,
+				toNode.viewCenter.x,
+				toNode.viewCenter.y
+			);
+			
 			g.endFill();
 			
 			/* if the vgraph currently displays edgeLabels, then
@@ -70,19 +85,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			if(vedge.vgraph.displayEdgeLabels) {
 				ERGlobals.setLabelCoordinates(vedge.labelView,labelCoordinates(vedge));
 			}
-		}
-		
-		/**
-		 * @inheritDoc
-		 * 
-		 * In this simple implementation we put the label into the
-		 * middle of the straight line between the two nodes.
-		 * */
-		public function labelCoordinates(vedge:IVisualEdge):Point {
-			return Geometry.midPointOfLine(
-				vedge.edge.node1.vnode.viewCenter,
-				vedge.edge.node2.vnode.viewCenter
-			);
 		}
 	}
 }
