@@ -52,11 +52,11 @@
 			import org.un.cava.birdeye.ravis.globals.GlobalParamsVGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.IEdgeRenderer;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.DefaultEdgeRenderer;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.DirectedEdgeRenderer;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.FlowCurveEdgeRenderer;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.FlowEdgeRenderer;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.OrthogonalEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.FlowCurveEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.FlowEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.OrthogonalEdgeRenderer;
 			
 			/**
 			 * When enabling or disabling this component, we also
@@ -92,7 +92,7 @@
 				if(vgraph != null) {
 					switch(er) {
 						case "Default":
-							vgraph.edgeRenderer = new DefaultEdgeRenderer;
+							vgraph.edgeRenderer = new BaseEdgeRenderer;
 							break;
 						case "Directed":
 							vgraph.edgeRenderer = new DirectedEdgeRenderer;
@@ -108,7 +108,7 @@
 							break;
 					default:
 							trace("Illegal EdgeLabelRenderer selected:"+er);
-							vgraph.edgeRenderer = new DefaultEdgeRenderer;
+							vgraph.edgeRenderer = new BaseEdgeRenderer;
 							break;
 					}
 					vgraph.refresh();
@@ -127,7 +127,7 @@
 				
 				if(vgraph != null) {
 					switch(ObjectUtil.getClassInfo(vgraph.edgeRenderer).name) {
-						case "DefaultEdgeRenderer":
+						case "BaseEdgeRenderer":
 							this.selectedIndex = 0;
 							break;
 						case "DirectedEdgeRenderer":

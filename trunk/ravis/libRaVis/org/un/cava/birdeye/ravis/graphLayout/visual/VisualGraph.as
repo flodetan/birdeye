@@ -43,6 +43,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	import org.un.cava.birdeye.ravis.graphLayout.data.IGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
 	import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
 	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 
 	/**
@@ -396,7 +397,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* set an edge renderer, for now we use the Default,
 			 * but at a later stage this could be set externally */
-			_edgeRenderer = new DefaultEdgeRenderer();
+			_edgeRenderer = new BaseEdgeRenderer();
 			
 			/* initialise view/ItemRenderer and visibility mapping */
 			_vnodes = new Dictionary;
@@ -1443,7 +1444,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * 
 		 * */
 		protected function drawEdge(vedge:IVisualEdge):void {
-			_edgeRenderer.draw(_drawingSurface.graphics, vedge, _displayEdgeLabels);
+			_edgeRenderer.draw(_drawingSurface.graphics, vedge);
 		}
 		
 
@@ -1599,8 +1600,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			if(_edgeLabelRendererFactory != null) {
 				mycomponent = _edgeLabelRendererFactory.newInstance();
 			} else {
+				/* this is only for the basic default */
 				mycomponent = new Label; // this is our default label.
 				mycomponent.setStyle("textAlign","center");
+				
+				if(ve.data != null) {
+					(mycomponent as Label).text = ve.data.@association;
+				}
 			}			
 				
 			/* assigns the edge to the IDataRenderer part of the view

@@ -27,9 +27,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	import flash.display.Graphics;
 	import flash.geom.Point;
 	
-	import mx.controls.Label;
-	
-	import org.un.cava.birdeye.ravis.graphLayout.data.IEdge;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 	import org.un.cava.birdeye.ravis.utils.Geometry;
 
 
@@ -105,7 +104,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * which are stored in an edge object.
 		 * @inheritDoc
 		 * */
-		public function draw(g:Graphics, edge:IEdge, displayLabel:Boolean = false):void {
+		override public function draw(g:Graphics, vedge:IVisualEdge):void {
 
 			var fromNode:IVisualNode;
 			var toNode:IVisualNode;
@@ -125,10 +124,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			fromNode = vedge.edge.node1.vnode;
 			toNode = vedge.edge.node2.vnode;
 			
-			if((edge.data as XML).attribute("flow").length() > 0) {
-				flow = edge.data.@flow;
+			if((vedge.edge.data as XML).attribute("flow").length() > 0) {
+				flow = vedge.edge.data.@flow;
 			} else {
-				throw Error("Edge: "+edge.id+" does not have flow attribute.");
+				throw Error("Edge: "+vedge.edge.id+" does not have flow attribute.");
 			}
 			
 			/* now get some current coordinates and calculate the middle 

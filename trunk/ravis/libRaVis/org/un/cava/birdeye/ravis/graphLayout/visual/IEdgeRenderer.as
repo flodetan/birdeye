@@ -25,8 +25,7 @@
 package org.un.cava.birdeye.ravis.graphLayout.visual {
 
 	import flash.display.Graphics;
-	import org.un.cava.birdeye.ravis.graphLayout.data.IEdge;
-	import mx.core.UIComponent;
+	import flash.geom.Point;
 	
 	/**
 	 * Interface for any Edge renderers,
@@ -46,6 +45,16 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * 	has an edge renderer (UIComponent) associated with it.
 		 *
 		 * */
-		function draw(g:Graphics,edge:IEdge,displayLabel:Boolean = false):void;
+		function draw(g:Graphics,vedge:IVisualEdge):void;
+		
+		/**
+		 * Returns the coordinates of the label for the given edge.
+		 * Different edge renderers might want to specify a different
+		 * place where to put the label.
+		 * @param edge The Edge where the label coordinates should refer to.
+		 * @returns The coordinates where the edge renderer wants to place the label
+		 * */
+		function labelCoordinates(vedge:IVisualEdge):Point;
+		
 	}
 }
