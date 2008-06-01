@@ -65,7 +65,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			ERGlobals.applyLineStyle(vedge,g);
 			
 			/* now we actually draw */
-			g.beginFill(0);
+			g.beginFill(uint(vedge.lineStyle.color));
 			g.moveTo(fromNode.viewCenter.x, fromNode.viewCenter.y);			
 			
 			//g.curveTo(centreX, centreY, toX, toY);

@@ -44,9 +44,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		private var _type:String = 'orthogonal';
 		private var _g:Graphics;
 		
-		/* temporary fix needed???*/
-		//private var color:uint;
-		
 		/**
 		 * The draw function, in this renderer draws an Arrow
 		 * but not straight or curved but only with angles of 90 degrees
@@ -145,7 +142,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	        var arrowLine2:Object = this.calculatePoint(toX, toY, arrowLength, 180 - Math.atan(dXY) * 5.729578E+001 + arrowOS);   		
      		
      		_g.moveTo(toX, toY);
-     		_g.beginFill(color,1);
+     		_g.beginFill(uint(vedge.lineStyle.color),1);
             _g.lineTo(arrowLine1.x, arrowLine1.y);            
             _g.lineTo(arrowLine2.x, arrowLine2.y);
             _g.lineTo(toX, toY);
