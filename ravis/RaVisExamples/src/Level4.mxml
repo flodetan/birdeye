@@ -66,7 +66,7 @@ LEVEL 4
 			import org.un.cava.birdeye.ravis.graphLayout.visual.IEdgeRenderer;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.ConcentricRadialLayouter;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.DirectedEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedEdgeRenderer;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			
 			// These are the item renderers
