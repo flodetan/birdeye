@@ -166,10 +166,10 @@ package org.un.cava.birdeye.ravis.utils {
 		 * @param x
 		 * @return
 		 */
-    public static function sinh(x:Number):Number {
-    	var expX:Number = Math.exp(x);
+		public static function sinh(x:Number):Number {
+    		var expX:Number = Math.exp(x);
 			return 0.5 * (expX - 1/expX);
-    }
+		}
 		
 		/**
 		 * Returns cosine hyperbolic function:
@@ -177,10 +177,10 @@ package org.un.cava.birdeye.ravis.utils {
 		 * @param x
 		 * @return
 		 */
-    public static function cosh(x:Number):Number {
-    	var expX:Number = Math.exp(x);
+		public static function cosh(x:Number):Number {
+			var expX:Number = Math.exp(x);
 			return 0.5 * (expX + 1/expX);
-    }
+		}
 		
 		/**
 		 * Returns inverse of the sine hyperbolic function:
@@ -188,18 +188,38 @@ package org.un.cava.birdeye.ravis.utils {
 		 * @param x
 		 * @return
 		 */
-    public static function arsinh(x:Number):Number {
+		public static function arsinh(x:Number):Number {
 			return Math.log(x + Math.sqrt(x * x + 1));
-    }
+		}
 		
 		/**
-	   * Returns inverse of the sine hyperbolic function:
+		 * Returns inverse of the sine hyperbolic function:
 		 * <code>arcosh(x) = ln(x+sqrt(x^2-1))</code>.
 		 * @param x
 		 * @return
 		 */
-    public static function arcosh(x:Number):Number {
-		  return Math.log(x + Math.sqrt(x * x - 1));
-    }
+		public static function arcosh(x:Number):Number {
+			return Math.log(x + Math.sqrt(x * x - 1));
+		}
+    
+    	/**
+    	 * Calculates the point in the middle of the straight line
+    	 * between the two given points.
+    	 * @param p The first endpoint of the virtual line.
+    	 * @param q The second endpoint of the virtual line.
+    	 * @returns The point at the center of the virtual line.
+    	 * */
+    	public static function midPointOfLine(p:Point,q:Point):Point {
+			
+			if(p != null && q != null) {
+				return new Point(
+					p.x + ((q.x - p.x) / 2.0),
+					p.y + ((q.y - p.y) / 2.0)
+					);
+			} else {
+				return null;
+			}
+		}
+    
 	}
 }
