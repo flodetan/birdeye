@@ -25,10 +25,10 @@
 package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	
 	import flash.display.Graphics;
-	
-	import mx.controls.Label;
+	import flash.geom.Point;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 
 
 	/**
@@ -43,6 +43,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		private var arrowLength:Number;
 		private var _type:String = 'orthogonal';
 		private var _g:Graphics;
+		private var _color:uint; // because we need to cross function boundaries
 		
 		/**
 		 * The draw function, in this renderer draws an Arrow
@@ -51,7 +52,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * 
 		 * @inheritDoc
 		 * */
-		public function draw(g:Graphics, vedge:IVisualEdge):void {
+		override public function draw(g:Graphics, vedge:IVisualEdge):void {
 			
 			/* first get the corresponding visual object */
 			var fromNode:IVisualNode = vedge.edge.node1.vnode;
@@ -66,6 +67,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 				(fP.x + vedge.vgraph.center.x) / 2.0,
 				(fP.y + vedge.vgraph.center.y) / 2.0
 				);
+			
+			_color = uint(vedge.lineStyle.color);
 			
 			/* this is not interface conform !!!! */
 			arrowLength = 10;
@@ -142,7 +145,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	        var arrowLine2:Object = this.calculatePoint(toX, toY, arrowLength, 180 - Math.atan(dXY) * 5.729578E+001 + arrowOS);   		
      		
      		_g.moveTo(toX, toY);
-     		_g.beginFill(uint(vedge.lineStyle.color),1);
+     		_g.beginFill(_color,1);
             _g.lineTo(arrowLine1.x, arrowLine1.y);            
             _g.lineTo(arrowLine2.x, arrowLine2.y);
             _g.lineTo(toX, toY);
