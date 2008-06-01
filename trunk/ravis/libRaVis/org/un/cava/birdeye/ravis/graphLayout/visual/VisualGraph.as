@@ -1430,7 +1430,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				/* Change: we do not pass the nodes or the vnodes, but the
 				 * edge. The reason is that the edge can have properties
 				 * assigned with it that affect the drawing. */
-				drawEdge(edge);
+				drawEdge(edge.vedge);
 			}
 			// we are done, so we reset the indicator
 			_layouter.layoutChanged = false;
@@ -1442,8 +1442,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * into redrawEdges(). For now we leave it like this
 		 * 
 		 * */
-		protected function drawEdge(edge:IEdge):void {
-			_edgeRenderer.draw(_drawingSurface.graphics, edge, _displayEdgeLabels);
+		protected function drawEdge(vedge:IVisualEdge):void {
+			_edgeRenderer.draw(_drawingSurface.graphics, vedge, _displayEdgeLabels);
 		}
 		
 
@@ -1610,7 +1610,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				(mycomponent as IDataRenderer).data = ve;
 			}
 			
-			/* set initial x/y values */
+			/* set initial default x/y values, these should be in the middle of the
+			 * edge, but depending on the edge renderer. Thus we should ask
+			 * the edge renderer, where it wants to place the label. This would
+			 * be a new method for the edge renderer interface */
 			mycomponent.x = _canvas.width / 2.0;
 			mycomponent.y = _canvas.height / 2.0;
 			
@@ -1620,7 +1623,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * Add after the edges layer, but below all other elements such as nodes */
 			_canvas.addChildAt(mycomponent, 1);
 			
-			/* register it the view in the vnode and the mapping */
+			/* register it the view in the vedge and the mapping */
 			/*
 			if(ve.labelView != null) {
 				trace("Edge:"+ve.edge.id+" has already view:"+ve.labelView.toString()+" will be overwritten");
@@ -1628,8 +1631,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				trace("Edge:"+ve.edge.id+" gets new view.");
 			}
 			*/
-			
-			
 			ve.labelView = mycomponent;
 			_viewToVEdgeMap[mycomponent] = ve;
 			
