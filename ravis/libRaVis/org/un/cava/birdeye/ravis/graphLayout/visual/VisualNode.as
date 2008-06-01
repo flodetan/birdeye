@@ -27,6 +27,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
+	import flash.geom.Point;
 	
 	import mx.core.IDataRenderer;
 	import mx.core.UIComponent;
@@ -286,6 +287,18 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		 * */
 		public function set view(v:UIComponent):void {
 			_view = v;
+		}
+
+		/**
+		 * @inheritDoc
+		 * */
+		public function get viewCenter():Point {
+			if(_view != null) {
+				return new Point(_view.x + (_view.width / 2.0), 
+								 _view.y + (_view.height / 2.0));
+			} else {
+				return null;
+			}
 		}
 
 		/**

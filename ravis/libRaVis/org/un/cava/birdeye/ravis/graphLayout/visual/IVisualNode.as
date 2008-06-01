@@ -24,7 +24,10 @@
  */
 package org.un.cava.birdeye.ravis.graphLayout.visual {
 	
+	import flash.geom.Point;
+	
 	import mx.core.UIComponent;
+	
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
 	
 	/** 
@@ -77,6 +80,15 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * @private
 		 * */
 		function set view(v:UIComponent):void;
+
+		/**
+		 * This may be useful for edge renderers and edgeLabelRenderers.
+		 * 
+		 * @returns the current middle of the associated view, i.e.
+		 * calculates the center from the view/UIComponents 
+		 * dimenstions and returns the center.
+		 * */
+		function get viewCenter():Point;
 
 		/**
 		 * Convenient access to the X coordinate of a node's
