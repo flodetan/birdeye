@@ -1,6 +1,10 @@
 package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	
 	import flash.display.Graphics;
+	import flash.geom.Point;
+	
+	import mx.core.UIComponent;
+	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
 	
 	
@@ -29,6 +33,19 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 					String(ve.lineStyle.joints),
 					Number(ve.lineStyle.miterLimits)
 				);
+			}
+		}
+		
+		/**
+		 * Applies the provided coordinates to the given UI Component.
+		 * Is basically a helper to allow to use directly a Point object.
+		 * @param uc The UIComponent to set the coordinates in.
+		 * @param p The Point with the target coordinates.
+		 * */
+		public static function setLabelCoordinates(uc:UIComponent,p:Point):void {
+			if(uc != null && p != null) {
+				uc.x = p.x;
+				uc.y = p.y;
 			}
 		}
 		
