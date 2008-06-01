@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright (c) 2008 The SixDegrees Project Team
+ * Copyright (c) 2007 The SixDegrees Project Team
  * (Jason Bellone, Juan Rodriguez, Segolene de Basquiat, Daniel Lang).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,18 +25,21 @@
 package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	
 	import flash.display.Graphics;
-	import flash.geom.Point;
 	
+	import mx.controls.Label;
+	
+	import org.un.cava.birdeye.ravis.graphLayout.data.IEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
-	import org.un.cava.birdeye.ravis.utils.GraphicUtils;
 
 
 	/**
-	 * This is the edge renderer for circular layout, which draws the edges
-	 * as curved lines from one node to another.
+	 * This is a directed edge renderer, which draws the edges
+	 * with slim ballon like curves that indicate a source.
+	 * Please note that for undirected graphs, the actual direction
+	 * of the edge might be arbitrary.
 	 * */
-	public class CircularEdgeRenderer extends BaseEdgeRenderer {
+	public class DirectedEdgeRenderer extends BaseEdgeRenderer {
 		
 		/* constructor does nothing and is therefore omitted
 		 */
@@ -55,10 +58,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			var fromNode:IVisualNode = vedge.edge.node1.vnode;
 			var toNode:IVisualNode = vedge.edge.node2.vnode;
 			
+			var fP:Point = fromNode.viewCenter;
+			
 			/* calculate the midpoint used as curveTo anchor point */
 			var anchor:Point = new Point(
-				(fromNode.viewCenter.x + vedge.vgraph.center.x) / 2.0,
-				(fromNode.viewCenter.y + vedge.vgraph.center.y) / 2.0
+				(fP.x + vedge.vgraph.center.x) / 2.0,
+				(fP.y + vedge.vgraph.center.y) / 2.0
 				);
 			
 			/* apply the line style */
@@ -66,17 +71,21 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			
 			/* now we actually draw */
 			g.beginFill(0);
-			g.moveTo(fromNode.viewCenter.x, fromNode.viewCenter.y);			
+			g.moveTo(fP.x, fP.y);			
 			
-			//g.curveTo(centreX, centreY, toX, toY);
-			g.curveTo(
-				anchor.x,
-				anchor.y,
-				toNode.viewCenter.x,
-				toNode.viewCenter.y
-			);
+			/* bezier curve style */
+			g.curveTo(fP.x - 2,	fP.y - 2, anchor.x, anchor.y);
+			g.moveTo(fP.x, fP.y);
+			g.curveTo(fP.x + 2, fP.y + 2, anchor.x, anchor.y);
+			g.moveTo(fP.x, fP.y);
+			g.curveTo(fP.x - 2, fP.y + 2, anchor.x, anchor.y);
+			g.moveTo(fP.x, fP.y);
+			g.curveTo(fP.x + 2, fP.y - 2, anchor.x, anchor.y);
+			g.moveTo(anchor.x, anchor.y);
 			
+			g.lineTo(toNode.viewCenter.x, toNode.viewCenter.y);
 			g.endFill();
+		
 			
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */
