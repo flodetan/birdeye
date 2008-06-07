@@ -37,7 +37,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	 * Please note that for undirected graphs, the actual direction
 	 * of the edge might be arbitrary.
 	 * */
-	public class DirectedEdgeRenderer extends BaseEdgeRenderer {
+	public class DirectedBalloonEdgeRenderer extends BaseEdgeRenderer {
 		
 		/* constructor does nothing and is therefore omitted
 		 */

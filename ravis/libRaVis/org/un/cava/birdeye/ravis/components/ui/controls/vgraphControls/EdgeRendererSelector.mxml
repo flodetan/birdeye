@@ -38,14 +38,18 @@
 	
 	<mx:ArrayCollection id="ervalues">
 		<mx:String>Default</mx:String>
-		<mx:String>Directed</mx:String>
+		<mx:String>DirectedArrows</mx:String>
+		<mx:String>DirectedBalloons</mx:String>
 		<mx:String>Orthogonal</mx:String>
 		<mx:String>Flow</mx:String>
 		<mx:String>Bezier</mx:String>
+		<mx:String>Circular</mx:String>
+		<mx:String>Hyperbolic</mx:String>
 	</mx:ArrayCollection>
 	
 	<mx:Script>	
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.graphLayout.layout.Hyperbolic2DLayouter;
 			import mx.events.ListEvent;
 			import mx.utils.ObjectUtil;
 			import org.un.cava.birdeye.ravis.globals.GlobalParams;
@@ -53,10 +57,13 @@
 			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.IEdgeRenderer;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedArrowEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedBalloonEdgeRenderer;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.FlowCurveEdgeRenderer;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.FlowEdgeRenderer;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.OrthogonalEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.CircularEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.HyperbolicEdgeRenderer;
 			
 			/**
 			 * When enabling or disabling this component, we also
@@ -94,8 +101,11 @@
 						case "Default":
 							vgraph.edgeRenderer = new BaseEdgeRenderer;
 							break;
-						case "Directed":
-							vgraph.edgeRenderer = new DirectedEdgeRenderer;
+						case "DirectedArrows":
+							vgraph.edgeRenderer = new DirectedArrowEdgeRenderer;
+							break;
+						case "DirectedBalloons":
+							vgraph.edgeRenderer = new DirectedBalloonEdgeRenderer;
 							break;
 						case "Orthogonal":
 							vgraph.edgeRenderer = new OrthogonalEdgeRenderer;
@@ -105,6 +115,25 @@
 							break;
 						case "Bezier":
 							vgraph.edgeRenderer = new FlowCurveEdgeRenderer;
+							break;
+						case "Circular":
+							vgraph.edgeRenderer = new CircularEdgeRenderer;
+							break;
+						case "Hyperbolic":
+							if(vgraph.layouter is Hyperbolic2DLayouter) {
+								if((vgraph.layouter as Hyperbolic2DLayouter).projector != null) {
+									vgraph.edgeRenderer =
+										new HyperbolicEdgeRenderer((vgraph.layouter as Hyperbolic2DLayouter).projector);
+								} else {
+									trace("Cannot access projector of layouter, cannot use this edgerenderer!");
+									vgraph.edgeRenderer = new BaseEdgeRenderer;
+									this.selectedIndex = 0;
+								}
+							} else {
+								trace("Layouter MUST be hyperbolic, otherwise cannot use this edgerenderer!");
+								vgraph.edgeRenderer = new BaseEdgeRenderer;
+								this.selectedIndex = 0;
+							}
 							break;
 					default:
 							trace("Illegal EdgeLabelRenderer selected:"+er);
@@ -130,17 +159,26 @@
 						case "BaseEdgeRenderer":
 							this.selectedIndex = 0;
 							break;
-						case "DirectedEdgeRenderer":
+						case "DirectedArrowEdgeRenderer":
 							this.selectedIndex = 1;
 							break;
-						case "OrthogonalEdgeRenderer":
+						case "DirectedBalloonEdgeRenderer":
 							this.selectedIndex = 2;
 							break;
-						case "FlowEdgeRenderer":
+						case "OrthogonalEdgeRenderer":
 							this.selectedIndex = 3;
 							break;
-						case "FlowCurveEdgeRenderer":
+						case "FlowEdgeRenderer":
 							this.selectedIndex = 4;
+							break;
+						case "FlowCurveEdgeRenderer":
+							this.selectedIndex = 5;
+							break;
+						case "CircularEdgeRenderer":
+							this.selectedIndex = 6;
+							break;
+						case "HyperbolicEdgeRenderer":
+							this.selectedIndex = 7;
 							break;
 						default:
 							trace("Illegal EdgeRenderer class received:"+
