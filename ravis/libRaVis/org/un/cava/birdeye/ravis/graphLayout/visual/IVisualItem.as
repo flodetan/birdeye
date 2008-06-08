@@ -54,5 +54,16 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * Access to the associated VisualGraph of this item.
 		 * */
 		function get vgraph():IVisualGraph;
+	
+		/**
+		 * Method to specify if the current Visual Item
+		 * is considered to be visible or not.
+		 * */
+		function get isVisible():Boolean;
+
+		/**
+		 * @private
+		 * */
+		function set isVisible(v:Boolean):void
 	}
 }

@@ -56,10 +56,13 @@ package org.un.cava.birdeye.ravis.utils {
 		 * P = [x1, y1]<br>
 		 * Q = [x2, y2]<br>
 		 * O = [atX, atY]<br>
+		 * 
+		 * XXX why not use Math.atan2(y2 - y1, x2 - x1)?
+		 * How can point O affect the angle between 2 lines??
 		 */
 		public static function getAngle(x1:Number, y1:Number,
-																		 x2:Number, y2:Number,
-																		 atX:Number, atY:Number):Number {
+										 x2:Number, y2:Number,
+										 atX:Number, atY:Number):Number {
 			var m1:Number = (y1 - atY) / (x1 - atX);
 			var m2:Number = (y2 - atY) / (x2 - atX);
 			var rtn:Number = Math.atan((m1 - m2) / (1 + m1 * m2));
@@ -70,10 +73,21 @@ package org.un.cava.birdeye.ravis.utils {
 		 * O = [centerX, centerY]<br>
 		 * P = [startX, startY]<br>
 		 * Q = [endX, endY]<br>
+		 * 
+		 * XXX Why not use Point.polar here?
+		 * 
+		 * initAngle = Math.atan2(startY - centerY, startx - centerX);
+		 * newAngle = initAngle + angleDelta
+		 * length = Point.distance(P,O);
+		 * resultQ = Point.polar(length,newAngle);
+		 * resultQ.offset(P.x,P.y)
+		 * 
+		 * should do it. 
+		 * 
 		 */
 		public static function getRotation(angleDelta:Number,
-																			 centerX:Number, centerY:Number,
-																			 startX:Number, startY:Number):Point {
+											 centerX:Number, centerY:Number,
+											 startX:Number, startY:Number):Point {
 			var radius:Number = Math.sqrt((centerX - startX) * (centerX - startX) + (centerY - startY) * (centerY - startY));
 			var angle:Number, ax:Number, ay:Number;
 			
@@ -115,8 +129,9 @@ package org.un.cava.birdeye.ravis.utils {
 		 * P = [startX, startY]<br>
 		 */
 		public static function drawArc(g:Graphics, angleDelta:Number,
-																	  centerX:Number, centerY:Number,
-																	  startX:Number, startY:Number):void {
+									  centerX:Number, centerY:Number,
+									  startX:Number, startY:Number):void {
+			
 			if (angleDelta > Math.PI / 4) {
 				// Call recursively until the angle becomes less than 45 degrees
 				drawArc(g, Math.PI / 4, centerX, centerY, startX, startY);

@@ -161,6 +161,34 @@ package org.un.cava.birdeye.ravis.utils {
 		}
 		
 		/**
+		 * Calculates the point on a quadratic bezier curve
+		 * at the given position t with 0 <= t <= 1
+		 * (t = 0 being the starting anchor point and
+		 * t = 1 being the ending anchor point).
+		 * @param ps Starting Point of the curve.
+		 * @param pc Control Point of the curve.
+		 * @param pe Ending Point of the curve.
+		 * @param t The point on the curve that we want. 0 <= t <= 1
+		 * @returns The point B(t).
+		 * */
+		public static function bezierPoint(ps:Point, pc:Point, pe:Point, t:Number):Point {
+			/* we calculate x and y separately */
+			var x:Number;
+			var y:Number;
+			
+			if(t < 0 || t > 1) {
+				trace("bezierPointQuad: t has to be between 0 and 1, but it:"+t);
+				return new Point(0,0);
+			}
+			
+			x = Math.pow((1-t),2)*ps.x + 2*t*(1-t)*pc.x + Math.pow(t,2)*pe.x;
+			y = Math.pow((1-t),2)*ps.y + 2*t*(1-t)*pc.y + Math.pow(t,2)*pe.y;
+			
+			return new Point(x,y);	
+		}
+		
+		
+		/**
 		 * Returns sine hyperbolic function:
 		 * <code>sinh(x) = 0.5*(e^x-e^(-x))</code>.
 		 * @param x

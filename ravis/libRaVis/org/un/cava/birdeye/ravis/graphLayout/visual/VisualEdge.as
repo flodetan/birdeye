@@ -52,6 +52,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		/* the associated VGraph of this VEdge */
 		private var _vgraph:IVisualGraph;
 		
+		/* visibility */
+		private var _visible:Boolean;
+		
 		/* the associated label view if set */
 		private var _labelView:UIComponent;
 		
@@ -74,6 +77,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			_vgraph = vg;
 			_edge = edge;
 			_id = id;
+			_visible = undefined;
 			_data = data;
 			_labelView = lview;
 			_lineStyle = lStyle;
@@ -113,6 +117,29 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * */
 		public function get id():int {
 			return _id;
+		}
+		
+		/**
+		 * Access to the indicator if the node is currently
+		 * visible or not. If this is set to false, any
+		 * associated view will be removed in order to 
+		 * save resources.
+		 * */
+		public function get isVisible():Boolean {
+			return _visible;
+		}
+		
+		/**
+		 * @private
+		 * */
+		public function set isVisible(v:Boolean):void {
+			_visible = v;
+			
+			/* set the views visibility, if we currently
+			 * have one */
+			if(	_labelView != null) {
+				_labelView.visible = v;
+			}
 		}
 		
 		/**

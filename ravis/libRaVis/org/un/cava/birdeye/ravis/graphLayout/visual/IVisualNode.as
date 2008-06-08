@@ -123,18 +123,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * of this visual node.
 		 * */			
 		function get node():INode;
-		
-		/**
-		 * Method to specify if the current Visual node
-		 * is considered to be visible or not. This is
-		 * important for most layouters.
-		 * */
-		function get isVisible():Boolean;
-
-		/**
-		 * @private
-		 * */
-		function set isVisible(v:Boolean):void
 
 		/**
 		 * Property to indicate if the node should be

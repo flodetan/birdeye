@@ -179,7 +179,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * the layouter only needs to consider the currently visible
 		 * edges.
 		 * */
-		function get visibleEdges():Dictionary;
+		function get visibleVEdges():Dictionary;
 
 		/**
 		 * This property controls whether to show the history of
