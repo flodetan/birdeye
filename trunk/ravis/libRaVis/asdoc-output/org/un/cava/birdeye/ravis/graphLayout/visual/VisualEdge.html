@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print">
-<meta content="VisualEdge,org.un.cava.birdeye.ravis.graphLayout.visual.VisualEdge,data,edge,id,labelView,vgraph,lineStyle" name="keywords">
+<meta content="VisualEdge,org.un.cava.birdeye.ravis.graphLayout.visual.VisualEdge,data,edge,id,isVisible,labelView,vgraph,lineStyle" name="keywords">
 <title>org.un.cava.birdeye.ravis.graphLayout.visual.VisualEdge</title>
 </head>
 <body>
@@ -76,6 +76,12 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#id">id</a> : int<div class="summaryTableDescription">[read-only]
    Access to the id of the VEdge
    </div>
+</td><td class="summaryTableOwnerCol">VisualEdge</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#isVisible">isVisible</a> : Boolean<div class="summaryTableDescription">
+   Access to the indicator if the node is currently
+   visible or not.</div>
 </td><td class="summaryTableOwnerCol">VisualEdge</td>
 </tr>
 <tr class="">
@@ -167,6 +173,25 @@ showHideInherited();
    </p><span class="label">Implementation</span>
 <br>
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function get id():int</code>
+<br>
+</div>
+<a name="isVisible"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">isVisible</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>isVisible:Boolean</code>&nbsp;&nbsp;[read-write]<p>
+   Access to the indicator if the node is currently
+   visible or not. If this is set to false, any
+   associated view will be removed in order to 
+   save resources.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get isVisible():Boolean</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set isVisible(value:Boolean):void</code>
 <br>
 </div>
 <a name="labelView"></a>

@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print">
-<meta content="VisualGraph,org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph,_backgroundDragInProgress,_canvas,_componentCounter,_currentRootVNode,_currentVNodeHistory,_defaultEdgeStyle,_displayEdgeLabels,_dragComponent,_dragCursorStartX,_dragCursorStartY,_drag_boundsMap,_drag_x_offsetMap,_drag_y_offsetMap,_drawingSurface,_edgeLabelRendererFactory,_edgeRenderer,_graph,_itemRendererFactory,_layouter,_maxVisibleDistance,_moveNodeInDrag,_noNodesWithinDistance,_noVisibleVNodes,_nodeIDsWithinDistanceLimit,_origin,_prevNodeIDsWithinDistanceLimit,_scale,_scrollBackgroundInDrag,_showCurrentNodeHistory,_vedges,_viewToVEdgeMap,_viewToVNodeMap,_visibilityLimitActive,_visibleEdges,_visibleVNodes,_vnodes,addItemEffect,dragLockCenter,newNodesDefaultVisible,removeItemEffect,center,currentRootSID,currentRootVNode,layouter,maxVisibleDistance,noVisibleVNodes,origin,scale,showHistory,visibilityLimitActive,visibleEdges,visibleVNodes,displayEdgeLabels,edgeLabelRenderer,edgeRenderer,graph,itemRenderer,moveNodeInDrag,scrollBackgroundInDrag,backgroundDragBegin,backgroundDragContinue,calcNodesBoundingBox,clearHistory,createNode,createVEdge,createVEdgeView,createVNode,createVNodeComponent,dragBegin,dragEnd,draw,drawEdge,globalMousePosition,handleDrag,initFromGraph,linkNodes,lookupNode,nodeDoubleClick,nodeMouseDown,purgeVGraph,redrawEdges,refresh,removeComponent,removeEffectDone,removeNode,removeVEdge,removeVEdgeView,removeVNode,scroll,setAllInVisible,setAllVisible,setDistanceLimitedNodeIds,setNodeVisibility,unlinkNodes,updateDisplayList,updateVisibility" name="keywords">
+<meta content="VisualGraph,org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph,_backgroundDragInProgress,_canvas,_componentCounter,_currentRootVNode,_currentVNodeHistory,_defaultEdgeStyle,_displayEdgeLabels,_dragComponent,_dragCursorStartX,_dragCursorStartY,_drag_boundsMap,_drag_x_offsetMap,_drag_y_offsetMap,_drawingSurface,_edgeLabelRendererFactory,_edgeRenderer,_graph,_itemRendererFactory,_layouter,_maxVisibleDistance,_moveNodeInDrag,_noNodesWithinDistance,_noVisibleVNodes,_nodeIDsWithinDistanceLimit,_origin,_prevNodeIDsWithinDistanceLimit,_scale,_scrollBackgroundInDrag,_showCurrentNodeHistory,_vedges,_viewToVEdgeMap,_viewToVNodeMap,_visibilityLimitActive,_visibleVEdges,_visibleVNodes,_vnodes,addItemEffect,dragLockCenter,newNodesDefaultVisible,removeItemEffect,center,currentRootSID,currentRootVNode,edgeDrawGraphics,layouter,maxVisibleDistance,noVisibleVNodes,origin,scale,showHistory,visibilityLimitActive,visibleVEdges,visibleVNodes,displayEdgeLabels,edgeLabelRenderer,edgeRenderer,graph,itemRenderer,moveNodeInDrag,scrollBackgroundInDrag,backgroundDragBegin,backgroundDragContinue,calcNodesBoundingBox,clearHistory,createNode,createVEdge,createVEdgeView,createVNode,createVNodeComponent,dragBegin,dragEnd,draw,globalMousePosition,handleDrag,initFromGraph,linkNodes,lookupNode,nodeDoubleClick,nodeMouseDown,purgeVGraph,redrawEdges,refresh,removeComponent,removeEffectDone,removeNode,removeVEdge,removeVEdgeView,removeVNode,scroll,setAllInVisible,setAllVisible,setDistanceLimitedNodeIds,setEdgeVisibility,setNodeVisibility,unlinkNodes,updateConnectedEdgesVisibility,updateDisplayList,updateVisibility" name="keywords">
 <title>org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph</title>
 </head>
 <body>
@@ -106,6 +106,13 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol">VisualGraph</td>
 </tr>
 <tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#edgeDrawGraphics">edgeDrawGraphics</a> : Graphics<div class="summaryTableDescription">[read-only]
+   
+   Access to a parameter Object to preset various
+   settings for the drawing of Edges.</div>
+</td><td class="summaryTableOwnerCol">VisualGraph</td>
+</tr>
+<tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#edgeLabelRenderer">edgeLabelRenderer</a> : IFactory<div class="summaryTableDescription">
    
    Allow to provide an EdgeLabelRenderer in order to
@@ -130,8 +137,8 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#itemRenderer">itemRenderer</a> : IFactory<div class="summaryTableDescription">
    
-   Access to a parameter Object to preset various
-   settings for the drawing of Edges.</div>
+   Allow the provision of an ItemRenderer (which is
+   more precisely an IFactory).</div>
 </td><td class="summaryTableOwnerCol">VisualGraph</td>
 </tr>
 <tr class="">
@@ -205,7 +212,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol">VisualGraph</td>
 </tr>
 <tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#visibleEdges">visibleEdges</a> : Dictionary<div class="summaryTableDescription">[read-only]
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#visibleVEdges">visibleVEdges</a> : Dictionary<div class="summaryTableDescription">[read-only]
    
    Provide access to a list of currently visible edges,
    i.e.</div>
@@ -417,7 +424,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol">VisualGraph</td>
 </tr>
 <tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_visibleEdges">_visibleEdges</a> : Dictionary<div class="summaryTableDescription">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_visibleVEdges">_visibleVEdges</a> : Dictionary<div class="summaryTableDescription">
    This Dictionary keeps track of all currently
    visible edges.</div>
 </td><td class="summaryTableOwnerCol">VisualGraph</td>
@@ -640,16 +647,6 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#drawEdge()">drawEdge</a>(edge:<a href="../data/IEdge.html">IEdge</a>):void</div>
-<div class="summaryTableDescription">
-   this currently ONLY calls the edge renderer, this 
-   method is basically useless and we could move the call
-   into redrawEdges().</div>
-</td><td class="summaryTableOwnerCol">VisualGraph</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
 <a class="signatureLink" href="#globalMousePosition()">globalMousePosition</a>():Point</div>
 <div class="summaryTableDescription">
    return the current mouse position, used by 
@@ -769,10 +766,30 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
+<a class="signatureLink" href="#setEdgeVisibility()">setEdgeVisibility</a>(ve:<a href="IVisualEdge.html">IVisualEdge</a>, visible:Boolean):void</div>
+<div class="summaryTableDescription">
+   This sets a VEdge visible or invisible, updating all related
+   data.</div>
+</td><td class="summaryTableOwnerCol">VisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
 <a class="signatureLink" href="#setNodeVisibility()">setNodeVisibility</a>(vn:<a href="IVisualNode.html">IVisualNode</a>, visible:Boolean):void</div>
 <div class="summaryTableDescription">
    This sets a VNode visible or invisible, updating all related
    data.</div>
+</td><td class="summaryTableOwnerCol">VisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#updateConnectedEdgesVisibility()">updateConnectedEdgesVisibility</a>(vn:<a href="IVisualNode.html">IVisualNode</a>):void</div>
+<div class="summaryTableDescription">
+   This methods walks through all edges connected
+   to a node and sets them either visible or invisible
+   depending on the visibility of the given node and
+   the node on the other end.</div>
 </td><td class="summaryTableOwnerCol">VisualGraph</td>
 </tr>
 <tr class="">
@@ -1077,6 +1094,28 @@ showHideInherited();
    This is a drawing surface to draw the edges on. It is only
    used for the edges and is added as a child to the canvas.
    </p></div>
+<a name="edgeDrawGraphics"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">edgeDrawGraphics</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>edgeDrawGraphics:Graphics</code>&nbsp;&nbsp;[read-only]<p>
+   
+   Access to a parameter Object to preset various
+   settings for the drawing of Edges.
+   The Object is a hash with the following properties:
+   "alpha"
+   "thickness"
+   "color"
+   "distcolor"
+   which are to be used by an Edge Renderer
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get edgeDrawGraphics():Graphics</code>
+<br>
+</div>
 <a name="edgeLabelRenderer"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -1184,14 +1223,10 @@ showHideInherited();
 <div class="detailBody">
 <code>itemRenderer:IFactory</code>&nbsp;&nbsp;[read-write]<p>
    
-   Access to a parameter Object to preset various
-   settings for the drawing of Edges.
-   The Object is a hash with the following properties:
-   "alpha"
-   "thickness"
-   "color"
-   "distcolor"
-   which are to be used by an Edge Renderer
+   Allow the provision of an ItemRenderer (which is
+   more precisely an IFactory). This is important to allow
+   the Drawing of the items in a customised way.
+   Note that any ItemRenderer will have to be a UIComponent.
    </p><span class="label">Implementation</span>
 <br>
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function get itemRenderer():IFactory</code>
@@ -1572,29 +1607,27 @@ showHideInherited();
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function set visibilityLimitActive(value:Boolean):void</code>
 <br>
 </div>
-<a name="_visibleEdges"></a>
+<a name="_visibleVEdges"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
-<td class="detailHeaderName">_visibleEdges</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+<td class="detailHeaderName">_visibleVEdges</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
 </tr>
 </table>
 <div class="detailBody">
-<code>protected var _visibleEdges:Dictionary</code><p>
+<code>protected var _visibleVEdges:Dictionary</code><p>
    This Dictionary keeps track of all currently
    visible edges. An edge is visible iff both
    attached nodes are visible. This hash is indexed
-   with Edges and the values are the same Edge objects.
-   (We do not work really with VEdges, so we keep the
-   Graph Edges here).
+   with VEdges and the values are the same VEdge objects.
    </p></div>
-<a name="visibleEdges"></a>
+<a name="visibleVEdges"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
-<td class="detailHeaderName">visibleEdges</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+<td class="detailHeaderName">visibleVEdges</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
 </tr>
 </table>
 <div class="detailBody">
-<code>visibleEdges:Dictionary</code>&nbsp;&nbsp;[read-only]<p>
+<code>visibleVEdges:Dictionary</code>&nbsp;&nbsp;[read-only]<p>
    
    Provide access to a list of currently visible edges,
    i.e. edges whose both nodes are visible and thus need
@@ -1603,7 +1636,7 @@ showHideInherited();
    edges.
    </p><span class="label">Implementation</span>
 <br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get visibleEdges():Dictionary</code>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get visibleVEdges():Dictionary</code>
 <br>
 </div>
 <a name="_visibleVNodes"></a>
@@ -1941,25 +1974,6 @@ showHideInherited();
    Calling this forces a full calculation and redraw of the layout
    including all edges.
    </p></div>
-<a name="drawEdge()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">drawEdge</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>protected function drawEdge(edge:<a href="../data/IEdge.html">IEdge</a>):void</code><p>
-   this currently ONLY calls the edge renderer, this 
-   method is basically useless and we could move the call
-   into redrawEdges(). For now we leave it like this
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">edge</span>:<a href="../data/IEdge.html">IEdge</a></code></td>
-</tr>
-</table>
-</div>
 <a name="globalMousePosition()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -2344,6 +2358,31 @@ showHideInherited();
 </tr>
 </table>
 </div>
+<a name="setEdgeVisibility()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">setEdgeVisibility</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function setEdgeVisibility(ve:<a href="IVisualEdge.html">IVisualEdge</a>, visible:Boolean):void</code><p>
+   This sets a VEdge visible or invisible, updating all related
+   data.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">ve</span>:<a href="IVisualEdge.html">IVisualEdge</a></code> &mdash; The VisualEdge to be turned invisible or not.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">visible</span>:Boolean</code> &mdash; The indicator if visible or not.
+   </td>
+</tr>
+</table>
+</div>
 <a name="setNodeVisibility()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -2392,6 +2431,27 @@ showHideInherited();
 </tr>
 <tr>
 <td width="20px"></td><td><code><span class="label">v2</span>:<a href="IVisualNode.html">IVisualNode</a></code> &mdash; The second node to unlink.
+   </td>
+</tr>
+</table>
+</div>
+<a name="updateConnectedEdgesVisibility()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">updateConnectedEdgesVisibility</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function updateConnectedEdgesVisibility(vn:<a href="IVisualNode.html">IVisualNode</a>):void</code><p>
+   This methods walks through all edges connected
+   to a node and sets them either visible or invisible
+   depending on the visibility of the given node and
+   the node on the other end. An edge is only visible
+   if both nodes are visible.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">vn</span>:<a href="IVisualNode.html">IVisualNode</a></code> &mdash; The VisualNode of which connected edges should be updated.
    </td>
 </tr>
 </table>

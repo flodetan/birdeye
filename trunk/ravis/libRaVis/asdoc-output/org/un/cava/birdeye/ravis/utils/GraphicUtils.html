@@ -85,6 +85,9 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
    P = [x1, y1]<br>
    Q = [x2, y2]<br>
    O = [atX, atY]<br>
+   
+   XXX why not use Math.atan2(y2 - y1, x2 - x1)?
+   How can point O affect the angle between 2 lines??
    </div>
 </td><td class="summaryTableOwnerCol">GraphicUtils</td>
 </tr>
@@ -106,7 +109,16 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
    O = [centerX, centerY]<br>
    P = [startX, startY]<br>
    Q = [endX, endY]<br>
-   </div>
+   
+   XXX Why not use Point.polar here?
+   
+   initAngle = Math.atan2(startY - centerY, startx - centerX);
+   newAngle = initAngle + angleDelta
+   length = Point.distance(P,O);
+   resultQ = Point.polar(length,newAngle);
+   resultQ.offset(P.x,P.y)
+   
+   should do it.</div>
 </td><td class="summaryTableOwnerCol">GraphicUtils</td>
 </tr>
 </table>
@@ -210,6 +222,9 @@ showHideInherited();
    P = [x1, y1]<br>
    Q = [x2, y2]<br>
    O = [atX, atY]<br>
+   
+   XXX why not use Math.atan2(y2 - y1, x2 - x1)?
+   How can point O affect the angle between 2 lines??
    </p><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
@@ -289,6 +304,17 @@ showHideInherited();
    O = [centerX, centerY]<br>
    P = [startX, startY]<br>
    Q = [endX, endY]<br>
+   
+   XXX Why not use Point.polar here?
+   
+   initAngle = Math.atan2(startY - centerY, startx - centerX);
+   newAngle = initAngle + angleDelta
+   length = Point.distance(P,O);
+   resultQ = Point.polar(length,newAngle);
+   resultQ.offset(P.x,P.y)
+   
+   should do it. 
+   
    </p><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
