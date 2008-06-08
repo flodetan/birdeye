@@ -63,7 +63,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * 
 		 * @inheritDoc
 		 * */
-		override public function draw(g:Graphics, vedge:IVisualEdge):void {
+		override public function draw(vedge:IVisualEdge):void {
 			
 			/* first get the corresponding visual object */
 			/**

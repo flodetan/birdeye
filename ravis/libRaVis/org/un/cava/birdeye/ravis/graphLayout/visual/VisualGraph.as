@@ -1442,22 +1442,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				/* Change: we do not pass the nodes or the vnodes, but the
 				 * edge. The reason is that the edge can have properties
 				 * assigned with it that affect the drawing. */
-				drawEdge(edge.vedge);
+				_edgeRenderer.draw(edge.vedge);
 			}
 			// we are done, so we reset the indicator
 			_layouter.layoutChanged = false;
 		}
-		
-		/**
-		 * this currently ONLY calls the edge renderer, this 
-		 * method is basically useless and we could move the call
-		 * into redrawEdges(). For now we leave it like this
-		 * 
-		 * */
-		protected function drawEdge(vedge:IVisualEdge):void {
-			_edgeRenderer.draw(_drawingSurface.graphics, vedge);
-		}
-		
 
 		/**
 		 * Lookup a node by its UIComponent. This is more a convenience
