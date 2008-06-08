@@ -29,6 +29,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+	import org.un.cava.birdeye.ravis.utils.Geometry;
 
 
 	/**
@@ -38,6 +39,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	 * of the edge might be arbitrary.
 	 * */
 	public class DirectedBalloonEdgeRenderer extends BaseEdgeRenderer {
+		
+		
+		/**
+		 * Specifies the width or thickness of the balloons.
+		 * @default 10
+		 * */
+		public var balloonWidth:Number = 10.0;
 		
 		/**
 		 * Constructor sets the graphics object (required).
@@ -58,43 +66,71 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		override public function draw(g:Graphics, vedge:IVisualEdge):void {
 			
 			/* first get the corresponding visual object */
+			/**
+			 * 
+			 */
 			var fromNode:IVisualNode = vedge.edge.node1.vnode;
 			var toNode:IVisualNode = vedge.edge.node2.vnode;
 			
 			var fP:Point = fromNode.viewCenter;
+			var tP:Point = toNode.viewCenter;
 			
 			/* calculate the midpoint used as curveTo anchor point */
-			var anchor:Point = new Point(
-				(fP.x + vedge.vgraph.center.x) / 2.0,
-				(fP.y + vedge.vgraph.center.y) / 2.0
-				);
+			var anchor:Point = Geometry.midPointOfLine(fP,tP);
 			
 			/* apply the line style */
 			ERGlobals.applyLineStyle(vedge,g);
 			
 			/* now we actually draw */
-			g.beginFill(uint(vedge.lineStyle.color));
-			g.moveTo(fP.x, fP.y);			
+			_g.beginFill(uint(vedge.lineStyle.color));
+			_g.moveTo(fP.x, fP.y);			
 			
 			/* bezier curve style */
-			g.curveTo(fP.x - 2,	fP.y - 2, anchor.x, anchor.y);
-			g.moveTo(fP.x, fP.y);
-			g.curveTo(fP.x + 2, fP.y + 2, anchor.x, anchor.y);
-			g.moveTo(fP.x, fP.y);
-			g.curveTo(fP.x - 2, fP.y + 2, anchor.x, anchor.y);
-			g.moveTo(fP.x, fP.y);
-			g.curveTo(fP.x + 2, fP.y - 2, anchor.x, anchor.y);
-			g.moveTo(anchor.x, anchor.y);
+			_g.curveTo(fP.x - balloonWidth, fP.y - balloonWidth, anchor.x, anchor.y);
+			_g.endFill();
+			_g.beginFill(uint(vedge.lineStyle.color));
+			_g.moveTo(fP.x, fP.y);
+			_g.curveTo(fP.x + balloonWidth, fP.y + balloonWidth, anchor.x, anchor.y);
+			_g.endFill();
+			_g.beginFill(uint(vedge.lineStyle.color));
+			_g.moveTo(fP.x, fP.y);
+			_g.curveTo(fP.x - balloonWidth, fP.y + balloonWidth, anchor.x, anchor.y);
+			_g.endFill();
+			_g.beginFill(uint(vedge.lineStyle.color));
+			_g.moveTo(fP.x, fP.y);
+			_g.curveTo(fP.x + balloonWidth, fP.y - balloonWidth, anchor.x, anchor.y);
+			_g.endFill();
+			_g.beginFill(uint(vedge.lineStyle.color));
+			_g.moveTo(anchor.x, anchor.y);
 			
-			g.lineTo(toNode.viewCenter.x, toNode.viewCenter.y);
-			g.endFill();
+			_g.lineTo(toNode.viewCenter.x, toNode.viewCenter.y);
+			_g.endFill();
 		
-			
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */
 			if(vedge.vgraph.displayEdgeLabels) {
 				ERGlobals.setLabelCoordinates(vedge.labelView,labelCoordinates(vedge));
 			}
+		}
+		
+		/**
+		 * This method places the label coordinates at the functional midpoint
+		 * of the bezier curve using the same anchors as the edge renderer.
+		 * 
+		 * @inheritDoc
+		 * */
+		override public function labelCoordinates(vedge:IVisualEdge):Point {
+			/* first get the corresponding visual object */
+			var fromPoint:Point = new Point(vedge.edge.node1.vnode.viewCenter.x,
+								vedge.edge.node1.vnode.viewCenter.y);
+			var toPoint:Point = new Point(vedge.edge.node2.vnode.viewCenter.x,
+								vedge.edge.node2.vnode.viewCenter.y);
+			
+			/* calculate the midpoint used as curveTo anchor point */
+			var anchor:Point = Geometry.midPointOfLine(fromPoint,toPoint);
+			
+			/* we use t = 0.6 here to a bit more towards the target */
+			return Geometry.bezierPoint(fromPoint,anchor,toPoint,0.6);
 		}
 	}
 }
