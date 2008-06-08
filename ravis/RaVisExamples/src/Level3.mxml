@@ -62,7 +62,7 @@ LEVEL 3
 			import org.un.cava.birdeye.ravis.graphLayout.visual.IEdgeRenderer;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.ConcentricRadialLayouter;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedBalloonEdgeRenderer;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			
 			// These are the item renderers
@@ -114,7 +114,7 @@ LEVEL 3
 				layouter.autoFitEnabled = true;
 				
 				/* set the layouter */
-				vgraph.edgeRenderer = new DirectedEdgeRenderer;
+				vgraph.edgeRenderer = new DirectedBalloonEdgeRenderer(vgraph.edgeDrawGraphics);
 				
 				/* set the visibility limit options, default 2 
 				* a.k.a degrees of separation */

@@ -43,6 +43,12 @@ The purpose of this demo is to explain the basics for creating a simple graph wh
 
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.FlowEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.FlowCurveEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedBalloonEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.layout.CircularLayouter;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.CircularEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedArrowEdgeRenderer;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
 
 			import org.un.cava.birdeye.ravis.graphLayout.data.INode;
@@ -104,13 +110,15 @@ The purpose of this demo is to explain the basics for creating a simple graph wh
 
 				/* set the default layouter type */
 				layouter = new ConcentricRadialLayouter(vgraph);
+				//layouter = new CircularLayouter(vgraph);
 				vgraph.layouter = layouter;
 				
 				/* set autofit */
 				layouter.autoFitEnabled = true;
 				
 				/* create and set an EdgeRenderer */
-				vgraph.edgeRenderer = new BaseEdgeRenderer;
+				vgraph.edgeRenderer = new BaseEdgeRenderer(vgraph.edgeDrawGraphics);
+				//vgraph.edgeRenderer = new FlowEdgeRenderer(vgraph.edgeDrawGraphics);
 				
 				/* set the visibility limit options, default 2 
 				 * a.k.a degrees of separation */
