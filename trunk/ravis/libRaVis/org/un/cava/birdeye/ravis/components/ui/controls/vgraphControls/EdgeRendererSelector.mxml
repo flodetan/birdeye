@@ -92,6 +92,7 @@
 				
 				var er:String;
 				var vgraph:IVisualGraph = GlobalParams.vgraph;
+				var g:Graphics = vgraph.edgeDrawGraphics;
 				
 				/* get the currently selected EdgeRenderer */
 				er = this.selectedItem as String;
@@ -99,45 +100,45 @@
 				if(vgraph != null) {
 					switch(er) {
 						case "Default":
-							vgraph.edgeRenderer = new BaseEdgeRenderer;
+							vgraph.edgeRenderer = new BaseEdgeRenderer(g);
 							break;
 						case "DirectedArrows":
-							vgraph.edgeRenderer = new DirectedArrowEdgeRenderer;
+							vgraph.edgeRenderer = new DirectedArrowEdgeRenderer(g);
 							break;
 						case "DirectedBalloons":
-							vgraph.edgeRenderer = new DirectedBalloonEdgeRenderer;
+							vgraph.edgeRenderer = new DirectedBalloonEdgeRenderer(g);
 							break;
 						case "Orthogonal":
-							vgraph.edgeRenderer = new OrthogonalEdgeRenderer;
+							vgraph.edgeRenderer = new OrthogonalEdgeRenderer(g);
 							break;
 						case "Flow":
-							vgraph.edgeRenderer = new FlowEdgeRenderer;
+							vgraph.edgeRenderer = new FlowEdgeRenderer(g);
 							break;
 						case "Bezier":
-							vgraph.edgeRenderer = new FlowCurveEdgeRenderer;
+							vgraph.edgeRenderer = new FlowCurveEdgeRenderer(g);
 							break;
 						case "Circular":
-							vgraph.edgeRenderer = new CircularEdgeRenderer;
+							vgraph.edgeRenderer = new CircularEdgeRenderer(g);
 							break;
 						case "Hyperbolic":
 							if(vgraph.layouter is Hyperbolic2DLayouter) {
 								if((vgraph.layouter as Hyperbolic2DLayouter).projector != null) {
 									vgraph.edgeRenderer =
-										new HyperbolicEdgeRenderer((vgraph.layouter as Hyperbolic2DLayouter).projector);
+										new HyperbolicEdgeRenderer(g,(vgraph.layouter as Hyperbolic2DLayouter).projector);
 								} else {
 									trace("Cannot access projector of layouter, cannot use this edgerenderer!");
-									vgraph.edgeRenderer = new BaseEdgeRenderer;
+									vgraph.edgeRenderer = new BaseEdgeRenderer(g);
 									this.selectedIndex = 0;
 								}
 							} else {
 								trace("Layouter MUST be hyperbolic, otherwise cannot use this edgerenderer!");
-								vgraph.edgeRenderer = new BaseEdgeRenderer;
+								vgraph.edgeRenderer = new BaseEdgeRenderer(g);
 								this.selectedIndex = 0;
 							}
 							break;
 					default:
 							trace("Illegal EdgeLabelRenderer selected:"+er);
-							vgraph.edgeRenderer = new BaseEdgeRenderer;
+							vgraph.edgeRenderer = new BaseEdgeRenderer(g);
 							break;
 					}
 					vgraph.refresh();

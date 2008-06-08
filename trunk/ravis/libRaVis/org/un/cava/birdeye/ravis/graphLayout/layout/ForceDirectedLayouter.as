@@ -352,9 +352,9 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			t_maxSpringMotion = 0.0;
 			
 			/* we need IEdges first */			
-			for each(t_edge in _vgraph.visibleEdges) {
+			for each(t_ve in _vgraph.visibleVEdges) {
 				/* now work on the edge */
-				t_ve = t_edge.vedge;
+				t_edge = t_ve.edge;
 				t_vn1 = t_edge.node1.vnode;
 				t_vn2 = t_edge.node2.vnode;
 

@@ -318,11 +318,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * This Dictionary keeps track of all currently
 		 * visible edges. An edge is visible iff both
 		 * attached nodes are visible. This hash is indexed
-		 * with Edges and the values are the same Edge objects.
-		 * (We do not work really with VEdges, so we keep the
-		 * Graph Edges here).
+		 * with VEdges and the values are the same VEdge objects.
 		 * */
-		protected var _visibleEdges:Dictionary;
+		protected var _visibleVEdges:Dictionary;
 		
 		/* root nodes, distinguished nodes and history */
 		
@@ -401,7 +399,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			_viewToVNodeMap = new Dictionary;
 			_viewToVEdgeMap = new Dictionary;
 			_visibleVNodes = new Dictionary;
-			_visibleEdges = new Dictionary;
+			_visibleVEdges = new Dictionary;
 			_noVisibleVNodes = 0;
 			_visibilityLimitActive = true;
 			
@@ -561,13 +559,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				/* from false to true *
 				if(del == true) {
 					/* walk through all visible edges and create and display their labels *
-					for each(e in _visibleEdges) {
+					for each(e in _visibleVEdges) {
 						createVEdgeView(e.vedge);
 					}
 				/* true to false *
 				} else {
 					/* walk again, but remove labels this time *
-					for each(e in _visibleEdges) {
+					for each(e in _visibleVEdges) {
 						removeVEdgeView(e.vedge.labelView);
 					}
 				}
@@ -630,8 +628,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		/**
 		 * @inheritDoc
 		 * */
-		public function get visibleEdges():Dictionary {
-			return _visibleEdges;
+		public function get visibleVEdges():Dictionary {
+			return _visibleVEdges;
 		}
 		
 		/**
@@ -1320,7 +1318,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			n2 = e.node2;
 			
 			if(n1.vnode.isVisible && n2.vnode.isVisible) {
-				_visibleEdges[e] = e;
+				_visibleVEdges[e] = e;
 			}
 			
 			/* add to tracking hash */
@@ -1349,7 +1347,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			ve.edge.vedge = null;
 			
 			/* remove the visible edge if present */
-			delete _visibleEdges[ve.edge];
+			delete _visibleVEdges[ve.edge];
 			
 			/* remove from tracking hash */
 			delete _vedges[ve];
@@ -1405,7 +1403,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			var vn1:IVisualNode;
 			var vn2:IVisualNode;
 			var color:int;
-			var edge:IEdge;
+			var vedge:IVisualEdge;
 			
 			/* make sure we have a graph */
 			if(_graph == null) {
@@ -1417,11 +1415,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			_drawingSurface.graphics.clear();
 			
 			/* now walk through all currently visible egdes */
-			for each(edge in _visibleEdges) {
+			for each(vedge in _visibleVEdges) {
 				
 				/* get the two nodes attached to the edge */
-				vn1 = edge.node1.vnode;
-				vn2 = edge.node2.vnode;
+				vn1 = vedge.edge.node1.vnode;
+				vn2 = vedge.edge.node2.vnode;
 				
 				/* all nodes should be visible, so we make an assertion
 				 * here */
@@ -1433,16 +1431,17 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				 * create an edge view to display the label, if it is not
 				 * there already */
 				if(_displayEdgeLabels) {
-					if(edge.vedge.labelView == null) {
-						trace("Created missing labelView for edge:"+edge.id);
-						createVEdgeView(edge.vedge);
+					/* should not happen for visible edges !! */
+					if(vedge.labelView == null) {
+						trace("Created missing labelView for edge:"+vedge.id);
+						createVEdgeView(vedge);
 					}
 				}
 
 				/* Change: we do not pass the nodes or the vnodes, but the
 				 * edge. The reason is that the edge can have properties
 				 * assigned with it that affect the drawing. */
-				_edgeRenderer.draw(edge.vedge);
+				_edgeRenderer.draw(vedge);
 			}
 			// we are done, so we reset the indicator
 			_layouter.layoutChanged = false;
@@ -1639,18 +1638,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			*/
 			ve.labelView = mycomponent;
 			_viewToVEdgeMap[mycomponent] = ve;
-			
-			/* increase the component counter */
-			//++_componentCounter;
-			
-			/* assertion there should not be more components than
-			 * visible nodes */
-			/*
-			if(_componentCounter > (_noVisibleVNodes)) {
-				throw Error("Got too many components:"+_componentCounter+" but only:"+_noVisibleVNodes
-				+" nodes visible");
-			}
-			*/
 			
 			/* we need to invalidate the display list since
 			 * we created new children */
@@ -2178,7 +2165,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * are the nodes that should remain visible, so they
 			 * must not be turned invisible and should also not
 			 * be turned visible again. */
-			
 			for each(vn in toInvisibleNodes) {
 				if(newVisibleNodes[vn] != null) {
 					/* this is a common node, remove it from
@@ -2194,40 +2180,26 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * will become invisible */
 			for each(vn in toInvisibleNodes) {
 				setNodeVisibility(vn, false);
-				
-				/* remove the edges */
-				edges = vn.node.inEdges.concat(vn.node.outEdges);
-				for each(e in edges) {
-					if(e.vedge.labelView != null) {
-						removeVEdgeView(e.vedge.labelView);
-					}
-					delete _visibleEdges[e];
-				}
 			}
 			
 			/* and all new visible nodes to visible */
 			for each(vn in newVisibleNodes) {
 				setNodeVisibility(vn, true);
-				
-				/* now here we have to test each edges othernode
-				 * if it is also visible */
-				edges = vn.node.inEdges;
-				edges = edges.concat(vn.node.outEdges);
-				for each(e in edges) {
-					/* get the other node at the end of the edge */
-					vno = e.othernode(vn.node).vnode;
-					
-					/* if this node either is still visible or in the
-					 * list to become visible, then the edge is also
-					 * visible */
-					if(vno.isVisible || (newVisibleNodes[vno] != null)) {
-						_visibleEdges[e] = e;
-						/* check if there is no view and we need one */
-						if(_displayEdgeLabels && e.vedge.labelView == null) {
-							createVEdgeView(e.vedge);
-						}
-					}
-				}
+			}
+			
+			/* we do a second pass to update all
+			 * associated edges.
+			 * we don't do it in one go, because that could
+			 * lead to a lot of edges to be examined and
+			 * changed in status multiple times, because not ALL
+			 * endpoints are already changed, thus we have to complete
+			 * changing all the nodes first
+			 */
+			for each(vn in newVisibleNodes) {
+				updateConnectedEdgesVisibility(vn);
+			}
+			for each(vn in toInvisibleNodes) {
+				updateConnectedEdgesVisibility(vn);
 			}
 		}
 
@@ -2258,17 +2230,16 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* recreate those, this is cheaper probably */
 			_visibleVNodes = new Dictionary;
 			_noVisibleVNodes = 0;
-			
-			
+		
 			for each(n in _graph.nodes) {
 				setNodeVisibility(n.vnode, true);
 			}
-			
+				
 			/* same for edges */
-			_visibleEdges = new Dictionary;
+			_visibleVEdges = new Dictionary;
 			
 			for each(e in _graph.edges) {
-				_visibleEdges[e] = e;
+				setEdgeVisibility(e.vedge, true);
 			}
 		}
 		
@@ -2276,9 +2247,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * Reset visibility of all nodes, all nodes are INVISIBLE.
 		 * */
 		protected function setAllInVisible():void {
-			var vn:IVisualNode;
 			
-			var e:IEdge;
+			var vn:IVisualNode;			
+			var ve:IVisualEdge;
 			
 			/* not sure if this is really, really needed, but
 			 * since similar code was added, I optimise it a bit.
@@ -2300,9 +2271,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				setNodeVisibility(vn, false);
 			}
 			
-			/* just reset the visible edges array
-			 * XXX THERE MAY BE MORE TO IT HERE!!  */
-			_visibleEdges = new Dictionary;
+			for each(ve in _visibleVEdges) {
+				setEdgeVisibility(ve, false);
+			}
 		}
 	
 		/**
@@ -2310,13 +2281,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * data.
 		 * @param vn The VisualNode to be turned invisible or not.
 		 * @param visible The indicator if visible or not.
-		 * */	
+		 * */
 		protected function setNodeVisibility(vn:IVisualNode, visible:Boolean):void {
 			
 			var comp:UIComponent;
 			
 			/* was there actually a change, if not issue a warning */
-			if(vn.isVisible === visible) {
+			if(vn.isVisible == visible) {
 				trace("Tried to set node:"+vn.id+" visibility to:"+visible.toString()+" but it was already.");
 				return;
 			}
@@ -2347,6 +2318,89 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				/* remove the view if there is one */
 				if(vn.view != null) {
 					removeComponent(vn.view, false);
+				}
+			}
+		}
+		
+		
+		/**
+		 * This sets a VEdge visible or invisible, updating all related
+		 * data.
+		 * @param ve The VisualEdge to be turned invisible or not.
+		 * @param visible The indicator if visible or not.
+		 * */	
+		protected function setEdgeVisibility(ve:IVisualEdge, visible:Boolean):void {
+			
+			var comp:UIComponent;
+			
+			/* was there actually a change, if not issue a warning */
+			if(ve.isVisible == visible) {
+				trace("Tried to set vedge:"+ve.id+" visibility to:"+visible.toString()+" but it was already.");
+				return;
+			}
+			
+			if(visible == true) {
+				
+				/* add it to the hash of currently visible nodes */
+				_visibleVEdges[ve] = ve;
+				
+				/* check if there is no view and we need one */
+				if(_displayEdgeLabels && ve.labelView == null) {
+					comp = createVEdgeView(ve);
+				}
+				
+				/* set the edges view to visible */
+				ve.isVisible = true;
+				
+			} else { // i.e. set to invisible 
+				/* render node invisible, thus potentially destroying its view */
+				ve.isVisible = false;
+				/* remove it from the hash */
+				delete _visibleVEdges[ve];
+				
+				/* remove the view if there is one */
+				if(ve.labelView != null) {
+					removeVEdgeView(ve.labelView);
+				}
+			}
+		}
+		
+		/**
+		 * This methods walks through all edges connected
+		 * to a node and sets them either visible or invisible
+		 * depending on the visibility of the given node and
+		 * the node on the other end. An edge is only visible
+		 * if both nodes are visible.
+		 * @param vn The VisualNode of which connected edges should be updated.
+		 * */
+		protected function updateConnectedEdgesVisibility(vn:IVisualNode):void {
+			
+			var edges:Array;
+			var ovn:IVisualNode;
+			var e:IEdge;
+			
+			/* now here we have to test each edges othernode
+			 * if it is also visible */
+			edges = vn.node.inEdges;
+			
+			/* concat might lead to duplication in the case of
+			 * undirected graphs... :( not sure how to efficiently
+			 * only add items which are not there, yet?
+			 */
+			edges = edges.concat(vn.node.outEdges);
+			
+			for each(e in edges) {
+				
+				/* get the other node at the end of the edge */
+				ovn = e.othernode(vn.node).vnode;
+					
+				/* if this node either is still visible or in the
+				 * list to become visible, then the edge is also
+				 * visible */
+				if(vn.isVisible && ovn.isVisible) {
+					setEdgeVisibility(e.vedge,true);
+				} else {
+					setEdgeVisibility(e.vedge,false);
 				}
 			}
 		}
