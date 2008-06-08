@@ -38,8 +38,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	 * */
 	public class CircularEdgeRenderer extends BaseEdgeRenderer {
 		
-		/* constructor does nothing and is therefore omitted
-		 */
+		/**
+		 * Constructor sets the graphics object (required).
+		 * @param g The graphics object to be used.
+		 * */
+		public function CircularEdgeRenderer(g:Graphics):void {
+			super(g);
+		}
 		
 		/**
 		 * The draw function, i.e. the main function to be used.

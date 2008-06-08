@@ -33,6 +33,25 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	 * requires a draw() method.
 	 * */
 	public interface IEdgeRenderer {
+		
+		
+		/**
+		 * Access to the graphics object on which all 
+		 * drawing takes place. Previously this was passed
+		 * to draw(), but since that would hardly
+		 * change at all, it makes more sense
+		 * to implement it as an attribute of the
+		 * edge renderers.
+		 * @param g The graphics object to be used with the edge renderer.
+		 * */
+		function set graphics(g:Graphics):void;
+		
+		/**
+		 * @private
+		 * */
+		function get graphics():Graphics;
+		
+		
 		/**
 		 * Draws an edge.
 		 * The way how the colouring is currently handled, with the distinguished

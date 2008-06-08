@@ -63,9 +63,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	
 		
 		/**
-		 * The constructor just initialises some default values.
+		 * The constructor just initialises some default values
+		 * and the graphics object.
+		 * @param g The graphics object to draw on.
 		 * */
-		public function FlowEdgeRenderer():void {
+		public function FlowEdgeRenderer(g:Graphics):void {
+			super(g);
 			relativeEdgeMagnitude = 1000;
 			maxBaseWidth = 100;
 		}
