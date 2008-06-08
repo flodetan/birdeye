@@ -88,9 +88,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		public var bendingDirection:int = BEND_LEFT;
 		
 		/**
-		 * The constructor just initialises some default values.
+		 * The constructor just initialises some default values
+		 * and the graphics object.
+		 * @param g The graphics object to be used.
 		 * */
-		public function FlowCurveEdgeRenderer():void {
+		public function FlowCurveEdgeRenderer(g:Graphics):void {
+			super(g);
 			relativeEdgeMagnitude = 1000;
 			maxBaseWidth = 100;
 			bendingDegree = 100;

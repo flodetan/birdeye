@@ -38,12 +38,17 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	 * */
 	public class OrthogonalEdgeRenderer extends BaseEdgeRenderer {
 		
-		/* constructor does nothing and is therefore omitted
-		 */
 		private var arrowLength:Number;
 		private var _type:String = 'orthogonal';
-		private var _g:Graphics;
 		private var _color:uint; // because we need to cross function boundaries
+		
+		/**
+		 * Constructor sets the graphics object (required).
+		 * @param g The graphics object to be used.
+		 * */
+		public function OrthogonalEdgeRenderer(g:Graphics):void {
+			super(g);
+		}
 		
 		/**
 		 * The draw function, in this renderer draws an Arrow

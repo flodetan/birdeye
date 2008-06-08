@@ -27,8 +27,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	import flash.display.Graphics;
 	import flash.geom.Point;
 	
-	import mx.controls.Label;
-	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IEdgeRenderer;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
@@ -40,8 +38,34 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	 * */
 	public class BaseEdgeRenderer implements IEdgeRenderer {
 		
-		/* constructor does nothing and is therefore omitted
+		/* since the graphics object would hardly change
+		 * we can implement it as an attribute
 		 */
+		
+		protected var _g:Graphics;
+		
+		/**
+		 * Constructor sets the graphics object (required).
+		 * @param g The graphics object to be used.
+		 * */
+		public function BaseEdgeRenderer(g:Graphics):void {
+			_g = g;
+		}
+		
+		/**
+		 * @inheritDoc
+		 * */
+		public function get graphics():Graphics {
+			return _g;
+		}
+		
+		/**
+		 * @private
+		 * */
+		public function set graphics(g:Graphics):void {
+			_g = g;
+		}
+		
 		
 		/**
 		 * The draw function, i.e. the main function to be used.

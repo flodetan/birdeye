@@ -23,6 +23,7 @@
  * THE SOFTWARE.
  */
 package org.un.cava.birdeye.ravis.graphLayout.visual {
+	import flash.display.Graphics;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
@@ -75,6 +76,14 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * object of the Visual Graph. This is for convenience.
 		 * */
 		//function set lineColor(color:int):void;
+		
+		/**
+		 * provide access to the graphics object of
+		 * the drawing surface for the edge drawing, needed
+		 * by edge renderers.
+		 * @returns The graphics object of the drawing surface.
+		 * */
+		function get edgeDrawGraphics():Graphics;
 		
 		/**
 		 * Allow the provision of an ItemRenderer (which is

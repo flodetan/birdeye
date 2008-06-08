@@ -51,8 +51,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * */
 		public var arrowHeadLength:Number = 20;
 		
-		/* constructor does nothing and is therefore omitted
-		 */
+		/**
+		 * Constructor sets the graphics object (required).
+		 * @param g The graphics object to be used.
+		 * */
+		public function DirectedArrowEdgeRenderer(g:Graphics):void {
+			super(g);
+		}
 		
 		/**
 		 * The draw function, i.e. the main function to be used.
@@ -77,12 +82,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			
 			var edgeAngle:Number;
 			
-			/* calculate the midpoint used as curveTo anchor point */
-			var anchor:Point = new Point(
-				(fP.x + vedge.vgraph.center.x) / 2.0,
-				(fP.y + vedge.vgraph.center.y) / 2.0
-				);
-			
 			/* apply the line style */
 			ERGlobals.applyLineStyle(vedge,g);
 			
@@ -101,6 +100,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			 */
 			mArrowBase = Point.polar(Point.distance(tP,fP) - arrowHeadLength,edgeAngle);
 			mArrowBase.offset(0,fP.y);
+		
+			
 		
 			/* Now find the left and right arrow base points
 			 * in a similar way.

@@ -25,6 +25,7 @@
 package org.un.cava.birdeye.ravis.graphLayout.visual {
 	
 	import flash.display.DisplayObject;
+	import flash.display.Graphics;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -394,11 +395,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			_drag_y_offsetMap = new Dictionary;
 			_drag_boundsMap = new Dictionary;
 			
-			
-			/* set an edge renderer, for now we use the Default,
-			 * but at a later stage this could be set externally */
-			_edgeRenderer = new BaseEdgeRenderer();
-			
 			/* initialise view/ItemRenderer and visibility mapping */
 			_vnodes = new Dictionary;
 			_vedges = new Dictionary;
@@ -414,6 +410,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* set the drawing surface for the edges */
 			_drawingSurface = new UIComponent();
+			
+			/* set an edge renderer, for now we use the Default,
+			 * but at a later stage this could be set externally */
+			_edgeRenderer = new BaseEdgeRenderer(_drawingSurface.graphics);
 			
 			/* initialize the canvas, we are our own canvas obviously */
 			_canvas = this;
@@ -481,6 +481,17 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * */
 		public function get graph():IGraph {
 			return _graph;
+		}
+
+		/**
+		 * @inheritDoc
+		 * */
+		public function get edgeDrawGraphics():Graphics {
+			if(_drawingSurface) {
+				return _drawingSurface.graphics;
+			} else {
+				return null;
+			}
 		}
 
 		/**
