@@ -17,6 +17,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * Applies the linestyle stored in the passed visual Edge
 		 * object to the passed Graphics object.
 		 *
+		 * XXX: May be moved into the BaseEdgeRenderer, no more need for this here.
+		 * 
 		 * @param ve The VisualEdge object that the line style is taken from.
 		 * @param g The Graphics object that the line style is applies to.
 		 * */
@@ -39,6 +41,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		/**
 		 * Applies the provided coordinates to the given UI Component.
 		 * Is basically a helper to allow to use directly a Point object.
+		 * 
+		 * XXX May be moved into the BaseEdgeRenderer
+		 * 
 		 * @param uc The UIComponent to set the coordinates in.
 		 * @param p The Point with the target coordinates.
 		 * */
