@@ -147,14 +147,6 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("DÂ
    </td>
 </tr>
 <tr>
-<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/DefaultEdgeRenderer.html">DefaultEdgeRenderer</a> &mdash; Class in package <a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/package-detail.html">org.un.cava.birdeye.ravis.graphLayout.visual</a></td>
-</tr>
-<tr>
-<td width="20"></td><td>
-  This is the default edge renderer, which draws the edges
-  as straight lines from one node to another.</td>
-</tr>
-<tr>
 <td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/VisualGraph.html#_defaultEdgeStyle">_defaultEdgeStyle</a> &mdash; Property in class org.un.cava.birdeye.ravis.graphLayout.visual.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/VisualGraph.html">VisualGraph</a></td>
 </tr>
 <tr>
@@ -261,12 +253,34 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("DÂ
    Returns the direction (point) of the vector.</td>
 </tr>
 <tr>
-<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/DirectedEdgeRenderer.html">DirectedEdgeRenderer</a> &mdash; Class in package <a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/package-detail.html">org.un.cava.birdeye.ravis.graphLayout.visual</a></td>
+<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/DirectedArrowEdgeRenderer.html">DirectedArrowEdgeRenderer</a> &mdash; Class in package <a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/package-detail.html">org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers</a></td>
+</tr>
+<tr>
+<td width="20"></td><td>
+  This is a directed edge renderer, which draws the edges
+  with arrowheads at the target point.</td>
+</tr>
+<tr>
+<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/DirectedArrowEdgeRenderer.html#DirectedArrowEdgeRenderer()">DirectedArrowEdgeRenderer</a>(g) &mdash; Constructor in class org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/DirectedArrowEdgeRenderer.html">DirectedArrowEdgeRenderer</a></td>
+</tr>
+<tr>
+<td width="20"></td><td>
+   Constructor sets the graphics object (required).</td>
+</tr>
+<tr>
+<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/DirectedBalloonEdgeRenderer.html">DirectedBalloonEdgeRenderer</a> &mdash; Class in package <a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/package-detail.html">org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers</a></td>
 </tr>
 <tr>
 <td width="20"></td><td>
   This is a directed edge renderer, which draws the edges
   with slim ballon like curves that indicate a source.</td>
+</tr>
+<tr>
+<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/DirectedBalloonEdgeRenderer.html#DirectedBalloonEdgeRenderer()">DirectedBalloonEdgeRenderer</a>(g) &mdash; Constructor in class org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/DirectedBalloonEdgeRenderer.html">DirectedBalloonEdgeRenderer</a></td>
+</tr>
+<tr>
+<td width="20"></td><td>
+   Constructor sets the graphics object (required).</td>
 </tr>
 <tr>
 <td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/data/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/data/Edge.html#_directional">_directional</a> &mdash; Property in class org.un.cava.birdeye.ravis.graphLayout.data.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/data/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/data/Edge.html">Edge</a></td>
@@ -649,49 +663,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("DÂ
 <td width="20"></td><td></td>
 </tr>
 <tr>
-<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/CircularEdgeRenderer.html#draw()">draw</a>(g, edge:<a href="org/un/cava/birdeye/ravis/graphLayout/data/IEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/data./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.data:IEdge</a>, displayLabel) &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/CircularEdgeRenderer.html">CircularEdgeRenderer</a></td>
-</tr>
-<tr>
-<td width="20"></td><td>
-   The draw function, i.e.</td>
-</tr>
-<tr>
-<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/DefaultEdgeRenderer.html#draw()">draw</a>(g, edge:<a href="org/un/cava/birdeye/ravis/graphLayout/data/IEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/data./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.data:IEdge</a>, displayLabel) &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/DefaultEdgeRenderer.html">DefaultEdgeRenderer</a></td>
-</tr>
-<tr>
-<td width="20"></td><td>
-   The draw function, i.e.</td>
-</tr>
-<tr>
-<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/DirectedEdgeRenderer.html#draw()">draw</a>(g, edge:<a href="org/un/cava/birdeye/ravis/graphLayout/data/IEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/data./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.data:IEdge</a>, displayLabel) &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/DirectedEdgeRenderer.html">DirectedEdgeRenderer</a></td>
-</tr>
-<tr>
-<td width="20"></td><td>
-   The draw function, i.e.</td>
-</tr>
-<tr>
-<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/FlowCurveEdgeRenderer.html#draw()">draw</a>(g, edge:<a href="org/un/cava/birdeye/ravis/graphLayout/data/IEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/data./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.data:IEdge</a>, displayLabel) &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/FlowCurveEdgeRenderer.html">FlowCurveEdgeRenderer</a></td>
-</tr>
-<tr>
-<td width="20"></td><td>
-   The draw function, i.e.</td>
-</tr>
-<tr>
-<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/FlowEdgeRenderer.html#draw()">draw</a>(g, edge:<a href="org/un/cava/birdeye/ravis/graphLayout/data/IEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/data./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.data:IEdge</a>, displayLabel) &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/FlowEdgeRenderer.html">FlowEdgeRenderer</a></td>
-</tr>
-<tr>
-<td width="20"></td><td>
-   The draw function, i.e.</td>
-</tr>
-<tr>
-<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/HyperbolicEdgeRenderer.html#draw()">draw</a>(g, edge:<a href="org/un/cava/birdeye/ravis/graphLayout/data/IEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/data./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.data:IEdge</a>, displayLabel) &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/HyperbolicEdgeRenderer.html">HyperbolicEdgeRenderer</a></td>
-</tr>
-<tr>
-<td width="20"></td><td>
-   The draw function, i.e.</td>
-</tr>
-<tr>
-<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/IEdgeRenderer.html#draw()">draw</a>(g, edge:<a href="org/un/cava/birdeye/ravis/graphLayout/data/IEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/data./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.data:IEdge</a>, displayLabel) &mdash; Method in interface org.un.cava.birdeye.ravis.graphLayout.visual.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/IEdgeRenderer.html">IEdgeRenderer</a></td>
+<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/IEdgeRenderer.html#draw()">draw</a>(vedge:<a href="org/un/cava/birdeye/ravis/graphLayout/visual/IVisualEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.visual:IVisualEdge</a>) &mdash; Method in interface org.un.cava.birdeye.ravis.graphLayout.visual.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/IEdgeRenderer.html">IEdgeRenderer</a></td>
 </tr>
 <tr>
 <td width="20"></td><td>
@@ -706,13 +678,6 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("DÂ
    including all edges.</td>
 </tr>
 <tr>
-<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/OrthogonalEdgeRenderer.html#draw()">draw</a>(g, edge:<a href="org/un/cava/birdeye/ravis/graphLayout/data/IEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/data./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.data:IEdge</a>, displayLabel) &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/OrthogonalEdgeRenderer.html">OrthogonalEdgeRenderer</a></td>
-</tr>
-<tr>
-<td width="20"></td><td>
-   The draw function, i.e.</td>
-</tr>
-<tr>
 <td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/VisualGraph.html#draw()">draw</a>() &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/VisualGraph.html">VisualGraph</a></td>
 </tr>
 <tr>
@@ -720,6 +685,67 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("DÂ
    
    Calling this forces a full calculation and redraw of the layout
    including all edges.</td>
+</tr>
+<tr>
+<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/BaseEdgeRenderer.html#draw()">draw</a>(vedge:<a href="org/un/cava/birdeye/ravis/graphLayout/visual/IVisualEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.visual:IVisualEdge</a>) &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/BaseEdgeRenderer.html">BaseEdgeRenderer</a></td>
+</tr>
+<tr>
+<td width="20"></td><td>
+   The draw function, i.e.</td>
+</tr>
+<tr>
+<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/CircularEdgeRenderer.html#draw()">draw</a>(vedge:<a href="org/un/cava/birdeye/ravis/graphLayout/visual/IVisualEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.visual:IVisualEdge</a>) &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/CircularEdgeRenderer.html">CircularEdgeRenderer</a></td>
+</tr>
+<tr>
+<td width="20"></td><td>
+   The draw function, i.e.</td>
+</tr>
+<tr>
+<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/DirectedArrowEdgeRenderer.html#draw()">draw</a>(vedge:<a href="org/un/cava/birdeye/ravis/graphLayout/visual/IVisualEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.visual:IVisualEdge</a>) &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/DirectedArrowEdgeRenderer.html">DirectedArrowEdgeRenderer</a></td>
+</tr>
+<tr>
+<td width="20"></td><td>
+   The draw function, i.e.</td>
+</tr>
+<tr>
+<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/DirectedBalloonEdgeRenderer.html#draw()">draw</a>(vedge:<a href="org/un/cava/birdeye/ravis/graphLayout/visual/IVisualEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.visual:IVisualEdge</a>) &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/DirectedBalloonEdgeRenderer.html">DirectedBalloonEdgeRenderer</a></td>
+</tr>
+<tr>
+<td width="20"></td><td>
+   The draw function, i.e.</td>
+</tr>
+<tr>
+<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/FlowCurveEdgeRenderer.html#draw()">draw</a>(vedge:<a href="org/un/cava/birdeye/ravis/graphLayout/visual/IVisualEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.visual:IVisualEdge</a>) &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/FlowCurveEdgeRenderer.html">FlowCurveEdgeRenderer</a></td>
+</tr>
+<tr>
+<td width="20"></td><td>
+   The draw method here draws a bent curve of a certain
+   thickness, depending on the flow and the parameters of
+   this renderer.</td>
+</tr>
+<tr>
+<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/FlowEdgeRenderer.html#draw()">draw</a>(vedge:<a href="org/un/cava/birdeye/ravis/graphLayout/visual/IVisualEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.visual:IVisualEdge</a>) &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/FlowEdgeRenderer.html">FlowEdgeRenderer</a></td>
+</tr>
+<tr>
+<td width="20"></td><td>
+   The draw function, i.e.</td>
+</tr>
+<tr>
+<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/HyperbolicEdgeRenderer.html#draw()">draw</a>(vedge:<a href="org/un/cava/birdeye/ravis/graphLayout/visual/IVisualEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.visual:IVisualEdge</a>) &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/HyperbolicEdgeRenderer.html">HyperbolicEdgeRenderer</a></td>
+</tr>
+<tr>
+<td width="20"></td><td>
+   The draw function for the HyperbolicEdgeRenderer, it draws
+   the curve according to the model calculation.</td>
+</tr>
+<tr>
+<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/OrthogonalEdgeRenderer.html#draw()">draw</a>(vedge:<a href="org/un/cava/birdeye/ravis/graphLayout/visual/IVisualEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.visual:IVisualEdge</a>) &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/OrthogonalEdgeRenderer.html">OrthogonalEdgeRenderer</a></td>
+</tr>
+<tr>
+<td width="20"></td><td>
+   The draw function, in this renderer draws an Arrow
+   but not straight or curved but only with angles of 90 degrees
+   parallel to the x and y axis.</td>
 </tr>
 <tr>
 <td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/utils/class-list.html');" href="org/un/cava/birdeye/ravis/utils/GraphicUtils.html#drawArc()">drawArc</a>(g, angleDelta, centerX, centerY, startX, startY) &mdash; Static method in class org.un.cava.birdeye.ravis.utils.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/utils/class-list.html');" href="org/un/cava/birdeye/ravis/utils/GraphicUtils.html">GraphicUtils</a></td>
@@ -738,15 +764,6 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("DÂ
 </tr>
 <tr>
 <td width="20"></td><td></td>
-</tr>
-<tr>
-<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/VisualGraph.html#drawEdge()">drawEdge</a>(edge:<a href="org/un/cava/birdeye/ravis/graphLayout/data/IEdge.html" onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/data./class-list.html');">org.un.cava.birdeye.ravis.graphLayout.data:IEdge</a>) &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/VisualGraph.html">VisualGraph</a></td>
-</tr>
-<tr>
-<td width="20"></td><td>
-   this currently ONLY calls the edge renderer, this 
-   method is basically useless and we could move the call
-   into redrawEdges().</td>
 </tr>
 <tr>
 <td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/VisualGraph.html#_drawingSurface">_drawingSurface</a> &mdash; Property in class org.un.cava.birdeye.ravis.graphLayout.visual.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/VisualGraph.html">VisualGraph</a></td>
