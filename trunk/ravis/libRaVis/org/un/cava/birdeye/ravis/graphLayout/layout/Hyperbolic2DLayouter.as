@@ -200,7 +200,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				//trace("Resetting node indexes...");
 				_nodeIndex = new Array(totalNodes);
 				k = 0;
-      	for each(vn in allVisVNodes) {
+      			for each(vn in allVisVNodes) {
 					_nodeIndex[k] = vn;
 					++k;
 				}
@@ -312,6 +312,15 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			var newNodePos:Point;
 			var newNodeScale:Point;
 			var k:int;
+			
+			/* it happens for some reasons that the _nodeIndex array 
+			 * was not initialised, then this crashes, adding a safeguard
+			 */
+			if(_nodeIndex == null) {
+				trace("WARNING: _nodeIndex not initialised in Hyperbolic2DLayouter.projectNodes()");
+				return;
+			}
+			
 			for (k = 0; k < _nodeIndex.length; k++) {
  				// Use Projector to map Complex Points to 2D display
 				newNodePos = _projector.project(_nodePositions[k] as IPoint, _vgraph as DisplayObject);

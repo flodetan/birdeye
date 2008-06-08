@@ -195,8 +195,13 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * @private
 		 * */
 		public function get linkLength():Number {
-			/* NOP */
-			return 0;
+			/* NOP
+			 * but must not return 0, since some layouter
+			 * do not care about LL, but the vgraph will
+			 * not draw if LL is 0
+			 * so default is something else, like 1
+			 */
+			return 1;
 		}
 
 		/**
