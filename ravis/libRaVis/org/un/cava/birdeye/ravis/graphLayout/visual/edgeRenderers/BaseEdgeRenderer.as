@@ -108,5 +108,17 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 				vedge.edge.node2.vnode.viewCenter
 			);
 		}
+		
+		/**
+		 * This is a helper function for debugging, it marks
+		 * the given spot with a small circle.
+		 * @param p The location to be marked given as a Point.
+		 * */
+		public function markPoint(p:Point):void {
+			_g.beginFill(0);
+			_g.drawCircle(p.x,p.y,10);
+			_g.endFill();
+		}
+		
 	}
 }

@@ -29,6 +29,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+	import org.un.cava.birdeye.ravis.utils.Geometry;
 
 
 	/**
@@ -90,7 +91,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			 *
 			 * First Step: get the angle of the edge in radians
 			 */
-			edgeAngle = Math.acos((tP.x - fP.x) / Point.distance(tP,fP)); 
+			edgeAngle = Math.atan2(tP.y - fP.y,tP.x - fP.x);
 			
 			/* Second step: the midpoint of the base can easily
 			 * be specified in polar coords, using the same angle
@@ -99,9 +100,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			 * y value of the from point
 			 */
 			mArrowBase = Point.polar(Point.distance(tP,fP) - arrowHeadLength,edgeAngle);
-			mArrowBase.offset(0,fP.y);
-		
-			
+			mArrowBase.offset(fP.x,fP.y);
 		
 			/* Now find the left and right arrow base points
 			 * in a similar way.
@@ -115,16 +114,14 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			lArrowBase.offset(mArrowBase.x,mArrowBase.y);			
 			rArrowBase.offset(mArrowBase.x,mArrowBase.y);
 			
-			
 			/* now we actually draw */
-			g.beginFill(uint(vedge.lineStyle.color));
-			g.moveTo(fP.x, fP.y);
-			g.lineTo(tP.x, tP.y);
-			g.lineTo(lArrowBase.x, lArrowBase.y);
-			g.lineTo(rArrowBase.x, rArrowBase.y);
-			g.lineTo(tP.x, tP.y);
-			g.endFill();
-		
+			_g.beginFill(uint(vedge.lineStyle.color));
+			_g.moveTo(fP.x, fP.y);
+			_g.lineTo(tP.x, tP.y);
+			_g.lineTo(lArrowBase.x, lArrowBase.y);
+			_g.lineTo(rArrowBase.x, rArrowBase.y);
+			_g.lineTo(tP.x, tP.y);
+			_g.endFill();
 			
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */
