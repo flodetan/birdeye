@@ -81,7 +81,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			
 
 			/* apply the line style */
-			ERGlobals.applyLineStyle(vedge,_g);
+			applyLineStyle(vedge);
 			
 			if(isFullyLeftOf(fromNode, toNode)) {
 				if(isFullyAbove(fromNode, toNode)) {
@@ -118,7 +118,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */
 			if(vedge.vgraph.displayEdgeLabels) {
-				ERGlobals.setLabelCoordinates(vedge.labelView,labelCoordinates(vedge));
+				setLabelCoordinates(vedge.labelView,labelCoordinates(vedge));
 			}
 			
 		}
