@@ -115,9 +115,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * @param p The location to be marked given as a Point.
 		 * */
 		public function markPoint(p:Point):void {
-			_g.beginFill(0);
+			//_g.beginFill(0);
 			_g.drawCircle(p.x,p.y,10);
-			_g.endFill();
+			//_g.endFill();
 		}
 		
 	}

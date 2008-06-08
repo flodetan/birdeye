@@ -29,7 +29,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
-	import org.un.cava.birdeye.ravis.utils.GraphicUtils;
+	import org.un.cava.birdeye.ravis.utils.Geometry;
 
 
 	/**
@@ -49,8 +49,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		/**
 		 * The draw function, i.e. the main function to be used.
 		 * Draws a curved line from one node of the edge to the other.
-		 * The colour is determined by the "disting" parameter and
-		 * a set of edge parameters, which are stored in an edge object.
 		 * 
 		 * @inheritDoc
 		 * */
@@ -70,24 +68,39 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			ERGlobals.applyLineStyle(vedge,g);
 			
 			/* now we actually draw */
-			g.beginFill(uint(vedge.lineStyle.color));
-			g.moveTo(fromNode.viewCenter.x, fromNode.viewCenter.y);			
+			//_g.beginFill(uint(vedge.lineStyle.color));
+			_g.moveTo(fromNode.viewCenter.x, fromNode.viewCenter.y);			
 			
-			//g.curveTo(centreX, centreY, toX, toY);
-			g.curveTo(
+			//_g.curveTo(centreX, centreY, toX, toY);
+			_g.curveTo(
 				anchor.x,
 				anchor.y,
 				toNode.viewCenter.x,
 				toNode.viewCenter.y
 			);
 			
-			g.endFill();
+			//_g.endFill();
 			
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */
 			if(vedge.vgraph.displayEdgeLabels) {
 				ERGlobals.setLabelCoordinates(vedge.labelView,labelCoordinates(vedge));
 			}
+		}
+		
+		override public function labelCoordinates(vedge:IVisualEdge):Point {
+			/* first get the corresponding visual object */
+			var fromPoint:Point = new Point(vedge.edge.node1.vnode.viewCenter.x,
+								vedge.edge.node1.vnode.viewCenter.y);
+			var toPoint:Point = new Point(vedge.edge.node2.vnode.viewCenter.x,
+								vedge.edge.node2.vnode.viewCenter.y);
+			
+			/* calculate the midpoint used as curveTo anchor point */
+			var anchor:Point = new Point(
+				(fromPoint.x + vedge.vgraph.center.x) / 2.0,
+				(fromPoint.y + vedge.vgraph.center.y) / 2.0
+				);
+			return Geometry.bezierPoint(fromPoint,anchor,toPoint,0.5);
 		}
 	}
 }
