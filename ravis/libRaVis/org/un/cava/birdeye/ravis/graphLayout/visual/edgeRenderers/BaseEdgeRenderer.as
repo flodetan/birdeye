@@ -27,6 +27,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	import flash.display.Graphics;
 	import flash.geom.Point;
 	
+	import mx.core.UIComponent;
+	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IEdgeRenderer;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
@@ -81,7 +83,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			var toNode:IVisualNode = vedge.edge.node2.vnode;
 			
 			/* apply the line style */
-			ERGlobals.applyLineStyle(vedge,_g);
+			applyLineStyle(vedge);
 			
 			/* now we actually draw */
 			_g.beginFill(uint(vedge.lineStyle.color));
@@ -92,7 +94,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */
 			if(vedge.vgraph.displayEdgeLabels) {
-				ERGlobals.setLabelCoordinates(vedge.labelView,labelCoordinates(vedge));
+				setLabelCoordinates(vedge.labelView,labelCoordinates(vedge));
 			}
 		}
 		
@@ -108,6 +110,42 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 				vedge.edge.node2.vnode.viewCenter
 			);
 		}
+		
+		/**
+		 * Applies the linestyle stored in the passed visual Edge
+		 * object to the Graphics object of the renderer.
+		 * @param ve The VisualEdge object that the line style is taken from.
+		 * */
+		public function applyLineStyle(ve:IVisualEdge):void {
+			/* apply the style to the drawing */
+			if(ve.lineStyle != null) {
+				_g.lineStyle(
+					Number(ve.lineStyle.thickness),
+					uint(ve.lineStyle.color),
+					Number(ve.lineStyle.alpha),
+					Boolean(ve.lineStyle.pixelHinting),
+					String(ve.lineStyle.scaleMode),
+					String(ve.lineStyle.caps),
+					String(ve.lineStyle.joints),
+					Number(ve.lineStyle.miterLimits)
+				);
+			}
+		}
+		
+		/**
+		 * Applies the provided coordinates to the given UI Component.
+		 * Is basically a helper to allow to use directly a Point object.
+		 * 
+		 * @param uc The UIComponent to set the coordinates in.
+		 * @param p The Point with the target coordinates.
+		 * */
+		public function setLabelCoordinates(uc:UIComponent,p:Point):void {
+			if(uc != null && p != null) {
+				uc.x = p.x;
+				uc.y = p.y;
+			}
+		}
+		
 		
 		/**
 		 * This is a helper function for debugging, it marks

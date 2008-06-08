@@ -79,7 +79,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			var anchor:Point = Geometry.midPointOfLine(fP,tP);
 			
 			/* apply the line style */
-			ERGlobals.applyLineStyle(vedge,_g);
+			applyLineStyle(vedge);
 			
 			/* now we actually draw */
 			_g.beginFill(uint(vedge.lineStyle.color));
@@ -109,7 +109,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */
 			if(vedge.vgraph.displayEdgeLabels) {
-				ERGlobals.setLabelCoordinates(vedge.labelView,labelCoordinates(vedge));
+				setLabelCoordinates(vedge.labelView,labelCoordinates(vedge));
 			}
 		}
 		
