@@ -76,7 +76,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * 
 		 * @inheritDoc
 		 * */
-		public function draw(g:Graphics, vedge:IVisualEdge):void {
+		public function draw(vedge:IVisualEdge):void {
 			
 			/* first get the corresponding visual object */
 			var fromNode:IVisualNode = vedge.edge.node1.vnode;

@@ -54,17 +54,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		
 		/**
 		 * Draws an edge.
-		 * The way how the colouring is currently handled, with the distinguished
-		 * parameter is not appropriate, this may need to change to something more
+		 * Colours and linestyle can be provided through the XML object associated
+		 * with the (v)edge.
 		 * flexible.
-		 * 
-		 * @param g Reference to the Graphics object of the Drawing surface.
-		 * @param edge The edge to draw, it needs to provide all the information required, i.e. locations.
-		 * @param displayLabel If set, it displays a label in the middle of the egde, provided the edge
-		 * 	has an edge renderer (UIComponent) associated with it.
-		 *
+		 * @param vedge The edge to draw, it needs to provide all the information required, i.e. locations.
 		 * */
-		function draw(g:Graphics,vedge:IVisualEdge):void;
+		function draw(vedge:IVisualEdge):void;
 		
 		/**
 		 * Returns the coordinates of the label for the given edge.
