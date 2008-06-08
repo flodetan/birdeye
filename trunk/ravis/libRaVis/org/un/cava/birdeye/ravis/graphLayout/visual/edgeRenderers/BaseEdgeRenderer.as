@@ -84,10 +84,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			ERGlobals.applyLineStyle(vedge,g);
 			
 			/* now we actually draw */
-			g.beginFill(uint(vedge.lineStyle.color));
-			g.moveTo(fromNode.viewCenter.x, fromNode.viewCenter.y);			
-			g.lineTo(toNode.viewCenter.x, toNode.viewCenter.y);
-			g.endFill();
+			_g.beginFill(uint(vedge.lineStyle.color));
+			_g.moveTo(fromNode.viewCenter.x, fromNode.viewCenter.y);			
+			_g.lineTo(toNode.viewCenter.x, toNode.viewCenter.y);
+			_g.endFill();
 			
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */

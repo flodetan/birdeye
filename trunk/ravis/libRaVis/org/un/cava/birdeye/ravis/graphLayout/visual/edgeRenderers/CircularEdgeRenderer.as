@@ -88,6 +88,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			}
 		}
 		
+		/**
+		 * This method places the label coordinates at the functional midpoint
+		 * of the bezier curve using the same anchors as the edge renderer.
+		 * 
+		 * @inheritDoc
+		 * */
 		override public function labelCoordinates(vedge:IVisualEdge):Point {
 			/* first get the corresponding visual object */
 			var fromPoint:Point = new Point(vedge.edge.node1.vnode.viewCenter.x,
