@@ -172,12 +172,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			//trace("base2:"+base2.toString());
 
 			/* apply the line style */
-			ERGlobals.applyLineStyle(vedge,g);
+			ERGlobals.applyLineStyle(vedge,_g);
 			
 			/* now we draw the first curve with base 1 to target */
-			g.beginFill(uint(vedge.lineStyle.color));
-			g.moveTo(source.x, source.y);
-			g.curveTo(
+			_g.beginFill(uint(vedge.lineStyle.color));
+			_g.moveTo(source.x, source.y);
+			_g.curveTo(
 				base1.x,
 				base1.y,
 				target.x,
@@ -187,13 +187,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			/* and the second curve using base 2 as control point and given
 			 * that we are now at the target, we now go to the source 
 			 */
-			g.curveTo(
+			_g.curveTo(
 				base2.x,
 				base2.y,
 				source.x,
 				source.y
 			);
-			g.endFill();
+			_g.endFill();
 
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */

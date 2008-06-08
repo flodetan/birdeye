@@ -87,7 +87,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			
 			
 			/* apply the line style */
-			ERGlobals.applyLineStyle(vedge,g);
+			ERGlobals.applyLineStyle(vedge,_g);
 			
 			
 			/*
@@ -119,25 +119,25 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			// Method 2: Using circular arcs		
 			var center:Point = _projector.getCenter(fromX, fromY, toX, toY, (vedge.vgraph as DisplayObject));
 			if (center == null) {// diameter - just draw a straight line
-				g.moveTo(fromX, fromY);
-				g.lineTo(toX, toY);
+				_g.moveTo(fromX, fromY);
+				_g.lineTo(toX, toY);
 			} else {
 				var angle:Number = GraphicUtils.getAngle(fromX, fromY, toX, toY, center.x, center.y);
 				var testPoint1:Point = GraphicUtils.getRotation(angle, center.x, center.y, fromX, fromY);
 				var testPoint2:Point = GraphicUtils.getRotation(angle, center.x, center.y, toX, toY);
 				// Rotation check - the second point must be equal to the rotated point
 				if (GraphicUtils.equal(testPoint1, new Point(toX,toY))) {
-					GraphicUtils.drawArc(g, angle, center.x, center.y, fromX, fromY);
+					GraphicUtils.drawArc(_g, angle, center.x, center.y, fromX, fromY);
 				} else if (GraphicUtils.equal(testPoint2, new Point(fromX, fromY))) {
-					GraphicUtils.drawArc(g, angle, center.x, center.y, toX, toY);
+					GraphicUtils.drawArc(_g, angle, center.x, center.y, toX, toY);
 				} else {// Rare case - arc angle greater than PI/2
 					angle = Math.PI - angle;
 					testPoint1 = GraphicUtils.getRotation(angle, center.x, center.y, fromX, fromY);
 					testPoint2 = GraphicUtils.getRotation(angle, center.x, center.y, toX, toY);
 					if (GraphicUtils.equal(testPoint1, new Point(toX,toY))) {
-						GraphicUtils.drawArc(g, angle, center.x, center.y, fromX, fromY);
+						GraphicUtils.drawArc(_g, angle, center.x, center.y, fromX, fromY);
 					} else if (GraphicUtils.equal(testPoint2, new Point(fromX, fromY))) {
-						GraphicUtils.drawArc(g, angle, center.x, center.y, toX, toY);
+						GraphicUtils.drawArc(_g, angle, center.x, center.y, toX, toY);
 					}
 				}
 			}

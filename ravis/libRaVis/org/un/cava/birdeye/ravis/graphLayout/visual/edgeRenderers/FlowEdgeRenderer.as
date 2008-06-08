@@ -89,7 +89,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			var target:Point;
 			var base1:Point;
 			var base2:Point;	
-			var mid:Point;
 			
 			var flow:Number;
 			var tdirectionAngle:Number;
@@ -110,9 +109,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			 * of the node's view */
 			source = fromNode.viewCenter;
 			target = toNode.viewCenter;
-			
-			/* calculate the midpoint */
-			mid = Geometry.midPointOfLine(source,target);
 			
 			/* for the source, we now need to establish actually two points
 			 * which are orthogonal to the direction of the target
@@ -143,29 +139,25 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 
 
 			/* apply the line style */
-			ERGlobals.applyLineStyle(vedge,g);
+			ERGlobals.applyLineStyle(vedge,_g);
 			
 			/* now we draw the first curve with base 1 to target */
-			g.beginFill(uint(vedge.lineStyle.color));
-			g.moveTo(source.x, source.y);
-			g.curveTo(
+			_g.beginFill(uint(vedge.lineStyle.color));
+			_g.moveTo(source.x, source.y);
+			_g.curveTo(
 				base1.x,
 				base1.y,
 				target.x,
 				target.y
 			);
-			g.endFill();
 			
-			/* and the second curve using base 2 as control point */
-			g.beginFill(uint(vedge.lineStyle.color));
-			g.moveTo(source.x, source.y);			
-			g.curveTo(
+			_g.curveTo(
 				base2.x,
 				base2.y,
-				target.x,
-				target.y
+				source.x,
+				source.y
 			);
-			g.endFill();
+			_g.endFill();
 
 			
 			/* if the vgraph currently displays edgeLabels, then
@@ -174,5 +166,70 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 				ERGlobals.setLabelCoordinates(vedge.labelView,labelCoordinates(vedge));
 			}
 		}
+	
+	
+		/**
+		 * This takes one of the curves which are part of the
+		 * curved flow and places the label more or less next to the middle.
+		 * 
+		 * @inheritDoc
+		 * */
+		override public function labelCoordinates(vedge:IVisualEdge):Point {
+
+			var fromNode:IVisualNode;
+			var toNode:IVisualNode;
+			
+			var source:Point;
+			var target:Point;
+			var base:Point;
+			
+			var flow:Number;
+			var tdirectionAngle:Number;
+			var basedirectionAngle:Number;
+			var baseWidth:Number;
+			
+			/* first get the corresponding nodes */
+			fromNode = vedge.edge.node1.vnode;
+			toNode = vedge.edge.node2.vnode;
+			
+			if((vedge.edge.data as XML).attribute("flow").length() > 0) {
+				flow = vedge.edge.data.@flow;
+			} else {
+				throw Error("Edge: "+vedge.edge.id+" does not have flow attribute.");
+			}
+			
+			/* now get some current coordinates and calculate the middle 
+			 * of the node's view */
+			source = fromNode.viewCenter;
+			target = toNode.viewCenter;
+		
+			/* for the source, we now need to establish actually two points
+			 * which are orthogonal to the direction of the target
+			 * and have a distance that matches the flow parameter */
+			
+			/* calculate the angle of the direction of the target */
+			tdirectionAngle = Geometry.polarAngle(target.subtract(source));
+			//trace("target direction:"+Geometry.rad2deg(tdirectionAngle)+" degrees");
+			
+			/* calculate the angle of the direction of the base, which is
+			 * always 90 degrees (PI/2) of tdirection */
+			basedirectionAngle = Geometry.normaliseAngle(tdirectionAngle + (Math.PI / 2));
+			//trace("base direction:"+Geometry.rad2deg(basedirectionAngle)+" degrees");
+			
+			/* now calculate the width of the base in relation to the flow */
+			baseWidth = (flow * (maxBaseWidth / relativeEdgeMagnitude));
+			//trace("flow:"+flow+" base width:"+baseWidth);
+			
+			/* now calculate the first base point, which is half the width in
+			 * positive base direction in the curved version we have to add
+			 * or subtract depending on the direction *
+			 * the second is the same but in negative direction (or negative angle,
+			 * that should not make a difference */
+
+			base = source.add(Point.polar((baseWidth / 2), basedirectionAngle));
+
+			return Geometry.bezierPoint(source,base,target,0.65);
+		}
+
 	}
 }

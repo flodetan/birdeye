@@ -84,7 +84,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			var edgeAngle:Number;
 			
 			/* apply the line style */
-			ERGlobals.applyLineStyle(vedge,g);
+			ERGlobals.applyLineStyle(vedge,_g);
 			
 			/* calculate the base bidpoint which is on
 			 * the same vector defined between the two endpoints

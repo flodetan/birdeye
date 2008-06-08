@@ -38,9 +38,15 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	 * */
 	public class OrthogonalEdgeRenderer extends BaseEdgeRenderer {
 		
-		private var arrowLength:Number;
+		
 		private var _type:String = 'orthogonal';
 		private var _color:uint; // because we need to cross function boundaries
+		
+		/**
+		 * length of the arrowhead
+		 * @default 10
+		 * */
+		public var arrowLength:Number = 10;
 		
 		/**
 		 * Constructor sets the graphics object (required).
@@ -64,9 +70,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			var toNode:IVisualNode = vedge.edge.node2.vnode;
 			
 			var fP:Point = fromNode.viewCenter;
-			
-			var mid:Point = labelCoordinates(vedge);
-			
+				
 			/* calculate the midpoint used as curveTo anchor point */
 			var anchor:Point = new Point(
 				(fP.x + vedge.vgraph.center.x) / 2.0,
@@ -75,14 +79,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			
 			_color = uint(vedge.lineStyle.color);
 			
-			/* this is not interface conform !!!! */
-			arrowLength = 10;
-			
-			/* set the graphic attribute */
-			_g = g;
-			
+
 			/* apply the line style */
-			ERGlobals.applyLineStyle(vedge,g);
+			ERGlobals.applyLineStyle(vedge,_g);
 			
 			if(isFullyLeftOf(fromNode, toNode)) {
 				if(isFullyAbove(fromNode, toNode)) {
@@ -127,6 +126,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		/* here we could actually improve a few things.... .XXXX */
 		
 		private function calculatePoint(fromX:Number, fromY:Number, distance:Number, angle:Number):Object{
+			
+			/* XXX WHAT IS THIS VALUE? PLEASE USE/DEFINE CONSTANTS AND COMMENT */
 			angle = angle * 1.745329E-002;
 			var _loc3:Number = fromX + distance * Math.cos(angle);
 			var _loc2:Number = fromY - distance * Math.sin(angle);
@@ -138,6 +139,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
      		var arrowLength:Number = 10;
      		var dXY:Number = (fromY - toY) / (fromX - toX);
      		var arrowOS:Number;
+     		
+     		/* XXX What is arrowOS ??? */
 	        if (fromX >= toX)
 	        {
 	            arrowOS = 155;
