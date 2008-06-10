@@ -1,5 +1,4 @@
 #summary Relational Analysis Components
-#labels Featured
 
 http://birdeye.googlecode.com/svn/trunk/images/BirdEyeLogoRaVis100.png
 
@@ -17,6 +16,8 @@ All code and development migrated from flexvizgraphlib project.
 Stable: Project is at RC2; 27 May 2008
 
 == Demos ==
+  * Example code how to use the library can be found [http://birdeye.googlecode.com/svn/trunk/ravis/RaVisExamples/ here].
+
   * You can download a precompiled snapshot of the library [http://birdeye.googlecode.com/svn/trunk/ravis/libRaVis/released-binaries/ here].
 
   * Try the RaVis Explorer: [http://birdeye.googlecode.com/svn/trunk/ravis/RaVisExamples/example-binaries/ here] (work in progress)
