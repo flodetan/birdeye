@@ -1317,8 +1317,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			n1 = e.node1;
 			n2 = e.node2;
 			
+			/* if both nodes are visible, the edge should
+			 * be made visible, which may also create a label
+			 */
 			if(n1.vnode.isVisible && n2.vnode.isVisible) {
-				_visibleVEdges[e] = e;
+				setEdgeVisibility(vedge, true);
 			}
 			
 			/* add to tracking hash */
@@ -1338,16 +1341,25 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				return;
 			}
 			
-			/* see if the edge has a view and remove that */
+			/* first turn it invisible, which should
+			 * remove the labelview */
+			setEdgeVisibility(ve, false);
+			
+			
+			/* see if the edge has a view and remove that
+			 * SHOULD BE REDUNDANT NOW
 			if(ve.labelView != null) {
 				removeVEdgeView(ve.labelView);
 			}
+			*/
 			
 			/* remove the reference from the real edge */
 			ve.edge.vedge = null;
 			
-			/* remove the visible edge if present */
-			delete _visibleVEdges[ve.edge];
+			/* remove the visible edge if present *
+			 * should be done now
+			delete _visibleVEdges[ve];
+			*/
 			
 			/* remove from tracking hash */
 			delete _vedges[ve];
