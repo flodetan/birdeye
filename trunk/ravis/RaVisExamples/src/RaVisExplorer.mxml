@@ -266,7 +266,6 @@
 			 * in the event handler for the HTTP Service */
 			private function init():void {
 				initData();
-				// myControlAccPanel.selectPane(VGAccordion.INDEX_VIS_LAYOUT);
 			}
 			
 			/**
@@ -275,9 +274,6 @@
 			private function initData():void {
 				GlobalParams.xmlData = xmldata;
 				
-				// (myControlAccPanel.searchFilterComp as SeachFilterGrid).initDataGrid(xmldata.elements);
-				
-				
 				/* init a graph object with the XML data */
 				vgraph.graph = new Graph("XMLAsDocsGraph",false,xmldata,GlobalParams.xmlNames);
 
@@ -285,10 +281,7 @@
 
 				/* assign start root */
 				vgraph.currentRootVNode = vgraph.graph.nodeByStringId("1").vnode;
-
-				//GlobalParamsLayout.currentLayouterName = "Hierarchical";
-				//GlobalLayoutControls.applyLayouter();
-				
+	
 				if(GlobalParamsLayout.layoutSelectorControl != null) {
 					GlobalParamsLayout.layoutSelectorControl.selectedItem = "ConcentricRadial";
 					GlobalParamsLayout.layoutSelectorControl.changeLayouter();

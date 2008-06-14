@@ -62,6 +62,7 @@ The purpose of this demo is to explain the basics for creating a simple graph wh
 			import org.un.cava.birdeye.ravis.graphLayout.layout.ConcentricRadialLayouter;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;			
+			import org.un.cava.birdeye.ravis.components.renderers.nodes.RotatedRectNodeRenderer;
 			
 			// These are the item renderers
 			import renderers.nodes.mxml.basicNodeRenderer;
@@ -109,8 +110,8 @@ The purpose of this demo is to explain the basics for creating a simple graph wh
 				vgraph.graph = graph;
 
 				/* set the default layouter type */
-				layouter = new ConcentricRadialLayouter(vgraph);
-				//layouter = new CircularLayouter(vgraph);
+				//layouter = new ConcentricRadialLayouter(vgraph);
+				layouter = new CircularLayouter(vgraph);
 				vgraph.layouter = layouter;
 				
 				/* set autofit */
@@ -129,7 +130,7 @@ The purpose of this demo is to explain the basics for creating a simple graph wh
 				startRoot = graph.nodeByStringId("1").vnode;
 						
 				/* set if edge labels should be displayed */
-				vgraph.displayEdgeLabels = true;
+				vgraph.displayEdgeLabels = false;
 
 				/* the following kicks it off .... */
 				vgraph.currentRootVNode = startRoot;
@@ -138,6 +139,8 @@ The purpose of this demo is to explain the basics for creating a simple graph wh
 			}
 		]]>
 	</mx:Script>					
+
+<!-- edgeLabelRenderer="renderers.edgelabels.mxml.basicEdgeLabelRenderer" -->
 
 	<mx:Style source="styles/main.css" />
 	<mx:XML id="xmldata" source="data/graph.xml" />	
@@ -148,8 +151,8 @@ The purpose of this demo is to explain the basics for creating a simple graph wh
 			<ravis:VisualGraph id="vgraph" width="100%" height="100%" 
 				paddingBottom="5" left="0" right="0" top="0" bottom="0"
 				backgroundColor="#FFFFFF" alpha="1"
-				itemRenderer="renderers.nodes.mxml.basicNodeRenderer"
-				edgeLabelRenderer="renderers.edgelabels.mxml.basicEdgeLabelRenderer" 
+				itemRenderer="org.un.cava.birdeye.ravis.components.renderers.nodes.RotatedRectNodeRenderer"
+				edgeLabelRenderer="renderers.edgelabels.mxml.basicEdgeLabelRenderer"
 				visibilityLimitActive="true"
 				>
 			</ravis:VisualGraph>
