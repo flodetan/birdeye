@@ -90,11 +90,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			_g.moveTo(fromNode.viewCenter.x, fromNode.viewCenter.y);			
 			_g.lineTo(toNode.viewCenter.x, toNode.viewCenter.y);
 			_g.endFill();
-			
+				
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */
 			if(vedge.vgraph.displayEdgeLabels) {
 				setLabelCoordinates(vedge.labelView,labelCoordinates(vedge));
+				//trace("BER: drawing edgelabel at:"+labelCoordinates(vedge).toString());
 			}
 		}
 		
