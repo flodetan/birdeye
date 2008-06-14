@@ -28,9 +28,9 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 	
 	import flash.events.Event;
 	
+	import mx.containers.Box;
 	import mx.core.UIComponent;
 	
-	import org.un.cava.birdeye.ravis.components.renderers.RendererIconFactory;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 		
 	/**
@@ -40,11 +40,17 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 	 * */
 	public class RotatedRectNodeRenderer extends EffectBaseNodeRenderer  {
 		
+		
+		private var _rc:UIComponent;
+		
+		public var boxWidth:Number = 20;
+		
 		/**
 		 * Default constructor
 		 * */
 		public function RotatedRectNodeRenderer() {
 			super();
+			this.addEventListener("NodeUpdated",updateRotation);
 		}
 	
 		/**
@@ -52,33 +58,56 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 		 * */
 		override protected function initComponent(e:Event):void {
 			
-			var rc:UIComponent;
-			
 			/* initialize the upper part of the renderer */
 			initTopPart();
 			
 			/* add a primitive rectangle
 			 * as well the XML should be checked before */
+			
+			/*
 			rc = RendererIconFactory.createIcon("primitive::rectangle",
 				this.data.data.@nodeSize,
 				this.data.data.@nodeColor);
-			rc.toolTip = this.data.data.@name; // needs check
+			*/
+			_rc = new Box;
+			
+			_rc.width = this.data.data.@nodeSize;
+			_rc.height = boxWidth; 
+			
+			_rc.setStyle("backgroundColor",this.data.data.@nodeColor);
+			_rc.setStyle("borderStyle","solid");
+			
+			_rc.toolTip = this.data.data.@name; // needs check
 			
 			/* rotate. Note that this will only rotate on init
 			 * i.e. all will be triggered only on creation complete
 			 * this was the same in the original vgExplorer
 			 * maybe it was not intended */
 			if(this.data is IVisualNode) {
-				rc.rotation =  (this.data as IVisualNode).orientAngle;
+				_rc.rotation = (this.data as IVisualNode).orientAngle;
 			}
 			
-			this.addChild(rc);
+			this.addChild(_rc);
 			
 			/* now add the filters to the circle */
-			reffects.addDSFilters(rc);
+			reffects.addDSFilters(_rc);
 			 
 			/* now the link button */
 			initLinkButton();
+		}
+	
+	
+		/**
+		 * Event handler to turn the box if the orientation
+		 * in a node changes *
+		 * */
+		public function updateRotation(e:Event):void {
+			if(_rc != null) {
+				//trace("updating rotation");
+				if(this.data is IVisualNode) {
+					_rc.rotation = (this.data as IVisualNode).orientAngle;
+				}
+			}
 		}
 	}
 }

@@ -35,6 +35,7 @@ package org.un.cava.birdeye.ravis.components.renderers {
 	import mx.controls.Label;
 	import mx.controls.LinkButton;
 	import mx.controls.Spacer;
+	import mx.core.ContainerCreationPolicy;
 	import mx.core.IDataRenderer;
 	import mx.events.FlexEvent;
 	
@@ -72,8 +73,10 @@ package org.un.cava.birdeye.ravis.components.renderers {
 		 * Base Constructor
 		 * */
 		public function BaseRenderer() {
-			super();
+			//super();
+			this.creationPolicy = ContainerCreationPolicy.ALL;
 			this.addEventListener(FlexEvent.CREATION_COMPLETE,initComponent);
+			super();
 		}
 			
 		/**

@@ -212,6 +212,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
         protected var _edgeLabelRendererFactory:IFactory = null;
         
         /**
+         * Flag to force a redraw of all edge even if the layout
+         * has not changed
+         * */
+        protected var _forceUpdateEdges:Boolean = false;
+        
+        /**
          * Specify whether edge labels should be displayed or not
          * */
         protected var _displayEdgeLabels:Boolean = true;
@@ -536,13 +542,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			if(elr != _edgeLabelRendererFactory) {
 				/* set all edges invisible, this should delete all instances
 				 * of view components */
-				setAllInVisible();
+				setAllEdgesInVisible();
 			
 				/* set the new renderer */
 				_edgeLabelRendererFactory = elr;	
 				
 				/* update i.e. recreate the instances */
-				updateVisibility();
+				updateEdgeVisibility();
 			}
 		}
 		
@@ -564,27 +570,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				// no change
 			} else {
 				_displayEdgeLabels = del;
-				updateVisibility();
-				this.invalidateDisplayList(); // maybe this is enough
+				setAllEdgesInVisible();
+				updateEdgeVisibility();
 			}
-				
-				/* removed code which probably made problems 
-				
-				/* from false to true *
-				if(del == true) {
-					/* walk through all visible edges and create and display their labels *
-					for each(e in _visibleVEdges) {
-						createVEdgeView(e.vedge);
-					}
-				/* true to false *
-				} else {
-					/* walk again, but remove labels this time *
-					for each(e in _visibleVEdges) {
-						removeVEdgeView(e.vedge.labelView);
-					}
-				}
-			}
-			*/
 		}
 
 		/**
@@ -1153,9 +1141,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		public function refresh():void {
 			/* this forces the next call of updateDisplayList()
 			 * to redraw all edges */
-			if(_layouter) {
-				_layouter.layoutChanged = true;
-			}
+			_forceUpdateEdges = true;
 			_canvas.invalidateDisplayList();
 		}
 
@@ -1184,7 +1170,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				_layouter.layoutPass();
 			}
 			
-			/* after the layout was passed, the layout has
+			/* after the layout was done, the layout has
 			 * probably changed again, the layouter will have
 			 * itself set to that, but has maybe not
 			 * invalidated the display list, so we make sure it
@@ -1213,9 +1199,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			super.updateDisplayList(unscaledWidth,unscaledHeight);
 			
 			/* now add part to redraw edges */
-			if(_layouter && _layouter.layoutChanged) {
+			if(_forceUpdateEdges || (_layouter && _layouter.layoutChanged)) {
 				redrawEdges();
-				/* reset the flag */
+				/* reset the flags */
+				_forceUpdateEdges = false;
 				_layouter.layoutChanged = false;
 			}
 		}
@@ -1359,21 +1346,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * remove the labelview */
 			setEdgeVisibility(ve, false);
 			
-			
-			/* see if the edge has a view and remove that
-			 * SHOULD BE REDUNDANT NOW
-			if(ve.labelView != null) {
-				removeVEdgeView(ve.labelView);
-			}
-			*/
-			
 			/* remove the reference from the real edge */
 			ve.edge.vedge = null;
-			
-			/* remove the visible edge if present *
-			 * should be done now
-			delete _visibleVEdges[ve];
-			*/
 			
 			/* remove from tracking hash */
 			delete _vedges[ve];
@@ -1431,6 +1405,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			var color:int;
 			var vedge:IVisualEdge;
 			
+			/*
+			var d:Date = new Date();
+			trace("redrawing edges at:"+d.toTimeString());
+			*/
+			
 			/* make sure we have a graph */
 			if(_graph == null) {
 				throw Error("_graph object in VisualGraph is null");
@@ -1452,17 +1431,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				if(!vn1.isVisible || !vn2.isVisible) {
 					throw Error("One of the nodes of the checked edge is not visible, but should be!");
 				}
-				
-				/* now check if we should display edge labels, and if so
-				 * create an edge view to display the label, if it is not
-				 * there already */
-				if(_displayEdgeLabels) {
-					/* should not happen for visible edges !! */
-					if(vedge.labelView == null) {
-						trace("Created missing labelView for edge:"+vedge.id);
-						createVEdgeView(vedge);
-					}
-				}
 
 				/* Change: we do not pass the nodes or the vnodes, but the
 				 * edge. The reason is that the edge can have properties
@@ -1470,7 +1438,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				_edgeRenderer.draw(vedge);
 			}
 			// we are done, so we reset the indicator
-			_layouter.layoutChanged = false;
+			// we already did that in the outer method 
+			//_layouter.layoutChanged = false;
 		}
 
 		/**
@@ -1641,13 +1610,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				(mycomponent as IDataRenderer).data = ve;
 			}
 			
-			/* set initial default x/y values, these should be in the middle of the
-			 * edge, but depending on the edge renderer. Thus we should ask
-			 * the edge renderer, where it wants to place the label. This would
-			 * be a new method for the edge renderer interface */
-			mycomponent.x = _canvas.width / 2.0;
-			mycomponent.y = _canvas.height / 2.0;
-			
 			/* add the component to its parent component
 			 * this can create problems, we have to see where we
 			 * check for all children
@@ -1664,6 +1626,16 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			*/
 			ve.labelView = mycomponent;
 			_viewToVEdgeMap[mycomponent] = ve;
+			
+			/* set initial default x/y values, these should be in the middle of the
+			 * edge, but depending on the edge renderer. Thus we should ask
+			 * the edge renderer, where it wants to place the label. This would
+			 * be a new method for the edge renderer interface */
+			if(_edgeRenderer != null) {
+				ve.setEdgeLabelCoordinates(_edgeRenderer.labelCoordinates(ve));
+			} else {
+				ve.setEdgeLabelCoordinates(new Point(_canvas.width / 2.0, _canvas.height / 2.0));
+			}
 			
 			/* we need to invalidate the display list since
 			 * we created new children */
@@ -2213,18 +2185,20 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				setNodeVisibility(vn, true);
 			}
 			
-			/* we do a second pass to update all
-			 * associated edges.
-			 * we don't do it in one go, because that could
-			 * lead to a lot of edges to be examined and
-			 * changed in status multiple times, because not ALL
-			 * endpoints are already changed, thus we have to complete
-			 * changing all the nodes first
-			 */
-			for each(vn in newVisibleNodes) {
-				updateConnectedEdgesVisibility(vn);
-			}
-			for each(vn in toInvisibleNodes) {
+			/* now update the edges */
+			updateEdgeVisibility();
+		}
+
+		/**
+		 * This methods walks through all nodes and updates
+		 * the edge visibility (only the edge visibility)
+		 * taking into account three factors:
+		 * visibility of adjacent nodes and
+		 * if we want edge labels or not at all
+		 * */
+		protected function updateEdgeVisibility():void {
+			var vn:IVisualNode;
+			for each(vn in _visibleVNodes) {
 				updateConnectedEdgesVisibility(vn);
 			}
 		}
@@ -2303,6 +2277,16 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		}
 	
 		/**
+		 * Reset visibility of all edges to INVISIBLE.
+		 * */
+		protected function setAllEdgesInVisible():void {
+			var ve:IVisualEdge;
+			for each(ve in _visibleVEdges) {
+				setEdgeVisibility(ve, false);
+			}
+		}	
+	
+		/**
 		 * This sets a VNode visible or invisible, updating all related
 		 * data.
 		 * @param vn The VisualNode to be turned invisible or not.
@@ -2361,7 +2345,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* was there actually a change, if not issue a warning */
 			if(ve.isVisible == visible) {
-				trace("Tried to set vedge:"+ve.id+" visibility to:"+visible.toString()+" but it was already.");
+				//trace("Tried to set vedge:"+ve.id+" visibility to:"+visible.toString()+" but it was already.");
 				return;
 			}
 			
