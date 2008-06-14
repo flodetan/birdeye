@@ -24,8 +24,11 @@
  */
 package org.un.cava.birdeye.ravis.graphLayout.visual {
 	
-	import org.un.cava.birdeye.ravis.graphLayout.data.IEdge;
+	import flash.geom.Point;
+	
 	import mx.core.UIComponent;
+	
+	import org.un.cava.birdeye.ravis.graphLayout.data.IEdge;
 
 	/** 
 	 * Interface for a visual edge. This does not do
@@ -49,6 +52,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * @private
 		 * */
 		function set labelView(lv:UIComponent):void;
+	
+		/**
+		 * Applies the provided coordinates to edges label (if present).
+		 * 
+		 * @param p The Point with the target coordinates.
+		 * */
+		function setEdgeLabelCoordinates(p:Point):void;
 		
 		/**
 		 * Set the lineStyle of the edge. The parameter

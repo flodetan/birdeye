@@ -349,8 +349,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 			if(this.data is IEventDispatcher) {
 				(this.data as IEventDispatcher).dispatchEvent(new Event("NodeUpdated"));
 			}
-			
-		
 		}
 		
 

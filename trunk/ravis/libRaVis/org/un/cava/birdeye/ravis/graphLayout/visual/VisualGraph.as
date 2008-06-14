@@ -496,12 +496,14 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * @inheritDoc
 		 * */
 		public function set itemRenderer(ifac:IFactory):void {
-			_itemRendererFactory = ifac;
-			
-			/* if that has changed, we would need to recreate all
-			 * currently visible nodes */
-			setAllInVisible();
-			updateVisibility();
+			if(ifac != _itemRendererFactory) {
+				_itemRendererFactory = ifac;
+				
+				/* if that has changed, we would need to recreate all
+				 * currently visible nodes */
+				setAllInVisible();
+				updateVisibility();
+			}
 		}
 		
 		/**
@@ -529,7 +531,19 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * @inheritDoc
 		 * */
 		public function set edgeLabelRenderer(elr:IFactory):void {
-			_edgeLabelRendererFactory = elr;
+			/* if the factory was changed, then we have to remove all
+			 * instances of vedgeViews to have them updated */
+			if(elr != _edgeLabelRendererFactory) {
+				/* set all edges invisible, this should delete all instances
+				 * of view components */
+				setAllInVisible();
+			
+				/* set the new renderer */
+				_edgeLabelRendererFactory = elr;	
+				
+				/* update i.e. recreate the instances */
+				updateVisibility();
+			}
 		}
 		
 		/**
