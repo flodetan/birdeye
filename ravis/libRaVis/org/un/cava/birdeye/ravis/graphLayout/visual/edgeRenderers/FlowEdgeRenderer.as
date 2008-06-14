@@ -163,7 +163,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */
 			if(vedge.vgraph.displayEdgeLabels) {
-				setLabelCoordinates(vedge.labelView,labelCoordinates(vedge));
+				vedge.setEdgeLabelCoordinates(labelCoordinates(vedge));
 			}
 		}
 	

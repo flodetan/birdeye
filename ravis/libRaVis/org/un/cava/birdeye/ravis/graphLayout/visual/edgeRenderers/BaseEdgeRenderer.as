@@ -94,7 +94,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */
 			if(vedge.vgraph.displayEdgeLabels) {
-				setLabelCoordinates(vedge.labelView,labelCoordinates(vedge));
+				vedge.setEdgeLabelCoordinates(labelCoordinates(vedge));
 				//trace("BER: drawing edgelabel at:"+labelCoordinates(vedge).toString());
 			}
 		}
@@ -132,21 +132,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 				);
 			}
 		}
-		
-		/**
-		 * Applies the provided coordinates to the given UI Component.
-		 * Is basically a helper to allow to use directly a Point object.
-		 * 
-		 * @param uc The UIComponent to set the coordinates in.
-		 * @param p The Point with the target coordinates.
-		 * */
-		public function setLabelCoordinates(uc:UIComponent,p:Point):void {
-			if(uc != null && p != null) {
-				uc.x = p.x;
-				uc.y = p.y;
-			}
-		}
-		
 		
 		/**
 		 * This is a helper function for debugging, it marks

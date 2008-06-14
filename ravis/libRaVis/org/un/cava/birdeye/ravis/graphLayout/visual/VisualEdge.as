@@ -25,6 +25,7 @@
 package org.un.cava.birdeye.ravis.graphLayout.visual {
 	
 	import flash.events.EventDispatcher;
+	import flash.geom.Point;
 	
 	import mx.core.IDataRenderer;
 	import mx.core.UIComponent;
@@ -61,6 +62,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		/* the line style of the edge */
 		private var _lineStyle:Object;
 		
+		/* instead of a left/top corner orientation
+		 * we can implicitly do a centered orientation 
+		 * this will be applied during the commit() method
+		 * and will be reversed during refresh() */
+		private var _centered:Boolean;
 		
 		/**
 		 * The constructor initialiazes the edge and must be preset with almost
@@ -78,6 +84,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			_edge = edge;
 			_id = id;
 			_visible = undefined;
+			_centered = true;
 			_data = data;
 			_labelView = lview;
 			_lineStyle = lStyle;
@@ -120,6 +127,21 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		}
 		
 		/**
+		 * @inheritDoc
+		 * */
+		public function get centered():Boolean {
+			return _centered;
+		}
+		
+		/**
+		 * @private
+		 * */
+		public function set centered(c:Boolean):void {
+			_centered = c;
+		}
+
+		
+		/**
 		 * Access to the indicator if the node is currently
 		 * visible or not. If this is set to false, any
 		 * associated view will be removed in order to 
@@ -154,6 +176,21 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * */
 		public function set labelView(lv:UIComponent):void {
 			_labelView = lv;
+		}
+		
+		/**
+		 * @inheritDoc
+		 * */
+		public function setEdgeLabelCoordinates(p:Point):void {
+			if(_labelView != null && p != null) {
+				if(_centered) {
+					_labelView.x = p.x - (_labelView.width / 2.0);
+					_labelView.y = p.y - (_labelView.height / 2.0);
+				} else {
+					_labelView.x = p.x;
+					_labelView.y = p.y;
+				}
+			}
 		}
 		
 		/**
