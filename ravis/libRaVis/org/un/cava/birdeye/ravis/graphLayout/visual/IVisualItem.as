@@ -65,5 +65,21 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * @private
 		 * */
 		function set isVisible(v:Boolean):void
+	
+		/**
+		 * Property to indicate if the node should be
+		 * centered around it's geometrical center (i.e.
+		 * the center of it's view) or if it's origin would
+		 * be the usual upper left corner. The value will
+		 * be applied by the commit() and refresh() methods.
+		 * @see commit()
+		 * @see refresh()
+		 * */
+		function get centered():Boolean;
+		
+		/**
+		 * @private
+		 * */	
+		function set centered(c:Boolean):void;
 	}
 }
