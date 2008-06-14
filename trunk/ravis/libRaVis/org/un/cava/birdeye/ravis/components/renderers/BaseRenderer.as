@@ -40,6 +40,7 @@ package org.un.cava.birdeye.ravis.components.renderers {
 	import mx.events.FlexEvent;
 	
 	import org.un.cava.birdeye.ravis.globals.GlobalParams;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualItem;
 	
 	/**
 	 * This is the basic renderer class that more
@@ -76,6 +77,7 @@ package org.un.cava.birdeye.ravis.components.renderers {
 			//super();
 			this.creationPolicy = ContainerCreationPolicy.ALL;
 			this.addEventListener(FlexEvent.CREATION_COMPLETE,initComponent);
+			//this.addEventListener(FlexEvent.INITIALIZE,adjustCoordinates);
 			super();
 		}
 			
@@ -152,6 +154,24 @@ package org.un.cava.birdeye.ravis.components.renderers {
 			sp.height = 18;
 			this.addChild(sp);
 		}
+
+		/**
+		 * This method is required to readjust the coordinates
+		 * after initialised if we have a centered renderer
+		 * parent object.
+		 * This should only be called through the initComponent
+		 * event handler.
+		 * */
+		/*
+		protected function adjustCoordinates(e:Event):void {
+			if(this.data is IVisualItem) {
+				if((this.data as IVisualItem).centered) {
+					this.x -= (this.width / 2.0);
+					this.y -= (this.height / 2.0);
+				}
+			}
+		}
+		*/
 
 		/**
 		 * this methods initialises and adds a 

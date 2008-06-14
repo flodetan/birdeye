@@ -75,7 +75,6 @@ package org.un.cava.birdeye.ravis.components.renderers.edgeLabels {
 			 
 			/* now the link button */
 			initLinkButton();
-		
 		}
 		
 		/**
