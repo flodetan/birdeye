@@ -272,13 +272,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		 * @inheritDoc
 		 * */
 		public function get view():UIComponent {
-			/* moved into the visibility thing *
-			if(_view == null) {
-				// changing that to be done during the set visible/invisible phase
-				//_vgraph.createVNodeComponent(this);
-				//trace("creating vnode view on demand for node:"+this.id);
-			}
-			*/
 			return _view;
 		}
 		
@@ -324,6 +317,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		 * */
 		public function set orientAngle(oa:Number):void {
 			_orientAngle = oa;
+			if(this.view is IEventDispatcher) {
+				(this.view as IEventDispatcher).dispatchEvent(new Event("NodeUpdated"));
+			}
 		}
 	
 		/**
@@ -340,14 +336,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 				this.viewY = _y;
 			}
 		
-			/* here would be the logical place to initiate
-			 * the rotation of the nodes the best way to do this
-			 * in order to keep the interface clean is to add
-			 * an event listener in the IconRenderer and just send
-			 * the event here, this means of course that the IconRenderer
-			 * must be also an IEventDispatcher */
-			if(this.data is IEventDispatcher) {
-				(this.data as IEventDispatcher).dispatchEvent(new Event("NodeUpdated"));
+			if(this.view is IEventDispatcher) {
+				(this.view as IEventDispatcher).dispatchEvent(new Event("NodeUpdated"));
 			}
 		}
 		

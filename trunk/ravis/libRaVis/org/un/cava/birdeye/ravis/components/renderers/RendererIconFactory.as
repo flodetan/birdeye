@@ -122,12 +122,14 @@ package org.un.cava.birdeye.ravis.components.renderers {
 			switch(name) {
 		    	case "rectangle":
 					img = new Rectangle();
+					(img as Rectangle).color = color;
 					img.setStyle("color", color);
 					img.width=size;
 					img.height=size;
 					break;
 				case "circle":
 					img = new Circle();
+					(img as Circle).color = color;
 					img.setStyle("color", color);
 					img.width=size;
 					img.height=size;

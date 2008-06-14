@@ -65,9 +65,11 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 			 * as well the XML should be checked before */
 			cc = RendererIconFactory.createIcon("primitive::circle",
 				this.data.data.@nodeSize,
-				this.data.data.@nodeColor);
+				int(this.data.data.@nodeColor));
 			cc.toolTip = this.data.data.@name; // needs check
 			this.addChild(cc);
+			
+			//trace("COLOR of component is: "+int(this.data.data.@nodeColor));
 			
 			/* now add the filters to the circle */
 			reffects.addDSFilters(cc);

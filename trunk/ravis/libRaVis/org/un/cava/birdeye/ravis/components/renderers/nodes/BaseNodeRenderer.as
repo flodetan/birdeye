@@ -95,7 +95,7 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 			if(GlobalParams.vgAccordion != null) {
 				GlobalParams.vgAccordion.selectPane(VGAccordion.INDEX_DATADETAIL);
 			} else {
-				throw Error("GlobalParams.vgAccordion not initialised!");
+				trace("GlobalParams.vgAccordion not initialised!");
 			}
 		}
 		
