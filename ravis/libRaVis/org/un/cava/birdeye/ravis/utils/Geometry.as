@@ -241,8 +241,8 @@ package org.un.cava.birdeye.ravis.utils {
 			
 			if(p != null && q != null) {
 				return new Point(
-					p.x + ((q.x - p.x) / 2.0),
-					p.y + ((q.y - p.y) / 2.0)
+					(p.x + q.x) / 2.0,
+					(p.y + q.y) / 2.0
 					);
 			} else {
 				return null;

@@ -294,8 +294,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		 * */
 		public function get viewCenter():Point {
 			if(_view != null) {
-				return new Point(_view.x + (_view.width / 2.0), 
-								 _view.y + (_view.height / 2.0));
+				if(_centered) {
+					return new Point(_view.x + (_view.width / 2.0), 
+									 _view.y + (_view.height / 2.0));
+				} else {
+					return new Point(_view.x, _view.y);
+				}
 			} else {
 				return null;
 			}
