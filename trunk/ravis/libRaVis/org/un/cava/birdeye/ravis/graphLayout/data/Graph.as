@@ -139,7 +139,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		 * @param xmlsource an XML object that contains node and edge items that define the graph.
 		 * @param xmlnames an optional Array that contains XML tag and attribute names that define the graph. 
 		 * */
-		public function Graph(id:String, directional:Boolean = false, xmlsource:XML = null, xmlnames:Array = null):void {
+		public function Graph(id:String, directional:Boolean = false, xmlsource:XML = null):void {
 			if(id == null)
 				throw Error("id string must not be null")
 			if(id.length == 0)
@@ -162,7 +162,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 			
 			if(xmlsource != null) {
 				//trace("Graph detected XML source:"+xmlsource.name().toString());
-				initFromXML(xmlsource, xmlnames);
+				initFromXML(xmlsource);
 			}			
 		}
 
@@ -176,12 +176,12 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		 * @return the created Graph object (i.e. an object that implements the IGraph interface.
 		 * @throws Error of the xmlsource is null.
 		 **/
-		public static function createGraph(id:String, directional:Boolean, xmlsource:XML, xmlnames:Array = null):IGraph {
+		public static function createGraph(id:String, directional:Boolean, xmlsource:XML):IGraph {
 			if(xmlsource == null) {
 				throw Error("the xmlsource must not be null if creating a new Graph");
 			}
 			
-			return new Graph(id, directional, xmlsource, xmlnames);
+			return new Graph(id, directional, xmlsource);
 		}
 
 		/**
@@ -303,7 +303,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 	    /**
 		 * @inheritDoc
 		 * */
-		public function initFromXML(xml:XML, xmlnames:Array):void {
+		public function initFromXML(xml:XML):void {
 			
 			var nodeName:String = DEFAULTNAME_NODE;
 			var edgeName:String = DEFAULTNAME_EDGE;
@@ -319,13 +319,6 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 			var fromNode:INode;
 			var toNode:INode;
 
-			if(xmlnames != null) {
-				nodeName = xmlnames[0];
-				edgeName = xmlnames[1];
-				fromIDName = xmlnames[2];
-				toIDName = xmlnames[3];
-			}
-			
 			//trace("initFromXML called");
 			
 			for each(xnode in xml.descendants(nodeName)) {
