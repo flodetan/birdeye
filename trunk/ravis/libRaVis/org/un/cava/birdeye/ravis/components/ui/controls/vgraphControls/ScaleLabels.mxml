@@ -44,6 +44,8 @@
 			id="minusScale"
 			icon="{EmbeddedIcons.zoomoutIcon}"
 			cornerRadius="5"
+			width="25"
+			height="25"
 			click="scaleSlider.value=scaleSlider.value-.1; updateScale();"
 			/>		
 		<mx:HSlider
@@ -61,6 +63,8 @@
 			id="plusScale"
 			icon="{EmbeddedIcons.zoominIcon}"
 			cornerRadius="5"
+			width="25"
+			height="25"
 			click="scaleSlider.value=scaleSlider.value+.1; updateScale();"
 			/>	
 	</mx:HBox>

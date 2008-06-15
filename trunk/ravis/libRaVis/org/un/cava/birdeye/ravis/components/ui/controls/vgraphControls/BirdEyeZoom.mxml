@@ -44,6 +44,8 @@
 			id="minusZoom"
 			icon="{EmbeddedIcons.zoomoutIcon}"
 			cornerRadius="5"
+			width="25"
+			height="25"
 			click="bzoom.value=bzoom.value-.10;updateVScale();"
 			/>		
 		<mx:HSlider
@@ -60,6 +62,8 @@
 			id="plusZoom"
 			icon="{EmbeddedIcons.zoominIcon}"
 			cornerRadius="5"
+			width="25"
+			height="25"
 			click="bzoom.value=bzoom.value+.10;updateVScale();"
 			/>	
 	</mx:HBox>
