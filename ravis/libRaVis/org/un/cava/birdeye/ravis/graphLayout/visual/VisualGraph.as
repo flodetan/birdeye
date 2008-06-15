@@ -69,6 +69,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	 * */
 	public class VisualGraph extends Canvas implements IVisualGraph {
 		
+		
+		/**
+		 * This flag for draw() specifies that the linklength
+		 * shall be reset to 100 when calling draw();
+		 * */
+		public static const DF_RESET_LL:uint = 1;
+		
 		/**
 		 * We keep a reference to ourselves (this) in this attribute.
 		 * Not really necessary, but it makes the code more clear if
@@ -1148,16 +1155,21 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		/**
 		 * @inheritDoc
 		 * */
-		public function draw():void {	
+		public function draw(flags:uint = 0):void {	
 			
 			/* first refresh does layoutChanges to true and
 			 * invalidate display list */
 			refresh();
 			
+			if(flags == VisualGraph.DF_RESET_LL) {
+				if(_layouter != null && _layouter.linkLength == 0) {
+					_layouter.linkLength = 100;
+				}
+			}
+			
 			/* we need to do some sanity checks, e.g. if the canvas window
 			 * size was reduced to 0 or linklength 0 or similar things,
 			 * the layouter might crash */
-			
 			
 			/* then force a layout pass in the layouter */
 			if(_layouter && 

@@ -42,25 +42,7 @@ package org.un.cava.birdeye.ravis.globals {
 	public class GlobalControls {
 		
 		
-		/**
-		 * Redraw the graph and reset linklength if 0.
-		 * This is typically used to handle a resize event
-		 * */
- 		public static function redrawGraphLL():void {
- 			if(GlobalParams.vgraph is IVisualGraph) {
-	 			if(GlobalParams.vgraphInitOk) {
-	 				/* it can happen that the linklength is reduced to 0
-	 				 * in this case we reset it */
-	 				if(GlobalParams.layouter.linkLength == 0) {
-	 					GlobalParams.layouter.linkLength = 100; // current default
-	 				}
-	 				
-	 				GlobalParams.vgraph.draw();	
-	 			}
-	 		} else {
-	 			trace("Cannot redraw invalid GlobalParams.vgraph object");
-	 		}
- 		}
+		
  	
  		/**
  		 * this function takes the node with the specified
