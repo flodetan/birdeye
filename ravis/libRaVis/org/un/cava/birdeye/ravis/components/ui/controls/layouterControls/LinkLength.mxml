@@ -46,6 +46,8 @@
 			id="minusLinkLength"
 			icon="{EmbeddedIcons.zoomoutIcon}"
 			cornerRadius="5"
+			width="25"
+			height="25"
 			click="lslider.value=lslider.value-25;updateLinkLength();"
 			/>		
 		<mx:HSlider
@@ -62,6 +64,8 @@
 			id="plusLinkLength"
 			icon="{EmbeddedIcons.zoominIcon}"
 			cornerRadius="5"
+			width="25"
+			height="25"
 			click="lslider.value=lslider.value+25;updateLinkLength();"
 			/>	
 	</mx:HBox>
