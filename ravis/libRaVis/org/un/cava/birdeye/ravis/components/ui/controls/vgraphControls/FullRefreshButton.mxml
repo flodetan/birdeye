@@ -34,13 +34,18 @@
 	toolTip="Do a full refresh of data and drawing..."
 	fontSize="9"
 	icon="{EmbeddedIcons.refreshIcon}"
-	click="GlobalControls.fullVGraphRefresh()"
+	click="vgraph.fullVGraphRefresh(directional,xmlData)"
 	>
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
-			import org.un.cava.birdeye.ravis.globals.GlobalControls;
+			
+			/* we need this to properly initialize the new graph */
+			public var vgraph:VisualGraph;
+			public var directional:Boolean = false;
+			public var xmlData:XML;		
 		]]>
 	</mx:Script>
 </mx:Button>

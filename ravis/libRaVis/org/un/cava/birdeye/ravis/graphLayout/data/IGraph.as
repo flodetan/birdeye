@@ -130,19 +130,11 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 	     * id will come from the Node's id attribute (make sure this is unique). The item's data will
 	     * be the Node, and will be of type XML. The &lt;Edge&gt; elements must come *after* the corresponding
 	     * &lt;Node&gt; elements have appeared.
-	     * The xmlnames array must have 4 elements:
-		 * <ul>
-		 * <li>the element name that defines nodes</li>
-		 * <li>the element name that defines edges</li>
-		 * <li>the edge attribute name that defines the 'from' node</li>
-		 * <li>the edge attribute name that defines the 'to' node</li>
-		 * </ul>
 	     * 
 	     * @param xml an XML document containing Node and Edge elements.
-	     * @param strings the XML element and attribute names to use when parsing an XML dataProvider.
 	     * @return a graph that corresponds to the Node and Edge elements in the input.
 	     */
-		function initFromXML(xml:XML, xmlnames:Array):void;
+		function initFromXML(xml:XML):void;
 		
 		/**
 		 * Creates a graph node in the graph, optionally takes a string

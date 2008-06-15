@@ -40,12 +40,19 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	import mx.events.EffectEvent;
 	import mx.utils.ObjectUtil;
 	
+	import org.un.cava.birdeye.ravis.graphLayout.data.Graph;
 	import org.un.cava.birdeye.ravis.graphLayout.data.IEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.data.IGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
 	import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
 	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
+
+	/* temporary until totally eliminated */
+	import org.un.cava.birdeye.ravis.globals.GlobalLayoutControls;
+	import org.un.cava.birdeye.ravis.globals.GlobalParams;
+	import org.un.cava.birdeye.ravis.globals.GlobalParamsLayout;
+
 
 	/**
 	 *  Dispatched when there is any change to the nodes and/or links of this graph.
@@ -455,7 +462,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * */
 		public function set graph(g:IGraph):void {
 
-			
 			if(_graph != null) {
 				trace("WARNING: _graph in VisualGraph was not null when new graph was assigned."+
 					" Some cleanup done, but this may leak memory");
@@ -463,10 +469,15 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				clearHistory();
 				purgeVGraph();
 				_graph.purgeGraph();
-				_layouter.resetAll();
 				_nodeIDsWithinDistanceLimit = null;
 				_prevNodeIDsWithinDistanceLimit = null;
 				_noNodesWithinDistance = 0;
+			
+				/* this may have been removed already before */
+				if(_layouter) {
+					_layouter.resetAll();
+				}
+			
 			}
 			
 			/* assign defaults */
@@ -1198,6 +1209,86 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			dispatchEvent(new VGraphEvent(VGraphEvent.VGRAPH_CHANGED));
 		}
 
+		/**
+ 		 * Refresh the VGraph fully. I.e. recreate and
+ 		 * reassign all data objects, etc.
+ 		 * This is a heavy operation */
+		public function fullVGraphRefresh(directional:Boolean,xmlData:XML):void {
+			
+			var graph:IGraph;	
+			var oldroot:IVisualNode;
+			var oldsid:String;
+			var newroot:INode;
+			
+			/* remove and create a new layouter */			
+			if(_layouter != null) {
+				_layouter.resetAll();
+				_layouter = null;
+			}
+			
+			/* init a graph object with the XML data */
+			graph = new Graph("myXMLbasedGraphID",directional,xmlData);
+						
+			/* remember the old root and id */
+			oldroot = _currentRootVNode;
+			oldsid = oldroot.node.stringid;
+			
+			/* set the graph in the VGraph object, this automatically
+			 * initializes the VGraph items */
+			this.graph = graph;
+			
+			/* XXX this has to be replaced by an event */
+			GlobalLayoutControls.applyLayouter();
+			
+			/* XXX this too */
+			GlobalParamsLayout.commonLayoutControls.refreshValues();
+			
+			/* setting a new graph invalidated our old root, we need to reset it */
+			/* we try to find a node, that has the same string-id as the old root node */
+			newroot = _graph.nodeByStringId(oldsid);
+			if(newroot != null) {
+				this.currentRootVNode = newroot.vnode;
+			} else {
+				throw Error("Cannot set a default root, bailing out");
+			}
+			
+			/* trigger a redraw
+			 * XXXX think if we should do that here */
+			this.draw();
+		}		
+
+		/**
+ 		 * this function takes the node with the specified
+ 		 * string id and selects it as a root
+		 * node, automatically centering the layout around it
+		 * */
+		public function centerNodeByStringId(nodeID:String):IVisualNode {
+			
+			var newroot:INode;
+			
+			if(_graph == null) {
+				trace("VGraph has no Graph object, probably not correctly initialised, yet");
+				return null;
+			}
+			
+			newroot = _graph.nodeByStringId(nodeID);
+			
+			/* if we have a node, set its vnode as the new root */
+			if(newroot) {
+				/* is it really a new node */
+				if(newroot.vnode != _currentRootVNode) {
+					/* set it */
+					this.currentRootVNode = newroot.vnode;
+					return newroot.vnode;
+				} else {
+					return _currentRootVNode;
+				}
+			}
+			trace("Node with id:"+nodeID+" not found!");
+			return null;
+		}
+
+
 
 		/**
 		 * This calls the base updateDisplayList() method of the
@@ -1211,11 +1302,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			super.updateDisplayList(unscaledWidth,unscaledHeight);
 			
 			/* now add part to redraw edges */
-			if(_forceUpdateEdges || (_layouter && _layouter.layoutChanged)) {
-				redrawEdges();
-				/* reset the flags */
-				_forceUpdateEdges = false;
-				_layouter.layoutChanged = false;
+			if(_layouter) {
+				if(_forceUpdateEdges || _layouter.layoutChanged) {
+					redrawEdges();
+					/* reset the flags */
+					_forceUpdateEdges = false;
+					_layouter.layoutChanged = false;
+				}
 			}
 		}
 
@@ -1424,7 +1517,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* make sure we have a graph */
 			if(_graph == null) {
-				throw Error("_graph object in VisualGraph is null");
+				trace("_graph object in VisualGraph is null");
+				return;
 			}
 	
 			/* clear the drawing surface and remove previous
