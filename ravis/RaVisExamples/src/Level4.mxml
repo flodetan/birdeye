@@ -29,7 +29,7 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:ravis="org.un.cava.birdeye.ravis.graphLayout.visual.*"
 	xmlns:controls="org.un.cava.birdeye.ravis.components.ui.controls.vgraphControls.*"
-	creationComplete="init();" width="100%" height="100%" >
+	creationComplete="initData();" width="100%" height="100%" >
 
 <!--
 DEMO LEVEL 2:
@@ -85,24 +85,14 @@ LEVEL 4
 			private var itemCount:int = 0;
 			// important to ensure we are done with the main initialisation
 			private var initDone:Boolean = false;
-
-			/* Init function, initiates the HTTP
-			 * request. All further initalisation is done
-			 * in the event handler for the HTTP Service */
-
-			private function init():void {
-				
-				initData(['Node','Edge','fromID','toID']);
-								
-			}
 			
 			/*
 			 * event handler for HTTPService, does all the remaining required
 			 * initialisation */
 			
-			private function initData(xN:Array):void {
+			private function initData():void {
 				/* init a graph object with the XML data */
-				graph = new org.un.cava.birdeye.ravis.graphLayout.data.Graph("XMLAsDocsGraph",false,xmldata,xN);
+				graph = new org.un.cava.birdeye.ravis.graphLayout.data.Graph("XMLAsDocsGraph",false,xmldata);
 				
 				/* set the graph in the VGraph object, this automatically
 				 * initializes the VGraph items; 
