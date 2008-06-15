@@ -196,7 +196,11 @@
 											backgroundAlpha=".2" >
 											<vc:DegreesOfSeparation id="myDegreeOS" />
 											<vc:ScaleControls id="mySCs" />
-											<vc:FullRefreshButton id="myFRB" />
+											<vc:FullRefreshButton
+												id="myFRB"
+												vgraph="{vgraph}"
+												directional="false"
+												xmlData="{xmldata}" />
 										</mx:VBox>
 									</flexlib:WindowShade>					
 									
@@ -255,7 +259,6 @@
 			import org.un.cava.birdeye.ravis.globals.GlobalParamsLayout;
 			import org.un.cava.birdeye.ravis.globals.GlobalParamsVGraph;
 			import org.un.cava.birdeye.ravis.globals.GlobalLayoutControls;
-			import org.un.cava.birdeye.ravis.globals.GlobalControls;
 			import org.un.cava.birdeye.ravis.components.ui.controls.vgraphControls.NodeRendererSelector;
 			import org.un.cava.birdeye.ravis.components.ui.controls.vgraphControls.EdgeRendererSelector;
 			import org.un.cava.birdeye.ravis.components.ui.controls.vgraphControls.DegreesOfSeparation;
@@ -275,7 +278,7 @@
 				GlobalParams.xmlData = xmldata;
 				
 				/* init a graph object with the XML data */
-				vgraph.graph = new Graph("XMLAsDocsGraph",false,xmldata,GlobalParams.xmlNames);
+				vgraph.graph = new Graph("XMLAsDocsGraph",false,xmldata);
 
 				GlobalParams.vgraph = vgraph;
 
