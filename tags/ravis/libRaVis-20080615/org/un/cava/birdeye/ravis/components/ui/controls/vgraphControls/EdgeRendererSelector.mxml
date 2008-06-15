@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ *
+ * The MIT License
+ *
+ * Copyright (c) 2008
+ * United Nations Office at Geneva
+ * Center for Advanced Visual Analytics
+ * http://cava.unog.ch
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+-->
+<mx:ComboBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	height="20"
+	width="100%"
+	color="#CCCCCC"
+	prompt="Select edge style."
+	toolTip="Select the style of line drawn between nodes."
+	creationComplete="initData()"
+	change="changeEdgeRenderer()" >
+	
+	<mx:ArrayCollection id="ervalues">
+		<mx:String>Default</mx:String>
+		<mx:String>DirectedArrows</mx:String>
+		<mx:String>DirectedBalloons</mx:String>
+		<mx:String>Orthogonal</mx:String>
+		<mx:String>Flow</mx:String>
+		<mx:String>Bezier</mx:String>
+		<mx:String>Circular</mx:String>
+		<mx:String>Hyperbolic</mx:String>
+	</mx:ArrayCollection>
+	
+	<mx:Script>	
+		<![CDATA[
+			import org.un.cava.birdeye.ravis.graphLayout.layout.Hyperbolic2DLayouter;
+			import mx.events.ListEvent;
+			import mx.utils.ObjectUtil;
+			import org.un.cava.birdeye.ravis.globals.GlobalParams;
+			import org.un.cava.birdeye.ravis.globals.GlobalParamsVGraph;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.IEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedArrowEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedBalloonEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.FlowCurveEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.FlowEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.OrthogonalEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.CircularEdgeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.HyperbolicEdgeRenderer;
+			
+			/**
+			 * When enabling or disabling this component, we also
+			 * perform some specific tasks.
+			 * Attention do completely disable interaction
+			 * there is also the mouseEnabled property.
+			 * 
+			 * @inheritDoc
+			 * */
+			override public function set enabled(e:Boolean):void {
+				if(e == true) {
+					this.setStyle("color",0x000000);
+					this.alpha=1;
+				} else {
+					this.setStyle("color",0xCCCCCC);
+					this.alpha=0.3;
+				}
+				/* call superclass (ComboBox) */
+				super.enabled = e;
+			}
+
+			/**
+			 * Set the selected EdgeLabelRenderer.
+			 * */
+			public function changeEdgeRenderer():void {
+				
+				var er:String;
+				var vgraph:IVisualGraph = GlobalParams.vgraph;
+				var g:Graphics = vgraph.edgeDrawGraphics;
+				
+				/* get the currently selected EdgeRenderer */
+				er = this.selectedItem as String;
+				
+				if(vgraph != null) {
+					switch(er) {
+						case "Default":
+							vgraph.edgeRenderer = new BaseEdgeRenderer(g);
+							break;
+						case "DirectedArrows":
+							vgraph.edgeRenderer = new DirectedArrowEdgeRenderer(g);
+							break;
+						case "DirectedBalloons":
+							vgraph.edgeRenderer = new DirectedBalloonEdgeRenderer(g);
+							break;
+						case "Orthogonal":
+							vgraph.edgeRenderer = new OrthogonalEdgeRenderer(g);
+							break;
+						case "Flow":
+							vgraph.edgeRenderer = new FlowEdgeRenderer(g);
+							break;
+						case "Bezier":
+							vgraph.edgeRenderer = new FlowCurveEdgeRenderer(g);
+							break;
+						case "Circular":
+							vgraph.edgeRenderer = new CircularEdgeRenderer(g);
+							break;
+						case "Hyperbolic":
+							if(vgraph.layouter is Hyperbolic2DLayouter) {
+								if((vgraph.layouter as Hyperbolic2DLayouter).projector != null) {
+									vgraph.edgeRenderer =
+										new HyperbolicEdgeRenderer(g,(vgraph.layouter as Hyperbolic2DLayouter).projector);
+								} else {
+									trace("Cannot access projector of layouter, cannot use this edgerenderer!");
+									vgraph.edgeRenderer = new BaseEdgeRenderer(g);
+									this.selectedIndex = 0;
+								}
+							} else {
+								trace("Layouter MUST be hyperbolic, otherwise cannot use this edgerenderer!");
+								vgraph.edgeRenderer = new BaseEdgeRenderer(g);
+								this.selectedIndex = 0;
+							}
+							break;
+					default:
+							trace("Illegal EdgeLabelRenderer selected:"+er);
+							vgraph.edgeRenderer = new BaseEdgeRenderer(g);
+							break;
+					}
+					vgraph.refresh();
+				} else {
+					trace("EdgeRenderer NOT CHANGED, no valid vgraph in GlobalParams, not redrawing!");
+				}
+			}
+			
+			/**
+			 * Refresh the selector with the current EdgeLabelRenderer.
+			 * */
+			public function refreshSelector():void {
+				
+
+				var vgraph:IVisualGraph = GlobalParams.vgraph;
+				
+				if(vgraph != null) {
+					switch(ObjectUtil.getClassInfo(vgraph.edgeRenderer).name) {
+						case "BaseEdgeRenderer":
+							this.selectedIndex = 0;
+							break;
+						case "DirectedArrowEdgeRenderer":
+							this.selectedIndex = 1;
+							break;
+						case "DirectedBalloonEdgeRenderer":
+							this.selectedIndex = 2;
+							break;
+						case "OrthogonalEdgeRenderer":
+							this.selectedIndex = 3;
+							break;
+						case "FlowEdgeRenderer":
+							this.selectedIndex = 4;
+							break;
+						case "FlowCurveEdgeRenderer":
+							this.selectedIndex = 5;
+							break;
+						case "CircularEdgeRenderer":
+							this.selectedIndex = 6;
+							break;
+						case "HyperbolicEdgeRenderer":
+							this.selectedIndex = 7;
+							break;
+						default:
+							trace("Illegal EdgeRenderer class received:"+
+								ObjectUtil.getClassInfo(vgraph.edgeRenderer).name);
+							break;
+					}
+				} else {
+					trace("EdgeRenderer NOT refreshed, no valid vgraph in GlobalParams!");
+				}
+			}
+			
+			/**
+			 * initialise the selection data.
+			 * It is a bit unclear, why this seems to be necessary.
+			 * */
+			private function initData():void {
+				this.dataProvider = ervalues;
+				/* register ourselves */
+				GlobalParamsVGraph.edgeRendererSelectorControl = this;
+			}
+		]]>
+	</mx:Script>
+</mx:ComboBox>

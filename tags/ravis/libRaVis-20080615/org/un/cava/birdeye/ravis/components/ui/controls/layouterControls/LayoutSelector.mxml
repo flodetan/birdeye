@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ *
+ * The MIT License
+ *
+ * Copyright (c) 2008
+ * United Nations Office at Geneva
+ * Center for Advanced Visual Analytics
+ * http://cava.unog.ch
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+-->
+<mx:ComboBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	height="20"
+	width="95%"
+	color="#CCCCCC"
+	prompt="Select layout algorithm."
+	toolTip="Some layouters may not be fully stable."
+	creationComplete="initData()"
+	initialize="registerWithGlobal()"
+	change="changeLayouter()" >
+	
+	<mx:ArrayCollection id="layouts">
+		<mx:String>---Radial---</mx:String>
+		<mx:String>ConcentricRadial</mx:String>
+		<mx:String>ParentCenteredRadial</mx:String>
+		<mx:String>SingleCycleCircle</mx:String>
+		<mx:String>Hyperbolic</mx:String>
+		<mx:String>---Tree---</mx:String>
+		<mx:String>Hierarchical</mx:String>
+		<mx:String>---Physics---</mx:String>
+		<mx:String>ForceDirected</mx:String>
+		<mx:String>ISOM</mx:String>
+		<mx:String>---Coordinates---</mx:String>
+		<mx:String>DirectPlacement</mx:String>
+		<mx:String>---Experimental---</mx:String>
+		<mx:String>Phyllotactic</mx:String>
+	</mx:ArrayCollection>
+
+	<mx:Script>	
+		<![CDATA[
+			import org.un.cava.birdeye.ravis.globals.GlobalLayoutControls;
+			import mx.utils.ObjectUtil;
+			import org.un.cava.birdeye.ravis.globals.GlobalParams;
+			import org.un.cava.birdeye.ravis.globals.GlobalParamsLayout;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
+			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
+			import org.un.cava.birdeye.ravis.graphLayout.layout.CircularLayouter;
+			import org.un.cava.birdeye.ravis.graphLayout.layout.ConcentricRadialLayouter;
+			import org.un.cava.birdeye.ravis.graphLayout.layout.DirectPlacementLayouter;
+			import org.un.cava.birdeye.ravis.graphLayout.layout.ForceDirectedLayouter;
+			import org.un.cava.birdeye.ravis.graphLayout.layout.HierarchicalLayouter;
+			import org.un.cava.birdeye.ravis.graphLayout.layout.Hyperbolic2DLayouter;
+			import org.un.cava.birdeye.ravis.graphLayout.layout.ISOMLayouter;
+			import org.un.cava.birdeye.ravis.graphLayout.layout.ParentCenteredRadialLayouter;
+			import org.un.cava.birdeye.ravis.graphLayout.layout.PhylloTreeLayouter;
+			
+			/**
+			 * We need a custom constructor to register this
+			 * instance with the GlobalParams class
+			 * */
+			private function registerWithGlobal():void {
+				/* register ourselves */
+				GlobalParamsLayout.layoutSelectorControl = this;
+			}
+			
+			/**
+			 * When enabling or disabling this component, we also
+			 * perform some specific tasks.
+			 * Attention do completely disable interaction
+			 * there is also the mouseEnabled property.
+			 * 
+			 * @inheritDoc
+			 * */
+			override public function set enabled(e:Boolean):void {
+				if(e == true) {
+					this.setStyle("color",0x000000);
+					this.alpha=1;
+				} else {
+					this.setStyle("color",0xCCCCCC);
+					this.alpha=0.3;
+				}
+				/* call superclass (ComboBox) */
+				super.enabled = e;
+			}
+	
+			/**
+			 * Set the selected Layouter.
+			 * */
+			public function changeLayouter():void {	
+				GlobalParamsLayout.currentLayouterName = this.selectedItem as String;
+				GlobalLayoutControls.applyLayouter();
+			}
+
+			/**
+			 * initialise the selection data.
+			 * It is a bit unclear, why this seems to be necessary.
+			 * */
+			private function initData():void {
+				this.dataProvider = layouts;
+			}
+		]]>
+	</mx:Script>
+</mx:ComboBox>

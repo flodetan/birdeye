@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ *
+ * The MIT License
+ *
+ * Copyright (c) 2008
+ * United Nations Office at Geneva
+ * Center for Advanced Visual Analytics
+ * http://cava.unog.ch
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+-->
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	initialize="registerWithGlobal()"
+	>
+	
+	<mx:Label
+		id="phidiallabel"
+		toolTip="This control changes the geometric angle of ParentCentered and PhylloTree Layouts"
+		text="Layout Angle"
+		fontSize="9"
+		textAlign="center" />
+		
+	<mx:HSlider
+		tickInterval="30"
+		width="95%"
+		id="phidial"
+		value="160"
+		minimum="-360"
+		maximum="360"
+		liveDragging="true"
+		change="updatePhi()" />
+
+
+	<mx:Script>
+		<![CDATA[
+			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
+			import org.un.cava.birdeye.ravis.globals.GlobalParams;
+			import org.un.cava.birdeye.ravis.globals.GlobalParamsLayout;
+			import org.un.cava.birdeye.ravis.graphLayout.layout.IAngularLayouter;
+			
+			/* to be set if creation was complete */
+			private var _complete:Boolean = false;
+
+			/**
+			 * We need a custom constructor to register this
+			 * instance with the GlobalParams class
+			 * */
+			private function registerWithGlobal():void {
+				/* register ourselves */
+				GlobalParamsLayout.phiDialControl = this;
+			}
+		
+			/**
+			 * When enabling or disabling this component, we also
+			 * perform some specific tasks.
+			 * Attention do completely disable interaction
+			 * there is also the mouseEnabled property.
+			 * 
+			 * @inheritDoc
+			 * */
+			override public function set enabled(e:Boolean):void {
+				if(_complete) {
+					if(e == true) {
+						phidiallabel.setStyle("color",0x000000);
+						phidial.alpha=1;
+						refreshPhi();
+					} else {
+						phidiallabel.setStyle("color",0xCCCCCC);
+						phidial.alpha=0.3;
+					}
+				}
+				/* call superclass (VBox) */
+				super.enabled = e;
+			}
+						
+			/**
+			 * update the layouter with the selected value
+			 * The 'phi' angular value is support by selected
+			 * layouters, currently ParentCentered and PhylloTree.
+			 * */
+			public function updatePhi():void {
+				
+				var alayouter:IAngularLayouter;
+				var vgraph:IVisualGraph = GlobalParams.vgraph;
+				
+				/* check if we have a layouter at all */
+				if(GlobalParams.layouter == null) {
+					trace("Cannot update Phi on null layouter");
+					return;
+				}
+				
+				/* check if it is a supported layouter (currently angulars only) */
+				if(!GlobalParams.layouter is IAngularLayouter) {
+					trace("Phi is only available in IAngularLayouter");
+					return;
+				}
+				
+				alayouter = GlobalParams.layouter as IAngularLayouter;
+				alayouter.phi = phidial.value;
+				alayouter.layoutChanged = true;
+
+				/* consider removing this from all these controls */				
+				if(vgraph != null) {
+					vgraph.draw();
+				} else {
+					trace("Phi changed, but no valid vgraph in GlobalParams, not redrawing!");
+				}
+			}
+			
+			/**
+			 * This refreshes the current slider setting to
+			 * the value from the current layouter.
+			 * */
+			public function refreshPhi():void {
+				var alayouter:IAngularLayouter;
+				
+				/* check if we have a layouter at all */
+				if(GlobalParams.layouter == null) {
+					trace("Cannot update LinkLength on null layouter");
+					return;
+				}
+				/* check if it is a supported layouter (currently angulars only) */
+				if(!GlobalParams.layouter is IAngularLayouter) {
+					trace("Phi is only available in IAngularLayouter");
+					return;
+				}
+				
+				/* refresh the value */
+				alayouter = GlobalParams.layouter as IAngularLayouter;
+				phidial.value = alayouter.phi;
+			}
+			
+			
+			/**
+			 * register that we are complete
+			 * */
+			private function registerComplete():void {
+				_complete = true;
+			}			
+		]]>
+	</mx:Script>
+
+</mx:VBox>

@@ -1,0 +1,963 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print">
+<meta content="PoincareModel,org.un.cava.birdeye.ravis.utils.geom.PoincareModel,dist,distP,distanceGradient,distanceGradientV,exp,getAngle,getDefaultVector,getDistance,getIdentity,getOrigin,getProjection,getRotation,getTranslationIPR,length,length2,product" name="keywords">
+<title>org.un.cava.birdeye.ravis.utils.geom.PoincareModel</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'PoincareModel - API Documentation';
+				var baseRef = '../../../../../../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/utils/geom/PoincareModel.html&amp;org/un/cava/birdeye/ravis/utils/geom/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;PoincareModel</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class PoincareModel"); titleBar_setSubNav(false,true,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">org.un.cava.birdeye.ravis.utils.geom</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class PoincareModel</td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">PoincareModel <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../../../../images/inherit-arrow.gif"> <a href="BaseModel.html">BaseModel</a></td>
+</tr>
+</table>
+<p></p>
+  This class implements the Poincare model, which is used for 
+  Hyperbolic (Non-Euclidean) layout.
+  
+   <hr>
+  The implementation is a rewrite of Jens Kanschik's Hypergraph
+  implementation in Java. However, apart from the general idea 
+  and some variable names, this code improves on hypergraph 
+  and also implements additional functionality.
+  
+  Copyright (C) 2003  Jens Kanschik,
+  mail : jensKanschik<p></p>
+<br>
+<hr>
+</div>
+<a name="propertySummary"></a><a name="protectedPropertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Protected Properties</div>
+<div class="showHideLinks">
+<div class="hideInheritedProtectedProperty" id="hideInheritedProtectedProperty">
+<a onclick="javascript:setInheritedVisible(false,'ProtectedProperty');" href="#protectedPropertySummary" class="showHideLink"><img src="../../../../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Protected Properties</a>
+</div>
+<div class="showInheritedProtectedProperty" id="showInheritedProtectedProperty">
+<a onclick="javascript:setInheritedVisible(true,'ProtectedProperty');" href="#protectedPropertySummary" class="showHideLink"><img src="../../../../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Protected Properties</a>
+</div>
+</div>
+<table id="summaryTableProtectedProperty" class="summaryTable hideInheritedProtectedProperty" cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseModel.html#t_isom1">t_isom1</a> : <a href="../geom/IIsometry.html">IIsometry</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="BaseModel.html">BaseModel</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseModel.html#t_isom2">t_isom2</a> : <a href="../geom/IIsometry.html">IIsometry</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="BaseModel.html">BaseModel</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseModel.html#t_z1">t_z1</a> : <a href="../geom/IPoint.html">IPoint</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="BaseModel.html">BaseModel</a></td>
+</tr>
+</table>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<div class="showHideLinks">
+<div class="hideInheritedMethod" id="hideInheritedMethod">
+<a onclick="javascript:setInheritedVisible(false,'Method');" href="#methodSummary" class="showHideLink"><img src="../../../../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Public Methods</a>
+</div>
+<div class="showInheritedMethod" id="showInheritedMethod">
+<a onclick="javascript:setInheritedVisible(true,'Method');" href="#methodSummary" class="showHideLink"><img src="../../../../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Public Methods</a>
+</div>
+</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#PoincareModel()">PoincareModel</a>()</div>
+<div class="summaryTableDescription">
+   Constructor for the Poincare Model
+   </div>
+</td><td class="summaryTableOwnerCol">PoincareModel</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#dist()">dist</a>(z:<a href="IPoint.html">IPoint</a>):Number</div>
+<div class="summaryTableDescription">   
+   Calculates the distance from <code>z</code> to the origin.</div>
+</td><td class="summaryTableOwnerCol">PoincareModel</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseModel.html#dist2()">dist2</a>(z:<a href="../geom/IPoint.html">IPoint</a>):Number</div>
+<div class="summaryTableDescription">  
+   Computes the squared distance from <code>z</code> to the origin.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseModel.html">BaseModel</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#distanceGradient()">distanceGradient</a>(base:<a href="IPoint.html">IPoint</a>, z:<a href="IPoint.html">IPoint</a>):<a href="../geom/IVector.html">IVector</a>
+</div>
+<div class="summaryTableDescription">  
+   Computes the gradient at <code>basePoint</code> of the distance functions to
+   <code>z</code>, i.e.</div>
+</td><td class="summaryTableOwnerCol">PoincareModel</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#distanceGradientV()">distanceGradientV</a>(base:<a href="IPoint.html">IPoint</a>, z:<a href="IPoint.html">IPoint</a>, gradient:<a href="IVector.html">IVector</a>):void</div>
+<div class="summaryTableDescription">  
+   Computes the gradient at <code>basePoint</code> of the distance functions to
+   <code>z</code>, i.e.</div>
+</td><td class="summaryTableOwnerCol">PoincareModel</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#distP()">distP</a>(mp1:<a href="IPoint.html">IPoint</a>, mp2:<a href="IPoint.html">IPoint</a>):Number</div>
+<div class="summaryTableDescription">   
+   Computes the distance between two points.</div>
+</td><td class="summaryTableOwnerCol">PoincareModel</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseModel.html#distP2()">distP2</a>(mp1:<a href="../geom/IPoint.html">IPoint</a>, mp2:<a href="../geom/IPoint.html">IPoint</a>):Number</div>
+<div class="summaryTableDescription">  
+   Computes the squared distance between two points.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseModel.html">BaseModel</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#exp()">exp</a>(vector:<a href="IVector.html">IVector</a>, length:Number):<a href="../geom/IPoint.html">IPoint</a>
+</div>
+<div class="summaryTableDescription">  
+   Calculates the exponent of the vector maintaining the same direction as the vector
+   
+   </div>
+</td><td class="summaryTableOwnerCol">PoincareModel</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getAngle()">getAngle</a>(p:<a href="IPoint.html">IPoint</a>, z1:<a href="IPoint.html">IPoint</a>, z2:<a href="IPoint.html">IPoint</a>):Number</div>
+<div class="summaryTableDescription">   
+   Returns the angle between the line segments
+   starting at <code>p</code> and ending in <code>z1</code>
+   and <code>z2</code> respectively.<br>
+   If the model is orientated, the angle may have a sign, but this is not required.</div>
+</td><td class="summaryTableOwnerCol">PoincareModel</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getDefaultVector()">getDefaultVector</a>():<a href="../geom/IVector.html">IVector</a>
+</div>
+<div class="summaryTableDescription">   
+   Returns a "default" vector at the origin.<br>
+   In most models, there is no special vector,
+   but it is very convenient to have such a default vector to start with.<br>
+   This vector is always located at the origin, is always normalized (i.e.</div>
+</td><td class="summaryTableOwnerCol">PoincareModel</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getDistance()">getDistance</a>(p:<a href="IPoint.html">IPoint</a>, z1:<a href="IPoint.html">IPoint</a>, z2:<a href="IPoint.html">IPoint</a>, cutoff1:Boolean, cutoff2:Boolean):Number</div>
+<div class="summaryTableDescription">   
+   Returns the distance of <code>p</code> to the line, ray or line segment
+   from <code>z1</code> to <code>z2</code>.<br>
+   
+   The parameters <code>cutoff1</code> and <code>cutoff2</code>
+   define whether the whole line should be considered or only parts.</div>
+</td><td class="summaryTableOwnerCol">PoincareModel</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getIdentity()">getIdentity</a>():<a href="../geom/IIsometry.html">IIsometry</a>
+</div>
+<div class="summaryTableDescription">   
+   Returns the identity transformation.</div>
+</td><td class="summaryTableOwnerCol">PoincareModel</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getOrigin()">getOrigin</a>():<a href="../geom/IPoint.html">IPoint</a>
+</div>
+<div class="summaryTableDescription">           FOLLOWING METHODS MUST BE IMPLEMENTED BY SUBCLASSES            </div>
+</td><td class="summaryTableOwnerCol">PoincareModel</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getProjection()">getProjection</a>(p:<a href="IPoint.html">IPoint</a>, z1:<a href="IPoint.html">IPoint</a>, z2:<a href="IPoint.html">IPoint</a>, cutoff1:Boolean, cutoff2:Boolean):<a href="../geom/IPoint.html">IPoint</a>
+</div>
+<div class="summaryTableDescription">   
+   Returns the projection of point <code>p</code> on the line defined by
+   the points <code>z1</code> and <code>z2</code>.</div>
+</td><td class="summaryTableOwnerCol">PoincareModel</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getRotation()">getRotation</a>(alpha:Number):<a href="../geom/IIsometry.html">IIsometry</a>
+</div>
+<div class="summaryTableDescription">   
+   Returns a rotation of <code>alpha</code> at the origin.</div>
+</td><td class="summaryTableOwnerCol">PoincareModel</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseModel.html#getRotationP()">getRotationP</a>(mp:<a href="../geom/IPoint.html">IPoint</a>, alpha:Number):<a href="../geom/IIsometry.html">IIsometry</a>
+</div>
+<div class="summaryTableDescription">  
+   Returns a rotation of <code>alpha</code> at the point <code>p</code>.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseModel.html">BaseModel</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseModel.html#getTranslationIP()">getTranslationIP</a>(isom:<a href="../geom/IIsometry.html">IIsometry</a>, mp1:<a href="../geom/IPoint.html">IPoint</a>):void</div>
+<div class="summaryTableDescription"> 
+   Calculates the translation (isometry) to a given point <code>p</code>.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseModel.html">BaseModel</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseModel.html#getTranslationIPP()">getTranslationIPP</a>(isom:<a href="../geom/IIsometry.html">IIsometry</a>, mp1:<a href="../geom/IPoint.html">IPoint</a>, mp2:<a href="../geom/IPoint.html">IPoint</a>):void</div>
+<div class="summaryTableDescription"> 
+   Calculates the translation (isometry) from a given point <code>p2</code>
+   to a destination point <code>p1</code>.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseModel.html">BaseModel</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseModel.html#getTranslationIPPR()">getTranslationIPPR</a>(isom:<a href="../geom/IIsometry.html">IIsometry</a>, mp1:<a href="../geom/IPoint.html">IPoint</a>, mp2:<a href="../geom/IPoint.html">IPoint</a>, t:Number):void</div>
+<div class="summaryTableDescription"> 
+   Calculate the translation of a given point to a destination point 
+   in a given number of steps
+    
+    </div>
+</td><td class="summaryTableOwnerCol"><a href="BaseModel.html">BaseModel</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getTranslationIPR()">getTranslationIPR</a>(isom:<a href="IIsometry.html">IIsometry</a>, mp:<a href="IPoint.html">IPoint</a>, t:Number):void</div>
+<div class="summaryTableDescription">  
+   Calculates the r-th root (isometry) of the translation to
+   a given point.</div>
+</td><td class="summaryTableOwnerCol">PoincareModel</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseModel.html#getTranslationIVR()">getTranslationIVR</a>(isom:<a href="../geom/IIsometry.html">IIsometry</a>, vector:<a href="../geom/IVector.html">IVector</a>, t:Number):void</div>
+<div class="summaryTableDescription"> 
+   Calculates the translation for the base of the given vector in a specific direction
+   
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="BaseModel.html">BaseModel</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseModel.html#getTranslationP()">getTranslationP</a>(mp1:<a href="../geom/IPoint.html">IPoint</a>):<a href="../geom/IIsometry.html">IIsometry</a>
+</div>
+<div class="summaryTableDescription">  
+   Returns the translation to a given point <code>z</code>.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseModel.html">BaseModel</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseModel.html#getTranslationPP()">getTranslationPP</a>(mp1:<a href="../geom/IPoint.html">IPoint</a>, mp2:<a href="../geom/IPoint.html">IPoint</a>):<a href="../geom/IIsometry.html">IIsometry</a>
+</div>
+<div class="summaryTableDescription">  
+   Translate a point to another point
+     </div>
+</td><td class="summaryTableOwnerCol"><a href="BaseModel.html">BaseModel</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseModel.html#getTranslationPPR()">getTranslationPPR</a>(mp1:<a href="../geom/IPoint.html">IPoint</a>, mp2:<a href="../geom/IPoint.html">IPoint</a>, t:Number):<a href="../geom/IIsometry.html">IIsometry</a>
+</div>
+<div class="summaryTableDescription">  
+   Translate a given point to a destination point in a given number of steps
+   
+     </div>
+</td><td class="summaryTableOwnerCol"><a href="BaseModel.html">BaseModel</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseModel.html#getTranslationPR()">getTranslationPR</a>(mp:<a href="../geom/IPoint.html">IPoint</a>, t:Number):<a href="../geom/IIsometry.html">IIsometry</a>
+</div>
+<div class="summaryTableDescription">  
+   Returns the r-th root (isometry) of the translation to
+   a given point.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseModel.html">BaseModel</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseModel.html#getTranslationVR()">getTranslationVR</a>(vector:<a href="../geom/IVector.html">IVector</a>, t:Number):<a href="../geom/IIsometry.html">IIsometry</a>
+</div>
+<div class="summaryTableDescription">  
+   Returns the translation for the base of the given vector in a specific direction
+   
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="BaseModel.html">BaseModel</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#length()">length</a>(v:<a href="IVector.html">IVector</a>):Number</div>
+<div class="summaryTableDescription">   
+   Returns the length of the vector.</div>
+</td><td class="summaryTableOwnerCol">PoincareModel</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#length2()">length2</a>(v:<a href="IVector.html">IVector</a>):Number</div>
+<div class="summaryTableDescription">   
+   Returns the squared length of the vector.</div>
+</td><td class="summaryTableOwnerCol">PoincareModel</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#product()">product</a>(v1:<a href="IVector.html">IVector</a>, v2:<a href="IVector.html">IVector</a>):Number</div>
+<div class="summaryTableDescription">   
+   Returns the scalar product of the two vectors.<br>
+   They have to have the same base point, otherwise, a computation is not possible.</div>
+</td><td class="summaryTableOwnerCol">PoincareModel</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="constructorDetail"></a>
+<div class="detailSectionHeader">Constructor detail</div>
+<a name="PoincareModel()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">PoincareModel</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">constructor</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function PoincareModel()</code><p>
+   Constructor for the Poincare Model
+   </p></div>
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="dist()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">dist</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function dist(z:<a href="IPoint.html">IPoint</a>):Number</code><p>   
+   Calculates the distance from <code>z</code> to the origin.
+   
+     </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">z</span>:<a href="IPoint.html">IPoint</a></code> &mdash; A point in the model.
+     </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The distance from <code>z</code> to the origin.
+     </td>
+</tr>
+</table>
+</div>
+<a name="distanceGradient()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">distanceGradient</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function distanceGradient(base:<a href="IPoint.html">IPoint</a>, z:<a href="IPoint.html">IPoint</a>):<a href="../geom/IVector.html">IVector</a></code><p>  
+   Computes the gradient at <code>basePoint</code> of the distance functions to
+   <code>z</code>, i.e.
+   <pre>
+         grad           d(z)
+             |basepoint
+   </pre>
+   or "grad_{|basepoint}d(\cdot,z)" in tex.
+      </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">base</span>:<a href="IPoint.html">IPoint</a></code> &mdash; The base of the gradient
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">z</span>:<a href="IPoint.html">IPoint</a></code> &mdash; The end point of the gradient
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../geom/IVector.html">IVector</a></code> &mdash; 
+                        the resulting gradient vector
+   
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="distanceGradientV()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">distanceGradientV</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function distanceGradientV(base:<a href="IPoint.html">IPoint</a>, z:<a href="IPoint.html">IPoint</a>, gradient:<a href="IVector.html">IVector</a>):void</code><p>  
+   Computes the gradient at <code>basePoint</code> of the distance functions to
+   <code>z</code>, i.e.
+   <pre>
+         grad           d(z)
+             |basepoint
+   </pre>
+   or "grad_{|basepoint}d(\cdot,z)" in tex.
+      </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">base</span>:<a href="IPoint.html">IPoint</a></code> &mdash; The base of the gradient
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">z</span>:<a href="IPoint.html">IPoint</a></code> &mdash; The end point of the gradient
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">gradient</span>:<a href="IVector.html">IVector</a></code> &mdash; the resulting gradient vector
+   </td>
+</tr>
+</table>
+</div>
+<a name="distP()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">distP</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function distP(mp1:<a href="IPoint.html">IPoint</a>, mp2:<a href="IPoint.html">IPoint</a>):Number</code><p>   
+   Computes the distance between two points.
+   
+     </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">mp1</span>:<a href="IPoint.html">IPoint</a></code> &mdash; A point in the model.
+     </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">mp2</span>:<a href="IPoint.html">IPoint</a></code> &mdash; A point in the model.
+     </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The distance of the two points.
+     </td>
+</tr>
+</table>
+</div>
+<a name="exp()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">exp</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function exp(vector:<a href="IVector.html">IVector</a>, length:Number):<a href="../geom/IPoint.html">IPoint</a></code><p>  
+   Calculates the exponent of the vector maintaining the same direction as the vector
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">vector</span>:<a href="IVector.html">IVector</a></code> &mdash; the vector to use
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">length</span>:Number</code> &mdash; the new length
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../geom/IPoint.html">IPoint</a></code> &mdash; 
+                        new vector length as a complex number
+   
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="getAngle()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getAngle</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function getAngle(p:<a href="IPoint.html">IPoint</a>, z1:<a href="IPoint.html">IPoint</a>, z2:<a href="IPoint.html">IPoint</a>):Number</code><p>   
+   Returns the angle between the line segments
+   starting at <code>p</code> and ending in <code>z1</code>
+   and <code>z2</code> respectively.<br>
+   If the model is orientated, the angle may have a sign, but this is not required.
+      </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">p</span>:<a href="IPoint.html">IPoint</a></code> &mdash;        The commong starting point of the two segments.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">z1</span>:<a href="IPoint.html">IPoint</a></code> &mdash;       The end point of the first line segment.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">z2</span>:<a href="IPoint.html">IPoint</a></code> &mdash;       The end point of the first line segment.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash;         The angle of the hinge defined by the three parameters.
+   </td>
+</tr>
+</table>
+</div>
+<a name="getDefaultVector()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getDefaultVector</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function getDefaultVector():<a href="../geom/IVector.html">IVector</a></code><p>   
+   Returns a "default" vector at the origin.<br>
+   In most models, there is no special vector,
+   but it is very convenient to have such a default vector to start with.<br>
+   This vector is always located at the origin, is always normalized (i.e. has length 1)
+   and it always has to be the same.<br>
+      </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../geom/IVector.html">IVector</a></code> &mdash; 
+                        A normalized vector at the origin.
+   
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="getDistance()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getDistance</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function getDistance(p:<a href="IPoint.html">IPoint</a>, z1:<a href="IPoint.html">IPoint</a>, z2:<a href="IPoint.html">IPoint</a>, cutoff1:Boolean, cutoff2:Boolean):Number</code><p>   
+   Returns the distance of <code>p</code> to the line, ray or line segment
+   from <code>z1</code> to <code>z2</code>.<br>
+   
+   The parameters <code>cutoff1</code> and <code>cutoff2</code>
+   define whether the whole line should be considered or only parts.
+   <ul>
+   <li><code>getDistance(p, z1, z2, true, true)</code>
+   returns the distance to the line segment.</li>
+   <li><code>getDistance(p, z1, z2, false, true)</code>
+   returns the distance to the ray starting in <code>z1</code>.</li>
+   <li><code>getDistance(p, z1, z2, false, false)</code>
+   returns the distance to the whole (infinite) line.</li>
+   </ul>
+   If the geometry of the model
+   allows to give the distance a sign using a well defined orientation,
+   (e.g. for most two dimensional models) it should do so, but it is not required.
+      </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">p</span>:<a href="IPoint.html">IPoint</a></code> &mdash;        The point from which the distance is computed.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">z1</span>:<a href="IPoint.html">IPoint</a></code> &mdash;       The starting point of the line segment.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">z2</span>:<a href="IPoint.html">IPoint</a></code> &mdash;       The end point of the line segment.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">cutoff1</span>:Boolean</code> &mdash;  If true, the line is cut off at <code>z1</code>.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">cutoff2</span>:Boolean</code> &mdash;  If true, the line is cut off at <code>z2</code>.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash;         The distance from <code>p</code> to the line,
+                   ray or linesegment defined by the other parameters.
+   </td>
+</tr>
+</table>
+</div>
+<a name="getIdentity()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getIdentity</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function getIdentity():<a href="../geom/IIsometry.html">IIsometry</a></code><p>   
+   Returns the identity transformation.
+   
+     </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../geom/IIsometry.html">IIsometry</a></code> &mdash; 
+                        The identity transformation.
+     
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="getOrigin()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getOrigin</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function getOrigin():<a href="../geom/IPoint.html">IPoint</a></code><p>           FOLLOWING METHODS MUST BE IMPLEMENTED BY SUBCLASSES            </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../geom/IPoint.html">IPoint</a></code></td>
+</tr>
+</table>
+</div>
+<a name="getProjection()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getProjection</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function getProjection(p:<a href="IPoint.html">IPoint</a>, z1:<a href="IPoint.html">IPoint</a>, z2:<a href="IPoint.html">IPoint</a>, cutoff1:Boolean, cutoff2:Boolean):<a href="../geom/IPoint.html">IPoint</a></code><p>   
+   Returns the projection of point <code>p</code> on the line defined by
+   the points <code>z1</code> and <code>z2</code>.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">p</span>:<a href="IPoint.html">IPoint</a></code> &mdash; The point to project.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">z1</span>:<a href="IPoint.html">IPoint</a></code> &mdash; A point on the line on which to project.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">z2</span>:<a href="IPoint.html">IPoint</a></code> &mdash; A point on the line on which to project.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">cutoff1</span>:Boolean</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">cutoff2</span>:Boolean</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../geom/IPoint.html">IPoint</a></code> &mdash; 
+                        The projection.
+   
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="getRotation()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getRotation</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function getRotation(alpha:Number):<a href="../geom/IIsometry.html">IIsometry</a></code><p>   
+   Returns a rotation of <code>alpha</code> at the origin.
+     Only well defined in 2D, oriented models.<br>
+   
+     </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">alpha</span>:Number</code> &mdash; The angle of the rotation.
+     </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../geom/IIsometry.html">IIsometry</a></code> &mdash; 
+                        The rotation at the origin with angle <code>alpha</code>.
+     
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="getTranslationIPR()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getTranslationIPR</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function getTranslationIPR(isom:<a href="IIsometry.html">IIsometry</a>, mp:<a href="IPoint.html">IPoint</a>, t:Number):void</code><p>  
+   Calculates the r-th root (isometry) of the translation to
+   a given point.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">isom</span>:<a href="IIsometry.html">IIsometry</a></code> &mdash; the resulting isometry
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">mp</span>:<a href="IPoint.html">IPoint</a></code> &mdash; the given point
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">t</span>:Number</code> &mdash; the root.
+   </td>
+</tr>
+</table>
+</div>
+<a name="length()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">length</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function length(v:<a href="IVector.html">IVector</a>):Number</code><p>   
+   Returns the length of the vector.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">v</span>:<a href="IVector.html">IVector</a></code> &mdash; A vector in the tangent space of the model.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The length of the vector.
+   </td>
+</tr>
+</table>
+</div>
+<a name="length2()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">length2</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function length2(v:<a href="IVector.html">IVector</a>):Number</code><p>   
+   Returns the squared length of the vector.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">v</span>:<a href="IVector.html">IVector</a></code> &mdash; A vector in the tangent space of the model.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The squared length of the vector.
+   </td>
+</tr>
+</table>
+</div>
+<a name="product()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">product</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function product(v1:<a href="IVector.html">IVector</a>, v2:<a href="IVector.html">IVector</a>):Number</code><p>   
+   Returns the scalar product of the two vectors.<br>
+   They have to have the same base point, otherwise, a computation is not possible.
+   <code>NaN</code> is returned in this situation.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">v1</span>:<a href="IVector.html">IVector</a></code> &mdash; A vector in the tangentspace of the model.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">v2</span>:<a href="IVector.html">IVector</a></code> &mdash; A vector in the tangentspace of the model.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The scalar product of both vectors.
+   </td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->
