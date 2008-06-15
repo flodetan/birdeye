@@ -49,12 +49,12 @@
   <Node id="42" name="F.5" desc="This is a description" nodeColor="0x4682b4" nodeSize="8" nodeClass="leaf" nodeIcon="44" x="70" y="90" />
   <Node id="43" name="F.6" desc="This is a description" nodeColor="0x4682b4" nodeSize="10" nodeClass="leaf" nodeIcon="45" x="70" y="95" />
   
-  <Edge fromID="1" toID="2" edgeLabel="No Change" flow="50" edgeClass="sun" edgeIcon="NoChange" />
-  <Edge fromID="1" toID="3" edgeLabel="Bad" flow="400" edgeClass="sun" edgeIcon="Bad" />
-  <Edge fromID="1" toID="4" edgeLabel="Good" flow="80" edgeClass="sun" edgeIcon="Good" />
-  <Edge fromID="1" toID="5" edgeLabel="Good" flow="100" edgeClass="sun" edgeIcon="Good" />
-  <Edge fromID="1" toID="6" edgeLabel="No Change" flow="120" edgeClass="sun" edgeIcon="NoChange" />
-  <Edge fromID="1" toID="7" edgeLabel="Bad" flow="150" edgeClass="sun" edgeIcon="Bad" />
+  <Edge fromID="1" toID="2" edgeLabel="No Change" flow="50" color="0x556b2f" edgeClass="sun" edgeIcon="NoChange" />
+  <Edge fromID="1" toID="3" edgeLabel="Bad" flow="400" color="0xcd5c5c" edgeClass="sun" edgeIcon="Bad" />
+  <Edge fromID="1" toID="4" edgeLabel="Good" flow="80" color="0xb22222" edgeClass="sun" edgeIcon="Good" />
+  <Edge fromID="1" toID="5" edgeLabel="Good" flow="100" color="0x607b8b" edgeClass="sun" edgeIcon="Good" />
+  <Edge fromID="1" toID="6" edgeLabel="No Change" flow="120" color="0x333333" edgeClass="sun" edgeIcon="NoChange" />
+  <Edge fromID="1" toID="7" edgeLabel="Bad" flow="150" color="0x6b8e23" edgeClass="sun" edgeIcon="Bad" />
   
   <Edge fromID="2" toID="8" edgeLabel="Good" flow="100" edgeClass="rain" edgeIcon="Good" />
   <Edge fromID="2" toID="9" edgeLabel="Bad" flow="400" edgeClass="rain" edgeIcon="Bad" />
