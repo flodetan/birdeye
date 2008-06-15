@@ -54,30 +54,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		function set graph(g:IGraph):void;
 		
 		/**
-		 * Access to a parameter Object to preset various
-		 * settings for the drawing of Edges.
-		 * The Object is a hash with the following properties:
-		 * "alpha"
-		 * "thickness"
-		 * "color"
-		 * "distcolor"
-		 * which are to be used by an Edge Renderer
-		 * @see org.un.cava.birdeye.ravis.graphLayout.layout.IEdgeRenderer
-		 * */
-		//function get globalEdgeSettings():Object;
-		
-		/**
-		 * @private
-		 * */
-		//function set globalEdgeSettings(o:Object):void;
-		
-		/**
-		 * Set the line color in the global Edge settings
-		 * object of the Visual Graph. This is for convenience.
-		 * */
-		//function set lineColor(color:int):void;
-		
-		/**
 		 * provide access to the graphics object of
 		 * the drawing surface for the edge drawing, needed
 		 * by edge renderers.
@@ -305,31 +281,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		function unlinkNodes(v1:IVisualNode, v2:IVisualNode):void;
 	
 		/**
-		 * @internal
-		 * Create a "view" object (UIComponent) for the given node and
-		 * return it. These methods are only exported to be used by
-		 * the VisualNode. Alas, AS does not provide the "friend" directive.
-		 * Not sure how to get around this problem right now.
-		 * @param vn The node to replace/add a view object.
-		 * @return The created view object.
-		 * */
-		/* no longer needed as public */
-		//[internal] function createVNodeComponent(vn:IVisualNode):UIComponent;
-		
-		/**
-		 * @internal
-		 * Remove a "view" object (UIComponent) for the given node and specify whether
-		 * this should honor any specified add/remove effects.
-		 * These methods are only exported to be used by
-		 * the VisualNode. Alas, AS does not provide the "friend" directive.
-		 * Not sure how to get around this problem right now.
-		 * @param component The UIComponent to be removed.
-		 * @param honorEffect To specify whether the effect should be applied or not.
-		 * */
-		/* no longer needed as public */
-		//[internal] function removeComponent(component:UIComponent, honorEffect:Boolean = true):void;
-
-		/**
 		 * Calling this results in a redrawing of all edges during the next
 		 * update cycle (and only the edges).
 		 * */
@@ -339,7 +290,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * Calling this forces a full calculation and redraw of the layout
 		 * including all edges.
 		 * */
-		function draw():void;
+		function draw(flags:uint = 0):void;
 
 		/**
 		 * This forces a redraw of all edges */
