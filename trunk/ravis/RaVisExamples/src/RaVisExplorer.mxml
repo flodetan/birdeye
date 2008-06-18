@@ -118,11 +118,11 @@
 											backgroundColor="#CCCCCC"
 											backgroundAlpha=".2" >
 					
-											<lc:LayoutSelector id="myLayoutSelector"  />
-											<lc:HierLayoutControls id="myHierLC" />
-											<lc:PhiDial id="myPhiDial" />
-											<lc:ToggleDamping id="myDamping" />
-											<lc:CommonLayoutControls id="myCommonLC" />
+											<lc:LayoutSelector id="myLayoutSelector" vgraph="{vgraph}" />
+											<lc:HierLayoutControls id="myHierLC" vgraph="{vgraph}" />
+											<lc:PhiDial id="myPhiDial" vgraph="{vgraph}" />
+											<lc:ToggleDamping id="myDamping" vgraph="{vgraph}" />
+											<lc:CommonLayoutControls id="myCommonLC" vgraph="{vgraph}" />
 											<dp:CenteredNodeLabel id="myCenteredNodeLabel" />
 											<dp:NoVisNodesLabel id="myNoVisNodeLabel" />
 									
@@ -140,7 +140,7 @@
 						  				paddingBottom="5"
 						  				>
 				
-										<vc:NodeRendererSelector id="myNodeRendererSelector" />
+										<vc:NodeRendererSelector id="myNodeRendererSelector" vgraph="{vgraph}" />
 				
 									</flexlib:WindowShade>
 									
@@ -155,7 +155,7 @@
 							  			paddingBottom="5"
 							  			>
 									
-										<vc:EdgeRendererSelector id="myEdgeRendererSelector" />
+										<vc:EdgeRendererSelector id="myEdgeRendererSelector" vgraph="{vgraph}" />
 									
 									</flexlib:WindowShade>
 									
@@ -169,7 +169,7 @@
 							  			horizontalAlign="center"
 							  			paddingBottom="5"
 							  			>
-										<vc:EdgeLabelControls id="myELCs" />
+										<vc:EdgeLabelControls id="myELCs" vgraph="{vgraph}" />
 									</flexlib:WindowShade>
 									
 									<flexlib:WindowShade
@@ -194,8 +194,8 @@
 											borderStyle="solid"
 											backgroundColor="#CCCCCC"
 											backgroundAlpha=".2" >
-											<vc:DegreesOfSeparation id="myDegreeOS" />
-											<vc:ScaleControls id="mySCs" />
+											<vc:DegreesOfSeparation id="myDegreeOS" vgraph="{vgraph}" />
+											<vc:ScaleControls id="mySCs" vgraph="{vgraph}" />
 											<vc:FullRefreshButton
 												id="myFRB"
 												vgraph="{vgraph}"
@@ -256,9 +256,6 @@
 			import org.un.cava.birdeye.ravis.graphLayout.data.Graph;
 			import org.un.cava.birdeye.ravis.globals.GlobalParams;
 			import org.un.cava.birdeye.ravis.globals.GlobalParamsData;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsLayout;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsVGraph;
-			import org.un.cava.birdeye.ravis.globals.GlobalLayoutControls;
 			import org.un.cava.birdeye.ravis.components.ui.controls.vgraphControls.NodeRendererSelector;
 			import org.un.cava.birdeye.ravis.components.ui.controls.vgraphControls.EdgeRendererSelector;
 			import org.un.cava.birdeye.ravis.components.ui.controls.vgraphControls.DegreesOfSeparation;
@@ -275,7 +272,6 @@
 			 * event handler for HTTPService, does all the remaining required
 			 * initialisation */
 			private function initData():void {
-				GlobalParams.xmlData = xmldata;
 				
 				/* init a graph object with the XML data */
 				vgraph.graph = new Graph("XMLAsDocsGraph",false,xmldata);
@@ -285,37 +281,20 @@
 				/* assign start root */
 				vgraph.currentRootVNode = vgraph.graph.nodeByStringId("1").vnode;
 	
-				if(GlobalParamsLayout.layoutSelectorControl != null) {
-					GlobalParamsLayout.layoutSelectorControl.selectedItem = "ConcentricRadial";
-					GlobalParamsLayout.layoutSelectorControl.changeLayouter();
-				}
+				/* provide the control components with some initial settings */
+				myLayoutSelector.selectedItem = "ConcentricRadial";
+				myLayoutSelector.changeLayouter();
+	
+				myNodeRendererSelector.selectedItem = "Icons";
+				myNodeRendererSelector.changeNodeRenderer();
 				
-				if(GlobalParamsLayout.commonLayoutControls != null) {
-					GlobalParamsLayout.commonLayoutControls.applyValues();
-				}
-				
-				/* apply the values of the control objects */
-				if(GlobalParamsVGraph.nodeRendererSelectorControl != null) {
-					GlobalParamsVGraph.nodeRendererSelectorControl.selectedItem = "Icons";
-					GlobalParamsVGraph.nodeRendererSelectorControl.changeNodeRenderer();
-				}
+				myEdgeRendererSelector.selectedItem = "Default";
+				myEdgeRendererSelector.changeEdgeRenderer();
 			
-				if(GlobalParamsVGraph.edgeRendererSelectorControl != null) {
-					GlobalParamsVGraph.edgeRendererSelectorControl.selectedItem = "Default";
-					GlobalParamsVGraph.edgeRendererSelectorControl.changeEdgeRenderer();
-				}
+				myELCs.elselector.selectedItem = "Default";
+				myELCs.elselector.changeEdgeLabelRenderer();
 				
-				if(GlobalParamsVGraph.edgeLabelSelectorControl != null) {
-					GlobalParamsVGraph.edgeLabelSelectorControl.selectedItem = "Default";
-					GlobalParamsVGraph.edgeLabelSelectorControl.changeEdgeLabelRenderer();
-				}
-			
-				if(GlobalParamsVGraph.degreeOfSeparationControl != null) {
-					GlobalParamsVGraph.degreeOfSeparationControl.updateMaxVisDist();
-				}
-				
-				/* ready to go */
-				GlobalParams.vgraphInitOk = true;
+				myDegreeOS.updateMaxVisDist();
 				
 				/* the following kicks it off .... */
 				vgraph.draw();
