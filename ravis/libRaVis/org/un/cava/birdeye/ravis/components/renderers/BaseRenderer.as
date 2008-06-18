@@ -77,7 +77,7 @@ package org.un.cava.birdeye.ravis.components.renderers {
 			//super();
 			this.creationPolicy = ContainerCreationPolicy.ALL;
 			this.addEventListener(FlexEvent.CREATION_COMPLETE,initComponent);
-			//this.addEventListener(FlexEvent.INITIALIZE,adjustCoordinates);
+			//this.addEventListener(FlexEvent.INIT_COMPLETE,adjustCoordinates);
 			super();
 		}
 			

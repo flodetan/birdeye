@@ -29,7 +29,7 @@
 -->
 <mx:VBox 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	creationComplete="registerComplete()"
+	initialize="registerListeners()"
 	>
 	
 	<mx:Label
@@ -70,45 +70,35 @@
 
 	<mx:Script>
 		<![CDATA[
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsVGraph;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
+			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
 			
-			/* to be set if creation was complete */
-			private var _complete:Boolean = false;
+			public var vgraph:VisualGraph;
 			
 			/* update the scale of the VGraph, thus creating a BirdEye zoom effect */		
 			public function updateVScale():void {
-				
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
-				
-				if(vgraph != null) {
-					vgraph.scale = bzoom.value;
-				} else {
-					trace("BirdEyeZoom NOT changed, no valid vgraph in GlobalParams, not redrawing!");
+				if(vgraph == null) {
+					trace("BirdEyeZoom NOT changed, no valid vgraph!");
+					return;
 				}
+				vgraph.scale = bzoom.value;
 			}
 			
 			/* refresh the slider from the scaleX value */
-			public function refreshVScale():void {
-				
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
-				
-				if(vgraph != null) {
-					bzoom.value = vgraph.scale;
-				} else {
-					trace("BirdEyeZoom slider NOT refreshed, no valid vgraph in GlobalParams, not redrawing!");
+			public function refreshVScale(e:VGraphEvent = null):void {
+				if(vgraph == null) {
+					trace("BirdEyeZoom NOT refreshed, no valid vgraph!");
+					return;
 				}
+				bzoom.value = vgraph.scale;
 			}
 			
 			/**
-			 * register that we are complete
+			 * register listeners
 			 * */
-			private function registerComplete():void {
-				_complete = true;
-				/* register ourselves */
-				GlobalParamsVGraph.birdEyeZoomControl = this;
+			private function registerListeners():void {
+				this.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshVScale);
 			}
 		]]>
 	</mx:Script>

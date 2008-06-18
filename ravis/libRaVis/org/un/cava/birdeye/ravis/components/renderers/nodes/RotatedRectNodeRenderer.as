@@ -32,6 +32,7 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 	import mx.core.UIComponent;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 		
 	/**
 	 * This is a simple renderer, similar to the filtered circle
@@ -50,7 +51,7 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 		 * */
 		public function RotatedRectNodeRenderer() {
 			super();
-			this.addEventListener("NodeUpdated",updateRotation);
+			this.addEventListener(VGraphEvent.VNODE_UPDATED,updateRotation);
 		}
 	
 		/**
@@ -95,7 +96,6 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 			/* now the link button */
 			initLinkButton();
 		}
-	
 	
 		/**
 		 * Event handler to turn the box if the orientation

@@ -32,26 +32,31 @@
 	selected="true"
 	label="Damping"
 	toolTip="Enable/Disable damping"
-	initialize="registerWithGlobal()"
 	click="toggleDamping()" >
 	
 	
 	<mx:Script>
 		<![CDATA[
-			
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsLayout;
+			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.ForceDirectedLayouter;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
-			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
+
+			private var _vgraph:VisualGraph;
 
 			/**
-			 * We need a custom constructor to register this
-			 * instance with the GlobalParams class
+			 * Provides access to the registered vgraph object.
 			 * */
-			private function registerWithGlobal():void {
-				/* register ourselves */
-				GlobalParamsLayout.dampingControl = this;
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				registerListeners();
+			}
+
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
 			}
 			
 			/**
@@ -73,6 +78,34 @@
 				/* call superclass (Checkbox) */
 				super.enabled = e;
 			}
+
+			/**
+			 * Event handler to be triggered in case the
+			 * layouter in VGraph has changed.
+			 * Since this control is valid for ForceDirected Layouter only,
+			 * it will only be enabled in this case.
+			 * */
+			public function layouterChanged(e:VGraphEvent = null):void {
+				
+				var flayouter:ForceDirectedLayouter;
+				
+				/* check if we have a layouter at all */
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot apply Damping without vgraph or on null layouter");
+					return;
+				}
+				
+				/* check if it is a supported layouter (currently ForceDirected only) */
+				if(_vgraph.layouter is ForceDirectedLayouter) {
+					this.enabled = true;
+					flayouter = _vgraph.layouter as ForceDirectedLayouter;
+					flayouter.dampingActive = this.selected;
+					flayouter.layoutChanged = true; // this may be ignored by FD?
+				} else {
+					this.enabled = false;
+				}
+			}
+
 			
 			/**
 			 * toggles the damping feature of the ForceDirected Layouter
@@ -80,53 +113,57 @@
 			public function toggleDamping():void {
 				
 				var flayouter:ForceDirectedLayouter;
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
 				
 				/* check if we have a layouter at all */
-				if(GlobalParams.layouter == null) {
-					trace("Cannot enable damping on null layouter");
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot apply Damping without vgraph or on null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently ForceDirected only) */
-				if(!GlobalParams.layouter is ForceDirectedLayouter) {
+				if(!(_vgraph.layouter is ForceDirectedLayouter)) {
 					trace("Damping is only available in ForceDirectedLayouter");
 					return;
 				}
 				
 				/* set the local layouter reference */
-				flayouter = GlobalParams.layouter as ForceDirectedLayouter;
+				flayouter = _vgraph.layouter as ForceDirectedLayouter;
 				flayouter.dampingActive = this.selected;
+				flayouter.layoutChanged = true; // may be ignored
 				
-				if(vgraph != null) {
-					vgraph.draw();
-				} else {
-					trace("Damping changed, but no valid vgraph in GlobalParams, not redrawing!");
-				}
+				_vgraph.draw();
 			}
 			
 			/**
 			 * This refreshes the current value of the
 			 * checkbox with the value in the layouter.
 			 * */
-			public function refreshDampingCheckbox():void {
+			public function refreshCheckbox(e:VGraphEvent = null):void {
 				var flayouter:ForceDirectedLayouter;
 				
 				/* check if we have a layouter at all */
-				if(GlobalParams.layouter == null) {
-					trace("Cannot refresh damping from null layouter");
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot refresh Damping without vgraph or from null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently ForceDirected only) */
-				if(!GlobalParams.layouter is ForceDirectedLayouter) {
+				if(!(_vgraph.layouter is ForceDirectedLayouter)) {
 					trace("Damping is only available in ForceDirectedLayouter");
 					return;
 				}
 				
 				/* set the local layouter reference */
-				flayouter = GlobalParams.layouter as ForceDirectedLayouter;
+				flayouter = _vgraph.layouter as ForceDirectedLayouter;
 				this.selected = flayouter.dampingActive;
+			}
+			
+			/**
+			 * Adds the listeners to update on changes in the VGraph
+			 * */
+			private function registerListeners():void {
+				_vgraph.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshCheckbox);
+				_vgraph.addEventListener(VGraphEvent.LAYOUTER_CHANGED,layouterChanged);
 			}	
 		]]>
 	</mx:Script>

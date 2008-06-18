@@ -41,21 +41,17 @@
 	borderStyle="solid"
 	backgroundColor="#CCCCCC"
 	backgroundAlpha=".2"
-	creationComplete="registerComplete()"
-	 >
+	>
 	
-	<local:EdgeLabelSelector id="elselector" />
-	<local:ToggleEdgeLabels id="eltoggle" />
+	<local:EdgeLabelSelector id="elselector" vgraph="{vgraph}" />
+	<local:ToggleEdgeLabels id="eltoggle" vgraph="{vgraph}" />
 	
 	<mx:Script>
 		<![CDATA[
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsVGraph;
-			import org.un.cava.birdeye.ravis.graphLayout.layout.HierarchicalLayouter;
-
-			/* to be set if creation was complete */
-			private var _complete:Boolean = false;
-
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
+			
+			[Bindable]
+			public var vgraph:VisualGraph;
 
 			/**
 			 * When enabling or disabling this component, we also
@@ -66,53 +62,20 @@
 			 * @inheritDoc
 			 * */
 			override public function set enabled(e:Boolean):void {
-				
-				/* only do this if creation was complete including children */
-				if(_complete) {
-					/* disable children */
-					elselector.enabled = e;
-					eltoggle.enabled = e;
-				}
-				
 				/* do it for the super class */
 				super.enabled = e;
 				
 				/* if disabled remove from view and vice versa */
 				this.visible = e;
 				this.includeInLayout = e;
-			}
 			
-			/**
-			 * This method applies the current values of all controls to
-			 * the layouter set in GlobalParams
-			 * */
-			public function applyValues():void {
-				elselector.changeEdgeLabelRenderer();
-				eltoggle.toggleShowEdgeLabels();
-			}
-			
-			/**
-			 * This method refreshed the current values of all controls with
-			 * those of the layouter set in GlobalParams
-			 * */
-			public function refreshValues():void {
-				/* cannot do it easily for edgeLabelRendererSelector
-				 * deferred until required */
-				 
-				if(GlobalParams.vgraph) {
-					eltoggle.selected = GlobalParams.vgraph.displayEdgeLabels;
-				} else {
-					trace("cannot refresh ToggleEdgeLabels, vgraph ref in GlobalParams is invalid");
+				/* check if our subcomponents are already there */
+				if(elselector == null || eltoggle == null) {
+					return;
 				}
-			}
-			
-			/**
-			 * register that we are complete
-			 * */
-			private function registerComplete():void {
-				_complete = true;
-				/* register ourselves */
-				GlobalParamsVGraph.edgeLabelControls = this;
+				
+				elselector.enabled = e;
+				eltoggle.enabled = e;	
 			}
 		]]>
 	</mx:Script>

@@ -48,11 +48,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
 	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 
-	/* temporary until totally eliminated */
-	import org.un.cava.birdeye.ravis.globals.GlobalLayoutControls;
-	import org.un.cava.birdeye.ravis.globals.GlobalParams;
-	import org.un.cava.birdeye.ravis.globals.GlobalParamsLayout;
-
 
 	/**
 	 *  Dispatched when there is any change to the nodes and/or links of this graph.
@@ -615,6 +610,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				_layouter.resetAll(); // to stop any pending animations
 			}
 			_layouter = l;
+			
+			/* need to signal control components possibly */
+			this.dispatchEvent(new VGraphEvent(VGraphEvent.LAYOUTER_CHANGED));
 		}
 
 		/**
@@ -1213,12 +1211,25 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
  		 * Refresh the VGraph fully. I.e. recreate and
  		 * reassign all data objects, etc.
  		 * This is a heavy operation */
-		public function fullVGraphRefresh(directional:Boolean,xmlData:XML):void {
+		public function fullVGraphRefresh(xmlData:XML = null, directional:Boolean = false):void {
 			
 			var graph:IGraph;	
 			var oldroot:IVisualNode;
 			var oldsid:String;
 			var newroot:INode;
+			var theXMLData:XML = xmlData;
+			
+			/* if we do not have been passed an XML object
+			 * we try to get one from the old graph */
+			if(theXMLData == null && _graph != null) {
+				theXMLData = _graph.xmlData;
+			}
+			
+			/* still null? then we have to bail out */
+			if(theXMLData == null) {
+				trace("No XML object passed or found in old graph");
+				return;
+			}
 			
 			/* remove and create a new layouter */			
 			if(_layouter != null) {
@@ -1227,7 +1238,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			}
 			
 			/* init a graph object with the XML data */
-			graph = new Graph("myXMLbasedGraphID",directional,xmlData);
+			graph = new Graph("myXMLbasedGraphID",directional,theXMLData);
 						
 			/* remember the old root and id */
 			oldroot = _currentRootVNode;
@@ -1237,12 +1248,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * initializes the VGraph items */
 			this.graph = graph;
 			
-			/* XXX this has to be replaced by an event */
-			GlobalLayoutControls.applyLayouter();
-			
-			/* XXX this too */
-			GlobalParamsLayout.commonLayoutControls.refreshValues();
-			
+			/* send an event for controls to reapply their currentl
+			 * set values to layouters */
+			this.dispatchEvent(new VGraphEvent(VGraphEvent.LAYOUTER_CHANGED));
+					
 			/* setting a new graph invalidated our old root, we need to reset it */
 			/* we try to find a node, that has the same string-id as the old root node */
 			newroot = _graph.nodeByStringId(oldsid);
@@ -1535,6 +1544,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				/* all nodes should be visible, so we make an assertion
 				 * here */
 				if(!vn1.isVisible || !vn2.isVisible) {
+					trace("Edge:"+vedge.id.toString()+
+						" Node1:"+vn1.id.toString()+" vis:"+vn1.isVisible.toString()+
+						" Node2:"+vn2.id.toString()+" vis:"+vn2.isVisible.toString());
 					throw Error("One of the nodes of the checked edge is not visible, but should be!");
 				}
 
@@ -1982,7 +1994,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		
 			/* if there is an animation in progress, we ignore
 			 * the drag attempt */
-			if(_layouter.animInProgress) {
+			if(_layouter && _layouter.animInProgress) {
 				trace("Animation in progress, drag attempt ignored");
 				return;
 			}
@@ -2009,7 +2021,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			mycomponent.addEventListener(MouseEvent.MOUSE_MOVE, backgroundDragContinue);
 			
 			/* and inform the layouter about the dragEvent */
-			_layouter.bgDragEvent(event);
+			if(_layouter) {
+				_layouter.bgDragEvent(event);
+			}
 		}
 		
 		/**
@@ -2291,8 +2305,15 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				setNodeVisibility(vn, true);
 			}
 			
-			/* now update the edges */
-			updateEdgeVisibility();
+			/* and now walk again to update the edges */
+			for each(vn in toInvisibleNodes) {
+				updateConnectedEdgesVisibility(vn);
+			}
+			
+			/* and all new visible nodes to visible */
+			for each(vn in newVisibleNodes) {
+				updateConnectedEdgesVisibility(vn);
+			}
 		}
 
 		/**
@@ -2303,7 +2324,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * if we want edge labels or not at all
 		 * */
 		protected function updateEdgeVisibility():void {
+			
 			var vn:IVisualNode;
+			
 			for each(vn in _visibleVNodes) {
 				updateConnectedEdgesVisibility(vn);
 			}

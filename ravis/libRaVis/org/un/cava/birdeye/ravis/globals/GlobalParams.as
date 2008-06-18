@@ -69,54 +69,10 @@ package org.un.cava.birdeye.ravis.globals {
 		 * */
 		public static var vgraphInitOk:Boolean = false;
 		
-		
-		/**
-		 * This is the main instance for the currently
-		 * active layouter in the VisualGraph object.
-		 * Again currently only one instance is allowed, but
-		 * it is less complicated to allow more than one
-		 * (I wonder if there will be a demand for it, though).
-		 * */
-		public static var layouter:ILayoutAlgorithm;
-		
-		/**
-		 * This is the current XML object that contains all
-		 * graph Data.
-		 * It is not clear, if this will remain in API like that
-		 * but we do it like that for now.
-		 * */
-		public static var xmlData:XML;
-		
-		/**
-		 * This is the current array that contains all
-		 * the tag and attribute names, that are used to
-		 * parse the XML graph structure. This may
-		 * change in the future if "real" GraphML syntax
-		 * could be suppoered.
-		 * It is not clear, if this will remain in API like that
-		 * but we do it like that for now.
-		 * */
-		public static var xmlNames:Array = ['Node','Edge','fromID','toID'];
-		
 		/*
 		 * Other parameter modules 
 		 */
 		
-		/**
-		 * This holds the static class that contains all
-		 * relevant references to the layouter controls
-		 * This allows to delegate/modularise the global
-		 * parameters
-		 * */
-		public static var layoutComponents:Class = GlobalParamsLayout;
-		
-		/**
-		 * This holds the static class that contains all
-		 * relevant references to the VisualGraph related controls
-		 * This allows to delegate/modularise the global
-		 * parameters
-		 * */
-		public static var vgraphComponents:Class = GlobalParamsVGraph;
 		
 		/**
 		 * This holds the static class that contains all

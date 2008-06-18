@@ -30,6 +30,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 	
 	/**
 	 * This layouter implements the drawing of generalized trees
@@ -251,6 +252,10 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		public function set enableSiblingSpread(ss:Boolean):void {
 			_siblingSpreadEnabled = ss;
+			/* notify controls (specifically interleaving toggle */
+			if(_vgraph) {
+				_vgraph.dispatchEvent(new VGraphEvent(VGraphEvent.LAYOUTER_HIER_SIBLINGSPREAD));
+			}
 		}
 		
 		/**

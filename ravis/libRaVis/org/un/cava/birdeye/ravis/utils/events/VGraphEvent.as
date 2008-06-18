@@ -39,6 +39,24 @@ package org.un.cava.birdeye.ravis.utils.events
 		public static const VGRAPH_CHANGED:String = "vgraphChanged";
 	
 		/**
+		 * This event type signals that the layouter was changed
+		 * on the vgraph.
+		 * */
+		public static const LAYOUTER_CHANGED:String = "layouterChanged";
+	
+		/**
+		 * This event type signals that the hierarchical layouter
+		 * has changed sibling spread (maybe this can be generalized).
+		 * */
+		public static const LAYOUTER_HIER_SIBLINGSPREAD:String = "hierLayouterSiblingSpreadChanged";
+	
+		/**
+		 * This event type signals that a VNode has been
+		 * updated (e.g. its orientation)
+		 * */
+		public static const VNODE_UPDATED:String = "vnodeUpdated";
+	
+		/**
 		 * This subtype specifies some undefined general
 		 * change.
 		 * */

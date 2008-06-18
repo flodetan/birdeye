@@ -41,22 +41,18 @@
 	borderStyle="solid"
 	backgroundColor="#CCCCCC"
 	backgroundAlpha=".2"
-	creationComplete="registerComplete()"
 	 >
 	
-	<local:NodeRendererSelector id="nodeRenSel" />
-	<local:EdgeLabelControls id="elcontrols" />
-	<local:EdgeRendererSelector id="erSel" />
+	<local:NodeRendererSelector id="nodeRenSel" vgraph="{vgraph}" />
+	<local:EdgeLabelControls id="elcontrols" vgraph="{vgraph}" />
+	<local:EdgeRendererSelector id="erSel" vgraph="{vgraph}" />
 
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 		
-		
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsVGraph;
-		
-			/* to be set if creation was complete */
-			private var _complete:Boolean = false;
-
+			[Bindable]
+			public var vgraph:VisualGraph;
 			/**
 			 * When enabling or disabling this component, we also
 			 * perform some specific tasks.
@@ -67,13 +63,9 @@
 			 * */
 			override public function set enabled(e:Boolean):void {
 				
-				/* only do this if creation was complete including children */
-				if(_complete) {
-					/* disable children */
-					nodeRenSel.enabled = e;
-					elcontrols.enabled = e;
-					erSel.enabled = e;
-				}
+				nodeRenSel.enabled = e;
+				elcontrols.enabled = e;
+				erSel.enabled = e;
 				
 				/* do it for the super class */
 				super.enabled = e;
@@ -81,35 +73,6 @@
 				/* if disabled remove from view and vice versa */
 				this.visible = e;
 				this.includeInLayout = e;
-			}
-			
-			/**
-			 * This method applies the current values of all controls to
-			 * the layouter set in GlobalParams
-			 * */
-			public function applyValues():void {
-				nodeRenSel.changeNodeRenderer();
-				elcontrols.applyValues();
-				erSel.changeEdgeRenderer();
-			}
-			
-			/**
-			 * This method refreshed the current values of all controls with
-			 * those of the layouter set in GlobalParams
-			 * */
-			public function refreshValues():void {
-				nodeRenSel.refreshSelector();
-				elcontrols.refreshValues();
-				erSel.refreshSelector();
-			}
-			
-			/**
-			 * register that we are complete
-			 * */
-			private function registerComplete():void {
-				_complete = true;
-				/* register ourselves  */
-				GlobalParamsVGraph.rendererControls = this;
 			}
 		]]>
 	</mx:Script>

@@ -24,16 +24,16 @@
  */
 package org.un.cava.birdeye.ravis.graphLayout.layout {
 	
-	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
-	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
-	
-	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
-	import org.un.cava.birdeye.ravis.utils.StopWatch;
 	
 	import mx.core.UIComponent;
+	
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+	import org.un.cava.birdeye.ravis.utils.StopWatch;
+	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 	/**
 	 * This is a base class of an Iterative Layouting algorithm. Unlike one
 	 * pass algorithms with performs animation to reach to a final drawing, 
@@ -182,7 +182,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				// Step 4: Update node position, redraw edges and sent update to the UI */
 				_layoutChanged = true;
 				_vgraph.redrawEdges();
-				_vgraph.dispatchEvent(new Event("vgraphChanged"));
+				_vgraph.dispatchEvent(new VGraphEvent(VGraphEvent.VGRAPH_CHANGED));
 				
 				// Step 5: Re-start the Timer
 				_timerDelay = _stopWatch.stopTimer();

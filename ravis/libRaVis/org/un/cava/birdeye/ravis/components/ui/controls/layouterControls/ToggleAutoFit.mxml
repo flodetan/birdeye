@@ -32,30 +32,57 @@
 	selected="true"
 	label="AutoFit"
 	toolTip="Select to restrict graph to boundaries of current view space.  Graph will autofit its size so that all nodes are visible."
-	initialize="registerWithGlobal()"
 	click="toggleAutoFit()" >
 	
 	<mx:Script>
 		<![CDATA[
-			
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsLayout;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
-			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
-			
+			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;	
 			/**
 			 * ATTENTION: autoFitting has an impact on other layouter
 			 * specific controls, we should somehow inform those controls
 			 * possibly by sending an event 
 			 * */
 			
+			private var _vgraph:VisualGraph;
+
 			/**
-			 * We need a custom constructor to register this
-			 * instance with the GlobalParams class
+			 * Provides access to the registered vgraph object.
 			 * */
-			private function registerWithGlobal():void {	
-				/* register ourselves */
-				GlobalParamsLayout.autoFitControl = this;
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				registerListeners();
+			}
+
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
+			
+			/**
+			 * Event handler to be triggered in case the
+			 * layouter in VGraph has changed.
+			 * Only used to apply the current value to the new layouter.
+			 * */
+			public function layouterChanged(e:VGraphEvent = null):void {
+				
+				/* check if we have a layouter at all */
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot toggle AutoFit to missing vgraph or null layouter");
+					return;
+				}
+				
+				/* this is a default control component, and valid
+				 * for all layouters, thus we only need to apply
+				 * the value to the new layouter. 
+				 * We don't call toggleAutoFit(), since this 
+				 * triggers a draw(), which we do not want here
+				 */ 
+				_vgraph.layouter.autoFitEnabled = this.selected;
+				_vgraph.layouter.layoutChanged = true;
 			}
 			
 			/**
@@ -63,40 +90,37 @@
 			 * */
 			public function toggleAutoFit():void {
 				
-				var layouter:ILayoutAlgorithm;
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
-				
 				/* check if we have a layouter at all */
-				if(GlobalParams.layouter == null) {
-					trace("Cannot enable autofit on null layouter");
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot toggle AutoFit to missing vgraph or null layouter");
 					return;
 				}
 				
-				/* set the local layouter reference */
-				layouter = GlobalParams.layouter;
-				layouter.autoFitEnabled = this.selected;
-				
-				if(vgraph != null) {
-					vgraph.draw();
-				} else {
-					trace("AutoFit changed, but no valid vgraph in GlobalParams, not redrawing!");
-				}
+				_vgraph.layouter.autoFitEnabled = this.selected;
+				_vgraph.layouter.layoutChanged = true;
+				_vgraph.draw();
 			}
 			
 			/**
 			 * This refreshes the current value of the
 			 * checkbox with the value in the layouter.
 			 * */
-			public function refreshAFCheckbox():void {
-				var layouter:ILayoutAlgorithm;
-				
+			public function refreshCheckbox(e:VGraphEvent = null):void {
 				/* check if we have a layouter at all */
-				if(GlobalParams.layouter == null) {
-					trace("Cannot update AutoFit checkbox from null layouter");
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot refresh AutoFit from missing vgraph or null layouter");
 					return;
 				}
 				/* refresh the value */
-				this.selected = GlobalParams.layouter.autoFitEnabled;
+				this.selected = _vgraph.layouter.autoFitEnabled;
+			}
+			
+			/**
+			 * Adds the listeners to update on changes in the VGraph
+			 * */
+			private function registerListeners():void {
+				_vgraph.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshCheckbox);
+				_vgraph.addEventListener(VGraphEvent.LAYOUTER_CHANGED,layouterChanged);
 			}	
 		]]>
 	</mx:Script>

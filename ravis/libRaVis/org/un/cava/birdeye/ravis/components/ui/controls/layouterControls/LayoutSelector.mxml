@@ -33,8 +33,7 @@
 	color="#CCCCCC"
 	prompt="Select layout algorithm."
 	toolTip="Some layouters may not be fully stable."
-	creationComplete="initData()"
-	initialize="registerWithGlobal()"
+	initialize="initData()"
 	change="changeLayouter()" >
 	
 	<mx:ArrayCollection id="layouts">
@@ -56,11 +55,9 @@
 
 	<mx:Script>	
 		<![CDATA[
-			import org.un.cava.birdeye.ravis.globals.GlobalLayoutControls;
+			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import mx.utils.ObjectUtil;
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsLayout;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.CircularLayouter;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.ConcentricRadialLayouter;
@@ -72,13 +69,22 @@
 			import org.un.cava.birdeye.ravis.graphLayout.layout.ParentCenteredRadialLayouter;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.PhylloTreeLayouter;
 			
+			private var _vgraph:VisualGraph;
+
 			/**
-			 * We need a custom constructor to register this
-			 * instance with the GlobalParams class
+			 * Provides access to the registered vgraph object.
 			 * */
-			private function registerWithGlobal():void {
-				/* register ourselves */
-				GlobalParamsLayout.layoutSelectorControl = this;
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				registerListeners();
+			}
+
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
 			}
 			
 			/**
@@ -105,8 +111,158 @@
 			 * Set the selected Layouter.
 			 * */
 			public function changeLayouter():void {	
-				GlobalParamsLayout.currentLayouterName = this.selectedItem as String;
-				GlobalLayoutControls.applyLayouter();
+				/* check if we have a vgraph at all */
+				if(_vgraph == null) {
+					trace("Cannot change Layouter without vgraph.");
+					return;
+				}
+				setLayouter();
+				_vgraph.draw(); // run the layout
+			}
+
+			/**
+			 * Set/Activate the layouter set in the selector.
+			 * */
+			public function setLayouter():void {
+				
+				var layouter:ILayoutAlgorithm;
+				var layouterName:String = (this.selectedItem as String);
+								
+				/* check if we have a vgraph at all */
+				if(_vgraph == null) {
+					trace("Cannot change Layouter without vgraph.");
+					return;
+				}
+	
+				/* kill off animation in old layouter if present */
+				if(_vgraph.layouter != null) {
+					_vgraph.layouter.resetAll();
+					/* remove also existing references thus
+					 * destroying the object (maybe this is not needed?) */
+					_vgraph.layouter = null;
+				}
+	
+				/* now choose the selected layouter */
+				switch(layouterName) {
+					case "ConcentricRadial":
+						layouter = new ConcentricRadialLayouter(_vgraph);
+						break;
+					case "ParentCenteredRadial":
+						layouter = new ParentCenteredRadialLayouter(_vgraph);
+						break;
+					case "SingleCycleCircle":
+						layouter = new CircularLayouter(_vgraph);
+						
+						/* set the hyperbolic edge renderer type *
+						_vgraph.edgeRenderer = new CircularEdgeRenderer();
+						_vgraph.scrollBackgroundInDrag = false;
+						_vgraph.moveNodeInDrag = false;
+						absoluteScaling = true;
+						updateScale();
+						*/
+						break;
+					case "Hyperbolic":
+						layouter = new Hyperbolic2DLayouter(_vgraph);
+						
+						/* set some layouter specific defaults:
+						_vgraph.edgeRenderer = new HyperbolicEdgeRenderer((layouter as Hyperbolic2DLayouter).projector);
+						_vgraph.scrollBackgroundInDrag = false;
+						_vgraph.moveNodeInDrag = false;
+						absoluteScaling = false;
+						*/
+						break;
+					case "Hierarchical":
+						layouter = new HierarchicalLayouter(_vgraph);
+						break;
+					case "ForceDirected":
+						layouter = new ForceDirectedLayouter(_vgraph);
+						break;
+					case "ISOM":
+						layouter = new ISOMLayouter(_vgraph);
+						break;
+					case "DirectPlacement":
+						layouter = new DirectPlacementLayouter(_vgraph);
+						/* set some layouter specific values, i.e. create a control
+						 * for these first, also they could be prepopulated from
+						 * XML data
+						(layouter as DirectPlacementLayouter).relativeHeight = 400;
+						(layouter as DirectPlacementLayouter).relativeWidth = 400;
+						 */
+						/*
+						/* set the orthogonal edge renderer type *
+						_vgraph.edgeRenderer = new OrthogonalEdgeRenderer();
+						_vgraph.scrollBackgroundInDrag = true;
+						_vgraph.moveNodeInDrag = true;
+						absoluteScaling = true;
+						updateScale();
+						*/
+						break;
+					case "Phyllotactic":
+						layouter = new PhylloTreeLayouter(_vgraph);
+						break;
+					default:
+						trace("Illegal Layouter selected, defaulting to ConcentricRadial"+
+							layouterName);
+						layouter = new ConcentricRadialLayouter(_vgraph);
+						break;
+				}
+				_vgraph.layouter = layouter;
+			}
+
+			/**
+			 * Refresh the selector if an external event changes the layouter.
+			 * */
+			public function refreshSelector(e:VGraphEvent = null):void {
+				
+				var layouterClassName:String;
+				var layouterName:String;
+								
+				/* check if we have a vgraph/layouter at all */
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot refresh the LayoutSelector without vgraph or Layouter.");
+					return;
+				}
+	
+				layouterClassName = ObjectUtil.getClassInfo(_vgraph.layouter).name;
+	
+				/* now choose the selected layouter */
+				switch(layouterClassName) {
+					case "ConcentricRadialLayouter":
+						layouterName = "ConcentricRadial";
+						break;
+					case "ParentCenteredRadialLayouter":
+						layouterName = "ParentCenteredRadial";
+						break;
+					case "CircularLayouter":
+						layouterName = "SingleCycleCircle";
+						break;
+					case "Hyperbolic2DLayouter":
+						layouterName = "Hyperbolic";
+						break;
+					case "HierarchicalLayouter":
+						layouterName = "Hierarchical";
+						break;
+					case "ForceDirectedLayouter":
+						layouterName = "ForceDirected";
+						break;
+					case "ISOMLayouter":
+						layouterName = "ISOM";
+						break;
+					case "DirectPlacementLayouter":
+						layouterName = "DirectPlacement";
+						break;
+					case "PhylloTreeLayouter":
+						layouterName = "Phyllotactic";
+						break;
+					default:
+						layouterName = "Unknown";
+						trace("Unknown Layouter found:"+layouterClassName);
+						break;
+				}
+				/* make the selection */
+				
+				/* XXX THIS MAY CAUSE A LOOP POSSIBLY */
+				this.selectedItem = layouterName;
 			}
 
 			/**
@@ -115,6 +271,13 @@
 			 * */
 			private function initData():void {
 				this.dataProvider = layouts;
+			}
+			
+			/**
+			 * Adds the listeners to update on changes in the VGraph
+			 * */
+			private function registerListeners():void {
+				_vgraph.addEventListener(VGraphEvent.LAYOUTER_CHANGED,refreshSelector);
 			}
 		]]>
 	</mx:Script>

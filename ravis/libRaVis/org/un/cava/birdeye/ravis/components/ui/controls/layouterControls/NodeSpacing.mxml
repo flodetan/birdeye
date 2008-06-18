@@ -27,10 +27,7 @@
  * THE SOFTWARE.
  *
 -->
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
-	initialize="registerWithGlobal()"
-	creationComplete="registerComplete()"
-	>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml">
 	
 	<mx:Label
 		id="bsliderlabel"
@@ -53,25 +50,29 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsLayout;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.HierarchicalLayouter;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
 			
-			/* to be set if creation was complete */
-			private var _complete:Boolean = false;
+			private var _vgraph:VisualGraph;
 
 			/**
-			 * We need a custom constructor to register this
-			 * instance with the GlobalParams class
+			 * Provides access to the registered vgraph object.
 			 * */
-			private function registerWithGlobal():void {
-				/* register ourselves */
-				GlobalParamsLayout.nodeSpacingControl = this;
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				registerListeners();
 			}
 
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
 			
 			/**
 			 * When enabling or disabling this component, we also
@@ -82,7 +83,7 @@
 			 * @inheritDoc
 			 * */
 			override public function set enabled(e:Boolean):void {
-				if(_complete) {
+				if(bslider != null) {
 					if(e == true) {
 						bsliderlabel.setStyle("color",0x000000);
 						bslider.alpha=1;
@@ -96,70 +97,104 @@
 			}
 			
 			/**
+			 * Event handler to be triggered in case the
+			 * layouter in VGraph has changed.
+			 * Since this control is valid for Hierarchical Layouter only,
+			 * it will only be enabled in this case.
+			 * */
+			public function layouterChanged(e:VGraphEvent = null):void {
+				
+				var hlayouter:HierarchicalLayouter;
+				
+				/* check if we have a layouter at all */
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot apply NodeSpacing without vgraph or on null layouter");
+					return;
+				}
+				
+				/* check if it is a supported layouter (currently Hierarchical only) */
+				if(_vgraph.layouter is HierarchicalLayouter) {
+					/* set the local layouter reference */
+					hlayouter = _vgraph.layouter as HierarchicalLayouter;
+					if(bslider != null) {
+						hlayouter.breadth = bslider.value;
+					}
+					hlayouter.layoutChanged = true;
+					/* yes, enable */
+					this.enabled = true;
+				} else {
+					/* no, so disable */
+					this.enabled = false;
+				}
+			}
+				
+			
+			/**
 			 * updates the node spacing distance in the hierarchical
 			 * layouter.
 			 * */ 
 			public function updateNodeSpacing():void {
 				
 				var hlayouter:HierarchicalLayouter;
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
+				
+				if(bslider == null) {
+					return;
+				}
 				
 				/* check if we have a layouter at all */
-				if(GlobalParams.layouter == null) {
-					trace("Cannot update NodeSpacing on null layouter");
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot apply NodeSpacing without vgraph or on null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently Hierarchical only) */
-				if(!GlobalParams.layouter is HierarchicalLayouter) {
+				if(!(_vgraph.layouter is HierarchicalLayouter)) {
 					trace("NodeSpacing is only available in HierarchicalLayouter");
 					return;
 				}
 				
 				/* set the local layouter reference */
-				hlayouter = GlobalParams.layouter as HierarchicalLayouter;
-				
+				hlayouter = _vgraph.layouter as HierarchicalLayouter;
 				hlayouter.breadth = bslider.value;
 				hlayouter.layoutChanged = true;
 				
-				if(vgraph != null) {
-					vgraph.draw();
-				} else {
-					trace("NodeSpacing changed, but no valid vgraph in GlobalParams, not redrawing!");
-				}
+				_vgraph.draw();
 			}
 			
 			/**
 			 * This refreshes the current slider setting to
 			 * the value from the current layouter.
 			 * */
-			public function refreshSlider():void {
+			public function refreshSlider(e:VGraphEvent = null):void {
 				var hlayouter:HierarchicalLayouter;
 				
+				if(bslider == null) {
+					return;
+				}
+				
 				/* check if we have a layouter at all */
-				if(GlobalParams.layouter == null) {
-					trace("Cannot update NodeSpacing on null layouter");
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot update NodeSpacing without vgraph or from null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently Hierarchical only) */
-				if(!GlobalParams.layouter is HierarchicalLayouter) {
+				if(!(_vgraph.layouter is HierarchicalLayouter)) {
 					trace("NodeSpacing is only available in HierarchicalLayouter");
 					return;
 				}
 				
 				/* refresh the bslider */
-				hlayouter = GlobalParams.layouter as HierarchicalLayouter;
+				hlayouter = _vgraph.layouter as HierarchicalLayouter;
 				bslider.value = hlayouter.breadth;
 			}
 			
 			/**
-			 * register that we are complete
+			 * Adds the listeners to update on changes in the VGraph
 			 * */
-			private function registerComplete():void {
-				
-				this.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshSlider);
-				_complete = true;
+			private function registerListeners():void {
+				_vgraph.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshSlider);
+				_vgraph.addEventListener(VGraphEvent.LAYOUTER_CHANGED,layouterChanged);
 			}
 		]]>
 	</mx:Script>

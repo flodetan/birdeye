@@ -41,8 +41,6 @@
 	borderStyle="solid"
 	backgroundColor="#CCCCCC"
 	backgroundAlpha=".2"
-	initialize="registerWithGlobal()"
-	creationComplete="registerComplete()"
 	 >
 	
 	<local:LinkLength id="linklengthctl" />
@@ -51,115 +49,26 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsLayout;
-			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 
-			/* to be set if creation was complete */
-			private var _complete:Boolean = false;
+			private var _vgraph:VisualGraph;
 
 			/**
-			 * We need a custom constructor to register this
-			 * instance with the GlobalParams class
+			 * Provides access to the registered vgraph object.
 			 * */
-			private function registerWithGlobal():void {
-				/* register ourselves */
-				GlobalParamsLayout.commonLayoutControls = this;
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				linklengthctl.vgraph = v;
+				toggleanim.vgraph = v;
+				toggleaf.vgraph = v;
 			}
 
+
 			/**
-			 * When enabling or disabling this component, we also
-			 * perform some specific tasks.
-			 * Attention do completely disable interaction
-			 * there is also the mouseEnabled property.
-			 * 
-			 * @inheritDoc
+			 * @private
 			 * */
-			override public function set enabled(e:Boolean):void {
-				
-				/* only do this if creation was complete including children */
-				if(_complete) {
-					/* disable children */
-					linklengthctl.enabled = e;
-					toggleanim.enabled = e;
-					toggleaf.enabled = e;
-				}
-				
-				/* do it for the super class */
-				super.enabled = e;
-				
-				/* if disabled remove from view and vice versa */
-				this.visible = e;
-				this.includeInLayout = e;
-			}
-			
-			/**
-			 * This method applies the current values of all controls to
-			 * the layouter set in GlobalParams
-			 * */
-			public function applyValues():void {
-				var layouter:ILayoutAlgorithm;
-				
-				if(GlobalParams.layouter == null) {
-					trace("GP layouter is null, doing nothing");
-					return;
-				}
-				
-				/* this is a direct version, but less transparent */
-				layouter = GlobalParams.layouter;
-				
-				layouter.disableAnimation = toggleanim.selected;
-				layouter.autoFitEnabled = toggleaf.selected;
-				
-				/* have to do it like this, because is compound already */
-				linklengthctl.updateLinkLength();
-				
-				/* the following would use the update methods provided
-				 * the layouter is not done, since the calling of that
-				 * might call vgraph.draw() which could result in a crash....
-				 * have to investigate ... XXX */
-				 
-				/*
-				toggleanim.toggleAnimation();
-				toggleaf.toggleAutoFit();
-				*/
-			}
-			
-			/**
-			 * This method refreshed the current values of all controls with
-			 * those of the layouter set in GlobalParams
-			 * */
-			public function refreshValues():void {
-				var layouter:ILayoutAlgorithm;
-				
-				if(GlobalParams.layouter == null) {
-					trace("GP layouter is null, doing nothing");
-					return;
-				}
-		
-				/* this is a direct version, but less transparent */
-				layouter = GlobalParams.layouter;
-				
-				toggleanim.selected = layouter.disableAnimation;
-				toggleaf.selected = layouter.autoFitEnabled;
-				
-				/* the following would use the update methods provided
-				 * the layouter is not done, since the calling of that
-				 * might call vgraph.draw() which could result in a crash....
-				 * have to investigate ... XXX */
-				
-				linklengthctl.refreshSlider();
-				/*
-				toggleanim.refreshAnimCheckbox();
-				toggleaf.refreshAFCheckbox();
-				*/
-			}
-			
-			/**
-			 * register that we are complete
-			 * */
-			private function registerComplete():void {
-				_complete = true;
+			public function get vgraph():VisualGraph {
+				return _vgraph;
 			}
 		]]>
 	</mx:Script>

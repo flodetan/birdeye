@@ -33,6 +33,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 	import mx.core.UIComponent;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
+	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 	
 	/**
 	 * The VisualNode to be used in the Graph.
@@ -318,7 +319,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		public function set orientAngle(oa:Number):void {
 			_orientAngle = oa;
 			if(this.view is IEventDispatcher) {
-				(this.view as IEventDispatcher).dispatchEvent(new Event("NodeUpdated"));
+				(this.view as IEventDispatcher).dispatchEvent(new VGraphEvent(VGraphEvent.VNODE_UPDATED));
 			}
 		}
 	
@@ -337,7 +338,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 			}
 		
 			if(this.view is IEventDispatcher) {
-				(this.view as IEventDispatcher).dispatchEvent(new Event("NodeUpdated"));
+				(this.view as IEventDispatcher).dispatchEvent(new VGraphEvent(VGraphEvent.VNODE_UPDATED));
 			}
 		}
 		

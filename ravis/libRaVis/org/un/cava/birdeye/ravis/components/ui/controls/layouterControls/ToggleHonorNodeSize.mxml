@@ -31,26 +31,32 @@
 	selected="false"
 	label="Honor node size"
 	toolTip="Take node size into account when calculating distance"
-	initialize="registerWithGlobal()"
 	click="toggleHonorNodeSize()">
 	
 	<mx:Script>
 		<![CDATA[
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsLayout;
+			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.HierarchicalLayouter;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
-			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
+			
+			private var _vgraph:VisualGraph;
 
 			/**
-			 * We need a custom constructor to register this
-			 * instance with the GlobalParams class
+			 * Provides access to the registered vgraph object.
 			 * */
-			private function registerWithGlobal():void {
-				/* register ourselves */
-				GlobalParamsLayout.honorNodeSizeControl = this;
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				registerListeners();
 			}
 
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
+			
 			
 			/**
 			 * When enabling or disabling this component, we also
@@ -72,63 +78,95 @@
 				super.enabled = e;
 			}
 			
+			
 			/**
-			 * toggles the sibling spread feature in the
+			 * Event handler to be triggered in case the
+			 * layouter in VGraph has changed.
+			 * Since this control is valid for Hierarchical Layouter only,
+			 * it will only be enabled in this case.
+			 * */
+			public function layouterChanged(e:VGraphEvent = null):void {
+				
+				var hlayouter:HierarchicalLayouter;
+				
+				/* check if we have a layouter at all */
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot togge HonorNodeSize without vgraph or on null layouter");
+					return;
+				}
+				
+				/* check if it is a supported layouter (currently Hierarchical only) */
+				if(_vgraph.layouter is HierarchicalLayouter) {
+					/* yes, enable */
+					this.enabled = true;
+					hlayouter = _vgraph.layouter as HierarchicalLayouter;
+					hlayouter.honorNodeSize = this.selected;
+					hlayouter.layoutChanged = true;
+				} else {
+					/* no, so disable */
+					this.enabled = false;
+				}
+			}
+			
+			/**
+			 * toggles the HonorNodeSize feature in the
 			 * hierarchical layouter
 			 * */
 			public function toggleHonorNodeSize():void {
 				
 				var hlayouter:HierarchicalLayouter;
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
 				
 				/* check if we have a layouter at all */
-				if(GlobalParams.layouter == null) {
-					trace("Cannot enable honorNodeSize on null layouter");
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot toggle HonorNodeSize without vgraph or on null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently Hierarchical only) */
-				if(!GlobalParams.layouter is HierarchicalLayouter) {
-					trace("honorNodeSize is only available in HierarchicalLayouter");
+				if(!(_vgraph.layouter is HierarchicalLayouter)) {
+					trace("ToggleHonorNodeSize is only available in HierarchicalLayouter");
 					return;
 				}
 				
 				/* set the local layouter reference */
-				hlayouter = GlobalParams.layouter as HierarchicalLayouter;
-				
+				hlayouter = _vgraph.layouter as HierarchicalLayouter;
 				hlayouter.honorNodeSize = this.selected;
 				hlayouter.layoutChanged = true;
 				
-				if(vgraph != null) {
-					vgraph.draw();
-				} else {
-					trace("honorNodeSize changed, but no valid vgraph in GlobalParams, not redrawing!");
-				}
+				_vgraph.draw();
 			}
 			
 			/**
 			 * This refreshes the current value of the
 			 * checkbox with the value in the layouter.
 			 * */
-			public function refreshCheckbox():void {
+			public function refreshCheckbox(e:VGraphEvent = null):void {
 				
 				var hlayouter:HierarchicalLayouter;
 				
 				/* check if we have a layouter at all */
-				if(GlobalParams.layouter == null) {
-					trace("Cannot refresh honorNodeSize from null layouter");
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot refresh HonorNodeSize without vgraph or from null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently Hierarchical only) */
-				if(!GlobalParams.layouter is HierarchicalLayouter) {
-					trace("honorNodeSize is only available in HierarchicalLayouter");
+				if(!(_vgraph.layouter is HierarchicalLayouter)) {
+					trace("ToggleHonorNodeSize is only available in HierarchicalLayouter");
 					return;
 				}
 				
 				/* set the local layouter reference */
-				hlayouter = GlobalParams.layouter as HierarchicalLayouter;
+				hlayouter = _vgraph.layouter as HierarchicalLayouter;
 				this.selected = hlayouter.honorNodeSize;
+			}
+			
+			/**
+			 * Adds the listeners to update on changes in the VGraph
+			 * */
+			private function registerListeners():void {
+				_vgraph.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshCheckbox);
+				_vgraph.addEventListener(VGraphEvent.LAYOUTER_CHANGED,layouterChanged);
 			}
 		]]>
 	</mx:Script>
