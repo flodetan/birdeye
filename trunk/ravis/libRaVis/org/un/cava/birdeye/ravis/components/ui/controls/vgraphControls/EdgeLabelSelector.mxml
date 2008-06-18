@@ -33,7 +33,7 @@
 	color="#CCCCCC"
 	prompt="Select edge annotation."
 	toolTip="Select the label type of edges."
-	creationComplete="initData()"
+	initialize="initData()"
 	change="changeEdgeLabelRenderer()" >
 	
 	<mx:ArrayCollection id="elvalues">
@@ -45,12 +45,14 @@
 	<mx:Script>	
 		<![CDATA[
 			import mx.utils.ObjectUtil;
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsVGraph;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
+		
+			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.components.renderers.edgeLabels.DefaultEdgeLabelRenderer;
 			import org.un.cava.birdeye.ravis.components.renderers.edgeLabels.BaseEdgeLabelRenderer;
 			import org.un.cava.birdeye.ravis.components.renderers.edgeLabels.WFBEdgeLabelRenderer;
+			
+			public var vgraph:VisualGraph;
 			
 			/**
 			 * When enabling or disabling this component, we also
@@ -78,61 +80,57 @@
 			public function changeEdgeLabelRenderer():void {
 				
 				var elr:String;
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
+				
+				if(vgraph == null) {
+					trace("Cannot change EdgeLabelRenderer, no valid vgraph!");
+					return;
+				}
 				
 				/* get the currently selected EdgeLabelRenderer */
 				elr = this.selectedItem as String;
 				
-				if(vgraph != null) {
-					switch(elr) {
-						case "Default":
-							vgraph.edgeLabelRenderer = new ClassFactory(DefaultEdgeLabelRenderer);
-							break;
-						case "Basic":
-							vgraph.edgeLabelRenderer = new ClassFactory(BaseEdgeLabelRenderer);
-							break;
-						case "WFB":
-							vgraph.edgeLabelRenderer = new ClassFactory(WFBEdgeLabelRenderer);
-							break;
-						default:
-							trace("Illegal EdgeLabelRenderer selected:"+elr);
-							vgraph.edgeLabelRenderer = new ClassFactory(DefaultEdgeLabelRenderer);
-							break;
-					}
-					/* XXX WE NEED A FULL REFRESH HERE TO CHANGE OUT ALL THE CREATED RENDERER OBJECTS
-					 * TO IMPLEMENT */
-					vgraph.draw();
-				} else {
-					trace("EdgeLabelRenderer NOT CHANGED, no valid vgraph in GlobalParams, not redrawing!");
+				switch(elr) {
+					case "Default":
+						vgraph.edgeLabelRenderer = new ClassFactory(DefaultEdgeLabelRenderer);
+						break;
+					case "Basic":
+						vgraph.edgeLabelRenderer = new ClassFactory(BaseEdgeLabelRenderer);
+						break;
+					case "WFB":
+						vgraph.edgeLabelRenderer = new ClassFactory(WFBEdgeLabelRenderer);
+						break;
+					default:
+						trace("Illegal EdgeLabelRenderer selected:"+elr);
+						vgraph.edgeLabelRenderer = new ClassFactory(DefaultEdgeLabelRenderer);
+						break;
 				}
+				vgraph.draw();
 			}
 			
 			/**
 			 * Refresh the selector with the current EdgeLabelRenderer.
 			 * */
-			public function refreshSelector():void {
+			public function refreshSelector(e:VGraphEvent = null):void {
 				
-
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
+				if(vgraph == null) {
+					trace("Cannot change EdgeLabelRenderer, no valid vgraph!");
+					return;
+				}
 				
-				if(vgraph != null) {
-					switch(ObjectUtil.getClassInfo(vgraph.edgeLabelRenderer).name) {
-						case "DefaultEdgeLabelRenderer":
-							this.selectedIndex = 0;
-							break;
-						case "BaseEdgeLabelRenderer":
-							this.selectedIndex = 1;
-							break;
-						case "WFBEdgeLabelRenderer":
-							this.selectedIndex = 2;
-							break;
-						default:
-							trace("Illegal ELR class received:"+
-								ObjectUtil.getClassInfo(vgraph.edgeLabelRenderer).name);
-							break;
-					}
-				} else {
-					trace("EdgeLabelRenderer NOT refreshed, no valid vgraph in GlobalParams!");
+				switch(ObjectUtil.getClassInfo(vgraph.edgeLabelRenderer).name) {
+					case "DefaultEdgeLabelRenderer":
+						this.selectedIndex = 0;
+						break;
+					case "BaseEdgeLabelRenderer":
+						this.selectedIndex = 1;
+						break;
+					case "WFBEdgeLabelRenderer":
+						this.selectedIndex = 2;
+						break;
+					default:
+						trace("Illegal ELR class received:"+
+							ObjectUtil.getClassInfo(vgraph.edgeLabelRenderer).name);
+						break;
 				}
 			}
 			
@@ -142,8 +140,8 @@
 			 * */
 			private function initData():void {
 				this.dataProvider = elvalues;
-				/* register ourselves */
-				GlobalParamsVGraph.edgeLabelSelectorControl = this;
+				
+				this.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshSelector);
 			}
 		]]>
 	</mx:Script>

@@ -41,19 +41,17 @@
 	borderStyle="solid"
 	backgroundColor="#CCCCCC"
 	backgroundAlpha=".2"
-	creationComplete="registerComplete()"
 	 >
 	
-	<local:BirdEyeZoom id="beyezoom" />
-	<local:ScaleLabels id="scalelbs" />
+	<local:BirdEyeZoom id="beyezoom" vgraph="{vgraph}" />
+	<local:ScaleLabels id="scalelbs" vgraph="{vgraph}" />
 
 	<mx:Script>
 		<![CDATA[
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsVGraph;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			
-			/* to be set if creation was complete */
-			private var _complete:Boolean = false;
-
+			[Bindable]
+			public var vgraph:VisualGraph;
 
 			/**
 			 * When enabling or disabling this component, we also
@@ -64,47 +62,19 @@
 			 * @inheritDoc
 			 * */
 			override public function set enabled(e:Boolean):void {
-				
-				/* only do this if creation was complete including children */
-				if(_complete) {
-					/* disable children */
-					beyezoom.enabled = e;
-					scalelbs.enabled = e;
-				}
-				
 				/* do it for the super class */
 				super.enabled = e;
 				
 				/* if disabled remove from view and vice versa */
 				this.visible = e;
 				this.includeInLayout = e;
-			}
-			
-			/**
-			 * This method applies the current values of all controls to
-			 * the layouter set in GlobalParams
-			 * */
-			public function applyValues():void {
-				beyezoom.updateVScale();
-				scalelbs.updateScale();
-			}
-			
-			/**
-			 * This method refreshed the current values of all controls with
-			 * those of the layouter set in GlobalParams
-			 * */
-			public function refreshValues():void {
-				beyezoom.refreshVScale();
-				scalelbs.refreshSlider();
-			}
-			
-			/**
-			 * register that we are complete
-			 * */
-			private function registerComplete():void {
-				_complete = true;
-				/* register ourselves */
-				GlobalParamsVGraph.scaleControls = this;
+				
+				if(beyezoom == null || scalelbs == null) {
+					return;
+				}
+				
+				beyezoom.enabled = e;
+				scalelbs.enabled = e;
 			}
 		]]>
 	</mx:Script>

@@ -83,8 +83,13 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		 * attributes of a graph
 		 * */
 		protected var _id:String;
+
+		protected var _xmlData:XML;
+
 		protected var _nodes:Array;
 		protected var _edges:Array;
+
+
 
 		/* lookup by string id and by id */
 		protected var _nodesByStringId:Object;
@@ -147,6 +152,8 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 			
 			_id = id
 			
+			_xmlData = xmlsource;
+			
 			_nodes = new Array;
 			_edges = new Array;
 			_treeMap = new Dictionary;
@@ -190,6 +197,13 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		public function get id():String {
 			return _id;
 		}		
+		
+		/**
+		 * @inheritDoc
+		 * */
+		public function get xmlData():XML {
+			return _xmlData;
+		}
 		
 		/**
 		 * @inheritDoc

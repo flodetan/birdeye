@@ -28,7 +28,7 @@
  *
 -->
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
-	creationComplete="registerComplete()" >
+	initialize="registerListeners()" >
 	
 	<mx:Label
 		toolTip="Use this control to specify visible link distance"
@@ -51,12 +51,10 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsVGraph;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
-
-			/* to be set if creation was complete */
-			private var _complete:Boolean = false;
+			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
+		
+			public var vgraph:VisualGraph;
 						
 			/**
 			 * updates the visible degree of separation (i.e.
@@ -64,36 +62,31 @@
 			 * */
 			public function updateMaxVisDist():void {
 				
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
-				if(vgraph != null) {
-					vgraph.maxVisibleDistance = degreesOfSep.value;
-					vgraph.draw();
-				} else {
-					trace("DegreeOfSeparation NOT changed, no valid vgraph in GlobalParams, not redrawing!");
+				if(vgraph == null) {
+					trace("DegreeOfSeparation NOT changed, no valid vgraph!");
+					return;
 				}
+				vgraph.maxVisibleDistance = degreesOfSep.value;
+				vgraph.draw();
 			}
 			
 			/**
 			 * refreshes the component slider from the value
 			 * from VisualGraph object.
 			 * */
-			public function refreshMaxVisDist():void {
-				
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
-				if(vgraph != null) {
-					degreesOfSep.value = vgraph.maxVisibleDistance;
-				} else {
-					trace("DegreeOfSeparation NOT refreshed, no valid vgraph in GlobalParams!");
+			public function refreshMaxVisDist(e:VGraphEvent = null):void {
+				if(vgraph == null) {
+					trace("DegreeOfSeparation NOT refreshed, no valid vgraph!");
+					return;
 				}
+				degreesOfSep.value = vgraph.maxVisibleDistance;
 			}
 			
 			/**
-			 * register that we are complete
+			 * register listeners
 			 * */
-			private function registerComplete():void {
-				_complete = true;
-				/* register ourselves */
-				GlobalParamsVGraph.degreeOfSeparationControl = this;
+			private function registerListeners():void {
+				this.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshMaxVisDist);
 			}
 			
 		]]>

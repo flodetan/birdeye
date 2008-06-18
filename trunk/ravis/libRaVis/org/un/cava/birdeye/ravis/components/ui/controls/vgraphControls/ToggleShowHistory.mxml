@@ -32,15 +32,15 @@
 	selected="false"
 	label="History"
 	toolTip="Select will retain visibility of all nodes visited."
-	creationComplete="registerComplete()"
+	initialize="registerListeners()"
 	click="toggleShowHistory()" >
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsVGraph;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
+			public var vgraph:VisualGraph;
 			
 			/**
 			 * toggles to show previously visited root nodes
@@ -48,39 +48,34 @@
 			 * */
 			public function toggleShowHistory():void {
 				
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
-				
-				if(vgraph != null) {
-					vgraph.showHistory = this.selected;
-					vgraph.draw();
-				} else {
-					trace("History NOT changed, no valid vgraph in GlobalParams, not redrawing!");
+				if(vgraph == null) {
+					trace("Cannot toggle showing History, no valid vgraph!");
+					return;
 				}
+				
+				vgraph.showHistory = this.selected;
+				vgraph.draw();
 			}
 
 			/**
 			 * refreshes the checkbox from the current value
 			 * in VGraph
 			 * */
-			public function refreshCheckbox():void {
+			public function refreshCheckbox(e:VGraphEvent = null):void {
 				
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
-				
-				if(vgraph != null) {
-					this.selected = vgraph.showHistory;
-				} else {
-					trace("History NOT refreshed, no valid vgraph in GlobalParams!");
+				if(vgraph == null) {
+					trace("Cannot toggle showing History, no valid vgraph!");
+					return;
 				}
+				this.selected = vgraph.showHistory;
 			}		
 	
 			/**
-			 * register that we are complete
+			 * register a listener
 			 * */
-			private function registerComplete():void {
-				
-				/* register ourselves */
-				GlobalParamsVGraph.toggleShowHistoryControl = this;
-			}		
+			private function registerListeners():void {
+				this.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshCheckbox);
+			}	
 		]]>
 	</mx:Script>
 </mx:CheckBox>

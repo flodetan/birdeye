@@ -33,7 +33,7 @@
 	color="#CCCCCC"
 	prompt="Select node style."
 	toolTip="Select the type of node labels."
-	creationComplete="initData()"
+	initialize="initData()"
 	change="changeNodeRenderer()" >
 	
 	<mx:ArrayCollection id="nrvalues">
@@ -50,10 +50,9 @@
 	
 	<mx:Script>	
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import mx.utils.ObjectUtil;
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsVGraph;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 			import org.un.cava.birdeye.ravis.components.renderers.nodes.BaseNodeRenderer;
 			import org.un.cava.birdeye.ravis.components.renderers.nodes.DefaultNodeRenderer;
 			import org.un.cava.birdeye.ravis.components.renderers.nodes.EffectBaseNodeRenderer;
@@ -63,6 +62,8 @@
 			import org.un.cava.birdeye.ravis.components.renderers.nodes.SimpleCircleNodeRenderer;
 			import org.un.cava.birdeye.ravis.components.renderers.nodes.SizeByValueNodeRenderer;
 			import org.un.cava.birdeye.ravis.components.renderers.nodes.WFBNodeRenderer;
+			
+			public var vgraph:VisualGraph;
 			
 			/**
 			 * When enabling or disabling this component, we also
@@ -90,107 +91,105 @@
 			public function changeNodeRenderer():void {
 				
 				var nr:String;
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
 				
+				if(vgraph == null) {
+					trace("Cannot change NodeRenderer, no valid vgraph!");
+					return;
+				}
 				/* get the currently selected orientation */
 				nr = this.selectedItem as String;
 					
-				if(vgraph != null) {
-					switch(nr) {
-						case "Default":
-							vgraph.itemRenderer = new ClassFactory(DefaultNodeRenderer);
-							break;
-						case "Basic":
-							vgraph.itemRenderer = new ClassFactory(BaseNodeRenderer);
-							break;
-						case "Basic+Effects":
-							vgraph.itemRenderer = new ClassFactory(EffectBaseNodeRenderer);
-							break;
-						case "SimpleCircle":
-							vgraph.itemRenderer = new ClassFactory(SimpleCircleNodeRenderer);
-							break;
-						case "SimpleCircle+Effects":
-							vgraph.itemRenderer = new ClassFactory(FilteredSimpleCircleNodeRenderer);
-							break;
-						case "Icons":
-							vgraph.itemRenderer = new ClassFactory(IconNodeRenderer);
-							break;
-						case "Rotated Rectangle":
-							vgraph.itemRenderer = new ClassFactory(RotatedRectNodeRenderer);
-							break;
-						case "Size by Value":
-							vgraph.itemRenderer = new ClassFactory(SizeByValueNodeRenderer);
-							break;
-						case "WFB":
-							vgraph.itemRenderer = new ClassFactory(WFBNodeRenderer);
-							break;
-						
-						default:
-							trace("Illegal NodeRenderer selected:"+nr);
-							vgraph.itemRenderer = new ClassFactory(DefaultNodeRenderer);
-							break;
-					}
-					vgraph.draw();
-				} else {
-					trace("NodeRenderer NOT CHANGED, no valid vgraph in GlobalParams, not redrawing!");
+				switch(nr) {
+					case "Default":
+						vgraph.itemRenderer = new ClassFactory(DefaultNodeRenderer);
+						break;
+					case "Basic":
+						vgraph.itemRenderer = new ClassFactory(BaseNodeRenderer);
+						break;
+					case "Basic+Effects":
+						vgraph.itemRenderer = new ClassFactory(EffectBaseNodeRenderer);
+						break;
+					case "SimpleCircle":
+						vgraph.itemRenderer = new ClassFactory(SimpleCircleNodeRenderer);
+						break;
+					case "SimpleCircle+Effects":
+						vgraph.itemRenderer = new ClassFactory(FilteredSimpleCircleNodeRenderer);
+						break;
+					case "Icons":
+						vgraph.itemRenderer = new ClassFactory(IconNodeRenderer);
+						break;
+					case "Rotated Rectangle":
+						vgraph.itemRenderer = new ClassFactory(RotatedRectNodeRenderer);
+						break;
+					case "Size by Value":
+						vgraph.itemRenderer = new ClassFactory(SizeByValueNodeRenderer);
+						break;
+					case "WFB":
+						vgraph.itemRenderer = new ClassFactory(WFBNodeRenderer);
+						break;
+					
+					default:
+						trace("Illegal NodeRenderer selected:"+nr);
+						vgraph.itemRenderer = new ClassFactory(DefaultNodeRenderer);
+						break;
 				}
+				vgraph.draw();
 			}	
 			
 			/**
 			 * Refresh the selector with the current EdgeLabelRenderer.
 			 * */
-			public function refreshSelector():void {
+			public function refreshSelector(e:VGraphEvent = null):void {
 				
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
-	
-				if(vgraph != null) {
-					switch(ObjectUtil.getClassInfo(vgraph.edgeLabelRenderer).name) {
+				if(vgraph == null) {
+					trace("Cannot refresh NodeRenderer, no valid vgraph!");
+					return;
+				}
+				
+				switch(ObjectUtil.getClassInfo(vgraph.edgeLabelRenderer).name) {
 
-						case "DefaultNodeRenderer":
-							this.selectedIndex = 0;
-							break;
-						case "BaseNodeRenderer":
-							this.selectedIndex = 1;
-							break;
-						case "EffectsBaseNodeRenderer":
-							this.selectedIndex = 2;
-							break;
-						case "SimpleCircleNodeRenderer":
-							this.selectedIndex = 3;
-							break;
-						case "FilteredSimpleCircleNodeRenderer":
-							this.selectedIndex = 4;
-							break;
-						case "IconNodeRenderer":
-							this.selectedIndex = 5;
-							break;
-						case "RotatedRectNodeRenderer":
-							this.selectedIndex = 6;
-							break;
-						case "SizeByValueNodeRenderer":
-							this.selectedIndex = 7;
-							break;
-						case "WFBNodeRenderer":
-							this.selectedIndex = 8;
-							break;
-						default:
-							trace("Illegal NodeLabelRenderer received:"+
-								ObjectUtil.getClassInfo(vgraph.edgeLabelRenderer).name);
-							break;
-					}
-				} else {
-					trace("NodeRenderer NOT refreshed, no valid vgraph in GlobalParams!");
+					case "DefaultNodeRenderer":
+						this.selectedIndex = 0;
+						break;
+					case "BaseNodeRenderer":
+						this.selectedIndex = 1;
+						break;
+					case "EffectsBaseNodeRenderer":
+						this.selectedIndex = 2;
+						break;
+					case "SimpleCircleNodeRenderer":
+						this.selectedIndex = 3;
+						break;
+					case "FilteredSimpleCircleNodeRenderer":
+						this.selectedIndex = 4;
+						break;
+					case "IconNodeRenderer":
+						this.selectedIndex = 5;
+						break;
+					case "RotatedRectNodeRenderer":
+						this.selectedIndex = 6;
+						break;
+					case "SizeByValueNodeRenderer":
+						this.selectedIndex = 7;
+						break;
+					case "WFBNodeRenderer":
+						this.selectedIndex = 8;
+						break;
+					default:
+						trace("Illegal NodeLabelRenderer received:"+
+							ObjectUtil.getClassInfo(vgraph.edgeLabelRenderer).name);
+						break;
 				}
 			}
 			
 			/**
-			 * initialise the selection data.
+			 * initialise the selection data
 			 * It is a bit unclear, why this seems to be necessary.
+			 * Also register the listener.
 			 * */
 			private function initData():void {
 				this.dataProvider = nrvalues;
-				/* register ourselves */
-				GlobalParamsVGraph.nodeRendererSelectorControl = this;
+				this.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshSelector);
 			}
 		]]>
 	</mx:Script>

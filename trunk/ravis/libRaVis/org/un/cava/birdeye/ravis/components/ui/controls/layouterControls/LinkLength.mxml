@@ -29,8 +29,6 @@
 -->
 <mx:VBox 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	initialize="registerWithGlobal()"
-	creationComplete="registerComplete()"
 	>
 	
 	<mx:Label
@@ -74,23 +72,30 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsLayout;
+			import mx.utils.ObjectUtil;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
 			import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			
-			/* to be set if creation was complete */
-			private var _complete:Boolean = false;
-			
+			/* critical */
+			private var _vgraph:VisualGraph;
+
 			/**
-			 * We need a custom constructor to register this
-			 * instance with the GlobalParams class
+			 * Provides access to the registered vgraph object.
 			 * */
-			private function registerWithGlobal():void {	
-				/* register ourselves */
-				GlobalParamsLayout.linkLengthControl = this;
+			[Bindable]
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				registerListeners();
+			}
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
 			}
 			
 			/**
@@ -102,7 +107,7 @@
 			 * @inheritDoc
 			 * */
 			override public function set enabled(e:Boolean):void {
-				if(_complete) {
+				if(lllabel != null && lslider != null) {
 					if(e == true) {
 						lllabel.setStyle("color",0x000000);
 						lslider.alpha=1;
@@ -115,6 +120,30 @@
 				super.enabled = e;
 			}
 			
+			/**
+			 * Event handler to be triggered in case the
+			 * layouter in VGraph has changed.
+			 * Only used to apply the current value to the new layouter.
+			 * */
+			public function layouterChanged(e:VGraphEvent = null):void {
+				
+				/* check if we have a layouter at all */
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot apply LinkLength to missing vgraph or null layouter");
+					return;
+				}
+				
+				/* this is a default control component, and valid
+				 * for all layouters, thus we only need to apply
+				 * the value to the new layouter. 
+				 * We don't call updateLinkLength(), since this 
+				 * triggers a draw(), which we do not want here
+				 */ 
+				_vgraph.layouter.linkLength = lslider.value;
+				_vgraph.layouter.layoutChanged = true;
+			}
+				
+			
 			/** 
 			 * Update the linklength, this indicator always
  			 * goes from 0 to 100, depending on the layouter
@@ -122,53 +151,42 @@
  			 * */		
 			public function updateLinkLength():void {
 				
-				var layouter:ILayoutAlgorithm;
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
-				
 				/* check if we have a layouter at all */
-				if(GlobalParams.layouter == null) {
-					trace("Cannot update LinkLength on null layouter");
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot update LinkLength on missing vgraph or null layouter");
 					return;
 				}
 				
-				/* set the local layouter reference */
-				layouter = GlobalParams.layouter;
-				layouter.linkLength = lslider.value;
-			
-				if(vgraph != null) {
-					vgraph.draw();
-				} else {
-					trace("LinkLength changed, but no valid vgraph in GlobalParams, not redrawing!");
-				}
+				/* update the value */
+				_vgraph.layouter.linkLength = lslider.value;
+				_vgraph.layouter.layoutChanged = true;
+				
+				/* trigger redraw */
+				_vgraph.draw();
 			}
 			
 			/**
 			 * This refreshes the current slider setting to
 			 * the value from the current layouter.
 			 * */
-			public function refreshSlider():void {
-				var layouter:ILayoutAlgorithm;
+			public function refreshSlider(e:VGraphEvent = null):void {
 				
 				/* check if we have a layouter at all */
-				if(GlobalParams.layouter == null) {
-					trace("Cannot update LinkLength on null layouter");
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot refresh LinkLength from missing vgraph or null layouter");
 					return;
 				}
+				
 				/* refresh the value */
-				lslider.value = GlobalParams.layouter.linkLength;
+				lslider.value = _vgraph.layouter.linkLength;
 			}
 			
 			/**
-			 * register that we are complete and
-			 * init various other issues
+			 * Adds the listeners to update on changes in the VGraph
 			 * */
-			private function registerComplete():void {
-				
-				/* register an event listener for a VGraphChanged
-				 * event */
-				this.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshSlider);
-				
-				_complete = true;
+			private function registerListeners():void {
+				_vgraph.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshSlider);
+				_vgraph.addEventListener(VGraphEvent.LAYOUTER_CHANGED,layouterChanged);
 			}
 		]]>
 	</mx:Script>

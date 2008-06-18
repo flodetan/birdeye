@@ -40,6 +40,12 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		function get id():String;
 		
 		/**
+		 * Return a reference to the XML graph
+		 * structure that was used to initialise the graph.
+		 * */
+		function get xmlData():XML;
+		
+		/**
 		 * An Array that contains all nodes of the graph.
 		 * */
 		function get nodes():Array;

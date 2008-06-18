@@ -34,7 +34,7 @@
 	toolTip="Do a full refresh of data and drawing..."
 	fontSize="9"
 	icon="{EmbeddedIcons.refreshIcon}"
-	click="vgraph.fullVGraphRefresh(directional,xmlData)"
+	click="fullyRefreshIt()"
 	>
 	
 	<mx:Script>
@@ -46,6 +46,19 @@
 			public var vgraph:VisualGraph;
 			public var directional:Boolean = false;
 			public var xmlData:XML;		
+	
+			public function fullyRefreshIt():void {
+				if(vgraph == null) {
+					trace("Cannot fully refresh vgraph, no vgraph!");
+					return;
+				}
+				
+				/* the vgraph.fullVGraphRefresh() method checks to see
+				 * if no xmlData was passed if it can be taken from the
+				 * old graph, thus we do not need to check if it is null
+				 */
+				vgraph.fullVGraphRefresh(xmlData, directional);
+			}
 		]]>
 	</mx:Script>
 </mx:Button>

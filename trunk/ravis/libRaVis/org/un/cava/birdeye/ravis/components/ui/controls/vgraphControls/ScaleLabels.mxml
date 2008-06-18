@@ -29,7 +29,7 @@
 -->
 <mx:VBox 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	creationComplete="registerComplete()"
+	initialize="registerListener()"
 	>
 	
 	<mx:Label
@@ -71,90 +71,67 @@
 
 	<mx:Script>
 		<![CDATA[
-			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
+			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import mx.core.Container;
 			import mx.core.UIComponent;
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsVGraph;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
 			
-			/* to be set if creation was complete */
-			private var _complete:Boolean = false;
+			public var vgraph:VisualGraph;
 			
 			/**
 			 * this updates the scale factor in all children of the vgraph
 			 * */	
 			public function updateScale():void {
 				
-				/* we need the VGraph object in its capacity as a Container */
-				var vgraph:Container = (GlobalParams.vgraph as Container);
 				var children:Array;
 				var child:UIComponent;
 
-				var layouter:ILayoutAlgorithm = GlobalParams.layouter;
-
-				if(vgraph != null) {		
-					/* update the global parameter */
-					GlobalParams.scaleFactor = scaleSlider.value;
-					
-					children = vgraph.getChildren();
-					for each(child in children) {
-						child.scaleX = scaleSlider.value;
-						child.scaleY = scaleSlider.value;
-					}
-					
-					/* check if we have a layouter at all */
-					if(layouter != null) {
-						layouter.layoutChanged = true;
-					} else {
-						trace("Cannot notify null layouter of layout change due to scaling.");
-					}
-	
-					/* a bit ugly, but we need the polymorphism here, since the
-					 * IVisualGraph interface does not contain all the Container
-					 * methods. Our object of course does! */
-					(vgraph as IVisualGraph).draw(); // do we need this? 
-					
-				} else {
-					trace("Scale NOT changed, no valid vgraph in GlobalParams, not redrawing!");
+				if(vgraph == null) {
+					trace("Cannot update Scale of VGraph, no valid vgraph!");
+					return;
 				}
+	
+				children = vgraph.getChildren();
+				for each(child in children) {
+					child.scaleX = scaleSlider.value;
+					child.scaleY = scaleSlider.value;
+				}
+				
+				/* check if we have a layouter at all */
+				if(vgraph.layouter != null) {
+					vgraph.layouter.layoutChanged = true;
+				} else {
+					trace("Cannot notify null layouter of layout change due to scaling.");
+				}
+				vgraph.draw();
 			}
 			
 			/**
 			 * refreshes the slider from the current scale value
 			 * of the first child object of VGraph
 			 * */
-			public function refreshSlider():void {
+			public function refreshSlider(e:VGraphEvent = null):void {
 				
-				/* we need the VGraph object in its capacity as a Container */
-				var vgraph:Container = (GlobalParams.vgraph as Container);
-				var children:Array;
 				var child:UIComponent;
-
-				if(vgraph != null) {		
+				
+				if(vgraph == null) {
+					trace("Cannot refresh ScaleSlider of VGraph, no valid vgraph!");
+					return;
+				}	
 					
-					/* get from first child. XXX Needs to check that
-					 * we actually have at least 1 child (we should
-					 * at least always have the drawing surface for the edges.....
-					 */
-					scaleSlider.value = vgraph.getChildAt(0).scaleX;
-					
-					/* npw update the global parameter */
-					GlobalParams.scaleFactor = scaleSlider.value;
-				} else {
-					trace("Scale NOT refreshed, no valid vgraph in GlobalParams!");
-				}
+				/* get from first child. XXX Needs to check that
+				 * we actually have at least 1 child (we should
+				 * at least always have the drawing surface for the edges.....
+				 */
+				scaleSlider.value = vgraph.getChildAt(0).scaleX;
 			}
 			
 			/**
 			 * register that we are complete
 			 * */
-			private function registerComplete():void {
-				_complete = true;
-				
-				/* register ourselves */
-				GlobalParamsVGraph.scaleLabelsControl = this;
+			private function registerListener():void {
+				this.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshSlider);
 			}
 		]]>
 	</mx:Script>

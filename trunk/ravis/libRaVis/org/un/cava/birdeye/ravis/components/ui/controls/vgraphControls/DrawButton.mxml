@@ -34,13 +34,22 @@
 	toolTip="Do a drawing..."
 	fontSize="9"
 	icon="{EmbeddedIcons.resetIcon}"
-	click="GlobalParams.vgraph.draw()"
+	click="doDraw()"
 	>
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
+			public var vgraph:VisualGraph;
+			
+			public function doDraw():void {
+				if(vgraph == null) {
+					trace("Cannot redraw VisualGraph, no valid vgraph!");
+					return;
+				}
+				vgraph.draw();
+			}
 		]]>
 	</mx:Script>
 </mx:Button>

@@ -27,9 +27,7 @@
  * THE SOFTWARE.
  *
 -->
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
-	initialize="registerWithGlobal()"
-	>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml">
 	
 	<mx:Label
 		id="phidiallabel"
@@ -51,21 +49,27 @@
 
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsLayout;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.IAngularLayouter;
-			
-			/* to be set if creation was complete */
-			private var _complete:Boolean = false;
+	
+			private var _vgraph:VisualGraph;
 
 			/**
-			 * We need a custom constructor to register this
-			 * instance with the GlobalParams class
+			 * Provides access to the registered vgraph object.
 			 * */
-			private function registerWithGlobal():void {
-				/* register ourselves */
-				GlobalParamsLayout.phiDialControl = this;
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				registerListeners();
+			}
+
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
 			}
 		
 			/**
@@ -77,20 +81,52 @@
 			 * @inheritDoc
 			 * */
 			override public function set enabled(e:Boolean):void {
-				if(_complete) {
-					if(e == true) {
-						phidiallabel.setStyle("color",0x000000);
-						phidial.alpha=1;
-						refreshPhi();
-					} else {
-						phidiallabel.setStyle("color",0xCCCCCC);
-						phidial.alpha=0.3;
-					}
-				}
+				
 				/* call superclass (VBox) */
 				super.enabled = e;
+				
+				/* check if children are already initialized */
+				if(phidiallabel == null || phidial == null) {
+					return;
+				}
+				
+				if(e == true) {
+					phidiallabel.setStyle("color",0x000000);
+					phidial.alpha=1;
+					refreshSlider();
+				} else {
+					phidiallabel.setStyle("color",0xCCCCCC);
+					phidial.alpha=0.3;
+				}
 			}
-						
+											
+			/**
+			 * Event handler to be triggered in case the
+			 * layouter in VGraph has changed.
+			 * En/Disables the control and applies the values.
+			 * */
+			public function layouterChanged(e:VGraphEvent = null):void {
+				
+				var alayouter:IAngularLayouter;
+				
+				/* check if we have a layouter at all */
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot apply PhiDial to missing vgraph or null layouter");
+					return;
+				}
+				
+				/* enable and apply if we have an angular layouter */
+				if(_vgraph.layouter is IAngularLayouter) {
+					this.enabled = true;
+					
+					alayouter = _vgraph.layouter as IAngularLayouter;
+					alayouter.phi = phidial.value;
+					alayouter.layoutChanged = true;
+				} else {
+					this.enabled = false;
+				}
+			}
+	
 			/**
 			 * update the layouter with the selected value
 			 * The 'phi' angular value is support by selected
@@ -99,62 +135,59 @@
 			public function updatePhi():void {
 				
 				var alayouter:IAngularLayouter;
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
 				
 				/* check if we have a layouter at all */
-				if(GlobalParams.layouter == null) {
-					trace("Cannot update Phi on null layouter");
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot apply Phi without vgraph or to null layouter");
 					return;
 				}
 				
-				/* check if it is a supported layouter (currently angulars only) */
-				if(!GlobalParams.layouter is IAngularLayouter) {
-					trace("Phi is only available in IAngularLayouter");
+				/* check if it is a supported layouter */
+				if(!(_vgraph.layouter is IAngularLayouter)) {
+					trace("Phi is only available in IAngularLayouters");
 					return;
 				}
 				
-				alayouter = GlobalParams.layouter as IAngularLayouter;
+				alayouter = _vgraph.layouter as IAngularLayouter;
 				alayouter.phi = phidial.value;
 				alayouter.layoutChanged = true;
 
-				/* consider removing this from all these controls */				
-				if(vgraph != null) {
-					vgraph.draw();
-				} else {
-					trace("Phi changed, but no valid vgraph in GlobalParams, not redrawing!");
-				}
+				/* consider removing this from all these controls */
+				_vgraph.draw();				
 			}
 			
 			/**
 			 * This refreshes the current slider setting to
 			 * the value from the current layouter.
 			 * */
-			public function refreshPhi():void {
+			public function refreshSlider(e:VGraphEvent = null):void {
 				var alayouter:IAngularLayouter;
 				
 				/* check if we have a layouter at all */
-				if(GlobalParams.layouter == null) {
-					trace("Cannot update LinkLength on null layouter");
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot update Phi without vgraph or from null layouter");
 					return;
 				}
-				/* check if it is a supported layouter (currently angulars only) */
-				if(!GlobalParams.layouter is IAngularLayouter) {
-					trace("Phi is only available in IAngularLayouter");
+				
+				/* check if it is a supported layouter */
+				if(!(_vgraph.layouter is IAngularLayouter)) {
+					trace("Phi is only available in IAngularLayouters");
 					return;
 				}
 				
 				/* refresh the value */
-				alayouter = GlobalParams.layouter as IAngularLayouter;
+				alayouter = _vgraph.layouter as IAngularLayouter;
 				phidial.value = alayouter.phi;
 			}
 			
 			
 			/**
-			 * register that we are complete
+			 * Adds the listeners to update on changes in the VGraph
 			 * */
-			private function registerComplete():void {
-				_complete = true;
-			}			
+			private function registerListeners():void {
+				_vgraph.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshSlider);
+				_vgraph.addEventListener(VGraphEvent.LAYOUTER_CHANGED,layouterChanged);
+			}		
 		]]>
 	</mx:Script>
 

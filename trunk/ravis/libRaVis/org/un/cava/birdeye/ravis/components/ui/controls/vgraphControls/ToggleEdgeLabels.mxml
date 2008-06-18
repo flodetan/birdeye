@@ -32,51 +32,45 @@
 	selected="true"
 	label="Edge Labels"
 	toolTip="Select to show edge labels."
-	creationComplete="registerComplete()"
+	initialize="registerListeners()"
 	click="toggleShowEdgeLabels()" >
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsVGraph;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
+			public var vgraph:VisualGraph;
 			
 			/**
 			 * toggles to show edge labels or not
 			 * */
 			public function toggleShowEdgeLabels():void {
 				
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
-				
-				if(vgraph != null) {
-					vgraph.displayEdgeLabels = this.selected;
-					/* XXX THIS MAY REQUIRE A FULL REFRESH TO BE VERIFIED AND IMPLEMENTED */
-					vgraph.draw();
-				} else {
-					trace("Show EdgeLabels not toggled, no valid vgraph in GlobalParams, not redrawing!");
+				if(vgraph == null) {
+					trace("Cannot toggle display of EdgeLabels, no valid vgraph!");
+					return;
 				}
+				vgraph.displayEdgeLabels = this.selected;
+				vgraph.draw();
 			}
 			
 			/**
 			 * refreshes the checkbox from the value in VGraph.
 			 * */
-			public function refreshCheckbox():void {
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
-				
-				if(vgraph != null) {
-					this.selected = vgraph.displayEdgeLabels;
-				} else {
-					trace("Show EdgeLabels not refreshed, no valid vgraph in GlobalParams!");
+			public function refreshCheckbox(e:VGraphEvent = null):void {
+				if(vgraph == null) {
+					trace("Cannot refresh display of EdgeLabels, no valid vgraph!");
+					return;
 				}
+				this.selected = vgraph.displayEdgeLabels;
 			}
 			
 			/**
-			 * register that we are complete
+			 * register a listener
 			 * */
-			private function registerComplete():void {
-				/* register ourselves */
-				GlobalParamsVGraph.toggleEdgeLabelsControl = this;
+			private function registerListeners():void {
+				this.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshCheckbox);
 			}		
 		]]>
 	</mx:Script>

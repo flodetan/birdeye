@@ -31,26 +31,32 @@
 	selected="true"
 	label="Interleave nodes"
 	toolTip="Enable/Disable Node Interleaving (only when spread enabled)"
-	initialize="registerWithGlobal()"
 	click="toggleNodeInterleaving()">
 	
 	<mx:Script>
 		<![CDATA[
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsLayout;
+			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.HierarchicalLayouter;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
-			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
+		
+			private var _vgraph:VisualGraph;
 
 			/**
-			 * We need a custom constructor to register this
-			 * instance with the GlobalParams class
+			 * Provides access to the registered vgraph object.
 			 * */
-			private function registerWithGlobal():void {
-				/* register ourselves */
-				GlobalParamsLayout.nodeInterleavingControl = this;
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				registerListeners();
 			}
 
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
+		
 			
 			/**
 			 * When enabling or disabling this component, we also
@@ -73,62 +79,102 @@
 			}
 			
 			/**
+			 * Event handler to be triggered in case the
+			 * layouter in VGraph has changed.
+			 * Since this control is valid for Hierarchical Layouter only,
+			 * it will only be enabled in this case.
+			 * */
+			public function layouterChanged(e:VGraphEvent = null):void {
+				
+				trace("NODEINTERLEAVE: received event about layouter changed");
+				
+				var hlayouter:HierarchicalLayouter;
+				
+				/* check if we have a layouter at all */
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot togge NodeInterleaving without vgraph or on null layouter");
+					return;
+				}
+				
+				/* check if it is a supported layouter (currently Hierarchical only)
+				 * further it can only be enabled if also sibling spread is
+				 * enabled */
+				if(_vgraph.layouter is HierarchicalLayouter &&
+					(_vgraph.layouter as HierarchicalLayouter).enableSiblingSpread == true) {
+					
+					/* yes, enable */
+					this.enabled = true;
+					hlayouter = _vgraph.layouter as HierarchicalLayouter;
+					hlayouter.interleaveSiblings = this.selected;
+					hlayouter.layoutChanged = true;
+				} else {
+					this.enabled = false;
+				}
+			}
+			
+			/**
 			 * toggles the sibling spread feature in the
 			 * hierarchical layouter
 			 * */
 			public function toggleNodeInterleaving():void {
 				
 				var hlayouter:HierarchicalLayouter;
-				var vgraph:IVisualGraph = GlobalParams.vgraph;
 				
 				/* check if we have a layouter at all */
-				if(GlobalParams.layouter == null) {
-					trace("Cannot enable nodeInterleaving on null layouter");
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot toggle NodeInterleaving without vgraph or on null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently Hierarchical only) */
-				if(!GlobalParams.layouter is HierarchicalLayouter) {
-					trace("NodeInterleaving is only available in HierarchicalLayouter");
+				if(!(_vgraph.layouter is HierarchicalLayouter)) {
+					trace("ToggleNodeInterleaving is only available in HierarchicalLayouter");
 					return;
 				}
 				
-				/* set the local layouter reference */
-				hlayouter = GlobalParams.layouter as HierarchicalLayouter;
-				
+				hlayouter = _vgraph.layouter as HierarchicalLayouter;
 				hlayouter.interleaveSiblings = this.selected;
 				hlayouter.layoutChanged = true;
 				
-				if(vgraph != null) {
-					vgraph.draw();
-				} else {
-					trace("NodeInterleaving changed, but no valid vgraph in GlobalParams, not redrawing!");
-				}
+				_vgraph.draw();
 			}
 			
 			/**
 			 * This refreshes the current value of the
 			 * checkbox with the value in the layouter.
 			 * */
-			public function refreshCheckbox():void {
+			public function refreshCheckbox(e:VGraphEvent = null):void {
 				
 				var hlayouter:HierarchicalLayouter;
 				
 				/* check if we have a layouter at all */
-				if(GlobalParams.layouter == null) {
-					trace("Cannot refresh NodeInterleaving from null layouter");
+				if(_vgraph == null || _vgraph.layouter == null) {
+					trace("Cannot refresh NodeInterleaving without vgraph or from null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently Hierarchical only) */
-				if(!GlobalParams.layouter is HierarchicalLayouter) {
-					trace("NodeInterleaving is only available in HierarchicalLayouter");
+				if(!(_vgraph.layouter is HierarchicalLayouter)) {
+					trace("ToggleNodeInterleaving is only available in HierarchicalLayouter");
 					return;
 				}
 				
-				/* set the local layouter reference */
-				hlayouter = GlobalParams.layouter as HierarchicalLayouter;
+				hlayouter = _vgraph.layouter as HierarchicalLayouter;
 				this.selected = hlayouter.interleaveSiblings;
+			}
+			
+			/**
+			 * Adds the listeners to update on changes in the _vgraph
+			 * */
+			private function registerListeners():void {
+				if(_vgraph == null) {
+					trace("VGraph invalid in ToggleNodeInterleave, cannot register eventlisteners");
+					return;
+				}
+				_vgraph.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshCheckbox);
+				_vgraph.addEventListener(VGraphEvent.LAYOUTER_CHANGED,layouterChanged);
+				/* we can use the same method here */
+				_vgraph.addEventListener(VGraphEvent.LAYOUTER_HIER_SIBLINGSPREAD,layouterChanged);
 			}
 		]]>
 	</mx:Script>
