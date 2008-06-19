@@ -29,7 +29,6 @@
 -->
 <mx:HBox width="100%"
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	creationComplete="registerComplete()"
 	>
 	<mx:Label text="Center Node: " />
 	<mx:Label
@@ -41,21 +40,31 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import mx.binding.utils.BindingUtils;
-			
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsData;
+
+			private var _vgraph:VisualGraph;
 
 			/**
-			 * register that we are complete
+			 * Provides access to the registered vgraph object.
 			 * */
-			private function registerComplete():void {
-				/* register ourselves */
-				GlobalParamsData.curRootNodeLabel = this;
-				
-				if(GlobalParams.vgraph != null) {
-					BindingUtils.bindProperty(myNodeNameLbl,"text",GlobalParams.vgraph,["currentRootVNode","data","@name"]);
-				}
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				bindValue();
+			}
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
+
+			/**
+			 * bind the value to the vgraph object
+			 * */
+			private function bindValue():void {
+				BindingUtils.bindProperty(myNodeNameLbl,"text",_vgraph,["currentRootVNode","data","@name"]);
 			}
 		]]>
 	</mx:Script>

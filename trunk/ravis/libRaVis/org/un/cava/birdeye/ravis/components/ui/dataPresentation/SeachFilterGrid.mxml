@@ -31,7 +31,6 @@
 	height="100%"
 	width="100%"
 	label="Search/Filter Nodes"
-	creationComplete="registerComplete()"
 	 >
 	
 	<mx:VBox width="100%" height="100%" paddingLeft="5" paddingRight="5">
@@ -49,7 +48,6 @@
 		<!-- Use DataGrid Click to call graph dataprovider() function to center node -->
 		<mx:DataGrid
 			id="dgSearch"
-			doubleClick="vgraph.centerNodeByStringId(dgSearch.selectedItem.@id)"
 			width="100%"
 			height="100%" 
 			dataProvider="{filterNodes}"
@@ -70,17 +68,27 @@
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import mx.collections.ArrayCollection;
 			import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsData;
-			import org.un.cava.birdeye.ravis.graphLayout.layout.HierarchicalLayouter;
-
-			/* to be set if creation was complete */
-			private var _complete:Boolean = false;
 			
 			[Bindable]
 			public var filterNodes:ArrayCollection;
 
-			public var vgraph:VisualGraph;
+			private var _vgraph:VisualGraph;
+
+			/**
+			 * Provides access to the registered vgraph object.
+			 * */
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				bindValues();
+			}
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
+			
 			/**
 			 * When enabling or disabling this component, we also
 			 * perform some specific tasks.
@@ -132,16 +140,15 @@
 				return false;
 			}
 			
+			private function bindValues():void {
+				dgSearch.addEventListener(MouseEvent.DOUBLE_CLICK,doubleClickListener);	
+			}
 			
-			
-			/**
-			 * register that we are complete
-			 * */
-			private function registerComplete():void {
-				_complete = true;
-				
-				/* register ourselves */
-				GlobalParamsData.searchFilterGrid = this;
+			private function doubleClickListener(e:MouseEvent = null):void {
+				if(_vgraph == null) {
+					return;
+				}
+				_vgraph.centerNodeByStringId(dgSearch.selectedItem.@id);
 			}
 		]]>
 	</mx:Script>
