@@ -41,14 +41,30 @@
 		<![CDATA[
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
-			public var vgraph:VisualGraph;
+			
+			private var _vgraph:VisualGraph;
+
+			/**
+			 * Provides access to the registered vgraph object.
+			 * */
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+			}
+
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
 			
 			public function doDraw():void {
-				if(vgraph == null) {
+				if(_vgraph == null) {
 					trace("Cannot redraw VisualGraph, no valid vgraph!");
 					return;
 				}
-				vgraph.draw();
+				_vgraph.draw();
 			}
 		]]>
 	</mx:Script>

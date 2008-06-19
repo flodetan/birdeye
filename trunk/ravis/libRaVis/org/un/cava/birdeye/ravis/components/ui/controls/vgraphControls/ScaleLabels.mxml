@@ -27,10 +27,7 @@
  * THE SOFTWARE.
  *
 -->
-<mx:VBox 
-	xmlns:mx="http://www.adobe.com/2006/mxml"
-	initialize="registerListener()"
-	>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml">
 	
 	<mx:Label
 		toolTip="Use this control to increase/decrease text/icon size."
@@ -77,7 +74,23 @@
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
 			
-			public var vgraph:VisualGraph;
+			private var _vgraph:VisualGraph;
+
+			/**
+			 * Provides access to the registered vgraph object.
+			 * */
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				registerListeners();
+			}
+
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
 			
 			/**
 			 * this updates the scale factor in all children of the vgraph
@@ -87,24 +100,24 @@
 				var children:Array;
 				var child:UIComponent;
 
-				if(vgraph == null) {
+				if(_vgraph == null) {
 					trace("Cannot update Scale of VGraph, no valid vgraph!");
 					return;
 				}
 	
-				children = vgraph.getChildren();
+				children = _vgraph.getChildren();
 				for each(child in children) {
 					child.scaleX = scaleSlider.value;
 					child.scaleY = scaleSlider.value;
 				}
 				
 				/* check if we have a layouter at all */
-				if(vgraph.layouter != null) {
-					vgraph.layouter.layoutChanged = true;
+				if(_vgraph.layouter != null) {
+					_vgraph.layouter.layoutChanged = true;
 				} else {
 					trace("Cannot notify null layouter of layout change due to scaling.");
 				}
-				vgraph.draw();
+				_vgraph.draw();
 			}
 			
 			/**
@@ -115,7 +128,7 @@
 				
 				var child:UIComponent;
 				
-				if(vgraph == null) {
+				if(_vgraph == null) {
 					trace("Cannot refresh ScaleSlider of VGraph, no valid vgraph!");
 					return;
 				}	
@@ -124,14 +137,14 @@
 				 * we actually have at least 1 child (we should
 				 * at least always have the drawing surface for the edges.....
 				 */
-				scaleSlider.value = vgraph.getChildAt(0).scaleX;
+				scaleSlider.value = _vgraph.getChildAt(0).scaleX;
 			}
 			
 			/**
 			 * register that we are complete
 			 * */
-			private function registerListener():void {
-				this.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshSlider);
+			private function registerListeners():void {
+				_vgraph.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshSlider);
 			}
 		]]>
 	</mx:Script>

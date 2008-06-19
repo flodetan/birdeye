@@ -76,6 +76,9 @@
 				}
 				/* call superclass (Checkbox) */
 				super.enabled = e;
+				/* if disabled remove from view and vice versa */
+				this.visible = e;
+				this.includeInLayout = e;
 			}
 			
 			/**

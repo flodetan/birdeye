@@ -63,7 +63,23 @@
 			import org.un.cava.birdeye.ravis.components.renderers.nodes.SizeByValueNodeRenderer;
 			import org.un.cava.birdeye.ravis.components.renderers.nodes.WFBNodeRenderer;
 			
-			public var vgraph:VisualGraph;
+			private var _vgraph:VisualGraph;
+
+			/**
+			 * Provides access to the registered vgraph object.
+			 * */
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				registerListeners();
+			}
+
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
 			
 			/**
 			 * When enabling or disabling this component, we also
@@ -92,7 +108,7 @@
 				
 				var nr:String;
 				
-				if(vgraph == null) {
+				if(_vgraph == null) {
 					trace("Cannot change NodeRenderer, no valid vgraph!");
 					return;
 				}
@@ -101,39 +117,39 @@
 					
 				switch(nr) {
 					case "Default":
-						vgraph.itemRenderer = new ClassFactory(DefaultNodeRenderer);
+						_vgraph.itemRenderer = new ClassFactory(DefaultNodeRenderer);
 						break;
 					case "Basic":
-						vgraph.itemRenderer = new ClassFactory(BaseNodeRenderer);
+						_vgraph.itemRenderer = new ClassFactory(BaseNodeRenderer);
 						break;
 					case "Basic+Effects":
-						vgraph.itemRenderer = new ClassFactory(EffectBaseNodeRenderer);
+						_vgraph.itemRenderer = new ClassFactory(EffectBaseNodeRenderer);
 						break;
 					case "SimpleCircle":
-						vgraph.itemRenderer = new ClassFactory(SimpleCircleNodeRenderer);
+						_vgraph.itemRenderer = new ClassFactory(SimpleCircleNodeRenderer);
 						break;
 					case "SimpleCircle+Effects":
-						vgraph.itemRenderer = new ClassFactory(FilteredSimpleCircleNodeRenderer);
+						_vgraph.itemRenderer = new ClassFactory(FilteredSimpleCircleNodeRenderer);
 						break;
 					case "Icons":
-						vgraph.itemRenderer = new ClassFactory(IconNodeRenderer);
+						_vgraph.itemRenderer = new ClassFactory(IconNodeRenderer);
 						break;
 					case "Rotated Rectangle":
-						vgraph.itemRenderer = new ClassFactory(RotatedRectNodeRenderer);
+						_vgraph.itemRenderer = new ClassFactory(RotatedRectNodeRenderer);
 						break;
 					case "Size by Value":
-						vgraph.itemRenderer = new ClassFactory(SizeByValueNodeRenderer);
+						_vgraph.itemRenderer = new ClassFactory(SizeByValueNodeRenderer);
 						break;
 					case "WFB":
-						vgraph.itemRenderer = new ClassFactory(WFBNodeRenderer);
+						_vgraph.itemRenderer = new ClassFactory(WFBNodeRenderer);
 						break;
 					
 					default:
 						trace("Illegal NodeRenderer selected:"+nr);
-						vgraph.itemRenderer = new ClassFactory(DefaultNodeRenderer);
+						_vgraph.itemRenderer = new ClassFactory(DefaultNodeRenderer);
 						break;
 				}
-				vgraph.draw();
+				_vgraph.draw();
 			}	
 			
 			/**
@@ -141,12 +157,12 @@
 			 * */
 			public function refreshSelector(e:VGraphEvent = null):void {
 				
-				if(vgraph == null) {
+				if(_vgraph == null) {
 					trace("Cannot refresh NodeRenderer, no valid vgraph!");
 					return;
 				}
 				
-				switch(ObjectUtil.getClassInfo(vgraph.edgeLabelRenderer).name) {
+				switch(ObjectUtil.getClassInfo(_vgraph.edgeLabelRenderer).name) {
 
 					case "DefaultNodeRenderer":
 						this.selectedIndex = 0;
@@ -177,7 +193,7 @@
 						break;
 					default:
 						trace("Illegal NodeLabelRenderer received:"+
-							ObjectUtil.getClassInfo(vgraph.edgeLabelRenderer).name);
+							ObjectUtil.getClassInfo(_vgraph.edgeLabelRenderer).name);
 						break;
 				}
 			}
@@ -189,7 +205,13 @@
 			 * */
 			private function initData():void {
 				this.dataProvider = nrvalues;
-				this.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshSelector);
+			}
+			
+			/**
+			 * Register event listeners
+			 * */
+			private function registerListeners():void {
+				_vgraph.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshSelector);
 			}
 		]]>
 	</mx:Script>

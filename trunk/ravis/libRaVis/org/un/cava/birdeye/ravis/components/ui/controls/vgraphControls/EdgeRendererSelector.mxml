@@ -64,7 +64,23 @@
 			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.CircularEdgeRenderer;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.HyperbolicEdgeRenderer;
 			
-			public var vgraph:VisualGraph;
+			private var _vgraph:VisualGraph;
+
+			/**
+			 * Provides access to the registered vgraph object.
+			 * */
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				registerListeners();
+			}
+
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
 			
 			/**
 			 * When enabling or disabling this component, we also
@@ -92,60 +108,61 @@
 			public function changeEdgeRenderer():void {
 				
 				var er:String;
-				var g:Graphics = vgraph.edgeDrawGraphics;
+				var g:Graphics;
 				
-				if(vgraph == null) {
+				if(_vgraph == null) {
 					trace("Cannot change EdgeRenderer, no valid vgraph!");
 					return;
 				}
+				g = _vgraph.edgeDrawGraphics;
 				
 				/* get the currently selected EdgeRenderer */
 				er = this.selectedItem as String;
 				
 				switch(er) {
 					case "Default":
-						vgraph.edgeRenderer = new BaseEdgeRenderer(g);
+						_vgraph.edgeRenderer = new BaseEdgeRenderer(g);
 						break;
 					case "DirectedArrows":
-						vgraph.edgeRenderer = new DirectedArrowEdgeRenderer(g);
+						_vgraph.edgeRenderer = new DirectedArrowEdgeRenderer(g);
 						break;
 					case "DirectedBalloons":
-						vgraph.edgeRenderer = new DirectedBalloonEdgeRenderer(g);
+						_vgraph.edgeRenderer = new DirectedBalloonEdgeRenderer(g);
 						break;
 					case "Orthogonal":
-						vgraph.edgeRenderer = new OrthogonalEdgeRenderer(g);
+						_vgraph.edgeRenderer = new OrthogonalEdgeRenderer(g);
 						break;
 					case "Flow":
-						vgraph.edgeRenderer = new FlowEdgeRenderer(g);
+						_vgraph.edgeRenderer = new FlowEdgeRenderer(g);
 						break;
 					case "Bezier":
-						vgraph.edgeRenderer = new FlowCurveEdgeRenderer(g);
+						_vgraph.edgeRenderer = new FlowCurveEdgeRenderer(g);
 						break;
 					case "Circular":
-						vgraph.edgeRenderer = new CircularEdgeRenderer(g);
+						_vgraph.edgeRenderer = new CircularEdgeRenderer(g);
 						break;
 					case "Hyperbolic":
-						if(vgraph.layouter is Hyperbolic2DLayouter) {
-							if((vgraph.layouter as Hyperbolic2DLayouter).projector != null) {
-								vgraph.edgeRenderer =
-									new HyperbolicEdgeRenderer(g,(vgraph.layouter as Hyperbolic2DLayouter).projector);
+						if(_vgraph.layouter is Hyperbolic2DLayouter) {
+							if((_vgraph.layouter as Hyperbolic2DLayouter).projector != null) {
+								_vgraph.edgeRenderer =
+									new HyperbolicEdgeRenderer(g,(_vgraph.layouter as Hyperbolic2DLayouter).projector);
 							} else {
 								trace("Cannot access projector of layouter, cannot use this edgerenderer!");
-								vgraph.edgeRenderer = new BaseEdgeRenderer(g);
+								_vgraph.edgeRenderer = new BaseEdgeRenderer(g);
 								this.selectedIndex = 0;
 							}
 						} else {
 							trace("Layouter MUST be hyperbolic, otherwise cannot use this edgerenderer!");
-							vgraph.edgeRenderer = new BaseEdgeRenderer(g);
+							_vgraph.edgeRenderer = new BaseEdgeRenderer(g);
 							this.selectedIndex = 0;
 						}
 						break;
 				default:
 						trace("Illegal EdgeLabelRenderer selected:"+er);
-						vgraph.edgeRenderer = new BaseEdgeRenderer(g);
+						_vgraph.edgeRenderer = new BaseEdgeRenderer(g);
 						break;
 				}
-				vgraph.refresh();
+				_vgraph.refresh();
 			}
 			
 			/**
@@ -153,12 +170,12 @@
 			 * */
 			public function refreshSelector(e:VGraphEvent = null):void {
 				
-				if(vgraph == null) {
+				if(_vgraph == null) {
 					trace("Cannot refresh EdgeRenderer, no valid vgraph!");
 					return;
 				}
 				
-				switch(ObjectUtil.getClassInfo(vgraph.edgeRenderer).name) {
+				switch(ObjectUtil.getClassInfo(_vgraph.edgeRenderer).name) {
 					case "BaseEdgeRenderer":
 						this.selectedIndex = 0;
 						break;
@@ -185,7 +202,7 @@
 						break;
 					default:
 						trace("Illegal EdgeRenderer class received:"+
-							ObjectUtil.getClassInfo(vgraph.edgeRenderer).name);
+							ObjectUtil.getClassInfo(_vgraph.edgeRenderer).name);
 						break;
 				}
 			}
@@ -196,7 +213,13 @@
 			 * */
 			private function initData():void {
 				this.dataProvider = ervalues;
-				this.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshSelector);
+			}
+			
+			/**
+			 * register event listener
+			 * */
+			private function registerListeners():void {
+				_vgraph.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshSelector);
 			}
 		]]>
 	</mx:Script>
