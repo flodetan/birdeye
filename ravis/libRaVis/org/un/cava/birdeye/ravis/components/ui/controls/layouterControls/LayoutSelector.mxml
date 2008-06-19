@@ -224,6 +224,7 @@
 				}
 	
 				layouterClassName = ObjectUtil.getClassInfo(_vgraph.layouter).name;
+				layouterClassName = layouterClassName.replace(/org.un.cava.birdeye.ravis.graphLayout.layout::/,"");
 	
 				/* now choose the selected layouter */
 				switch(layouterClassName) {

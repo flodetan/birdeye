@@ -43,15 +43,31 @@
 	backgroundAlpha=".2"
 	 >
 	
-	<local:BirdEyeZoom id="beyezoom" vgraph="{vgraph}" />
-	<local:ScaleLabels id="scalelbs" vgraph="{vgraph}" />
+	<local:BirdEyeZoom id="beyezoom" />
+	<local:ScaleLabels id="scalelbs" />
 
 	<mx:Script>
 		<![CDATA[
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			
-			[Bindable]
-			public var vgraph:VisualGraph;
+			private var _vgraph:VisualGraph;
+
+			/**
+			 * Provides access to the registered vgraph object.
+			 * */
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				beyezoom.vgraph = v;
+				scalelbs.vgraph = v;
+			}
+
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
 
 			/**
 			 * When enabling or disabling this component, we also

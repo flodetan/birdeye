@@ -32,7 +32,6 @@
 	selected="false"
 	label="History"
 	toolTip="Select will retain visibility of all nodes visited."
-	initialize="registerListeners()"
 	click="toggleShowHistory()" >
 	
 	<mx:Script>
@@ -40,7 +39,23 @@
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			
-			public var vgraph:VisualGraph;
+			private var _vgraph:VisualGraph;
+
+			/**
+			 * Provides access to the registered vgraph object.
+			 * */
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				registerListeners();
+			}
+
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
 			
 			/**
 			 * toggles to show previously visited root nodes
@@ -48,13 +63,13 @@
 			 * */
 			public function toggleShowHistory():void {
 				
-				if(vgraph == null) {
+				if(_vgraph == null) {
 					trace("Cannot toggle showing History, no valid vgraph!");
 					return;
 				}
 				
-				vgraph.showHistory = this.selected;
-				vgraph.draw();
+				_vgraph.showHistory = this.selected;
+				_vgraph.draw();
 			}
 
 			/**
@@ -63,18 +78,18 @@
 			 * */
 			public function refreshCheckbox(e:VGraphEvent = null):void {
 				
-				if(vgraph == null) {
+				if(_vgraph == null) {
 					trace("Cannot toggle showing History, no valid vgraph!");
 					return;
 				}
-				this.selected = vgraph.showHistory;
+				this.selected = _vgraph.showHistory;
 			}		
 	
 			/**
 			 * register a listener
 			 * */
 			private function registerListeners():void {
-				this.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshCheckbox);
+				_vgraph.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshCheckbox);
 			}	
 		]]>
 	</mx:Script>

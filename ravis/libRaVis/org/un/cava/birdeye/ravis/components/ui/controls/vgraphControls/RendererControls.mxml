@@ -43,16 +43,33 @@
 	backgroundAlpha=".2"
 	 >
 	
-	<local:NodeRendererSelector id="nodeRenSel" vgraph="{vgraph}" />
-	<local:EdgeLabelControls id="elcontrols" vgraph="{vgraph}" />
-	<local:EdgeRendererSelector id="erSel" vgraph="{vgraph}" />
+	<local:NodeRendererSelector id="nodeRenSel" />
+	<local:EdgeLabelControls id="elcontrols" />
+	<local:EdgeRendererSelector id="erSel" />
 
 	<mx:Script>
 		<![CDATA[
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 		
-			[Bindable]
-			public var vgraph:VisualGraph;
+			private var _vgraph:VisualGraph;
+
+			/**
+			 * Provides access to the registered vgraph object.
+			 * */
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				nodeRenSel.vgraph = v;
+				elcontrols.vgraph = v;
+				erSel.vgraph = v;
+			}
+
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
 			/**
 			 * When enabling or disabling this component, we also
 			 * perform some specific tasks.
@@ -62,17 +79,18 @@
 			 * @inheritDoc
 			 * */
 			override public function set enabled(e:Boolean):void {
-				
-				nodeRenSel.enabled = e;
-				elcontrols.enabled = e;
-				erSel.enabled = e;
-				
 				/* do it for the super class */
 				super.enabled = e;
 				
 				/* if disabled remove from view and vice versa */
 				this.visible = e;
 				this.includeInLayout = e;
+				
+				if(nodeRenSel != null && elcontrols != null && erSel != null) {
+					nodeRenSel.enabled = e;
+					elcontrols.enabled = e;
+					erSel.enabled = e;
+				}
 			}
 		]]>
 	</mx:Script>

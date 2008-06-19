@@ -27,8 +27,7 @@
  * THE SOFTWARE.
  *
 -->
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
-	initialize="registerListeners()" >
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml">
 	
 	<mx:Label
 		toolTip="Use this control to specify visible link distance"
@@ -54,20 +53,39 @@
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 		
-			public var vgraph:VisualGraph;
+			private var _vgraph:VisualGraph;
+
+			/**
+			 * Provides access to the registered vgraph object.
+			 * */
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				registerListeners();
+			}
+
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
 						
 			/**
 			 * updates the visible degree of separation (i.e.
 			 * nodes visible from the root node).
 			 * */
 			public function updateMaxVisDist():void {
+				if(degreesOfSep == null) {
+					return;
+				}
 				
-				if(vgraph == null) {
+				if(_vgraph == null) {
 					trace("DegreeOfSeparation NOT changed, no valid vgraph!");
 					return;
 				}
-				vgraph.maxVisibleDistance = degreesOfSep.value;
-				vgraph.draw();
+				_vgraph.maxVisibleDistance = degreesOfSep.value;
+				_vgraph.draw();
 			}
 			
 			/**
@@ -75,18 +93,21 @@
 			 * from VisualGraph object.
 			 * */
 			public function refreshMaxVisDist(e:VGraphEvent = null):void {
-				if(vgraph == null) {
+				if(degreesOfSep == null) {
+					return;
+				}
+				if(_vgraph == null) {
 					trace("DegreeOfSeparation NOT refreshed, no valid vgraph!");
 					return;
 				}
-				degreesOfSep.value = vgraph.maxVisibleDistance;
+				degreesOfSep.value = _vgraph.maxVisibleDistance;
 			}
 			
 			/**
 			 * register listeners
 			 * */
 			private function registerListeners():void {
-				this.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshMaxVisDist);
+				_vgraph.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshMaxVisDist);
 			}
 			
 		]]>

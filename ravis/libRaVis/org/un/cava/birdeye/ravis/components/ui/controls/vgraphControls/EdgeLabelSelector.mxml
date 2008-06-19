@@ -52,7 +52,23 @@
 			import org.un.cava.birdeye.ravis.components.renderers.edgeLabels.BaseEdgeLabelRenderer;
 			import org.un.cava.birdeye.ravis.components.renderers.edgeLabels.WFBEdgeLabelRenderer;
 			
-			public var vgraph:VisualGraph;
+			private var _vgraph:VisualGraph;
+
+			/**
+			 * Provides access to the registered vgraph object.
+			 * */
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				registerListeners();
+			}
+
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
 			
 			/**
 			 * When enabling or disabling this component, we also
@@ -81,7 +97,7 @@
 				
 				var elr:String;
 				
-				if(vgraph == null) {
+				if(_vgraph == null) {
 					trace("Cannot change EdgeLabelRenderer, no valid vgraph!");
 					return;
 				}
@@ -104,7 +120,7 @@
 						vgraph.edgeLabelRenderer = new ClassFactory(DefaultEdgeLabelRenderer);
 						break;
 				}
-				vgraph.draw();
+				_vgraph.draw();
 			}
 			
 			/**
@@ -112,12 +128,12 @@
 			 * */
 			public function refreshSelector(e:VGraphEvent = null):void {
 				
-				if(vgraph == null) {
+				if(_vgraph == null) {
 					trace("Cannot change EdgeLabelRenderer, no valid vgraph!");
 					return;
 				}
 				
-				switch(ObjectUtil.getClassInfo(vgraph.edgeLabelRenderer).name) {
+				switch(ObjectUtil.getClassInfo(_vgraph.edgeLabelRenderer).name) {
 					case "DefaultEdgeLabelRenderer":
 						this.selectedIndex = 0;
 						break;
@@ -140,8 +156,13 @@
 			 * */
 			private function initData():void {
 				this.dataProvider = elvalues;
-				
-				this.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshSelector);
+			}
+			
+			/**
+			 * register the event listener 
+			 * */
+			private function registerListeners():void {
+				_vgraph.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshSelector);	
 			}
 		]]>
 	</mx:Script>

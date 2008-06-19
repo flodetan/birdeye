@@ -43,15 +43,32 @@
 	backgroundAlpha=".2"
 	>
 	
-	<local:EdgeLabelSelector id="elselector" vgraph="{vgraph}" />
-	<local:ToggleEdgeLabels id="eltoggle" vgraph="{vgraph}" />
+	<local:EdgeLabelSelector id="elselector" />
+	<local:ToggleEdgeLabels id="eltoggle" />
 	
 	<mx:Script>
 		<![CDATA[
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			
 			[Bindable]
-			public var vgraph:VisualGraph;
+			private var _vgraph:VisualGraph;
+
+			/**
+			 * Provides access to the registered vgraph object.
+			 * */
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				elselector.vgraph = v;
+				eltoggle.vgraph = v;
+			}
+
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
 
 			/**
 			 * When enabling or disabling this component, we also

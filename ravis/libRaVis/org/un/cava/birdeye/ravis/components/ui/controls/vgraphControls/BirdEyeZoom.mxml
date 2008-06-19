@@ -27,10 +27,7 @@
  * THE SOFTWARE.
  *
 -->
-<mx:VBox 
-	xmlns:mx="http://www.adobe.com/2006/mxml"
-	initialize="registerListeners()"
-	>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml">
 	
 	<mx:Label
 		toolTip="Use this control to height of birdeye view."
@@ -74,31 +71,54 @@
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
 			
-			public var vgraph:VisualGraph;
+			private var _vgraph:VisualGraph;
+
+			/**
+			 * Provides access to the registered vgraph object.
+			 * */
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				registerListeners();
+			}
+
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
 			
 			/* update the scale of the VGraph, thus creating a BirdEye zoom effect */		
 			public function updateVScale():void {
-				if(vgraph == null) {
+				if(bzoom == null) {
+					return;
+				}
+				
+				if(_vgraph == null) {
 					trace("BirdEyeZoom NOT changed, no valid vgraph!");
 					return;
 				}
-				vgraph.scale = bzoom.value;
+				_vgraph.scale = bzoom.value;
 			}
 			
 			/* refresh the slider from the scaleX value */
 			public function refreshVScale(e:VGraphEvent = null):void {
-				if(vgraph == null) {
+				if(bzoom == null) {
+					return;
+				}
+				if(_vgraph == null) {
 					trace("BirdEyeZoom NOT refreshed, no valid vgraph!");
 					return;
 				}
-				bzoom.value = vgraph.scale;
+				bzoom.value = _vgraph.scale;
 			}
 			
 			/**
 			 * register listeners
 			 * */
 			private function registerListeners():void {
-				this.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshVScale);
+				_vgraph.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshVScale);
 			}
 		]]>
 	</mx:Script>

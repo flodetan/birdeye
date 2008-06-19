@@ -32,7 +32,6 @@
 	selected="true"
 	label="Edge Labels"
 	toolTip="Select to show edge labels."
-	initialize="registerListeners()"
 	click="toggleShowEdgeLabels()" >
 	
 	<mx:Script>
@@ -40,37 +39,53 @@
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			
-			public var vgraph:VisualGraph;
+			private var _vgraph:VisualGraph;
+
+			/**
+			 * Provides access to the registered vgraph object.
+			 * */
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				registerListeners();
+			}
+
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
 			
 			/**
 			 * toggles to show edge labels or not
 			 * */
 			public function toggleShowEdgeLabels():void {
 				
-				if(vgraph == null) {
+				if(_vgraph == null) {
 					trace("Cannot toggle display of EdgeLabels, no valid vgraph!");
 					return;
 				}
-				vgraph.displayEdgeLabels = this.selected;
-				vgraph.draw();
+				_vgraph.displayEdgeLabels = this.selected;
+				_vgraph.draw();
 			}
 			
 			/**
 			 * refreshes the checkbox from the value in VGraph.
 			 * */
 			public function refreshCheckbox(e:VGraphEvent = null):void {
-				if(vgraph == null) {
+				if(_vgraph == null) {
 					trace("Cannot refresh display of EdgeLabels, no valid vgraph!");
 					return;
 				}
-				this.selected = vgraph.displayEdgeLabels;
+				this.selected = _vgraph.displayEdgeLabels;
 			}
 			
 			/**
 			 * register a listener
 			 * */
 			private function registerListeners():void {
-				this.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshCheckbox);
+				_vgraph.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshCheckbox);
 			}		
 		]]>
 	</mx:Script>

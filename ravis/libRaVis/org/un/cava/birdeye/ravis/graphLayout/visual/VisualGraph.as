@@ -1218,6 +1218,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			var oldsid:String;
 			var newroot:INode;
 			var theXMLData:XML = xmlData;
+			var layouter:ILayoutAlgorithm;
 			
 			/* if we do not have been passed an XML object
 			 * we try to get one from the old graph */
@@ -1231,10 +1232,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				return;
 			}
 			
-			/* remove and create a new layouter */			
+			/* reset layouter and remember it */			
 			if(_layouter != null) {
 				_layouter.resetAll();
+				layouter = _layouter;
 				_layouter = null;
+				
 			}
 			
 			/* init a graph object with the XML data */
@@ -1248,9 +1251,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * initializes the VGraph items */
 			this.graph = graph;
 			
-			/* send an event for controls to reapply their currentl
-			 * set values to layouters */
-			this.dispatchEvent(new VGraphEvent(VGraphEvent.LAYOUTER_CHANGED));
+			/* reapply the previous layouter */
+			_layouter = layouter;
 					
 			/* setting a new graph invalidated our old root, we need to reset it */
 			/* we try to find a node, that has the same string-id as the old root node */
@@ -1261,9 +1263,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				throw Error("Cannot set a default root, bailing out");
 			}
 			
+			/* send an event for controls to reapply their currently
+			 * set values to layouters */
+			this.dispatchEvent(new VGraphEvent(VGraphEvent.LAYOUTER_CHANGED));
+			
 			/* trigger a redraw
 			 * XXXX think if we should do that here */
-			this.draw();
+			this.draw(VisualGraph.DF_RESET_LL);
 		}		
 
 		/**
@@ -1858,7 +1864,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* if there is an animation in progress, we ignore
 			 * the drag attempt */
-			if(_layouter.animInProgress) {
+			if(_layouter && _layouter.animInProgress) {
 				trace("Animation in progress, drag attempt ignored");
 				return;
 			}
@@ -2052,7 +2058,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				scroll(deltaX, deltaY);
 			}
 			/* and inform the layouter about the dragEvent */
-			_layouter.bgDragContinue(event);
+			if(_layouter) {
+				_layouter.bgDragContinue(event);
+			}
 			
 			/* reset the drag start point for the next step */
 			_dragCursorStartX = mpoint.x;
@@ -2107,8 +2115,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				// myback.removeEventListener(MouseEvent.MOUSE_MOVE,dragEnd);
 				
 				/* and inform the layouter about the dropEvent */
-				_layouter.bgDropEvent(event);
-				
+				if(_layouter) {
+					_layouter.bgDropEvent(event);
+				}
 			} else {
 				
 				/* if it was no background drag, the component
@@ -2132,8 +2141,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				
 				/* get the associated VNode to notify the layouter */
 				myvnode = _viewToVNodeMap[mycomp];
-				_layouter.dropEvent(event, myvnode);
-				
+				if(_layouter) {
+					_layouter.dropEvent(event, myvnode);
+				}
 				/* reset the dragComponent */
 				_dragComponent = null;
 				
