@@ -51,7 +51,6 @@
 				_vgraph = v;
 			}
 
-
 			/**
 			 * @private
 			 * */
