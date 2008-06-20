@@ -76,6 +76,7 @@ package org.un.cava.birdeye.ravis.components.renderers {
 			this.creationPolicy = ContainerCreationPolicy.ALL;
 			this.addEventListener(FlexEvent.CREATION_COMPLETE,initComponent);
 			//this.addEventListener(FlexEvent.INIT_COMPLETE,adjustCoordinates);
+			
 			super();
 		}
 			
@@ -180,13 +181,7 @@ package org.un.cava.birdeye.ravis.components.renderers {
 			lb = new LinkButton();
 			
 			lb.width = 100;
-		
-			BindingUtils.bindProperty(lb,"scaleX",this.parent,"scaleX");
-			BindingUtils.bindProperty(lb,"scaleY",this.parent,"scaleY");
-		
-			// XXX needs to be fixed
-			//lb.scaleX = GlobalParams.scaleFactor;
-			//lb.scaleY = GlobalParams.scaleFactor;
+
 			lb.toolTip = "Click to View Details";
 			lb.setStyle("fontWeight","normal");
 			lb.setStyle("rollOverColor",0xcccccc);

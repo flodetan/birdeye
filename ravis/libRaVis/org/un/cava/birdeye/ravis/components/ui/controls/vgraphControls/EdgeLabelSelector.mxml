@@ -128,12 +128,17 @@
 			 * */
 			public function refreshSelector(e:VGraphEvent = null):void {
 				
+				var elrClassName:String;
+				
 				if(_vgraph == null) {
 					trace("Cannot change EdgeLabelRenderer, no valid vgraph!");
 					return;
 				}
 				
-				switch(ObjectUtil.getClassInfo(_vgraph.edgeLabelRenderer).name) {
+				elrClassName = ObjectUtil.getClassInfo(_vgraph.edgeLabelRenderer).name;
+				elrClassName = elrClassName.replace(/org.un.cava.birdeye.ravis.components.renderers.edges::/,"");
+				
+				switch(elrClassName) {
 					case "DefaultEdgeLabelRenderer":
 						this.selectedIndex = 0;
 						break;
@@ -144,8 +149,7 @@
 						this.selectedIndex = 2;
 						break;
 					default:
-						trace("Illegal ELR class received:"+
-							ObjectUtil.getClassInfo(vgraph.edgeLabelRenderer).name);
+						trace("Illegal ELR class received:"+elrClassName);
 						break;
 				}
 			}

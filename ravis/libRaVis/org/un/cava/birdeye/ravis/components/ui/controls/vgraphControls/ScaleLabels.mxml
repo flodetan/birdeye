@@ -107,8 +107,13 @@
 	
 				children = _vgraph.getChildren();
 				for each(child in children) {
-					child.scaleX = scaleSlider.value;
-					child.scaleY = scaleSlider.value;
+					/* we would need to make sure we don't scale the drawing
+					 * surface
+					 */
+					if(child != _vgraph.drawingSurface) {
+						child.scaleX = scaleSlider.value;
+						child.scaleY = scaleSlider.value;
+					}
 				}
 				
 				/* check if we have a layouter at all */
@@ -127,17 +132,25 @@
 			public function refreshSlider(e:VGraphEvent = null):void {
 				
 				var child:UIComponent;
-				
+				var children:Array;
+
 				if(_vgraph == null) {
 					trace("Cannot refresh ScaleSlider of VGraph, no valid vgraph!");
 					return;
 				}	
-					
-				/* get from first child. XXX Needs to check that
-				 * we actually have at least 1 child (we should
-				 * at least always have the drawing surface for the edges.....
-				 */
-				scaleSlider.value = _vgraph.getChildAt(0).scaleX;
+									
+				children = _vgraph.getChildren();
+				for each(child in children) {
+					/* we would need to make sure we don't scale the drawing
+					 * surface
+					 */
+					if(child != _vgraph.drawingSurface) {
+						scaleSlider.value = _vgraph.getChildAt(1).scaleX;
+						/* and we can abort here */
+						return;
+					}
+					trace("VGraph has no child except drawing surface, no reference for scale refresh");
+				}
 			}
 			
 			/**

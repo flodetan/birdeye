@@ -88,13 +88,7 @@ package org.un.cava.birdeye.ravis.components.renderers.edgeLabels {
 			lb.width = 65;
 			lb.height = 15;
 			lb.visible = false;
-		
-			BindingUtils.bindProperty(lb,"scaleX",this.parent,"scaleX");
-			BindingUtils.bindProperty(lb,"scaleY",this.parent,"scaleY");
-		
-			// XXX
-			//lb.scaleX = GlobalParams.scaleFactor;
-			//lb.scaleY = GlobalParams.scaleFactor;
+
 			lb.toolTip = this.data.data.@edgeDescription;
 			
 			return lb;
@@ -130,8 +124,8 @@ package org.un.cava.birdeye.ravis.components.renderers.edgeLabels {
 			
 			img.toolTip = this.data.data.@edgeLabel;
 		
-			BindingUtils.bindProperty(img,"scaleX",this.parent,"scaleX");
-			BindingUtils.bindProperty(img,"scaleY",this.parent,"scaleY");
+			//BindingUtils.bindProperty(img,"scaleX",this.parent,"scaleX");
+			//BindingUtils.bindProperty(img,"scaleY",this.parent,"scaleY");
 		
 			//img.scaleX = GlobalParams.scaleFactor;
 			//img.scaleY = GlobalParams.scaleFactor;
