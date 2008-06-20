@@ -29,12 +29,9 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 	// Flash classes
 	import flash.events.Event;
 	
-	import mx.controls.Image;
+	import mx.binding.utils.BindingUtils;
 	import mx.core.UIComponent;
 	
-	import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
-	import org.un.cava.birdeye.ravis.assets.icons.primitives.Circle;
-	import org.un.cava.birdeye.ravis.assets.icons.primitives.Rectangle;
 	import org.un.cava.birdeye.ravis.components.renderers.RendererIconFactory;
 	
 	/**
@@ -72,6 +69,10 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 				this.data.data.@nodeSize,
 				this.data.data.@nodeColor);
 			img.toolTip = this.data.data.@name;
+			
+			BindingUtils.bindProperty(img,"scaleX",this.parent,"scaleX");
+			BindingUtils.bindProperty(img,"scaleY",this.parent,"scaleY");
+		
 			//img.scaleX = GlobalParams.scaleFactor;
 			//img.scaleY = GlobalParams.scaleFactor;
 			this.addChild(img);

@@ -30,6 +30,7 @@ package org.un.cava.birdeye.ravis.components.renderers.edgeLabels {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
+	import mx.binding.utils.BindingUtils;
 	import mx.controls.Image;
 	import mx.controls.LinkButton;
 	import mx.core.UIComponent;
@@ -87,6 +88,10 @@ package org.un.cava.birdeye.ravis.components.renderers.edgeLabels {
 			lb.width = 65;
 			lb.height = 15;
 			lb.visible = false;
+		
+			BindingUtils.bindProperty(lb,"scaleX",this.parent,"scaleX");
+			BindingUtils.bindProperty(lb,"scaleY",this.parent,"scaleY");
+		
 			// XXX
 			//lb.scaleX = GlobalParams.scaleFactor;
 			//lb.scaleY = GlobalParams.scaleFactor;
@@ -124,6 +129,10 @@ package org.un.cava.birdeye.ravis.components.renderers.edgeLabels {
 			img.setStyle("backgroundColor", "0xcccccc");
 			
 			img.toolTip = this.data.data.@edgeLabel;
+		
+			BindingUtils.bindProperty(img,"scaleX",this.parent,"scaleX");
+			BindingUtils.bindProperty(img,"scaleY",this.parent,"scaleY");
+		
 			//img.scaleX = GlobalParams.scaleFactor;
 			//img.scaleY = GlobalParams.scaleFactor;
 			//XXXX

@@ -30,6 +30,7 @@ package org.un.cava.birdeye.ravis.components.renderers {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
+	import mx.binding.utils.BindingUtils;
 	import mx.containers.VBox;
 	import mx.controls.Image;
 	import mx.controls.Label;
@@ -38,8 +39,6 @@ package org.un.cava.birdeye.ravis.components.renderers {
 	import mx.core.ContainerCreationPolicy;
 	import mx.core.IDataRenderer;
 	import mx.events.FlexEvent;
-	
-	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualItem;
 	
 	/**
 	 * This is the basic renderer class that more
@@ -181,6 +180,10 @@ package org.un.cava.birdeye.ravis.components.renderers {
 			lb = new LinkButton();
 			
 			lb.width = 100;
+		
+			BindingUtils.bindProperty(lb,"scaleX",this.parent,"scaleX");
+			BindingUtils.bindProperty(lb,"scaleY",this.parent,"scaleY");
+		
 			// XXX needs to be fixed
 			//lb.scaleX = GlobalParams.scaleFactor;
 			//lb.scaleY = GlobalParams.scaleFactor;
