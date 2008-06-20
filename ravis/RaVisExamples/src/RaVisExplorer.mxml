@@ -100,7 +100,7 @@
 										styleName="linkButtonWindowShade" 
 		  								label="Layout"
 		  								width="100%"
-		  								opened="true"
+		  								opened="false"
 		  								horizontalAlign="center"
 		  								paddingBottom="5"
 		  								>
@@ -177,7 +177,7 @@
 										styleName="linkButtonWindowShade" 
 							  			label="View Controls"
 							  			width="100%"
-							  			opened="false"
+							  			opened="true"
 							  			horizontalAlign="center"
 							  			paddingBottom="5"
 							  			>
@@ -196,6 +196,7 @@
 											backgroundAlpha=".2" >
 											<vc:DegreesOfSeparation id="myDegreeOS" vgraph="{vgraph}" />
 											<vc:ScaleControls id="mySCs" vgraph="{vgraph}" />
+											<vc:DrawButton id="myDB" vgraph="{vgraph}" />
 											<vc:FullRefreshButton
 												id="myFRB"
 												vgraph="{vgraph}"
