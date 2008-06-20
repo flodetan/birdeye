@@ -366,6 +366,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		/* public attributes */
 
 		/**
+		 * enable bitmap caching in renderer components
+		 * */
+		public var cacheRendererObjects:Boolean = false;
+
+		/**
 		 * Default visibility setting for new nodes. If
 		 * set all new nodes are created visible and with
 		 * a view component. Beware of that if you have
@@ -1653,6 +1658,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			mycomponent.addEventListener(MouseEvent.MOUSE_DOWN,nodeMouseDown);
 			mycomponent.addEventListener(MouseEvent.MOUSE_UP, dragEnd);
 
+			/* enable bitmap cachine if required */
+			mycomponent.cacheAsBitmap = cacheRendererObjects;
+
 			/* add the component to its parent component */
 			_canvas.addChild(mycomponent);
 			
@@ -1755,6 +1763,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			if(mycomponent is IDataRenderer) {
 				(mycomponent as IDataRenderer).data = ve;
 			}
+			
+			/* enable bitmap cachine if required */
+			mycomponent.cacheAsBitmap = cacheRendererObjects;
 			
 			/* add the component to its parent component
 			 * this can create problems, we have to see where we
