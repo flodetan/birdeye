@@ -27,10 +27,12 @@
  * THE SOFTWARE.
  *
 -->
-<mx:HBox width="100%"
+<mx:HBox 
+	width="100%"
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	>
 	<mx:Label text="Center Node: " />
+	
 	<mx:Label
 		id="myNodeNameLbl"
 		fontSize="9"
