@@ -33,7 +33,6 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 	import mx.controls.LinkButton;
 	
 	import org.un.cava.birdeye.ravis.components.renderers.BaseRenderer;
-	import org.un.cava.birdeye.ravis.components.ui.VGAccordion;
 	import org.un.cava.birdeye.ravis.utils.events.VGraphRendererEvent;
 	
 	/**
