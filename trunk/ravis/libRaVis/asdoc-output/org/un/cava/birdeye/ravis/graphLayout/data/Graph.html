@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print">
-<meta content="Graph,org.un.cava.birdeye.ravis.graphLayout.data.Graph,DEFAULTNAME_EDGE,DEFAULTNAME_FROMID,DEFAULTNAME_NODE,DEFAULTNAME_TOID,WALK_BACKWARDS,WALK_BOTH,WALK_FORWARD,_currentEdgeId,_currentNodeId,_directional,_edges,_id,_nodeSortFunction,_nodes,_nodesById,_nodesByStringId,_numberOfEdges,_numberOfNodes,_treeMap,_walkingDirection,edges,id,isDirectional,noEdges,noNodes,nodes,nodeSortFunction,walkingDirection,createGraph,createNode,getEdge,getTree,initFromXML,link,nodeById,nodeByStringId,purgeGraph,purgeTrees,removeEdge,removeNode,unlink" name="keywords">
+<meta content="Graph,org.un.cava.birdeye.ravis.graphLayout.data.Graph,DEFAULTNAME_EDGE,DEFAULTNAME_FROMID,DEFAULTNAME_NODE,DEFAULTNAME_TOID,WALK_BACKWARDS,WALK_BOTH,WALK_FORWARD,_currentEdgeId,_currentNodeId,_directional,_edges,_id,_nodeSortFunction,_nodes,_nodesById,_nodesByStringId,_numberOfEdges,_numberOfNodes,_treeMap,_walkingDirection,_xmlData,edges,id,isDirectional,noEdges,noNodes,nodes,xmlData,nodeSortFunction,walkingDirection,createGraph,createNode,getEdge,getTree,initFromXML,link,nodeById,nodeByStringId,purgeGraph,purgeTrees,removeEdge,removeNode,unlink" name="keywords">
 <title>org.un.cava.birdeye.ravis.graphLayout.data.Graph</title>
 </head>
 <body>
@@ -120,6 +120,13 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
    a spanning tree.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#xmlData">xmlData</a> : XML<div class="summaryTableDescription">[read-only]
+   
+   Return a reference to the XML graph
+   structure that was used to initialise the graph.</div>
+</td><td class="summaryTableOwnerCol">Graph</td>
+</tr>
 </table>
 </div>
 <a name="protectedPropertySummary"></a>
@@ -186,6 +193,10 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_walkingDirection">_walkingDirection</a> : int = 0<div class="summaryTableDescription"></div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_xmlData">_xmlData</a> : XML<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">Graph</td>
+</tr>
 </table>
 </div>
 <a name="methodSummary"></a>
@@ -198,7 +209,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#Graph()">Graph</a>(id:String, directional:Boolean = false, xmlsource:XML = null, xmlnames:Array = null)</div>
+<a class="signatureLink" href="#Graph()">Graph</a>(id:String, directional:Boolean = false, xmlsource:XML = null)</div>
 <div class="summaryTableDescription">
    Constructor method that creates the graph and can
    initialise it directly from an XML object, if one is specified.</div>
@@ -207,7 +218,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#createGraph()">createGraph</a>(id:String, directional:Boolean, xmlsource:XML, xmlnames:Array = null):<a href="../data/IGraph.html">IGraph</a>
+<a class="signatureLink" href="#createGraph()">createGraph</a>(id:String, directional:Boolean, xmlsource:XML):<a href="../data/IGraph.html">IGraph</a>
 </div>
 <div class="summaryTableDescription">[static]
    A static factory method to create new graphs, but requires an xmlsource to be specified.</div>
@@ -249,7 +260,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#initFromXML()">initFromXML</a>(xml:XML, xmlnames:Array):void</div>
+<a class="signatureLink" href="#initFromXML()">initFromXML</a>(xml:XML):void</div>
 <div class="summaryTableDescription">
    
       Creates a graph from XML.</div>
@@ -645,6 +656,31 @@ showHideInherited();
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function set walkingDirection(value:int):void</code>
 <br>
 </div>
+<a name="_xmlData"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">_xmlData</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var _xmlData:XML</code>
+</div>
+<a name="xmlData"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">xmlData</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>xmlData:XML</code>&nbsp;&nbsp;[read-only]<p>
+   
+   Return a reference to the XML graph
+   structure that was used to initialise the graph.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get xmlData():XML</code>
+<br>
+</div>
 <a name="constructorDetail"></a>
 <div class="detailSectionHeader">Constructor detail</div>
 <a name="Graph()"></a>
@@ -654,7 +690,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public function Graph(id:String, directional:Boolean = false, xmlsource:XML = null, xmlnames:Array = null)</code><p>
+<code>public function Graph(id:String, directional:Boolean = false, xmlsource:XML = null)</code><p>
    Constructor method that creates the graph and can
    initialise it directly from an XML object, if one is specified.
    
@@ -678,13 +714,6 @@ showHideInherited();
 <td width="20px"></td><td><code><span class="label">xmlsource</span>:XML</code> (default = <code>null</code>)<code></code> &mdash; an XML object that contains node and edge items that define the graph.
    </td>
 </tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">xmlnames</span>:Array</code> (default = <code>null</code>)<code></code> &mdash; an optional Array that contains XML tag and attribute names that define the graph. 
-   </td>
-</tr>
 </table>
 </div>
 <a name="methodDetail"></a>
@@ -696,7 +725,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public static function createGraph(id:String, directional:Boolean, xmlsource:XML, xmlnames:Array = null):<a href="../data/IGraph.html">IGraph</a></code><p>
+<code>public static function createGraph(id:String, directional:Boolean, xmlsource:XML):<a href="../data/IGraph.html">IGraph</a></code><p>
    A static factory method to create new graphs, but requires an xmlsource to be specified.
    
    </p><span class="label">Parameters</span>
@@ -717,13 +746,6 @@ showHideInherited();
 </tr>
 <tr>
 <td width="20px"></td><td><code><span class="label">xmlsource</span>:XML</code> &mdash; an XML object that contains node and edge items that define the graph.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">xmlnames</span>:Array</code> (default = <code>null</code>)<code></code> &mdash; an optional Array that contains XML tag and attribute names that define the graph. 
    </td>
 </tr>
 </table>
@@ -877,7 +899,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public function initFromXML(xml:XML, xmlnames:Array):void</code><p>
+<code>public function initFromXML(xml:XML):void</code><p>
    
       Creates a graph from XML.
       The XML you provide should contain 2 kinds of elements<br>
@@ -889,25 +911,11 @@ showHideInherited();
       id will come from the Node's id attribute (make sure this is unique). The item's data will
       be the Node, and will be of type XML. The &lt;Edge&gt; elements must come fterthe corresponding
       &lt;Node&gt; elements have appeared.
-      The xmlnames array must have 4 elements:
-   <ul>
-   <li>the element name that defines nodes</li>
-   <li>the element name that defines edges</li>
-   <li>the edge attribute name that defines the 'from' node</li>
-   <li>the edge attribute name that defines the 'to' node</li>
-   </ul>
       
       <span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
 <td width="20px"></td><td><code><span class="label">xml</span>:XML</code> &mdash; an XML document containing Node and Edge elements.
-      </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">xmlnames</span>:Array</code> &mdash; the XML element and attribute names to use when parsing an XML dataProvider.
       </td>
 </tr>
 </table>

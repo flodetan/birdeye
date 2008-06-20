@@ -136,10 +136,19 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("CÂ
    the display object d.</td>
 </tr>
 <tr>
-<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/IVisualNode.html#centered">centered</a> &mdash; Property in interface org.un.cava.birdeye.ravis.graphLayout.visual.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/IVisualNode.html">IVisualNode</a></td>
+<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/IVisualItem.html#centered">centered</a> &mdash; Property in interface org.un.cava.birdeye.ravis.graphLayout.visual.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/IVisualItem.html">IVisualItem</a></td>
 </tr>
 <tr>
 <td width="20"></td><td>
+   Property to indicate if the node should be
+   centered around it's geometrical center (i.e.</td>
+</tr>
+<tr>
+<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/VisualEdge.html#centered">centered</a> &mdash; Property in class org.un.cava.birdeye.ravis.graphLayout.visual.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/VisualEdge.html">VisualEdge</a></td>
+</tr>
+<tr>
+<td width="20"></td><td>
+   
    Property to indicate if the node should be
    centered around it's geometrical center (i.e.</td>
 </tr>
@@ -180,7 +189,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("CÂ
 <td width="20"></td><td></td>
 </tr>
 <tr>
-<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/globals/class-list.html');" href="org/un/cava/birdeye/ravis/globals/GlobalControls.html#centerNodeByStringId()">centerNodeByStringId</a>(nodeID) &mdash; Static method in class org.un.cava.birdeye.ravis.globals.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/globals/class-list.html');" href="org/un/cava/birdeye/ravis/globals/GlobalControls.html">GlobalControls</a></td>
+<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/VisualGraph.html#centerNodeByStringId()">centerNodeByStringId</a>(nodeID) &mdash; Method in class org.un.cava.birdeye.ravis.graphLayout.visual.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/visual/VisualGraph.html">VisualGraph</a></td>
 </tr>
 <tr>
 <td width="20"></td><td>
@@ -237,8 +246,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("CÂ
 </tr>
 <tr>
 <td width="20"></td><td>
-    Set the orientation value in the layouter
-    according to the current selected value
+    set the selected orientation and calls vgraph.draw()
     </td>
 </tr>
 <tr>
@@ -378,16 +386,6 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("CÂ
    visual coordinates point to.</td>
 </tr>
 <tr>
-<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/globals/class-list.html');" href="org/un/cava/birdeye/ravis/globals/GlobalParamsLayout.html#commonLayoutControls">commonLayoutControls</a> &mdash; Static property in class org.un.cava.birdeye.ravis.globals.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/globals/class-list.html');" href="org/un/cava/birdeye/ravis/globals/GlobalParamsLayout.html">GlobalParamsLayout</a></td>
-</tr>
-<tr>
-<td width="20"></td><td>
-   This mapping holds instantiated CommonLayoutControls
-   components, which aggregate as a compound component
-   all controls common to all layouters, currently 
-   AutoFit, Animation and LinkLength.</td>
-</tr>
-<tr>
 <td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/components/ui/controls/layouterControls/class-list.html');" href="org/un/cava/birdeye/ravis/components/ui/controls/layouterControls/CommonLayoutControls.html">CommonLayoutControls</a> &mdash; Class in package <a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/components/ui/controls/layouterControls/class-list.html');" href="org/un/cava/birdeye/ravis/components/ui/controls/layouterControls/package-detail.html">org.un.cava.birdeye.ravis.components.ui.controls.layouterControls</a></td>
 </tr>
 <tr>
@@ -482,7 +480,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("CÂ
    <code>cosh(x) = 0.5e^x+e^(-x))</code>.</td>
 </tr>
 <tr>
-<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/data/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/data/Graph.html#createGraph()">createGraph</a>(id, directional, xmlsource, xmlnames) &mdash; Static method in class org.un.cava.birdeye.ravis.graphLayout.data.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/data/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/data/Graph.html">Graph</a></td>
+<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/data/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/data/Graph.html#createGraph()">createGraph</a>(id, directional, xmlsource) &mdash; Static method in class org.un.cava.birdeye.ravis.graphLayout.data.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/data/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/data/Graph.html">Graph</a></td>
 </tr>
 <tr>
 <td width="20"></td><td>
@@ -585,14 +583,6 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("CÂ
 <td width="20"></td><td></td>
 </tr>
 <tr>
-<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/globals/class-list.html');" href="org/un/cava/birdeye/ravis/globals/GlobalParamsLayout.html#currentLayouterName">currentLayouterName</a> &mdash; Static property in class org.un.cava.birdeye.ravis.globals.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/globals/class-list.html');" href="org/un/cava/birdeye/ravis/globals/GlobalParamsLayout.html">GlobalParamsLayout</a></td>
-</tr>
-<tr>
-<td width="20"></td><td>
-   This string contains the descriptive name of the
-   currently selected layouter.</td>
-</tr>
-<tr>
 <td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/data/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/data/Graph.html#_currentNodeId">_currentNodeId</a> &mdash; Property in class org.un.cava.birdeye.ravis.graphLayout.data.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/graphLayout/data/class-list.html');" href="org/un/cava/birdeye/ravis/graphLayout/data/Graph.html">Graph</a></td>
 </tr>
 <tr>
@@ -635,13 +625,6 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("CÂ
 <td width="20"></td><td>
    This hash keeps track of all the past root VNodes
    thus being the history.</td>
-</tr>
-<tr>
-<td colspan="2" class="idxrow"><a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/globals/class-list.html');" href="org/un/cava/birdeye/ravis/globals/GlobalParamsData.html#curRootNodeLabel">curRootNodeLabel</a> &mdash; Static property in class org.un.cava.birdeye.ravis.globals.<a onclick="javascript:loadClassListFrame('org/un/cava/birdeye/ravis/globals/class-list.html');" href="org/un/cava/birdeye/ravis/globals/GlobalParamsData.html">GlobalParamsData</a></td>
-</tr>
-<tr>
-<td width="20"></td><td>
-   This holds a label to display the current root node.</td>
 </tr>
 <tr>
 <td style="padding-bottom:20px" colspan="2"></td>
