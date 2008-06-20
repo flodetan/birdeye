@@ -522,6 +522,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		/**
 		 * @inheritDoc
 		 * */
+		public function get drawingSurface():UIComponent {
+			return _drawingSurface;
+		}
+
+		/**
+		 * @inheritDoc
+		 * */
 		public function set itemRenderer(ifac:IFactory):void {
 			if(ifac != _itemRendererFactory) {
 				_itemRendererFactory = ifac;

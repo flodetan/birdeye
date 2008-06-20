@@ -70,8 +70,8 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 				this.data.data.@nodeColor);
 			img.toolTip = this.data.data.@name;
 			
-			BindingUtils.bindProperty(img,"scaleX",this.parent,"scaleX");
-			BindingUtils.bindProperty(img,"scaleY",this.parent,"scaleY");
+			//BindingUtils.bindProperty(img,"scaleX",this.parent,"scaleX");
+			//BindingUtils.bindProperty(img,"scaleY",this.parent,"scaleY");
 		
 			//img.scaleX = GlobalParams.scaleFactor;
 			//img.scaleY = GlobalParams.scaleFactor;

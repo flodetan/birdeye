@@ -31,10 +31,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	import mx.core.IFactory;
 	import mx.core.IInvalidating;
 	import mx.core.IUIComponent;
+	import mx.core.UIComponent;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.data.IGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
-	
 	
 	/**
 	 * Interface to the VisualGraph Flex Component,
@@ -60,6 +60,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * @returns The graphics object of the drawing surface.
 		 * */
 		function get edgeDrawGraphics():Graphics;
+		
+		/**
+		 * provide access to the drawing surface.
+		 * This is important as it should not be scaled.
+		 * */
+		function get drawingSurface():UIComponent;
 		
 		/**
 		 * Allow the provision of an ItemRenderer (which is

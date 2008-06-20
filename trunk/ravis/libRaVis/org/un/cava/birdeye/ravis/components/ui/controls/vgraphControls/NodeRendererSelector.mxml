@@ -157,13 +157,17 @@
 			 * */
 			public function refreshSelector(e:VGraphEvent = null):void {
 				
+				var nlrClassName:String;
+				
 				if(_vgraph == null) {
 					trace("Cannot refresh NodeRenderer, no valid vgraph!");
 					return;
 				}
 				
-				switch(ObjectUtil.getClassInfo(_vgraph.edgeLabelRenderer).name) {
-
+				nlrClassName = ObjectUtil.getClassInfo(_vgraph.itemRenderer).name;
+				nlrClassName = nlrClassName.replace(/org.un.cava.birdeye.ravis.components.renderers.nodes::/,"");
+				
+				switch(nlrClassName) {
 					case "DefaultNodeRenderer":
 						this.selectedIndex = 0;
 						break;
@@ -192,8 +196,7 @@
 						this.selectedIndex = 8;
 						break;
 					default:
-						trace("Illegal NodeLabelRenderer received:"+
-							ObjectUtil.getClassInfo(_vgraph.edgeLabelRenderer).name);
+						trace("Illegal NodeLabelRenderer received:"+nlrClassName);
 						break;
 				}
 			}

@@ -158,7 +158,7 @@
 						}
 						break;
 				default:
-						trace("Illegal EdgeLabelRenderer selected:"+er);
+						trace("Illegal EdgeRenderer selected:"+er);
 						_vgraph.edgeRenderer = new BaseEdgeRenderer(g);
 						break;
 				}
@@ -169,13 +169,18 @@
 			 * Refresh the selector with the current EdgeLabelRenderer.
 			 * */
 			public function refreshSelector(e:VGraphEvent = null):void {
+	
+				var erClassName:String;
 				
 				if(_vgraph == null) {
 					trace("Cannot refresh EdgeRenderer, no valid vgraph!");
 					return;
 				}
 				
-				switch(ObjectUtil.getClassInfo(_vgraph.edgeRenderer).name) {
+				erClassName = ObjectUtil.getClassInfo(_vgraph.edgeRenderer).name;
+				erClassName = erClassName.replace(/org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers::/,"");
+				
+				switch(erClassName) {
 					case "BaseEdgeRenderer":
 						this.selectedIndex = 0;
 						break;
@@ -201,8 +206,7 @@
 						this.selectedIndex = 7;
 						break;
 					default:
-						trace("Illegal EdgeRenderer class received:"+
-							ObjectUtil.getClassInfo(_vgraph.edgeRenderer).name);
+						trace("Illegal EdgeRenderer class received:"+erClassName);
 						break;
 				}
 			}
