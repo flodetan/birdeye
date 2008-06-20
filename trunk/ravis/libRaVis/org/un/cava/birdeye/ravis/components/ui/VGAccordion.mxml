@@ -35,13 +35,10 @@
 	width="100%"
 	height="100%"
 	creationPolicy="all"
-	creationComplete="registerComplete()"
 	>
 	
 	<mx:Script>	
 		<![CDATA[
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-		
 			import mx.core.Container;
 			
 			public static const INDEX_VIS_LAYOUT:uint = 0;
@@ -100,14 +97,6 @@
 				} else {
 					trace("not all subcontainers properly registered");
 				}
-			}
-			
-		
-			/**
-			 * initialise the selection data.
-			 * */
-			private function registerComplete():void {
-				GlobalParams.vgAccordion = this;
 			}
 		]]>
 	</mx:Script>
