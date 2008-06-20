@@ -29,27 +29,52 @@
 -->
 <mx:HBox width="100%"
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	creationComplete="registerComplete()"
 	>
 	<mx:Label text="Number of Visible Nodes: " />
 	<mx:Label
+		id="noVisnodesLbl"
 		fontSize="9"
 		textAlign="left"
 		width="100%"
-		text="{GlobalParams.vgraph.noVisibleVNodes.toString()}" />
+		/>
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsData;
+			private var _vgraph:VisualGraph;
 
 			/**
-			 * register that we are complete
+			 * Provides access to the registered vgraph object.
 			 * */
-			private function registerComplete():void {
-				/* register ourselves */
-				GlobalParamsData.noVisVnodesLabel = this;
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v; 
+				registerListeners();
+			}
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
+			
+			/**
+			 * update the label from the number of visible nodes
+			 * */
+			public function updateLabel(e:VGraphEvent = null):void {
+				if(_vgraph == null) {
+					return;
+				}
+				noVisnodesLbl.text = _vgraph.noVisibleVNodes.toString();
+			}
+			
+			/**
+			 * bind the value to the vgraph object
+			 * */
+			private function registerListeners():void {
+				_vgraph.addEventListener(VGraphEvent.VISIBILITY_CHANGED,updateLabel);
 			}
 		]]>
 	</mx:Script>
