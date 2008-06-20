@@ -254,8 +254,6 @@
 	<mx:Script>
 		<![CDATA[
 			import org.un.cava.birdeye.ravis.graphLayout.data.Graph;
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsData;
 			import org.un.cava.birdeye.ravis.components.ui.controls.vgraphControls.NodeRendererSelector;
 			import org.un.cava.birdeye.ravis.components.ui.controls.vgraphControls.EdgeRendererSelector;
 			import org.un.cava.birdeye.ravis.components.ui.controls.vgraphControls.DegreesOfSeparation;
@@ -275,8 +273,6 @@
 				
 				/* init a graph object with the XML data */
 				vgraph.graph = new Graph("XMLAsDocsGraph",false,xmldata);
-
-				GlobalParams.vgraph = vgraph;
 
 				/* assign start root */
 				vgraph.currentRootVNode = vgraph.graph.nodeByStringId("1").vnode;
