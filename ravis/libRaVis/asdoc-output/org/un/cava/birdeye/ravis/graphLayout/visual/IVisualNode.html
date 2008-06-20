@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print">
-<meta content="IVisualNode,org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode,centered,moveable,node,orientAngle,rawview,view,viewCenter,viewX,viewY,x,y,commit,refresh" name="keywords">
+<meta content="IVisualNode,org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode,moveable,node,orientAngle,rawview,view,viewCenter,viewX,viewY,x,y,commit,refresh" name="keywords">
 <title>org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode</title>
 </head>
 <body>
@@ -65,11 +65,11 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("In
 <tr>
 <th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
 </tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#centered">centered</a> : Boolean<div class="summaryTableDescription">
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="IVisualItem.html#centered">centered</a> : Boolean<div class="summaryTableDescription">
    Property to indicate if the node should be
    centered around it's geometrical center (i.e.</div>
-</td><td class="summaryTableOwnerCol">IVisualNode</td>
+</td><td class="summaryTableOwnerCol"><a href="IVisualItem.html">IVisualItem</a></td>
 </tr>
 <tr class="hideInheritedProperty">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="IVisualItem.html#data">data</a> : Object<div class="summaryTableDescription">
@@ -190,34 +190,10 @@ showHideInherited();
 <div class="MainContent">
 <a name="propertyDetail"></a>
 <div class="detailSectionHeader">Property detail</div>
-<a name="centered"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">centered</td><td class="detailHeaderType">property</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>centered:Boolean</code>&nbsp;&nbsp;[read-write]<p>
-   Property to indicate if the node should be
-   centered around it's geometrical center (i.e.
-   the center of it's view) or if it's origin would
-   be the usual upper left corner. The value will
-   be applied by the commit() and refresh() methods.
-   </p><span class="label">Implementation</span>
-<br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get centered():Boolean</code>
-<br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set centered(value:Boolean):void</code>
-<br>
-<p>
-<span class="label">See also</span>
-</p>
-<div class="seeAlso">commit()<br>refresh()</div>
-</div>
 <a name="moveable"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
-<td class="detailHeaderName">moveable</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+<td class="detailHeaderName">moveable</td><td class="detailHeaderType">property</td>
 </tr>
 </table>
 <div class="detailBody">

@@ -161,9 +161,9 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <div class="summaryTableDescription">
    
    
-   this methods initialises and adds a 
-   link button to the renderer
-   </div>
+   This method is required to readjust the coordinates
+   after initialised if we have a centered renderer
+   parent object.</div>
 </td><td class="summaryTableOwnerCol">DefaultEdgeLabelRenderer</td>
 </tr>
 <tr class="hideInheritedProtectedMethod">
@@ -226,8 +226,11 @@ showHideInherited();
 <code>protected override function initLinkButton():LinkButton</code><p>
    
    
-   this methods initialises and adds a 
-   link button to the renderer
+   This method is required to readjust the coordinates
+   after initialised if we have a centered renderer
+   parent object.
+   This should only be called through the initComponent
+   event handler.
    </p><p></p>
 <span class="label">Returns</span>
 <table border="0" cellspacing="0" cellpadding="0">
