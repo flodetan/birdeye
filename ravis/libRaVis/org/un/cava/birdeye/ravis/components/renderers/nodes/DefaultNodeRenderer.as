@@ -36,7 +36,6 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 	import org.un.cava.birdeye.ravis.assets.icons.primitives.Circle;
 	import org.un.cava.birdeye.ravis.assets.icons.primitives.Rectangle;
 	import org.un.cava.birdeye.ravis.components.renderers.RendererIconFactory;
-	import org.un.cava.birdeye.ravis.globals.GlobalParams;
 	
 	/**
 	 * This renderer displays the graph nodes as
@@ -73,8 +72,8 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 				this.data.data.@nodeSize,
 				this.data.data.@nodeColor);
 			img.toolTip = this.data.data.@name;
-			img.scaleX = GlobalParams.scaleFactor;
-			img.scaleY = GlobalParams.scaleFactor;
+			//img.scaleX = GlobalParams.scaleFactor;
+			//img.scaleY = GlobalParams.scaleFactor;
 			this.addChild(img);
 			 
 			/* now the link button */

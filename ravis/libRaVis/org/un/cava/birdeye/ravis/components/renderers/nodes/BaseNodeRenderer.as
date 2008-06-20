@@ -34,8 +34,7 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 	
 	import org.un.cava.birdeye.ravis.components.renderers.BaseRenderer;
 	import org.un.cava.birdeye.ravis.components.ui.VGAccordion;
-	import org.un.cava.birdeye.ravis.globals.GlobalParams;
-	import org.un.cava.birdeye.ravis.globals.GlobalParamsData;
+	import org.un.cava.birdeye.ravis.utils.events.VGraphRendererEvent;
 	
 	/**
 	 * This is an extension to the base renderer
@@ -50,41 +49,33 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 		public function BaseNodeRenderer() {
 			super();
 		}
-			
+		
 		/**
 		 * @inheritDoc
 		 * */
 		override protected function getDetails(e:Event):void {
 			// trace("Show Details");
+			var vgre:VGraphRendererEvent = new VGraphRendererEvent(VGraphRendererEvent.VG_RENDERER_SELECTED);
 			
 			/* do the checks in the super class */
 			super.getDetails(e);
 			
-			/* set the name of the XML object as title */
+			/* prepare the event */
 			
-			/* XXX We may want to omit the check for null pointer, is redundant for
-			 * static string variable */
-			//if(GlobalParamsData.nodeDetailTitle != null) {
-				/* make sure we have the XML attribute */
-				if(this.data.data.@name != null) {
-					GlobalParamsData.nodeDetailTitle = this.data.data.@name;
-				} else {
-					trace("XML data object has no 'name' attribute");
-				}
-			//} else {
-				//throw Error("GlobalParamsData not initialised!");
-			//}
+			
+			/* make sure we have the XML attribute */
+			if(this.data.data.@name != null) {
+				vgre.rname = this.data.data.@name;
+			} else {
+				trace("XML data object has no 'name' attribute");
+			}
 			
 			/* now the description */
-			//if(GlobalParamsData.nodeDetailDesc != null) {
-				if(this.data.data.@desc != null) {
-					GlobalParamsData.nodeDetailDesc = this.data.data.@desc;
-				} else {
-					trace("XML data object has no 'desc' attribute");
-				}
-		//	} else {
-		//		throw Error("GlobalParams.visualDetailDesc not initialised!");
-		//	}
+			if(this.data.data.@desc != null) {
+				vgre.rdesc = this.data.data.@desc;
+			} else {
+				trace("XML data object has no 'desc' attribute");
+			}
 			
 			/* this is a bit obscure and should be done through a constant
 			 * basically the index 2 in the current implementation means to
@@ -92,11 +83,14 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 			 * All this could possibly be better resolved using events
 			 * ...
 			 */
+			/*
 			if(GlobalParams.vgAccordion != null) {
 				GlobalParams.vgAccordion.selectPane(VGAccordion.INDEX_DATADETAIL);
 			} else {
 				trace("GlobalParams.vgAccordion not initialised!");
 			}
+			*/
+			this.dispatchEvent(vgre);
 		}
 		
 		/**

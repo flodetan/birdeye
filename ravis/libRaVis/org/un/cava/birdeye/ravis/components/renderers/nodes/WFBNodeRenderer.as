@@ -28,7 +28,6 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 	
 	import flash.events.Event;
 	import mx.core.UIComponent;
-	import org.un.cava.birdeye.ravis.globals.GlobalParams;
 	import org.un.cava.birdeye.ravis.components.renderers.RendererIconFactory;
 		
 	/**
@@ -69,6 +68,7 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 			
 			/* now add specifics
 			 * all would need checks for presence of the XML attribute */
+			/* disabled for now
 			if(GlobalParams.dataComponents.visualShade != null) {
 				GlobalParams.dataComponents.visualShade.opened = true;
 			}
@@ -102,6 +102,7 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 			if(GlobalParams.dataComponents.visualDetailPop != null) {
 				GlobalParams.dataComponents.visualDetailPop.text = this.data.data.@population;
 			}
+			*/
 		}
 	
 		/**

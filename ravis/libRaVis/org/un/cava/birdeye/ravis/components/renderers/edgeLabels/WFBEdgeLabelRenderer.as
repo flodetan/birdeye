@@ -36,7 +36,6 @@ package org.un.cava.birdeye.ravis.components.renderers.edgeLabels {
 	
 	import org.un.cava.birdeye.ravis.components.renderers.RendererIconFactory;
 	import org.un.cava.birdeye.ravis.components.renderers.nodes.BaseNodeRenderer;
-	import org.un.cava.birdeye.ravis.globals.GlobalParams;
 	
 	/**
 	 * This renderer displays the graph nodes as
@@ -90,8 +89,8 @@ package org.un.cava.birdeye.ravis.components.renderers.edgeLabels {
 			lb.width = 65;
 			lb.height = 15;
 			lb.visible = false;
-			lb.scaleX = GlobalParams.scaleFactor;
-			lb.scaleY = GlobalParams.scaleFactor;
+			//lb.scaleX = GlobalParams.scaleFactor;
+			//lb.scaleY = GlobalParams.scaleFactor;
 			lb.toolTip = this.data.data.@edgeDescription;
 			
 			return lb;

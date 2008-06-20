@@ -28,16 +28,12 @@ package org.un.cava.birdeye.ravis.components.renderers.edgeLabels {
 	
 	// Flash classes
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 	
 	import mx.controls.Label;
 	import mx.controls.LinkButton;
-	import mx.controls.Spacer;
-	import mx.core.IDataRenderer;
-	import mx.events.FlexEvent;
 	
 	import org.un.cava.birdeye.ravis.components.renderers.BaseRenderer;
-	import org.un.cava.birdeye.ravis.globals.GlobalParams;
+	import org.un.cava.birdeye.ravis.utils.events.VGraphRendererEvent;
 	
 	/**
 	 * This is an extension to the base renderer
@@ -57,45 +53,30 @@ package org.un.cava.birdeye.ravis.components.renderers.edgeLabels {
 		 * @inheritDoc
 		 * */
 		override protected function getDetails(e:Event):void {
+
 			// trace("Show Details");
+			var vgre:VGraphRendererEvent = new VGraphRendererEvent(VGraphRendererEvent.VG_RENDERER_SELECTED);
 			
 			/* do the checks in the super class */
 			super.getDetails(e);
 			
-			/* set the name of the XML object as title */
-			if(GlobalParams.dataComponents.visualDetailTitle != null) {
-				/* make sure we have the XML attribute */
-				if(this.data.data.@edgeLabel != null) {
-					GlobalParams.dataComponents.visualDetailTitle.text = this.data.data.@edgeLabel;
-				} else {
-					trace("XML data object has no 'edgeLabel' attribute");
-				}
+			/* prepare the event */
+			
+			/* make sure we have the XML attribute */
+			if(this.data.data.@edgeLabel != null) {
+				vgre.rname = this.data.data.@edgeLabel;
 			} else {
-				throw Error("GlobalParams.visualDetailTitle not initialised!");
+				trace("XML data object has no 'edgeLabel' attribute");
 			}
 			
 			/* now the description */
-			if(GlobalParams.dataComponents.visualDetailDesc != null) {
-				if(this.data.data.@edgeDescription != null) {
-					GlobalParams.dataComponents.visualDetailDesc.text = this.data.data.@edgeDescription;
-				} else {
-					trace("XML data object has no 'edgeDescription' attribute");
-				}
+			if(this.data.data.@edgeDescription != null) {
+				vgre.rdesc = this.data.data.@edgeDescription;
 			} else {
-				throw Error("GlobalParams.visualDetailDesc not initialised!");
+				trace("XML data object has no 'edgeDescription' attribute");
 			}
 			
-			/* this is a bit obscure and should be done through a constant
-			 * basically the index 2 in the current implementation means to
-			 * open the detailed description pane.
-			 * All this could possibly be better resolved using events
-			 * ...
-			 */
-			if(GlobalParams.dataComponents.visualLeftAccordion != null) {
-				GlobalParams.dataComponents.visualLeftAccordion.selectedIndex = 2;
-			} else {
-				throw Error("GlobalParams.visualLeftAccordion not initialised!");
-			}
+			this.dispatchEvent(vgre);
 		}
 		
 		/**

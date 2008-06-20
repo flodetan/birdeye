@@ -39,7 +39,6 @@ package org.un.cava.birdeye.ravis.components.renderers {
 	import mx.core.IDataRenderer;
 	import mx.events.FlexEvent;
 	
-	import org.un.cava.birdeye.ravis.globals.GlobalParams;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualItem;
 	
 	/**
@@ -182,8 +181,9 @@ package org.un.cava.birdeye.ravis.components.renderers {
 			lb = new LinkButton();
 			
 			lb.width = 100;
-			lb.scaleX = GlobalParams.scaleFactor;
-			lb.scaleY = GlobalParams.scaleFactor;
+			// XXX needs to be fixed
+			//lb.scaleX = GlobalParams.scaleFactor;
+			//lb.scaleY = GlobalParams.scaleFactor;
 			lb.toolTip = "Click to View Details";
 			lb.setStyle("fontWeight","normal");
 			lb.setStyle("rollOverColor",0xcccccc);
