@@ -40,7 +40,6 @@
 	borderStyle="solid"
 	backgroundColor="#CCCCCC"
 	backgroundAlpha=".2"
-	creationComplete="registerComplete()"
 	>
 	
 	<mx:Label text="Title:" fontWeight="bold" />
@@ -51,7 +50,6 @@
 		width="100%"
 		editable="false"
 		wordWrap="true"
-		text="{GlobalParamsData.nodeDetailTitle}"
 		/>	
 	<mx:Label text="Description" fontWeight="bold" />
 	<mx:TextArea id="detailDesc"
@@ -62,23 +60,37 @@
 		width="100%"
 		height="100%"
 		wordWrap="true"
-		text="{GlobalParamsData.nodeDetailDesc}"
 		/>
 	
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
+			import mx.binding.utils.BindingUtils;
 			
-			import org.un.cava.birdeye.ravis.globals.GlobalParams;
-			import org.un.cava.birdeye.ravis.globals.GlobalParamsData;
+			private var _vgraph:VisualGraph;
 
 			/**
-			 * register that we are complete
+			 * Provides access to the registered vgraph object.
 			 * */
-			private function registerComplete():void {
-				/* register ourselves with out id, I think in an
-				 * MX Component this must always be present */
-				GlobalParamsData.selectedNodeDetail = this;
+			public function set vgraph(v:VisualGraph):void {
+				_vgraph = v;
+				bindValues();
+			}
+
+			/**
+			 * @private
+			 * */
+			public function get vgraph():VisualGraph {
+				return _vgraph;
+			}
+
+			/**
+			 * bind the value to the vgraph object
+			 * */
+			private function bindValues():void {
+				BindingUtils.bindProperty(detailTitle,"text",_vgraph,["currentRootVNode","data","@name"]);
+				BindingUtils.bindProperty(detailDesc,"text",_vgraph,["currentRootVNode","data","@desc"]);
 			}
 		]]>
 	</mx:Script>

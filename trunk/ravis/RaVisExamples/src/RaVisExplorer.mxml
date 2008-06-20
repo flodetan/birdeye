@@ -123,8 +123,8 @@
 											<lc:PhiDial id="myPhiDial" vgraph="{vgraph}" />
 											<lc:ToggleDamping id="myDamping" vgraph="{vgraph}" />
 											<lc:CommonLayoutControls id="myCommonLC" vgraph="{vgraph}" />
-											<dp:CenteredNodeLabel id="myCenteredNodeLabel" />
-											<dp:NoVisNodesLabel id="myNoVisNodeLabel" />
+											<dp:CenteredNodeLabel id="myCenteredNodeLabel" vgraph="{vgraph}" />
+											<dp:NoVisNodesLabel id="myNoVisNodeLabel" vgraph="{vgraph}" />
 									
 										</mx:VBox>
 									</flexlib:WindowShade>
