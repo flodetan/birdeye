@@ -57,6 +57,12 @@ package org.un.cava.birdeye.ravis.utils.events
 		public static const VNODE_UPDATED:String = "vnodeUpdated";
 	
 		/**
+		 * This event type signals that the visibility
+		 * of some nodes may have changed
+		 * */
+		public static const VISIBILITY_CHANGED:String = "visibilityChanged";
+	
+		/**
 		 * This subtype specifies some undefined general
 		 * change.
 		 * */

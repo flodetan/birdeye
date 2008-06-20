@@ -478,6 +478,14 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* assign defaults */
 			_graph = g;
 			
+			/* IMPORTANT: a layouter also has a graph reference
+			 * separate, this must be updated in order for
+			 * this to work properly
+			 */
+			if(_layouter) {
+				_layouter.graph = g;
+			}
+			
 			/* better safe than sorry even if it is an empty one */
 			initFromGraph();
 			
@@ -1247,12 +1255,19 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			oldroot = _currentRootVNode;
 			oldsid = oldroot.node.stringid;
 			
+			/* reapply the previous layouter 
+			 * IMPORTANT: this has to be done before the
+			 * graph object is set, because otherwise the graph
+			 * attribute in the layouter will not be updated!
+			 */
+			_layouter = layouter;		
+			
+			
 			/* set the graph in the VGraph object, this automatically
 			 * initializes the VGraph items */
 			this.graph = graph;
 			
-			/* reapply the previous layouter */
-			_layouter = layouter;
+			
 					
 			/* setting a new graph invalidated our old root, we need to reset it */
 			/* we try to find a node, that has the same string-id as the old root node */
@@ -2324,6 +2339,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			for each(vn in newVisibleNodes) {
 				updateConnectedEdgesVisibility(vn);
 			}
+			
+			/* send an event */
+			this.dispatchEvent(new VGraphEvent(VGraphEvent.VISIBILITY_CHANGED));
 		}
 
 		/**

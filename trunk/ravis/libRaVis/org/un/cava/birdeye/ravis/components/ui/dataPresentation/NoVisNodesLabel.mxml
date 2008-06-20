@@ -40,8 +40,8 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
-			import mx.binding.utils.BindingUtils;
 			
 			private var _vgraph:VisualGraph;
 
@@ -49,8 +49,8 @@
 			 * Provides access to the registered vgraph object.
 			 * */
 			public function set vgraph(v:VisualGraph):void {
-				_vgraph = v;
-				bindValues();
+				_vgraph = v; 
+				registerListeners();
 			}
 
 			/**
@@ -59,12 +59,22 @@
 			public function get vgraph():VisualGraph {
 				return _vgraph;
 			}
-
+			
+			/**
+			 * update the label from the number of visible nodes
+			 * */
+			public function updateLabel(e:VGraphEvent = null):void {
+				if(_vgraph == null) {
+					return;
+				}
+				noVisnodesLbl.text = _vgraph.noVisibleVNodes.toString();
+			}
+			
 			/**
 			 * bind the value to the vgraph object
 			 * */
-			private function bindValues():void {
-				BindingUtils.bindProperty(noVisnodesLbl,"text",_vgraph,"noVisibleVNodes");
+			private function registerListeners():void {
+				_vgraph.addEventListener(VGraphEvent.VISIBILITY_CHANGED,updateLabel);
 			}
 		]]>
 	</mx:Script>
