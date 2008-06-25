@@ -36,10 +36,12 @@ package org.un.cava.birdeye.geovis.features
 	
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
-	import flash.filters.GlowFilter;
+	import flash.filters.BitmapFilterQuality;
+	import flash.filters.BitmapFilterType;
+	import flash.filters.GradientGlowFilter;
 	import flash.utils.*;
 	
-	import mx.containers.Canvas;
+	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	
 	import org.un.cava.birdeye.geovis.projections.Projections;
@@ -64,22 +66,32 @@ package org.un.cava.birdeye.geovis.features
 * 
 * @tag Tag text.
 */
-	public class Features extends Canvas
+	public class Features extends UIComponent
 	{
 		public var colorItem:SolidFill;//=new SolidFill(0xFFFFFF);
-		public var stkItem:SolidStroke;
+		public var stkItem:SolidStroke=new SolidStroke(0x000000,1,1);
 		
 		public var gradItemFill:Array;
 		
 		[Inspectable(defaultValue="")]
 		public var foid:String;
 		
-		[Inspectable(defaultValue=false)]
-		public var highlighted:Boolean;
+		//[Inspectable(defaultValue=false)]
+		public var _highlighted:Boolean=false;
 		
 		private var _toolTip:String;
 		private var surface:Surface;
+		private var geom:GeometryGroup;
+		private var myCoo:IGeometry;
 		
+		[Bindable]
+		public function set highlighted(value:Boolean):void{
+			_highlighted=value;
+		} 
+		
+		public function get highlighted():Boolean{
+			return _highlighted;
+		} 
 		/**
 		* Set the color of a particular item for example a country of the map. 
 		*/
@@ -123,11 +135,10 @@ package org.un.cava.birdeye.geovis.features
 			super();
 			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
 		}
-		/*override public function set toolTip(value:String):void 
+		override public function set toolTip(value:String):void 
 		{
     		_toolTip=value;
-    		this.toolTip=_toolTip;
-    	}*/
+    	}
 		
 		private function creationCompleteHandler (event:FlexEvent):void{
 			this.name='feat'+foid;
@@ -136,9 +147,9 @@ package org.un.cava.birdeye.geovis.features
 			var proj:String=(this.parent as dynamicClassRef).projection;
 			var region:String=(this.parent as dynamicClassRef).region;
 			surface=Surface((this.parent as DisplayObjectContainer).getChildByName("Surface"))
-			var geom:GeometryGroup=GeometryGroup(surface.getChildByName(foid));
+			geom=GeometryGroup(surface.getChildByName(foid));
 			if(geom!=null){
-					var myCoo:IGeometry;
+					
 					GeoData=Projections.getData(proj,region);
 					if(GeoData.getCoordinates(foid)!=null){
 						if(isNaN(GeoData.getCoordinates(foid).substr(0,1))){
@@ -163,9 +174,9 @@ package org.un.cava.birdeye.geovis.features
 								arrStrokeItem.push(1); 
 							}
 							stkItem= new SolidStroke(arrStrokeItem[0],arrStrokeItem[1],arrStrokeItem[2]);
+							
 						}
-						
-						
+						stkItem.scaleMode="none";
 							if(getStyle("gradientItemFill")){
 								gradItemFill=getStyle("gradientItemFill");
 								if(gradItemFill.length!=0){
@@ -187,19 +198,20 @@ package org.un.cava.birdeye.geovis.features
 						
 					}
 					
-					//ToolTipManager.enabled=true;
-				//this.toolTip=toolTip;
-				
-				//geom.mouseChildren=true;
-				geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
-				geom.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
-				geom.addEventListener(MouseEvent.MOUSE_OVER,handleMouseOverEvent);
+					geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
+					geom.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
 			}
+			
         }
 		
+		
+        
 		private function onRollOver(e:MouseEvent):void{
-			surface.toolTip=toolTip;
-			if(highlighted==true){
+			e.target.useHandCursor=true;
+        	e.target.buttonMode=true;
+			surface.toolTip=null;
+			surface.toolTip=_toolTip;
+			if(_highlighted==true){
 				var glowColor:uint=0xFFFFFF;
 				var glowGradFill:Array;
 				if(getStyle("gradientItemFill")){
@@ -212,28 +224,65 @@ package org.un.cava.birdeye.geovis.features
 						glowColor=uint(colorItem.color);
 					}
 				}
-				GeometryGroup(e.target).filters=[new GlowFilter(glowColor,0.5,32,32,255,3,true,true)];
+				
+				var gradientGlow:GradientGlowFilter = new GradientGlowFilter();
+				gradientGlow.distance = 0;
+				gradientGlow.angle = 45;
+				gradientGlow.colors = [0x000000, glowColor];
+				gradientGlow.alphas = [0, 1];
+				gradientGlow.ratios = [0, 255];
+				gradientGlow.blurX = 8;
+				gradientGlow.blurY = 8;
+				gradientGlow.strength = 2;
+				gradientGlow.quality = BitmapFilterQuality.HIGH;
+				gradientGlow.type = BitmapFilterType.OUTER;
+				GeometryGroup(e.target).filters=[gradientGlow];
+				//GeometryGroup(e.target).filters=[new GlowFilter(glowColor,0.5,32,32,255,3,true,true)];
 			}
 	    }
 	    private function onRollOut(e:MouseEvent):void{
-	    	surface.toolTip = "";
-	    	if(highlighted==false){
+	    	e.target.useHandCursor=false;
+        	e.target.buttonMode=false;
+	    	surface.toolTip = null;
+	    	//if(_highlighted==false){
 	    		GeometryGroup(e.target).filters=null;
-	    	}
+	    	//}
 	    }
-
-		private function handleMouseOverEvent(eventObj:MouseEvent):void {
-        	eventObj.target.useHandCursor=true;
-        	eventObj.target.buttonMode=true;
-        	//eventObj.target.mouseChildren=false;
-        	//GeometryGroup(eventObj.target).filters=[new GlowFilter(0xFFFFFF,0.5,32,32,255,3,true,true)];
-		}
-		
-		private function handleMouseOutEvent(eventObj:MouseEvent):void {
-        	eventObj.target.useHandCursor=false;
-        	eventObj.target.buttonMode=false;
-        	//eventObj.target.mouseChildren=false;
-        	//GeometryGroup(eventObj.target).filters=[new GlowFilter(0xFFFFFF,1,6,6,2,1,false,false)];
-        }
+        
+        override public function styleChanged( styleProp:String ):void{            
+        	super.styleChanged( styleProp );            
+        	if ( styleProp == "fillItem" ){
+        		//_sourceChanged = true;                 
+        		invalidateDisplayList();                
+        		return;                            
+        	}         
+       }
+       
+       override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
+      		super.updateDisplayList( unscaledWidth, unscaledHeight );            
+      		if(myCoo){
+      			myCoo.fill=new SolidFill(getStyle("fillItem"),1);
+      		}      
+      		
+      		if(geom!=null){
+			        if(_highlighted==true){
+						if(!geom.hasEventListener(MouseEvent.ROLL_OVER)){
+							geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
+						}
+						if(!geom.hasEventListener(MouseEvent.ROLL_OUT)){
+							geom.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
+						}
+					}else{
+						if(geom.hasEventListener(MouseEvent.ROLL_OVER)){
+							geom.removeEventListener(MouseEvent.ROLL_OVER, onRollOver);
+						}
+						if(geom.hasEventListener(MouseEvent.ROLL_OUT)){
+							geom.removeEventListener(MouseEvent.ROLL_OUT, onRollOut);
+						}
+					}
+		        }   
+      	}
+      	
+      	
 	}
 }

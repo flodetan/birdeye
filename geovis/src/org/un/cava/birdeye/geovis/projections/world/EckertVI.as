@@ -37,8 +37,6 @@ package org.un.cava.birdeye.geovis.projections.world
 	[ExcludeClass]
 	public class EckertVI extends WorldCountries
 	{
-		import flash.utils.Dictionary;
-		
 		private var dicCoordinates:Dictionary= new Dictionary();
 		private var dicBarryCenter:Dictionary= new Dictionary();
 		public var translateX:Number=0;
@@ -50,6 +48,7 @@ package org.un.cava.birdeye.geovis.projections.world
 		{
 			super();
 			setCoordinates();
+			setBarryCenter();
 		}
 		
 		private function setCoordinates():void

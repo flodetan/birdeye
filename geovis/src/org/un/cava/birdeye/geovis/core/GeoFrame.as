@@ -199,8 +199,9 @@ package org.un.cava.birdeye.geovis.core
 					arrStroke.push(1); 
 				}
 				_stroke = new SolidStroke(arrStroke[0],arrStroke[1],arrStroke[2]);
+				
 			}
-			
+			_stroke.scaleMode="none";
 			getChildValues();
 
 			wcData = Projections.getData(_projection, _region);
@@ -210,7 +211,6 @@ package org.un.cava.birdeye.geovis.core
 			surf.name="Surface";
 		    surf.scaleX=_scaleX;
 		    surf.scaleY=_scaleY;
-		    
 			for each (var country:String in listOfCountry)
 			{
 				if(wcData.getCoordinates(country)!="")
