@@ -571,7 +571,7 @@
 										<mx:String>Diverging</mx:String>
 									</mx:ArrayCollection>
 							</mx:ComboBox>
-							<mx:CheckBox id="chkColorRange" change="selCR(event)" label="Color Range Control" />	
+							<mx:CheckBox id="chkColorRange" change="selCR(event)" label="Color Range Control" selected="true" />	
 							</mx:VBox>
 							</flexlib:WindowShade>
 							
@@ -777,7 +777,7 @@
 			<!-- Dashboard -->
 			<mx:VBox id="vbDashbox" width="100%" height="150" left="5" right="5" bottom="5" 
         	verticalAlign="top" horizontalAlign="center" horizontalScrollPolicy="off" verticalScrollPolicy="off">
-        	<controls:GeoGauge id="GeoGauge" x="0" y="0" width="500" height="15" minimumValue="0" maximumValue="50000000" trackColor="0x6d2c" visible="false">
+        	<controls:GeoGauge id="GeoGauge" x="0" y="0" width="500" height="15" minimumValue="0" maximumValue="50000000" trackColor="0x6d2c" visible="true">
         		<controls:GeoThumb id="t1" Color="0x000000" value="0" draggable="false"/>
         		<controls:GeoThumb id="t2" Color="0xedf8e9" minimum="0" maximum="{t3.value}" value="1000000" draggable="true" mouseDown="myevent(event)" mouseUp="stopev(event)"/>
         		<controls:GeoThumb id="t3" Color="0xbae4b3" minimum="{t2.value}" maximum="{t4.value}" value="5000000" draggable="true" mouseDown="myevent(event)" mouseUp="stopev(event)"/>
