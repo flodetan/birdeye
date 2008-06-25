@@ -35,7 +35,7 @@
 	xmlns:flows="org.un.cava.birdeye.geovis.analysis.*"
 	xmlns:sparks="org.un.cava.birdeye.qavis.sparklines.*"
 	backgroundGradientColors="[#333333,#999999]" layout="vertical"
-	width="100%" height="100%" applicationComplete="init()" >
+	width="100%" height="100%" applicationComplete="init()" xmlns:controls="org.un.cava.birdeye.geovis.controls.*">
 
 <mx:Script>
 	<![CDATA[
@@ -48,15 +48,24 @@
 		import mx.events.ListEvent;
 		import mx.controls.Alert;
 		import mx.collections.ArrayCollection;
-
-		import org.un.cava.birdeye.geovis.views.maps.usa.*
-		import org.un.cava.birdeye.geovis.views.maps.world.*
-		import org.un.cava.birdeye.geovis.features.*
-		import org.un.cava.birdeye.qavis.sparklines.*
-		 
+		import mx.events.DragEvent;
+		import mx.utils.ObjectUtil;
+		
+		import org.un.cava.birdeye.geovis.views.maps.usa.*;
+		import org.un.cava.birdeye.geovis.views.maps.world.*;
+		import org.un.cava.birdeye.geovis.features.*;
+		import org.un.cava.birdeye.qavis.sparklines.*;
+		import org.un.cava.birdeye.geovis.controls.*;
+		
+		import com.degrafa.Surface;
+		import com.degrafa.GeometryGroup;
+		import com.degrafa.paint.*;
+		import com.degrafa.geometry.Path;
+		
 		private var XMLLoader:URLLoader;
 		private var XMLFile:String;
 		private var maxxValue:Number;
+		private var arrFeat:Array;
 		private const maxRadius:Number=15;
 		[Bindable] 
 		public var Maps:XML;
@@ -269,19 +278,26 @@
 		
 		private function colorize():void{
 			var states:XMLList=Maps.states.state;
+			arrFeat=new Array();
 			for each (var statesElement:XML in states) {
 				var ft:Features=new Features();
 				ft.foid=statesElement.@id;
 				ft.toolTip=statesElement.@name;
-				if(statesElement.@population<1000000){
+				//ft.name="ft"+statesElement.@name;
+				if(statesElement.@population<t2.value){
 					ft.setStyle("fillItem","0xedf8e9")
-				}else if(statesElement.@population>=1000000 && statesElement.@population<5000000){
+				}else if(statesElement.@population>=t2.value && statesElement.@population<t3.value){
 					ft.setStyle("fillItem","0xbae4b3")
-				}else if(statesElement.@population>=5000000 && statesElement.@population<10000000){
+				}else if(statesElement.@population>=t3.value && statesElement.@population<t4.value){
 					ft.setStyle("fillItem","0x74c476")
-				}else if(statesElement.@population>=1500000){
+				}else if(statesElement.@population>=t4.value){
 					ft.setStyle("fillItem","0x6d2c")
 				}
+				/*var obj:Object=new Object();
+   				obj["ft"]=ft;
+   				obj["key"]=statesElement.@id;
+   				obj["data"]=statesElement.@population;*/
+   				arrFeat.push([ft,statesElement.@population,"ft"+statesElement.@name]);	
 				myMap.addChild(ft);
 			}
 		}
@@ -364,6 +380,7 @@
 			 	map.scaleX=zoomer.value;
 			 	map.scaleY=zoomer.value;
 			 }else{*/
+			 
 			 	(myMap as Canvas).scaleX=zoomer.value;
 			 	(myMap as Canvas).scaleY=zoomer.value;
 			// }
@@ -435,7 +452,43 @@
                 <flow fromKey="AK" toKey="ID" description="Hello" />
                 <flow fromKey="LA" toKey="NY" description="GoodBye" />
             </flows>;
+            
+            
+            private function myevent(e:MouseEvent):void {
+                 GeoThumb(e.currentTarget).addEventListener(MouseEvent.MOUSE_MOVE,moveEvent);
+            }
 
+			private function moveEvent(e:MouseEvent):void{
+				changeColorMap();
+			}
+
+			private function stopev(e:MouseEvent):void{
+				GeoThumb(e.currentTarget).removeEventListener(MouseEvent.MOUSE_MOVE, moveEvent);
+			}
+			
+			private function changeColorMap():void{
+				for(var i:int=0; i<arrFeat.length-1; i++){
+					var surface:Surface=Surface((Features(arrFeat[i][0]).parent as DisplayObjectContainer).getChildByName("Surface"))
+					var geom:GeometryGroup=GeometryGroup(surface.getChildAt(0));
+					if(Number(arrFeat[i][1])<t2.value){
+						Features(arrFeat[i][0]).setStyle("fillItem","0xedf8e9");
+					}else if(Number(arrFeat[i][1])>=t2.value && Number(arrFeat[i][1])<t3.value){
+						Features(arrFeat[i][0]).setStyle("fillItem","0xbae4b3")
+					}else if(Number(arrFeat[i][1])>=t3.value && Number(arrFeat[i][1])<t4.value){
+						Features(arrFeat[i][0]).setStyle("fillItem","0x74c476")
+					}else if(Number(arrFeat[i][1])>=t4.value){
+						Features(arrFeat[i][0]).setStyle("fillItem","0x6d2c")
+					}
+				}
+			}
+			
+		private function selCR(e:Event):void{
+			if(e.currentTarget.selected){
+				GeoGauge.visible=true;
+			}else{
+				GeoGauge.visible=false;
+			}
+		}
 	]]>
 </mx:Script>
 <mx:Style source="styles/main.css" />
@@ -518,7 +571,7 @@
 										<mx:String>Diverging</mx:String>
 									</mx:ArrayCollection>
 							</mx:ComboBox>
-							<mx:CheckBox label="Color Range Control" />	
+							<mx:CheckBox id="chkColorRange" change="selCR(event)" label="Color Range Control" />	
 							</mx:VBox>
 							</flexlib:WindowShade>
 							
@@ -724,6 +777,15 @@
 			<!-- Dashboard -->
 			<mx:VBox id="vbDashbox" width="100%" height="150" left="5" right="5" bottom="5" 
         	verticalAlign="top" horizontalAlign="center" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+        	<controls:GeoGauge id="GeoGauge" x="0" y="0" width="500" height="15" minimumValue="0" maximumValue="50000000" trackColor="0x6d2c" visible="false">
+        		<controls:GeoThumb id="t1" Color="0x000000" value="0" draggable="false"/>
+        		<controls:GeoThumb id="t2" Color="0xedf8e9" minimum="0" maximum="{t3.value}" value="1000000" draggable="true" mouseDown="myevent(event)" mouseUp="stopev(event)"/>
+        		<controls:GeoThumb id="t3" Color="0xbae4b3" minimum="{t2.value}" maximum="{t4.value}" value="5000000" draggable="true" mouseDown="myevent(event)" mouseUp="stopev(event)"/>
+        		<controls:GeoThumb id="t4" Color="0x74c476" minimum="{t3.value}" maximum="{t4.value}" value="10000000" draggable="true" allowDragToTheEnd="true" mouseDown="myevent(event)" mouseUp="stopev(event)"/>
+        		<controls:GeoThumb id="t5" Color="0x000000" value="50000000" draggable="false"/>
+        		<controls:GeoScale/>
+        	</controls:GeoGauge>
+        	
         	<mx:HBox width="100%" height="100%" paddingTop="5" paddingLeft="5" paddingRight="5" paddingBottom="5" 
         		cornerRadius="12" borderStyle="solid" borderThickness="2" borderColor="#CCCCCC" backgroundColor="#CCCCCC" backgroundAlpha="0.3"
         		horizontalAlign="center">

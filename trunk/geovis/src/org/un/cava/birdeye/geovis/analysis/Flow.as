@@ -26,16 +26,14 @@
  */
 package org.un.cava.birdeye.geovis.analysis
 {
-	import com.degrafa.Surface;
 	import com.degrafa.GeometryGroup;
-
+	import com.degrafa.Surface;
+	
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.utils.*;
 	import flash.xml.XMLNode;
-	import flash.utils.getDefinitionByName;
-	import flash.utils.getQualifiedClassName;
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.ICollectionView;
@@ -43,18 +41,25 @@ package org.un.cava.birdeye.geovis.analysis
 	import mx.collections.XMLListCollection;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
+	import mx.styles.StyleManager;
 	
+	import org.un.cava.birdeye.geovis.dictionary.*;
 	import org.un.cava.birdeye.geovis.projections.Projections;
+	
 	/**
 	* Flow annotations are used to show the movement or relation of objects 
 	* from one location to another.
 	**/
+	[Style(name="fill",type="uint",format="Color",inherit="no")]
+	
 	[Inspectable("dataProvider")]
 	[Inspectable("dataField")]	
 	[Inspectable("showDataTips")]
+	[Inspectable("dataTipFunction")]
 	[Inspectable("fromField")]
 	[Inspectable("toField")]
 	[Inspectable("valueField")]
+	[Inspectable("thickness")]
 	public class Flow extends UIComponent
 	{
 		
@@ -71,8 +76,11 @@ package org.un.cava.birdeye.geovis.analysis
 		private var _fromField:String;
 		private var _toField:String;
 		private var _showDataTips:Boolean=false;
+		private var _dataTipFunction:Function;
 		private var dynamicClassName:String;
 		private var dynamicClassRef:Class;
+		private var _color:uint=0x333333;
+		private var _thickness:Number=2;
 		[Bindable]
 		private var _scaleY:Number;
 		[Bindable]
@@ -114,7 +122,11 @@ package org.un.cava.birdeye.geovis.analysis
 			else if(value is XMLList)
 			{
 				//XMLLists become XMLListCollections
-				value = new XMLListCollection(value.children() as XMLList);
+				if(XMLList(value).children().length()>0){
+					value = new XMLListCollection(value.children() as XMLList);
+				}else{
+					value = new XMLListCollection(value as XMLList);
+				}
 			}
 			else if(value is Array)
 			{
@@ -167,6 +179,28 @@ package org.un.cava.birdeye.geovis.analysis
 			return _toField;
 		}
 		
+		public function set thickness(value:Number):void
+		{
+			_thickness = value;
+		}
+			
+		public function get thickness():Number
+		{
+			return _thickness;
+		}
+		
+		public function get dataTipFunction():Function
+	    {
+	        return _dataTipFunction;
+	    }
+
+	    
+    	public function set dataTipFunction(value:Function):void
+	    {
+	        _dataTipFunction = value;
+	        //dispatchEvent(new Event("labelFunctionChanged"));
+	    }
+	    
 		public function Flow()
 		{
 			super();
@@ -188,21 +222,32 @@ package org.un.cava.birdeye.geovis.analysis
 				var cooTo:String;
 				var i:int=0;
 				var cursor:IViewCursor = _dataProvider.createCursor();
+				
 			while(!cursor.afterLast)
 			{
 				var fromKey:String=cursor.current[_fromField];
 				var toKey:String=cursor.current[_toField];
-				var desc:String=cursor.current[_valueField];
+				trace(fromKey + ' / ' + toKey)
+				
+				var fromKeyDesc:String=GeoData.getCountriesName(cursor.current[_fromField]);
+				var toKeyDesc:String=GeoData.getCountriesName(cursor.current[_toField]);
+				var desc:String;
 				cooFrom=GeoData.getBarryCenter(fromKey);
 				var arrPosFrom:Array=cooFrom.split(',');
 				cooTo=GeoData.getBarryCenter(toKey);
 				var arrPosTo:Array=cooTo.split(',')
-						
+				
+				if(_dataTipFunction!=null){
+					desc=_dataTipFunction(cursor);
+				}else{
+					desc=cursor.current[_valueField];
+				}
+				
 				var geom1:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(fromKey));
 				var geom2:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(toKey));
 				
 				if(geom1!=null && geom2!=null){
-					drawFlow(arrPosFrom,arrPosTo, fromKey, toKey, desc);
+					drawFlow(arrPosFrom,arrPosTo, fromKeyDesc, toKeyDesc, desc);
 				}
 				    
 				i++;
@@ -228,6 +273,17 @@ package org.un.cava.birdeye.geovis.analysis
 	  		surf.scaleX=_scaleX;
 	  		surf.scaleY=_scaleY;
 	  		
+	  		if(getStyle("fill")){
+				_color=uint(getStyle("fill"));
+			}else{
+				if(styleName){
+					if(StyleManager.getStyleDeclaration("."+ styleName).getStyle("fill")){
+			   			_color=uint("0x"+StyleManager.getStyleDeclaration("."+ styleName).getStyle("fill").toString(16));
+			   		}
+			 	}
+			}
+					
+					
 			//From
 		      var strFrom:String=fromDest;
 		      var p1:Point = new Point(cooFrom[0], cooFrom[1]);
@@ -251,8 +307,8 @@ package org.un.cava.birdeye.geovis.analysis
 		      // source to target
 		      flows.graphics.moveTo(p1.x, p1.y);
 		      // need to parameterize color
-		      flows.graphics.lineStyle(2, 0x333333, .6);  // thickness (flow), color, alpha
-		      flows.graphics.beginFill(0x333333, .6);
+		      flows.graphics.lineStyle(_thickness, _color, .6);  // thickness (flow), color, alpha
+		      flows.graphics.beginFill(_color, .6);
 		      flows.graphics.curveTo(cntrlpoint.x, cntrlpoint.y, p2.x, p2.y);
 		      // target back to source + flow value (or static constant as 10)
 		      flows.graphics.curveTo(cntrlpoint.x, cntrlpoint.y, p1.x, p1.y+10);
@@ -260,7 +316,11 @@ package org.un.cava.birdeye.geovis.analysis
 		      flows.addEventListener(MouseEvent.MOUSE_OVER,handleMouseOverEvent);
 		      flows.addEventListener(MouseEvent.MOUSE_OUT, handleMouseOutEvent);
 		      if(_showDataTips==true){
-		      	flows.toolTip=description;//"From: " + strFrom + "\r" + "To: " + strTo
+		      	if(description!=''){
+		      		flows.toolTip=description;
+		      	}else{
+		      		flows.toolTip="From: " + strFrom + "\r" + "To: " + strTo
+		      	}
 		      }
 		      // control point
 		      // need to add drag and drop capability here
