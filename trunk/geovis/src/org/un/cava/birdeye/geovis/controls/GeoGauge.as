@@ -91,18 +91,23 @@ package org.un.cava.birdeye.geovis.controls
 		
 		public function GeoGauge()
 		{
-			
-			this.addEventListener(FlexEvent.CREATION_COMPLETE,createSlider);
-		}
-		
-		private function createSlider(e:Event):void{
-			barre = new UIComponent();			
-			//barre.x = _x;
-			//barre.y = _y;
-			this.addChild(barre);
 		}
 		
 		
+		override protected function createChildren() : void 
+     	{ 
+        	super.createChildren(); 
+        	barre = new UIComponent();		
+     	} 
+     	
+     	override protected function commitProperties() : void 
+     	{ 
+     		if (barre) 
+	        { 
+	        	this.addChild(barre);
+	        }
+     	}
+     	
 		override protected function updateDisplayList(unscaledWidth:Number,unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			if(barre){
@@ -112,7 +117,6 @@ package org.un.cava.birdeye.geovis.controls
 				barre.graphics.endFill();
 				
 				for (var i:int = 0; i < this.numChildren-1; i++) {
-					var thumb:GeoThumb = new GeoThumb();
 					var dynamicClassName:String=getQualifiedClassName(this.getChildAt(i));
 					var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
 					if(dynamicClassName.substr(dynamicClassName.length-8,8)=='GeoThumb')
@@ -137,13 +141,9 @@ package org.un.cava.birdeye.geovis.controls
   	 		 		 		 barre.graphics.lineTo(_x+_width/100*j,_y+(_height*50/100));
   	 		 		 }
   		 		}
-  		 		
-  		 		if(dynamicClassName.substr(dynamicClassName.length-8,8)=='GeoScale')
-				{
-					var scale:GeoScale = new GeoScale();
-  		 			scale.x=_x;
-  				}
 			}
 		}
+		
+		
 	}
 }
