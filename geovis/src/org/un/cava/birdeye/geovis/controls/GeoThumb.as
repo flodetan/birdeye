@@ -80,41 +80,49 @@ package org.un.cava.birdeye.geovis.controls
 		
 		public function GeoThumb()
 		{
-			this.addEventListener(FlexEvent.CREATION_COMPLETE,createThumb);
 		}
 		
-		private function createThumb(e:Event):void{
-			dynamicClassName = getQualifiedClassName(this.parent);
-			dynamicClassRef = getDefinitionByName(dynamicClassName) as Class;
-			_height=(this.parent as dynamicClassRef).height;
-			_width=(this.parent as dynamicClassRef).width;
-			_x=(this.parent as dynamicClassRef).x;
-			_y=(this.parent as dynamicClassRef).y;
-			_parentMin=(this.parent as dynamicClassRef).minimumValue;
-			_parentMax=(this.parent as dynamicClassRef).maximumValue;
-			
-			bouton = new UIComponent();
-			bouton.graphics.beginFill(getStyle("Color"));
-			bouton.graphics.lineStyle(1,0x000000);
-			bouton.graphics.moveTo(0,0);
-			bouton.graphics.lineTo(-_height/2,-_height);
-			bouton.graphics.lineTo(_height/2,-_height);
-			bouton.graphics.moveTo(0,0);
-			bouton.graphics.endFill();
-			bouton.x=_x+(_value*_width)/_parentMax;
-			bouton.y=_y-2;
-			
-		    this.addChild(bouton);
-			
-			if(_draggable==true){
-				bouton.addEventListener(MouseEvent.MOUSE_OVER,MouseOverEvent);
-	            bouton.addEventListener(MouseEvent.MOUSE_OVER,MouseOutEvent);
-	  			bouton.addEventListener(MouseEvent.MOUSE_DOWN, startMove);
-	            bouton.addEventListener(MouseEvent.MOUSE_UP, endDrag);
-	            bouton.addEventListener(MouseEvent.MOUSE_OUT, endDrag);
+		override protected function createChildren() : void 
+     	{ 
+     		super.createChildren(); 
+        	bouton = new UIComponent();
+     	}
+     	
+     	override protected function commitProperties() : void 
+     	{ 
+	        if (bouton) 
+	        { 
+	        	dynamicClassName = getQualifiedClassName(this.parent);
+				dynamicClassRef = getDefinitionByName(dynamicClassName) as Class;
+				_height=(this.parent as dynamicClassRef).height;
+				_width=(this.parent as dynamicClassRef).width;
+				_x=(this.parent as dynamicClassRef).x;
+				_y=(this.parent as dynamicClassRef).y;
+				_parentMin=(this.parent as dynamicClassRef).minimumValue;
+				_parentMax=(this.parent as dynamicClassRef).maximumValue;
+				
+				bouton = new UIComponent();
+				bouton.graphics.beginFill(getStyle("Color"));
+				bouton.graphics.lineStyle(1,0x000000);
+				bouton.graphics.moveTo(0,0);
+				bouton.graphics.lineTo(-_height/2,-_height);
+				bouton.graphics.lineTo(_height/2,-_height);
+				bouton.graphics.moveTo(0,0);
+				bouton.graphics.endFill();
+				bouton.x=_x+(_value*_width)/_parentMax;
+				bouton.y=_y-2;
+				
+			    this.addChild(bouton);
+				
+				if(_draggable==true){
+					bouton.addEventListener(MouseEvent.MOUSE_OVER,MouseOverEvent);
+		            bouton.addEventListener(MouseEvent.MOUSE_OVER,MouseOutEvent);
+		  			bouton.addEventListener(MouseEvent.MOUSE_DOWN, startMove);
+		            bouton.addEventListener(MouseEvent.MOUSE_UP, endDrag);
+		            bouton.addEventListener(MouseEvent.MOUSE_OUT, endDrag);
+		        }
 	        }
-		}
-		
+     	}
 		
 		 private function startMove(event:MouseEvent):void
         {
