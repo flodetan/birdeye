@@ -7,99 +7,274 @@ package org.un.cava.birdeye.geovis.controls
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	
+	//--------------------------------------
+	//  Styles
+	//--------------------------------------
+	
+	/**
+ 	*  Define the default track color. 
+ 	*/
 	[Style(name="trackColor", type="uint", format="Color", inherit="no")]
+	
+	//--------------------------------------
+	//  Other metadata
+	//--------------------------------------
+	
 	[Inspectable("ticksMark")]
 	public class GeoGauge extends Canvas
 	{
 		
+		//--------------------------------------------------------------------------
+	    //
+	    //  Variables
+	    //
+	    //--------------------------------------------------------------------------
+	
+	    /**
+	     *  @private
+	     */
 		private var barre:UIComponent;
+		/**
+	     *  @private
+	     */
         private var _width:Number=300;
+        /**
+	     *  @private
+	     */
         private var _height:Number=15;
+        /**
+	     *  @private
+	     */
         private var _x:Number=0;
+        /**
+	     *  @private
+	     */
         private var _y:Number=0;
+        /**
+	     *  @private
+	     */
         private var _min:Number;
+		/**
+	     *  @private
+	     */
 		private var _max:Number;
+		/**
+	     *  @private
+	     */
 		private var _ticksMark:Boolean=true;
+		/**
+	     *  @private
+	     */
 		private var _ticksWidth:Number=3;
+		/**
+	     *  @private
+	     */
 		private var _minorTicksInterval:Number=1;
+		/**
+	     *  @private
+	     */
 		private var _majorTicksInterval:Number=10;
 		
+		
+		//--------------------------------------------------------------------------
+	    //
+	    //  Properties
+	    //
+	    //--------------------------------------------------------------------------
+	    
+    	//----------------------------------
+	    //  x
+	    //----------------------------------
+		
+		/**
+     	 *  Define the x position of the GeoGauge.
+     	*/		
         override public function set x(x:Number):void{
 			_x = x;
 		}
 		
+		/**
+	     *  @private
+	     */
 		override public function get x():Number{
 			return _x;
 		}
 		
+		//----------------------------------
+	    //  y
+	    //----------------------------------
+		
+		/**
+     	 *  Define the y position of the GeoGauge.
+     	*/	
 		override public function set y(value:Number):void{
 			_y = value;
 		}
 		
+		/**
+	     *  @private
+	     */
 		override public function get y():Number{
 			return _y;
 		}
 		
+		//----------------------------------
+	    //  width
+	    //----------------------------------
+		
+		/**
+     	 *  Define the width of the GeoGauge.
+     	*/	
 		override public function set width(w:Number):void{
 			_width = w;
 		}
 		
+		/**
+	     *  @private
+	     */
 		override public function get width():Number{
 			return _width;
 		}
 		
+		//----------------------------------
+	    //  height
+	    //----------------------------------
+		
+		/**
+     	 *  Define the height of the GeoGauge .
+     	*/	
 		override public function set height(h:Number):void{
 			_height = h;
 		}
 		
+		/**
+	     *  @private
+	     */
 		override public function get height():Number{
 			return _height;
 		}
 		
+		//----------------------------------
+	    //  minimumValue
+	    //----------------------------------
+		
+		/**
+     	 *  Define the minimal value of the GeoGauge .
+     	*/	
 		public function set minimumValue(value:Number):void{
 			_min = value;
 		}
 		
+		/**
+	     *  @private
+	     */
 		public function get minimumValue():Number{
 			return _min;
 		}
 		
+		//----------------------------------
+	    //  maximumValue
+	    //----------------------------------
+		
+		/**
+     	 *  Define the maximal value of the GeoGauge .
+     	*/	
 		public function set maximumValue(value:Number):void{
 			_max = value;
 		}
 		
+		/**
+	     *  @private
+	     */
 		public function get maximumValue():Number{
 			return _max;
 		}
 		
 		[Inspectable(enumeration="true,false")]
+		//----------------------------------
+	    //  ticksMark
+	    //----------------------------------
+		
+		/**
+		*  Define if the ticks mark are shown or not.
+     	*  Valid values are <code>true</code> or <code>false</code>.
+     	*  @default true
+		*/
 		public function set ticksMark(value:Boolean):void{
 			_ticksMark = value;
 		}
 		
+		//----------------------------------
+	    //  thicksWidth
+	    //----------------------------------
+		
+		/**
+     	 *  Define the width of the ticks mark.
+     	 * 
+     	 * @default 3
+     	*/	
 		public function set ticksWidth(value:Number):void{
 			_ticksWidth = value;
 		}
 		
+		//----------------------------------
+	    //  minorThicksInterval
+	    //----------------------------------
+		
+		/**
+     	 *  Define the interval of the minor ticks mark.
+     	 * 
+     	 * @default 1
+     	*/	
 		public function set minorTicksInterval(value:Number):void{
 			_minorTicksInterval = value;
 		}
 		
+		//----------------------------------
+	    //  majorThicksInterval
+	    //----------------------------------
+		
+		/**
+     	 *  Define the interval of the major ticks mark.
+     	 * 
+     	 * @default 10
+     	*/	
 		public function set majorTicksInterval(value:Number):void{
 			_majorTicksInterval = value;
 		}
 		
+		//--------------------------------------------------------------------------
+    	//
+    	//  Constructor
+    	//
+    	//--------------------------------------------------------------------------
+
+    	/**
+     	*  Constructor.
+     	*/
 		public function GeoGauge()
 		{
 		}
 		
-		
+		//--------------------------------------------------------------------------
+    	//
+    	//  Overridden methods
+    	//
+    	//--------------------------------------------------------------------------
+    
+		/**
+		 * @private
+		 * Create component child elements. Standard Flex component method.
+		 */
 		override protected function createChildren() : void 
      	{ 
         	super.createChildren(); 
         	barre = new UIComponent();		
      	} 
      	
+     	/**
+	     *  @private
+	     */
      	override protected function commitProperties() : void 
      	{ 
      		if (barre) 
@@ -108,6 +283,9 @@ package org.un.cava.birdeye.geovis.controls
 	        }
      	}
      	
+     	/**
+	     *  @private
+	     */
 		override protected function updateDisplayList(unscaledWidth:Number,unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			if(barre){

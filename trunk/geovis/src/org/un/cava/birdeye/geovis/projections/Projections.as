@@ -63,8 +63,6 @@ package org.un.cava.birdeye.geovis.projections
 					GeoData = new Sinsoidal();
 				}else if(proj=="Robinson"){
 					GeoData = new Robinson();
-				//}else{
-					//GeoData = new WorldCountriesData();
 				}
 			}else if(region=="USA" || region=="CONUS" || region=="OCONUS" || region=="NorthEast" || region=="MidWest" || region=="South" || region=="West" || region=="NewEngland" || region=="MiddleAtlantic" || region=="EastNorthCentral" || region=="WestNorthCentral" || region=="SouthAtlantic" || region=="EastSouthCentral" || region=="WestSouthCentral" || region=="Mountain" || region=="Pacific") {
 				

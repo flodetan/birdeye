@@ -5,41 +5,138 @@ package org.un.cava.birdeye.geovis.controls
 	import mx.controls.Label;
 	import mx.core.UIComponent;
 	
+	//--------------------------------------
+	//  Other metadata
+	//--------------------------------------
+	
+	
 	[Inspectable("title")]
 	public class GeoScale extends UIComponent
 	{
+		
+		//--------------------------------------------------------------------------
+	    //
+	    //  Variables
+	    //
+	    //--------------------------------------------------------------------------
+	
+	    /**
+	     *  @private
+	     */
 		private var scale:UIComponent;
+		
+		/**
+	     *  @private
+	     */
 		private var dynamicClassName:String;
+		
+		/**
+	     *  @private
+	     */
 		private var dynamicClassRef:Class;
+		
+		/**
+	     *  @private
+	     */
 		private var _height:Number;
+		
+		/**
+	     *  @private
+	     */
 		private var _width:Number;
+		
+		/**
+	     *  @private
+	     */
 		private var _x:Number;
+		
+		/**
+	     *  @private
+	     */
 		private var _y:Number;
+		
+		/**
+	     *  @private
+	     */
 		private var _parentMin:Number;
+		
+		/**
+	     *  @private
+	     */
 		private var _parentMax:Number;
+		
+		/**
+	     *  @private
+	     */
 		private var lbl:Label;
+		
+		/**
+	     *  @private
+	     */
 		private var _title:String;
+		
+		/**
+	     *  @private
+	     */
 		private var lblTitle:Label;
 		
+		//--------------------------------------------------------------------------
+	    //
+	    //  Properties
+	    //
+	    //--------------------------------------------------------------------------
+	    
+    	//----------------------------------
+	    //  title
+	    //----------------------------------
+		
+		/**
+     	 *  Define the title of the GeoScale.
+     	*/	
 		public function set title(value:String):void{
 			_title = value;
 		}
 		
+		/**
+	     *  @private
+	     */
 		public function get title():String{
 			return _title;
 		}
 		
+		
+		//--------------------------------------------------------------------------
+    	//
+    	//  Constructor
+    	//
+    	//--------------------------------------------------------------------------
+
+    	/**
+     	*  Constructor.
+     	*/
 		public function GeoScale()
 		{
 		}
 		
-		
+		//--------------------------------------------------------------------------
+    	//
+    	//  Overridden methods
+    	//
+    	//--------------------------------------------------------------------------
+    
+		/**
+		 * @private
+		 * Create component child elements. Standard Flex component method.
+		 */
 		override protected function createChildren() : void 
      	{ 
         	super.createChildren(); 
         	scale=new UIComponent();
      	} 
 		
+		/**
+	     *  @private
+	     */
 		override protected function commitProperties() : void 
      	{ 
 	        if (scale) 

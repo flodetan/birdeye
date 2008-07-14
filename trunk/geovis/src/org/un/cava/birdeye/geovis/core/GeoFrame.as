@@ -24,6 +24,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+ 
 package org.un.cava.birdeye.geovis.core
 {	
 	import com.degrafa.GeometryGroup;
@@ -45,10 +46,49 @@ package org.un.cava.birdeye.geovis.core
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.geovis.styles.GeoStyles;
 	
-	[Event(name="ItemClick", type="org.un.cava.birdeye.geo.events.GeoMapEvents")]
+	//--------------------------------------
+	//  Events
+	//--------------------------------------
+	
+	/**
+ 	*  Dispatched when a country has been clicked on the map.
+ 	*
+ 	*  @eventType org.un.cava.birdeye.geovis.events.GeoMapEvents.ITEM_CLICKED
+ 	*/
+	[Event(name="ItemClick", type="org.un.cava.birdeye.geovis.events.GeoMapEvents")]
+	
+	//--------------------------------------
+	//  Styles
+	//--------------------------------------
+	
+	/**
+ 	*  Define a default gradient for fill all the countries. 
+ 	*  You should set this to an Array. Elements 0 and 1 specify the start and end values for a color gradient.
+ 	*  Element 2 specify the type of gradient 0: radial and 1: linear.
+ 	*  Element 3 specify the rotation angle.
+ 	*/
 	[Style(name="gradientFill",type="Array",format="Color",inherit="no")]
+	
+	/**
+ 	*  Define a default stroke for all the countries. 
+ 	*  You should set this to an Array. 
+ 	*  Elements 0 specify the color of the stroke.
+ 	*  Element 1 specify the alpha.
+ 	*  Element 2 specify the weight.
+ 	*  
+ 	*  @default color:0x000000, alpha:1, weight:1
+ 	*/
 	[Style(name="stroke",type="Array",format="Color",inherit="no")]
+	
+	/**
+ 	*  Define a default color for fill all the countries. 
+ 	*/
 	[Style(name="fill",type="uint",format="Color",inherit="no")]
+	
+	//--------------------------------------
+	//  Other metadata
+	//--------------------------------------
+	
 	[Inspectable("projection")]
 	[Exclude(name="gpGeom", kind="property")]
 	[Exclude(name="surf", kind="property")]
@@ -59,30 +99,111 @@ package org.un.cava.birdeye.geovis.core
 	
 	[ExcludeClass]
 	
+	
 	/**
-	* This class is the main class that draw the maps.
-	* All the other maps are subclass of this one.
-	*/ 
+	 *  The GeoFrame class is the main class that draw the maps.
+	 *  All the other maps are subclass of this one.
+	 */
 	public class GeoFrame extends Canvas
 	{
+		//--------------------------------------------------------------------------
+	    //
+	    //  Variables
+	    //
+	    //--------------------------------------------------------------------------
+	
+	    /**
+	     *  @private
+	     */
 		private var _region:String;
+		
+		/**
+	     *  @private
+	     */
 		private var _projection:String;
+		
+		/**
+	     *  @private
+	     */
 		private var _color:SolidFill;
+		
+		/**
+	     *  @private
+	     */
 		private var _geoGroup:Array;
+		
+		/**
+	     *  @private
+	     */
 		private var _stroke:SolidStroke=new SolidStroke(0x000000,1,1);
+		
+		/**
+	     *  @private
+	     */
 		private var _gradientFill:Array=new Array();
+		
+		/**
+	     *  @private
+	     */
 		private var _scaleX:Number;
+		
+		/**
+	     *  @private
+	     */
 		private var _scaleY:Number;
+		
+		/**
+	     *  @private
+	     */
 		private var listOfCountry:Array=new Array();
+		
+		/**
+	     *  @private
+	     */
     	private var arrChildColors:Dictionary=new Dictionary();
+    	
+    	/**
+	     *  @private
+	     */
     	private var arrChildStrokes:Dictionary=new Dictionary();
+    	
+    	/**
+	     *  @private
+	     */
     	private var arrChildGradients:Dictionary=new Dictionary();
+    	
+    	/**
+	     *  @private
+	     */
     	private var arrStroke:Array=new Array();
     	
+    	/**
+     	*  @private
+     	*/
     	public var wcData:Object;
+    	
+    	/**
+     	*  @private
+     	*/
     	public var surf:Surface;
     	
+    	
+    	//--------------------------------------------------------------------------
+	    //
+	    //  Properties
+	    //
+	    //--------------------------------------------------------------------------
+	    
+    	//----------------------------------
+	    //  projection
+	    //----------------------------------
+
 		[Inspectable(enumeration="Geographic,Lambert equal area,Mercator,Mollweide,WinkelTripel,Miller cylindrical,EckertIV,EckertVI,Goode,Sinsoidal,Robinson")]
+		
+		 /**
+     	 *  Define the type of projection of the map.
+     	 *  Valid values are <code>"Geographic"</code> or <code>"Lambert equal area"</code> or <code>"Mercator"</code> or <code>"Mollweide"</code> or <code>"WinkelTripel"</code> or <code>"Miller cylindrical"</code> or <code>"EckertIV"</code> or <code>"EckertVI"</code> or <code>"Goode"</code> or <code>"Sinsoidal"</code> or <code>"Robinson"</code>.
+	     */
 		public function set projection(value:String):void
 		{
 			_projection = value;
@@ -90,15 +211,26 @@ package org.un.cava.birdeye.geovis.core
 			invalidateProperties();
 		}
 		
+		/**
+     	*  @private
+     	*/
 		public function get projection():String
 		{
 			return _projection;
 		}
 		
+		
+		//----------------------------------
+	    //  scaleX
+	    //----------------------------------
+	    
+		/**
+	     *  The X scale of the map.
+	     *  Any number, 2 is the double of the original size.
+	     */
     	override public function set scaleX(value:Number):void
     	{
     		_scaleX=value;
-			// Draw composite GeometryGroup collection 
 			for each (var gpGeom:GeometryGroup in _geoGroup)
 			{
 				gpGeom.scaleX = value;			
@@ -116,16 +248,27 @@ package org.un.cava.birdeye.geovis.core
 			
     	}
     	
-    	//override public function get scaleX():Number
+    	/**
+     	*  @private
+     	*/
     	override public function get scaleX():Number
     	{
 				return _scaleX;
     	}
     	
+    	
+    	//----------------------------------
+	    //  scaleY
+	    //----------------------------------
+	    
+	    
+    	/**
+	     *  The Y scale of the map.
+	     *  Any number, 2 is the double of the original size.
+	     */
     	override public function set scaleY(value:Number):void
     	{
     		_scaleY=value;
-			// Draw composite GeometryGroup collection 
 			for each (var gpGeom:GeometryGroup in _geoGroup)
 			{
 				gpGeom.scaleY = value;
@@ -143,14 +286,23 @@ package org.un.cava.birdeye.geovis.core
 			
     	}
     	
+    	/**
+     	*  @private
+     	*/
     	override public function get scaleY():Number
     	{
 				return _scaleY;
     	}
+    	
+		//--------------------------------------------------------------------------
+    	//
+    	//  Constructor
+    	//
+    	//--------------------------------------------------------------------------
+
     	/**
-		* The type of projection used to draw the map.  
-		* If not specified a default projection of "No projection" is used. 
-		*/
+     	*  Constructor.
+     	*/
 		public function GeoFrame(region:String)
 		{
 			super();
@@ -161,10 +313,17 @@ package org.un.cava.birdeye.geovis.core
 			
 			this.mouseEnabled=false;
 		}
-
+		
+		
+		//--------------------------------------------------------------------------
+    	//
+    	//  Overridden methods
+    	//
+    	//--------------------------------------------------------------------------
+    
 		/**
+		 * @private
 		 * Create component child elements. Standard Flex component method.
-		 * 
 		 */
 	    override protected function createChildren():void
 	    {
@@ -172,9 +331,40 @@ package org.un.cava.birdeye.geovis.core
 	        createMap();
 	    }
 		
+		
 		/**
-		 * Create map elements.
+		 * @private
+		 * Draw child elements.
 		 * 
+	     *  @param unscaledWidth Specifies the width of the component, in pixels,
+	     *  in the component's coordinates, regardless of the value of the
+	     *  <code>scaleX</code> property of the component.
+	     *
+	     *  @param unscaledHeight Specifies the height of the component, in pixels,
+	     *  in the component's coordinates, regardless of the value of the
+	     *  <code>scaleY</code> property of the component.
+		 */		
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+		{
+			super.updateDisplayList(unscaledWidth, unscaledHeight);
+			
+			for each (var gpGeom:GeometryGroup in _geoGroup)
+			{
+				gpGeom.draw(null,null);			
+			}
+			
+		}
+		
+		
+		//--------------------------------------------------------------------------
+    	//
+    	//  Methods
+    	//
+    	//--------------------------------------------------------------------------
+		
+		/**
+		 * @private
+		 * Create map elements.
 		 */
 		private function createMap():void
 		{
@@ -224,23 +414,10 @@ package org.un.cava.birdeye.geovis.core
 					countryGeom.scaleY=_scaleY;
 					countryGeom.name = country;
 					
-					// The equivalent of the svg transform for flash. This will apply the flip and reposition the item.
-					// taken from SVG as translate(0,174.8) scale(1, -1) and multiplied by 2 for magnification
-		    		//countryGeom.transform.matrix = new Matrix(wcData.scaleX,0,0,wcData.scaleY,wcData.translateX,1*wcData.translateY);
 					countryGeom.target=surf;
 						
-					//countryGeom.addEventListener(MouseEvent.CLICK,handleClickEvent);
-					//countryGeom.addEventListener(MouseEvent.CLICK,handleClickEvent);
-					///countryGeom.addEventListener(MouseEvent.MOUSE_OVER,handleMouseOverEvent);
-					//countryGeom.addEventListener(MouseEvent.MOUSE_OUT,handleMouseOutEvent);
-					//countryGeom.addEventListener(MouseEvent.CLICK, handleClickEvent);
-					
-					//countryGeom.addEventListener(MouseEvent.ROLL_OVER, handleRollOverEvent);
-					//countryGeom.addEventListener(MouseEvent.ROLL_OUT, handleRollOutEvent);
-					
 					surf.graphicsCollection.addItem(countryGeom);
 					
-					//check if it is a path or a polygone
 					var myCoo:IGeometry;
 					if(wcData.getCoordinates(country)!=null){
 						if(isNaN(wcData.getCoordinates(country).substr(0,1))){
@@ -297,85 +474,64 @@ package org.un.cava.birdeye.geovis.core
 			this.addChild(surf);
 		}
 		
+		/**
+     	*  @private
+     	*/
 	    private function itemClkEv(e:MouseEvent):void{
 	    	dispatchEvent(new GeoMapEvents(GeoMapEvents.ITEM_CLICKED,e.currentTarget.name,Features(this.getChildByName('feat'+e.currentTarget.name))))
 	    }
+	    
+	    /**
+     	*  @private
+     	*/
 	    private function itemDblClkEv(e:MouseEvent):void{
 	    	dispatchEvent(new GeoMapEvents(GeoMapEvents.ITEM_DOUBLECLICKED,e.currentTarget.name,Features(this.getChildByName('feat'+e.currentTarget.name))))
 	    }
+	    
+	    /**
+     	*  @private
+     	*/
 	    private function itemRollOverEv(e:MouseEvent):void{
 	    	dispatchEvent(new GeoMapEvents(GeoMapEvents.ITEM_ROLLOVER,e.currentTarget.name,Features(this.getChildByName('feat'+e.currentTarget.name))))
 	    }
+	    
+	    /**
+     	*  @private
+     	*/
 	    private function itemRollOutEv(e:MouseEvent):void{
 	    	dispatchEvent(new GeoMapEvents(GeoMapEvents.ITEM_ROLLOUT,e.currentTarget.name,Features(this.getChildByName('feat'+e.currentTarget.name))))
 	    }
 	    
-		/**
-		 * Draw child elements.
-		 * 
-	     *  @param unscaledWidth Specifies the width of the component, in pixels,
-	     *  in the component's coordinates, regardless of the value of the
-	     *  <code>scaleX</code> property of the component.
-	     *
-	     *  @param unscaledHeight Specifies the height of the component, in pixels,
-	     *  in the component's coordinates, regardless of the value of the
-	     *  <code>scaleY</code> property of the component.
-		 * 
-		 */		
-		 
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-		{
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			
-			// Draw composite GeometryGroup collection 
-			for each (var gpGeom:GeometryGroup in _geoGroup)
-			{
-				gpGeom.draw(null,null);			
-			}
-			
-		}
+		
 	    
+	    /**
+     	*  @private
+     	*/
 		private function handleClickEvent(eventObj:MouseEvent):void {
-			//
-			//if(eventObj.target!="[object GeometryGroup]"){
-				//dispatchEvent(new GeoMapEvents("ItemClick"));
-				//Alert.show('/'+eventObj.type+eventObj.target+'/'+eventObj.currentTarget);
-				eventObj.stopPropagation()
-			//}
+			eventObj.stopPropagation()
 			
 		}
-
-      
-		/*private function handleMouseOverEvent(eventObj:MouseEvent):void {
-        	eventObj.target.useHandCursor=true;
-        	eventObj.target.buttonMode=true;
-        	//eventObj.target.mouseChildren=false;
-        	//GeometryGroup(eventObj.target).filters=[new GlowFilter(0xFFFFFF,0.5,32,32,255,3,true,true)];
-		}
 		
-		private function handleMouseOutEvent(eventObj:MouseEvent):void {
-        	eventObj.target.useHandCursor=true;
-        	eventObj.target.buttonMode=true;
-        	//eventObj.target.mouseChildren=false;
-        	//GeometryGroup(eventObj.target).filters=[new GlowFilter(0xFFFFFF,1,6,6,2,1,false,false)];
-        }*/
-		
-		/*private function handleClickEvent(eventObj:MouseEvent):void {
-        	dispatchEvent(new MouseEvent("click"));
-		}*/
+		/**
+     	*  @private
+     	*/
 		private function handleRollOverEvent(eventObj:MouseEvent):void {
-			//dispatchEvent(new MouseEvent("rollover"));
 			highlightSeries(eventObj.target);
 		}
+		
+		/**
+     	*  @private
+     	*/
 		private function handleRollOutEvent(eventObj:MouseEvent):void {
-        	//dispatchEvent(new MouseEvent("rollout"));
         	eventObj.target.filters=[];
 		}
-
+		
+		/**
+     	*  @private
+     	*/
 		private function getChildValues():void{
 			for(var numOfChildren:int=0; numOfChildren<this.numChildren; numOfChildren++){
 				var ClassName:String=getQualifiedClassName(this.getChildAt(numOfChildren));
-				//Alert.show(ClassName);
 				if(ClassName=="org.un.cava.birdeye.geo.features::Features"){
 					if(Features(this.getChildAt(numOfChildren)).colorItem){
 						arrChildColors[Features(this.getChildAt(numOfChildren)).foid.toString()]=Features(this.getChildAt(numOfChildren)).colorItem;
@@ -389,33 +545,23 @@ package org.un.cava.birdeye.geovis.core
 				}
 			}
 		}
-
-		/*private function setZPosition():void{
-			var arrChildren:Array=new Array();
-			arrChildren=this.getChildren();
-			var childNumber:int=0;
-			while (childNumber<arrChildren.length) { 
-				var ClassName:String=getQualifiedClassName(this.getChildAt(childNumber));
-				if(ClassName=="Features"){
-					this.setChildIndex(this.getChildAt(childNumber),1);
-				}else if(ClassName=="Symbols"){
-					this.setChildIndex(this.getChildAt(childNumber),2);
-				}
-				childNumber++;
-			}
-		}*/
+		
+		/**
+     	*  @private
+     	*/
 		private function highlightSeries(Ser:Object):void{
-	            //set filter
 	            var filter:GlowFilter = getBitmapFilter();
 	            var myFilters:Array = new Array();
 	            myFilters.push(filter);
 	            Ser.filters = myFilters;
 	           
-    			// blink series
     			var target:Array = new Array();
     			target.push(Ser);
 	        }
-	
+			
+			/**
+     		*  @private
+     		*/
 	        private function getBitmapFilter():GlowFilter {
 	            var color:Number = 0xCCCCCC;
 	            var alpha:Number = 1;

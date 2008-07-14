@@ -43,43 +43,97 @@ package org.un.cava.birdeye.geovis.symbols
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.qavis.sparklines.*;
 	
+	//--------------------------------------
+	//  Other metadata
+	//--------------------------------------
+	
 	[Inspectable("key")] 
-	public class Symbols extends UIComponent	//Canvas
-	{
+	public class Symbols extends UIComponent
+	{	
+		//--------------------------------------------------------------------------
+	    //
+	    //  Variables
+	    //
+	    //--------------------------------------------------------------------------
+	
+	    /**
+	     *  @private
+	     */
 		private var _key:String="";
-		//public var myUIComp:UIComponent;
-		public var wcData:Object;
+		
+		/**
+	     *  @private
+	     */
 		private var _isRemove:Boolean=false;
+		
+		/**
+	     *  @private
+	     */
 		private var geom:GeometryGroup;
+		
+		/**
+	     *  @private
+	     */
 		private var objToDel:DisplayObject;
 		
+		/**
+	     *  @private
+	     */
+		public var wcData:Object;
+		
+		
+		//--------------------------------------------------------------------------
+	    //
+	    //  Properties
+	    //
+	    //--------------------------------------------------------------------------
+	    
+    	//----------------------------------
+	    //  key
+	    //----------------------------------
+
+		/**
+     	 * The key is a 3 letters country ISO code for the world map, and 2 letters states ISO code for the US map.
+     	 */
 		public function set key(value:String):void{
 			_key=value;
 		}
 		
+		/**
+	     *  @private
+	     */
 		public function get key():String{
 			return _key;
 		}
 		
+		//--------------------------------------------------------------------------
+    	//
+    	//  Constructor
+    	//
+    	//--------------------------------------------------------------------------
+
+    	/**
+     	*  Constructor.
+     	*/
 		public function Symbols()
 		{
 			super();
-			//this.mouseEnabled=false;
-			//this.mouseChildren=false;
-			//myUIComp=new UIComponent();
 			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
-			//this.addEventListener(FlexEvent.REMOVE, remove);
 		}
 		
-		/*private function remove(e:FlexEvent):void{
-			trace('Remove Event');
-			_isRemove=true;
-			trace(e.currentTarget+e.currentTarget.name);
-			invalidateDisplayList();
-			//Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).removeChild(this);
-		}*/
 		
+		//--------------------------------------------------------------------------
+    	//
+    	//  Methods
+    	//
+    	//--------------------------------------------------------------------------
+		
+		
+		/**
+	     *  @private
+	     */
 		private function creationCompleteHandler (event:FlexEvent):void{
+		
 			if(_key!=""){
 				var dynamicClassName:String=getQualifiedClassName(this.parent);
 				var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
@@ -110,20 +164,13 @@ package org.un.cava.birdeye.geovis.symbols
 		}	
 		
 		
-		
+		/**
+	     *  @private
+	     */
 		private function handleClickEvent(eventObj:MouseEvent):void {
 			eventObj.stopPropagation()
 		}
 		
-		/*override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
-      		super.updateDisplayList( unscaledWidth, unscaledHeight );      
-      		if(_isRemove){
-      			if(geom!=null){
-      				trace('this'+this.name)
-      				Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).removeChild(this);
-      			}
-      			
-      		}
-  		}*/
+		
 	}
 }

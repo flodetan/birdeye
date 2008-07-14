@@ -125,15 +125,6 @@
 						ref.toolTip=_dataTips;
 					}
 		    		
-		   		
-			   		var arrGradColor:Array=new Array();
-			   		
-			   		var gradStop1:GradientStop=new GradientStop();
-			   		gradStop1.color=uint("0xFFFFFF");
-			   		gradStop1.alpha=.8;
-			   		gradStop1.ratio=0;
-			   		arrGradColor.push(gradStop1);
-			   		
 			   		if(getStyle("fill")){
 						_color=uint(getStyle("fill"));
 					}else{
@@ -164,7 +155,14 @@
 							_ratio=ratio;
 						}
 					}
-					
+					var arrGradColor:Array=new Array();
+			   		
+			   		var gradStop1:GradientStop=new GradientStop();
+			   		gradStop1.color=uint("0x666666");
+			   		gradStop1.alpha=.8;
+			   		gradStop1.ratio=0;
+			   		arrGradColor.push(gradStop1);
+			   		
 					var gradStop2:GradientStop=new GradientStop();
 			   		gradStop2.color=_color;
 			   		gradStop2.alpha=_alpha;
