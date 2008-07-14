@@ -31,10 +31,10 @@
 	import com.degrafa.geometry.*;
 	import com.degrafa.paint.*;
 	
-	import mx.managers.ToolTipManager; 
-	import mx.core.IToolTip; 
-	
 	import flash.events.MouseEvent;
+	
+	import mx.collections.IViewCursor;
+	import mx.core.IToolTip;
 	
 	public class PieSparkSlice extends GeometryGroup
 	{
@@ -43,13 +43,21 @@
 		
 		private var _surf:Surface;
 		private var _toolTip:String;
+		private var _cursor:IViewCursor;
 		private var currentToolTipItem:IToolTip; 
-
-
-		public function PieSparkSlice(wdt:Number,hgt:Number,field:String,showdtTips:Boolean,toolTip:String,surf:Surface)
+		private var _dtFunction:Function;
+		
+		public function PieSparkSlice(wdt:Number,hgt:Number,field:String,showdtTips:Boolean,cursor:IViewCursor,dataTipFunction:Function,surf:Surface)
 		{
 			_surf=surf;
-			_toolTip=toolTip;
+			_dtFunction=dataTipFunction;
+			_cursor=cursor;
+			
+			if(_dtFunction!=null){
+				_toolTip=_dtFunction(_cursor);
+			}else{
+				_toolTip=cursor.current[field];
+			}
 			
 			Arc=new EllipticalArc();
 		 	Arc.id="arc";
@@ -58,7 +66,6 @@
 		 	Arc.closureType="pie"; 
 		 	Arc.startAngle=0;
 		 	Arc.arc=0;
-			
 			this.geometryCollection.addItem(Arc);
 			if(showdtTips==true){
 				this.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
@@ -92,6 +99,7 @@
 		private function onRollOver(event:MouseEvent):void{
 			_surf.toolTip=_toolTip;
 	    }
+	    
 	    private function onRollOut(event:MouseEvent):void{
 	    	_surf.toolTip = "";
 	    }

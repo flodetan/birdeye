@@ -46,11 +46,20 @@ package org.un.cava.birdeye.geovis.analysis
 	import org.un.cava.birdeye.geovis.dictionary.*;
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	
+	//--------------------------------------
+	//  Styles
+	//--------------------------------------
+	
 	/**
-	* Flow annotations are used to show the movement or relation of objects 
-	* from one location to another.
-	**/
+ 	*  Define the color of the flow. 
+ 	* 
+ 	*  @default 0x333333
+ 	*/
 	[Style(name="fill",type="uint",format="Color",inherit="no")]
+	
+	//--------------------------------------
+	//  Other metadata
+	//--------------------------------------
 	
 	[Inspectable("dataProvider")]
 	[Inspectable("dataField")]	
@@ -63,49 +72,171 @@ package org.un.cava.birdeye.geovis.analysis
 	public class Flow extends UIComponent
 	{
 		
-		
+		//--------------------------------------------------------------------------
+	    //
+	    //  Variables
+	    //
+	    //--------------------------------------------------------------------------
+	
+	    /**
+	     *  @private
+	     */
 		private var flows:UIComponent;
+		/**
+	     *  @private
+	     */
 		private var cntrlpt:UIComponent;
+		/**
+	     *  @private
+	     */
 		private var markers:UIComponent;
+		/**
+	     *  @private
+	     */
 		private var cntrlpoint:Point;
+		/**
+	     *  @private
+	     */
 		private var mid:Point;
+		/**
+	     *  @private
+	     */
 		private var ArrMarkers:Array=new Array();
+		/**
+	     *  @private
+	     */
 		private var dicMarkers:Dictionary= new Dictionary();
+		/**
+	     *  @private
+	     */
 		private var _dataProvider:ICollectionView;
+		/**
+	     *  @private
+	     */
 		private var _valueField:String;
+		/**
+	     *  @private
+	     */
 		private var _fromField:String;
+		/**
+	     *  @private
+	     */
 		private var _toField:String;
+		/**
+	     *  @private
+	     */
 		private var _showDataTips:Boolean=false;
+		/**
+	     *  @private
+	     */
 		private var _dataTipFunction:Function;
+		/**
+	     *  @private
+	     */
 		private var dynamicClassName:String;
+		/**
+	     *  @private
+	     */
 		private var dynamicClassRef:Class;
+		/**
+	     *  @private
+	     */
 		private var _color:uint=0x333333;
+		/**
+	     *  @private
+	     */
 		private var _thickness:Number=2;
+		
 		[Bindable]
+		/**
+	     *  @private
+	     */
 		private var _scaleY:Number;
+		
 		[Bindable]
+		/**
+	     *  @private
+	     */
 		private var _scaleX:Number;
+	  	
+	  	/**
+	     *  @private
+	     */
 	  	private var blnInit:Boolean=true;
+	  	
+	  	/**
+	     *  @private
+	     */
 	  	private var surf:Surface;
+	  	
+	  	/**
+	     *  @private
+	     */
 	  	private var proj:String;
+		
+		/**
+	     *  @private
+	     */
 		private var region:String;
 		
+		
+		//--------------------------------------------------------------------------
+	    //
+	    //  Properties
+	    //
+	    //--------------------------------------------------------------------------
+	    
+    	//----------------------------------
+	    //  showDataTips
+	    //----------------------------------
+
 		[Inspectable(showDataTips="true,false")]
+		/**
+     	 *  Define if a dataTips is shown or not.
+     	 *  Valid values are <code>true</code> or <code>false</code>.
+     	 *  @default false
+	     */
 		public function set showDataTips(value:Boolean):void
 		{
 			_showDataTips = value;
 		}
 		
+		/**
+     	*  @private
+     	*/
 		public function get showDataTips():Boolean
 		{
 			return _showDataTips;
 		}
 		
+		
+		//----------------------------------
+	    //  dataProvider
+	    //----------------------------------
+	    
+		/**
+	     *  An object that contains the data that defined the flows.
+	     *  When you assign a value to this property, the Flow class handles
+	     *  the source data object as follows:
+	     *  <p>
+	     *  <ul><li>A String containing valid XML text is converted to an XMLListCollection.</li>
+	     *  <li>An XMLNode is converted to an XMLListCollection.</li>
+	     *  <li>An XMLList is converted to an XMLListCollection.</li>
+	     *  <li>Any object that implements the ICollectionView interface is cast to
+	     *  an ICollectionView.</li>
+	     *  <li>An Array is converted to an ArrayCollection.</li>
+	     *  <li>Any other type object is wrapped in an Array with the object as its sole
+	     *  entry.</li></ul>
+	     *  </p>
+	     */
 		public function get dataProvider():Object
 		{
 			return this._dataProvider;
 		}
 		
+		/**
+     	*  @private
+     	*/
 		public function set dataProvider(value:Object):void
 		{
 			//_dataProvider = value;
@@ -154,60 +285,141 @@ package org.un.cava.birdeye.geovis.analysis
 	  		}
 		}
 		
+		//----------------------------------
+	    //  valueField
+	    //----------------------------------
+	    
+		/**
+     	 * The string that will be displayed on the tooltip.
+     	 */
 		public function set valueField(value:String):void
 		{
 			_valueField = value;
 		}
 		
+		//----------------------------------
+	    //  fromField
+	    //----------------------------------
+	    
+		/**
+     	 *  Define from which country the flow is strating. the value is a 3 letters country ISO code for the world map, and 2 letters states ISO code for the US map.
+     	 */
 		public function set fromField(value:String):void
 		{
 			_fromField = value;
 		}
 		
+		/**
+     	*  @private
+     	*/
 		public function get fromField():String
 		{
 			return _fromField;
 		}
 		
+		//----------------------------------
+	    //  toField
+	    //----------------------------------
+	    
+		/**
+     	 *  Define to which country the flow is ending. the value is a 3 letters country ISO codeand 2 letters states ISO code for the US map.
+     	 */
 		public function set toField(value:String):void
 		{
 			_toField = value;
 		}
 		
+		/**
+     	*  @private
+     	*/
 		public function get toField():String
 		{
 			return _toField;
 		}
 		
+		//----------------------------------
+	    //  thickness
+	    //----------------------------------
+		/**
+     	 *  Define the thickness of the flow.
+     	 * 
+     	 * @default 2
+     	 */
 		public function set thickness(value:Number):void
 		{
 			_thickness = value;
 		}
-			
+		
+		/**
+     	*  @private
+     	*/	
 		public function get thickness():Number
 		{
 			return _thickness;
 		}
 		
+		//----------------------------------
+	    //  dataTipFunction
+	    //----------------------------------
+	    
+		/**
+	     *  Specifies a callback function to run on each item of the data provider 
+	     *  to determine its dataTip.
+	    
+	     *  <p>The function must take a single IViewCursor parameter, containing the
+	     *  data provider element, and return a String.</p>
+	     * 
+	     * <pre>
+	     * <p>If you have an XML datatprovider with the fields @fromkey and @tokey
+	     * private function customDataTipFlows(currDatatip:IViewCursor):String{
+		 * 		return 'Originating from: ' + currDatatip.current["@fromkey"].toString() + ' To: ' + currDatatip.current["@tokey"].toString();
+		 * }</p>
+		 * </pre>
+		 * 
+	     *  <p>You can use the <code>dataTipFunction</code> property for handling formatting and localization.</p>
+	     *
+	     */
 		public function get dataTipFunction():Function
 	    {
 	        return _dataTipFunction;
 	    }
 
-	    
+	    /**
+     	*  @private
+     	*/
     	public function set dataTipFunction(value:Function):void
 	    {
 	        _dataTipFunction = value;
 	        //dispatchEvent(new Event("labelFunctionChanged"));
 	    }
 	    
+	    //--------------------------------------------------------------------------
+    	//
+    	//  Constructor
+    	//
+    	//--------------------------------------------------------------------------
+
+    	/**
+     	*  Constructor.
+     	*/
 		public function Flow()
 		{
 			super();
 			this.addEventListener(FlexEvent.CREATION_COMPLETE,createFlows);
 		}
-
 		
+		//--------------------------------------------------------------------------
+    	//
+    	//  Methods
+    	//
+    	//--------------------------------------------------------------------------
+		
+		
+		/**
+		* @private
+		* Flow annotations are used to show the movement or relation of objects 
+		* from one location to another.
+		**/
 		 private function createFlows(event:FlexEvent):void{//
 		 		dynamicClassName =getQualifiedClassName(this.parent);
 				dynamicClassRef = getDefinitionByName(dynamicClassName) as Class;
@@ -223,39 +435,40 @@ package org.un.cava.birdeye.geovis.analysis
 				var i:int=0;
 				var cursor:IViewCursor = _dataProvider.createCursor();
 				
-			while(!cursor.afterLast)
-			{
-				var fromKey:String=cursor.current[_fromField];
-				var toKey:String=cursor.current[_toField];
-				trace(fromKey + ' / ' + toKey)
-				
-				var fromKeyDesc:String=GeoData.getCountriesName(cursor.current[_fromField]);
-				var toKeyDesc:String=GeoData.getCountriesName(cursor.current[_toField]);
-				var desc:String;
-				cooFrom=GeoData.getBarryCenter(fromKey);
-				var arrPosFrom:Array=cooFrom.split(',');
-				cooTo=GeoData.getBarryCenter(toKey);
-				var arrPosTo:Array=cooTo.split(',')
-				
-				if(_dataTipFunction!=null){
-					desc=_dataTipFunction(cursor);
-				}else{
-					desc=cursor.current[_valueField];
-				}
-				
-				var geom1:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(fromKey));
-				var geom2:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(toKey));
-				
-				if(geom1!=null && geom2!=null){
-					drawFlow(arrPosFrom,arrPosTo, fromKeyDesc, toKeyDesc, desc);
-				}
-				    
-				i++;
-				cursor.moveNext();  
-			}  
+				while(!cursor.afterLast)
+				{
+					var fromKey:String=cursor.current[_fromField];
+					var toKey:String=cursor.current[_toField];
+					
+					var fromKeyDesc:String=GeoData.getCountriesName(cursor.current[_fromField]);
+					var toKeyDesc:String=GeoData.getCountriesName(cursor.current[_toField]);
+					var desc:String;
+					cooFrom=GeoData.getBarryCenter(fromKey);
+					var arrPosFrom:Array=cooFrom.split(',');
+					cooTo=GeoData.getBarryCenter(toKey);
+					var arrPosTo:Array=cooTo.split(',')
+					
+					if(_dataTipFunction!=null){
+						desc=_dataTipFunction(cursor);
+					}else{
+						desc=cursor.current[_valueField];
+					}
+					
+					var geom1:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(fromKey));
+					var geom2:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(toKey));
+					
+					if(geom1!=null && geom2!=null){
+						drawFlow(arrPosFrom,arrPosTo, fromKeyDesc, toKeyDesc, desc);
+					}
+					    
+					i++;
+					cursor.moveNext();  
+				}  
     	}
    
-  
+  		/**
+     	*  @private
+     	*/
 	   	private function drawFlow(cooFrom:Array, cooTo:Array, fromDest:String, toDest:String, description:String):void{
 	   		flows = new UIComponent();
 	   	  	flows.name="flow"+fromDest+toDest;
@@ -284,16 +497,13 @@ package org.un.cava.birdeye.geovis.analysis
 			}
 					
 					
-			//From
-		      var strFrom:String=fromDest;
+			  var strFrom:String=fromDest;
 		      var p1:Point = new Point(cooFrom[0], cooFrom[1]);
 		      surf.addChild(flows);
 		    
-		     // To
 		      var strTo:String=toDest;
 		      var p2:Point = new Point(cooTo[0], cooTo[1]);
 		    
-		     // Mid
 		      mid = new Point(p1.x + ((p2.x - p1.x) / 2.0), p1.y + ((p2.y - p1.y) / 2.0));
 		      
 			  // initial parameters for control point
@@ -322,9 +532,6 @@ package org.un.cava.birdeye.geovis.analysis
 		      		flows.toolTip="From: " + strFrom + "\r" + "To: " + strTo
 		      	}
 		      }
-		      // control point
-		      // need to add drag and drop capability here
-		      // drop point of rect becomes new control point for flow     
 		      
 		      // guide lines
 		      cntrlpt.graphics.lineStyle(1, 0xFF0000, .3);
@@ -334,21 +541,21 @@ package org.un.cava.birdeye.geovis.analysis
 		      cntrlpt.graphics.lineTo(p2.x, p2.y);   
 	   }
    		
+   		/**
+     	*  @private
+     	*/
    		private function handleMouseOverEvent(eventObj:MouseEvent):void {
         	eventObj.target.useHandCursor=true;
         	eventObj.target.buttonMode=true;
 		}
 		
+		/**
+     	*  @private
+     	*/
 		private function handleMouseOutEvent(eventObj:MouseEvent):void {
         	eventObj.target.useHandCursor=false;
         	eventObj.target.buttonMode=false;
         }
-	/*override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		trace('updateDisplayList');
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.clear()
-		super.addEventListener(FlexEvent.CREATION_COMPLETE,createFlows);
-	}*/
+	
 }
 }

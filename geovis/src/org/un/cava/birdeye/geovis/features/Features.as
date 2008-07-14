@@ -47,9 +47,38 @@ package org.un.cava.birdeye.geovis.features
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.geovis.styles.GeoStyles;
 	
+	//--------------------------------------
+	//  Styles
+	//--------------------------------------
+	
+	/**
+ 	*  Define a gradient for fill a specific country. 
+ 	*  You should set this to an Array. Elements 0 and 1 specify the start and end values for a color gradient.
+ 	*  Element 2 specify the type of gradient 0: radial and 1: linear.
+ 	*  Element 3 specify the rotation angle.
+ 	*/
 	[Style(name="gradientItemFill",type="Array",format="Color",inherit="no")]
+	
+	/**
+ 	*  Define a stroke for a specific country. 
+ 	*  You should set this to an Array. 
+ 	*  Elements 0 specify the color of the stroke.
+ 	*  Element 1 specify the alpha.
+ 	*  Element 2 specify the weight.
+ 	*  
+ 	*  @default color:0x000000, alpha:1, weight:1
+ 	*/
 	[Style(name="strokeItem",type="Array",format="Color",inherit="no")]
+	
+	/**
+ 	*  Define a default color for fill a specific country. 
+ 	*/
 	[Style(name="fillItem",type="uint",format="Color",inherit="no")]
+	
+	//--------------------------------------
+	//  Other metadata
+	//--------------------------------------
+	
 	[Inspectable("highlighted")]
 	[Inspectable("foid")] 
 	[Exclude(name="gradItemFill", kind="property")]
@@ -61,86 +90,137 @@ package org.un.cava.birdeye.geovis.features
 	[Exclude(name="stroke", kind="style")]
 	[Exclude(name="fill", kind="style")]
 	
-/** 
-* Features Class
-* 
-* @tag Tag text.
-*/
+
 	public class Features extends UIComponent
 	{
-		public var colorItem:SolidFill;//=new SolidFill(0xFFFFFF);
+		//--------------------------------------------------------------------------
+	    //
+	    //  Variables
+	    //
+	    //--------------------------------------------------------------------------
+		
+		/**
+	     *  @private
+	     */
+		private var GeoData:Object;
+		/**
+	     *  @private
+	     */
+		private var arrStrokeItem:Array=new Array();
+		/**
+	     *  @private
+	     */
+		private var _toolTip:String;
+		
+		/**
+	     *  @private
+	     */
+		private var surface:Surface;
+		
+		/**
+	     *  @private
+	     */
+		private var geom:GeometryGroup;
+		
+		/**
+	     *  @private
+	     */
+		private var myCoo:IGeometry;
+	    /**
+	     *  @private
+	     */
+		public var colorItem:SolidFill;
+		
+		/**
+	     *  @private
+	     */
 		public var stkItem:SolidStroke=new SolidStroke(0x000000,1,1);
 		
+		/**
+	     *  @private
+	     */
 		public var gradItemFill:Array;
 		
+		/**
+	     *  @private
+	     */
+		private var _highlighted:Boolean=false;
+		
+		//--------------------------------------------------------------------------
+	    //
+	    //  Properties 
+	    //
+	    //--------------------------------------------------------------------------
+	    
+    	//----------------------------------
+	    //  foid
+	    //----------------------------------
+
 		[Inspectable(defaultValue="")]
+		/**
+     	 * The value is a 3 letters country ISO code for the world map, and 2 letters states ISO code for the US map.
+     	 */
 		public var foid:String;
 		
-		//[Inspectable(defaultValue=false)]
-		public var _highlighted:Boolean=false;
 		
-		private var _toolTip:String;
-		private var surface:Surface;
-		private var geom:GeometryGroup;
-		private var myCoo:IGeometry;
+		
+		//----------------------------------
+	    //  highlighted
+	    //----------------------------------
 		
 		[Bindable]
+		/**
+     	 *  Define a GradientGlowFilter when the mouse move over a country.
+     	 *  Valid values are <code>true</code> or <code>false</code>.
+     	 *  @default false
+	     */
 		public function set highlighted(value:Boolean):void{
 			_highlighted=value;
 		} 
 		
+		/**
+	     *  @private
+	     */
 		public function get highlighted():Boolean{
 			return _highlighted;
 		} 
-		/**
-		* Set the color of a particular item for example a country of the map. 
-		*/
-		/*public function set colorItem(value:uint):void{
-			_colorItem=new SolidFill(value,1);
-		} 
-		public function get colorItem():uint{
-			var retColor:uint;
-			if(_colorItem){
-				retColor=_colorItem.color;
-			}else{
-				retColor=0;	
-			}
-			return retColor;
-		}   */
 		
-		/**
-		 * Set the stroke of a particular Item for example a country of the map.  
-		 */
-		/*public function set strokeItem(value:Stroke):void{
-			_strokeItem= new SolidStroke(value.color,value.alpha,value.weight);
-		} 
-		public function get strokeItem():Stroke{
-			var retStroke:Stroke;
-			if(_strokeItem){
-				retStroke=new Stroke(_strokeItem.color,_strokeItem.weight,_strokeItem.alpha);
-			}else{
-				retStroke=null;
-			}
-			return retStroke
-		}*/
 		
-		/**
-		*Set the gradient of a particular Item for example a country of the map.
-		*/ 
 		
-		private var GeoData:Object;
-		private var arrStrokeItem:Array=new Array();
+		//--------------------------------------------------------------------------
+    	//
+    	//  Constructor
+    	//
+    	//--------------------------------------------------------------------------
+
+    	/**
+     	*  Constructor.
+     	*/
 		public function Features()
 		{
 			super();
-			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
 		}
+		
+		//--------------------------------------------------------------------------
+    	//
+    	//  Overridden methods
+    	//
+    	//--------------------------------------------------------------------------
+    
+		/**
+		 * @private
+		 */
 		override public function set toolTip(value:String):void 
 		{
     		_toolTip=value;
     	}
 		
-		private function creationCompleteHandler (event:FlexEvent):void{
+		/**
+		 * @private
+		 */
+		override protected function createChildren():void{
+	        super.createChildren();
+	        
 			this.name='feat'+foid;
 			var dynamicClassName:String=getQualifiedClassName(this.parent);
 			var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
@@ -204,8 +284,54 @@ package org.un.cava.birdeye.geovis.features
 			
         }
 		
+		/**
+		 * @private
+		 */
+        override public function styleChanged( styleProp:String ):void{            
+        	super.styleChanged( styleProp );            
+        	if ( styleProp == "fillItem" ){               
+        		invalidateDisplayList();                
+        		return;                            
+        	}         
+       }
+       
+       /**
+		 * @private
+		 */
+       override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
+      		super.updateDisplayList( unscaledWidth, unscaledHeight );            
+      		if(myCoo){
+      			myCoo.fill=new SolidFill(getStyle("fillItem"),1);
+      		}      
+      		
+      		if(geom!=null){
+			        if(_highlighted==true){
+						if(!geom.hasEventListener(MouseEvent.ROLL_OVER)){
+							geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
+						}
+						if(!geom.hasEventListener(MouseEvent.ROLL_OUT)){
+							geom.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
+						}
+					}else{
+						if(geom.hasEventListener(MouseEvent.ROLL_OVER)){
+							geom.removeEventListener(MouseEvent.ROLL_OVER, onRollOver);
+						}
+						if(geom.hasEventListener(MouseEvent.ROLL_OUT)){
+							geom.removeEventListener(MouseEvent.ROLL_OUT, onRollOut);
+						}
+					}
+		        }   
+      	}
+      	
+        //--------------------------------------------------------------------------
+    	//
+    	//  Methods
+    	//
+    	//--------------------------------------------------------------------------
 		
-        
+		/**
+		 * @private
+		 */
 		private function onRollOver(e:MouseEvent):void{
 			e.target.useHandCursor=true;
         	e.target.buttonMode=true;
@@ -237,52 +363,19 @@ package org.un.cava.birdeye.geovis.features
 				gradientGlow.quality = BitmapFilterQuality.HIGH;
 				gradientGlow.type = BitmapFilterType.OUTER;
 				GeometryGroup(e.target).filters=[gradientGlow];
-				//GeometryGroup(e.target).filters=[new GlowFilter(glowColor,0.5,32,32,255,3,true,true)];
 			}
 	    }
+	    
+	    /**
+		 * @private
+		 */
 	    private function onRollOut(e:MouseEvent):void{
 	    	e.target.useHandCursor=false;
         	e.target.buttonMode=false;
 	    	surface.toolTip = null;
-	    	//if(_highlighted==false){
-	    		GeometryGroup(e.target).filters=null;
-	    	//}
+	    	GeometryGroup(e.target).filters=null;
 	    }
         
-        override public function styleChanged( styleProp:String ):void{            
-        	super.styleChanged( styleProp );            
-        	if ( styleProp == "fillItem" ){
-        		//_sourceChanged = true;                 
-        		invalidateDisplayList();                
-        		return;                            
-        	}         
-       }
-       
-       override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
-      		super.updateDisplayList( unscaledWidth, unscaledHeight );            
-      		if(myCoo){
-      			myCoo.fill=new SolidFill(getStyle("fillItem"),1);
-      		}      
-      		
-      		if(geom!=null){
-			        if(_highlighted==true){
-						if(!geom.hasEventListener(MouseEvent.ROLL_OVER)){
-							geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
-						}
-						if(!geom.hasEventListener(MouseEvent.ROLL_OUT)){
-							geom.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
-						}
-					}else{
-						if(geom.hasEventListener(MouseEvent.ROLL_OVER)){
-							geom.removeEventListener(MouseEvent.ROLL_OVER, onRollOver);
-						}
-						if(geom.hasEventListener(MouseEvent.ROLL_OUT)){
-							geom.removeEventListener(MouseEvent.ROLL_OUT, onRollOut);
-						}
-					}
-		        }   
-      	}
-      	
       	
 	}
 }

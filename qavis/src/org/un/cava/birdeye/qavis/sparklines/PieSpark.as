@@ -31,11 +31,11 @@
 	import com.degrafa.geometry.*;
 	import com.degrafa.paint.*;
 	
-	import flash.filters.DropShadowFilter;
-	import flash.xml.XMLNode;
 	import flash.display.DisplayObjectContainer;
+	import flash.filters.DropShadowFilter;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
+	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.ICollectionView;
@@ -49,6 +49,7 @@
 	[Inspectable("colors")]
 	[Inspectable("dataField")]	
 	[Inspectable("showDataTips")]	
+	[Inspectable("dataTipFunction")]	
 	public class PieSpark extends UIComponent
 	{
 			private var values:Array;
@@ -59,6 +60,9 @@
 			private var _gradientColors:Array;
 			private var _dataField:String;
 			private var _showDataTips:Boolean=false;
+			private var _dataTipFunction:Function;
+			//[Bindable("dataTipFunctionChanged")]
+    		//[Inspectable(category="Advanced")]
 			public var Surf:Surface;
 			
 			[Bindable]
@@ -81,7 +85,8 @@
 		{
 			return this._dataProvider;
 		}
-		
+
+
 		public function set dataProvider(value:Object):void
 		{
 			//_dataProvider = value;
@@ -97,8 +102,11 @@
 	        }
 			else if(value is XMLList)
 			{
-				//XMLLists become XMLListCollections
-				value = new XMLListCollection(value.children() as XMLList);
+				if(XMLList(value).children().length()>0){
+					value = new XMLListCollection(value.children() as XMLList);
+				}else{
+					value = new XMLListCollection(value as XMLList);
+				}
 			}
 			else if(value is Array)
 			{
@@ -142,6 +150,17 @@
 			_dataField = value;
 		}
 			
+		public function get dataTipFunction():Function
+	    {
+	        return _dataTipFunction;
+	    }
+
+	    
+    	public function set dataTipFunction(value:Function):void
+	    {
+	        _dataTipFunction = value;
+	        //dispatchEvent(new Event("labelFunctionChanged"));
+	    }
 		public function PieSpark()
 		{
 			super();
@@ -182,7 +201,7 @@
 				var cursor:IViewCursor = _dataProvider.createCursor();
 				while(!cursor.afterLast)
 				{
-					var slice:PieSparkSlice = createSlice(cursor.current[_dataField],Surf);
+					var slice:PieSparkSlice = createSlice(cursor,Surf);
 					data[i] = cursor.current[_dataField];
 					total += Number(data[i]);
 				    i++;
@@ -192,14 +211,13 @@
 
 		
 				SLICES = _dataProvider.length;
-				
 				redraw(data, total);
 			}
 			
-			private function createSlice(ttips:String, surf:Surface):PieSparkSlice 
+			private function createSlice(curs:IViewCursor, surf:Surface):PieSparkSlice 
 			{
 				var c:int;
-				var slice:PieSparkSlice = new PieSparkSlice(this.width,this.height,_dataField,_showDataTips,ttips,surf);
+				var slice:PieSparkSlice = new PieSparkSlice(this.width,this.height,_dataField,_showDataTips,curs,_dataTipFunction,surf);
 				slice.x = 0;
 				slice.y = 0;
 				var fill:LinearGradientFill = new LinearGradientFill();

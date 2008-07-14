@@ -9,85 +9,249 @@ package org.un.cava.birdeye.geovis.controls
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	import mx.managers.ToolTipManager;
-            
+    
+    //--------------------------------------
+	//  Styles
+	//--------------------------------------
+	
+	/**
+ 	*  Define the default color of teh thumb. 
+ 	*/        
 	[Style(name="Color", type="uint", format="Color", inherit="no")]
+	
+	//--------------------------------------
+	//  Other metadata
+	//--------------------------------------
+	
+	
 	[Inspectable("draggable")]
 	[Inspectable("allowDragToTheEnd")]
 	public class GeoThumb extends UIComponent
 	{
+		//--------------------------------------------------------------------------
+	    //
+	    //  Variables
+	    //
+	    //--------------------------------------------------------------------------
+	
+	    /**
+	     *  @private
+	     */
 		private var bouton:UIComponent;
+		
+		/**
+	     *  @private
+	     */
 		private var _height:Number;
+		
+		/**
+	     *  @private
+	     */
 		private var _width:Number;
+		
+		/**
+	     *  @private
+	     */
 		private var _x:Number;
+		
+		/**
+	     *  @private
+	     */
 		private var _y:Number;
+		
 		[Bindable]
+		/**
+	     *  @private
+	     */
 		private var _min:Number;
+		
 		[Bindable]
+		/**
+	     *  @private
+	     */
 		private var _max:Number;
+		
 		[Bindable]
+		/**
+	     *  @private
+	     */
 		private var _value:Number;
+		
+		/**
+	     *  @private
+	     */
 		private var _draggable:Boolean=true;
+		
+		/**
+	     *  @private
+	     */
 		private var _parentMin:Number;
+		
+		/**
+	     *  @private
+	     */
 		private var _parentMax:Number;
+		
+		/**
+	     *  @private
+	     */
 		private var dynamicClassName:String;
+		
+		/**
+	     *  @private
+	     */
 		private var dynamicClassRef:Class;
+		
+		/**
+	     *  @private
+	     */
 		private var _allowDragToTheEnd:Boolean=false;
+		
+		/**
+	     *  @private
+	     */
 		private var tt:IToolTip;
-
+		
+		//--------------------------------------------------------------------------
+	    //
+	    //  Properties
+	    //
+	    //--------------------------------------------------------------------------
+	    
+    	//----------------------------------
+	    //  minimum
+	    //----------------------------------
+		
+		
 		[Bindable]
+		/**
+     	 *  Define the minimum value of the Thumb.
+     	*/	
 		public function set minimum(value:Number):void{
 			_min = value;
 		}
+		
+		/**
+	     *  @private
+	     */
 		public function get minimum():Number{
 			return _min;
 		}
 		
+		//----------------------------------
+	    //  maximum
+	    //----------------------------------
+	    
 		[Bindable]
+		/**
+     	 *  Define the maximum value of the Thumb.
+     	*/
 		public function set maximum(value:Number):void{
 			_max = value;
 		}
+		
+		/**
+	     *  @private
+	     */
 		public function get maximum():Number{
 			return _max;
 		}
 		
+		//----------------------------------
+	    //  value
+	    //----------------------------------
+	    
 		[Bindable(event="valueUpdated")]
+		/**
+     	 *  Define the initial value of the Thumb.
+     	*/
 		public function set value(value:Number):void{
 			_value = value;
 			dispatchEvent( new FlexEvent( "valueUpdated" ) );
 		}
+		
+		/**
+	     *  @private
+	     */
 		public function get value():Number{
 			return _value;
 		}
 		
+		//----------------------------------
+	    //  draggable
+	    //----------------------------------
+	    
 		[Inspectable(enumeration="true,false")]
+		/**
+     	 *  Define if the Thumb is draggable or not.
+     	 * 
+     	 * @default true
+     	*/
 		public function set draggable(value:Boolean):void{
 			_draggable = value;
 		}
 		
+		/**
+	     *  @private
+	     */
 		public function get draggable():Boolean{
 			return _draggable;
 		}
 		
-		
+		//----------------------------------
+	    //  allowDragToTheEnd
+	    //----------------------------------
+	    
 		[Inspectable(enumeration="true,false")]
+		/**
+     	 *  Define if the Thumb is draggable to the end or not. It should be used only by the last draggable thumb.
+     	 * 
+     	 * @default false
+     	*/
 		public function set allowDragToTheEnd(value:Boolean):void{
 			_allowDragToTheEnd = value;
 		}
 		
+		/**
+	     *  @private
+	     */
 		public function get allowDragToTheEnd():Boolean{
 			return _allowDragToTheEnd;
 		}
 		
+		//--------------------------------------------------------------------------
+    	//
+    	//  Constructor
+    	//
+    	//--------------------------------------------------------------------------
+
+    	/**
+     	*  Constructor.
+     	*/
 		public function GeoThumb()
 		{
 		}
 		
+		
+		//--------------------------------------------------------------------------
+    	//
+    	//  Overridden methods
+    	//
+    	//--------------------------------------------------------------------------
+    
+		/**
+		 * @private
+		 * Create component child elements. Standard Flex component method.
+		 */
 		override protected function createChildren() : void 
      	{ 
      		super.createChildren(); 
         	bouton = new UIComponent();
      	}
      	
+     	/**
+	     *  @private
+	     */
      	override protected function commitProperties() : void 
      	{ 
 	        if (bouton) 
@@ -124,6 +288,16 @@ package org.un.cava.birdeye.geovis.controls
 	        }
      	}
 		
+		
+		//--------------------------------------------------------------------------
+    	//
+    	//  Methods
+    	//
+    	//--------------------------------------------------------------------------
+		
+		/**
+		 * @private
+		 */
 		 private function startMove(event:MouseEvent):void
         {
         	toolTipCreate(_value.toString(), event.stageX + 10, event.stageY + 10);
@@ -138,14 +312,20 @@ package org.un.cava.birdeye.geovis.controls
            }
            bouton.addEventListener(MouseEvent.MOUSE_MOVE, moveDrag);
         }
-
+		
+		/**
+		 * @private
+		 */
         private function endDrag(event:MouseEvent):void
         {
         	toolTipDestroy();
             bouton.stopDrag();
             bouton.removeEventListener(MouseEvent.MOUSE_MOVE, moveDrag);
         }
-
+		
+		/**
+		 * @private
+		 */
         private function moveDrag(event:MouseEvent):void
         {
         	if (tt) {
@@ -159,25 +339,37 @@ package org.un.cava.birdeye.geovis.controls
 	            (this.parent as dynamicClassRef).invalidateDisplayList();
         }
         
+        /**
+		 * @private
+		 */
         private function MouseOverEvent(event:MouseEvent):void {
         	toolTipCreate(_value.toString(), event.stageX + 10, event.stageY + 10);
         	event.currentTarget.useHandCursor=true;
         	event.currentTarget.buttonMode=true;
         }
 		
+		/**
+		 * @private
+		 */
 		private function MouseOutEvent(event:MouseEvent):void {
 			toolTipDestroy();
         	event.currentTarget.useHandCursor=false;
         	event.currentTarget.buttonMode=false;
         }
         
+        /**
+		 * @private
+		 */
         private function toolTipCreate(ttText:String,xPos:Number,yPos:Number):void {
                 if (tt) {
                     toolTipDestroy();
                 }
                 tt = ToolTipManager.createToolTip(ttText, xPos, yPos);
         }
-
+		
+		/**
+		 * @private
+		 */
         private function toolTipDestroy():void {
             if (tt) {
                 ToolTipManager.destroyToolTip(tt);
