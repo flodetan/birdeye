@@ -39,6 +39,7 @@ package org.un.cava.birdeye.geovis.symbols
 	
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
+	import mx.containers.Canvas;
 	
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.qavis.sparklines.*;
@@ -48,7 +49,7 @@ package org.un.cava.birdeye.geovis.symbols
 	//--------------------------------------
 	
 	[Inspectable("key")] 
-	public class Symbols extends UIComponent
+	public class Symbols extends Canvas//UIComponent
 	{	
 		//--------------------------------------------------------------------------
 	    //
