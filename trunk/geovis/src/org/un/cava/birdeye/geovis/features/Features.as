@@ -199,6 +199,7 @@ package org.un.cava.birdeye.geovis.features
 		public function Features()
 		{
 			super();
+			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
 		}
 		
 		//--------------------------------------------------------------------------
@@ -218,9 +219,7 @@ package org.un.cava.birdeye.geovis.features
 		/**
 		 * @private
 		 */
-		override protected function createChildren():void{
-	        super.createChildren();
-	        
+		private function creationCompleteHandler (event:FlexEvent):void{    
 			this.name='feat'+foid;
 			var dynamicClassName:String=getQualifiedClassName(this.parent);
 			var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
@@ -281,7 +280,6 @@ package org.un.cava.birdeye.geovis.features
 					geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
 					geom.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
 			}
-			
         }
 		
 		/**
