@@ -236,9 +236,16 @@ package org.un.cava.birdeye.geovis.core
 			for each (var gpGeom:GeometryGroup in _geoGroup)
 			{
 				gpGeom.scaleX = value;
-				gpGeom.x=gpGeom.x*value/surf.scaleX;
 			}
 			
+			if(surf!=null){
+				for (var n:int = 0; n<surf.numChildren; n++) 
+				{
+					surf.getChildAt(n).x=surf.getChildAt(n).x*value/surf.scaleX;
+					surf.getChildAt(n).scaleX=value;
+				}
+				surf.scaleX=value;
+			}
 			invalidateDisplayList();
 			
     	}
@@ -267,7 +274,14 @@ package org.un.cava.birdeye.geovis.core
 			for each (var gpGeom:GeometryGroup in _geoGroup)
 			{
 				gpGeom.scaleY = value;
-				gpGeom.y=gpGeom.y*value/surf.scaleY;
+			}
+			if(surf!=null){
+				for (var n:int = 0; n<surf.numChildren; n++) 
+				{
+					surf.getChildAt(n).y=surf.getChildAt(n).y*value/surf.scaleY;
+					surf.getChildAt(n).scaleY=value;
+				}
+				surf.scaleY=value;
 			}
 			
 			invalidateDisplayList();
@@ -414,16 +428,17 @@ package org.un.cava.birdeye.geovis.core
 							myCoo = new Polygon();
 						}
 						
-					/*	var trsf:Transform=new Transform();
+						/*var trsf:Transform=new Transform();
 						trsf.registrationPoint="center";
 						trsf.scaleX=_scaleX;
+						trsf.scaleY=_scaleY;
 						
 						if(isNaN(wcData.getCoordinates(country).substr(0,1))){
 							Path(myCoo).transform = trsf;
 						}else{
 							Polygon(myCoo).transform = trsf;
-						}
-						*/
+						}*/
+						
 						myCoo.data = wcData.getCoordinates(country);
 						
 						if(arrChildStrokes[country]===undefined)
