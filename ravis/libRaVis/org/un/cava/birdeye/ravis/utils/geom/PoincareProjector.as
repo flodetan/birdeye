@@ -24,10 +24,14 @@
  */
 package org.un.cava.birdeye.ravis.utils.geom {
 
-import flash.geom.Point;
 import flash.display.DisplayObject;
-import org.un.cava.birdeye.ravis.utils.GraphicUtils;
+import flash.geom.Point;
+
+import mx.logging.ILogger;
+
 import org.un.cava.birdeye.ravis.graphLayout.layout.Hyperbolic2DLayouter;
+import org.un.cava.birdeye.ravis.utils.GraphicUtils;
+import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
 
 	/**
 	 * This class implements the IProjector, using Poincare model to map 
@@ -49,6 +53,8 @@ import org.un.cava.birdeye.ravis.graphLayout.layout.Hyperbolic2DLayouter;
 	 * @author Nitin Lamba
 	 */
 	public class PoincareProjector implements IProjector {
+		
+		private static const logger : ILogger = fetchLogger(PoincareProjector)
 		
 		private	var _viewMatrix:IIsometry;
 		private	var _inverseViewMatrix:IIsometry;
@@ -247,7 +253,7 @@ import org.un.cava.birdeye.ravis.graphLayout.layout.Hyperbolic2DLayouter;
 			if (d.height != 0)
 				z.imag = 1 - p.y * 2.0 / d.height;
 			if (z.norm2() >= 1.0) {
-				//trace("Point " + p + " out of bounds");
+				//logger.debug("Point " + p + " out of bounds");
 				if (adjustBadNodes) {// Adjusting bad node to a valid node at the same orientation
 					var angle:Number = Math.atan(Math.abs(z.imag / z.real));
 					z.real = 0.8 * Math.cos(angle) * z.real / Math.abs(z.real) ;

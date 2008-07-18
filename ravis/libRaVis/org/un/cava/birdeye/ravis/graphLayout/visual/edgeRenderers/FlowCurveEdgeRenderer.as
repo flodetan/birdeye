@@ -27,9 +27,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	import flash.display.Graphics;
 	import flash.geom.Point;
 	
+	import mx.logging.ILogger;
+	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 	import org.un.cava.birdeye.ravis.utils.Geometry;
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
 
 
 	/**
@@ -43,6 +46,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	 * The whole flow is also bent in a bit of a curve.
 	 * */
 	public class FlowCurveEdgeRenderer extends BaseEdgeRenderer {
+		
+		private static const logger : ILogger = fetchLogger(FlowCurveEdgeRenderer)
 		
 		/**
 		 * constant to describe that the bending should be left.
@@ -143,16 +148,16 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			
 			/* calculate the angle of the direction of the target */
 			tdirectionAngle = Geometry.polarAngle(target.subtract(source));
-			//trace("target direction:"+Geometry.rad2deg(tdirectionAngle)+" degrees");
+			//logger.debug("target direction:"+Geometry.rad2deg(tdirectionAngle)+" degrees");
 			
 			/* calculate the angle of the direction of the base, which is
 			 * always 90 degrees (PI/2) of tdirection */
 			basedirectionAngle = Geometry.normaliseAngle(tdirectionAngle + (Math.PI / 2));
-			//trace("base direction:"+Geometry.rad2deg(basedirectionAngle)+" degrees");
+			//logger.debug("base direction:"+Geometry.rad2deg(basedirectionAngle)+" degrees");
 			
 			/* now calculate the width of the base in relation to the flow */
 			baseWidth = (flow * (maxBaseWidth / relativeEdgeMagnitude));
-			//trace("flow:"+flow+" base width:"+baseWidth);
+			//logger.debug("flow:"+flow+" base width:"+baseWidth);
 			
 			/* now calculate the first base point, which is half the width in
 			 * positive base direction in the curved version we have to add
@@ -168,8 +173,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 				base2 = source.add(Point.polar(-(baseWidth / 2)+bendingDegree, basedirectionAngle));
 			}
 			
-			//trace("base1:"+base1.toString());
-			//trace("base2:"+base2.toString());
+			//logger.debug("base1:"+base1.toString());
+			//logger.debug("base2:"+base2.toString());
 
 			/* apply the line style */
 			applyLineStyle(vedge);
@@ -243,16 +248,16 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			
 			/* calculate the angle of the direction of the target */
 			tdirectionAngle = Geometry.polarAngle(target.subtract(source));
-			//trace("target direction:"+Geometry.rad2deg(tdirectionAngle)+" degrees");
+			//logger.debug("target direction:"+Geometry.rad2deg(tdirectionAngle)+" degrees");
 			
 			/* calculate the angle of the direction of the base, which is
 			 * always 90 degrees (PI/2) of tdirection */
 			basedirectionAngle = Geometry.normaliseAngle(tdirectionAngle + (Math.PI / 2));
-			//trace("base direction:"+Geometry.rad2deg(basedirectionAngle)+" degrees");
+			//logger.debug("base direction:"+Geometry.rad2deg(basedirectionAngle)+" degrees");
 			
 			/* now calculate the width of the base in relation to the flow */
 			baseWidth = (flow * (maxBaseWidth / relativeEdgeMagnitude));
-			//trace("flow:"+flow+" base width:"+baseWidth);
+			//logger.debug("flow:"+flow+" base width:"+baseWidth);
 			
 			/* now calculate the first base point, which is half the width in
 			 * positive base direction in the curved version we have to add

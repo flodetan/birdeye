@@ -23,13 +23,15 @@
  * THE SOFTWARE.
  */
 package org.un.cava.birdeye.ravis.graphLayout.layout {
-	import flash.accessibility.AccessibilityProperties;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	
-	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
-  	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+	import mx.logging.ILogger;
+	
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
 	
 /**
  * This is an implementation of an Inverted Self Organizing Map (ISOM) 
@@ -44,6 +46,10 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
  * @author Nitin Lamba
  */
   public class ISOMLayouter extends IterativeBaseLayouter implements ILayoutAlgorithm {
+  	
+  	private static const logger : ILogger = fetchLogger(ISOMLayouter)
+  	
+  	
 	 /*********************************************
 		* CONSTANTS
 		*********************************************/
@@ -171,7 +177,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	      adjust();
   	    updateParameters();
 				/*
-	      trace("epoch=" + epoch + ", " 
+	      logger.debug("epoch=" + epoch + ", " 
 				    + "adaption=" + adaption + ", "
 						+ "radius=" + radius);
 				 */
@@ -238,7 +244,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				last_y = min_y + (max_y - min_y) * Math.random();
 			} while (!insideDistribution(last_x,last_y));
       winner = closestNode(last_x, last_y);
-			//trace("*> Winner is = " + winner.node.stringid);
+			//logger.debug("*> Winner is = " + winner.node.stringid);
 			
 			// add winner to the queue
 			distanceMap[winner] = [0];
@@ -258,7 +264,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				vn.x += factor * dx;
 				vn.y += factor * dy;
 				/*
-				 trace("Q: Adjusting node " + vn.node.stringid + 
+				 logger.debug("Q: Adjusting node " + vn.node.stringid + 
 							 "@d=" + p + 
 							 ": dx=" + factor * dx +
 							 " and dy=" + factor * dy +
@@ -273,9 +279,9 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 					// Propagate the change to predessors
 					for(j=0;j < node.predecessors.length; ++j) {
 						child = (node.predecessors[j] as INode);
-						//trace("P: Child = " + child.stringid);
+						//logger.debug("P: Child = " + child.stringid);
 						vchild = child.vnode;
-						//trace("P: Retrieved child's vNode...");
+						//logger.debug("P: Retrieved child's vNode...");
 						if (vchild.isVisible &&
 						      !(visitedMap[vchild] as Array)[0] &&
 									 ( !clipping ||
@@ -283,19 +289,19 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 							visitedMap[vchild] = [true];
 							d = (distanceMap[vn] as Array)[0];
 							distanceMap[vchild] = [d + 1];
-				 			//trace("P: Distance =" + d);
+				 			//logger.debug("P: Distance =" + d);
 							queue.push(vchild);
 						} else {
-							//trace("P: vNode doesn't qualify, no action...");
+							//logger.debug("P: vNode doesn't qualify, no action...");
 						}
 					}
 					
 					// Propagate the change to successors
 					for(j=0;j < node.successors.length; ++j) {
 						child = (node.successors[j] as INode);
-						//trace("S: Child = " + child.stringid);
+						//logger.debug("S: Child = " + child.stringid);
 						vchild = child.vnode;
-						//trace("S: Retrieved child's vNode...");
+						//logger.debug("S: Retrieved child's vNode...");
 						if (vchild.isVisible &&
 						      !(visitedMap[vchild] as Array)[0] &&
 									 ( !clipping ||
@@ -303,14 +309,14 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 							visitedMap[vchild] = [true];
 							d = (distanceMap[vn] as Array)[0];
 							distanceMap[vchild] = [d + 1];
-				 			//trace("S: Distance =" + d);
+				 			//logger.debug("S: Distance =" + d);
 							queue.push(vchild);
 						} else {
-							//trace("S: vNode doesn't qualify, no action...");
+							//logger.debug("S: vNode doesn't qualify, no action...");
 						}
 					}
 				} else {
-					//trace("Q: Node beyond the radius, no action...");
+					//logger.debug("Q: Node beyond the radius, no action...");
 				}
 			}
       if (taboo) tabooCheck(visitedMap);
@@ -332,19 +338,19 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			var vn:IVisualNode;
 			
 			for each(vn in allVisVNodes) {
-				//trace("$> " + vn.x + ", " + vn.y);
+				//logger.debug("$> " + vn.x + ", " + vn.y);
 				if (insideDistribution(vn.x, vn.y)) {
 					dx = vn.x - x;
 					dy = vn.y - y;
 					dist = Math.sqrt(dx*dx + dy*dy);
-					//trace("$> Distance from target =" + dist);
+					//logger.debug("$> Distance from target =" + dist);
 					if (bestDistance > dist) {
 						bestDistance = dist;
 						bestNode = vn;
 					}
 				}
 			}
-			//trace("$> closestNode = " + bestNode);
+			//logger.debug("$> closestNode = " + bestNode);
 			return bestNode;
 		}
     

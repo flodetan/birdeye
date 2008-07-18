@@ -25,7 +25,11 @@
 package org.un.cava.birdeye.ravis.graphLayout.layout {
 	
 	import flash.utils.Dictionary;
+	
+	import mx.logging.ILogger;
+	
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
 	
 	/**
 	 * This class holds all the parameters needed
@@ -35,6 +39,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	 * */
 	public class ConcentricRadialLayoutDrawing extends BaseLayoutDrawing {
 
+		private static const logger : ILogger = fetchLogger(ConcentricRadialLayoutDrawing)
 
 		/* our addition for the concentric radial Layout is
 		 * a storage for the angular widths */
@@ -57,13 +62,13 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		public function setAngularWidth(n:INode, w:Number):void {
 			
-			//trace("Setting angular width for node:"+n.id+" to:"+degrees+" degrees");
+			//logger.debug("Setting angular width for node:"+n.id+" to:"+degrees+" degrees");
 			/*
 			if(w > 360) {
-				trace("Width of node:"+n.id+" larger than 360:"+w);
+				logger.debug("Width of node:"+n.id+" larger than 360:"+w);
 			}
 			if(w < 0) {
-				trace("Width of node:"+n.id+" smaller than 0:"+w);
+				logger.debug("Width of node:"+n.id+" smaller than 0:"+w);
 			}
 			*/
 			_nodeAngularWidths[n] = w;

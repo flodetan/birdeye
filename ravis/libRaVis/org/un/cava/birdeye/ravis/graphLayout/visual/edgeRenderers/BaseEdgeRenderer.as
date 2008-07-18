@@ -27,18 +27,21 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	import flash.display.Graphics;
 	import flash.geom.Point;
 	
-	import mx.core.UIComponent;
+	import mx.logging.ILogger;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IEdgeRenderer;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 	import org.un.cava.birdeye.ravis.utils.Geometry;
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
 
 	/**
 	 * This is the default edge renderer, which draws the edges
 	 * as straight lines from one node to another.
 	 * */
 	public class BaseEdgeRenderer implements IEdgeRenderer {
+		
+		private static const logger : ILogger = fetchLogger(BaseEdgeRenderer)
 		
 		/* since the graphics object would hardly change
 		 * we can implement it as an attribute
@@ -95,7 +98,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			 * we need to update their coordinates */
 			if(vedge.vgraph.displayEdgeLabels) {
 				vedge.setEdgeLabelCoordinates(labelCoordinates(vedge));
-				//trace("BER: drawing edgelabel at:"+labelCoordinates(vedge).toString());
+				//logger.debug("BER: drawing edgelabel at:"+labelCoordinates(vedge).toString());
 			}
 		}
 		

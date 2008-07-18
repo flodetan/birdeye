@@ -33,6 +33,7 @@
 	xmlns:ui="org.un.cava.birdeye.ravis.components.ui.*"
 	xmlns:dp="org.un.cava.birdeye.ravis.components.ui.dataPresentation.*"
 	xmlns:flexlib="http://code.google.com/p/flexlib/"
+	xmlns:flcont="flexlib.containers.*"
 	backgroundGradientColors="[#333333,#999999]" layout="vertical"
 	width="100%" height="100%"
 	creationPolicy="all"
@@ -95,7 +96,7 @@
 									verticalScrollPolicy="off">
 									<mx:Spacer height="3" />
 		
-									<flexlib:WindowShade
+									<flcont:WindowShade
 										id="layoutContainer"
 										styleName="linkButtonWindowShade" 
 		  								label="Layout"
@@ -127,10 +128,10 @@
 											<dp:NoVisNodesLabel id="myNoVisNodeLabel" vgraph="{vgraph}" />
 									
 										</mx:VBox>
-									</flexlib:WindowShade>
+									</flcont:WindowShade>
 			
 									<!-- Node Styles -->
-									<flexlib:WindowShade
+									<flcont:WindowShade
 										id="nodeRenderContainer"
 										styleName="linkButtonWindowShade" 
 						  				label="Node Styles"
@@ -142,10 +143,10 @@
 				
 										<vc:NodeRendererSelector id="myNodeRendererSelector" vgraph="{vgraph}" />
 				
-									</flexlib:WindowShade>
+									</flcont:WindowShade>
 									
 									<!-- Edge Styles -->
-									<flexlib:WindowShade
+									<flcont:WindowShade
 										id="edgeRenderContainer"
 										styleName="linkButtonWindowShade" 
 							  			label="Edge Styles"
@@ -157,10 +158,10 @@
 									
 										<vc:EdgeRendererSelector id="myEdgeRendererSelector" vgraph="{vgraph}" />
 									
-									</flexlib:WindowShade>
+									</flcont:WindowShade>
 									
 									<!-- Edge Labels -->
-									<flexlib:WindowShade
+									<flcont:WindowShade
 										id="edgeLabelRenderContainer"
 										styleName="linkButtonWindowShade" 
 							  			label="Edge Label Styles"
@@ -170,9 +171,9 @@
 							  			paddingBottom="5"
 							  			>
 										<vc:EdgeLabelControls id="myELCs" vgraph="{vgraph}" />
-									</flexlib:WindowShade>
+									</flcont:WindowShade>
 									
-									<flexlib:WindowShade
+									<flcont:WindowShade
 										id="viewControlsContainer"
 										styleName="linkButtonWindowShade" 
 							  			label="View Controls"
@@ -203,7 +204,7 @@
 												directional="false"
 												xmlData="{xmldata}" />
 										</mx:VBox>
-									</flexlib:WindowShade>					
+									</flcont:WindowShade>					
 									
 									<mx:Spacer height="5" />
 								</mx:VBox>		

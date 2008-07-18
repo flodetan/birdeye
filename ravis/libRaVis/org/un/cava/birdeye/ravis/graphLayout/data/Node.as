@@ -27,8 +27,10 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 	import flash.events.EventDispatcher;
 	
 	import mx.core.IDataRenderer;
+	import mx.logging.ILogger;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
 	
 	
 	/**
@@ -38,6 +40,8 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 	 * and may be associated with a visual node.
 	 * */
 	public class Node extends EventDispatcher implements INode, IDataRenderer {
+	
+		private static const logger : ILogger = fetchLogger(Node)
 	
 		/**
 		 * @internal
@@ -108,7 +112,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 			if(e.othernode(this) == null) {
 				throw Error("Edge:"+e.id+" has no toNode");
 			}
-			//trace("added successor node:"+e.othernode(this).id+" to node:"+_id);
+			//logger.debug("added successor node: {0} to node: {1}", e.othernode(this).id, _id);
 			_successors.unshift(e.othernode(this));
 			_outEdges.unshift(e);
 		}

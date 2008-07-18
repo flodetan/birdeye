@@ -24,9 +24,9 @@
  */
 package org.un.cava.birdeye.ravis.graphLayout.visual
 {
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	
 	import mx.core.IDataRenderer;
@@ -85,6 +85,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		private var _orientAngle:Number = 0;
 		
 		
+		private var transformationMatrix : Matrix = new Matrix
+		
 		/**
 		 * The constructor presets the VisualNode's data structures
 		 * and requires most parameters already present.
@@ -96,6 +98,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		 * @param mv Indicator if the node is moveable (currently ignored).
 		 * */
 		public function VisualNode(vg:IVisualGraph, node:INode, id:int, view:UIComponent = null, data:Object = null, mv:Boolean = true):void {
+			transformationMatrix.scale(2,1)
 			_vgraph = vg;
 			_node = node;
 			_id = id;
@@ -330,8 +333,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 			/* if we have the centered orientation we apply
 			 * some corrections */
 			if(_centered) {
-				this.viewX = _x - (this.view.width / 2.0);
-				this.viewY = _y - (this.view.height / 2.0);
+				const original : Point = new Point(_x, _y)
+				const transformed : Point = transformationMatrix.transformPoint(original)
+//				this.viewX = _x - (this.view.width / 2.0);
+//				this.viewY = _y - (this.view.height / 2.0);
+				this.viewX = transformed.x - (this.view.width / 2.0);
+				this.viewY = transformed.y - (this.view.height / 2.0);
 			} else {
 				this.viewX = _x;
 				this.viewY = _y;

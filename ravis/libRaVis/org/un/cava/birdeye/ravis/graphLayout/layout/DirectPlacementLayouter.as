@@ -27,8 +27,11 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	
+	import mx.logging.ILogger;
+	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
 	
 	/**
 	 * This layouter does not use any algorithm for node placement,
@@ -39,6 +42,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	 * perspective.
 	 * */
 	public class DirectPlacementLayouter extends BaseLayouter implements ILayoutAlgorithm {
+		
+		private static const logger : ILogger = fetchLogger(DirectPlacementLayouter)
 		
 		/* this holds the data for the Hierarchical layout drawing */
 		//XXX probably not needed private var _currentDrawing:HierarchicalLayoutDrawing;
@@ -90,15 +95,15 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		override public function layoutPass():Boolean {
 			
-			//trace("layoutPass called");
+			//logger.debug("layoutPass called");
 			
 			if(!_vgraph) {
-				trace("No Vgraph set in DPLayouter, aborting");
+				logger.warn("No Vgraph set in DPLayouter, aborting");
 				return false;
 			}
 			
 			if(!_vgraph.currentRootVNode) {
-				trace("This Layouter always requires a root node!");
+				logger.error("This Layouter always requires a root node!");
 				return false;
 			}
 			
@@ -195,24 +200,24 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				if((vn.data as XML).attribute("x").length() > 0) {
 					node_x = Number(vn.data.@x);
 				} else {
-					trace("Node:"+vn.id+" associated XML object does not have x attribute, => 0.0");
+					logger.warn("Node: {0} associated XML object does not have x attribute, => 0.0", vn.id);
 					node_x = 0.0;
 				}
 				
 				if((vn.data as XML).attribute("y").length() > 0) {
 					node_y = Number(vn.data.@y);
 				} else {
-					trace("Node:"+vn.id+" associated XML object does not have y attribute, => 0.0");
+					logger.warn("Node: {0} associated XML object does not have y attribute, => 0.0", vn.id);
 					node_y = 0.0;
 				}
 				
-				//trace("using rel width:"+_relativeWidth+" rh:"+_relativeHeight);
+				//logger.debug("using rel width:"+_relativeWidth+" rh:"+_relativeHeight);
 				target = new Point(node_x * 1000 / _relativeWidth, node_y * 1000 / _relativeHeight);
-				//trace("target for node:"+vn.id+" = " + target.toString());
+				//logger.debug("target for node:"+vn.id+" = " + target.toString());
 				
 				/* apply the relative origin */
 				target.add(_relativeOrigin);
-				//trace("target2 for node:"+vn.id+" = " + target.toString());
+				//logger.debug("target2 for node:"+vn.id+" = " + target.toString());
 
 				
 				/* set the coordinates in the VNode, this won't be

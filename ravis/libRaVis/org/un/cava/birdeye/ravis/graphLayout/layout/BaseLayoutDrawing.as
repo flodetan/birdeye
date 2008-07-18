@@ -24,10 +24,14 @@
  */
 package org.un.cava.birdeye.ravis.graphLayout.layout {
 	
-	import flash.utils.Dictionary;
 	import flash.geom.Point;
+	import flash.utils.Dictionary;
+	
+	import mx.logging.ILogger;
+	
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
 	import org.un.cava.birdeye.ravis.utils.Geometry;
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
 	
 	/**
 	 * This is a base class to hold layout drawing information
@@ -36,6 +40,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	 * So it can already represent a drawing.
 	 * */
 	public class BaseLayoutDrawing	{
+		
+		private static const logger : ILogger = fetchLogger(BaseLayoutDrawing)
 
 		/* we create a virtual origin, that is used as an offset
 		 * to the (0,0) origin of the root node */
@@ -180,7 +186,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			_nodePolarPhis[n] = polarPhi;
 			_nodeCartCoordinates[n] = Geometry.cartFromPolarDeg(polarR, polarPhi);
 			
-			//trace("SetPolarCoordinates of node:"+n.id+" polarRadius:"+polarR+" polarPhi:"+polarPhi+" and in cartesian:"+(_nodeCartCoordinates[n] as Point).toString());
+			//logger.debug("SetPolarCoordinates of node:"+n.id+" polarRadius:"+polarR+" polarPhi:"+polarPhi+" and in cartesian:"+(_nodeCartCoordinates[n] as Point).toString());
 			
 			_nodeDataValid[n] = true;
 		}
@@ -206,7 +212,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			_nodeCartCoordinates[n] = p;
 			
 			/*
-			trace("SetCartCoordinates of node:"+n.id+" polarRadius:"+_nodePolarRs[n]+
+			logger.debug("SetCartCoordinates of node:"+n.id+" polarRadius:"+_nodePolarRs[n]+
 				" polarPhi:"+_nodePolarPhis[n]+" and in cartesian:"+
 				(_nodeCartCoordinates[n] as Point).toString());
 			*/

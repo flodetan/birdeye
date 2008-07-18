@@ -62,7 +62,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	 * like that in general.
 	 * 
 	 * Currently the graphs are required to be connected. And for most layouts
-	 * a root node is required (as they are tree based).
+	 * a t node is required (as they are tree based).
 	 * 
 	 * A graph object needs to be specified as well as a layouter object
 	 * that implements the ILayoutAlgorithm interface.
@@ -691,7 +691,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 						trace("No root selected, not creating limited graph, not doing anything.");
 						return;
 					}
-					//trace("getting limited node ids with limit:"+_maxVisibleDistance);
+					//logger.debug("getting limited node ids with limit:"+_maxVisibleDistance);
 					
 					/* 1. Get the spanning tree, rooted in our current root node from
 					 *    the graph object.
@@ -733,7 +733,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			if(_maxVisibleDistance != md) {
 				/* if yes, apply the change */
 				_maxVisibleDistance = md;
-				//trace("visible distance changed to: "+md);
+				//logger.debug("visible distance changed to: "+md);
 				
 				/* if our current limits are active we create a new
 				 * set of nodes within the distance and update the
@@ -780,7 +780,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				/* now update the history with the new node */
 				_currentVNodeHistory.unshift(_currentRootVNode);
 				
-				//trace("node:"+_currentRootVNode.id+" added to history");
+				//logger.debug("node:"+_currentRootVNode.id+" added to history");
 				
 				/* if we are currently limiting node visibility,
 				 * update the set of visible nodes since we 
@@ -876,7 +876,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* create the vnode from the node */
 			for each(node in _graph.nodes) {
 				this.createVNode(node);
-				//trace("created VNode for node:"+node.id);
+				//logger.debug("created VNode for node:"+node.id);
 			}
 			
 			/* we also create the edge objects, since they
@@ -918,7 +918,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * are negative */
 			result = new Rectangle(999999, 999999, -999999, -999999);
 
-			//trace("THIS CANVAS currently HAS:"+children.length+" children!!");
+			//logger.debug("THIS CANVAS currently HAS:"+children.length+" children!!");
 
 			/* if there are no children at all, there may be something
 			 * wrong as it should at least contain the drawing surface */
@@ -1087,7 +1087,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				}
 			}
 	
-			//trace("linkNodes, created edge "+(e as Object).toString()+" from nodes: "+n1.id+", "+n2.id);
+			//logger.debug("linkNodes, created edge "+(e as Object).toString()+" from nodes: "+n1.id+", "+n2.id);
 
 			/* this changes the layout, so we have to do a full redraw */
 			// if we link nodes we may not necesarily want to draw();
@@ -1132,7 +1132,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * unlinking the nodes */
 			_graph.removeEdge(e);
 
-			//trace("removed edge: "+e.id+" : "+n1.id+" and "+n2.id);			
+			//logger.debug("removed edge: "+e.id+" : "+n1.id+" and "+n2.id);			
 			
 			/* again a full redraw is required */
 			//draw();
@@ -1158,7 +1158,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * to the scroll offset */
 			for each(view in children) {
 				if(view != _drawingSurface) {
-					//trace("scrolling view of:"+(view as IDataRenderer).data.id);
+					//logger.debug("scrolling view of:"+(view as IDataRenderer).data.id);
 					view.x += deltaX;
 					view.y += deltaY;
 				}
@@ -1168,7 +1168,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * (not 100% sure if this is a good idea but seems
 			 * to work) XXX */
 			_origin.offset(deltaX,deltaY);
-			//trace("Setting new origin to:"+_origin.toString());
+			//logger.debug("Setting new origin to:"+_origin.toString());
 		}
 
 		/**
@@ -1731,7 +1731,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				/* decreate component counter */
 				--_componentCounter;
 				
-				//trace("removed component from node:"+vn.id);
+				//logger.debug("removed component from node:"+vn.id);
 			}
 		}
 		
@@ -1824,7 +1824,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* decreate component counter */
 			//--_componentCounter;
 			
-			//trace("removed component from node:"+vn.id);
+			//logger.debug("removed component from node:"+vn.id);
 		}
 		
 		
@@ -1857,14 +1857,14 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* get the associated VNode */
 			vnode = lookupNode(comp);
 			
-			//trace("double click!");
+			//logger.debug("double click!");
 			
 			/* Now we change the root node, we go through
 			 * our public setter method to get all associated
 			 * updates done. */
 			this.currentRootVNode = vnode;
 			
-			//trace("currentVNode:"+this.currentRootVNode.id);
+			//logger.debug("currentVNode:"+this.currentRootVNode.id);
 			
 			/* here we still want to implicitly redraw */
 			draw();
@@ -1893,7 +1893,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			var evnode:IVisualNode;
 			var pt:Point;
 			
-			//trace("DragBegin was called...");
+			//logger.debug("DragBegin was called...");
 			
 			/* if there is an animation in progress, we ignore
 			 * the drag attempt */
@@ -2236,7 +2236,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* set the new amount */
 			_noNodesWithinDistance = amount;
 			
-			//trace("current visible nodeids:"+_noNodesWithinDistance);
+			//logger.debug("current visible nodeids:"+_noNodesWithinDistance);
 		}
 		
 		/**
@@ -2272,7 +2272,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			}
 			
 			
-			//trace("update node visibility");
+			//logger.debug("update node visibility");
 			
 			/* create a copy of the currently visible 
 			 * node set, as the set for nodes to potentially
@@ -2520,7 +2520,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* was there actually a change, if not issue a warning */
 			if(ve.isVisible == visible) {
-				//trace("Tried to set vedge:"+ve.id+" visibility to:"+visible.toString()+" but it was already.");
+				//logger.debug("Tried to set vedge:"+ve.id+" visibility to:"+visible.toString()+" but it was already.");
 				return;
 			}
 			

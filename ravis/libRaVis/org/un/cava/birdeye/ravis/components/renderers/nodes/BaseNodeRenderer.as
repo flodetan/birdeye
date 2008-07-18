@@ -31,9 +31,11 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 	
 	import mx.controls.Label;
 	import mx.controls.LinkButton;
+	import mx.logging.ILogger;
 	
 	import org.un.cava.birdeye.ravis.components.renderers.BaseRenderer;
 	import org.un.cava.birdeye.ravis.utils.events.VGraphRendererEvent;
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
 	
 	/**
 	 * This is an extension to the base renderer
@@ -41,7 +43,9 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 	 * label fields and icons with node XML data.
 	 * */
 	public class BaseNodeRenderer extends BaseRenderer {
-	
+		
+		public static const logger : ILogger = fetchLogger(BaseNodeRenderer);
+		
 		/**
 		 * Base Constructor
 		 * */
@@ -53,7 +57,6 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 		 * @inheritDoc
 		 * */
 		override protected function getDetails(e:Event):void {
-			// trace("Show Details");
 			var vgre:VGraphRendererEvent = new VGraphRendererEvent(VGraphRendererEvent.VG_RENDERER_SELECTED);
 			
 			/* do the checks in the super class */
@@ -66,14 +69,14 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 			if(this.data.data.@name != null) {
 				vgre.rname = this.data.data.@name;
 			} else {
-				trace("XML data object has no 'name' attribute");
+				logger.warn("XML data object has no 'name' attribute");
 			}
 			
 			/* now the description */
 			if(this.data.data.@desc != null) {
 				vgre.rdesc = this.data.data.@desc;
 			} else {
-				trace("XML data object has no 'desc' attribute");
+				logger.warn("XML data object has no 'desc' attribute");
 			}
 			
 			/* this is a bit obscure and should be done through a constant
@@ -86,7 +89,7 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 			if(GlobalParams.vgAccordion != null) {
 				GlobalParams.vgAccordion.selectPane(VGAccordion.INDEX_DATADETAIL);
 			} else {
-				trace("GlobalParams.vgAccordion not initialised!");
+				logger.warn("GlobalParams.vgAccordion not initialised!");
 			}
 			*/
 			this.dispatchEvent(vgre);
@@ -130,7 +133,7 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 			if(this.data.data.@name != null) {
 				this.toolTip = this.data.data.@name;
 			} else {
-				trace("XML data object has no 'name' attribute");
+				logger.warn("XML data object has no 'name' attribute");
 			}
 		}
 

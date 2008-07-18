@@ -29,12 +29,15 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	
+	import mx.logging.ILogger;
+	
 	import org.un.cava.birdeye.ravis.graphLayout.data.Graph;
 	import org.un.cava.birdeye.ravis.graphLayout.data.IGTree;
 	import org.un.cava.birdeye.ravis.graphLayout.data.IGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
 	
 	/**
 	 * This is an base class to various layout implementations
@@ -42,6 +45,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	 * everything required by the Interface.
 	 * */
 	public class BaseLayouter extends EventDispatcher implements ILayoutAlgorithm {
+		
+		private static const logger : ILogger = fetchLogger(BaseLayouter)
 		
 		/**
 		 * The default minimum node height to be used if the exact node
@@ -140,7 +145,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				_vgraph = vg;
 				_graph = _vgraph.graph;
 			} else {
-				trace("vgraph was already set in layouter");
+				logger.warn("vgraph was already set in layouter");
 			}
 		}
 		
@@ -253,7 +258,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		public function dragEvent(event:MouseEvent, vn:IVisualNode):void {
 			/* NOP */
-			// trace("Node: " + vn.node.stringid + " started DRAG");
+			// logger.debug("Node: " + vn.node.stringid + " started DRAG");
 		}
 		
 		/**
@@ -262,7 +267,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		public function dragContinue(event:MouseEvent, vn:IVisualNode):void {
 			/* NOP */
-			// trace("Node: " + vn.node.stringid + " being DRAGGED...");
+			// logger.debug("Node: " + vn.node.stringid + " being DRAGGED...");
 		}
 		
 		/**
@@ -271,7 +276,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		public function dropEvent(event:MouseEvent, vn:IVisualNode):void {
 			/* NOP */
-			// trace("Node: " + vn.node.stringid + " DROPPED");
+			// logger.debug("Node: " + vn.node.stringid + " DROPPED");
 		}
 		
 		/**
@@ -280,7 +285,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		public function bgDragEvent(event:MouseEvent):void {
 			/* NOP */
-			//trace("Canvas started DRAG");
+			//logger.debug("Canvas started DRAG");
 		}
 
 		/**
@@ -289,7 +294,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		public function bgDragContinue(event:MouseEvent):void {
 			/* NOP */
-			//trace("Canvas being DRAGGED...");
+			//logger.debug("Canvas being DRAGGED...");
 		}
 		
 		/**
@@ -298,7 +303,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		public function bgDropEvent(event:MouseEvent):void {
 			/* NOP */
-			//trace("Canvas DROPPED");
+			//logger.debug("Canvas DROPPED");
 		}
 		
 		/**

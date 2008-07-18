@@ -28,6 +28,10 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
+	import mx.logging.ILogger;
+	
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
+	
 	/**
 	 * Graph implements a graph datastructure G(V,E)
 	 * with vertices V and edges E, except that we call the
@@ -40,6 +44,8 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 	 * @see Edge
 	 * */
 	public class Graph extends EventDispatcher implements IGraph {
+		
+		private static const logger : ILogger = fetchLogger(Graph)
 		
 		/**
 		 * The default XML tagname of an XML item that defines a node.
@@ -168,7 +174,6 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 			_numberOfEdges = 0;
 			
 			if(xmlsource != null) {
-				//trace("Graph detected XML source:"+xmlsource.name().toString());
 				initFromXML(xmlsource);
 			}			
 		}
@@ -333,13 +338,13 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 			var fromNode:INode;
 			var toNode:INode;
 
-			//trace("initFromXML called");
+			//logger.debug("initFromXML called");
 			
 			for each(xnode in xml.descendants(nodeName)) {
 				/* we add the xml node id as string id and the xml
 				 * node data as data object */
 				fromNode = createNode(xnode.@id, xnode);
-				//trace("Node:"+fromNode.stringid+" created, total:"+_nodes.length);
+				//logger.debug("Node:"+fromNode.stringid+" created, total:"+_nodes.length);
 			}
 			
 			for each(xedge in xml.descendants(edgeName)) {
@@ -353,15 +358,15 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 				 * is often inconsistent. In this case we just ignore
 				 * the edge */
 				if(fromNode == null) {
-					trace("Node id: "+fromNodeId+" not found, link not done");
+					logger.warn("Node id: {0} not found, link not done", fromNodeId);
 					continue;
 				}
 				if(toNode == null) {
-					trace("Node id: "+toNodeId+" not found, link not done");
+					logger.warn("Node id: {0} not found, link not done", toNodeId);
 					continue;
 				}
 				link(fromNode,toNode,xedge);
-				//trace("Current nr of edges:"+_edges.length);
+				//logger.debug("Current nr of edges:"+_edges.length);
 			}
 		}
 
@@ -385,7 +390,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 			
 			/* avoid using a duplicate string id */
 			while(_nodesByStringId.hasOwnProperty(mysid)) {
-				trace("sid: "+mysid+" already in use, trying alternative");
+				logger.warn("sid: {0} already in use, trying alternative", mysid);
 				mysid = (++myaltid).toString();
 			}
 			
@@ -439,7 +444,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 				
 				// HMMM we assume that the throw will abort the script
 				// but I am not sure, we'll see
-				//trace("PASSED Check for node in _node list");
+				//logger.debug("PASSED Check for node in _node list");
 				
 				/* remove node from list */
 				_nodes.splice(myindex,1);
@@ -481,8 +486,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 				/* we should give an error message, but
 				 * there is no need to abort the script
 				 * we should just do nothing */
-				trace("Link between nodes:"+node1.id+" and "+
-				node2.id+" already exists, returning existing edge");
+				logger.debug("Link between nodes:{0} and {1} already exists, returning existing edge", node1.id, node2.id);
 				
 				/* oh in fact, we should return the edge that was found 
 				 * this was more complicated than I thought and I am
@@ -521,12 +525,11 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 				 * which of the edges to return.... maybe it can be
 				 * handled using the same edge, if the in the directional
 				 * case, the edge returns always the other node */
-				//trace("Graph is directional? "+_directional.toString());
+				//logger.debug("Graph is directional? {0}", _directional.toString());
 				if(!_directional) {
 					node1.addInEdge(newEdge);
 					node2.addOutEdge(newEdge);
-					//trace("graph is not directional adding same edge:"+newEdge.id+
-					//" the other way round");
+					//logger.debug("graph is not directional adding same edge: {0} the other way round", newEdge.id);
 				}
 				retEdge = newEdge;
 			}

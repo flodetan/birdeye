@@ -31,9 +31,11 @@ package org.un.cava.birdeye.ravis.components.renderers.edgeLabels {
 	
 	import mx.controls.Label;
 	import mx.controls.LinkButton;
+	import mx.logging.ILogger;
 	
 	import org.un.cava.birdeye.ravis.components.renderers.BaseRenderer;
 	import org.un.cava.birdeye.ravis.utils.events.VGraphRendererEvent;
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
 	
 	/**
 	 * This is an extension to the base renderer
@@ -41,6 +43,8 @@ package org.un.cava.birdeye.ravis.components.renderers.edgeLabels {
 	 * label fields and icons with node XML data.
 	 * */
 	public class BaseEdgeLabelRenderer extends BaseRenderer {
+		
+		public static const logger : ILogger = fetchLogger(BaseEdgeLabelRenderer);
 	
 		/**
 		 * Base Constructor
@@ -54,7 +58,6 @@ package org.un.cava.birdeye.ravis.components.renderers.edgeLabels {
 		 * */
 		override protected function getDetails(e:Event):void {
 
-			// trace("Show Details");
 			var vgre:VGraphRendererEvent = new VGraphRendererEvent(VGraphRendererEvent.VG_RENDERER_SELECTED);
 			
 			/* do the checks in the super class */
@@ -66,14 +69,14 @@ package org.un.cava.birdeye.ravis.components.renderers.edgeLabels {
 			if(this.data.data.@edgeLabel != null) {
 				vgre.rname = this.data.data.@edgeLabel;
 			} else {
-				trace("XML data object has no 'edgeLabel' attribute");
+				logger.warn("XML data object has no 'edgeLabel' attribute");
 			}
 			
 			/* now the description */
 			if(this.data.data.@edgeDescription != null) {
 				vgre.rdesc = this.data.data.@edgeDescription;
 			} else {
-				trace("XML data object has no 'edgeDescription' attribute");
+				logger.warn("XML data object has no 'edgeDescription' attribute");
 			}
 			
 			this.dispatchEvent(vgre);
@@ -117,7 +120,7 @@ package org.un.cava.birdeye.ravis.components.renderers.edgeLabels {
 			if(this.data.data.@name != null) {
 				this.toolTip = this.data.data.@edgeLabel;
 			} else {
-				trace("XML data object has no 'edgeLabel' attribute");
+				logger.warn("XML data object has no 'edgeLabel' attribute");
 			}
 		}
 

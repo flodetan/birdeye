@@ -28,6 +28,10 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
+	import mx.logging.ILogger;
+	
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
+	
 	
 	/**
 	 * This class represents a spanning
@@ -42,7 +46,9 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 	 * </p>
 	 * */
 	public class GTree extends EventDispatcher implements IGTree {
-			
+		
+		private static const logger : ILogger = fetchLogger(GTree)
+		
 		protected var _graph:IGraph;
 		protected var _root:INode;
 
@@ -309,7 +315,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 			var i:int,j:int;
 			var childcount:int;
 			
-			//trace("initTree1: walking tree with root:"+_root.id);
+			//logger.debug("initTree1: walking tree with root: {0}", _root.id);
 			
 			initMaps();
 
@@ -330,7 +336,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 					continue;
 				}
 				
-				//trace("initTree2: queue node:"+u.id+" has successors:"+u.successors.toString());
+				//logger.debug("initTree2: queue node: {0} has successors: {1}", u.id, u.successors.toString());
 				
 				// here we could check if we want the node
 				childcount = 0;
@@ -358,8 +364,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 						continue;
 					}
 					
-					//trace("initTree3: working on successor index:"+j+
-					//" which is node:"+v.id+" and has current parent:"+_parentMap[v]);
+					//logger.debug("initTree3: working on successor index: {0} which is node: {1} and has current parent: {2}, j, v.id, _parentMap[v]);
 					
 					/* check if visited before */
 					if(_parentMap[v] == null) {
@@ -375,7 +380,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 						queue.push(v);
 						
 						++childcount; // we have to increase here (i.e. after setValues)
-						//trace("initTree4 added node:"+v.id+" with distance:"+_distanceMap[v]);
+						//logger.debug("initTree4 added node: {0} with distance:{1}", v.id, _distanceMap[v]);
 					}
 				}
 				/* only here we now know the number of childen
@@ -413,7 +418,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 				if(_distanceMap[on] <= limit) {
 					/* we use the same stringid as the original node
 					 * but it is in fact a copy */
-					//trace("getLimitedNodes: adding node id:"+on.id);
+					//logger.debug("getLimitedNodes: adding node id: {0}", on.id);
 					result[on] = on;
 				}
 			}
@@ -523,9 +528,9 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 			
 			_childrenMap[p][cindex] = n;
 			
-			//trace("added child:"+_childrenMap[p][cindex]+" of node:"+p.id+" to its map at index:"+cindex);
-			//trace("GTreeSetValues: set node:"+n.id+" as "+cindex+" child of parent:"+p.id);
-			//trace("GTreeSetValues: with key:"+p.id.toString()+"_"+cindex.toString());
+			//logger.debug("added child:"+_childrenMap[p][cindex]+" of node:"+p.id+" to its map at index:"+cindex);
+			//logger.debug("GTreeSetValues: set node:"+n.id+" as "+cindex+" child of parent:"+p.id);
+			//logger.debug("GTreeSetValues: with key:"+p.id.toString()+"_"+cindex.toString());
 		}
 	}
 }

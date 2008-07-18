@@ -25,8 +25,12 @@
 package org.un.cava.birdeye.ravis.utils {
 	
 	import flash.display.DisplayObject;
-	import flash.geom.Point;
 	import flash.display.Graphics;
+	import flash.geom.Point;
+	
+	import mx.logging.ILogger;
+	
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
 	
 	/**
 	 * This is a class to provide some static functions
@@ -35,6 +39,8 @@ package org.un.cava.birdeye.ravis.utils {
 	 * @author Nitin Lamba
 	 * */
 	public class GraphicUtils {
+		
+		private static const logger : ILogger = fetchLogger(GraphicUtils)
 		
 		/**
 		 * Function that tests if two points are equal within tolerance
@@ -146,7 +152,7 @@ package org.un.cava.birdeye.ravis.utils {
 				                            + (centerY - startY) * (centerY - startY));
 				var ctrlDist:Number = radius/Math.cos(angleDelta/2);
 				var rx:Number, ry:Number, ax:Number, ay:Number;
-				//trace("Radius = " + radius);
+				//logger.debug("Radius = {0}", radius);
 				var angle:Number;
 				
 				// Compute angles, drawing points and control points

@@ -25,11 +25,17 @@
 package org.un.cava.birdeye.ravis.utils {
 	import flash.geom.Point;
 	
+	import mx.logging.ILogger;
+	
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
+	
 	/**
 	 * This is a class to provide some static functions
 	 * to help with angles and geometry.
 	 * */
 	public class Geometry {
+		
+		private static const logger : ILogger = fetchLogger(Geometry)
 		
 		/**
 		 * Calculate the polar Angle of a Point.
@@ -177,7 +183,7 @@ package org.un.cava.birdeye.ravis.utils {
 			var y:Number;
 			
 			if(t < 0 || t > 1) {
-				trace("bezierPointQuad: t has to be between 0 and 1, but it:"+t);
+				logger.error("bezierPointQuad: t has to be between 0 and 1, but it: {0}", t);
 				return new Point(0,0);
 			}
 			

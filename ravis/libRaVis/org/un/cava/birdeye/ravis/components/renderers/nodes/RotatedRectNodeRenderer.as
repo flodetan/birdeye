@@ -103,7 +103,6 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 		 * */
 		public function updateRotation(e:Event):void {
 			if(_rc != null) {
-				//trace("updating rotation");
 				if(this.data is IVisualNode) {
 					_rc.rotation = (this.data as IVisualNode).orientAngle;
 				}

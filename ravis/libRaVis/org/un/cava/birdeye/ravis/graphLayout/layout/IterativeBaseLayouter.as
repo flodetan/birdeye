@@ -29,11 +29,13 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import flash.utils.Timer;
 	
 	import mx.core.UIComponent;
+	import mx.logging.ILogger;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 	import org.un.cava.birdeye.ravis.utils.StopWatch;
 	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
 	/**
 	 * This is a base class of an Iterative Layouting algorithm. Unlike one
 	 * pass algorithms with performs animation to reach to a final drawing, 
@@ -48,6 +50,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	 * @author Nitin Lamba
 	 **/
 	public class IterativeBaseLayouter extends BaseLayouter implements ILayoutAlgorithm {
+		
+		private static const logger : ILogger = fetchLogger(IterativeBaseLayouter)
 		
 		/*********************************************
 		* CONSTANTS
@@ -93,7 +97,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				_timer.stop()
 				_timer.reset();
 				//_timer = null;
-				//trace("Timer STOPPED");
+				//logger.debug("Timer STOPPED");
 			}
 			
 			/* reset parameters */
@@ -186,10 +190,10 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				
 				// Step 5: Re-start the Timer
 				_timerDelay = _stopWatch.stopTimer();
-				//trace("Iteration computation time = " + _timerDelay);
+				//logger.debug("Iteration computation time = " + _timerDelay);
 				restartTimer();
 			} else {
-				trace("Achieved steady node state, terminating iterations...");
+				logger.debug("Achieved steady node state, terminating iterations...");
 			}
 			
 			/* return always true for now */

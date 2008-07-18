@@ -69,8 +69,6 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 			cc.toolTip = this.data.data.@name; // needs check
 			this.addChild(cc);
 			
-			//trace("COLOR of component is: "+int(this.data.data.@nodeColor));
-			
 			/* now add the filters to the circle */
 			reffects.addDSFilters(cc);
 			 

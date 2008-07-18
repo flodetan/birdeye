@@ -27,8 +27,13 @@
 package org.un.cava.birdeye.ravis.assets.icons {
 	
 	import mx.controls.Image;
+	import mx.logging.ILogger;
+	
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
 	
 	public class EmbeddedIcons {
+		
+		static private const logger : ILogger = fetchLogger(EmbeddedIcons);		
 		
 		// UI Icons
 		[Bindable]
@@ -485,7 +490,7 @@ package org.un.cava.birdeye.ravis.assets.icons {
 			        break;			        
 			        
 			    default:
-					trace("Illegal type for image node:"+type+" setting to leaf icon");
+				    logger.error("Illegal type for image node: {0} setting to leaf icon", type);
 					img.source = EmbeddedIcons.leafIcon;
 					break;
 			}

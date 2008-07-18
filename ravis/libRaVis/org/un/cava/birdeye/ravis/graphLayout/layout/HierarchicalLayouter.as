@@ -27,10 +27,13 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	
+	import mx.logging.ILogger;
+	
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
 	
 	/**
 	 * This layouter implements the drawing of generalized trees
@@ -40,6 +43,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	 * "Improving Walker's Algorithm to run in linear time"
 	 * */
 	public class HierarchicalLayouter extends AnimatedBaseLayouter implements ILayoutAlgorithm {
+		
+		private static const logger : ILogger = fetchLogger(HierarchicalLayouter)
 		
 		/**
 		 * Set the orientation to this to result in a
@@ -149,15 +154,15 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			var rv:Boolean;
 			var children:Array;
 			
-			//trace("layoutPass called");
+			//logger.debug("layoutPass called");
 			
 			if(!_vgraph) {
-				trace("No Vgraph set in HierarchicalLayouter, aborting");
+				logger.warn("No Vgraph set in HierarchicalLayouter, aborting");
 				return false;
 			}
 			
 			if(!_vgraph.currentRootVNode) {
-				trace("This Layouter always requires a root node!");
+				logger.error("This Layouter always requires a root node!");
 				return false;
 			}
 			
@@ -185,7 +190,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			/* check if the root is visible, if not
 			 * this is an issue */
 			if(!_root.vnode.isVisible) {
-				trace("Invisible root node, this is probably due to wrong initialisation of nodes or wrong defaults");
+				logger.error("Invisible root node, this is probably due to wrong initialisation of nodes or wrong defaults");
 				return false;
 			}
 
@@ -336,7 +341,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 					layoutPass();
 					break;
 				default:
-					trace("orientation:"+o+" not supported");
+					logger.error("orientation: {0} not supported", o);
 			}
 		}
 		
@@ -783,11 +788,11 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 					
 				}
 				/*
-				trace("h:"+_vgraph.height+" w:"+_vgraph.width+" md:"+_stree.maxDepth+
+				logger.debug("h:"+_vgraph.height+" w:"+_vgraph.width+" md:"+_stree.maxDepth+
 					" mnpl:"+_stree.maxNumberPerLayer+" ld:"+_layerDistance+" nd:"+_defaultNodeDistance);
 				*/
 			} else {
-				//trace("TreeMaxDepth:"+_stree.maxDepth+" is 0");
+				//logger.debug("TreeMaxDepth:"+_stree.maxDepth+" is 0");
 			}
 		}
 	}

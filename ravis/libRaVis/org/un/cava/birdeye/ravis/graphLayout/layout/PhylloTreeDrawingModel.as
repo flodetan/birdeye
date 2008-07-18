@@ -24,10 +24,14 @@
  */
 package org.un.cava.birdeye.ravis.graphLayout.layout {
 	
-	import flash.utils.Dictionary;
 	import flash.geom.Point;
+	import flash.utils.Dictionary;
+	
+	import mx.logging.ILogger;
+	
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
 	import org.un.cava.birdeye.ravis.utils.Geometry;
+	import org.un.cava.birdeye.ravis.utils.logging.fetchLogger;
 	
 	/**
 	 * This class is similar to the parent centered layout drawing
@@ -36,6 +40,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	 * @see org.un.cava.birdeye.ravis.graphLayout.layout.ParentCenteredDrawingModel
 	 * */
 	public class PhylloTreeDrawingModel	extends BaseLayoutDrawing {
+		
+		private static const logger : ILogger = fetchLogger(PhylloTreeDrawingModel)
 
 		/* radius of tier-1 nodes */
 		private var _rootR:Number;
@@ -141,7 +147,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			_localPolarPhis[n] = polarPhi;
 			
 			/*
-			trace("Raw polar calc node:"+n.id+" origin:"+origin.toString()+" angleOff:"+angleOff+
+			logger.debug("Raw polar calc node:"+n.id+" origin:"+origin.toString()+" angleOff:"+angleOff+
 			" polarRadius:"+polarR+" polarPhi:"+polarPhi+" result:"+Geometry.cartFromPolarDeg(polarR,polarPhi));
 			*/
 			
@@ -156,17 +162,17 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			 * local origin offset */
 			p = this.getRelCartCoordinates(n);
 			
-			//trace("With angle offset:"+p.toString());
+			//logger.debug("With angle offset:"+p.toString());
 			
 			p = p.add(origin);
 			
-			//trace("With origin:"+origin.toString()+" offset = "+p.toString());
+			//logger.debug("With origin:"+origin.toString()+" offset = "+p.toString());
 			
 			/* and set them again */
 			this.setCartCoordinates(n, p);
 			
 			/*
-			trace("SetNodeCoordinates of node:"+n.id+" origin:"+origin.toString()+" angleOff:"+angleOff+
+			logger.debug("SetNodeCoordinates of node:"+n.id+" origin:"+origin.toString()+" angleOff:"+angleOff+
 			" polarRadius:"+polarR+" polarPhi:"+polarPhi+" and in cartesian:"+this.getRelCartCoordinates(n).toString());
 			*/
 		}
