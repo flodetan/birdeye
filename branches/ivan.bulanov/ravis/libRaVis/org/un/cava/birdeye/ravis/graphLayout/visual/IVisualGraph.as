@@ -232,6 +232,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * */
 		function set scale(s:Number):void;
 		
+		function set zoom(z : Number) : void
+		
 		/**
 		 * Initializes the VisualGraph from its currently set Graph object,
 		 * basically removing all existing VNodes and VEdges and
