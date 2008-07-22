@@ -27,6 +27,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	import flash.display.DisplayObject;
 	import flash.display.Graphics;
 	import flash.events.MouseEvent;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
@@ -71,6 +72,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	 * */
 	public class VisualGraph extends Canvas implements IVisualGraph {
 		
+		
+		public var zoomFactor : Number = 1
 		
 		/**
 		 * This flag for draw() specifies that the linklength
@@ -1226,7 +1229,34 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 
 			dispatchEvent(new VGraphEvent(VGraphEvent.VGRAPH_CHANGED));
 		}
-
+		
+		public function set zoom(z : Number) : void
+		{
+			zoomFactor = z
+			
+			const tx : Number = width/2
+			const ty : Number = height/2
+			
+			const finalMatrix : Matrix = new Matrix
+			//Translate to the offset position (0,0)
+			finalMatrix.translate(-tx, -ty)
+			const scaleMatrix : Matrix = new Matrix
+			//Then scale
+			scaleMatrix.scale(z,z)
+			finalMatrix.concat(scaleMatrix)
+			const untranslateMatrix : Matrix = new Matrix
+			untranslateMatrix.translate(tx + origin.x, ty + origin.y)
+			//Then translate to the original offset
+			finalMatrix.concat(untranslateMatrix)
+			VisualNode.transformationMatrix = finalMatrix
+			
+			for each(var vnode :IVisualNode in _visibleVNodes)
+				vnode.commit()
+				
+			redrawEdges()
+		}
+		
+		
 		/**
  		 * Refresh the VGraph fully. I.e. recreate and
  		 * reassign all data objects, etc.

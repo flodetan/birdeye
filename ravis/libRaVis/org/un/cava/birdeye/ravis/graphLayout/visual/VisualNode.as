@@ -84,8 +84,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		 */
 		private var _orientAngle:Number = 0;
 		
-		
-		private var transformationMatrix : Matrix = new Matrix
+		//A dirty hack for node transformation purposes 
+		public static var transformationMatrix : Matrix = new Matrix
 		
 		/**
 		 * The constructor presets the VisualNode's data structures
@@ -98,7 +98,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		 * @param mv Indicator if the node is moveable (currently ignored).
 		 * */
 		public function VisualNode(vg:IVisualGraph, node:INode, id:int, view:UIComponent = null, data:Object = null, mv:Boolean = true):void {
-			transformationMatrix.scale(2,1)
 			_vgraph = vg;
 			_node = node;
 			_id = id;
@@ -332,16 +331,14 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		public function commit():void {
 			/* if we have the centered orientation we apply
 			 * some corrections */
+			const original : Point = new Point(_x, _y)
+			const transformed : Point = transformationMatrix.transformPoint(original)
 			if(_centered) {
-				const original : Point = new Point(_x, _y)
-				const transformed : Point = transformationMatrix.transformPoint(original)
-//				this.viewX = _x - (this.view.width / 2.0);
-//				this.viewY = _y - (this.view.height / 2.0);
 				this.viewX = transformed.x - (this.view.width / 2.0);
 				this.viewY = transformed.y - (this.view.height / 2.0);
 			} else {
-				this.viewX = _x;
-				this.viewY = _y;
+				this.viewX = transformed.x;
+				this.viewY = transformed.y;
 			}
 		
 			if(this.view is IEventDispatcher) {
@@ -349,19 +346,22 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 			}
 		}
 		
-
 		/**
 		 * @inheritDoc
 		 * */
 		public function refresh():void {
+			const backwardTransform : Matrix = transformationMatrix.clone()
+			backwardTransform.invert()
 			
-			/* have to recompensate for centered */
+//			/* have to recompensate for centered */
+			const originalViewPoint : Point = new Point(viewX, viewY)
+			const untransformedViewPoint : Point = backwardTransform.transformPoint(originalViewPoint)
 			if(_centered) {
-				_x = this.viewX + (this.view.width / 2.0);
-				_y = this.viewY + (this.view.height / 2.0);
+				_x = untransformedViewPoint.x + (this.view.width / 2.0);
+				_y = untransformedViewPoint.y + (this.view.width / 2.0);
 			} else {
-				_x = this.viewX;
-				_y = this.viewY;
+				_x = untransformedViewPoint.x;
+				_y = untransformedViewPoint.y;
 			}
 		}
 	}
