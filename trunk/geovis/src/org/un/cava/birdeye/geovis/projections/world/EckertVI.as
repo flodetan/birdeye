@@ -408,8 +408,8 @@ package org.un.cava.birdeye.geovis.projections.world
 			dicBarryCenter["TZA"]="500.731,233.6333";
 			dicBarryCenter["ATA"]="457.5562,418.8599";
 			dicBarryCenter["MUS"]="550.1743,275.729";
-			//dicBarryCenter["PRT"]="400.7017,93.9351";
-			dicBarryCenter["PRT"]="361.7183,97.6914";
+			dicBarryCenter["PRT"]="400.7017,93.9351";
+			//dicBarryCenter["PRT"]="361.7183,97.6914";
 			dicBarryCenter["GRL"]="363.2642,11.5728";
 			dicBarryCenter["NAM"]="457.3491,279.936";
 			dicBarryCenter["MRT"]="391.8149,151.1094";
