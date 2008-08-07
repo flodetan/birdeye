@@ -217,7 +217,7 @@
 			private function createSlice(curs:IViewCursor, surf:Surface):PieSparkSlice 
 			{
 				var c:int;
-				var slice:PieSparkSlice = new PieSparkSlice(this.width,this.height,_dataField,_showDataTips,curs,_dataTipFunction,surf);
+				var slice:PieSparkSlice = new PieSparkSlice(this.width,this.height,_dataField,_showDataTips,curs,_dataTipFunction,surf,_dataProvider.length);
 				slice.x = 0;
 				slice.y = 0;
 				var fill:LinearGradientFill = new LinearGradientFill();
