@@ -1,0 +1,848 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print">
+<meta content="ComplexNumber,org.un.cava.birdeye.ravis.utils.geom.ComplexNumber,_imag,_real,imag,real,addC,addR,clone,conjugate,dist,dist2,divideC,divideF,equals,getRad,getReciprocal,getRotation,multiplyC,multiplyF,norm,norm2,normalize,reciprocal,scalarProduct,setTo,subtractC,toArray,toString" name="keywords">
+<title>org.un.cava.birdeye.ravis.utils.geom.ComplexNumber</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'ComplexNumber - API Documentation';
+				var baseRef = '../../../../../../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/utils/geom/ComplexNumber.html&amp;org/un/cava/birdeye/ravis/utils/geom/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;ComplexNumber</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class ComplexNumber"); titleBar_setSubNav(false,true,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">org.un.cava.birdeye.ravis.utils.geom</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class ComplexNumber</td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Implements</td><td><a href="IPoint.html">IPoint</a></td>
+</tr>
+</table>
+<p></p>
+  Implements a complex number as a point and certain common
+  methods for complex geometry.
+  
+   <hr>
+  The implementation is a rewrite of Jens Kanschik's Hypergraph
+  implementation in Java. However, apart from the general idea 
+  and some variable names, this code improves on hypergraph 
+  and also implements additional functionality.
+  
+  Copyright (C) 2003  Jens Kanschik,
+  mail : jensKanschik<p></p>
+<br>
+<hr>
+</div>
+<a name="propertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Properties</div>
+<table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#imag">imag</a> : Number<div class="summaryTableDescription"> 
+   Returns the imaginary part of the complex number.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#real">real</a> : Number<div class="summaryTableDescription"> 
+   Returns the real part of the complex number.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+</table>
+</div>
+<a name="protectedPropertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Protected Properties</div>
+<table id="summaryTableProtectedProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_imag">_imag</a> : Number<div class="summaryTableDescription"> The imaginary part of the complex number.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_real">_real</a> : Number<div class="summaryTableDescription"> The real part of the complex number.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+</table>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#ComplexNumber()">ComplexNumber</a>(r:Number = 0, i:Number = 0)</div>
+<div class="summaryTableDescription"> 
+   Creates a complex number with the given real and imaginary part.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#addC()">addC</a>(v:<a href="ComplexNumber.html">ComplexNumber</a>):void</div>
+<div class="summaryTableDescription"> 
+   Adds a complex number to this complex number.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#addR()">addR</a>(x:Number):void</div>
+<div class="summaryTableDescription"> 
+   Adds a real number to the complex number.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#clone()">clone</a>():Object</div>
+<div class="summaryTableDescription">  Creates a deep copy of the Point.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#conjugate()">conjugate</a>():void</div>
+<div class="summaryTableDescription"> 
+   Conjugates the complex number (negates the imaginary part.)
+   </div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#dist()">dist</a>(z:<a href="ComplexNumber.html">ComplexNumber</a>):Number</div>
+<div class="summaryTableDescription"> 
+   Return the distance from <code>this</code> to 
+   a complex number <code>z</code>.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#dist2()">dist2</a>(z:<a href="ComplexNumber.html">ComplexNumber</a>):Number</div>
+<div class="summaryTableDescription"> 
+   Return the squared distance from <code>this</code> to 
+   a complex number <code>z</code>.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#divideC()">divideC</a>(z:<a href="ComplexNumber.html">ComplexNumber</a>):void</div>
+<div class="summaryTableDescription"> 
+   Divides the complex number by another complex number.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#divideF()">divideF</a>(r:Number):void</div>
+<div class="summaryTableDescription"> 
+   Divides the complex number by a real number.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#equals()">equals</a>(z:Object):Boolean</div>
+<div class="summaryTableDescription"> 
+   Returns true if the parameter object is equals to
+     this and false otherwise.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getRad()">getRad</a>():Number</div>
+<div class="summaryTableDescription"> 
+   Returns the radiant of a complex number.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getReciprocal()">getReciprocal</a>():<a href="../geom/ComplexNumber.html">ComplexNumber</a>
+</div>
+<div class="summaryTableDescription"> 
+   Returns the reciprocal of <code>this</code>.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getRotation()">getRotation</a>(t:Number):<a href="../geom/ComplexNumber.html">ComplexNumber</a>
+</div>
+<div class="summaryTableDescription">[static]
+   Returns <code>exp(it)</code>.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#multiplyC()">multiplyC</a>(v:<a href="ComplexNumber.html">ComplexNumber</a>):void</div>
+<div class="summaryTableDescription"> 
+   Multiplies a complex number with this complex number.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#multiplyF()">multiplyF</a>(r:Number):void</div>
+<div class="summaryTableDescription"> 
+   Multiplies a real number with this complex number.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#norm()">norm</a>():Number</div>
+<div class="summaryTableDescription"> 
+   Return the norm of the complex number.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#norm2()">norm2</a>():Number</div>
+<div class="summaryTableDescription"> 
+   Return the squared norm of the complex number.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#normalize()">normalize</a>():void</div>
+<div class="summaryTableDescription"> 
+   Normalizes the complex number so that it's length is 1.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#reciprocal()">reciprocal</a>():void</div>
+<div class="summaryTableDescription"> 
+   Sets this complex number to its reciprocal.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#setTo()">setTo</a>(p:<a href="IPoint.html">IPoint</a>):void</div>
+<div class="summaryTableDescription"> 
+   Sets this point to the given point.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#subtractC()">subtractC</a>(v:<a href="ComplexNumber.html">ComplexNumber</a>):void</div>
+<div class="summaryTableDescription"> 
+   Subtracts a complex number from this complex number.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#toArray()">toArray</a>():Array</div>
+<div class="summaryTableDescription">
+     Returns an array of to doubles,
+     the first is the real part, the second the imaginary part.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#toString()">toString</a>():String</div>
+<div class="summaryTableDescription">  Returns a String representation of the point.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+</table>
+</div>
+<a name="protectedMethodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Protected Methods</div>
+<table id="summaryTableProtectedMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#scalarProduct()">scalarProduct</a>(z:<a href="ComplexNumber.html">ComplexNumber</a>):Number</div>
+<div class="summaryTableDescription"> 
+   Return the euclidian scalar product of the complex number and another complex number.</div>
+</td><td class="summaryTableOwnerCol">ComplexNumber</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="propertyDetail"></a>
+<div class="detailSectionHeader">Property detail</div>
+<a name="_imag"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">_imag</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var _imag:Number</code><p> The imaginary part of the complex number. </p></div>
+<a name="imag"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">imag</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>imag:Number</code>&nbsp;&nbsp;[read-write]<p> 
+   Returns the imaginary part of the complex number.
+   
+    </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get imag():Number</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set imag(value:Number):void</code>
+<br>
+</div>
+<a name="_real"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">_real</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var _real:Number</code><p> The real part of the complex number. </p></div>
+<a name="real"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">real</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>real:Number</code>&nbsp;&nbsp;[read-write]<p> 
+   Returns the real part of the complex number.
+   
+     </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get real():Number</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set real(value:Number):void</code>
+<br>
+</div>
+<a name="constructorDetail"></a>
+<div class="detailSectionHeader">Constructor detail</div>
+<a name="ComplexNumber()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ComplexNumber</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">constructor</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function ComplexNumber(r:Number = 0, i:Number = 0)</code><p> 
+   Creates a complex number with the given real and imaginary part.
+   
+     </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">r</span>:Number</code> (default = <code>0</code>)<code></code> &mdash; The real part of the complex number.
+     </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">i</span>:Number</code> (default = <code>0</code>)<code></code> &mdash; The imaginary part of the complex number.
+     </td>
+</tr>
+</table>
+</div>
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="addC()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">addC</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function addC(v:<a href="ComplexNumber.html">ComplexNumber</a>):void</code><p> 
+   Adds a complex number to this complex number.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">v</span>:<a href="ComplexNumber.html">ComplexNumber</a></code> &mdash; The complex number to be added.
+   </td>
+</tr>
+</table>
+</div>
+<a name="addR()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">addR</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function addR(x:Number):void</code><p> 
+   Adds a real number to the complex number.
+   
+     </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">x</span>:Number</code> &mdash; The real number to be added.
+     </td>
+</tr>
+</table>
+</div>
+<a name="clone()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">clone</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function clone():Object</code><p>  Creates a deep copy of the Point.
+   </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Object</code> &mdash; A deep copy of the Point.
+   </td>
+</tr>
+</table>
+</div>
+<a name="conjugate()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">conjugate</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function conjugate():void</code><p> 
+   Conjugates the complex number (negates the imaginary part.)
+   </p></div>
+<a name="dist()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">dist</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function dist(z:<a href="ComplexNumber.html">ComplexNumber</a>):Number</code><p> 
+   Return the distance from <code>this</code> to 
+   a complex number <code>z</code>.
+   
+     </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">z</span>:<a href="ComplexNumber.html">ComplexNumber</a></code> &mdash; Another complex number.
+     </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The distance from this complex number to <code>z</code>.
+     </td>
+</tr>
+</table>
+</div>
+<a name="dist2()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">dist2</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function dist2(z:<a href="ComplexNumber.html">ComplexNumber</a>):Number</code><p> 
+   Return the squared distance from <code>this</code> to 
+   a complex number <code>z</code>.
+   
+     </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">z</span>:<a href="ComplexNumber.html">ComplexNumber</a></code> &mdash; Another complex number.
+     </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The squared distance from this complex number to <code>z</code>.
+     </td>
+</tr>
+</table>
+</div>
+<a name="divideC()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">divideC</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function divideC(z:<a href="ComplexNumber.html">ComplexNumber</a>):void</code><p> 
+   Divides the complex number by another complex number.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">z</span>:<a href="ComplexNumber.html">ComplexNumber</a></code> &mdash; The divisor.
+   </td>
+</tr>
+</table>
+</div>
+<a name="divideF()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">divideF</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function divideF(r:Number):void</code><p> 
+   Divides the complex number by a real number.
+   
+     </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">r</span>:Number</code> &mdash; The divisor.
+     </td>
+</tr>
+</table>
+</div>
+<a name="equals()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">equals</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function equals(z:Object):Boolean</code><p> 
+   Returns true if the parameter object is equals to
+     this and false otherwise.
+   
+     </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">z</span>:Object</code> &mdash; Any object.
+     </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code> &mdash; True if obj equals this.
+   </td>
+</tr>
+</table>
+</div>
+<a name="getRad()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getRad</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getRad():Number</code><p> 
+   Returns the radiant of a complex number.
+   
+     </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The radiant of the complex number.
+     </td>
+</tr>
+</table>
+</div>
+<a name="getReciprocal()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getReciprocal</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getReciprocal():<a href="../geom/ComplexNumber.html">ComplexNumber</a></code><p> 
+   Returns the reciprocal of <code>this</code>.
+   
+     </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../geom/ComplexNumber.html">ComplexNumber</a></code> &mdash; 
+                        A new complex that is the reciprocal of <code>this</code>.
+     
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="getRotation()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getRotation</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function getRotation(t:Number):<a href="../geom/ComplexNumber.html">ComplexNumber</a></code><p>
+   Returns <code>exp(it)</code>.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">t</span>:Number</code> &mdash; The angle
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../geom/ComplexNumber.html">ComplexNumber</a></code> &mdash; 
+                        The complex number <code>exp(it)</code>
+   
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="multiplyC()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">multiplyC</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function multiplyC(v:<a href="ComplexNumber.html">ComplexNumber</a>):void</code><p> 
+   Multiplies a complex number with this complex number.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">v</span>:<a href="ComplexNumber.html">ComplexNumber</a></code> &mdash; The complex factor.
+   </td>
+</tr>
+</table>
+</div>
+<a name="multiplyF()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">multiplyF</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function multiplyF(r:Number):void</code><p> 
+   Multiplies a real number with this complex number.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">r</span>:Number</code> &mdash; The real factor.
+   </td>
+</tr>
+</table>
+</div>
+<a name="norm()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">norm</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function norm():Number</code><p> 
+   Return the norm of the complex number.
+   
+   </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The norm of the complex number.
+   </td>
+</tr>
+</table>
+</div>
+<a name="norm2()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">norm2</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function norm2():Number</code><p> 
+   Return the squared norm of the complex number.
+   
+   </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The squared norm of the complex number.
+   </td>
+</tr>
+</table>
+</div>
+<a name="normalize()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">normalize</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function normalize():void</code><p> 
+   Normalizes the complex number so that it's length is 1.
+   </p></div>
+<a name="reciprocal()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">reciprocal</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function reciprocal():void</code><p> 
+   Sets this complex number to its reciprocal. 
+   </p></div>
+<a name="scalarProduct()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">scalarProduct</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function scalarProduct(z:<a href="ComplexNumber.html">ComplexNumber</a>):Number</code><p> 
+   Return the euclidian scalar product of the complex number and another complex number.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">z</span>:<a href="ComplexNumber.html">ComplexNumber</a></code> &mdash; Another complex number.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The euclidian scalar product of the two complex numbers.
+   </td>
+</tr>
+</table>
+</div>
+<a name="setTo()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">setTo</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function setTo(p:<a href="IPoint.html">IPoint</a>):void</code><p> 
+   Sets this point to the given point.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">p</span>:<a href="IPoint.html">IPoint</a></code> &mdash; The new point.
+   </td>
+</tr>
+</table>
+</div>
+<a name="subtractC()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">subtractC</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function subtractC(v:<a href="ComplexNumber.html">ComplexNumber</a>):void</code><p> 
+   Subtracts a complex number from this complex number.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">v</span>:<a href="ComplexNumber.html">ComplexNumber</a></code> &mdash; The complex number to be subtracted.
+   </td>
+</tr>
+</table>
+</div>
+<a name="toArray()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">toArray</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function toArray():Array</code><p>
+     Returns an array of to doubles,
+     the first is the real part, the second the imaginary part.
+   
+     </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Array</code> &mdash; The complex number as array.
+     </td>
+</tr>
+</table>
+</div>
+<a name="toString()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">toString</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function toString():String</code><p>  Returns a String representation of the point.
+   </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>String</code> &mdash; A String in appropriate format.
+   </td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->
