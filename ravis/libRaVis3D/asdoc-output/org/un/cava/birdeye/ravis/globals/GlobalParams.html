@@ -1,0 +1,285 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../../../print.css" type="text/css" media="print">
+<meta content="GlobalParams,org.un.cava.birdeye.ravis.globals.GlobalParams,dataComponents,layoutComponents,layouter,scaleFactor,vgAccordion,vgraph,vgraphComponents,vgraphInitOk,xmlData,xmlNames" name="keywords">
+<title>org.un.cava.birdeye.ravis.globals.GlobalParams</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'GlobalParams - API Documentation';
+				var baseRef = '../../../../../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../all-classes.html')" href="../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../all-classes.html')" href="../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../index-list.html')" href="../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../index.html?org/un/cava/birdeye/ravis/globals/GlobalParams.html&amp;org/un/cava/birdeye/ravis/globals/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;GlobalParams</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class GlobalParams"); titleBar_setSubNav(false,true,false,false,false,false,false,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">org.un.cava.birdeye.ravis.globals</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class GlobalParams</td>
+</tr>
+</table>
+<p></p>
+  This class will hold global params in static
+  variables in order to facilitate the passing of params
+  and to avoid issues with parentDocument and/or 
+  parentApplication (and other issues)
+  
+  This is essential for the proper functioning of
+  all the provided control components for the graphLayout
+  features. This is the main communication interface.
+  
+  Basically every instantiated component will register itself
+  with this class. graphLayout based components will have to be
+  registered from the application (but it is basically only VisualGraph
+  and the layouter).
+  <p></p>
+<br>
+<hr>
+</div>
+<a name="propertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Properties</div>
+<table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#dataComponents">dataComponents</a> : Class<div class="summaryTableDescription">[static]
+   This holds the static class that contains all
+   relevant references to the data presentation related controls
+   This allows to delegate/modularise the global
+   parameters
+   </div>
+</td><td class="summaryTableOwnerCol">GlobalParams</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#layoutComponents">layoutComponents</a> : Class<div class="summaryTableDescription">[static]
+   This holds the static class that contains all
+   relevant references to the layouter controls
+   This allows to delegate/modularise the global
+   parameters
+   </div>
+</td><td class="summaryTableOwnerCol">GlobalParams</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#layouter">layouter</a> : <a href="../graphLayout/layout/ILayoutAlgorithm.html">ILayoutAlgorithm</a>
+<div class="summaryTableDescription">[static]
+   This is the main instance for the currently
+   active layouter in the VisualGraph object.</div>
+</td><td class="summaryTableOwnerCol">GlobalParams</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#scaleFactor">scaleFactor</a> : Number = 1<div class="summaryTableDescription">[static] 
+   zoom factor for rendered items </div>
+</td><td class="summaryTableOwnerCol">GlobalParams</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#vgAccordion">vgAccordion</a> : <a href="../components/ui/VGAccordion.html">VGAccordion</a>
+<div class="summaryTableDescription">[static]
+   Holds a reference to the main navigation accordion
+   </div>
+</td><td class="summaryTableOwnerCol">GlobalParams</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#vgraph">vgraph</a> : <a href="../graphLayout/visual/IVisualGraph.html">IVisualGraph</a>
+<div class="summaryTableDescription">[static]
+   This is the global instance of the VisualGraph
+   object.</div>
+</td><td class="summaryTableOwnerCol">GlobalParams</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#vgraphComponents">vgraphComponents</a> : Class<div class="summaryTableDescription">[static]
+   This holds the static class that contains all
+   relevant references to the VisualGraph related controls
+   This allows to delegate/modularise the global
+   parameters
+   </div>
+</td><td class="summaryTableOwnerCol">GlobalParams</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#vgraphInitOk">vgraphInitOk</a> : Boolean = false<div class="summaryTableDescription">[static]
+   This flag is set to true if the vgraph is initialised
+   correctly.</div>
+</td><td class="summaryTableOwnerCol">GlobalParams</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#xmlData">xmlData</a> : XML<div class="summaryTableDescription">[static]
+   This is the current XML object that contains all
+   graph Data.</div>
+</td><td class="summaryTableOwnerCol">GlobalParams</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#xmlNames">xmlNames</a> : Array<div class="summaryTableDescription">[static]
+   This is the current array that contains all
+   the tag and attribute names, that are used to
+   parse the XML graph structure.</div>
+</td><td class="summaryTableOwnerCol">GlobalParams</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="propertyDetail"></a>
+<div class="detailSectionHeader">Property detail</div>
+<a name="dataComponents"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">dataComponents</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var dataComponents:Class</code><p>
+   This holds the static class that contains all
+   relevant references to the data presentation related controls
+   This allows to delegate/modularise the global
+   parameters
+   </p></div>
+<a name="layoutComponents"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">layoutComponents</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var layoutComponents:Class</code><p>
+   This holds the static class that contains all
+   relevant references to the layouter controls
+   This allows to delegate/modularise the global
+   parameters
+   </p></div>
+<a name="layouter"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">layouter</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var layouter:<a href="../graphLayout/layout/ILayoutAlgorithm.html">ILayoutAlgorithm</a></code><p>
+   This is the main instance for the currently
+   active layouter in the VisualGraph object.
+   Again currently only one instance is allowed, but
+   it is less complicated to allow more than one
+   (I wonder if there will be a demand for it, though).
+   </p></div>
+<a name="scaleFactor"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">scaleFactor</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var scaleFactor:Number = 1</code><p> 
+   zoom factor for rendered items </p></div>
+<a name="vgAccordion"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">vgAccordion</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var vgAccordion:<a href="../components/ui/VGAccordion.html">VGAccordion</a></code><p>
+   Holds a reference to the main navigation accordion
+   </p></div>
+<a name="vgraph"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">vgraph</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var vgraph:<a href="../graphLayout/visual/IVisualGraph.html">IVisualGraph</a></code><p>
+   This is the global instance of the VisualGraph
+   object. Currently there can only be one right now.
+   In a future time, this could be generalized, but then
+   ALL other components registered here, have to be parametrized
+   for each VisualGraph instance.
+   </p><p>This property can be used as the source for data binding.</p>
+</div>
+<a name="vgraphComponents"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">vgraphComponents</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var vgraphComponents:Class</code><p>
+   This holds the static class that contains all
+   relevant references to the VisualGraph related controls
+   This allows to delegate/modularise the global
+   parameters
+   </p></div>
+<a name="vgraphInitOk"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">vgraphInitOk</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var vgraphInitOk:Boolean = false</code><p>
+   This flag is set to true if the vgraph is initialised
+   correctly. It needs to be reset if the
+   vgraph assignment changes....
+   </p></div>
+<a name="xmlData"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">xmlData</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var xmlData:XML</code><p>
+   This is the current XML object that contains all
+   graph Data.
+   It is not clear, if this will remain in API like that
+   but we do it like that for now.
+   </p></div>
+<a name="xmlNames"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">xmlNames</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var xmlNames:Array</code><p>
+   This is the current array that contains all
+   the tag and attribute names, that are used to
+   parse the XML graph structure. This may
+   change in the future if "real" GraphML syntax
+   could be suppoered.
+   It is not clear, if this will remain in API like that
+   but we do it like that for now.
+   </p></div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->

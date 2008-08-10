@@ -1,0 +1,347 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print">
+<meta content="IProjector,org.un.cava.birdeye.ravis.utils.geom.IProjector,getCenter,getInverseViewMatrix,getScale,getViewMatrix,project,setViewMatrix,unProject" name="keywords">
+<title>org.un.cava.birdeye.ravis.utils.geom.IProjector</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'IProjector - API Documentation';
+				var baseRef = '../../../../../../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/utils/geom/IProjector.html&amp;org/un/cava/birdeye/ravis/utils/geom/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Interface&nbsp;IProjector</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#methodSummary">Methods</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Interface IProjector"); titleBar_setSubNav(false,false,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">org.un.cava.birdeye.ravis.utils.geom</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Interface</td><td class="classSignature">public interface IProjector</td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Implementors</td><td><a href="../geom/PoincareProjector.html">PoincareProjector</a></td>
+</tr>
+</table>
+<p></p>
+  This interface defines the functionality of a projector,
+  which is used to map points in Display Geometry (Screen) to
+  those in Non-Euclidean Space (Hyperbolic Geometry).
+   <hr>
+  The implementation is a rewrite of Jens Kanschik's Hypergraph
+  implementation in Java. However, apart from the general idea 
+  and some variable names, this code improves on hypergraph 
+  and also implements additional functionality.
+  
+  Copyright (C) 2003  Jens Kanschik,
+  mail : jensKanschik<p></p>
+<br>
+<hr>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getCenter()">getCenter</a>(x1:Number, y1:Number, x2:Number, y2:Number, d:DisplayObject):Point</div>
+<div class="summaryTableDescription">
+   Returns the center of the circle in Euclidean space, which joins 
+   the two points P (x1, y1) and Q (x2, y2)
+   </div>
+</td><td class="summaryTableOwnerCol">IProjector</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getInverseViewMatrix()">getInverseViewMatrix</a>():<a href="../geom/IIsometry.html">IIsometry</a>
+</div>
+<div class="summaryTableDescription">
+   Returns the inverse of the view matrix.</div>
+</td><td class="summaryTableOwnerCol">IProjector</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getScale()">getScale</a>(p:<a href="IPoint.html">IPoint</a>):Point</div>
+<div class="summaryTableDescription">
+   Returns the scaling factors at a point in the non-euclidean space.</div>
+</td><td class="summaryTableOwnerCol">IProjector</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getViewMatrix()">getViewMatrix</a>():<a href="../geom/IIsometry.html">IIsometry</a>
+</div>
+<div class="summaryTableDescription">
+   Returns the view matrix.</div>
+</td><td class="summaryTableOwnerCol">IProjector</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#project()">project</a>(p:<a href="IPoint.html">IPoint</a>, d:DisplayObject):Point</div>
+<div class="summaryTableDescription"> 
+   Project a IPoint (Hyperbolic Geometry) to Point (Display Geometry)
+   </div>
+</td><td class="summaryTableOwnerCol">IProjector</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#setViewMatrix()">setViewMatrix</a>(vm:<a href="IIsometry.html">IIsometry</a>):void</div>
+<div class="summaryTableDescription">
+   Sets the view matrix and computes the inverse of the view matrix.</div>
+</td><td class="summaryTableOwnerCol">IProjector</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#unProject()">unProject</a>(p:Point, d:DisplayObject, adjustBadNodes:Boolean):<a href="../geom/IPoint.html">IPoint</a>
+</div>
+<div class="summaryTableDescription"> 
+   Un-project a Point (Display Geometry) to IPoint (Hyperbolic Geometry)
+   </div>
+</td><td class="summaryTableOwnerCol">IProjector</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="getCenter()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getCenter</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getCenter(x1:Number, y1:Number, x2:Number, y2:Number, d:DisplayObject):Point</code><p>
+   Returns the center of the circle in Euclidean space, which joins 
+   the two points P (x1, y1) and Q (x2, y2)
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">x1</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">y1</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">x2</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">y2</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">d</span>:DisplayObject</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Point</code> &mdash; The center of the circle
+   </td>
+</tr>
+</table>
+</div>
+<a name="getInverseViewMatrix()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getInverseViewMatrix</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getInverseViewMatrix():<a href="../geom/IIsometry.html">IIsometry</a></code><p>
+   Returns the inverse of the view matrix.
+   </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../geom/IIsometry.html">IIsometry</a></code> &mdash; 
+                        The inverse of the view matrix.
+   
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="getScale()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getScale</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getScale(p:<a href="IPoint.html">IPoint</a>):Point</code><p>
+   Returns the scaling factors at a point in the non-euclidean space.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">p</span>:<a href="IPoint.html">IPoint</a></code> &mdash; The point in the non-euclidean space
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Point</code> &mdash; A point with scaling factors in X and Y directions.
+   </td>
+</tr>
+</table>
+</div>
+<a name="getViewMatrix()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getViewMatrix</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getViewMatrix():<a href="../geom/IIsometry.html">IIsometry</a></code><p>
+   Returns the view matrix.
+   </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../geom/IIsometry.html">IIsometry</a></code> &mdash; 
+                        The view matrix.
+   
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="project()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">project</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function project(p:<a href="IPoint.html">IPoint</a>, d:DisplayObject):Point</code><p> 
+   Project a IPoint (Hyperbolic Geometry) to Point (Display Geometry)
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">p</span>:<a href="IPoint.html">IPoint</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">d</span>:DisplayObject</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Point</code></td>
+</tr>
+</table>
+</div>
+<a name="setViewMatrix()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">setViewMatrix</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function setViewMatrix(vm:<a href="IIsometry.html">IIsometry</a>):void</code><p>
+   Sets the view matrix and computes the inverse of the view matrix.
+   If vm is null, the view matrix is set to the identity transformation.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">vm</span>:<a href="IIsometry.html">IIsometry</a></code> &mdash; The new view matrix.
+   </td>
+</tr>
+</table>
+</div>
+<a name="unProject()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">unProject</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function unProject(p:Point, d:DisplayObject, adjustBadNodes:Boolean):<a href="../geom/IPoint.html">IPoint</a></code><p> 
+   Un-project a Point (Display Geometry) to IPoint (Hyperbolic Geometry)
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">p</span>:Point</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">d</span>:DisplayObject</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">adjustBadNodes</span>:Boolean</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../geom/IPoint.html">IPoint</a></code></td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->

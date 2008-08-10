@@ -1,0 +1,470 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print">
+<meta content="BaseLayoutDrawing,org.un.cava.birdeye.ravis.graphLayout.layout.BaseLayoutDrawing,centerOffset,centeredLayout,originOffset,getAbsCartCoordinates,getPolarPhi,getPolarR,getRelCartCoordinates,invalidateNodeData,nodeDataValid,setCartCoordinates,setPolarCoordinates" name="keywords">
+<title>org.un.cava.birdeye.ravis.graphLayout.layout.BaseLayoutDrawing</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'BaseLayoutDrawing - API Documentation';
+				var baseRef = '../../../../../../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/graphLayout/layout/BaseLayoutDrawing.html&amp;org/un/cava/birdeye/ravis/graphLayout/layout/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;BaseLayoutDrawing</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class BaseLayoutDrawing"); titleBar_setSubNav(false,true,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">org.un.cava.birdeye.ravis.graphLayout.layout</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class BaseLayoutDrawing</td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Subclasses</td><td><a href="../layout/ConcentricRadialLayoutDrawing.html">ConcentricRadialLayoutDrawing</a>, <a href="../layout/HierarchicalLayoutDrawing.html">HierarchicalLayoutDrawing</a>, <a href="../layout/ParentCenteredDrawingModel.html">ParentCenteredDrawingModel</a>, <a href="../layout/PhylloTreeDrawingModel.html">PhylloTreeDrawingModel</a></td>
+</tr>
+</table>
+<p></p>
+  This is a base class to hold layout drawing information
+  like target coordinates for all nodes, access to polar and
+  cartesian versions of those coordinates and an origin offset.
+  So it can already represent a drawing.
+  <p></p>
+<br>
+<hr>
+</div>
+<a name="propertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Properties</div>
+<table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#centeredLayout">centeredLayout</a> : Boolean<div class="summaryTableDescription">
+   Specifies if the center offset should be applied 
+   or not.</div>
+</td><td class="summaryTableOwnerCol">BaseLayoutDrawing</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#centerOffset">centerOffset</a> : Point<div class="summaryTableDescription">
+   Access to the offset of the center of the layout.</div>
+</td><td class="summaryTableOwnerCol">BaseLayoutDrawing</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#originOffset">originOffset</a> : Point<div class="summaryTableDescription">
+   Access to the offset of the origin of the layout.</div>
+</td><td class="summaryTableOwnerCol">BaseLayoutDrawing</td>
+</tr>
+</table>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#BaseLayoutDrawing()">BaseLayoutDrawing</a>()</div>
+<div class="summaryTableDescription">
+   The constructor just initializes the internal data structures.</div>
+</td><td class="summaryTableOwnerCol">BaseLayoutDrawing</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getAbsCartCoordinates()">getAbsCartCoordinates</a>(n:<a href="../data/INode.html">INode</a>):Point</div>
+<div class="summaryTableDescription">
+   Access the absolute cartesian coordinates of the given node.</div>
+</td><td class="summaryTableOwnerCol">BaseLayoutDrawing</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getPolarPhi()">getPolarPhi</a>(n:<a href="../data/INode.html">INode</a>):Number</div>
+<div class="summaryTableDescription">
+   access the polar angle part of the 
+   target coordinates of the given node.</div>
+</td><td class="summaryTableOwnerCol">BaseLayoutDrawing</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getPolarR()">getPolarR</a>(n:<a href="../data/INode.html">INode</a>):Number</div>
+<div class="summaryTableDescription">
+   access the polar radius part of the 
+   target coordinates of the given node.</div>
+</td><td class="summaryTableOwnerCol">BaseLayoutDrawing</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getRelCartCoordinates()">getRelCartCoordinates</a>(n:<a href="../data/INode.html">INode</a>):Point</div>
+<div class="summaryTableDescription">
+   Access the cartesian coordinates of the given node.</div>
+</td><td class="summaryTableOwnerCol">BaseLayoutDrawing</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#invalidateNodeData()">invalidateNodeData</a>():void</div>
+<div class="summaryTableDescription">
+   invalidate all node data sets
+   </div>
+</td><td class="summaryTableOwnerCol">BaseLayoutDrawing</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#nodeDataValid()">nodeDataValid</a>(n:<a href="../data/INode.html">INode</a>):Boolean</div>
+<div class="summaryTableDescription">
+   indicates if the data set for a given node is 
+   currently valid.</div>
+</td><td class="summaryTableOwnerCol">BaseLayoutDrawing</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#setCartCoordinates()">setCartCoordinates</a>(n:<a href="../data/INode.html">INode</a>, p:Point):void</div>
+<div class="summaryTableDescription">
+   Set the target coordinates for node n according to the
+   calculated layout in cartesian (i.e.</div>
+</td><td class="summaryTableOwnerCol">BaseLayoutDrawing</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#setPolarCoordinates()">setPolarCoordinates</a>(n:<a href="../data/INode.html">INode</a>, polarR:Number, polarPhi:Number):void</div>
+<div class="summaryTableDescription">
+   Set the target coordinates for node n according to the
+   calculated layout in Polar form.</div>
+</td><td class="summaryTableOwnerCol">BaseLayoutDrawing</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="propertyDetail"></a>
+<div class="detailSectionHeader">Property detail</div>
+<a name="centeredLayout"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">centeredLayout</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>centeredLayout:Boolean</code>&nbsp;&nbsp;[read-write]<p>
+   Specifies if the center offset should be applied 
+   or not.
+   </p><p>This property can be used as the source for data binding.</p>
+<span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get centeredLayout():Boolean</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set centeredLayout(value:Boolean):void</code>
+<br>
+</div>
+<a name="centerOffset"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">centerOffset</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>centerOffset:Point</code>&nbsp;&nbsp;[read-write]<p>
+   Access to the offset of the center of the layout.
+   The actual origin is the upper left corner of the
+   canvas. But the calculation of this layout is done around
+   circles around the origin. So we want to move the
+   origin into the center of the canvas, This is what the
+   center offset actually does.
+   </p><p>This property can be used as the source for data binding.</p>
+<span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get centerOffset():Point</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set centerOffset(value:Point):void</code>
+<br>
+</div>
+<a name="originOffset"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">originOffset</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>originOffset:Point</code>&nbsp;&nbsp;[read-write]<p>
+   Access to the offset of the origin of the layout.
+   The actual origin is the upper left corner of the
+   canvas. But that changes if we scroll the canvas
+   around, so we have to keep track of this offset.
+   </p><p>This property can be used as the source for data binding.</p>
+<span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get originOffset():Point</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set originOffset(value:Point):void</code>
+<br>
+</div>
+<a name="constructorDetail"></a>
+<div class="detailSectionHeader">Constructor detail</div>
+<a name="BaseLayoutDrawing()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">BaseLayoutDrawing</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">constructor</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function BaseLayoutDrawing()</code><p>
+   The constructor just initializes the internal data structures.
+   </p></div>
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="getAbsCartCoordinates()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getAbsCartCoordinates</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getAbsCartCoordinates(n:<a href="../data/INode.html">INode</a>):Point</code><p>
+   Access the absolute cartesian coordinates of the given node.
+   These are the absolute coordinates with the origin offset
+   already applied.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">n</span>:<a href="../data/INode.html">INode</a></code> &mdash; The node which target coordinates are required.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Point</code> &mdash; A Point object that contains the required absolute coordinates.
+   </td>
+</tr>
+</table>
+</div>
+<a name="getPolarPhi()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getPolarPhi</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getPolarPhi(n:<a href="../data/INode.html">INode</a>):Number</code><p>
+   access the polar angle part of the 
+   target coordinates of the given node.
+   These are relative coordinates (subject to origin offset).
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">n</span>:<a href="../data/INode.html">INode</a></code> &mdash; The node which target coordinate is required.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The angle part of n's target coordinates (in polar).
+   </td>
+</tr>
+</table>
+</div>
+<a name="getPolarR()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getPolarR</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getPolarR(n:<a href="../data/INode.html">INode</a>):Number</code><p>
+   access the polar radius part of the 
+   target coordinates of the given node.
+   These are relative coordinates (subject to origin offset).
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">n</span>:<a href="../data/INode.html">INode</a></code> &mdash; The node which target coordinate is required.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The radius part of n's target coordinates (in polar).
+   </td>
+</tr>
+</table>
+</div>
+<a name="getRelCartCoordinates()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getRelCartCoordinates</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getRelCartCoordinates(n:<a href="../data/INode.html">INode</a>):Point</code><p>
+   Access the cartesian coordinates of the given node.
+   These are relative coordinates (subject to origin offset).
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">n</span>:<a href="../data/INode.html">INode</a></code> &mdash; The node which target coordinates are required.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Point</code> &mdash; A Point object that contains the required coordinates.
+   </td>
+</tr>
+</table>
+</div>
+<a name="invalidateNodeData()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">invalidateNodeData</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function invalidateNodeData():void</code><p>
+   invalidate all node data sets
+   </p></div>
+<a name="nodeDataValid()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">nodeDataValid</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function nodeDataValid(n:<a href="../data/INode.html">INode</a>):Boolean</code><p>
+   indicates if the data set for a given node is 
+   currently valid.
+   WARNING: may not be implemented properly and may not even be needed
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">n</span>:<a href="../data/INode.html">INode</a></code> &mdash; The node for which dataset the validity should be tested.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code> &mdash; If the dataset for node n is valid.
+   </td>
+</tr>
+</table>
+</div>
+<a name="setCartCoordinates()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">setCartCoordinates</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function setCartCoordinates(n:<a href="../data/INode.html">INode</a>, p:Point):void</code><p>
+   Set the target coordinates for node n according to the
+   calculated layout in cartesian (i.e. x and y) form. Consider these are
+   "relative" coordinates, which will finally be adjusted
+   by the origin offset.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">n</span>:<a href="../data/INode.html">INode</a></code> &mdash; The node to set its coordinates.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">p</span>:Point</code> &mdash; The point object representing the target coordinates.
+    </td>
+</tr>
+</table>
+</div>
+<a name="setPolarCoordinates()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">setPolarCoordinates</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function setPolarCoordinates(n:<a href="../data/INode.html">INode</a>, polarR:Number, polarPhi:Number):void</code><p>
+   Set the target coordinates for node n according to the
+   calculated layout in Polar form. Consider these are
+   "relative" coordinates, which will finally be adjusted
+   by the origin offset.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">n</span>:<a href="../data/INode.html">INode</a></code> &mdash; The node to set its coordinates.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">polarR</span>:Number</code> &mdash; The radius (length) part of the polar coordinates.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">polarPhi</span>:Number</code> &mdash; The angle part of the polar coordinates (in degrees).
+   </td>
+</tr>
+</table>
+<br>
+<span class="label">Throws</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code></code> &mdash; error if any part of the coordinates is NaN (not a number).
+    </td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->
