@@ -32,9 +32,9 @@ package org.un.cava.birdeye.geovis.analysis
 	* are shaded or patterned in proportion to the measurement 
 	* of the statistical variable being displayed on the map.
 	**/
-	public class Colorize
+	public class Choropleth
 	{
-		public function Colorize()
+		public function Choropleth()
 			{
 			super();
 		}
