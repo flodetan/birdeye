@@ -17,28 +17,13 @@
 Application {
 	font-family: main;
 	font-size: 10;
+	color: #ffffff;
 }
 
-.linkButtonWindowShade {
-	      	headerClass:ClassReference('mx.controls.LinkButton');
-	      	header-style-name: linkButtonStyle;
-	     
-	     	drop-shadow-enabled:true;
-	     	
-	      	corner-radius:5;
-	      	border-style:solid;
-	    	
-	    	background-color:#CCCCCC;
-	    	background-alpha:.7;
-	    }         
-
-.linkButtonStyle {
-	    	corner-radius:5;	
-	    	fill-alphas:1,1;
-	    	padding-left:10;
-	    	rollOverColor: #666666;
-	    	textRollOverColor: #ffffff;
-	    }
+HRule {
+   strokeColor: #999999;
+   shadowColor: #cccccc;
+}
 
 ToolTip {
    			backgroundAlpha: 0.85;
@@ -47,3 +32,8 @@ ToolTip {
    			font-family: main;
 			font-size: 10;
 }
+
+WorldMap {
+    background-color : #333333;
+  	stroke : #FFFFFF;
+  }
