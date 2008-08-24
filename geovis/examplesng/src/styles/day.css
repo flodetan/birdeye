@@ -1,0 +1,30 @@
+
+
+WorldMap {
+    background-color : #FFFFFF;
+  	stroke : #333333;
+  	weight: 0.25;
+  }
+  
+Panel {
+   borderColor: #333333;
+   borderAlpha: 0.6;
+   borderThicknessLeft: 1;
+   borderThicknessTop: 1;
+   borderThicknessBottom: 1;
+   borderThicknessRight: 1;
+   roundedBottomCorners: true;
+   headerHeight: 20;
+   highlightAlphas: 0.42, 0.1;
+   headerColors: #000000, #666666;
+   backgroundColor: #ffffff;
+   dropShadowEnabled: true;
+   dropShadowColor: #000000;
+   titleStyleName: "mypanelTitle";
+}
+
+.mypanelTitle {
+   color: #ffffff;
+   fontFamily: main;
+   fontSize: 10;
+}

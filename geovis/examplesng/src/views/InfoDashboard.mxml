@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:flexlib="http://code.google.com/p/flexlib/"
+	paddingBottom="5" 
+	backgroundColor="#333333" horizontalAlign="center"
+	horizontalScrollPolicy="off" verticalScrollPolicy="off"
+	width="100%" height="100%" >
+
+
+<mx:Box id="middle" width="100%" height="100%" horizontalAlign="center" >
+	
+</mx:Box>
+
+
+</mx:HBox>
