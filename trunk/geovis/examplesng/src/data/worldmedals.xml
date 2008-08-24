@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<countries>																																																					
+	<country iso="AFG" name="Afghanistan" gold="" silver="" bronze="" total="" >
+		<golds>
+			<gold discipline="" total="" />
+		</golds>
+		<silvers>
+			<silver discipline="" total="" />
+		</silvers>
+		<bronzes>
+			<bronze discipline="" total="" />
+		</bronzes>
+	</country>
+	<country iso="CHN" name="China" gold="" silver="" bronze="" total=""  />
+	<country iso="AUS" name="Australia" gold="" silver="" bronze="" total=""  />
+	<country iso="CAN" name="Canada" gold="" silver="" bronze="" total=""  />
+</countries>	

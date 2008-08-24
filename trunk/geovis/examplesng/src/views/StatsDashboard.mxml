@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:flexlib="http://code.google.com/p/flexlib/"
+	paddingBottom="5" 
+	backgroundColor="#333333" horizontalAlign="center"
+	horizontalScrollPolicy="off" verticalScrollPolicy="off"
+	width="100%" height="100%" >
+
+<mx:Script>
+        <![CDATA[
+
+        import mx.collections.ArrayCollection;
+
+        [Bindable]
+        private var medalsAC:ArrayCollection = new ArrayCollection( [
+            { Country: "USA", Gold: 35, Silver:39, Bronze: 29 },
+            { Country: "China", Gold: 32, Silver:17, Bronze: 14 },
+            { Country: "Russia", Gold: 27, Silver:27, Bronze: 38 } ]);
+        
+        private function updateDetails():void
+			{
+				var dataValues:Array = dataSelector.dataValues;
+				
+				
+			}
+        
+        ]]>
+    </mx:Script>
+
+<mx:SeriesSlide id="slideIn" duration="1000" direction="down" />
+<mx:SeriesSlide id="slideOut" duration="1000" direction="up"/>
+<mx:SeriesInterpolate id="showInterpolEffect" duration="2000" />
+
+<!-- Define custom colors for use as fills. -->
+    <mx:SolidColor id="sc1" color="yellow" alpha=".8"/>
+    <mx:SolidColor id="sc2" color="0xCCCCCC" alpha=".6"/>
+    <mx:SolidColor id="sc3" color="0xFFCC66" alpha=".6"/>
+
+    <!-- Define custom Strokes for the columns. -->
+    <mx:Stroke id="s1" color="yellow" weight="2"/>
+    <mx:Stroke id="s2" color="0xCCCCCC" weight="2"/>
+    <mx:Stroke id="s3" color="0xFFCC66" weight="2"/>
+
+<mx:Box id="middle" width="100%" height="100%" horizontalAlign="center" >
+	<mx:ColumnChart id="column" 
+            height="100%" type="stacked" 
+            width="100%" 
+            paddingLeft="5" 
+            paddingRight="5" 
+            showDataTips="true" gutterLeft="0" 
+            dataProvider="{medalsAC}"
+        >                
+            <mx:horizontalAxis>
+                <mx:CategoryAxis categoryField="Country"/>
+            </mx:horizontalAxis>
+            
+            <mx:annotationElements>
+				<flexlib:HorizontalAxisDataSelector id="dataSelector" change="updateDetails();"
+					selectorColor="0xffffff" />
+			</mx:annotationElements>
+                
+            <mx:series>
+                <mx:ColumnSeries 
+                    xField="Country" 
+                    yField="Bronze" 
+                    displayName="Bronze"
+                    fill="{sc3}"
+                    stroke="{s3}"
+                />
+                <mx:ColumnSeries 
+                    xField="Country" 
+                    yField="Silver" 
+                    displayName="Silver"
+                    fill="{sc2}"
+                    stroke="{s2}"
+                />
+                <mx:ColumnSeries 
+                    xField="Country" 
+                    yField="Gold" 
+                    displayName="Gold"
+                    fill="{sc1}"
+                    stroke="{s1}"
+                />
+                
+            </mx:series>
+        </mx:ColumnChart>
+</mx:Box>
+
+
+</mx:HBox>

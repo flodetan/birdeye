@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:controls="org.un.cava.birdeye.geovis.controls.*"
+	xmlns:geomap="org.un.cava.birdeye.geovis.views.maps.world.*"
+	xmlns:analysis="org.un.cava.birdeye.geovis.analysis.*"
+	xmlns:features="org.un.cava.birdeye.geovis.features.*"
+	xmlns:views="views.*"
+	width="100%" height="100%" backgroundGradientColors="[#333333,#333333]"
+	layout="absolute"
+	preinitialize="loadStyle()"
+	>
+
+<mx:Script>
+	<![CDATA[
+		import org.un.cava.birdeye.geovis.controls.*;
+		import mx.rpc.events.ResultEvent;
+        import mx.events.StyleEvent;
+		import mx.styles.StyleManager;
+        
+        // Start Style Loading
+        
+        private var currentTheme:String = "night";
+		private function toggleTheme():void
+        {
+            if (currentTheme == "day")
+            {
+                currentTheme = "day";
+            }
+            else
+            {
+                currentTheme = "night";
+            }
+
+            loadStyle();
+        }
+
+        private function loadStyle():void
+        {
+            var eventDispatcher:IEventDispatcher =
+                StyleManager.loadStyleDeclarations("styles/" + currentTheme + ".swf");
+            	eventDispatcher.addEventListener(StyleEvent.COMPLETE, completeHandler);
+        }
+
+        private function completeHandler(event:StyleEvent):void
+        {
+            super.initialized = true;
+        }
+		
+		override public function set initialized(value:Boolean):void
+        {
+            // Hold off until the Runtime CSS SWF is done loading.
+        }
+
+		// End Style Loading
+		
+		private function toggleFlows():void{
+			if (showFlows.selected==true) 
+			{
+				johFlows.visible=true;
+				johFlows.includeInLayout=true;
+			}
+			else if (showFlows.selected==false)
+			{
+				johFlows.visible=false;
+				johFlows.includeInLayout=false;
+			}
+		} 
+		
+		
+	]]>
+</mx:Script>
+
+<mx:Style source="styles/main.css" />
+<mx:XML id="myWorldMedals" source="data/worldmedals.xml" />
+<mx:XML id="myFlows" source="data/journeyofharmony.xml" />
+
+<mx:Box width="100%" height="100%" horizontalAlign="center" verticalAlign="top" horizontalScrollPolicy="off" verticalScrollPolicy="off" >
+		
+	<mx:VBox width="1000" height="744" verticalGap="10" backgroundColor="#333333" paddingLeft="5" paddingRight="5" paddingBottom="5" horizontalScrollPolicy="off" verticalScrollPolicy="off" >
+	<mx:Spacer width="5" />
+	<mx:ApplicationControlBar width="100%" height="30" fillColors="[#333333,#666666]" fillAlphas="[1.0,1.0]" cornerRadius="0"  >
+		<mx:HBox width="100%" height="100%" verticalAlign="middle" paddingLeft="5" paddingRight="5" >
+			<mx:Label text="GeoVis Explorer" color="#FFFFFF" fontSize="16" />
+			<mx:Spacer width="100%" />
+			<mx:Button id="b1" label="CSS" click="toggleTheme()"/>
+				<mx:RadioButtonGroup id="rbgDataSelect" labelPlacement="right"  />
+				<mx:RadioButton groupName="rbgDataSelect" id="rbOrigin" value="shwByOrigin" 
+            		label="Day" color="#ffffff" textRollOverColor="#ffffff" textSelectedColor="#ffffff" selected="false" />
+        		<mx:RadioButton groupName="rbgDataSelect" id="rbAsylum" value="shwByAsylum" 
+            		label="Night" color="#ffffff" textRollOverColor="#ffffff" textSelectedColor="#ffffff" selected="true" />
+        </mx:HBox>
+	</mx:ApplicationControlBar>
+	<mx:Spacer width="5" />
+	
+	
+	<mx:HBox id="dashboardTop" width="100%" horizontalGap="5" >
+					
+	<!-- Map Panel-->
+	<mx:Panel id="mapCnvs" title="Visualize: World Population Projections"
+		width="750" height="100%" verticalScrollPolicy="off">		
+		<mx:ProgressBar id="progressBar" x="{mapCnvs.width/2-progressBar.width/2}" y="{mapCnvs.height/2}" indeterminate="true" visible="false"/>
+		
+		<!-- Need to add property for perspective, e.g. 2d, 3dPlane, 3dSphere -->
+		<geomap:WorldMap id="myMap" projection="Miller cylindrical" scaleX=".942" scaleY=".942" x="0" y="20" >
+			
+			<!-- alpha not working? -->
+			<features:Features foid="USA" fillItem="0xCCCCCC" alpha="0.4" toolTip="United States" />
+			<features:Features foid="BRA" fillItem="0xCCCCCC" alpha="0.3" toolTip="Brazil"/>
+			<features:Features foid="FRA" fillItem="0xCCCCCC" alpha="0.2" toolTip="France"/>			
+			
+			<!-- Need to complete choropleth (a.k.a. colorize) function -->
+			<!--
+			<analysis:Choropleth id="choropleth" dataprovider="" foid="" colorField="" alpha="" colorScheme="" baseHue="" steps="" toolTip="" />
+			-->
+			
+			<!-- Need to complete cartogram function -->
+			<!--
+			<analysis:Cartogram id="cartogram" dataprovider="" foid="" areaField="" type="" form="" />
+			-->
+			
+			<!-- Flows - setting visibility property does not work -->
+			<analysis:Flow id="johFlows" dataProvider="{myFlows}" fromField="@fromID" toField="@toID" showDataTips="true" valueField="@desc" fill="0xFF8C00" visible="false" includeInLayout="false" />
+			
+			<!-- To load flows for Olympic torch run -->
+			<mx:CheckBox id="showFlows" left="625" top="0" label="Journey of Harmony:" labelPlacement="left" selected="false" change="toggleFlows();" />
+			
+		</geomap:WorldMap>
+		<!-- Errors resulting from CSS load
+		<controls:GeoGauge id="GeoGauge" left="10" right="10" bottom="25" width="725" height="10" minimumValue="0" maximumValue="50000000" trackColor="0x333333" visible="true">
+        		<controls:GeoThumb id="t1" Color="0x000000" value="0" draggable="false"/>
+        		<controls:GeoThumb id="t2" Color="0xCCCCCC" minimum="0" maximum="{t3.value}" value="5000000" draggable="true" />
+        		<controls:GeoThumb id="t3" Color="0x999999" minimum="{t2.value}" maximum="{t4.value}" value="10000000" draggable="true" />
+        		<controls:GeoThumb id="t4" Color="0x666666" minimum="{t3.value}" maximum="{t4.value}" value="40000000" draggable="true" allowDragToTheEnd="true" />
+        		<controls:GeoThumb id="t5" Color="0x333333" value="50000000" draggable="false"/>
+        		<controls:GeoScale title="Percentage" />
+        </controls:GeoGauge>
+        -->
+						
+	</mx:Panel>
+		
+	
+	<!-- Right Side Dashboard -->
+	<mx:Panel id="designCnvs" title="Design"
+		width="100%" height="450" verticalScrollPolicy="off">
+	<mx:VBox width="100%" height="100%"
+		horizontalAlign="center" backgroundColor="#333333" paddingLeft="5" paddingRight="5" paddingTop="5"
+		>
+			<!-- These should be moved as individual components -->
+							
+							<mx:ComboBox id="projectionSelector" width="180" prompt="Projection..." toolTip="Select map area for viewing..."  />
+												
+							<mx:HRule width="100%" />
+							
+							<mx:ComboBox id="zoomSelector" width="180" prompt="Zoom..." toolTip="Select map area for viewing..."  />
+							
+							<mx:HRule width="100%" />
+											
+							<!-- Colorize Styles -->
+							<mx:HBox width="95%" horizontalAlign="left" >
+							<mx:Label text="Colorize:" textAlign="left" fontWeight="bold" fontSize="10" />
+							<mx:ComboBox id="featureSelector" itemRenderer="mx.controls.Label" height="20" width="137" prompt="Color by..." toolTip="Select the data field value to base colorization on..." >
+									<mx:ArrayCollection>
+										<mx:String>Total</mx:String>
+										<mx:String>Gold</mx:String>
+										<mx:String>Silver</mx:String>
+										<mx:String>Bronze</mx:String>
+									</mx:ArrayCollection>
+							</mx:ComboBox>
+							
+							</mx:HBox>
+							<mx:ComboBox id="colorBrewerSelector" height="20" width="180" prompt="Color scheme..." toolTip="Select the orientation of tree layout" >
+									<mx:ArrayCollection>
+										<mx:String>Sequential</mx:String>
+										<mx:String>Qualitative</mx:String>
+										<mx:String>Diverging</mx:String>
+									</mx:ArrayCollection>
+							</mx:ComboBox>
+							<mx:HBox width="95%" horizontalAlign="center" >
+							<mx:ComboBox id="hueSelector" height="20" width="122" prompt="Base hue..." toolTip="Select the orientation of tree layout" >
+									<mx:ArrayCollection>
+										<mx:String>Gold</mx:String>
+										<mx:String>Silver</mx:String>
+										<mx:String>Bronze</mx:String>
+									</mx:ArrayCollection>
+							</mx:ComboBox>
+							<mx:NumericStepper minimum="3" maximum="7" value="5" />
+							</mx:HBox>
+							<mx:HBox width="95%" horizontalAlign="center" >
+							<mx:RadioButtonGroup id="rgbColorTypeSelector" labelPlacement="right"  />
+									<mx:RadioButton groupName="rgbColorTypeSelector" id="rbRange" value="Range" 
+            							label="Range Control" selected="true" />
+        							<mx:RadioButton groupName="rgbColorTypeSelector" id="rbLegend" value="Legend" 
+            							label="Legend" selected="false"  />
+							</mx:HBox>			
+							<mx:HRule width="100%" />
+							
+							<!-- Symbols Styles -->
+							<mx:HBox width="95%" horizontalAlign="center" >
+							<mx:Label text="Symbols:" textAlign="left" fontWeight="bold" fontSize="10" />
+							<mx:ComboBox id="symbolSelector" height="20" width="125" prompt="Style..." toolTip="Select the orientation of tree layout" >
+									<mx:ArrayCollection>
+										<mx:String>Bubble</mx:String>
+										<mx:String>Pie</mx:String>
+										<mx:String>Column (3D)</mx:String>
+									</mx:ArrayCollection>
+							</mx:ComboBox>
+							</mx:HBox>
+							<mx:ComboBox id="symbolLocationSelector" height="20" width="180" prompt="Based on..." toolTip="Select the location where symbols will be placed on the map"  />
+							<mx:ComboBox id="symbolFieldSelector" itemRenderer="mx.controls.Label" height="20" width="180" prompt="For values..." toolTip="Select the field(s) for the symbol values" >
+									<mx:ArrayCollection>
+										<mx:String>All</mx:String>
+										<mx:String>Gold</mx:String>
+										<mx:String>Silver</mx:String>
+										<mx:String>Bronze</mx:String>
+									</mx:ArrayCollection>
+							</mx:ComboBox>
+							
+							<mx:HRule width="100%" />
+							
+							<mx:HBox width="95%" horizontalAlign="center" >
+							<mx:Label text="Cartogram:" textAlign="left" fontWeight="bold" fontSize="10" />
+							<mx:ComboBox id="cartogramSelector" height="20" width="115" prompt="Type..." toolTip="Select the orientation of tree layout" >
+									<mx:ArrayCollection>
+										<mx:String>Area</mx:String>
+										<mx:String>Distance</mx:String>
+									</mx:ArrayCollection>
+							</mx:ComboBox>
+							</mx:HBox>
+							<mx:ComboBox id="cartoFormSelector" height="20" width="180" prompt="Form..." toolTip="Select the location where symbols will be placed on the map"  >
+									<mx:ArrayCollection>
+										<mx:String>Non-Contiguous</mx:String>
+										<mx:String>Continguous</mx:String>
+										<mx:String>Dorling</mx:String>
+										<mx:String>Demmer</mx:String>
+									</mx:ArrayCollection>
+							</mx:ComboBox>
+							<mx:ComboBox id="cartoFieldSelector" itemRenderer="mx.controls.Label" height="20" width="180" prompt="For values..." toolTip="Select the field(s) for the symbol values" >
+									<mx:ArrayCollection>
+										<mx:String>All</mx:String>
+										<mx:String>Gold</mx:String>
+										<mx:String>Silver</mx:String>
+										<mx:String>Bronze</mx:String>
+									</mx:ArrayCollection>
+							</mx:ComboBox>
+							<mx:HRule width="100%" />
+							
+							<!-- Perspective -->
+							<mx:HBox width="95%" >
+								<mx:Label text="Perspective:" textAlign="left" fontWeight="bold" fontSize="10" />
+								<mx:RadioButtonGroup id="perspective" labelPlacement="right" />
+									<mx:RadioButton groupName="perspective" id="twod" value="twod" 
+            							label="2D" selected="true" />
+        							<mx:RadioButton groupName="perspective" id="plane" value="plane" 
+            							label="3D Plane" />
+        					</mx:HBox>
+        					<mx:HSlider id="tilt" width="95%" />
+        					<mx:Label text="Tilt" textAlign="center" fontWeight="bold" fontSize="10" />
+							
+							<!--<mx:Spacer height="5" />-->
+					
+	</mx:VBox>
+	</mx:Panel>
+
+</mx:HBox>
+<mx:Panel id="dashboardBottom" title="Dashboard" width="100%" height="100%" >
+  	<!-- Bottom Dashboard -->
+  	<mx:ViewStack id="myViewStack" width="100%" height="100%">
+            <views:StatsDashboard id="statsDashboard" label="STATS" />
+            <views:InfoDashboard id="infoDashboard" label="INFO" />
+    </mx:ViewStack>
+</mx:Panel>
+
+
+<mx:HBox width="100%" height="20" backgroundColor="#333333"
+	verticalGap="0" horizontalAlign="center" verticalAlign="middle" >
+			<mx:LinkBar dataProvider="{myViewStack}"/>
+			<mx:Spacer width="100%" />
+			<mx:Label text="BIRDEYE: the visual analytics toolkit" textAlign="center" color="#FFFFFF" />
+</mx:HBox>
+
+</mx:VBox>
+</mx:Box>
+
+	
+</mx:Application>
