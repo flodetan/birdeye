@@ -25,13 +25,12 @@
         {
             if (currentTheme == "day")
             {
-                currentTheme = "day";
+                currentTheme = "night";
             }
             else
             {
-                currentTheme = "night";
+                currentTheme = "day";
             }
-
             loadStyle();
         }
 
@@ -134,9 +133,8 @@
         		<controls:GeoThumb id="t4" Color="0x666666" minimum="{t3.value}" maximum="{t4.value}" value="40000000" draggable="true" allowDragToTheEnd="true" />
         		<controls:GeoThumb id="t5" Color="0x333333" value="50000000" draggable="false"/>
         		<controls:GeoScale title="Percentage" />
-        </controls:GeoGauge>
-        -->
-						
+        </controls:GeoGauge>-->
+        		
 	</mx:Panel>
 		
 	
