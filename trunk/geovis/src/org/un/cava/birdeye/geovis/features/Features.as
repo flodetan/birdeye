@@ -146,6 +146,11 @@ package org.un.cava.birdeye.geovis.features
 	     */
 		private var _highlighted:Boolean=false;
 		
+		/**
+	     *  @private
+	     */
+		private var _alpha:Number=1;
+		
 		//--------------------------------------------------------------------------
 	    //
 	    //  Properties 
@@ -219,6 +224,14 @@ package org.un.cava.birdeye.geovis.features
 		/**
 		 * @private
 		 */
+		override public function set alpha(value:Number):void 
+		{
+    		_alpha=value;
+    	}
+    	
+		/**
+		 * @private
+		 */
 		private function creationCompleteHandler (event:FlexEvent):void{    
 			this.name='feat'+foid;
 			var dynamicClassName:String=getQualifiedClassName(this.parent);
@@ -240,7 +253,7 @@ package org.un.cava.birdeye.geovis.features
 					
 					if(foid!=""){
 						if(getStyle("fillItem")){
-							colorItem=new SolidFill(getStyle("fillItem"),1);
+							colorItem=new SolidFill(getStyle("fillItem"),_alpha);
 						}
 						if(getStyle("strokeItem")){
 							if(typeof(getStyle("strokeItem"))=="number"){
@@ -252,7 +265,7 @@ package org.un.cava.birdeye.geovis.features
 							while (arrStrokeItem.length<3) { 
 								arrStrokeItem.push(1); 
 							}
-							stkItem= new SolidStroke(arrStrokeItem[0],arrStrokeItem[1],arrStrokeItem[2]);
+							stkItem= new SolidStroke(arrStrokeItem[0], arrStrokeItem[1],arrStrokeItem[2]);
 							
 						}
 						stkItem.scaleMode="none";
@@ -299,7 +312,7 @@ package org.un.cava.birdeye.geovis.features
        override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
       		super.updateDisplayList( unscaledWidth, unscaledHeight );            
       		if(myCoo){
-      			myCoo.fill=new SolidFill(getStyle("fillItem"),1);
+      			myCoo.fill=new SolidFill(getStyle("fillItem"),_alpha);
       		}      
       		
       		if(geom!=null){
