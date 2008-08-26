@@ -28,13 +28,12 @@
 package org.un.cava.birdeye.geovis.core
 {	
 	import com.degrafa.GeometryGroup;
-	import com.degrafa.IGeometry;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.Polygon;
-	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.*;
-	import com.degrafa.transform.Transform;
+	import com.degrafa.transform.ScaleTransform;
+	import com.degrafa.IGeometry;
 	
 	import flash.events.MouseEvent;
 	import flash.filters.GlowFilter;
@@ -147,12 +146,12 @@ package org.un.cava.birdeye.geovis.core
 		/**
 	     *  @private
 	     */
-		private var _scaleX:Number;
+		private var _scaleX:Number=1;
 		
 		/**
 	     *  @private
 	     */
-		private var _scaleY:Number;
+		private var _scaleY:Number=1;
 		
 		/**
 	     *  @private
@@ -188,7 +187,6 @@ package org.un.cava.birdeye.geovis.core
      	*  @private
      	*/
     	public var surf:Surface;
-    	
     	
     	//--------------------------------------------------------------------------
 	    //
@@ -233,10 +231,10 @@ package org.un.cava.birdeye.geovis.core
     	override public function set scaleX(value:Number):void
     	{
     		_scaleX=value;
-			for each (var gpGeom:GeometryGroup in _geoGroup)
+			/*for each (var gpGeom:GeometryGroup in _geoGroup)
 			{
 				gpGeom.scaleX = value;
-			}
+			}*/
 			
 			if(surf!=null){
 				for (var n:int = 0; n<surf.numChildren; n++) 
@@ -271,10 +269,10 @@ package org.un.cava.birdeye.geovis.core
     	override public function set scaleY(value:Number):void
     	{
     		_scaleY=value;
-			for each (var gpGeom:GeometryGroup in _geoGroup)
+			/*for each (var gpGeom:GeometryGroup in _geoGroup)
 			{
 				gpGeom.scaleY = value;
-			}
+			}*/
 			if(surf!=null){
 				for (var n:int = 0; n<surf.numChildren; n++) 
 				{
@@ -308,12 +306,15 @@ package org.un.cava.birdeye.geovis.core
 		public function GeoFrame(region:String)
 		{
 			super();
+			super.measure();
 			
 			_region = region;
 			
 			_geoGroup = new Array();
 			
 			this.mouseEnabled=false;
+			//this.setStyle("verticalCenter",0);
+			//this.setStyle("horizontalCenter",0);
 		}
 		
 		
@@ -322,7 +323,8 @@ package org.un.cava.birdeye.geovis.core
     	//  Overridden methods
     	//
     	//--------------------------------------------------------------------------
-    
+    	
+		
 		/**
 		 * @private
 		 * Create component child elements. Standard Flex component method.
@@ -349,7 +351,6 @@ package org.un.cava.birdeye.geovis.core
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			
 			for each (var gpGeom:GeometryGroup in _geoGroup)
 			{
 				gpGeom.draw(null,null);			
@@ -401,8 +402,9 @@ package org.un.cava.birdeye.geovis.core
 			
 			surf=new Surface();
 			surf.name="Surface";
-		    surf.scaleX=_scaleX;
+			surf.scaleX=_scaleX;
 		    surf.scaleY=_scaleY;
+		    
 			for each (var country:String in listOfCountry)
 			{
 				if(wcData.getCoordinates(country)!="")
@@ -416,6 +418,15 @@ package org.un.cava.birdeye.geovis.core
 					countryGeom.scaleY=_scaleY;
 					countryGeom.name = country;
 					
+					/*
+					var myBarryCoo:Array=wcData.getBarryCenter(country).split(",");
+					var transMat:Matrix = countryGeom.transform.matrix; 
+					transMat.translate(-myBarryCoo[0],-myBarryCoo[1]); 
+					transMat.scale(_scaleX,_scaleY); 
+					transMat.translate(myBarryCoo[0],myBarryCoo[1]); 
+					countryGeom.transform.matrix=transMat; 
+					*/
+
 					countryGeom.target=surf;
 						
 					surf.graphicsCollection.addItem(countryGeom);
@@ -438,6 +449,9 @@ package org.un.cava.birdeye.geovis.core
 						}else{
 							Polygon(myCoo).transform = trsf;
 						}*/
+						
+						//var geoComp:GeometryComposition=new GeometryComposition();
+						//geoComp.transform=trsf;
 						
 						myCoo.data = wcData.getCoordinates(country);
 						
@@ -485,7 +499,6 @@ package org.un.cava.birdeye.geovis.core
 				}
 				
 			}
-			
 			this.addChild(surf);
 		}
 		

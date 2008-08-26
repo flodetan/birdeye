@@ -30,7 +30,7 @@
 	import com.degrafa.*;
 	import com.degrafa.geometry.*;
 	import com.degrafa.paint.*;
-	
+	import com.degrafa.GeometryGroup;
 	import flash.events.MouseEvent;
 	
 	import mx.collections.IViewCursor;
@@ -47,7 +47,7 @@
 		private var currentToolTipItem:IToolTip; 
 		private var _dtFunction:Function;
 		
-		public function PieSparkSlice(wdt:Number,hgt:Number,field:String,showdtTips:Boolean,cursor:IViewCursor,dataTipFunction:Function,surf:Surface)
+		public function PieSparkSlice(wdt:Number,hgt:Number,field:String,showdtTips:Boolean,cursor:IViewCursor,dataTipFunction:Function,surf:Surface, numOfSlice:int)
 		{
 			_surf=surf;
 			_dtFunction=dataTipFunction;
@@ -63,7 +63,11 @@
 		 	Arc.id="arc";
 		 	Arc.width=wdt/2;
 		 	Arc.height=hgt/2;
-		 	Arc.closureType="pie"; 
+		 	if(numOfSlice==1){
+		 		Arc.closureType="chord"; 
+		 	}else{
+		 		Arc.closureType="pie"; 
+		 	}
 		 	Arc.startAngle=0;
 		 	Arc.arc=0;
 			this.geometryCollection.addItem(Arc);

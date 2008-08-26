@@ -1,6 +1,5 @@
 package org.un.cava.birdeye.geovis.controls
 {
-	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	import flash.utils.*;
@@ -8,6 +7,8 @@ package org.un.cava.birdeye.geovis.controls
 	import mx.core.IToolTip;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
+	import mx.formatters.NumberBaseRoundType;
+	import mx.formatters.NumberFormatter;
 	import mx.managers.ToolTipManager;
     
     //--------------------------------------
@@ -111,6 +112,11 @@ package org.un.cava.birdeye.geovis.controls
 	     *  @private
 	     */
 		private var tt:IToolTip;
+		
+		/**
+	     *  @private
+	     */
+		private var Numformat:NumberFormatter;
 		
 		//--------------------------------------------------------------------------
 	    //
@@ -230,8 +236,16 @@ package org.un.cava.birdeye.geovis.controls
      	*/
 		public function GeoThumb()
 		{
+			this.addEventListener(FlexEvent.CREATION_COMPLETE, setFormatter);
+			
 		}
 		
+		private function setFormatter(e:FlexEvent):void{
+			Numformat=new NumberFormatter();
+			Numformat.rounding=NumberBaseRoundType.NEAREST;
+			Numformat.precision=2;
+			Numformat.useThousandsSeparator=true;
+		}
 		
 		//--------------------------------------------------------------------------
     	//
@@ -300,7 +314,7 @@ package org.un.cava.birdeye.geovis.controls
 		 */
 		 private function startMove(event:MouseEvent):void
         {
-        	toolTipCreate(_value.toString(), event.stageX + 10, event.stageY + 10);
+        	toolTipCreate(Numformat.format(_value).toString(), event.stageX + 10, event.stageY + 10);
             
             // false : on déplace l'objet par rapport à l'endroit du clic souris
             // true : on déplace l'objet par rapport à son centre
@@ -330,7 +344,7 @@ package org.un.cava.birdeye.geovis.controls
         {
         	if (tt) {
                     tt.move(event.stageX + 10, event.stageY + 10);
-                    tt.text=((event.currentTarget.x-_x)*_parentMax/_width).toString();
+                    tt.text=Numformat.format(((event.currentTarget.x-_x)*_parentMax/_width)).toString();
                     //rounded value with 2 decimal tt.text=(int((event.currentTarget.x-_x)*_parentMax/_width*100)/100).toString();
                     event.updateAfterEvent();
             }
@@ -343,7 +357,7 @@ package org.un.cava.birdeye.geovis.controls
 		 * @private
 		 */
         private function MouseOverEvent(event:MouseEvent):void {
-        	toolTipCreate(_value.toString(), event.stageX + 10, event.stageY + 10);
+        	toolTipCreate(Numformat.format(_value).toString(), event.stageX + 10, event.stageY + 10);
         	event.currentTarget.useHandCursor=true;
         	event.currentTarget.buttonMode=true;
         }
