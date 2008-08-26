@@ -179,6 +179,11 @@ package org.un.cava.birdeye.geovis.analysis
 	     */
 		private var region:String;
 		
+		/**
+	     *  @private
+	     */
+	    [Bindable]
+		private var _visible:Boolean=true;
 		
 		//--------------------------------------------------------------------------
 	    //
@@ -410,6 +415,29 @@ package org.un.cava.birdeye.geovis.analysis
 		
 		//--------------------------------------------------------------------------
     	//
+    	//  Overridden methods
+    	//
+    	//--------------------------------------------------------------------------
+    
+		/**
+		 * @private
+		 */
+		override public function set visible(value:Boolean):void 
+		{
+			
+    		_visible=value;
+    		
+    		if(surf){
+    			for (var i:int = 0; i < surf.numChildren-1; i++) {
+    				if(surf.getChildAt(i).name.toString().substr(0,4)=='flow'){
+    					surf.getChildAt(i).visible=_visible;
+    				}
+    			}
+    		}
+    	}
+    	
+		//--------------------------------------------------------------------------
+    	//
     	//  Methods
     	//
     	//--------------------------------------------------------------------------
@@ -463,7 +491,7 @@ package org.un.cava.birdeye.geovis.analysis
 					    
 					i++;
 					cursor.moveNext();  
-				}  
+				} 
     	}
    
   		/**
@@ -472,6 +500,8 @@ package org.un.cava.birdeye.geovis.analysis
 	   	private function drawFlow(cooFrom:Array, cooTo:Array, fromDest:String, toDest:String, description:String):void{
 	   		flows = new UIComponent();
 	   	  	flows.name="flow"+fromDest+toDest;
+	   	  	flows.visible=_visible;
+	   	  	trace(_visible)
 		  	cntrlpt = new UIComponent();
 		  	markers = new UIComponent();
 		  	cntrlpoint = new Point();
