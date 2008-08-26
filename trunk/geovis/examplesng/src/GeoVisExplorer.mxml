@@ -146,8 +146,20 @@
 		>
 			<!-- These should be moved as individual components -->
 							
-							<mx:ComboBox id="projectionSelector" width="180" prompt="Projection..." toolTip="Select map area for viewing..."  />
-												
+							<mx:ComboBox id="projectionSelector" width="180" prompt="Projection..." selectedIndex="4" toolTip="Select map area for viewing..."  >
+								<mx:ArrayCollection>
+										<mx:String>Geographic</mx:String>
+										<mx:String>Lambert equal area</mx:String>
+										<mx:String>Mollweide</mx:String>
+										<mx:String>WinkelTripel</mx:String>
+										<mx:String>Miller cylindrical</mx:String>
+										<mx:String>EckertIV</mx:String>
+										<mx:String>EckertVI</mx:String>
+										<mx:String>Goode</mx:String>
+										<mx:String>Sinsoidal</mx:String>
+										<mx:String>Robinson</mx:String>
+									</mx:ArrayCollection>
+							</mx:ComboBox>				
 							<mx:HRule width="100%" />
 							
 							<mx:ComboBox id="zoomSelector" width="180" prompt="Zoom..." toolTip="Select map area for viewing..."  />
