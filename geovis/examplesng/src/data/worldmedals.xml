@@ -6,7 +6,7 @@
 						 <medal discipline="Taekwondo" gold="0" silver="0" bronze="1" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="ALG" name="Algeria" gold="0" silver="1" bronze="1" total="2">
+    <Country iso="DZA" name="Algeria" gold="0" silver="1" bronze="1" total="2">
 			<medals>
   					 <medal discipline="Judo" gold="0" silver="1" bronze="1" total="2"/>
     			</medals>
@@ -61,7 +61,7 @@
             <medal discipline="Wrestling" gold="0" silver="2" bronze="2" total="4"/>
     			</medals>
 		</Country>
-    <Country iso="BAH" name="Bahamas" gold="0" silver="1" bronze="1" total="2">
+    <Country iso="BHS" name="Bahamas" gold="0" silver="1" bronze="1" total="2">
 			<medals>
   					<medal discipline="Athletics" gold="0" silver="1" bronze="1" total="2"/>
     			</medals>
@@ -93,12 +93,12 @@
               <medal discipline="Volleyball" gold="1" silver="1" bronze="0" total="2"/>
     			</medals>
 		</Country>
-    <Country iso="BRN" name="Bahrain" gold="1" silver="0" bronze="0" total="1">
+    <Country iso="BHR" name="Bahrain" gold="1" silver="0" bronze="0" total="1">
 			<medals>
   					 <medal discipline="Athletics" gold="1" silver="0" bronze="0" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="BUL" name="Bulgaria" gold="1" silver="1" bronze="3" total="5">
+    <Country iso="BGR" name="Bulgaria" gold="1" silver="1" bronze="3" total="5">
 			<medals>
   					 <medal discipline="Rowing" gold="1" silver="0" bronze="0" total="1"/>
 						 <medal discipline="Wrestling" gold="0" silver="1" bronze="3" total="4"/>
@@ -191,7 +191,7 @@
             <medal discipline="Shooting" gold="2" silver="1" bronze="0" total="3"/>
     			</medals>
 		</Country>
-    <Country iso="DEN" name="Denmark" gold="2" silver="2" bronze="3" total="7">
+    <Country iso="DNK" name="Denmark" gold="2" silver="2" bronze="3" total="7">
 			<medals>
   					 <medal discipline="Canoe/Kayak - Flatwater" gold="0" silver="1" bronze="0" total="1"/>
               <medal discipline="Cycling - Track" gold="0" silver="1" bronze="0" total="1"/>
@@ -297,7 +297,7 @@
             <medal discipline="Wrestling" gold="2" silver="0" bronze="2" total="4"/>
     			</medals>
 		</Country>
-    <Country iso="GER" name="Germany" gold="16" silver="10" bronze="15" total="41">
+    <Country iso="DEU" name="Germany" gold="16" silver="10" bronze="15" total="41">
 			<medals>
   					 <medal discipline="Athletics" gold="0" silver="0" bronze="1" total="1"/>
               <medal discipline="Canoe/Kayak - Flatwater" gold="2" silver="2" bronze="3" total="7"/>
@@ -322,7 +322,7 @@
               <medal discipline="Wrestling" gold="0" silver="1" bronze="0" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="GRE" name="Greece" gold="0" silver="2" bronze="2" total="4">
+    <Country iso="GRC" name="Greece" gold="0" silver="2" bronze="2" total="4">
 			<medals>
   					 <medal discipline="Athletics" gold="0" silver="0" bronze="1" total="1"/>
             <medal discipline="Rowing" gold="0" silver="1" bronze="0" total="1"/>
@@ -339,7 +339,7 @@
             <medal discipline="Wrestling" gold="0" silver="1" bronze="0" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="INA" name="Indonesia" gold="1" silver="1" bronze="3" total="5">
+    <Country iso="IDN" name="Indonesia" gold="1" silver="1" bronze="3" total="5">
 			<medals>
   					 <medal discipline="Badminton" gold="1" silver="1" bronze="1" total="3"/>
 						 <medal discipline="Weightlifting" gold="0" silver="0" bronze="2" total="2"/>
@@ -352,7 +352,7 @@
 						 <medal discipline="Wrestling" gold="0" silver="0" bronze="1" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="IRI" name="Iran" gold="1" silver="0" bronze="1" total="2">
+    <Country iso="IRN" name="Iran" gold="1" silver="0" bronze="1" total="2">
 			<medals>
   					 <medal discipline="Taekwondo" gold="1" silver="0" bronze="0" total="1"/>
 						 <medal discipline="Wrestling" gold="0" silver="0" bronze="1" total="1"/>
@@ -445,7 +445,7 @@
             <medal discipline="Wrestling" gold="0" silver="0" bronze="1" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="LAT" name="Latvia" gold="1" silver="1" bronze="1" total="3">
+    <Country iso="LVA" name="Latvia" gold="1" silver="1" bronze="1" total="3">
 			<medals>
   					 <medal discipline="Athletics" gold="0" silver="1" bronze="0" total="1"/>
             <medal discipline="Cycling - BMX" gold="1" silver="0" bronze="0" total="1"/>
@@ -465,7 +465,7 @@
   					<medal discipline="Athletics" gold="0" silver="1" bronze="1" total="2"/> 
     			</medals>
 		</Country>
-    <Country iso="MAS" name="Malaysia" gold="0" silver="1" bronze="0" total="1">
+    <Country iso="MYS" name="Malaysia" gold="0" silver="1" bronze="0" total="1">
 			<medals>
   					 <medal discipline="Badminton" gold="0" silver="1" bronze="0" total="1"/>
     			</medals>
@@ -481,19 +481,19 @@
 						 <medal discipline="Taekwondo" gold="2" silver="0" bronze="0" total="2"/>
     			</medals>
 		</Country>
-    <Country iso="MGL" name="Mongolia" gold="2" silver="2" bronze="0" total="4">
+    <Country iso="MNG" name="Mongolia" gold="2" silver="2" bronze="0" total="4">
 			<medals>
   					 <medal discipline="Boxing" gold="1" silver="1" bronze="0" total="2"/>
             <medal discipline="Judo" gold="1" silver="0" bronze="0" total="1"/>
             <medal discipline="Shooting" gold="0" silver="1" bronze="0" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="MRI" name="Mauritius" gold="0" silver="0" bronze="1" total="1">
+    <Country iso="MUS" name="Mauritius" gold="0" silver="0" bronze="1" total="1">
 			<medals>
   					 <medal discipline="Boxing" gold="0" silver="0" bronze="1" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="NED" name="Netherlands" gold="7" silver="5" bronze="4" total="16">
+    <Country iso="NLD" name="Netherlands" gold="7" silver="5" bronze="4" total="16">
 			<medals>
   					 <medal discipline="Cycling - Track" gold="1" silver="0" bronze="0" total="1"/>
             <medal discipline="Equestrian" gold="1" silver="1" bronze="0" total="2"/>
@@ -505,7 +505,7 @@
             <medal discipline="Water Polo" gold="1" silver="0" bronze="0" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="NGR" name="Nigeria" gold="0" silver="1" bronze="3" total="4">
+    <Country iso="NGA" name="Nigeria" gold="0" silver="1" bronze="3" total="4">
 			<medals>
   					 <medal discipline="Athletics" gold="0" silver="0" bronze="2" total="2"/>
             <medal discipline="Football" gold="0" silver="1" bronze="0" total="1"/>
@@ -550,7 +550,7 @@
             <medal discipline="Wrestling" gold="0" silver="0" bronze="1" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="POR" name="Portugal" gold="1" silver="1" bronze="0" total="2">
+    <Country iso="PRT" name="Portugal" gold="1" silver="1" bronze="0" total="2">
 			<medals>
   					 <medal discipline="Athletics" gold="1" silver="0" bronze="0" total="1"/>
 						 <medal discipline="Triathlon" gold="0" silver="1" bronze="0" total="1"/>
@@ -572,7 +572,7 @@
             <medal discipline="Rowing" gold="1" silver="0" bronze="1" total="2"/>
     			</medals>
 		</Country>
-    <Country iso="RSA" name="South Africa" gold="0" silver="1" bronze="0" total="1">
+    <Country iso="ZAF" name="South Africa" gold="0" silver="1" bronze="0" total="1">
 			<medals>
   					 <medal discipline="Athletics" gold="0" silver="1" bronze="0" total="1"/>
     			</medals>
@@ -602,12 +602,12 @@
             <medal discipline="Wrestling" gold="6" silver="3" bronze="2" total="11"/>
     			</medals>
 		</Country>
-    <Country iso="SIN" name="Singapore" gold="0" silver="1" bronze="0" total="1">
+    <Country iso="SGP" name="Singapore" gold="0" silver="1" bronze="0" total="1">
 			<medals>
   					 <medal discipline="Table Tennis" gold="0" silver="1" bronze="0" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="SLO" name="Slovenia" gold="1" silver="2" bronze="2" total="5">
+    <Country iso="SVN" name="Slovenia" gold="1" silver="2" bronze="2" total="5">
 			<medals>
   					 <medal discipline="Athletics" gold="1" silver="0" bronze="0" total="1"/>
             <medal discipline="Judo" gold="0" silver="0" bronze="1" total="1"/>
@@ -616,19 +616,19 @@
             <medal discipline="Swimming" gold="0" silver="1" bronze="0" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="SRB" name="Serbia" gold="0" silver="1" bronze="2" total="3">
+    <Country iso="SCG" name="Serbia" gold="0" silver="1" bronze="2" total="3">
 			<medals>
   					 <medal discipline="Swimming" gold="0" silver="1" bronze="0" total="1"/>
             <medal discipline="Tennis" gold="0" silver="0" bronze="1" total="1"/>
             <medal discipline="Water Polo" gold="0" silver="0" bronze="1" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="SUD" name="Sudan" gold="0" silver="1" bronze="0" total="1">
+    <Country iso="SDN" name="Sudan" gold="0" silver="1" bronze="0" total="1">
 			<medals>
   					 <medal discipline="Athletics" gold="0" silver="1" bronze="0" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="SUI" name="Switzerland" gold="2" silver="0" bronze="4" total="6">
+    <Country iso="CHE" name="Switzerland" gold="2" silver="0" bronze="4" total="6">
 			<medals>
   					 <medal discipline="Cycling - Mountain Bike" gold="0" silver="0" bronze="1" total="1"/>
             <medal discipline="Cycling - Road" gold="1" silver="0" bronze="2" total="3"/>
@@ -665,7 +665,7 @@
 						 <medal discipline="Wrestling" gold="0" silver="1" bronze="0" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="TOG" name="Togo" gold="0" silver="0" bronze="1" total="1">
+    <Country iso="TGO" name="Togo" gold="0" silver="0" bronze="1" total="1">
 			<medals>
   					 <medal discipline="Canoe/Kayak - Slalom" gold="0" silver="0" bronze="1" total="1"/>
     			</medals>
@@ -676,7 +676,7 @@
 						 <medal discipline="Weightlifting" gold="0" silver="0" bronze="2" total="2"/>
     			</medals>
 		</Country>
-    <Country iso="TRI" name="Trinidad/Tobago" gold="0" silver="2" bronze="0" total="2">
+    <Country iso="TTO" name="Trinidad/Tobago" gold="0" silver="2" bronze="0" total="2">
 			<medals>
   					 <medal discipline="Athletics" gold="0" silver="2" bronze="0" total="2"/>
     			</medals>
@@ -752,12 +752,12 @@
   					 <medal discipline="Taekwondo" gold="0" silver="0" bronze="1" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="VIE" name="Vietnam" gold="0" silver="1" bronze="0" total="1">
+    <Country iso="VNM" name="Vietnam" gold="0" silver="1" bronze="0" total="1">
 			<medals>
   					 <medal discipline="Weightlifting" gold="0" silver="1" bronze="0" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="ZIM" name="Zimbabwe" gold="1" silver="3" bronze="0" total="4">
+    <Country iso="ZWE" name="Zimbabwe" gold="1" silver="3" bronze="0" total="4">
 			<medals>
   					 <medal discipline="Swimming" gold="1" silver="3" bronze="0" total="4"/>
     			</medals>
