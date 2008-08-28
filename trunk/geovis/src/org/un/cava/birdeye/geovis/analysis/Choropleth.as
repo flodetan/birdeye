@@ -1,4 +1,4 @@
-/* 
+/*  
  * The MIT License
  *
  * Copyright (c) 2008
@@ -24,20 +24,724 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.un.cava.birdeye.geovis.analysis
+ 
+ package org.un.cava.birdeye.geovis.analysis
 {
-	[ExcludeClass]
+	import com.degrafa.GeometryGroup;
+	import com.degrafa.IGeometry;
+	import com.degrafa.Surface;
+	import com.degrafa.geometry.Path;
+	import com.degrafa.geometry.Polygon;
+	import com.degrafa.paint.*;
+	
+	import flash.display.DisplayObjectContainer;
+	import flash.events.MouseEvent;
+	import flash.filters.BitmapFilterQuality;
+	import flash.filters.BitmapFilterType;
+	import flash.filters.GradientGlowFilter;
+	import flash.utils.getDefinitionByName;
+	import flash.utils.getQualifiedClassName;
+	import flash.xml.XMLNode;
+	
+	import mx.collections.ArrayCollection;
+	import mx.collections.ICollectionView;
+	import mx.collections.IViewCursor;
+	import mx.collections.XMLListCollection;
+	import mx.core.UIComponent;
+	import mx.events.FlexEvent;
+	
+	import org.un.cava.birdeye.geovis.dictionary.*;
+	import org.un.cava.birdeye.geovis.projections.Projections;
+	import org.un.cava.birdeye.geovis.utils.ColorBrewer;
+	
+	//--------------------------------------
+	//  Styles
+	//--------------------------------------
+	
 	/**
-	* Implements a choropleth map: a thematic map in which areas 
-	* are shaded or patterned in proportion to the measurement 
-	* of the statistical variable being displayed on the map.
-	**/
-	public class Choropleth
+ 	*  Define a stroke for a specific country. 
+ 	*  You should set this to an Array. 
+ 	*  Elements 0 specify the color of the stroke.
+ 	*  Element 1 specify the alpha.
+ 	*  Element 2 specify the weight.
+ 	*  
+ 	*  @default color:0x000000, alpha:1, weight:1
+ 	*/
+	[Style(name="strokeItem",type="Array",format="Color",inherit="no")]
+	
+	
+	//--------------------------------------
+	//  Other metadata
+	//--------------------------------------
+	
+	[Inspectable("dataProvider")]
+	[Inspectable("foidField")]
+	[Inspectable("colorField")]
+	[Inspectable("toolTipField")]
+	[Inspectable("showDataTips")]
+	[Inspectable("dataTipFunction")]
+	[Inspectable("thickness")]
+	[Inspectable("scheme")]
+	[Inspectable("steps")]
+	[Inspectable("highlighted")]
+	[Exclude(name="toolTip", kind="property")]
+	
+	public class Choropleth extends UIComponent
 	{
-		public function Choropleth()
-			{
-			super();
+		
+		/**
+	     *  @private
+	     */
+		private var _dataProvider:ICollectionView;
+		
+		/**
+	     *  @private
+	     */
+		private var _showDataTips:Boolean=false;
+		
+		/**
+	     *  @private
+	     */
+		private var _dataTipFunction:Function;
+		
+		/**
+	     *  @private
+	     */
+		private var _foidField:String;
+		
+		/**
+	     *  @private
+	     */
+		private var _colorField:String;
+		
+		/**
+	     *  @private
+	     */
+		private var _toolTipField:String;
+		
+		/**
+	     *  @private
+	     */
+		private var _thickness:Number=2;
+		
+		/**
+	     *  @private
+	     */
+		private var _scheme:String;
+		
+		/**
+	     *  @private
+	     */
+		private var _steps:int=3;
+		
+		/**
+	     *  @private
+	     */
+		private var GeoData:Object;
+		
+		/**
+	     *  @private
+	     */
+		private var surface:Surface;
+		
+		/**
+	     *  @private
+	     */
+		//private var geom:GeometryGroup;
+		
+		/**
+	     *  @private
+	     */
+		private var myCoo:IGeometry;
+		
+		/**
+	     *  @private
+	     */
+		private var _highlighted:Boolean=false;
+		
+		/**
+	     *  @private
+	     */
+		private var _alpha:Number=1;
+		
+		/**
+	     *  @private
+	     */
+		private var _toolTip:String;
+		
+		/**
+	     *  @private
+	     */
+		private var _colorItem:uint;
+		
+		/**
+		 * @private
+		 */
+		 private var _arrDataTips:ArrayCollection;
+		
+		/**
+		 * @private
+		 */
+		 private var _gg:GeometryGroup;
+		 
+		 /**
+	     *  @private
+	     */
+		private var arrStrokeItem:Array=new Array();
+		
+		/**
+	     *  @private
+	     */
+		public var stkItem:SolidStroke=new SolidStroke(0x000000,1,1);
+		
+		//--------------------------------------------------------------------------
+	    //
+	    //  Properties
+	    //
+	    //--------------------------------------------------------------------------
+	    
+    	//----------------------------------
+	    //  showDataTips
+	    //----------------------------------
+
+		[Inspectable(showDataTips="true,false")]
+		/**
+     	 *  Define if a dataTips is shown or not.
+     	 *  Valid values are <code>true</code> or <code>false</code>.
+     	 *  @default false
+	     */
+		public function set showDataTips(value:Boolean):void
+		{
+			_showDataTips = value;
 		}
+		
+		/**
+     	*  @private
+     	*/
+		public function get showDataTips():Boolean
+		{
+			return _showDataTips;
+		}
+		
+		
+		//----------------------------------
+	    //  dataProvider
+	    //----------------------------------
+	    
+		/**
+	     *  An object that contains the data that defined the flows.
+	     *  When you assign a value to this property, the Flow class handles
+	     *  the source data object as follows:
+	     *  <p>
+	     *  <ul><li>A String containing valid XML text is converted to an XMLListCollection.</li>
+	     *  <li>An XMLNode is converted to an XMLListCollection.</li>
+	     *  <li>An XMLList is converted to an XMLListCollection.</li>
+	     *  <li>Any object that implements the ICollectionView interface is cast to
+	     *  an ICollectionView.</li>
+	     *  <li>An Array is converted to an ArrayCollection.</li>
+	     *  <li>Any other type object is wrapped in an Array with the object as its sole
+	     *  entry.</li></ul>
+	     *  </p>
+	     */
+		public function get dataProvider():Object
+		{
+			return this._dataProvider;
+		}
+		
+		/**
+     	*  @private
+     	*/
+		public function set dataProvider(value:Object):void
+		{
+			//_dataProvider = value;
+			if(typeof(value) == "string")
+	    	{
+	    		//string becomes XML
+	        	value = new XML(value);
+	     	}
+	        else if(value is XMLNode)
+	        {
+	        	//AS2-style XMLNodes become AS3 XML
+				value = new XML(XMLNode(value).toString());
+	        }
+			else if(value is XMLList)
+			{
+				//XMLLists become XMLListCollections
+				if(XMLList(value).children().length()>0){
+					value = new XMLListCollection(value.children() as XMLList);
+				}else{
+					value = new XMLListCollection(value as XMLList);
+				}
+			}
+			else if(value is Array)
+			{
+				value = new ArrayCollection(value as Array);
+			}
+			
+			if(value is XML)
+			{
+				var list:XMLList = new XMLList();
+				list += value;
+				this._dataProvider = new XMLListCollection(list.children());
+			}
+			//if already a collection dont make new one
+	        else if(value is ICollectionView)
+	        {
+	            this._dataProvider = ICollectionView(value);
+	        }else if(value is Object)
+			{
+				// convert to an array containing this one item
+				this._dataProvider = new ArrayCollection( [value] );
+	  		}
+	  		else
+	  		{
+	  			this._dataProvider = new ArrayCollection();
+	  		}
+		}
+		
+		//----------------------------------
+	    //  dataTipFunction
+	    //----------------------------------
+	    
+		/**
+	     *  Specifies a callback function to run on each item of the data provider 
+	     *  to determine its dataTip.
+	    
+	     *  <p>The function must take a single IViewCursor parameter, containing the
+	     *  data provider element, and return a String.</p>
+	     * 
+	     * <pre>
+	     * <p>If you have an XML datatprovider with the fields @fromkey and @tokey
+	     * private function customDataTipFlows(currDatatip:IViewCursor):String{
+		 * 		return 'Originating from: ' + currDatatip.current["@fromkey"].toString() + ' To: ' + currDatatip.current["@tokey"].toString();
+		 * }</p>
+		 * </pre>
+		 * 
+	     *  <p>You can use the <code>dataTipFunction</code> property for handling formatting and localization.</p>
+	     *
+	     */
+		public function get dataTipFunction():Function
+	    {
+	        return _dataTipFunction;
+	    }
+
+	    /**
+     	*  @private
+     	*/
+    	public function set dataTipFunction(value:Function):void
+	    {
+	        _dataTipFunction = value;
+	        //dispatchEvent(new Event("labelFunctionChanged"));
+	    }
+	    
+	    
+	    //----------------------------------
+	    //  thickness
+	    //----------------------------------
+		/**
+     	 *  Define the thickness of the flow.
+     	 * 
+     	 * @default 2
+     	 */
+		public function set thickness(value:Number):void
+		{
+			_thickness = value;
+		}
+		
+		/**
+     	*  @private
+     	*/	
+		public function get thickness():Number
+		{
+			return _thickness;
+		}
+		
+		
+		//----------------------------------
+	    //  scheme
+	    //----------------------------------
+
+		[Inspectable(enumeration="YlGn,YlGnBu,GnBu,BuGn,PuBuGn,PuBu,BuPu,RdPu,PuRd,OrRd,YlOrRd,YlOrBr,Purples,Blues,Greens,Oranges,Reds,Greys,PuOr,BrBG,PRGn,PiYG,RdBu,RdGy,RdYlBu,Spectral,RdYlGn,Set3,Pastel1,Set1,Pastel2,Set2,Dark2,Paired")]
+		
+		 /**
+     	 *  Define the type of scheme.
+     	 *  Valid values are <code>"YlGn"</code> or <code>"YlGnBu"</code> or <code>"GnBu"</code> or <code>"BuGn"</code> or <code>"PuBuGn"</code> or <code>"PuBu"</code> or <code>"BuPu"</code> or <code>"RdPu"</code> or <code>"PuRd"</code> or <code>"OrRd"</code> or <code>"YlOrRd"</code> or <code>"YlOrBr"</code> or <code>"Purples"</code> or <code>"Blues"</code> or <code>"Greens"</code> or <code>"Oranges"</code> or <code>"Reds"</code> or <code>"Greys"</code> or <code>"PuOr"</code> or <code>"BrBG"</code> or <code>"PRGn"</code> or <code>"PiYG"</code> or <code>"RdBu"</code> or <code>"RdGy"</code> or <code>"RdYlBu"</code> or <code>"Spectral"</code> or <code>"RdYlGn"</code> or <code>"Set3"</code> or <code>"Pastel1"</code> or <code>"Set1"</code> or <code>"Pastel2"</code> or <code>"Set2"</code> or <code>"Dark2"</code> or <code>"Paired"</code>.
+     	 * You can use the class ColorType to get the list of scheme.
+	     */
+		public function set scheme(value:String):void
+		{
+			_scheme = value;
+			invalidateProperties();
+		}
+		
+		/**
+     	*  @private
+     	*/
+		public function get scheme():String
+		{
+			return _scheme;
+		}
+		
+		//----------------------------------
+	    //  steps
+	    //----------------------------------
+	    
+	    [Inspectable(enumeration="3,4,5,6,7,8")]
+		
+		/**
+     	 *  Define the number of color's steps.
+     	 * 
+     	 * @default 3
+     	 */
+		public function set steps(value:int):void
+		{
+			_steps = value;
+		}
+		
+		/**
+     	*  @private
+     	*/	
+		public function get steps():int
+		{
+			return _steps;
+		}
+		
+		//----------------------------------
+	    //  highlighted
+	    //----------------------------------
+		
+		[Bindable]
+		/**
+     	 *  Define a GradientGlowFilter when the mouse move over a country.
+     	 *  Valid values are <code>true</code> or <code>false</code>.
+     	 *  @default false
+	     */
+		public function set highlighted(value:Boolean):void{
+			_highlighted=value;
+		} 
+		
+		/**
+	     *  @private
+	     */
+		public function get highlighted():Boolean{
+			return _highlighted;
+		} 
+		
+		
+		//----------------------------------
+	    //  colorField
+	    //----------------------------------
+		
+		[Bindable]
+		/**
+     	 *  Define the value field to use to colorize the countries.
+	     */
+		public function set colorField(value:String):void{
+			_colorField=value;
+		} 
+		
+		/**
+	     *  @private
+	     */
+		public function get colorField():String{
+			return _colorField;
+		} 
+		
+		
+		//----------------------------------
+	    //  foidField
+	    //----------------------------------
+		
+		[Bindable]
+		/**
+     	 *  Define the ISO country Code field.
+	     */
+		public function set foidField(value:String):void{
+			_foidField=value;
+		} 
+		
+		/**
+	     *  @private
+	     */
+		public function get foidField():String{
+			return _foidField;
+		} 
+		
+		
+		//----------------------------------
+	    //  toolTipfield
+	    //----------------------------------
+		
+		[Bindable]
+		/**
+     	 *  Define the field to use for the toolTips.
+	     */
+		public function set toolTipField(value:String):void{
+			_toolTipField=value;
+		} 
+		
+		/**
+	     *  @private
+	     */
+		public function get toolTipField():String{
+			return _toolTipField;
+		} 
+		
+		
+	    //--------------------------------------------------------------------------
+    	//
+    	//  Constructor
+    	//
+    	//--------------------------------------------------------------------------
+
+    	/**
+     	*  Constructor.
+     	*/
+		public function Choropleth()
+		{
+			super();
+			_arrDataTips=new ArrayCollection();
+			this.addEventListener(FlexEvent.CREATION_COMPLETE,colorize);
+		}
+		
+		
+		//--------------------------------------------------------------------------
+    	//
+    	//  Overridden methods
+    	//
+    	//--------------------------------------------------------------------------
+    	
+    	/**
+		 * @private
+		 */
+		override public function set alpha(value:Number):void 
+		{
+    		_alpha=value;
+    	}
+    	
+    
+    	/**
+		 * @private
+		 */
+       /*override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
+      		super.updateDisplayList( unscaledWidth, unscaledHeight );            
+      		if(geom!=null){
+			        if(_highlighted==true){
+						if(!geom.hasEventListener(MouseEvent.ROLL_OVER)){
+							geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
+						}
+						if(!geom.hasEventListener(MouseEvent.ROLL_OUT)){
+							geom.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
+						}
+					}else{
+						if(geom.hasEventListener(MouseEvent.ROLL_OVER)){
+							geom.removeEventListener(MouseEvent.ROLL_OVER, onRollOver);
+						}
+						if(geom.hasEventListener(MouseEvent.ROLL_OUT)){
+							geom.removeEventListener(MouseEvent.ROLL_OUT, onRollOut);
+						}
+					}
+		        }   
+      	}*/
+      	
+      	
+		//--------------------------------------------------------------------------
+    	//
+    	//  Methods
+    	//
+    	//--------------------------------------------------------------------------
+		
+		
+		/**
+		* @private
+		**/
+		 private function colorize(event:FlexEvent):void{
+		 		var arrStep:Array=FindStepWithoutZero(_dataProvider, _colorField, _steps-1);
+				if(arrStep[0]!=null){
+		 			var colB:ColorBrewer=new ColorBrewer();
+		 			var arrCol:Array=colB.getColors(_scheme, _steps);
+		 			//trace(ObjectUtil.toString(arrStep))
+		 			//trace(ObjectUtil.toString(arrCol))
+			 		var dynamicClassName:String=getQualifiedClassName(this.parent);
+					var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
+					var proj:String=(this.parent as dynamicClassRef).projection;
+					var region:String=(this.parent as dynamicClassRef).region;
+					
+					var GeoData:Object=Projections.getData(proj,region);
+					
+					surface=Surface((this.parent as DisplayObjectContainer).getChildByName("Surface"))
+						
+					var i:int=0;
+					var cursor:IViewCursor = _dataProvider.createCursor();
+					
+					while(!cursor.afterLast)
+					{
+						var key:String=cursor.current[_foidField];
+						var val:Number=Number(cursor.current[_colorField]);
+						if(key!=""){
+							var geom:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(key));  
+							
+							if(geom!=null){
+								geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
+								geom.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
+								
+								if(GeoData.getCoordinates(key)!=null){
+									if(isNaN(GeoData.getCoordinates(key).substr(0,1))){
+										myCoo = Path(GeometryGroup(surface.getChildByName(key)).geometryCollection.getItemAt(0));
+									}else{
+										myCoo = Polygon(GeometryGroup(surface.getChildByName(key)).geometryCollection.getItemAt(0));
+									}	
+								}
+									
+								if(val<=Number(arrStep[0])){
+									myCoo.fill=new SolidFill(arrCol[0],_alpha);
+									_colorItem=arrCol[0];
+								}else if(val>Number(arrStep[_steps-2])){
+									myCoo.fill=new SolidFill(arrCol[_steps-1],_alpha);
+									_colorItem=arrCol[_steps-1];
+								}else{
+									for (var k:int=0; k<_steps-2;k++){
+										if(val>Number(arrStep[k]) && val<=Number(arrStep[k+1])){
+											myCoo.fill=new SolidFill(arrCol[k+1],_alpha);
+											_colorItem=arrCol[k+1];
+										}
+									}
+								}
+								
+								if(getStyle("strokeItem")){
+									if(typeof(getStyle("strokeItem"))=="number"){
+										arrStrokeItem.push(getStyle("strokeItem"));
+									}else{
+										arrStrokeItem=getStyle("strokeItem");
+									}
+									
+									while (arrStrokeItem.length<3) { 
+										arrStrokeItem.push(1); 
+									}
+									stkItem= new SolidStroke(arrStrokeItem[0], arrStrokeItem[1],arrStrokeItem[2]);
+									
+								}
+								stkItem.scaleMode="none";
+								
+								if(stkItem){
+									myCoo.stroke=stkItem;
+								}
+										
+							}
+						}
+						
+						
+						
+						if(_dataTipFunction!=null){
+							_arrDataTips.addItem({gg:geom, dataTips:_dataTipFunction(cursor)});
+						}else{
+							_arrDataTips.addItem({gg:geom, dataTips:cursor.current[_toolTipField]});
+						}
+						//_toolTip=cursor.current[_toolTipField]
+						
+						i++;
+						cursor.moveNext();  
+					} 
+				}
+    	}
+   		
+   		/**
+   		 * @private
+   		 */
+   		 private function FindStepWithoutZero(List:ICollectionView, valueField:String, nbrStep:int):Array{
+			var arrValues:Array=new Array();
+			var arrRetValues:Array=new Array();
+			var i:int=0;
+			var cursor:IViewCursor = List.createCursor();
+				
+			while(!cursor.afterLast)
+			{
+				arrValues[i]=cursor.current[valueField];  
+				i++;
+				cursor.moveNext();  
+			} 
+			
+			arrValues.sort(Array.NUMERIC);
+			removeDup(arrValues);
+			if(arrValues[0]==0){
+				arrValues.splice(0,1);
+			}
+			var step:int=Math.floor(arrValues.length/(nbrStep+1));
+			for (var k:int=0; k<nbrStep;k++){
+				arrRetValues[k]=arrValues[(k+1)*step];
+			}
+			return arrRetValues;
+		}
+   		
+   		
+   		/**
+   		 * @private
+   		 */
+   		 private function removeDup(a:Array):void{
+		    for(var y:int=0;y<a.length;y++){
+				for(var z:int=(y+1);z<=a.length;z++){
+					if(a[y]==a[z]){
+		        		a.splice(z,1);
+		                z--;
+		            }
+		        }
+		    }
+		}
+		
+   		 
+   		/**
+		 * @private
+		 */
+		private function onRollOver(e:MouseEvent):void{
+			_gg=GeometryGroup(e.currentTarget);
+			e.target.useHandCursor=true;
+        	e.target.buttonMode=true;
+			surface.toolTip=null;
+			_arrDataTips.filterFunction=filterGeom;
+			_arrDataTips.refresh();
+			surface.toolTip=_arrDataTips.getItemAt(0).dataTips.toString();
+			if(_highlighted==true){
+				var glowColor:uint=0xFFFFFF;
+				var glowGradFill:Array;
+				glowColor=uint(_colorItem);
+				
+				var gradientGlow:GradientGlowFilter = new GradientGlowFilter();
+				gradientGlow.distance = 0;
+				gradientGlow.angle = 45;
+				gradientGlow.colors = [0x000000, glowColor];
+				gradientGlow.alphas = [0, 1];
+				gradientGlow.ratios = [0, 255];
+				gradientGlow.blurX = 8;
+				gradientGlow.blurY = 8;
+				gradientGlow.strength = 2;
+				gradientGlow.quality = BitmapFilterQuality.HIGH;
+				gradientGlow.type = BitmapFilterType.OUTER;
+				GeometryGroup(e.target).filters=[gradientGlow];
+			}
+	    }
+	    
+	    /**
+		 * @private
+		 */
+	    private function onRollOut(e:MouseEvent):void{
+	    	e.target.useHandCursor=false;
+        	e.target.buttonMode=false;
+	    	surface.toolTip = null;
+	    	GeometryGroup(e.target).filters=null;
+	    }
+   
+   		/**
+		 * @private
+		 */
+   		private function filterGeom(item:Object):Boolean{
+			var isMatch:Boolean;
+			if(item.gg==_gg){
+				isMatch=true;
+			}
+			return isMatch;
+		}
+		
+		
 
 	}
 }
