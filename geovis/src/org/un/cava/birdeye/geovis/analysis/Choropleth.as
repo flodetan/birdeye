@@ -54,6 +54,7 @@
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.geovis.utils.ColorBrewer;
 	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
+	import org.un.cava.birdeye.geovis.events.GeoChoroEvents;
 	
 	//--------------------------------------
 	//  Styles
@@ -376,6 +377,7 @@
 		public function set scheme(value:String):void
 		{
 			_scheme = value;
+			dispatchEvent(new GeoChoroEvents(GeoChoroEvents.CHOROPLETH_SCHEME_CHANGED,value, null, null));
 			invalidateDisplayList();
 		}
 		
@@ -401,6 +403,7 @@
 		public function set steps(value:int):void
 		{
 			_steps = value;
+			dispatchEvent(new GeoChoroEvents(GeoChoroEvents.CHOROPLETH_STEPS_CHANGED, null, value, null));
 			invalidateDisplayList();
 		}
 		
@@ -444,6 +447,7 @@
 	     */
 		public function set colorField(value:String):void{
 			_colorField=value;
+			dispatchEvent(new GeoChoroEvents(GeoChoroEvents.CHOROPLETH_COLORFIELD_CHANGED, null, null, value));
 			invalidateDisplayList();
 		} 
 		
@@ -642,6 +646,8 @@
 						cursor.moveNext();  
 					} 
 				}
+				
+				dispatchEvent(new GeoChoroEvents(GeoChoroEvents.CHOROPLETH_COMPLETE, _scheme, _steps, _colorField));
     	}
    		
    		/**

@@ -29,8 +29,6 @@ package org.un.cava.birdeye.geovis.events
 {
 	import flash.events.Event;
 	
-	import org.un.cava.birdeye.geovis.features.Features;
-	
 	public class GeoChoroEvents extends Event
 	{
 		//--------------------------------------------------------------------------
@@ -44,11 +42,15 @@ package org.un.cava.birdeye.geovis.events
 		 *
 		 *  @param type The event type; indicates the action that caused the event.
 		 *
-		 *  @param value can be name of the scheme or the number of steps, or the colorField.
+		 *  @param scheme
+		 * 	@param steps
+		 * 	@param colorField
 		 */
-		public function GeoChoroEvents(type:String,value:String) {
+		public function GeoChoroEvents(type:String,scheme:String, steps:int, colorField:String) {
                 super(type);
-                this.value=value;
+                this.scheme=scheme;
+                this.steps=steps;
+                this.colorField=colorField;
         }
 		
 		//--------------------------------------------------------------------------
@@ -67,7 +69,7 @@ package org.un.cava.birdeye.geovis.events
 		 *     <tr><th>Property</th><th>Value</th></tr>
 	     *     <tr><td><code>currentTarget</code></td><td>The Object that defines the 
 	     *       event listener that handles the event.</td></tr>
-	     *     <tr><td><code>value</code></td><td>The name of the scheme.</td></tr>
+	     *     <tr><td><code>scheme</code></td><td>The name of the scheme.</td></tr>
 	     *     <tr><td><code>target</code></td><td>The Object that dispatched the event; 
 	     *       it is not always the Object listening for the event. 
 	     *       Use the <code>currentTarget</code> property to always access the 
@@ -87,7 +89,7 @@ package org.un.cava.birdeye.geovis.events
 		 *     <tr><th>Property</th><th>Value</th></tr>
 	     *     <tr><td><code>currentTarget</code></td><td>The Object that defines the 
 	     *       event listener that handles the event.</td></tr>
-	     *     <tr><td><code>value</code></td><td>The number of steps.</td></tr>
+	     *     <tr><td><code>steps</code></td><td>The number of steps.</td></tr>
 	     *     <tr><td><code>target</code></td><td>The Object that dispatched the event; 
 	     *       it is not always the Object listening for the event. 
 	     *       Use the <code>currentTarget</code> property to always access the 
@@ -107,7 +109,7 @@ package org.un.cava.birdeye.geovis.events
 		 *     <tr><th>Property</th><th>Value</th></tr>
 	     *     <tr><td><code>currentTarget</code></td><td>The Object that defines the 
 	     *       event listener that handles the event.</td></tr>
-	     *     <tr><td><code>value</code></td><td>The name of the scheme.</td></tr>
+	     *     <tr><td><code>scheme</code></td><td>The name of the scheme.</td></tr>
 	     *     <tr><td><code>target</code></td><td>The Object that dispatched the event; 
 	     *       it is not always the Object listening for the event. 
 	     *       Use the <code>currentTarget</code> property to always access the 
@@ -118,6 +120,26 @@ package org.un.cava.birdeye.geovis.events
 		 */
         public static const CHOROPLETH_COLORFIELD_CHANGED:String = "ChoroplethColorFieldChanged";
         
+        
+        /**
+		 *  The <code>GeoChoroEvents.CHOROPLETH_COLORFIELD_CHANGED</code> constant defines the value of the 
+		 *  <code>type</code> property of the event object for an <code>ChoroplethComplete</code> event.
+		 *
+		 *  <p>The properties of the event object have the following values:</p>
+		 *  <table class="innertable">
+		 *     <tr><th>Property</th><th>Value</th></tr>
+	     *     <tr><td><code>currentTarget</code></td><td>The Object that defines the 
+	     *       event listener that handles the event.</td></tr>
+	     *     <tr><td><code>target</code></td><td>The Object that dispatched the event; 
+	     *       it is not always the Object listening for the event. 
+	     *       Use the <code>currentTarget</code> property to always access the 
+	     *       Object listening for the event.</td></tr>
+		 *  </table>
+		 *
+	     *  @eventType ChoroplethComplete 
+		 */
+        public static const CHOROPLETH_COMPLETE:String = "ChoroplethComplete";
+        
         //--------------------------------------------------------------------------
 	    //
 	    //  Variables
@@ -127,7 +149,17 @@ package org.un.cava.birdeye.geovis.events
 	    /**
 	     *  @private
 	     */    
-        public var value:String;
+        public var scheme:String;
+        
+        /**
+	     *  @private
+	     */    
+        public var steps:int;
+        
+        /**
+	     *  @private
+	     */    
+        public var colorField:String;
         
 		
 		//--------------------------------------------------------------------------
@@ -140,7 +172,7 @@ package org.un.cava.birdeye.geovis.events
 		 * @private
 		 */
         override public function clone():Event {
-            return new GeoProjEvents(type, value);
+            return new GeoChoroEvents(type, scheme, steps, colorField);
         }
 
 	}
