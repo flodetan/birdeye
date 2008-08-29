@@ -44,9 +44,11 @@ package org.un.cava.birdeye.geovis.features
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	
+	import org.un.cava.birdeye.geovis.analysis.Choropleth;
+	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
+	import org.un.cava.birdeye.geovis.events.GeoChoroEvents;
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.geovis.styles.GeoStyles;
-	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	
 	//--------------------------------------
 	//  Styles
@@ -156,6 +158,11 @@ package org.un.cava.birdeye.geovis.features
 	     *  @private
 	     */
 		private var _isProjChanged:Boolean=false;
+		
+		/**
+	     *  @private
+	     */
+		private var _isChoroChanged:Boolean=false;
 		
 		//--------------------------------------------------------------------------
 	    //
@@ -280,6 +287,11 @@ package org.un.cava.birdeye.geovis.features
       			_isProjChanged=false;
       		  }
       		  
+      		  if(_isChoroChanged){
+      			colorizeFeatures();
+      			_isChoroChanged=false;
+      		  }
+      		  
       	}
       	
         //--------------------------------------------------------------------------
@@ -294,6 +306,13 @@ package org.un.cava.birdeye.geovis.features
 		private function creationCompleteHandler (event:FlexEvent):void{    
 			colorizeFeatures();
 			this.parent.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
+			var choropleth:Choropleth=isChoroplethInUse();
+			if(choropleth){
+				choropleth.addEventListener(GeoChoroEvents.CHOROPLETH_COMPLETE, choroChanged);
+				//choropleth.addEventListener(GeoChoroEvents.CHOROPLETH_STEPS_CHANGED, choroChanged);
+				//choropleth.addEventListener(GeoChoroEvents.CHOROPLETH_SCHEME_CHANGED, choroChanged);
+				//choropleth.addEventListener(GeoChoroEvents.CHOROPLETH_COLORFIELD_CHANGED, choroChanged);
+			}
 		}
 		
 		
@@ -417,6 +436,27 @@ package org.un.cava.birdeye.geovis.features
         	_isProjChanged=true;
         	invalidateDisplayList();
         }
+        
+        /**
+     	*  @private
+     	*/
+        private function choroChanged(e:GeoChoroEvents):void{
+        	_isChoroChanged=true;
+        	invalidateDisplayList();
+        }
+        
+        /**
+		 * @private
+		 */
+		 private function isChoroplethInUse():Choropleth{
+		 	var choro:Choropleth;
+		 	for (var i:int = 0; i < this.parent.numChildren; i++) {
+    			if(this.parent.getChildAt(i) is Choropleth){
+    				choro=Choropleth(this.parent.getChildAt(i));
+    			}
+    		}
+    		return choro;
+		 }
         
 	}
 }

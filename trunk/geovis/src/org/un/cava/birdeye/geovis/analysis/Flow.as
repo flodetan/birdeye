@@ -44,6 +44,7 @@ package org.un.cava.birdeye.geovis.analysis
 	import mx.styles.StyleManager;
 	
 	import org.un.cava.birdeye.geovis.dictionary.*;
+	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	
 	//--------------------------------------
@@ -184,6 +185,11 @@ package org.un.cava.birdeye.geovis.analysis
 	     */
 	    [Bindable]
 		private var _visible:Boolean=true;
+		
+		/**
+	     *  @private
+	     */
+	     private var _isProjChanged:Boolean=false;
 		
 		//--------------------------------------------------------------------------
 	    //
@@ -410,7 +416,7 @@ package org.un.cava.birdeye.geovis.analysis
 		public function Flow()
 		{
 			super();
-			this.addEventListener(FlexEvent.CREATION_COMPLETE,createFlows);
+			this.addEventListener(FlexEvent.CREATION_COMPLETE,createFlowsDelayed);
 		}
 		
 		//--------------------------------------------------------------------------
@@ -418,7 +424,19 @@ package org.un.cava.birdeye.geovis.analysis
     	//  Overridden methods
     	//
     	//--------------------------------------------------------------------------
-    
+    	
+    	/**
+		* @private
+		*/
+       	override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
+      		super.updateDisplayList( unscaledWidth, unscaledHeight ); 
+      		if(_isProjChanged){
+      			createFlows();
+      			_isProjChanged=false;
+      		}
+      		
+      	}
+      	
 		/**
 		 * @private
 		 */
@@ -428,7 +446,7 @@ package org.un.cava.birdeye.geovis.analysis
     		_visible=value;
     		
     		if(surf){
-    			for (var i:int = 0; i < surf.numChildren-1; i++) {
+    			for (var i:int = 0; i < surf.numChildren; i++) {
     				if(surf.getChildAt(i).name.toString().substr(0,4)=='flow'){
     					surf.getChildAt(i).visible=_visible;
     				}
@@ -442,13 +460,21 @@ package org.un.cava.birdeye.geovis.analysis
     	//
     	//--------------------------------------------------------------------------
 		
+		/**
+		 * @private
+		 */
+		private function createFlowsDelayed(e:FlexEvent):void{
+			createFlows();
+			this.parent.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
+		}
+		
 		
 		/**
 		* @private
 		* Flow annotations are used to show the movement or relation of objects 
 		* from one location to another.
 		**/
-		 private function createFlows(event:FlexEvent):void{//
+		 private function createFlows():void{
 		 		dynamicClassName =getQualifiedClassName(this.parent);
 				dynamicClassRef = getDefinitionByName(dynamicClassName) as Class;
 				proj=(this.parent as dynamicClassRef).projection;
@@ -501,7 +527,6 @@ package org.un.cava.birdeye.geovis.analysis
 	   		flows = new UIComponent();
 	   	  	flows.name="flow"+fromDest+toDest;
 	   	  	flows.visible=_visible;
-	   	  	trace(_visible)
 		  	cntrlpt = new UIComponent();
 		  	markers = new UIComponent();
 		  	cntrlpoint = new Point();
@@ -585,6 +610,14 @@ package org.un.cava.birdeye.geovis.analysis
 		private function handleMouseOutEvent(eventObj:MouseEvent):void {
         	eventObj.target.useHandCursor=false;
         	eventObj.target.buttonMode=false;
+        }
+        
+        /**
+     	*  @private
+     	*/
+        private function projChanged(e:GeoProjEvents):void{
+        	_isProjChanged=true;
+        	invalidateDisplayList();
         }
 	
 }
