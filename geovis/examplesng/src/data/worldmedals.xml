@@ -455,7 +455,7 @@
     <Country iso="LTU" name="Lithuania" gold="0" silver="2" bronze="3" total="5">
 			<medals>
   					<medal discipline="Athletics" gold="0" silver="0" bronze="1" total="1"/>
-            <medal discipline="Modern Pentathlon" gold="-" silver="1" bronze="1" total="2"/>
+            <medal discipline="Modern Pentathlon" gold="0" silver="1" bronze="1" total="2"/>
             <medal discipline="Sailing" gold="0" silver="1" bronze="0" total="1"/>
             <medal discipline="Wrestling" gold="0" silver="0" bronze="1" total="1"/>
     			</medals>
@@ -592,7 +592,7 @@
             <medal discipline="Gymnastics Artistic" gold="0" silver="0" bronze="2" total="2"/>
             <medal discipline="Gymnastics Rhythmic" gold="2" silver="0" bronze="0" total="2"/>
             <medal discipline="Handball" gold="0" silver="1" bronze="0" total="1"/>
-            <medal discipline="Modern Pentathlon" gold="1" silver="-" bronze="-" total="1"/>
+            <medal discipline="Modern Pentathlon" gold="1" silver="0" bronze="0" total="1"/>
             <medal discipline="Shooting" gold="0" silver="2" bronze="2" total="4"/>
             <medal discipline="Swimming" gold="1" silver="1" bronze="2" total="4"/>
             <medal discipline="Synchronized Swimming" gold="2" silver="0" bronze="0" total="2"/>
@@ -707,7 +707,7 @@
             <medal discipline="Gymnastics Artistic" gold="0" silver="0" bronze="1" total="1"/>
             <medal discipline="Gymnastics Rhythmic" gold="0" silver="0" bronze="1" total="1"/>
             <medal discipline="Judo" gold="0" silver="0" bronze="1" total="1"/>
-            <medal discipline="Modern Pentathlon" gold="-" silver="-" bronze="1" total="1"/>
+            <medal discipline="Modern Pentathlon" gold="0" silver="0" bronze="1" total="1"/>
             <medal discipline="Shooting" gold="2" silver="1" bronze="0" total="3"/>
             <medal discipline="Weightlifting" gold="0" silver="1" bronze="1" total="2"/>
             <medal discipline="Wrestling" gold="0" silver="2" bronze="3" total="5"/>

@@ -70,4 +70,12 @@ Panel {
 WorldMap {
     background-color : #333333;
   	stroke : #FFFFFF;
-  }
+}
+
+Choropleth{
+	strokeItem : #FFFFFF;
+}
+
+Features{
+	strokeItem : #FFFFFF;
+}
