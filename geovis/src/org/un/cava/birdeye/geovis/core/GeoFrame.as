@@ -28,21 +28,22 @@
 package org.un.cava.birdeye.geovis.core
 {	
 	import com.degrafa.GeometryGroup;
+	import com.degrafa.IGeometry;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.Polygon;
 	import com.degrafa.paint.*;
-	import com.degrafa.transform.ScaleTransform;
-	import com.degrafa.IGeometry;
 	
 	import flash.events.MouseEvent;
 	import flash.filters.GlowFilter;
 	import flash.utils.*;
 	
 	import mx.containers.Canvas;
+	import mx.events.FlexEvent;
 	
 	import org.un.cava.birdeye.geovis.analysis.*;
 	import org.un.cava.birdeye.geovis.events.GeoMapEvents;
+	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	import org.un.cava.birdeye.geovis.features.Features;
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.geovis.styles.GeoStyles;
@@ -121,7 +122,7 @@ package org.un.cava.birdeye.geovis.core
 		/**
 	     *  @private
 	     */
-		private var _projection:String;
+		private var _projection:String="Geographic";
 		
 		/**
 	     *  @private
@@ -188,6 +189,16 @@ package org.un.cava.birdeye.geovis.core
      	*/
     	public var surf:Surface;
     	
+    	/**
+     	*  @private
+     	*/
+    	private var isAlreadyCreated:Boolean=false;
+    	
+    	/**
+     	*  @private
+     	*/
+    	private var isProjectionChanged:Boolean=false;
+    	
     	//--------------------------------------------------------------------------
 	    //
 	    //  Properties
@@ -203,12 +214,15 @@ package org.un.cava.birdeye.geovis.core
 		 /**
      	 *  Define the type of projection of the map.
      	 *  Valid values are <code>"Geographic"</code> or <code>"Lambert equal area"</code> or <code>"Mercator"</code> or <code>"Mollweide"</code> or <code>"WinkelTripel"</code> or <code>"Miller cylindrical"</code> or <code>"EckertIV"</code> or <code>"EckertVI"</code> or <code>"Goode"</code> or <code>"Sinsoidal"</code> or <code>"Robinson"</code>.
+     	 * @default Geographic
 	     */
 		public function set projection(value:String):void
 		{
 			_projection = value;
-			
-			invalidateProperties();
+			isProjectionChanged=true;
+			invalidateDisplayList();
+			//invalidateProperties();
+			dispatchEvent(new GeoProjEvents(GeoProjEvents.PROJECTION_CHANGED,value));
 		}
 		
 		/**
@@ -331,8 +345,9 @@ package org.un.cava.birdeye.geovis.core
 		 */
 	    override protected function createChildren():void
 	    {
-	        super.createChildren();
+	    	super.createChildren();
 	        createMap();
+	        isAlreadyCreated=true;
 	    }
 		
 		
@@ -354,6 +369,13 @@ package org.un.cava.birdeye.geovis.core
 			for each (var gpGeom:GeometryGroup in _geoGroup)
 			{
 				gpGeom.draw(null,null);			
+			}
+			if(isProjectionChanged==true && isAlreadyCreated==true){
+				if(surf){
+					this.removeChild(surf);
+					createMap();
+				}
+				isProjectionChanged=false;
 			}
 			
 		}
