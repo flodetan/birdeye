@@ -46,6 +46,7 @@ package org.un.cava.birdeye.geovis.features
 	
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.geovis.styles.GeoStyles;
+	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	
 	//--------------------------------------
 	//  Styles
@@ -151,6 +152,11 @@ package org.un.cava.birdeye.geovis.features
 	     */
 		private var _alpha:Number=1;
 		
+		/**
+	     *  @private
+	     */
+		private var _isProjChanged:Boolean=false;
+		
 		//--------------------------------------------------------------------------
 	    //
 	    //  Properties 
@@ -229,10 +235,72 @@ package org.un.cava.birdeye.geovis.features
     		_alpha=value;
     	}
     	
+		
+		
+		/**
+		 * @private
+		 */
+        override public function styleChanged( styleProp:String ):void{            
+        	super.styleChanged( styleProp );            
+        	if ( styleProp == "fillItem" ){               
+        		invalidateDisplayList();                
+        		return;                            
+        	}         
+       }
+       
+       /**
+		 * @private
+		 */
+       override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
+      		super.updateDisplayList( unscaledWidth, unscaledHeight );            
+      		if(myCoo){
+      			myCoo.fill=new SolidFill(getStyle("fillItem"),_alpha);
+      		}      
+      		
+      		if(geom!=null){
+			        if(_highlighted==true){
+						if(!geom.hasEventListener(MouseEvent.ROLL_OVER)){
+							geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
+						}
+						if(!geom.hasEventListener(MouseEvent.ROLL_OUT)){
+							geom.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
+						}
+					}else{
+						if(geom.hasEventListener(MouseEvent.ROLL_OVER)){
+							geom.removeEventListener(MouseEvent.ROLL_OVER, onRollOver);
+						}
+						if(geom.hasEventListener(MouseEvent.ROLL_OUT)){
+							geom.removeEventListener(MouseEvent.ROLL_OUT, onRollOut);
+						}
+					}
+		        } 
+		      
+		      if(_isProjChanged){
+      			colorizeFeatures();
+      			_isProjChanged=false;
+      		  }
+      		  
+      	}
+      	
+        //--------------------------------------------------------------------------
+    	//
+    	//  Methods
+    	//
+    	//--------------------------------------------------------------------------
+		
 		/**
 		 * @private
 		 */
 		private function creationCompleteHandler (event:FlexEvent):void{    
+			colorizeFeatures();
+			this.parent.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
+		}
+		
+		
+		/**
+		 * @private
+		 */
+		private function colorizeFeatures():void{    
 			this.name='feat'+foid;
 			var dynamicClassName:String=getQualifiedClassName(this.parent);
 			var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
@@ -294,52 +362,7 @@ package org.un.cava.birdeye.geovis.features
 					geom.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
 			}
         }
-		
-		/**
-		 * @private
-		 */
-        override public function styleChanged( styleProp:String ):void{            
-        	super.styleChanged( styleProp );            
-        	if ( styleProp == "fillItem" ){               
-        		invalidateDisplayList();                
-        		return;                            
-        	}         
-       }
-       
-       /**
-		 * @private
-		 */
-       override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
-      		super.updateDisplayList( unscaledWidth, unscaledHeight );            
-      		if(myCoo){
-      			myCoo.fill=new SolidFill(getStyle("fillItem"),_alpha);
-      		}      
-      		
-      		if(geom!=null){
-			        if(_highlighted==true){
-						if(!geom.hasEventListener(MouseEvent.ROLL_OVER)){
-							geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
-						}
-						if(!geom.hasEventListener(MouseEvent.ROLL_OUT)){
-							geom.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
-						}
-					}else{
-						if(geom.hasEventListener(MouseEvent.ROLL_OVER)){
-							geom.removeEventListener(MouseEvent.ROLL_OVER, onRollOver);
-						}
-						if(geom.hasEventListener(MouseEvent.ROLL_OUT)){
-							geom.removeEventListener(MouseEvent.ROLL_OUT, onRollOut);
-						}
-					}
-		        }   
-      	}
-      	
-        //--------------------------------------------------------------------------
-    	//
-    	//  Methods
-    	//
-    	//--------------------------------------------------------------------------
-		
+        
 		/**
 		 * @private
 		 */
@@ -387,6 +410,13 @@ package org.un.cava.birdeye.geovis.features
 	    	GeometryGroup(e.target).filters=null;
 	    }
         
-      	
+      	/**
+     	*  @private
+     	*/
+        private function projChanged(e:GeoProjEvents):void{
+        	_isProjChanged=true;
+        	invalidateDisplayList();
+        }
+        
 	}
 }

@@ -53,6 +53,7 @@
 	import org.un.cava.birdeye.geovis.dictionary.*;
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.geovis.utils.ColorBrewer;
+	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	
 	//--------------------------------------
 	//  Styles
@@ -192,8 +193,12 @@
 		/**
 	     *  @private
 	     */
-		public var stkItem:SolidStroke=new SolidStroke(0x000000,1,1);
+		private var stkItem:SolidStroke=new SolidStroke(0x000000,1,1);
 		
+		/**
+	     *  @private
+	     */
+	     private var _isColorChanged:Boolean=false;
 		//--------------------------------------------------------------------------
 	    //
 	    //  Properties
@@ -371,7 +376,7 @@
 		public function set scheme(value:String):void
 		{
 			_scheme = value;
-			invalidateProperties();
+			invalidateDisplayList();
 		}
 		
 		/**
@@ -396,6 +401,7 @@
 		public function set steps(value:int):void
 		{
 			_steps = value;
+			invalidateDisplayList();
 		}
 		
 		/**
@@ -438,6 +444,7 @@
 	     */
 		public function set colorField(value:String):void{
 			_colorField=value;
+			invalidateDisplayList();
 		} 
 		
 		/**
@@ -500,8 +507,7 @@
 		public function Choropleth()
 		{
 			super();
-			_arrDataTips=new ArrayCollection();
-			this.addEventListener(FlexEvent.CREATION_COMPLETE,colorize);
+			this.addEventListener(FlexEvent.CREATION_COMPLETE,willColorize);
 		}
 		
 		
@@ -512,37 +518,23 @@
     	//--------------------------------------------------------------------------
     	
     	/**
+		* @private
+		*/
+       	override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
+      		super.updateDisplayList( unscaledWidth, unscaledHeight );  	
+      		if(_isColorChanged){
+      			colorize();
+      		}
+      		
+      	}
+      		
+    	/**
 		 * @private
 		 */
 		override public function set alpha(value:Number):void 
 		{
     		_alpha=value;
     	}
-    	
-    
-    	/**
-		 * @private
-		 */
-       /*override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
-      		super.updateDisplayList( unscaledWidth, unscaledHeight );            
-      		if(geom!=null){
-			        if(_highlighted==true){
-						if(!geom.hasEventListener(MouseEvent.ROLL_OVER)){
-							geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
-						}
-						if(!geom.hasEventListener(MouseEvent.ROLL_OUT)){
-							geom.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
-						}
-					}else{
-						if(geom.hasEventListener(MouseEvent.ROLL_OVER)){
-							geom.removeEventListener(MouseEvent.ROLL_OVER, onRollOver);
-						}
-						if(geom.hasEventListener(MouseEvent.ROLL_OUT)){
-							geom.removeEventListener(MouseEvent.ROLL_OUT, onRollOut);
-						}
-					}
-		        }   
-      	}*/
       	
       	
 		//--------------------------------------------------------------------------
@@ -551,22 +543,28 @@
     	//
     	//--------------------------------------------------------------------------
 		
+		/**
+		* @private
+		**/
+		 private function willColorize(event:FlexEvent):void{
+		 	colorize();
+		 	_isColorChanged=true;
+		 	this.parent.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
+		 }
 		
 		/**
 		* @private
 		**/
-		 private function colorize(event:FlexEvent):void{
+		 private function colorize():void{//event:FlexEvent
+		 		_arrDataTips=new ArrayCollection();
 		 		var arrStep:Array=FindStepWithoutZero(_dataProvider, _colorField, _steps-1);
 				if(arrStep[0]!=null){
 		 			var colB:ColorBrewer=new ColorBrewer();
 		 			var arrCol:Array=colB.getColors(_scheme, _steps);
-		 			//trace(ObjectUtil.toString(arrStep))
-		 			//trace(ObjectUtil.toString(arrCol))
 			 		var dynamicClassName:String=getQualifiedClassName(this.parent);
 					var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
 					var proj:String=(this.parent as dynamicClassRef).projection;
-					var region:String=(this.parent as dynamicClassRef).region;
-					
+					var region:String=(this.parent as dynamicClassRef).region;		
 					var GeoData:Object=Projections.getData(proj,region);
 					
 					surface=Surface((this.parent as DisplayObjectContainer).getChildByName("Surface"))
@@ -592,41 +590,42 @@
 										myCoo = Polygon(GeometryGroup(surface.getChildByName(key)).geometryCollection.getItemAt(0));
 									}	
 								}
-									
-								if(val<=Number(arrStep[0])){
-									myCoo.fill=new SolidFill(arrCol[0],_alpha);
-									_colorItem=arrCol[0];
-								}else if(val>Number(arrStep[_steps-2])){
-									myCoo.fill=new SolidFill(arrCol[_steps-1],_alpha);
-									_colorItem=arrCol[_steps-1];
-								}else{
-									for (var k:int=0; k<_steps-2;k++){
-										if(val>Number(arrStep[k]) && val<=Number(arrStep[k+1])){
-											myCoo.fill=new SolidFill(arrCol[k+1],_alpha);
-											_colorItem=arrCol[k+1];
+								
+								if(_scheme!=null){	
+										if(val<=Number(arrStep[0])){
+											myCoo.fill=new SolidFill(arrCol[0],_alpha);
+											_colorItem=arrCol[0];
+										}else if(val>Number(arrStep[_steps-2])){
+											myCoo.fill=new SolidFill(arrCol[_steps-1],_alpha);
+											_colorItem=arrCol[_steps-1];
+										}else{
+											for (var k:int=0; k<_steps-2;k++){
+												if(val>Number(arrStep[k]) && val<=Number(arrStep[k+1])){
+													myCoo.fill=new SolidFill(arrCol[k+1],_alpha);
+													_colorItem=arrCol[k+1];
+												}
+											}
 										}
-									}
-								}
-								
-								if(getStyle("strokeItem")){
-									if(typeof(getStyle("strokeItem"))=="number"){
-										arrStrokeItem.push(getStyle("strokeItem"));
-									}else{
-										arrStrokeItem=getStyle("strokeItem");
-									}
-									
-									while (arrStrokeItem.length<3) { 
-										arrStrokeItem.push(1); 
-									}
-									stkItem= new SolidStroke(arrStrokeItem[0], arrStrokeItem[1],arrStrokeItem[2]);
-									
-								}
-								stkItem.scaleMode="none";
-								
-								if(stkItem){
-									myCoo.stroke=stkItem;
-								}
 										
+										if(getStyle("strokeItem")){
+											if(typeof(getStyle("strokeItem"))=="number"){
+												arrStrokeItem.push(getStyle("strokeItem"));
+											}else{
+												arrStrokeItem=getStyle("strokeItem");
+											}
+											
+											while (arrStrokeItem.length<3) { 
+												arrStrokeItem.push(1); 
+											}
+											stkItem= new SolidStroke(arrStrokeItem[0], arrStrokeItem[1],arrStrokeItem[2]);
+											
+										}
+										stkItem.scaleMode="none";
+										
+										if(stkItem){
+											myCoo.stroke=stkItem;
+										}
+							 	}		
 							}
 						}
 						
@@ -741,7 +740,12 @@
 			return isMatch;
 		}
 		
-		
+		/**
+     	*  @private
+     	*/
+        private function projChanged(e:GeoProjEvents):void{
+        	invalidateDisplayList();
+        }
 
 	}
 }
