@@ -44,7 +44,7 @@ package org.un.cava.birdeye.geovis.events
 		 *
 		 *  @param type The event type; indicates the action that caused the event.
 		 *
-		 *  @param key The value is a 3 letters country ISO codeand 2 letters states ISO code for the US map..
+		 *  @param key The value is a 3 letters country ISO code and 2 letters states ISO code for the US map.
 		 *
 		 *  @param features Specifies the features of the associated item.
 		 *
@@ -69,8 +69,6 @@ package org.un.cava.birdeye.geovis.events
 		 *  <p>The properties of the event object have the following values:</p>
 		 *  <table class="innertable">
 		 *     <tr><th>Property</th><th>Value</th></tr>
-	     *     <tr><td><code>bubbles</code></td><td>false</td></tr>
-	     *     <tr><td><code>cancelable</code></td><td>false</td></tr>
 	     *     <tr><td><code>currentTarget</code></td><td>The Object that defines the 
 	     *       event listener that handles the event.</td></tr>
 	     *     <tr><td><code>index</code></td><td>The index of the navigation item that was clicked.</td></tr>
@@ -95,8 +93,6 @@ package org.un.cava.birdeye.geovis.events
 		 *  <p>The properties of the event object have the following values:</p>
 		 *  <table class="innertable">
 		 *     <tr><th>Property</th><th>Value</th></tr>
-	     *     <tr><td><code>bubbles</code></td><td>false</td></tr>
-	     *     <tr><td><code>cancelable</code></td><td>false</td></tr>
 	     *     <tr><td><code>currentTarget</code></td><td>The Object that defines the 
 	     *       event listener that handles the event.</td></tr>
 	     *     <tr><td><code>index</code></td><td>The index of the navigation item that was double clicked.</td></tr>
@@ -121,8 +117,6 @@ package org.un.cava.birdeye.geovis.events
 		 *  <p>The properties of the event object have the following values:</p>
 		 *  <table class="innertable">
 		 *     <tr><th>Property</th><th>Value</th></tr>
-	     *     <tr><td><code>bubbles</code></td><td>false</td></tr>
-	     *     <tr><td><code>cancelable</code></td><td>false</td></tr>
 	     *     <tr><td><code>currentTarget</code></td><td>The Object that defines the 
 	     *       event listener that handles the event.</td></tr>
 	     *     <tr><td><code>index</code></td><td>The index of the navigation item that was rolled over.</td></tr>
@@ -147,8 +141,6 @@ package org.un.cava.birdeye.geovis.events
 		 *  <p>The properties of the event object have the following values:</p>
 		 *  <table class="innertable">
 		 *     <tr><th>Property</th><th>Value</th></tr>
-	     *     <tr><td><code>bubbles</code></td><td>false</td></tr>
-	     *     <tr><td><code>cancelable</code></td><td>false</td></tr>
 	     *     <tr><td><code>currentTarget</code></td><td>The Object that defines the 
 	     *       event listener that handles the event.</td></tr>
 	     *     <tr><td><code>index</code></td><td>The index of the navigation item that was rolled out.</td></tr>
