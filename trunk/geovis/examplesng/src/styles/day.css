@@ -5,7 +5,15 @@ WorldMap {
   	stroke : #333333;
   	weight: 0.25;
   }
-  
+
+Choropleth{
+	strokeItem : #333333;
+}  
+
+Features{
+	strokeItem : #333333;
+}
+
 Panel {
    borderColor: #333333;
    borderAlpha: 0.6;

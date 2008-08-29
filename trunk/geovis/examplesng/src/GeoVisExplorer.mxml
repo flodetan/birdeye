@@ -5,6 +5,8 @@
 	xmlns:geomap="org.un.cava.birdeye.geovis.views.maps.world.*"
 	xmlns:analysis="org.un.cava.birdeye.geovis.analysis.*"
 	xmlns:features="org.un.cava.birdeye.geovis.features.*"
+	xmlns:symbols="org.un.cava.birdeye.geovis.symbols.*"
+	xmlns:sparks="org.un.cava.birdeye.geovis.symbols.GeoSymbols.*"
 	xmlns:views="views.*"
 	width="100%" height="100%" backgroundGradientColors="[#333333,#333333]"
 	layout="absolute"
@@ -13,10 +15,14 @@
 
 <mx:Script>
 	<![CDATA[
+		import mx.events.ListEvent;
 		import org.un.cava.birdeye.geovis.controls.*;
 		import mx.rpc.events.ResultEvent;
         import mx.events.StyleEvent;
 		import mx.styles.StyleManager;
+        
+        [Bindable]
+        private var proj:String="Miller cylindrical";
         
         // Start Style Loading
         
@@ -36,8 +42,7 @@
 
         private function loadStyle():void
         {
-            var eventDispatcher:IEventDispatcher =
-                StyleManager.loadStyleDeclarations("styles/" + currentTheme + ".swf");
+            var eventDispatcher:IEventDispatcher = StyleManager.loadStyleDeclarations("styles/" + currentTheme + ".swf");
             	eventDispatcher.addEventListener(StyleEvent.COMPLETE, completeHandler);
         }
 
@@ -66,6 +71,15 @@
 			}
 		} 
 		
+		private function cbSel(e:ListEvent):void{
+			if(e.currentTarget.selectedLabel=='Sequential'){
+				hueSelector.dataProvider=seq;
+			}else if(e.currentTarget.selectedLabel=='Qualitative'){
+				hueSelector.dataProvider=qua;
+			}else{
+				hueSelector.dataProvider=div;
+			}
+		}
 		
 	]]>
 </mx:Script>
@@ -73,6 +87,51 @@
 <mx:Style source="styles/main.css" />
 <mx:XML id="myWorldMedals" source="data/worldmedals.xml" />
 <mx:XML id="myFlows" source="data/journeyofharmony.xml" />
+
+<mx:ArrayCollection id="seq" >
+	<mx:source>
+		<mx:Object label="YlGn" data="YlGn"/>
+		<mx:Object label="YlGnBu" data="YlGnBu"/>
+		<mx:Object label="GnBu" data="GnBu"/>
+		<mx:Object label="BuGn" data="BuGn"/>
+		<mx:Object label="PuBuGn" data="PuBuGn"/>
+		<mx:Object label="PuBu" data="PuBu"/>
+		<mx:Object label="BuPu" data="BuPu"/>
+		<mx:Object label="RdPu" data="RdPu"/>
+		<mx:Object label="PuRd" data="PuRd"/>
+		<mx:Object label="OrRd" data="OrRd"/>
+		<mx:Object label="YlOrRd" data="YlOrRd"/>
+		<mx:Object label="YlOrBr" data="YlOrBr"/>
+		<mx:Object label="Purples" data="Purples"/>
+		<mx:Object label="Blues" data="Blues"/>
+		<mx:Object label="Greens" data="Greens"/>
+		<mx:Object label="Oranges" data="Oranges"/>
+		<mx:Object label="Reds" data="Reds"/>
+		<mx:Object label="Greys" data="Greys"/>
+	</mx:source>
+</mx:ArrayCollection>
+
+<mx:ArrayCollection id="div" >
+        <mx:Object label="PuOr" data="PuOr"/>
+		<mx:Object label="BrBG" data="BrBG"/>
+		<mx:Object label="PRGn" data="PRGn"/>
+		<mx:Object label="PiYG" data="PiYG"/>
+		<mx:Object label="RdBu" data="RdBu"/>
+		<mx:Object label="RdGy" data="RdGy"/>
+		<mx:Object label="RdYlBu" data="RdYlBu"/>
+		<mx:Object label="Spectral" data="Spectral"/>
+		<mx:Object label="RdYlGn" data="RdYlGn"/>
+</mx:ArrayCollection>
+
+<mx:ArrayCollection id="qua" >
+        <mx:Object label="Set3" data="Set3"/>
+		<mx:Object label="Pastel1" data="Pastel1"/>
+		<mx:Object label="Set1" data="Set1"/>
+		<mx:Object label="Pastel2" data="Pastel2"/>
+		<mx:Object label="Set2" data="Set2"/>
+		<mx:Object label="Dark2" data="Dark2"/>
+		<mx:Object label="Paired" data="Paired"/>
+</mx:ArrayCollection>
 
 <mx:Box width="100%" height="100%" horizontalAlign="center" verticalAlign="top" horizontalScrollPolicy="off" verticalScrollPolicy="off" >
 		
@@ -101,18 +160,14 @@
 		<mx:ProgressBar id="progressBar" x="{mapCnvs.width/2-progressBar.width/2}" y="{mapCnvs.height/2}" indeterminate="true" visible="false"/>
 		
 		<!-- Need to add property for perspective, e.g. 2d, 3dPlane, 3dSphere -->
-		<geomap:WorldMap id="myMap" projection="Miller cylindrical" scaleX=".942" scaleY=".942" x="0" y="20" >
+		<geomap:WorldMap id="myMap" projection="{projectionSelector.selectedItem.label}" scaleX=".942" scaleY=".942" x="0" y="20" >
+			<analysis:Choropleth id="choropleth" dataProvider="{myWorldMedals}" foidField="@iso" colorField="{featureSelector.selectedItem.data}" alpha="1" scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" toolTipField="@name" highlighted="true"  />
 			
-			<!-- alpha not working? -->
-			<features:Features foid="USA" fillItem="0xCCCCCC" alpha="0.4" toolTip="United States" />
-			<features:Features foid="BRA" fillItem="0xCCCCCC" alpha="0.3" toolTip="Brazil"/>
-			<features:Features foid="FRA" fillItem="0xCCCCCC" alpha="0.2" toolTip="France"/>			
+			<!--<features:Features fillItem="0x00ff00" foid="USA"/>-->
 			
-			<!-- Need to complete choropleth (a.k.a. colorize) function -->
-			<!--
-			<analysis:Choropleth id="choropleth" dataprovider="" foid="" colorField="" alpha="" colorScheme="" baseHue="" steps="" toolTip="" />
-			-->
-			
+			<!--<symbols:Symbols key="FRA">
+					<sparks:GeoBubbleSpark radius="17" fill="0xFF00FF" alpha="0.8" ratio="1"/>
+			</symbols:Symbols>-->
 			<!-- Need to complete cartogram function -->
 			<!--
 			<analysis:Cartogram id="cartogram" dataprovider="" foid="" areaField="" type="" form="" />
@@ -126,12 +181,12 @@
 			
 		</geomap:WorldMap>
 		<!-- Errors resulting from CSS load
-		<controls:GeoGauge id="GeoGauge" left="10" right="10" bottom="25" width="725" height="10" minimumValue="0" maximumValue="50000000" trackColor="0x333333" visible="true">
+		<controls:GeoGauge id="GeoGauge" left="10" x="10" y="10" right="10" bottom="25" width="725" height="10" minimumValue="0" maximumValue="500000" trackColor="0x333333" visible="true">
         		<controls:GeoThumb id="t1" Color="0x000000" value="0" draggable="false"/>
-        		<controls:GeoThumb id="t2" Color="0xCCCCCC" minimum="0" maximum="{t3.value}" value="5000000" draggable="true" />
-        		<controls:GeoThumb id="t3" Color="0x999999" minimum="{t2.value}" maximum="{t4.value}" value="10000000" draggable="true" />
-        		<controls:GeoThumb id="t4" Color="0x666666" minimum="{t3.value}" maximum="{t4.value}" value="40000000" draggable="true" allowDragToTheEnd="true" />
-        		<controls:GeoThumb id="t5" Color="0x333333" value="50000000" draggable="false"/>
+        		<controls:GeoThumb id="t2" Color="0xCCCCCC" minimum="0" maximum="{t3.value}" value="50000" draggable="true" />
+        		<controls:GeoThumb id="t3" Color="0x999999" minimum="{t2.value}" maximum="{t4.value}" value="100000" draggable="true" />
+        		<controls:GeoThumb id="t4" Color="0x666666" minimum="{t3.value}" maximum="{t4.value}" value="400000" draggable="true" allowDragToTheEnd="true" />
+        		<controls:GeoThumb id="t5" Color="0x333333" value="5000000" draggable="false"/>
         		<controls:GeoScale title="Percentage" />
         </controls:GeoGauge>-->
         		
@@ -146,19 +201,19 @@
 		>
 			<!-- These should be moved as individual components -->
 							
-							<mx:ComboBox id="projectionSelector" width="180" prompt="Projection..." selectedIndex="4" toolTip="Select map area for viewing..."  >
+							<mx:ComboBox id="projectionSelector" width="180" prompt="Projection..." selectedIndex="4" toolTip="Select map area for viewing...">
 								<mx:ArrayCollection>
-										<mx:String>Geographic</mx:String>
-										<mx:String>Lambert equal area</mx:String>
-										<mx:String>Mollweide</mx:String>
-										<mx:String>WinkelTripel</mx:String>
-										<mx:String>Miller cylindrical</mx:String>
-										<mx:String>EckertIV</mx:String>
-										<mx:String>EckertVI</mx:String>
-										<mx:String>Goode</mx:String>
-										<mx:String>Sinsoidal</mx:String>
-										<mx:String>Robinson</mx:String>
-									</mx:ArrayCollection>
+										<mx:Object label="Geographic"/>
+										<mx:Object label="Lambert equal area"/>
+										<mx:Object label="Mollweide"/>
+										<mx:Object label="WinkelTripel"/>
+										<mx:Object label="Miller cylindrical"/>
+										<mx:Object label="EckertIV"/>
+										<mx:Object label="EckertVI"/>
+										<mx:Object label="Goode"/>
+										<mx:Object label="Sinsoidal"/>
+										<mx:Object label="Robinson"/>
+								</mx:ArrayCollection>
 							</mx:ComboBox>				
 							<mx:HRule width="100%" />
 							
@@ -169,32 +224,26 @@
 							<!-- Colorize Styles -->
 							<mx:HBox width="95%" horizontalAlign="left" >
 							<mx:Label text="Colorize:" textAlign="left" fontWeight="bold" fontSize="10" />
-							<mx:ComboBox id="featureSelector" itemRenderer="mx.controls.Label" height="20" width="137" prompt="Color by..." toolTip="Select the data field value to base colorization on..." >
-									<mx:ArrayCollection>
-										<mx:String>Total</mx:String>
-										<mx:String>Gold</mx:String>
-										<mx:String>Silver</mx:String>
-										<mx:String>Bronze</mx:String>
-									</mx:ArrayCollection>
+							<mx:ComboBox id="featureSelector" labelField="label" selectedIndex="0" itemRenderer="mx.controls.Label" height="20" width="137" prompt="Color by..." toolTip="Select the data field value to base colorization on..." >
+								<mx:ArrayCollection>
+										<mx:Object label="Total" data="@total"/>
+										<mx:Object label="Gold" data="@gold"/>
+										<mx:Object label="Silver" data="@silver"/>
+										<mx:Object label="Bronze" data="@bronze"/>
+								</mx:ArrayCollection>
 							</mx:ComboBox>
 							
 							</mx:HBox>
-							<mx:ComboBox id="colorBrewerSelector" height="20" width="180" prompt="Color scheme..." toolTip="Select the orientation of tree layout" >
-									<mx:ArrayCollection>
-										<mx:String>Sequential</mx:String>
-										<mx:String>Qualitative</mx:String>
-										<mx:String>Diverging</mx:String>
-									</mx:ArrayCollection>
+							<mx:ComboBox id="colorBrewerSelector" selectedIndex="0" height="20" width="180" prompt="Color scheme..." toolTip="Select the color scheme"  change="cbSel(event)" >
+								<mx:ArrayCollection>
+								        <mx:Object label="Sequential" data="seq"/>
+										<mx:Object label="Qualitative" data="qua"/>
+										<mx:Object label="Diverging" data="div"/>
+								</mx:ArrayCollection>
 							</mx:ComboBox>
 							<mx:HBox width="95%" horizontalAlign="center" >
-							<mx:ComboBox id="hueSelector" height="20" width="122" prompt="Base hue..." toolTip="Select the orientation of tree layout" >
-									<mx:ArrayCollection>
-										<mx:String>Gold</mx:String>
-										<mx:String>Silver</mx:String>
-										<mx:String>Bronze</mx:String>
-									</mx:ArrayCollection>
-							</mx:ComboBox>
-							<mx:NumericStepper minimum="3" maximum="7" value="5" />
+							<mx:ComboBox id="hueSelector" dataProvider="{seq}" selectedIndex="0" height="20" width="122" prompt="Base hue..." toolTip="Select the base hue..."/>
+							<mx:NumericStepper id="stepsNum" minimum="3" maximum="8" value="5" />
 							</mx:HBox>
 							<mx:HBox width="95%" horizontalAlign="center" >
 							<mx:RadioButtonGroup id="rgbColorTypeSelector" labelPlacement="right"  />
@@ -291,6 +340,4 @@
 
 </mx:VBox>
 </mx:Box>
-
-	
 </mx:Application>
