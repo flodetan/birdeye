@@ -1,4 +1,4 @@
-package org.un.cava.birdeye.geovis.controls
+package org.un.cava.birdeye.geovis.controls.choropleth
 {
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;

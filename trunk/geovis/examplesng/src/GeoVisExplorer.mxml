@@ -16,7 +16,8 @@
 <mx:Script>
 	<![CDATA[
 		import mx.events.ListEvent;
-		import org.un.cava.birdeye.geovis.controls.*;
+		import org.un.cava.birdeye.geovis.controls.viewers.*;
+		import org.un.cava.birdeye.geovis.controls.choropleth.*;
 		import mx.rpc.events.ResultEvent;
         import mx.events.StyleEvent;
 		import mx.styles.StyleManager;
@@ -161,19 +162,21 @@
 		
 		<!-- Need to add property for perspective, e.g. 2d, 3dPlane, 3dSphere -->
 		<geomap:WorldMap id="myMap" projection="{projectionSelector.selectedItem.label}" scaleX=".942" scaleY=".942" x="0" y="20" >
+			
 			<analysis:Choropleth id="choropleth" dataProvider="{myWorldMedals}" foidField="@iso" colorField="{featureSelector.selectedItem.data}" alpha="1" scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" toolTipField="@name" highlighted="true"  />
 			
-			<!--<features:Features fillItem="0x00ff00" foid="USA"/>-->
+			<symbols:Symbols id="mySymbols" dataProvider="{myWorldMedals}" foidField="@iso" itemRenderer="renderers.SymbolRenderer" />			
 			
 			<!--<symbols:Symbols key="FRA">
 					<sparks:GeoBubbleSpark radius="17" fill="0xFF00FF" alpha="0.8" ratio="1"/>
 			</symbols:Symbols>-->
+			
 			<!-- Need to complete cartogram function -->
 			<!--
 			<analysis:Cartogram id="cartogram" dataprovider="" foid="" areaField="" type="" form="" />
 			-->
 			
-			<!-- Flows - setting visibility property does not work -->
+			<!-- Flows -->
 			<analysis:Flow id="johFlows" dataProvider="{myFlows}" fromField="@fromID" toField="@toID" showDataTips="true" valueField="@desc" fill="0xFF8C00" visible="false" includeInLayout="false" />
 			
 			<!-- To load flows for Olympic torch run -->
