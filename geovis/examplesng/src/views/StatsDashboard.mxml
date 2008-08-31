@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:flexlib="http://code.google.com/p/flexlib/"
 	paddingBottom="5" 
 	backgroundColor="#333333" horizontalAlign="center"
 	horizontalScrollPolicy="off" verticalScrollPolicy="off"
@@ -18,15 +17,11 @@
             { Country: "China", Gold: 32, Silver:17, Bronze: 14 },
             { Country: "Russia", Gold: 27, Silver:27, Bronze: 38 } ]);
         
-        private function updateDetails():void
-			{
-				var dataValues:Array = dataSelector.dataValues;
-				
-				
-			}
-        
+               
         ]]>
     </mx:Script>
+
+<mx:XML id="myWorldMedals" source="data/worldmedals.xml" />
 
 <mx:SeriesSlide id="slideIn" duration="1000" direction="down" />
 <mx:SeriesSlide id="slideOut" duration="1000" direction="up"/>
@@ -49,35 +44,30 @@
             paddingLeft="5" 
             paddingRight="5" 
             showDataTips="true" gutterLeft="0" 
-            dataProvider="{medalsAC}"
-        >                
+            dataProvider="{myWorldMedals.Country}"
+        	>                
             <mx:horizontalAxis>
-                <mx:CategoryAxis categoryField="Country"/>
+                <mx:CategoryAxis categoryField="@iso"/>
             </mx:horizontalAxis>
-            
-            <mx:annotationElements>
-				<flexlib:HorizontalAxisDataSelector id="dataSelector" change="updateDetails();"
-					selectorColor="0xffffff" />
-			</mx:annotationElements>
-                
+                          
             <mx:series>
                 <mx:ColumnSeries 
-                    xField="Country" 
-                    yField="Bronze" 
+                    xField="@iso" 
+                    yField="@bronze" 
                     displayName="Bronze"
                     fill="{sc3}"
                     stroke="{s3}"
                 />
                 <mx:ColumnSeries 
-                    xField="Country" 
-                    yField="Silver" 
+                    xField="@iso" 
+                    yField="@silver" 
                     displayName="Silver"
                     fill="{sc2}"
                     stroke="{s2}"
                 />
                 <mx:ColumnSeries 
-                    xField="Country" 
-                    yField="Gold" 
+                    xField="@iso" 
+                    yField="@gold" 
                     displayName="Gold"
                     fill="{sc1}"
                     stroke="{s1}"

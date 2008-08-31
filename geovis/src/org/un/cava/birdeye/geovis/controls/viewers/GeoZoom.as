@@ -24,16 +24,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
-package org.un.cava.birdeye.geovis.controls
+
+package org.un.cava.birdeye.geovis.controls.viewers
 {
-	
 	/**
-	* Control to Pan map in 3D view
+	* Control to Zoom map based on map object id or lat/long
 	**/
-	public class Pan
+	public class GeoZoom
 	{
-		public function Pan()
+		public function GeoZoom()
 			{
 			super();
 		}

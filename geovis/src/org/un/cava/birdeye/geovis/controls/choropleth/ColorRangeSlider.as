@@ -1,4 +1,4 @@
-package org.un.cava.birdeye.geovis.controls
+package org.un.cava.birdeye.geovis.controls.choropleth
 {
 	import mx.controls.sliderClasses.Slider;
 	import mx.controls.sliderClasses.SliderThumb;

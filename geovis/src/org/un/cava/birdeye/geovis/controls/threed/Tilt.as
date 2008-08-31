@@ -25,7 +25,7 @@
  * THE SOFTWARE.
  */
 
-package org.un.cava.birdeye.geovis.controls
+package org.un.cava.birdeye.geovis.controls.threed
 {
 	/**
 	* Control to Tilt map in 3D view

@@ -25,7 +25,7 @@
  * THE SOFTWARE.
  */
 
-package org.un.cava.birdeye.geovis.controls
+package org.un.cava.birdeye.geovis.controls.viewers
 {
 	/**
 	* Control to Zoom map based on map object id or lat/long

@@ -24,7 +24,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.un.cava.birdeye.geovis.controls
+package org.un.cava.birdeye.geovis.controls.viewers
 {
 	/**
 	* Control to set visibility of neighbors to a selected country or US state 
