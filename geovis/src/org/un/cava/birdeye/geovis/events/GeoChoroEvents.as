@@ -122,7 +122,7 @@ package org.un.cava.birdeye.geovis.events
         
         
         /**
-		 *  The <code>GeoChoroEvents.CHOROPLETH_COLORFIELD_CHANGED</code> constant defines the value of the 
+		 *  The <code>GeoChoroEvents.CHOROPLETH_COMPLETE</code> constant defines the value of the 
 		 *  <code>type</code> property of the event object for an <code>ChoroplethComplete</code> event.
 		 *
 		 *  <p>The properties of the event object have the following values:</p>
