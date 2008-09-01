@@ -118,7 +118,7 @@
             <medal discipline="Wrestling" gold="1" silver="0" bronze="1" total="2"/>
     			</medals>
 		</Country>
-    <Country iso="CHI" name="Chile" gold="0" silver="1" bronze="0" total="1">
+    <Country iso="CHL" name="Chile" gold="0" silver="1" bronze="0" total="1">
 			<medals>
   					 <medal discipline="Tennis" gold="0" silver="1" bronze="0" total="1"/>
     			</medals>
@@ -163,14 +163,7 @@
 						 <medal discipline="Wrestling" gold="0" silver="0" bronze="1" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="CRO" name="Croatia" gold="0" silver="2" bronze="3" total="5">
-			<medals>
-  					 <medal discipline="Athletics" gold="0" silver="1" bronze="0" total="1"/>
-              <medal discipline="Gymnastics Artistic" gold="0" silver="1" bronze="0" total="1"/>
-              <medal discipline="Shooting" gold="0" silver="0" bronze="1" total="1"/>
-              <medal discipline="Taekwondo" gold="0" silver="0" bronze="2" total="2"/>
-    			</medals>
-		</Country>
+    
     <Country iso="CUB" name="Cuba" gold="2" silver="11" bronze="11" total="24">
 			<medals>
   					 <medal discipline="Athletics" gold="1" silver="2" bronze="2" total="5"/>
@@ -616,7 +609,7 @@
             <medal discipline="Swimming" gold="0" silver="1" bronze="0" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="SCG" name="Serbia" gold="0" silver="1" bronze="2" total="3">
+    <Country iso="SRB" name="Serbia" gold="0" silver="1" bronze="2" total="3">
 			<medals>
   					 <medal discipline="Swimming" gold="0" silver="1" bronze="0" total="1"/>
             <medal discipline="Tennis" gold="0" silver="0" bronze="1" total="1"/>
@@ -670,12 +663,7 @@
   					 <medal discipline="Canoe/Kayak - Slalom" gold="0" silver="0" bronze="1" total="1"/>
     			</medals>
 		</Country>
-    <Country iso="TPE" name="Chinese Taipei" gold="0" silver="0" bronze="4" total="4">
-			<medals>
-  					 <medal discipline="Taekwondo" gold="0" silver="0" bronze="2" total="2"/>
-						 <medal discipline="Weightlifting" gold="0" silver="0" bronze="2" total="2"/>
-    			</medals>
-		</Country>
+    
     <Country iso="TTO" name="Trinidad/Tobago" gold="0" silver="2" bronze="0" total="2">
 			<medals>
   					 <medal discipline="Athletics" gold="0" silver="2" bronze="0" total="2"/>
