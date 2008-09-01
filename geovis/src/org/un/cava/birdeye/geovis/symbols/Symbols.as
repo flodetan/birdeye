@@ -36,17 +36,15 @@ package org.un.cava.birdeye.geovis.symbols
 	import flash.events.MouseEvent;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
+	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.ICollectionView;
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
-	import flash.xml.XMLNode;
 	import mx.core.IFactory;
-		
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
-	import mx.containers.Box;
 	
 	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	import org.un.cava.birdeye.geovis.projections.Projections;
@@ -59,7 +57,7 @@ package org.un.cava.birdeye.geovis.symbols
 	[Inspectable("dataProvider")]
 	[Inspectable("foidField")]
 	[Inspectable("itemRenderer")]
-	public class Symbols extends Box//UIComponent
+	public class Symbols extends UIComponent//Box
 	{	
 		//--------------------------------------------------------------------------
 	    //
@@ -246,6 +244,26 @@ package org.un.cava.birdeye.geovis.symbols
 		
 		//--------------------------------------------------------------------------
     	//
+    	//  Overridden methods
+    	//
+    	//--------------------------------------------------------------------------
+    
+		/**
+		 * @private
+		 */
+       override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
+      		super.updateDisplayList( unscaledWidth, unscaledHeight );            
+      		
+		      if(_isProjChanged){
+      			createSymbols();
+      			_isProjChanged=false;
+      		  }
+      		  
+      	}
+      	
+		
+		//--------------------------------------------------------------------------
+    	//
     	//  Methods
     	//
     	//--------------------------------------------------------------------------
@@ -258,39 +276,41 @@ package org.un.cava.birdeye.geovis.symbols
 	     *  @private
 	     */
 		private function createSymbols ():void{
-				
-						
 				var dynamicClassName:String=getQualifiedClassName(this.parent);
 				var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
 				var proj:String=(this.parent as dynamicClassRef).projection;
 				var region:String=(this.parent as dynamicClassRef).region;
-				var GeoData:Object=Projections.getData(proj,region);
 				
-				Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).addChild(this);
-								
 				var cooFoid:String;
 				var i:int=0;
 				var cursor:IViewCursor = _dataProvider.createCursor();
 				
 				while(!cursor.afterLast)
 				{
-					
-					var foidField:String=cursor.current[_foidField];
-					cooFoid=GeoData.getBarryCenter(foidField);
-					var arrPosFoid:Array=cooFoid.split(',');
+					var mySymbol:UIComponent = null;
 					
 					if(foidField!=""){
-							var geom:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foidField));
-					
-					if(geom!=null){
-						var myScaleX:Number=(this.parent as dynamicClassRef).scaleX;
-						var myScaleY:Number=(this.parent as dynamicClassRef).scaleY;
-			
-						this.x=(arrPosFoid[0]-this.getChildAt(0).width/2)*myScaleX;
-						this.y=(arrPosFoid[1]-this.getChildAt(0).height/2)*myScaleY;
+						var GeoData:Object=Projections.getData(proj,region);
+						var foidField:String=cursor.current[_foidField];
+						cooFoid=GeoData.getBarryCenter(foidField);
+						var arrPosFoid:Array=cooFoid.split(',');
 						
-						drawSymbols();
-					}
+						var geom:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foidField));
+					
+						if(geom!=null){
+							var myScaleX:Number=(this.parent as dynamicClassRef).scaleX;
+							var myScaleY:Number=(this.parent as dynamicClassRef).scaleY;
+							
+							if(_itemRenderer != null) {
+								mySymbol = _itemRenderer.newInstance();
+							} else {
+								mySymbol = new UIComponent();
+							}
+							mySymbol.x=(arrPosFoid[0]-mySymbol.width/2)*myScaleX;
+							mySymbol.y=(arrPosFoid[1]-mySymbol.height/2)*myScaleY;
+						}
+						Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).addChild(mySymbol);
+						refresh();
 					}
 					i++;
 					cursor.moveNext();
@@ -299,18 +319,7 @@ package org.un.cava.birdeye.geovis.symbols
 				
 		}	
 		
-		private function drawSymbols():void{
-			
-			var mySymbol:UIComponent = null;
-							
-			if(_itemRenderer != null) {
-						mySymbol = _itemRenderer.newInstance();
-						} else {
-						mySymbol = new UIComponent();
-						}
-			this.addChild(mySymbol);
-			refresh();
-		}	
+		
 		
 		/**
 	     *  @private
