@@ -33,7 +33,21 @@ ToolTip {
 			font-size: 10;
 }
 
-WorldMap {
+/*WorldMap {
     background-color : #333333;
   	stroke : #FFFFFF;
-  }
+}*/
+
+DataGrid
+{
+	color:#FFFFFF;
+  	backgroundAlpha:0;
+	text-align:center;
+}
+
+.headerStyle
+{
+font-weight:bold;
+text-align:center;
+color:#000000;
+}

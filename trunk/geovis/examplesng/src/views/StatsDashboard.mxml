@@ -11,12 +11,6 @@
 
         import mx.collections.ArrayCollection;
 
-        [Bindable]
-        private var medalsAC:ArrayCollection = new ArrayCollection( [
-            { Country: "USA", Gold: 35, Silver:39, Bronze: 29 },
-            { Country: "China", Gold: 32, Silver:17, Bronze: 14 },
-            { Country: "Russia", Gold: 27, Silver:27, Bronze: 38 } ]);
-        
                
         ]]>
     </mx:Script>

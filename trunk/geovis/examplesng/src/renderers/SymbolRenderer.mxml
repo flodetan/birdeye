@@ -1,25 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="*" 
-	xmlns:primitive="renderers.*" 
-	creationComplete="setCircle()"
-	>
-
-	<!-- This a basic circle itemRenderer. -->
-	
-	<primitive:Circle id="circle" toolTip="{this.data.data.@name}" />
+<mx:Button xmlns:mx="http://www.adobe.com/2006/mxml"
+	label="{this.data.@name}" toolTip="{this.data.@name}" width="15" height="15" >
+	<!-- This a basic circle itemRenderer. toolTip="{this.data.@name}" -->
     
-	<mx:Script>
-		<![CDATA[
-			
-			private function setCircle():void {
-			
-			var Size:int = this.data.data.@gold;
-			trace(Size);
-			
-			circle.color=0xFF0000;
-			circle.width=Size;
-			circle.height=Size;
-   			}
-		]]>
-	</mx:Script>	
-</mx:Box>
+
+</mx:Button>
