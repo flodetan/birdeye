@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:flexlib="http://code.google.com/p/flexlib/"
-	paddingBottom="5" 
-	backgroundColor="#333333" horizontalAlign="center"
+	horizontalAlign="center"
 	horizontalScrollPolicy="off" verticalScrollPolicy="off"
-	width="100%" height="100%" >
+	width="100%" height="100%" paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5" >
 
 
-<mx:Box id="middle" width="100%" height="100%" horizontalAlign="center" >
+<mx:Box id="middle" width="100%" height="100%" horizontalAlign="center"  >
 	<mx:DataGrid id="results" headerStyleName="headerStyle">
 		<mx:columns>
        			<mx:DataGridColumn headerText="Discipline" dataField="@discipline"/>

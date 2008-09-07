@@ -1,21 +1,45 @@
+Application {
+	backgroundGradientColors: #ffffff,#ffffff;
+	color: #000000;
+}
 
+DataGrid
+{
+	color:#000000;
+  	backgroundAlpha:1;
+	text-align:center;
+}
 
-WorldMap {
-    background-color : #FFFFFF;
-  	stroke : #333333;
-  	weight: 0.25;
-  }
+.headerStyle
+{
+font-weight:bold;
+text-align:center;
+color:#000000;
+}
 
-Choropleth{
-	strokeItem : #333333;
-}  
+HBox {
+backgroundColor: #ffffff;
+}
 
-Features{
-	strokeItem : #333333;
+LinkBar {
+   separatorColor: #666666;
+   rollOverColor: #666666;
+   selectionColor: #cccccc;
+   color: #000000;
+   textRollOverColor: #cccccc;
+   textSelectedColor: #cccccc;
+   disabledColor: #cccccc;
+}
+
+NumericStepper {
+   borderColor: #666666;
+   fillColors: #333333, #cccccc, #333333, #999999;
+   backgroundColor: #FFFFFF;
+   color: #000000;
 }
 
 Panel {
-   borderColor: #333333;
+   borderColor: #cccccc;
    borderAlpha: 0.6;
    borderThicknessLeft: 1;
    borderThicknessTop: 1;
@@ -24,7 +48,7 @@ Panel {
    roundedBottomCorners: true;
    headerHeight: 20;
    highlightAlphas: 0.42, 0.1;
-   headerColors: #000000, #666666;
+   headerColors: #cccccc, #999999;
    backgroundColor: #ffffff;
    dropShadowEnabled: true;
    dropShadowColor: #000000;
@@ -32,7 +56,24 @@ Panel {
 }
 
 .mypanelTitle {
-   color: #ffffff;
+   color: #000000;
    fontFamily: main;
    fontSize: 10;
+}
+
+VBox {
+backgroundColor: #FFFFFF;
+}
+
+WorldMap {
+    background-color : #FFFFFF;
+  	stroke : #CCCCCC;
+}
+
+Choropleth{
+	strokeItem : #CCCCCC;
+}
+
+Features{
+	strokeItem : #CCCCCC;
 }

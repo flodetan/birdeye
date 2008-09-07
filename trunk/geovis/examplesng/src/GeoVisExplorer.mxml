@@ -9,9 +9,11 @@
 	xmlns:sparks="org.un.cava.birdeye.geovis.symbols.GeoSymbols.*"
 	xmlns:quarks="org.un.cava.birdeye.qavis.sparklines.*"
 	xmlns:views="views.*"
-	width="100%" height="100%" backgroundGradientColors="[#333333,#333333]"
+	xmlns:maps="styles.maps.*"
+	xmlns:mate="http://mate.asfusion.com/"
+	width="100%" height="100%"
 	layout="absolute"
-	preinitialize="loadStyle()"
+	preinitialize="dispatcher.generateEvent({url:'styles/night.swf'})"
 	>
 
 <mx:Script>
@@ -26,42 +28,11 @@
 		import org.un.cava.birdeye.geovis.controls.choropleth.*;
 		import org.un.cava.birdeye.geovis.events.GeoMapEvents;
 		
+		import styles.events.StyleLoaderEvent;
+		
         [Bindable]
         private var proj:String="Miller cylindrical";
-        
-        // Start Style Loading
-        
-        private var currentTheme:String = "night";
-		private function toggleTheme():void
-        {
-            if (currentTheme == "day")
-            {
-                currentTheme = "night";
-            }
-            else
-            {
-                currentTheme = "day";
-            }
-            loadStyle();
-        }
-
-        private function loadStyle():void
-        {
-            var eventDispatcher:IEventDispatcher = StyleManager.loadStyleDeclarations("styles/" + currentTheme + ".swf");
-            	eventDispatcher.addEventListener(StyleEvent.COMPLETE, completeHandler);
-        }
-
-        private function completeHandler(event:StyleEvent):void
-        {
-            super.initialized = true;
-        }
-		
-		override public function set initialized(value:Boolean):void
-        {
-            // Hold off until the Runtime CSS SWF is done loading.
-        }
-
-		// End Style Loading
+              
 		
 		private function toggleFlows():void{
 			if (showFlows.selected==true) 
@@ -112,6 +83,33 @@
 <mx:XML id="myWorldMedals" source="data/worldmedals.xml" />
 <mx:XML id="myFlows" source="data/journeyofharmony.xml" />
 
+<!-- Mate Style Loader -->
+<!-- Event Maps __________________________________________________ -->
+	<maps:MainMap />
+<!-- Listeners and Dispatchers ____________________________________________________________________ -->
+	<mate:Dispatcher id="dispatcher" type="{StyleLoaderEvent.STYLE_CHANGE}" generator="{StyleLoaderEvent}">
+		<mate:ResponseHandler response="currentState = 'complete'" type="{StyleLoaderEvent.LOAD_COMPLETE}" />
+		<mate:ResponseHandler response="currentState = 'error'" type="{StyleLoaderEvent.FAULT}" />
+	</mate:Dispatcher>
+<!-- Model __________________________________________________________________________________ -->
+	<mx:Array id="dataProvider">
+		<mx:Object data="styles/night.swf" label="Night"/>
+		<mx:Object data="styles/day.swf" label="Day"/>
+	</mx:Array>
+<!-- States __________________________________________________________________________________ -->
+	<mx:states>
+		<mx:State name="complete">
+			<mx:SetProperty target="{this}" name="filters" value="{[new DropShadowFilter(4,45,0,0.3)]}" />
+		</mx:State>
+		
+		<mx:State name="error">
+			<mx:AddChild position="lastChild">
+				<mx:Label x="15" y="47" text="Style could not be loaded :(" color="#E60000" fontWeight="bold"/>
+			</mx:AddChild>
+		</mx:State>
+	</mx:states>
+<!-- End Mate Style Loader -->
+
 <mx:ArrayCollection id="seq" >
 	<mx:source>
 		<mx:Object label="YlGn" data="YlGn"/>
@@ -159,18 +157,15 @@
 
 <mx:Box width="100%" height="100%" horizontalAlign="center" verticalAlign="top" horizontalScrollPolicy="off" verticalScrollPolicy="off" >
 		
-	<mx:VBox width="1000" height="744" verticalGap="10" backgroundColor="#333333" paddingLeft="5" paddingRight="5" paddingBottom="5" horizontalScrollPolicy="off" verticalScrollPolicy="off" >
+	<mx:VBox width="1000" height="744" verticalGap="10" paddingLeft="5" paddingRight="5" paddingBottom="5" horizontalScrollPolicy="off" verticalScrollPolicy="off" >
 	<mx:Spacer width="5" />
 	<mx:ApplicationControlBar width="100%" height="30" fillColors="[#333333,#666666]" fillAlphas="[1.0,1.0]" cornerRadius="0"  >
 		<mx:HBox width="100%" height="100%" verticalAlign="middle" paddingLeft="5" paddingRight="5" >
 			<mx:Label text="GeoVis Explorer" color="#FFFFFF" fontSize="16" />
 			<mx:Spacer width="100%" />
-			<mx:Button id="b1" label="CSS" click="toggleTheme()"/>
-				<mx:RadioButtonGroup id="rbgDataSelect" labelPlacement="right"  />
-				<mx:RadioButton groupName="rbgDataSelect" id="rbOrigin" value="shwByOrigin" 
-            		label="Day" color="#ffffff" textRollOverColor="#ffffff" textSelectedColor="#ffffff" selected="false" />
-        		<mx:RadioButton groupName="rbgDataSelect" id="rbAsylum" value="shwByAsylum" 
-            		label="Night" color="#ffffff" textRollOverColor="#ffffff" textSelectedColor="#ffffff" selected="true" />
+			<mx:ComboBox id="comboBox" dataProvider="{dataProvider}" prompt="Choose style..." 
+				change="dispatcher.generateEvent({url:comboBox.selectedItem.data})"/>
+			
         </mx:HBox>
 	</mx:ApplicationControlBar>
 	<mx:Spacer width="5" />
@@ -226,7 +221,7 @@
 	<mx:Panel id="designCnvs" title="Design"
 		width="100%" height="450" verticalScrollPolicy="off">
 	<mx:VBox width="100%" height="100%"
-		horizontalAlign="center" backgroundColor="#333333" paddingLeft="5" paddingRight="5" paddingTop="5"
+		horizontalAlign="center" paddingLeft="5" paddingRight="5" paddingTop="5"
 		>
 			<!-- These should be moved as individual components -->
 							
@@ -360,7 +355,7 @@
 </mx:Panel>
 
 
-<mx:HBox width="100%" height="20" backgroundColor="#333333"
+<mx:HBox width="100%" height="20" 
 	verticalGap="0" horizontalAlign="center" verticalAlign="middle" >
 			<mx:LinkBar dataProvider="{myViewStack}"/>
 			<mx:Spacer width="100%" />

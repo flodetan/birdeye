@@ -1,3 +1,7 @@
+Application {
+	backgroundGradientColors: #333333,#333333;
+	color: #ffffff;
+}
 
 CheckBox {
    color: #ffffff;
@@ -17,6 +21,20 @@ ComboBox {
    alternatingItemColors: #666666, #666666;
    rollOverColor: #333333;
    textRollOverColor: #ffffff;
+}
+
+DataGrid
+{
+	color:#FFFFFF;
+  	backgroundAlpha:0;
+	text-align:center;
+}
+
+.headerStyle
+{
+font-weight:bold;
+text-align:center;
+color:#000000;
 }
 
 RadioButton {
@@ -65,6 +83,14 @@ Panel {
    color: #ffffff;
    fontFamily: main;
    fontSize: 10;
+}
+
+VBox {
+backgroundColor: #333333;
+}
+
+HBox {
+backgroundColor: #333333;
 }
 
 WorldMap {
