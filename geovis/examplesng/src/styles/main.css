@@ -17,7 +17,6 @@
 Application {
 	font-family: main;
 	font-size: 10;
-	color: #ffffff;
 }
 
 HRule {
@@ -33,21 +32,4 @@ ToolTip {
 			font-size: 10;
 }
 
-/*WorldMap {
-    background-color : #333333;
-  	stroke : #FFFFFF;
-}*/
 
-DataGrid
-{
-	color:#FFFFFF;
-  	backgroundAlpha:0;
-	text-align:center;
-}
-
-.headerStyle
-{
-font-weight:bold;
-text-align:center;
-color:#000000;
-}
