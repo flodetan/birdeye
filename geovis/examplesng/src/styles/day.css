@@ -1,14 +1,48 @@
 Application {
-	backgroundGradientColors: #ffffff,#ffffff;
+	backgroundGradientColors: #767676,#767676;
 	color: #000000;
 }
 
-DataGrid
-{
-	color:#000000;
-  	backgroundAlpha:1;
-	text-align:center;
+
+ApplicationControlBar {
+   highlightAlphas: 0.3, 0;
+   fillAlphas: 1, 1;
+   fillColors: #767676, #C6C6C6;
+   backgroundColor: #767676;
 }
+
+
+ComboBox {
+   color: #0b333c;
+   borderColor: #b7babc;
+   iconColor: #111111;
+   fillColors: #767676, #c6c6c6, #ffffff, #c6c6c6; 
+   selectionColor: #cccccc;
+   textSelectedColor: #0b333c;
+   rollOverColor: #999999;
+   textRollOverColor: #0b333c;
+   alternatingItemColors: #ffffff, #ffffff;
+   themeColor: #c6c6c6;
+   dropdownStyleName: "myComboBoxDropDowns";
+}
+
+.myComboBoxDropDowns {
+   borderColor: #919495;
+   color: #0b333c;
+}
+
+DataGrid {
+           backgroundAlpha: 0.61;
+           headerColors: #767676, #c6c6c6,#767676;
+           horizontalGridLines: false;
+           verticalGridLineColor: #c6c6c6;
+           rollOverColor: #666666;
+           textRollOverColor: #cccccc;
+           selectionColor: #999999;
+           textSelectedColor: #000000;
+           color:#000000;
+        }
+
 
 .headerStyle
 {
@@ -18,16 +52,16 @@ color:#000000;
 }
 
 HBox {
-backgroundColor: #ffffff;
+backgroundColor: #767676;
 }
 
 LinkBar {
    separatorColor: #666666;
    rollOverColor: #666666;
-   selectionColor: #cccccc;
+   selectionColor: #333333;
    color: #000000;
-   textRollOverColor: #cccccc;
-   textSelectedColor: #cccccc;
+   textRollOverColor: #666666;
+   textSelectedColor: #000000;
    disabledColor: #cccccc;
 }
 
@@ -39,19 +73,17 @@ NumericStepper {
 }
 
 Panel {
-   borderColor: #cccccc;
-   borderAlpha: 0.6;
+   borderColor: #333333;
+   borderAlpha: 1;
    borderThicknessLeft: 1;
    borderThicknessTop: 1;
    borderThicknessBottom: 1;
    borderThicknessRight: 1;
    roundedBottomCorners: true;
    headerHeight: 20;
-   highlightAlphas: 0.42, 0.1;
-   headerColors: #cccccc, #999999;
+   highlightAlphas: 0.36, 0.07;
+   headerColors: #767676, #C6C6C6;
    backgroundColor: #ffffff;
-   dropShadowEnabled: true;
-   dropShadowColor: #000000;
    titleStyleName: "mypanelTitle";
 }
 
@@ -62,18 +94,18 @@ Panel {
 }
 
 VBox {
-backgroundColor: #FFFFFF;
+backgroundColor: #767676;
 }
 
 WorldMap {
-    background-color : #FFFFFF;
-  	stroke : #CCCCCC;
+    background-color : #767676;
+  	stroke : #333333;
 }
 
 Choropleth{
-	strokeItem : #CCCCCC;
+	strokeItem : #333333;
 }
 
 Features{
-	strokeItem : #CCCCCC;
+	strokeItem : #333333;
 }
