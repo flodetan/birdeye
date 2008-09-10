@@ -7,6 +7,7 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	
+	import org.un.cava.birdeye.geovis.controls.choropleth.GeoAutoGauge;
 	//--------------------------------------
 	//  Styles
 	//--------------------------------------
@@ -15,6 +16,16 @@ package org.un.cava.birdeye.geovis.controls.choropleth
  	*  Define the default track color. 
  	*/
 	[Style(name="trackColor", type="uint", format="Color", inherit="no")]
+	
+	/**
+ 	*  Define the default border color. 
+ 	*/
+	[Style(name="borderColor", type="uint", format="Color", inherit="no")]
+	
+	/**
+ 	*  Define the default tick color. 
+ 	*/
+	[Style(name="tickColor", type="uint", format="Color", inherit="no")]
 	
 	//--------------------------------------
 	//  Other metadata
@@ -74,6 +85,14 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	     *  @private
 	     */
 		private var _majorTicksInterval:Number=10;
+		/**
+	     *  @private
+	     */
+		private var _borderColor:uint=0x000000;
+		/**
+	     *  @private
+	     */
+		private var _tickColor:uint=0x000000;
 		
 		
 		//--------------------------------------------------------------------------
@@ -269,7 +288,8 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 		override protected function createChildren() : void 
      	{ 
         	super.createChildren(); 
-        	barre = new UIComponent();		
+        	barre = new UIComponent();
+        	barre.name="geoBarre";		
      	} 
      	
      	/**
@@ -279,7 +299,9 @@ package org.un.cava.birdeye.geovis.controls.choropleth
      	{ 
      		if (barre) 
 	        { 
-	        	this.addChild(barre);
+	        	if(!this.getChildByName("geoBarre")){
+	        		this.addChild(barre);
+	        	}
 	        }
      	}
      	
@@ -289,8 +311,17 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 		override protected function updateDisplayList(unscaledWidth:Number,unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			if(barre){
+				if(getStyle("borderColor")){
+					_borderColor=getStyle("borderColor");
+				}
+				
+				if(getStyle("tickColor")){
+					_tickColor=getStyle("tickColor");
+				}
+				
 				barre.graphics.clear();
 				barre.graphics.beginFill(getStyle("trackColor"));
+				barre.graphics.lineStyle(1,_borderColor);
 				barre.graphics.drawRect(_x,_y,_width,_height);
 				barre.graphics.endFill();
 				
@@ -307,9 +338,9 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 					}
 				}
 			
-				barre.graphics.lineStyle(1,0x000000);
+				barre.graphics.lineStyle(1,_borderColor);
 				barre.graphics.drawRect(_x, _y, _width, _height);
-				
+				barre.graphics.lineStyle(1,_tickColor);
 				for (var j:int = 1; j < 100; j++) {
   	 		 		 if (j%10==0){
   	 		 		 		 barre.graphics.moveTo(_x+_width/100*j,_y+_height-2);

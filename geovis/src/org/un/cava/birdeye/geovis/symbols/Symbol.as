@@ -43,6 +43,7 @@ package org.un.cava.birdeye.geovis.symbols
 	
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.qavis.sparklines.*;
+	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	
 	//--------------------------------------
 	//  Other metadata
@@ -82,7 +83,10 @@ package org.un.cava.birdeye.geovis.symbols
 	     */
 		public var wcData:Object;
 		
-		
+		/**
+	     *  @private
+	     */
+		private var _isProjChanged:Boolean=false;
 		//--------------------------------------------------------------------------
 	    //
 	    //  Properties
@@ -122,26 +126,51 @@ package org.un.cava.birdeye.geovis.symbols
 			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
 		}
 		
-		
+		//--------------------------------------------------------------------------
+    	//
+    	//  Overridden methods
+    	//
+    	//--------------------------------------------------------------------------
+    
+		/**
+		 * @private
+		 */
+       override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
+      		super.updateDisplayList( unscaledWidth, unscaledHeight );            
+      		
+		      if(_isProjChanged){
+      			createSymbols();
+      			_isProjChanged=false;
+      		  }
+      		  
+      	}
+      	
 		//--------------------------------------------------------------------------
     	//
     	//  Methods
     	//
     	//--------------------------------------------------------------------------
 		
+		/**
+		 * @private
+		 */
+		private function creationCompleteHandler (event:FlexEvent):void{    
+			createSymbols();
+			this.parent.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
+		}
 		
 		/**
 	     *  @private
 	     */
-		private function creationCompleteHandler (event:FlexEvent):void{
-		
+		private function createSymbols():void{
+		trace('create symbols');
 			if(_key!=""){
 				var dynamicClassName:String=getQualifiedClassName(this.parent);
 				var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
 				var proj:String=(this.parent as dynamicClassRef).projection;
 				var region:String=(this.parent as dynamicClassRef).region;
 				geom=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(_key));
-				
+				trace('geom ' +geom);
 				if(geom!=null){
 					var GeoData:Object=Projections.getData(proj,region);
 					var cooBC:String=GeoData.getBarryCenter(_key);
@@ -149,6 +178,8 @@ package org.un.cava.birdeye.geovis.symbols
 					
 					var myScaleX:Number=(this.parent as dynamicClassRef).scaleX;
 					var myScaleY:Number=(this.parent as dynamicClassRef).scaleY;
+					
+					trace('this ' + this + ' / ' + this.getChildAt(0));
 					if(this.getChildAt(0) is PieSpark)
 					{
 						this.x=(arrPos[0]-this.getChildAt(0).width/4)*myScaleX;
@@ -160,6 +191,7 @@ package org.un.cava.birdeye.geovis.symbols
 					
 					
 					Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).addChild(this);
+					trace('Symbol surface')
 				}
 			}
 		}	
@@ -172,6 +204,14 @@ package org.un.cava.birdeye.geovis.symbols
 			eventObj.stopPropagation()
 		}
 		
+		
+		/**
+     	*  @private
+     	*/
+        private function projChanged(e:GeoProjEvents):void{
+        	_isProjChanged=true;
+        	invalidateDisplayList();
+        }
 		
 	}
 }

@@ -43,6 +43,8 @@ package org.un.cava.birdeye.geovis.symbols
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
 	import mx.core.IFactory;
+	import mx.core.IDataRenderer;
+	import mx.controls.listClasses.BaseListData;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	
@@ -57,7 +59,7 @@ package org.un.cava.birdeye.geovis.symbols
 	[Inspectable("dataProvider")]
 	[Inspectable("foidField")]
 	[Inspectable("itemRenderer")]
-	public class Symbols extends UIComponent//Box
+	public class Symbols extends UIComponent implements IDataRenderer
 	{	
 		//--------------------------------------------------------------------------
 	    //
@@ -261,7 +263,108 @@ package org.un.cava.birdeye.geovis.symbols
       		  
       	}
       	
-		
+		//----------------------------------
+    //  data
+    //----------------------------------
+
+    /**
+     *  @private
+     *  Storage for the data property.
+     */
+    private var _data:Object;
+
+    [Bindable("dataChange")]
+    [Inspectable(environment="none")]
+
+    /**
+     *  The <code>data</code> property lets you pass a value
+     *  to the component when you use it in an item renderer or item editor.
+     *  You typically use data binding to bind a field of the <code>data</code>
+     *  property to a property of this component.
+     *
+     *  <p>The ComboBox control uses the <code>listData</code> property and the
+     *  <code>data</code> property as follows. If the ComboBox is in a 
+     *  DataGrid control, it expects the <code>dataField</code> property of the 
+     *  column to map to a property in the data and sets 
+     *  <code>selectedItem</code> to that property. If the ComboBox control is 
+     *  in a List control, it expects the <code>labelField</code> of the list 
+     *  to map to a property in the data and sets <code>selectedItem</code> to 
+     *  that property. 
+     *  Otherwise, it sets <code>selectedItem</code> to the data itself.</p>
+     *
+     *  <p>You do not set this property in MXML.</p>
+     *
+     *  @see mx.core.IDataRenderer
+     */
+    public function get data():Object
+    {
+        return _data;
+    }
+
+    /**
+     *  @private
+     */
+    public function set data(value:Object):void
+    {
+        //var newSelectedItem:*;
+
+        _data = value;
+trace('symbols' + data)
+       /* if (_listData && _listData is DataGridListData)
+            newSelectedItem = _data[DataGridListData(_listData).dataField];
+        else if (_listData is ListData && ListData(_listData).labelField in _data)
+            newSelectedItem = _data[ListData(_listData).labelField];
+        else
+            newSelectedItem = _data;
+
+        if (newSelectedItem !== undefined && !selectedItemSet)
+        {
+            selectedItem = newSelectedItem;
+            selectedItemSet = false;
+        }*/
+
+        dispatchEvent(new FlexEvent(FlexEvent.DATA_CHANGE));
+    }
+
+    //----------------------------------
+    //  listData
+    //----------------------------------
+
+    /**
+     *  @private
+     *  Storage for the listData property.
+     */
+    private var _listData:BaseListData;
+
+    [Bindable("dataChange")]
+    [Inspectable(environment="none")]
+
+    /**
+     *  When a component is used as a drop-in item renderer or drop-in item 
+     *  editor, Flex initializes the <code>listData</code> property of the 
+     *  component with the appropriate data from the List control. The 
+     *  component can then use the <code>listData</code> property and the 
+     *  <code>data</code> property to display the appropriate information 
+     *  as a drop-in item renderer or drop-in item editor.
+     *
+     *  <p>You do not set this property in MXML or ActionScript; Flex sets it 
+     *  when the component
+     *  is used as a drop-in item renderer or drop-in item editor.</p>
+     *
+     *  @see mx.controls.listClasses.IDropInListItemRenderer
+     */
+    public function get listData():BaseListData
+    {
+        return _listData;
+    }
+
+    /**
+     *  @private
+     */
+    public function set listData(value:BaseListData):void
+    {
+        _listData = value;
+    }
 		//--------------------------------------------------------------------------
     	//
     	//  Methods
