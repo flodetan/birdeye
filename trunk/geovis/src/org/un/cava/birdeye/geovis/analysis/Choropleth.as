@@ -49,12 +49,16 @@
 	import mx.collections.XMLListCollection;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
+	import mx.managers.ToolTipManager;
+	import mx.utils.ObjectUtil;
 	
 	import org.un.cava.birdeye.geovis.dictionary.*;
+	import org.un.cava.birdeye.geovis.events.GeoChoroEvents;
+	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.geovis.utils.ColorBrewer;
-	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
-	import org.un.cava.birdeye.geovis.events.GeoChoroEvents;
+	import org.un.cava.birdeye.geovis.utils.HtmlToolTip;
+	import org.un.cava.birdeye.geovis.utils.ArrayUtils;
 	
 	//--------------------------------------
 	//  Styles
@@ -200,6 +204,17 @@
 	     *  @private
 	     */
 	     private var _isColorChanged:Boolean=false;
+	     
+	     /**
+	     *  @private
+	     */
+	     private var arrStep:Array
+	     
+	     /**
+	     *  @private
+	     */
+	     private var arrCol:Array
+	     
 		//--------------------------------------------------------------------------
 	    //
 	    //  Properties
@@ -511,6 +526,7 @@
 		public function Choropleth()
 		{
 			super();
+			ToolTipManager.toolTipClass = HtmlToolTip;
 			this.addEventListener(FlexEvent.CREATION_COMPLETE,willColorize);
 		}
 		
@@ -559,12 +575,12 @@
 		/**
 		* @private
 		**/
-		 private function colorize():void{//event:FlexEvent
+		 private function colorize():void{
 		 		_arrDataTips=new ArrayCollection();
-		 		var arrStep:Array=FindStepWithoutZero(_dataProvider, _colorField, _steps-1);
+		 		arrStep=ArrayUtils.FindStepWithoutZero(_dataProvider, _colorField, _steps-1);
 				if(arrStep[0]!=null){
 		 			var colB:ColorBrewer=new ColorBrewer();
-		 			var arrCol:Array=colB.getColors(_scheme, _steps);
+		 			arrCol=colB.getColors(_scheme, _steps);
 			 		var dynamicClassName:String=getQualifiedClassName(this.parent);
 					var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
 					var proj:String=(this.parent as dynamicClassRef).projection;
@@ -640,7 +656,6 @@
 						}else{
 							_arrDataTips.addItem({gg:geom, dataTips:cursor.current[_toolTipField]});
 						}
-						//_toolTip=cursor.current[_toolTipField]
 						
 						i++;
 						cursor.moveNext();  
@@ -650,48 +665,7 @@
 				dispatchEvent(new GeoChoroEvents(GeoChoroEvents.CHOROPLETH_COMPLETE, _scheme, _steps, _colorField));
     	}
    		
-   		/**
-   		 * @private
-   		 */
-   		 private function FindStepWithoutZero(List:ICollectionView, valueField:String, nbrStep:int):Array{
-			var arrValues:Array=new Array();
-			var arrRetValues:Array=new Array();
-			var i:int=0;
-			var cursor:IViewCursor = List.createCursor();
-				
-			while(!cursor.afterLast)
-			{
-				arrValues[i]=cursor.current[valueField];  
-				i++;
-				cursor.moveNext();  
-			} 
-			
-			arrValues.sort(Array.NUMERIC);
-			removeDup(arrValues);
-			if(arrValues[0]==0){
-				arrValues.splice(0,1);
-			}
-			var step:int=Math.floor(arrValues.length/(nbrStep+1));
-			for (var k:int=0; k<nbrStep;k++){
-				arrRetValues[k]=arrValues[(k+1)*step];
-			}
-			return arrRetValues;
-		}
    		
-   		
-   		/**
-   		 * @private
-   		 */
-   		 private function removeDup(a:Array):void{
-		    for(var y:int=0;y<a.length;y++){
-				for(var z:int=(y+1);z<=a.length;z++){
-					if(a[y]==a[z]){
-		        		a.splice(z,1);
-		                z--;
-		            }
-		        }
-		    }
-		}
 		
    		 
    		/**
@@ -752,6 +726,20 @@
         private function projChanged(e:GeoProjEvents):void{
         	invalidateDisplayList();
         }
-
+        
+        /**
+     	*  return the value for each steps.
+     	*/
+		public function getStepsValues():Array{
+			return arrStep;
+		}
+		
+		/**
+     	*  return the colors for each steps.
+     	*/
+		public function getColors():Array{
+			return arrCol;
+		}
+		
 	}
 }

@@ -44,6 +44,7 @@ package org.un.cava.birdeye.geovis.core
 	import org.un.cava.birdeye.geovis.analysis.*;
 	import org.un.cava.birdeye.geovis.events.GeoMapEvents;
 	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
+	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	import org.un.cava.birdeye.geovis.features.Features;
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.geovis.styles.GeoStyles;
@@ -218,6 +219,7 @@ package org.un.cava.birdeye.geovis.core
 	     */
 		public function set projection(value:String):void
 		{
+			trace('projection')
 			_projection = value;
 			isProjectionChanged=true;
 			invalidateDisplayList();
@@ -346,7 +348,7 @@ package org.un.cava.birdeye.geovis.core
 	    override protected function createChildren():void
 	    {
 	    	super.createChildren();
-	        createMap();
+	    	createMap();
 	        isAlreadyCreated=true;
 	    }
 		
@@ -521,7 +523,9 @@ package org.un.cava.birdeye.geovis.core
 				}
 				
 			}
+			
 			this.addChild(surf);
+			dispatchEvent(new GeoCoreEvents(GeoCoreEvents.DRAW_BASEMAP_COMPLETE));
 		}
 		
 		/**

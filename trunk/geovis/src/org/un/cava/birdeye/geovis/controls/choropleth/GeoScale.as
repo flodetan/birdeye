@@ -5,6 +5,17 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	import mx.controls.Label;
 	import mx.core.UIComponent;
 	
+	
+	//--------------------------------------
+	//  Styles
+	//--------------------------------------
+	
+	/**
+ 	*  Define the default text color. 
+ 	*/
+	[Style(name="textColor", type="uint", format="Color", inherit="no")]
+	
+	
 	//--------------------------------------
 	//  Other metadata
 	//--------------------------------------
@@ -80,6 +91,12 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	     */
 		private var lblTitle:Label;
 		
+		/**
+	     *  @private
+	     */
+		private var _textColor:uint=0x000000;
+		
+		
 		//--------------------------------------------------------------------------
 	    //
 	    //  Properties
@@ -152,11 +169,15 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 				
 				scale.x=Number(_x);
 				scale.y=Number(_y+_height+2);
+				
+				if(getStyle("textColor")){
+					_textColor=getStyle("textColor");
+				}
 			
 				for (var i:int = 0; i <= 10; i++) {
 	  	 			lbl=new Label();
 			 		lbl.text=(i*10).toString()+'%';
-			 		lbl.setStyle('color',0x000000);
+			 		lbl.setStyle('color',_textColor);
 			 		lbl.setStyle('textAlign','center');
 			 		lbl.height=15;
 			 		lbl.width=40;
@@ -167,6 +188,7 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	  	 		if(_title!=''){
 		  	 		lblTitle=new Label();
 		  	 		lblTitle.text=_title;
+		  	 		lbl.setStyle('color',_textColor);
 		  	 		lblTitle.setStyle('textAlign','center');
 		  	 		lblTitle.width=_width;
 		  	 		lblTitle.height=15;

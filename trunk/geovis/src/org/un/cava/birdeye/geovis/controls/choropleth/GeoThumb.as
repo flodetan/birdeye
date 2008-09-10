@@ -11,12 +11,14 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	import mx.formatters.NumberFormatter;
 	import mx.managers.ToolTipManager;
     
+    import org.un.cava.birdeye.geovis.events.GeoThumbEvents;
+    
     //--------------------------------------
 	//  Styles
 	//--------------------------------------
 	
 	/**
- 	*  Define the default color of teh thumb. 
+ 	*  Define the default color of the thumb. 
  	*/        
 	[Style(name="Color", type="uint", format="Color", inherit="no")]
 	
@@ -118,6 +120,11 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	     */
 		private var Numformat:NumberFormatter;
 		
+		/**
+	     *  @private
+	     */
+		private var _borderColor:uint=0x000000;
+		
 		//--------------------------------------------------------------------------
 	    //
 	    //  Properties
@@ -167,13 +174,14 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	    //  value
 	    //----------------------------------
 	    
-		[Bindable(event="valueUpdated")]
+		//[Bindable(event="valueUpdated")]
 		/**
      	 *  Define the initial value of the Thumb.
      	*/
 		public function set value(value:Number):void{
 			_value = value;
-			dispatchEvent( new FlexEvent( "valueUpdated" ) );
+			dispatchEvent(new GeoThumbEvents(GeoThumbEvents.VALUE_CHANGED,_value));
+			//dispatchEvent( new FlexEvent( "valueUpdated" ) );
 		}
 		
 		/**
@@ -279,9 +287,13 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 				_parentMin=(this.parent as dynamicClassRef).minimumValue;
 				_parentMax=(this.parent as dynamicClassRef).maximumValue;
 				
+				if((this.parent as dynamicClassRef).getStyle('borderColor')){
+					_borderColor=(this.parent as dynamicClassRef).getStyle('borderColor');
+				}
+				
 				bouton = new UIComponent();
 				bouton.graphics.beginFill(getStyle("Color"));
-				bouton.graphics.lineStyle(1,0x000000);
+				bouton.graphics.lineStyle(1,_borderColor);
 				bouton.graphics.moveTo(0,0);
 				bouton.graphics.lineTo(-_height/2,-_height);
 				bouton.graphics.lineTo(_height/2,-_height);
@@ -349,7 +361,8 @@ package org.un.cava.birdeye.geovis.controls.choropleth
                     event.updateAfterEvent();
             }
 				_value=(event.currentTarget.x-_x)*_parentMax/_width
-	        	dispatchEvent( new FlexEvent( "valueUpdated" ) );
+	        	//dispatchEvent( new FlexEvent( "valueUpdated" ) );
+	        	dispatchEvent(new GeoThumbEvents(GeoThumbEvents.VALUE_CHANGED,_value));
 	            (this.parent as dynamicClassRef).invalidateDisplayList();
         }
         
