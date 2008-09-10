@@ -201,19 +201,10 @@
 			
 			<!-- To load flows for Olympic torch run -->
 			<mx:CheckBox id="showFlows" left="625" top="0" label="Journey of Harmony:" labelPlacement="left" selected="false" change="toggleFlows();" />
-			
 		</geomap:WorldMap>
 		
-		<!-- Errors resulting from CSS load
-		<controls:GeoGauge id="GeoGauge" left="10" x="10" y="10" right="10" bottom="25" width="700" height="10" minimumValue="0" maximumValue="500000" trackColor="0x333333" visible="true">
-        		<controls:GeoThumb id="t1" Color="0x000000" value="0" draggable="false"/>
-        		<controls:GeoThumb id="t2" Color="0xCCCCCC" minimum="0" maximum="{t3.value}" value="50000" draggable="true" />
-        		<controls:GeoThumb id="t3" Color="0x999999" minimum="{t2.value}" maximum="{t4.value}" value="100000" draggable="true" />
-        		<controls:GeoThumb id="t4" Color="0x666666" minimum="{t3.value}" maximum="{t4.value}" value="400000" draggable="true" allowDragToTheEnd="true" />
-        		<controls:GeoThumb id="t5" Color="0x333333" value="5000000" draggable="false"/>
-        		<controls:GeoScale title="Percentage" />
-        </controls:GeoGauge>-->
-        		
+		<controls:GeoAutoGauge id="geoAutoGauge" target="{myMap}" dataProvider="{myWorldMedals}" foidField="@iso" valueField="{featureSelector.selectedItem.data}" x="25" y="320" width="700" height="14"  scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" geoTScale="true" title="Percentage" textColor="0xFFFFFF" startAtZero="true" visible="true"/>
+			
 	</mx:Panel>
 		
 	
@@ -348,7 +339,7 @@
 </mx:HBox>
 <mx:Panel id="dashboardBottom" title="Dashboard" width="100%" height="100%" >
   	<!-- Bottom Dashboard -->
-  	<mx:ViewStack id="myViewStack" width="100%" height="100%">
+  	<mx:ViewStack id="myViewStack" width="100%" height="100%" creationPolicy="all">
             <views:StatsDashboard id="statsDashboard" label="STATS" />
             <views:InfoDashboard id="infoDashboard" label="INFO" />
     </mx:ViewStack>
