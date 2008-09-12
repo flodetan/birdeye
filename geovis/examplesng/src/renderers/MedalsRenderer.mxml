@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Button   xmlns:mx="http://www.adobe.com/2006/mxml"   width="15" height="15"
+                verticalCenter="0" horizontalCenter="0"
+                upSkin="Skins.SkinGoldMedals"
+                overSkin="Skins.SkinGoldMedals"
+                 downSkin="Skins.SkinGoldMedals"/>

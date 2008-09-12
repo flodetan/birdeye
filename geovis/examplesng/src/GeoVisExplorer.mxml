@@ -67,9 +67,14 @@
 		
 		private function showDetails(e:GeoMapEvents):void {
 	      try {
-	      	myViewStack.selectedIndex=1;
+	      	//myViewStack.selectedIndex=1;
 	      	var key:String=e.key;
 	      	infoDashboard.results.dataProvider=myWorldMedals.Country.(@iso==key).medals.medal; 
+	      	statsDashboard.column.dataProvider=myWorldMedals.Country.(@iso==key).medals.medal; 
+	      	statsDashboard.catAxis.categoryField="@discipline";
+	      	statsDashboard.broSer.xField="@discipline";
+	      	statsDashboard.silSer.xField="@discipline";
+	      	statsDashboard.golSer.xField="@discipline";
 	      }
 	   	  catch (errObject:Error){
 	   		return;
@@ -174,23 +179,22 @@
 	<mx:HBox id="dashboardTop" width="100%" horizontalGap="5" >
 			
 	<!-- Map Panel-->
-	<mx:Panel id="mapCnvs" title="Visualize: World Population Projections"
-		width="750" height="100%" verticalScrollPolicy="off">		
+	<mx:Panel id="mapCnvs" title="Visualize: World Population Projections" width="750" height="100%" verticalScrollPolicy="off">		
 		<mx:ProgressBar id="progressBar" x="{mapCnvs.width/2-progressBar.width/2}" y="{mapCnvs.height/2}" indeterminate="true" visible="false"/>
-		
 		<!-- Need to add property for perspective, e.g. 2d, 3dPlane, 3dSphere -->
-		<geomap:WorldMap id="myMap" projection="{projectionSelector.selectedItem.label}" ItemClick="showDetails(event)" scaleX=".942" scaleY=".942" x="0" y="20" >
+		<geomap:WorldMap id="myMap" projection="{projectionSelector.selectedItem.label}" ItemClick="showDetails(event)" ProjectionChanged="{progressBar.visible=true}" DrawBaseMapComplete="{progressBar.visible=false}" scaleX=".942" scaleY=".942" x="0" y="20" >
 			
 			<analysis:Choropleth id="choropleth" dataProvider="{myWorldMedals}" foidField="@iso" colorField="{featureSelector.selectedItem.data}" alpha="1" scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" dataTipFunction="customDataTip" highlighted="true"  />
 			
-			<symbols:Symbols id="mySymbols" dataProvider="{myWorldMedals}" foidField="@iso" itemRenderer="renderers.SymbolRenderer" />			
-			
-			<!--<symbols:Symbol key="FRA">
+			<symbols:Symbols id="mySymbols" dataProvider="{myWorldMedals}" foidField="@iso" itemRenderer="renderers.MedalsRenderer" />			
+			<!--
+			<symbols:Symbol key="FRA">
 					<sparks:GeoBubbleSpark radius="17" fill="0xFF00FF" alpha="0.8" ratio="1"/>
 			</symbols:Symbol>
 			<symbols:Symbol key="ZAF">
 				<quarks:BubbleSpark radius="17" fill="0xFF00FF" alpha="0.8" ratio="1"/>
-			</symbols:Symbol>-->
+			</symbols:Symbol>
+			-->
 			<!-- Need to complete cartogram function -->
 			<!--
 			<analysis:Cartogram id="cartogram" dataprovider="" foid="" areaField="" type="" form="" />
@@ -202,9 +206,7 @@
 			<!-- To load flows for Olympic torch run -->
 			<mx:CheckBox id="showFlows" left="625" top="0" label="Journey of Harmony:" labelPlacement="left" selected="false" change="toggleFlows();" />
 		</geomap:WorldMap>
-		
-		<controls:GeoAutoGauge id="geoAutoGauge" target="{myMap}" dataProvider="{myWorldMedals}" foidField="@iso" valueField="{featureSelector.selectedItem.data}" x="25" y="320" width="700" height="14"  scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" geoTScale="true" title="Percentage" textColor="0xFFFFFF" startAtZero="true" visible="true"/>
-			
+		<controls:GeoAutoGauge id="geoAutoGauge" target="{myMap}" dataProvider="{myWorldMedals}" foidField="@iso" valueField="{featureSelector.selectedItem.data}" x="25" y="320" width="700" height="14"  scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" geoTScale="true" title="Percentage" textColor="0xFFFFFF" startAtZero="true" visible="true"/>	
 	</mx:Panel>
 		
 	
@@ -216,7 +218,7 @@
 		>
 			<!-- These should be moved as individual components -->
 							
-							<mx:ComboBox id="projectionSelector" width="180" prompt="Projection..." selectedIndex="4" toolTip="Select map area for viewing...">
+							<mx:ComboBox id="projectionSelector" width="180" prompt="Projection..." selectedIndex="4" toolTip="Select map area for viewing..." >
 								<mx:ArrayCollection>
 										<mx:Object label="Geographic"/>
 										<mx:Object label="Lambert equal area"/>
