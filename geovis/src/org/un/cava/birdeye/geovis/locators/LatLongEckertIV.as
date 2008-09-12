@@ -1,21 +1,24 @@
 package org.un.cava.birdeye.geovis.locators
 {
-	public class LatLongEckertIV extends LatLong
+	public class LatLongEckertIV extends org.un.cava.birdeye.geovis.locators.LatLong
 	{
 		private var theta:Number=1;
 		private var tmpCounter=0;
 
 		public function LatLongEckertIV(long:Number,lat:Number)
 		{
-			trace ("lat comig in: " + lat);
-			super(long,lat);
+			super();
 			this.long=long;
 			this.lat=lat;
-			this.theta = approxTheta(lat);
 
 			this.scalefactor=145;
 			this.xoffset=2.6;
 			this.yoffset=1.3;
+			
+			this.theta = approxTheta(lat);
+
+			this.xval=calculateX();
+			this.yval=calculateY();
 		}
 
 		private function approxIsGoodEnough(tP:Number, lat:Number):Boolean {
@@ -43,17 +46,17 @@ package org.un.cava.birdeye.geovis.locators
 			return thetaPrim;
 		}
 
-		public override function longToX(long:Number):Number
+		public override function calculateX():Number
 		{
 			const lstart:Number = 0;
 			const c:Number = 2/Math.sqrt(Math.PI*(4+Math.PI));
 			var xCentered:Number;
 			
-			xCentered = c *(long-lstart)*(1+Math.cos(this.theta));
+			xCentered = c *(this.long-lstart)*(1+Math.cos(this.theta));
 			return translateX(xCentered);
 		}
 
-		public override function latToY(lat:Number):Number
+		public override function calculateY():Number
 		{
 			const c:Number = 2*Math.sqrt(Math.PI/(4+Math.PI));
 			var yCentered:Number;

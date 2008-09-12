@@ -40,31 +40,32 @@ package org.un.cava.birdeye.geovis.locators
     	//--------------------------------------------------------------------------
 		public function LatLongUSGeographic(long:Number,lat:Number)
 		{
-			super(long, lat);
+			super();
 			this.long=long;
 			this.lat=lat;
 
 			this.scalefactor=740;
 			this.xoffset=2.19;
 			this.yoffset=0.858
+
+			this.xval=calculateX();
+			this.yval=calculateY();
 		}
 
-		public override function longToX(long:Number):Number
+		public override function calculateX():Number
 		{
 			var xCentered:Number;
 			var stdParallell:Number = 0;
 			
-			xCentered = long * Math.cos(stdParallell);
-			trace ("xCentered: " + xCentered);
+			xCentered = this.long * Math.cos(stdParallell);
 			return translateX(xCentered);
 		}
 
-		public override function latToY(lat:Number):Number
+		public override function calculateY():Number
 		{
 			var yCentered:Number;
 			var scaleY:Number = 100;
-			yCentered = lat;
-			trace ("yCentered: " + yCentered);
+			yCentered = this.lat;
 			return translateY(yCentered);
 		}
 		

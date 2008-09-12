@@ -27,26 +27,20 @@
 
 package org.un.cava.birdeye.geovis.locators
 {
-//	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
-//	import flash.utils.getDefinitionByName;
-//	import flash.utils.getQualifiedClassName;
-	
-//	import mx.core.UIComponent;
+
 	import mx.events.FlexEvent;
 	import mx.containers.Canvas;
 	
-//	import org.un.cava.birdeye.geovis.projections.Projections;
-//	import org.un.cava.birdeye.qavis.sparklines.*;
-
 	/**
 	* Class for geographic location referencing via latitude and longitude
 	**/
-	 
+
+	//This class is intended to be overridden. Inheriting classes should implement the functions calculateX and calculateY
 	public class LatLong extends Canvas//UIComponent
 	{
 		//--------------------------------------------------------------------------
@@ -54,70 +48,60 @@ package org.un.cava.birdeye.geovis.locators
 	    //  Variables
 	    //
 	    //--------------------------------------------------------------------------
-	
-	    /**
-	     *  @private
-	     */
 
-		private var _long:Number=0;
-		private var _lat:Number=0;
-		private var _xval:Number=0;
-		private var _yval:Number=0;
-		private var _scalefactor:Number=1;
-		private var _xscaler:Number=1;
-		private var _xoffset:Number=0;
-		private var _yoffset:Number=0;
-		
-		/**
-	     *  @private
-	     */
-//		private var _isRemove:Boolean=false;
-		
-		/**
-	     *  @private
-	     */
-//		private var geom:GeometryGroup;
-		
-		/**
-	     *  @private
-	     */
-//		private var objToDel:DisplayObject;
-		            
+		private var _long:Number=0; //longitude in radians
+		private var _lat:Number=0;	//latitude in radians
+		private var _xval:Number=0;	//x value calculated from long and lat
+		private var _yval:Number=0; //y value calculated from long and lat
+		private var _scalefactor:Number=1; //for zooming in to match the size of the map polygon
+		private var _xscaler:Number=1; //temporary calibration variable, will be removed after calibration is done
+		private var _xoffset:Number=0; //x-wise translation so that x=0 becomes the left end of the map
+		private var _yoffset:Number=0; //y-wise translation so that y=0 becomes the upper end of the map
+			            
 		//--------------------------------------------------------------------------
     	//
     	//  Constructor
     	//
     	//--------------------------------------------------------------------------
-		public function LatLong(long:Number,lat:Number)
+		public function LatLong()
 		{
 			super();
 			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
 		}
 
-		public function longToX(long:Number):Number
+		//--------------------------------------------------------------------------
+	    //
+	    //  Functions for transformation from lat and long to x and y
+	    //
+	    //--------------------------------------------------------------------------
+	    
+		//This function is supposed to be overridden
+		public function calculateX():Number
 		{
 			return 0;
 		}
 
-		public function latToY(lat:Number):Number
+		//This function is supposed to be overridden
+		public function calculateY():Number
 		{
 			return 0;
 		}
 		
-		public function translateX(xCentered:Number):Number
+		protected function translateX(xCentered:Number):Number
 		{
-			trace("_scalefactor: " + _scalefactor);
 			return (_xoffset+xCentered)*_scalefactor;
 		}
 
-		public function translateY(yCentered:Number):Number
+		protected function translateY(yCentered:Number):Number
 		{
 			return (_yoffset-yCentered)*_scalefactor;
 		}
 
-    	//----------------------------------
-	    //  long and lat define the position of the child of LatLong
-	    //----------------------------------
+		//--------------------------------------------------------------------------
+	    //
+	    //  Setters and Getters
+	    //
+	    //--------------------------------------------------------------------------
 
 		protected function set long(value:Number):void{
 			_long=value;
@@ -135,35 +119,36 @@ package org.un.cava.birdeye.geovis.locators
 			return _lat;
 		}
 		
-		protected function set xval(value:Number):void{
+		public function set xval(value:Number):void{
 			_xval=value;
 		}
 
-		protected function get xval():Number{
+		public function get xval():Number{
 			return _xval;
 		}
 		
-		protected function set yval(value:Number):void{
+		public function set yval(value:Number):void{
 			_yval=value;
 		}
 
-		protected function get yval():Number{
+		public function get yval():Number{
 			return _yval;
 		}
 
 		public function set scalefactor(value:Number):void{
 			_scalefactor=value;
-			trace ("_scalefactor set to value: " + value);
 		}
 		
 		public function get scalefactor():Number{
 			return _scalefactor;
 		}
 		
+		//xscaler is a temporary calibration variable, will be removed once calibration is done
 		public function set xscaler(value:Number):void{
 			_xscaler=value;
 		}
 		
+		//xscaler is a temporary calibration variable, will be removed once calibration is done
 		public function get xscaler():Number{
 			return _xscaler;
 		}
@@ -186,18 +171,17 @@ package org.un.cava.birdeye.geovis.locators
 		
 		//--------------------------------------------------------------------------
     	//
-    	//  Methods
+    	//  Functions for this canvas
     	//
     	//--------------------------------------------------------------------------
-		
 		
 		/**
 	     *  @private
 	     */
 		private function creationCompleteHandler (event:FlexEvent):void{
 		
-			this.x=longToX(this.long);
-			this.y=latToY(this.lat);		
+			this.x=this.xval;
+			this.y=this.yval;		
 					
 			Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).addChild(this);
 		}	

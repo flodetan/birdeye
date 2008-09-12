@@ -1,19 +1,22 @@
 package org.un.cava.birdeye.geovis.locators
 {
-	public class LatLongWinkelTripel extends LatLong
+	public class LatLongWinkelTripel extends org.un.cava.birdeye.geovis.locators.LatLong
 	{
 		private var sincAlpha:Number;
 		
 		public function LatLongWinkelTripel(long:Number,lat:Number)
 		{
-			trace ("lat comig in: " + lat);
-			super(long,lat);
+			super();
 			this.long=long;
 			this.lat=lat;
-			this.sincAlpha=calcSincAlpha(long, lat);
 			this.scalefactor=120;
 			this.xoffset=3.15;
 			this.yoffset=1.47;
+
+			this.sincAlpha=calcSincAlpha(long, lat);
+
+			this.xval=calculateX();
+			this.yval=calculateY();
 		}
 
 
@@ -29,21 +32,21 @@ package org.un.cava.birdeye.geovis.locators
 			}
 		}
 
-		public override function longToX(long:Number):Number
+		public override function calculateX():Number
 		{
 			//const cosEquirect:Number = 1;//2/Math.PI;
-			var cosEquirect = this.xscaler;
+			var cosEquirect:Number = this.xscaler;
 			var xCentered:Number;
 			
-			xCentered = ( long*cosEquirect + 2*Math.cos(lat)*Math.sin(long/2)/this.sincAlpha )/2;
+			xCentered = ( this.long*cosEquirect + 2*Math.cos(this.lat)*Math.sin(this.long/2)/this.sincAlpha )/2;
 			return translateX(xCentered);
 		}
 
-		public override function latToY(lat:Number):Number
+		public override function calculateY():Number
 		{
 			var yCentered:Number;
 			
-			yCentered = (lat + Math.sin(lat)/this.sincAlpha)/2;
+			yCentered = (this.lat + Math.sin(this.lat)/this.sincAlpha)/2;
 			return translateY(yCentered);
 		}
 
