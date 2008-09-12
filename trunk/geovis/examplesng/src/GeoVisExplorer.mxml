@@ -164,14 +164,14 @@
 		
 	<mx:VBox width="1000" height="744" verticalGap="10" paddingLeft="5" paddingRight="5" paddingBottom="5" horizontalScrollPolicy="off" verticalScrollPolicy="off" >
 	<mx:Spacer width="5" />
-	<mx:ApplicationControlBar width="100%" height="30" fillColors="[#333333,#666666]" fillAlphas="[1.0,1.0]" cornerRadius="0"  >
-		<mx:HBox width="100%" height="100%" verticalAlign="middle" paddingLeft="5" paddingRight="5" >
+	<mx:ApplicationControlBar width="100%" height="35" fillColors="[#333333,#666666]" fillAlphas="[1.0,1.0]" cornerRadius="0"  >
+		<mx:Box width="100%" height="100%" direction="horizontal" verticalAlign="middle" paddingLeft="5" paddingRight="5" >
 			<mx:Label text="GeoVis Explorer" color="#FFFFFF" fontSize="16" />
 			<mx:Spacer width="100%" />
 			<mx:ComboBox id="comboBox" dataProvider="{dataProvider}" prompt="Choose style..." 
 				change="dispatcher.generateEvent({url:comboBox.selectedItem.data})"/>
 			
-        </mx:HBox>
+        </mx:Box>
 	</mx:ApplicationControlBar>
 	<mx:Spacer width="5" />
 	
