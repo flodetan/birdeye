@@ -1,0 +1,847 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print">
+<meta content="IVisualGraph,org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph,center,currentRootVNode,drawingSurface,edgeDrawGraphics,graph,layouter,maxVisibleDistance,noVisibleVNodes,origin,scale,showHistory,visibilityLimitActive,visibleVEdges,visibleVNodes,displayEdgeLabels,edgeLabelRenderer,edgeRenderer,itemRenderer,calcNodesBoundingBox,clearHistory,createNode,draw,initFromGraph,linkNodes,redrawEdges,refresh,removeNode,scroll,unlinkNodes" name="keywords">
+<title>org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'IVisualGraph - API Documentation';
+				var baseRef = '../../../../../../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/graphLayout/visual/IVisualGraph.html&amp;org/un/cava/birdeye/ravis/graphLayout/visual/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Interface&nbsp;IVisualGraph</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Interface IVisualGraph"); titleBar_setSubNav(false,true,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">org.un.cava.birdeye.ravis.graphLayout.visual</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Interface</td><td class="classSignature">public interface IVisualGraph extends <a href="none">mx.core.IUIComponent</a>, <a href="none">mx.core.IInvalidating</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Implementors</td><td><a href="../visual/VisualGraph.html">VisualGraph</a></td>
+</tr>
+</table>
+<p></p>
+  Interface to the VisualGraph Flex Component,
+  which also has to implement the IUIComponent
+  and the IInvalidating interface.
+  <p></p>
+<br>
+<hr>
+</div>
+<a name="propertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Properties</div>
+<table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#center">center</a> : Point<div class="summaryTableDescription">[read-only]
+   Provide access to the center point of the VGraph's
+   drawing surface, used by layouters to properly center
+   their layout.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#currentRootVNode">currentRootVNode</a> : <a href="../visual/IVisualNode.html">IVisualNode</a>
+<div class="summaryTableDescription">
+   Set or get the current root node (or focused node).</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#displayEdgeLabels">displayEdgeLabels</a> : Boolean<div class="summaryTableDescription">
+   Specify whether to display edge labels or not.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#drawingSurface">drawingSurface</a> : UIComponent<div class="summaryTableDescription">[read-only]
+   provide access to the drawing surface.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#edgeDrawGraphics">edgeDrawGraphics</a> : Graphics<div class="summaryTableDescription">[read-only]
+   provide access to the graphics object of
+   the drawing surface for the edge drawing, needed
+   by edge renderers.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#edgeLabelRenderer">edgeLabelRenderer</a> : IFactory<div class="summaryTableDescription">
+   Allow to provide an EdgeLabelRenderer in order to
+   display edge labels.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#edgeRenderer">edgeRenderer</a> : <a href="../visual/IEdgeRenderer.html">IEdgeRenderer</a>
+<div class="summaryTableDescription">
+   Allow the provision of an EdgeRenderer to
+   allow drawing of edges in a customised way.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#graph">graph</a> : <a href="../data/IGraph.html">IGraph</a>
+<div class="summaryTableDescription">
+   Access to the underlying Graph datastructure object.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#itemRenderer">itemRenderer</a> : IFactory<div class="summaryTableDescription">
+   Allow the provision of an ItemRenderer (which is
+   more precisely an IFactory).</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#layouter">layouter</a> : <a href="../layout/ILayoutAlgorithm.html">ILayoutAlgorithm</a>
+<div class="summaryTableDescription">
+   Access to the layouter to be used for the
+   layout of the graph.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#maxVisibleDistance">maxVisibleDistance</a> : int<div class="summaryTableDescription">
+   Limit the currently visible nodes to those in a limited
+   distance (in terms of degrees of separation) from the current
+   root node.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#noVisibleVNodes">noVisibleVNodes</a> : uint<div class="summaryTableDescription">[read-only]
+   Returns the number of currently visible nodes.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#origin">origin</a> : Point<div class="summaryTableDescription">[read-only]
+   Provide access to the current origin of the of the Visual Graph
+   which is required for proper drawing.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#scale">scale</a> : Number<div class="summaryTableDescription">
+   The scale property of VGraph will affect
+   the scaleX and scaleY properties and also
+   will ensure drag&drop works properly.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#showHistory">showHistory</a> : Boolean<div class="summaryTableDescription">
+   This property controls whether to show the history of
+   root nodes (or focused nodes) or not.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#visibilityLimitActive">visibilityLimitActive</a> : Boolean<div class="summaryTableDescription">
+   Specifies if any visibility limits should be active
+   or not.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#visibleVEdges">visibleVEdges</a> : Dictionary<div class="summaryTableDescription">[read-only]
+   Provide access to a list of currently visible edges,
+   i.e.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#visibleVNodes">visibleVNodes</a> : Dictionary<div class="summaryTableDescription">[read-only]
+   Provide access to a list of currently visible VNodes.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+</table>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#calcNodesBoundingBox()">calcNodesBoundingBox</a>():Rectangle</div>
+<div class="summaryTableDescription">
+   Calculate and return the current bounding box of all visible nodes.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#clearHistory()">clearHistory</a>():void</div>
+<div class="summaryTableDescription">
+   Clears the current history of root nodes.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#createNode()">createNode</a>(sid:String = "", o:Object = null):<a href="../visual/IVisualNode.html">IVisualNode</a>
+</div>
+<div class="summaryTableDescription">
+   Create a new Node in this VisualGraph, this automatically
+   creates an underlying Node in the Graph object.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#draw()">draw</a>(flags:uint = 0):void</div>
+<div class="summaryTableDescription">
+   Calling this forces a full calculation and redraw of the layout
+   including all edges.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#initFromGraph()">initFromGraph</a>():void</div>
+<div class="summaryTableDescription">
+   Initializes the VisualGraph from its currently set Graph object,
+   basically removing all existing VNodes and VEdges and
+   recreating them based on the information found in the associated
+   Graph object.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#linkNodes()">linkNodes</a>(v1:<a href="IVisualNode.html">IVisualNode</a>, v2:<a href="IVisualNode.html">IVisualNode</a>):<a href="../visual/IVisualEdge.html">IVisualEdge</a>
+</div>
+<div class="summaryTableDescription">
+   Links two nodes, thus creating an edge.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#redrawEdges()">redrawEdges</a>():void</div>
+<div class="summaryTableDescription">
+   This forces a redraw of all edges </div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#refresh()">refresh</a>():void</div>
+<div class="summaryTableDescription">
+   Calling this results in a redrawing of all edges during the next
+   update cycle (and only the edges).</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#removeNode()">removeNode</a>(vn:<a href="IVisualNode.html">IVisualNode</a>):void</div>
+<div class="summaryTableDescription">
+   Removes a node from this VisualGraph.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#scroll()">scroll</a>(sx:Number, sy:Number):void</div>
+<div class="summaryTableDescription">
+   Scrolls all objects according to the specified coordinates
+   (used as an offset).</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#unlinkNodes()">unlinkNodes</a>(v1:<a href="IVisualNode.html">IVisualNode</a>, v2:<a href="IVisualNode.html">IVisualNode</a>):void</div>
+<div class="summaryTableDescription">
+   Unlinks two nodes, thus removing the edge between them, if it
+   exists.</div>
+</td><td class="summaryTableOwnerCol">IVisualGraph</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="propertyDetail"></a>
+<div class="detailSectionHeader">Property detail</div>
+<a name="center"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">center</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>center:Point</code>&nbsp;&nbsp;[read-only]<p>
+   Provide access to the center point of the VGraph's
+   drawing surface, used by layouters to properly center
+   their layout.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get center():Point</code>
+<br>
+</div>
+<a name="currentRootVNode"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">currentRootVNode</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>currentRootVNode:<a href="../visual/IVisualNode.html">IVisualNode</a></code>&nbsp;&nbsp;[read-write]<p>
+   Set or get the current root node (or focused node). Setting
+   this property will result in a redraw of the graph to reflect
+   the change (if it was actually a change).
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get currentRootVNode():<a href="../visual/IVisualNode.html">IVisualNode</a></code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set currentRootVNode(value:<a href="../visual/IVisualNode.html">IVisualNode</a>):void</code>
+<br>
+</div>
+<a name="displayEdgeLabels"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">displayEdgeLabels</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>displayEdgeLabels:Boolean</code>&nbsp;&nbsp;[read-write]<p>
+   Specify whether to display edge labels or not.
+   If no edge label renderer is present a default
+   will be used.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get displayEdgeLabels():Boolean</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set displayEdgeLabels(value:Boolean):void</code>
+<br>
+</div>
+<a name="drawingSurface"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">drawingSurface</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>drawingSurface:UIComponent</code>&nbsp;&nbsp;[read-only]<p>
+   provide access to the drawing surface.
+   This is important as it should not be scaled.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get drawingSurface():UIComponent</code>
+<br>
+</div>
+<a name="edgeDrawGraphics"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">edgeDrawGraphics</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>edgeDrawGraphics:Graphics</code>&nbsp;&nbsp;[read-only]<p>
+   provide access to the graphics object of
+   the drawing surface for the edge drawing, needed
+   by edge renderers.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get edgeDrawGraphics():Graphics</code>
+<br>
+</div>
+<a name="edgeLabelRenderer"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">edgeLabelRenderer</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>edgeLabelRenderer:IFactory</code>&nbsp;&nbsp;[read-write]<p>
+   Allow to provide an EdgeLabelRenderer in order to
+   display edge labels. The created instances must be
+   UIComponents.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get edgeLabelRenderer():IFactory</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set edgeLabelRenderer(value:IFactory):void</code>
+<br>
+</div>
+<a name="edgeRenderer"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">edgeRenderer</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>edgeRenderer:<a href="../visual/IEdgeRenderer.html">IEdgeRenderer</a></code>&nbsp;&nbsp;[read-write]<p>
+   Allow the provision of an EdgeRenderer to
+   allow drawing of edges in a customised way.
+   The edgeRenderer has to implement the IEdgeRenderer interface.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get edgeRenderer():<a href="../visual/IEdgeRenderer.html">IEdgeRenderer</a></code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set edgeRenderer(value:<a href="../visual/IEdgeRenderer.html">IEdgeRenderer</a>):void</code>
+<br>
+</div>
+<a name="graph"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">graph</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>graph:<a href="../data/IGraph.html">IGraph</a></code>&nbsp;&nbsp;[read-write]<p>
+   Access to the underlying Graph datastructure object.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get graph():<a href="../data/IGraph.html">IGraph</a></code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set graph(value:<a href="../data/IGraph.html">IGraph</a>):void</code>
+<br>
+</div>
+<a name="itemRenderer"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">itemRenderer</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>itemRenderer:IFactory</code>&nbsp;&nbsp;[read-write]<p>
+   Allow the provision of an ItemRenderer (which is
+   more precisely an IFactory). This is important to allow
+   the Drawing of the items in a customised way.
+   Note that any ItemRenderer will have to be a UIComponent.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get itemRenderer():IFactory</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set itemRenderer(value:IFactory):void</code>
+<br>
+</div>
+<a name="layouter"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">layouter</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>layouter:<a href="../layout/ILayoutAlgorithm.html">ILayoutAlgorithm</a></code>&nbsp;&nbsp;[read-write]<p>
+   Access to the layouter to be used for the
+   layout of the graph.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get layouter():<a href="../layout/ILayoutAlgorithm.html">ILayoutAlgorithm</a></code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set layouter(value:<a href="../layout/ILayoutAlgorithm.html">ILayoutAlgorithm</a>):void</code>
+<br>
+</div>
+<a name="maxVisibleDistance"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">maxVisibleDistance</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>maxVisibleDistance:int</code>&nbsp;&nbsp;[read-write]<p>
+   Limit the currently visible nodes to those in a limited
+   distance (in terms of degrees of separation) from the current
+   root node. If showHistory is enabled, the previous root nodes
+   will be shown regardless of this limit. 
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get maxVisibleDistance():int</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set maxVisibleDistance(value:int):void</code>
+<br>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">showHistory</div>
+</div>
+<a name="noVisibleVNodes"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">noVisibleVNodes</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>noVisibleVNodes:uint</code>&nbsp;&nbsp;[read-only]<p>
+   Returns the number of currently visible nodes.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get noVisibleVNodes():uint</code>
+<br>
+</div>
+<a name="origin"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">origin</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>origin:Point</code>&nbsp;&nbsp;[read-only]<p>
+   Provide access to the current origin of the of the Visual Graph
+   which is required for proper drawing.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get origin():Point</code>
+<br>
+</div>
+<a name="scale"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">scale</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>scale:Number</code>&nbsp;&nbsp;[read-write]<p>
+   The scale property of VGraph will affect
+   the scaleX and scaleY properties and also
+   will ensure drag&drop works properly.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get scale():Number</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set scale(value:Number):void</code>
+<br>
+</div>
+<a name="showHistory"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">showHistory</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>showHistory:Boolean</code>&nbsp;&nbsp;[read-write]<p>
+   This property controls whether to show the history of
+   root nodes (or focused nodes) or not. If enabled, these
+   previous root nodes will be shown even though they are
+   are now more degrees of separation away from the current
+   root node than the limit allows. Also any intermediate node
+   from a previous root node to the current root node will
+   be shown to have a complete link and not a disconnected graph.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get showHistory():Boolean</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set showHistory(value:Boolean):void</code>
+<br>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">maxVisibleDistance</div>
+</div>
+<a name="visibilityLimitActive"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">visibilityLimitActive</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>visibilityLimitActive:Boolean</code>&nbsp;&nbsp;[read-write]<p>
+   Specifies if any visibility limits should be active
+   or not. If not active, always all nodes are visible.
+   If you have many nodes, this could have a severe
+   impact on your performance so handle with care.
+   </p><p>The default value is <code>true</code>.</p>
+<span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get visibilityLimitActive():Boolean</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set visibilityLimitActive(value:Boolean):void</code>
+<br>
+</div>
+<a name="visibleVEdges"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">visibleVEdges</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>visibleVEdges:Dictionary</code>&nbsp;&nbsp;[read-only]<p>
+   Provide access to a list of currently visible edges,
+   i.e. edges whose both nodes are visible and thus need
+   to be drawn. Likewise this can save a lot of CPU if
+   the layouter only needs to consider the currently visible
+   edges.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get visibleVEdges():Dictionary</code>
+<br>
+</div>
+<a name="visibleVNodes"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">visibleVNodes</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>visibleVNodes:Dictionary</code>&nbsp;&nbsp;[read-only]<p>
+   Provide access to a list of currently visible VNodes.
+   This is very important for layouters, if we have many many
+   nodes, but only a few of them are visible at a time. Layouters
+   typically will only layout the currently visible nodes.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get visibleVNodes():Dictionary</code>
+<br>
+</div>
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="calcNodesBoundingBox()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">calcNodesBoundingBox</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function calcNodesBoundingBox():Rectangle</code><p>
+   Calculate and return the current bounding box of all visible nodes.
+   This is required by some layouters.
+   </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Rectangle</code> &mdash; The bounding box rectangle of all visible nodes.
+   </td>
+</tr>
+</table>
+</div>
+<a name="clearHistory()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">clearHistory</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function clearHistory():void</code><p>
+   Clears the current history of root nodes.
+   </p><p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">showHistory</div>
+</div>
+<a name="createNode()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">createNode</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function createNode(sid:String = "", o:Object = null):<a href="../visual/IVisualNode.html">IVisualNode</a></code><p>
+   Create a new Node in this VisualGraph, this automatically
+   creates an underlying Node in the Graph object. It does not
+   link the node to any other node, yet and it does not trigger
+   a layout pass. The reason is that currently all layouters require
+   a CONNECTED graph, since the new node would create a disconnected
+   graph (since it is not linked, yet) this would break things.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">sid</span>:String</code> (default = "<code></code>")<code></code> &mdash; The string id of the new node.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">o</span>:Object</code> (default = <code>null</code>)<code></code> &mdash; The data object of this new node.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../visual/IVisualNode.html">IVisualNode</a></code> &mdash; 
+                        The created VisualNode object.
+   
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="draw()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">draw</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function draw(flags:uint = 0):void</code><p>
+   Calling this forces a full calculation and redraw of the layout
+   including all edges.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">flags</span>:uint</code> (default = <code>0</code>)<code></code></td>
+</tr>
+</table>
+</div>
+<a name="initFromGraph()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">initFromGraph</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function initFromGraph():void</code><p>
+   Initializes the VisualGraph from its currently set Graph object,
+   basically removing all existing VNodes and VEdges and
+   recreating them based on the information found in the associated
+   Graph object.
+   </p></div>
+<a name="linkNodes()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">linkNodes</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function linkNodes(v1:<a href="IVisualNode.html">IVisualNode</a>, v2:<a href="IVisualNode.html">IVisualNode</a>):<a href="../visual/IVisualEdge.html">IVisualEdge</a></code><p>
+   Links two nodes, thus creating an edge. If the underlying Graph
+   is directional, the order matters, not otherwise. If the nodes are
+   already linked, simply returns the existing edge between them.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">v1</span>:<a href="IVisualNode.html">IVisualNode</a></code> &mdash; The first node (from node) to link.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">v2</span>:<a href="IVisualNode.html">IVisualNode</a></code> &mdash; The second node (to node) to link.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../visual/IVisualEdge.html">IVisualEdge</a></code> &mdash; 
+                        The created VisualEdge.
+   
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="redrawEdges()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">redrawEdges</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function redrawEdges():void</code><p>
+   This forces a redraw of all edges </p></div>
+<a name="refresh()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">refresh</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function refresh():void</code><p>
+   Calling this results in a redrawing of all edges during the next
+   update cycle (and only the edges).
+   </p></div>
+<a name="removeNode()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">removeNode</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function removeNode(vn:<a href="IVisualNode.html">IVisualNode</a>):void</code><p>
+   Removes a node from this VisualGraph. This removes any associated
+   VEdges and Edges with the node and of course the underlying Node from
+   the Graph datastructure.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">vn</span>:<a href="IVisualNode.html">IVisualNode</a></code> &mdash; The VisualNode to be removed.
+   </td>
+</tr>
+</table>
+</div>
+<a name="scroll()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">scroll</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function scroll(sx:Number, sy:Number):void</code><p>
+   Scrolls all objects according to the specified coordinates
+   (used as an offset).
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">sx</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">sy</span>:Number</code></td>
+</tr>
+</table>
+</div>
+<a name="unlinkNodes()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">unlinkNodes</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function unlinkNodes(v1:<a href="IVisualNode.html">IVisualNode</a>, v2:<a href="IVisualNode.html">IVisualNode</a>):void</code><p>
+   Unlinks two nodes, thus removing the edge between them, if it
+   exists. Does nothing if the nodes were not linked.
+   Again, order matters of the graph is directional.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">v1</span>:<a href="IVisualNode.html">IVisualNode</a></code> &mdash; The first node to unlink.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">v2</span>:<a href="IVisualNode.html">IVisualNode</a></code> &mdash; The second node to unlink.
+   </td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->

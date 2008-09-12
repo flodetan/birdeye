@@ -1,0 +1,779 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print">
+<meta content="IGraph,org.un.cava.birdeye.ravis.graphLayout.data.IGraph,edges,id,isDirectional,noEdges,noNodes,nodes,xmlData,nodeSortFunction,walkingDirection,createNode,getEdge,getTree,initFromXML,link,nodeById,nodeByStringId,purgeGraph,purgeTrees,removeEdge,removeNode,unlink" name="keywords">
+<title>org.un.cava.birdeye.ravis.graphLayout.data.IGraph</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'IGraph - API Documentation';
+				var baseRef = '../../../../../../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/graphLayout/data/IGraph.html&amp;org/un/cava/birdeye/ravis/graphLayout/data/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Interface&nbsp;IGraph</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Interface IGraph"); titleBar_setSubNav(false,true,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">org.un.cava.birdeye.ravis.graphLayout.data</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Interface</td><td class="classSignature">public interface IGraph extends <a href="none">flash.events.IEventDispatcher</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Implementors</td><td><a href="../data/Graph.html">Graph</a></td>
+</tr>
+</table>
+<p></p>
+  Interface to the Graph datastructure class
+  that hold the set of nodes
+  and edges that actually form that graph
+  <p></p>
+<br>
+<hr>
+</div>
+<a name="propertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Properties</div>
+<table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#edges">edges</a> : Array<div class="summaryTableDescription">[read-only]
+   An Array that contains all edges of the graph.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#id">id</a> : String<div class="summaryTableDescription">[read-only]
+   The id (or name) of the graph
+   </div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#isDirectional">isDirectional</a> : Boolean<div class="summaryTableDescription">[read-only] 
+   Indicator if the graph is directional or not.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#nodes">nodes</a> : Array<div class="summaryTableDescription">[read-only]
+   An Array that contains all nodes of the graph.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#nodeSortFunction">nodeSortFunction</a> : Function<div class="summaryTableDescription">
+   Provide a method to sort nodes in a graph.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#noEdges">noEdges</a> : int<div class="summaryTableDescription">[read-only]
+   The number of edges in the graph.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#noNodes">noNodes</a> : int<div class="summaryTableDescription">[read-only]
+   The number of nodes in the graph.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#walkingDirection">walkingDirection</a> : int<div class="summaryTableDescription">
+   This determines the walking direction when building
+   a spanning tree.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#xmlData">xmlData</a> : XML<div class="summaryTableDescription">[read-only]
+   Return a reference to the XML graph
+   structure that was used to initialise the graph.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+</table>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#createNode()">createNode</a>(sid:String = "", o:Object = null):<a href="../data/INode.html">INode</a>
+</div>
+<div class="summaryTableDescription">
+   Creates a graph node in the graph, optionally takes a string
+   id for the node and an object to associate the node with.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getEdge()">getEdge</a>(n1:<a href="INode.html">INode</a>, n2:<a href="INode.html">INode</a>):<a href="../data/IEdge.html">IEdge</a>
+</div>
+<div class="summaryTableDescription">
+   Find an edge between two nodes.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getTree()">getTree</a>(n:<a href="INode.html">INode</a>, restr:Boolean = false, nocache:Boolean = false):<a href="../data/IGTree.html">IGTree</a>
+</div>
+<div class="summaryTableDescription">
+   returns the current BFS tree of the graph, rooted in the given node,
+   optionally the tree is restricted to only contain currently visible
+   nodes.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#initFromXML()">initFromXML</a>(xml:XML):void</div>
+<div class="summaryTableDescription">
+      Creates a graph from XML.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#link()">link</a>(node1:<a href="INode.html">INode</a>, node2:<a href="INode.html">INode</a>, o:Object = null):<a href="../data/IEdge.html">IEdge</a>
+</div>
+<div class="summaryTableDescription">
+   Link two nodes together (i.e.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#nodeById()">nodeById</a>(id:int):<a href="../data/INode.html">INode</a>
+</div>
+<div class="summaryTableDescription">
+   A lookup to find a node by it's (int) id.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#nodeByStringId()">nodeByStringId</a>(sid:String):<a href="../data/INode.html">INode</a>
+</div>
+<div class="summaryTableDescription">
+   A lookup to find a node by it's string id.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#purgeGraph()">purgeGraph</a>():void</div>
+<div class="summaryTableDescription">
+   Remove all edges and nodes from the Graph.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#purgeTrees()">purgeTrees</a>():void</div>
+<div class="summaryTableDescription">
+   Under certain circumstances all cached trees need
+   to be purged.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#removeEdge()">removeEdge</a>(e:<a href="IEdge.html">IEdge</a>):void</div>
+<div class="summaryTableDescription">
+   Removes an edge between two nodes.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#removeNode()">removeNode</a>(n:<a href="INode.html">INode</a>):void</div>
+<div class="summaryTableDescription">
+   Removes a node from the graph.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#unlink()">unlink</a>(node1:<a href="INode.html">INode</a>, node2:<a href="INode.html">INode</a>):void</div>
+<div class="summaryTableDescription">
+   Unlink two nodes, effectively removing the edge between
+   them.</div>
+</td><td class="summaryTableOwnerCol">IGraph</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="propertyDetail"></a>
+<div class="detailSectionHeader">Property detail</div>
+<a name="edges"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">edges</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>edges:Array</code>&nbsp;&nbsp;[read-only]<p>
+   An Array that contains all edges of the graph.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get edges():Array</code>
+<br>
+</div>
+<a name="id"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">id</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>id:String</code>&nbsp;&nbsp;[read-only]<p>
+   The id (or name) of the graph
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get id():String</code>
+<br>
+</div>
+<a name="isDirectional"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">isDirectional</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>isDirectional:Boolean</code>&nbsp;&nbsp;[read-only]<p> 
+   Indicator if the graph is directional or not.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get isDirectional():Boolean</code>
+<br>
+</div>
+<a name="nodes"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">nodes</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>nodes:Array</code>&nbsp;&nbsp;[read-only]<p>
+   An Array that contains all nodes of the graph.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get nodes():Array</code>
+<br>
+</div>
+<a name="nodeSortFunction"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">nodeSortFunction</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>nodeSortFunction:Function</code>&nbsp;&nbsp;[read-write]<p>
+   Provide a method to sort nodes in a graph.
+   This can be used by GTree when building
+   a spanning tree.
+   The function must be compatible with a function
+   to sort an Array.
+   </p><p>The default value is <code>null</code>.</p>
+<span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get nodeSortFunction():Function</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set nodeSortFunction(value:Function):void</code>
+<br>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">Array</div>
+</div>
+<a name="noEdges"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">noEdges</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>noEdges:int</code>&nbsp;&nbsp;[read-only]<p>
+   The number of edges in the graph.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get noEdges():int</code>
+<br>
+</div>
+<a name="noNodes"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">noNodes</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>noNodes:int</code>&nbsp;&nbsp;[read-only]<p>
+   The number of nodes in the graph.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get noNodes():int</code>
+<br>
+</div>
+<a name="walkingDirection"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">walkingDirection</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>walkingDirection:int</code>&nbsp;&nbsp;[read-write]<p>
+   This determines the walking direction when building
+   a spanning tree. Possible values are
+   Graph.WALK_FORWARD
+   Graph.WALK_BACKWARDS
+   Graph.WALK_BOTH
+   All make only sense in a directional graph.
+   Forward means we follow edges in its regular direction
+   from the root node.
+   Backwards means, we follow edges back from the root
+   node (e.g. the root is a sink with multiple sources)
+   Both obviously means both.
+   
+   This property will be queried by GTree to determine the
+   walking direction set.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get walkingDirection():int</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set walkingDirection(value:int):void</code>
+<br>
+</div>
+<a name="xmlData"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">xmlData</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>xmlData:XML</code>&nbsp;&nbsp;[read-only]<p>
+   Return a reference to the XML graph
+   structure that was used to initialise the graph.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get xmlData():XML</code>
+<br>
+</div>
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="createNode()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">createNode</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function createNode(sid:String = "", o:Object = null):<a href="../data/INode.html">INode</a></code><p>
+   Creates a graph node in the graph, optionally takes a string
+   id for the node and an object to associate the node with.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">sid</span>:String</code> (default = "<code></code>")<code></code> &mdash; A unique string id for the node (if empty the numerical id will be used).
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">o</span>:Object</code> (default = <code>null</code>)<code></code> &mdash; Dataobject to be associated with this node.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../data/INode.html">INode</a></code> &mdash; 
+                        The created node object.
+   
+                        
+                     </td>
+</tr>
+</table>
+<br>
+<span class="label">Throws</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code></code> &mdash; if the string id was already used before (must be unique).
+   </td>
+</tr>
+</table>
+</div>
+<a name="getEdge()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getEdge</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getEdge(n1:<a href="INode.html">INode</a>, n2:<a href="INode.html">INode</a>):<a href="../data/IEdge.html">IEdge</a></code><p>
+   Find an edge between two nodes.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">n1</span>:<a href="INode.html">INode</a></code> &mdash; The first node of the edge.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">n2</span>:<a href="INode.html">INode</a></code> &mdash; The second node of the edge.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../data/IEdge.html">IEdge</a></code> &mdash; 
+                        The resulting edge or null if the nodes were not linked.
+   
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="getTree()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getTree</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getTree(n:<a href="INode.html">INode</a>, restr:Boolean = false, nocache:Boolean = false):<a href="../data/IGTree.html">IGTree</a></code><p>
+   returns the current BFS tree of the graph, rooted in the given node,
+   optionally the tree is restricted to only contain currently visible
+   nodes. 
+   The trees are cached, that means a tree is only created once and then
+   stored in a map, unless the "nocache" flag is set! If the flag is set,
+   then the tree will be created once and returned, the existing cache will
+   not be touched or overwritten, this is useful if a full tree is needed
+   for a specific purpose but the cache should not be overwritten or consulted.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">n</span>:<a href="INode.html">INode</a></code> &mdash; The root node of the tree.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">restr</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash; This flag specifies if the resulting tree should be restricted to currently visible nodes.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">nocache</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash; If set, always a new tree will be created and returned and the cache will be untouched.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../data/IGTree.html">IGTree</a></code> &mdash; 
+                        The a GTree object that contains the tree.
+   
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="initFromXML()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">initFromXML</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function initFromXML(xml:XML):void</code><p>
+      Creates a graph from XML.
+      The XML you provide should contain 2 kinds of elements<br>
+       &lt;Node id="xxx" anything-else..../&gt;<br>
+       and<br>
+       &lt;Edge fromID="xxx" toID="yyy"/&gt;<br><br>
+      </p><p>You can have additional tags, and/or nest the tags any way you like; this will not
+      have any effect. We create a graph where each Item corresponds to a single node. The item's
+      id will come from the Node's id attribute (make sure this is unique). The item's data will
+      be the Node, and will be of type XML. The &lt;Edge&gt; elements must come fterthe corresponding
+      &lt;Node&gt; elements have appeared.
+      
+      <span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">xml</span>:XML</code> &mdash; an XML document containing Node and Edge elements.
+      </td>
+</tr>
+</table>
+</div>
+<a name="link()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">link</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function link(node1:<a href="INode.html">INode</a>, node2:<a href="INode.html">INode</a>, o:Object = null):<a href="../data/IEdge.html">IEdge</a></code><p>
+   Link two nodes together (i.e. create an edge). If the graph is NOT directional
+   the same edge will be incoming and outgoing for both nodes. If the nodes are
+   already linked, it will just return the existing edge between them.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">node1</span>:<a href="INode.html">INode</a></code> &mdash; First node to be linked.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">node2</span>:<a href="INode.html">INode</a></code> &mdash; Second node to be linked.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">o</span>:Object</code> (default = <code>null</code>)<code></code> &mdash; Optional data object to be associated with the resulting edge.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../data/IEdge.html">IEdge</a></code> &mdash; 
+                        The resulting edge.
+   
+                        
+                     </td>
+</tr>
+</table>
+<br>
+<span class="label">Throws</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code></code> &mdash; if any node is null.
+   </td>
+</tr>
+</table>
+</div>
+<a name="nodeById()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">nodeById</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function nodeById(id:int):<a href="../data/INode.html">INode</a></code><p>
+   A lookup to find a node by it's (int) id.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">id</span>:int</code> &mdash; The node's id.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../data/INode.html">INode</a></code> &mdash; 
+                        The node if one was found, null otherwise.
+   
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="nodeByStringId()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">nodeByStringId</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function nodeByStringId(sid:String):<a href="../data/INode.html">INode</a></code><p>
+   A lookup to find a node by it's string id.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">sid</span>:String</code> &mdash; The node's string id.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../data/INode.html">INode</a></code> &mdash; 
+                        The node if one was found, null otherwise.
+   
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="purgeGraph()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">purgeGraph</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function purgeGraph():void</code><p>
+   Remove all edges and nodes from the Graph.
+   </p></div>
+<a name="purgeTrees()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">purgeTrees</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function purgeTrees():void</code><p>
+   Under certain circumstances all cached trees need
+   to be purged.
+   </p></div>
+<a name="removeEdge()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">removeEdge</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function removeEdge(e:<a href="IEdge.html">IEdge</a>):void</code><p>
+   Removes an edge between two nodes.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">e</span>:<a href="IEdge.html">IEdge</a></code> &mdash; The edge to be removed.
+   </td>
+</tr>
+</table>
+<br>
+<span class="label">Throws</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code></code> &mdash; error if the edge was not part of the graph.
+   </td>
+</tr>
+</table>
+</div>
+<a name="removeNode()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">removeNode</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function removeNode(n:<a href="INode.html">INode</a>):void</code><p>
+   Removes a node from the graph. If the node is part of any edge,
+   and error is thrown (i.e. edges must be removed/nodes unlinked first).
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">n</span>:<a href="INode.html">INode</a></code> &mdash; The node object to be removed.
+   </td>
+</tr>
+</table>
+<br>
+<span class="label">Throws</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code></code> &mdash; error if the node is still part of any edge.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20"></td><td><code></code> &mdash; error if the node to be removed cannot be found in the graph.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20"></td><td><code></code> &mdash; error if there exists still a vnode associated with this node.
+   </td>
+</tr>
+</table>
+</div>
+<a name="unlink()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">unlink</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function unlink(node1:<a href="INode.html">INode</a>, node2:<a href="INode.html">INode</a>):void</code><p>
+   Unlink two nodes, effectively removing the edge between
+   them.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">node1</span>:<a href="INode.html">INode</a></code> &mdash; The first node to be unlinked.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">node2</span>:<a href="INode.html">INode</a></code> &mdash; The second node to be unlinked.
+   </td>
+</tr>
+</table>
+<br>
+<span class="label">Throws</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code></code> &mdash; error if the nodes were not linked before.
+   </td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->
