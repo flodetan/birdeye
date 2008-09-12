@@ -41,30 +41,36 @@
             dataProvider="{myWorldMedals.Country}"
         	>                
             <mx:horizontalAxis>
-                <mx:CategoryAxis categoryField="@iso"/>
+                <mx:CategoryAxis id="catAxis" categoryField="@iso"/>
             </mx:horizontalAxis>
                           
             <mx:series>
                 <mx:ColumnSeries 
+                	showDataEffect="showInterpolEffect" 
                     xField="@iso" 
                     yField="@bronze" 
                     displayName="Bronze"
                     fill="{sc3}"
                     stroke="{s3}"
+                    id="broSer"
                 />
                 <mx:ColumnSeries 
+                	showDataEffect="showInterpolEffect" 
                     xField="@iso" 
                     yField="@silver" 
                     displayName="Silver"
                     fill="{sc2}"
                     stroke="{s2}"
+                    id="silSer"
                 />
                 <mx:ColumnSeries 
+                	showDataEffect="showInterpolEffect" 
                     xField="@iso" 
                     yField="@gold" 
                     displayName="Gold"
                     fill="{sc1}"
                     stroke="{s1}"
+                    id="golSer"
                 />
                 
             </mx:series>
