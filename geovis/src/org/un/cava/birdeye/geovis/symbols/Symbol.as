@@ -163,14 +163,12 @@ package org.un.cava.birdeye.geovis.symbols
 	     *  @private
 	     */
 		private function createSymbols():void{
-		trace('create symbols');
 			if(_key!=""){
 				var dynamicClassName:String=getQualifiedClassName(this.parent);
 				var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
 				var proj:String=(this.parent as dynamicClassRef).projection;
 				var region:String=(this.parent as dynamicClassRef).region;
 				geom=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(_key));
-				trace('geom ' +geom);
 				if(geom!=null){
 					var GeoData:Object=Projections.getData(proj,region);
 					var cooBC:String=GeoData.getBarryCenter(_key);
@@ -179,7 +177,6 @@ package org.un.cava.birdeye.geovis.symbols
 					var myScaleX:Number=(this.parent as dynamicClassRef).scaleX;
 					var myScaleY:Number=(this.parent as dynamicClassRef).scaleY;
 					
-					trace('this ' + this + ' / ' + this.getChildAt(0));
 					if(this.getChildAt(0) is PieSpark)
 					{
 						this.x=(arrPos[0]-this.getChildAt(0).width/4)*myScaleX;
@@ -191,7 +188,6 @@ package org.un.cava.birdeye.geovis.symbols
 					
 					
 					Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).addChild(this);
-					trace('Symbol surface')
 				}
 			}
 		}	

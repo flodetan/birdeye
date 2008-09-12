@@ -174,14 +174,14 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	    //  value
 	    //----------------------------------
 	    
-		//[Bindable(event="valueUpdated")]
+		[Bindable(event="valueUpdated")]
 		/**
      	 *  Define the initial value of the Thumb.
      	*/
 		public function set value(value:Number):void{
 			_value = value;
-			dispatchEvent(new GeoThumbEvents(GeoThumbEvents.VALUE_CHANGED,_value));
-			//dispatchEvent( new FlexEvent( "valueUpdated" ) );
+			//dispatchEvent(new GeoThumbEvents(GeoThumbEvents.VALUE_CHANGED,_value));
+			dispatchEvent( new FlexEvent( "valueUpdated" ) );
 		}
 		
 		/**
@@ -361,8 +361,8 @@ package org.un.cava.birdeye.geovis.controls.choropleth
                     event.updateAfterEvent();
             }
 				_value=(event.currentTarget.x-_x)*_parentMax/_width
-	        	//dispatchEvent( new FlexEvent( "valueUpdated" ) );
-	        	dispatchEvent(new GeoThumbEvents(GeoThumbEvents.VALUE_CHANGED,_value));
+	        	dispatchEvent( new FlexEvent( "valueUpdated" ) );
+	        	//dispatchEvent(new GeoThumbEvents(GeoThumbEvents.VALUE_CHANGED,_value));
 	            (this.parent as dynamicClassRef).invalidateDisplayList();
         }
         

@@ -61,6 +61,39 @@
 	import org.un.cava.birdeye.geovis.utils.ArrayUtils;
 	
 	//--------------------------------------
+	//  Events
+	//--------------------------------------
+	
+	/**
+ 	*  Dispatched when the scheme change.
+ 	*
+ 	*  @eventType org.un.cava.birdeye.geovis.events.GeoChoroEvents.CHOROPLETH_SCHEME_CHANGED
+ 	*/
+	[Event(name="ChoroplethSchemeChanged", type="org.un.cava.birdeye.geovis.events.GeoChoroEvents")]
+	
+	/**
+ 	*  Dispatched when the number of steps change.
+ 	*
+ 	*  @eventType org.un.cava.birdeye.geovis.events.GeoChoroEvents.CHOROPLETH_STEPS_CHANGED
+ 	*/
+	[Event(name="ChoroplethStepsChanged", type="org.un.cava.birdeye.geovis.events.GeoChoroEvents")]
+	
+	
+	/**
+ 	*  Dispatched when the colorField change.
+ 	*
+ 	*  @eventType org.un.cava.birdeye.geovis.events.GeoChoroEvents.CHOROPLETH_COLORFIELD_CHANGED
+ 	*/
+	[Event(name="ChoroplethColorFieldChanged", type="org.un.cava.birdeye.geovis.events.GeoChoroEvents")]
+	
+	/**
+ 	*  Dispatched when the colorization is complete.
+ 	*
+ 	*  @eventType org.un.cava.birdeye.geovis.events.GeoChoroEvents.CHOROPLETH_COMPLETE
+ 	*/
+	[Event(name="ChoroplethComplete", type="org.un.cava.birdeye.geovis.events.GeoChoroEvents")]
+	
+	//--------------------------------------
 	//  Styles
 	//--------------------------------------
 	
