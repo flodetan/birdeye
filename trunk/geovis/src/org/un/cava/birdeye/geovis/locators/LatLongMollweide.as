@@ -1,29 +1,31 @@
 package org.un.cava.birdeye.geovis.locators
 {
-	public class LatLongMollweide extends LatLong
+	public class LatLongMollweide extends org.un.cava.birdeye.geovis.locators.LatLong
 	{
 		private var theta:Number=1;
-		private var tmpCounter=0;
+		private var loopCounter:int=0;
 		
 		public function LatLongMollweide(long:Number,lat:Number)
 		{
-			trace ("lat comig in: " + lat);
-			super(long,lat);
+			super();
 			this.long=long;
 			this.lat=lat;
-			this.theta = approxTheta(lat);
-
 			this.scalefactor=137;
 			this.xoffset=2.73;
 			this.yoffset=1.35;
+
+			this.theta = approxTheta(lat);
+
+			this.xval=calculateX();
+			this.yval=calculateY();
 		}
 		
 		private function approxIsGoodEnough(tP:Number, lat:Number):Boolean {
 			var maxDiff:Number = 1E-100; //acceptable deviation
-			tmpCounter++;
+			loopCounter++;
 			//diff = Left side - Right side = tP + sin(tP) - pi*sin(lat)
 			var diff:Number = tP+Math.sin(tP) - Math.PI * Math.sin(lat); 
-			return (Math.abs(diff)<maxDiff || tmpCounter>=100);
+			return (Math.abs(diff)<maxDiff || loopCounter>=100); //Do not loop more than 100 times
 		}
 		
 		private function newtonRaphson(tP:Number, lat:Number):Number {
@@ -34,23 +36,21 @@ package org.un.cava.birdeye.geovis.locators
 		{
 			var thetaPrim:Number = lat;
 			while (approxIsGoodEnough(thetaPrim, lat)==false) {
-				trace ("tmpCounter: " + tmpCounter);
-				trace ("thetaPrim: " + thetaPrim);
 				thetaPrim = thetaPrim + newtonRaphson(thetaPrim, lat);
 			}
 			return thetaPrim/2;
 		}
 
-		public override function longToX(long:Number):Number
+		public override function calculateX():Number
 		{
 			var xCentered:Number;
 			const c:Number = 2*Math.sqrt(2)/Math.PI;
 			
-			xCentered = c * long * Math.cos(this.theta);
+			xCentered = c * this.long * Math.cos(this.theta);
 			return translateX(xCentered);
 		}
 
-		public override function latToY(lat:Number):Number
+		public override function calculateY():Number
 		{
 			var yCentered:Number;
 			yCentered = Math.sqrt(2) * Math.sin(this.theta);
