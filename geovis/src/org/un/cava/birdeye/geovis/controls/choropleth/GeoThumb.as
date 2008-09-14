@@ -306,7 +306,7 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 				
 				if(_draggable==true){
 					bouton.addEventListener(MouseEvent.MOUSE_OVER,MouseOverEvent);
-		            bouton.addEventListener(MouseEvent.MOUSE_OVER,MouseOutEvent);
+		            bouton.addEventListener(MouseEvent.MOUSE_OUT,MouseOutEvent);
 		  			bouton.addEventListener(MouseEvent.MOUSE_DOWN, startMove);
 		            bouton.addEventListener(MouseEvent.MOUSE_UP, endDrag);
 		            bouton.addEventListener(MouseEvent.MOUSE_OUT, endDrag);

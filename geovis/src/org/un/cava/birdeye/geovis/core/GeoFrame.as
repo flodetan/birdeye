@@ -29,6 +29,7 @@ package org.un.cava.birdeye.geovis.core
 {	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
+	import com.degrafa.IGraphic;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.Polygon;
@@ -39,15 +40,15 @@ package org.un.cava.birdeye.geovis.core
 	import flash.utils.*;
 	
 	import mx.containers.Canvas;
-	import mx.events.FlexEvent;
 	
 	import org.un.cava.birdeye.geovis.analysis.*;
+	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	import org.un.cava.birdeye.geovis.events.GeoMapEvents;
 	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
-	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	import org.un.cava.birdeye.geovis.features.Features;
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.geovis.styles.GeoStyles;
+	import org.un.cava.birdeye.geovis.symbols.Symbol;
 	
 	//--------------------------------------
 	//  Events
@@ -256,12 +257,12 @@ package org.un.cava.birdeye.geovis.core
 	     */
 		public function set projection(value:String):void
 		{
-			trace('projection')
+			dispatchEvent(new GeoProjEvents(GeoProjEvents.PROJECTION_CHANGED,value));
 			_projection = value;
 			isProjectionChanged=true;
 			invalidateDisplayList();
 			//invalidateProperties();
-			dispatchEvent(new GeoProjEvents(GeoProjEvents.PROJECTION_CHANGED,value));
+			
 		}
 		
 		/**
@@ -359,7 +360,7 @@ package org.un.cava.birdeye.geovis.core
 		public function GeoFrame(region:String)
 		{
 			super();
-			super.measure();
+			//super.measure();
 			
 			_region = region;
 			
@@ -385,8 +386,13 @@ package org.un.cava.birdeye.geovis.core
 	    override protected function createChildren():void
 	    {
 	    	super.createChildren();
-	    	createMap();
-	        isAlreadyCreated=true;
+	    	//createMap();
+	        surf=new Surface();
+			surf.name="Surface";
+			surf.scaleX=_scaleX;
+		    surf.scaleY=_scaleY;
+		    this.addChild(surf);
+	        
 	    }
 		
 		
@@ -405,17 +411,20 @@ package org.un.cava.birdeye.geovis.core
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			for each (var gpGeom:GeometryGroup in _geoGroup)
+			/*for each (var gpGeom:GeometryGroup in _geoGroup)
 			{
 				gpGeom.draw(null,null);			
-			}
+			}*/
 			if(isProjectionChanged==true && isAlreadyCreated==true){
 				if(surf){
-					this.removeChild(surf);
+					for(var i:int=surf.numChildren-1; i>=0; i--){
+						surf.removeChildAt(i);
+					}
 					createMap();
 				}
 				isProjectionChanged=false;
 			}
+			isAlreadyCreated=true;
 			
 		}
 		
@@ -461,10 +470,7 @@ package org.un.cava.birdeye.geovis.core
 			wcData = Projections.getData(_projection, _region);
 			listOfCountry = wcData.getCountriesListByRegion(_region);
 			
-			surf=new Surface();
-			surf.name="Surface";
-			surf.scaleX=_scaleX;
-		    surf.scaleY=_scaleY;
+			
 		    
 			for each (var country:String in listOfCountry)
 			{
@@ -561,7 +567,7 @@ package org.un.cava.birdeye.geovis.core
 				
 			}
 			
-			this.addChild(surf);
+			
 			dispatchEvent(new GeoCoreEvents(GeoCoreEvents.DRAW_BASEMAP_COMPLETE));
 		}
 		
