@@ -171,7 +171,7 @@ package org.un.cava.birdeye.geovis.symbols
 		 */
 		private function creationCompleteHandler(event:FlexEvent):void{    
 			createSymbols();
-			this.parent.parent.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
+			//this.parent.parent.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
 			this.parent.parent.addEventListener(GeoCoreEvents.DRAW_BASEMAP_COMPLETE, baseMapComplete);
 		}
 		
