@@ -37,13 +37,13 @@ package org.un.cava.birdeye.geovis.symbols
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	
-	import mx.core.UIComponent;
-	import mx.events.FlexEvent;
 	import mx.containers.Canvas;
+	import mx.events.FlexEvent;
 	
+	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
+	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.qavis.sparklines.*;
-	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	
 	//--------------------------------------
 	//  Other metadata
@@ -87,6 +87,21 @@ package org.un.cava.birdeye.geovis.symbols
 	     *  @private
 	     */
 		private var _isProjChanged:Boolean=false;
+		
+		/**
+	     *  @private
+	     */
+		private var _isBaseMapComplete:Boolean=false;
+		
+		/**
+	     *  @private
+	     */
+		private var _isAddedToSurface:Boolean=false;
+		
+		/**
+	     *  @private
+	     */
+		private var _parent:*;
 		//--------------------------------------------------------------------------
 	    //
 	    //  Properties
@@ -137,10 +152,10 @@ package org.un.cava.birdeye.geovis.symbols
 		 */
        override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
       		super.updateDisplayList( unscaledWidth, unscaledHeight );            
-      		
-		      if(_isProjChanged){
+      		 if(_isProjChanged || _isBaseMapComplete){
       			createSymbols();
       			_isProjChanged=false;
+      			_isBaseMapComplete=false;
       		  }
       		  
       	}
@@ -154,9 +169,10 @@ package org.un.cava.birdeye.geovis.symbols
 		/**
 		 * @private
 		 */
-		private function creationCompleteHandler (event:FlexEvent):void{    
+		private function creationCompleteHandler(event:FlexEvent):void{    
 			createSymbols();
-			this.parent.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
+			this.parent.parent.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
+			this.parent.parent.addEventListener(GeoCoreEvents.DRAW_BASEMAP_COMPLETE, baseMapComplete);
 		}
 		
 		/**
@@ -164,18 +180,22 @@ package org.un.cava.birdeye.geovis.symbols
 	     */
 		private function createSymbols():void{
 			if(_key!=""){
-				var dynamicClassName:String=getQualifiedClassName(this.parent);
+				if(!_isAddedToSurface){
+					_parent=this.parent
+				}
+				
+				var dynamicClassName:String=getQualifiedClassName(_parent);
 				var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
-				var proj:String=(this.parent as dynamicClassRef).projection;
-				var region:String=(this.parent as dynamicClassRef).region;
-				geom=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(_key));
+				var proj:String=(_parent as dynamicClassRef).projection;
+				var region:String=(_parent as dynamicClassRef).region;
+				geom=GeometryGroup(Surface((_parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(_key));
 				if(geom!=null){
 					var GeoData:Object=Projections.getData(proj,region);
 					var cooBC:String=GeoData.getBarryCenter(_key);
 					var arrPos:Array=cooBC.split(',')
 					
-					var myScaleX:Number=(this.parent as dynamicClassRef).scaleX;
-					var myScaleY:Number=(this.parent as dynamicClassRef).scaleY;
+					var myScaleX:Number=(_parent as dynamicClassRef).scaleX;
+					var myScaleY:Number=(_parent as dynamicClassRef).scaleY;
 					
 					if(this.getChildAt(0) is PieSpark)
 					{
@@ -186,8 +206,8 @@ package org.un.cava.birdeye.geovis.symbols
 						this.y=(arrPos[1]-this.getChildAt(0).height/2)*myScaleY;
 					}
 					
-					
-					Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).addChild(this);
+					Surface((_parent as DisplayObjectContainer).getChildByName("Surface")).addChild(this);//this
+					_isAddedToSurface=true;
 				}
 			}
 		}	
@@ -206,6 +226,14 @@ package org.un.cava.birdeye.geovis.symbols
      	*/
         private function projChanged(e:GeoProjEvents):void{
         	_isProjChanged=true;
+        	invalidateDisplayList();
+        }
+        
+        /**
+     	*  @private
+     	*/
+        private function baseMapComplete(e:GeoCoreEvents):void{
+        	_isBaseMapComplete=true;
         	invalidateDisplayList();
         }
 		

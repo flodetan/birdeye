@@ -44,6 +44,7 @@ package org.un.cava.birdeye.geovis.analysis
 	import mx.styles.StyleManager;
 	
 	import org.un.cava.birdeye.geovis.dictionary.*;
+	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	
@@ -190,6 +191,10 @@ package org.un.cava.birdeye.geovis.analysis
 	     *  @private
 	     */
 	     private var _isProjChanged:Boolean=false;
+		/**
+	     *  @private
+	     */
+		private var _isBaseMapComplete:Boolean=false;
 		
 		//--------------------------------------------------------------------------
 	    //
@@ -430,9 +435,10 @@ package org.un.cava.birdeye.geovis.analysis
 		*/
        	override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
       		super.updateDisplayList( unscaledWidth, unscaledHeight ); 
-      		if(_isProjChanged){
+      		if(_isProjChanged || _isBaseMapComplete){
       			createFlows();
       			_isProjChanged=false;
+      			_isBaseMapComplete=false;
       		}
       		
       	}
@@ -466,6 +472,7 @@ package org.un.cava.birdeye.geovis.analysis
 		private function createFlowsDelayed(e:FlexEvent):void{
 			createFlows();
 			this.parent.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
+			this.parent.addEventListener(GeoCoreEvents.DRAW_BASEMAP_COMPLETE, baseMapComplete);
 		}
 		
 		
@@ -617,6 +624,14 @@ package org.un.cava.birdeye.geovis.analysis
      	*/
         private function projChanged(e:GeoProjEvents):void{
         	_isProjChanged=true;
+        	invalidateDisplayList();
+        }
+        
+        /**
+     	*  @private
+     	*/
+        private function baseMapComplete(e:GeoCoreEvents):void{
+        	_isBaseMapComplete=true;
         	invalidateDisplayList();
         }
 	

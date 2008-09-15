@@ -48,6 +48,7 @@ package org.un.cava.birdeye.geovis.symbols
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	
+	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.qavis.sparklines.*;
@@ -77,7 +78,10 @@ package org.un.cava.birdeye.geovis.symbols
 	     *  @private
 	     */
 		private var _foidField:String;
-		
+		/**
+	     *  @private
+	     */
+		private var _isBaseMapComplete:Boolean=false;
 	    
     //----------------------------------
     //  itemRenderer
@@ -256,9 +260,10 @@ package org.un.cava.birdeye.geovis.symbols
        override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
       		super.updateDisplayList( unscaledWidth, unscaledHeight );            
       		
-		      if(_isProjChanged){
+		      if(_isProjChanged || _isBaseMapComplete){
       			createSymbols();
       			_isProjChanged=false;
+      			_isBaseMapComplete=false;
       		  }
       		  
       	}
@@ -309,7 +314,6 @@ package org.un.cava.birdeye.geovis.symbols
         //var newSelectedItem:*;
 
         _data = value;
-trace('symbols' + data)
        /* if (_listData && _listData is DataGridListData)
             newSelectedItem = _data[DataGridListData(_listData).dataField];
         else if (_listData is ListData && ListData(_listData).labelField in _data)
@@ -373,6 +377,7 @@ trace('symbols' + data)
 		private function createSymbolsDelayed(e:FlexEvent):void{
 			createSymbols();
 			this.parent.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
+			this.parent.addEventListener(GeoCoreEvents.DRAW_BASEMAP_COMPLETE, baseMapComplete);
 		}
 		
 		/**
@@ -447,7 +452,13 @@ trace('symbols' + data)
 			this.invalidateDisplayList();
 		}
 
-		
+		/**
+     	*  @private
+     	*/
+        private function baseMapComplete(e:GeoCoreEvents):void{
+        	_isBaseMapComplete=true;
+        	invalidateDisplayList();
+        }
 		
 	}
 }
