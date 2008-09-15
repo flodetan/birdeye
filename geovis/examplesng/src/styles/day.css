@@ -109,3 +109,8 @@ Choropleth{
 Features{
 	strokeItem : #333333;
 }
+
+Legend{
+	textColor: #000000;
+	borderStyle:none;
+}

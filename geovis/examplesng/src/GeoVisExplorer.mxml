@@ -6,8 +6,8 @@
 	xmlns:analysis="org.un.cava.birdeye.geovis.analysis.*"
 	xmlns:features="org.un.cava.birdeye.geovis.features.*"
 	xmlns:symbols="org.un.cava.birdeye.geovis.symbols.*"
-	xmlns:sparks="org.un.cava.birdeye.geovis.symbols.GeoSymbols.*"
 	xmlns:quarks="org.un.cava.birdeye.qavis.sparklines.*"
+	xmlns:surrounds="org.un.cava.birdeye.geovis.views.surrounds.*"
 	xmlns:views="views.*"
 	xmlns:maps="styles.maps.*"
 	xmlns:mate="http://mate.asfusion.com/"
@@ -164,14 +164,14 @@
 		
 	<mx:VBox width="1000" height="744" verticalGap="10" paddingLeft="5" paddingRight="5" paddingBottom="5" horizontalScrollPolicy="off" verticalScrollPolicy="off" >
 	<mx:Spacer width="5" />
-	<mx:ApplicationControlBar width="100%" height="35" fillColors="[#333333,#666666]" fillAlphas="[1.0,1.0]" cornerRadius="0"  >
-		<mx:Box width="100%" height="100%" direction="horizontal" verticalAlign="middle" paddingLeft="5" paddingRight="5" >
+	<mx:ApplicationControlBar width="100%" height="30" fillColors="[#333333,#666666]" fillAlphas="[1.0,1.0]" cornerRadius="0"  >
+		<mx:HBox width="100%" height="100%" verticalAlign="middle" paddingLeft="5" paddingRight="5" >
 			<mx:Label text="GeoVis Explorer" color="#FFFFFF" fontSize="16" />
 			<mx:Spacer width="100%" />
 			<mx:ComboBox id="comboBox" dataProvider="{dataProvider}" prompt="Choose style..." 
 				change="dispatcher.generateEvent({url:comboBox.selectedItem.data})"/>
 			
-        </mx:Box>
+        </mx:HBox>
 	</mx:ApplicationControlBar>
 	<mx:Spacer width="5" />
 	
@@ -185,16 +185,13 @@
 		<geomap:WorldMap id="myMap" projection="{projectionSelector.selectedItem.label}" ItemClick="showDetails(event)" ProjectionChanged="{progressBar.visible=true}" DrawBaseMapComplete="{progressBar.visible=false}" scaleX=".942" scaleY=".942" x="0" y="20" >
 			
 			<analysis:Choropleth id="choropleth" dataProvider="{myWorldMedals}" foidField="@iso" colorField="{featureSelector.selectedItem.data}" alpha="1" scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" dataTipFunction="customDataTip" highlighted="true"  />
-			
+			<!---->
 			<symbols:Symbols id="mySymbols" dataProvider="{myWorldMedals}" foidField="@iso" itemRenderer="renderers.MedalsRenderer" />			
-			<!--
-			<symbols:Symbol key="FRA">
-					<sparks:GeoBubbleSpark radius="17" fill="0xFF00FF" alpha="0.8" ratio="1"/>
-			</symbols:Symbol>
+			
+			
 			<symbols:Symbol key="ZAF">
 				<quarks:BubbleSpark radius="17" fill="0xFF00FF" alpha="0.8" ratio="1"/>
 			</symbols:Symbol>
-			-->
 			<!-- Need to complete cartogram function -->
 			<!--
 			<analysis:Cartogram id="cartogram" dataprovider="" foid="" areaField="" type="" form="" />
@@ -206,7 +203,19 @@
 			<!-- To load flows for Olympic torch run -->
 			<mx:CheckBox id="showFlows" left="625" top="0" label="Journey of Harmony:" labelPlacement="left" selected="false" change="toggleFlows();" />
 		</geomap:WorldMap>
-		<controls:GeoAutoGauge id="geoAutoGauge" target="{myMap}" dataProvider="{myWorldMedals}" foidField="@iso" valueField="{featureSelector.selectedItem.data}" x="25" y="320" width="700" height="14"  scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" geoTScale="true" title="Percentage" textColor="0xFFFFFF" startAtZero="true" visible="true"/>	
+		
+		<mx:ViewStack id="myVS" width="100%" selectedIndex="1" creationPolicy="all" >
+			<mx:Canvas width="100%">
+				<controls:GeoAutoGauge id="geoAutoGauge" target="{myMap}" dataProvider="{myWorldMedals}" foidField="@iso" valueField="{featureSelector.selectedItem.data}" x="25" y="320" width="700" height="14"  scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" geoTScale="true" title="Percentage" textColor="0xFFFFFF" startAtZero="true" visible="true"/>	
+			</mx:Canvas>
+			<mx:Canvas width="100%">
+				<surrounds:Legend target="{geoAutoGauge}"  x="25" y="320" width="700" height="20"/>
+			</mx:Canvas>
+        </mx:ViewStack>
+
+		
+	<!---->
+	
 	</mx:Panel>
 		
 	
@@ -263,11 +272,11 @@
 							<mx:NumericStepper id="stepsNum" minimum="3" maximum="8" value="5" />
 							</mx:HBox>
 							<mx:HBox width="95%" horizontalAlign="center" >
-							<mx:RadioButtonGroup id="rgbColorTypeSelector" labelPlacement="right"  />
-									<mx:RadioButton groupName="rgbColorTypeSelector" id="rbRange" value="Range" 
-            							label="Range Control" selected="true" />
-        							<mx:RadioButton groupName="rgbColorTypeSelector" id="rbLegend" value="Legend" 
-            							label="Legend" selected="false"  />
+							<mx:RadioButtonGroup id="rgbColorTypeSelector" labelPlacement="right" change="{myVS.selectedIndex=int(rgbColorTypeSelector.selectedValue)}"  />
+									<mx:RadioButton groupName="rgbColorTypeSelector" id="rbRange" value="0" 
+            							label="Range Control" selected="false" />
+        							<mx:RadioButton groupName="rgbColorTypeSelector" id="rbLegend" value="1" 
+            							label="Legend" selected="true"  />
 							</mx:HBox>			
 							<mx:HRule width="100%" />
 							
