@@ -376,7 +376,7 @@ package org.un.cava.birdeye.geovis.symbols
     	//--------------------------------------------------------------------------
 		private function createSymbolsDelayed(e:FlexEvent):void{
 			createSymbols();
-			this.parent.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
+			//this.parent.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
 			this.parent.addEventListener(GeoCoreEvents.DRAW_BASEMAP_COMPLETE, baseMapComplete);
 		}
 		
