@@ -83,6 +83,16 @@ package org.un.cava.birdeye.geovis.symbols
 	     */
 		private var _isBaseMapComplete:Boolean=false;
 	    
+	    /**
+	     *  @private
+	     */
+	    [Bindable]
+		private var _visible:Boolean=true;
+		
+		/**
+	     *  @private
+	     */
+	  	private var surf:Surface;
     //----------------------------------
     //  itemRenderer
     //----------------------------------
@@ -268,7 +278,23 @@ package org.un.cava.birdeye.geovis.symbols
       		  
       	}
       	
-		//----------------------------------
+      	/**
+		 * @private
+		 */
+		override public function set visible(value:Boolean):void 
+		{
+			_visible=value;
+    		if(surf){
+    			for (var i:int = 0; i < surf.numChildren; i++) {
+    				if(surf.getChildAt(i).name.toString().substr(0,7)=='Symbols'){
+    					surf.getChildAt(i).visible=_visible;
+    				}
+    			}
+    		}
+    	}
+    	
+    	
+	//----------------------------------
     //  data
     //----------------------------------
 
@@ -404,7 +430,7 @@ package org.un.cava.birdeye.geovis.symbols
 						var arrPosFoid:Array=cooFoid.split(',');
 						
 						var geom:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foidField));
-					
+						surf=Surface((this.parent as DisplayObjectContainer).getChildByName("Surface"));
 						if(geom!=null){
 							var myScaleX:Number=(this.parent as dynamicClassRef).scaleX;
 							var myScaleY:Number=(this.parent as dynamicClassRef).scaleY;
@@ -416,8 +442,10 @@ package org.un.cava.birdeye.geovis.symbols
 							}
 							mySymbol.x=(arrPosFoid[0]-mySymbol.width/2)*myScaleX;
 							mySymbol.y=(arrPosFoid[1]-mySymbol.height/2)*myScaleY;
+							mySymbol.name="Symbols";
+							mySymbol.visible=_visible;
 						}
-						Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).addChild(mySymbol);
+						surf.addChild(mySymbol);
 						refresh();
 					}
 					i++;
@@ -449,7 +477,7 @@ package org.un.cava.birdeye.geovis.symbols
 		 * */
 		public function refresh():void {
 			/* this forces the next call of updateDisplayList() */
-			this.invalidateDisplayList();
+			invalidateDisplayList();
 		}
 
 		/**
