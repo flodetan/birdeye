@@ -69,8 +69,8 @@
 	      try {
 	      	//myViewStack.selectedIndex=1;
 	      	var key:String=e.key;
-	      	infoDashboard.results.dataProvider=myWorldMedals.region.Country.(@iso==key).medals.medal; 
-	      	statsDashboard.column.dataProvider=myWorldMedals.region.Country.(@iso==key).medals.medal; 
+	      	infoDashboard.results.dataProvider=myWorldMedals.regions.region.Countries.Country.(@iso==key).medals.medal; 
+	      	statsDashboard.column.dataProvider=myWorldMedals.regions.region.Countries.Country.(@iso==key).medals.medal; 
 	      	statsDashboard.catAxis.categoryField="@discipline";
 	      	statsDashboard.broSer.xField="@discipline";
 	      	statsDashboard.silSer.xField="@discipline";
@@ -192,9 +192,9 @@
 		<!-- Need to add property for perspective, e.g. 2d, 3dPlane, 3dSphere -->
 		<geomap:WorldMap id="myMap" projection="{projectionSelector.selectedItem.label}" ItemClick="showDetails(event)" ProjectionChanged="{progressBar.visible=true}" DrawBaseMapComplete="{progressBar.visible=false}" scaleX=".942" scaleY=".942" x="0" y="20" >
 			
-			<analysis:Choropleth id="choropleth" dataProvider="{myWorldMedals.region}" foidField="@iso" colorField="{featureSelector.selectedItem.data}" alpha="1" scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" dataTipFunction="customDataTip" highlighted="true"  />
+			<analysis:Choropleth id="choropleth" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" colorField="{featureSelector.selectedItem.data}" alpha="1" scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" dataTipFunction="customDataTip" highlighted="true"  />
 			<!---->
-			<symbols:Symbols id="mySymbols" dataProvider="{myWorldMedals.region}" foidField="@iso" itemRenderer="renderers.MedalsRenderer" visible="false" />			
+			<symbols:Symbols id="mySymbols" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" itemRenderer="renderers.MedalsRenderer" visible="false" />			
 			
 			<!--<symbols:Symbol key="ZAF">
 				<quarks:BubbleSpark radius="17" fill="0xFF00FF" alpha="0.8" ratio="1"/>
@@ -213,7 +213,7 @@
 		
 		<mx:ViewStack id="myVS" width="100%" selectedIndex="1" creationPolicy="all" >
 			<mx:Canvas width="100%">
-				<controls:GeoAutoGauge id="geoAutoGauge" target="{myMap}" dataProvider="{myWorldMedals.region}" foidField="@iso" valueField="{featureSelector.selectedItem.data}" x="25" y="320" width="700" height="14"  scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" geoTScale="true" title="Percentage" textColor="0xFFFFFF" startAtZero="true" visible="true"/>	
+				<controls:GeoAutoGauge id="geoAutoGauge" target="{myMap}" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" valueField="{featureSelector.selectedItem.data}" x="25" y="320" width="700" height="14"  scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" geoTScale="true" title="Percentage" textColor="0xFFFFFF" startAtZero="true" visible="true"/>	
 			</mx:Canvas>
 			<mx:Canvas width="100%">
 				<surrounds:Legend target="{geoAutoGauge}"  x="25" y="320" width="700" height="20"/>
