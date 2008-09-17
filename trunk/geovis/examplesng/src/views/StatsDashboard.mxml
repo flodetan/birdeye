@@ -38,7 +38,7 @@
             paddingLeft="5" 
             paddingRight="5" 
             showDataTips="true" gutterLeft="0" 
-            dataProvider="{myWorldMedals.region.Country}"
+            dataProvider="{myWorldMedals.regions.region.Countries.Country}"
         	>                
             <mx:horizontalAxis>
                 <mx:CategoryAxis id="catAxis" categoryField="@iso"/>

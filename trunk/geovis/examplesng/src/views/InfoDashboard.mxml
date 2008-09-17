@@ -5,9 +5,10 @@
 	horizontalScrollPolicy="off" verticalScrollPolicy="off"
 	width="100%" height="100%" paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5" >
 
+<mx:XML id="myWorldMedals" source="data/worldmedals.xml" />
 
 <mx:Box id="middle" width="100%" height="100%" horizontalAlign="center"  >
-	<mx:DataGrid id="results" headerStyleName="headerStyle" width="100%" height="100%" >
+	<mx:DataGrid id="results" dataProvider="{myWorldMedals.world.Total.medals.medal}" headerStyleName="headerStyle" width="100%" height="100%" >
 		<mx:columns>
        			<mx:DataGridColumn headerText="Discipline" dataField="@discipline"/>
        			<mx:DataGridColumn headerText="Gold" dataField="@gold"/>
