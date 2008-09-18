@@ -50,15 +50,14 @@
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	import mx.managers.ToolTipManager;
-	import mx.utils.ObjectUtil;
 	
 	import org.un.cava.birdeye.geovis.dictionary.*;
 	import org.un.cava.birdeye.geovis.events.GeoChoroEvents;
-	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
+	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	import org.un.cava.birdeye.geovis.projections.Projections;
+	import org.un.cava.birdeye.geovis.utils.ArrayUtils;
 	import org.un.cava.birdeye.geovis.utils.ColorBrewer;
 	import org.un.cava.birdeye.geovis.utils.HtmlToolTip;
-	import org.un.cava.birdeye.geovis.utils.ArrayUtils;
 	
 	//--------------------------------------
 	//  Events
@@ -236,8 +235,23 @@
 		/**
 	     *  @private
 	     */
-	     private var _isColorChanged:Boolean=false;
+	     private var _colorChanged:Boolean=false;
 	     
+	     /**
+	     *  @private
+	     */
+		private var _schemeChanged:Boolean=false;
+		
+		/**
+	     *  @private
+	     */
+		private var _stepsChanged:Boolean=false;
+		
+		/**
+	     *  @private
+	     */
+		private var _isBaseMapComplete:Boolean=false;
+		
 	     /**
 	     *  @private
 	     */
@@ -248,6 +262,10 @@
 	     */
 	     private var arrCol:Array
 	     
+	     /**
+	     *  @private
+	     */
+		private var _isReady:Boolean=false;
 		//--------------------------------------------------------------------------
 	    //
 	    //  Properties
@@ -426,6 +444,7 @@
 		{
 			_scheme = value;
 			dispatchEvent(new GeoChoroEvents(GeoChoroEvents.CHOROPLETH_SCHEME_CHANGED,value, null, null));
+			_schemeChanged=true;
 			invalidateDisplayList();
 		}
 		
@@ -452,6 +471,7 @@
 		{
 			_steps = value;
 			dispatchEvent(new GeoChoroEvents(GeoChoroEvents.CHOROPLETH_STEPS_CHANGED, null, value, null));
+			_stepsChanged=true;
 			invalidateDisplayList();
 		}
 		
@@ -496,6 +516,7 @@
 		public function set colorField(value:String):void{
 			_colorField=value;
 			dispatchEvent(new GeoChoroEvents(GeoChoroEvents.CHOROPLETH_COLORFIELD_CHANGED, null, null, value));
+			_colorChanged=true;
 			invalidateDisplayList();
 		} 
 		
@@ -574,9 +595,15 @@
 		* @private
 		*/
        	override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
-      		super.updateDisplayList( unscaledWidth, unscaledHeight );  	
-      		if(_isColorChanged){
-      			colorize();
+      		super.updateDisplayList( unscaledWidth, unscaledHeight ); 
+      		if(_isReady){
+      			if(_isBaseMapComplete || _colorChanged || _schemeChanged || _stepsChanged){
+      				colorize();
+      				_isBaseMapComplete=false;
+      				_colorChanged=false;
+      				_schemeChanged=false;
+      				_stepsChanged=false;
+      			}
       		}
       		
       	}
@@ -601,8 +628,8 @@
 		**/
 		 private function willColorize(event:FlexEvent):void{
 		 	colorize();
-		 	_isColorChanged=true;
-		 	this.parent.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
+		 	_isReady=true;
+		 	this.parent.addEventListener(GeoCoreEvents.DRAW_BASEMAP_COMPLETE, baseMapComplete);
 		 }
 		
 		/**
@@ -611,7 +638,7 @@
 		 private function colorize():void{
 		 		_arrDataTips=new ArrayCollection();
 		 		arrStep=ArrayUtils.FindStepWithoutZero(_dataProvider, _colorField, _steps-1);
-				if(arrStep[0]!=null){
+		 		if(arrStep[0]!=null){
 		 			var colB:ColorBrewer=new ColorBrewer();
 		 			arrCol=colB.getColors(_scheme, _steps);
 			 		var dynamicClassName:String=getQualifiedClassName(this.parent);
@@ -621,7 +648,6 @@
 					var GeoData:Object=Projections.getData(proj,region);
 					
 					surface=Surface((this.parent as DisplayObjectContainer).getChildByName("Surface"))
-						
 					var i:int=0;
 					var cursor:IViewCursor = _dataProvider.createCursor();
 					
@@ -630,12 +656,10 @@
 						var key:String=cursor.current[_foidField];
 						var val:Number=Number(cursor.current[_colorField]);
 						if(key!=""){
-							var geom:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(key));  
-							
+							var geom:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(key)); 
 							if(geom!=null){
 								geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
 								geom.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
-								
 								if(GeoData.getCoordinates(key)!=null){
 									if(isNaN(GeoData.getCoordinates(key).substr(0,1))){
 										myCoo = Path(GeometryGroup(surface.getChildByName(key)).geometryCollection.getItemAt(0));
@@ -756,10 +780,12 @@
 		/**
      	*  @private
      	*/
-        private function projChanged(e:GeoProjEvents):void{
+        private function baseMapComplete(e:GeoCoreEvents):void{
+        	_isBaseMapComplete=true;
         	invalidateDisplayList();
         }
-        
+       
+       
         /**
      	*  return the value for each steps.
      	*/
