@@ -436,6 +436,13 @@ package org.un.cava.birdeye.geovis.analysis
        	override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
       		super.updateDisplayList( unscaledWidth, unscaledHeight ); 
       		if(_isProjChanged || _isBaseMapComplete){
+      			if(surf){
+		      		for(var i:int=surf.numChildren-1; i>=0; i--){
+							if(surf.getChildAt(i).name.toString().substr(0,7)=='GeoFlow'){
+								surf.removeChildAt(i);
+							}
+						}
+		      	}
       			createFlows();
       			_isProjChanged=false;
       			_isBaseMapComplete=false;
@@ -453,7 +460,7 @@ package org.un.cava.birdeye.geovis.analysis
     		
     		if(surf){
     			for (var i:int = 0; i < surf.numChildren; i++) {
-    				if(surf.getChildAt(i).name.toString().substr(0,4)=='flow'){
+    				if(surf.getChildAt(i).name.toString().substr(0,7)=='GeoFlow'){
     					surf.getChildAt(i).visible=_visible;
     				}
     			}
@@ -471,7 +478,6 @@ package org.un.cava.birdeye.geovis.analysis
 		 */
 		private function createFlowsDelayed(e:FlexEvent):void{
 			createFlows();
-			//this.parent.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
 			this.parent.addEventListener(GeoCoreEvents.DRAW_BASEMAP_COMPLETE, baseMapComplete);
 		}
 		
@@ -532,7 +538,7 @@ package org.un.cava.birdeye.geovis.analysis
      	*/
 	   	private function drawFlow(cooFrom:Array, cooTo:Array, fromDest:String, toDest:String, description:String):void{
 	   		flows = new UIComponent();
-	   	  	flows.name="flow"+fromDest+toDest;
+	   	  	flows.name="GeoFlow"+fromDest+toDest;
 	   	  	flows.visible=_visible;
 		  	cntrlpt = new UIComponent();
 		  	markers = new UIComponent();

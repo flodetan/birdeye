@@ -102,6 +102,18 @@ package org.un.cava.birdeye.geovis.symbols
 	     *  @private
 	     */
 		private var _parent:*;
+		
+		/**
+	     *  @private
+	     */
+	    [Bindable]
+		private var _visible:Boolean=true;
+		
+		/**
+	     *  @private
+	     */
+	  	private var surf:Surface;
+	  	
 		//--------------------------------------------------------------------------
 	    //
 	    //  Properties
@@ -152,7 +164,7 @@ package org.un.cava.birdeye.geovis.symbols
 		 */
        override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
       		super.updateDisplayList( unscaledWidth, unscaledHeight );            
-      		 if(_isProjChanged || _isBaseMapComplete){
+      		 if(_isProjChanged || _isBaseMapComplete ){
       			createSymbols();
       			_isProjChanged=false;
       			_isBaseMapComplete=false;
@@ -160,6 +172,22 @@ package org.un.cava.birdeye.geovis.symbols
       		  
       	}
       	
+      	
+    	/**
+		 * @private
+		 */
+		override public function set visible(value:Boolean):void 
+		{
+			_visible=value;
+    		if(surf){
+    			for (var i:int = 0; i < surf.numChildren; i++) {
+    				if(surf.getChildAt(i) is Symbol){
+    					var sym:Symbol=Symbol(surf.getChildAt(i));
+    					sym.getChildAt(0).visible=_visible;
+    				}
+    			}
+    		}
+    	}
 		//--------------------------------------------------------------------------
     	//
     	//  Methods
@@ -183,12 +211,12 @@ package org.un.cava.birdeye.geovis.symbols
 				if(!_isAddedToSurface){
 					_parent=this.parent
 				}
-				
 				var dynamicClassName:String=getQualifiedClassName(_parent);
 				var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
 				var proj:String=(_parent as dynamicClassRef).projection;
 				var region:String=(_parent as dynamicClassRef).region;
 				geom=GeometryGroup(Surface((_parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(_key));
+				surf=Surface((_parent as DisplayObjectContainer).getChildByName("Surface"));
 				if(geom!=null){
 					var GeoData:Object=Projections.getData(proj,region);
 					var cooBC:String=GeoData.getBarryCenter(_key);
@@ -205,8 +233,7 @@ package org.un.cava.birdeye.geovis.symbols
 						this.x=(arrPos[0]-this.getChildAt(0).width/2)*myScaleX;
 						this.y=(arrPos[1]-this.getChildAt(0).height/2)*myScaleY;
 					}
-					
-					Surface((_parent as DisplayObjectContainer).getChildByName("Surface")).addChild(this);//this
+					surf.addChild(this);
 					_isAddedToSurface=true;
 				}
 			}

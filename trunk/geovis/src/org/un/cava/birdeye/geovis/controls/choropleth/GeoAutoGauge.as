@@ -16,6 +16,8 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	import mx.collections.XMLListCollection;
 	import mx.core.UIComponent;
 	
+	import org.un.cava.birdeye.geovis.events.GeoAutoGaugeEvents;
+	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	import org.un.cava.birdeye.geovis.utils.ArrayUtils;
 	import org.un.cava.birdeye.geovis.utils.ColorBrewer;
 	//--------------------------------------
@@ -53,6 +55,7 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	[Inspectable("steps")]
 	[Inspectable("startAtZero")]
 	[Inspectable("Title")]
+	[Inspectable("target")]
 	
 	public class GeoAutoGauge extends UIComponent
 	{
@@ -162,6 +165,20 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	     */
 		private var _title:String="";
 		
+		/**
+	     *  @private
+	     */
+		private var _isProjChanged:Boolean=false;
+		
+		/**
+	     *  @private
+	     */
+		private var colB:ColorBrewer;
+		
+		/**
+	     *  @private
+	     */
+		private var _newStepsValues:Array;
 		//--------------------------------------------------------------------------
 	    //
 	    //  Properties
@@ -456,6 +473,7 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	        
 	        if (value)
 	            _targets[0] = value;
+	            _targets[0].addEventListener(GeoProjEvents.PROJECTION_CHANGED,projChangeEvent);
 	    }
 	
     	
@@ -511,19 +529,24 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 		override public function set y(value:Number):void{
 			_y=value;
 		}
+		
+		
      	/**
 	     *  @private
 	     */
 		override protected function updateDisplayList(unscaledWidth:Number,unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			if(_valueField!=null && _dataProvider!=null){
-				if(_schemeChanged || _stepsChanged){
+				if(_schemeChanged || _stepsChanged || _isProjChanged){
 					for(var k:int=0; k<this.numChildren; k++){
 						this.removeChildAt(k);
 					}
-					var colB:ColorBrewer=new ColorBrewer();
-			 		_stepsColors=colB.getColors(_scheme, _steps);
-			 		_stepsValues=ArrayUtils.FindStepWithoutZero(_dataProvider, _valueField, _steps-1);
+					
+					colB=new ColorBrewer();
+					_stepsColors=colB.getColors(_scheme, _steps);
+					_stepsValues=ArrayUtils.FindStepWithoutZero(_dataProvider, _valueField, _steps-1);
+					_newStepsValues==ArrayUtils.FindStepWithoutZero(_dataProvider, _valueField, _steps-1);
+					
 			 		if(startAtZero){
 			 			_min=0;
 			 		}else{
@@ -531,7 +554,8 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 			 		}
 			 		_max=ArrayUtils.FindMaxValue(_dataProvider, _valueField)[1];
 					
-					gG=new GeoGauge()
+					gG=new GeoGauge();
+					gG.name="GeoGauge";
 					gG.width=this.width;
 					gG.height=this.height;
 					gG.x=_x;
@@ -584,6 +608,7 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 					
 					_schemeChanged=false;
 					_stepsChanged=false;
+					_isProjChanged=false;
 						
 				}
 			}
@@ -601,20 +626,24 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 			}
 			
 			private function AssignValues():void{
+				_newStepsValues=new Array();
 				for(var j:int=_stepsValues.length-1; j>=0; j--){
-									var th1:GeoThumb=GeoThumb(gG.getChildByName('t'+j))
-									if(j==0){
-										th1.minimum=_min;
-										th1.maximum=GeoThumb(gG.getChildByName('t'+(j+1))).value;
-									}else if(j==_stepsValues.length-1){
-										th1.minimum=(gG.getChildByName('t'+(j-1)) as GeoThumb).value;
-										th1.maximum=GeoThumb(th1).value;
-										th1.allowDragToTheEnd=true;
-									}else{
-										th1.minimum=GeoThumb(gG.getChildByName('t'+(j-1))).value;
-										th1.maximum=GeoThumb(gG.getChildByName('t'+(j+1))).value;
-									}
-								}	
+					var th1:GeoThumb=GeoThumb(gG.getChildByName('t'+j))
+					if(j==0){
+						th1.minimum=_min;
+						th1.maximum=GeoThumb(gG.getChildByName('t'+(j+1))).value;
+					}else if(j==_stepsValues.length-1){
+						th1.minimum=(gG.getChildByName('t'+(j-1)) as GeoThumb).value;
+						th1.maximum=GeoThumb(th1).value;
+						th1.allowDragToTheEnd=true;
+					}else{
+						th1.minimum=GeoThumb(gG.getChildByName('t'+(j-1))).value;
+						th1.maximum=GeoThumb(gG.getChildByName('t'+(j+1))).value;
+					}
+					_newStepsValues.push(th1.value);
+				}
+				_newStepsValues.reverse();
+				dispatchEvent(new GeoAutoGaugeEvents(GeoAutoGaugeEvents.VALUES_CHANGED, _newStepsValues));
 			}
 			
 			private function stopEvent(e:MouseEvent):void{
@@ -631,13 +660,12 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 			private function recolorizeMap():void{
 				var surf:Surface=Surface(_targets[0].getChildByName("Surface"));
 				var curs:IViewCursor=_dataProvider.createCursor();
-				
 				for (var l:int=0; l<=surf.numChildren-1; l++){
 					if(surf.getChildAt(l) is GeometryGroup){
 						var obj:Object=new Object();
    						obj[_foidField]=GeometryGroup(surf.getChildAt(l)).name;
    						if(curs.findAny(obj)){
-							var val:Number=curs.current[_valueField];
+   							var val:Number=curs.current[_valueField];
 							if(val<=GeoThumb(gG.getChildByName('t0')).value){
 								GeometryGroup(surf.getChildAt(l)).geometryCollection.getItemAt(0).fill=new SolidFill(_stepsColors[0],1);
 							}else if(val>GeoThumb(gG.getChildByName('t' + (_steps-2))).value){
@@ -656,6 +684,27 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 				}
 				
 				
+			}
+			
+			private function projChangeEvent(e:GeoProjEvents):void{
+				_isProjChanged=true;
+				invalidateDisplayList();
+				/*AssignValues();
+				recolorizeMap();*/
+			}
+			
+			/**
+	     	*  return the value for each steps.
+	     	*/
+			public function getStepsValues():Array{
+				return _newStepsValues;
+			}
+			
+			/**
+	     	*  return the colors for each steps.
+	     	*/
+			public function getColors():Array{
+				return _stepsColors;
 			}
 			
 	}

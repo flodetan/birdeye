@@ -71,7 +71,7 @@ package org.un.cava.birdeye.geovis.views.surrounds
 	/**
  	*  Define the default border color. 
  	*/
-	[Style(name="borderStyle", type="Number", enumeration="solid,dashed,dotted,double,groove,ridge,inset,outset,hidden,none", inherit="no")]
+	[Style(name="borderStyle", type="Number", enumeration="none,solid,dashed,dotted,double,groove,ridge,inset,outset,hidden", inherit="no")]
 	
 	/**
  	*  Define the default border color. 
@@ -125,12 +125,13 @@ package org.un.cava.birdeye.geovis.views.surrounds
 		/**
 	     *  @private
 	     */
+	    [Bindable]
 		private var _backgroundColor:uint;//=0xFFFFFF
 		
 		/**
 	     *  @private
 	     */
-		private var _borderStyle:String;
+		private var _borderStyle:String='none';
 		
 		/**
 	     *  @private
@@ -145,6 +146,7 @@ package org.un.cava.birdeye.geovis.views.surrounds
 		/**
 	     *  @private
 	     */
+	    [Bindable]
 		private var _textColor:uint=0x000000;
 		
 		/**
@@ -166,6 +168,8 @@ package org.un.cava.birdeye.geovis.views.surrounds
 	     *  @private
 	     */
 		private var Numformat:NumberFormatter;
+		
+		
 	    //--------------------------------------------------------------------------
 	    //
 	    //  Properties
@@ -265,11 +269,9 @@ package org.un.cava.birdeye.geovis.views.surrounds
 	     */
 		override protected function updateDisplayList(unscaledWidth:Number,unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-				
 			if(_isProjChanged){
 				
 			}
-			
 		}
 		
 		//--------------------------------------------------------------------------

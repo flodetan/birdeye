@@ -42,9 +42,9 @@ package org.un.cava.birdeye.geovis.symbols
 	import mx.collections.ICollectionView;
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
-	import mx.core.IFactory;
-	import mx.core.IDataRenderer;
 	import mx.controls.listClasses.BaseListData;
+	import mx.core.IDataRenderer;
+	import mx.core.IFactory;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	
@@ -60,7 +60,7 @@ package org.un.cava.birdeye.geovis.symbols
 	[Inspectable("dataProvider")]
 	[Inspectable("foidField")]
 	[Inspectable("itemRenderer")]
-	public class Symbols extends UIComponent implements IDataRenderer
+	public class Symbols extends UIComponent
 	{	
 		//--------------------------------------------------------------------------
 	    //
@@ -271,6 +271,13 @@ package org.un.cava.birdeye.geovis.symbols
       		super.updateDisplayList( unscaledWidth, unscaledHeight );            
       		
 		      if(_isProjChanged || _isBaseMapComplete){
+		      	if(surf){
+		      		for(var i:int=surf.numChildren-1; i>=0; i--){
+							if(surf.getChildAt(i).name.toString().substr(0,10)=='GeoSymbols'){
+								surf.removeChildAt(i);
+							}
+						}
+		      	}
       			createSymbols();
       			_isProjChanged=false;
       			_isBaseMapComplete=false;
@@ -286,7 +293,7 @@ package org.un.cava.birdeye.geovis.symbols
 			_visible=value;
     		if(surf){
     			for (var i:int = 0; i < surf.numChildren; i++) {
-    				if(surf.getChildAt(i).name.toString().substr(0,7)=='Symbols'){
+    				if(surf.getChildAt(i).name.toString().substr(0,10)=='GeoSymbols'){
     					surf.getChildAt(i).visible=_visible;
     				}
     			}
@@ -294,107 +301,7 @@ package org.un.cava.birdeye.geovis.symbols
     	}
     	
     	
-	//----------------------------------
-    //  data
-    //----------------------------------
-
-    /**
-     *  @private
-     *  Storage for the data property.
-     */
-    private var _data:Object;
-
-    [Bindable("dataChange")]
-    [Inspectable(environment="none")]
-
-    /**
-     *  The <code>data</code> property lets you pass a value
-     *  to the component when you use it in an item renderer or item editor.
-     *  You typically use data binding to bind a field of the <code>data</code>
-     *  property to a property of this component.
-     *
-     *  <p>The ComboBox control uses the <code>listData</code> property and the
-     *  <code>data</code> property as follows. If the ComboBox is in a 
-     *  DataGrid control, it expects the <code>dataField</code> property of the 
-     *  column to map to a property in the data and sets 
-     *  <code>selectedItem</code> to that property. If the ComboBox control is 
-     *  in a List control, it expects the <code>labelField</code> of the list 
-     *  to map to a property in the data and sets <code>selectedItem</code> to 
-     *  that property. 
-     *  Otherwise, it sets <code>selectedItem</code> to the data itself.</p>
-     *
-     *  <p>You do not set this property in MXML.</p>
-     *
-     *  @see mx.core.IDataRenderer
-     */
-    public function get data():Object
-    {
-        return _data;
-    }
-
-    /**
-     *  @private
-     */
-    public function set data(value:Object):void
-    {
-        //var newSelectedItem:*;
-
-        _data = value;
-       /* if (_listData && _listData is DataGridListData)
-            newSelectedItem = _data[DataGridListData(_listData).dataField];
-        else if (_listData is ListData && ListData(_listData).labelField in _data)
-            newSelectedItem = _data[ListData(_listData).labelField];
-        else
-            newSelectedItem = _data;
-
-        if (newSelectedItem !== undefined && !selectedItemSet)
-        {
-            selectedItem = newSelectedItem;
-            selectedItemSet = false;
-        }*/
-
-        dispatchEvent(new FlexEvent(FlexEvent.DATA_CHANGE));
-    }
-
-    //----------------------------------
-    //  listData
-    //----------------------------------
-
-    /**
-     *  @private
-     *  Storage for the listData property.
-     */
-    private var _listData:BaseListData;
-
-    [Bindable("dataChange")]
-    [Inspectable(environment="none")]
-
-    /**
-     *  When a component is used as a drop-in item renderer or drop-in item 
-     *  editor, Flex initializes the <code>listData</code> property of the 
-     *  component with the appropriate data from the List control. The 
-     *  component can then use the <code>listData</code> property and the 
-     *  <code>data</code> property to display the appropriate information 
-     *  as a drop-in item renderer or drop-in item editor.
-     *
-     *  <p>You do not set this property in MXML or ActionScript; Flex sets it 
-     *  when the component
-     *  is used as a drop-in item renderer or drop-in item editor.</p>
-     *
-     *  @see mx.controls.listClasses.IDropInListItemRenderer
-     */
-    public function get listData():BaseListData
-    {
-        return _listData;
-    }
-
-    /**
-     *  @private
-     */
-    public function set listData(value:BaseListData):void
-    {
-        _listData = value;
-    }
+	
 		//--------------------------------------------------------------------------
     	//
     	//  Methods
@@ -402,7 +309,6 @@ package org.un.cava.birdeye.geovis.symbols
     	//--------------------------------------------------------------------------
 		private function createSymbolsDelayed(e:FlexEvent):void{
 			createSymbols();
-			//this.parent.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
 			this.parent.addEventListener(GeoCoreEvents.DRAW_BASEMAP_COMPLETE, baseMapComplete);
 		}
 		
@@ -422,7 +328,7 @@ package org.un.cava.birdeye.geovis.symbols
 				while(!cursor.afterLast)
 				{
 					var mySymbol:UIComponent = null;
-					
+					var myIR:IDataRenderer;
 					if(foidField!=""){
 						var GeoData:Object=Projections.getData(proj,region);
 						var foidField:String=cursor.current[_foidField];
@@ -431,18 +337,21 @@ package org.un.cava.birdeye.geovis.symbols
 						
 						var geom:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(foidField));
 						surf=Surface((this.parent as DisplayObjectContainer).getChildByName("Surface"));
+						
 						if(geom!=null){
 							var myScaleX:Number=(this.parent as dynamicClassRef).scaleX;
 							var myScaleY:Number=(this.parent as dynamicClassRef).scaleY;
 							
 							if(_itemRenderer != null) {
-								mySymbol = _itemRenderer.newInstance();
+								myIR=_itemRenderer.newInstance()
+								myIR.data = cursor.current ; 
+								mySymbol=(myIR as UIComponent);
 							} else {
 								mySymbol = new UIComponent();
 							}
 							mySymbol.x=(arrPosFoid[0]-mySymbol.width/2)*myScaleX;
 							mySymbol.y=(arrPosFoid[1]-mySymbol.height/2)*myScaleY;
-							mySymbol.name="Symbols";
+							mySymbol.name="GeoSymbols";
 							mySymbol.visible=_visible;
 						}
 						surf.addChild(mySymbol);

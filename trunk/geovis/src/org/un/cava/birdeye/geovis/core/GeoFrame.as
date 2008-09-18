@@ -238,6 +238,15 @@ package org.un.cava.birdeye.geovis.core
      	*/
     	private var isProjectionChanged:Boolean=false;
     	
+    	/**
+     	*  @private
+     	*/
+    	private var isScaleXChanged:Boolean=false;
+    	
+    	/**
+     	*  @private
+     	*/
+    	private var isScaleYChanged:Boolean=false;
     	//--------------------------------------------------------------------------
 	    //
 	    //  Properties
@@ -257,10 +266,10 @@ package org.un.cava.birdeye.geovis.core
 	     */
 		public function set projection(value:String):void
 		{
-			dispatchEvent(new GeoProjEvents(GeoProjEvents.PROJECTION_CHANGED,value));
 			_projection = value;
 			isProjectionChanged=true;
 			invalidateDisplayList();
+			dispatchEvent(new GeoProjEvents(GeoProjEvents.PROJECTION_CHANGED,value));
 			//invalidateProperties();
 			
 		}
@@ -298,6 +307,7 @@ package org.un.cava.birdeye.geovis.core
 				}
 				surf.scaleX=value;
 			}
+			isScaleXChanged=true;
 			invalidateDisplayList();
 			
     	}
@@ -335,7 +345,7 @@ package org.un.cava.birdeye.geovis.core
 				}
 				surf.scaleY=value;
 			}
-			
+			isScaleYChanged=true;
 			invalidateDisplayList();
 			
     	}
@@ -386,13 +396,12 @@ package org.un.cava.birdeye.geovis.core
 	    override protected function createChildren():void
 	    {
 	    	super.createChildren();
-	    	//createMap();
-	        surf=new Surface();
+	    	surf=new Surface();
 			surf.name="Surface";
 			surf.scaleX=_scaleX;
 		    surf.scaleY=_scaleY;
 		    this.addChild(surf);
-	        
+		    //createMap();
 	    }
 		
 		
@@ -415,17 +424,26 @@ package org.un.cava.birdeye.geovis.core
 			{
 				gpGeom.draw(null,null);			
 			}*/
-			if(isProjectionChanged==true && isAlreadyCreated==true){
-				if(surf){
+			if(isScaleXChanged || isScaleYChanged || isProjectionChanged){
+				
+			if(surf){
+				
+				for(var i:int=surf.numChildren-1; i>=0; i--){
+					if(surf.getChildAt(i) is GeometryGroup){
+						surf.removeChildAt(i);
+					}
+				}
+				/*if(isProjectionChanged==true && isAlreadyCreated==true){
 					for(var i:int=surf.numChildren-1; i>=0; i--){
 						surf.removeChildAt(i);
 					}
-					createMap();
-				}
-				isProjectionChanged=false;
+					isProjectionChanged=false;
+					//isAlreadyCreated=false;
+				}*/
+				createMap();
 			}
 			isAlreadyCreated=true;
-			
+			}
 		}
 		
 		
@@ -563,12 +581,12 @@ package org.un.cava.birdeye.geovis.core
 					
 					}
 					_geoGroup.push(countryGeom);
-				}
 				
 			}
 			
 			
 			dispatchEvent(new GeoCoreEvents(GeoCoreEvents.DRAW_BASEMAP_COMPLETE));
+			}
 		}
 		
 		/**
