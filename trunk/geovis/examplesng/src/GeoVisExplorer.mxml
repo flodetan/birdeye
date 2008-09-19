@@ -6,6 +6,7 @@
 	xmlns:analysis="org.un.cava.birdeye.geovis.analysis.*"
 	xmlns:features="org.un.cava.birdeye.geovis.features.*"
 	xmlns:symbols="org.un.cava.birdeye.geovis.symbols.*"
+	xmlns:locators="org.un.cava.birdeye.geovis.locators.*"
 	xmlns:quarks="org.un.cava.birdeye.qavis.sparklines.*"
 	xmlns:surrounds="org.un.cava.birdeye.geovis.views.surrounds.*"
 	xmlns:views="views.*"
@@ -23,6 +24,7 @@
         import mx.events.StyleEvent;
 		import mx.styles.StyleManager;
         import mx.collections.IViewCursor;
+        import mx.utils.ObjectUtil;
         
         import org.un.cava.birdeye.geovis.controls.viewers.*;
 		import org.un.cava.birdeye.geovis.controls.choropleth.*;
@@ -30,20 +32,14 @@
 		
 		import styles.events.StyleLoaderEvent;
 		
-        [Bindable]
-        private var proj:String="Miller cylindrical";
-              
-		
 		private function toggleFlows():void{
 			if (showFlows.selected==true) 
 			{
 				johFlows.visible=true;
-				johFlows.includeInLayout=true;
 			}
 			else if (showFlows.selected==false)
 			{
 				johFlows.visible=false;
-				johFlows.includeInLayout=false;
 			}
 		} 
 		
@@ -81,13 +77,36 @@
 	   	  }
    	 	}
 		
+		private function custDT(currDatatip:IViewCursor):String{
+			return  currDatatip.current["@Name"] + ' (' + currDatatip.current["@total"] + ')' + '\n' + currDatatip.current["@type"] + ': ' + currDatatip.current["@number"];
+		}
+		
 		private function symbolSelEvt(e:ListEvent):void{
-			trace(e.currentTarget.selectedLabel)
 			if(e.currentTarget.selectedLabel=='Bubble'){
+				symbolFieldSelector.visible=true;
 				mySymbols.visible=true;
-			}else{
+				vis=false;
+			}else if(e.currentTarget.selectedLabel=='Pie'){
+				symbolFieldSelector.visible=false;
 				mySymbols.visible=false;
+				vis=true;
+			}else{
+				symbolFieldSelector.visible=false;
+				mySymbols.visible=false;
+				vis=false;
 			}
+		}
+		
+		private function sizePie(tot:Number):Number{
+			var retValue:Number;
+			if(tot<60){
+				retValue=100;
+			}else if(tot>400){
+				retValue=200;
+			}else{
+				retValue=tot*0.8;
+			}
+			return retValue;
 		}
 	]]>
 </mx:Script>
@@ -168,6 +187,23 @@
 		<mx:Object label="Paired" data="Paired"/>
 </mx:ArrayCollection>
 
+<mx:Array id="medalsColors" >
+	<mx:Array>
+	    <mx:String>0xFFFF00</mx:String>
+	    <mx:String>0xCD7F32</mx:String>
+    </mx:Array>
+	<mx:Array>
+	    <mx:String>0xCDCDCD</mx:String>
+	    <mx:String>0x545454</mx:String>
+    </mx:Array>
+	<mx:Array>
+	     <mx:String>0xFAE38F</mx:String>
+	     <mx:String>0xEE9819</mx:String>
+    </mx:Array>
+</mx:Array>
+
+<mx:Boolean id="vis">false</mx:Boolean>
+
 <mx:Box width="100%" height="100%" horizontalAlign="center" verticalAlign="top" horizontalScrollPolicy="off" verticalScrollPolicy="off" >
 		
 	<mx:VBox width="1000" height="744" verticalGap="10" paddingLeft="5" paddingRight="5" paddingBottom="5" horizontalScrollPolicy="off" verticalScrollPolicy="off" >
@@ -191,14 +227,16 @@
 		<mx:ProgressBar id="progressBar" x="{mapCnvs.width/2-progressBar.width/2}" y="{mapCnvs.height/2}" indeterminate="true" visible="false"/>
 		<!-- Need to add property for perspective, e.g. 2d, 3dPlane, 3dSphere -->
 		<geomap:WorldMap id="myMap" projection="{projectionSelector.selectedItem.label}" ItemClick="showDetails(event)" ProjectionChanged="{progressBar.visible=true}" DrawBaseMapComplete="{progressBar.visible=false}" scaleX=".942" scaleY=".942" x="0" y="20" >
-			
 			<analysis:Choropleth id="choropleth" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" colorField="{featureSelector.selectedItem.data}" alpha="1" scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" dataTipFunction="customDataTip" highlighted="true"  />
-			<!---->
+			
+			
 			<symbols:Symbols id="mySymbols" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" itemRenderer="renderers.MedalsRenderer" visible="false" />			
 			
-			<!--<symbols:Symbol key="ZAF">
-				<quarks:BubbleSpark radius="17" fill="0xFF00FF" alpha="0.8" ratio="1"/>
-			</symbols:Symbol>-->
+			<mx:Repeater id="r" dataProvider="{myWorldMedals.regions.region}">
+					<symbols:Symbol id="mySymbol" key="{r.currentItem.@iso}">
+						<quarks:PieSpark id="PS1" visible="{vis}" dataProvider="{r.currentItem.Total.tot.medal}" dataField="@number" gradientColors="{medalsColors}" width="{sizePie(r.currentItem.@total)}" height="{sizePie(r.currentItem.@total)}" showDataTips="true" dataTipFunction="custDT"  />
+					</symbols:Symbol>
+			</mx:Repeater>
 			<!-- Need to complete cartogram function -->
 			<!--
 			<analysis:Cartogram id="cartogram" dataprovider="" foid="" areaField="" type="" form="" />
@@ -276,7 +314,7 @@
 							</mx:ComboBox>
 							<mx:HBox width="95%" horizontalAlign="center" >
 							<mx:ComboBox id="hueSelector" dataProvider="{seq}" selectedIndex="0" height="20" width="122" prompt="Base hue..." toolTip="Select the base hue..."/>
-							<mx:NumericStepper id="stepsNum" minimum="3" maximum="8" value="5" />
+							<mx:NumericStepper id="stepsNum" minimum="3" maximum="8" value="5" stepSize="1" />
 							</mx:HBox>
 							<mx:HBox width="95%" horizontalAlign="center" >
 							<mx:RadioButtonGroup id="rgbColorTypeSelector" labelPlacement="right" change="{myVS.selectedIndex=int(rgbColorTypeSelector.selectedValue)}"  />
@@ -298,14 +336,14 @@
 									</mx:ArrayCollection>
 							</mx:ComboBox>
 							</mx:HBox>
-							<mx:ComboBox id="symbolLocationSelector" height="20" width="180" prompt="Based on..." toolTip="Select the location where symbols will be placed on the map"  />
-							<mx:ComboBox id="symbolFieldSelector" itemRenderer="mx.controls.Label" height="20" width="180" prompt="For values..." toolTip="Select the field(s) for the symbol values" >
+							<!--<mx:ComboBox id="symbolLocationSelector" height="20" width="180" prompt="Based on..." toolTip="Select the location where symbols will be placed on the map"  />-->
+							<mx:ComboBox id="symbolFieldSelector" selectedIndex="0" itemRenderer="mx.controls.Label" height="20" width="180" toolTip="Select the field(s) for the symbol values" >
 									<mx:ArrayCollection>
-										<mx:String>All</mx:String>
-										<mx:String>Gold</mx:String>
-										<mx:String>Silver</mx:String>
-										<mx:String>Bronze</mx:String>
-									</mx:ArrayCollection>
+										<mx:Object label="Gold" data="@gold"/>
+										<mx:Object label="Silver" data="@silver"/>
+										<mx:Object label="Bronze" data="@bronze"/>
+										<mx:Object label="All" data="@total"/>
+								</mx:ArrayCollection>
 							</mx:ComboBox>
 							
 							<mx:HRule width="100%" />

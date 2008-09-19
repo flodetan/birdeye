@@ -24,11 +24,6 @@
 			<GradientStop ratio="0" alpha="1" color="#545454"/>
 			<GradientStop ratio="1" alpha="1" color="#CDCDCD"/>
 		</LinearGradientFill>
-
-     	<LinearGradientFill id="WashFill" angle="90" >
-			<GradientStop ratio="0" alpha=".75" color="#FFFFFF"/>
-			<GradientStop ratio="1" alpha="0" color="#FFFFFF"/>
-		</LinearGradientFill>
 	 </fills>
 
     <stroke>
@@ -36,10 +31,7 @@
     </stroke>
 		
     <geometry>
-		<Circle centerX="{awidth/2}" centerY="{aheight/2}" radius="{Math.max(awidth/2,aheight/2)}"
-				fill="{MainFill}" stroke="{theStroke}" />
-		<!--<Ellipse width="{awidth-7}" height="{aheight/1.5}" x="3" y="3"
-					fill="{WashFill}" />-->
+		<Circle centerX="{awidth/2}" centerY="{aheight/2}" radius="{Math.max(awidth/2,aheight/2)}" fill="{MainFill}" stroke="{theStroke}" />
 	</geometry>
 
 </GraphicBorderSkin>
