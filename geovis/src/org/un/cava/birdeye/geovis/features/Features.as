@@ -109,7 +109,7 @@ package org.un.cava.birdeye.geovis.features
 		/**
 	     *  @private
 	     */
-		private var arrStrokeItem:Array=new Array();
+		private var arrStrokeItem:Array;
 		/**
 	     *  @private
 	     */
@@ -321,6 +321,7 @@ package org.un.cava.birdeye.geovis.features
 		 */
 		private function colorizeFeatures():void{    
 			this.name='feat'+foid;
+			arrStrokeItem=new Array();
 			var dynamicClassName:String=getQualifiedClassName(this.parent);
 			var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
 			var proj:String=(this.parent as dynamicClassRef).projection;
