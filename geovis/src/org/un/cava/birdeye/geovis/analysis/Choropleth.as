@@ -225,7 +225,7 @@
 		 /**
 	     *  @private
 	     */
-		private var arrStrokeItem:Array=new Array();
+		private var arrStrokeItem:Array;
 		
 		/**
 	     *  @private
@@ -636,6 +636,7 @@
 		* @private
 		**/
 		 private function colorize():void{
+		 		arrStrokeItem=new Array();
 		 		_arrDataTips=new ArrayCollection();
 		 		arrStep=ArrayUtils.FindStepWithoutZero(_dataProvider, _colorField, _steps-1);
 		 		if(arrStep[0]!=null){
