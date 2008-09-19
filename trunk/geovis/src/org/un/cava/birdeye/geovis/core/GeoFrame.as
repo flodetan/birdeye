@@ -216,7 +216,7 @@ package org.un.cava.birdeye.geovis.core
     	/**
 	     *  @private
 	     */
-    	private var arrStroke:Array=new Array();
+    	private var arrStroke:Array;
     	
     	/**
      	*  @private
@@ -459,6 +459,7 @@ package org.un.cava.birdeye.geovis.core
 		 */
 		private function createMap():void
 		{
+			arrStroke=new Array();
 			if(getStyle("fill"))
 			{
 				_color=new SolidFill(getStyle("fill"),1);
