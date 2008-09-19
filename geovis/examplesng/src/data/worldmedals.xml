@@ -46,8 +46,13 @@
 		</Total>
 	</world>
 	<regions>
-		<region Name="Africa" iso="CAF" gold="12" silver="14" bronze="14" total="40">
+		<region Name="Africa" iso="CAF" total="40">
 			<Total>
+				<tot>
+					<medal Name="Africa" type="Gold" number="12" total="40"/>
+					<medal Name="Africa" type="Silver" number="14" total="40"/>
+					<medal Name="Africa" type="Bronze" number="14" total="40"/>
+				</tot>
 				<medals>
 					<medal discipline="Judo" gold="0" silver="1" bronze="2" total="3" />
 					<medal discipline="Athletics" gold="10" silver="9" bronze="9" total="28"/>
@@ -129,8 +134,13 @@
 			</Countries> 
 		</region>
 		
-		<region Name="America" iso="MEX" gold="56" silver="72" bronze="71" total="199">
+		<region Name="America" iso="MEX" total="199">
 			<Total>
+				<tot>
+					<medal Name="America" type="Gold" number="56" total="199"/>
+					<medal Name="America" type="Silver" number="72" total="199"/>
+					<medal Name="America" type="Bronze" number="71" total="199"/>
+				</tot>
 				<medals>
 					<medal discipline="Basketball" gold="2" silver="0" bronze="1" total="3"/>
 					<medal discipline="Athletics" gold="16" silver="18" bronze="13" total="47"/>
@@ -294,8 +304,13 @@
 			</Countries>
 		</region>
 		
-		<region Name="Asia" iso="MNG" gold="87" silver="58" bronze="72" total="217">
+		<region Name="Asia" iso="MNG" total="217">
 			<Total>
+				<tot>
+					<medal Name="Asia" type="Gold" number="87" total="217"/>
+					<medal Name="Asia" type="Silver" number="58" total="217"/>
+					<medal Name="Asia" type="Bronze" number="72" total="217"/>
+				</tot>
 				<medals>
 					<medal discipline="Archery" gold="3" silver="3" bronze="2" total="8"/>
 					<medal discipline="Athletics" gold="1" silver="2" bronze="3" total="6"/>
@@ -498,8 +513,13 @@
 			</Countries>
 		</region>
 		
-		<region Name="Europe" iso="FRA" gold="130" silver="141" bronze="168" total="439">
+		<region Name="Europe" iso="FRA" total="439">
 			<Total>
+				<tot>
+					<medal Name="Europe" type="Gold" number="130" total="439"/>
+					<medal Name="Europe" type="Silver" number="141" total="439"/>
+					<medal Name="Europe" type="Bronze" number="168" total="439"/>
+				</tot>
 				<medals>
 					<medal discipline="Archery" gold="1" silver="1" bronze="2" total="4"/>
 					<medal discipline="Athletics" gold="18" silver="16" bronze="19" total="53"/>
@@ -897,8 +917,13 @@
 			</Countries>
 		  </region>
 		
-		<region Name="Oceania" iso="AUS" gold="17" silver="16" bronze="22" total="55">
+		<region Name="Oceania" iso="AUS" total="55">
 			<Total>
+				<tot>
+					<medal Name="Oceania" type="Gold" number="17" total="55"/>
+					<medal Name="Oceania" type="Silver" number="16" total="55"/>
+					<medal Name="Oceania" type="Bronze" number="22" total="55"/>
+				</tot>
 				<medals>
 					<medal discipline="Athletics" gold="2" silver="2" bronze="2" total="6"/>
 					<medal discipline="Basketball" gold="0" silver="1" bronze="0" total="1"/>

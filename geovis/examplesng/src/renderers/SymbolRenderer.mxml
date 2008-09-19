@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<mx:Button xmlns:mx="http://www.adobe.com/2006/mxml"
-	label="{this.data.@name}" toolTip="{this.data.@name}" width="15" height="15" >
-	<!-- This a basic circle itemRenderer. toolTip="{this.data.@name}" -->
-    
-
-</mx:Button>

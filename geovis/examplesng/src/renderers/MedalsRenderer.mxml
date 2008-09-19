@@ -1,6 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Button   xmlns:mx="http://www.adobe.com/2006/mxml"   width="15" height="15"
+<mx:Button   xmlns:mx="http://www.adobe.com/2006/mxml"   
                 verticalCenter="0" horizontalCenter="0"
-                upSkin="Skins.SkinGoldMedals"
-                overSkin="Skins.SkinGoldMedals"
-                 downSkin="Skins.SkinGoldMedals"/>
+                creationComplete="init()">
+<mx:Script>
+    	<![CDATA[
+    		import Skins.SkinGoldMedals;
+    		import mx.utils.ObjectUtil;
+    		import Skins.*
+    		import mx.events.ListEvent;
+    		
+    		private var _x:Number;
+    		private var _y:Number;
+    		
+    		private function init():void{
+    			_x=this.x;
+    			_y=this.y;
+    			parentApplication.symbolFieldSelector.addEventListener(ListEvent.CHANGE, change)
+    			setSkin();
+    		}
+    		
+			private function change(e:ListEvent):void{
+				setSkin();
+			}
+			
+			private function setSkin():void{
+				if(this.data[parentApplication.symbolFieldSelector.selectedItem.data]==0){
+					this.height=this.width=0;
+				}else if(this.data[parentApplication.symbolFieldSelector.selectedItem.data]<=10){
+    				this.height=this.width=10;
+    			}else{
+    				this.width=this.height=this.data[parentApplication.symbolFieldSelector.selectedItem.data];
+    			}
+    			this.x=_x-this.width/2;
+    			this.y=_y-this.height/2;
+    			this.toolTip=this.data['@name'] + ' : ' + this.data[parentApplication.symbolFieldSelector.selectedItem.data];
+				if(parentApplication.symbolFieldSelector.selectedItem.label=="Gold"){
+    				this.setStyle("upSkin", Skins.SkinGoldMedals); 
+    				this.setStyle("overSkin", Skins.SkinGoldMedals);
+    				this.setStyle("downSkin", Skins.SkinGoldMedals);
+    			}else if (parentApplication.symbolFieldSelector.selectedItem.label=="Silver"){
+    				this.setStyle("upSkin", Skins.SkinSilverMedals); 
+    				this.setStyle("overSkin", Skins.SkinSilverMedals);
+    				this.setStyle("downSkin", Skins.SkinSilverMedals);
+    			}else if (parentApplication.symbolFieldSelector.selectedItem.label=="Bronze"){
+    				this.setStyle("upSkin", Skins.SkinBronzeMedals); 
+    				this.setStyle("overSkin", Skins.SkinBronzeMedals);
+    				this.setStyle("downSkin", Skins.SkinBronzeMedals);
+    			}else if (parentApplication.symbolFieldSelector.selectedItem.label=="All"){
+    				this.setStyle("upSkin", Skins.SkinAllMedals); 
+    				this.setStyle("overSkin", Skins.SkinAllMedals);
+    				this.setStyle("downSkin", Skins.SkinAllMedals);
+    			}
+			}
+    	]]>
+    </mx:Script>
+    
+</mx:Button>
