@@ -27,6 +27,18 @@
 
 package org.un.cava.birdeye.geovis.locators
 {
+	import org.un.cava.birdeye.geovis.transformations.Transformation;
+	import org.un.cava.birdeye.geovis.transformations.USGeographicTransformation;
+	import org.un.cava.birdeye.geovis.transformations.WorldGeographicTransformation;
+	import org.un.cava.birdeye.geovis.transformations.MollweideTransformation;
+	import org.un.cava.birdeye.geovis.transformations.WinkelTripelTransformation;
+	import org.un.cava.birdeye.geovis.transformations.MillerTransformation;
+	import org.un.cava.birdeye.geovis.transformations.EckertIVTransformation;
+	import org.un.cava.birdeye.geovis.transformations.EckertVITransformation;
+	import org.un.cava.birdeye.geovis.transformations.RobinsonTransformation;
+	import org.un.cava.birdeye.geovis.transformations.SinusoidalTransformation;
+	import org.un.cava.birdeye.geovis.transformations.LambertTransformation;
+
 	import com.degrafa.Surface;
 	
 	import flash.display.DisplayObject;
@@ -40,6 +52,10 @@ package org.un.cava.birdeye.geovis.locators
 	* Class for geographic location referencing via latitude and longitude
 	**/
 
+	[Inspectable("long")] 
+	[Inspectable("lat")] 
+	[Inspectable("xval")] 
+	[Inspectable("yval")] 
 	//This class is intended to be overridden. Inheriting classes should implement the functions calculateX and calculateY
 	public class LatLong extends Canvas//UIComponent
 	{
@@ -53,55 +69,74 @@ package org.un.cava.birdeye.geovis.locators
 		private var _lat:Number=0;	//latitude in radians
 		private var _xval:Number=0;	//x value calculated from long and lat
 		private var _yval:Number=0; //y value calculated from long and lat
-		private var _scalefactor:Number=1; //for zooming in to match the size of the map polygon
-		private var _xscaler:Number=1; //temporary calibration variable, will be removed after calibration is done
-		private var _xoffset:Number=0; //x-wise translation so that x=0 becomes the left end of the map
-		private var _yoffset:Number=0; //y-wise translation so that y=0 becomes the upper end of the map
 			            
 		//--------------------------------------------------------------------------
     	//
-    	//  Constructor
+    	//  Constructors
     	//
     	//--------------------------------------------------------------------------
-		public function LatLong()
+
+		public function LatLong(lat:Number, long:Number, projection:String)
 		{
 			super();
 			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
-		}
-
-		//--------------------------------------------------------------------------
-	    //
-	    //  Functions for transformation from lat and long to x and y
-	    //
-	    //--------------------------------------------------------------------------
-	    
-		//This function is supposed to be overridden
-		public function calculateX():Number
-		{
-			return 0;
-		}
-
-		//This function is supposed to be overridden
-		public function calculateY():Number
-		{
-			return 0;
+			this.long = long;
+			this.lat = lat;
+	
+			var t:Transformation = initTransformation(lat, long, projection);
+			this.xval = t.calculateX();
+			this.yval = t.calculateY();
 		}
 		
-		protected function translateX(xCentered:Number):Number
+		//--------------------------------------------------------------------------
+    	//
+    	//  Functions for transforming lat and long to x and y
+    	//
+    	//--------------------------------------------------------------------------
+		public function initTransformation(lat:Number, long:Number, projection:String):Transformation
 		{
-			return (_xoffset+xCentered)*_scalefactor;
-		}
-
-		protected function translateY(yCentered:Number):Number
-		{
-			return (_yoffset-yCentered)*_scalefactor;
+			var t:Transformation;
+			if (projection == "Geographic") {
+				t = new WorldGeographicTransformation(long,lat);
+			} else if (projection == "Mollweide") {
+				t = new MollweideTransformation(long,lat);
+			} else if (projection == "WinkelTripel") {
+				t = new WinkelTripelTransformation(long,lat);
+			} else if (projection == "Miller cylindrical") {
+				t = new MillerTransformation(long,lat);
+			} else if (projection == "EckertIV") {
+				t = new EckertIVTransformation(long,lat);
+			} else if (projection == "EckertVI") {
+				t = new EckertVITransformation(long,lat);
+			} else if (projection == "Robinson") {
+				t = new RobinsonTransformation(long,lat);
+			} else if (projection == "Sinsoidal") {
+				t = new SinusoidalTransformation(long,lat);
+			} else if (projection == "Lambert equal area") {
+				t = new LambertTransformation(long,lat);
+			} else if (projection == "Goode") {
+				if (Math.abs(lat) >= 0.710930782){
+					t = new MollweideTransformation(long, lat);
+					t.scalefactor = 118;
+					t.xscaler = 1.05;
+					t.xoffset = 3.16;
+					t.yoffset = 1.36;
+				} else {
+					t = new SinusoidalTransformation(long, lat);
+					t.scalefactor = 124;
+					t.xscaler = 0;
+					t.xoffset = 3;
+					t.yoffset = 1.31;
+				}
+			}
+			return t;
 		}
 
 		//--------------------------------------------------------------------------
-	    //
-	    //  Setters and Getters
-	    //
-	    //--------------------------------------------------------------------------
+    	//
+    	//  Setters and getters
+    	//
+    	//--------------------------------------------------------------------------
 
 		protected function set long(value:Number):void{
 			_long=value;
@@ -135,40 +170,6 @@ package org.un.cava.birdeye.geovis.locators
 			return _yval;
 		}
 
-		public function set scalefactor(value:Number):void{
-			_scalefactor=value;
-		}
-		
-		public function get scalefactor():Number{
-			return _scalefactor;
-		}
-		
-		//xscaler is a temporary calibration variable, will be removed once calibration is done
-		public function set xscaler(value:Number):void{
-			_xscaler=value;
-		}
-		
-		//xscaler is a temporary calibration variable, will be removed once calibration is done
-		public function get xscaler():Number{
-			return _xscaler;
-		}
-
-		public function set xoffset(value:Number):void{
-			_xoffset=value;
-		}
-		
-		public function get xoffset():Number{
-			return _xoffset;
-		}
-
-		public function set yoffset(value:Number):void{
-			_yoffset=value;
-		}
-		
-		public function get yoffset():Number{
-			return _yoffset;
-		}
-		
 		//--------------------------------------------------------------------------
     	//
     	//  Functions for this canvas
@@ -178,7 +179,7 @@ package org.un.cava.birdeye.geovis.locators
 		/**
 	     *  @private
 	     */
-		private function creationCompleteHandler (event:FlexEvent):void{
+		private function creationCompleteHandler (event:FlexEvent):void {
 		
 			this.x=this.xval;
 			this.y=this.yval;		
