@@ -83,7 +83,7 @@ Panel {
    headerHeight: 20;
    highlightAlphas: 0.36, 0.07;
    headerColors: #767676, #C6C6C6;
-   backgroundColor: #ffffff;
+   backgroundColor: #767676;
    titleStyleName: "mypanelTitle";
 }
 
