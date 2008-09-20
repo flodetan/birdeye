@@ -29,39 +29,50 @@ package org.un.cava.birdeye.geovis.transformations
 {
 	public class MollweideTransformation extends Transformation
 	{
-		private var theta:Number=1;
-		private var loopCounter:int=0;
+		private var _latRad:Number;
+		private var _longRad:Number;
+		private var _theta:Number=1;
+		private var _loopCounter:int=0;
 		
-		public function MollweideTransformation(long:Number,lat:Number)
+		public function MollweideTransformation(lat:Number,long:Number)
 		{
 			super();
-			this.long=long;
-			this.lat=lat;
+			_latRad=convertDegToRad(lat);
+			_longRad=convertDegToRad(long);
 			this.scalefactor=152;
 			this.xoffset=2.74;
 			this.yoffset=1.35;
 			this.xscaler=1;
 
-			this.theta = approxTheta(lat);
-		}
-		
-		private function approxIsGoodEnough(tP:Number, lat:Number):Boolean {
-			var maxDiff:Number = 1E-100; //acceptable deviation
-			loopCounter++;
-			//diff = Left side - Right side = tP + sin(tP) - pi*sin(lat)
-			var diff:Number = tP+Math.sin(tP) - Math.PI * Math.sin(lat); 
-			return (Math.abs(diff)<maxDiff || loopCounter>=100); //Do not loop more than 100 times
-		}
-		
-		private function newtonRaphson(tP:Number, lat:Number):Number {
-			return (Math.PI * Math.sin(lat)-tP-Math.sin(tP))/(1 + Math.cos(tP));
+			this._theta = approx_theta(_latRad);
 		}
 
-		private function approxTheta(lat:Number):Number
+		//When the Mollweide transformation is used for the central part of the Goode projection
+		public function setGoodeConstants():void
 		{
-			var thetaPrim:Number = lat;
-			while (approxIsGoodEnough(thetaPrim, lat)==false) {
-				thetaPrim = thetaPrim + newtonRaphson(thetaPrim, lat);
+			this.scalefactor = 131;
+			this.xscaler = 1.05;
+			this.xoffset = 3.16;
+			this.yoffset = 1.36;
+		}
+		
+		private function approxIsGoodEnough(tP:Number, la:Number):Boolean {
+			var maxDiff:Number = 1E-100; //acceptable deviation
+			_loopCounter++;
+			//diff = Left side - Right side = tP + sin(tP) - pi*sin(lat)
+			var diff:Number = tP+Math.sin(tP) - Math.PI * Math.sin(la); 
+			return (Math.abs(diff)<maxDiff || _loopCounter>=100); //Do not loop more than 100 times
+		}
+		
+		private function newtonRaphson(tP:Number, la:Number):Number {
+			return (Math.PI * Math.sin(la)-tP-Math.sin(tP))/(1 + Math.cos(tP));
+		}
+
+		private function approx_theta(la:Number):Number
+		{
+			var thetaPrim:Number = la;
+			while (approxIsGoodEnough(thetaPrim, la)==false) {
+				thetaPrim = thetaPrim + newtonRaphson(thetaPrim, la);
 			}
 			return thetaPrim/2;
 		}
@@ -71,7 +82,7 @@ package org.un.cava.birdeye.geovis.transformations
 			var xCentered:Number;
 			const c:Number = 2*Math.sqrt(2)/Math.PI;
 			
-			xCentered = c * this.long * Math.cos(this.theta);
+			xCentered = c * _longRad * Math.cos(this._theta);
 			xCentered = xCentered *this.xscaler;
 			return translateX(xCentered);
 		}
@@ -79,7 +90,7 @@ package org.un.cava.birdeye.geovis.transformations
 		public override function calculateY():Number
 		{
 			var yCentered:Number;
-			yCentered = Math.sqrt(2) * Math.sin(this.theta);
+			yCentered = Math.sqrt(2) * Math.sin(this._theta);
 			return translateY(yCentered);
 		}
 				

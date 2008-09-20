@@ -29,12 +29,14 @@ package org.un.cava.birdeye.geovis.transformations
 {
 	public class SinusoidalTransformation extends Transformation
 	{
+		private var _latRad:Number;
+		private var _longRad:Number;
 		
-		public function SinusoidalTransformation(long:Number,lat:Number)
+		public function SinusoidalTransformation(lat:Number,long:Number)
 		{
 			super();
-			this.long=long;
-			this.lat=lat;
+			_latRad=convertDegToRad(lat);
+			_longRad=convertDegToRad(long);
 
 			this.xscaler=-0.05;
 			this.scalefactor=137;
@@ -42,19 +44,27 @@ package org.un.cava.birdeye.geovis.transformations
 			this.yoffset=1.45;
 		}
 
+		//When the Sinusoidal transformation is used for the peripheral parts of the Goode projection
+		public function setGoodeConstants():void
+		{
+			this.scalefactor = 138;
+			this.xscaler = 0;
+			this.xoffset = 3;
+			this.yoffset = 1.31;
+		}
+
 		public override function calculateX():Number
 		{
-			//const lstart = 0;
 			var lstart:Number = this.xscaler;
 			var xCentered:Number;
 			//x = (long-lstart)*cos(lat)
-			xCentered=(this.long-lstart)*Math.cos(this.lat);
+			xCentered=(_longRad-lstart)*Math.cos(_latRad);
 			return translateX(xCentered);
 		}
 
 		public override function calculateY():Number
 		{
-			var yCentered:Number = this.lat;
+			var yCentered:Number = _latRad;
 			return translateY(yCentered);
 		}
 
