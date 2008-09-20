@@ -36,9 +36,9 @@ package org.un.cava.birdeye.geovis.transformations
 			super();
 			this.long=long;
 			this.lat=lat;
-			this.scalefactor=61;
-			this.xoffset=6.14;
-			this.yoffset=2.9;
+			this.scalefactor=68;
+			this.xoffset=6.13;
+			this.yoffset=2.88;
 
 			this.sincAlpha=calcSincAlpha(long, lat);
 			trace ("sincAlpha: " + sincAlpha);

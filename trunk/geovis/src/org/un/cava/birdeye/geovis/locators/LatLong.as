@@ -44,7 +44,8 @@ package org.un.cava.birdeye.geovis.locators
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
-
+	import flash.utils.getQualifiedClassName;
+	import flash.utils.getDefinitionByName;
 	import mx.events.FlexEvent;
 	import mx.containers.Canvas;
 	
@@ -76,16 +77,26 @@ package org.un.cava.birdeye.geovis.locators
     	//
     	//--------------------------------------------------------------------------
 
-		public function LatLong(lat:Number, long:Number, projection:String)
+		public function LatLong(lat:Number, long:Number, target:Object,scF:Number,xSc:Number,cE:Number,xoffset:Number,yoffset:Number)
 		{
 			super();
 			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
 			this.long = long;
 			this.lat = lat;
-	
-			var t:Transformation = initTransformation(lat, long, projection);
-			this.xval = t.calculateX();
-			this.yval = t.calculateY();
+			
+			var dynamicClassName:String = getQualifiedClassName(target);
+			var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
+			var proj:String = (target as dynamicClassRef).projection;			
+			trace ("proj: " + proj);
+			var transf:Transformation = initTransformation(lat, long, proj);
+			
+			transf.scaleX = (target as dynamicClassRef).scaleX;
+			transf.scaleY = (target as dynamicClassRef).scaleY;
+			trace ("scaleX: " + (target as dynamicClassRef).scaleX);
+			trace ("scaleY: " + (target as dynamicClassRef).scaleY);
+
+			this.xval = transf.calculateX();
+			this.yval = transf.calculateY();
 		}
 		
 		//--------------------------------------------------------------------------
@@ -117,13 +128,13 @@ package org.un.cava.birdeye.geovis.locators
 			} else if (projection == "Goode") {
 				if (Math.abs(lat) >= 0.710930782){
 					t = new MollweideTransformation(long, lat);
-					t.scalefactor = 118;
+					t.scalefactor = 131;
 					t.xscaler = 1.05;
 					t.xoffset = 3.16;
 					t.yoffset = 1.36;
 				} else {
 					t = new SinusoidalTransformation(long, lat);
-					t.scalefactor = 124;
+					t.scalefactor = 138;
 					t.xscaler = 0;
 					t.xoffset = 3;
 					t.yoffset = 1.31;
