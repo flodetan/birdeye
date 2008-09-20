@@ -29,11 +29,14 @@ package org.un.cava.birdeye.geovis.transformations
 {
 	public class WorldGeographicTransformation extends Transformation
 	{
-		public function WorldGeographicTransformation(long:Number,lat:Number)
+		private var _latRad:Number;
+		private var _longRad:Number;
+
+		public function WorldGeographicTransformation(lat:Number,long:Number)
 		{
 			super();
-			this.long=long;
-			this.lat=lat;
+			_latRad=convertDegToRad(lat);
+			_longRad=convertDegToRad(long);
 
 			this.scalefactor=134.5;
 			this.xscaler=0.99;
@@ -46,7 +49,7 @@ package org.un.cava.birdeye.geovis.transformations
 			var xCentered:Number;
 			var stdParallell:Number = Math.PI / 8;
 			
-			xCentered = this.long * this.xscaler;//Math.cos(stdParallell);
+			xCentered = _longRad * this.xscaler;//Math.cos(stdParallell);
 			return translateX(xCentered);
 		}
 
@@ -54,7 +57,7 @@ package org.un.cava.birdeye.geovis.transformations
 		{
 			var yCentered:Number;
 			var scaleY:Number = 100;
-			yCentered = this.lat;
+			yCentered = _latRad;
 			return translateY(yCentered);
 		}
 		

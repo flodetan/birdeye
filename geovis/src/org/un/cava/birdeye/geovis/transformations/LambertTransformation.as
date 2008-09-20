@@ -29,26 +29,28 @@ package org.un.cava.birdeye.geovis.transformations
 {
 	public class LambertTransformation extends Transformation
 	{
-		private const lstart:Number=0;		
-		private const stdLat:Number=0;
-		private var kayPrim:Number;
+		private var _latRad:Number;
+		private var _longRad:Number;
+		private const _lstart:Number=0;		
+		private const _stdLat:Number=0;
+		private var _kayPrim:Number;
 		
-		public function LambertTransformation(long:Number,lat:Number)
+		public function LambertTransformation(lat:Number,long:Number)
 		{
 			super();
-			this.long=long;
-			this.lat=lat;			
+			_latRad=convertDegToRad(lat);
+			_longRad=convertDegToRad(long);
 
-			kayPrim = calcKayPrim(this.long, this.lat);
+			_kayPrim = calc_kayPrim(_latRad,_longRad);
 			this.scalefactor=152.3;
 			this.xoffset=1.94;
 			this.yoffset=1.79;
 		}
 
-		private function calcKayPrim(lo:Number,la:Number):Number
+		private function calc_kayPrim(la:Number, lo:Number):Number
 		{
-			//k'=sqrt(2/( 1+sin(stdLat)sin(lat)+cos(stdLat)cos(lat)cos(lambda-lstart) )) 
-			var denominator:Number = 1+Math.sin(this.stdLat)*Math.sin(la)+Math.cos(this.stdLat)*Math.cos(la)*Math.cos(lo-this.lstart);
+			//k'=sqrt(2/( 1+sin(_stdLat)sin(lat)+cos(_stdLat)cos(lat)cos(lambda-_lstart) )) 
+			var denominator:Number = 1+Math.sin(_stdLat)*Math.sin(la)+Math.cos(_stdLat)*Math.cos(la)*Math.cos(lo-_lstart);
 			return Math.sqrt(2/denominator);
 		}
 		
@@ -56,16 +58,16 @@ package org.un.cava.birdeye.geovis.transformations
 		{
 			var xCentered:Number;
 
-			//x	= k'*cos(lat)*sin(long-lstart)
-			xCentered = this.kayPrim * Math.cos(this.lat)*Math.sin(this.long-this.lstart);
+			//x	= k'*cos(lat)*sin(long-_lstart)
+			xCentered = _kayPrim * Math.cos(_latRad)*Math.sin(_longRad-_lstart);
 			return translateX(xCentered);
 		}
 
 		public override function calculateY():Number
 		{
 			var yCentered:Number;
-			//y	= k'[cos(stdLat)sin(lat)-sin(stdLat)cos(lat)cos(long-lstart)]
-			yCentered = this.kayPrim * (Math.cos(this.stdLat)*Math.sin(this.lat)-Math.sin(this.stdLat)*Math.cos(this.lat)*Math.cos(this.long-this.lstart));
+			//y	= k'[cos(_stdLat)sin(lat)-sin(_stdLat)cos(lat)cos(long-_lstart)]
+			yCentered = _kayPrim * (Math.cos(_stdLat)*Math.sin(_latRad)-Math.sin(_stdLat)*Math.cos(_latRad)*Math.cos(_longRad-_lstart));
 			return translateY(yCentered);
 		}
 

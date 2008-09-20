@@ -29,12 +29,14 @@ package org.un.cava.birdeye.geovis.transformations
 {
 	public class MillerTransformation extends Transformation
 	{
+		private var _latRad:Number;
+		private var _longRad:Number;
 		
-		public function MillerTransformation(long:Number,lat:Number)
+		public function MillerTransformation(lat:Number,long:Number)
 		{
 			super();
-			this.long=long;
-			this.lat=lat;
+			_latRad=convertDegToRad(lat);
+			_longRad=convertDegToRad(long);
 
 			this.scalefactor=133.5;
 			this.xoffset=3.15;
@@ -43,7 +45,7 @@ package org.un.cava.birdeye.geovis.transformations
 
 		public override function calculateX():Number
 		{
-			var xCentered:Number=this.long;
+			var xCentered:Number=_longRad;
 			return translateX(xCentered);
 		}
 
@@ -51,7 +53,7 @@ package org.un.cava.birdeye.geovis.transformations
 		{
 			var yCentered:Number;
 			//y = 1.25 ln( tan(pi/4 + 0.8 lat/2) ) 
-			yCentered = 1.25*Math.log( Math.tan(Math.PI/4 + 0.4*this.lat) );
+			yCentered = 1.25*Math.log( Math.tan(Math.PI/4 + 0.4*_latRad) );
 			return translateY(yCentered);
 		}
 

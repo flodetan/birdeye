@@ -27,27 +27,26 @@
 
 package org.un.cava.birdeye.geovis.locators
 {
-	import org.un.cava.birdeye.geovis.transformations.Transformation;
-	import org.un.cava.birdeye.geovis.transformations.USGeographicTransformation;
-	import org.un.cava.birdeye.geovis.transformations.WorldGeographicTransformation;
-	import org.un.cava.birdeye.geovis.transformations.MollweideTransformation;
-	import org.un.cava.birdeye.geovis.transformations.WinkelTripelTransformation;
-	import org.un.cava.birdeye.geovis.transformations.MillerTransformation;
-	import org.un.cava.birdeye.geovis.transformations.EckertIVTransformation;
-	import org.un.cava.birdeye.geovis.transformations.EckertVITransformation;
-	import org.un.cava.birdeye.geovis.transformations.RobinsonTransformation;
-	import org.un.cava.birdeye.geovis.transformations.SinusoidalTransformation;
-	import org.un.cava.birdeye.geovis.transformations.LambertTransformation;
-
 	import com.degrafa.Surface;
 	
-	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
-	import flash.utils.getQualifiedClassName;
 	import flash.utils.getDefinitionByName;
-	import mx.events.FlexEvent;
+	import flash.utils.getQualifiedClassName;
+	
 	import mx.containers.Canvas;
+	import mx.events.FlexEvent;
+	
+	import org.un.cava.birdeye.geovis.transformations.EckertIVTransformation;
+	import org.un.cava.birdeye.geovis.transformations.EckertVITransformation;
+	import org.un.cava.birdeye.geovis.transformations.LambertTransformation;
+	import org.un.cava.birdeye.geovis.transformations.MillerTransformation;
+	import org.un.cava.birdeye.geovis.transformations.MollweideTransformation;
+	import org.un.cava.birdeye.geovis.transformations.RobinsonTransformation;
+	import org.un.cava.birdeye.geovis.transformations.SinusoidalTransformation;
+	import org.un.cava.birdeye.geovis.transformations.Transformation;
+	import org.un.cava.birdeye.geovis.transformations.WinkelTripelTransformation;
+	import org.un.cava.birdeye.geovis.transformations.WorldGeographicTransformation;
 	
 	/**
 	* Class for geographic location referencing via latitude and longitude
@@ -92,16 +91,18 @@ package org.un.cava.birdeye.geovis.locators
     	//--------------------------------------------------------------------------
 		public function calculateXY():void
 		{
+			//if _target has not been set, try using mom
 			if (_target == null ) {
 				_target = this.parent;
 			}
+			
+			//retrieve projection from _target and create a transformation for the projection
 			var dynamicClassName:String = getQualifiedClassName(_target);
 			var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
 			var proj:String = (_target as dynamicClassRef).projection;
-			var latRadians:Number = convertDegToRad(_lat);
-			var longRadians:Number = convertDegToRad(_long);
-			var transf:Transformation = createTransformation(latRadians, longRadians, proj);
+			var transf:Transformation = createTransformation(_lat, _long, proj);
 			
+			//retrieve scale factors from _target and calculate x and y
 			transf.scaleX = (_target as dynamicClassRef).scaleX;
 			transf.scaleY = (_target as dynamicClassRef).scaleY;
 			_xval = transf.calculateX();
@@ -112,43 +113,33 @@ package org.un.cava.birdeye.geovis.locators
 		{
 			var t:Transformation;
 			if (projection == "Geographic") {
-				t = new WorldGeographicTransformation(long,lat);
+				t = new WorldGeographicTransformation(lat,long);
 			} else if (projection == "Mollweide") {
-				t = new MollweideTransformation(long,lat);
+				t = new MollweideTransformation(lat,long);
 			} else if (projection == "WinkelTripel") {
-				t = new WinkelTripelTransformation(long,lat);
+				t = new WinkelTripelTransformation(lat,long);
 			} else if (projection == "Miller cylindrical") {
-				t = new MillerTransformation(long,lat);
+				t = new MillerTransformation(lat,long);
 			} else if (projection == "EckertIV") {
-				t = new EckertIVTransformation(long,lat);
+				t = new EckertIVTransformation(lat,long);
 			} else if (projection == "EckertVI") {
-				t = new EckertVITransformation(long,lat);
+				t = new EckertVITransformation(lat,long);
 			} else if (projection == "Robinson") {
-				t = new RobinsonTransformation(long,lat);
+				t = new RobinsonTransformation(lat,long);
 			} else if (projection == "Sinsoidal") {
-				t = new SinusoidalTransformation(long,lat);
+				t = new SinusoidalTransformation(lat,long);
 			} else if (projection == "Lambert equal area") {
-				t = new LambertTransformation(long,lat);
+				t = new LambertTransformation(lat,long);
 			} else if (projection == "Goode") {
-				if (Math.abs(lat) >= 0.710930782){
-					t = new MollweideTransformation(long, lat);
-					t.scalefactor = 131;
-					t.xscaler = 1.05;
-					t.xoffset = 3.16;
-					t.yoffset = 1.36;
+				if (Math.abs(lat) >= 40.73333403){
+					t = new MollweideTransformation(lat,long);
+					(t as MollweideTransformation).setGoodeConstants();
 				} else {
-					t = new SinusoidalTransformation(long, lat);
-					t.scalefactor = 138;
-					t.xscaler = 0;
-					t.xoffset = 3;
-					t.yoffset = 1.31;
+					t = new SinusoidalTransformation(lat,long);
+					(t as SinusoidalTransformation).setGoodeConstants();
 				}
 			}
 			return t;
-		}
-
-		public static function convertDegToRad(deg:Number):Number {
-			return deg * Math.PI / 180 ;
 		}
 
 		//--------------------------------------------------------------------------

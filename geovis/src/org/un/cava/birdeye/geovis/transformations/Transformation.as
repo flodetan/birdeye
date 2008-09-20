@@ -40,16 +40,12 @@ package org.un.cava.birdeye.geovis.transformations
 	    //  Variables
 	    //
 	    //--------------------------------------------------------------------------
-		private var _long:Number=0; //longitude in radians
-		private var _lat:Number=0;	//latitude in radians
-		private var _xval:Number=0;	//x value calculated from long and lat
-		private var _yval:Number=0; //y value calculated from long and lat
-		private var _scalefactor:Number=1; //for zooming in to match the size of the map polygon
-		private var _scaleX:Number=0; //an additional x-wise scaling factor, taken from myMap.scaleX
-		private var _scaleY:Number=0; //an additional y-wise scaling factor, taken from myMap.scaleY
+		private var _scalefactor:Number=1; //Projection-specific scaling factor for zooming in to match the size of the map polygon
+		private var _scaleX:Number=1; //Map-specific x-wise scaling factor, taken from map.scaleX
+		private var _scaleY:Number=1; //Map-specific y-wise scaling factor, taken from map.scaleY
 		private var _xscaler:Number=1; //temporary calibration variable, will be removed after calibration is done
-		private var _xoffset:Number=0; //x-wise translation so that x=0 becomes the left end of the map
-		private var _yoffset:Number=0; //y-wise translation so that y=0 becomes the upper end of the map
+		private var _xoffset:Number=0; //x-wise translation so that x=0 becomes the left border of the map
+		private var _yoffset:Number=0; //y-wise translation so that y=0 becomes the top of the map
 
 		public function Transformation()
 		{
@@ -82,38 +78,6 @@ package org.un.cava.birdeye.geovis.transformations
 	    //  Setters and Getters
 	    //
 	    //--------------------------------------------------------------------------
-
-		protected function set long(value:Number):void{
-			_long=value;
-		}
-		
-		protected function get long():Number{
-			return _long;
-		}
-		
-		protected function set lat(value:Number):void{
-			_lat=value;
-		}
-
-		protected function get lat():Number{
-			return _lat;
-		}
-		
-		public function set xval(value:Number):void{
-			_xval=value;
-		}
-
-		public function get xval():Number{
-			return _xval;
-		}
-		
-		public function set yval(value:Number):void{
-			_yval=value;
-		}
-
-		public function get yval():Number{
-			return _yval;
-		}
 
 		public function set scalefactor(value:Number):void{
 			_scalefactor=value;
@@ -163,6 +127,10 @@ package org.un.cava.birdeye.geovis.transformations
 		
 		public function get yoffset():Number{
 			return _yoffset;
+		}
+
+		public static function convertDegToRad(deg:Number):Number {
+			return deg * Math.PI / 180 ;
 		}
 
 	}

@@ -29,6 +29,11 @@ package org.un.cava.birdeye.geovis.transformations
 {
 	public class RobinsonTransformation extends Transformation
 	{
+		private var _lat:Number;
+		private var _long:Number;
+		private var _lowLat:int;
+		private var _highLat:int;
+		private var _ratio:Number;
 		
  		private const arrProjDef:Object={
 			00 : {'PLEN':1.0000, 'PDFE' :0.0000},
@@ -51,27 +56,21 @@ package org.un.cava.birdeye.geovis.transformations
 			85 : {'PLEN':0.5722, 'PDFE' :0.9761},
 			90 : {'PLEN':0.5322, 'PDFE' :1.0000}
 		};
-		private var lowLat:int;
-		private var highLat:int;
-		private var ratio:Number;
 
-		public function RobinsonTransformation(long:Number,lat:Number)
+		public function RobinsonTransformation(lat:Number,long:Number)
 		{
 			super();
-			this.long=long*180/Math.PI;
-			this.lat=lat*180/Math.PI;
+			_lat=lat;
+			_long=long;
 
 			this.xscaler=0.1278;
 			this.scalefactor=1700;
 			this.xoffset=0.246;
 			this.yoffset=0.122;
-			lowLat = roundDownToFive(this.lat);
-			highLat = roundUpToFive(this.lat);
-			ratio = calcRatio(this.lat-lowLat, Math.abs(highLat-lowLat));
-			trace ("lat: " + this.lat);
-			trace ("lowLat: " + lowLat);
-			trace ("highLat: " + highLat);
-			trace ("ratio: " + ratio);
+
+			_lowLat = roundDownToFive(_lat);
+			_highLat = roundUpToFive(_lat);
+			_ratio = calc_ratio(_lat-_lowLat, Math.abs(_highLat-_lowLat));
 		}
 
 		private function roundUpToFive(inVal:Number):int{
@@ -84,7 +83,7 @@ package org.un.cava.birdeye.geovis.transformations
 			return 5*Math.floor(fiver);
 		}
 
-		private function calcRatio(numerator:Number, denominator:Number):Number{
+		private function calc_ratio(numerator:Number, denominator:Number):Number{
 			if (denominator==0) {
 				return 0;
 			} else {
@@ -102,34 +101,24 @@ package org.un.cava.birdeye.geovis.transformations
 		
 		public override function calculateX():Number
 		{
-			var xCentered:Number;
+			var xCentered:Number;		
+			var lowX:Number = arrProjDef[Math.abs(_lowLat)].PLEN*_long/4/180;//Math.PI;
+			var highX:Number = arrProjDef[Math.abs(_highLat)].PLEN*_long/4/180;//Math.PI;
 			
-			var lowX:Number = arrProjDef[Math.abs(this.lowLat)].PLEN*this.long/4/180;//Math.PI;
-			var highX:Number = arrProjDef[Math.abs(this.highLat)].PLEN*this.long/4/180;//Math.PI;
-			
-			xCentered = lowX+ratio*(highX-lowX);
-
-			trace ("xCentered: " + xCentered);
-			trace ("lowX: " + lowX);
-			trace ("highX: " + highX);
-//			xCentered = interpolate(ratio, this.lowX, this.highX);
+//			xCentered = interpolate(_ratio, lowX, highX);
+			xCentered = lowX+_ratio*(highX-lowX);
 			return translateX(xCentered);
 		}
 
 		public override function calculateY():Number
 		{
 			var yCentered:Number;
-			var sign:int = sign(this.lat)
-			trace ("sign: " + sign);
-			var lowY:Number = arrProjDef[Math.abs(this.lowLat)].PDFE*sign*this.xscaler;
-			var highY:Number = arrProjDef[Math.abs(this.highLat)].PDFE*sign*this.xscaler;
+			var sign:int = sign(_lat)
+			var lowY:Number = arrProjDef[Math.abs(_lowLat)].PDFE*sign*this.xscaler;
+			var highY:Number = arrProjDef[Math.abs(_highLat)].PDFE*sign*this.xscaler;
 
-			yCentered = lowY+ratio*(highY-lowY);
-			
-			trace ("yCentered: " + yCentered);
-			trace ("lowY: " + lowY);
-			trace ("highY: " + highY);
-//			yCentered = interpolate(ratio, this.lowY, this.highY);
+//			yCentered = interpolate(_ratio, lowY, highY);
+			yCentered = lowY+_ratio*(highY-lowY);			
 			return translateY(yCentered);
 		}
 

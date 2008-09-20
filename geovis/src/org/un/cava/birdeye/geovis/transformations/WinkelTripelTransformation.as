@@ -29,26 +29,25 @@ package org.un.cava.birdeye.geovis.transformations
 {
 	public class WinkelTripelTransformation extends Transformation
 	{
-		private var sincAlpha:Number;
+		private var _latRad:Number;
+		private var _longRad:Number;
+		private var _sincAlpha:Number;
 		
-		public function WinkelTripelTransformation(long:Number,lat:Number)
+		public function WinkelTripelTransformation(lat:Number,long:Number)
 		{
 			super();
-			this.long=long;
-			this.lat=lat;
+			_latRad=convertDegToRad(lat);
+			_longRad=convertDegToRad(long);
 			this.scalefactor=68;
 			this.xoffset=6.13;
 			this.yoffset=2.88;
 
-			this.sincAlpha=calcSincAlpha(long, lat);
-			trace ("sincAlpha: " + sincAlpha);
+			_sincAlpha=calcSincAlpha(_latRad,_longRad);
 		}
 
-
-		private function calcSincAlpha(long:Number,lat:Number):Number
+		private function calcSincAlpha(la:Number,lo:Number):Number
 		{
-			var alpha:Number = Math.acos(Math.cos(lat)*Math.cos(long/2));
-			trace ("alpha: " + alpha);
+			var alpha:Number = Math.acos(Math.cos(la)*Math.cos(lo/2));
 			if (alpha==0) {
 				return 1;
 			}else{
@@ -58,22 +57,18 @@ package org.un.cava.birdeye.geovis.transformations
 
 		public override function calculateX():Number
 		{
-			//const cosEquirect:Number = 1;//2/Math.PI;
-			var cosEquirect:Number = 1;
+			const cosEquirect:Number = 1;
 			var xCentered:Number;
-			this.sincAlpha=calcSincAlpha(this.long, this.lat);
-			trace ("sincAlpha: " + sincAlpha);
-			
-			xCentered = this.long*cosEquirect + 2*Math.cos(this.lat)*Math.sin(this.long/2)/this.sincAlpha;
+			//x = long*cosEquirect + 2cos(lat)*sin(long/2)/sincAlpha
+			xCentered = _longRad*cosEquirect + 2*Math.cos(_latRad)*Math.sin(_longRad/2)/_sincAlpha;
 			return translateX(xCentered);
 		}
 
 		public override function calculateY():Number
 		{
 			var yCentered:Number;
-			
-			yCentered = this.lat + Math.sin(this.lat)/this.sincAlpha;
-
+			//y = lat + sin(lat)/sincAlpha
+			yCentered = _latRad + Math.sin(_latRad)/_sincAlpha;
 			return translateY(yCentered);
 		}
 
