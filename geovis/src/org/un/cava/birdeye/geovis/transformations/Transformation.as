@@ -45,6 +45,8 @@ package org.un.cava.birdeye.geovis.transformations
 		private var _xval:Number=0;	//x value calculated from long and lat
 		private var _yval:Number=0; //y value calculated from long and lat
 		private var _scalefactor:Number=1; //for zooming in to match the size of the map polygon
+		private var _scaleX:Number=0; //an additional x-wise scaling factor, taken from myMap.scaleX
+		private var _scaleY:Number=0; //an additional y-wise scaling factor, taken from myMap.scaleY
 		private var _xscaler:Number=1; //temporary calibration variable, will be removed after calibration is done
 		private var _xoffset:Number=0; //x-wise translation so that x=0 becomes the left end of the map
 		private var _yoffset:Number=0; //y-wise translation so that y=0 becomes the upper end of the map
@@ -67,12 +69,12 @@ package org.un.cava.birdeye.geovis.transformations
 		
 		protected function translateX(xCentered:Number):Number
 		{
-			return (_xoffset+xCentered)*_scalefactor;
+			return (_xoffset+xCentered)*_scalefactor*_scaleX;
 		}
 
 		protected function translateY(yCentered:Number):Number
 		{
-			return (_yoffset-yCentered)*_scalefactor;
+			return (_yoffset-yCentered)*_scalefactor*_scaleY;
 		}
 
 		//--------------------------------------------------------------------------
@@ -121,6 +123,22 @@ package org.un.cava.birdeye.geovis.transformations
 			return _scalefactor;
 		}
 		
+		public function set scaleX(value:Number):void{
+			_scaleX=value;
+		}
+
+		public function get scaleX():Number{
+			return _scaleX;
+		}
+		
+		public function set scaleY(value:Number):void{
+			_scaleY=value;
+		}
+
+		public function get scaleY():Number{
+			return _scaleY;
+		}
+			
 		//xscaler is a temporary calibration variable, will be removed once calibration is done
 		public function set xscaler(value:Number):void{
 			_xscaler=value;

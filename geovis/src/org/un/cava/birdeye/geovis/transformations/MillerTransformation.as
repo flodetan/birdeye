@@ -36,9 +36,9 @@ package org.un.cava.birdeye.geovis.transformations
 			this.long=long;
 			this.lat=lat;
 
-			this.scalefactor=120;
-			this.xoffset=3.16;
-			this.yoffset=1.99;
+			this.scalefactor=133.5;
+			this.xoffset=3.15;
+			this.yoffset=1.98;
 		}
 
 		public override function calculateX():Number

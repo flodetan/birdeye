@@ -62,7 +62,7 @@ package org.un.cava.birdeye.geovis.transformations
 			this.lat=lat*180/Math.PI;
 
 			this.xscaler=0.1278;
-			this.scalefactor=1530;
+			this.scalefactor=1700;
 			this.xoffset=0.246;
 			this.yoffset=0.122;
 			lowLat = roundDownToFive(this.lat);

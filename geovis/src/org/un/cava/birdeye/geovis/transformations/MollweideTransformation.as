@@ -37,9 +37,10 @@ package org.un.cava.birdeye.geovis.transformations
 			super();
 			this.long=long;
 			this.lat=lat;
-			this.scalefactor=137;
-			this.xoffset=2.73;
+			this.scalefactor=152;
+			this.xoffset=2.74;
 			this.yoffset=1.35;
+			this.xscaler=1;
 
 			this.theta = approxTheta(lat);
 		}

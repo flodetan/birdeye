@@ -40,7 +40,7 @@ package org.un.cava.birdeye.geovis.transformations
 			this.lat=lat;			
 
 			kayPrim = calcKayPrim(this.long, this.lat);
-			this.scalefactor=137;
+			this.scalefactor=152.3;
 			this.xoffset=1.94;
 			this.yoffset=1.79;
 		}

@@ -38,7 +38,7 @@ package org.un.cava.birdeye.geovis.transformations
 			this.long=long;
 			this.lat=lat;
 
-			this.scalefactor=141;
+			this.scalefactor=156.5;
 			this.xoffset=2.64;
 			this.yoffset=1.36;
 			
