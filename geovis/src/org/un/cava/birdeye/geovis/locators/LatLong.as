@@ -70,6 +70,7 @@ package org.un.cava.birdeye.geovis.locators
 		private var _lat:Number=0;	//latitude in radians
 		private var _xval:Number=0;	//x value calculated from long and lat
 		private var _yval:Number=0; //y value calculated from long and lat
+		private var _target:Object; //myMap. Used for retrieving projection, scaleX and scaleY
 			            
 		//--------------------------------------------------------------------------
     	//
@@ -77,26 +78,10 @@ package org.un.cava.birdeye.geovis.locators
     	//
     	//--------------------------------------------------------------------------
 
-		public function LatLong(lat:Number, long:Number, target:Object)
+		public function LatLong()
 		{
 			super();
 			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
-			this.long = long;
-			this.lat = lat;
-			
-			var dynamicClassName:String = getQualifiedClassName(target);
-			var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
-			var proj:String = (target as dynamicClassRef).projection;			
-			trace ("proj: " + proj);
-			var transf:Transformation = initTransformation(lat, long, proj);
-			
-			transf.scaleX = (target as dynamicClassRef).scaleX;
-			transf.scaleY = (target as dynamicClassRef).scaleY;
-			trace ("scaleX: " + (target as dynamicClassRef).scaleX);
-			trace ("scaleY: " + (target as dynamicClassRef).scaleY);
-
-			this.xval = transf.calculateX();
-			this.yval = transf.calculateY();
 		}
 		
 		//--------------------------------------------------------------------------
@@ -104,7 +89,24 @@ package org.un.cava.birdeye.geovis.locators
     	//  Functions for transforming lat and long to x and y
     	//
     	//--------------------------------------------------------------------------
-		public function initTransformation(lat:Number, long:Number, projection:String):Transformation
+		public function calculateXY():void
+		{
+			if (_target == null ) {
+				_target = this.parent;
+			}
+			var dynamicClassName:String = getQualifiedClassName(_target);
+			var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
+			var proj:String = (_target as dynamicClassRef).projection;			
+			var transf:Transformation = createTransformation(_lat, _long, proj);
+			
+			transf.scaleX = (_target as dynamicClassRef).scaleX;
+			transf.scaleY = (_target as dynamicClassRef).scaleY;
+			_xval = transf.calculateX();
+			_yval = transf.calculateY();
+		}
+
+
+		public function createTransformation(lat:Number, long:Number, projection:String):Transformation
 		{
 			var t:Transformation;
 			if (projection == "Geographic") {
@@ -149,19 +151,19 @@ package org.un.cava.birdeye.geovis.locators
     	//
     	//--------------------------------------------------------------------------
 
-		protected function set long(value:Number):void{
+		public function set long(value:Number):void{
 			_long=value;
 		}
 		
-		protected function get long():Number{
+		public function get long():Number{
 			return _long;
 		}
 		
-		protected function set lat(value:Number):void{
+		public function set lat(value:Number):void{
 			_lat=value;
 		}
 
-		protected function get lat():Number{
+		public function get lat():Number{
 			return _lat;
 		}
 		
@@ -180,6 +182,14 @@ package org.un.cava.birdeye.geovis.locators
 		public function get yval():Number{
 			return _yval;
 		}
+		
+		public function set target(value:Object):void{
+			_target=value;
+		}
+
+		public function get target():Object{
+			return _target;
+		}		
 
 		//--------------------------------------------------------------------------
     	//
@@ -191,7 +201,7 @@ package org.un.cava.birdeye.geovis.locators
 	     *  @private
 	     */
 		private function creationCompleteHandler (event:FlexEvent):void {
-		
+			calculateXY();
 			this.x=this.xval;
 			this.y=this.yval;		
 					
