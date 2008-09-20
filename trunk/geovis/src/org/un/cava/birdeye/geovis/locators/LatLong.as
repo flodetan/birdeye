@@ -77,7 +77,7 @@ package org.un.cava.birdeye.geovis.locators
     	//
     	//--------------------------------------------------------------------------
 
-		public function LatLong(lat:Number, long:Number, target:Object,scF:Number,xSc:Number,cE:Number,xoffset:Number,yoffset:Number)
+		public function LatLong(lat:Number, long:Number, target:Object)
 		{
 			super();
 			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
