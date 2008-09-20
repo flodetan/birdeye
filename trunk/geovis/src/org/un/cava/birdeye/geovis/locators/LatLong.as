@@ -65,12 +65,13 @@ package org.un.cava.birdeye.geovis.locators
 	    //  Variables
 	    //
 	    //--------------------------------------------------------------------------
-
-		private var _long:Number=0; //longitude in radians
-		private var _lat:Number=0;	//latitude in radians
+		private var _long:Number=0; //longitude in degrees
+		private var _lat:Number=0;	//latitude in degrees
 		private var _xval:Number=0;	//x value calculated from long and lat
 		private var _yval:Number=0; //y value calculated from long and lat
 		private var _target:Object; //myMap. Used for retrieving projection, scaleX and scaleY
+		private var _childWidth:Number=0; //Optional. If set, the child UIComponent will be moved so that it's centered x-wise over the spot given by lat and long
+		private var _childHeight:Number=0; //Optional. If set, the child UIComponent will be moved so that it's centered y-wise over the spot given by lat and long
 			            
 		//--------------------------------------------------------------------------
     	//
@@ -96,15 +97,16 @@ package org.un.cava.birdeye.geovis.locators
 			}
 			var dynamicClassName:String = getQualifiedClassName(_target);
 			var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
-			var proj:String = (_target as dynamicClassRef).projection;			
-			var transf:Transformation = createTransformation(_lat, _long, proj);
+			var proj:String = (_target as dynamicClassRef).projection;
+			var latRadians:Number = convertDegToRad(_lat);
+			var longRadians:Number = convertDegToRad(_long);
+			var transf:Transformation = createTransformation(latRadians, longRadians, proj);
 			
 			transf.scaleX = (_target as dynamicClassRef).scaleX;
 			transf.scaleY = (_target as dynamicClassRef).scaleY;
 			_xval = transf.calculateX();
 			_yval = transf.calculateY();
 		}
-
 
 		public function createTransformation(lat:Number, long:Number, projection:String):Transformation
 		{
@@ -143,6 +145,10 @@ package org.un.cava.birdeye.geovis.locators
 				}
 			}
 			return t;
+		}
+
+		public static function convertDegToRad(deg:Number):Number {
+			return deg * Math.PI / 180 ;
 		}
 
 		//--------------------------------------------------------------------------
@@ -191,6 +197,22 @@ package org.un.cava.birdeye.geovis.locators
 			return _target;
 		}		
 
+		public function set childWidth(value:Number):void{
+			_childWidth=value;
+		}
+
+		public function get childWidth():Number{
+			return _childWidth;
+		}
+
+		public function set childHeight(value:Number):void{
+			_childHeight=value;
+		}
+
+		public function get childHeight():Number{
+			return _childHeight;
+		}
+
 		//--------------------------------------------------------------------------
     	//
     	//  Functions for this canvas
@@ -202,9 +224,9 @@ package org.un.cava.birdeye.geovis.locators
 	     */
 		private function creationCompleteHandler (event:FlexEvent):void {
 			calculateXY();
-			this.x=this.xval;
-			this.y=this.yval;		
-					
+			this.x=this.xval-childWidth/2;
+			this.y=this.yval-childHeight/2;		
+				
 			Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).addChild(this);
 		}	
 		
