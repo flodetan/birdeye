@@ -48,6 +48,7 @@ package org.un.cava.birdeye.geovis.locators
 	import org.un.cava.birdeye.geovis.transformations.Transformation;
 	import org.un.cava.birdeye.geovis.transformations.WinkelTripelTransformation;
 	import org.un.cava.birdeye.geovis.transformations.WorldGeographicTransformation;
+	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	
 	/**
 	* Class for geographic location referencing via latitude and longitude
@@ -72,7 +73,8 @@ package org.un.cava.birdeye.geovis.locators
 		private var _target:Object; //myMap. Used for retrieving projection, scaleX and scaleY
 		private var _childWidth:Number=0; //Optional. If set, the child UIComponent will be moved so that it's centered x-wise over the spot given by lat and long
 		private var _childHeight:Number=0; //Optional. If set, the child UIComponent will be moved so that it's centered y-wise over the spot given by lat and long
-		private var _calculationPending:Boolean=true; //Optional. If set, the child UIComponent will be moved so that it's centered y-wise over the spot given by lat and long
+		private var _isCalculationPending:Boolean=true; //Optional. If set, the child UIComponent will be moved so that it's centered y-wise over the spot given by lat and long
+		private var _isBaseMapComplete:Boolean=false;
 			            
 		//--------------------------------------------------------------------------
     	//
@@ -112,7 +114,7 @@ package org.un.cava.birdeye.geovis.locators
 				_yval = transf.calculateY();
 
 				//Remember that x and y now are calculated.
-				_calculationPending = false; 
+				_isCalculationPending = false; 
 			} //TODO: Else throw an error			 
 		}
 
@@ -176,7 +178,7 @@ package org.un.cava.birdeye.geovis.locators
 		}
 
 		public function get xval():Number{
-			if (_calculationPending) {
+			if (_isCalculationPending) {
 				calculateXY();
 			}
 			return _xval;
@@ -187,7 +189,7 @@ package org.un.cava.birdeye.geovis.locators
 		}
 
 		public function get yval():Number{
-			if (_calculationPending) {
+			if (_isCalculationPending) {
 				calculateXY();
 			}
 			return _yval;
@@ -227,12 +229,13 @@ package org.un.cava.birdeye.geovis.locators
 	     *  @private
 	     */
 		private function creationCompleteHandler (event:FlexEvent):void {
-			if (_calculationPending) {
+			if (_isCalculationPending) {
 				calculateXY();
 			}
+			this.parent.addEventListener(GeoCoreEvents.DRAW_BASEMAP_COMPLETE, baseMapComplete);
 			this.x = _xval-childWidth/2;
 			this.y = _yval-childHeight/2;
-				
+
 			Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).addChild(this);
 		}
 		
@@ -243,6 +246,25 @@ package org.un.cava.birdeye.geovis.locators
 			eventObj.stopPropagation()
 		}
 		
+		private function baseMapComplete(e:GeoCoreEvents):void{
+        	_isBaseMapComplete=true;
+			invalidateDisplayList();
+		}
+
+	//--------------------------------------------------------------------------
+    	//
+    	//  Overridden methods
+    	//
+    	//--------------------------------------------------------------------------
+
+		override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
+			super.updateDisplayList( unscaledWidth, unscaledHeight );            
+			if(_isBaseMapComplete){
+				calculateXY();
+				_isBaseMapComplete=false;
+			}
+		}
+
 		override public function addChild(child:DisplayObject):DisplayObject {
 			_childWidth = child.width;
 			_childHeight = child.height;
