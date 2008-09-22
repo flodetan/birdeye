@@ -72,6 +72,7 @@ package org.un.cava.birdeye.geovis.locators
 		private var _target:Object; //myMap. Used for retrieving projection, scaleX and scaleY
 		private var _childWidth:Number=0; //Optional. If set, the child UIComponent will be moved so that it's centered x-wise over the spot given by lat and long
 		private var _childHeight:Number=0; //Optional. If set, the child UIComponent will be moved so that it's centered y-wise over the spot given by lat and long
+		private var _calculationPending:Boolean=true; //Optional. If set, the child UIComponent will be moved so that it's centered y-wise over the spot given by lat and long
 			            
 		//--------------------------------------------------------------------------
     	//
@@ -92,22 +93,27 @@ package org.un.cava.birdeye.geovis.locators
     	//--------------------------------------------------------------------------
 		public function calculateXY():void
 		{
-			//if _target has not been set, try using mom
+			//if _target has not been set, try using parent
 			if (_target == null ) {
 				_target = this.parent;
 			}
 			
-			//retrieve projection from _target and create a transformation for the projection
-			var dynamicClassName:String = getQualifiedClassName(_target);
-			var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
-			var proj:String = (_target as dynamicClassRef).projection;
-			var transf:Transformation = createTransformation(_lat, _long, proj);
+			if (_target != null ) {
+				//retrieve projection from _target and create a transformation for the projection
+				var dynamicClassName:String = getQualifiedClassName(_target);
+				var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
+				var proj:String = (_target as dynamicClassRef).projection;
+				var transf:Transformation = createTransformation(_lat, _long, proj);
 			
-			//retrieve scale factors from _target and calculate x and y
-			transf.scaleX = (_target as dynamicClassRef).scaleX;
-			transf.scaleY = (_target as dynamicClassRef).scaleY;
-			_xval = transf.calculateX();
-			_yval = transf.calculateY();
+				//retrieve scale factors from _target and calculate x and y
+				transf.scaleX = (_target as dynamicClassRef).scaleX;
+				transf.scaleY = (_target as dynamicClassRef).scaleY;
+				_xval = transf.calculateX();
+				_yval = transf.calculateY();
+
+				//Remember that x and y now are calculated.
+				_calculationPending = false; 
+			} //TODO: Else throw an error			 
 		}
 
 		public function createTransformation(lat:Number, long:Number, projection:String):Transformation
@@ -170,6 +176,9 @@ package org.un.cava.birdeye.geovis.locators
 		}
 
 		public function get xval():Number{
+			if (_calculationPending) {
+				calculateXY();
+			}
 			return _xval;
 		}
 		
@@ -178,6 +187,9 @@ package org.un.cava.birdeye.geovis.locators
 		}
 
 		public function get yval():Number{
+			if (_calculationPending) {
+				calculateXY();
+			}
 			return _yval;
 		}
 		
@@ -215,9 +227,11 @@ package org.un.cava.birdeye.geovis.locators
 	     *  @private
 	     */
 		private function creationCompleteHandler (event:FlexEvent):void {
-			calculateXY();
-			this.x=this.xval-childWidth/2;
-			this.y=this.yval-childHeight/2;
+			if (_calculationPending) {
+				calculateXY();
+			}
+			this.x = _xval-childWidth/2;
+			this.y = _yval-childHeight/2;
 				
 			Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).addChild(this);
 		}
