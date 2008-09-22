@@ -29,6 +29,7 @@ package org.un.cava.birdeye.geovis.locators
 {
 	import com.degrafa.Surface;
 	
+	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
 	import flash.utils.getDefinitionByName;
@@ -216,17 +217,22 @@ package org.un.cava.birdeye.geovis.locators
 		private function creationCompleteHandler (event:FlexEvent):void {
 			calculateXY();
 			this.x=this.xval-childWidth/2;
-			this.y=this.yval-childHeight/2;		
+			this.y=this.yval-childHeight/2;
 				
 			Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).addChild(this);
-		}	
-		
+		}
 		
 		/**
 	     *  @private
 	     */
 		private function handleClickEvent(eventObj:MouseEvent):void {
 			eventObj.stopPropagation()
+		}
+		
+		override public function addChild(child:DisplayObject):DisplayObject {
+			_childWidth = child.width;
+			_childHeight = child.height;
+			return super.addChild(child);
 		}
 	}
 }
