@@ -15,23 +15,29 @@
 	width="100%" height="100%"
 	layout="absolute"
 	preinitialize="dispatcher.generateEvent({url:'styles/night.swf'})"
-	>
+	 creationComplete="init()" xmlns:viewers="org.un.cava.birdeye.geovis.controls.viewers.*">
 
 <mx:Script>
 	<![CDATA[
+		import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 		import mx.events.ListEvent;
 		import mx.rpc.events.ResultEvent;
         import mx.events.StyleEvent;
 		import mx.styles.StyleManager;
         import mx.collections.IViewCursor;
         import mx.utils.ObjectUtil;
+        import mx.core.UIComponent;
         
         import org.un.cava.birdeye.geovis.controls.viewers.*;
 		import org.un.cava.birdeye.geovis.controls.choropleth.*;
 		import org.un.cava.birdeye.geovis.events.GeoMapEvents;
+		import org.un.cava.birdeye.geovis.locators.LatLong;
 		
 		import styles.events.StyleLoaderEvent;
 		
+		[Bindable]
+		private var isLoading:Boolean = true;
+
 		private function toggleFlows():void{
 			if (showFlows.selected==true) 
 			{
@@ -107,6 +113,20 @@
 				retValue=tot*0.8;
 			}
 			return retValue;
+		}
+		
+		//ConnectingApplications_wt4
+		private function projChange(e:ListEvent):void{
+			isLoading = false;
+			callLater(newProj,[]);
+		}
+		
+		private function newProj():void{
+			myMap.projection=projectionSelector.selectedItem.label;
+		}
+		
+		private function BaseMapCompleted(e:GeoCoreEvents):void{
+			isLoading = true;
 		}
 	]]>
 </mx:Script>
@@ -222,10 +242,12 @@
 	<mx:HBox id="dashboardTop" width="100%" horizontalGap="5" >
 			
 	<!-- Map Panel-->
-	<mx:Panel id="mapCnvs" title="Visualize: World Population Projections" width="750" height="100%" verticalScrollPolicy="off">		
-		<mx:ProgressBar id="progressBar" x="{mapCnvs.width/2-progressBar.width/2}" y="{mapCnvs.height/2}" indeterminate="true" visible="false"/>
+	<mx:Panel id="mapCnvs" title="Visualize: World Population Projections" width="750" height="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off">		
+		<!--<mx:ProgressBar id="progressBar" x="{mapCnvs.width/2-progressBar.width/2}" y="{mapCnvs.height/2}" indeterminate="true" visible="false"/>-->
+		
 		<!-- Need to add property for perspective, e.g. 2d, 3dPlane, 3dSphere -->
-		<geomap:WorldMap id="myMap" projection="{projectionSelector.selectedItem.label}" ItemClick="showDetails(event)" ProjectionChanged="{progressBar.visible=true}" DrawBaseMapComplete="{progressBar.visible=false}" scaleX=".942" scaleY=".942" x="0" y="20" >
+		<geomap:WorldMap visible="{isLoading}" id="myMap" ItemClick="showDetails(event)" DrawBaseMapComplete="{isLoading = true}"  scaleX=".942" scaleY=".942" x="0" y="20" ><!-- DrawBaseMapComplete="{progressBar.visible=false}" projection="{projectionSelector.selectedItem.label}"  ProjectionChanged="{progressBar.visible=true}"-->
+			<!---->
 			<analysis:Choropleth id="choropleth" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" colorField="{featureSelector.selectedItem.data}" alpha="1" scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" dataTipFunction="customDataTip" highlighted="true"  />
 			
 			
@@ -236,13 +258,15 @@
 						<quarks:PieSpark id="PS1" visible="{vis}" dataProvider="{r.currentItem.Total.tot.medal}" dataField="@number" gradientColors="{medalsColors}" width="{sizePie(r.currentItem.@total)}" height="{sizePie(r.currentItem.@total)}" showDataTips="true" dataTipFunction="custDT"  />
 					</symbols:Symbol>
 			</mx:Repeater>
+			<!--
+			<locators:LatLong lat=" 35.66667 " long=" 139.75 " > 
+				<mx:Label text=" Tokyo " /> 
+			</locators:LatLong> 
+			-->
 			<!-- Need to complete cartogram function -->
 			<!--
 			<analysis:Cartogram id="cartogram" dataprovider="" foid="" areaField="" type="" form="" />
 			-->
-			<locators:LatLong lat="39.92889" long="116.38833"  >
-				<mx:Box width="16" height="16" color="0xFF0000" toolTip="Beijing" />
-			</locators:LatLong>
 			
 			<!-- Flows -->
 			<analysis:Flow id="johFlows" dataProvider="{myFlows}" fromField="@fromID" toField="@toID" showDataTips="true" valueField="@desc" fill="0xFF8C00" visible="false" includeInLayout="false" />
@@ -251,7 +275,7 @@
 			<mx:CheckBox id="showFlows" left="625" top="0" label="Journey of Harmony:" labelPlacement="left" selected="false" change="toggleFlows();" />
 		</geomap:WorldMap>
 		
-		<mx:ViewStack id="myVS" width="100%" selectedIndex="1" creationPolicy="all" >
+		<mx:ViewStack id="myVS" width="100%" selectedIndex="1" creationPolicy="all"  visible="{isLoading}" >
 			<mx:Canvas width="100%">
 				<controls:GeoAutoGauge id="geoAutoGauge" target="{myMap}" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" valueField="{featureSelector.selectedItem.data}" x="25" y="320" width="700" height="14"  scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" geoTScale="true" title="Percentage" textColor="0xFFFFFF" startAtZero="true" visible="true"/>	
 			</mx:Canvas>
@@ -260,7 +284,9 @@
 			</mx:Canvas>
         </mx:ViewStack>
 
-		
+		<mx:Canvas visible="{!isLoading}" width="100%" height="100%">
+			<mx:ProgressBar x="175" y="100"  id="loadingLabel" label="Loading..." labelPlacement="top" indeterminate="true"/>
+		</mx:Canvas>
 	<!---->
 	
 	</mx:Panel>
@@ -274,7 +300,7 @@
 		>
 			<!-- These should be moved as individual components -->
 							
-							<mx:ComboBox id="projectionSelector" width="180" prompt="Projection..." selectedIndex="4" toolTip="Select map area for viewing..." >
+							<mx:ComboBox id="projectionSelector" width="180" prompt="Projection..." change="projChange(event)" selectedIndex="4" toolTip="Select map area for viewing..." >
 								<mx:ArrayCollection>
 										<mx:Object label="Geographic"/>
 										<mx:Object label="Lambert equal area"/>
@@ -289,9 +315,7 @@
 								</mx:ArrayCollection>
 							</mx:ComboBox>				
 							<mx:HRule width="100%" />
-							
-							<mx:ComboBox id="zoomSelector" width="180" prompt="Zoom..." toolTip="Select map area for viewing..."  />
-							
+							<viewers:GeoZoom  id="zoomSelector" width="180" prompt="Zoom..." target="{myMap}" toolTip="Select map area for viewing..." />
 							<mx:HRule width="100%" />
 											
 							<!-- Colorize Styles -->
