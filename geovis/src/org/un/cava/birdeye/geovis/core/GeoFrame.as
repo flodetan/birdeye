@@ -308,7 +308,7 @@ package org.un.cava.birdeye.geovis.core
 				surf.scaleX=value;
 			}
 			isScaleXChanged=true;
-			invalidateDisplayList();
+			//invalidateDisplayList();
 			
     	}
     	
@@ -346,7 +346,7 @@ package org.un.cava.birdeye.geovis.core
 				surf.scaleY=value;
 			}
 			isScaleYChanged=true;
-			invalidateDisplayList();
+			//invalidateDisplayList();
 			
     	}
     	
@@ -401,7 +401,7 @@ package org.un.cava.birdeye.geovis.core
 			surf.scaleX=_scaleX;
 		    surf.scaleY=_scaleY;
 		    this.addChild(surf);
-		    //createMap();
+		    createMap();
 	    }
 		
 		
@@ -419,20 +419,26 @@ package org.un.cava.birdeye.geovis.core
 		 */		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
+			trace('Hello')
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			/*for each (var gpGeom:GeometryGroup in _geoGroup)
 			{
 				gpGeom.draw(null,null);			
 			}*/
-			if(isScaleXChanged || isScaleYChanged || isProjectionChanged){
+			trace(isScaleXChanged  + ' || ' +  isScaleYChanged + ' || ' + isProjectionChanged)
+			if(isScaleXChanged || isScaleYChanged || isProjectionChanged){// 
 				
 			if(surf){
-				
+				trace('goodBye')
+				//if(isProjectionChanged){
 				for(var i:int=surf.numChildren-1; i>=0; i--){
 					if(surf.getChildAt(i) is GeometryGroup){
 						surf.removeChildAt(i);
 					}
 				}
+				//createMap();
+				
+				//}
 				/*if(isProjectionChanged==true && isAlreadyCreated==true){
 					for(var i:int=surf.numChildren-1; i>=0; i--){
 						surf.removeChildAt(i);
@@ -442,7 +448,11 @@ package org.un.cava.birdeye.geovis.core
 				}*/
 				createMap();
 			}
-			isAlreadyCreated=true;
+			//isProjectionChanged=false;
+			//isScaleXChanged=false;
+			//isScaleYChanged=false;
+			//isAlreadyCreated=true;
+
 			}
 		}
 		
