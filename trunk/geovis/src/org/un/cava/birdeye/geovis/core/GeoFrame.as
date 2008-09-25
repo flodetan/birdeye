@@ -29,7 +29,6 @@ package org.un.cava.birdeye.geovis.core
 {	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
-	import com.degrafa.IGraphic;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.Polygon;
@@ -40,6 +39,7 @@ package org.un.cava.birdeye.geovis.core
 	import flash.utils.*;
 	
 	import mx.containers.Canvas;
+	import mx.events.FlexEvent;
 	
 	import org.un.cava.birdeye.geovis.analysis.*;
 	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
@@ -48,7 +48,6 @@ package org.un.cava.birdeye.geovis.core
 	import org.un.cava.birdeye.geovis.features.Features;
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.geovis.styles.GeoStyles;
-	import org.un.cava.birdeye.geovis.symbols.Symbol;
 	
 	//--------------------------------------
 	//  Events
@@ -268,10 +267,9 @@ package org.un.cava.birdeye.geovis.core
 		{
 			_projection = value;
 			isProjectionChanged=true;
-			invalidateDisplayList();
+			///invalidateDisplayList();
+			invalidateProperties();
 			dispatchEvent(new GeoProjEvents(GeoProjEvents.PROJECTION_CHANGED,value));
-			//invalidateProperties();
-			
 		}
 		
 		/**
@@ -371,7 +369,7 @@ package org.un.cava.birdeye.geovis.core
 		{
 			super();
 			//super.measure();
-			
+			this.addEventListener(FlexEvent.CREATION_COMPLETE, setMap)
 			_region = region;
 			
 			_geoGroup = new Array();
@@ -380,6 +378,7 @@ package org.un.cava.birdeye.geovis.core
 			//this.setStyle("verticalCenter",0);
 			//this.setStyle("horizontalCenter",0);
 		}
+		
 		
 		
 		//--------------------------------------------------------------------------
@@ -401,7 +400,9 @@ package org.un.cava.birdeye.geovis.core
 			surf.scaleX=_scaleX;
 		    surf.scaleY=_scaleY;
 		    this.addChild(surf);
+		    
 		    createMap();
+		
 	    }
 		
 		
@@ -419,23 +420,22 @@ package org.un.cava.birdeye.geovis.core
 		 */		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
-			trace('Hello')
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			/*for each (var gpGeom:GeometryGroup in _geoGroup)
 			{
 				gpGeom.draw(null,null);			
 			}*/
-			trace(isScaleXChanged  + ' || ' +  isScaleYChanged + ' || ' + isProjectionChanged)
-			if(isScaleXChanged || isScaleYChanged || isProjectionChanged){// 
+			//trace(isScaleXChanged  + ' || ' +  isScaleYChanged + ' || ' + isProjectionChanged)
+			///if(isScaleXChanged || isScaleYChanged || isProjectionChanged){// 
 				
-			if(surf){
-				trace('goodBye')
+			///if(surf){
+				///trace('goodBye')
 				//if(isProjectionChanged){
-				for(var i:int=surf.numChildren-1; i>=0; i--){
-					if(surf.getChildAt(i) is GeometryGroup){
-						surf.removeChildAt(i);
-					}
-				}
+				///for(var i:int=surf.numChildren-1; i>=0; i--){
+				///	if(surf.getChildAt(i) is GeometryGroup){
+				///		surf.removeChildAt(i);
+				///	}
+				///}
 				//createMap();
 				
 				//}
@@ -446,16 +446,25 @@ package org.un.cava.birdeye.geovis.core
 					isProjectionChanged=false;
 					//isAlreadyCreated=false;
 				}*/
-				createMap();
-			}
+				///createMap();
+			///}
 			//isProjectionChanged=false;
 			//isScaleXChanged=false;
 			//isScaleYChanged=false;
 			//isAlreadyCreated=true;
 
-			}
+			///}
 		}
 		
+		override protected function commitProperties():void {
+		    super.commitProperties();
+		    
+		    if (isProjectionChanged) {
+		       createMap();
+				isProjectionChanged=false;
+		    }
+		}
+
 		
 		//--------------------------------------------------------------------------
     	//
@@ -465,10 +474,24 @@ package org.un.cava.birdeye.geovis.core
 		
 		/**
 		 * @private
+		 */
+		private function setMap(e:FlexEvent):void{
+			createMap();
+		}
+		
+		/**
+		 * @private
 		 * Create map elements.
 		 */
 		private function createMap():void
 		{
+			if(surf){
+				for(var i:int=surf.numChildren-1; i>=0; i--){
+						if(surf.getChildAt(i) is GeometryGroup){
+							surf.removeChildAt(i);
+						}
+					}
+			}	
 			arrStroke=new Array();
 			if(getStyle("fill"))
 			{
