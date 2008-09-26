@@ -38,6 +38,7 @@ package org.un.cava.birdeye.geovis.locators
 	import mx.containers.Canvas;
 	import mx.events.FlexEvent;
 	
+	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	import org.un.cava.birdeye.geovis.transformations.EckertIVTransformation;
 	import org.un.cava.birdeye.geovis.transformations.EckertVITransformation;
 	import org.un.cava.birdeye.geovis.transformations.LambertTransformation;
@@ -48,7 +49,6 @@ package org.un.cava.birdeye.geovis.locators
 	import org.un.cava.birdeye.geovis.transformations.Transformation;
 	import org.un.cava.birdeye.geovis.transformations.WinkelTripelTransformation;
 	import org.un.cava.birdeye.geovis.transformations.WorldGeographicTransformation;
-	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	
 	/**
 	* Class for geographic location referencing via latitude and longitude
@@ -232,11 +232,9 @@ package org.un.cava.birdeye.geovis.locators
 			if (_isCalculationPending) {
 				calculateXY();
 			}
-			this.parent.addEventListener(GeoCoreEvents.DRAW_BASEMAP_COMPLETE, baseMapComplete);
 			this.x = _xval-childWidth/2;
 			this.y = _yval-childHeight/2;
-
-			Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).addChild(this);
+			this.parent.addEventListener(GeoCoreEvents.DRAW_BASEMAP_COMPLETE, baseMapComplete);		
 		}
 		
 		/**
@@ -251,7 +249,7 @@ package org.un.cava.birdeye.geovis.locators
 			invalidateDisplayList();
 		}
 
-	//--------------------------------------------------------------------------
+		//--------------------------------------------------------------------------
     	//
     	//  Overridden methods
     	//
@@ -261,6 +259,7 @@ package org.un.cava.birdeye.geovis.locators
 			super.updateDisplayList( unscaledWidth, unscaledHeight );            
 			if(_isBaseMapComplete){
 				calculateXY();
+				Surface((_target as DisplayObjectContainer).getChildByName("Surface")).addChild(this);
 				_isBaseMapComplete=false;
 			}
 		}
