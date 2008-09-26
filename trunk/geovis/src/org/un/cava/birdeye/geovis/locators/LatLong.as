@@ -234,6 +234,7 @@ package org.un.cava.birdeye.geovis.locators
 			}
 			this.x = _xval-childWidth/2;
 			this.y = _yval-childHeight/2;
+			Surface((_target as DisplayObjectContainer).getChildByName("Surface")).addChild(this);
 			this.parent.addEventListener(GeoCoreEvents.DRAW_BASEMAP_COMPLETE, baseMapComplete);		
 		}
 		
