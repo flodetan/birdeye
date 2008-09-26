@@ -242,22 +242,21 @@
 	<mx:HBox id="dashboardTop" width="100%" horizontalGap="5" >
 			
 	<!-- Map Panel-->
-	<mx:Panel id="mapCnvs" title="Visualize: World Population Projections" width="750" height="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off">		
-		<!--<mx:ProgressBar id="progressBar" x="{mapCnvs.width/2-progressBar.width/2}" y="{mapCnvs.height/2}" indeterminate="true" visible="false"/>-->
+	<mx:Panel layout="absolute" id="mapCnvs" title="Visualize: World Population Projections" width="750" height="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off">		
+		<!-- To load flows for Olympic torch run -->
+			<mx:CheckBox id="showFlows" x="625" top="0" label="Journey of Harmony:" labelPlacement="left" selected="false" change="toggleFlows();" />
 		
 		<!-- Need to add property for perspective, e.g. 2d, 3dPlane, 3dSphere -->
 		<geomap:WorldMap visible="{isLoading}" id="myMap" ItemClick="showDetails(event)" DrawBaseMapComplete="{isLoading = true}"  scaleX=".942" scaleY=".942" x="0" y="20" ><!-- DrawBaseMapComplete="{progressBar.visible=false}" projection="{projectionSelector.selectedItem.label}"  ProjectionChanged="{progressBar.visible=true}"-->
-			<!---->
 			<analysis:Choropleth id="choropleth" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" colorField="{featureSelector.selectedItem.data}" alpha="1" scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" dataTipFunction="customDataTip" highlighted="true"  />
-			
-			
 			<symbols:Symbols id="mySymbols" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" itemRenderer="renderers.MedalsRenderer" visible="false" />			
 			
 			<mx:Repeater id="r" dataProvider="{myWorldMedals.regions.region}">
-					<symbols:Symbol id="mySymbol" key="{r.currentItem.@iso}">
+					<symbols:Symbol id="mySymbol" key="{r.currentItem.@iso}" >
 						<quarks:PieSpark id="PS1" visible="{vis}" dataProvider="{r.currentItem.Total.tot.medal}" dataField="@number" gradientColors="{medalsColors}" width="{sizePie(r.currentItem.@total)}" height="{sizePie(r.currentItem.@total)}" showDataTips="true" dataTipFunction="custDT"  />
 					</symbols:Symbol>
 			</mx:Repeater>
+			
 			<!--
 			<locators:LatLong lat=" 35.66667 " long=" 139.75 " > 
 				<mx:Label text=" Tokyo " /> 
@@ -271,24 +270,20 @@
 			<!-- Flows -->
 			<analysis:Flow id="johFlows" dataProvider="{myFlows}" fromField="@fromID" toField="@toID" showDataTips="true" valueField="@desc" fill="0xFF8C00" visible="false" includeInLayout="false" />
 			
-			<!-- To load flows for Olympic torch run -->
-			<mx:CheckBox id="showFlows" left="625" top="0" label="Journey of Harmony:" labelPlacement="left" selected="false" change="toggleFlows();" />
 		</geomap:WorldMap>
 		
-		<mx:ViewStack id="myVS" width="100%" selectedIndex="1" creationPolicy="all"  visible="{isLoading}" >
-			<mx:Canvas width="100%">
-				<controls:GeoAutoGauge id="geoAutoGauge" target="{myMap}" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" valueField="{featureSelector.selectedItem.data}" x="25" y="320" width="700" height="14"  scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" geoTScale="true" title="Percentage" textColor="0xFFFFFF" startAtZero="true" visible="true"/>	
+		<mx:ViewStack id="myVS" width="100%" selectedIndex="1" creationPolicy="all" horizontalScrollPolicy="off"  visible="{isLoading}" >
+			<mx:Canvas width="100%" horizontalScrollPolicy="off">
+				<controls:GeoAutoGauge id="geoAutoGauge" target="{myMap}" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" valueField="{featureSelector.selectedItem.data}" x="15" y="370" width="720" height="14"  scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" geoTScale="true" title="Percentage" textColor="0xFFFFFF" startAtZero="true" visible="true"/>	
 			</mx:Canvas>
-			<mx:Canvas width="100%">
-				<surrounds:Legend target="{geoAutoGauge}"  x="25" y="320" width="700" height="20"/>
+			<mx:Canvas width="100%" horizontalScrollPolicy="off">
+				<surrounds:Legend target="{geoAutoGauge}"  x="15" y="370" width="720" height="20"/>
 			</mx:Canvas>
         </mx:ViewStack>
 
 		<mx:Canvas visible="{!isLoading}" width="100%" height="100%">
 			<mx:ProgressBar x="175" y="100"  id="loadingLabel" label="Loading..." labelPlacement="top" indeterminate="true"/>
 		</mx:Canvas>
-	<!---->
-	
 	</mx:Panel>
 		
 	
