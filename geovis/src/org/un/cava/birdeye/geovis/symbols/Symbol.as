@@ -150,6 +150,8 @@ package org.un.cava.birdeye.geovis.symbols
 		public function Symbol()
 		{
 			super();
+			this.horizontalScrollPolicy="off";
+			this.verticalScrollPolicy="off";
 			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
 		}
 		
