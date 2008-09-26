@@ -56,7 +56,7 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	[Inspectable("startAtZero")]
 	[Inspectable("Title")]
 	[Inspectable("target")]
-	
+	[Inspectable("decimalNumber")]
 	public class GeoAutoGauge extends UIComponent
 	{
 		/**
@@ -179,6 +179,11 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	     *  @private
 	     */
 		private var _newStepsValues:Array;
+		
+		/**
+	     *  @private
+	     */
+        private var _decNum:Number=0;
 		//--------------------------------------------------------------------------
 	    //
 	    //  Properties
@@ -449,7 +454,7 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 		}
 		
 		
-		 //----------------------------------
+		//----------------------------------
 	    //  target
 	    //----------------------------------
 	
@@ -495,6 +500,25 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 		public function get title():String{
 			return _title;
 		} 
+		
+		
+		//----------------------------------
+	    //  decimalNumber
+	    //----------------------------------
+		
+		/**
+     	 *  Define the number of decimals displayed on the tooltip of the thumbs.
+     	*/		
+        public function set decimalNumber(value:Number):void{
+			_decNum = value;
+		}
+		
+		/**
+	     *  @private
+	     */
+		public function get decimalNumber():Number{
+			return _decNum;
+		}
 		
 		
 		//--------------------------------------------------------------------------
@@ -564,7 +588,7 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 					gG.minimumValue=_min;
 					gG.maximumValue=_max;
 					gG.setStyle("trackColor",_stepsColors[_stepsColors.length-1]);
-					
+					gG.decimalNumber=_decNum;
 					
 					for(var i:int=0; i<=_stepsValues.length-1; i++){
 						var th:GeoThumb=new GeoThumb();

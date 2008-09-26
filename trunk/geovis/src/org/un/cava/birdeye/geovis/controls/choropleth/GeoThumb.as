@@ -11,8 +11,6 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	import mx.formatters.NumberFormatter;
 	import mx.managers.ToolTipManager;
     
-    import org.un.cava.birdeye.geovis.events.GeoThumbEvents;
-    
     //--------------------------------------
 	//  Styles
 	//--------------------------------------
@@ -124,6 +122,11 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	     *  @private
 	     */
 		private var _borderColor:uint=0x000000;
+		
+		/**
+	     *  @private
+	     */
+		private var _decNum:Number;
 		
 		//--------------------------------------------------------------------------
 	    //
@@ -244,14 +247,19 @@ package org.un.cava.birdeye.geovis.controls.choropleth
      	*/
 		public function GeoThumb()
 		{
-			this.addEventListener(FlexEvent.CREATION_COMPLETE, setFormatter);
+			
+			//this.addEventListener(FlexEvent.CREATION_COMPLETE, setFormatter);
 			
 		}
 		
-		private function setFormatter(e:FlexEvent):void{
+		/**
+		 * @private
+		 */
+		private function setFormatter(decNum:Number):void{
+			
 			Numformat=new NumberFormatter();
 			Numformat.rounding=NumberBaseRoundType.NEAREST;
-			Numformat.precision=2;
+			Numformat.precision=decNum;
 			Numformat.useThousandsSeparator=true;
 		}
 		
@@ -286,6 +294,8 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 				_y=(this.parent as dynamicClassRef).y;
 				_parentMin=(this.parent as dynamicClassRef).minimumValue;
 				_parentMax=(this.parent as dynamicClassRef).maximumValue;
+				_decNum=(this.parent as dynamicClassRef).decimalNumber;
+				setFormatter(_decNum);
 				
 				if((this.parent as dynamicClassRef).getStyle('borderColor')){
 					_borderColor=(this.parent as dynamicClassRef).getStyle('borderColor');

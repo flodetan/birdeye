@@ -32,6 +32,7 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	//--------------------------------------
 	
 	[Inspectable("ticksMark")]
+	[Inspectable("decimalNumber")]
 	public class GeoGauge extends Canvas
 	{
 		
@@ -93,7 +94,10 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	     *  @private
 	     */
 		private var _tickColor:uint=0x000000;
-		
+		/**
+	     *  @private
+	     */
+        private var _decNum:Number=0;
 		
 		//--------------------------------------------------------------------------
 	    //
@@ -260,6 +264,24 @@ package org.un.cava.birdeye.geovis.controls.choropleth
      	*/	
 		public function set majorTicksInterval(value:Number):void{
 			_majorTicksInterval = value;
+		}
+		
+		//----------------------------------
+	    //  decimalNumber
+	    //----------------------------------
+		
+		/**
+     	 *  Define the number of decimals displayed on the tooltip of the thumbs.
+     	*/		
+        public function set decimalNumber(value:Number):void{
+			_decNum = value;
+		}
+		
+		/**
+	     *  @private
+	     */
+		public function get decimalNumber():Number{
+			return _decNum;
 		}
 		
 		//--------------------------------------------------------------------------
