@@ -220,10 +220,6 @@ package org.un.cava.birdeye.geovis.views.surrounds
 		public function Legend()
 		{
 			super();
-			Numformat=new NumberFormatter();
-			Numformat.rounding=NumberBaseRoundType.NEAREST;
-			Numformat.precision=2;
-			Numformat.useThousandsSeparator=true;
 			this.addEventListener(FlexEvent.CREATION_COMPLETE,willCreateLegend);
 		}
 		
@@ -293,7 +289,7 @@ package org.un.cava.birdeye.geovis.views.surrounds
 	     private function createLegend():void{
 	     	arrStep=new Array();
 			arrCol=new Array();
-							
+			setFormatter(_targets[0].decimalNumber);			
 	     	
 			if(HBLegend){
 				HBLegend.removeAllChildren();
@@ -394,6 +390,15 @@ package org.un.cava.birdeye.geovis.views.surrounds
 			createLegend();
 		}
 		
+		/**
+		 * @private
+		 */
+		private function setFormatter(decNum:Number):void{
+			Numformat=new NumberFormatter();
+			Numformat.rounding=NumberBaseRoundType.NEAREST;
+			Numformat.precision=decNum;
+			Numformat.useThousandsSeparator=true;
+		}
 		
 	}
 }
