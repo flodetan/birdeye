@@ -13,7 +13,7 @@ Unstable: highly dynamic concept development (pre-Alpha): 19 March 2008
 
 === Explorer ===
 
-A GeoVis Explorer is available [http://birdeye.googlecode.com/svn/trunk/geovis/examples/bin/gvExplorer.html here]
+A GeoVis Explorer is available [http://birdeye.googlecode.com/svn/trunk/geovis/demo/GeoVisExplorer.html here]
 to monitor the progress of the component.
 
 === Development Plan ===
