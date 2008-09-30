@@ -34,7 +34,6 @@ package org.un.cava.birdeye.geovis.controls.viewers
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.ICollectionView;
-	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
 	import mx.controls.ComboBox;
 	import mx.effects.Move;
@@ -43,7 +42,7 @@ package org.un.cava.birdeye.geovis.controls.viewers
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
 	
-	import org.un.cava.birdeye.geovis.locators.LatLong;
+	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	
 	//--------------------------------------
 	//  Other metadata
@@ -191,9 +190,9 @@ package org.un.cava.birdeye.geovis.controls.viewers
 		{label:"  -Western",ulx:"15", uly:"40", lrx:"60", lry:"15"},
 		{label:"CIS",ulx:"25", uly:"75", lrx:"180", lry:"35"},
 		{label:"Europe",ulx:"-25", uly:"75", lrx:"40", lry:"35"},
-		{label:"NorthAmerica",ulx:"-150", uly:"40", lrx:"10", lry:"40"},
-		{label:"Oceania",ulx:"100", uly:"15", lrx:"180", lry:"-50"},
-		{label:"SouthAmerica",ulx:"-120", uly:"35", lrx:"-30", lry:"-60"}]);
+		{label:"North America",ulx:"-150", uly:"40", lrx:"10", lry:"40"},
+		{label:"South America",ulx:"-120", uly:"35", lrx:"-30", lry:"-60"},
+		{label:"Oceania",ulx:"100", uly:"15", lrx:"180", lry:"-50"}]);
 	    //--------------------------------------------------------------------------
 	    //
 	    //  Properties
@@ -331,14 +330,12 @@ package org.un.cava.birdeye.geovis.controls.viewers
 		 private function setGeoZoom(e:FlexEvent):void{
 		 	var dynamicClassName:String = getQualifiedClassName(target);
 			var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
-			//proj = (_targets[0] as dynamicClassRef).projection;			
+			proj = (_targets[0] as dynamicClassRef).projection;			
 			ZoomHeightFrom = (_targets[0] as dynamicClassRef).scaleX;
 			ZoomWidthFrom = (target as dynamicClassRef).scaleY;
-			xPos=_targets[0].x;
-			yPos=_targets[0].y;
 			
-			ori_ulx=_targets[0].x;
-			ori_uly=_targets[0].y;
+			xPos=ori_ulx=_targets[0].x;
+			yPos=ori_uly=_targets[0].y;
 			ori_lrx=_targets[0].x + _targets[0].width;
 			ori_lry=_targets[0].y + _targets[0].height;
 			ori_width=_targets[0].width;
@@ -355,7 +352,9 @@ package org.un.cava.birdeye.geovis.controls.viewers
 			
 			_labelField=this.labelField;
 			
+			
 		 	this.addEventListener(ListEvent.CHANGE, zoom);
+		 	_targets[0].addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
 		 }	
 		 
 		 /**
@@ -368,15 +367,51 @@ package org.un.cava.birdeye.geovis.controls.viewers
 		 /**
 		 * @private
 		 */
+		 private function projChanged(e:GeoProjEvents):void{
+		 		proj=e.projection;
+		 		
+		 		this.selectedIndex=0;
+		 		_targets[0].scaleX=0.942;
+		 		_targets[0].scaleY=0.942;
+		 		_targets[0].x=0;
+		 		_targets[0].y=20;
+		 		parEf=new Parallel();
+				EffMove=new Move();
+				EffZoom=new Zoom();
+				EffMove.duration=1;
+				EffZoom.duration=1;
+				EffMove.xFrom=xPos;
+				EffMove.yFrom=yPos;
+				EffMove.xTo=ori_ulx;
+				EffMove.yTo=ori_uly;
+				EffZoom.zoomWidthFrom=ZoomWidthFrom;
+				EffZoom.zoomHeightFrom=ZoomHeightFrom;
+				EffZoom.zoomWidthTo=0.942//ori_zoomWidth;
+				EffZoom.zoomHeightTo=0.942//ori_zoomHeight;
+				ZoomWidthFrom=0.942//ZoomWidthFrom;
+				ZoomHeightFrom=0.942//ZoomHeightFrom;
+				xPos=ori_ulx;
+				yPos=ori_uly;
+				parEf.suspendBackgroundProcessing=true;
+		  		parEf.addChild(EffMove);
+				parEf.addChild(EffZoom);
+				parEf.play([_targets[0]]);
+				
+		 }
+		 
+		 /**
+		 * @private
+		 */
 		 private function setZoom(e:ListEvent):void{
 		 	parEf=new Parallel();
 			EffMove=new Move();
 			EffZoom=new Zoom();
-			EffMove.duration=2000;
-			EffZoom.duration=2000;
+			EffMove.duration=1500;
+			EffZoom.duration=1500;
 			
-			EffMove.xFrom=xPos;
-			EffMove.yFrom=yPos;
+			/*trace('x: ' + _targets[0].x  + 'y: ' + _targets[0].y)
+			EffMove.xFrom=_targets[0].x;
+			EffMove.yFrom=_targets[0].y; //yPos;
 			EffZoom.zoomWidthFrom=ZoomHeightFrom;
 			EffZoom.zoomHeightFrom=ZoomWidthFrom;
 			
@@ -398,70 +433,412 @@ package org.un.cava.birdeye.geovis.controls.viewers
 					lalolr.long=cursor.current[_lrxField];
 					lalolr.target=_targets[0];
 					
-					trace(cursor.current[_ulxField] + ' / ' + cursor.current[_ulyField] + ' / ' + laloul.xval + ' / ' + laloul.yval)
-					EffMove.xTo=laloul.xval;
-					EffMove.yTo=laloul.yval;
+					trace(cursor.current[_labelField] + ' / ' + cursor.current[_ulxField] + ' / ' + cursor.current[_ulyField] + ' / ' + laloul.xval + ' / ' + laloul.yval)
+					EffMove.xTo=Math.abs(xPos)-laloul.xval;
+					EffMove.yTo=Math.abs(yPos)-laloul.yval;
 					EffZoom.zoomWidthTo=ori_width/(lalolr.xval-laloul.xval);
 					EffZoom.zoomHeightTo=ori_height/(lalolr.yval-laloul.yval);
-					xPos=laloul.xval;
-					yPos=laloul.yval;
+					xPos=Math.abs(xPos)-laloul.xval;
+					yPos=Math.abs(yPos)-laloul.yval;
 					ZoomHeightFrom=ori_width/(lalolr.xval-laloul.xval);
 					ZoomWidthFrom=ori_height/(lalolr.yval-laloul.yval);
 				}
 				i++;
 				cursor.moveNext();
-			}
-			
-		 	/*if(e.target.selectedLabel=='World'){
-		 		EffMove.xFrom=xPos;
-				EffMove.yFrom=yPos;
-				EffMove.xTo=ori_ulx;
-				EffMove.yTo=ori_uly;
-				EffZoom.zoomWidthFrom=ZoomHeightFrom;
-				EffZoom.zoomHeightFrom=ZoomWidthFrom;
-				EffZoom.zoomWidthTo=ori_zoomWidth;
-				EffZoom.zoomHeightTo=ori_zoomHeight;
-				ZoomWidthFrom=ZoomHeightFrom;
-				ZoomHeightFrom=ZoomWidthFrom;
-				xPos=ori_ulx;
-				yPos=ori_uly;
-		 	}else if(e.target.selectedLabel=='Africa'){
-		 		EffMove.xFrom=xPos;
-				EffMove.yFrom=yPos;
-				EffMove.xTo=3;
-				EffMove.yTo=75;
-				EffZoom.zoomWidthFrom=ZoomHeightFrom;
-				EffZoom.zoomHeightFrom=ZoomWidthFrom;
-				EffZoom.zoomWidthTo=1.2;
-				EffZoom.zoomHeightTo=1.2;
-				ZoomWidthFrom=1.2;
-				ZoomHeightFrom=1.2;
-				xPos=3;
-				yPos=75;
-		 	}else if(e.target.selectedLabel=='  -North'){
-		 		
-		 	}else if(e.target.selectedLabel=='  -Sub-Sahara'){
-		 		
-		 	}else if(e.target.selectedLabel=='  -Eastern'){
-		 		
-		 	}else if(e.target.selectedLabel=='  -Southern'){
-		 		
-		 	}else if(e.target.selectedLabel=='  -South-eastern'){
-		 		
-		 	}else if(e.target.selectedLabel=='  -Western'){
-		 		
-		 	}else if(e.target.selectedLabel=='CIS'){
-		 		
-		 	}else if(e.target.selectedLabel=='Europe'){
-		 		
-		 	}else if(e.target.selectedLabel=='NorthAmerica'){
-		 		
-		 	}else if(e.target.selectedLabel=='Oceania'){
-		 		
-		 	}else if(e.target.selectedLabel=='SouthAmerica'){
-		 		
-		 	}*/
-		 	
+			}*/
+			if(proj=='Miller cylindrical'){
+				if(e.target.selectedLabel=='World'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=ori_ulx;
+					EffMove.yTo=ori_uly;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=0.942//ori_zoomWidth;
+					EffZoom.zoomHeightTo=0.942//ori_zoomHeight;
+					ZoomWidthFrom=0.942//ZoomWidthFrom;
+					ZoomHeightFrom=0.942//ZoomHeightFrom;
+					xPos=ori_ulx;
+					yPos=ori_uly;
+			 	}else if(e.target.selectedLabel=='Africa'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-640;
+					EffMove.yTo=-360;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.5;
+					EffZoom.zoomHeightTo=1.5;
+					ZoomWidthFrom=1.5;
+					ZoomHeightFrom=1.5;
+					xPos=-640;
+					yPos=-360;
+			 	}else if(e.target.selectedLabel=='  -North'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-1050;
+					EffMove.yTo=-500;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.8;
+					EffZoom.zoomHeightTo=1.8;
+					ZoomWidthFrom=1.8;
+					ZoomHeightFrom=1.8;
+					xPos=-1050;
+					yPos=-500;
+			 	}else if(e.target.selectedLabel=='  -Sub-Sahara'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-1020;
+					EffMove.yTo=-600;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.7;
+					EffZoom.zoomHeightTo=1.7;
+					ZoomWidthFrom=1.7;
+					ZoomHeightFrom=1.7;
+					xPos=-1020;
+					yPos=-600;
+			 	}else if(e.target.selectedLabel=='Asia'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-700;
+					EffMove.yTo=-100;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.3;
+					EffZoom.zoomHeightTo=1.3;
+					ZoomWidthFrom=1.3;
+					ZoomHeightFrom=1.3;
+					xPos=-700;
+					yPos=-100;
+			 	}else if(e.target.selectedLabel=='  -Eastern'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-2000;
+					EffMove.yTo=-500;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.9;
+					EffZoom.zoomHeightTo=1.9;
+					ZoomWidthFrom=1.9;
+					ZoomHeightFrom=1.9;
+					xPos=-2000;
+					yPos=-500;
+			 	}else if(e.target.selectedLabel=='  -Southern'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-1500;
+					EffMove.yTo=-450;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.8;
+					EffZoom.zoomHeightTo=1.8;
+					ZoomWidthFrom=1.8;
+					ZoomHeightFrom=1.8;
+					xPos=-1500;
+					yPos=-450;
+			 	}else if(e.target.selectedLabel=='  -South-eastern'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-1800;
+					EffMove.yTo=-500;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.8;
+					EffZoom.zoomHeightTo=1.8;
+					ZoomWidthFrom=1.8;
+					ZoomHeightFrom=1.8;
+					xPos=-1800;
+					yPos=-500;
+			 	}else if(e.target.selectedLabel=='  -Western'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-1800;
+					EffMove.yTo=-480;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=2;
+					EffZoom.zoomHeightTo=2;
+					ZoomWidthFrom=2;
+					ZoomHeightFrom=2;
+					xPos=-1800;
+					yPos=-480;
+			 	}else if(e.target.selectedLabel=='CIS'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-900;
+					EffMove.yTo=0;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.4;
+					EffZoom.zoomHeightTo=1.4;
+					ZoomWidthFrom=1.4;
+					ZoomHeightFrom=1.4;
+					xPos=-900;
+					yPos=0;
+			 	}else if(e.target.selectedLabel=='Europe'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-1300;
+					EffMove.yTo=-300;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.9;
+					EffZoom.zoomHeightTo=1.9;
+					ZoomWidthFrom=1.9;
+					ZoomHeightFrom=1.9;
+					xPos=-1300;
+					yPos=-300;
+			 	}else if(e.target.selectedLabel=='North America'){
+			 		/*EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=3;
+					EffMove.yTo=65;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.4;
+					EffZoom.zoomHeightTo=1.4;
+					ZoomWidthFrom=1.4;
+					ZoomHeightFrom=1.4;
+					xPos=3;
+					yPos=65;*/
+					EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-1;
+					EffMove.yTo=-50;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.3;
+					EffZoom.zoomHeightTo=1.3;
+					ZoomWidthFrom=1.3;
+					ZoomHeightFrom=1.3;
+					xPos=-1;
+					yPos=-50;
+			 	}else if(e.target.selectedLabel=='Oceania'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-1750;
+					EffMove.yTo=-750;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.7;
+					EffZoom.zoomHeightTo=1.7;
+					ZoomWidthFrom=1.7;
+					ZoomHeightFrom=1.7;
+					xPos=-1750;
+					yPos=-750;
+			 	}else if(e.target.selectedLabel=='South America'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-150;
+					EffMove.yTo=-400;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.4;
+					EffZoom.zoomHeightTo=1.4;
+					ZoomWidthFrom=1.4;
+					ZoomHeightFrom=1.4;
+					xPos=-150;
+					yPos=-400;
+			 	}
+			}else{
+			 	if(e.target.selectedLabel=='World'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=ori_ulx;
+					EffMove.yTo=ori_uly;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=0.942//ori_zoomWidth;
+					EffZoom.zoomHeightTo=0.942//ori_zoomHeight;
+					ZoomWidthFrom=0.942//ZoomWidthFrom;
+					ZoomHeightFrom=0.942//ZoomHeightFrom;
+					xPos=ori_ulx;
+					yPos=ori_uly;
+			 	}else if(e.target.selectedLabel=='Africa'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-640;
+					EffMove.yTo=-220;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.5;
+					EffZoom.zoomHeightTo=1.5;
+					ZoomWidthFrom=1.5;
+					ZoomHeightFrom=1.5;
+					xPos=-640;
+					yPos=-220;
+			 	}else if(e.target.selectedLabel=='  -North'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-1050;
+					EffMove.yTo=-250;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.8;
+					EffZoom.zoomHeightTo=1.8;
+					ZoomWidthFrom=1.8;
+					ZoomHeightFrom=1.8;
+					xPos=-1050;
+					yPos=-250;
+			 	}else if(e.target.selectedLabel=='  -Sub-Sahara'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-1020;
+					EffMove.yTo=-350;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.7;
+					EffZoom.zoomHeightTo=1.7;
+					ZoomWidthFrom=1.7;
+					ZoomHeightFrom=1.7;
+					xPos=-1020;
+					yPos=-350;
+			 	}else if(e.target.selectedLabel=='Asia'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-700;
+					EffMove.yTo=0;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.3;
+					EffZoom.zoomHeightTo=1.3;
+					ZoomWidthFrom=1.3;
+					ZoomHeightFrom=1.3;
+					xPos=-700;
+					yPos=0;
+			 	}else if(e.target.selectedLabel=='  -Eastern'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-2000;
+					EffMove.yTo=-300;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.9;
+					EffZoom.zoomHeightTo=1.9;
+					ZoomWidthFrom=1.9;
+					ZoomHeightFrom=1.9;
+					xPos=-2000;
+					yPos=-300;
+			 	}else if(e.target.selectedLabel=='  -Southern'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-1500;
+					EffMove.yTo=-250;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.8;
+					EffZoom.zoomHeightTo=1.8;
+					ZoomWidthFrom=1.8;
+					ZoomHeightFrom=1.8;
+					xPos=-1500;
+					yPos=-250;
+			 	}else if(e.target.selectedLabel=='  -South-eastern'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-1800;
+					EffMove.yTo=-300;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.8;
+					EffZoom.zoomHeightTo=1.8;
+					ZoomWidthFrom=1.8;
+					ZoomHeightFrom=1.8;
+					xPos=-1800;
+					yPos=-300;
+			 	}else if(e.target.selectedLabel=='  -Western'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-1800;
+					EffMove.yTo=-280;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=2;
+					EffZoom.zoomHeightTo=2;
+					ZoomWidthFrom=2;
+					ZoomHeightFrom=2;
+					xPos=-1800;
+					yPos=-280;
+			 	}else if(e.target.selectedLabel=='CIS'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-900;
+					EffMove.yTo=0;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.4;
+					EffZoom.zoomHeightTo=1.4;
+					ZoomWidthFrom=1.4;
+					ZoomHeightFrom=1.4;
+					xPos=-900;
+					yPos=0;
+			 	}else if(e.target.selectedLabel=='Europe'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-1300;
+					EffMove.yTo=-40;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.9;
+					EffZoom.zoomHeightTo=1.9;
+					ZoomWidthFrom=1.9;
+					ZoomHeightFrom=1.9;
+					xPos=-1300;
+					yPos=-40;
+			 	}else if(e.target.selectedLabel=='North America'){
+			 		/*EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=3;
+					EffMove.yTo=65;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.4;
+					EffZoom.zoomHeightTo=1.4;
+					ZoomWidthFrom=1.4;
+					ZoomHeightFrom=1.4;
+					xPos=3;
+					yPos=65;*/
+					EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-1;
+					EffMove.yTo=50;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.3;
+					EffZoom.zoomHeightTo=1.3;
+					ZoomWidthFrom=1.3;
+					ZoomHeightFrom=1.3;
+					xPos=-1;
+					yPos=50;
+			 	}else if(e.target.selectedLabel=='Oceania'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-1750;
+					EffMove.yTo=-500;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.7;
+					EffZoom.zoomHeightTo=1.7;
+					ZoomWidthFrom=1.7;
+					ZoomHeightFrom=1.7;
+					xPos=-1750;
+					yPos=-500;
+			 	}else if(e.target.selectedLabel=='South America'){
+			 		EffMove.xFrom=xPos;
+					EffMove.yFrom=yPos;
+					EffMove.xTo=-150;
+					EffMove.yTo=-280;
+					EffZoom.zoomWidthFrom=ZoomWidthFrom;
+					EffZoom.zoomHeightFrom=ZoomHeightFrom;
+					EffZoom.zoomWidthTo=1.4;
+					EffZoom.zoomHeightTo=1.4;
+					ZoomWidthFrom=1.4;
+					ZoomHeightFrom=1.4;
+					xPos=-150;
+					yPos=-280;
+			 	}
+		 }
 		 	parEf.suspendBackgroundProcessing=true;
 	  		parEf.addChild(EffMove);
 			parEf.addChild(EffZoom);
