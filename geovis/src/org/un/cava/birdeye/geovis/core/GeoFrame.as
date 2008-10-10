@@ -476,6 +476,7 @@ package org.un.cava.birdeye.geovis.core
 		 * @private
 		 */
 		private function setMap(e:FlexEvent):void{
+			
 			createMap();
 		}
 		
@@ -518,7 +519,6 @@ package org.un.cava.birdeye.geovis.core
 			}
 			_stroke.scaleMode="none";
 			getChildValues();
-
 			wcData = Projections.getData(_projection, _region);
 			listOfCountry = wcData.getCountriesListByRegion(_region);
 			

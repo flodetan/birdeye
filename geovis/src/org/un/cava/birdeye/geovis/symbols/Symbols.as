@@ -341,10 +341,9 @@ package org.un.cava.birdeye.geovis.symbols
 						if(geom!=null){
 							var myScaleX:Number=(this.parent as dynamicClassRef).scaleX;
 							var myScaleY:Number=(this.parent as dynamicClassRef).scaleY;
-							
 							if(_itemRenderer != null) {
 								myIR=_itemRenderer.newInstance()
-								myIR.data = cursor.current ; 
+								myIR.data = cursor.current; 
 								mySymbol=(myIR as UIComponent);
 							} else {
 								mySymbol = new UIComponent();
