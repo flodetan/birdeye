@@ -39,8 +39,8 @@ package org.un.cava.birdeye.geovis.transformations
 			super();
 			_latRad=convertDegToRad(lat);
 			_longRad=convertDegToRad(long);
-			this.scalefactor=151.5;
-			this.xoffset=2.75;
+			this.scalefactor=153.7;
+			this.xoffset=2.69;
 			this.yoffset=1.37;
 			this.xscaler=1;
 
