@@ -40,9 +40,9 @@ package org.un.cava.birdeye.geovis.transformations
 			_latRad=convertDegToRad(lat);
 			_longRad=convertDegToRad(long);
 
-			this.scalefactor=161;
-			this.xoffset=2.6;
-			this.yoffset=1.3;
+			this.scalefactor=163.6;
+			this.xoffset=2.524;
+			this.yoffset=1.31;
 			
 			_theta = approx_theta(_latRad);
 		}
