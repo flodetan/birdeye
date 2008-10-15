@@ -37,24 +37,24 @@ package org.un.cava.birdeye.geovis.transformations
 		
  		private const arrProjDef:Object={
 			00 : {'PLEN':1.0000, 'PDFE' :0.0000},
-			05 : {'PLEN':0.9986, 'PDFE' :0.0620},
-			10 : {'PLEN':0.9954, 'PDFE' :0.1240},
-			15 : {'PLEN':0.9900, 'PDFE' :0.1860},
-			20 : {'PLEN':0.9822, 'PDFE' :0.2480},
-			25 : {'PLEN':0.9730, 'PDFE' :0.3100},
-			30 : {'PLEN':0.9600, 'PDFE' :0.3720},
-			35 : {'PLEN':0.9427, 'PDFE' :0.4340},
-			40 : {'PLEN':0.9216, 'PDFE' :0.4958},
-			45 : {'PLEN':0.8962, 'PDFE' :0.5571},
-			50 : {'PLEN':0.8679, 'PDFE' :0.6176},
-			55 : {'PLEN':0.8350, 'PDFE' :0.6769},
-			60 : {'PLEN':0.7986, 'PDFE' :0.7346},
-			65 : {'PLEN':0.7597, 'PDFE' :0.7903},
-			70 : {'PLEN':0.7186, 'PDFE' :0.8435},
-			75 : {'PLEN':0.6732, 'PDFE' :0.8936},
-			80 : {'PLEN':0.6213, 'PDFE' :0.9394},
-			85 : {'PLEN':0.5722, 'PDFE' :0.9761},
-			90 : {'PLEN':0.5322, 'PDFE' :1.0000}
+			05 : {'PLEN':0.9986, 'PDFE' :0.007874},
+			10 : {'PLEN':0.9954, 'PDFE' :0.015748},
+			15 : {'PLEN':0.9900, 'PDFE' :0.023622},
+			20 : {'PLEN':0.9822, 'PDFE' :0.031496},
+			25 : {'PLEN':0.9730, 'PDFE' :0.03937},
+			30 : {'PLEN':0.9600, 'PDFE' :0.047244},
+			35 : {'PLEN':0.9427, 'PDFE' :0.055118},
+			40 : {'PLEN':0.9216, 'PDFE' :0.0629666},
+			45 : {'PLEN':0.8962, 'PDFE' :0.0707517},
+			50 : {'PLEN':0.8679, 'PDFE' :0.0784352},
+			55 : {'PLEN':0.8350, 'PDFE' :0.0859663},
+			60 : {'PLEN':0.7986, 'PDFE' :0.0932942},
+			65 : {'PLEN':0.7597, 'PDFE' :0.1003681},
+			70 : {'PLEN':0.7186, 'PDFE' :0.1071245},
+			75 : {'PLEN':0.6732, 'PDFE' :0.1134872},
+			80 : {'PLEN':0.6213, 'PDFE' :0.1193038},
+			85 : {'PLEN':0.5722, 'PDFE' :0.1239647},
+			90 : {'PLEN':0.5322, 'PDFE' :0.127}
 		};
 
 		public function RobinsonTransformation(lat:Number,long:Number)
@@ -63,7 +63,6 @@ package org.un.cava.birdeye.geovis.transformations
 			_lat=lat;
 			_long=long;
 
-			this.xscaler=0.127;
 			this.scalefactor=1729;
 			this.xoffset=0.239;
 			this.yoffset=0.1224;
@@ -114,8 +113,8 @@ package org.un.cava.birdeye.geovis.transformations
 		{
 			var yCentered:Number;
 			var sign:int = sign(_lat)
-			var lowY:Number = arrProjDef[Math.abs(_lowLat)].PDFE*sign*this.xscaler;
-			var highY:Number = arrProjDef[Math.abs(_highLat)].PDFE*sign*this.xscaler;
+			var lowY:Number = sign*arrProjDef[Math.abs(_lowLat)].PDFE;
+			var highY:Number = sign*arrProjDef[Math.abs(_highLat)].PDFE;
 
 //			yCentered = interpolate(_ratio, lowY, highY);
 			yCentered = lowY+_ratio*(highY-lowY);			

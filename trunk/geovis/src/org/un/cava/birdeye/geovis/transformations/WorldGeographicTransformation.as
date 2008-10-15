@@ -39,7 +39,6 @@ package org.un.cava.birdeye.geovis.transformations
 			_longRad=convertDegToRad(long);
 
 			this.scalefactor=133.9;
-			this.xscaler=1;
 			this.xoffset=3.145;
 			this.yoffset=1.455;
 		}
@@ -47,9 +46,8 @@ package org.un.cava.birdeye.geovis.transformations
 		public override function calculateX():Number
 		{
 			var xCentered:Number;
-			var stdParallell:Number = Math.PI / 8;
 			
-			xCentered = _longRad * this.xscaler;//Math.cos(stdParallell);
+			xCentered = _longRad;
 			return translateX(xCentered);
 		}
 

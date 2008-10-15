@@ -38,7 +38,6 @@ package org.un.cava.birdeye.geovis.transformations
 			_latRad=convertDegToRad(lat);
 			_longRad=convertDegToRad(long);
 
-			this.xscaler=0;
 			this.scalefactor=139;
 			this.xoffset=2.97;
 			this.yoffset=1.45;
@@ -48,17 +47,15 @@ package org.un.cava.birdeye.geovis.transformations
 		public function setGoodeConstants():void
 		{
 			this.scalefactor = 138.6;
-			this.xscaler = 0;
 			this.xoffset = 2.98;
 			this.yoffset = 1.32;
 		}
 
 		public override function calculateX():Number
 		{
-			var lstart:Number = this.xscaler;
 			var xCentered:Number;
-			//x = (long-lstart)*cos(lat)
-			xCentered=(_longRad-lstart)*Math.cos(_latRad);
+			//x = (long-lstart)*cos(lat)  //lstart=0
+			xCentered=(_longRad)*Math.cos(_latRad);
 			return translateX(xCentered);
 		}
 
