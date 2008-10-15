@@ -31,6 +31,7 @@ package org.un.cava.birdeye.geovis.transformations
 	{
 		private var _latRad:Number;
 		private var _longRad:Number;
+		private var _xscaler:Number=1;
 		private var _theta:Number=1;
 		private var _loopCounter:int=0;
 		
@@ -39,19 +40,19 @@ package org.un.cava.birdeye.geovis.transformations
 			super();
 			_latRad=convertDegToRad(lat);
 			_longRad=convertDegToRad(long);
+			_xscaler=1;
 			this.scalefactor=153.7;
 			this.xoffset=2.69;
 			this.yoffset=1.37;
-			this.xscaler=1;
 
-			this._theta = approx_theta(_latRad);
+			_theta = approx_theta(_latRad);
 		}
 
 		//When the Mollweide transformation is used for the central part of the Goode projection
 		public function setGoodeConstants():void
 		{
+			_xscaler = 1.05;
 			this.scalefactor = 131;
-			this.xscaler = 1.05;
 			this.xoffset = 3.15;
 			this.yoffset = 1.39;
 		}
@@ -82,15 +83,15 @@ package org.un.cava.birdeye.geovis.transformations
 			var xCentered:Number;
 			const c:Number = 2*Math.sqrt(2)/Math.PI;
 			
-			xCentered = c * _longRad * Math.cos(this._theta);
-			xCentered = xCentered *this.xscaler;
+			xCentered = c * _longRad * Math.cos(_theta);
+			xCentered = xCentered *_xscaler;
 			return translateX(xCentered);
 		}
 
 		public override function calculateY():Number
 		{
 			var yCentered:Number;
-			yCentered = Math.sqrt(2) * Math.sin(this._theta);
+			yCentered = Math.sqrt(2) * Math.sin(_theta);
 			return translateY(yCentered);
 		}
 				

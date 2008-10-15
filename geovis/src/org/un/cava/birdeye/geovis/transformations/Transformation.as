@@ -43,7 +43,6 @@ package org.un.cava.birdeye.geovis.transformations
 		private var _scalefactor:Number=1; //Projection-specific scaling factor for zooming in to match the size of the map polygon
 		private var _scaleX:Number=1; //Map-specific x-wise scaling factor, taken from map.scaleX
 		private var _scaleY:Number=1; //Map-specific y-wise scaling factor, taken from map.scaleY
-		private var _xscaler:Number=1; //temporary calibration variable, will be removed after calibration is done
 		private var _xoffset:Number=0; //x-wise translation so that x=0 becomes the left border of the map
 		private var _yoffset:Number=0; //y-wise translation so that y=0 becomes the top of the map
 
@@ -101,16 +100,6 @@ package org.un.cava.birdeye.geovis.transformations
 
 		public function get scaleY():Number{
 			return _scaleY;
-		}
-			
-		//xscaler is a temporary calibration variable, will be removed once calibration is done
-		public function set xscaler(value:Number):void{
-			_xscaler=value;
-		}
-		
-		//xscaler is a temporary calibration variable, will be removed once calibration is done
-		public function get xscaler():Number{
-			return _xscaler;
 		}
 
 		public function set xoffset(value:Number):void{
