@@ -118,7 +118,7 @@ package org.un.cava.birdeye.geovis.locators
 			} //TODO: Else throw an error			 
 		}
 
-		public function createTransformation(lat:Number, long:Number, projection:String):Transformation
+		public static function createTransformation(lat:Number, long:Number, projection:String):Transformation
 		{
 			var t:Transformation;
 			if (projection == "Geographic") {
