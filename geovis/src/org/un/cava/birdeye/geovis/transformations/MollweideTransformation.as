@@ -52,8 +52,8 @@ package org.un.cava.birdeye.geovis.transformations
 		{
 			this.scalefactor = 131;
 			this.xscaler = 1.05;
-			this.xoffset = 3.16;
-			this.yoffset = 1.36;
+			this.xoffset = 3.15;
+			this.yoffset = 1.39;
 		}
 		
 		private function approxIsGoodEnough(tP:Number, la:Number):Boolean {

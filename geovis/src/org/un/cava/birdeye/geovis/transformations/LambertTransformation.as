@@ -42,9 +42,9 @@ package org.un.cava.birdeye.geovis.transformations
 			_longRad=convertDegToRad(long);
 
 			_kayPrim = calc_kayPrim(_latRad,_longRad);
-			this.scalefactor=152.3;
-			this.xoffset=1.94;
-			this.yoffset=1.79;
+			this.scalefactor=152.2;
+			this.xoffset=1.98;
+			this.yoffset=1.94;
 		}
 
 		private function calc_kayPrim(la:Number, lo:Number):Number

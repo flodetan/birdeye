@@ -38,19 +38,19 @@ package org.un.cava.birdeye.geovis.transformations
 			_latRad=convertDegToRad(lat);
 			_longRad=convertDegToRad(long);
 
-			this.xscaler=-0.05;
-			this.scalefactor=137;
-			this.xoffset=2.99;
+			this.xscaler=0;
+			this.scalefactor=139;
+			this.xoffset=2.97;
 			this.yoffset=1.45;
 		}
 
 		//When the Sinusoidal transformation is used for the peripheral parts of the Goode projection
 		public function setGoodeConstants():void
 		{
-			this.scalefactor = 138;
+			this.scalefactor = 138.6;
 			this.xscaler = 0;
-			this.xoffset = 3;
-			this.yoffset = 1.31;
+			this.xoffset = 2.98;
+			this.yoffset = 1.32;
 		}
 
 		public override function calculateX():Number
