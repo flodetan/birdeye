@@ -38,9 +38,9 @@ package org.un.cava.birdeye.geovis.transformations
 			_latRad=convertDegToRad(lat);
 			_longRad=convertDegToRad(long);
 
-			this.scalefactor=133.5;
-			this.xoffset=3.155;
-			this.yoffset=1.99;
+			this.scalefactor=133.8;
+			this.xoffset=3.14;
+			this.yoffset=1.98;
 		}
 
 		public override function calculateX():Number

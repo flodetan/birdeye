@@ -63,10 +63,10 @@ package org.un.cava.birdeye.geovis.transformations
 			_lat=lat;
 			_long=long;
 
-			this.xscaler=0.1278;
-			this.scalefactor=1700;
-			this.xoffset=0.246;
-			this.yoffset=0.122;
+			this.xscaler=0.127;
+			this.scalefactor=1729;
+			this.xoffset=0.239;
+			this.yoffset=0.1224;
 
 			_lowLat = roundDownToFive(_lat);
 			_highLat = roundUpToFive(_lat);
