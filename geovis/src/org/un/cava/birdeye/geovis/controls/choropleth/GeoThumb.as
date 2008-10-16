@@ -320,6 +320,9 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 		  			bouton.addEventListener(MouseEvent.MOUSE_DOWN, startMove);
 		            bouton.addEventListener(MouseEvent.MOUSE_UP, endDrag);
 		            bouton.addEventListener(MouseEvent.MOUSE_OUT, endDrag);
+		        }else{
+		        	bouton.addEventListener(MouseEvent.MOUSE_OVER,MouseOverEvent);
+		            bouton.addEventListener(MouseEvent.MOUSE_OUT,MouseOutEvent);
 		        }
 	        }
      	}
@@ -381,8 +384,10 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 		 */
         private function MouseOverEvent(event:MouseEvent):void {
         	toolTipCreate(Numformat.format(_value).toString(), event.stageX + 10, event.stageY + 10);
-        	event.currentTarget.useHandCursor=true;
-        	event.currentTarget.buttonMode=true;
+        	if(_draggable==true){
+	        	event.currentTarget.useHandCursor=true;
+	        	event.currentTarget.buttonMode=true;
+	        }
         }
 		
 		/**
@@ -390,8 +395,10 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 		 */
 		private function MouseOutEvent(event:MouseEvent):void {
 			toolTipDestroy();
-        	event.currentTarget.useHandCursor=false;
-        	event.currentTarget.buttonMode=false;
+			if(_draggable==true){
+	        	event.currentTarget.useHandCursor=false;
+	        	event.currentTarget.buttonMode=false;
+	  		}
         }
         
         /**
