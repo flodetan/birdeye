@@ -4,7 +4,8 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	
 	import mx.controls.Label;
 	import mx.core.UIComponent;
-	
+	import mx.formatters.NumberFormatter;
+	import mx.formatters.NumberBaseRoundType;
 	
 	//--------------------------------------
 	//  Styles
@@ -20,7 +21,8 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	//  Other metadata
 	//--------------------------------------
 	
-	
+	[Inspectable("scaleData")]
+	[Inspectable("usePercentScale")]
 	[Inspectable("title")]
 	public class GeoScale extends UIComponent
 	{
@@ -96,7 +98,25 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	     */
 		private var _textColor:uint=0x000000;
 		
+		/**
+	     *  @private
+	     */
+		private var _usePercentScale:Boolean=false;
 		
+		/**
+	     *  @private
+	     */
+		private var _scaleData:Array;
+		
+		/**
+	     *  @private
+	     */
+		private var Numformat:NumberFormatter;
+		
+		/**
+	     *  @private
+	     */
+		private var _decNum:Number;
 		//--------------------------------------------------------------------------
 	    //
 	    //  Properties
@@ -121,6 +141,41 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 			return _title;
 		}
 		
+		//----------------------------------
+	    //  usePercentScale
+	    //----------------------------------
+		
+		/**
+     	 *  Define use the 0-100% scale or not.
+     	*/	
+		public function set usePercentScale(value:Boolean):void{
+			_usePercentScale = value;
+		}
+		
+		/**
+	     *  @private
+	     */
+		public function get usePercentScale():Boolean{
+			return _usePercentScale;
+		}
+		
+		//----------------------------------
+	    //  scaleData
+	    //----------------------------------
+		
+		/**
+     	 *  Define the value for the scale.
+     	*/	
+		public function set scaleData(value:Array):void{
+			_scaleData = value;
+		}
+		
+		/**
+	     *  @private
+	     */
+		public function get scaleData():Array{
+			return _scaleData;
+		}
 		
 		//--------------------------------------------------------------------------
     	//
@@ -166,6 +221,8 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 				_y=(this.parent as dynamicClassRef).y;
 				_parentMin=(this.parent as dynamicClassRef).minimumValue;
 				_parentMax=(this.parent as dynamicClassRef).maximumValue;
+				_decNum=(this.parent as dynamicClassRef).decimalNumber;
+				setFormatter(_decNum);
 				
 				scale.x=Number(_x);
 				scale.y=Number(_y+_height+2);
@@ -173,18 +230,54 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 				if(getStyle("textColor")){
 					_textColor=getStyle("textColor");
 				}
-			
-				for (var i:int = 0; i <= 10; i++) {
-	  	 			lbl=new Label();
-			 		lbl.text=(i*10).toString()+'%';
-			 		lbl.setStyle('color',_textColor);
-			 		lbl.setStyle('textAlign','center');
-			 		lbl.height=15;
-			 		lbl.width=40;
-			 		lbl.x=Number((_width/10*i) - lbl.width/2);
-			 		
-			 		scale.addChild(lbl);
-	  	 		}
+				
+				if(_usePercentScale){
+					for (var i:int = 0; i <= 10; i++) {
+		  	 			lbl=new Label();
+				 		lbl.text=(i*10).toString()+'%';
+				 		lbl.setStyle('color',_textColor);
+				 		lbl.setStyle('textAlign','center');
+				 		lbl.height=15;
+				 		lbl.width=40;
+				 		lbl.x=Number((_width/10*i) - lbl.width/2);
+				 		
+				 		scale.addChild(lbl);
+		  	 		}
+				  }else{
+				  	_scaleData.sort(Array.NUMERIC);
+				  	//if(_parentMin){
+				  		
+				  		lbl=new Label();
+				 		lbl.text=Numformat.format(_parentMin).toString();
+				 		lbl.setStyle('color',_textColor);
+				 		lbl.setStyle('textAlign','center');
+				 		lbl.height=15;
+				 		lbl.width=_width/_scaleData.length;
+				 		lbl.x=Number(-lbl.width/2);
+				 		scale.addChild(lbl);
+				 		
+				  	//}
+				  	for (var j:int = 0; j <= _scaleData.length-2; j++) {
+		  	 			lbl=new Label();
+				 		lbl.text=Numformat.format(_scaleData[j]).toString();
+				 		lbl.setStyle('color',_textColor);
+				 		lbl.setStyle('textAlign','center');
+				 		lbl.height=15;
+				 		lbl.width=_width/_scaleData.length;
+				 		lbl.x=Number((_width/_scaleData.length*(j+1)) - lbl.width/2);
+				 		scale.addChild(lbl);
+		  	 		}
+		  	 		//if(_parentMax){
+				  		lbl=new Label();
+				 		lbl.text=Numformat.format(_parentMax).toString();
+				 		lbl.setStyle('color',_textColor);
+				 		lbl.setStyle('textAlign','center');
+				 		lbl.height=15;
+				 		lbl.width=_width/_scaleData.length;
+				 		lbl.x=Number((_width/_scaleData.length*(j+1)) - lbl.width/2);
+				 		scale.addChild(lbl);
+				  	//}
+				  }
 	  	 		if(_title!=''){
 		  	 		lblTitle=new Label();
 		  	 		lblTitle.text=_title;
@@ -199,5 +292,24 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	  	 		this.addChild(scale)
 	        }     
 	     } 
+	     
+	     //--------------------------------------------------------------------------
+    	//
+    	//  Methods
+    	//
+    	//--------------------------------------------------------------------------
+		
+	     /**
+		 * @private
+		 */
+		private function setFormatter(decNum:Number):void{
+			
+			Numformat=new NumberFormatter();
+			Numformat.rounding=NumberBaseRoundType.NEAREST;
+			Numformat.precision=decNum;
+			Numformat.useThousandsSeparator=true;
+		}
+		
+		
 	}
 }
