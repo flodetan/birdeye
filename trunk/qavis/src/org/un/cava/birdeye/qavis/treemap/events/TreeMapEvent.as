@@ -70,7 +70,11 @@ package org.un.cava.birdeye.qavis.treemap.events
 		 * Dispatched when the user selects a branch item in the TreeMap component.
 		 */
 		public static const BRANCH_SELECT:String = "branchSelect";
-	
+		
+		/**
+		 * Dispatched when the user clicks on a branch item in the TreeMap component.
+		 */
+		public static const BRANCH_CLICK:String = "branchClick";
 	//--------------------------------------
 	//  Constructor
 	//--------------------------------------
