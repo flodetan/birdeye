@@ -367,6 +367,9 @@ package org.un.cava.birdeye.geovis.controls.choropleth
   	 		 		 if (j%10==0){
   	 		 		 		 barre.graphics.moveTo(_x+_width/100*j,_y+_height-2);
   	 		 		 		 barre.graphics.lineTo(_x+_width/100*j,_y+2);
+  	 		 		 }else if(j%5==0){
+  	 		 		 		barre.graphics.moveTo(_x+_width/100*j,_y+_height-2);
+  	 		 		 		barre.graphics.lineTo(_x+_width/100*j,_y+(_height*30/100));
   	 		 		 }else{
   	 		 		 		 barre.graphics.moveTo(_x+_width/100*j,_y+_height-2);
   	 		 		 		 barre.graphics.lineTo(_x+_width/100*j,_y+(_height*50/100));
