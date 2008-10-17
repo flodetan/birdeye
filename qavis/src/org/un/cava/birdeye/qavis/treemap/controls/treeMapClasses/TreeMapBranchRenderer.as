@@ -262,6 +262,7 @@ include "../../styles/metadata/PaddingStyles.inc"
 			{
 				if(this.header)
 				{
+					this.header.removeEventListener(TreeMapEvent.BRANCH_CLICK, headerClickHandler);
 					this.header.removeEventListener(TreeMapEvent.BRANCH_ZOOM, headerZoomHandler);
 					this.header.removeEventListener(TreeMapEvent.BRANCH_SELECT, headerSelectHandler);
 					this.removeChild(this.header);
@@ -274,6 +275,7 @@ include "../../styles/metadata/PaddingStyles.inc"
 				if(this.header)
 				{
 					this.header.styleName = headerStyleName;
+					this.header.addEventListener(TreeMapEvent.BRANCH_CLICK, headerClickHandler);
 					this.header.addEventListener(TreeMapEvent.BRANCH_SELECT, headerSelectHandler);
 					this.header.addEventListener(TreeMapEvent.BRANCH_ZOOM, headerZoomHandler);
 					this.addChild(this.header);
@@ -374,5 +376,15 @@ include "../../styles/metadata/PaddingStyles.inc"
 			var zoom:TreeMapEvent = new TreeMapEvent(TreeMapEvent.BRANCH_ZOOM, this);
 			this.dispatchEvent(zoom);
 		}
+		
+		/**
+		 * Handles selecte events from the header.
+		 */
+		protected function headerClickHandler(event:Event):void
+		{
+			var select:TreeMapEvent = new TreeMapEvent(TreeMapEvent.BRANCH_CLICK, this);
+			this.dispatchEvent(select);
+		}
+	
 	}
 }

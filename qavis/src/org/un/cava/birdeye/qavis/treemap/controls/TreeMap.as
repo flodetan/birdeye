@@ -86,6 +86,14 @@ package org.un.cava.birdeye.qavis.treemap.controls
 	 * @eventType org.un.cava.birdeye.qavis.treemap.events.TreeMapEvent.LEAF_DOUBLE_CLICK
 	 */
 	[Event(name="leafDoubleClick", type="org.un.cava.birdeye.qavis.treemap.events.TreeMapEvent")]
+	
+	/**
+	 * Dispatched when the user clicks on a branch item in the control.
+	 *
+	 * @eventType org.un.cava.birdeye.qavis.treemap.events.TreeMapEvent.BRANCH_CLICK
+	 */
+	[Event(name="branchClick", type="org.un.cava.birdeye.qavis.treemap.events.TreeMapEvent")]
+
 
 	//--------------------------------------
 	//  Styles
@@ -1362,6 +1370,7 @@ include "../styles/metadata/TextStyles.inc"
 				}
 				iterator.moveNext();
 			}
+			
 		}
 		
 		/**
@@ -1482,7 +1491,7 @@ include "../styles/metadata/TextStyles.inc"
 				renderer.styleName = this.getStyle("branchStyleName");
 				this.addChild(UIComponent(renderer));
 			}
-			
+			renderer.addEventListener(MouseEvent.CLICK, branchClickHandler);
 			renderer.addEventListener(TreeMapEvent.BRANCH_ZOOM, branchZoomHandler);
 			renderer.addEventListener(TreeMapEvent.BRANCH_SELECT, branchSelectHandler);
 			renderer.addEventListener(TreeMapLayoutEvent.BRANCH_LAYOUT_CHANGE, branchLayoutChangeHandler);
@@ -1501,6 +1510,7 @@ include "../styles/metadata/TextStyles.inc"
 			for(var i:int = 0; i < itemCount; i++)
 			{
 				var extraRenderer:UIComponent = UIComponent(this._branchRendererCache[i]);
+				extraRenderer.removeEventListener(MouseEvent.CLICK, branchClickHandler);
 				extraRenderer.removeEventListener(TreeMapEvent.BRANCH_ZOOM, branchZoomHandler);
 				extraRenderer.removeEventListener(TreeMapEvent.BRANCH_SELECT, branchSelectHandler);
 				extraRenderer.removeEventListener(TreeMapLayoutEvent.BRANCH_LAYOUT_CHANGE, branchLayoutChangeHandler);
@@ -1537,6 +1547,7 @@ include "../styles/metadata/TextStyles.inc"
 			for(var i:int = 0; i < itemCount; i++)
 			{
 				var renderer:ITreeMapItemRenderer = ITreeMapItemRenderer(this._branchRendererCache.pop());
+				renderer.removeEventListener(MouseEvent.CLICK, branchClickHandler);
 				renderer.removeEventListener(TreeMapEvent.BRANCH_ZOOM, branchZoomHandler);
 				renderer.removeEventListener(TreeMapEvent.BRANCH_SELECT, branchSelectHandler);
 				renderer.removeEventListener(TreeMapLayoutEvent.BRANCH_LAYOUT_CHANGE, branchLayoutChangeHandler);
@@ -1934,6 +1945,24 @@ include "../styles/metadata/TextStyles.inc"
 					renderer.setActualSize(Math.max(0, itemLayoutData.width), Math.max(0, itemLayoutData.height));
 				}
 			}
+		}
+		
+		/**
+		 * @private
+		 * Handles the clicking of a branch. If selection is enabled, updates
+		 * the selectedItem.
+		 */
+		protected function branchClickHandler(event:MouseEvent):void
+		{
+			var renderer:ITreeMapBranchRenderer = ITreeMapBranchRenderer(event.currentTarget);
+			var branchEvent:TreeMapEvent = new TreeMapEvent(TreeMapEvent.BRANCH_CLICK, renderer);
+			this.dispatchEvent(branchEvent);
+			
+			/*if(this._selectable)
+			{
+				this.selectedItem = renderer.data;
+				this.dispatchEvent(new Event(Event.CHANGE));
+			}*/
 		}
 	}
 }
