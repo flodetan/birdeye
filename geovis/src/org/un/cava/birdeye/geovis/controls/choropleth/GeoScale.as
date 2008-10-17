@@ -264,7 +264,8 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 				 		lbl.setStyle('textAlign','center');
 				 		lbl.height=15;
 				 		lbl.width=_width/_scaleData.length;
-				 		lbl.x=Number((_width/_scaleData.length*(j+1)) - lbl.width/2);
+				 		//lbl.x=Number((_width/_scaleData.length*(j+1)) - lbl.width/2);
+				 		lbl.x=((_scaleData[j]*_width)/_parentMax) - lbl.width/2;//
 				 		scale.addChild(lbl);
 		  	 		}
 		  	 		//if(_parentMax){
