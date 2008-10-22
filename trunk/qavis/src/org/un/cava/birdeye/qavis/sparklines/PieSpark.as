@@ -49,7 +49,8 @@
 	[Inspectable("colors")]
 	[Inspectable("dataField")]	
 	[Inspectable("showDataTips")]	
-	[Inspectable("dataTipFunction")]	
+	[Inspectable("dataTipFunction")]
+	[Inspectable("dataTipPrefix")]		
 	public class PieSpark extends UIComponent
 	{
 			private var values:Array;
@@ -61,6 +62,7 @@
 			private var _dataField:String;
 			private var _showDataTips:Boolean=false;
 			private var _dataTipFunction:Function;
+			private var _dataTipPrefix:String;
 			//[Bindable("dataTipFunctionChanged")]
     		//[Inspectable(category="Advanced")]
 			public var Surf:Surface;
@@ -149,6 +151,11 @@
 		{
 			_dataField = value;
 		}
+		
+		public function set dataTipPrefix(value:String):void
+		{
+			_dataTipPrefix = value;
+		}
 			
 		public function get dataTipFunction():Function
 	    {
@@ -217,7 +224,7 @@
 			private function createSlice(curs:IViewCursor, surf:Surface):PieSparkSlice 
 			{
 				var c:int;
-				var slice:PieSparkSlice = new PieSparkSlice(this.width,this.height,_dataField,_showDataTips,curs,_dataTipFunction,surf,_dataProvider.length);
+				var slice:PieSparkSlice = new PieSparkSlice(this.width,this.height,_dataField,_showDataTips,curs,_dataTipFunction,surf,_dataProvider.length,_dataTipPrefix);
 				slice.x = 0;
 				slice.y = 0;
 				var fill:LinearGradientFill = new LinearGradientFill();
