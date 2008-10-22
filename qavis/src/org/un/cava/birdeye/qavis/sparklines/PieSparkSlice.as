@@ -30,7 +30,7 @@
 	import com.degrafa.*;
 	import com.degrafa.geometry.*;
 	import com.degrafa.paint.*;
-	import com.degrafa.GeometryGroup;
+	
 	import flash.events.MouseEvent;
 	
 	import mx.collections.IViewCursor;
@@ -46,17 +46,27 @@
 		private var _cursor:IViewCursor;
 		private var currentToolTipItem:IToolTip; 
 		private var _dtFunction:Function;
+		private var _dtPrefix:String;
 		
-		public function PieSparkSlice(wdt:Number,hgt:Number,field:String,showdtTips:Boolean,cursor:IViewCursor,dataTipFunction:Function,surf:Surface, numOfSlice:int)
+		public function PieSparkSlice(wdt:Number,hgt:Number,field:String,showdtTips:Boolean,cursor:IViewCursor,dataTipFunction:Function,surf:Surface, numOfSlice:int, dtPrefix:String=null)
 		{
 			_surf=surf;
 			_dtFunction=dataTipFunction;
 			_cursor=cursor;
+			_dtPrefix=dtPrefix;
 			
 			if(_dtFunction!=null){
-				_toolTip=_dtFunction(_cursor);
+				if(_dtPrefix!=null){
+					_toolTip=_dtPrefix + _dtFunction(_cursor);
+				}else{
+					_toolTip=_dtFunction(_cursor);
+				}
 			}else{
-				_toolTip=cursor.current[field];
+				if(_dtPrefix!=null){
+					_toolTip=_dtPrefix + cursor.current[field];
+				}else{
+					_toolTip=cursor.current[field];
+				}
 			}
 			
 			Arc=new EllipticalArc();
