@@ -17,11 +17,10 @@
 .titleTableTitle {
 	padding-left: 15px;
 	padding-right: 5px;
-	font-size: 25px;
+	font-size: 13px;
 	height: 44px;
 	background-image: url(images/titleTableTop.jpg);
 	background-repeat: repeat-x;
-	vertical-align:middle;
 }
 .titleTableSearch {
 	white-space: nowrap;
