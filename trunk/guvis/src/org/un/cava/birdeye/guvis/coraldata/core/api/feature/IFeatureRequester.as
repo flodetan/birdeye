@@ -6,7 +6,7 @@
  * Center for Advanced Visual Analytics
  * http://cava.unog.ch
  *
- * Author: Anselm Bradford
+ * Author: Anselm Bradford (http://anselmbradford.com)
  * The coraldata data structure library was originally inspired by and adopted 
  * from JDSL (http://www.jdsl.org), any remaining similarities in architecture are 
  * credited to the respective authors in the JDSL classes.
@@ -33,7 +33,7 @@
 /*
  * SVN propsets
  *
- * $HeadURL$
+ * $HeadURL: $
  * $LastChangedBy$
  * $Date$
  * $Revision$
@@ -55,11 +55,6 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.feature
 		* FeatureRequester
 		*/
 		function instantiate( acc:IFeatureSupport ) : IFeature;
-		
-		/**
-		* @see IFeature#isApplicable
-		*/
-		//function isApplicable( to:IAccessor ) : Boolean;
 		
 		/**
 		* Checks if the associated Feature accepts accessors of a certain class.

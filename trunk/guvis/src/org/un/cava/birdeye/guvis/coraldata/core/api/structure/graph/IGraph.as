@@ -6,7 +6,7 @@
  * Center for Advanced Visual Analytics
  * http://cava.unog.ch
  *
- * Author: Anselm Bradford
+ * Author: Anselm Bradford (http://anselmbradford.com)
  * The coraldata data structure library was originally inspired by and adopted 
  * from JDSL (http://www.jdsl.org), any remaining similarities in architecture are 
  * credited to the respective authors in the JDSL classes.
@@ -33,49 +33,43 @@
 /*
  * SVN propsets
  *
- * $HeadURL: https://birdeye.googlecode.com/svn/trunk/guvis/src/org/un/cava/birdeye/guvis/coraldata/core/api/structure/IImmutableCollection.as $
+ * $HeadURL$
  * $LastChangedBy$
  * $Date$
  * $Revision$
  */
 
-package org.un.cava.birdeye.guvis.coraldata.core.api.structure
-{
-	import org.un.cava.birdeye.guvis.coraldata.core.api.iterator.IIterator;
-	import org.un.cava.birdeye.guvis.coraldata.core.api.access.IAccessor;
-	import org.un.cava.birdeye.guvis.coraldata.core.api.feature.IFeatureSupport;
-	
+package org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph
+{	
+
 	/**
-	* An interface enforcing methods of an immutatable ("read-only") 
-	* collection of data.
-	*/
-	public interface IImmutableCollection extends IFeatureSupport
+	 * An interface enforcing the methods needed to add vertices and edges to a
+	 * graph.
+	 */
+	public interface IGraph extends IModifiableGraph 
 	{
-						
 		/*----------------------------------------------------------------------
 		* public methods
-		*---------------------------------------------------------------------*/    
-
-		/** 
-		* @return The number of accessors in this collection.
-		*/
-		function size() : int;
-		
+		*---------------------------------------------------------------------*/    		
 		/**
-		* Checks whether this collection holds zero elements. 
+		* Inserts a new isolated vertex.
+		* @param element the object to be stored in the new vertex
+		* @return the new vertex
 		*/
-		function isEmpty() : Boolean;
-		
+		function insertVertex( element:Object = null ) : IVertex;
+				
 		/**
-		* Checks whether this collection contains an particular accessor.
-		* @param a The accessor to check for.
+		* Inserts a new edge between two existing vertices.
+		* 	
+		* @param v1 the first endvertex
+		* @param v2 the second endvertex
+		* @param element the object to be stored in the new edge
+		* @param ofType The type of edge to insert, use EdgeType.UNDIR, EdgeType.IN, or 
+		* EdgeType.OUT. Default is EdgeType.UNDIR.
+		* (static constant from <code>EdgeType</code> is not used because interfaces do not support  
+		* references to static constants of classes unfortunately.)
+		* @return the new edge
 		*/
-		function doesContain( a:IAccessor ) : Boolean;
-		
-		/**
-		* @return an iterator over all the elements stored in this
-		* collection
-		*/
-		function elements() : IIterator;		
-	}	
+		function insertEdge( v1:IVertex , v2:IVertex , element:Object = null , ofType:int = 4 /*EdgeType.UNDIR*/ ) : IEdge ;		
+	}
 }

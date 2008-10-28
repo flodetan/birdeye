@@ -6,7 +6,7 @@
  * Center for Advanced Visual Analytics
  * http://cava.unog.ch
  *
- * Author: Anselm Bradford
+ * Author: Anselm Bradford (http://anselmbradford.com)
  * The coraldata data structure library was originally inspired by and adopted 
  * from JDSL (http://www.jdsl.org), any remaining similarities in architecture are 
  * credited to the respective authors in the JDSL classes.
@@ -33,7 +33,7 @@
 /*
  * SVN propsets
  *
- * $HeadURL$
+ * $HeadURL: $
  * $LastChangedBy$
  * $Date$
  * $Revision$
@@ -42,6 +42,7 @@
 package org.un.cava.birdeye.guvis.coraldata.core.api.feature
 {
 	import org.un.cava.birdeye.guvis.coraldata.core.api.iterator.IIterator;
+	import org.un.cava.birdeye.guvis.coraldata.core.api.feature.IFeatureSet;
 	
 	/**
 	 * Interface enforcing methods for an object that can support features.
@@ -50,42 +51,9 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.feature
 	public interface IFeatureSupport
 	{
 		/**
-		* Add a feature to this object.
-		* @param request The feature requester for the feature.
-		* @return The feature instance that was added.
+		* @return The feature set instance associated with this object.
 		*/
-		function addFeature( request:IFeatureRequester ) : void;
+		function get features() : IFeatureSet;
 		
-		/**
-		* Remove a feature to this object.
-		* @param request The feature requester for the feature.
-		*/
-		function removeFeature( request:IFeatureRequester ) : void;
-		
-		/**
-		* Get a feature for this object.
-		* @param request The feature requester for the feature.
-		* @return The feature.
-		*/
-		function getFeature( request:IFeatureRequester ) : IFeature;
-		
-		/**
-		* Whether this object has a particular feature.
-		* @param request The feature requester for the feature.
-		* @return <code>true</code> if the object has the feature, 
-		* <code>false</code> otherwise.
-		*/
-		function hasFeature( request:IFeatureRequester ) : Boolean;
-		
-		/**
-		* An iterator of features on this object.
-		* @return An iterator of features on this object.
-		*/
-		function features() : IIterator;
-
-		/**
-		* Remove the features present on this object.
-		*/
-		function purgeFeatures() : void;
 	}
 }

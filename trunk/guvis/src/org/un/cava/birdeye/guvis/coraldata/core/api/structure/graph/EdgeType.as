@@ -6,7 +6,7 @@
  * Center for Advanced Visual Analytics
  * http://cava.unog.ch
  *
- * Author: Anselm Bradford
+ * Author: Anselm Bradford (http://anselmbradford.com)
  * The coraldata data structure library was originally inspired by and adopted 
  * from JDSL (http://www.jdsl.org), any remaining similarities in architecture are 
  * credited to the respective authors in the JDSL classes.
@@ -33,49 +33,29 @@
 /*
  * SVN propsets
  *
- * $HeadURL: https://birdeye.googlecode.com/svn/trunk/guvis/src/org/un/cava/birdeye/guvis/coraldata/core/api/structure/IImmutableCollection.as $
+ * $HeadURL$
  * $LastChangedBy$
  * $Date$
  * $Revision$
  */
 
-package org.un.cava.birdeye.guvis.coraldata.core.api.structure
+
+package org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph
 {
-	import org.un.cava.birdeye.guvis.coraldata.core.api.iterator.IIterator;
-	import org.un.cava.birdeye.guvis.coraldata.core.api.access.IAccessor;
-	import org.un.cava.birdeye.guvis.coraldata.core.api.feature.IFeatureSupport;
 	
 	/**
-	* An interface enforcing methods of an immutatable ("read-only") 
-	* collection of data.
-	*/
-	public interface IImmutableCollection extends IFeatureSupport
+	 * Static final class containing constants for specifying which edges are desired in
+	 * graph-query methods. Note that constants can be OR'd together using bitwise operations 
+	 * in any combination: <code>IN | OUT</code> specifies all directed edges, etc.
+	 *
+	 * Unlike most of the <code>coraldata.core.api</code> package, this is a concrete class as 
+	 * opposed to an interface because constants can not be added to an interface.
+	 */
+	public final class EdgeType
 	{
-						
-		/*----------------------------------------------------------------------
-		* public methods
-		*---------------------------------------------------------------------*/    
-
-		/** 
-		* @return The number of accessors in this collection.
-		*/
-		function size() : int;
-		
-		/**
-		* Checks whether this collection holds zero elements. 
-		*/
-		function isEmpty() : Boolean;
-		
-		/**
-		* Checks whether this collection contains an particular accessor.
-		* @param a The accessor to check for.
-		*/
-		function doesContain( a:IAccessor ) : Boolean;
-		
-		/**
-		* @return an iterator over all the elements stored in this
-		* collection
-		*/
-		function elements() : IIterator;		
-	}	
+		public static const IN : int = 1;
+		public static const OUT : int = 2;
+		public static const UNDIR : int = 4;
+		public static const ALL : int = 7;
+	}
 }

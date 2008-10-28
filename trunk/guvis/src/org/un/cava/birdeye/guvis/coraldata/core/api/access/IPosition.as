@@ -6,7 +6,7 @@
  * Center for Advanced Visual Analytics
  * http://cava.unog.ch
  *
- * Author: Anselm Bradford
+ * Author: Anselm Bradford (http://anselmbradford.com)
  * The coraldata data structure library was originally inspired by and adopted 
  * from JDSL (http://www.jdsl.org), any remaining similarities in architecture are 
  * credited to the respective authors in the JDSL classes.
@@ -33,49 +33,25 @@
 /*
  * SVN propsets
  *
- * $HeadURL: https://birdeye.googlecode.com/svn/trunk/guvis/src/org/un/cava/birdeye/guvis/coraldata/core/api/structure/IImmutableCollection.as $
+ * $HeadURL$
  * $LastChangedBy$
  * $Date$
  * $Revision$
  */
 
-package org.un.cava.birdeye.guvis.coraldata.core.api.structure
+package org.un.cava.birdeye.guvis.coraldata.core.api.access
 {
-	import org.un.cava.birdeye.guvis.coraldata.core.api.iterator.IIterator;
-	import org.un.cava.birdeye.guvis.coraldata.core.api.access.IAccessor;
-	import org.un.cava.birdeye.guvis.coraldata.core.api.feature.IFeatureSupport;
-	
 	/**
-	* An interface enforcing methods of an immutatable ("read-only") 
-	* collection of data.
-	*/
-	public interface IImmutableCollection extends IFeatureSupport
+	 * A place in a collection where an element is stored relative to other elements in 
+	 * the collection. (A node of a tree and a vertex of a graph are examples of positions.)
+	 */
+	
+	public interface IPosition extends IAccessor
 	{
-						
-		/*----------------------------------------------------------------------
-		* public methods
-		*---------------------------------------------------------------------*/    
-
-		/** 
-		* @return The number of accessors in this collection.
-		*/
-		function size() : int;
-		
 		/**
-		* Checks whether this collection holds zero elements. 
+		* Set the element at this position.
+		* @return the previous element set at this position.
 		*/
-		function isEmpty() : Boolean;
-		
-		/**
-		* Checks whether this collection contains an particular accessor.
-		* @param a The accessor to check for.
-		*/
-		function doesContain( a:IAccessor ) : Boolean;
-		
-		/**
-		* @return an iterator over all the elements stored in this
-		* collection
-		*/
-		function elements() : IIterator;		
-	}	
+		function setElement( e:Object ) : Object;
+	}
 }

@@ -33,7 +33,7 @@
 /*
  * SVN propsets
  *
- * $HeadURL$
+ * $HeadURL: https://birdeye.googlecode.com/svn/trunk/guvis/src/org/un/cava/birdeye/guvis/coraldata/core/api/structure/ICollection.as $
  * $LastChangedBy$
  * $Date$
  * $Revision$
