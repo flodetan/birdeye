@@ -6,7 +6,7 @@
  * Center for Advanced Visual Analytics
  * http://cava.unog.ch
  *
- * Author: Anselm Bradford
+ * Author: Anselm Bradford (http://anselmbradford.com)
  * The coraldata data structure library was originally inspired by and adopted 
  * from JDSL (http://www.jdsl.org), any remaining similarities in architecture are 
  * credited to the respective authors in the JDSL classes.
@@ -33,7 +33,7 @@
 /*
  * SVN propsets
  *
- * $HeadURL: https://birdeye.googlecode.com/svn/trunk/guvis/src/org/un/cava/birdeye/guvis/coraldata/core/api/structure/IImmutableCollection.as $
+ * $HeadURL$
  * $LastChangedBy$
  * $Date$
  * $Revision$
@@ -42,40 +42,18 @@
 package org.un.cava.birdeye.guvis.coraldata.core.api.structure
 {
 	import org.un.cava.birdeye.guvis.coraldata.core.api.iterator.IIterator;
-	import org.un.cava.birdeye.guvis.coraldata.core.api.access.IAccessor;
-	import org.un.cava.birdeye.guvis.coraldata.core.api.feature.IFeatureSupport;
 	
 	/**
-	* An interface enforcing methods of an immutatable ("read-only") 
-	* collection of data.
+	* Please refer to the documentation of
+	* <code>IPositionalCollection</code>.
+	*
+	* @see IPositionalCollection
 	*/
-	public interface IImmutableCollection extends IFeatureSupport
+	public interface IImmutablePositionalCollection extends IImmutableCollection
 	{
-						
-		/*----------------------------------------------------------------------
-		* public methods
-		*---------------------------------------------------------------------*/    
-
 		/** 
-		* @return The number of accessors in this collection.
+		* @return An iterator over all positions in the collection
 		*/
-		function size() : int;
-		
-		/**
-		* Checks whether this collection holds zero elements. 
-		*/
-		function isEmpty() : Boolean;
-		
-		/**
-		* Checks whether this collection contains an particular accessor.
-		* @param a The accessor to check for.
-		*/
-		function doesContain( a:IAccessor ) : Boolean;
-		
-		/**
-		* @return an iterator over all the elements stored in this
-		* collection
-		*/
-		function elements() : IIterator;		
-	}	
+		function positions() : IIterator;
+	}
 }

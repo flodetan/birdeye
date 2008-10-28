@@ -6,7 +6,7 @@
  * Center for Advanced Visual Analytics
  * http://cava.unog.ch
  *
- * Author: Anselm Bradford
+ * Author: Anselm Bradford (http://anselmbradford.com)
  * The coraldata data structure library was originally inspired by and adopted 
  * from JDSL (http://www.jdsl.org), any remaining similarities in architecture are 
  * credited to the respective authors in the JDSL classes.
@@ -33,7 +33,7 @@
 /*
  * SVN propsets
  *
- * $HeadURL$
+ * $HeadURL: $
  * $LastChangedBy$
  * $Date$
  * $Revision$
@@ -43,7 +43,7 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.feature
 {
 	
 	/**
-	 * Features are classed of extra functionality that can be associated with 
+	 * Features are classes of extra functionality that can be associated with 
 	 * a particular <code>IAccessor</code>. Examples include the ability to 
 	 * create an alias of an accessor in another data collection, or to add
 	 * weight to an edge of a graph. 

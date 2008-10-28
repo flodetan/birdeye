@@ -6,7 +6,7 @@
  * Center for Advanced Visual Analytics
  * http://cava.unog.ch
  *
- * Author: Anselm Bradford
+ * Author: Anselm Bradford (http://anselmbradford.com)
  * The coraldata data structure library was originally inspired by and adopted 
  * from JDSL (http://www.jdsl.org), any remaining similarities in architecture are 
  * credited to the respective authors in the JDSL classes.
@@ -33,49 +33,37 @@
 /*
  * SVN propsets
  *
- * $HeadURL: https://birdeye.googlecode.com/svn/trunk/guvis/src/org/un/cava/birdeye/guvis/coraldata/core/api/structure/IImmutableCollection.as $
+ * $HeadURL$
  * $LastChangedBy$
  * $Date$
  * $Revision$
  */
 
-package org.un.cava.birdeye.guvis.coraldata.core.api.structure
+package org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph
 {
-	import org.un.cava.birdeye.guvis.coraldata.core.api.iterator.IIterator;
-	import org.un.cava.birdeye.guvis.coraldata.core.api.access.IAccessor;
-	import org.un.cava.birdeye.guvis.coraldata.core.api.feature.IFeatureSupport;
+	import org.un.cava.birdeye.guvis.coraldata.core.api.structure.IPositionalCollection;
 	
 	/**
-	* An interface enforcing methods of an immutatable ("read-only") 
-	* collection of data.
-	*/
-	public interface IImmutableCollection extends IFeatureSupport
-	{
-						
-		/*----------------------------------------------------------------------
-		* public methods
-		*---------------------------------------------------------------------*/    
-
-		/** 
-		* @return The number of accessors in this collection.
+	 * An interface describing the modifier methods of a combinatorial
+	 * graph that can safely be inherited by more restricted graphs.
+	 */
+	public interface IModifiableGraph extends IImmutableGraph, IPositionalCollection 
+	{	
+		/**
+		* Sets the direction of an edge relative to a vertex.  
+		*
+		* @param edgeType The type of edge of this edge
+		* @param e an edge
+		* @param v an endvertex of <code>e</code>
 		*/
-		function size() : int;
+		function setEdgeDirection( edgeType:int , e:IEdge , v:IVertex = null ) : void;
+		
 		
 		/**
-		* Checks whether this collection holds zero elements. 
+		* Reverse the direction of an edge.
+		* @param e an edge
 		*/
-		function isEmpty() : Boolean;
-		
-		/**
-		* Checks whether this collection contains an particular accessor.
-		* @param a The accessor to check for.
-		*/
-		function doesContain( a:IAccessor ) : Boolean;
-		
-		/**
-		* @return an iterator over all the elements stored in this
-		* collection
-		*/
-		function elements() : IIterator;		
-	}	
+		function reverseDirection ( e:IEdge ) : void;
+	
+	}
 }
