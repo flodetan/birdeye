@@ -2,7 +2,7 @@
 <mx:Application 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:treemap="views.treemap.*"
-	xmlns:sparklines="views.sparklines.*"
+	xmlns:microcharts="views.microcharts.*"
 	xmlns:charts="views.charts.*"
 	backgroundGradientColors="[#333333,#999999]" layout="vertical"
 	width="100%" height="100%">
@@ -21,7 +21,7 @@
 	
 	<mx:TabNavigator width="100%" height="100%" paddingLeft="5" creationPolicy="all" >
 		
-		<sparklines:Sparklines label="Sparklines" width="100%" height="100%" />
+		<microcharts:Microcharts label="Microcharts" width="100%" height="100%" />
 		<treemap:TreeMap label="Treemap" width="100%" height="100%" />
 		<charts:Charts label="Charts" width="100%" height="100%" />
 		
