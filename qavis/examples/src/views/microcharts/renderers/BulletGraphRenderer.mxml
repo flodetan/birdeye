@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mc="org.un.cava.birdeye.qavis.microcharts.*" verticalAlign="middle" horizontalAlign="center"
+	xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
+	<mc:MicroBulletGraph orientation="vertical" 
+		qualitativeRanges="{data.Chart}" 
+		target="{data.trg}" value="{data.val}">
+	</mc:MicroBulletGraph>
+	<mx:Spacer height="100%"/>
+	<mc:MicroBulletGraph orientation="horizontal"  
+		qualitativeRanges="{data.Chart}" 
+		target="{data.trg}" value="{data.val}">
+	</mc:MicroBulletGraph>
+</mx:VBox>

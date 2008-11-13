@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" backgroundColor="#ffffff"
+	xmlns:local="views.microcharts.*"
+	xmlns:mc="org.un.cava.birdeye.qavis.microcharts.*"
+	width="100%" height="100%"
+	creationComplete="updateDataGrid();">
+
+	<mx:Style source="styles/main.css"/>
+    <mx:Script>
+        <![CDATA[
+            import mx.collections.ArrayCollection;
+
+			[Bindable]
+			private var colors:Array = [0xe2e0f8, 0xa69df6, 0x7e71f3, 0x412fed, 0x766dca, 0xb36dca, 0xb193bb, 0x49d8e1, 0x6da3a6, 0x06e9f7, 0xabf4f9];
+            [Bindable]
+            private var acMC:ArrayCollection;
+            
+            [Bindable]
+            public var acBG:ArrayCollection;
+            
+            [Bindable]
+            public var aMC:Array;
+            
+            [Bindable]
+            public var aBG:Array;
+
+            private function updateDataGrid():void
+            {
+            	aBG = [m1.value,m2.value,m3.value,m4.value,m5.value,m6.value];
+
+            	acMC = new ArrayCollection([
+            		{v1:m1.value,v2:m2.value,v3:m3.value,v4:m4.value,v5:m5.value,v6:m6.value,v7:m7.value,v8:m8.value,v9:m9.value,v10:m10.value,v11:m11.value,v12:m12.value, 
+            		Chart:[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value],
+            		Colors:colors},
+
+            		{v1:m7.value,v2:m8.value,v3:m9.value,v4:m10.value,v5:m1.value,v6:m2.value,v7:m3.value,v8:m4.value,v9:m5.value,v10:m6.value,v11:m11.value,v12:m12.value, 
+            		Chart:[m7.value,m8.value,m9.value,m10.value,m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m11.value,m12.value],
+            		Colors:colors},
+            		
+            		{v1:m3.value,v2:m7.value,v3:m8.value,v4:m1.value,v5:m2.value,v6:m4.value,v7:m5.value,v8:m9.value,v9:m10.value,v10:m11.value,v11:m12.value,v12:m6.value, 
+            		Chart:[m3.value,m7.value,m8.value,m1.value,m2.value,m4.value,m5.value,m9.value,m10.value,m11.value,m12.value,m6.value],
+            		Colors:colors}
+            	]);
+
+            	acBG = new ArrayCollection([
+            		{trg:t.value, val:v.value, c1:m1.value, c2:m2.value, c3:m3.value, c4:m4.value, c5:m5.value, c6:m6.value, Chart:aBG, MicroBulletHorizontal:aBG, MicroBulletVertical:aBG}
+            	]);            
+            }
+        ]]>
+    </mx:Script>
+
+	<mx:VBox width="200" height="100%">
+		<mx:Label text="dataProvider"/>
+		<mx:HSlider id="m1" value="50" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m2" value="100" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m3" value="80" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m4" value="-70" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m5" value="-30" minimum="-500" change="updateDataGrid()" maximum="400"  snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m6" value="0" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m7" value="80" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m8" value="40" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m9" value="-30" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m10" value="-30" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m11" value="-20" minimum="-500" change="updateDataGrid()" maximum="400"  snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m12" value="-100" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:Spacer height="30"/>
+		<mx:Label text="Target/actual values (bullet only)"/>
+		<mx:HSlider id="v" value="40" minimum="-500" maximum="400" change="updateDataGrid()" snapInterval="1" enabled="true"/>
+		<mx:HSlider id="t" value="70" minimum="-500" maximum="400" change="updateDataGrid()" snapInterval="1" enabled="true"/>
+	</mx:VBox>
+
+	<mx:TabNavigator height="100%" width="100%">
+		<mx:VBox label="Area">
+		    <mx:DataGrid selectable="false" dataProvider="{acMC}" editable="false" verticalAlign="center">
+		        <mx:columns>
+		            <mx:DataGridColumn dataField="v1" width="40"/>
+		            <mx:DataGridColumn dataField="v2" width="40"/>
+		            <mx:DataGridColumn dataField="v3" width="40"/>
+		            <mx:DataGridColumn dataField="v4" width="40"/>
+		            <mx:DataGridColumn dataField="v5" width="40"/>
+		            <mx:DataGridColumn dataField="v6" width="40"/> 
+		            <mx:DataGridColumn dataField="v7" width="40"/>
+		            <mx:DataGridColumn dataField="v8" width="40"/>
+		            <mx:DataGridColumn dataField="v9" width="40"/>
+		            <mx:DataGridColumn dataField="v10" width="40"/>
+		            <mx:DataGridColumn dataField="v11" width="40"/>
+		            <mx:DataGridColumn dataField="v12" width="40"/> 
+		            <mx:DataGridColumn dataField="Chart" itemRenderer="views.microcharts.renderers.MicroAreaRenderer"/>
+		        </mx:columns>
+		    </mx:DataGrid>
+			<mx:Label text="Sizing MicroArea"/>
+			<mx:HSlider id="mcaw" minimum="10" value="200" maximum="400" snapInterval="1" liveDragging="true"/>
+			<mx:HSlider id="mcah" minimum="10" value="100" maximum="200" snapInterval="1" liveDragging="true"/>
+			<mc:MicroAreaChart dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}"  
+				height="{mcah.value}" width="{mcaw.value}" color="0x000000" backgroundColor="0xaaaaaa"/>
+		</mx:VBox>
+		<mx:VBox label="Line">
+		    <mx:DataGrid selectable="false" dataProvider="{acMC}" editable="false" verticalAlign="center">
+		        <mx:columns>
+		            <mx:DataGridColumn dataField="v1" width="40"/>
+		            <mx:DataGridColumn dataField="v2" width="40"/>
+		            <mx:DataGridColumn dataField="v3" width="40"/>
+		            <mx:DataGridColumn dataField="v4" width="40"/>
+		            <mx:DataGridColumn dataField="v5" width="40"/>
+		            <mx:DataGridColumn dataField="v6" width="40"/> 
+		            <mx:DataGridColumn dataField="v7" width="40"/>
+		            <mx:DataGridColumn dataField="v8" width="40"/>
+		            <mx:DataGridColumn dataField="v9" width="40"/>
+		            <mx:DataGridColumn dataField="v10" width="40"/>
+		            <mx:DataGridColumn dataField="v11" width="40"/>
+		            <mx:DataGridColumn dataField="v12" width="40"/> 
+		            <mx:DataGridColumn dataField="Chart" itemRenderer="views.microcharts.renderers.MicroLineRenderer"/>
+		        </mx:columns>
+		    </mx:DataGrid>
+			<mx:Label text="Sizing MicroLine"/>
+			<mx:HSlider id="mlaw" minimum="10" value="200" maximum="400" snapInterval="1" liveDragging="true"/>
+			<mx:HSlider id="mlah" minimum="10" value="100" maximum="200" snapInterval="1" liveDragging="true"/>
+			<mc:MicroLineChart dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}" 
+				height="{mlah.value}" width="{mlaw.value}" color="0x000000" backgroundColor="0xaaaaaa"/>
+		</mx:VBox>
+		<mx:VBox label="WinLose">
+		    <mx:DataGrid selectable="false" dataProvider="{acMC}" editable="false" verticalAlign="center">
+		        <mx:columns>
+		            <mx:DataGridColumn dataField="v1" width="40"/>
+		            <mx:DataGridColumn dataField="v2" width="40"/>
+		            <mx:DataGridColumn dataField="v3" width="40"/>
+		            <mx:DataGridColumn dataField="v4" width="40"/>
+		            <mx:DataGridColumn dataField="v5" width="40"/>
+		            <mx:DataGridColumn dataField="v6" width="40"/> 
+		            <mx:DataGridColumn dataField="v7" width="40"/>
+		            <mx:DataGridColumn dataField="v8" width="40"/>
+		            <mx:DataGridColumn dataField="v9" width="40"/>
+		            <mx:DataGridColumn dataField="v10" width="40"/>
+		            <mx:DataGridColumn dataField="v11" width="40"/>
+		            <mx:DataGridColumn dataField="v12" width="40"/> 
+		            <mx:DataGridColumn dataField="Chart" itemRenderer="views.microcharts.renderers.MicroWinLoseRenderer"/>
+		        </mx:columns>
+		    </mx:DataGrid>
+			<mx:Label text="Sizing MicroWinLose"/>
+			<mx:HSlider id="mwlaw" minimum="10" value="200" maximum="400" snapInterval="1" liveDragging="true"/>
+			<mx:HSlider id="mwlah" minimum="10" value="100" maximum="200" snapInterval="1" liveDragging="true"/>
+			<mc:MicroWinLoseChart spacing="3" dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}" 
+				height="{mwlah.value}" width="{mwlaw.value}" color="0x000000" backgroundColor="0xaaaaaa"/>
+		</mx:VBox>
+		<mx:VBox label="Plot">
+		    <mx:DataGrid selectable="false" dataProvider="{acMC}" editable="false" verticalAlign="center">
+		        <mx:columns>
+		            <mx:DataGridColumn dataField="v1" width="40"/>
+		            <mx:DataGridColumn dataField="v2" width="40"/>
+		            <mx:DataGridColumn dataField="v3" width="40"/>
+		            <mx:DataGridColumn dataField="v4" width="40"/>
+		            <mx:DataGridColumn dataField="v5" width="40"/>
+		            <mx:DataGridColumn dataField="v6" width="40"/> 
+		            <mx:DataGridColumn dataField="v7" width="40"/>
+		            <mx:DataGridColumn dataField="v8" width="40"/>
+		            <mx:DataGridColumn dataField="v9" width="40"/>
+		            <mx:DataGridColumn dataField="v10" width="40"/>
+		            <mx:DataGridColumn dataField="v11" width="40"/>
+		            <mx:DataGridColumn dataField="v12" width="40"/> 
+		            <mx:DataGridColumn dataField="Chart" itemRenderer="views.microcharts.renderers.MicroPlotRenderer"/>
+		        </mx:columns>
+		    </mx:DataGrid>
+			<mx:Label text="Sizing MicroPlot"/>
+			<mx:HSlider id="mpaw" minimum="10" value="200" maximum="400" snapInterval="1" liveDragging="true"/>
+			<mx:HSlider id="mpah" minimum="10" value="100" maximum="200" snapInterval="1" liveDragging="true"/>
+			<mc:MicroPlotChart radius="2" dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}" 
+				height="{mpah.value}" width="{mpaw.value}" color="0x000000" backgroundColor="0xaaaaaa"/>
+		</mx:VBox>
+		<mx:VBox label="Bar">
+		    <mx:DataGrid selectable="false" dataProvider="{acBG}" editable="false" verticalAlign="center">
+		        <mx:columns>
+		            <mx:DataGridColumn dataField="c1" width="40"/>
+		            <mx:DataGridColumn dataField="c2" width="40"/>
+		            <mx:DataGridColumn dataField="c3" width="40"/>
+		            <mx:DataGridColumn dataField="c4" width="40"/>
+		            <mx:DataGridColumn dataField="c5" width="40"/>
+		            <mx:DataGridColumn dataField="c6" width="40"/> 
+		            <mx:DataGridColumn dataField="Chart" itemRenderer="views.microcharts.renderers.MicroBarRenderer"/>
+		        </mx:columns>
+		    </mx:DataGrid>
+			<mx:Label text="Sizing MicroBar"/>
+			<mx:HSlider id="mbw" minimum="10" value="200" maximum="400" snapInterval="1" liveDragging="true"/>
+			<mx:HSlider id="mbh" minimum="10" value="100" maximum="200" snapInterval="1" liveDragging="true"/>
+			<mc:MicroBarChart dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}" 
+				height="{mbh.value}" width="{mbw.value}" spacing="1" color="0x000000" backgroundColor="0xaaaaaa"/>
+		</mx:VBox>
+		<mx:VBox label="Column">
+		    <mx:DataGrid selectable="false" dataProvider="{acMC}" editable="false" verticalAlign="center">
+		        <mx:columns>
+		            <mx:DataGridColumn dataField="v1" width="40"/>
+		            <mx:DataGridColumn dataField="v2" width="40"/>
+		            <mx:DataGridColumn dataField="v3" width="40"/>
+		            <mx:DataGridColumn dataField="v4" width="40"/>
+		            <mx:DataGridColumn dataField="v5" width="40"/>
+		            <mx:DataGridColumn dataField="v6" width="40"/> 
+		            <mx:DataGridColumn dataField="v7" width="40"/>
+		            <mx:DataGridColumn dataField="v8" width="40"/>
+		            <mx:DataGridColumn dataField="v9" width="40"/>
+		            <mx:DataGridColumn dataField="v10" width="40"/>
+		            <mx:DataGridColumn dataField="v11" width="40"/>
+		            <mx:DataGridColumn dataField="v12" width="40"/> 
+		            <mx:DataGridColumn dataField="Chart" itemRenderer="views.microcharts.renderers.MicroColumnRenderer"/>
+		        </mx:columns>
+		    </mx:DataGrid>
+			<mx:Label text="Sizing MicroColumn"/>
+			<mx:HSlider id="mnaw" minimum="10" value="200" maximum="400" snapInterval="1" liveDragging="true"/>
+			<mx:HSlider id="mnah" minimum="10" value="100" maximum="200" snapInterval="1" liveDragging="true"/>
+			<mc:MicroColumnChart dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}" 
+				height="{mnah.value}" width="{mnaw.value}" spacing="1" color="0x000000" backgroundColor="0xaaaaaa"/>
+		</mx:VBox>
+		<mx:VBox label="Pie">
+		    <mx:DataGrid selectable="false" dataProvider="{acMC}">
+		        <mx:columns>
+		            <mx:DataGridColumn dataField="v1" width="40"/>
+		            <mx:DataGridColumn dataField="v2" width="40"/>
+		            <mx:DataGridColumn dataField="v3" width="40"/>
+		            <mx:DataGridColumn dataField="v4" width="40"/>
+		            <mx:DataGridColumn dataField="v5" width="40"/>
+		            <mx:DataGridColumn dataField="v6" width="40"/> 
+		            <mx:DataGridColumn dataField="v7" width="40"/>
+		            <mx:DataGridColumn dataField="v8" width="40"/>
+		            <mx:DataGridColumn dataField="v9" width="40"/>
+		            <mx:DataGridColumn dataField="v10" width="40"/>
+		            <mx:DataGridColumn dataField="v11" width="40"/>
+		            <mx:DataGridColumn dataField="v12" width="40"/> 
+		            <mx:DataGridColumn dataField="Chart" itemRenderer="views.microcharts.renderers.MicroPieRenderer"/>
+		        </mx:columns>
+		    </mx:DataGrid>
+			<mx:Label text="Sizing MicroPie"/>
+			<mx:HSlider id="s" value="80" minimum="0" maximum="400" snapInterval="1" liveDragging="true"/>
+			<mc:MicroPieChart id="pc" size="{s.value}" 
+				colors="{colors}"
+				dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}"/>
+		</mx:VBox>
+		<mx:VBox label="100% Bar">
+		    <mx:DataGrid selectable="false" dataProvider="{acMC}">
+		        <mx:columns>
+		            <mx:DataGridColumn dataField="v1" width="40"/>
+		            <mx:DataGridColumn dataField="v2" width="40"/>
+		            <mx:DataGridColumn dataField="v3" width="40"/>
+		            <mx:DataGridColumn dataField="v4" width="40"/>
+		            <mx:DataGridColumn dataField="v5" width="40"/>
+		            <mx:DataGridColumn dataField="v6" width="40"/> 
+		            <mx:DataGridColumn dataField="v7" width="40"/>
+		            <mx:DataGridColumn dataField="v8" width="40"/>
+		            <mx:DataGridColumn dataField="v9" width="40"/>
+		            <mx:DataGridColumn dataField="v10" width="40"/>
+		            <mx:DataGridColumn dataField="v11" width="40"/>
+		            <mx:DataGridColumn dataField="v12" width="40"/> 
+		            <mx:DataGridColumn dataField="Chart" itemRenderer="views.microcharts.renderers.Micro100BarRenderer"/>
+	        </mx:columns>
+		    </mx:DataGrid>
+			<mx:Label text="Sizing Micro100Bar"/>
+			<mx:HSlider id="w100" value="70" minimum="0" maximum="400" snapInterval="1" liveDragging="true"/>
+			<mx:HSlider id="h100" value="20" minimum="0" maximum="400" snapInterval="1" liveDragging="true"/>
+			<mc:Micro100BarChart height="{h100.value}" width="{w100.value}" sizeX="{w100.value}" sizeY="{h100.value}" 
+				colors="{colors}"
+				dataProvider="{[m1.value,m2.value,m3.value]}"/>
+		</mx:VBox>
+		<mx:VBox label="Bullet">
+		    <mx:DataGrid selectable="false" dataProvider="{acBG}" editable="false" rowCount="2" verticalAlign="center">
+		        <mx:columns>
+		            <mx:DataGridColumn dataField="trg" width="40"/>
+		            <mx:DataGridColumn dataField="val" width="40"/>
+		            <mx:DataGridColumn dataField="MicroBulletHorizontal" itemRenderer="views.microcharts.renderers.MicroBulletGraphHorizontalRenderer"/>
+		            <mx:DataGridColumn dataField="MicroBulletVertical" itemRenderer="views.microcharts.renderers.MicroBulletGraphVerticalRenderer"/>
+		            <mx:DataGridColumn dataField="c1" width="40"/>
+		            <mx:DataGridColumn dataField="c2" width="40"/>
+		            <mx:DataGridColumn dataField="c3" width="40"/>
+		            <mx:DataGridColumn dataField="c4" width="40"/>
+		            <mx:DataGridColumn dataField="c5" width="40"/>
+		            <mx:DataGridColumn dataField="c6" width="40"/> 
+		        </mx:columns>
+		    </mx:DataGrid>
+			<mx:Label text="Sizing Bullet Graph"/>
+			<mx:HSlider id="vwd" minimum="10" value="20" maximum="200" snapInterval="1" liveDragging="true"/>
+			<mx:HSlider id="vht" minimum="100" value="250" maximum="400" snapInterval="1" liveDragging="true"/>
+			<mx:HSlider id="hwd" minimum="200" value="350" maximum="500" snapInterval="1" liveDragging="true"/>
+			<mx:HSlider id="hht" minimum="10" value="20" maximum="200" snapInterval="1" liveDragging="true"/>
+			<mx:Label text="Snap interval"/>
+			<mx:HSlider minimum="1" maximum="30" value="26" snapInterval="1" id="tk" liveDragging="true"/>
+			<mc:BulletGraph orientation="vertical" 
+				qualitativeRanges="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value]}" 
+				target="{t.value}" value="{v.value}" title="Vertical graph"
+				snapInterval="{tk.value}" width="{vwd.value}" height="{vht.value}"/>
+			<mc:BulletGraph orientation="horizontal"  
+				qualitativeRanges="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value]}" 
+				target="{t.value}" value="{v.value}" title="Horizontal BulletGraph" 
+				snapInterval="{tk.value}" width="{hwd.value}" height="{hht.value}"/>
+		</mx:VBox>
+		<mx:VBox label="All">
+		    <mx:DataGrid selectable="false" dataProvider="{acMC}">
+		        <mx:columns>
+		            <mx:DataGridColumn dataField="Plot" itemRenderer="views.microcharts.renderers.MicroPlotRenderer"/>
+		            <mx:DataGridColumn dataField="Area" itemRenderer="views.microcharts.renderers.MicroAreaRenderer"/>
+		            <mx:DataGridColumn dataField="Column" itemRenderer="views.microcharts.renderers.MicroColumnRenderer"/>
+		            <mx:DataGridColumn dataField="Line" itemRenderer="views.microcharts.renderers.MicroLineRenderer"/>
+		            <mx:DataGridColumn dataField="Pie" itemRenderer="views.microcharts.renderers.MicroPieRenderer"/>
+		            <mx:DataGridColumn dataField="WinLose" itemRenderer="views.microcharts.renderers.MicroWinLoseRenderer"/>
+		            <mx:DataGridColumn dataField="100% Bar" itemRenderer="views.microcharts.renderers.Micro100BarRenderer"/>
+		       </mx:columns>
+		    </mx:DataGrid>
+		    <mx:DataGrid selectable="false" dataProvider="{acBG}" rowCount="1" editable="false" verticalAlign="center">
+		        <mx:columns>
+		            <mx:DataGridColumn dataField="Bullet" itemRenderer="views.microcharts.renderers.BulletGraphRenderer"/>
+		            <mx:DataGridColumn dataField="Bar" itemRenderer="views.microcharts.renderers.MicroBarRenderer"/>
+		       </mx:columns>
+		    </mx:DataGrid>
+
+		</mx:VBox>
+	</mx:TabNavigator>
+</mx:HBox>
