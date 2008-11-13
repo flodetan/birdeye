@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+	horizontalAlign="center" verticalAlign="middle"
+	showCloseButton="true" close="PopUpManager.removePopUp(this)"
+	borderColor="#000000" backgroundColor="#ffffff" 
+	xmlns:mc="org.un.cava.birdeye.qavis.microcharts.*" width="100%" height="100%"
+	cornerRadius="9" borderStyle="solid" borderThickness="7" backgroundAlpha=".9">
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+
+			[Bindable]
+			public var a:Array;
+			
+			[Bindable]
+			public var target:Number;
+
+			[Bindable]
+			public var value:Number;
+
+			[Bindable]
+			public var colorArray:Array;
+			
+			private function updateColor():void
+			{
+				colorArray = [c1.value, c2.value, c3.value, c4.value, c5.value, c6.value];
+				chart.rangeColor = colorArray;
+			}
+		]]>
+	</mx:Script>
+	<mx:VBox width="100%" height="100%">
+		<mx:HBox height="100%">
+		<mc:BulletGraph orientation="horizontal"  
+			qualitativeRanges="{a}" id="chart"
+			target="{target}" value="{value}" title="Horizontal BulletGraph" 
+			snapInterval="19" width="450" height="20">
+		</mc:BulletGraph>
+		</mx:HBox>
+		<mx:HBox width="100%">
+			<mx:ColorPicker id="c1" change="updateColor()"/>
+			<mx:ColorPicker id="c2" change="updateColor()"/>
+			<mx:ColorPicker id="c3" change="updateColor()"/>
+			<mx:ColorPicker id="c4" change="updateColor()"/>
+			<mx:ColorPicker id="c5" change="updateColor()"/>
+			<mx:ColorPicker id="c6" change="updateColor()"/>
+			<mx:ColorPicker id="c7" change="chart.valueColor = int(c7.value)"/>
+			<mx:ColorPicker id="c8" change="chart.targetColor = int(c8.value)"/>
+		</mx:HBox>
+	</mx:VBox>
+</mx:TitleWindow>
