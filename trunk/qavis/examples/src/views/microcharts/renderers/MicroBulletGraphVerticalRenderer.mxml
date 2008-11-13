@@ -24,4 +24,5 @@
 	<mc:MicroBulletGraph orientation="vertical" 
 		qualitativeRanges="{data.Chart}" toolTip="Double click to zoom it"
 		target="{data.trg}" value="{data.val}"  doubleClick="popChart();" doubleClickEnabled="true"/>
+	<mx:Text selectable="false" fontSize="8" text="Zoom it with double click"/>
 </mx:VBox>
