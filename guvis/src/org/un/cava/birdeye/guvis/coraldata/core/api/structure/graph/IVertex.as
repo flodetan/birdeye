@@ -41,27 +41,10 @@
 
 package org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph
 {
-	import org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph.EdgeType;
-	import org.un.cava.birdeye.guvis.coraldata.core.api.iterator.IIterator;
-
 	/**
-	 * An <code>IPosition</code>s that represents vertices in a graph. 
+	 * An empty interface enforcing type safety for getVertices of a graph. 
 	 */
 	public interface IVertex extends IGraphPosition
 	{	
-		/**
-		 * All edges of a certain type incident to this vertex.
-		 * @return An iterator over the incident edges.
-		 * @see EdgeType
-		 */
-		function incidentEdges( edgetype:int = 7 /*EdgeType.ALL*/ ) : IIterator;
-		
-		/**
-		 * All vertices on the other end of edges of a certain type connected to 
-		 * this vertex.
-		 * @return An iterator over the incident vertices.
-		 * @see EdgeType
-		 */
-		function incidentVertices( edgeType:int = 7 /*EdgeType.ALL*/ ) : IIterator;		
 	}
 }

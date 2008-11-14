@@ -44,14 +44,9 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.structure.sequence
 	import org.un.cava.birdeye.guvis.coraldata.core.api.access.IPosition;
 
 	/**
-	 * Interface for sequence node operations.
+	 * Empty interface for sequence node type safety.
 	 */
 	public interface ISequenceNode extends IPosition
 	{
-		/**
-		* Access to the next node in the sequence.
-		* @return The next node
-		*/
-		function get next() : ISequenceNode
 	}
 }

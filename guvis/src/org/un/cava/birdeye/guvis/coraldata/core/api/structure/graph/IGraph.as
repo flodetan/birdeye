@@ -41,12 +41,14 @@
 
 package org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph
 {	
+	import org.un.cava.birdeye.guvis.coraldata.core.api.structure.IPositionalCollection;
 
 	/**
-	 * An interface enforcing the methods needed to add vertices and edges to a
-	 * graph.
+	 * An interface describing a combinatorial graph.  Directed and
+	 * undirected edges may coexist. Multiple parallel edges and
+	 * self-loops are allowed.  The graph can be disconnected. 
 	 */
-	public interface IGraph extends IModifiableGraph 
+	public interface IGraph extends IImmutableGraph, IPositionalCollection
 	{
 		/*----------------------------------------------------------------------
 		* public methods
@@ -56,13 +58,15 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph
 		* @param element the object to be stored in the new vertex
 		* @return the new vertex
 		*/
-		function insertVertex( element:Object = null ) : IVertex;
+		function addVertex( element:Object = null ) : IVertex;
 				
 		/**
-		* Inserts a new edge between two existing vertices.
+		* Inserts a new edge between two existing vertices. If the loop is a self-loop, meaning
+		* it has the same origin and destination vertices, then if the edge is directed its 
+		* type will always be <code>EdgeType.OUT</code>.
 		* 	
-		* @param v1 the first endvertex
-		* @param v2 the second endvertex
+		* @param v1 the origin vertex
+		* @param v2 the destination vertex
 		* @param element the object to be stored in the new edge
 		* @param ofType The type of edge to insert, use EdgeType.UNDIR, EdgeType.IN, or 
 		* EdgeType.OUT. Default is EdgeType.UNDIR.
@@ -70,6 +74,8 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph
 		* references to static constants of classes unfortunately.)
 		* @return the new edge
 		*/
-		function insertEdge( v1:IVertex , v2:IVertex , element:Object = null , ofType:int = 4 /*EdgeType.UNDIR*/ ) : IEdge ;		
+		function addEdge( v1:IVertex , v2:IVertex , element:Object = null , edgeType:int = 4 /*EdgeType.UNDIR*/ ) : IEdge ;		
+	
+		
 	}
 }

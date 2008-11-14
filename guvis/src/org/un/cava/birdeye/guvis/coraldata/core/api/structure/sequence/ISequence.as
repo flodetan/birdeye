@@ -45,10 +45,27 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.structure.sequence
 	import org.un.cava.birdeye.guvis.coraldata.core.api.structure.IPositionalCollection;
 	
 	/**
-	  * A positional container whose elements are linearly organized. 
+	  * A positional container whose elements
+	  * are linearly organized. It is a generalization of stacks, queues,
+	  * linked lists, and arrays.</P>
+	  *   
+	  * <P>For a Sequence, methods <code>InspectableContainer.elements()</code>
+	  * and <code>InspectablePositionalContainer.positions()
+	  * are guaranteed to return iterators in first-to-last order.</P>
+	  *   
+	  * @version JDSL 2.1.1 
+	 * @author Mark Handy (mdh)
+	 * @author Luca Vismara (lv)
+	 * @author Andrew Schwerin (schwerin)
+	  * @see InspectableSequence
+	  * @see PositionalContainer
 	  */
 	public interface ISequence extends IImmutableSequence, IPositionalCollection 
-	{	  
+	{
+	  
+	  // Five insertion methods that take an Object element, and return
+	  // the position of the element after inserting it into the sequence.
+	  
 	  /** 
 		* Inserts an object as <i>first</i> element of the sequence
 		* @param element Any java.lang.Object
@@ -70,31 +87,43 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.structure.sequence
 	  /**  Inserts an object <i>before</i> a position in the sequence.
 		* @param p Position in this sequence before which to insert an 
 		* element.
-		* @param element Any Object
-		* @return the node containing <code>element</code> 
+		* @param element Any java.lang.Object<br>
+		* @return Position containing <code>element</code> and before
+		* <code>Position p</code>.
+		* @exception InvalidAccessorException Thrown if <code>p</code> is 
+		* not a valid position in this sequence
 		*/
-	  function addBefore ( p:ISequenceNode , element:Object ) : ISequenceNode;
+	  function addBefore ( p:ISequenceNode , element:Object ) : ISequenceNode 
+	  /*throws InvalidAccessorException*/;
 	
 	  
 	  /** 
 		* Inserts an object <i>after</i> a position in the sequence.  
 		* @param p Position in this sequence after which to insert an
 		* element.
-		* @param element Any Object
-		* @return the node containing <code>element</code> 
+		* @param element Any java.lang.Object<br>
+		* @return Position containing <code>element</code> and after
+		* <code>Position p</code>.
+		* @exception InvalidAccessorException Thrown if <code>p</code> is 
+		* not a valid position in this sequence
 		*/
-	  function addAfter ( p:ISequenceNode , element:Object ) : ISequenceNode;
+	  function addAfter ( p:ISequenceNode , element:Object ) : ISequenceNode
+	  /*throws InvalidAccessorException*/;
 	
 		/** 
-		* Inserts based on an integer index similar to array indices.
-		* The first element in the sequence has index 0, and the last has rank
-		* <code>size() - 1</code>. 
+		* Inserts based on an integer rank similar to array indices.
+		* The first element in the sequence has rank 0, and the last has rank
+		* <code>size() - 1</code>.  It is valid to insert at any rank greater
+		* than or equal to zero and less than or equal to <code>size()</code>.
 		*
-		* @param index Index position that <code>element</code> should have after insertion.
-		* @param element Any Object
-		* @return the node containing <code>element</code> 
+		* @param rank Rank that <code>element</code> should have after insertion.
+		* @param element Any java.lang.Object<br>
+		* @return Position of <code>element</code> in the sequence.
+		* @exception BoundaryViolationException if <code>rank</code> exceeds
+		* <code>size()</code> or if 0 exceeds <code>rank</code>
 		*/
-	  function addAtIndex ( index:int , element:Object ) : ISequenceNode;
+	  function addAtIndex ( index:int , element:Object ) : ISequenceNode /*throws BoundaryViolationException*/;
+	
 
 	}
 }

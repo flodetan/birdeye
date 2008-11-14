@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../../../../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../../../../../../../print.css" type="text/css" media="print">
+<meta content="EdgeType,org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph.EdgeType,ALL,IN,OUT,SELF_LOOP,UNDIR,isValid" name="keywords">
+<title>org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph.EdgeType</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'EdgeType - Documentation';
+				var baseRef = '../../../../../../../../../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../../../../all-classes.html')" href="../../../../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../../../../all-classes.html')" href="../../../../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../../../../index-list.html')" href="../../../../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../../../../index.html?org/un/cava/birdeye/guvis/coraldata/core/api/structure/graph/EdgeType.html&amp;org/un/cava/birdeye/guvis/coraldata/core/api/structure/graph/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;EdgeType</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#methodSummary">Methods</a>&nbsp;| <a href="#constantSummary">Constants</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class EdgeType"); titleBar_setSubNav(true,false,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public final  class EdgeType</td>
+</tr>
+</table>
+<p></p>
+  Static final class containing constants for specifying which edges are desired in
+  graph-query methods. Note that constants can be OR'd together using bitwise operations 
+  in any combination. For example, <code>EdgeType.UNDIR | EdgeType.SELFLOOP</code> specifies 
+  all undirected and self-loop edges.
+    Unlike most of the <code>coraldata.core.api</code> package, this is a concrete class as 
+  opposed to an interface because constants can not be added to an interface.
+  
+  <p></p>
+<br>
+<span class="label">Example</span>
+<br>The following code returns all the undirected and self-loop edges incident to 
+  a randomly retrieved vertex.
+  <div class='listing'><pre> 
+  
+  var it:IIterator = graph.getEdges( graph.aVertex() , (EdgeType.UNDIR | EdgeType.SELFLOOP) );
+  
+  </pre></div>
+  <p></p>
+<br>
+<hr>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#isValid()">isValid</a>(type:int):Boolean</div>
+<div class="summaryTableDescription">[static]
+  </div>
+</td><td class="summaryTableOwnerCol">EdgeType</td>
+</tr>
+</table>
+</div>
+<a name="constantSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Constants</div>
+<table id="summaryTableConstant" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Constant</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#ALL">ALL</a> : int = 15<div class="summaryTableDescription">[static]
+  Provides a way to specify all edge types for bitwise operations.</div>
+</td><td class="summaryTableOwnerCol">EdgeType</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#IN">IN</a> : int = 1<div class="summaryTableDescription">[static]
+  The edge is directed and is incoming in relation to a particular vertex.</div>
+</td><td class="summaryTableOwnerCol">EdgeType</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#OUT">OUT</a> : int = 2<div class="summaryTableDescription">[static]
+  The edge is directed and is outgoing in relation to a particular vertex.</div>
+</td><td class="summaryTableOwnerCol">EdgeType</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#SELF_LOOP">SELF_LOOP</a> : int = 8<div class="summaryTableDescription">[static]
+  The edge is a self-loop, meaning it has the same beginning and ending vertex.</div>
+</td><td class="summaryTableOwnerCol">EdgeType</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#UNDIR">UNDIR</a> : int = 4<div class="summaryTableDescription">[static]
+  The edge is undirected and is both incoming and outgoing in relation to a particular 
+  vertex.</div>
+</td><td class="summaryTableOwnerCol">EdgeType</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="isValid()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">isValid</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function isValid(type:int):Boolean</code><p>
+  </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">type</span>:int</code> &mdash; An edge type ID (see constants in this class)
+  </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code> &mdash; <code>true</code> if the supplied edge type ID exists, 
+  <code>false</code> otherwise.
+  </td>
+</tr>
+</table>
+</div>
+<a name="constantDetail"></a>
+<div class="detailSectionHeader">Constant detail</div>
+<a name="ALL"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ALL</td><td class="detailHeaderType">constant</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const ALL:int = 15</code><p>
+  Provides a way to specify all edge types for bitwise operations.
+  </p></div>
+<a name="IN"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">IN</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const IN:int = 1</code><p>
+  The edge is directed and is incoming in relation to a particular vertex.
+  </p></div>
+<a name="OUT"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">OUT</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const OUT:int = 2</code><p>
+  The edge is directed and is outgoing in relation to a particular vertex.
+  </p></div>
+<a name="SELF_LOOP"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">SELF_LOOP</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const SELF_LOOP:int = 8</code><p>
+  The edge is a self-loop, meaning it has the same beginning and ending vertex. In practice 
+  it is equivalent to an undirected edge, as it can be both incoming and outgoing on the 
+  same vertex.
+  </p></div>
+<a name="UNDIR"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">UNDIR</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const UNDIR:int = 4</code><p>
+  The edge is undirected and is both incoming and outgoing in relation to a particular 
+  vertex.
+  </p></div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->
