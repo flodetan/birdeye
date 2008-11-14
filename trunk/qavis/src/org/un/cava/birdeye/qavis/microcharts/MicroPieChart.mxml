@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Surface xmlns="http://www.degrafa.com/2008"   
+	xmlns:mx="http://www.adobe.com/2006/mxml">
+	
+	<mx:Script>
+		<![CDATA[
+/*  
+ * The MIT License
+ *
+ * Copyright (c) 2008
+ * United Nations Office at Geneva
+ * Center for Advanced Visual Analytics
+ * http://cava.unog.ch
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+ 
+ /**
+* <p>This component is used to create Pie microcharts. 
+ * The basic simple syntax to use it and create an Pie microchart with mxml is:</p>
+ * <p>&lt;MicroPieChart dataProvider="{myArray}" width="20" height="70"/></p>
+ * 
+ * <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
+ * and XML. To size the Pie chart:</p>
+ * <p>- size: to define the diameter of the chart;</p>
+ * 
+ * <p>It's also possible to change the colors by defining the following Array of int:</p>
+ * <p>- colors: array that sets the color for each bar value. The lenght has to be the same as the dataProvider.</p>
+ * 
+ * <p>If no colors are defined, than the Pie chart will display different colors based on the default color and a default offset color.</p>
+*/
+
+			private var tot:Number = NaN;
+			
+			[Bindable]
+			private var tempColor:int = 0xbbbbbb;
+						
+			[Bindable]
+			private var _size:Number = NaN;
+			[Bindable]
+			private var _dataProvider:Array = new Array();
+			
+			[Bindable]
+			private var _colors:Array = new Array;
+
+			[Bindable]
+			public function set size(val:Number):void
+			{
+				_size = val;
+			}
+			
+			/**
+			* Set the size of the chart (circle).  
+			*/
+			public function get size():Number
+			{
+				return _size;
+			}
+						
+			[Bindable]
+			public function set dataProvider(val:Array):void
+			{
+				setTot(val);
+				_dataProvider = val;
+			}
+			
+			/**
+			 * This property is used to set the dataProvider to feed the chart. 
+			*/
+			public function get dataProvider():Array
+			{
+				return _dataProvider;
+			}
+					
+			[Bindable]
+			public function set colors(val:Array):void
+			{
+				_colors = val;
+			}
+			
+			/**
+			 * <p>The MicroPieChart component is used to create Pie microcharts. 
+			 * The basic simple syntax to use it and create an Pie microchart with mxml is:</p>
+			 * <p>&lt;MicroPieChart dataProvider="{myArray}" width="20" height="70"/></p>
+			 * 
+			 * <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
+			 * and XML. To size the Pie chart:</p>
+			 * <p>- size: to define the diameter of the chart;</p>
+			 * 
+			 * <p>It's also possible to change the colors by defining the following Array of int:</p>
+			 * <p>- colors: array that sets the color for each bar value. The lenght has to be the same as the dataProvider.</p>
+			 * 
+			 * <p>If no colors are defined, than the Pie chart will display different colors based on the default color and a default offset color.</p>
+			 * 
+			 * <p>Set the colors of the pies in the chart. If not set, a function will automatically create colors for each bar.</p>
+			*/
+			public function get colors():Array
+			{
+				return _colors;
+			}
+			
+			/**
+			* @private  
+			*/
+			override protected function commitProperties():void
+			{
+				super.commitProperties();
+			}
+								
+			/**
+			* @private  
+			* Calculate the total of all positive values in the dataProvider. Negative values are not considered nor rendered in the chart. 
+			*/
+			private function setTot(val:Array):void
+			{
+				tot = 0;
+				for (var i:Number = 0; i < val.length; i++)
+					if (val[i] > 0)
+						tot += val[i];
+			}
+			
+			/**
+			* @private  
+			* Calculate the angle size of the current value provided by the repeater. 
+			*/
+			private function arcAngleSize(indexIteration:Number, target:Object):Number
+			{
+				if (isNaN(tot)) 
+					setTot(_dataProvider);
+				var arcAngleSize:Number = Math.max(0,_dataProvider[indexIteration] * 360 / tot); 
+				if (arcAngleSize == 360)
+					arcAngleSize = 359.9;
+				return arcAngleSize;
+			}
+			
+			/**
+			* @private  
+			* Calculate the offset angle from where the next pie will be drawn. 
+			*/
+			private function startAngle(indexIteration:Number, target:Object):Number
+			{
+				if (isNaN(tot))
+					setTot(_dataProvider);
+				var startAngle:Number = (indexIteration==0)? 0 : Math.max(0,_dataProvider[indexIteration-1] * 360 / tot);
+				return startAngle;
+			}
+			
+			/**
+			* @private  
+			* Set automatic colors to the pies, in case these are not provided. 
+			*/
+			private function useColor(indexIteration:Number, target:Object):int
+			{
+				if (colors != null && colors.length > 0)
+					tempColor = colors[indexIteration];
+				else
+					tempColor += 0x123456; 
+
+				return tempColor;
+			}
+		]]>
+	</mx:Script>
+		
+	<graphicsData>
+		<GeometryGroup>
+			<geometry>
+				<GeometryRepeater count="{_dataProvider.length}">
+					<EllipticalArc closureType="pie" width="{size}" height="{size}" 
+						stroke="{black}">
+						<fill>
+							<SolidFill color="{tempColor}" alpha="1"/>
+						</fill>
+					</EllipticalArc>
+					<modifiers>
+						<PropertyModifier property="startAngle" offset="{startAngle}" offsetOperator="add"/>
+						<PropertyModifier property="arc" offset="{arcAngleSize}" offsetOperator="none"/>
+						<PropertyModifier property="fill.color" offset="{useColor}" offsetOperator="none"/>
+					</modifiers>
+				</GeometryRepeater>
+			</geometry>
+			<strokes>
+				<SolidStroke id="black" color="0x000000" alpha="1"/>
+			</strokes>
+		</GeometryGroup>
+	</graphicsData>
+</Surface>
