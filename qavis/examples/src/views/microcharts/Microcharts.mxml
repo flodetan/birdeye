@@ -258,7 +258,7 @@
 				dataProvider="{[m1.value,m2.value,m3.value]}"/>
 		</mx:VBox>
 		<mx:VBox label="Bullet">
-		    <mx:DataGrid selectable="false" dataProvider="{acBG}" editable="false" rowHeight="70" rowCount="1" verticalAlign="center">
+		    <mx:DataGrid selectable="false" dataProvider="{acBG}" editable="false" rowHeight="70" rowCount="2" verticalAlign="center">
 		        <mx:columns>
 		            <mx:DataGridColumn dataField="trg" width="40"/>
 		            <mx:DataGridColumn dataField="val" width="40"/>
