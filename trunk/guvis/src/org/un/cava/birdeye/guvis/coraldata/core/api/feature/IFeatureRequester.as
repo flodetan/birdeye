@@ -57,6 +57,11 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.feature
 		function instantiate( acc:IFeatureSupport ) : IFeature;
 		
 		/**
+		* @see IFeature#isApplicable
+		*/
+		//function isApplicable( to:IAccessor ) : Boolean;
+		
+		/**
 		* Checks if the associated Feature accepts accessors of a certain class.
 		* @param clazz The class to check for acceptance.
 		*/

@@ -44,8 +44,9 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph
 	import org.un.cava.birdeye.guvis.coraldata.core.api.access.IPosition;
 
 	/**
-	 * Empty interface only used as a parent class of both vertices and edges.
-	 * Used for when a feature is created that applies to both vertices and edges.
+	 * Empty interface only used as a parent class of both getVertices and edges.
+	 * Used for when a feature is created that applies to both kinds of positions.
+	 * 
 	 */
 	public interface IGraphPosition extends IPosition
 	{	

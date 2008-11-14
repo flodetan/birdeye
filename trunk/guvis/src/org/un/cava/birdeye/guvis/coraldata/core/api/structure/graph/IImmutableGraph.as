@@ -53,7 +53,7 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph
 	public interface IImmutableGraph extends IImmutablePositionalCollection 
 	{
 	  /**
-	   * @return the number of vertices
+	   * @return the number of getVertices
 	   */
 	  function numVertices() : int;
 	
@@ -63,62 +63,56 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph
 	  function numEdges() : int;
 	
 	  /**
-	   * @return an iterator over all vertices in the graph
+	   * @return an iterator over all getVertices in the graph
 	   */
-	  function vertices() : IIterator;
+	  function getVertices() : IIterator;
 	
 	  /**
+	   * Retrieve a random vertex from the graph.
+	   * @e Edge must be connected to vertex
 	   * @return an arbitrary vertex
 	   */
-	  function aVertex() : IVertex;
+	  function aVertex( e:IEdge = null ) : IVertex;
 	
 	  /**
 	   * @param The type of edge to return. Supply a constant in the <code>EdgeType</code>
 	   * class. Default is <code>EdgeType.ALL</code>.
 	   * @return an iterator over the edges of this graph.
-	   * @see EdgeType
+	   * @see org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph.EdgeType
 	   */
-	  function edges( edgeType:int = 7/*EdgeType.ALL*/ ) : IIterator;
+	  function getEdges( incidentTo:IVertex = null , edgeType:int = EdgeType.ALL ) : IIterator;
 	
 	  /**
+	  	* @param ofType restrict to a certain type
+	  	* @param v Endpoint of the returned edge
 	   * @return an arbitrary edge
 	   */
-	  function anEdge() : IEdge;
-	
-	  /**
-	   * @param v a vertex
-	   * @param edgeType A constant from the <code>EdgeType</code> static class.
-	   * Default is <code>EdgeType.ALL</code>.
-	   * @return an iterator over all edges of the specified type incident
-	   * on <code>v</code> 
-	   * @exception InvalidAccessorException if <code>v</code> is not
-	   * contained in this graph
-	   * @see EdgeType
-	   */
-	  function incidentEdges ( v:IVertex , edgeType:int = 7/*EdgeType.ALL*/ ) : IIterator;
-	
+	  function anEdge( ofType:int = EdgeType.ALL , v:IVertex = null ) : IEdge;	
 	  	
 	  /* edge methods */
 	
 	  /**
-	   * @param v one endvertex of <code>e</code>
 	   * @param e an edge
-	   * @return the endvertex of <code>e</code> different from <code>v</code>
+	   * @param v one endvertex of <code>e</code>. If supplied vertex is null the origin of the edge
+	   * is used by default, which will always return <code>EdgeType.OUT</code> if the edge is 
+	   * directed.
+	   * @return the type ID of the supplied edge.
+	   * @see org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph.EdgeType
 	   */
-	  function opposite ( v:IVertex , e:IEdge ) : IVertex;
+	  function getEdgeType ( e:IEdge , v:IVertex = null ) : int;
 	
 	  /**
 	   * @param e an edge
 	   * @return the origin vertex of <code>e</code>, if <code>e</code> is directed
 	   */
-	  function origin ( e:IEdge ) : IVertex;
+	  function getEdgeOrigin ( e:IEdge ) : IVertex;
 	
 	  /**
 	   * @param e an edge
 	   * @return the destination vertex of <code>e</code>, if
 	   * <code>e</code> is directed 
 	   */
-	  function destination ( e:IEdge ) : IVertex;	
+	  function getEdgeDestination ( e:IEdge ) : IVertex;	
 	
 	  /* direction methods */
 	
@@ -127,8 +121,20 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph
 	   * @return <code>true</code> if <code>e</code> is directed,
 	   * <code>false</code> otherwise
 	   */
-	  function isDirected ( e:IEdge ) : Boolean;
+	  function isEdgeDirected ( e:IEdge ) : Boolean;
 	
-	
+		/**
+		 * @param v a vertex
+		 * @param e an edge
+		 * @return whether <code>v</code> and <code>e</code> are incident,
+		 * e.g., whether <code>v</code> is an end vertex of <code>e</code>.
+		 */
+	  	function areIncident( v:IVertex , e:IEdge ) : Boolean;
+		
+		/**
+		* Whether this edge is a self-loop edge or not.
+		* @return True if this is a self-loop edge, false otherwise.
+		*/
+		function isEdgeSelfLoop( e:IEdge ) : Boolean;
 	}
 }

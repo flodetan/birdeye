@@ -6,7 +6,7 @@
  * Center for Advanced Visual Analytics
  * http://cava.unog.ch
  *
- * Author: Anselm Bradford
+ * Author: Anselm Bradford (http://anselmbradford.com)
  * The coraldata data structure library was originally inspired by and adopted 
  * from JDSL (http://www.jdsl.org), any remaining similarities in architecture are 
  * credited to the respective authors in the JDSL classes.
@@ -33,7 +33,7 @@
 /*
  * SVN propsets
  *
- * $HeadURL: https://birdeye.googlecode.com/svn/trunk/guvis/src/org/un/cava/birdeye/guvis/coraldata/core/api/structure/IImmutableCollection.as $
+ * $HeadURL: $
  * $LastChangedBy$
  * $Date$
  * $Revision$
@@ -67,7 +67,7 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.structure
 		function isEmpty() : Boolean;
 		
 		/**
-		* Checks whether this collection contains an particular accessor.
+		* Checks whether this collection contains a particular accessor.
 		* @param a The accessor to check for.
 		*/
 		function doesContain( a:IAccessor ) : Boolean;
@@ -76,6 +76,17 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.structure
 		* @return an iterator over all the elements stored in this
 		* collection
 		*/
-		function elements() : IIterator;		
+		function elements() : IIterator;
+		
+		/**
+		* Search a collection for an accessor with a particular element and return 
+		* that accessor. Note that in the case of elements that are Strings and Numbers, 
+		* more than more accessor could hold the same element. It is up to the implementing
+		* collection on how to handle this scenario. Most likely the first instance holding 
+		* the element would be returned.
+		* @param element The element to search for.
+		* @return The accessor that was found, null otherwise.
+		*/
+		function findAccessorByElement( element:Object ) : IAccessor;
 	}	
 }

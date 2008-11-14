@@ -51,44 +51,14 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph
 		* edge that is directed.
 		* @return The originating vertex.
 		*/
-		function get origin() : IVertex;
+		//function get origin() : IVertex;
 
 		/**
 		* An endpoint of an edge. This specifies the destination endpoint in an
 		* edge that is directed.
 		* @return The destination vertex.
 		*/
-		function get destination() : IVertex;
-
-		/**
-		* Swap the endpoints (the <code>origin</code> and 
-		* <code>destination</code>) of an edge.
-		*/
-		function swapEndpoints() : void;
-		
-		/**
-		* Find the vertex at the opposite end of an edge.
-		* @param The vertex to find the opposite vertex of.
-		* @return The opposite vertex of the given vertex.
-		* @throw Error if the supplied vertex is not an endpoint of this edge.
-		*/
-		function opposite( v:IVertex ) : IVertex;
-		
-		/**
-		* Whether this edge is directed or not.
-		* @return True if this edge is directed, false otherwise.
-		*/
-		function isDirected() : Boolean;
-		
-		/**
-		* Make this edge directed.
-		*/
-		function makeDirected() : void;
-
-		/**
-		* Make this edge undirected.
-		*/		
-		function makeUndirected() : void;
+		//function get destination() : IVertex;
 		
 		/**
 		* Return the type of this edge relative to the vertex specified. 
@@ -98,12 +68,43 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph
 		* @return The integer specifying what type this edge is
 		* @see org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph.EdgeType
 		*/
-		function getType( endpoint:IVertex ) : int;
+		//function getType( endpoint:IVertex ) : int;
+
+
+		/**
+		* Find the vertex at the opposite end of an edge.
+		* @param The vertex to find the opposite vertex of.
+		* @return The opposite vertex of the given vertex.
+		* @throw Error if the supplied vertex is not an endpoint of this edge.
+		*/
+		//function opposite( v:IVertex ) : IVertex;
+		
+		/**
+		* Swap the endpoints (the <code>origin</code> and 
+		* <code>destination</code>) of an edge.
+		*/
+		//function swapEndpoints() : void;
+		
+		/**
+		* Make this edge directed.
+		*/
+		//function makeDirected() : void;
+
+		/**
+		* Make this edge undirected.
+		*/		
+		//function makeUndirected() : void;
+		
+		/**
+		* Whether this edge is directed or not.
+		* @return True if this edge is directed, false otherwise.
+		*/
+		//function isEdgeDirected() : Boolean;
 				
 		/**
-		* Whether is edge is a self-loop edge or not.
+		* Whether this edge is a self-loop edge or not.
 		* @return True if this is a self-loop edge, false otherwise.
 		*/
-		function isSelfLoop() : Boolean;
+		//function isEdgeSelfLoop() : Boolean;
 	}
 }

@@ -50,7 +50,14 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.feature
 	public interface IFeatureSet
 	{
 		/**
-		* Remove a feature attached to this object.
+		* Add a feature to this object.
+		* @param request The feature requester for the feature.
+		* @return The feature instance that was added.
+		*/
+		//function addFeature( request:IFeatureRequester ) : void;
+		
+		/**
+		* Remove a feature to this object.
 		* @param request The feature requester for the feature.
 		*/
 		function removeFeature( request:IFeatureRequester ) : void;

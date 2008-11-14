@@ -46,16 +46,70 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.structure.graph
 	/**
 	 * Static final class containing constants for specifying which edges are desired in
 	 * graph-query methods. Note that constants can be OR'd together using bitwise operations 
-	 * in any combination: <code>IN | OUT</code> specifies all directed edges, etc.
+	 * in any combination. For example, <code>EdgeType.UNDIR | EdgeType.SELFLOOP</code> specifies 
+	 * all undirected and self-loop edges.
 	 *
 	 * Unlike most of the <code>coraldata.core.api</code> package, this is a concrete class as 
 	 * opposed to an interface because constants can not be added to an interface.
+	 * 
+	 * @example The following code returns all the undirected and self-loop edges incident to 
+	 * a randomly retrieved vertex.
+	 * <listing version="3.0" > 
+	 * 
+	 * var it:IIterator = graph.getEdges( graph.aVertex() , (EdgeType.UNDIR | EdgeType.SELFLOOP) );
+	 * 
+	 * </listing>
 	 */
 	public final class EdgeType
 	{
+		/**
+		* The edge is directed and is incoming in relation to a particular vertex.
+		*/
 		public static const IN : int = 1;
+
+		/**
+		* The edge is directed and is outgoing in relation to a particular vertex.
+		*/
 		public static const OUT : int = 2;
+
+		/**
+		* The edge is undirected and is both incoming and outgoing in relation to a particular 
+		* vertex.
+		*/
 		public static const UNDIR : int = 4;
-		public static const ALL : int = 7;
+
+		/**
+		* The edge is a self-loop, meaning it has the same beginning and ending vertex. In practice 
+		* it is equivalent to an undirected edge, as it can be both incoming and outgoing on the 
+		* same vertex.
+		*/
+		public static const SELF_LOOP : int = 8;
+		
+		/**
+		* Provides a way to specify all edge types for bitwise operations.
+		*/
+		public static const ALL : int = 15;
+		
+		/**
+		* @param type An edge type ID (see constants in this class)
+		* @return <code>true</code> if the supplied edge type ID exists, 
+		* <code>false</code> otherwise.
+		*/
+		public static function isValid( type:int ) : Boolean
+		{
+			if ( (type & EdgeType.IN) != 0 || 
+				(type & EdgeType.OUT) != 0 || 
+				(type & EdgeType.UNDIR) != 0 || 
+				(type & EdgeType.SELF_LOOP) != 0 || 
+				(type & EdgeType.ALL) != 0
+				)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 	}
 }

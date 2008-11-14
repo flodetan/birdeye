@@ -6,7 +6,7 @@
  * Center for Advanced Visual Analytics
  * http://cava.unog.ch
  *
- * Author: Anselm Bradford
+ * Author: Anselm Bradford (http://anselmbradford.com)
  * The coraldata data structure library was originally inspired by and adopted 
  * from JDSL (http://www.jdsl.org), any remaining similarities in architecture are 
  * credited to the respective authors in the JDSL classes.
@@ -33,7 +33,7 @@
 /*
  * SVN propsets
  *
- * $HeadURL: https://birdeye.googlecode.com/svn/trunk/guvis/src/org/un/cava/birdeye/guvis/coraldata/core/api/access/IAccessor.as $
+ * $HeadURL: $
  * $LastChangedBy$
  * $Date$
  * $Revision$
@@ -106,9 +106,10 @@ package org.un.cava.birdeye.guvis.coraldata.core.api.access
 	  	*
 	  	* @param caller The function that called this function, 
 	  	* this is used for inter-method communication, so leave it null
+	  	* @return The element stored at the destroyed accessor.
 	  	* @see org.un.cava.birdeye.guvis.coraldata.core.api.structure.ICollection#remove()
 	  	*/
-		function destroy( caller:Function = null ) : void
+		function destroy( caller:Function = null ) : Object
 		
 	}
 }
