@@ -34,7 +34,7 @@
  /**
 * <p>This component is used to create Pie microcharts. 
  * The basic simple syntax to use it and create an Pie microchart with mxml is:</p>
- * <p>&lt;MicroPieChart dataProvider="{myArray}" width="20" height="70"/></p>
+ * <p>&lt;MicroPieChart dataProvider="{myArray}" size="70"/></p>
  * 
  * <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
  * and XML. To size the Pie chart:</p>
@@ -97,7 +97,7 @@
 			/**
 			 * <p>The MicroPieChart component is used to create Pie microcharts. 
 			 * The basic simple syntax to use it and create an Pie microchart with mxml is:</p>
-			 * <p>&lt;MicroPieChart dataProvider="{myArray}" width="20" height="70"/></p>
+			 * <p>&lt;MicroPieChart dataProvider="{myArray}" size="70"/></p>
 			 * 
 			 * <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
 			 * and XML. To size the Pie chart:</p>
