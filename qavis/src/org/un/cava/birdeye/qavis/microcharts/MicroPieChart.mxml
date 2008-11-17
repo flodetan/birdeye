@@ -53,10 +53,10 @@
 						
 			[Bindable]
 			private var _size:Number = NaN;
+			
 			[Bindable]
 			private var _dataProvider:Array = new Array();
 			
-			[Bindable]
 			private var _colors:Array = new Array;
 
 			[Bindable]
@@ -195,7 +195,7 @@
 				</GeometryRepeater>
 			</geometry>
 			<strokes>
-				<SolidStroke id="black" color="0x000000" alpha="1"/>
+				<SolidStroke id="black" color="0xffffff" alpha="1"/>
 			</strokes>
 		</GeometryGroup>
 	</graphicsData>

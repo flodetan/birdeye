@@ -50,49 +50,26 @@
 			[Bindable]
 			private var tempColor:int = 0xbbbbbb;
 			
-			[Bindable]
-			private var _sizeY:Number = NaN;
-			
-			[Bindable]
-			private var _sizeX:Number = NaN;
-
-			[Bindable]
-			private var _dataProvider:Array = new Array();
-			
-			[Bindable]
-			private var _colors:Array = null;
-
-			[Bindable]
-			private function set sizeX(val:Number):void
-			{
-				_sizeX = val;
-			}
-			
 			/**
 			* @private  
 			* Set the width parameter of the chart. 
 			* At this stage using height and width to create the Rectangle is not always properly binded. 
 			*/
-			private function get sizeX():Number
-			{
-				return _sizeX;
-			}
-						
 			[Bindable]
-			private function set sizeY(val:Number):void
-			{
-				_sizeY = val;
-			}
+			private var _sizeY:Number = NaN;
 			
 			/**
 			* @private  
 			* Set the height parameter of the chart. 
 			* At this stage using height and width to create the Rectangle is not always properly binded. 
 			*/
-			private function get sizeY():Number
-			{
-				return _sizeY;
-			}
+			[Bindable]
+			private var _sizeX:Number = NaN;
+
+			[Bindable]
+			private var _dataProvider:Array = new Array();
+			
+			private var _colors:Array = null;
 
 			[Bindable]
 			public function set dataProvider(val:Array):void
@@ -139,8 +116,8 @@
 			override protected function commitProperties():void
 			{
 				super.commitProperties();
-				sizeX = width;
-				sizeY = height;
+				_sizeX = width;
+				_sizeY = height;
 			}
 			
 			/**
@@ -154,7 +131,7 @@
 					if (val[i] > 0)
 						tot += val[i];
 			}
-			
+
 			/**
 			* @private  
 			* Calculate the width size of the current value provided by the repeater. 
@@ -199,7 +176,7 @@
 		<GeometryGroup>
 			<geometry>
 				<GeometryRepeater count="{_dataProvider.length}">
-					<RegularRectangle height="{sizeY}" width="{sizeX}"
+					<RegularRectangle height="{_sizeY}" width="{_sizeX}"
 						stroke="{black}">
 						<fill>
 							<SolidFill color="{tempColor}" alpha="1"/>
@@ -213,7 +190,7 @@
 				</GeometryRepeater>
 			</geometry>
 			<strokes>
-				<SolidStroke id="black" color="0x000000" alpha="1"/>
+				<SolidStroke id="black" color="0xffffff" alpha="1"/>
 			</strokes>
 		</GeometryGroup>
 	</graphicsData>
