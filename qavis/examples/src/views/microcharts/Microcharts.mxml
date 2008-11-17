@@ -5,7 +5,6 @@
 	width="100%" height="100%"
 	creationComplete="updateDataGrid();">
 
-	<mx:Style source="styles/main.css"/>
     <mx:Script>
         <![CDATA[
             import mx.collections.ArrayCollection;
@@ -253,7 +252,7 @@
 			<mx:Label text="Sizing Micro100Bar"/>
 			<mx:HSlider id="w100" value="70" minimum="0" maximum="400" snapInterval="1" liveDragging="true"/>
 			<mx:HSlider id="h100" value="20" minimum="0" maximum="400" snapInterval="1" liveDragging="true"/>
-			<mc:Micro100BarChart height="{h100.value}" width="{w100.value}" sizeX="{w100.value}" sizeY="{h100.value}" 
+			<mc:Micro100BarChart height="{h100.value}" width="{w100.value}"  
 				colors="{colors}"
 				dataProvider="{[m1.value,m2.value,m3.value]}"/>
 		</mx:VBox>

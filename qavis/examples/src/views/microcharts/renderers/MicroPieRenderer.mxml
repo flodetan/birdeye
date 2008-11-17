@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:mc="org.un.cava.birdeye.qavis.microcharts.*" xmlns:c="charts.*"
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:mc="org.un.cava.birdeye.qavis.microcharts.*" 
 	width="100%" height="100%" horizontalAlign="center">
 	<mc:MicroPieChart dataProvider="{data.Chart}" 
 		colors="{data.Colors}"
