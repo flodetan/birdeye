@@ -31,7 +31,6 @@
  * THE SOFTWARE.
  */
  
-			import mx.events.IndexChangedEvent;
 /**
  * <p>The Micro100BarChart component is used to create 100% Bar microcharts. 
  * The basic simple syntax to use it and create an 100% Bar microchart with mxml is:</p>
