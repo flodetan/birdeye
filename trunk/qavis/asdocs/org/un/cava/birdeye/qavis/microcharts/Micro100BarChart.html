@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../../../print.css" type="text/css" media="print">
-<meta content="Micro100BarChart,org.un.cava.birdeye.qavis.microcharts.Micro100BarChart,colors,dataProvider,sizeX,sizeY" name="keywords">
+<meta content="Micro100BarChart,org.un.cava.birdeye.qavis.microcharts.Micro100BarChart,colors,dataProvider" name="keywords">
 <title>org.un.cava.birdeye.qavis.microcharts.Micro100BarChart</title>
 </head>
 <body>
@@ -66,16 +66,6 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
    Set the dataProvider to feed the chart.</div>
 </td><td class="summaryTableOwnerCol">Micro100BarChart</td>
 </tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#sizeX">sizeX</a> : Number<div class="summaryTableDescription">[read-only]
-   Set the width parameter of the chart.</div>
-</td><td class="summaryTableOwnerCol">Micro100BarChart</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#sizeY">sizeY</a> : Number<div class="summaryTableDescription">[read-only]
-   Set the height parameter of the chart.</div>
-</td><td class="summaryTableOwnerCol">Micro100BarChart</td>
-</tr>
 </table>
 </div>
 <script type="text/javascript" language="javascript">
@@ -98,10 +88,7 @@ showHideInherited();
     <p>&lt;Micro100BarChart dataProvider="{myArray}" width="20" height="70"/></p>
     
     <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
-    and XML. To insure the proper sizing binding, it's better to use the following properties:</p>
-    <p>- sizeX: to define the width of the chart;</p>
-    <p>- sizeY: to define the height of the chart;  </p>
-    <p>It's also possible to change the colors by defining the following Array of int:</p>
+    and XML. It's also possible to change the colors by defining the following Array of int:</p>
     <p>- colors: array that sets the color for each bar value. The lenght has to be the same as the dataProvider.</p>
     
     <p>If no colors are defined, than the 100 bar will display different colors based on the default color and a default offset color.</p>
@@ -124,36 +111,6 @@ showHideInherited();
    </p><span class="label">Implementation</span>
 <br>
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function get dataProvider():Array</code>
-<br>
-</div>
-<a name="sizeX"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">sizeX</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>sizeX:Number</code>&nbsp;&nbsp;[read-only]<p>
-   Set the width parameter of the chart. 
-   At this stage, it's recommended to use sizeX together with width to avoid rendering and binding problems. 
-   </p><span class="label">Implementation</span>
-<br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get sizeX():Number</code>
-<br>
-</div>
-<a name="sizeY"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">sizeY</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>sizeY:Number</code>&nbsp;&nbsp;[read-only]<p>
-   Set the height parameter of the chart. 
-   At this stage, it's recommended to use sizeY together with height to avoid rendering and binding problems. 
-   </p><span class="label">Implementation</span>
-<br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get sizeY():Number</code>
 <br>
 </div>
 <br>
