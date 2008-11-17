@@ -33,18 +33,17 @@
  
 			import mx.events.IndexChangedEvent;
 /**
- * <p>This component is used to create 100% Bar microcharts. 
+ * <p>The Micro100BarChart component is used to create 100% Bar microcharts. 
  * The basic simple syntax to use it and create an 100% Bar microchart with mxml is:</p>
  * <p>&lt;Micro100BarChart dataProvider="{myArray}" width="20" height="70"/></p>
  * 
  * <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
- * and XML. To insure the proper sizing binding, it's better to use the following properties:</p>
- * <p>- sizeX: to define the width of the chart;</p>
- * <p>- sizeY: to define the height of the chart;  </p>
- * <p>It's also possible to change the colors by defining the following Array of int:</p>
+ * and XML. It's also possible to change the colors by defining the following Array of int:</p>
  * <p>- colors: array that sets the color for each bar value. The lenght has to be the same as the dataProvider.</p>
  * 
  * <p>If no colors are defined, than the 100 bar will display different colors based on the default color and a default offset color.</p>
+ * 
+ * This property sets the colors of the bars in the chart. If not set, a function will automatically create colors for each bar.
 */
 			private var tot:Number = NaN;
 			
@@ -64,35 +63,37 @@
 			private var _colors:Array = null;
 
 			[Bindable]
-			public function set sizeX(val:Number):void
+			private function set sizeX(val:Number):void
 			{
 				_sizeX = val;
 			}
 			
 			/**
+			* @private  
 			* Set the width parameter of the chart. 
-			* At this stage, it's recommended to use sizeX together with width to avoid rendering and binding problems. 
+			* At this stage using height and width to create the Rectangle is not always properly binded. 
 			*/
-			public function get sizeX():Number
+			private function get sizeX():Number
 			{
 				return _sizeX;
 			}
 						
 			[Bindable]
-			public function set sizeY(val:Number):void
+			private function set sizeY(val:Number):void
 			{
 				_sizeY = val;
 			}
 			
 			/**
+			* @private  
 			* Set the height parameter of the chart. 
-			* At this stage, it's recommended to use sizeY together with height to avoid rendering and binding problems. 
+			* At this stage using height and width to create the Rectangle is not always properly binded. 
 			*/
-			public function get sizeY():Number
+			private function get sizeY():Number
 			{
 				return _sizeY;
 			}
-						
+
 			[Bindable]
 			public function set dataProvider(val:Array):void
 			{
@@ -120,10 +121,7 @@
 			 * <p>&lt;Micro100BarChart dataProvider="{myArray}" width="20" height="70"/></p>
 			 * 
 			 * <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
-			 * and XML. To insure the proper sizing binding, it's better to use the following properties:</p>
-			 * <p>- sizeX: to define the width of the chart;</p>
-			 * <p>- sizeY: to define the height of the chart;  </p>
-			 * <p>It's also possible to change the colors by defining the following Array of int:</p>
+			 * and XML. It's also possible to change the colors by defining the following Array of int:</p>
 			 * <p>- colors: array that sets the color for each bar value. The lenght has to be the same as the dataProvider.</p>
 			 * 
 			 * <p>If no colors are defined, than the 100 bar will display different colors based on the default color and a default offset color.</p>
@@ -134,7 +132,17 @@
 			{
 				return _colors;
 			}
-					
+			
+			/**
+			* @private  
+			*/
+			override protected function commitProperties():void
+			{
+				super.commitProperties();
+				sizeX = width;
+				sizeY = height;
+			}
+			
 			/**
 			* @private  
 			* Calculate the total of all positive values in the dataProvider. Negative values are not considered nor rendered in the chart. 
