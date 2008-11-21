@@ -93,7 +93,7 @@
 			<mx:HSlider id="mcaw" minimum="10" value="200" maximum="400" snapInterval="1" liveDragging="true"/>
 			<mx:HSlider id="mcah" minimum="10" value="100" maximum="200" snapInterval="1" liveDragging="true"/>
 			<mc:MicroAreaChart dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}"  
-				height="{mcah.value}" width="{mcaw.value}" color="0x000000" backgroundColor="0xaaaaaa"/>
+				height="{mcah.value}" width="{mcaw.value}"/>
 		</mx:VBox>
 		<mx:VBox label="Line">
 		    <mx:DataGrid selectable="false" dataProvider="{acMC}" editable="false" verticalAlign="center">
@@ -117,7 +117,7 @@
 			<mx:HSlider id="mlaw" minimum="10" value="200" maximum="400" snapInterval="1" liveDragging="true"/>
 			<mx:HSlider id="mlah" minimum="10" value="100" maximum="200" snapInterval="1" liveDragging="true"/>
 			<mc:MicroLineChart dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}" 
-				height="{mlah.value}" width="{mlaw.value}" color="0x000000" backgroundColor="0xaaaaaa"/>
+				height="{mlah.value}" width="{mlaw.value}" referenceValue="30" referenceColor="0xaaaaaa"/>
 		</mx:VBox>
 		<mx:VBox label="WinLose">
 		    <mx:DataGrid selectable="false" dataProvider="{acMC}" editable="false" verticalAlign="center">
@@ -141,7 +141,7 @@
 			<mx:HSlider id="mwlaw" minimum="10" value="200" maximum="400" snapInterval="1" liveDragging="true"/>
 			<mx:HSlider id="mwlah" minimum="10" value="100" maximum="200" snapInterval="1" liveDragging="true"/>
 			<mc:MicroWinLoseChart spacing="3" dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}" 
-				height="{mwlah.value}" width="{mwlaw.value}" color="0x000000" backgroundColor="0xaaaaaa"/>
+				height="{mwlah.value}" width="{mwlaw.value}"/>
 		</mx:VBox>
 		<mx:VBox label="Plot">
 		    <mx:DataGrid selectable="false" dataProvider="{acMC}" editable="false" verticalAlign="center">
@@ -165,7 +165,7 @@
 			<mx:HSlider id="mpaw" minimum="10" value="200" maximum="400" snapInterval="1" liveDragging="true"/>
 			<mx:HSlider id="mpah" minimum="10" value="100" maximum="200" snapInterval="1" liveDragging="true"/>
 			<mc:MicroPlotChart radius="2" dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}" 
-				height="{mpah.value}" width="{mpaw.value}" color="0x000000" backgroundColor="0xaaaaaa"/>
+				height="{mpah.value}" width="{mpaw.value}"/>
 		</mx:VBox>
 		<mx:VBox label="Bar">
 		    <mx:DataGrid selectable="false" dataProvider="{acBG}" editable="false" verticalAlign="center">
@@ -183,7 +183,7 @@
 			<mx:HSlider id="mbw" minimum="10" value="200" maximum="400" snapInterval="1" liveDragging="true"/>
 			<mx:HSlider id="mbh" minimum="10" value="100" maximum="200" snapInterval="1" liveDragging="true"/>
 			<mc:MicroBarChart dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}" 
-				height="{mbh.value}" width="{mbw.value}" spacing="1" color="0x000000" backgroundColor="0xaaaaaa"/>
+				height="{mbh.value}" width="{mbw.value}" spacing="1"/>
 		</mx:VBox>
 		<mx:VBox label="Column">
 		    <mx:DataGrid selectable="false" dataProvider="{acMC}" editable="false" verticalAlign="center">
@@ -207,7 +207,7 @@
 			<mx:HSlider id="mnaw" minimum="10" value="200" maximum="400" snapInterval="1" liveDragging="true"/>
 			<mx:HSlider id="mnah" minimum="10" value="100" maximum="200" snapInterval="1" liveDragging="true"/>
 			<mc:MicroColumnChart dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}" 
-				height="{mnah.value}" width="{mnaw.value}" spacing="1" color="0x000000" backgroundColor="0xaaaaaa"/>
+				height="{mnah.value}" width="{mnaw.value}" spacing="1"/>
 		</mx:VBox>
 		<mx:VBox label="Pie">
 		    <mx:DataGrid selectable="false" dataProvider="{acMC}">
@@ -255,11 +255,11 @@
 			<mx:HSlider id="w100" value="70" minimum="0" maximum="400" snapInterval="1" liveDragging="true"/>
 			<mx:HSlider id="h100" value="20" minimum="0" maximum="400" snapInterval="1" liveDragging="true"/>
 			<mc:Micro100BarChart height="{h100.value}" width="{w100.value}"  
-				colors="{colors}"
+				colors="{colors}" stroke="0xffffff"
 				dataProvider="{[m1.value,m2.value,m3.value]}"/>
 		</mx:VBox>
 		<mx:VBox label="Bullet">
-		    <mx:DataGrid selectable="false" dataProvider="{acBG}" editable="false" rowHeight="70" rowCount="1" verticalAlign="center">
+		    <mx:DataGrid selectable="false" dataProvider="{acBG}" editable="false" rowCount="1" verticalAlign="center">
 		        <mx:columns>
 		            <mx:DataGridColumn dataField="trg" width="40"/>
 		            <mx:DataGridColumn dataField="val" width="40"/>
@@ -280,13 +280,13 @@
 			<mx:HSlider id="hht" minimum="10" value="20" maximum="200" snapInterval="1" liveDragging="true"/>
 			<mx:Label text="Snap interval"/>
 			<mx:HSlider minimum="1" maximum="30" value="26" snapInterval="1" id="tk" liveDragging="true"/>
-			<mc:BulletGraph orientation="vertical" 
+			<mc:MicroBulletGraph orientation="vertical" 
 				qualitativeRanges="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value]}" 
-				target="{t.value}" value="{v.value}" title="Vertical graph"
+				target="{t.value}" value="{v.value}" 
 				snapInterval="{tk.value}" width="{vwd.value}" height="{vht.value}"/>
-			<mc:BulletGraph orientation="horizontal"  
+			<mc:MicroBulletGraph orientation="horizontal"  
 				qualitativeRanges="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value]}" 
-				target="{t.value}" value="{v.value}" title="Horizontal BulletGraph" 
+				target="{t.value}" value="{v.value}" 
 				snapInterval="{tk.value}" width="{hwd.value}" height="{hht.value}"/>
 		</mx:VBox>
 		<mx:VBox label="All">

@@ -20,31 +20,13 @@
 			
 			[Bindable]
 			public var colorArray:Array;
-			
-			private function updateColor():void
-			{
-				colorArray = [c1.value, c2.value, c3.value, c4.value, c5.value, c6.value];
-				chart.rangeColor = colorArray;
-			}
 		]]>
 	</mx:Script>
 	<mx:HBox width="100%" height="100%">
-		<mx:VBox width="100%">
-			<mc:BulletGraph orientation="vertical" id="chart"
-				qualitativeRanges="{a}" 
-				target="{target}" value="{value}" title="Vertical" 
-				snapInterval="19" width="30" height="300">
-			</mc:BulletGraph>
-		</mx:VBox>
-		<mx:VBox width="100%">
-			<mx:ColorPicker id="c1" change="updateColor()"/>
-			<mx:ColorPicker id="c2" change="updateColor()"/>
-			<mx:ColorPicker id="c3" change="updateColor()"/>
-			<mx:ColorPicker id="c4" change="updateColor()"/>
-			<mx:ColorPicker id="c5" change="updateColor()"/>
-			<mx:ColorPicker id="c6" change="updateColor()"/>
-			<mx:ColorPicker id="c7" change="chart.valueColor = int(c7.value)"/>
-			<mx:ColorPicker id="c8" change="chart.targetColor = int(c8.value)"/>
-		</mx:VBox>
+		<mc:MicroBulletGraph orientation="vertical" id="chart"
+			qualitativeRanges="{a}" 
+			target="{target}" value="{value}" 
+			snapInterval="19" width="30" height="300">
+		</mc:MicroBulletGraph>
 	</mx:HBox>
 </mx:TitleWindow>
