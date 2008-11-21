@@ -37,8 +37,6 @@ package org.un.cava.birdeye.qavis.microcharts
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 		
-	import mx.formatters.NumberFormatter;
-
 	[Inspectable("orientation")]
 	/**
 	* This component is used to create BulletGraph charts.
