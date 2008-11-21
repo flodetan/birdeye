@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../../../print.css" type="text/css" media="print">
-<meta content="MicroColumnChart,org.un.cava.birdeye.qavis.microcharts.MicroColumnChart,backgroundColor,color,dataProvider,negative,negativeColor,spacing" name="keywords">
+<meta content="MicroColumnChart,org.un.cava.birdeye.qavis.microcharts.MicroColumnChart,colors,dataProvider,negative,negativeColor,spacing" name="keywords">
 <title>org.un.cava.birdeye.qavis.microcharts.MicroColumnChart</title>
 </head>
 <body>
@@ -38,7 +38,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <td class="classHeaderTableLabel">Class</td><td class="classSignature">public class MicroColumnChart</td>
 </tr>
 <tr>
-<td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">MicroColumnChart <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../../../images/inherit-arrow.gif"> mx.core.UIComponent</td>
+<td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">MicroColumnChart <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../../../images/inherit-arrow.gif"> com.degrafa.Surface</td>
 </tr>
 </table>
 <p></p>
@@ -49,8 +49,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
   <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
   and XML.
   It's also possible to change the colors by defining the following properties in the mxml declaration:</p>
-  <p>- color: to change the default shape color;</p>
-  <p>- backgroundColor: to change the default background color of the chart;</p>
+  <p>- colors:Array to change the default columns color;</p>
   <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
   
   <p>The following public properties can also be used to: </p>
@@ -68,13 +67,8 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
 </tr>
 <tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#backgroundColor">backgroundColor</a> : int<div class="summaryTableDescription">
-  Changes the default background color of the chart.</div>
-</td><td class="summaryTableOwnerCol">MicroColumnChart</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#color">color</a> : int<div class="summaryTableDescription">
-  Changes the default color of columns.</div>
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#colors">colors</a> : Array<div class="summaryTableDescription">
+  Changes the default colors of columns.</div>
 </td><td class="summaryTableOwnerCol">MicroColumnChart</td>
 </tr>
 <tr class="">
@@ -84,16 +78,16 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#negative">negative</a> : Boolean<div class="summaryTableDescription">
-  Indicate whether the negative reference line has to be drawn or not.</div>
+  Indicate whether negative values have to be differentiated or not.</div>
 </td><td class="summaryTableOwnerCol">MicroColumnChart</td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#negativeColor">negativeColor</a> : int<div class="summaryTableDescription">
-  Changes the default color for the negative reference line.</div>
+  Changes the default color for the negative values.</div>
 </td><td class="summaryTableOwnerCol">MicroColumnChart</td>
 </tr>
 <tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#spacing">spacing</a> : int<div class="summaryTableDescription">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#spacing">spacing</a> : Number<div class="summaryTableDescription">
   Changes the default spacing between columns.</div>
 </td><td class="summaryTableOwnerCol">MicroColumnChart</td>
 </tr>
@@ -122,36 +116,20 @@ showHideInherited();
 <div class="MainContent">
 <a name="propertyDetail"></a>
 <div class="detailSectionHeader">Property detail</div>
-<a name="backgroundColor"></a>
+<a name="colors"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
-<td class="detailHeaderName">backgroundColor</td><td class="detailHeaderType">property</td>
+<td class="detailHeaderName">colors</td><td class="detailHeaderType">property</td>
 </tr>
 </table>
 <div class="detailBody">
-<code>backgroundColor:int</code>&nbsp;&nbsp;[read-write]<p>
-  Changes the default background color of the chart. 
+<code>colors:Array</code>&nbsp;&nbsp;[read-write]<p>
+  Changes the default colors of columns. 
   </p><span class="label">Implementation</span>
 <br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get backgroundColor():int</code>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get colors():Array</code>
 <br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set backgroundColor(value:int):void</code>
-<br>
-</div>
-<a name="color"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">color</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>color:int</code>&nbsp;&nbsp;[read-write]<p>
-  Changes the default color of columns. 
-  </p><span class="label">Implementation</span>
-<br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get color():int</code>
-<br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set color(value:int):void</code>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set colors(value:Array):void</code>
 <br>
 </div>
 <a name="dataProvider"></a>
@@ -178,7 +156,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>negative:Boolean</code>&nbsp;&nbsp;[read-write]<p>
-  Indicate whether the negative reference line has to be drawn or not. 
+  Indicate whether negative values have to be differentiated or not. 
   </p><span class="label">Implementation</span>
 <br>
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function get negative():Boolean</code>
@@ -194,7 +172,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>negativeColor:int</code>&nbsp;&nbsp;[read-write]<p>
-  Changes the default color for the negative reference line. 
+  Changes the default color for the negative values. 
   </p><span class="label">Implementation</span>
 <br>
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function get negativeColor():int</code>
@@ -209,13 +187,13 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>spacing:int</code>&nbsp;&nbsp;[read-write]<p>
+<code>spacing:Number</code>&nbsp;&nbsp;[read-write]<p>
   Changes the default spacing between columns. 
   </p><span class="label">Implementation</span>
 <br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get spacing():int</code>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get spacing():Number</code>
 <br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set spacing(value:int):void</code>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set spacing(value:Number):void</code>
 <br>
 </div>
 <a name="constructorDetail"></a>
