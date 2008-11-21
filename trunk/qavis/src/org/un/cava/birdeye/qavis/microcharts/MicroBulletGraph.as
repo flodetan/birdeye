@@ -87,7 +87,6 @@ package org.un.cava.birdeye.qavis.microcharts
 		private var _value:Number;
 		private var _target:Number;
 		private var _snapInterval:Number = NaN;
-		private var _formatter:NumberFormatter = new NumberFormatter();
 		private var _colors:Array = ["0x777777","0x999999","0xbbbbbb","0xcccccc","0xdddddd"];
 		
 		private var prevStartX:Number, prevStartY:Number, min:Number, max:Number, space:Number = 0, maxSize:Number = 10;
@@ -163,21 +162,6 @@ package org.un.cava.birdeye.qavis.microcharts
 			invalidateDisplayList();
 		}
 		
-		/**
-		* Set the formatter parameter of the BulletGraph to establish the text format of the value shown in the graph meter
-		*/
-		public function get formatter(): NumberFormatter 
-		{
-			return _formatter;
-		}
-		
-		public function set formatter(val:NumberFormatter):void 
-		{
-			_formatter = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-				
 		/**
 		* @private
 		 * Used to recalculate min, max and tot each time properties have to ba revalidated 
@@ -512,7 +496,6 @@ package org.un.cava.birdeye.qavis.microcharts
 			geomGroup = new GeometryGroup();
 			geomGroup.target = this;
 			createBulletGraph();
-//			createSnap();
 			this.graphicsCollection.addItem(geomGroup);
 		}
 		
@@ -550,86 +533,6 @@ package org.un.cava.birdeye.qavis.microcharts
 			}
 			geomGroup.geometryCollection.addItem(valueShape);
 			geomGroup.geometryCollection.addItem(targetShape);
-		}
-		
-		/**
-		* @private 
-		 * Create the snap shapes and texts
-		*/
-		private function createSnap():void
-		{
-			if (orientation == VERTICAL)
-			{
-				if (max != min)
-				{
-					if (isNaN(_snapInterval))
-						snapInterval = (max-min)/5;
-
-					for (var snapValue:Number = min; snapValue <= max; snapValue+=snapInterval) 
-					{
-						var yCoord:Number = height - ((snapValue-min)/(max-min) * height);
-						var long:int = 5;
-						var thick:int = 1;
-						// create snap line
-						snapLine = new Line(space-long, space+yCoord, space, space+yCoord);
-						snapLine.stroke = new SolidStroke(snapLineColor,1,1);
-						
-						// create snap text (formatted number)
-						var snapText:GraphicText = new GraphicText();
-						snapText.text = formatter.format(Math.round(snapValue));
-						snapText.visible = true;
-						snapText.autoSize = "left";
-						snapText.autoSizeField = true;
-						snapText.selectable = false;
-						snapText.fontSize = snapTextFontSize;
-						snapText.color = snapLineColor;
-						snapText.y = space + yCoord-snapText.height/3;
-						snapText.x = space - snapText.width;
-
-						snapText.fill = black;
-						snapText.stroke = new SolidStroke(0x000000);
-
-						geomGroup.geometryCollection.addItem(snapLine);
-						geomGroup.geometryCollection.addItem(snapText);
-					}
-				}
-			} else {/* 
-				if (max != min)
-				{
-					//draw meter and clear labels
-					snapContainer.removeAllChildren();
-					snapContainer.x = 0; 
-					snapContainer.y = height;
-					snapContainer.width = unscaledWidth;
-					snapContainer.height = unscaledHeight;
-		
-					if (isNaN(_snapInterval))
-					{
-						snapInterval = (max-min)/5;
-					}
-		
-					for (var snapValue:Number = min; snapValue <= max; snapValue+=snapInterval) {
-						var xCoord:Number = startX + (snapValue-min)/(max-min) * totalGraphicWidth;
-						long = 5;
-						thick = 1;
-						gH.beginFill(tickLabelColor);
-						gH.drawRect(xCoord, height, thick, long);
-						gH.endFill(); 
-						
-						var lbl:UITextField = new UITextField();
-						lbl.text = formatter.format(Math.round(snapValue));
-						lbl.height = 15;
-						lbl.autoSize = TextFieldAutoSize.LEFT;
-						lbl.selectable = false;
-						
-						snapContainer.addChild(lbl);
-						lbl.styleName = tickStyle;
-						lbl.x = xCoord - lbl.textWidth /2;
-						lbl.y = 2;
-					}
-					_titleLabel.y = (height - _titleLabel.height)/2;
-				} */
-			}
 		}
 		
 		override protected function measure():void
