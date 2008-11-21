@@ -25,14 +25,13 @@
  * THE SOFTWARE.
  */
  
- 
-package org.un.cava.birdeye.qavis.microcharts
+ package org.un.cava.birdeye.qavis.microcharts
 {
-	import flash.display.Graphics;
-	import flash.display.Shape;
+	import com.degrafa.GeometryGroup;
+	import com.degrafa.Surface;
+	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.paint.SolidFill;
 	
-	import mx.core.UIComponent;
-
 	 /**
 	* <p>This component is used to create column microcharts. 
 	 * The basic simple syntax to use it and create an column microchart with mxml is:</p>
@@ -42,183 +41,170 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * and XML.
 	 * It's also possible to change the colors by defining the following properties in the mxml declaration:</p>
 	 * <p>- color: to change the default shape color;</p>
-	 * <p>- backgroundColor: to change the default background color of the chart;</p>
 	 * <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
 	 * 
 	 * <p>The following public properties can also be used to: </p>
 	 * <p>- spacing: to modify the spacing between columns;</p>
 	*/
-	public class MicroWinLoseChart extends UIComponent
+	public class MicroWinLoseChart extends Surface
 	{
-		private static const DEFAULT_WIDTH:Number = 200;
-		private static const DEFAULT_COLOR:int = 0x000000;
-		private static const DEFAULT_HEIGHT:Number = 50;
+		private var geomGroup:GeometryGroup;
+		private var black:SolidFill = new SolidFill("0x000000",1);
+		private var red:SolidFill = new SolidFill("0xff0000",1);
 		
-		private var _dataProvider:Array = [];
-		private var _backgroundColor:Number = NaN;
-		private var _color:int;
-		private var _negativeColor:int = 0xff0006; 
-		private var _spacing:int = 0;
-		private var _reference:int = 0;
+		private var _spacing:Number = 0;
+		private var _colors:Array = null;
+		private var _dataProvider:Array = new Array();
+		private var _referenceValue:Number = 0;
+		
+		private var space:Number = 0;
 
-		private var graph:Shape = new Shape();
-		
-		public function set reference(val:int):void
+		public function set colors(val:Array):void
 		{
-			_reference = val;
+			_colors = val;
+			invalidateDisplayList();
 		}
 		
 		/**
-		* Change the default (0) reference value that define winning or loosing values. 
-		*/
-		public function get reference():int
-		{
-			return _reference;
-		}
-		
-		public function set negativeColor(val:int):void
-		{
-			_negativeColor = val;
-		}
-		
-		/**
-		* Changes the default color for the negative reference line. 
+		* Changes the default colors of each column. 
 		*/		
-		public function get negativeColor():int
+		public function get colors():Array
 		{
-			return _negativeColor;
+			return _colors;
 		}
-
+		
+		public function set spacing(val:Number):void
+		{
+			_spacing = val;
+			invalidateDisplayList();
+		}
+		
 		/**
 		* Changes the default spacing between columns. 
 		*/		
-		public function get spacing():int
+		public function get spacing():Number
 		{
 			return _spacing;
 		}
 		
-		public function set spacing(value:int):void
+		public function set dataProvider(val:Array):void
 		{
-			_spacing = value;
-			invalidateDisplayList();
-			invalidateSize();
-		}
-
-		/**
-		* Changes the default color of columns. 
-		*/		
-		public function get color():int{
-			return _color;
-		}
-		
-		public function set color(value:int):void
-		{
-			_color = value;
-			invalidateDisplayList();
-		}
-		
-		/**
-		* Changes the default background color of the chart. 
-		*/		
-		public function get backgroundColor():int{
-			return _backgroundColor;
-		}
-		
-		public function set backgroundColor(value:int):void
-		{
-			_backgroundColor = value;
+			_dataProvider = val;
+			invalidateProperties();
 			invalidateDisplayList();
 		}
 		
 		/**
 		* Set the dataProvider that will feed the chart. 
 		*/		
-		public function get dataProvider() : Array {
+		public function get dataProvider():Array
+		{
 			return _dataProvider;
 		}
 		
-		public function set dataProvider(val:Array) : void {
-			_dataProvider = val;
-			invalidateDisplayList();	
+		public function set referenceValue(val:Number):void
+		{
+			_referenceValue = val;
+			invalidateDisplayList(); 
 		}
 
+		/**
+		* Change the default (0) reference value that define winning or loosing values. 
+		*/
+		public function get referenceValue():Number
+		{
+			return _referenceValue; 
+		}
+
+		/**
+		* @private
+		 * Used to recalculate min, max and tot each time properties have to ba revalidated 
+		*/
+		override protected function commitProperties():void
+		{
+			super.commitProperties();
+		}
+		
 		public function MicroWinLoseChart()
 		{
 			super();
 		}
 		
 		/**
-		* @private 
+		* @private
+		 * Calculate the height size of the winlose column for the current dataProvider value   
 		*/
-		override protected function createChildren():void {
-			super.createChildren();
+		private function sizeY(indexIteration:Number):Number
+		{
+			var _sizeY:Number = (_dataProvider[indexIteration] >= _referenceValue) ? -height/3 : height/3;
+			return _sizeY;
 		}
-		
-		/**
-		* @private 
-		*/
-		override protected function commitProperties():void {
-			super.commitProperties();
 
-			if (width == 0 || isNaN(width))
-				width = DEFAULT_WIDTH; 
-			
-			if (height == 0 || isNaN(height))
-				height = DEFAULT_HEIGHT;
-				
-			measure();
+		/**
+		* @private
+		 * It sets the color for the current winlose column
+		*/
+		private function useColor(indexIteration:Number):int
+		{
+			return _colors[indexIteration];
 		}
 		
 		/**
 		* @private 
+		 * Used to create and refresh the chart.
 		*/
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void 
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			var g:Graphics = graph.graphics;
+			for(var i:int=this.numChildren-1; i>=0; i--)
+				if(getChildAt(i) is GeometryGroup)
+						removeChildAt(i);
 
-			g.clear();
-			if (dataProvider != null) 
+			geomGroup = new GeometryGroup();
+			geomGroup.target = this;
+			createColumns();
+			this.graphicsCollection.addItem(geomGroup);
+		}
+		
+		/**
+		* @private 
+		 * Create the winlose columns.
+		*/
+		private function createColumns():void
+		{
+			var columnWidth:Number = width/dataProvider.length;
+			var startY:Number = height/2;
+			var startX:Number = 0;
+
+			// create columns
+			for (var i:Number=0; i<_dataProvider.length; i++)
 			{
-				commitProperties();
-				drawMicroWinLoseChart(unscaledWidth, unscaledHeight);
+				var column:RegularRectangle = 
+					new RegularRectangle(space+startX, space+startY, columnWidth, sizeY(i));
+				
+				startX += columnWidth + spacing;
+
+				if (_colors == null || _colors.lenght == 0)
+					if (_dataProvider[i] < 0)
+						column.fill = red;
+					else
+						column.fill = black;
+				else
+					column.fill = new SolidFill(useColor(i));
+
+				geomGroup.geometryCollection.addItem(column);
 			}
 		}
-				
-		private function drawMicroWinLoseChart(unscaledWidth:Number, unscaledHeight:Number):void
+		
+		/**
+		* @private 
+		 * Set the minHeight and minWidth in case width and height are not set in the creation of the chart.
+		*/
+		override protected function measure():void
 		{
-			var g:Graphics = graph.graphics;
-			var startX:int = 0;
-			var startY:int = unscaledHeight/2;
-			var columnWidth:Number = unscaledWidth/(2*dataProvider.length);
-
-			if (!isNaN(_backgroundColor))
-			{
-				g.beginFill(_backgroundColor, 1);
-				g.drawRect(0,0, (columnWidth+spacing)*dataProvider.length-spacing, unscaledHeight);
-				g.endFill();
-			}
-						
-			var valueHeight:int;
-			valueHeight = unscaledHeight/3;
-
-			for each (var value:Number in dataProvider)
-			{
-				var c:int;
-				if (value < _reference)
-				{
-					g.beginFill(_negativeColor);
-					g.drawRect(startX, (startY>=0)?startY:0, columnWidth,valueHeight);
-					g.endFill();
-					startX = startX + columnWidth + spacing;					
-				} else {
-					g.beginFill(_color);
-					g.drawRect(startX, (startY>=0)?startY:0, columnWidth,-valueHeight);
-					g.endFill();
-					startX = startX + columnWidth + spacing;					
-				}
-			}
-			addChild(graph)
+			super.measure();
+			minHeight = 5;
+			minWidth = 10;
 		}
 	}
 }

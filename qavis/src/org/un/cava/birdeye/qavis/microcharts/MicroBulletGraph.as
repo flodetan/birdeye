@@ -1,14 +1,10 @@
-/*
- * Derived from the work of Mcgraphix, Inc. (www.mcgraphix.com) 
- * for the BirdEye Library by the
- * United Nations Office at Geneva
- * Center for Advanced Visual Analytics
- *  http://cava.unog.ch
- *
+/*  
  * The MIT License
  *
  * Copyright (c) 2008
- * Mcgraphix, Inc. (www.mcgraphix.com)
+ * United Nations Office at Geneva
+ * Center for Advanced Visual Analytics
+ * http://cava.unog.ch
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,17 +24,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
+
 package org.un.cava.birdeye.qavis.microcharts
 {
-	import flash.display.Graphics;
-	import flash.text.TextFieldAutoSize;
-	
-	import mx.controls.Label;
-	import mx.core.Container;
-	import mx.core.ScrollPolicy;
-	import mx.core.UIComponent;
-	import mx.core.UITextField;
+	import com.degrafa.GeometryGroup;
+	import com.degrafa.GraphicText;
+	import com.degrafa.IGeometry;
+	import com.degrafa.Surface;
+	import com.degrafa.geometry.Circle;
+	import com.degrafa.geometry.Line;
+	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.paint.SolidFill;
+	import com.degrafa.paint.SolidStroke;
+		
+	import mx.formatters.NumberFormatter;
 
 	[Inspectable("orientation")]
 	/**
@@ -52,10 +51,10 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * <p>It automatically adjusts itself accordingly.
 	 * Resizing keeps the right proportions of all of its parts.
 	 * The basic syntax to use and create a BulletGraph chart with mxml is:</p>
-	 * <p>&lt;MicroBulletGraph orientation="vertical"
+	 * <p>&lt;BulletGraph orientation="vertical"
 	 * 	qualitativeRanges="{[0, 20, 40, 60, 80]}"
-	 * 	target="50" value="45" 
-	 * 	width="30" height="200"/></p>
+	 * 	target="50" value="45" title="Vertical BG"
+	 * 	snapInterval="5" width="30" height="200"/></p>
 	 * 
 	 * <p>The qualitativeRanges property can only accept Array at the moment, but will be soon extended with ArrayCollection
 	 * and XML. 
@@ -64,73 +63,35 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * <p>- valueColor: to modify the value (bar or dot) color;</p>
 	 * <p>- targetColor: to modify the target color;</p>
 	 * 
-	 * <p>As indicated in the BulletGraph specification, there shound not have more than 5 quality ranges, 
+	 * <p>As indicated in the BulletGraph specification, the Bullet graph shound not have more than 5 quality ranges, 
 	 * and for this reason, the default colors array only contains a maximum of 5 colors. In case you need to create a bullet graph 
-	 * with more ranges, than you should provide an array of colors for them and not use the default ones.</p>
+	 * with more ranges, than you should provide an array of colors for them and not use the default ones.
 	*/
-	public class MicroBulletGraph extends UIComponent
-	{	
-		private static const HORIZONTAL_DEFAULT_WIDTH:Number = 30;
-		private static const HORIZONTAL_DEFAULT_HEIGHT:Number = 10;
-		private static const VERTICAL_DEFAULT_WIDTH:Number = 10;
-		private static const VERTICAL_DEFAULT_HEIGHT:Number = 30;
-		private static const HORIZONTAL:String = "horizontal";
-		private static const VERTICAL:String = "vertical";
-		private static const DEFAULT_ORIENTATION:String = HORIZONTAL;
+	public class MicroBulletGraph extends Surface
+	{
+		private var tot:Number = NaN;
+		private const VERTICAL:String = "vertical";
+		private const HORIZONTAL:String = "horizontal";
 		
-		private var _target:Number = NaN;
-		private var _value:Number = NaN;
-		private var _orientation:String = DEFAULT_ORIENTATION;
-		private var _qualitativeRanges:Array = [];
-		private var _rangeColor:Array = ["0xdddddd","0xcccccc","0xaaaaaa","0x999999","0x777777"]; 
-		private var _valueColor:int = 0x000000; 
-		private var _targetColor:int = 0x000000; 
+		private var geomGroup:GeometryGroup;
+		private var valueShape:IGeometry;
+		private var targetShape:RegularRectangle;
+		private var black:SolidFill = new SolidFill("0x000000",1);
+		
+		private var snapLine:Line;
+		private var snapLineColor:int = 0x9A9A98;
+		private var snapTextFontSize:int = 8;
 
-		private var minRange:Number;
-				
-		/**
-		* Set the valueColor parameter of the BulletGraph, used to change the default color of the value. 
-		*/
-		public function get valueColor():int
-		{
-			return _valueColor;
-		}
+		private var _orientation:String;
+		private var _qualitativeRanges:Array = new Array();
+		private var _value:Number;
+		private var _target:Number;
+		private var _snapInterval:Number = NaN;
+		private var _formatter:NumberFormatter = new NumberFormatter();
+		private var _colors:Array = ["0x777777","0x999999","0xbbbbbb","0xcccccc","0xdddddd"];
 		
-		public function set valueColor(val:int):void
-		{
-			_valueColor = val;
-			invalidateDisplayList();
-		}
+		private var prevStartX:Number, prevStartY:Number, min:Number, max:Number, space:Number = 0, maxSize:Number = 10;
 
-		/**
-		* Set the targetColor parameter of the BulletGraph, used to change the default color of the target. 
-		*/
-		public function get targetColor():int
-		{
-			return _targetColor;
-		}
-		
-		public function set targetColor(val:int):void
-		{
-			_targetColor = val;
-			invalidateDisplayList();
-		}
-		
-		/**
-		* Set the rangeColor parameter of the BulletGraph, used to change the default colors of the qualitativeRanges. 
-		*/
-		public function get rangeColor():Array
-		{
-			return _rangeColor;
-		}
-		
-		public function set rangeColor(val:Array):void
-		{
-			_rangeColor = val;
-			invalidateDisplayList();
-			invalidateProperties();
-		}
-		
 		/**
 		* Set the orientation parameter of the BulletGraph. It can be either 'horizontal' or 'vertical'.
 		*/
@@ -141,19 +102,21 @@ package org.un.cava.birdeye.qavis.microcharts
 		[Inspectable(enumeration="horizontal,vertical")]
 		public function set orientation(val:String) : void {
 			_orientation = val;
+			invalidateProperties();
 			invalidateDisplayList();	
 		}
 				
 		/**
-		* Set the qualityRanges parameter of the BulletGraph
+		* Set the value parameter of the BulletGraph
 		*/
-		public function get qualitativeRanges() : Array {
-			return _qualitativeRanges;
+		public function get value() : Number {
+			return _value;
 		}
 		
-		public function set qualitativeRanges(val:Array) : void {
-			_qualitativeRanges = val;
-			invalidateDisplayList();	
+		public function set value(val:Number) : void {
+			_value = val;
+			invalidateProperties();
+			invalidateDisplayList();
 		}
 
 		/**
@@ -168,196 +131,519 @@ package org.un.cava.birdeye.qavis.microcharts
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		
-		/**
-		* Set the value parameter of the BulletGraph
-		*/
-		public function get value() : Number {
-			return _value;
-		}
-		
-		public function set value(val:Number) : void {
-			_value = val;
+
+		public function set qualitativeRanges(val:Array):void
+		{
+			_qualitativeRanges = val;
+			tot = NaN;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
 		
-		public function MicroBulletGraph ()
+		/**
+		* Set the qualityRanges parameter of the BulletGraph
+		*/
+		public function get qualitativeRanges():Array
+		{
+			return _qualitativeRanges;
+		}
+		
+		/**
+		* Set the snapInterval of the meter of the BulletGraph
+		*/
+		public function get snapInterval():int 
+		{
+			return _snapInterval;
+		}
+		
+		public function set snapInterval(val:int):void 
+		{
+			_snapInterval = val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		
+		/**
+		* Set the formatter parameter of the BulletGraph to establish the text format of the value shown in the graph meter
+		*/
+		public function get formatter(): NumberFormatter 
+		{
+			return _formatter;
+		}
+		
+		public function set formatter(val:NumberFormatter):void 
+		{
+			_formatter = val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+				
+		/**
+		* @private
+		 * Used to recalculate min, max and tot each time properties have to ba revalidated 
+		*/
+		override protected function commitProperties():void
+		{
+			super.commitProperties();
+			if (orientation == null || orientation.length == 0)
+				orientation = HORIZONTAL;
+		}
+		
+		/**
+		* @private
+		 * Sort the qualitativeRanges array and calculate min, max and tot  
+		*/
+		private function sortMinMaxTot():void
+		{
+			switch (orientation)
+			{
+				case VERTICAL:
+					_qualitativeRanges.sort(Array.DESCENDING | Array.NUMERIC);
+					_colors.sort(Array.DESCENDING | Array.NUMERIC);
+					break;
+				case HORIZONTAL:
+					_qualitativeRanges.sort(Array.NUMERIC);
+					_colors.sort(Array.NUMERIC);
+			}
+
+			prevStartX = 0;
+			min = max = _qualitativeRanges[0];
+
+			tot = 0;
+			for (var i:Number = 0; i < _qualitativeRanges.length; i++)
+			{
+				if (min > _qualitativeRanges[i])
+					min = _qualitativeRanges[i];
+				if (max < _qualitativeRanges[i])
+					max = _qualitativeRanges[i];
+			}
+			tot = Math.abs(max - min);
+		}
+
+		/**
+		* @private
+		 * Calculate the startX position for the current qualitativeRanges value. It takes into account
+		 * whether the orientation is horizontal or vertical   
+		*/
+		private function startX(indexIteration:Number):Number
+		{
+			var _startX:Number; 
+			if (orientation == VERTICAL)
+				_startX = 0;
+			else 
+				_startX = (indexIteration==0)? 0 : prevStartX;
+
+			return _startX;
+		}
+		
+		/**
+		* @private
+		 * Calculate the width size for the current qualitativeRanges value. It takes into account
+		 * whether the orientation is horizontal or vertical   
+		*/
+		private function offsetSizeX(indexIteration:Number):Number
+		{
+			var _offSizeX:Number;
+
+			if (orientation == VERTICAL)
+				_offSizeX = width;
+			else
+			{
+				if (indexIteration == 0)
+				{
+					_offSizeX = 0;
+					prevStartX = 0;
+				}
+				else
+					_offSizeX = (_qualitativeRanges[indexIteration]-_qualitativeRanges[indexIteration-1])* width / tot;
+
+				prevStartX +=  _offSizeX;
+			}
+
+			return _offSizeX;
+		}
+		
+		/**
+		* @private
+		 * Calculate the startY position for the current qualitativeRanges value. It takes into account
+		 * whether the orientation is horizontal or vertical   
+		*/
+		private function startY(indexIteration:Number):Number
+		{
+			var _startY:Number; 
+			if (orientation == HORIZONTAL)
+				_startY = 0;
+			else 
+				_startY = (indexIteration==0)? 0 : prevStartY;
+			return _startY;
+		}
+		
+		/**
+		* @private
+		 * Calculate the height size for the current qualitativeRanges value. It takes into account
+		 * whether the orientation is horizontal or vertical   
+		*/
+		private function offsetSizeY(indexIteration:Number):Number
+		{
+			var _offSizeY:Number;
+			if (orientation == HORIZONTAL)
+				_offSizeY = height;
+			else
+			{
+				if (indexIteration == 0)
+				{
+					_offSizeY = 0;
+					prevStartY = 0;
+				}
+				else
+					_offSizeY = (_qualitativeRanges[indexIteration-1]-_qualitativeRanges[indexIteration])* height / tot;
+
+				prevStartY +=  _offSizeY;
+			}
+			return _offSizeY;
+		}
+		
+		/**
+		* @private
+		 * Calculate the x position for the actual value. It takes into account
+		 * whether the orientation is horizontal or vertical   
+		*/
+		private function xValue():Number 
+		{
+			var x:Number = 0;
+			if (orientation == HORIZONTAL)
+			{
+				if (min != 0)
+					if (value > max)
+						x = width;
+					else 
+						x = Math.abs((_value-min)/tot) * width ;
+
+				if (value < min)
+					x = -xSizeShapeValue();
+			} else
+				x = width * 2/5;
+			
+			return x;
+		}
+		
+		/**
+		* @private
+		 * Calculate the y position for the actual value. It takes into account
+		 * whether the orientation is horizontal or vertical   
+		*/
+		private function yValue():Number 
+		{
+			var y:Number = height - Math.abs((_value-min)/tot) * height;
+			if (orientation == VERTICAL)
+			{
+				if (value > max)
+					if (min != 0)
+						y = -ySizeShapeValue();
+					else
+						y = 0;
+					
+				if (value < min)
+					y = height;
+			} else
+				y = height * 2.5/6;
+			return y;
+		}
+
+		/**
+		* @private
+		 * Calculate the width size for the actual value shape. It takes into account
+		 * whether the orientation is horizontal or vertical and whether the min is != 0 or not,
+		 * which changes the shape format and therefore its size 
+		*/
+		private function xSizeShapeValue():Number
+		{
+			var xSizeValue:Number;
+			
+			if (orientation == HORIZONTAL)
+			{
+				xSizeValue = height/6;
+				if (min == 0)
+					if (value > max)
+						xSizeValue = width;
+					else
+						xSizeValue =  Math.abs(_value/tot) * width;
+				
+				if (value < min)
+					xSizeValue = Math.min(height/6, maxSize);
+			} else
+				xSizeValue = width/6;
+
+			return xSizeValue;
+		}
+		
+		/**
+		* @private
+		 * Calculate the height size for the actual value shape. It takes into account
+		 * whether the orientation is horizontal or vertical and whether the min is != 0 or not,
+		 * which changes the shape format and therefore its size 
+		*/
+		private function ySizeShapeValue():Number
+		{
+			var ySizeValue:Number;
+			
+			if (orientation == VERTICAL)
+			{
+				if (min == 0)
+					if (value > max)
+						ySizeValue = height;
+					else
+						ySizeValue =  Math.abs(_value/tot) * height;
+				else
+					ySizeValue = Math.min(width/6, maxSize);
+				
+				if (value < min)
+					ySizeValue = Math.min(width/6, maxSize);
+			} else
+				ySizeValue = height/6;
+			
+			return ySizeValue ;
+		} 
+
+		/**
+		* @private
+		 * Calculate the x position for the target value rectangle. It takes into account
+		 * whether the orientation is horizontal or vertical 
+		*/
+		private function xTarget():Number 
+		{
+			var x:Number = 0;
+			
+			if (orientation == HORIZONTAL)
+			{
+				if (_target > max)
+					x = width;
+				else 
+					x = Math.abs((_target-min)/tot) * width ;
+
+				if (_target < min)
+					x = -xSizeRectTarget();
+			} else
+				x = width/6;
+				
+			return x;
+		}
+
+		/**
+		* @private
+		 * Calculate the y position for the target value rectangle. It takes into account
+		 * whether the orientation is horizontal or vertical 
+		*/
+		private function yTarget():Number 
+		{
+			var y:Number = 0;
+			if (orientation == VERTICAL)
+			{
+				if (target > max)
+					y = -ySizeRectTarget();
+				else
+					y = height - Math.abs((_target-min)/tot) * height;
+						
+				if (target < min)
+					y = height;
+			} else
+				y = height/6;
+				
+			return y;
+		}
+
+		/**
+		* @private
+		 * Calculate the width size for the target value rectangle. It takes into account
+		 * whether the orientation is horizontal or vertical 
+		*/
+		private function xSizeRectTarget():Number
+		{
+			var xSizeTarget:Number;
+			if (orientation == HORIZONTAL)
+				xSizeTarget = Math.min(height/6, maxSize);
+			else
+				xSizeTarget = width * 4/6;
+			return xSizeTarget;
+		}
+		
+		/**
+		* @private
+		 * Calculate the width size for the target value rectangle. It takes into account
+		 * whether the orientation is horizontal or vertical 
+		*/
+		private function ySizeRectTarget():Number
+		{
+			var ySizeTarget:Number;
+			if (orientation == VERTICAL)
+				ySizeTarget = Math.min(width /6, maxSize);
+			else
+				ySizeTarget = height * 4/6;
+				
+			return ySizeTarget;
+		}
+		
+		/**
+		* @private  
+		* Set automatic colors to the bars, in case these are not provided. 
+		*/
+		private function useColor(indexIteration:Number):int
+		{
+			return (indexIteration == 0) ? 0 : _colors[indexIteration-1];
+		}
+		
+		public function MicroBulletGraph()
 		{
 			super();
 		}
 		
 		/**
-		* @private
+		* @private 
+		 * Used to create and refresh the chart.
 		*/
-		override protected function createChildren():void {
-			super.createChildren();
-		}
-		
-		/**
-		* @private
-		*/
-		override protected function commitProperties():void {
-			super.commitProperties();
-
-			if (orientation != VERTICAL && orientation != HORIZONTAL)
-				throw new Error("Orientation " + orientation + " not valid");
-				
-			if (width == 0 || isNaN(width))
-				switch (orientation)
-				{
-					case HORIZONTAL:
-						width = HORIZONTAL_DEFAULT_WIDTH; break;
-					case VERTICAL:
-						width = VERTICAL_DEFAULT_WIDTH; break;
-				} ;
-
-			if (height == 0 || isNaN(height))
-				switch (orientation)
-				{
-					case HORIZONTAL:
-						height = HORIZONTAL_DEFAULT_HEIGHT; break;
-					case VERTICAL:
-						height = VERTICAL_DEFAULT_HEIGHT; break;
-				} 
-				measure();
-		}
-		
-		/**
-		* @private
-		*/
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			var g:Graphics = graphics;
-
-			g.clear();
-			if (qualitativeRanges != null) 
-			{
-				//sort the ranges by max val so we can draw them from back to front
-				qualitativeRanges.sort(Array.DESCENDING | Array.NUMERIC); 
-
-				var min:Number = Math.min(value,target);
-				var max:Number = Math.max(value,target);
-				minRange = qualitativeRanges[0];
-				for each(var range:int in qualitativeRanges)
-				{
-					minRange = Math.min(minRange, range);
-					min = Math.min(min, range);
-					max = Math.max(max, range);	
-				}
-				
-				commitProperties();
-				
-				switch (orientation)
-				{
-					case HORIZONTAL:
-						drawHorizontalBulletGraph(min, max, unscaledWidth, unscaledHeight);
-						break;
-					case VERTICAL:
-						drawVerticalBulletGraph(min, max, unscaledWidth, unscaledHeight);
-				}					
-			}
-		}
-		
-		private function drawVerticalBulletGraph(min:Number, max:Number, 
-													unscaledWidth:Number, unscaledHeight:Number):void
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
-			var gV:Graphics = graphics;
-			var startX:int = 0;
-			var startY:int = unscaledHeight;
-			
-			//draw the value quality ranges
-			for (var i:Number = 0; i<qualitativeRanges.length-1; i++)
-			{
-				var rangeHeight:int;
-				var qr:int = qualitativeRanges[i];
-				rangeHeight = (qr-min)/(max-min) * unscaledHeight;
-				gV.beginFill(_rangeColor[i]);
-				gV.drawRect(startX, startY, width, -rangeHeight);
-				gV.endFill();
-			}
-			
-			var thick:int = width/4;
+			super.updateDisplayList(unscaledWidth, unscaledHeight);
+			sortMinMaxTot();
+			for(var i:int=this.numChildren-1; i>=0; i--)
+				if(getChildAt(i) is GeometryGroup)
+						removeChildAt(i);
 
- 			//draw the value bullet
-			if (!isNaN(value)) 
-			{
-				var bulletHeight:Number = (((value>=min)?value:min)-min)/(max-min) * unscaledHeight;
-				bulletHeight = Math.min(bulletHeight, unscaledHeight);
-				
-				if (minRange == 0 && value > 0)
-				{
-					gV.beginFill(_valueColor);
-					gV.drawRect(startX + (width-thick)/2, startY, thick, (isNaN(bulletHeight))?startY:-bulletHeight);
-					gV.endFill();
-				} else {
-					gV.beginFill(_valueColor);
-					gV.drawCircle(startX + width/2,startY-bulletHeight,thick/2);
-					gV.endFill();
-				} 
-			}
+			geomGroup = new GeometryGroup();
+			geomGroup.target = this;
+			createBulletGraph();
+//			createSnap();
+			this.graphicsCollection.addItem(geomGroup);
+		}
+		
+		/**
+		* @private 
+		 * Create the qualitativeRanges and value/target shapes
+		*/
+		private function createBulletGraph():void
+		{
+			// create value shape (as per the specs: (min == 0) ? rectangle : circle)
+			if (min == 0)
+				valueShape = new RegularRectangle(space+xValue(), space+yValue(), xSizeShapeValue(), ySizeShapeValue());
+			else
+				if (orientation == VERTICAL)
+					valueShape = new Circle(space+width/2, space+yValue(), Math.min(xSizeShapeValue(), maxSize));
+				else
+					valueShape = new Circle(space+xValue(), space+height/2, Math.min(ySizeShapeValue(), maxSize)); 
 			
-			//draw the target if the target exists
-			if (!isNaN(target)) 
+			// create target shape
+			if (orientation == VERTICAL)
+				targetShape = new RegularRectangle(space+xTarget(), space+yTarget(), xSizeRectTarget(), ySizeRectTarget());
+			else
+				targetShape = new RegularRectangle(space+xTarget(), space+yTarget(), xSizeRectTarget(), ySizeRectTarget());
+				
+			valueShape.fill = black;
+			targetShape.fill = black;
+			
+			// create qualitativeRanges
+			for (var i:Number=0; i<_qualitativeRanges.length; i++)
 			{
-				thick = 3;
-				var long:int = width*2/3;
-				gV.beginFill(_targetColor);
-				gV.drawRect(startX + (width-long)/2, 
-							Math.max(0, startY-((((target>=min)?target:min)-min)/(max-min) * unscaledHeight)), 
-							long, thick);
-				gV.endFill();
+				var qualitativeShape:RegularRectangle = 
+					new RegularRectangle(space+startX(i), space+startY(i), offsetSizeX(i), offsetSizeY(i));
+				qualitativeShape.fill = new SolidFill(useColor(i));
+				geomGroup.geometryCollection.addItem(qualitativeShape);
+			}
+			geomGroup.geometryCollection.addItem(valueShape);
+			geomGroup.geometryCollection.addItem(targetShape);
+		}
+		
+		/**
+		* @private 
+		 * Create the snap shapes and texts
+		*/
+		private function createSnap():void
+		{
+			if (orientation == VERTICAL)
+			{
+				if (max != min)
+				{
+					if (isNaN(_snapInterval))
+						snapInterval = (max-min)/5;
+
+					for (var snapValue:Number = min; snapValue <= max; snapValue+=snapInterval) 
+					{
+						var yCoord:Number = height - ((snapValue-min)/(max-min) * height);
+						var long:int = 5;
+						var thick:int = 1;
+						// create snap line
+						snapLine = new Line(space-long, space+yCoord, space, space+yCoord);
+						snapLine.stroke = new SolidStroke(snapLineColor,1,1);
+						
+						// create snap text (formatted number)
+						var snapText:GraphicText = new GraphicText();
+						snapText.text = formatter.format(Math.round(snapValue));
+						snapText.visible = true;
+						snapText.autoSize = "left";
+						snapText.autoSizeField = true;
+						snapText.selectable = false;
+						snapText.fontSize = snapTextFontSize;
+						snapText.color = snapLineColor;
+						snapText.y = space + yCoord-snapText.height/3;
+						snapText.x = space - snapText.width;
+
+						snapText.fill = black;
+						snapText.stroke = new SolidStroke(0x000000);
+
+						geomGroup.geometryCollection.addItem(snapLine);
+						geomGroup.geometryCollection.addItem(snapText);
+					}
+				}
+			} else {/* 
+				if (max != min)
+				{
+					//draw meter and clear labels
+					snapContainer.removeAllChildren();
+					snapContainer.x = 0; 
+					snapContainer.y = height;
+					snapContainer.width = unscaledWidth;
+					snapContainer.height = unscaledHeight;
+		
+					if (isNaN(_snapInterval))
+					{
+						snapInterval = (max-min)/5;
+					}
+		
+					for (var snapValue:Number = min; snapValue <= max; snapValue+=snapInterval) {
+						var xCoord:Number = startX + (snapValue-min)/(max-min) * totalGraphicWidth;
+						long = 5;
+						thick = 1;
+						gH.beginFill(tickLabelColor);
+						gH.drawRect(xCoord, height, thick, long);
+						gH.endFill(); 
+						
+						var lbl:UITextField = new UITextField();
+						lbl.text = formatter.format(Math.round(snapValue));
+						lbl.height = 15;
+						lbl.autoSize = TextFieldAutoSize.LEFT;
+						lbl.selectable = false;
+						
+						snapContainer.addChild(lbl);
+						lbl.styleName = tickStyle;
+						lbl.x = xCoord - lbl.textWidth /2;
+						lbl.y = 2;
+					}
+					_titleLabel.y = (height - _titleLabel.height)/2;
+				} */
 			}
 		}
-
-		private function drawHorizontalBulletGraph(min:Number, max:Number, 
-													unscaledWidth:Number, unscaledHeight:Number):void
-		{			
-			var gH:Graphics = graphics;
-			var startX:int = 0;
-			
-			//draw the value quality ranges
-			for (var i:Number = 0; i<qualitativeRanges.length-1; i++)
+		
+		override protected function measure():void
+		{
+			super.measure();
+			if (orientation == VERTICAL)
 			{
-				var rangeWidth:int;
-				var qr:int = qualitativeRanges[i];
-
-				rangeWidth = (qr-min)/(max-min) * unscaledWidth;
-				gH.beginFill(_rangeColor[i]);
-				gH.drawRect(startX, 0, rangeWidth, height);
-				gH.endFill();		
-			}
-
-			//draw the value bullet
-			if (!isNaN(value)) 
+				minWidth = 10;
+				minHeight = 50;
+			} else
 			{
-				var bulletWidth:Number = (((value>=min)?value:min)-min)/(max-min) * unscaledWidth;
-				bulletWidth = Math.min(bulletWidth, unscaledWidth);
-
-				var thick:Number = height/4;
-				if (minRange == 0 && value > 0)
-				{
-					gH.beginFill(_valueColor);
-					gH.drawRect(startX, (height - thick)/2, (isNaN(bulletWidth))?startX:bulletWidth, thick);
-					gH.endFill();
-				} else {
-					gH.beginFill(_valueColor);
-					gH.drawCircle(startX + bulletWidth,height/2,thick/2);
-					gH.endFill();
-				} 
+				minWidth = 50;
+				minHeight = 10;
 			}
-			
-			//draw the target if the target exists
-			if (!isNaN(target)) 
-			{
-				var long:int = height*2/3;
-				gH.beginFill(_targetColor);
-				gH.drawRect(Math.min(unscaledWidth, 
-							startX + ((((target>=min)?target:min)-min)/(max-min) * unscaledWidth)) - 2, 
-							(height - long)/2, 3, long);
-				gH.endFill();
-			}
-			 
 		}
 	}
 }

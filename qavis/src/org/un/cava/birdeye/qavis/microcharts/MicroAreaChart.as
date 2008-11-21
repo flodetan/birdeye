@@ -25,12 +25,13 @@
  * THE SOFTWARE.
  */
  
-package org.un.cava.birdeye.qavis.microcharts
+ package org.un.cava.birdeye.qavis.microcharts
 {
-	import flash.display.Graphics;
-	import flash.display.Shape;
-	import mx.core.UIComponent;
-
+	import com.degrafa.GeometryGroup;
+	import com.degrafa.Surface;
+	import com.degrafa.geometry.Polygon;
+	import com.degrafa.paint.SolidFill;
+	
 	 /**
 	 * <p>This component is used to create area microcharts. 
 	 * The basic simple syntax to use it and create an area microchart with mxml is:</p>
@@ -38,62 +39,100 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * 
 	 * <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
 	 * and XML.
-	 * It's also possible to change the colors by defining the following properties in the mxml declaration:</p>
+	 * It's also possible to change the colors by defining the following:</p>
 	 * <p>- color: to change the default shape color;</p>
-	 * <p>- backgroundColor: to change the default background color of the chart;</p>
+	 * 
 	*/
-	public class MicroAreaChart extends UIComponent
+	public class MicroAreaChart extends Surface
 	{
-		private static const DEFAULT_WIDTH:Number = 200;
-		private static const DEFAULT_HEIGHT:Number = 50;
-		private static const DEFAULT_COLOR:int = 0x000000;
-
-		private var _dataProvider:Array = [];
-		private var _backgroundColor:Number = NaN;
-		private var _color:int; 
+		private var geomGroup:GeometryGroup;
+		private var black:String = "0x000000";
 		
-		private var graph:Shape = new Shape();
-
-		/**
-		* Changes the default color of the area. 
-		*/
-		public function get color():int{
-			return _color;
-		}
+		private var _colors:Array = null;
+		private var _dataProvider:Array = new Array();
 		
-		public function set color(value:int):void
+		private var min:Number, max:Number, space:Number = 0;
+		private var tot:Number = NaN;
+
+		public function set colors(val:Array):void
 		{
-			_color = value;
+			_colors = val;
 			invalidateDisplayList();
 		}
 		
 		/**
-		* Changes the default background color of the area. 
+		* Changes the default color of the area. 
 		*/
-		public function get backgroundColor():int{
-			return _backgroundColor;
+		public function get colors():Array
+		{
+			return _colors;
 		}
 		
-		public function set backgroundColor(value:int):void
+		public function set dataProvider(val:Array):void
 		{
-			_backgroundColor = value;
+			_dataProvider = val;
+			invalidateProperties();
 			invalidateDisplayList();
 		}
 		
 		/**
 		* Set the dataProvider that will feed the area chart. 
 		*/
-		public function get dataProvider():Array 
+		public function get dataProvider():Array
 		{
 			return _dataProvider;
 		}
-		
-		public function set dataProvider(val:Array):void 
+
+		/**
+		* @private
+		 * Used to recalculate min, max and tot each time properties have to ba revalidated 
+		*/
+		override protected function commitProperties():void
 		{
-			_dataProvider = val;
-			invalidateDisplayList();	
+			super.commitProperties();
+			minMaxTot();
+		}
+		
+		/**
+		* @private
+		 * Calculate min, max and tot  
+		*/
+		private function minMaxTot():void
+		{
+			min = max = _dataProvider[0];
+
+			tot = 0;
+			for (var i:Number = 0; i < _dataProvider.length; i++)
+			{
+				if (min > _dataProvider[i])
+					min = _dataProvider[i];
+				if (max < _dataProvider[i])
+					max = _dataProvider[i];
+			}
+			// in case all values are negative or all values are positive, the 0 is considered respectively 
+			// to define the top or the bottom of the chart 
+			tot = Math.abs(Math.max(max,0) - Math.min(min,0));
 		}
 
+		/**
+		* @private
+		 * Calculate the y value (position) inside the chart of the current dataProvider   
+		*/
+		private function sizeY(indexIteration:Number):Number
+		{
+			var _sizeY:Number = _dataProvider[indexIteration] / tot * height;
+			return _sizeY;
+		}
+
+		/**
+		* @private
+		 * It sets the color for the current area (polygon)   
+		*/
+		private function useColor(indexIteration:Number):int
+		{
+			return _colors[indexIteration];
+		}
+		
 		public function MicroAreaChart()
 		{
 			super();
@@ -101,85 +140,64 @@ package org.un.cava.birdeye.qavis.microcharts
 		
 		/**
 		* @private 
+		 * Used to create and refresh the chart.
 		*/
-		override protected function createChildren():void 
-		{
-			super.createChildren();
-		}
-		
-		/**
-		* @private 
-		*/
-		override protected function commitProperties():void 
-		{
-			super.commitProperties();
-
-			if (width == 0 || isNaN(width))
-				width = DEFAULT_WIDTH; 
-			
-			if (height == 0 || isNaN(height))
-				height = DEFAULT_HEIGHT;
-
-			measure();
-		}
-		
-		/**
-		* @private 
-		*/
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void 
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			var g:Graphics = graph.graphics;
+			
+			// it replaces the this.graphics.clear() that doesn't work well
+			for(var i:int=this.numChildren-1; i>=0; i--)
+				if(getChildAt(i) is GeometryGroup)
+						removeChildAt(i);
 
-			g.clear();
-			if (dataProvider != null) 
+			geomGroup = new GeometryGroup();
+			geomGroup.target = this;
+			createPolygons();
+			this.graphicsCollection.addItem(geomGroup);
+		}
+		
+		/**
+		* @private 
+		 * Create the areas of the chart.
+		*/
+		private function createPolygons():void
+		{
+			var columnWidth:Number = width/dataProvider.length;
+			var startY:Number = height + Math.min(min,0)/tot * height;
+			var startX:Number = 0;
+
+			// create polygons
+			for (var i:Number=0; i<_dataProvider.length-1; i++)
 			{
-				var min:Number = dataProvider[0];
-				var max:Number = dataProvider[0];
-				for each(var value:int in dataProvider)
-				{
-					min = Math.min(min, value);
-					max = Math.max(max, value);	
-				}
-				commitProperties();
-				drawMicroAreaChart(min, max, unscaledWidth, unscaledHeight);
+				var pol:Polygon = 
+					new Polygon ()
+				
+				pol.data =  String(space+startX+columnWidth/2) + "," + String(space+startY) + " " +
+							String(space+startX+columnWidth/2) + "," + String(space+startY-sizeY(i)) + " " +
+							String(space+startX+columnWidth*3/2) + "," + String(space+startY-sizeY(i+1)) + " " +
+							String(space+startX+columnWidth*3/2) + "," + String(space+startY);
+
+				startX += columnWidth;
+
+				if (_colors != null)
+					pol.fill = new SolidFill(useColor(i));
+				else 
+					pol.fill = new SolidFill(black);
+					
+				geomGroup.geometryCollection.addItem(pol);
 			}
 		}
-				
-		private function drawMicroAreaChart(min:Number, max:Number, unscaledWidth:Number, unscaledHeight:Number):void
+		
+		/**
+		* @private 
+		 * Set the minHeight and minWidth in case width and height are not set in the creation of the chart.
+		*/
+		override protected function measure():void
 		{
-			var g:Graphics = graph.graphics;
-			var startY:int = unscaledHeight + ((min>0)?0:min)/(max-min) * unscaledHeight;
-			var columnWidth:Number = unscaledWidth/dataProvider.length;
-			var startX:int = columnWidth/2;
-			
-			startY = (startY>=0)? startY:0;
-			
-			if (!isNaN(_backgroundColor))
-			{
-				g.beginFill(_backgroundColor, 1);
-				g.drawRect(0,0, columnWidth*dataProvider.length, unscaledHeight+1);
-				g.endFill();
-			}
-
-			for (var i:Number = 0; i < dataProvider.length - 1; i++)
-			{
-				var value:Number = dataProvider[i];
-				var startValueHeight:int = 	(value)/(((max>=0)?max:0)-((min>0)?0:min)) * unscaledHeight;
-				var endX:int = startX + columnWidth;
-				var endValueHeight:int = (dataProvider[i+1])/(((max>=0)?max:0)-((min>0)?0:min)) * unscaledHeight;
-				
-				g.moveTo(startX, startY);
-				g.lineStyle(0,_color);
-				g.beginFill(_color, 1);
-				g.lineTo(startX, startY-startValueHeight)
-				g.lineTo(endX, startY-endValueHeight);
-				g.lineTo(endX, startY);
-				g.endFill();
-
-				startX = endX;
-			}
-			addChild(graph)
+			super.measure();
+			minHeight = 5;
+			minWidth = 10;
 		}
 	}
 }

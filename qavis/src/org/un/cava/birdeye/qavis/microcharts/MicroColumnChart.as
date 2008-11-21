@@ -24,13 +24,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
+
 package org.un.cava.birdeye.qavis.microcharts
 {
-	import flash.display.Graphics;
-	import flash.display.Shape;
-	import mx.core.UIComponent;
-
+	import com.degrafa.GeometryGroup;
+	import com.degrafa.Surface;
+	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.paint.SolidFill;
+	
 	[Inspectable("negative")]
 	 /**
 	* <p>This component is used to create column microcharts. 
@@ -40,28 +41,26 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
 	 * and XML.
 	 * It's also possible to change the colors by defining the following properties in the mxml declaration:</p>
-	 * <p>- color: to change the default shape color;</p>
-	 * <p>- backgroundColor: to change the default background color of the chart;</p>
+	 * <p>- colors:Array to change the default columns color;</p>
 	 * <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
 	 * 
 	 * <p>The following public properties can also be used to: </p>
 	 * <p>- spacing: to modify the spacing between columns;</p>
 	 * <p>- negative: this Boolean is set to true shows the negative values using the negativeColor.</p>
 	*/
-	public class MicroColumnChart extends UIComponent
+	public class MicroColumnChart extends Surface
 	{
-		private static const DEFAULT_WIDTH:Number = 200;
-		private static const DEFAULT_HEIGHT:Number = 50;
-		private static const DEFAULT_COLOR:int = 0x000000;
-		
-		private var _dataProvider:Array = [];
-		private var _backgroundColor:Number = NaN;
-		private var _color:int;
-		private var _negativeColor:int = 0xff0006; 
-		private var _spacing:int = 0;
-		private var _negative:Boolean = true;
+		private var geomGroup:GeometryGroup;
+		private var black:SolidFill = new SolidFill("0x000000",1);
 
-		private var graph:Shape = new Shape();
+		private var _spacing:Number = 0;
+		private var _colors:Array = null;
+		private var _dataProvider:Array = new Array();
+		private var _negative:Boolean = true;
+		private var _negativeColor:int = 0xff0000; 
+		
+		private var min:Number, max:Number, space:Number = 0;
+		private var tot:Number = NaN;
 		
 		[Inspectable(enumeration="true,false")]
 		public function set negative(val:Boolean):void
@@ -70,7 +69,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		}
 		
 		/**
-		* Indicate whether the negative reference line has to be drawn or not. 
+		* Indicate whether negative values have to be differentiated or not. 
 		*/
 		public function get negative():Boolean
 		{
@@ -83,66 +82,104 @@ package org.un.cava.birdeye.qavis.microcharts
 		}
 
 		/**
-		* Changes the default color for the negative reference line. 
+		* Changes the default color for the negative values. 
 		*/		
 		public function get negativeColor():int
 		{
 			return _negativeColor;
 		}
-
+		
+		public function set colors(val:Array):void
+		{
+			_colors = val;
+			invalidateDisplayList();
+		}
+		
+		/**
+		* Changes the default colors of columns. 
+		*/		
+		public function get colors():Array
+		{
+			return _colors;
+		}
+		
+		public function set spacing(val:Number):void
+		{
+			_spacing = val;
+			invalidateDisplayList();
+		}
+		
 		/**
 		* Changes the default spacing between columns. 
 		*/		
-		public function get spacing():int
+		public function get spacing():Number
 		{
 			return _spacing;
 		}
 		
-		public function set spacing(value:int):void
+		public function set dataProvider(val:Array):void
 		{
-			_spacing = value;
-			invalidateDisplayList();
-			invalidateSize();
-		}
-
-		/**
-		* Changes the default color of columns. 
-		*/		
-		public function get color():int{
-			return _color;
-		}
-		
-		public function set color(value:int):void
-		{
-			_color = value;
-			invalidateDisplayList();
-		}
-		
-		/**
-		* Changes the default background color of the chart. 
-		*/		
-		public function get backgroundColor():int{
-			return _backgroundColor;
-		}
-		
-		public function set backgroundColor(value:int):void
-		{
-			_backgroundColor = value;
+			_dataProvider = val;
+			invalidateProperties();
 			invalidateDisplayList();
 		}
 		
 		/**
 		* Set the dataProvider that will feed the chart. 
 		*/		
-		public function get dataProvider() : Array {
+		public function get dataProvider():Array
+		{
 			return _dataProvider;
 		}
+
+		/**
+		* @private
+		 * Used to recalculate min, max and tot each time properties have to ba revalidated 
+		*/
+		override protected function commitProperties():void
+		{
+			super.commitProperties();
+			minMaxTot();
+		}
 		
-		public function set dataProvider(val:Array) : void {
-			_dataProvider = val;
-			invalidateDisplayList();	
+		/**
+		* @private
+		 * Calculate min, max and tot  
+		*/
+		private function minMaxTot():void
+		{
+			min = max = _dataProvider[0];
+
+			tot = 0;
+			for (var i:Number = 0; i < _dataProvider.length; i++)
+			{
+				if (min > _dataProvider[i])
+					min = _dataProvider[i];
+				if (max < _dataProvider[i])
+					max = _dataProvider[i];
+			}
+			tot = Math.abs(Math.max(max,0) - Math.min(min,0));
 		}
 
+		/**
+		* @private
+		 * Calculate the height size of the column for for the current dataProvider value   
+		*/
+		private function sizeY(indexIteration:Number):Number
+		{
+			var _sizeY:Number = - _dataProvider[indexIteration] / tot * height;
+			return _sizeY;
+		}
+
+		/**
+		* @private
+		 * It sets the color for the current area (polygon)   
+		*/
+		private function useColor(indexIteration:Number):int
+		{
+			return _colors[indexIteration];
+		}
+		
 		public function MicroColumnChart()
 		{
 			super();
@@ -150,78 +187,58 @@ package org.un.cava.birdeye.qavis.microcharts
 		
 		/**
 		* @private 
+		 * Used to create and refresh the chart.
 		*/
-		override protected function createChildren():void {
-			super.createChildren();
-		}
-		
-		/**
-		* @private 
-		*/
-		override protected function commitProperties():void {
-			super.commitProperties();
-
-			if (width == 0 || isNaN(width))
-				width = DEFAULT_WIDTH; 
-			
-			if (height == 0 || isNaN(height))
-				height = DEFAULT_HEIGHT;
-				
-			measure();
-		}
-		
-		/**
-		* @private 
-		*/
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void 
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			var g:Graphics = graph.graphics;
+			for(var i:int=this.numChildren-1; i>=0; i--)
+				if(getChildAt(i) is GeometryGroup)
+						removeChildAt(i);
 
-			g.clear();
-			if (dataProvider != null) 
+			geomGroup = new GeometryGroup();
+			geomGroup.target = this;
+			createColumns();
+			this.graphicsCollection.addItem(geomGroup);
+		}
+		
+		/**
+		* @private 
+		 * Create the columns of the chart.
+		*/
+		private function createColumns():void
+		{
+			var columnWidth:Number = width/dataProvider.length;
+			var startY:Number = height + Math.min(min,0)/tot * height;
+			var startX:Number = 0;
+
+			// create columns
+			for (var i:Number=0; i<_dataProvider.length; i++)
 			{
-				var min:Number = dataProvider[0];
-				var max:Number = dataProvider[0];
-				for each(var value:int in dataProvider)
-				{
-					min = Math.min(min, value);
-					max = Math.max(max, value);	
-				}
-				commitProperties();
-				drawMicroColumnChart(min, max, unscaledWidth, unscaledHeight);
+				var column:RegularRectangle = 
+					new RegularRectangle(space+startX, space+startY, columnWidth, sizeY(i));
+				
+				startX += columnWidth + spacing;
+
+				if (_colors == null || _colors.lenght == 0)
+					if (negative && _dataProvider[i] < 0)
+						column.fill = new SolidFill(_negativeColor);
+					else
+						column.fill = black;
+
+				geomGroup.geometryCollection.addItem(column);
 			}
 		}
-				
-		private function drawMicroColumnChart(min:Number, max:Number, unscaledWidth:Number, unscaledHeight:Number):void
+		
+		/**
+		* @private 
+		 * Set the minHeight and minWidth in case width and height are not set in the creation of the chart.
+		*/
+		override protected function measure():void
 		{
-			var g:Graphics = graph.graphics;
-			var startX:int = 0;
-			var startY:int = unscaledHeight + ((min>0)?0:min)/(max-min) * unscaledHeight;
-			var columnWidth:Number = unscaledWidth/dataProvider.length;
-
-			if (!isNaN(_backgroundColor))
-			{
-				g.beginFill(_backgroundColor, 1);
-				g.drawRect(0,0, (columnWidth+spacing)*dataProvider.length-spacing, unscaledHeight);
-				g.endFill();
-			}
-						
-			for each (var value:Number in dataProvider)
-			{
-				var valueHeight:int;
-				valueHeight = (value)/(((max>=0)?max:0)-((min>0)?0:min)) * unscaledHeight;
-				var c:int;
-				if (negative && value < 0)
-					c = _negativeColor;
-				else 
-					c = _color;
-				g.beginFill(c);
-				g.drawRect(startX, (startY>=0)?startY:0, columnWidth,-valueHeight);
-				g.endFill();
-				startX = startX + columnWidth + spacing;
-			}
-			addChild(graph)
+			super.measure();
+			minHeight = 5;
+			minWidth = 10;
 		}
 	}
 }

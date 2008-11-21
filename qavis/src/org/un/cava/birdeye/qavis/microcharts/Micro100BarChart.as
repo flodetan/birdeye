@@ -24,43 +24,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+ 
 package org.un.cava.birdeye.qavis.microcharts
 {
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
+	import com.degrafa.paint.SolidStroke;
 	
-	[Inspectable("negative")]
-	 /**
-	 * <p>This component is used to create bar microcharts. 
-	 * The basic simple syntax to use it and create an bar microchart with mxml is:</p>
-	 * <p>&lt;MicroBarChart dataProvider="{myArray}" width="20" height="70"/></p>
+	/**
+	 * <p>The Micro100BarChart component is used to create 100% Bar microcharts. 
+	 * The basic simple syntax to use it and create an 100% Bar microchart with mxml is:</p>
+	 * <p>&lt;Micro100BarChart dataProvider="{myArray}" width="20" height="70"/></p>
 	 * 
 	 * <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
-	 * and XML.
-	 * It's also possible to change the colors by defining the following properties in the mxml declaration:</p>
-	 * <p>- color: to change the default shape color;</p>
-	 * <p>- backgroundColor: to change the default background color of the chart;</p>
-	 * <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
+	 * and XML. It's also possible to change the colors by defining the following:</p>
+	 * <p>- colors: array that sets the color for each bar value. The lenght has to be the same as the dataProvider.</p>
+	 * <p>- stroke: Number that sets the color of the stroke of the chart.</p>
 	 * 
-	 * <p>The following public properties can also be used to: </p>
-	 * <p>- spacing: to modify the spacing between columns;</p>
-	 * <p>- negative: this Boolean is set to true shows the negative values using the negativeColor.</p>
+	 * <p>If no colors are defined, than the 100 bar will display different colors based on the default color and a default offset color.</p>
 	*/
-	public class MicroBarChart extends Surface
+	public class Micro100BarChart extends Surface
 	{
 		private var geomGroup:GeometryGroup;
-		private var black:SolidFill = new SolidFill("0x000000",1);
-		
-		private var _spacing:Number = 0;
+		private var tempColor:int = 0xbbbbbb;
+
 		private var _colors:Array = null;
 		private var _dataProvider:Array = new Array();
-		private var _negative:Boolean = true;
-		private var _negativeColor:int = 0xff0000; 
+		private var _stroke:Number = NaN; 
 
-		private var min:Number, max:Number, space:Number = 0;
+		private var prevSizeX:Number, space:Number = 0;
 		private var tot:Number = NaN;
 
 		public function set colors(val:Array):void
@@ -70,25 +64,11 @@ package org.un.cava.birdeye.qavis.microcharts
 		}
 		
 		/**
-		* Changes the default color of the area. 
+		 * This property sets the colors of the bars in the chart. If not set, a function will automatically create colors for each bar.
 		*/
 		public function get colors():Array
 		{
 			return _colors;
-		}
-		
-		public function set spacing(val:Number):void
-		{
-			_spacing = val;
-			invalidateDisplayList();
-		}
-		
-		/**
-		* Changes the default spacing between bars. 
-		*/
-		public function get spacing():Number
-		{
-			return _spacing;
 		}
 		
 		public function set dataProvider(val:Array):void
@@ -99,79 +79,89 @@ package org.un.cava.birdeye.qavis.microcharts
 		}
 		
 		/**
-		* Set the dataProvider feeding the area chart. 
+		* Set the dataProvider to feed the chart. 
 		*/
 		public function get dataProvider():Array
 		{
 			return _dataProvider;
 		}
-
-		[Inspectable(enumeration="true,false")]
-		public function set negative(val:Boolean):void
+		
+		public function set stroke(val:Number):void
 		{
-			_negative = val;
+			_stroke = val;
+			invalidateDisplayList();
 		}
 		
 		/**
-		* Indicate whether negative values have to be differentiated or not. 
+		 * This property sets the color of chart stroke. If not set, no stroke will be defined for the chart.
 		*/
-		public function get negative():Boolean
+		public function get stroke():Number
 		{
-			return _negative;
+			return _stroke;
 		}
-		
-		/**
-		* @private
-		 * Calculate min, max and tot  
-		*/
-		private function minMaxTot():void
-		{
-			_dataProvider.sort(Array.DESCENDING | Array.NUMERIC);
-			
-			min = max = _dataProvider[0];
 
+		/**
+		* @private  
+		* Calculate the total of all positive values in the dataProvider. Negative values are not considered nor rendered in the chart. 
+		*/
+		private function setTot():void
+		{
 			tot = 0;
 			for (var i:Number = 0; i < _dataProvider.length; i++)
 			{
-				if (min > _dataProvider[i])
-					min = _dataProvider[i];
-				if (max < _dataProvider[i])
-					max = _dataProvider[i];
+				if (_dataProvider[i] > 0)
+					tot += _dataProvider[i];
 			}
-			tot = Math.abs(Math.max(max,0) - Math.min(min,0));
 		}
 
 		/**
-		* @private
-		 * Calculate the width size of the bar for for the current dataProvider value   
+		* @private  
+		* Calculate the width size of the current value provided by the repeater. 
 		*/
-		private function sizeX(indexIteration:Number):Number
+		private function offsetSizeX(indexIteration:Number):Number
 		{
-			var _sizeX:Number = _dataProvider[indexIteration] / tot * width;
-			return _sizeX;
+			var _offSizeX:Number = Math.max(0,_dataProvider[indexIteration] * width / tot);
+			prevSizeX += _offSizeX;
+			return _offSizeX;
 		}
-
+		
 		/**
-		* @private
-		 * It sets the color for the current area (polygon)   
+		* @private  
+		* Calculate the offset x position from where the next bar will be drawn. 
+		*/
+		private function startX(indexIteration:Number):Number
+		{
+			var _startX:Number = (indexIteration==0)? 0 : prevSizeX;
+			return _startX;
+		}	
+		
+		/**
+		* @private  
+		* Set automatic colors to the bars, in case these are not provided. 
 		*/
 		private function useColor(indexIteration:Number):int
 		{
-			return _colors[indexIteration];
+			if (colors != null && colors.length > 0)
+				tempColor = colors[indexIteration];
+			else
+				tempColor += 0x123456; 
+
+			return tempColor;
 		}
-		
-		public function MicroBarChart()
+
+		public function Micro100BarChart()
 		{
 			super();
 		}
 		
 		/**
-		* @private
-		 * Used to recalculate min, max and tot each time properties have to ba revalidated 
+		* @private 
+		 * Used to recalculate the tot each time there is an invalidation of properties (for ex. dataProvider values are changed).
 		*/
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
+			setTot();
 		}
 		
 		/**
@@ -181,10 +171,10 @@ package org.un.cava.birdeye.qavis.microcharts
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			minMaxTot();
+			prevSizeX = 0;
 			for(var i:int=this.numChildren-1; i>=0; i--)
 				if(getChildAt(i) is GeometryGroup)
-						removeChildAt(i);
+					removeChildAt(i);
 
 			geomGroup = new GeometryGroup();
 			geomGroup.target = this;
@@ -198,28 +188,26 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function createBars():void
 		{
-			var columnWidth:Number = height/dataProvider.length;
-			var startX:Number = - Math.min(min,0)/tot * width;
-			var startY:Number = 0;
-
-			// create bars
+			// create 100% Bars
 			for (var i:Number=0; i<_dataProvider.length; i++)
 			{
-				var column:RegularRectangle = 
-					new RegularRectangle(space+startX, space+startY, sizeX(i), columnWidth);
+				var bar:RegularRectangle;
 				
-				startY += columnWidth + spacing;
-
-				if (_colors == null || _colors.lenght == 0)
-					if (negative && _dataProvider[i] < 0)
-						column.fill = new SolidFill(_negativeColor);
-					else
-						column.fill = black;
-
-				geomGroup.geometryCollection.addItem(column);
+				if (_dataProvider[i] > 0) 
+				{
+					bar = new RegularRectangle(space+startX(i), space, offsetSizeX(i), height);
+					
+					if (!isNaN(_stroke))
+						bar.stroke = new SolidStroke(_stroke);
+						
+					if (_colors.length != 0)
+						bar.fill = new SolidFill(useColor(i));
+						
+					geomGroup.geometryCollection.addItem(bar);
+				}
 			}
 		}
-
+		
 		/**
 		* @private 
 		 * Set the minHeight and minWidth in case width and height are not set in the creation of the chart.
