@@ -71,6 +71,25 @@
 	</mx:VBox>
 
 	<mx:TabNavigator height="100%" width="100%">
+		<mx:VBox label="All">
+		    <mx:DataGrid selectable="false" dataProvider="{acMC}">
+		        <mx:columns>
+		            <mx:DataGridColumn dataField="Plot" itemRenderer="views.microcharts.renderers.MicroPlotRenderer"/>
+		            <mx:DataGridColumn dataField="Area" itemRenderer="views.microcharts.renderers.MicroAreaRenderer"/>
+		            <mx:DataGridColumn dataField="Column" itemRenderer="views.microcharts.renderers.MicroColumnRenderer"/>
+		            <mx:DataGridColumn dataField="Line" itemRenderer="views.microcharts.renderers.MicroLineRenderer"/>
+		            <mx:DataGridColumn dataField="Pie" itemRenderer="views.microcharts.renderers.MicroPieRenderer"/>
+		            <mx:DataGridColumn dataField="WinLose" itemRenderer="views.microcharts.renderers.MicroWinLoseRenderer"/>
+		            <mx:DataGridColumn dataField="100% Bar" itemRenderer="views.microcharts.renderers.Micro100BarRenderer"/>
+		       </mx:columns>
+		    </mx:DataGrid>
+		    <mx:DataGrid selectable="false" dataProvider="{acBG}" rowCount="1" editable="false" verticalAlign="center">
+		        <mx:columns>
+		            <mx:DataGridColumn dataField="Bullet" itemRenderer="views.microcharts.renderers.BulletGraphRenderer"/>
+		            <mx:DataGridColumn dataField="Bar" itemRenderer="views.microcharts.renderers.MicroBarRenderer"/>
+		       </mx:columns>
+		    </mx:DataGrid>
+		</mx:VBox>
 		<mx:VBox label="Area">
 		    <mx:DataGrid selectable="false" dataProvider="{acMC}" editable="false" verticalAlign="center">
 		        <mx:columns>
@@ -288,25 +307,6 @@
 				qualitativeRanges="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value]}" 
 				target="{t.value}" value="{v.value}" 
 				snapInterval="{tk.value}" width="{hwd.value}" height="{hht.value}"/>
-		</mx:VBox>
-		<mx:VBox label="All">
-		    <mx:DataGrid selectable="false" dataProvider="{acMC}">
-		        <mx:columns>
-		            <mx:DataGridColumn dataField="Plot" itemRenderer="views.microcharts.renderers.MicroPlotRenderer"/>
-		            <mx:DataGridColumn dataField="Area" itemRenderer="views.microcharts.renderers.MicroAreaRenderer"/>
-		            <mx:DataGridColumn dataField="Column" itemRenderer="views.microcharts.renderers.MicroColumnRenderer"/>
-		            <mx:DataGridColumn dataField="Line" itemRenderer="views.microcharts.renderers.MicroLineRenderer"/>
-		            <mx:DataGridColumn dataField="Pie" itemRenderer="views.microcharts.renderers.MicroPieRenderer"/>
-		            <mx:DataGridColumn dataField="WinLose" itemRenderer="views.microcharts.renderers.MicroWinLoseRenderer"/>
-		            <mx:DataGridColumn dataField="100% Bar" itemRenderer="views.microcharts.renderers.Micro100BarRenderer"/>
-		       </mx:columns>
-		    </mx:DataGrid>
-		    <mx:DataGrid selectable="false" dataProvider="{acBG}" rowCount="1" editable="false" verticalAlign="center">
-		        <mx:columns>
-		            <mx:DataGridColumn dataField="Bullet" itemRenderer="views.microcharts.renderers.BulletGraphRenderer"/>
-		            <mx:DataGridColumn dataField="Bar" itemRenderer="views.microcharts.renderers.MicroBarRenderer"/>
-		       </mx:columns>
-		    </mx:DataGrid>
 		</mx:VBox>
 	</mx:TabNavigator>
 </mx:HBox>
