@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../../../print.css" type="text/css" media="print">
-<meta content="MicroBarChart,org.un.cava.birdeye.qavis.microcharts.MicroBarChart,colors,dataProvider,negative,spacing" name="keywords">
+<meta content="MicroBarChart,org.un.cava.birdeye.qavis.microcharts.MicroBarChart,negative,spacing,createBackground" name="keywords">
 <title>org.un.cava.birdeye.qavis.microcharts.MicroBarChart</title>
 </head>
 <body>
@@ -38,24 +38,20 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <td class="classHeaderTableLabel">Class</td><td class="classSignature">public class MicroBarChart</td>
 </tr>
 <tr>
-<td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">MicroBarChart <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../../../images/inherit-arrow.gif"> com.degrafa.Surface</td>
+<td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">MicroBarChart <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../../../images/inherit-arrow.gif"> <a href="MicroChart.html">MicroChart</a> <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../../../images/inherit-arrow.gif"> com.degrafa.Surface</td>
 </tr>
 </table>
 <p></p>
-  <p>This component is used to create bar microcharts. 
+  <p>This component is used to create bar microcharts and extends the MicroChart class, thus inheriting all its 
+  properties (backgroundColor, backgroundStroke, colors, stroke, dataProvider, etc) and methods (minMaxTot, 
+  useColor, createBackground).
   The basic simple syntax to use it and create an bar microchart with mxml is:</p>
   <p>&lt;MicroBarChart dataProvider="{myArray}" width="20" height="70"/></p>
-  
-  <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
-  and XML.
-  It's also possible to change the colors by defining the following properties in the mxml declaration:</p>
-  <p>- color: to change the default shape color;</p>
-  <p>- backgroundColor: to change the default background color of the chart;</p>
-  <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
   
   <p>The following public properties can also be used to: </p>
   <p>- spacing: to modify the spacing between columns;</p>
   <p>- negative: this Boolean is set to true shows the negative values using the negativeColor.</p>
+  <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
  <p></p>
 <br>
 <hr>
@@ -63,19 +59,37 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <a name="propertySummary"></a>
 <div class="summarySection">
 <div class="summaryTableTitle">Public Properties</div>
+<div class="showHideLinks">
+<div class="hideInheritedProperty" id="hideInheritedProperty">
+<a onclick="javascript:setInheritedVisible(false,'Property');" href="#propertySummary" class="showHideLink"><img src="../../../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Public Properties</a>
+</div>
+<div class="showInheritedProperty" id="showInheritedProperty">
+<a onclick="javascript:setInheritedVisible(true,'Property');" href="#propertySummary" class="showHideLink"><img src="../../../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Public Properties</a>
+</div>
+</div>
 <table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
 <tr>
 <th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
 </tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#colors">colors</a> : Array<div class="summaryTableDescription">
-  Changes the default color of the area.</div>
-</td><td class="summaryTableOwnerCol">MicroBarChart</td>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="MicroChart.html#backgroundColor">backgroundColor</a> : Number<div class="summaryTableDescription">
+   The fill color of the chart background.</div>
+</td><td class="summaryTableOwnerCol"><a href="MicroChart.html">MicroChart</a></td>
 </tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#dataProvider">dataProvider</a> : Array<div class="summaryTableDescription">
-  Set the dataProvider feeding the area chart.</div>
-</td><td class="summaryTableOwnerCol">MicroBarChart</td>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="MicroChart.html#backgroundStroke">backgroundStroke</a> : Number<div class="summaryTableDescription">
+   The stroke color of the chart background.</div>
+</td><td class="summaryTableOwnerCol"><a href="MicroChart.html">MicroChart</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="MicroChart.html#colors">colors</a> : Array<div class="summaryTableDescription">
+   This property sets the colors of the bars in the chart.</div>
+</td><td class="summaryTableOwnerCol"><a href="MicroChart.html">MicroChart</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="MicroChart.html#dataProvider">dataProvider</a> : Array<div class="summaryTableDescription">
+  Set the dataProvider to feed the chart.</div>
+</td><td class="summaryTableOwnerCol"><a href="MicroChart.html">MicroChart</a></td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#negative">negative</a> : Boolean<div class="summaryTableDescription">
@@ -86,6 +100,40 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#spacing">spacing</a> : Number<div class="summaryTableDescription">
   Changes the default spacing between bars.</div>
 </td><td class="summaryTableOwnerCol">MicroBarChart</td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="MicroChart.html#stroke">stroke</a> : Number<div class="summaryTableDescription">
+   This property sets the color of chart stroke.</div>
+</td><td class="summaryTableOwnerCol"><a href="MicroChart.html">MicroChart</a></td>
+</tr>
+</table>
+</div>
+<a name="protectedPropertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Protected Properties</div>
+<div class="showHideLinks">
+<div class="hideInheritedProtectedProperty" id="hideInheritedProtectedProperty">
+<a onclick="javascript:setInheritedVisible(false,'ProtectedProperty');" href="#protectedPropertySummary" class="showHideLink"><img src="../../../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Protected Properties</a>
+</div>
+<div class="showInheritedProtectedProperty" id="showInheritedProtectedProperty">
+<a onclick="javascript:setInheritedVisible(true,'ProtectedProperty');" href="#protectedPropertySummary" class="showHideLink"><img src="../../../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Protected Properties</a>
+</div>
+</div>
+<table id="summaryTableProtectedProperty" class="summaryTable hideInheritedProtectedProperty" cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="MicroChart.html#geomGroup">geomGroup</a> : GeometryGroup<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="MicroChart.html">MicroChart</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="MicroChart.html#min">min</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="MicroChart.html">MicroChart</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="MicroChart.html#tot">tot</a> : Number = NaN<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="MicroChart.html">MicroChart</a></td>
 </tr>
 </table>
 </div>
@@ -105,6 +153,22 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </tr>
 </table>
 </div>
+<a name="methodSummary"></a><a name="protectedMethodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Protected Methods</div>
+<table id="summaryTableProtectedMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#createBackground()">createBackground</a>(w:Number, h:Number):void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">MicroBarChart</td>
+</tr>
+</table>
+</div>
 <script type="text/javascript" language="javascript">
 <!--
 showHideInherited();
@@ -112,42 +176,10 @@ showHideInherited();
 <div class="MainContent">
 <a name="propertyDetail"></a>
 <div class="detailSectionHeader">Property detail</div>
-<a name="colors"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">colors</td><td class="detailHeaderType">property</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>colors:Array</code>&nbsp;&nbsp;[read-write]<p>
-  Changes the default color of the area. 
-  </p><span class="label">Implementation</span>
-<br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get colors():Array</code>
-<br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set colors(value:Array):void</code>
-<br>
-</div>
-<a name="dataProvider"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">dataProvider</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>dataProvider:Array</code>&nbsp;&nbsp;[read-write]<p>
-  Set the dataProvider feeding the area chart. 
-  </p><span class="label">Implementation</span>
-<br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get dataProvider():Array</code>
-<br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set dataProvider(value:Array):void</code>
-<br>
-</div>
 <a name="negative"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
-<td class="detailHeaderName">negative</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+<td class="detailHeaderName">negative</td><td class="detailHeaderType">property</td>
 </tr>
 </table>
 <div class="detailBody">
@@ -186,6 +218,28 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public function MicroBarChart()</code>
+</div>
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="createBackground()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">createBackground</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected override function createBackground(w:Number, h:Number):void</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">w</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">h</span>:Number</code></td>
+</tr>
+</table>
 </div>
 <br>
 <br>

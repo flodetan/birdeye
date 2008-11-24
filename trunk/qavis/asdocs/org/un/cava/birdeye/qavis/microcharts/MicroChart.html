@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../../../print.css" type="text/css" media="print">
-<meta content="MicroChart,org.un.cava.birdeye.qavis.microcharts.MicroChart,dataProvider" name="keywords">
+<meta content="MicroChart,org.un.cava.birdeye.qavis.microcharts.MicroChart,geomGroup,min,tot,backgroundColor,backgroundStroke,colors,dataProvider,stroke" name="keywords">
 <title>org.un.cava.birdeye.qavis.microcharts.MicroChart</title>
 </head>
 <body>
@@ -40,9 +40,17 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr>
 <td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">MicroChart <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../../../images/inherit-arrow.gif"> com.degrafa.Surface</td>
 </tr>
+<tr>
+<td class="classHeaderTableLabel">Subclasses</td><td><a href="../microcharts/Micro100BarChart.html">Micro100BarChart</a>, <a href="../microcharts/MicroAreaChart.html">MicroAreaChart</a>, <a href="../microcharts/MicroBarChart.html">MicroBarChart</a>, <a href="../microcharts/MicroColumnChart.html">MicroColumnChart</a>, <a href="../microcharts/MicroLineChart.html">MicroLineChart</a>, <a href="../microcharts/MicroPieChart.html">MicroPieChart</a>, <a href="../microcharts/MicroPlotChart.html">MicroPlotChart</a>, <a href="../microcharts/MicroWinLoseChart.html">MicroWinLoseChart</a></td>
+</tr>
 </table>
 <p></p>
-<p></p>
+  This class is used as a skeleton for most of microcharts in this library. It provides the commong properties and methods 
+  that can be used or overridden by all other microcharts components, extending this class.  
+  The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
+  and XML.
+  
+ <p></p>
 <br>
 <hr>
 </div>
@@ -54,8 +62,49 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
 </tr>
 <tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#backgroundColor">backgroundColor</a> : Number<div class="summaryTableDescription">
+   The fill color of the chart background.</div>
+</td><td class="summaryTableOwnerCol">MicroChart</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#backgroundStroke">backgroundStroke</a> : Number<div class="summaryTableDescription">
+   The stroke color of the chart background.</div>
+</td><td class="summaryTableOwnerCol">MicroChart</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#colors">colors</a> : Array<div class="summaryTableDescription">
+   This property sets the colors of the bars in the chart.</div>
+</td><td class="summaryTableOwnerCol">MicroChart</td>
+</tr>
+<tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#dataProvider">dataProvider</a> : Array<div class="summaryTableDescription">
   Set the dataProvider to feed the chart.</div>
+</td><td class="summaryTableOwnerCol">MicroChart</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#stroke">stroke</a> : Number<div class="summaryTableDescription">
+   This property sets the color of chart stroke.</div>
+</td><td class="summaryTableOwnerCol">MicroChart</td>
+</tr>
+</table>
+</div>
+<a name="protectedPropertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Protected Properties</div>
+<table id="summaryTableProtectedProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#geomGroup">geomGroup</a> : GeometryGroup<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">MicroChart</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#min">min</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">MicroChart</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#tot">tot</a> : Number = NaN<div class="summaryTableDescription"></div>
 </td><td class="summaryTableOwnerCol">MicroChart</td>
 </tr>
 </table>
@@ -83,10 +132,58 @@ showHideInherited();
 <div class="MainContent">
 <a name="propertyDetail"></a>
 <div class="detailSectionHeader">Property detail</div>
+<a name="backgroundColor"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">backgroundColor</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>backgroundColor:Number</code>&nbsp;&nbsp;[read-write]<p>
+   The fill color of the chart background. 
+  </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get backgroundColor():Number</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set backgroundColor(value:Number):void</code>
+<br>
+</div>
+<a name="backgroundStroke"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">backgroundStroke</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>backgroundStroke:Number</code>&nbsp;&nbsp;[read-write]<p>
+   The stroke color of the chart background. 
+  </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get backgroundStroke():Number</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set backgroundStroke(value:Number):void</code>
+<br>
+</div>
+<a name="colors"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">colors</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>colors:Array</code>&nbsp;&nbsp;[read-write]<p>
+   This property sets the colors of the bars in the chart. If not set, a function will automatically create colors for each bar.
+  </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get colors():Array</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set colors(value:Array):void</code>
+<br>
+</div>
 <a name="dataProvider"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
-<td class="detailHeaderName">dataProvider</td><td class="detailHeaderType">property</td>
+<td class="detailHeaderName">dataProvider</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
 </tr>
 </table>
 <div class="detailBody">
@@ -98,6 +195,49 @@ showHideInherited();
 <br>
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function set dataProvider(value:Array):void</code>
 <br>
+</div>
+<a name="geomGroup"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">geomGroup</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var geomGroup:GeometryGroup</code>
+</div>
+<a name="min"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">min</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var min:Number</code>
+</div>
+<a name="stroke"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">stroke</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>stroke:Number</code>&nbsp;&nbsp;[read-write]<p>
+   This property sets the color of chart stroke. If not set, no stroke will be defined for the chart.
+  </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get stroke():Number</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set stroke(value:Number):void</code>
+<br>
+</div>
+<a name="tot"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">tot</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var tot:Number = NaN</code>
 </div>
 <a name="constructorDetail"></a>
 <div class="detailSectionHeader">Constructor detail</div>
