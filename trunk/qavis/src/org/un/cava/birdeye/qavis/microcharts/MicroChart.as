@@ -34,8 +34,8 @@ package org.un.cava.birdeye.qavis.microcharts
 	import com.degrafa.paint.SolidStroke;
 
 	 /**
-	 * This class is used as a skeleton for most of microcharts in this library. It provides the commong properties and methods 
-	 * that can be used or overridden by all other microcharts components, extending this class.  
+	 * This class is used as skeleton for most of microcharts in this library. It provides the common properties and methods 
+	 * that can be used or overridden by several microcharts components that extend this class.  
 	 * The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
 	 * and XML.
 	 * 
