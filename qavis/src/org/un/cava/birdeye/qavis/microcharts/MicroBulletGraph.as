@@ -99,7 +99,6 @@ package org.un.cava.birdeye.qavis.microcharts
 		[Inspectable(enumeration="horizontal,vertical")]
 		public function set orientation(val:String) : void {
 			_orientation = val;
-			invalidateProperties();
 			invalidateDisplayList();	
 		}
 				
@@ -112,7 +111,6 @@ package org.un.cava.birdeye.qavis.microcharts
 		
 		public function set value(val:Number) : void {
 			_value = val;
-			invalidateProperties();
 			invalidateDisplayList();
 		}
 
@@ -125,15 +123,12 @@ package org.un.cava.birdeye.qavis.microcharts
 		
 		public function set target(val:Number) : void {
 			_target = val;
-			invalidateProperties();
 			invalidateDisplayList();
 		}
 
 		public function set qualitativeRanges(val:Array):void
 		{
 			_qualitativeRanges = val;
-			tot = NaN;
-			invalidateProperties();
 			invalidateDisplayList();
 		}
 		
@@ -156,7 +151,6 @@ package org.un.cava.birdeye.qavis.microcharts
 		public function set snapInterval(val:int):void 
 		{
 			_snapInterval = val;
-			invalidateProperties();
 			invalidateDisplayList();
 		}
 		
@@ -167,6 +161,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
+			tot = NaN;
 			if (orientation == null || orientation.length == 0)
 				orientation = HORIZONTAL;
 		}
