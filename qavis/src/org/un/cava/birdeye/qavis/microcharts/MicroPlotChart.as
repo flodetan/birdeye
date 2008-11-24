@@ -28,43 +28,34 @@
  package org.un.cava.birdeye.qavis.microcharts
 {
 	import com.degrafa.GeometryGroup;
-	import com.degrafa.Surface;
 	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Line;
+	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	[Inspectable("negative")]
 	 /**
-	 * <p>This component is used to create plot microcharts. 
+	 * <p>This component is used to create plot microcharts and extends the MicroChart class, thus inheriting all its 
+	 * properties (backgroundColor, backgroundStroke, colors, stroke, dataProvider, etc) and methods (minMaxTot, 
+	 * useColor, createBackground).
 	 * The basic simple syntax to use it and create an plot microchart with mxml is:</p>
 	 * <p>&lt;MicroPlotChart dataProvider="{myArray}" width="20" height="70"/></p>
-	 * 
-	 * <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
-	 * and XML.
-	 * It's also possible to change the colors by defining the following properties in the mxml declaration:</p>
-	 * <p>- color: to change the default shape color;</p>
-	 * <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
 	 * 
 	 * <p>The following public properties can also be used to:</p> 
 	 * <p>- radius: to modify the plots size;</p>
 	 * <p>- negative: this Boolean if set to true shows the negative reference line colored with the same color of plots.</p>
+	 * <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
 	*/
-	public class MicroPlotChart extends Surface
+	public class MicroPlotChart extends MicroChart
 	{
-		private var geomGroup:GeometryGroup;
 		private var red:SolidStroke = new SolidStroke("0xff0000",1);
 		private var black:SolidFill = new SolidFill("0x000000",1);
 		
 		private var _negative:Boolean = true;
-		private var _colors:Array = null;
 		private var _negativeColor:Number = NaN;
-		private var _dataProvider:Array = new Array();
 		private var _radius:Number = 2;
 		
-		private var min:Number, max:Number, space:Number = 0;
-		private var tot:Number = NaN;
-
 		[Inspectable(enumeration="true,false")]
 		public function set negative(val:Boolean):void
 		{
@@ -77,20 +68,6 @@
 		public function get negative():Boolean
 		{
 			return _negative;
-		}
-		
-		public function set colors(val:Array):void
-		{
-			_colors = val;
-			invalidateDisplayList();
-		}
-		
-		/**
-		* Changes the default colors of the plots. 
-		*/		
-		public function get colors():Array
-		{
-			return _colors;
 		}
 		
 		public function set negativeColor(val:Number):void
@@ -121,21 +98,6 @@
 			return _radius;
 		}
 
-		public function set dataProvider(val:Array):void
-		{
-			_dataProvider = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		
-		/**
-		* Set the dataProvider that will feed the chart. 
-		*/		
-		public function get dataProvider():Array
-		{
-			return _dataProvider;
-		}
-
 		/**
 		* @private
 		 * Used to recalculate min, max and tot each time properties have to ba revalidated 
@@ -148,42 +110,14 @@
 		
 		/**
 		* @private
-		 * Calculate min, max and tot  
-		*/
-		private function minMaxTot():void
-		{
-			min = max = _dataProvider[0];
-
-			tot = 0;
-			for (var i:Number = 0; i < _dataProvider.length; i++)
-			{
-				if (min > _dataProvider[i])
-					min = _dataProvider[i];
-				if (max < _dataProvider[i])
-					max = _dataProvider[i];
-			}
-			tot = Math.abs(Math.max(max,0) - Math.min(min,0));
-		}
-
-		/**
-		* @private
 		 * Calculate the height size of the plot for the current dataProvider value   
 		*/
 		private function sizeY(indexIteration:Number):Number
 		{
-			var _sizeY:Number = _dataProvider[indexIteration] / tot * height;
+			var _sizeY:Number = dataProvider[indexIteration] / tot * height;
 			return _sizeY;
 		}
 
-		/**
-		* @private
-		 * It sets the color for the current line
-		*/
-		private function useColor(indexIteration:Number):int
-		{
-			return _colors[indexIteration];
-		}
-		
 		public function MicroPlotChart()
 		{
 			super();
@@ -202,8 +136,23 @@
 
 			geomGroup = new GeometryGroup();
 			geomGroup.target = this;
+			createBackground(width, height);
 			createPlots();
 			this.graphicsCollection.addItem(geomGroup);
+		}
+		
+		override protected function createBackground(w:Number, h:Number):void
+		{
+			if (!isNaN(backgroundColor) || !isNaN(backgroundStroke))
+			{
+				var backgroundRect:RegularRectangle = new RegularRectangle(space, space-radius, width, height+radius*3/2);
+				if (!isNaN(backgroundColor))
+					backgroundRect.fill = new SolidFill(backgroundColor);
+				if (!isNaN(backgroundStroke))
+					backgroundRect.stroke = new SolidStroke(backgroundStroke);
+				
+				geomGroup.geometryCollection.addItem(backgroundRect);
+			}
 		}
 		
 		/**
@@ -228,14 +177,14 @@
 			}
 			
 			// create columns
-			for (var i:Number=0; i<_dataProvider.length; i++)
+			for (var i:Number=0; i<dataProvider.length; i++)
 			{
 				var plot:Circle = 
 					new Circle(space+startX+columnWidth/2, space+ startY-sizeY(i), radius);
 				
 				startX += columnWidth;
 
-				if (_colors != null)
+				if (colors != null)
 					plot.fill = new SolidFill(useColor(i));
 				else
 					plot.fill = new SolidFill(black);

@@ -34,7 +34,9 @@ package org.un.cava.birdeye.qavis.microcharts
 	import com.degrafa.paint.SolidStroke;
 	
 	/**
-	 * <p>The Micro100BarChart component is used to create 100% Bar microcharts. 
+	 * <p>This component is used to create 100% Bar microcharts and extends the MicroChart class, thus inheriting all its 
+	 * properties (backgroundColor, backgroundStroke, colors, stroke, dataProvider, etc) and methods (minMaxTot, 
+	 * useColor, createBackground).
 	 * The basic simple syntax to use it and create an 100% Bar microchart with mxml is:</p>
 	 * <p>&lt;Micro100BarChart dataProvider="{myArray}" width="20" height="70"/></p>
 	 * 
@@ -45,72 +47,20 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * 
 	 * <p>If no colors are defined, than the 100 bar will display different colors based on the default color and a default offset color.</p>
 	*/
-	public class Micro100BarChart extends Surface
+	public class Micro100BarChart extends MicroChart
 	{
-		private var geomGroup:GeometryGroup;
-		private var tempColor:int = 0xbbbbbb;
-
-		private var _colors:Array = null;
-		private var _dataProvider:Array = new Array();
-		private var _stroke:Number = NaN; 
-
-		private var prevSizeX:Number, space:Number = 0;
-		private var tot:Number = NaN;
-
-		public function set colors(val:Array):void
-		{
-			_colors = val;
-			invalidateDisplayList();
-		}
-		
-		/**
-		 * This property sets the colors of the bars in the chart. If not set, a function will automatically create colors for each bar.
-		*/
-		public function get colors():Array
-		{
-			return _colors;
-		}
-		
-		public function set dataProvider(val:Array):void
-		{
-			_dataProvider = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		
-		/**
-		* Set the dataProvider to feed the chart. 
-		*/
-		public function get dataProvider():Array
-		{
-			return _dataProvider;
-		}
-		
-		public function set stroke(val:Number):void
-		{
-			_stroke = val;
-			invalidateDisplayList();
-		}
-		
-		/**
-		 * This property sets the color of chart stroke. If not set, no stroke will be defined for the chart.
-		*/
-		public function get stroke():Number
-		{
-			return _stroke;
-		}
-
+		private var prevSizeX:Number;
 		/**
 		* @private  
 		* Calculate the total of all positive values in the dataProvider. Negative values are not considered nor rendered in the chart. 
 		*/
-		private function setTot():void
+		override protected function minMaxTot():void
 		{
 			tot = 0;
-			for (var i:Number = 0; i < _dataProvider.length; i++)
+			for (var i:Number = 0; i < dataProvider.length; i++)
 			{
-				if (_dataProvider[i] > 0)
-					tot += _dataProvider[i];
+				if (dataProvider[i] > 0)
+					tot += dataProvider[i];
 			}
 		}
 
@@ -120,7 +70,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function offsetSizeX(indexIteration:Number):Number
 		{
-			var _offSizeX:Number = Math.max(0,_dataProvider[indexIteration] * width / tot);
+			var _offSizeX:Number = Math.max(0,dataProvider[indexIteration] * width / tot);
 			prevSizeX += _offSizeX;
 			return _offSizeX;
 		}
@@ -135,20 +85,6 @@ package org.un.cava.birdeye.qavis.microcharts
 			return _startX;
 		}	
 		
-		/**
-		* @private  
-		* Set automatic colors to the bars, in case these are not provided. 
-		*/
-		private function useColor(indexIteration:Number):int
-		{
-			if (colors != null && colors.length > 0)
-				tempColor = colors[indexIteration];
-			else
-				tempColor += 0x123456; 
-
-			return tempColor;
-		}
-
 		public function Micro100BarChart()
 		{
 			super();
@@ -161,7 +97,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
-			setTot();
+			minMaxTot();
 		}
 		
 		/**
@@ -178,6 +114,7 @@ package org.un.cava.birdeye.qavis.microcharts
 
 			geomGroup = new GeometryGroup();
 			geomGroup.target = this;
+			createBackground(width, height);
 			createBars();
 			this.graphicsCollection.addItem(geomGroup);
 		}
@@ -189,19 +126,19 @@ package org.un.cava.birdeye.qavis.microcharts
 		private function createBars():void
 		{
 			// create 100% Bars
-			for (var i:Number=0; i<_dataProvider.length; i++)
+			for (var i:Number=0; i<dataProvider.length; i++)
 			{
 				var bar:RegularRectangle;
 				
-				if (_dataProvider[i] > 0) 
+				if (dataProvider[i] > 0) 
 				{
 					bar = new RegularRectangle(space+startX(i), space, offsetSizeX(i), height);
 					
-					if (!isNaN(_stroke))
-						bar.stroke = new SolidStroke(_stroke);
+					if (!isNaN(stroke))
+						bar.stroke = new SolidStroke(stroke);
 						
-					if (_colors.length != 0)
-						bar.fill = new SolidFill(useColor(i));
+					if (colors.length != 0)
+						bar.fill = new SolidFill(super.useColor(i));
 						
 					geomGroup.geometryCollection.addItem(bar);
 				}
