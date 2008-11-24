@@ -28,12 +28,14 @@
  package org.un.cava.birdeye.qavis.microcharts
 {
 	import com.degrafa.GeometryGroup;
-	import com.degrafa.Surface;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
+	import com.degrafa.paint.SolidStroke;
 	
 	 /**
-	* <p>This component is used to create column microcharts. 
+	 * <p>This component is used to create win lose microcharts and extends the MicroChart class, thus inheriting all its 
+	 * properties (backgroundColor, backgroundStroke, colors, stroke, dataProvider, etc) and methods (minMaxTot, 
+	 * useColor, createBackground).
 	 * The basic simple syntax to use it and create an column microchart with mxml is:</p>
 	 * <p>&lt;MicroWinLoseChart dataProvider="{myArray}" width="20" height="70"/></p>
 	 * 
@@ -46,32 +48,13 @@
 	 * <p>The following public properties can also be used to: </p>
 	 * <p>- spacing: to modify the spacing between columns;</p>
 	*/
-	public class MicroWinLoseChart extends Surface
+	public class MicroWinLoseChart extends MicroChart
 	{
-		private var geomGroup:GeometryGroup;
 		private var black:SolidFill = new SolidFill("0x000000",1);
 		private var red:SolidFill = new SolidFill("0xff0000",1);
 		
 		private var _spacing:Number = 0;
-		private var _colors:Array = null;
-		private var _dataProvider:Array = new Array();
 		private var _referenceValue:Number = 0;
-		
-		private var space:Number = 0;
-
-		public function set colors(val:Array):void
-		{
-			_colors = val;
-			invalidateDisplayList();
-		}
-		
-		/**
-		* Changes the default colors of each column. 
-		*/		
-		public function get colors():Array
-		{
-			return _colors;
-		}
 		
 		public function set spacing(val:Number):void
 		{
@@ -85,21 +68,6 @@
 		public function get spacing():Number
 		{
 			return _spacing;
-		}
-		
-		public function set dataProvider(val:Array):void
-		{
-			_dataProvider = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		
-		/**
-		* Set the dataProvider that will feed the chart. 
-		*/		
-		public function get dataProvider():Array
-		{
-			return _dataProvider;
 		}
 		
 		public function set referenceValue(val:Number):void
@@ -116,15 +84,6 @@
 			return _referenceValue; 
 		}
 
-		/**
-		* @private
-		 * Used to recalculate min, max and tot each time properties have to ba revalidated 
-		*/
-		override protected function commitProperties():void
-		{
-			super.commitProperties();
-		}
-		
 		public function MicroWinLoseChart()
 		{
 			super();
@@ -136,19 +95,10 @@
 		*/
 		private function sizeY(indexIteration:Number):Number
 		{
-			var _sizeY:Number = (_dataProvider[indexIteration] >= _referenceValue) ? -height/3 : height/3;
+			var _sizeY:Number = (dataProvider[indexIteration] >= _referenceValue) ? -height/3 : height/3;
 			return _sizeY;
 		}
 
-		/**
-		* @private
-		 * It sets the color for the current winlose column
-		*/
-		private function useColor(indexIteration:Number):int
-		{
-			return _colors[indexIteration];
-		}
-		
 		/**
 		* @private 
 		 * Used to create and refresh the chart.
@@ -162,10 +112,17 @@
 
 			geomGroup = new GeometryGroup();
 			geomGroup.target = this;
+			createBackground(width, height);
 			createColumns();
 			this.graphicsCollection.addItem(geomGroup);
 		}
 		
+		override protected function createBackground(w:Number, h:Number):void
+		{
+			w += spacing * (dataProvider.length - 1);
+			super.createBackground(w,h);
+		}
+
 		/**
 		* @private 
 		 * Create the winlose columns.
@@ -177,15 +134,15 @@
 			var startX:Number = 0;
 
 			// create columns
-			for (var i:Number=0; i<_dataProvider.length; i++)
+			for (var i:Number=0; i<dataProvider.length; i++)
 			{
 				var column:RegularRectangle = 
 					new RegularRectangle(space+startX, space+startY, columnWidth, sizeY(i));
 				
 				startX += columnWidth + spacing;
 
-				if (_colors == null || _colors.lenght == 0)
-					if (_dataProvider[i] < 0)
+				if (colors == null || colors.lenght == 0)
+					if (dataProvider[i] < 0)
 						column.fill = red;
 					else
 						column.fill = black;

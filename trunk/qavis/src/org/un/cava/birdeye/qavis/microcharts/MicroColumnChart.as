@@ -28,39 +28,30 @@
 package org.un.cava.birdeye.qavis.microcharts
 {
 	import com.degrafa.GeometryGroup;
-	import com.degrafa.Surface;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
+	import com.degrafa.paint.SolidStroke;
 	
 	[Inspectable("negative")]
 	 /**
-	* <p>This component is used to create column microcharts. 
+	 * <p>This component is used to create column microcharts and extends the MicroChart class, thus inheriting all its 
+	 * properties (backgroundColor, backgroundStroke, colors, stroke, dataProvider, etc) and methods (minMaxTot, 
+	 * useColor, createBackground).
 	 * The basic simple syntax to use it and create an column microchart with mxml is:</p>
 	 * <p>&lt;MicroColunmChart dataProvider="{myArray}" width="20" height="70"/></p>
-	 * 
-	 * <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
-	 * and XML.
-	 * It's also possible to change the colors by defining the following properties in the mxml declaration:</p>
-	 * <p>- colors:Array to change the default columns color;</p>
-	 * <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
 	 * 
 	 * <p>The following public properties can also be used to: </p>
 	 * <p>- spacing: to modify the spacing between columns;</p>
 	 * <p>- negative: this Boolean is set to true shows the negative values using the negativeColor.</p>
+	 * <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
 	*/
-	public class MicroColumnChart extends Surface
+	public class MicroColumnChart extends MicroChart
 	{
-		private var geomGroup:GeometryGroup;
 		private var black:SolidFill = new SolidFill("0x000000",1);
 
 		private var _spacing:Number = 0;
-		private var _colors:Array = null;
-		private var _dataProvider:Array = new Array();
 		private var _negative:Boolean = true;
 		private var _negativeColor:int = 0xff0000; 
-		
-		private var min:Number, max:Number, space:Number = 0;
-		private var tot:Number = NaN;
 		
 		[Inspectable(enumeration="true,false")]
 		public function set negative(val:Boolean):void
@@ -89,20 +80,6 @@ package org.un.cava.birdeye.qavis.microcharts
 			return _negativeColor;
 		}
 		
-		public function set colors(val:Array):void
-		{
-			_colors = val;
-			invalidateDisplayList();
-		}
-		
-		/**
-		* Changes the default colors of columns. 
-		*/		
-		public function get colors():Array
-		{
-			return _colors;
-		}
-		
 		public function set spacing(val:Number):void
 		{
 			_spacing = val;
@@ -117,21 +94,6 @@ package org.un.cava.birdeye.qavis.microcharts
 			return _spacing;
 		}
 		
-		public function set dataProvider(val:Array):void
-		{
-			_dataProvider = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		
-		/**
-		* Set the dataProvider that will feed the chart. 
-		*/		
-		public function get dataProvider():Array
-		{
-			return _dataProvider;
-		}
-
 		/**
 		* @private
 		 * Used to recalculate min, max and tot each time properties have to ba revalidated 
@@ -144,42 +106,14 @@ package org.un.cava.birdeye.qavis.microcharts
 		
 		/**
 		* @private
-		 * Calculate min, max and tot  
-		*/
-		private function minMaxTot():void
-		{
-			min = max = _dataProvider[0];
-
-			tot = 0;
-			for (var i:Number = 0; i < _dataProvider.length; i++)
-			{
-				if (min > _dataProvider[i])
-					min = _dataProvider[i];
-				if (max < _dataProvider[i])
-					max = _dataProvider[i];
-			}
-			tot = Math.abs(Math.max(max,0) - Math.min(min,0));
-		}
-
-		/**
-		* @private
 		 * Calculate the height size of the column for for the current dataProvider value   
 		*/
 		private function sizeY(indexIteration:Number):Number
 		{
-			var _sizeY:Number = - _dataProvider[indexIteration] / tot * height;
+			var _sizeY:Number = - dataProvider[indexIteration] / tot * height;
 			return _sizeY;
 		}
 
-		/**
-		* @private
-		 * It sets the color for the current area (polygon)   
-		*/
-		private function useColor(indexIteration:Number):int
-		{
-			return _colors[indexIteration];
-		}
-		
 		public function MicroColumnChart()
 		{
 			super();
@@ -198,8 +132,15 @@ package org.un.cava.birdeye.qavis.microcharts
 
 			geomGroup = new GeometryGroup();
 			geomGroup.target = this;
+			createBackground(width, height);
 			createColumns();
 			this.graphicsCollection.addItem(geomGroup);
+		}
+		
+		override protected function createBackground(w:Number, h:Number):void
+		{
+			w = width + spacing * (dataProvider.length -1);
+			super.createBackground(w, h);
 		}
 		
 		/**
@@ -213,15 +154,15 @@ package org.un.cava.birdeye.qavis.microcharts
 			var startX:Number = 0;
 
 			// create columns
-			for (var i:Number=0; i<_dataProvider.length; i++)
+			for (var i:Number=0; i<dataProvider.length; i++)
 			{
 				var column:RegularRectangle = 
 					new RegularRectangle(space+startX, space+startY, columnWidth, sizeY(i));
 				
 				startX += columnWidth + spacing;
 
-				if (_colors == null || _colors.lenght == 0)
-					if (negative && _dataProvider[i] < 0)
+				if (colors == null || colors.lenght == 0)
+					if (negative && dataProvider[i] < 0)
 						column.fill = new SolidFill(_negativeColor);
 					else
 						column.fill = black;

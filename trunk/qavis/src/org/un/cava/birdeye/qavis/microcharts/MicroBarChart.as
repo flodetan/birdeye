@@ -28,54 +28,30 @@
 package org.un.cava.birdeye.qavis.microcharts
 {
 	import com.degrafa.GeometryGroup;
-	import com.degrafa.Surface;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
+	import com.degrafa.paint.SolidStroke;
 	
 	[Inspectable("negative")]
 	 /**
-	 * <p>This component is used to create bar microcharts. 
+	 * <p>This component is used to create bar microcharts and extends the MicroChart class, thus inheriting all its 
+	 * properties (backgroundColor, backgroundStroke, colors, stroke, dataProvider, etc) and methods (minMaxTot, 
+	 * useColor, createBackground).
 	 * The basic simple syntax to use it and create an bar microchart with mxml is:</p>
 	 * <p>&lt;MicroBarChart dataProvider="{myArray}" width="20" height="70"/></p>
-	 * 
-	 * <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
-	 * and XML.
-	 * It's also possible to change the colors by defining the following properties in the mxml declaration:</p>
-	 * <p>- color: to change the default shape color;</p>
-	 * <p>- backgroundColor: to change the default background color of the chart;</p>
-	 * <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
 	 * 
 	 * <p>The following public properties can also be used to: </p>
 	 * <p>- spacing: to modify the spacing between columns;</p>
 	 * <p>- negative: this Boolean is set to true shows the negative values using the negativeColor.</p>
+	 * <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
 	*/
-	public class MicroBarChart extends Surface
+	public class MicroBarChart extends MicroChart
 	{
-		private var geomGroup:GeometryGroup;
 		private var black:SolidFill = new SolidFill("0x000000",1);
 		
 		private var _spacing:Number = 0;
-		private var _colors:Array = null;
-		private var _dataProvider:Array = new Array();
 		private var _negative:Boolean = true;
 		private var _negativeColor:int = 0xff0000; 
-
-		private var min:Number, max:Number, space:Number = 0;
-		private var tot:Number = NaN;
-
-		public function set colors(val:Array):void
-		{
-			_colors = val;
-			invalidateDisplayList();
-		}
-		
-		/**
-		* Changes the default color of the area. 
-		*/
-		public function get colors():Array
-		{
-			return _colors;
-		}
 		
 		public function set spacing(val:Number):void
 		{
@@ -91,21 +67,6 @@ package org.un.cava.birdeye.qavis.microcharts
 			return _spacing;
 		}
 		
-		public function set dataProvider(val:Array):void
-		{
-			_dataProvider = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		
-		/**
-		* Set the dataProvider feeding the area chart. 
-		*/
-		public function get dataProvider():Array
-		{
-			return _dataProvider;
-		}
-
 		[Inspectable(enumeration="true,false")]
 		public function set negative(val:Boolean):void
 		{
@@ -122,44 +83,14 @@ package org.un.cava.birdeye.qavis.microcharts
 		
 		/**
 		* @private
-		 * Calculate min, max and tot  
-		*/
-		private function minMaxTot():void
-		{
-			_dataProvider.sort(Array.DESCENDING | Array.NUMERIC);
-			
-			min = max = _dataProvider[0];
-
-			tot = 0;
-			for (var i:Number = 0; i < _dataProvider.length; i++)
-			{
-				if (min > _dataProvider[i])
-					min = _dataProvider[i];
-				if (max < _dataProvider[i])
-					max = _dataProvider[i];
-			}
-			tot = Math.abs(Math.max(max,0) - Math.min(min,0));
-		}
-
-		/**
-		* @private
 		 * Calculate the width size of the bar for for the current dataProvider value   
 		*/
 		private function sizeX(indexIteration:Number):Number
 		{
-			var _sizeX:Number = _dataProvider[indexIteration] / tot * width;
+			var _sizeX:Number = dataProvider[indexIteration] / tot * width;
 			return _sizeX;
 		}
 
-		/**
-		* @private
-		 * It sets the color for the current area (polygon)   
-		*/
-		private function useColor(indexIteration:Number):int
-		{
-			return _colors[indexIteration];
-		}
-		
 		public function MicroBarChart()
 		{
 			super();
@@ -172,6 +103,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
+			minMaxTot();
 		}
 		
 		/**
@@ -181,15 +113,22 @@ package org.un.cava.birdeye.qavis.microcharts
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			minMaxTot();
+			dataProvider.sort(Array.DESCENDING | Array.NUMERIC);
 			for(var i:int=this.numChildren-1; i>=0; i--)
 				if(getChildAt(i) is GeometryGroup)
 						removeChildAt(i);
 
 			geomGroup = new GeometryGroup();
 			geomGroup.target = this;
+			createBackground(width, height);
 			createBars();
 			this.graphicsCollection.addItem(geomGroup);
+		}
+		
+		override protected function createBackground(w:Number, h:Number):void
+		{
+			h += spacing * (dataProvider.length-1);
+			super.createBackground(w,h);
 		}
 		
 		/**
@@ -203,15 +142,15 @@ package org.un.cava.birdeye.qavis.microcharts
 			var startY:Number = 0;
 
 			// create bars
-			for (var i:Number=0; i<_dataProvider.length; i++)
+			for (var i:Number=0; i<dataProvider.length; i++)
 			{
 				var column:RegularRectangle = 
 					new RegularRectangle(space+startX, space+startY, sizeX(i), columnWidth);
 				
 				startY += columnWidth + spacing;
 
-				if (_colors == null || _colors.lenght == 0)
-					if (negative && _dataProvider[i] < 0)
+				if (colors == null || colors.lenght == 0)
+					if (negative && dataProvider[i] < 0)
 						column.fill = new SolidFill(_negativeColor);
 					else
 						column.fill = black;

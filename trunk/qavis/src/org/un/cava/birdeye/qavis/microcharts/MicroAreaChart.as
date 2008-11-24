@@ -28,61 +28,23 @@
  package org.un.cava.birdeye.qavis.microcharts
 {
 	import com.degrafa.GeometryGroup;
-	import com.degrafa.Surface;
 	import com.degrafa.geometry.Polygon;
+	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
+	import com.degrafa.paint.SolidStroke;
 	
 	 /**
-	 * <p>This component is used to create area microcharts. 
+	 * <p>This component is used to create area microcharts and extends the MicroChart class, thus inheriting all its 
+	 * properties (backgroundColor, backgroundStroke, colors, stroke, dataProvider, etc) and methods (minMaxTot, 
+	 * useColor, createBackground).
 	 * The basic simple syntax to use it and create an area microchart with mxml is:</p>
 	 * <p>&lt;MicroAreaChart dataProvider="{myArray}" width="20" height="70"/></p>
 	 * 
-	 * <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
-	 * and XML.
-	 * It's also possible to change the colors by defining the following:</p>
-	 * <p>- color: to change the default shape color;</p>
-	 * 
 	*/
-	public class MicroAreaChart extends Surface
+	public class MicroAreaChart extends MicroChart
 	{
-		private var geomGroup:GeometryGroup;
 		private var black:String = "0x000000";
 		
-		private var _colors:Array = null;
-		private var _dataProvider:Array = new Array();
-		
-		private var min:Number, max:Number, space:Number = 0;
-		private var tot:Number = NaN;
-
-		public function set colors(val:Array):void
-		{
-			_colors = val;
-			invalidateDisplayList();
-		}
-		
-		/**
-		* Changes the default color of the area. 
-		*/
-		public function get colors():Array
-		{
-			return _colors;
-		}
-		
-		public function set dataProvider(val:Array):void
-		{
-			_dataProvider = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		
-		/**
-		* Set the dataProvider that will feed the area chart. 
-		*/
-		public function get dataProvider():Array
-		{
-			return _dataProvider;
-		}
-
 		/**
 		* @private
 		 * Used to recalculate min, max and tot each time properties have to ba revalidated 
@@ -95,44 +57,14 @@
 		
 		/**
 		* @private
-		 * Calculate min, max and tot  
-		*/
-		private function minMaxTot():void
-		{
-			min = max = _dataProvider[0];
-
-			tot = 0;
-			for (var i:Number = 0; i < _dataProvider.length; i++)
-			{
-				if (min > _dataProvider[i])
-					min = _dataProvider[i];
-				if (max < _dataProvider[i])
-					max = _dataProvider[i];
-			}
-			// in case all values are negative or all values are positive, the 0 is considered respectively 
-			// to define the top or the bottom of the chart 
-			tot = Math.abs(Math.max(max,0) - Math.min(min,0));
-		}
-
-		/**
-		* @private
 		 * Calculate the y value (position) inside the chart of the current dataProvider   
 		*/
 		private function sizeY(indexIteration:Number):Number
 		{
-			var _sizeY:Number = _dataProvider[indexIteration] / tot * height;
+			var _sizeY:Number = dataProvider[indexIteration] / tot * height;
 			return _sizeY;
 		}
 
-		/**
-		* @private
-		 * It sets the color for the current area (polygon)   
-		*/
-		private function useColor(indexIteration:Number):int
-		{
-			return _colors[indexIteration];
-		}
-		
 		public function MicroAreaChart()
 		{
 			super();
@@ -153,6 +85,7 @@
 
 			geomGroup = new GeometryGroup();
 			geomGroup.target = this;
+			createBackground(width, height);
 			createPolygons();
 			this.graphicsCollection.addItem(geomGroup);
 		}
@@ -168,7 +101,7 @@
 			var startX:Number = 0;
 
 			// create polygons
-			for (var i:Number=0; i<_dataProvider.length-1; i++)
+			for (var i:Number=0; i<dataProvider.length-1; i++)
 			{
 				var pol:Polygon = 
 					new Polygon ()
@@ -180,7 +113,7 @@
 
 				startX += columnWidth;
 
-				if (_colors != null)
+				if (colors != null)
 					pol.fill = new SolidFill(useColor(i));
 				else 
 					pol.fill = new SolidFill(black);

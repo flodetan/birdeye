@@ -28,20 +28,20 @@
 package org.un.cava.birdeye.qavis.microcharts
 {
 	import com.degrafa.GeometryGroup;
-	import com.degrafa.Surface;
 	import com.degrafa.geometry.Line;
+	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	[Inspectable("negative")]
 	 /**
-	* <p>This component is used to create column microcharts. 
+	 * <p>This component is used to create line microcharts and extends the MicroChart class, thus inheriting all its 
+	 * properties (backgroundColor, backgroundStroke, colors, stroke, dataProvider, etc) and methods (minMaxTot, 
+	 * useColor, createBackground).
 	 * The basic simple syntax to use it and create an column microchart with mxml is:</p>
-	 * <p>&lt;MicroColunmChart dataProvider="{myArray}" width="20" height="70"/></p>
+	 * <p>&lt;MicroLineChart dataProvider="{myArray}" width="20" height="70"/></p>
 	 * 
-	 * <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
-	 * and XML.
 	 * It's also possible to change the colors by defining the following properties in the mxml declaration:</p>
-	 * <p>- colors:Array to change the default columns color;</p>
 	 * <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
 	 * <p>- referenceColor: to set a reference line color different from the negative one;</p>
 	 * 
@@ -50,35 +50,15 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * <p>- referenceValue: to set a reference line different from the negative one;</p>
 	 * <p>- negative: this Boolean is set to true shows the negative values using the negativeColor.</p>
 	*/
-	public class MicroLineChart extends Surface
+	public class MicroLineChart extends MicroChart
 	{
-		private var geomGroup:GeometryGroup;
 		private var black:SolidStroke = new SolidStroke("0x000000",1);
 		
-		private var _colors:Array = null;
 		private var _referenceColor:Number = 0x000000;
 		private var _referenceValue:Number = NaN;
-		private var _dataProvider:Array = new Array();
 		private var _radius:Number = 2;
 		private var _negative:Boolean = true;
 		private var _negativeColor:int = 0xff0000; 
-		
-		private var min:Number, max:Number, space:Number = 0;
-		private var tot:Number = NaN;
-
-		public function set colors(val:Array):void
-		{
-			_colors = val;
-			invalidateDisplayList();
-		}
-		
-		/**
-		* Changes the default colors for lines. 
-		*/		
-		public function get colors():Array
-		{
-			return _colors;
-		}
 		
 		public function set referenceColor(val:Number):void
 		{
@@ -122,21 +102,6 @@ package org.un.cava.birdeye.qavis.microcharts
 			return _radius;
 		}
 
-		public function set dataProvider(val:Array):void
-		{
-			_dataProvider = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		
-		/**
-		* Set the dataProvider that will feed the chart. 
-		*/		
-		public function get dataProvider():Array
-		{
-			return _dataProvider;
-		}
-
 		[Inspectable(enumeration="true,false")]
 		public function set negative(val:Boolean):void
 		{
@@ -163,42 +128,14 @@ package org.un.cava.birdeye.qavis.microcharts
 		
 		/**
 		* @private
-		 * Calculate min, max and tot  
-		*/
-		private function minMaxTot():void
-		{
-			min = max = _dataProvider[0];
-
-			tot = 0;
-			for (var i:Number = 0; i < _dataProvider.length; i++)
-			{
-				if (min > _dataProvider[i])
-					min = _dataProvider[i];
-				if (max < _dataProvider[i])
-					max = _dataProvider[i];
-			}
-			tot = Math.abs(Math.max(max,0) - Math.min(min,0));
-		}
-
-		/**
-		* @private
 		 * Calculate the height size of the column for for the current dataProvider value   
 		*/
 		private function sizeY(indexIteration:Number):Number
 		{
-			var _sizeY:Number = _dataProvider[indexIteration] / tot * height;
+			var _sizeY:Number = dataProvider[indexIteration] / tot * height;
 			return _sizeY;
 		}
 
-		/**
-		* @private
-		 * It sets the color for the current line
-		*/
-		private function useColor(indexIteration:Number):int
-		{
-			return _colors[indexIteration];
-		}
-		
 		public function MicroLineChart()
 		{
 			super();
@@ -217,10 +154,11 @@ package org.un.cava.birdeye.qavis.microcharts
 
 			geomGroup = new GeometryGroup();
 			geomGroup.target = this;
+			createBackground(width, height);
 			createLines();
 			this.graphicsCollection.addItem(geomGroup);
 		}
-		
+				
 		/**
 		* @private 
 		 * Create the lines of the chart.
@@ -252,14 +190,14 @@ package org.un.cava.birdeye.qavis.microcharts
 			}
 
 			// create value lines
-			for (var i:Number=0; i<_dataProvider.length-1; i++)
+			for (var i:Number=0; i<dataProvider.length-1; i++)
 			{
 				var line:Line = 
 					new Line(space+startX+columnWidth/2, space+startY-sizeY(i), space+startX + columnWidth*3/2, space+startY-sizeY(i+1));
 				
 				startX += columnWidth;
 
-				if (_colors != null)
+				if (colors != null)
 					line.stroke = new SolidStroke(useColor(i));
 				else 
 					line.stroke = new SolidStroke(black);
