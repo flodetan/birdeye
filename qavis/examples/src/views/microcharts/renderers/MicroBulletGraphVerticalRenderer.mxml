@@ -10,7 +10,7 @@
 			{
 				var popUp:VerticalBulletZoom; 
 				popUp = VerticalBulletZoom(PopUpManager.createPopUp(this, VerticalBulletZoom , false));
-				popUp.width = 120;
+				popUp.width = 300;
 				popUp.height = 400;
 				popUp.x = 300;
 				popUp.y = 300;

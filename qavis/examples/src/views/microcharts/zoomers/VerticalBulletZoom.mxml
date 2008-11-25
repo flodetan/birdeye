@@ -22,11 +22,12 @@
 			public var colorArray:Array;
 		]]>
 	</mx:Script>
-	<mx:HBox width="100%" height="100%">
+	<mx:VBox width="100%" height="100%" horizontalAlign="center">
 		<mc:MicroBulletGraph orientation="vertical" id="chart"
-			qualitativeRanges="{a}" paddingLeft="20"
+			qualitativeRanges="{a}" paddingLeft="0"
 			target="{target}" value="{value}" 
-			snapInterval="19" width="20" height="300">
+			snapInterval="{tk.value}" width="20" height="300">
 		</mc:MicroBulletGraph>
-	</mx:HBox>
+		<mx:HSlider minimum="1" maximum="30" value="26" snapInterval="1" id="tk" liveDragging="true"/>
+	</mx:VBox>
 </mx:TitleWindow>
