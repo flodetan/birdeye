@@ -233,6 +233,14 @@ package org.un.cava.birdeye.qavis.microcharts
 		{
 			super.commitProperties();
 			tot = NaN;
+			if (!noSnap)
+			{
+		        snapStyle = new CSSStyleDeclaration('snapStyle');
+		        snapStyle.setStyle('color', snapColor);
+		        snapStyle.setStyle('fontSize', snapFontSize);
+		        StyleManager.setStyleDeclaration(".snapStyle", snapStyle, true);
+			}
+	
 			if (orientation == null || orientation.length == 0)
 				orientation = HORIZONTAL;
 		}
@@ -543,11 +551,6 @@ package org.un.cava.birdeye.qavis.microcharts
 		public function MicroBulletGraph()
 		{
 			super();
-	        snapStyle = new CSSStyleDeclaration('snapStyle');
-	        snapStyle.setStyle('color', snapColor);
-	        snapStyle.setStyle('fontSize', snapFontSize);
-
-	        StyleManager.setStyleDeclaration(".snapStyle", snapStyle, true);
 		}
 		
 		/**

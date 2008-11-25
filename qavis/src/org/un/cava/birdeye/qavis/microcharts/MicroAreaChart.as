@@ -37,6 +37,7 @@
 	 * <p>This component is used to create area microcharts and extends the MicroChart class, thus inheriting all its 
 	 * properties (backgroundColor, backgroundStroke, colors, stroke, dataProvider, etc) and methods (minMaxTot, 
 	 * useColor, createBackground).
+	 * <p>The dataProvider property can accept Array, ArrayCollection, String, XML, etc.
 	 * The basic simple syntax to use it and create an area microchart with mxml is:</p>
 	 * <p>&lt;MicroAreaChart dataProvider="{myArray}" width="20" height="70"/></p>
 	 * 
@@ -61,7 +62,7 @@
 		*/
 		private function sizeY(indexIteration:Number):Number
 		{
-			var _sizeY:Number = dataProvider[indexIteration] / tot * height;
+			var _sizeY:Number = data[indexIteration] / tot * height;
 			return _sizeY;
 		}
 
@@ -96,12 +97,12 @@
 		*/
 		private function createPolygons():void
 		{
-			var columnWidth:Number = width/dataProvider.length;
+			var columnWidth:Number = width/data.length;
 			var startY:Number = height + Math.min(min,0)/tot * height;
 			var startX:Number = 0;
 
 			// create polygons
-			for (var i:Number=0; i<dataProvider.length-1; i++)
+			for (var i:Number=0; i<data.length-1; i++)
 			{
 				var pol:Polygon = 
 					new Polygon ()

@@ -40,8 +40,8 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * The basic simple syntax to use it and create an 100% Bar microchart with mxml is:</p>
 	 * <p>&lt;Micro100BarChart dataProvider="{myArray}" width="20" height="70"/></p>
 	 * 
-	 * <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
-	 * and XML. It's also possible to change the colors by defining the following:</p>
+	 * <p>The dataProvider property can accept Array, ArrayCollection, String, XML, etc
+	 * It's also possible to change the colors by defining the following:</p>
 	 * <p>- colors: array that sets the color for each bar value. The lenght has to be the same as the dataProvider.</p>
 	 * <p>- stroke: Number that sets the color of the stroke of the chart.</p>
 	 * 
@@ -57,10 +57,10 @@ package org.un.cava.birdeye.qavis.microcharts
 		override protected function minMaxTot():void
 		{
 			tot = 0;
-			for (var i:Number = 0; i < dataProvider.length; i++)
+			for (var i:Number = 0; i < data.length; i++)
 			{
-				if (dataProvider[i] > 0)
-					tot += dataProvider[i];
+				if (data[i] > 0)
+					tot += data[i];
 			}
 		}
 
@@ -70,7 +70,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function offsetSizeX(indexIteration:Number):Number
 		{
-			var _offSizeX:Number = Math.max(0,dataProvider[indexIteration] * width / tot);
+			var _offSizeX:Number = Math.max(0,data[indexIteration] * width / tot);
 			prevSizeX += _offSizeX;
 			return _offSizeX;
 		}
@@ -126,19 +126,18 @@ package org.un.cava.birdeye.qavis.microcharts
 		private function createBars():void
 		{
 			// create 100% Bars
-			for (var i:Number=0; i<dataProvider.length; i++)
+			for (var i:Number=0; i<data.length; i++)
 			{
 				var bar:RegularRectangle;
 				
-				if (dataProvider[i] > 0) 
+				if (data[i] > 0) 
 				{
 					bar = new RegularRectangle(space+startX(i), space, offsetSizeX(i), height);
 					
 					if (!isNaN(stroke))
 						bar.stroke = new SolidStroke(stroke);
 						
-					if (colors.length != 0)
-						bar.fill = new SolidFill(super.useColor(i));
+					bar.fill = useColor(i);
 						
 					geomGroup.geometryCollection.addItem(bar);
 				}

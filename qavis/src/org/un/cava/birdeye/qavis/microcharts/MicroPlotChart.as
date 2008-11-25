@@ -114,7 +114,7 @@
 		*/
 		private function sizeY(indexIteration:Number):Number
 		{
-			var _sizeY:Number = dataProvider[indexIteration] / tot * height;
+			var _sizeY:Number = data[indexIteration] / tot * height;
 			return _sizeY;
 		}
 
@@ -161,7 +161,7 @@
 		*/
 		private function createPlots():void
 		{
-			var columnWidth:Number = width/dataProvider.length;
+			var columnWidth:Number = width/data.length;
 			var startY:Number = height + Math.min(min,0)/tot * height;
 			var startX:Number = 0;
 
@@ -177,7 +177,7 @@
 			}
 			
 			// create columns
-			for (var i:Number=0; i<dataProvider.length; i++)
+			for (var i:Number=0; i<data.length; i++)
 			{
 				var plot:Circle = 
 					new Circle(space+startX+columnWidth/2, space+ startY-sizeY(i), radius);

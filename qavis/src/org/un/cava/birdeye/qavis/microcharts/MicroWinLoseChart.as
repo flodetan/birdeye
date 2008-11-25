@@ -39,8 +39,7 @@
 	 * The basic simple syntax to use it and create an column microchart with mxml is:</p>
 	 * <p>&lt;MicroWinLoseChart dataProvider="{myArray}" width="20" height="70"/></p>
 	 * 
-	 * <p>The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
-	 * and XML.
+	 * <p>The dataProvider can be Array, ArrayCollection, String, XML, etc...
 	 * It's also possible to change the colors by defining the following properties in the mxml declaration:</p>
 	 * <p>- color: to change the default shape color;</p>
 	 * <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
@@ -95,7 +94,7 @@
 		*/
 		private function sizeY(indexIteration:Number):Number
 		{
-			var _sizeY:Number = (dataProvider[indexIteration] >= _referenceValue) ? -height/3 : height/3;
+			var _sizeY:Number = (data[indexIteration] >= _referenceValue) ? -height/3 : height/3;
 			return _sizeY;
 		}
 
@@ -119,7 +118,7 @@
 		
 		override protected function createBackground(w:Number, h:Number):void
 		{
-			w += spacing * (dataProvider.length - 1);
+			w += spacing * (data.length - 1);
 			super.createBackground(w,h);
 		}
 
@@ -129,12 +128,12 @@
 		*/
 		private function createColumns():void
 		{
-			var columnWidth:Number = width/dataProvider.length;
+			var columnWidth:Number = width/data.length;
 			var startY:Number = height/2;
 			var startX:Number = 0;
 
 			// create columns
-			for (var i:Number=0; i<dataProvider.length; i++)
+			for (var i:Number=0; i<data.length; i++)
 			{
 				var column:RegularRectangle = 
 					new RegularRectangle(space+startX, space+startY, columnWidth, sizeY(i));
@@ -142,7 +141,7 @@
 				startX += columnWidth + spacing;
 
 				if (colors == null || colors.lenght == 0)
-					if (dataProvider[i] < 0)
+					if (data[i] < 0)
 						column.fill = red;
 					else
 						column.fill = black;

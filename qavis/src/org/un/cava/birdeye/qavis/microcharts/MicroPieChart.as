@@ -89,10 +89,10 @@ package org.un.cava.birdeye.qavis.microcharts
 		override protected function minMaxTot():void
 		{
 			tot = 0;
-			for (var i:Number = 0; i < dataProvider.length; i++)
+			for (var i:Number = 0; i < data.length; i++)
 			{
-				if (dataProvider[i] > 0)
-					tot += dataProvider[i];
+				if (data[i] > 0)
+					tot += data[i];
 			}
 		}
 
@@ -102,7 +102,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function arcAngleSize(indexIteration:Number):Number
 		{
-			var arcAngleSize:Number = Math.max(0,dataProvider[indexIteration] * 360 / tot); 
+			var arcAngleSize:Number = Math.max(0,data[indexIteration] * 360 / tot); 
 			if (arcAngleSize == 360)
 				arcAngleSize = 359.9;
 			
@@ -116,7 +116,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function startAngle(indexIteration:Number):Number
 		{
-			var startAngle:Number = prevAngleSize + (indexIteration==0)? 0 : Math.max(0,dataProvider[indexIteration-1] * 360 / tot);
+			var startAngle:Number = prevAngleSize + (indexIteration==0)? 0 : Math.max(0,data[indexIteration-1] * 360 / tot);
 			return startAngle;
 		}
 		
@@ -153,15 +153,15 @@ package org.un.cava.birdeye.qavis.microcharts
 		private function createPies():void
 		{
 			// create pies
-			for (var i:Number=0; i<dataProvider.length; i++)
+			for (var i:Number=0; i<data.length; i++)
 			{
 				var pie:EllipticalArc;
 				
-				if (dataProvider[i] > 0) 
+				if (data[i] > 0) 
 				{
 					pie = new EllipticalArc(space, space, size, size, prevAngleSize, arcAngleSize(i),"pie");
-					if (colors.length != 0)
-						pie.fill = new SolidFill(useColor(i));
+
+					pie.fill = useColor(i);
 						
 					if (!isNaN(stroke))
 						pie.stroke = new SolidStroke(stroke);

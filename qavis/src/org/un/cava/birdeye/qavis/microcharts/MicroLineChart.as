@@ -132,7 +132,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function sizeY(indexIteration:Number):Number
 		{
-			var _sizeY:Number = dataProvider[indexIteration] / tot * height;
+			var _sizeY:Number = data[indexIteration] / tot * height;
 			return _sizeY;
 		}
 
@@ -165,7 +165,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function createLines():void
 		{
-			var columnWidth:Number = width/dataProvider.length;
+			var columnWidth:Number = width/data.length;
 			var startY:Number = height + Math.min(min,0)/tot * height;
 			var startX:Number = 0;
 
@@ -190,7 +190,7 @@ package org.un.cava.birdeye.qavis.microcharts
 			}
 
 			// create value lines
-			for (var i:Number=0; i<dataProvider.length-1; i++)
+			for (var i:Number=0; i<data.length-1; i++)
 			{
 				var line:Line = 
 					new Line(space+startX+columnWidth/2, space+startY-sizeY(i), space+startX + columnWidth*3/2, space+startY-sizeY(i+1));
