@@ -40,7 +40,8 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * The basic simple syntax to use it and create an bar microchart with mxml is:</p>
 	 * <p>&lt;MicroBarChart dataProvider="{myArray}" width="20" height="70"/></p>
 	 * 
-	 * <p>The following public properties can also be used to: </p>
+	 * <p>The dataProvider property can accept Array, ArrayCollection, String, XML, etc.
+	 * The following public properties can also be used to: </p>
 	 * <p>- spacing: to modify the spacing between columns;</p>
 	 * <p>- negative: this Boolean is set to true shows the negative values using the negativeColor.</p>
 	 * <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
@@ -87,7 +88,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function sizeX(indexIteration:Number):Number
 		{
-			var _sizeX:Number = dataProvider[indexIteration] / tot * width;
+			var _sizeX:Number = data[indexIteration] / tot * width;
 			return _sizeX;
 		}
 
@@ -113,7 +114,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			dataProvider.sort(Array.DESCENDING | Array.NUMERIC);
+			data.sort(Array.DESCENDING | Array.NUMERIC);
 			for(var i:int=this.numChildren-1; i>=0; i--)
 				if(getChildAt(i) is GeometryGroup)
 						removeChildAt(i);
@@ -127,7 +128,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		
 		override protected function createBackground(w:Number, h:Number):void
 		{
-			h += spacing * (dataProvider.length-1);
+			h += spacing * (data.length-1);
 			super.createBackground(w,h);
 		}
 		
@@ -137,12 +138,12 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function createBars():void
 		{
-			var columnWidth:Number = height/dataProvider.length;
+			var columnWidth:Number = height/data.length;
 			var startX:Number = - Math.min(min,0)/tot * width;
 			var startY:Number = 0;
 
 			// create bars
-			for (var i:Number=0; i<dataProvider.length; i++)
+			for (var i:Number=0; i<data.length; i++)
 			{
 				var column:RegularRectangle = 
 					new RegularRectangle(space+startX, space+startY, sizeX(i), columnWidth);
@@ -150,7 +151,7 @@ package org.un.cava.birdeye.qavis.microcharts
 				startY += columnWidth + spacing;
 
 				if (colors == null || colors.lenght == 0)
-					if (negative && dataProvider[i] < 0)
+					if (negative && data[i] < 0)
 						column.fill = new SolidFill(_negativeColor);
 					else
 						column.fill = black;

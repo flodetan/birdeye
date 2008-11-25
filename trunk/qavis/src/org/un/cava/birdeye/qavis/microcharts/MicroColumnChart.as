@@ -40,7 +40,8 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * The basic simple syntax to use it and create an column microchart with mxml is:</p>
 	 * <p>&lt;MicroColunmChart dataProvider="{myArray}" width="20" height="70"/></p>
 	 * 
-	 * <p>The following public properties can also be used to: </p>
+	 * <p>The dataProvider can be Array, ArrayCollection, String, XML, etc... 
+	 * The following public properties can also be used to: </p>
 	 * <p>- spacing: to modify the spacing between columns;</p>
 	 * <p>- negative: this Boolean is set to true shows the negative values using the negativeColor.</p>
 	 * <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
@@ -110,7 +111,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function sizeY(indexIteration:Number):Number
 		{
-			var _sizeY:Number = - dataProvider[indexIteration] / tot * height;
+			var _sizeY:Number = - data[indexIteration] / tot * height;
 			return _sizeY;
 		}
 
@@ -139,7 +140,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		
 		override protected function createBackground(w:Number, h:Number):void
 		{
-			w = width + spacing * (dataProvider.length -1);
+			w = width + spacing * (data.length -1);
 			super.createBackground(w, h);
 		}
 		
@@ -149,12 +150,12 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function createColumns():void
 		{
-			var columnWidth:Number = width/dataProvider.length;
+			var columnWidth:Number = width/data.length;
 			var startY:Number = height + Math.min(min,0)/tot * height;
 			var startX:Number = 0;
 
 			// create columns
-			for (var i:Number=0; i<dataProvider.length; i++)
+			for (var i:Number=0; i<data.length; i++)
 			{
 				var column:RegularRectangle = 
 					new RegularRectangle(space+startX, space+startY, columnWidth, sizeY(i));
@@ -162,7 +163,7 @@ package org.un.cava.birdeye.qavis.microcharts
 				startX += columnWidth + spacing;
 
 				if (colors == null || colors.lenght == 0)
-					if (negative && dataProvider[i] < 0)
+					if (negative && data[i] < 0)
 						column.fill = new SolidFill(_negativeColor);
 					else
 						column.fill = black;
