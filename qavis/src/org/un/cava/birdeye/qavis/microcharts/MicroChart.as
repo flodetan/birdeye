@@ -32,6 +32,8 @@ package org.un.cava.birdeye.qavis.microcharts
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
+	
+	import mx.collections.ArrayCollection;
 
 	 /**
 	 * This class is used as skeleton for most of microcharts in this library. It provides the common properties and methods 
@@ -49,10 +51,12 @@ package org.un.cava.birdeye.qavis.microcharts
 		private var tempColor:int = 0xbbbbbb;
 		
 		private var _colors:Array = null;
-		private var _dataProvider:Array = new Array();
+		private var _dataProvider:Object = new Object();
 		private var _stroke:Number = NaN; 
 		private var _backgroundColor:Number = NaN;
 		private var _backgroundStroke:Number = NaN;
+		
+		protected var data:Array;
 		
 		public function set backgroundColor(val:Number):void
 		{
@@ -96,9 +100,12 @@ package org.un.cava.birdeye.qavis.microcharts
 			return _colors;
 		}
 		
-		public function set dataProvider(val:Array):void
+		public function set dataProvider(val:Object):void
 		{
-			_dataProvider = val;
+			if (val is Array)
+				_dataProvider = val;
+			if (val is ArrayCollection)
+				_dataProvider = ArrayCollection(val).toArray();
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -106,7 +113,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		/**
 		* Set the dataProvider to feed the chart. 
 		*/
-		public function get dataProvider():Array
+		public function get dataProvider():Object
 		{
 			return _dataProvider;
 		}
