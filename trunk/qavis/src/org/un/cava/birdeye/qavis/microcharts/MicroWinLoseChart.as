@@ -47,7 +47,7 @@
 	 * <p>The following public properties can also be used to: </p>
 	 * <p>- spacing: to modify the spacing between columns;</p>
 	*/
-	public class MicroWinLoseChart extends MicroChart
+	public class MicroWinLoseChart extends BasicMicroChart
 	{
 		private var black:SolidFill = new SolidFill("0x000000",1);
 		private var red:SolidFill = new SolidFill("0xff0000",1);

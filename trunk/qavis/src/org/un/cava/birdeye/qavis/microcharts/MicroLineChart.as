@@ -50,7 +50,7 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * <p>- referenceValue: to set a reference line different from the negative one;</p>
 	 * <p>- negative: this Boolean is set to true shows the negative values using the negativeColor.</p>
 	*/
-	public class MicroLineChart extends MicroChart
+	public class MicroLineChart extends BasicMicroChart
 	{
 		private var black:SolidStroke = new SolidStroke("0x000000",1);
 		

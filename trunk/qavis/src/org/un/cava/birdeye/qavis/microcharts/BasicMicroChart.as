@@ -49,7 +49,7 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * The dataProvider property be accept Array, ArrayCollection, String, XML, etc.
 	 * If dataProvider is different from a simple Array of values, than the dataField property cannot be null.
 	*/
-	public class MicroChart extends Surface
+	public class BasicMicroChart extends Surface
 	{
 		protected var geomGroup:GeometryGroup;
 		protected var tot:Number = NaN;
@@ -197,7 +197,7 @@ package org.un.cava.birdeye.qavis.microcharts
 			return _stroke;
 		}
 
-		public function MicroChart()
+		public function BasicMicroChart()
 		{
 			super();
 		}
