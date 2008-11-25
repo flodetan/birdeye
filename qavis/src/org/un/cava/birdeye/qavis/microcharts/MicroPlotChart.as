@@ -47,7 +47,7 @@
 	 * <p>- negative: this Boolean if set to true shows the negative reference line colored with the same color of plots.</p>
 	 * <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
 	*/
-	public class MicroPlotChart extends MicroChart
+	public class MicroPlotChart extends BasicMicroChart
 	{
 		private var red:SolidStroke = new SolidStroke("0xff0000",1);
 		private var black:SolidFill = new SolidFill("0x000000",1);

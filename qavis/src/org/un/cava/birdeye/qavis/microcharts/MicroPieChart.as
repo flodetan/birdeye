@@ -44,7 +44,7 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * 
 	 * <p>If no colors are defined, than the Pie chart will display different colors based on the default color and a default offset color.</p>
 	*/
-	public class MicroPieChart extends MicroChart
+	public class MicroPieChart extends BasicMicroChart
 	{
 		private var _referenceColor:Number = NaN;
 		private var _radius:Number = 2;

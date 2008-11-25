@@ -47,7 +47,7 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * 
 	 * <p>If no colors are defined, than the 100 bar will display different colors based on the default color and a default offset color.</p>
 	*/
-	public class Micro100BarChart extends MicroChart
+	public class Micro100BarChart extends BasicMicroChart
 	{
 		private var prevSizeX:Number;
 		/**

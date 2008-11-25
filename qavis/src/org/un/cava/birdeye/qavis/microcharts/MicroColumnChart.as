@@ -46,7 +46,7 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * <p>- negative: this Boolean is set to true shows the negative values using the negativeColor.</p>
 	 * <p>- negativeColor: to set or change the reference line which delimites negative values;</p>
 	*/
-	public class MicroColumnChart extends MicroChart
+	public class MicroColumnChart extends BasicMicroChart
 	{
 		private var black:SolidFill = new SolidFill("0x000000",1);
 

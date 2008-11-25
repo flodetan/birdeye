@@ -42,7 +42,7 @@
 	 * <p>&lt;MicroAreaChart dataProvider="{myArray}" width="20" height="70"/></p>
 	 * 
 	*/
-	public class MicroAreaChart extends MicroChart
+	public class MicroAreaChart extends BasicMicroChart
 	{
 		private var black:String = "0x000000";
 		
