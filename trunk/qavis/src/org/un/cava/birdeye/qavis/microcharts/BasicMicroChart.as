@@ -46,7 +46,7 @@ package org.un.cava.birdeye.qavis.microcharts
 	 /**
 	 * This class is used as skeleton for most of microcharts in this library. It provides the common properties and methods 
 	 * that can be used or overridden by several microcharts components that extend this class.  
-	 * The dataProvider property be accept Array, ArrayCollection, String, XML, etc.
+	 * The dataProvider property can accept Array, ArrayCollection, String, XML, etc.
 	 * If dataProvider is different from a simple Array of values, than the dataField property cannot be null.
 	*/
 	public class BasicMicroChart extends Surface
