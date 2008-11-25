@@ -70,15 +70,15 @@
 
 	<mx:VBox width="200" height="100%">
 		<mx:Label text="dataProvider"/>
-		<mx:HSlider id="m1" value="50" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m1" value="-50" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
 		<mx:HSlider id="m2" value="100" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
 		<mx:HSlider id="m3" value="80" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
 		<mx:HSlider id="m4" value="20" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
 		<mx:HSlider id="m5" value="130" minimum="-500" change="updateDataGrid()" maximum="400"  snapInterval="1" liveDragging="true"/>
 		<mx:HSlider id="m6" value="0" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
-		<mx:HSlider id="m7" value="80" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m7" value="-80" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
 		<mx:HSlider id="m8" value="40" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
-		<mx:HSlider id="m9" value="-30" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m9" value="-60" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
 		<mx:HSlider id="m10" value="-30" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
 		<mx:HSlider id="m11" value="-20" minimum="-500" change="updateDataGrid()" maximum="400"  snapInterval="1" liveDragging="true"/>
 		<mx:HSlider id="m12" value="-100" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
