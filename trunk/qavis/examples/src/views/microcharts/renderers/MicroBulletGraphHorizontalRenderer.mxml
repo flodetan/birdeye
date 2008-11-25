@@ -13,7 +13,7 @@
 				var popUp:HorizontalBulletZoom; 
 				popUp = HorizontalBulletZoom(PopUpManager.createPopUp(this, HorizontalBulletZoom , false));
 				popUp.width = 500;
-				popUp.height = 100;
+				popUp.height = 150;
 				popUp.a = data.Chart;
 				popUp.target = data.trg;
 				popUp.value = data.val;

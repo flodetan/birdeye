@@ -20,6 +20,9 @@
             public var acBG:ArrayCollection;
             
             [Bindable]
+            public var dpAC:ArrayCollection;
+
+            [Bindable]
             public var aMC:Array;
             
             [Bindable]
@@ -46,6 +49,21 @@
             	acBG = new ArrayCollection([
             		{trg:t.value, val:v.value, c1:m1.value, c2:m2.value, c3:m3.value, c4:m4.value, c5:m5.value, c6:m6.value, Chart:aBG, MicroBulletHorizontal:aBG, MicroBulletVertical:aBG}
             	]);            
+            	
+            	dpAC = new ArrayCollection([
+            		{v:m1.value, name:m1},
+            		{v:m2.value, name:m2},
+            		{v:m3.value, name:m3},
+            		{v:m4.value, name:m4},
+            		{v:m5.value, name:m5},
+            		{v:m6.value, name:m6},
+            		{v:m7.value, name:m7},
+            		{v:m8.value, name:m8},
+            		{v:m9.value, name:m9},
+            		{v:m10.value, name:m10},
+            		{v:m11.value, name:m11},
+            		{v:m12.value, name:m12}
+            	]);
             }
         ]]>
     </mx:Script>
@@ -227,6 +245,12 @@
 			<mx:HSlider id="mnah" minimum="10" value="100" maximum="200" snapInterval="1" liveDragging="true"/>
 			<mc:MicroColumnChart dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}" 
 				height="{mnah.value}" width="{mnaw.value}" spacing="1" backgroundColor="0xdddddd" backgroundStroke="0x888888"/>
+			<mx:Label text="Chart below is using ArrayCollection"/>
+			<mc:MicroColumnChart 
+				height="{mnah.value}" width="{mnaw.value}" spacing="1" 
+				backgroundColor="0xdddddd" backgroundStroke="0x888888"
+				dataProvider="{dpAC}"
+				dataField="v"/>
 		</mx:VBox>
 		<mx:VBox label="Pie">
 		    <mx:DataGrid selectable="false" dataProvider="{acMC}">
@@ -273,9 +297,10 @@
 			<mx:Label text="Sizing Micro100Bar"/>
 			<mx:HSlider id="w100" value="70" minimum="0" maximum="400" snapInterval="1" liveDragging="true"/>
 			<mx:HSlider id="h100" value="20" minimum="0" maximum="400" snapInterval="1" liveDragging="true"/>
-			<mc:Micro100BarChart height="{h100.value}" width="{w100.value}"  
+			<mx:Label text="Chart below is using ArrayCollection"/>
+			<mc:Micro100BarChart height="{h100.value}" width="{w100.value}" 
 				colors="{colors}" stroke="0xffffff" backgroundColor="0xeeeeee" backgroundStroke="0x888888"
-				dataProvider="{[m1.value,m2.value,m3.value]}"/>
+				dataField="v" dataProvider="{dpAC}"/>
 		</mx:VBox>
 		<mx:VBox label="Bullet">
 		    <mx:DataGrid selectable="false" dataProvider="{acBG}" editable="false" rowCount="1" verticalAlign="center">
@@ -293,20 +318,13 @@
 		        </mx:columns>
 		    </mx:DataGrid>
 			<mx:Label text="Sizing Bullet Graph"/>
-			<mx:HSlider id="vwd" minimum="10" value="20" maximum="200" snapInterval="1" liveDragging="true"/>
-			<mx:HSlider id="vht" minimum="100" value="250" maximum="400" snapInterval="1" liveDragging="true"/>
 			<mx:HSlider id="hwd" minimum="200" value="350" maximum="500" snapInterval="1" liveDragging="true"/>
 			<mx:HSlider id="hht" minimum="10" value="20" maximum="200" snapInterval="1" liveDragging="true"/>
-			<mx:Label text="Snap interval"/>
-			<mx:HSlider minimum="1" maximum="30" value="26" snapInterval="1" id="tk" liveDragging="true"/>
-			<mc:MicroBulletGraph orientation="vertical" paddingLeft="50"
-				qualitativeRanges="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value]}" 
-				target="{t.value}" value="{v.value}" 
-				snapInterval="{tk.value}" width="{vwd.value}" height="{vht.value}"/>
+			<mx:Label fontSize="12" text="Double click on the datagrid microcharts to see the snapInterval"/>
 			<mc:MicroBulletGraph orientation="horizontal"  paddingTop="20" paddingLeft="20"
 				qualitativeRanges="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value]}" 
-				target="{t.value}" value="{v.value}" 
-				snapInterval="{tk.value}" width="{hwd.value}" height="{hht.value}"/>
+				target="{t.value}" value="{v.value}" noSnap="true"
+				width="{hwd.value}" height="{hht.value}"/>
 		</mx:VBox>
 	</mx:TabNavigator>
 </mx:HBox>
