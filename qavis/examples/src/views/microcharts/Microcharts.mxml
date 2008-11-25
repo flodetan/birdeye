@@ -73,8 +73,8 @@
 		<mx:HSlider id="m1" value="50" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
 		<mx:HSlider id="m2" value="100" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
 		<mx:HSlider id="m3" value="80" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
-		<mx:HSlider id="m4" value="-70" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
-		<mx:HSlider id="m5" value="-30" minimum="-500" change="updateDataGrid()" maximum="400"  snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m4" value="20" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m5" value="130" minimum="-500" change="updateDataGrid()" maximum="400"  snapInterval="1" liveDragging="true"/>
 		<mx:HSlider id="m6" value="0" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
 		<mx:HSlider id="m7" value="80" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
 		<mx:HSlider id="m8" value="40" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
@@ -243,9 +243,6 @@
 			<mx:Label text="Sizing MicroColumn"/>
 			<mx:HSlider id="mnaw" minimum="10" value="200" maximum="400" snapInterval="1" liveDragging="true"/>
 			<mx:HSlider id="mnah" minimum="10" value="100" maximum="200" snapInterval="1" liveDragging="true"/>
-			<mc:MicroColumnChart dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}" 
-				height="{mnah.value}" width="{mnaw.value}" spacing="1" backgroundColor="0xdddddd" backgroundStroke="0x888888"/>
-			<mx:Label text="Chart below is using ArrayCollection"/>
 			<mc:MicroColumnChart 
 				height="{mnah.value}" width="{mnaw.value}" spacing="1" 
 				backgroundColor="0xdddddd" backgroundStroke="0x888888"
@@ -297,8 +294,7 @@
 			<mx:Label text="Sizing Micro100Bar"/>
 			<mx:HSlider id="w100" value="70" minimum="0" maximum="400" snapInterval="1" liveDragging="true"/>
 			<mx:HSlider id="h100" value="20" minimum="0" maximum="400" snapInterval="1" liveDragging="true"/>
-			<mx:Label text="Chart below is using ArrayCollection"/>
-			<mc:Micro100BarChart height="{h100.value}" width="{w100.value}" 
+			<mc:Micro100BarChart height="{h100.value}" width="{w100.value}"
 				colors="{colors}" stroke="0xffffff" backgroundColor="0xeeeeee" backgroundStroke="0x888888"
 				dataField="v" dataProvider="{dpAC}"/>
 		</mx:VBox>
