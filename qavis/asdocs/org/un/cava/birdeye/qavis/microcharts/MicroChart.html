@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../../../print.css" type="text/css" media="print">
-<meta content="MicroChart,org.un.cava.birdeye.qavis.microcharts.MicroChart,data,geomGroup,min,tot,backgroundColor,backgroundStroke,colors,dataProvider,stroke" name="keywords">
+<meta content="MicroChart,org.un.cava.birdeye.qavis.microcharts.MicroChart,data,geomGroup,min,tot,backgroundColor,backgroundStroke,colors,dataProvider,stroke,dataField,gradientColors" name="keywords">
 <title>org.un.cava.birdeye.qavis.microcharts.MicroChart</title>
 </head>
 <body>
@@ -47,9 +47,8 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <p></p>
   This class is used as skeleton for most of microcharts in this library. It provides the common properties and methods 
   that can be used or overridden by several microcharts components that extend this class.  
-  The dataProvider property can only accept Array at the moment, but will be soon extended with ArrayCollection
-  and XML.
-  
+  The dataProvider property be accept Array, ArrayCollection, String, XML, etc.
+  If dataProvider is different from a simple Array of values, than the dataField property cannot be null.
  <p></p>
 <br>
 <hr>
@@ -77,8 +76,18 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol">MicroChart</td>
 </tr>
 <tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#dataField">dataField</a> : String<div class="summaryTableDescription">[write-only]
+  Indicate the data field to be used to feed the chart.</div>
+</td><td class="summaryTableOwnerCol">MicroChart</td>
+</tr>
+<tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#dataProvider">dataProvider</a> : Object<div class="summaryTableDescription">
   Set the dataProvider to feed the chart.</div>
+</td><td class="summaryTableOwnerCol">MicroChart</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#gradientColors">gradientColors</a> : Array<div class="summaryTableDescription">[write-only]
+  Set the gradient colors.</div>
 </td><td class="summaryTableOwnerCol">MicroChart</td>
 </tr>
 <tr class="">
@@ -193,6 +202,20 @@ showHideInherited();
 <div class="detailBody">
 <code>protected var data:Array</code>
 </div>
+<a name="dataField"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">dataField</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>dataField:String</code>&nbsp;&nbsp;[write-only]<p>
+  Indicate the data field to be used to feed the chart. 
+  </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set dataField(value:String):void</code>
+<br>
+</div>
 <a name="dataProvider"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -217,6 +240,20 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>protected var geomGroup:GeometryGroup</code>
+</div>
+<a name="gradientColors"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">gradientColors</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>gradientColors:Array</code>&nbsp;&nbsp;[write-only]<p>
+  Set the gradient colors. 
+  </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set gradientColors(value:Array):void</code>
+<br>
 </div>
 <a name="min"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
