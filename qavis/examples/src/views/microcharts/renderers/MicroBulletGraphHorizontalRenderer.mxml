@@ -13,7 +13,7 @@
 				var popUp:HorizontalBulletZoom; 
 				popUp = HorizontalBulletZoom(PopUpManager.createPopUp(this, HorizontalBulletZoom , false));
 				popUp.width = 500;
-				popUp.height = 80;
+				popUp.height = 100;
 				popUp.a = data.Chart;
 				popUp.target = data.trg;
 				popUp.value = data.val;
@@ -21,8 +21,8 @@
 			}
 		]]>
 	</mx:Script>
-	<mc:MicroBulletGraph orientation="horizontal" width="60" height="15"
-		qualitativeRanges="{data.Chart}" toolTip="Double click to zoom it"
+	<mc:MicroBulletGraph orientation="horizontal" width="60" height="15" noSnap="true"
+		qualitativeRanges="{data.Chart}" toolTip="Double click to zoom it" 
 		target="{data.trg}" value="{data.val}" doubleClick="popChart();" doubleClickEnabled="true"/>
 	<mx:Text selectable="false" fontSize="8" text="Zoom it with double click"/>
 </mx:VBox>
