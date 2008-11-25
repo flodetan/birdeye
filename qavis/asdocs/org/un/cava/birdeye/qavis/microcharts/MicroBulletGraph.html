@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../../../print.css" type="text/css" media="print">
-<meta content="MicroBulletGraph,org.un.cava.birdeye.qavis.microcharts.MicroBulletGraph,formatter,orientation,qualitativeRanges,snapInterval,target,value,measure" name="keywords">
+<meta content="MicroBulletGraph,org.un.cava.birdeye.qavis.microcharts.MicroBulletGraph,formatter,noSnap,orientation,paddingLeft,paddingTop,qualitativeRanges,snapInterval,target,value,measure" name="keywords">
 <title>org.un.cava.birdeye.qavis.microcharts.MicroBulletGraph</title>
 </head>
 <body>
@@ -85,8 +85,23 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol">MicroBulletGraph</td>
 </tr>
 <tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#noSnap">noSnap</a> : Boolean<div class="summaryTableDescription">
+   If true, than the snap is not created, recommended for repeted microcharts rendering.</div>
+</td><td class="summaryTableOwnerCol">MicroBulletGraph</td>
+</tr>
+<tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#orientation">orientation</a> : String<div class="summaryTableDescription">
   Set the orientation parameter of the BulletGraph.</div>
+</td><td class="summaryTableOwnerCol">MicroBulletGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#paddingLeft">paddingLeft</a> : Number<div class="summaryTableDescription">
+  Set a space to the left of the chart to better arrange it, if needed.</div>
+</td><td class="summaryTableOwnerCol">MicroBulletGraph</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#paddingTop">paddingTop</a> : Number<div class="summaryTableDescription">
+  Set a space from the top of the chart to better arrange it, if needed.</div>
 </td><td class="summaryTableOwnerCol">MicroBulletGraph</td>
 </tr>
 <tr class="">
@@ -170,6 +185,22 @@ showHideInherited();
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function set formatter(value:NumberFormatter):void</code>
 <br>
 </div>
+<a name="noSnap"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">noSnap</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>noSnap:Boolean</code>&nbsp;&nbsp;[read-write]<p>
+   If true, than the snap is not created, recommended for repeted microcharts rendering.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get noSnap():Boolean</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set noSnap(value:Boolean):void</code>
+<br>
+</div>
 <a name="orientation"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -184,6 +215,38 @@ showHideInherited();
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function get orientation():String</code>
 <br>
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function set orientation(value:String):void</code>
+<br>
+</div>
+<a name="paddingLeft"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">paddingLeft</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>paddingLeft:Number</code>&nbsp;&nbsp;[read-write]<p>
+  Set a space to the left of the chart to better arrange it, if needed.
+  </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get paddingLeft():Number</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set paddingLeft(value:Number):void</code>
+<br>
+</div>
+<a name="paddingTop"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">paddingTop</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>paddingTop:Number</code>&nbsp;&nbsp;[read-write]<p>
+  Set a space from the top of the chart to better arrange it, if needed.
+  </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get paddingTop():Number</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set paddingTop(value:Number):void</code>
 <br>
 </div>
 <a name="qualitativeRanges"></a>
