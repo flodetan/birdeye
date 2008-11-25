@@ -35,13 +35,16 @@ package org.un.cava.birdeye.qavis.microcharts
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
-	
+	import flash.xml.XMLNode;
 	import flash.text.TextFieldAutoSize;
-	
 	import mx.core.UITextField;
 	import mx.formatters.NumberFormatter;
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
+	import mx.collections.ArrayCollection;
+	import mx.collections.ICollectionView;
+	import mx.collections.IViewCursor;
+	import mx.collections.XMLListCollection;
 
 	[Inspectable("orientation")]
 	[Inspectable("noSnap")]
@@ -61,8 +64,7 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * 	target="50" value="45" title="Vertical BG"
 	 * 	snapInterval="5" width="30" height="200"/></p>
 	 * 
-	 * <p>The qualitativeRanges property can only accept Array at the moment, but will be soon extended with ArrayCollection
-	 * and XML. 
+	 * <p>The qualitativeRanges can accept Array, ArrayCollection, XML, XMLListCollection, etc... 
 	 * It's also possible to change colors by defining the following properties:</p>
 	 * <p>- colors: array that sets the color for each range. </p>
 	 * <p>- valueColor: to modify the value (bar or dot) color;</p>
@@ -88,20 +90,22 @@ package org.un.cava.birdeye.qavis.microcharts
 		private var snapTextFontSize:int = 8;
 
 		private var _orientation:String;
-		private var _qualitativeRanges:Array = new Array();
+		private var _dataField:String;
+		private var _qualitativeRanges:Object = new Object();
 		private var _value:Number;
 		private var _target:Number;
 		private var _snapInterval:Number = NaN;
 		private var _colors:Array = ["0x777777","0x999999","0xbbbbbb","0xcccccc","0xdddddd"];
 		private var _noSnap:Boolean = false;
 		
-		private var _formatter:NumberFormatter = new NumberFormatter();
-
 		private var prevStartX:Number, prevStartY:Number, min:Number, max:Number, _paddingLeft:Number = 0, _paddingTop:Number = 0;
 		private var maxSize:Number = 10;
-		private var maxSnapWidth:Number = 0, snapColor:int = 0x999999, snapFontSize:int = 8, snapLong:int = 5, snapThick:int = 1;
+		private var snapColor:int = 0x999999, snapFontSize:int = 8, snapLong:int = 5, snapThick:int = 1;
 		private var snapStyle:CSSStyleDeclaration;
-		
+		private var _formatter:NumberFormatter = new NumberFormatter();
+
+		private var data:Array;
+
 		public function set paddingLeft(val:Number):void
 		{
 			_paddingLeft = val;
@@ -167,18 +171,68 @@ package org.un.cava.birdeye.qavis.microcharts
 			invalidateDisplayList();
 		}
 
-		public function set qualitativeRanges(val:Array):void
+		public function set qualitativeRanges(value:Object):void
 		{
-			_qualitativeRanges = val;
+			//_dataProvider = value;
+			if(typeof(value) == "string")
+	    	{
+	    		//string becomes XML
+	        	value = new XML(value);
+	     	}
+	        else if(value is XMLNode)
+	        {
+	        	//AS2-style XMLNodes become AS3 XML
+				value = new XML(XMLNode(value).toString());
+	        }
+			else if(value is XMLList)
+			{
+				if(XMLList(value).children().length()>0){
+					value = new XMLListCollection(value.children() as XMLList);
+				}else{
+					value = new XMLListCollection(value as XMLList);
+				}
+			}
+			else if(value is Array)
+			{
+				value = new ArrayCollection(value as Array);
+			}
+			
+			if(value is XML)
+			{
+				var list:XMLList = new XMLList();
+				list += value;
+				this._qualitativeRanges = new XMLListCollection(list.children());
+			}
+			//if already a collection dont make new one
+	        else if(value is ICollectionView)
+	        {
+	            this._qualitativeRanges = ICollectionView(value);
+	        }else if(value is Object)
+			{
+				// convert to an array containing this one item
+				this._qualitativeRanges = new ArrayCollection( [value] );
+	  		}
+	  		else
+	  		{
+	  			this._qualitativeRanges = new ArrayCollection();
+	  		}
 			invalidateDisplayList();
 		}
 		
 		/**
 		* Set the qualityRanges parameter of the BulletGraph
 		*/
-		public function get qualitativeRanges():Array
+		public function get qualitativeRanges():Object
 		{
 			return _qualitativeRanges;
+		}
+		
+		/**
+		* Indicate the data field to be used to feed the chart. 
+		*/
+		public function set dataField(value:String):void
+		{
+			_dataField = value;
 		}
 		
 		/**
@@ -227,53 +281,69 @@ package org.un.cava.birdeye.qavis.microcharts
 
 		/**
 		* @private
-		 * Used to recalculate min, max and tot each time properties have to ba revalidated 
+		* 
 		*/
-		override protected function commitProperties():void
+		private function feedDataArray():void
 		{
-			super.commitProperties();
-			tot = NaN;
-			if (!noSnap)
+			data = new Array();
+			var cursor:IViewCursor = _qualitativeRanges.createCursor();
+			var i:int=0;
+			
+			while(!cursor.afterLast)
 			{
-		        snapStyle = new CSSStyleDeclaration('snapStyle');
-		        snapStyle.setStyle('color', snapColor);
-		        snapStyle.setStyle('fontSize', snapFontSize);
-		        StyleManager.setStyleDeclaration(".snapStyle", snapStyle, true);
+				if (_dataField == null)
+					data[i] = Number(cursor.current);
+				else 
+					data[i] = cursor.current[_dataField];
+			    i++;
+			    cursor.moveNext();      
 			}
-	
-			if (orientation == null || orientation.length == 0)
-				orientation = HORIZONTAL;
 		}
-		
+
 		/**
 		* @private
-		 * Sort the qualitativeRanges array and calculate min, max and tot  
+		 * load values into data, sort the qualitativeRanges array depending on the orientation 
+		 * and calculate min, max and tot. 
 		*/
-		private function sortMinMaxTot():void
+		private function feedDataSortMinMaxTot():void
 		{
+			data = new Array();
+			var cursor:IViewCursor = _qualitativeRanges.createCursor();
+			var i:int=0;
+			
+			prevStartX = 0;
+			min = max = Number((_dataField != null) ? cursor.current[_dataField] : cursor.current); 
+
+			tot = 0;
+
+			while(!cursor.afterLast)
+			{
+				if (_dataField == null)
+					data[i] = Number(cursor.current);
+				else 
+					data[i] = cursor.current[_dataField];
+
+				if (min > data[i])
+					min = data[i];
+				if (max < data[i])
+					max = data[i];
+
+			    i++;
+			    cursor.moveNext();      
+			}
+
+			tot = Math.abs(max - min);
+
 			switch (orientation)
 			{
 				case VERTICAL:
-					_qualitativeRanges.sort(Array.DESCENDING | Array.NUMERIC);
+					data.sort(Array.DESCENDING | Array.NUMERIC);
 					_colors.sort(Array.DESCENDING | Array.NUMERIC);
 					break;
 				case HORIZONTAL:
-					_qualitativeRanges.sort(Array.NUMERIC);
+					data.sort(Array.NUMERIC);
 					_colors.sort(Array.NUMERIC);
 			}
-
-			prevStartX = 0;
-			min = max = _qualitativeRanges[0];
-
-			tot = 0;
-			for (var i:Number = 0; i < _qualitativeRanges.length; i++)
-			{
-				if (min > _qualitativeRanges[i])
-					min = _qualitativeRanges[i];
-				if (max < _qualitativeRanges[i])
-					max = _qualitativeRanges[i];
-			}
-			tot = Math.abs(max - min);
 		}
 
 		/**
@@ -311,7 +381,7 @@ package org.un.cava.birdeye.qavis.microcharts
 					prevStartX = 0;
 				}
 				else
-					_offSizeX = (_qualitativeRanges[indexIteration]-_qualitativeRanges[indexIteration-1])* width / tot;
+					_offSizeX = (data[indexIteration]-data[indexIteration-1])* width / tot;
 
 				prevStartX +=  _offSizeX;
 			}
@@ -352,7 +422,7 @@ package org.un.cava.birdeye.qavis.microcharts
 					prevStartY = 0;
 				}
 				else
-					_offSizeY = (_qualitativeRanges[indexIteration-1]-_qualitativeRanges[indexIteration])* height / tot;
+					_offSizeY = (data[indexIteration-1]-data[indexIteration])* height / tot;
 
 				prevStartY +=  _offSizeY;
 			}
@@ -554,14 +624,33 @@ package org.un.cava.birdeye.qavis.microcharts
 		}
 		
 		/**
+		* @private
+		 * Used to recalculate min, max and tot each time properties have to ba revalidated 
+		*/
+		override protected function commitProperties():void
+		{
+			super.commitProperties();
+			tot = NaN;
+			if (!noSnap)
+			{
+		        snapStyle = new CSSStyleDeclaration('snapStyle');
+		        snapStyle.setStyle('color', snapColor);
+		        snapStyle.setStyle('fontSize', snapFontSize);
+		        StyleManager.setStyleDeclaration(".snapStyle", snapStyle, true);
+			}
+	
+			if (orientation == null || orientation.length == 0)
+				orientation = HORIZONTAL;
+		}
+		
+		/**
 		* @private 
 		 * Used to create and refresh the chart.
 		*/
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			maxSnapWidth = 0;
-			sortMinMaxTot();
+			feedDataSortMinMaxTot();
 			for(var i:int=this.numChildren-1; i>=0; i--)
 				removeChildAt(i);
 
@@ -681,7 +770,7 @@ package org.un.cava.birdeye.qavis.microcharts
 			targetShape.fill = black;
 			
 			// create qualitativeRanges
-			for (var i:Number=0; i<_qualitativeRanges.length; i++)
+			for (var i:Number=0; i<data.length; i++)
 			{
 				var qualitativeShape:RegularRectangle = 
 					new RegularRectangle(_paddingLeft+startX(i), _paddingTop+startY(i), offsetSizeX(i), offsetSizeY(i));
