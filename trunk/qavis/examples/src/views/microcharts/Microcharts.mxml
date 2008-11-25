@@ -299,11 +299,11 @@
 			<mx:HSlider id="hht" minimum="10" value="20" maximum="200" snapInterval="1" liveDragging="true"/>
 			<mx:Label text="Snap interval"/>
 			<mx:HSlider minimum="1" maximum="30" value="26" snapInterval="1" id="tk" liveDragging="true"/>
-			<mc:MicroBulletGraph orientation="vertical" 
+			<mc:MicroBulletGraph orientation="vertical" paddingLeft="50"
 				qualitativeRanges="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value]}" 
 				target="{t.value}" value="{v.value}" 
 				snapInterval="{tk.value}" width="{vwd.value}" height="{vht.value}"/>
-			<mc:MicroBulletGraph orientation="horizontal"  
+			<mc:MicroBulletGraph orientation="horizontal"  paddingTop="20" paddingLeft="20"
 				qualitativeRanges="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value]}" 
 				target="{t.value}" value="{v.value}" 
 				snapInterval="{tk.value}" width="{hwd.value}" height="{hht.value}"/>
