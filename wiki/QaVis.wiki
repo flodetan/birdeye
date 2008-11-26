@@ -7,13 +7,15 @@ http://birdeye.googlecode.com/svn/trunk/images/BirdEyeLogoQaVis100.png
 
 This library is focused on conventional and novel approaches to the analysis, interpretation, explanation, and presentation of numerical data.  Components include:
 
-  * MicroCharts, Sparklines
+  * MicroCharts/Sparklines
   * Treemaps
   * Conventional charting such as bar, column, pie, line, plot, x/y.
+  * CoxComb, Parallel Coordinates Plot, Polar Chart, etc.
 
 === Status ===
 
-Currently under development
+Currently under development;
+Beta 1.0 MicroChart components released 25-Nov-2008
 
 === Demos ===
   * Check out the QaVisExplorer [http://birdeye.googlecode.com/svn/trunk/qavis/examples/bin/QaVisExplorer.html here] (work in progress)
