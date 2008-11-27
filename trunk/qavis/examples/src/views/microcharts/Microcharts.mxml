@@ -12,7 +12,7 @@
             import mx.collections.ArrayCollection;
 
 			[Bindable]
-			private var colors:Array = [0xe2e0f8, 0xa69df6, 0x7e71f3, 0x412fed, 0x766dca, 0xb36dca, 0xb193bb, 0x49d8e1, 0x6da3a6, 0x06e9f7, 0xabf4f9];
+			private var colors:Array = [0xe2e0f8, 0xa69df6, 0x7e71f3, 0x412fed, 0x766dca, 0xb36dca, 0xb193bb, 0x49d8e1, 0x6da3a6, 0x06e9f7, 0xabf4f9, 0x24e9dd];
             [Bindable]
             private var acMC:ArrayCollection;
             
