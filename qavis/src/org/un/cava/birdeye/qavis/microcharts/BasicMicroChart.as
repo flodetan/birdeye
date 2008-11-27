@@ -58,6 +58,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		private var tempColor:int = 0xbbbbbb;
 		
 		private var _colors:Array = null;
+		private var _color:Number = NaN;
 		private var _gradientColors:Array;
 		private var _dataProvider:Object = new Object();
 		private var _dataField:String;
@@ -66,6 +67,31 @@ package org.un.cava.birdeye.qavis.microcharts
 		private var _backgroundStroke:Number = NaN;
 		
 		protected var data:Array;
+		
+		public function get color():Number
+		{
+			return _color;
+		}
+
+		public function set color(val:Number):void
+		{
+			_color = val;
+			invalidateDisplayList();
+		}
+		
+		public function set colors(val:Array):void
+		{
+			_colors = val;
+			invalidateDisplayList();
+		}
+		
+		/**
+		 * This property sets the colors of the bars in the chart. If not set, a function will automatically create colors for each bar.
+		*/
+		public function get colors():Array
+		{
+			return _colors;
+		}
 		
 		public function set backgroundColor(val:Number):void
 		{
@@ -95,20 +121,6 @@ package org.un.cava.birdeye.qavis.microcharts
 			return _backgroundStroke;
 		}
 
-		public function set colors(val:Array):void
-		{
-			_colors = val;
-			invalidateDisplayList();
-		}
-		
-		/**
-		 * This property sets the colors of the bars in the chart. If not set, a function will automatically create colors for each bar.
-		*/
-		public function get colors():Array
-		{
-			return _colors;
-		}
-		
 		public function set dataProvider(value:Object):void
 		{
 			//_dataProvider = value;
@@ -280,14 +292,19 @@ package org.un.cava.birdeye.qavis.microcharts
 		protected function useColor(indexIteration:Number):IGraphicsFill
 		{
 			var fill:IGraphicsFill;
-			
-			if(_gradientColors==null)
+
+			if(_gradientColors == null)
 			{
 				fill = new SolidFill();
-				if(_colors==null)
+				if(_colors == null)
 				{
-					fill = new SolidFill(tempColor);
-					tempColor += 0x083456;
+					if (isNaN(_color))
+					{
+						fill = new SolidFill(tempColor);
+						tempColor += 0x083456;
+					}
+					else
+						fill = new SolidFill(_color);
 				} else
 					fill = new SolidFill(_colors[indexIteration]);
 			} else 
