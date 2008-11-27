@@ -275,7 +275,7 @@
 		
 		<mx:ViewStack id="myVS" width="100%" selectedIndex="1" creationPolicy="all" horizontalScrollPolicy="off"  visible="{isLoading}" >
 			<mx:Canvas width="100%" horizontalScrollPolicy="off">
-				<controls:GeoAutoGauge id="geoAutoGauge" target="{myMap}" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" valueField="{featureSelector.selectedItem.data}" x="15" y="370" width="720" height="14"  scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" geoTScale="true" title="Percentage" textColor="0xFFFFFF" startAtZero="true" visible="true"/>	
+				<controls:GeoAutoGauge id="geoAutoGauge" target="{myMap}" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" valueField="{featureSelector.selectedItem.data}" x="15" y="370" width="720" height="14"  scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" geoScale="false" title="Percentage" textColor="0xFFFFFF" startAtZero="true" visible="true"/>	
 			</mx:Canvas>
 			<mx:Canvas width="100%" horizontalScrollPolicy="off">
 				<surrounds:Legend target="{geoAutoGauge}"  x="15" y="370" width="720" height="20"/>
