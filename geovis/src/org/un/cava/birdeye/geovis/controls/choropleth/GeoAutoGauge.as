@@ -323,7 +323,7 @@ package org.un.cava.birdeye.geovis.controls.choropleth
      	 *  Valid values are <code>true</code> or <code>false</code>.
      	 *  @default false
 	     */
-		public function set geoTScale(value:Boolean):void
+		public function set geoScale(value:Boolean):void
 		{
 			_geoScale = value;
 		}
