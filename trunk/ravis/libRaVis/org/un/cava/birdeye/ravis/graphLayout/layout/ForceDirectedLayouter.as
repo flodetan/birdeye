@@ -530,7 +530,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				(_deltaPositions[t_vn1] as Point).y = t_dy / 2.0;
 				
 				/* how far did the node move? */
-				t_distanceMoved = Math.sqrt(t_dx*t_dx * t_dy*t_dy);
+				t_distanceMoved = Math.sqrt(t_dx*t_dx + t_dy*t_dy);
 					
 				/* move the node, but only if it is not currently dragged! */
 				if(t_vn1.moveable && t_vn1 != _dragNode) {
