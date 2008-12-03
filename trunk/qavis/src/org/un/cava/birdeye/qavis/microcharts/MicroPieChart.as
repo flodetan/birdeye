@@ -37,34 +37,33 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * properties (backgroundColor, backgroundStroke, colors, stroke, dataProvider, etc) and methods (minMaxTot, 
 	 * useColor, createBackground).
 	 * The basic simple syntax to use it and create an Pie microchart with mxml is:</p>
-	 * <p>&lt;MicroPieChart dataProvider="{myArray}" size="70"/></p>
+	 * <p>&lt;MicroPieChart dataProvider="{myArray}" diameter="70"/></p>
 	 * 
-	 * To size the Pie chart:</p>
-	 * <p>- size: to define the diameter of the chart;</p>
+	 * To diameter the Pie chart:</p>
+	 * <p>- diameter: to define the diameter of the chart;</p>
 	 * 
 	 * <p>If no colors are defined, than the Pie chart will display different colors based on the default color and a default offset color.</p>
 	*/
 	public class MicroPieChart extends BasicMicroChart
 	{
 		private var _referenceColor:Number = NaN;
-		private var _radius:Number = 2;
-		private var _size:Number = NaN;
+		private var _diameter:Number = NaN;
 
 		private var prevAngleSize:Number = 0;
 		
-		public function set size(val:Number):void
+		public function set diameter(val:Number):void
 		{
-			_size = val;
+			_diameter = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
 		
 		/**
-		* Set the size of the chart (circle).  
+		* Set the diameter of the chart (circle).  
 		*/
-		public function get size():Number
+		public function get diameter():Number
 		{
-			return _size;
+			return _diameter;
 		}
 					
 		public function MicroPieChart()
@@ -128,21 +127,16 @@ package org.un.cava.birdeye.qavis.microcharts
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			prevAngleSize = 0;
-			for(var i:int=this.numChildren-1; i>=0; i--)
-				if(getChildAt(i) is GeometryGroup)
-					removeChildAt(i);
 
-			geomGroup = new GeometryGroup();
-			geomGroup.target = this;
-			createBackground(width, height);
+			createBackground(unscaledWidth, unscaledHeight);
 			createPies();
 			this.graphicsCollection.addItem(geomGroup);
 		}
 		
 		override protected function createBackground(w:Number, h:Number):void
 		{
-			w = size;
-			h = size;
+			w = diameter;
+			h = diameter;
 			super.createBackground(w, h);
 		}
 
@@ -159,7 +153,7 @@ package org.un.cava.birdeye.qavis.microcharts
 				
 				if (data[i] > 0) 
 				{
-					pie = new EllipticalArc(space, space, size, size, prevAngleSize, arcAngleSize(i),"pie");
+					pie = new EllipticalArc(space, space, diameter, diameter, prevAngleSize, arcAngleSize(i),"pie");
 
 					pie.fill = useColor(i);
 						
@@ -173,13 +167,13 @@ package org.un.cava.birdeye.qavis.microcharts
 		
 		/**
 		* @private 
-		 * Set the minHeight and minWidth in case width and height are not set in the creation of the chart.
+		 * Set explicit sizes to the diameter value. Set also minWidth and minHeight
 		*/
 		override protected function measure():void
 		{
+			explicitWidth = diameter;
+			explicitHeight = diameter;
 			super.measure();
-			minHeight = 5;
-			minWidth = 10;
 		}
 	}
 }
