@@ -27,10 +27,7 @@
 
 package org.un.cava.birdeye.qavis.microcharts
 {
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.Line;
-	import com.degrafa.geometry.RegularRectangle;
-	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	[Inspectable("negative")]
@@ -130,9 +127,9 @@ package org.un.cava.birdeye.qavis.microcharts
 		* @private
 		 * Calculate the height size of the column for for the current dataProvider value   
 		*/
-		private function sizeY(indexIteration:Number):Number
+		private function sizeY(indexIteration:Number, h:Number):Number
 		{
-			var _sizeY:Number = data[indexIteration] / tot * height;
+			var _sizeY:Number = data[indexIteration] / tot * h;
 			return _sizeY;
 		}
 
@@ -148,14 +145,8 @@ package org.un.cava.birdeye.qavis.microcharts
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			for(var i:int=this.numChildren-1; i>=0; i--)
-				if(getChildAt(i) is GeometryGroup)
-						removeChildAt(i);
 
-			geomGroup = new GeometryGroup();
-			geomGroup.target = this;
-			createBackground(width, height);
-			createLines();
+			createLines(unscaledWidth, unscaledHeight);
 			this.graphicsCollection.addItem(geomGroup);
 		}
 				
@@ -163,20 +154,20 @@ package org.un.cava.birdeye.qavis.microcharts
 		* @private 
 		 * Create the lines of the chart.
 		*/
-		private function createLines():void
+		private function createLines(w:Number, h:Number):void
 		{
-			var columnWidth:Number = width/data.length;
-			var startY:Number = height + Math.min(min,0)/tot * height;
+			var columnWidth:Number = w / data.length;
+			var startY:Number = h + Math.min(min,0)/tot * h;
 			var startX:Number = 0;
 
 			// create reference line
 			if (!isNaN(_referenceValue))
 			{
-				var refY:Number = startY - _referenceValue/tot * height;
-				refY = Math.min(height, refY);
+				var refY:Number = startY - _referenceValue/tot * h;
+				refY = Math.min(h, refY);
 				refY = Math.max(0, refY);
 				
-				var refLine:Line = new Line(space+startX, space+refY, space+width, space+refY);
+				var refLine:Line = new Line(space+startX, space+refY, space+w, space+refY);
 				refLine.stroke = new SolidStroke(_referenceColor);
 				geomGroup.geometryCollection.addItem(refLine);
 			}
@@ -184,7 +175,7 @@ package org.un.cava.birdeye.qavis.microcharts
 			// create negative ref line
 			if (_negative)
 			{
-				var negLine:Line = new Line(space+startX, space+startY, space+width, space+startY);
+				var negLine:Line = new Line(space+startX, space+startY, space+w, space+startY);
 				negLine.stroke = new SolidStroke(_negativeColor);
 				geomGroup.geometryCollection.addItem(negLine);
 			}
@@ -193,7 +184,7 @@ package org.un.cava.birdeye.qavis.microcharts
 			for (var i:Number=0; i<data.length-1; i++)
 			{
 				var line:Line = 
-					new Line(space+startX+columnWidth/2, space+startY-sizeY(i), space+startX + columnWidth*3/2, space+startY-sizeY(i+1));
+					new Line(space+startX+columnWidth/2, space+startY-sizeY(i,h), space+startX + columnWidth*3/2, space+startY-sizeY(i+1,h));
 				
 				startX += columnWidth;
 
@@ -204,17 +195,6 @@ package org.un.cava.birdeye.qavis.microcharts
 					
 				geomGroup.geometryCollection.addItem(line);
 			}
-		}
-		
-		/**
-		* @private 
-		 * Set the minHeight and minWidth in case width and height are not set in the creation of the chart.
-		*/
-		override protected function measure():void
-		{
-			super.measure();
-			minHeight = 5;
-			minWidth = 10;
 		}
 	}
 }
