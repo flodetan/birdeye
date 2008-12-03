@@ -32,7 +32,7 @@
 		import org.un.cava.birdeye.geovis.controls.choropleth.*;
 		import org.un.cava.birdeye.geovis.events.GeoMapEvents;
 		import org.un.cava.birdeye.geovis.locators.LatLong;
-		
+		import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 		import styles.events.StyleLoaderEvent;
 		
 		[Bindable]
@@ -242,13 +242,12 @@
 	<mx:HBox id="dashboardTop" width="100%" horizontalGap="5" >
 			
 	<!-- Map Panel-->
-	<mx:Panel layout="absolute" id="mapCnvs" title="Visualize: 2008 Beijing Olympics" width="750" height="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off">		
-		
+	<mx:Panel layout="absolute" id="mapCnvs" title="Visualize: World Population Projections" width="750" height="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off">		
 		<!-- To load flows for Olympic torch run -->
 			<mx:CheckBox id="showFlows" x="625" top="0" label="Journey of Harmony:" labelPlacement="left" selected="false" change="toggleFlows();" />
 		
 		<!-- Need to add property for perspective, e.g. 2d, 3dPlane, 3dSphere -->
-		<geomap:WorldMap visible="{isLoading}" id="myMap" ItemClick="showDetails(event)" DrawBaseMapComplete="{isLoading = true}"  scaleX=".942" scaleY=".942" x="0" y="30" >
+		<geomap:WorldMap visible="{isLoading}" projection="Miller cylindrical" id="myMap" ItemClick="showDetails(event)" DrawBaseMapComplete="{isLoading = true}"  scaleX=".942" scaleY=".942" x="0" y="20" ><!-- DrawBaseMapComplete="{progressBar.visible=false}" projection="{projectionSelector.selectedItem.label}"  ProjectionChanged="{progressBar.visible=true}"-->
 			<analysis:Choropleth id="choropleth" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" colorField="{featureSelector.selectedItem.data}" alpha="1" scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" dataTipFunction="customDataTip" highlighted="true"  />
 			<symbols:Symbols id="mySymbols" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" itemRenderer="renderers.MedalsRenderer" visible="false" />			
 			
@@ -258,11 +257,11 @@
 					</symbols:Symbol>
 			</mx:Repeater>
 			
-			<!-- Lat/Long based marker for Beijing -->
-			<locators:LatLong lat="39.92889" long="116.38833" >
-				<mx:Button width="25" height="25" toolTip="Beijing (This is an example of symbol placement by lat/long coordinates..." fillColors="[#ff0000, #ff0000]" cornerRadius="10" />
-			</locators:LatLong>
-			
+			<!--
+			<locators:LatLong lat=" 35.66667 " long=" 139.75 " > 
+				<mx:Label text=" Tokyo " /> 
+			</locators:LatLong> 
+			-->
 			<!-- Need to complete cartogram function -->
 			<!--
 			<analysis:Cartogram id="cartogram" dataprovider="" foid="" areaField="" type="" form="" />
@@ -275,7 +274,7 @@
 		
 		<mx:ViewStack id="myVS" width="100%" selectedIndex="1" creationPolicy="all" horizontalScrollPolicy="off"  visible="{isLoading}" >
 			<mx:Canvas width="100%" horizontalScrollPolicy="off">
-				<controls:GeoAutoGauge id="geoAutoGauge" target="{myMap}" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" valueField="{featureSelector.selectedItem.data}" x="15" y="370" width="720" height="14"  scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" geoScale="false" title="Percentage" textColor="0xFFFFFF" startAtZero="true" visible="true"/>	
+				<controls:GeoAutoGauge id="geoAutoGauge" target="{myMap}" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" valueField="{featureSelector.selectedItem.data}" x="15" y="370" width="720" height="14"  scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" geoScale="true" title="Percentage" textColor="0xFFFFFF" startAtZero="true" visible="true"/>	
 			</mx:Canvas>
 			<mx:Canvas width="100%" horizontalScrollPolicy="off">
 				<surrounds:Legend target="{geoAutoGauge}"  x="15" y="370" width="720" height="20"/>
@@ -299,6 +298,7 @@
 							<mx:ComboBox id="projectionSelector" width="180" prompt="Projection..." change="projChange(event)" selectedIndex="3" toolTip="Select map area for viewing..." >
 								<mx:ArrayCollection>
 										<mx:Object label="Geographic"/>
+										<!--<mx:Object label="Lambert equal area"/>-->
 										<mx:Object label="Mollweide"/>
 										<mx:Object label="WinkelTripel"/>
 										<mx:Object label="Miller cylindrical"/>
@@ -310,10 +310,7 @@
 								</mx:ArrayCollection>
 							</mx:ComboBox>				
 							<mx:HRule width="100%" />
-							<!-- In development 
 							<viewers:GeoZoom  id="zoomSelector" width="180" prompt="Zoom..." target="{myMap}" toolTip="Select map area for viewing..." />
-							-->
-							<mx:ComboBox id="zoomSelector" width="180" prompt="Zoom..." toolTip="Select map area for viewing..." />
 							<mx:HRule width="100%" />
 											
 							<!-- Colorize Styles -->
@@ -374,14 +371,14 @@
 							
 							<mx:HBox width="95%" horizontalAlign="center" >
 							<mx:Label text="Cartogram:" textAlign="left" fontWeight="bold" fontSize="10" />
-							<mx:ComboBox id="cartogramSelector" height="20" width="115" alpha="0.6" prompt="Type..." toolTip="Under development..." >
+							<mx:ComboBox id="cartogramSelector" height="20" width="115" prompt="Type..." toolTip="Select the orientation of tree layout" >
 									<mx:ArrayCollection>
 										<mx:String>Area</mx:String>
 										<mx:String>Distance</mx:String>
 									</mx:ArrayCollection>
 							</mx:ComboBox>
 							</mx:HBox>
-							<mx:ComboBox id="cartoFormSelector" height="20" width="180" alpha="0.6" prompt="Form..." toolTip="Under development"  >
+							<mx:ComboBox id="cartoFormSelector" height="20" width="180" prompt="Form..." toolTip="Select the location where symbols will be placed on the map"  >
 									<mx:ArrayCollection>
 										<mx:String>Non-Contiguous</mx:String>
 										<mx:String>Continguous</mx:String>
@@ -389,7 +386,7 @@
 										<mx:String>Demmer</mx:String>
 									</mx:ArrayCollection>
 							</mx:ComboBox>
-							<mx:ComboBox id="cartoFieldSelector" itemRenderer="mx.controls.Label" height="20" width="180" alpha="0.6" prompt="For values..." toolTip="Under development..." >
+							<mx:ComboBox id="cartoFieldSelector" itemRenderer="mx.controls.Label" height="20" width="180" prompt="For values..." toolTip="Select the field(s) for the symbol values" >
 									<mx:ArrayCollection>
 										<mx:String>All</mx:String>
 										<mx:String>Gold</mx:String>
@@ -404,11 +401,9 @@
 								<mx:Label text="Perspective:" textAlign="left" fontWeight="bold" fontSize="10" />
 								<mx:RadioButtonGroup id="perspective" labelPlacement="right" />
 									<mx:RadioButton groupName="perspective" id="twod" value="twod" 
-            							label="2D" selected="true" toolTip="Under development..." />
+            							label="2D" selected="true" />
         							<mx:RadioButton groupName="perspective" id="plane" value="plane" 
-            							label="Plane" toolTip="Under development..." />
-            						<mx:RadioButton groupName="perspective" id="sphere" value="sphere" 
-            							label="Sphere" toolTip="Under development..." />
+            							label="3D Plane" />
         					</mx:HBox>
         					<mx:HSlider id="tilt" width="95%" />
         					<mx:Label text="Tilt" textAlign="center" fontWeight="bold" fontSize="10" />
