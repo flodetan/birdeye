@@ -29,9 +29,7 @@
 {
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.Polygon;
-	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
-	import com.degrafa.paint.SolidStroke;
 	
 	 /**
 	 * <p>This component is used to create area microcharts and extends the MicroChart class, thus inheriting all its 
@@ -60,9 +58,9 @@
 		* @private
 		 * Calculate the y value (position) inside the chart of the current dataProvider   
 		*/
-		private function sizeY(indexIteration:Number):Number
+		private function sizeY(indexIteration:Number, h:Number):Number
 		{
-			var _sizeY:Number = data[indexIteration] / tot * height;
+			var _sizeY:Number = data[indexIteration] / tot * h;
 			return _sizeY;
 		}
 
@@ -79,15 +77,7 @@
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
-			// it replaces the this.graphics.clear() that doesn't work well
-			for(var i:int=this.numChildren-1; i>=0; i--)
-				if(getChildAt(i) is GeometryGroup)
-						removeChildAt(i);
-
-			geomGroup = new GeometryGroup();
-			geomGroup.target = this;
-			createBackground(width, height);
-			createPolygons();
+			createPolygons(unscaledWidth, unscaledHeight);
 			this.graphicsCollection.addItem(geomGroup);
 		}
 		
@@ -95,21 +85,20 @@
 		* @private 
 		 * Create the areas of the chart.
 		*/
-		private function createPolygons():void
+		private function createPolygons(w:Number, h:Number):void
 		{
-			var columnWidth:Number = width/data.length;
-			var startY:Number = height + Math.min(min,0)/tot * height;
+			var columnWidth:Number = w/data.length;
+			var startY:Number = h + Math.min(min,0)/tot * h;
 			var startX:Number = 0;
 
 			// create polygons
 			for (var i:Number=0; i<data.length-1; i++)
 			{
-				var pol:Polygon = 
-					new Polygon ()
+				var pol:Polygon = new Polygon ()
 				
 				pol.data =  String(space+startX+columnWidth/2) + "," + String(space+startY) + " " +
-							String(space+startX+columnWidth/2) + "," + String(space+startY-sizeY(i)) + " " +
-							String(space+startX+columnWidth*3/2) + "," + String(space+startY-sizeY(i+1)) + " " +
+							String(space+startX+columnWidth/2) + "," + String(space+startY-sizeY(i, h)) + " " +
+							String(space+startX+columnWidth*3/2) + "," + String(space+startY-sizeY(i+1, h)) + " " +
 							String(space+startX+columnWidth*3/2) + "," + String(space+startY);
 
 				startX += columnWidth;
@@ -121,17 +110,6 @@
 					
 				geomGroup.geometryCollection.addItem(pol);
 			}
-		}
-		
-		/**
-		* @private 
-		 * Set the minHeight and minWidth in case width and height are not set in the creation of the chart.
-		*/
-		override protected function measure():void
-		{
-			super.measure();
-			minHeight = 5;
-			minWidth = 10;
 		}
 	}
 }
