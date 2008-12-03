@@ -36,12 +36,17 @@ package org.un.cava.birdeye.qavis.microcharts
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
+	import flash.events.Event;
 	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.ICollectionView;
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
+	import mx.core.Container;
+	import mx.core.EdgeMetrics;
+	import mx.core.UIComponent;
+	import mx.events.ResizeEvent;
 	
 	 /**
 	 * This class is used as skeleton for most of microcharts in this library. It provides the common properties and methods 
@@ -65,8 +70,39 @@ package org.un.cava.birdeye.qavis.microcharts
 		private var _stroke:Number = NaN; 
 		private var _backgroundColor:Number = NaN;
 		private var _backgroundStroke:Number = NaN;
+		private var _percentHeight:Number = NaN;
+		private var _percentWidth:Number = NaN;
 		
 		protected var data:Array;
+		
+		protected var tempWidth:Number, tempHeight:Number;
+		private var resizeListening:Boolean = false;
+		
+		override public function set percentHeight(val:Number):void
+		{
+			_percentHeight = val;
+		}
+		
+		/** 
+		 * @private
+		 */
+		override public function get percentHeight():Number
+		{
+			return _percentHeight;
+		}
+		
+		override public function set percentWidth(val:Number):void
+		{
+			_percentWidth = val;
+		}
+		
+		/** 
+		 * @private
+		 */
+		override public function get percentWidth():Number
+		{
+			return _percentWidth;
+		}
 		
 		public function get color():Number
 		{
@@ -222,6 +258,13 @@ package org.un.cava.birdeye.qavis.microcharts
 		{
 			super.commitProperties();
 			feedDataArray();
+			
+			// if autosize is set, than listen to parent's resize events
+			if (!resizeListening && (!isNaN(_percentHeight) || !isNaN(_percentWidth)))
+			{
+				resizeListening = true;
+				parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
+			}
 		}
 		
 		/**
@@ -317,6 +360,71 @@ package org.un.cava.birdeye.qavis.microcharts
 			}
 
 			return fill;
+		}
+		
+		/**
+		* @private 
+		 * perform common actions to all microcharts of the updateDisplayList, including clearing
+		 * the previous graphics objects. 
+		*/
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+		{
+			super.updateDisplayList(unscaledWidth, unscaledHeight);
+			for(var i:int=this.numChildren-1; i>=0; i--)
+				if(getChildAt(i) is GeometryGroup)
+						removeChildAt(i);
+
+			geomGroup = new GeometryGroup();
+			geomGroup.target = this;
+			
+			createBackground(unscaledWidth, unscaledHeight);
+		}
+		
+		/**
+		* @private 
+		 * Set the default and minimum width and height.
+		 * If percentWidth/percentHeight are used than it autosize the chart according the 
+		 * parent container size.
+		 * If explicitWidth/explicitHeight are set, than measure won't be called anymore, 
+		 * even if invalidateSize is called.
+		*/
+		override protected function measure():void
+		{
+			super.measure();
+			
+			if (!isNaN(explicitWidth))
+				tempWidth = explicitWidth;
+			if (!isNaN(explicitHeight))
+				tempHeight = explicitHeight;
+
+			if (!isNaN(percentWidth) || !isNaN(percentHeight))
+			{
+				var edgeMet:EdgeMetrics = Container(parent).viewMetricsAndPadding;
+				if (!isNaN(percentWidth) && parent.width != 0)
+					tempWidth = Math.max(0, percentWidth/100 * (parent.width - edgeMet.left - edgeMet.right));
+	
+				if (!isNaN(percentHeight) && parent.height!= 0)
+					tempHeight = Math.max(0, percentHeight/100 * (parent.height - edgeMet.top - edgeMet.bottom));
+			}
+
+			if (isNaN(tempWidth))
+				tempWidth = 50;
+
+			if (isNaN(tempHeight))
+				tempHeight = 10;
+				
+			measuredWidth = minWidth = tempWidth;
+			measuredHeight = minHeight = tempHeight;
+		}
+		
+		/**
+		* @private 
+		 * Only called when there is a parent resize event and the chart uses autosize 
+		 * values (percentWidth or percentHeight).
+		*/
+		private function onParentResize(e:Event):void
+		{
+			invalidateSize();
 		}
 	}
 }
