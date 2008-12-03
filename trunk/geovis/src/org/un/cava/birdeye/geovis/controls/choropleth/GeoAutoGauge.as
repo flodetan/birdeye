@@ -51,6 +51,8 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	[Inspectable("geoThumbStart")]
 	[Inspectable("geoThumbEnd")]
 	[Inspectable("geoScale")]
+	[Inspectable("usePercentScale")]
+	[Inspectable("scaleData")]
 	[Inspectable("scheme")]
 	[Inspectable("steps")]
 	[Inspectable("startAtZero")]
@@ -108,6 +110,11 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	     *  @private
 	     */
 		private var _geoScale:Boolean=false;
+		
+		/**
+	     *  @private
+	     */
+		private var _scaleData:Array;
 		
 		/**
 	     *  @private
@@ -184,6 +191,11 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	     *  @private
 	     */
         private var _decNum:Number=0;
+        
+        /**
+	     *  @private
+	     */
+		private var _usePercentScale:Boolean=true;
 		//--------------------------------------------------------------------------
 	    //
 	    //  Properties
@@ -434,7 +446,7 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 	    //  startAtZero
 	    //----------------------------------
 
-		[Inspectable(geoScale="true,false")]
+		[Inspectable(startAtZero="true,false")]
 		/**
      	 *  force the scale to start at 0.
      	 *  Valid values are <code>true</code> or <code>false</code>.
@@ -501,6 +513,41 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 			return _title;
 		} 
 		
+		//----------------------------------
+	    //  scaleData
+	    //----------------------------------
+		
+		/**
+     	 *  Define the value for the scale.
+     	*/	
+		public function set scaleData(value:Array):void{
+			_scaleData = value;
+		}
+		
+		/**
+	     *  @private
+	     */
+		public function get scaleData():Array{
+			return _scaleData;
+		}
+		
+		//----------------------------------
+	    //  usePercentScale
+	    //----------------------------------
+		
+		/**
+     	 *  Define use the 0-100% scale or not.
+     	*/	
+		public function set usePercentScale(value:Boolean):void{
+			_usePercentScale = value;
+		}
+		
+		/**
+	     *  @private
+	     */
+		public function get usePercentScale():Boolean{
+			return _usePercentScale;
+		}
 		
 		//----------------------------------
 	    //  decimalNumber
@@ -625,6 +672,10 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 						var scale:GeoScale=new GeoScale();
 						scale.title=_title;
 						scale.setStyle('textColor',getStyle('textColor'));
+						scale.usePercentScale=_usePercentScale;
+						if(!_usePercentScale){
+							scale.scaleData=_scaleData;
+						}
 						gG.addChild(scale);
 					}
 					
