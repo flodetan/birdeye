@@ -27,10 +27,8 @@
 
 package org.un.cava.birdeye.qavis.microcharts
 {
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
-	import com.degrafa.paint.SolidStroke;
 	
 	[Inspectable("negative")]
 	 /**
@@ -109,9 +107,9 @@ package org.un.cava.birdeye.qavis.microcharts
 		* @private
 		 * Calculate the height size of the column for for the current dataProvider value   
 		*/
-		private function sizeY(indexIteration:Number):Number
+		private function sizeY(indexIteration:Number, h:Number):Number
 		{
-			var _sizeY:Number = - data[indexIteration] / tot * height;
+			var _sizeY:Number = - data[indexIteration] / tot * h;
 			return _sizeY;
 		}
 
@@ -127,38 +125,26 @@ package org.un.cava.birdeye.qavis.microcharts
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			for(var i:int=this.numChildren-1; i>=0; i--)
-				if(getChildAt(i) is GeometryGroup)
-						removeChildAt(i);
 
-			geomGroup = new GeometryGroup();
-			geomGroup.target = this;
-			createBackground(width, height);
-			createColumns();
+			createColumns(unscaledWidth, unscaledHeight);
 			this.graphicsCollection.addItem(geomGroup);
-		}
-		
-		override protected function createBackground(w:Number, h:Number):void
-		{
-			w = width + spacing * (data.length -1);
-			super.createBackground(w, h);
 		}
 		
 		/**
 		* @private 
 		 * Create the columns of the chart.
 		*/
-		private function createColumns():void
+		private function createColumns(w:Number, h:Number):void
 		{
-			var columnWidth:Number = width/data.length;
-			var startY:Number = height + Math.min(min,0)/tot * height;
+			var columnWidth:Number = (w - spacing * (data.length-1)) / data.length;
+			var startY:Number = h + Math.min(min,0)/tot * h;
 			var startX:Number = 0;
 
 			// create columns
 			for (var i:Number=0; i<data.length; i++)
 			{
 				var column:RegularRectangle = 
-					new RegularRectangle(space+startX, space+startY, columnWidth, sizeY(i));
+					new RegularRectangle(space+startX, space+startY, columnWidth, sizeY(i, h));
 				
 				startX += columnWidth + spacing;
 
@@ -170,17 +156,6 @@ package org.un.cava.birdeye.qavis.microcharts
 
 				geomGroup.geometryCollection.addItem(column);
 			}
-		}
-		
-		/**
-		* @private 
-		 * Set the minHeight and minWidth in case width and height are not set in the creation of the chart.
-		*/
-		override protected function measure():void
-		{
-			super.measure();
-			minHeight = 5;
-			minWidth = 10;
 		}
 	}
 }
