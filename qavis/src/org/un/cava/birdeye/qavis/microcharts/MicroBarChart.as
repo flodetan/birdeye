@@ -30,7 +30,6 @@ package org.un.cava.birdeye.qavis.microcharts
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
-	import com.degrafa.paint.SolidStroke;
 	
 	[Inspectable("negative")]
 	 /**
@@ -86,9 +85,9 @@ package org.un.cava.birdeye.qavis.microcharts
 		* @private
 		 * Calculate the width size of the bar for for the current dataProvider value   
 		*/
-		private function sizeX(indexIteration:Number):Number
+		private function sizeX(indexIteration:Number, w:Number):Number
 		{
-			var _sizeX:Number = data[indexIteration] / tot * width;
+			var _sizeX:Number = data[indexIteration] / tot * w;
 			return _sizeX;
 		}
 
@@ -115,38 +114,26 @@ package org.un.cava.birdeye.qavis.microcharts
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			data.sort(Array.DESCENDING | Array.NUMERIC);
-			for(var i:int=this.numChildren-1; i>=0; i--)
-				if(getChildAt(i) is GeometryGroup)
-						removeChildAt(i);
 
-			geomGroup = new GeometryGroup();
-			geomGroup.target = this;
-			createBackground(width, height);
-			createBars();
+			createBars(unscaledWidth, unscaledHeight);
 			this.graphicsCollection.addItem(geomGroup);
-		}
-		
-		override protected function createBackground(w:Number, h:Number):void
-		{
-			h += spacing * (data.length-1);
-			super.createBackground(w,h);
 		}
 		
 		/**
 		* @private 
 		 * Create the bars of the chart.
 		*/
-		private function createBars():void
+		private function createBars(w:Number, h:Number):void
 		{
-			var columnWidth:Number = height/data.length;
-			var startX:Number = - Math.min(min,0)/tot * width;
+			var columnWidth:Number = (h - spacing * (data.length-1)) / data.length;
+			var startX:Number = - Math.min(min,0)/tot * w;
 			var startY:Number = 0;
 
 			// create bars
 			for (var i:Number=0; i<data.length; i++)
 			{
 				var column:RegularRectangle = 
-					new RegularRectangle(space+startX, space+startY, sizeX(i), columnWidth);
+					new RegularRectangle(space+startX, space+startY, sizeX(i,w), columnWidth);
 				
 				startY += columnWidth + spacing;
 
@@ -158,17 +145,6 @@ package org.un.cava.birdeye.qavis.microcharts
 
 				geomGroup.geometryCollection.addItem(column);
 			}
-		}
-
-		/**
-		* @private 
-		 * Set the minHeight and minWidth in case width and height are not set in the creation of the chart.
-		*/
-		override protected function measure():void
-		{
-			super.measure();
-			minHeight = 5;
-			minWidth = 10;
 		}
 	}
 }
