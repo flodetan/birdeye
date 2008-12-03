@@ -101,7 +101,7 @@ package org.un.cava.birdeye.geovis.controls.choropleth
 		/**
 	     *  @private
 	     */
-		private var _usePercentScale:Boolean=false;
+		private var _usePercentScale:Boolean=true;
 		
 		/**
 	     *  @private
