@@ -27,7 +27,6 @@
  
  package org.un.cava.birdeye.qavis.microcharts
 {
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RegularRectangle;
@@ -112,9 +111,9 @@
 		* @private
 		 * Calculate the height size of the plot for the current dataProvider value   
 		*/
-		private function sizeY(indexIteration:Number):Number
+		private function sizeY(indexIteration:Number, h:Number):Number
 		{
-			var _sizeY:Number = data[indexIteration] / tot * height;
+			var _sizeY:Number = data[indexIteration] / tot * h;
 			return _sizeY;
 		}
 
@@ -130,22 +129,21 @@
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			for(var i:int=this.numChildren-1; i>=0; i--)
-				if(getChildAt(i) is GeometryGroup)
-						removeChildAt(i);
 
-			geomGroup = new GeometryGroup();
-			geomGroup.target = this;
-			createBackground(width, height);
-			createPlots();
+			createBackground(unscaledWidth, unscaledHeight);
+			createPlots(unscaledWidth, unscaledHeight);
 			this.graphicsCollection.addItem(geomGroup);
 		}
 		
+		/**
+		* @private 
+		 * Create the background of microplots chart. It includes radius sizes.
+		*/
 		override protected function createBackground(w:Number, h:Number):void
 		{
 			if (!isNaN(backgroundColor) || !isNaN(backgroundStroke))
 			{
-				var backgroundRect:RegularRectangle = new RegularRectangle(space, space-radius, width, height+radius*3/2);
+				var backgroundRect:RegularRectangle = new RegularRectangle(space, space-radius, w, h+radius*3/2);
 				if (!isNaN(backgroundColor))
 					backgroundRect.fill = new SolidFill(backgroundColor);
 				if (!isNaN(backgroundStroke))
@@ -159,16 +157,16 @@
 		* @private 
 		 * Create the plots of the chart.
 		*/
-		private function createPlots():void
+		private function createPlots(w:Number, h:Number):void
 		{
-			var columnWidth:Number = width/data.length;
-			var startY:Number = height + Math.min(min,0)/tot * height;
+			var columnWidth:Number = w / data.length;
+			var startY:Number = h + Math.min(min,0)/tot * h;
 			var startX:Number = 0;
 
 			// create negative reference line
 			if (negative)
 			{
-				var negLine:Line = new Line(space+startX, space+startY, space+width, space+startY);
+				var negLine:Line = new Line(space+startX, space+startY, space+w, space+startY);
 				if (!isNaN(_negativeColor))
 					negLine.stroke = new SolidStroke(_negativeColor);
 				else
@@ -180,7 +178,7 @@
 			for (var i:Number=0; i<data.length; i++)
 			{
 				var plot:Circle = 
-					new Circle(space+startX+columnWidth/2, space+ startY-sizeY(i), radius);
+					new Circle(space+startX+columnWidth/2, space+ startY-sizeY(i,h), radius);
 				
 				startX += columnWidth;
 
@@ -192,17 +190,6 @@
 				geomGroup.geometryCollection.addItem(plot);
 			}
 
-		}
-		
-		/**
-		* @private 
-		 * Set the minHeight and minWidth in case width and height are not set in the creation of the chart.
-		*/
-		override protected function measure():void
-		{
-			super.measure();
-			minHeight = 5;
-			minWidth = 10;
 		}
 	}
 }
