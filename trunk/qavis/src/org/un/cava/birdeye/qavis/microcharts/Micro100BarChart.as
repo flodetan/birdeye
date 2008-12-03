@@ -28,9 +28,7 @@
 package org.un.cava.birdeye.qavis.microcharts
 {
 	import com.degrafa.GeometryGroup;
-	import com.degrafa.Surface;
 	import com.degrafa.geometry.RegularRectangle;
-	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	/**
@@ -68,9 +66,9 @@ package org.un.cava.birdeye.qavis.microcharts
 		* @private  
 		* Calculate the width size of the current value provided by the repeater. 
 		*/
-		private function offsetSizeX(indexIteration:Number):Number
+		private function offsetSizeX(indexIteration:Number, w:Number):Number
 		{
-			var _offSizeX:Number = Math.max(0,data[indexIteration] * width / tot);
+			var _offSizeX:Number = Math.max(0,data[indexIteration] * w / tot);
 			prevSizeX += _offSizeX;
 			return _offSizeX;
 		}
@@ -108,14 +106,8 @@ package org.un.cava.birdeye.qavis.microcharts
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			prevSizeX = 0;
-			for(var i:int=this.numChildren-1; i>=0; i--)
-				if(getChildAt(i) is GeometryGroup)
-					removeChildAt(i);
 
-			geomGroup = new GeometryGroup();
-			geomGroup.target = this;
-			createBackground(width, height);
-			createBars();
+			createBars(unscaledWidth, unscaledHeight);
 			this.graphicsCollection.addItem(geomGroup);
 		}
 		
@@ -123,7 +115,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		* @private 
 		 * Create the bars of the chart.
 		*/
-		private function createBars():void
+		private function createBars(w:Number, h:Number):void
 		{
 			// create 100% Bars
 			for (var i:Number=0; i<data.length; i++)
@@ -132,7 +124,7 @@ package org.un.cava.birdeye.qavis.microcharts
 				
 				if (data[i] > 0) 
 				{
-					bar = new RegularRectangle(space+startX(i), space, offsetSizeX(i), height);
+					bar = new RegularRectangle(space+startX(i), space, offsetSizeX(i, w), h);
 					
 					if (!isNaN(stroke))
 						bar.stroke = new SolidStroke(stroke);
@@ -142,17 +134,6 @@ package org.un.cava.birdeye.qavis.microcharts
 					geomGroup.geometryCollection.addItem(bar);
 				}
 			}
-		}
-		
-		/**
-		* @private 
-		 * Set the minHeight and minWidth in case width and height are not set in the creation of the chart.
-		*/
-		override protected function measure():void
-		{
-			super.measure();
-			minHeight = 5;
-			minWidth = 10;
 		}
 	}
 }
