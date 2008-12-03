@@ -372,7 +372,7 @@ package org.un.cava.birdeye.qavis.microcharts
 			var _offSizeX:Number;
 
 			if (orientation == VERTICAL)
-				_offSizeX = width;
+				_offSizeX = unscaledWidth;
 			else
 			{
 				if (indexIteration == 0)
@@ -381,7 +381,7 @@ package org.un.cava.birdeye.qavis.microcharts
 					prevStartX = 0;
 				}
 				else
-					_offSizeX = (data[indexIteration]-data[indexIteration-1])* width / tot;
+					_offSizeX = (data[indexIteration]-data[indexIteration-1])* unscaledWidth / tot;
 
 				prevStartX +=  _offSizeX;
 			}
@@ -413,7 +413,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		{
 			var _offSizeY:Number;
 			if (orientation == HORIZONTAL)
-				_offSizeY = height;
+				_offSizeY = unscaledHeight;
 			else
 			{
 				if (indexIteration == 0)
@@ -422,7 +422,7 @@ package org.un.cava.birdeye.qavis.microcharts
 					prevStartY = 0;
 				}
 				else
-					_offSizeY = (data[indexIteration-1]-data[indexIteration])* height / tot;
+					_offSizeY = (data[indexIteration-1]-data[indexIteration])* unscaledHeight / tot;
 
 				prevStartY +=  _offSizeY;
 			}
@@ -441,14 +441,14 @@ package org.un.cava.birdeye.qavis.microcharts
 			{
 				if (min != 0)
 					if (value > max)
-						x = width;
+						x = unscaledWidth;
 					else 
-						x = Math.abs((_value-min)/tot) * width ;
+						x = Math.abs((_value-min)/tot) * unscaledWidth ;
 
 				if (value < min)
 					x = -xSizeShapeValue();
 			} else
-				x = width * 2/5;
+				x = unscaledWidth * 2/5;
 			
 			return x;
 		}
@@ -460,7 +460,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function yValue():Number 
 		{
-			var y:Number = height - Math.abs((_value-min)/tot) * height;
+			var y:Number = unscaledHeight - Math.abs((_value-min)/tot) * unscaledHeight;
 			if (orientation == VERTICAL)
 			{
 				if (value > max)
@@ -470,9 +470,9 @@ package org.un.cava.birdeye.qavis.microcharts
 						y = 0;
 					
 				if (value < min)
-					y = height;
+					y = unscaledHeight;
 			} else
-				y = height * 2.5/6;
+				y = unscaledHeight * 2.5/6;
 			return y;
 		}
 
@@ -488,17 +488,17 @@ package org.un.cava.birdeye.qavis.microcharts
 			
 			if (orientation == HORIZONTAL)
 			{
-				xSizeValue = height/6;
+				xSizeValue = unscaledHeight/6;
 				if (min == 0)
 					if (value > max)
-						xSizeValue = width;
+						xSizeValue = unscaledWidth;
 					else
-						xSizeValue =  Math.abs(_value/tot) * width;
+						xSizeValue =  Math.abs(_value/tot) * unscaledWidth;
 				
 				if (value < min)
-					xSizeValue = Math.min(height/6, maxSize);
+					xSizeValue = Math.min(unscaledHeight/6, maxSize);
 			} else
-				xSizeValue = width/6;
+				xSizeValue = unscaledWidth/6;
 
 			return xSizeValue;
 		}
@@ -517,16 +517,16 @@ package org.un.cava.birdeye.qavis.microcharts
 			{
 				if (min == 0)
 					if (value > max)
-						ySizeValue = height;
+						ySizeValue = unscaledHeight;
 					else
-						ySizeValue =  Math.abs(_value/tot) * height;
+						ySizeValue =  Math.abs(_value/tot) * unscaledHeight;
 				else
-					ySizeValue = Math.min(width/6, maxSize);
+					ySizeValue = Math.min(unscaledWidth/6, maxSize);
 				
 				if (value < min)
-					ySizeValue = Math.min(width/6, maxSize);
+					ySizeValue = Math.min(unscaledWidth/6, maxSize);
 			} else
-				ySizeValue = height/6;
+				ySizeValue = unscaledHeight/6;
 			
 			return ySizeValue ;
 		} 
@@ -543,14 +543,14 @@ package org.un.cava.birdeye.qavis.microcharts
 			if (orientation == HORIZONTAL)
 			{
 				if (_target > max)
-					x = width;
+					x = unscaledWidth;
 				else 
-					x = Math.abs((_target-min)/tot) * width ;
+					x = Math.abs((_target-min)/tot) * unscaledWidth ;
 
 				if (_target < min)
 					x = -xSizeRectTarget();
 			} else
-				x = width/6;
+				x = unscaledWidth/6;
 				
 			return x;
 		}
@@ -568,12 +568,12 @@ package org.un.cava.birdeye.qavis.microcharts
 				if (target > max)
 					y = -ySizeRectTarget();
 				else
-					y = height - Math.abs((_target-min)/tot) * height;
+					y = unscaledHeight - Math.abs((_target-min)/tot) * unscaledHeight;
 						
 				if (target < min)
-					y = height;
+					y = unscaledHeight;
 			} else
-				y = height/6;
+				y = unscaledHeight/6;
 				
 			return y;
 		}
@@ -587,9 +587,9 @@ package org.un.cava.birdeye.qavis.microcharts
 		{
 			var xSizeTarget:Number;
 			if (orientation == HORIZONTAL)
-				xSizeTarget = Math.min(height/6, maxSize);
+				xSizeTarget = Math.min(unscaledHeight/6, maxSize);
 			else
-				xSizeTarget = width * 4/6;
+				xSizeTarget = unscaledWidth * 4/6;
 			return xSizeTarget;
 		}
 		
@@ -602,9 +602,9 @@ package org.un.cava.birdeye.qavis.microcharts
 		{
 			var ySizeTarget:Number;
 			if (orientation == VERTICAL)
-				ySizeTarget = Math.min(width /6, maxSize);
+				ySizeTarget = Math.min(unscaledWidth /6, maxSize);
 			else
-				ySizeTarget = height * 4/6;
+				ySizeTarget = unscaledHeight * 4/6;
 				
 			return ySizeTarget;
 		}
@@ -679,7 +679,7 @@ package org.un.cava.birdeye.qavis.microcharts
 					// calculate the maxSnapWidth to arrange the graph accordignly
 					for (var snapValue:Number = min; snapValue <= max; snapValue+=snapInterval) 
 					{
-						var yCoord:Number = height - ((snapValue-min)/(max-min) * height);
+						var yCoord:Number = unscaledHeight - ((snapValue-min)/(max-min) * unscaledHeight);
 
 						// create snap text (formatted number)
 /* 						var snapText:GraphicText = new GraphicText();
@@ -722,10 +722,10 @@ package org.un.cava.birdeye.qavis.microcharts
 					}
 
 					for (snapValue = min; snapValue <= max; snapValue+=snapInterval) {
-						var xCoord:Number = (snapValue-min)/(max-min) * width;
+						var xCoord:Number = (snapValue-min)/(max-min) * unscaledWidth;
 
 						// create snap line
- 						snapLine = new Line(_paddingLeft + xCoord, _paddingTop + height, _paddingLeft + xCoord, _paddingTop + height + snapLong);
+ 						snapLine = new Line(_paddingLeft + xCoord, _paddingTop + unscaledHeight, _paddingLeft + xCoord, _paddingTop + unscaledHeight + snapLong);
 						snapLine.stroke = new SolidStroke(snapLineColor,1,1);
 						geomGroup.geometryCollection.addItem(snapLine);
 
@@ -734,7 +734,7 @@ package org.un.cava.birdeye.qavis.microcharts
 						snapText.text = formatter.format(Math.round(snapValue));
 						snapText.autoSize = TextFieldAutoSize.LEFT;
 						snapText.selectable = false;
-						snapText.y = _paddingTop + height + snapLong;
+						snapText.y = _paddingTop + unscaledHeight + snapLong;
 						snapText.x = _paddingLeft + xCoord - 5;
 						snapText.styleName = snapStyle;
 
@@ -756,9 +756,9 @@ package org.un.cava.birdeye.qavis.microcharts
 				valueShape = new RegularRectangle(_paddingLeft+xValue(), _paddingTop+yValue(), xSizeShapeValue(), ySizeShapeValue());
 			else
 				if (orientation == VERTICAL)
-					valueShape = new Circle(_paddingLeft+width/2, _paddingTop+yValue(), Math.min(xSizeShapeValue(), maxSize));
+					valueShape = new Circle(_paddingLeft+unscaledWidth/2, _paddingTop+yValue(), Math.min(xSizeShapeValue(), maxSize));
 				else
-					valueShape = new Circle(_paddingLeft+xValue(), _paddingTop+height/2, Math.min(ySizeShapeValue(), maxSize)); 
+					valueShape = new Circle(_paddingLeft+xValue(), _paddingTop+unscaledHeight/2, Math.min(ySizeShapeValue(), maxSize)); 
 			
 			// create target shape
 			if (orientation == VERTICAL)
