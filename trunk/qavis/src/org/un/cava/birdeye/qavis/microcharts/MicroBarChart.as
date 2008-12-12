@@ -137,11 +137,16 @@ package org.un.cava.birdeye.qavis.microcharts
 				
 				startY += columnWidth + spacing;
 
-				if (colors == null || colors.lenght == 0)
+				if (colors == null)
 					if (negative && data[i] < 0)
 						column.fill = new SolidFill(_negativeColor);
 					else
-						column.fill = black;
+					{
+						if (isNaN(color))
+							column.fill = black;
+						else 
+							column.fill = new SolidFill(color);
+					}
 
 				geomGroup.geometryCollection.addItem(column);
 			}

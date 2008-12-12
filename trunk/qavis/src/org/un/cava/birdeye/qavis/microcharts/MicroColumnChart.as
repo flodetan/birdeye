@@ -152,7 +152,12 @@ package org.un.cava.birdeye.qavis.microcharts
 					if (negative && data[i] < 0)
 						column.fill = new SolidFill(_negativeColor);
 					else
-						column.fill = black;
+					{
+						if (isNaN(color))
+							column.fill = black;
+						else 
+							column.fill = new SolidFill(color);
+					}
 
 				geomGroup.geometryCollection.addItem(column);
 			}
