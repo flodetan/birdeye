@@ -127,11 +127,16 @@
 				
 				startX += columnWidth + spacing;
 
-				if (colors == null || colors.lenght == 0)
+				if (colors == null)
 					if (data[i] < 0)
 						column.fill = red;
 					else
-						column.fill = black;
+					{
+						if (isNaN(color))
+							column.fill = black;
+						else 
+							column.fill = new SolidFill(color);
+					}
 				else
 					column.fill = new SolidFill(useColor(i));
 
