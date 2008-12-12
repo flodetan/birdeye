@@ -191,7 +191,12 @@ package org.un.cava.birdeye.qavis.microcharts
 				if (colors != null)
 					line.stroke = new SolidStroke(useColor(i));
 				else 
-					line.stroke = new SolidStroke(black);
+				{
+					if (isNaN(color))
+						line.stroke = new SolidStroke(black);
+					else 
+						line.stroke = new SolidStroke(color);
+				}
 					
 				geomGroup.geometryCollection.addItem(line);
 			}

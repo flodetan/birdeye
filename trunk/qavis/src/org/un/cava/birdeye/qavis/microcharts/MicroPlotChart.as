@@ -185,7 +185,12 @@
 				if (colors != null)
 					plot.fill = new SolidFill(useColor(i));
 				else
-					plot.fill = new SolidFill(black);
+				{
+					if (isNaN(color))
+						plot.fill = new SolidFill(black);
+					else 
+						plot.stroke = new SolidStroke(color);
+				}
 					
 				geomGroup.geometryCollection.addItem(plot);
 			}
