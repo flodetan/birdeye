@@ -27,7 +27,6 @@
  
  package org.un.cava.birdeye.qavis.microcharts
 {
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.Polygon;
 	import com.degrafa.paint.SolidFill;
 	
@@ -106,7 +105,12 @@
 				if (colors != null)
 					pol.fill = new SolidFill(useColor(i));
 				else 
-					pol.fill = new SolidFill(black);
+				{
+					if (isNaN(color))
+						pol.fill = new SolidFill(black);
+					else 
+						pol.fill = new SolidFill(color);
+				}
 					
 				geomGroup.geometryCollection.addItem(pol);
 			}
