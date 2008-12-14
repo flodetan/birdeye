@@ -108,7 +108,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 			if(e.othernode(this) == null) {
 				throw Error("Edge:"+e.id+" has no toNode");
 			}
-			//trace("added successor node:"+e.othernode(this).id+" to node:"+_id);
+			//LogUtil.debug(_LOG, "added successor node:"+e.othernode(this).id+" to node:"+_id);
 			_successors.unshift(e.othernode(this));
 			_outEdges.unshift(e);
 		}

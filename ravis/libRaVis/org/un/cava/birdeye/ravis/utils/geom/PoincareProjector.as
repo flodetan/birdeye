@@ -247,7 +247,7 @@ import org.un.cava.birdeye.ravis.graphLayout.layout.Hyperbolic2DLayouter;
 			if (d.height != 0)
 				z.imag = 1 - p.y * 2.0 / d.height;
 			if (z.norm2() >= 1.0) {
-				//trace("Point " + p + " out of bounds");
+				//LogUtil.warn(_LOG, "Point " + p + " out of bounds");
 				if (adjustBadNodes) {// Adjusting bad node to a valid node at the same orientation
 					var angle:Number = Math.atan(Math.abs(z.imag / z.real));
 					z.real = 0.8 * Math.cos(angle) * z.real / Math.abs(z.real) ;

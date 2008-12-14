@@ -67,10 +67,12 @@
 
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
 			
+		  private static const _LOG:String = "components.ui.controls.vgraphControls.BirdEyeZoom";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -96,7 +98,7 @@
 				}
 				
 				if(_vgraph == null) {
-					trace("BirdEyeZoom NOT changed, no valid vgraph!");
+					LogUtil.warn(_LOG, "BirdEyeZoom NOT changed, no valid vgraph!");
 					return;
 				}
 				_vgraph.scale = bzoom.value;
@@ -108,7 +110,7 @@
 					return;
 				}
 				if(_vgraph == null) {
-					trace("BirdEyeZoom NOT refreshed, no valid vgraph!");
+					LogUtil.warn(_LOG, "BirdEyeZoom NOT refreshed, no valid vgraph!");
 					return;
 				}
 				bzoom.value = _vgraph.scale;

@@ -46,6 +46,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
 	import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 
 
@@ -71,6 +72,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	 * */
 	public class VisualGraph extends Canvas implements IVisualGraph {
 		
+		private static const _LOG:String = "graphLayout.visual.VisualGraph";		
 		
 		/**
 		 * This flag for draw() specifies that the linklength
@@ -463,7 +465,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		public function set graph(g:IGraph):void {
 
 			if(_graph != null) {
-				trace("WARNING: _graph in VisualGraph was not null when new graph was assigned."+
+				LogUtil.warn(_LOG, "_graph in VisualGraph was not null when new graph was assigned."+
 					" Some cleanup done, but this may leak memory");
 				/* this cleanes the VGraph so we are pristine */
 				clearHistory();
@@ -502,7 +504,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				_currentRootVNode = (_graph.nodes[0] as INode).vnode;
 			}
 			
-			trace("WARNING: setting a new graph object invalidates the root node,"+
+			LogUtil.warn(_LOG, "Setting a new graph object invalidates the root node,"+
 				" a new default root node was set, but it may not be what you want");
 		}
 
@@ -688,10 +690,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				/* activate? */
 				if(ac) {
 					if(_currentRootVNode == null) {
-						trace("No root selected, not creating limited graph, not doing anything.");
+						LogUtil.warn(_LOG, "No root selected, not creating limited graph, not doing anything.");
 						return;
 					}
-					//trace("getting limited node ids with limit:"+_maxVisibleDistance);
+					//LogUtil.debug(_LOG, "getting limited node ids with limit:"+_maxVisibleDistance);
 					
 					/* 1. Get the spanning tree, rooted in our current root node from
 					 *    the graph object.
@@ -733,14 +735,14 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			if(_maxVisibleDistance != md) {
 				/* if yes, apply the change */
 				_maxVisibleDistance = md;
-				//trace("visible distance changed to: "+md);
+				//LogUtil.debug(_LOG, "visible distance changed to: "+md);
 				
 				/* if our current limits are active we create a new
 				 * set of nodes within the distance and update the
 				 * visibility */
 				if(_visibilityLimitActive) {
 					if(_currentRootVNode == null) {
-						trace("No root selected, not creating limited graph");
+						LogUtil.warn(_LOG, "No root selected, not creating limited graph");
 						return;
 					} else {
 						setDistanceLimitedNodeIds(_graph.getTree(_currentRootVNode.node).
@@ -780,7 +782,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				/* now update the history with the new node */
 				_currentVNodeHistory.unshift(_currentRootVNode);
 				
-				//trace("node:"+_currentRootVNode.id+" added to history");
+				//LogUtil.debug(_LOG, "node:"+_currentRootVNode.id+" added to history");
 				
 				/* if we are currently limiting node visibility,
 				 * update the set of visible nodes since we 
@@ -876,7 +878,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* create the vnode from the node */
 			for each(node in _graph.nodes) {
 				this.createVNode(node);
-				//trace("created VNode for node:"+node.id);
+				//LogUtil.debug(_LOG, "created VNode for node:"+node.id);
 			}
 			
 			/* we also create the edge objects, since they
@@ -918,12 +920,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * are negative */
 			result = new Rectangle(999999, 999999, -999999, -999999);
 
-			//trace("THIS CANVAS currently HAS:"+children.length+" children!!");
+			//LogUtil.debug(_LOG, "THIS CANVAS currently HAS:"+children.length+" children!!");
 
 			/* if there are no children at all, there may be something
 			 * wrong as it should at least contain the drawing surface */
 			if(children.length == 0) {
-				trace("Canvas has no children, not even the drawing surface!");
+				LogUtil.warn(_LOG, "Canvas has no children, not even the drawing surface!");
 				return null;
 			}
 			
@@ -1082,12 +1084,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 					ve = createVEdge(e);
 				} else {
 					/* existing one, so we use the existing vedge */
-					trace("Edge already existed, returning existing vedge");
+					LogUtil.info(_LOG, "Edge already existed, returning existing vedge");
 					ve = e.vedge;
 				}
 			}
 	
-			//trace("linkNodes, created edge "+(e as Object).toString()+" from nodes: "+n1.id+", "+n2.id);
+			//LogUtil.debug(_LOG, "linkNodes, created edge "+(e as Object).toString()+" from nodes: "+n1.id+", "+n2.id);
 
 			/* this changes the layout, so we have to do a full redraw */
 			// if we link nodes we may not necesarily want to draw();
@@ -1120,7 +1122,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* if we do not get an edge, it may simply not exist */
 			if(e == null) {
-				trace("No edge found between: "+n1.id+" and "+n2.id);
+				LogUtil.warn(_LOG, "No edge found between: "+n1.id+" and "+n2.id);
 				return;
 			}
 			
@@ -1132,7 +1134,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * unlinking the nodes */
 			_graph.removeEdge(e);
 
-			//trace("removed edge: "+e.id+" : "+n1.id+" and "+n2.id);			
+			//LogUtil.debug(_LOG, "removed edge: "+e.id+" : "+n1.id+" and "+n2.id);			
 			
 			/* again a full redraw is required */
 			//draw();
@@ -1158,7 +1160,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * to the scroll offset */
 			for each(view in children) {
 				if(view != _drawingSurface) {
-					//trace("scrolling view of:"+(view as IDataRenderer).data.id);
+					//LogUtil.debug(_LOG, "scrolling view of:"+(view as IDataRenderer).data.id);
 					view.x += deltaX;
 					view.y += deltaY;
 				}
@@ -1168,7 +1170,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * (not 100% sure if this is a good idea but seems
 			 * to work) XXX */
 			_origin.offset(deltaX,deltaY);
-			//trace("Setting new origin to:"+_origin.toString());
+			//LogUtil.debug(_LOG, "Setting new origin to:"+_origin.toString());
 		}
 
 		/**
@@ -1248,7 +1250,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* still null? then we have to bail out */
 			if(theXMLData == null) {
-				trace("No XML object passed or found in old graph");
+				LogUtil.warn(_LOG, "No XML object passed or found in old graph");
 				return;
 			}
 			
@@ -1309,7 +1311,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			var newroot:INode;
 			
 			if(_graph == null) {
-				trace("VGraph has no Graph object, probably not correctly initialised, yet");
+				LogUtil.warn(_LOG, "VGraph has no Graph object, probably not correctly initialised, yet");
 				return null;
 			}
 			
@@ -1326,7 +1328,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 					return _currentRootVNode;
 				}
 			}
-			trace("Node with id:"+nodeID+" not found!");
+			LogUtil.warn(_LOG, "Node with id:"+nodeID+" not found!");
 			return null;
 		}
 
@@ -1526,7 +1528,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				vns.unshift(vn);
 			}
 			
-			trace("purgeVGraph called");
+			LogUtil.debug(_LOG, "purgeVGraph called");
 			
 			if(_graph != null) {
 				for each(ve in ves) {
@@ -1536,7 +1538,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 					removeVNode(vn);
 				}
 			} else {
-				trace("we had no graph to purge from, so nothing was done");
+				LogUtil.warn(_LOG, "we had no graph to purge from, so nothing was done");
 			}				
 		}
 	
@@ -1554,12 +1556,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/*
 			var d:Date = new Date();
-			trace("redrawing edges at:"+d.toTimeString());
+			LogUtil.debug(_LOG, "redrawing edges at:"+d.toTimeString());
 			*/
 			
 			/* make sure we have a graph */
 			if(_graph == null) {
-				trace("_graph object in VisualGraph is null");
+				LogUtil.debug(_LOG, "_graph object in VisualGraph is null");
 				return;
 			}
 	
@@ -1577,7 +1579,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				/* all nodes should be visible, so we make an assertion
 				 * here */
 				if(!vn1.isVisible || !vn2.isVisible) {
-					trace("Edge:"+vedge.id.toString()+
+					LogUtil.warn(_LOG, "Edge:"+vedge.id.toString()+
 						" Node1:"+vn1.id.toString()+" vis:"+vn1.isVisible.toString()+
 						" Node2:"+vn2.id.toString()+" vis:"+vn2.isVisible.toString());
 					throw Error("One of the nodes of the checked edge is not visible, but should be!");
@@ -1731,7 +1733,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				/* decreate component counter */
 				--_componentCounter;
 				
-				//trace("removed component from node:"+vn.id);
+				//LogUtil.debug(_LOG, "removed component from node:"+vn.id);
 			}
 		}
 		
@@ -1776,9 +1778,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* register it the view in the vedge and the mapping */
 			/*
 			if(ve.labelView != null) {
-				trace("Edge:"+ve.edge.id+" has already view:"+ve.labelView.toString()+" will be overwritten");
+				LogUtil.debug(_LOG, "Edge:"+ve.edge.id+" has already view:"+ve.labelView.toString()+" will be overwritten");
 			} else {
-				trace("Edge:"+ve.edge.id+" gets new view.");
+				LogUtil.debug(_LOG, "Edge:"+ve.edge.id+" gets new view.");
 			}
 			*/
 			ve.labelView = mycomponent;
@@ -1824,7 +1826,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* decreate component counter */
 			//--_componentCounter;
 			
-			//trace("removed component from node:"+vn.id);
+			//LogUtil.debug(_LOG, "removed component from node:"+vn.id);
 		}
 		
 		
@@ -1857,14 +1859,14 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* get the associated VNode */
 			vnode = lookupNode(comp);
 			
-			//trace("double click!");
+			//LogUtil.debug(_LOG, "double click!");
 			
 			/* Now we change the root node, we go through
 			 * our public setter method to get all associated
 			 * updates done. */
 			this.currentRootVNode = vnode;
 			
-			//trace("currentVNode:"+this.currentRootVNode.id);
+			//LogUtil.debug(_LOG, "currentVNode:"+this.currentRootVNode.id);
 			
 			/* here we still want to implicitly redraw */
 			draw();
@@ -1893,12 +1895,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			var evnode:IVisualNode;
 			var pt:Point;
 			
-			//trace("DragBegin was called...");
+			//LogUtil.debug(_LOG, "DragBegin was called...");
 			
 			/* if there is an animation in progress, we ignore
 			 * the drag attempt */
 			if(_layouter && _layouter.animInProgress) {
-				trace("Animation in progress, drag attempt ignored");
+				LogUtil.info(_LOG, "Animation in progress, drag attempt ignored");
 				return;
 			}
 			
@@ -1981,7 +1983,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* Sometimes we get spurious events */
 			if(_dragComponent == null) {
-				trace("received handleDrag event but _dragComponent is null, ignoring");
+				LogUtil.info(_LOG, "received handleDrag event but _dragComponent is null, ignoring");
 				return;
 			}
 			
@@ -2034,7 +2036,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* if there is an animation in progress, we ignore
 			 * the drag attempt */
 			if(_layouter && _layouter.animInProgress) {
-				trace("Animation in progress, drag attempt ignored");
+				LogUtil.info(_LOG, "Animation in progress, drag attempt ignored");
 				return;
 			}
 			
@@ -2129,9 +2131,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				
 				/*
 				if(myback == (this as DisplayObject)) {
-					trace("we found ourselves as the background object GREAT");
+					LogUtil.debug(_LOG, "we found ourselves as the background object GREAT");
 				} else {
-					trace("we got something else as the background, HMPF");
+					LogUtil.debug(_LOG, "we got something else as the background, HMPF");
 				}
 				*/
 				
@@ -2139,7 +2141,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				if(myback == null) {
 					/* this can happen if we let go of the button
 					 * outside of the window *
-					trace("dragEnd: background drop event target was no DisplayObject but "+event.currentTarget.toString());
+					LogUtil.debug(_LOG, "dragEnd: background drop event target was no DisplayObject but "+event.currentTarget.toString());
 				}
 				*/
 				
@@ -2160,7 +2162,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				/* But sometimes the dragComponent was already null, 
 				 * in this case we have to ignore the thing. */
 				if(mycomp == null) {
-					trace("dragEnd: received dragEnd but _dragComponent was null, ignoring");
+					LogUtil.info(_LOG, "dragEnd: received dragEnd but _dragComponent was null, ignoring");
 					return;
 				}
 				
@@ -2236,7 +2238,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* set the new amount */
 			_noNodesWithinDistance = amount;
 			
-			//trace("current visible nodeids:"+_noNodesWithinDistance);
+			//LogUtil.debug(_LOG, "current visible nodeids:"+_noNodesWithinDistance);
 		}
 		
 		/**
@@ -2272,7 +2274,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			}
 			
 			
-			//trace("update node visibility");
+			//LogUtil.debug(_LOG, "update node visibility");
 			
 			/* create a copy of the currently visible 
 			 * node set, as the set for nodes to potentially
@@ -2390,7 +2392,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * since similar code was added, I optimise it a bit.
 			 */
 			if(_graph == null) {
-				trace("setAllVisible() called, but graph is null");
+				LogUtil.warn(_LOG, "setAllVisible() called, but graph is null");
 				return;
 			}
 			
@@ -2430,7 +2432,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * since similar code was added, I optimise it a bit.
 			 */
 			if(_graph == null) {
-				trace("setAllInVisible() called, but graph is null");
+				LogUtil.warn(_LOG, "setAllInVisible() called, but graph is null");
 				return;
 			}
 			
@@ -2473,7 +2475,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* was there actually a change, if not issue a warning */
 			if(vn.isVisible == visible) {
-				trace("Tried to set node:"+vn.id+" visibility to:"+visible.toString()+" but it was already.");
+				LogUtil.warn(_LOG, "Tried to set node:"+vn.id+" visibility to:"+visible.toString()+" but it was already.");
 				return;
 			}
 			
@@ -2520,7 +2522,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* was there actually a change, if not issue a warning */
 			if(ve.isVisible == visible) {
-				//trace("Tried to set vedge:"+ve.id+" visibility to:"+visible.toString()+" but it was already.");
+				//LogUtil.warn(_LOG, "Tried to set vedge:"+ve.id+" visibility to:"+visible.toString()+" but it was already.");
 				return;
 			}
 			

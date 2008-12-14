@@ -34,6 +34,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 	import org.un.cava.birdeye.ravis.utils.Geometry;
 	import org.un.cava.birdeye.ravis.utils.GraphicUtils;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	
 	/**
 	 * This subclass to the BaseLayouter encapsulates the methods
@@ -41,6 +42,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	 * */
 	public class AnimatedBaseLayouter extends BaseLayouter implements ILayoutAlgorithm {
 
+		private static const _LOG:String = "graphLayout.layout.AnimatedBaseLayouter";
+		
 		/**
 		 * constant to define the radial animation type, which
 		 * interpolates node's polar coordinates.
@@ -161,7 +164,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		protected function killTimer():void {
 			if(_animTimer != null) {
-				//trace("timer killed");
+				//LogUtil.debug(_LOG, "timer killed");
 				_animTimer.stop();
 				_animTimer.reset();
 				//_animTimer = null;
@@ -201,7 +204,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 						cyclefinished = interpolateCartCoords();
 						break;
 					default:
-						trace("Illegal animation Type, default to ANIM_RADIAL");
+						LogUtil.warn(_LOG, "Illegal animation Type, default to ANIM_RADIAL");
 						cyclefinished = interpolatePolarCoords();
 						break;
 				}
@@ -217,10 +220,10 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 
 			/* check if we ran out of anim cycles, but are not finished */
 			if (cyclefinished) {
-				//trace("Achieved final node positions, terminating animation...");
+				//LogUtil.debug(_LOG, "Achieved final node positions, terminating animation...");
 				_animInProgress = false;
 			} else if(_animStep >= _ANIMATIONSTEPS) {
-				trace("Exceeded animation steps, setting nodes to final positions...");
+				LogUtil.info(_LOG, "Exceeded animation steps, setting nodes to final positions...");
 				applyTargetToNodes(_vgraph.visibleVNodes);
 				_animInProgress = false;
 			} else {
@@ -336,7 +339,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				}
 				
 				/*
-				trace("interpolating node:"+n.id+" cP:"+currPoint.toString()+" cr:"+currRadius+" cp:"+currPhi+
+				LogUtil.debug(_LOG, "interpolating node:"+n.id+" cP:"+currPoint.toString()+" cr:"+currRadius+" cp:"+currPhi+
 					" tr:"+targetRadius+" tp:"+targetPhi+" sP:"+stepPoint.toString()+" sr:"+stepRadius+
 					" sp:"+stepPhi); 
 				*/
@@ -490,21 +493,21 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			 * timing interval and the current signed animation step */
 			factorinput = _ANIMATIONTIMINGINTERVALSIZE * (signedAnimStep / _ANIMATIONSTEPS);			
 			
-			//trace("factor input:"+factorinput);
+			//LogUtil.debug(_LOG, "factor input:"+factorinput);
 			
 			/* calculate the timing factor using the atan() function
 			 * since we take the absolute value, 
 			 * its range goes from PI / 2 to 0 back to PI / 2 */
 			factor = Math.abs(Math.atan(factorinput));
 			
-			//trace("factor fraction of PI:"+(factor / Math.PI));
+			//LogUtil.debug(_LOG, "factor fraction of PI:"+(factor / Math.PI));
 			
 			/* now the delay for our timer is now the factors fraction
 			 * of PI/2 times the maximum timer delay, i.e. the full timer
 			 * delay if the factor has a value of PI / 2 */
 			timerdelay = (factor / (Math.PI / 2)) * _MAXANIMTIMERDELAY;
 			
-			//trace("Setting timerdelay to:"+timerdelay+" milliseconds in step:"+_animStep);
+			//LogUtil.debug(_LOG, "Setting timerdelay to:"+timerdelay+" milliseconds in step:"+_animStep);
 			
 			/* now creating the new timer with the specified delay
 			 * and ask for one execution, then the event handler will be
@@ -529,7 +532,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * @param event The fired timer event, will be ignored anyway.
 		 * */
 		private function animTimerFired(event:TimerEvent = null):void {
-			//trace("Timer fired!");
+			//LogUtil.debug(_LOG, "Timer fired!");
 			startAnimation();
 			//event.updateAfterEvent();
 		}

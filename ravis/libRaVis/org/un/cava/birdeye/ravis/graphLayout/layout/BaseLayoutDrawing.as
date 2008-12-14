@@ -180,7 +180,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			_nodePolarPhis[n] = polarPhi;
 			_nodeCartCoordinates[n] = Geometry.cartFromPolarDeg(polarR, polarPhi);
 			
-			//trace("SetPolarCoordinates of node:"+n.id+" polarRadius:"+polarR+" polarPhi:"+polarPhi+" and in cartesian:"+(_nodeCartCoordinates[n] as Point).toString());
+			//LogUtil.debug(_LOG, "SetPolarCoordinates of node:"+n.id+" polarRadius:"+polarR+" polarPhi:"+polarPhi+" and in cartesian:"+(_nodeCartCoordinates[n] as Point).toString());
 			
 			_nodeDataValid[n] = true;
 		}
@@ -206,7 +206,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			_nodeCartCoordinates[n] = p;
 			
 			/*
-			trace("SetCartCoordinates of node:"+n.id+" polarRadius:"+_nodePolarRs[n]+
+			LogUtil.debug(_LOG, "SetCartCoordinates of node:"+n.id+" polarRadius:"+_nodePolarRs[n]+
 				" polarPhi:"+_nodePolarPhis[n]+" and in cartesian:"+
 				(_nodeCartCoordinates[n] as Point).toString());
 			*/

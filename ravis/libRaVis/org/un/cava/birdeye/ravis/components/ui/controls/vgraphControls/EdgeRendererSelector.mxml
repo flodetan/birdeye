@@ -53,6 +53,7 @@
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import mx.events.ListEvent;
 			import mx.utils.ObjectUtil;
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.Hyperbolic2DLayouter;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.IEdgeRenderer;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
@@ -64,6 +65,7 @@
 			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.CircularEdgeRenderer;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.HyperbolicEdgeRenderer;
 			
+		  private static const _LOG:String = "components.ui.controls.vgraphControls.EdgeRendererSelector";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -111,7 +113,7 @@
 				var g:Graphics;
 				
 				if(_vgraph == null) {
-					trace("Cannot change EdgeRenderer, no valid vgraph!");
+					LogUtil.warn(_LOG, "Cannot change EdgeRenderer, no valid vgraph!");
 					return;
 				}
 				g = _vgraph.edgeDrawGraphics;
@@ -147,18 +149,18 @@
 								_vgraph.edgeRenderer =
 									new HyperbolicEdgeRenderer(g,(_vgraph.layouter as Hyperbolic2DLayouter).projector);
 							} else {
-								trace("Cannot access projector of layouter, cannot use this edgerenderer!");
+								LogUtil.warn(_LOG, "Cannot access projector of layouter, cannot use this edgerenderer!");
 								_vgraph.edgeRenderer = new BaseEdgeRenderer(g);
 								this.selectedIndex = 0;
 							}
 						} else {
-							trace("Layouter MUST be hyperbolic, otherwise cannot use this edgerenderer!");
+							LogUtil.warn(_LOG, "Layouter MUST be hyperbolic, otherwise cannot use this edgerenderer!");
 							_vgraph.edgeRenderer = new BaseEdgeRenderer(g);
 							this.selectedIndex = 0;
 						}
 						break;
 				default:
-						trace("Illegal EdgeRenderer selected:"+er);
+						LogUtil.warn(_LOG, "Illegal EdgeRenderer selected:"+er);
 						_vgraph.edgeRenderer = new BaseEdgeRenderer(g);
 						break;
 				}
@@ -173,7 +175,7 @@
 				var erClassName:String;
 				
 				if(_vgraph == null) {
-					trace("Cannot refresh EdgeRenderer, no valid vgraph!");
+					LogUtil.warn(_LOG, "Cannot refresh EdgeRenderer, no valid vgraph!");
 					return;
 				}
 				
@@ -206,7 +208,7 @@
 						this.selectedIndex = 7;
 						break;
 					default:
-						trace("Illegal EdgeRenderer class received:"+erClassName);
+						LogUtil.warn(_LOG, "Illegal EdgeRenderer class received:"+erClassName);
 						break;
 				}
 			}

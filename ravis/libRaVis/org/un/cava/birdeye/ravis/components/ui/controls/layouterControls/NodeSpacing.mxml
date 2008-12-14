@@ -50,12 +50,14 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.HierarchicalLayouter;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
 			
+		  private static const _LOG:String = "components.ui.controls.layouterControls.NodeSpacing";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -111,7 +113,7 @@
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot apply NodeSpacing without vgraph or on null layouter");
+					LogUtil.warn(_LOG, "Cannot apply NodeSpacing without vgraph or on null layouter");
 					return;
 				}
 				
@@ -146,13 +148,13 @@
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot apply NodeSpacing without vgraph or on null layouter");
+					LogUtil.warn(_LOG, "Cannot apply NodeSpacing without vgraph or on null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently Hierarchical only) */
 				if(!(_vgraph.layouter is HierarchicalLayouter)) {
-					trace("NodeSpacing is only available in HierarchicalLayouter");
+					LogUtil.warn(_LOG, "NodeSpacing is only available in HierarchicalLayouter");
 					return;
 				}
 				
@@ -177,13 +179,13 @@
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot update NodeSpacing without vgraph or from null layouter");
+					LogUtil.warn(_LOG, "Cannot update NodeSpacing without vgraph or from null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently Hierarchical only) */
 				if(!(_vgraph.layouter is HierarchicalLayouter)) {
-					trace("NodeSpacing is only available in HierarchicalLayouter");
+					LogUtil.warn(_LOG, "NodeSpacing is only available in HierarchicalLayouter");
 					return;
 				}
 				

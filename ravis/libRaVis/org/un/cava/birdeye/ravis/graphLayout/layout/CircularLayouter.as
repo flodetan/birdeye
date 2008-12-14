@@ -35,12 +35,13 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import org.un.cava.birdeye.ravis.graphLayout.data.IGTree;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 	import org.un.cava.birdeye.ravis.utils.Geometry;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	import flash.events.MouseEvent;
-	
+		
 	/**
 	 * This is an implementation of the circular layout -
 	 * all visible nodes are arranged in a circle
@@ -48,6 +49,9 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	 * @author Nitin Lamba
 	 * */
 	public class CircularLayouter extends AnimatedBaseLayouter {
+		
+		private static const _LOG:String = "graphLayout.layout.CircularLayouter";
+		
 		/**
 		 * The radius of the layout
 		 */
@@ -93,10 +97,10 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * @return Currently the return value is not set or used.
 		 * */
 		override public function layoutPass():Boolean {
-			//trace("layoutPass called");
+			//LogUtil.debug(_LOG, "layoutPass called");
 			
 			if(!_vgraph) {
-				trace("No Vgraph set in CircularLayouter, aborting...");
+				LogUtil.warn(_LOG, "No Vgraph set in CircularLayouter, aborting...");
 				return false;
 			}
 			
@@ -216,14 +220,14 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 					/* set the values */
 					ni = vn.node;
 					_currentDrawing.setPolarCoordinates(ni, _radius, phi);
-					//trace("CircularLayouter: node set to (r, phi) = " + _radius + ", " + phi);
+					//LogUtil.debug(_LOG, "CircularLayouter: node set to (r, phi) = " + _radius + ", " + phi);
 				
 					/* set the orientation into the visual node */
 					vn.orientAngle = phi;
 				}
 				i += 1;
 			}
-			//trace("CircularLayouter: nodes set to new (r, phi)...");
+			//LogUtil.debug(_LOG, "CircularLayouter: nodes set to new (r, phi)...");
 			return;
 		}
 

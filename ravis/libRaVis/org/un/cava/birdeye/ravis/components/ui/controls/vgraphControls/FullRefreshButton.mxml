@@ -39,9 +39,11 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
 			
+		  private static const _LOG:String = "components.ui.controls.vgraphControls.FullRefreshButton";
 			/* we need this to properly initialize the new graph */
 			private var _vgraph:VisualGraph;
 
@@ -66,7 +68,7 @@
 			public function fullyRefreshIt():void {
 	
 				if(_vgraph == null) {
-					trace("Cannot fully refresh vgraph, no vgraph!");
+					LogUtil.warn(_LOG, "Cannot fully refresh vgraph, no vgraph!");
 					return;
 				}
 				

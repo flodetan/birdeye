@@ -260,10 +260,16 @@
 			import org.un.cava.birdeye.ravis.components.ui.controls.vgraphControls.DegreesOfSeparation;
 			import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
 							
+			// Logging support
+			import mx.logging.Log;
+			import mx.logging.LogEventLevel;
+			import mx.logging.targets.TraceTarget;
+			
 			/* Init function, initiates the HTTP
 			 * request. All further initalisation is done
 			 * in the event handler for the HTTP Service */
 			private function init():void {
+				initLogging();
 				initData();
 			}
 			
@@ -295,6 +301,21 @@
 				
 				/* the following kicks it off .... */
 				vgraph.draw();
+			}
+			
+			private function initLogging():void {
+				const target:TraceTarget = new TraceTarget();
+				
+				/* can specify a certain subset of categories/classes to log */
+				//target.filters = ["components.*", "graphLayout.*"];
+				
+				/* can specify logging parameters */
+				target.includeDate = false;
+				target.includeTime = false;
+				target.includeCategory = false; // Category = "ravis"
+				target.includeLevel = true;
+				target.level = LogEventLevel.DEBUG;
+				Log.addTarget(target);
 			}
 		]]>
 	</mx:Script>		

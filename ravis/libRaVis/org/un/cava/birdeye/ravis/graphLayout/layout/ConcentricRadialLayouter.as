@@ -30,6 +30,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.utils.Geometry;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	
 	/**
 	 * This is an implementation of the generic radial
@@ -40,6 +41,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	 * lines.
 	 * */
 	public class ConcentricRadialLayouter extends AnimatedBaseLayouter implements ILayoutAlgorithm {
+		
+		private static const _LOG:String = "graphLayout.layout.ConcentricRadialLayouter";
 		
 		/**
 		 * The default radius increase between
@@ -143,15 +146,15 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			var nodes:Array;
 			var cindex:int;
 	
-			//trace("layoutPass called");
+			//LogUtil.debug(_LOG, "layoutPass called");
 			
 			if(!_vgraph) {
-				trace("No Vgraph set in ConcentricRadialLayouter, aborting");
+				LogUtil.warn(_LOG, "No Vgraph set in ConcentricRadialLayouter, aborting");
 				return false;
 			}
 			
 			if(!_vgraph.currentRootVNode) {
-				trace("This Layouter always requires a root node!");
+				LogUtil.warn(_LOG, "This Layouter always requires a root node!");
 				return false;
 			}
 			
@@ -176,7 +179,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				initDrawing();
 			}
 			
-			//trace("CCLayouter: current root:"+_root.id);
+			//LogUtil.debug(_LOG, "CCLayouter: current root:"+_root.id);
 	
 			/* set the coordinates in the drawing of root
 			 * to 0,0 */
@@ -255,7 +258,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			_currentDrawing.originOffset = _vgraph.origin;
 			_currentDrawing.centerOffset = _vgraph.center;
 			_currentDrawing.centeredLayout = true;
-			//trace("New Drawing with origin:"+_currentDrawing.originOffset.toString());
+			//LogUtil.debug(_LOG, "New Drawing with origin:"+_currentDrawing.originOffset.toString());
 		}
 		
 		/**
@@ -294,10 +297,10 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			}
 			
 			
-			//trace("CalcAngWidth called with node:"+n.id+" and depth:"+d);
+			//LogUtil.debug(_LOG, "CalcAngWidth called with node:"+n.id+" and depth:"+d);
 			
 			if(!n.vnode.isVisible) {
-				trace("Node:"+n.id+" not yet visible but called in angular width calc");
+				LogUtil.warn(_LOG, "Node:"+n.id+" not yet visible but called in angular width calc");
 				return 0;
 			}
 			
@@ -323,7 +326,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				nh = _maxviewheight;
 			}
 			
-			//trace("nodes width:"+nw+" height:"+nh);
+			//LogUtil.debug(_LOG, "nodes width:"+nw+" height:"+nh);
 			
 			if(d == 0) {
 				diameter = 0; // root node 
@@ -339,7 +342,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			diameter = Geometry.rad2deg(diameter);
 			
 			
-			//trace("depth:"+d+" diameter:"+diameter);
+			//LogUtil.debug(_LOG, "depth:"+d+" diameter:"+diameter);
 			
 			/* here the code checks if the node 'is expanded'
 			 * which means if he has visible children
@@ -349,20 +352,20 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			 * this may be a bit less efficient, but it fits
 			 * our code */
 			if(_stree.getNoChildren(n) > 0) {
-				//trace("node:"+n.id+" has children...");
+				//LogUtil.debug(_LOG, "node:"+n.id+" has children...");
 				for each(cn in _stree.getChildren(n)) {
 					aw += calcAngularWidth(cn, d+1);
-					//trace("current aw for node:"+n.id+" is:"+aw);
+					//LogUtil.debug(_LOG, "current aw for node:"+n.id+" is:"+aw);
 				}
 				aw = Math.max(diameter,aw);
 			} else {
-				//trace("node:"+n.id+" has NO children...");
+				//LogUtil.debug(_LOG, "node:"+n.id+" has NO children...");
 				aw = diameter;
-				//trace("current aw for node:"+n.id+" is:"+aw);
+				//LogUtil.debug(_LOG, "current aw for node:"+n.id+" is:"+aw);
 			}
 			
 			_currentDrawing.setAngularWidth(n,aw);
-			//trace("Set angular witdh of node:"+n.id+" to:"+aw);
+			//LogUtil.warn(_LOG, "Set angular witdh of node:"+n.id+" to:"+aw);
 			
 			return aw;
 		}
@@ -470,7 +473,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			/* if we have no children, the array is empty, thus null */
 			if(cc == 0) {
-				//trace("Node n:"+n.id+" has no children, returning null sort array");
+				//LogUtil.debug(_LOG, "Node n:"+n.id+" has no children, returning null sort array");
 				return null;
 			}
 			
@@ -487,14 +490,14 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				angles[i] = Geometry.normaliseAngleDeg(-base + Geometry.rad2deg(Math.atan2(cp.y - np.y, cp.x - np.x)));
 				
 				/*
-				trace("childorder angle for child:"+cn.id+" of node:"+n.id+" has base:"+base+
+				LogUtil.debug(_LOG, "childorder angle for child:"+cn.id+" of node:"+n.id+" has base:"+base+
 					" and angle:"+(angles[i] / (2*Math.PI) * 360));
 				*/
 			}
 			
 			result = angles.sort(Array.NUMERIC | Array.RETURNINDEXEDARRAY);
 			/*
-			trace("Built indexarray:"+result.toString()+" of array:"+angles.toString()+
+			LogUtil.debug(_LOG, "Built indexarray:"+result.toString()+" of array:"+angles.toString()+
 				" for children:"+_stree.getChildren(n).toString());
 			*/
 			return result;
@@ -547,7 +550,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 						theta1 + ((nfrac + cfrac) * dtheta));
 				}
 				
-				//trace("CSL: current radius:"+r);
+				//LogUtil.debug(_LOG, "CSL: current radius:"+r);
 				_currentDrawing.setPolarCoordinates(cn, r, theta1+(nfrac*dtheta)+(cfrac*dtheta2));
 				
 				/* set the orientation in the visual node */

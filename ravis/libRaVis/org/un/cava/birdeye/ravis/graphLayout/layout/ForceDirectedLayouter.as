@@ -32,6 +32,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	/**
 	 * This is an implementation of the ForceDirected/SpringGraph
 	 * Layouting algorithm. The implementation took the general
@@ -56,6 +57,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		/*********************************************
 		* CONSTANTS
 		* ********************************************/
+		
+		private static const _LOG:String = "graphLayout.layout.ForceDirectedLayouter";
 		
 		/**
 		 * @internal
@@ -583,7 +586,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 																								 _MAX_REPULSION) );
 				}
 			}
-			//trace("FD af Coverage:" + _coverage + " repulsionFactor:" + _repulsionFactor);
+			//LogUtil.debug(_LOG, "FD af Coverage:" + _coverage + " repulsionFactor:" + _repulsionFactor);
 		}
 
 		/**
@@ -601,7 +604,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				_motionRatio = 0.0;
 			}
 			/*
-			trace(t_maxSpringMotion + "\t"
+			_LOG.debug(t_maxSpringMotion + "\t"
 					+ t_maxRepulsiveMotion + "\t"
 					+ _maxMotion + "\t"
 					+ _motionRatio + "\t"

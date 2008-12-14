@@ -39,6 +39,8 @@ package org.un.cava.birdeye.ravis.components.renderers {
 	import mx.core.ContainerCreationPolicy;
 	import mx.core.IDataRenderer;
 	import mx.events.FlexEvent;
+
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	
 	/**
 	 * This is the basic renderer class that more
@@ -46,7 +48,9 @@ package org.un.cava.birdeye.ravis.components.renderers {
 	 * can be derived from
 	 * */
 	public class BaseRenderer extends VBox {
-	
+		
+		private static const _LOG:String = "components.renderers.BaseRenderer";
+		
 		/**
 		 * spacer component of this renderer
 		 * */
@@ -95,24 +99,24 @@ package org.un.cava.birdeye.ravis.components.renderers {
 		 * @param e The event that this handler was triggered from. Unused.
 		 * */
 		protected function getDetails(e:Event):void {
-			// trace("Show Details");
+			// LogUtil.debug(_LOG, "Show Details");
 			
 			/* check if we have a data object */
 			if(this.data == null) {
-				trace("Data object of this Renderer is null. This should not happen, probably wrong usage");
+				LogUtil.warn(_LOG, "Data object of this Renderer is null. This should not happen, probably wrong usage");
 				return;
 			}
 			
 			/* if yes, it should be an IVisualNode, but actually we don't care
 			 * we just need to make sure it also has a data object */
 			if(!(this.data is IDataRenderer)) {
-				trace("Data object is no IDataRenderer");
+				LogUtil.warn(_LOG, "Data object is no IDataRenderer");
 				return;
 			}
 			
 			/* and it should not be null */
 			if(this.data.data == null) {
-				trace("Data object of data object is null");
+				LogUtil.warn(_LOG, "Data object of data object is null");
 				return;
 			} 
 		}

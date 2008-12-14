@@ -31,7 +31,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import flash.geom.Point;
 	import flash.utils.Timer;
 	import mx.core.UIComponent;
-	
+		
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.VisualNode;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
@@ -46,6 +46,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import org.un.cava.birdeye.ravis.utils.geom.PoincareIsometry;
 	import org.un.cava.birdeye.ravis.utils.geom.PoincareModel;
 	import org.un.cava.birdeye.ravis.utils.geom.PoincareProjector;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	import org.un.cava.birdeye.ravis.utils.GraphicUtils;
 
 	/**
@@ -74,7 +75,9 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 
 	public class Hyperbolic2DLayouter extends IterativeBaseLayouter implements ILayoutAlgorithm {
 		
-		public static const ANIMATION_STEPS:int = 10;
+		private static const _LOG:String = "graphLayout.layout.Hyperbolic2DLayouter";
+		
+	  public static const ANIMATION_STEPS:int = 10;
 		
 	 /*********************************************
 		* INTERNAL OBJECTS
@@ -197,7 +200,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			// 1: Initialize global variables to avoid garbage collection.
 			if (_nodeIndex == null) {
-				//trace("Resetting node indexes...");
+				//LogUtil.debug(_LOG, "Resetting node indexes...");
 				_nodeIndex = new Array(totalNodes);
 				k = 0;
       			for each(vn in allVisVNodes) {
@@ -207,27 +210,27 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			}
 			
 			if (_nodePositions == null) {// UnProject Euclidean Space to Poincare Model
-				//trace("Resetting node positions...");
+				//LogUtil.debug(_LOG, "Resetting node positions...");
 				_nodePositions = new Array(totalNodes); //ComplexNumber
 				unProjectNodes();
 			}
 			
 			if (_gradient == null) {
-				//trace("Resetting gradients...");
+				//LogUtil.debug(_LOG, "Resetting gradients...");
 				_gradient = new Array(totalNodes); //ComplexVector
 				for (k = 0; k < totalNodes; k++)
 					_gradient[k] = new ComplexVector(_nodePositions[k] as ComplexNumber, new ComplexNumber());
 			}
 			
 			if (_tempPositions == null) {
-				//trace("Resetting temp node positions...");
+				//LogUtil.debug(_LOG, "Resetting temp node positions...");
 				_tempPositions = new Array(totalNodes); // ComplexNumber
 				for (k = 0; k < totalNodes; k++)
 					_tempPositions[k] = new ComplexNumber();
 			}
 			
 			if (_distances == null) {
-				//trace("Resetting distance matrix...");
+				//LogUtil.debug(_LOG, "Resetting distance matrix...");
 				var j:int;
 				_distances = new Array(totalNodes);
 				for (k = 0; k < totalNodes; k++) {
@@ -295,10 +298,10 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			// 2.5: Compute new energy
 			_energy = getEnergy();
 			/*
-			trace("  Energy: " + _energy 
-						+ "  StepWidth: " + _stepWidth
-						+ "  Gradient Norm: " + _gradientNorm2
-						+ "  Angle: "  + gradientProduct/Math.sqrt(_gradientNorm2*_previousGradientNorm2));
+			LogUtil.debug(_LOG, "  Energy: " + _energy 
+						   + "  StepWidth: " + _stepWidth
+						   + "  Gradient Norm: " + _gradientNorm2
+						   + "  Angle: "  + gradientProduct/Math.sqrt(_gradientNorm2*_previousGradientNorm2));
 			*/
 			
 			// 3: Map from Poincare Model to Euclidean Space
@@ -317,7 +320,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			 * was not initialised, then this crashes, adding a safeguard
 			 */
 			if(_nodeIndex == null) {
-				trace("WARNING: _nodeIndex not initialised in Hyperbolic2DLayouter.projectNodes()");
+				LogUtil.warn(_LOG, "_nodeIndex not initialised in Hyperbolic2DLayouter.projectNodes()");
 				return;
 			}
 			
@@ -359,7 +362,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 					translateRandomly(temp, 1.5, 2.5);
 					_nodePositions[k] = temp;
 					/*
-					trace( (_nodeIndex[k] as VisualNode).node.stringid 
+					_LOG.debug( (_nodeIndex[k] as VisualNode).node.stringid 
 					    + ": Randomly set position to " + _nodePositions[k] );
 					*/
 				} else {
@@ -367,7 +370,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				}
 				// DEBUG - CHECK:
 				if (isNaN((_nodePositions[k] as ComplexNumber).real)) 
-					trace("HyperbolicLayout: " + (_nodeIndex[k] as VisualNode).node.stringid 
+					LogUtil.warn(_LOG, "HyperbolicLayout: " + (_nodeIndex[k] as VisualNode).node.stringid 
 					    + ": Node position set to " + _nodePositions[k] );
 			}
 		}
@@ -394,7 +397,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 																					(position[j] as IPoint));
 					//DEBUG - CHECK:
 					if ((_distances[i][j] <= 1e-10) || isNaN(_distances[i][j]))
-						trace("HyperbolicLayout: Distance for (" + i + ", " + j + ") is = " + _distances[i][j]);
+						LogUtil.warn(_LOG, "HyperbolicLayout: Distance for (" + i + ", " + j + ") is = " + _distances[i][j]);
 				}
 		}
 		
@@ -424,11 +427,11 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 							
 							//DEBUG - CHECK:
 							if (isNaN((t_v2.dir as ComplexNumber).real)) {
-								trace( "Hyperbolic2DLayouter: [k = " + k + "] [i = " + i + "] Gradient vector between nodes " 
+								LogUtil.warn(_LOG, "Hyperbolic2DLayouter: [k = " + k + "] [i = " + i + "] Gradient vector between nodes " 
 									 + (_nodeIndex[k] as VisualNode).node.stringid + " & "
 									 + (_nodeIndex[i] as VisualNode).node.stringid 
 									 + " is: " + t_v2 );
-								trace( "  Positions are " 
+								LogUtil.warn(_LOG, "  Positions are " 
 									 + (position[k] as IPoint) + " & "
 									 + (position[i] as IPoint));
 							}
@@ -535,7 +538,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				if (n2 == (successors[i] as INode))
 				  rtn = true;
 					
-			// if (rtn) trace(n1.stringid + ", " + n2.stringid + " are directly connected");
+			// if (rtn) _LOG.debug(n1.stringid + ", " + n2.stringid + " are directly connected");
 			return rtn;
 		}
 		
@@ -551,7 +554,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			 * 2: Node Clicked: Move the node at the center
 			 * 3: Node Double-clicked: After changing visibility, move the node at the center
 			 */
-			// trace("Node: " + vn.node.stringid + " is CENTERED");
+			// LogUtil.debug(_LOG, "Node: " + vn.node.stringid + " is CENTERED");
 			_animationIsometries = _projector.center(new Point(vn.x, vn.y), _vgraph as DisplayObject, false);
 			_animInProgress = true;
 			resetAnimation();
@@ -562,7 +565,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * @inheritDoc
 		 */
 		override public function bgDragEvent(event:MouseEvent):void {
-			//trace("Canvas started DRAG");
+			//LogUtil.debug(_LOG, "Canvas started DRAG");
 			_dragStartX = event.localX;
 			_dragStartY = event.localY;
 		}
@@ -571,7 +574,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * @inheritDoc
 		 */
 		override public function bgDragContinue(event:MouseEvent):void {
-			//trace("Canvas being DRAGGED...");
+			//LogUtil.debug(_LOG, "Canvas being DRAGGED...");
 			
 			var startPt:Point = new Point(_dragStartX, _dragStartY);
 			// get start point of dragging but do not adjust node if it is out of bounds
@@ -630,7 +633,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		protected function animate():void {
 			// Check for end condition
 			if(_animStep >= ANIMATION_STEPS) {
-				//trace("Animation complete, dragged/clicked node is in its final position");
+				//LogUtil.warn(_LOG, "Animation complete, dragged/clicked node is in its final position");
 				//applyTargetToNodes(_vgraph.visibleVNodes);
 				_animInProgress = false;
 				_animationIsometries = null;
@@ -667,7 +670,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * @param event The fired timer event, will be ignored anyway.
 		 * */
 		private function animTimerFired(event:TimerEvent = null):void {
-			//trace("Timer fired!");
+			//LogUtil.warn(_LOG, "Timer fired!");
 			animate();
 			//event.updateAfterEvent();
 		}

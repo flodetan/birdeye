@@ -171,7 +171,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	      adjust();
   	    updateParameters();
 				/*
-	      trace("epoch=" + epoch + ", " 
+	      LogUtil.debug(_LOG, "epoch=" + epoch + ", " 
 				    + "adaption=" + adaption + ", "
 						+ "radius=" + radius);
 				 */
@@ -238,7 +238,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				last_y = min_y + (max_y - min_y) * Math.random();
 			} while (!insideDistribution(last_x,last_y));
       winner = closestNode(last_x, last_y);
-			//trace("*> Winner is = " + winner.node.stringid);
+			//LogUtil.debug(_LOG, "*> Winner is = " + winner.node.stringid);
 			
 			// add winner to the queue
 			distanceMap[winner] = [0];
@@ -258,7 +258,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				vn.x += factor * dx;
 				vn.y += factor * dy;
 				/*
-				 trace("Q: Adjusting node " + vn.node.stringid + 
+				 LogUtil.debug(_LOG, "Q: Adjusting node " + vn.node.stringid + 
 							 "@d=" + p + 
 							 ": dx=" + factor * dx +
 							 " and dy=" + factor * dy +
@@ -273,9 +273,9 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 					// Propagate the change to predessors
 					for(j=0;j < node.predecessors.length; ++j) {
 						child = (node.predecessors[j] as INode);
-						//trace("P: Child = " + child.stringid);
+						//LogUtil.debug(_LOG, "P: Child = " + child.stringid);
 						vchild = child.vnode;
-						//trace("P: Retrieved child's vNode...");
+						//LogUtil.debug(_LOG, "P: Retrieved child's vNode...");
 						if (vchild.isVisible &&
 						      !(visitedMap[vchild] as Array)[0] &&
 									 ( !clipping ||
@@ -283,19 +283,19 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 							visitedMap[vchild] = [true];
 							d = (distanceMap[vn] as Array)[0];
 							distanceMap[vchild] = [d + 1];
-				 			//trace("P: Distance =" + d);
+				 			//LogUtil.debug(_LOG, "P: Distance =" + d);
 							queue.push(vchild);
 						} else {
-							//trace("P: vNode doesn't qualify, no action...");
+							//LogUtil.debug(_LOG, "P: vNode doesn't qualify, no action...");
 						}
 					}
 					
 					// Propagate the change to successors
 					for(j=0;j < node.successors.length; ++j) {
 						child = (node.successors[j] as INode);
-						//trace("S: Child = " + child.stringid);
+						//LogUtil.debug(_LOG, "S: Child = " + child.stringid);
 						vchild = child.vnode;
-						//trace("S: Retrieved child's vNode...");
+						//LogUtil.debug(_LOG, "S: Retrieved child's vNode...");
 						if (vchild.isVisible &&
 						      !(visitedMap[vchild] as Array)[0] &&
 									 ( !clipping ||
@@ -303,14 +303,14 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 							visitedMap[vchild] = [true];
 							d = (distanceMap[vn] as Array)[0];
 							distanceMap[vchild] = [d + 1];
-				 			//trace("S: Distance =" + d);
+				 			//LogUtil.debug(_LOG, "S: Distance =" + d);
 							queue.push(vchild);
 						} else {
-							//trace("S: vNode doesn't qualify, no action...");
+							//LogUtil.debug(_LOG, "S: vNode doesn't qualify, no action...");
 						}
 					}
 				} else {
-					//trace("Q: Node beyond the radius, no action...");
+					//LogUtil.debug(_LOG, "Q: Node beyond the radius, no action...");
 				}
 			}
       if (taboo) tabooCheck(visitedMap);
@@ -332,19 +332,19 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			var vn:IVisualNode;
 			
 			for each(vn in allVisVNodes) {
-				//trace("$> " + vn.x + ", " + vn.y);
+				//LogUtil.debug(_LOG, "$> " + vn.x + ", " + vn.y);
 				if (insideDistribution(vn.x, vn.y)) {
 					dx = vn.x - x;
 					dy = vn.y - y;
 					dist = Math.sqrt(dx*dx + dy*dy);
-					//trace("$> Distance from target =" + dist);
+					//LogUtil.debug(_LOG, "$> Distance from target =" + dist);
 					if (bestDistance > dist) {
 						bestDistance = dist;
 						bestNode = vn;
 					}
 				}
 			}
-			//trace("$> closestNode = " + bestNode);
+			//LogUtil.debug(_LOG, "$> closestNode = " + bestNode);
 			return bestNode;
 		}
     

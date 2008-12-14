@@ -53,6 +53,7 @@
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import mx.utils.ObjectUtil;
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
 			import org.un.cava.birdeye.ravis.components.renderers.nodes.BaseNodeRenderer;
 			import org.un.cava.birdeye.ravis.components.renderers.nodes.DefaultNodeRenderer;
 			import org.un.cava.birdeye.ravis.components.renderers.nodes.EffectBaseNodeRenderer;
@@ -63,6 +64,7 @@
 			import org.un.cava.birdeye.ravis.components.renderers.nodes.SizeByValueNodeRenderer;
 			import org.un.cava.birdeye.ravis.components.renderers.nodes.WFBNodeRenderer;
 			
+		  private static const _LOG:String = "components.ui.controls.vgraphControls.NodeRendererSelector";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -109,7 +111,7 @@
 				var nr:String;
 				
 				if(_vgraph == null) {
-					trace("Cannot change NodeRenderer, no valid vgraph!");
+					LogUtil.warn(_LOG, "Cannot change NodeRenderer, no valid vgraph!");
 					return;
 				}
 				/* get the currently selected orientation */
@@ -145,7 +147,7 @@
 						break;
 					
 					default:
-						trace("Illegal NodeRenderer selected:"+nr);
+						LogUtil.warn(_LOG, "Illegal NodeRenderer selected:"+nr);
 						_vgraph.itemRenderer = new ClassFactory(DefaultNodeRenderer);
 						break;
 				}
@@ -160,7 +162,7 @@
 				var nlrClassName:String;
 				
 				if(_vgraph == null) {
-					trace("Cannot refresh NodeRenderer, no valid vgraph!");
+					LogUtil.warn(_LOG, "Cannot refresh NodeRenderer, no valid vgraph!");
 					return;
 				}
 				
@@ -196,7 +198,7 @@
 						this.selectedIndex = 8;
 						break;
 					default:
-						trace("Illegal NodeLabelRenderer received:"+nlrClassName);
+						LogUtil.warn(_LOG, "Illegal NodeLabelRenderer received:"+nlrClassName);
 						break;
 				}
 			}

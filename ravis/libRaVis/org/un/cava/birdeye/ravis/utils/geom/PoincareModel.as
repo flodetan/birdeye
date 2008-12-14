@@ -24,6 +24,7 @@
  */
 package org.un.cava.birdeye.ravis.utils.geom {
 	import org.un.cava.birdeye.ravis.utils.Geometry;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	
 	/**
 	 * This class implements the Poincare model, which is used for 
@@ -44,6 +45,8 @@ package org.un.cava.birdeye.ravis.utils.geom {
 	 * @author Nitin Lamba
 	 */
 	public class PoincareModel extends BaseModel {
+		
+		private static const _LOG:String = "utils.geom.PoincareModel";
 		
 		// TEMPORARY VARIABLES - to speed-up computations
 		private var t_v1:ComplexVector = new ComplexVector();
@@ -274,8 +277,8 @@ package org.un.cava.birdeye.ravis.utils.geom {
 			*/
 			// DEBUG - CHECK:
 			if (length == 0.0) {
-				trace("PoincareModel: Gradient Vector not defined...");
-				trace("  Positions are " + base + " & " + z);
+				LogUtil.warn(_LOG, "distanceGradientV(): Gradient Vector not defined...");
+				LogUtil.warn(_LOG, "  Positions are " + base + " & " + z);
 			}
 			
 			(t_v1.base as ComplexNumber).real = 0;

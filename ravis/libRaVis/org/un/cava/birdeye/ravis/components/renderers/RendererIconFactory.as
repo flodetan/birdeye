@@ -30,6 +30,7 @@ package org.un.cava.birdeye.ravis.components.renderers {
 	import mx.controls.Image;
 	import mx.core.UIComponent;
 	
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
 	import org.un.cava.birdeye.ravis.assets.icons.primitives.Circle;
 	import org.un.cava.birdeye.ravis.assets.icons.primitives.Rectangle;
@@ -40,6 +41,8 @@ package org.un.cava.birdeye.ravis.components.renderers {
 	 * */
 	public class RendererIconFactory {
 	
+		private static const _LOG:String = "components.renderers.RendererIconFactory";
+		
 		/**
 		 * This method generates an icon based on the
 		 * type and returns it as an UIComponent.
@@ -79,7 +82,7 @@ package org.un.cava.birdeye.ravis.components.renderers {
 				prefix = result.prefix;
 				suffix = result.suffix;
 			} else {
-				trace("Warning: node type is not well formed (:: missing), assuming embed");
+				LogUtil.warn(_LOG, "Node type is not well formed (:: missing), assuming embed");
 				prefix = "embed";
 				suffix = type;
 			}
@@ -97,7 +100,7 @@ package org.un.cava.birdeye.ravis.components.renderers {
 					icon = getUrlbasedIcon(suffix,size);
 					break;
 				default:
-					trace("Unknown icon prefix:"+prefix+" ,defaulting to URL based");
+					LogUtil.warn(_LOG, "Unknown icon prefix:"+prefix+" ,defaulting to URL based");
 					icon = getUrlbasedIcon(suffix,size);
 					break;
 			}
@@ -135,8 +138,8 @@ package org.un.cava.birdeye.ravis.components.renderers {
 					img.height=size;
 					break;
 				default:
-			        // trace("Out of range");
-			        trace("unsupported primitive shape: "+name);
+			        // LogUtil.warn(_LOG, "Out of range");
+			        LogUtil.warn(_LOG, "unsupported primitive shape: "+name);
 			        img.setStyle("color", color);
 			        break;
 			}

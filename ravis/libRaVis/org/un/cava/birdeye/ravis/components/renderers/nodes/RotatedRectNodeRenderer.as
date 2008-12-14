@@ -33,6 +33,7 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 		
 	/**
 	 * This is a simple renderer, similar to the filtered circle
@@ -41,6 +42,7 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 	 * */
 	public class RotatedRectNodeRenderer extends EffectBaseNodeRenderer  {
 		
+		private static const _LOG:String = "components.renderers.nodes.RotatedRectNodeRenderer";		
 		
 		private var _rc:UIComponent;
 		
@@ -103,7 +105,7 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 		 * */
 		public function updateRotation(e:Event):void {
 			if(_rc != null) {
-				//trace("updating rotation");
+				//LogUtil.info(_LOG, "updating rotation...");
 				if(this.data is IVisualNode) {
 					_rc.rotation = (this.data as IVisualNode).orientAngle;
 				}

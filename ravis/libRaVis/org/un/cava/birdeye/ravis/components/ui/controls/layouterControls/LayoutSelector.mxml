@@ -55,8 +55,9 @@
 
 	<mx:Script>	
 		<![CDATA[
-			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import mx.utils.ObjectUtil;
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
+			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.CircularLayouter;
@@ -69,6 +70,7 @@
 			import org.un.cava.birdeye.ravis.graphLayout.layout.ParentCenteredRadialLayouter;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.PhylloTreeLayouter;
 			
+		  private static const _LOG:String = "components.ui.controls.layouterControls.LayoutSelector";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -113,7 +115,7 @@
 			public function changeLayouter():void {	
 				/* check if we have a vgraph at all */
 				if(_vgraph == null) {
-					trace("Cannot change Layouter without vgraph.");
+					LogUtil.warn(_LOG, "Cannot change Layouter without vgraph.");
 					return;
 				}
 				setLayouter();
@@ -130,7 +132,7 @@
 								
 				/* check if we have a vgraph at all */
 				if(_vgraph == null) {
-					trace("Cannot change Layouter without vgraph.");
+					LogUtil.warn(_LOG, "Cannot change Layouter without vgraph.");
 					return;
 				}
 	
@@ -201,7 +203,7 @@
 						layouter = new PhylloTreeLayouter(_vgraph);
 						break;
 					default:
-						trace("Illegal Layouter selected, defaulting to ConcentricRadial"+
+						LogUtil.warn(_LOG, "Illegal Layouter selected, defaulting to ConcentricRadial"+
 							layouterName);
 						layouter = new ConcentricRadialLayouter(_vgraph);
 						break;
@@ -219,7 +221,7 @@
 								
 				/* check if we have a vgraph/layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot refresh the LayoutSelector without vgraph or Layouter.");
+					LogUtil.warn(_LOG, "Cannot refresh the LayoutSelector without vgraph or Layouter.");
 					return;
 				}
 	
@@ -257,7 +259,7 @@
 						break;
 					default:
 						layouterName = "Unknown";
-						trace("Unknown Layouter found:"+layouterClassName);
+						LogUtil.warn(_LOG, "Unknown Layouter found:"+layouterClassName);
 						break;
 				}
 				/* make the selection */
