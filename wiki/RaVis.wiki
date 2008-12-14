@@ -24,7 +24,7 @@ Stable: Project is at RC2; 27 May 2008
 
   * You can download a precompiled snapshot of the library [http://birdeye.googlecode.com/svn/trunk/ravis/libRaVis/released-binaries here].
 
-  * Try the RaVis Explorer: [http://birdeye.googlecode.com/svn/trunk/ravis/RaVisExamples/example-binaries/RaVisExplorer.html here] (work in progress)
+  * Try the RaVisExplorer: [http://birdeye.googlecode.com/svn/trunk/ravis/RaVisExamples/example-binaries/RaVisExplorer.html here] (work in progress)
 
 == Support ==
   * Check out the User Group: [http://groups.google.com/group/flexvizgraphlib here]
