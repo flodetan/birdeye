@@ -31,6 +31,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 	import org.un.cava.birdeye.ravis.utils.Geometry;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	
 	/**
 	 * This is an implementation of the 
@@ -42,6 +43,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	public class ParentCenteredRadialLayouter
 		extends AnimatedBaseLayouter
 		implements IAngularLayouter {
+		
+		private static const _LOG:String = "graphLayout.layout.ParentCenteredRadialLayouter";
 		
 		/* if we change phi we cannot set it directly
 		 * in the drawing mode, because we throw it away
@@ -94,15 +97,15 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			var rv:Boolean;
 			var children:Array;
 			
-			//trace("layoutPass called");
+			//LogUtil.info(_LOG, "layoutPass called");
 			
 			if(!_vgraph) {
-				trace("No Vgraph set in PCRLayouter, aborting");
+				LogUtil.warn(_LOG, "No Vgraph set in PCRLayouter, aborting");
 				return false;
 			}
 			
 			if(!_vgraph.currentRootVNode) {
-				trace("This Layouter always requires a root node!");
+				LogUtil.warn(_LOG, "This Layouter always requires a root node!");
 				return false;
 			}
 			
@@ -129,7 +132,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			/* check if the root is visible, if not
 			 * this is an issue */
 			if(!_root.vnode.isVisible) {
-				trace("Invisible root node, this is probably due to wrong initialisation of nodes or wrong defaults");
+				LogUtil.warn(_LOG, "Invisible root node, this is probably due to wrong initialisation of nodes or wrong defaults");
 				return false;
 			}
 
@@ -219,7 +222,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			_currentDrawing.centeredLayout = true;
 			(_currentDrawing as ParentCenteredDrawingModel).phi = _phi;
 			(_currentDrawing as ParentCenteredDrawingModel).rootR = _rootR;
-			//trace("New Model with phi:"+_phi+" and origin:"+_currentDrawing.originOffset.toString());
+			//LogUtil.debug(_LOG, "New Model with phi:"+_phi+" and origin:"+_currentDrawing.originOffset.toString());
 		}
 		
 		
@@ -261,7 +264,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				return;
 			}
 			
-			//trace("popped node:"+n.id+" from queue, working on it");
+			//LogUtil.debug(_LOG, "popped node:"+n.id+" from queue, working on it");
 			
 			/* first process the node */
 			processNode(n);
@@ -274,7 +277,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			for each(c in children) {
 				if(c.vnode.isVisible) {
 					_nodequeue.unshift(c);
-					//trace("added node:"+c.id+" to nodequeue");
+					//LogUtil.debug(_LOG, "added node:"+c.id+" to nodequeue");
 				}
 			}
 			
@@ -342,11 +345,11 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			}
 
 			
-			//trace("RecurseCC1: called");
+			//LogUtil.debug(_LOG, "RecurseCC1: called");
 			
 			if(vi == _root) {
 				
-				//trace("RecurseCC2: node:"+vi.id+" is root, setting all to 0");
+				//LogUtil.debug(_LOG, "RecurseCC2: node:"+vi.id+" is root, setting all to 0");
 				
 				/* if we are the root node we set the
 				 * static parameters of the root node */
@@ -371,7 +374,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				throw Error("Found non-root node without parent");
 			}
 			
-			//trace("RecurseCC3: node:"+vi.id+" is NOT root, got parent:"+vp.id);
+			//LogUtil.debug(_LOG, "RecurseCC3: node:"+vi.id+" is NOT root, got parent:"+vp.id);
 			
 			/* we would now check if we already have
 			 * the data of the parent node (in this case the root)
@@ -381,18 +384,18 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			 */
 			if(!_currentDrawing.nodeDataValid(vp)) {
 				/* RECURSE upward, but should not happen */
-				//trace("RecurseCC4: recursing with parent node:"+vp.id+" (current node:"+vi.id+")");
+				//LogUtil.debug(_LOG, "RecurseCC4: recursing with parent node:"+vp.id+" (current node:"+vi.id+")");
 				//recurseCoordinateCalculation(vp,_stree.getChildIndex(vp),_stree.getNoSiblings(vp));
 				throw Error("Parent node data invalid, this should not have happened");
 			}
 			
-			//trace("RecurseCC5: node:"+vi.id+"'s parent:"+vp.id+" has values");
+			//LogUtil.debug(_LOG, "RecurseCC5: node:"+vi.id+"'s parent:"+vp.id+" has values");
 			
 			/* now if the parent (v) is the root, i.e. we have
 			 * a tier-1 node we are still in a special case */
 			if(vp == _root) {
 								
-				//trace("RecurseCC6: node:"+vi.id+"'s parent:"+vp.id+" is ROOT, applying special values");
+				//LogUtil.debug(_LOG, "RecurseCC6: node:"+vi.id+"'s parent:"+vp.id+" is ROOT, applying special values");
 								
 				nodeOrigin = (_currentDrawing as ParentCenteredDrawingModel).getNodeOrigin(vp);
 				zeroAngleOffset = _currentDrawing.getAngleOffset(vp);
@@ -402,7 +405,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				/* remember we use degrees now, not radians */
 				nodePolarPhi = (360 * (i+1) / m); // have to adjust for index starting with 0 instead of 1
 				
-				//trace("RecurseCC6.1: node:"+vi.id+" gets rootR:"+nodePolarR);
+				//LogUtil.debug(_LOG, "RecurseCC6.1: node:"+vi.id+" gets rootR:"+nodePolarR);
 				
 				/* set the values */				
 				_currentDrawing.
@@ -410,7 +413,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				return;
 			}
 			
-			//trace("RecurseCC7: node:"+vi.id+"'s parent:"+vp.id+" is NOT root, calculating..");
+			//LogUtil.debug(_LOG, "RecurseCC7: node:"+vi.id+"'s parent:"+vp.id+" is NOT root, calculating..");
 			
 			/* now we use a regular node, again here we have 
 			 * two cases, depending on if the node has 
@@ -435,7 +438,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			vgpcoords = _currentDrawing.getRelCartCoordinates(vgp);
 			vpcoords = _currentDrawing.getRelCartCoordinates(vp);
 			
-			//trace("Node:"+vi.id+" has parent:"+vp.id+" and grandparent:"+vgp.id);
+			//LogUtil.debug(_LOG, "Node:"+vi.id+" has parent:"+vp.id+" and grandparent:"+vgp.id);
 			
 			/* big issue here is that the y axis direction is reversed
 			 * that means the sign of the y.coordinates is probably
@@ -448,7 +451,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			 * calculated according to the formula */
 			phi = _currentDrawing.phi;
 			
-			//trace("RecurseCC7.1: node:"+vi.id+" gets phi:"+phi);
+			//LogUtil.debug(_LOG, "RecurseCC7.1: node:"+vi.id+" gets phi:"+phi);
 			
 			/* new reasoning */
 			if(m == 1) {
@@ -457,7 +460,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				nodePolarPhi = 180 - (phi / 2.0) + (phi * i / (m-1));
 			} 
 		
-			//trace("RecurseCC7.2: node:"+vi.id+" with: i:"+i+" and m:"+m+" gets Polarphi:"+nodePolarPhi);	
+			//LogUtil.debug(_LOG, "RecurseCC7.2: node:"+vi.id+" with: i:"+i+" and m:"+m+" gets Polarphi:"+nodePolarPhi);	
 				
 			/* if the node has no siblings, m must be 1
 			 * the magnitude of the parent is what? Maybe
@@ -477,13 +480,13 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			mp = _stree.getNoSiblings(vp);
 			ip = _stree.getChildIndex(vp);
 			
-			//trace("RecurseCC8: set node:"+vi.id+"'s polarPhi to:"+nodePolarPhi);
+			//LogUtil.debug(_LOG, "RecurseCC8: set node:"+vi.id+"'s polarPhi to:"+nodePolarPhi);
 			if(mp == 1) {
 				
 				magnitude = Math.sqrt((vp.vnode.view.width * vp.vnode.view.width) +
 					(vp.vnode.view.height * vp.vnode.view.height));
 				
-				//trace("RecurseCC8.1: parent node:"+vp.id+" has no siblings");			
+				//LogUtil.debug(_LOG, "RecurseCC8.1: parent node:"+vp.id+" has no siblings");			
 				/* the diameter might be better here, but anyway */
 				//nodePolarR = (vp.vnode.view.width + vp.vnode.view.height) / 4;
 				
@@ -491,7 +494,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 								
 			} else {
 				
-				//trace("RecurseCC8.2: parent node:"+vp.id+" has "+mp+" siblings");
+				//LogUtil.debug(_LOG, "RecurseCC8.2: parent node:"+vp.id+" has "+mp+" siblings");
 				
 				/* literally: the radius of the circle centered at vp (parent node)
 				 * and intersecting the midway point between vp and vp's nearest
@@ -504,15 +507,15 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				/* check if there is a next sibling, i.e. the index must be less
 				 * than the maximum number -1 (which is the last index) */
 				if(ip < (mp - 1)) {
-					//trace("RecurseCC8.2.0.1: ip:"+ip+" is < mp:"+mp);
+					//LogUtil.debug(_LOG, "RecurseCC8.2.0.1: ip:"+ip+" is < mp:"+mp);
 					vs = _stree.getIthChildPerNode(vgp,ip+1);
-					//trace("RecurseCC8.2.0.2: sibling node vs:"+vs.id);
+					//LogUtil.debug(_LOG, "RecurseCC8.2.0.2: sibling node vs:"+vs.id);
 				}
 				/* no? but if the index is > 0 we have a previous sibling */
 				else if(ip > 0) {
-					//trace("RecurseCC8.2.0.3: ip:"+ip+" is > 1 and mp:"+mp);
+					//LogUtil.debug(_LOG, "RecurseCC8.2.0.3: ip:"+ip+" is > 1 and mp:"+mp);
 					vs = _stree.getIthChildPerNode(vgp,ip-1);
-					//trace("RecurseCC8.2.0.4: sibling node vs:"+vs.id);
+					//LogUtil.debug(_LOG, "RecurseCC8.2.0.4: sibling node vs:"+vs.id);
 				}
 				/* we have neither? so vp is childindex 1 and mp is 1 
 				 * that means vp was an only child */
@@ -529,7 +532,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				angle2 = _currentDrawing.getLocalPolarPhi(vs);
 				
 				/* *
-				trace("RecurseCC8.3: vi:"+vi.id+" parent:"+vp.id+"'s phi:"+
+				LogUtil.debug(_LOG, "RecurseCC8.3: vi:"+vi.id+" parent:"+vp.id+"'s phi:"+
 				angle1+
 				" sibling:"+vs.id+"'s phi:"+
 				angle2);
@@ -556,8 +559,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				delta = delta / 2.0;
 				
 				/*
-				trace("Half Angular diff between:"+vp.id+" and:"+vs.id+" is:"+delta);
-				trace("Radius of vp:"+_currentDrawing.getLocalPolarR(vp)+" and vs:"+
+				LogUtil.debug(_LOG, "Half Angular diff between:"+vp.id+" and:"+vs.id+" is:"+delta);
+				LogUtil.debug(_LOG, "Radius of vp:"+_currentDrawing.getLocalPolarR(vp)+" and vs:"+
 					_currentDrawing.getLocalPolarR(vs));
 				*/
 				
@@ -566,7 +569,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				/* now multiply with radius to get the segments length */
 				nodePolarR = Geometry.deg2rad(delta) * _currentDrawing.getLocalPolarR(vp);
 			}
-			//trace("RecurseCC9: set node:"+vi.id+"'s polarR to:"+nodePolarR);
+			//LogUtil.debug(_LOG, "RecurseCC9: set node:"+vi.id+"'s polarR to:"+nodePolarR);
 			
 			/* set the values */				
 			_currentDrawing.
@@ -605,7 +608,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			_rootR = currentRootR * (lenlimit / maxlen);
 			
-			trace("autofitting rootR to:"+_rootR+" with ml:"+maxlen);
+			//LogUtil.info(_LOG, "autofitting rootR to:"+_rootR+" with ml:"+maxlen);
 		}
 	}
 }

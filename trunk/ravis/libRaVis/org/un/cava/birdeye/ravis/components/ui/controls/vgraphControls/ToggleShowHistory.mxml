@@ -36,9 +36,11 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			
+		  private static const _LOG:String = "components.ui.controls.vgraphControls.ToggleShowHistory";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -64,7 +66,7 @@
 			public function toggleShowHistory():void {
 				
 				if(_vgraph == null) {
-					trace("Cannot toggle showing History, no valid vgraph!");
+					LogUtil.warn(_LOG, "Cannot toggle showing History, no valid vgraph!");
 					return;
 				}
 				
@@ -79,7 +81,7 @@
 			public function refreshCheckbox(e:VGraphEvent = null):void {
 				
 				if(_vgraph == null) {
-					trace("Cannot toggle showing History, no valid vgraph!");
+					LogUtil.warn(_LOG, "Cannot toggle showing History, no valid vgraph!");
 					return;
 				}
 				this.selected = _vgraph.showHistory;

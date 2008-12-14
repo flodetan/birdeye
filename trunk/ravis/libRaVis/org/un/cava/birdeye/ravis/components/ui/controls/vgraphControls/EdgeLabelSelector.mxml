@@ -45,6 +45,7 @@
 	<mx:Script>	
 		<![CDATA[
 			import mx.utils.ObjectUtil;
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
 		
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
@@ -52,6 +53,7 @@
 			import org.un.cava.birdeye.ravis.components.renderers.edgeLabels.BaseEdgeLabelRenderer;
 			import org.un.cava.birdeye.ravis.components.renderers.edgeLabels.WFBEdgeLabelRenderer;
 			
+		  private static const _LOG:String = "components.ui.controls.vgraphControls.EdgeLabelSelector";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -98,7 +100,7 @@
 				var elr:String;
 				
 				if(_vgraph == null) {
-					trace("Cannot change EdgeLabelRenderer, no valid vgraph!");
+					LogUtil.warn(_LOG, "Cannot change EdgeLabelRenderer, no valid vgraph!");
 					return;
 				}
 				
@@ -116,7 +118,7 @@
 						vgraph.edgeLabelRenderer = new ClassFactory(WFBEdgeLabelRenderer);
 						break;
 					default:
-						trace("Illegal EdgeLabelRenderer selected:"+elr);
+						LogUtil.warn(_LOG, "Illegal EdgeLabelRenderer selected:"+elr);
 						vgraph.edgeLabelRenderer = new ClassFactory(DefaultEdgeLabelRenderer);
 						break;
 				}
@@ -131,7 +133,7 @@
 				var elrClassName:String;
 				
 				if(_vgraph == null) {
-					trace("Cannot change EdgeLabelRenderer, no valid vgraph!");
+					LogUtil.warn(_LOG, "Cannot change EdgeLabelRenderer, no valid vgraph!");
 					return;
 				}
 				
@@ -149,7 +151,7 @@
 						this.selectedIndex = 2;
 						break;
 					default:
-						trace("Illegal ELR class received:"+elrClassName);
+						LogUtil.warn(_LOG, "Illegal ELR class received:"+elrClassName);
 						break;
 				}
 			}

@@ -32,11 +32,14 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 	import mx.effects.Zoom;
 	
 	import org.un.cava.birdeye.ravis.components.renderers.RendererIconFactory;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	
 	/**
 	 * Other version of the simple circle that changes in size
 	 * */
 	public class SizeByValueNodeRenderer extends EffectBaseNodeRenderer  {
+		
+		private static const _LOG:String = "components.renderers.nodes.SizeByValueNodeRenderer";
 		
 		/**
 		 * Default constructor
@@ -69,7 +72,7 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 			cc.toolTip = this.data.data.@name; // needs check
 			this.addChild(cc);
 			
-			//trace("COLOR of component is: "+int(this.data.data.@nodeColor));
+			//LogUtil.debug(_LOG, "COLOR of component is: "+int(this.data.data.@nodeColor));
 			
 			/* now add the filters to the circle */
 			reffects.addDSFilters(cc);

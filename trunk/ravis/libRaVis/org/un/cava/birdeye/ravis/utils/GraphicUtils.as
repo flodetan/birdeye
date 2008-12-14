@@ -146,7 +146,7 @@ package org.un.cava.birdeye.ravis.utils {
 				                            + (centerY - startY) * (centerY - startY));
 				var ctrlDist:Number = radius/Math.cos(angleDelta/2);
 				var rx:Number, ry:Number, ax:Number, ay:Number;
-				//trace("Radius = " + radius);
+				//LogUtil.warn(_LOG, "Radius = " + radius);
 				var angle:Number;
 				
 				// Compute angles, drawing points and control points

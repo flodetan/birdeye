@@ -25,9 +25,11 @@
 package org.un.cava.birdeye.ravis.graphLayout.layout {
 	
 	import flash.utils.Dictionary;
-	import flash.geom.Point;
+	import flash.geom.Point;	
+	
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
 	import org.un.cava.birdeye.ravis.utils.Geometry;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	
 	/**
 	 * This class holds all the parameters needed
@@ -37,6 +39,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	 * */
 	public class ParentCenteredDrawingModel	extends BaseLayoutDrawing {
 
+		private static const _LOG:String = "graphLayout.layout.ParentCenteredDrawingModel";
+		
 		/* radius of tier-1 nodes */
 		private var _rootR:Number;
 		
@@ -141,7 +145,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			_localPolarPhis[n] = polarPhi;
 			
 			/*
-			trace("Raw polar calc node:"+n.id+" origin:"+origin.toString()+" angleOff:"+angleOff+
+			LogUtil.warn(_LOG, "Raw polar calc node:"+n.id+" origin:"+origin.toString()+" angleOff:"+angleOff+
 			" polarRadius:"+polarR+" polarPhi:"+polarPhi+" result:"+Geometry.cartFromPolarDeg(polarR,polarPhi));
 			*/
 			
@@ -156,17 +160,17 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			 * local origin offset */
 			p = this.getRelCartCoordinates(n);
 			
-			//trace("With angle offset:"+p.toString());
+			//LogUtil.warn(_LOG, "With angle offset:"+p.toString());
 			
 			p = p.add(origin);
 			
-			//trace("With origin:"+origin.toString()+" offset = "+p.toString());
+			//LogUtil.warn(_LOG, "With origin:"+origin.toString()+" offset = "+p.toString());
 			
 			/* and set them again */
 			this.setCartCoordinates(n, p);
 			
 			/*
-			trace("SetNodeCoordinates of node:"+n.id+" origin:"+origin.toString()+" angleOff:"+angleOff+
+			LogUtil.warn(_LOG, "SetNodeCoordinates of node:"+n.id+" origin:"+origin.toString()+" angleOff:"+angleOff+
 			" polarRadius:"+polarR+" polarPhi:"+polarPhi+" and in cartesian:"+this.getRelCartCoordinates(n).toString());
 			*/
 		}

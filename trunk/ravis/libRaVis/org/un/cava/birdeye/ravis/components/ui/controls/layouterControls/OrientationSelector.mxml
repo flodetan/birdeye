@@ -45,12 +45,14 @@
 	
 	<mx:Script>	
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.HierarchicalLayouter;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
 			
+		  private static const _LOG:String = "components.ui.controls.layouterControls.OrientationSelector";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -104,7 +106,7 @@
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot apply NodeSpacing without vgraph or on null layouter");
+					LogUtil.warn(_LOG, "Cannot apply NodeSpacing without vgraph or on null layouter");
 					return;
 				}
 				
@@ -132,7 +134,7 @@
 				if(_vgraph != null) {
 					_vgraph.draw();
 				} else {
-					trace("vgraph not set in OrientationSelector");
+					LogUtil.warn(_LOG, "vgraph not set in OrientationSelector");
 				}
 			}
 			
@@ -148,13 +150,13 @@
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot apply new orientation without vgraph or on null layouter");
+					LogUtil.warn(_LOG, "Cannot apply new orientation without vgraph or on null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently Hierarchical only) */
 				if(!(_vgraph.layouter is HierarchicalLayouter)) {
-					trace("Orientation selection is only available in HierarchicalLayouter");
+					LogUtil.warn(_LOG, "Orientation selection is only available in HierarchicalLayouter");
 					return;
 				}
 				
@@ -178,7 +180,7 @@
 						hlayouter.orientation = HierarchicalLayouter.ORIENT_RIGHT_LEFT;
 						break;
 					default:
-						trace("Illegal orientation selected:"+or);
+						LogUtil.warn(_LOG, "Illegal orientation selected:"+or);
 						return;
 						break;
 				}
@@ -194,13 +196,13 @@
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot refresh orientation without vgraph or on null layouter");
+					LogUtil.warn(_LOG, "Cannot refresh orientation without vgraph or on null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently Hierarchical only) */
 				if(!(_vgraph.layouter is HierarchicalLayouter)) {
-					trace("Orientation selection is only available in HierarchicalLayouter");
+					LogUtil.warn(_LOG, "Orientation selection is only available in HierarchicalLayouter");
 					return;
 				}
 				
@@ -225,7 +227,7 @@
 						this.selectedIndex = 3;
 						break;
 					default:
-						trace("Illegal orientation value received from hlayouter:"+
+						LogUtil.warn(_LOG, "Illegal orientation value received from hlayouter:"+
 							hlayouter.orientation);
 						return;
 						break;

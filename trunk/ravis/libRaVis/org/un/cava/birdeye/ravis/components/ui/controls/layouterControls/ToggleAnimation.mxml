@@ -36,9 +36,11 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			
+		  private static const _LOG:String = "components.ui.controls.layouterControls.ToggleAnimation";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -65,7 +67,7 @@
 			
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot toggle Animation on missing vgraph or null layouter");
+					LogUtil.warn(_LOG, "Cannot toggle Animation on missing vgraph or null layouter");
 					return;
 				}
 				_vgraph.layouter.resetAll(); // to kill any timers
@@ -79,7 +81,7 @@
 			public function refreshCheckbox(e:VGraphEvent = null):void {
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot toggle Animation on missing vgraph or null layouter");
+					LogUtil.warn(_LOG, "Cannot toggle Animation on missing vgraph or null layouter");
 					return;
 				}
 				/* refresh the value */

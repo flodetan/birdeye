@@ -49,11 +49,13 @@
 
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.IAngularLayouter;
 	
+		  private static const _LOG:String = "components.ui.controls.layouterControls.PhiDial";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -114,7 +116,7 @@
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot apply PhiDial to missing vgraph or null layouter");
+					LogUtil.warn(_LOG, "Cannot apply PhiDial to missing vgraph or null layouter");
 					return;
 				}
 				
@@ -141,13 +143,13 @@
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot apply Phi without vgraph or to null layouter");
+					LogUtil.warn(_LOG, "Cannot apply Phi without vgraph or to null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter */
 				if(!(_vgraph.layouter is IAngularLayouter)) {
-					trace("Phi is only available in IAngularLayouters");
+					LogUtil.warn(_LOG, "Phi is only available in IAngularLayouters");
 					return;
 				}
 				
@@ -168,13 +170,13 @@
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot update Phi without vgraph or from null layouter");
+					LogUtil.warn(_LOG, "Cannot update Phi without vgraph or from null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter */
 				if(!(_vgraph.layouter is IAngularLayouter)) {
-					trace("Phi is only available in IAngularLayouters");
+					LogUtil.warn(_LOG, "Phi is only available in IAngularLayouters");
 					return;
 				}
 				

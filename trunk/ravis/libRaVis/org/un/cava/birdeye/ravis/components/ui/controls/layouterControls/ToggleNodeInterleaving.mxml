@@ -35,10 +35,12 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.HierarchicalLayouter;
 		
+		  private static const _LOG:String = "components.ui.controls.layouterControls.ToggleNodeInterleaving";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -89,13 +91,13 @@
 			 * */
 			public function layouterChanged(e:VGraphEvent = null):void {
 				
-				trace("NODEINTERLEAVE: received event about layouter changed");
+				LogUtil.debug(_LOG, "NODEINTERLEAVE: received event about layouter changed");
 				
 				var hlayouter:HierarchicalLayouter;
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot togge NodeInterleaving without vgraph or on null layouter");
+					LogUtil.warn(_LOG, "Cannot toggle NodeInterleaving without vgraph or on null layouter");
 					return;
 				}
 				
@@ -125,13 +127,13 @@
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot toggle NodeInterleaving without vgraph or on null layouter");
+					LogUtil.warn(_LOG, "Cannot toggle NodeInterleaving without vgraph or on null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently Hierarchical only) */
 				if(!(_vgraph.layouter is HierarchicalLayouter)) {
-					trace("ToggleNodeInterleaving is only available in HierarchicalLayouter");
+					LogUtil.warn(_LOG, "ToggleNodeInterleaving is only available in HierarchicalLayouter");
 					return;
 				}
 				
@@ -152,13 +154,13 @@
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot refresh NodeInterleaving without vgraph or from null layouter");
+					LogUtil.warn(_LOG, "Cannot refresh NodeInterleaving without vgraph or from null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently Hierarchical only) */
 				if(!(_vgraph.layouter is HierarchicalLayouter)) {
-					trace("ToggleNodeInterleaving is only available in HierarchicalLayouter");
+					LogUtil.warn(_LOG, "ToggleNodeInterleaving is only available in HierarchicalLayouter");
 					return;
 				}
 				
@@ -171,7 +173,7 @@
 			 * */
 			private function registerListeners():void {
 				if(_vgraph == null) {
-					trace("VGraph invalid in ToggleNodeInterleave, cannot register eventlisteners");
+					LogUtil.warn(_LOG, "VGraph invalid in ToggleNodeInterleave, cannot register eventlisteners");
 					return;
 				}
 				_vgraph.addEventListener(VGraphEvent.VGRAPH_CHANGED,refreshCheckbox);

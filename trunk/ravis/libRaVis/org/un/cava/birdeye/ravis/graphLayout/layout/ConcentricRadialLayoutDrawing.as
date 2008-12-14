@@ -57,13 +57,13 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		public function setAngularWidth(n:INode, w:Number):void {
 			
-			//trace("Setting angular width for node:"+n.id+" to:"+degrees+" degrees");
+			//LogUtil.debug(_LOG, "Setting angular width for node:"+n.id+" to:"+degrees+" degrees");
 			/*
 			if(w > 360) {
-				trace("Width of node:"+n.id+" larger than 360:"+w);
+				LogUtil.warn(_LOG, "Width of node:"+n.id+" larger than 360:"+w);
 			}
 			if(w < 0) {
-				trace("Width of node:"+n.id+" smaller than 0:"+w);
+				LogUtil.warn(_LOG, "Width of node:"+n.id+" smaller than 0:"+w);
 			}
 			*/
 			_nodeAngularWidths[n] = w;

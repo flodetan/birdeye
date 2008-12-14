@@ -36,9 +36,11 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			
+		  private static const _LOG:String = "components.ui.controls.vgraphControls.ToggleEdgeLabels";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -63,7 +65,7 @@
 			public function toggleShowEdgeLabels():void {
 				
 				if(_vgraph == null) {
-					trace("Cannot toggle display of EdgeLabels, no valid vgraph!");
+					LogUtil.warn(_LOG, "Cannot toggle display of EdgeLabels, no valid vgraph!");
 					return;
 				}
 				_vgraph.displayEdgeLabels = this.selected;
@@ -75,7 +77,7 @@
 			 * */
 			public function refreshCheckbox(e:VGraphEvent = null):void {
 				if(_vgraph == null) {
-					trace("Cannot refresh display of EdgeLabels, no valid vgraph!");
+					LogUtil.warn(_LOG, "Cannot refresh display of EdgeLabels, no valid vgraph!");
 					return;
 				}
 				this.selected = _vgraph.displayEdgeLabels;

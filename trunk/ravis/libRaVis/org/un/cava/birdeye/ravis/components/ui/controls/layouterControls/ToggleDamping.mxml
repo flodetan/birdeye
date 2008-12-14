@@ -37,10 +37,12 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.ForceDirectedLayouter;
 
+		  private static const _LOG:String = "components.ui.controls.layouterControls.ToggleDamping";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -94,7 +96,7 @@
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot apply Damping without vgraph or on null layouter");
+					LogUtil.warn(_LOG, "Cannot apply Damping without vgraph or on null layouter");
 					return;
 				}
 				
@@ -119,13 +121,13 @@
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot apply Damping without vgraph or on null layouter");
+					LogUtil.warn(_LOG, "Cannot apply Damping without vgraph or on null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently ForceDirected only) */
 				if(!(_vgraph.layouter is ForceDirectedLayouter)) {
-					trace("Damping is only available in ForceDirectedLayouter");
+					LogUtil.warn(_LOG, "Damping is only available in ForceDirectedLayouter");
 					return;
 				}
 				
@@ -146,13 +148,13 @@
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot refresh Damping without vgraph or from null layouter");
+					LogUtil.warn(_LOG, "Cannot refresh Damping without vgraph or from null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently ForceDirected only) */
 				if(!(_vgraph.layouter is ForceDirectedLayouter)) {
-					trace("Damping is only available in ForceDirectedLayouter");
+					LogUtil.warn(_LOG, "Damping is only available in ForceDirectedLayouter");
 					return;
 				}
 				

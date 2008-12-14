@@ -24,6 +24,8 @@
  */
 
 package org.un.cava.birdeye.ravis.graphLayout.data {
+
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
@@ -77,6 +79,8 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		 * directions
 		 * */
 		public static const WALK_BOTH:int = 2;
+		
+		private static const _LOG:String = "graphLayout.data.Graph";
 		
 		/**
 		 * @internal
@@ -168,7 +172,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 			_numberOfEdges = 0;
 			
 			if(xmlsource != null) {
-				//trace("Graph detected XML source:"+xmlsource.name().toString());
+				//LogUtil.debug(_LOG, "Graph detected XML source:"+xmlsource.name().toString());
 				initFromXML(xmlsource);
 			}			
 		}
@@ -333,13 +337,13 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 			var fromNode:INode;
 			var toNode:INode;
 
-			//trace("initFromXML called");
+			//LogUtil.debug(_LOG, "initFromXML called");
 			
 			for each(xnode in xml.descendants(nodeName)) {
 				/* we add the xml node id as string id and the xml
 				 * node data as data object */
 				fromNode = createNode(xnode.@id, xnode);
-				//trace("Node:"+fromNode.stringid+" created, total:"+_nodes.length);
+				//LogUtil.debug(_LOG, "Node:"+fromNode.stringid+" created, total:"+_nodes.length);
 			}
 			
 			for each(xedge in xml.descendants(edgeName)) {
@@ -353,15 +357,15 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 				 * is often inconsistent. In this case we just ignore
 				 * the edge */
 				if(fromNode == null) {
-					trace("Node id: "+fromNodeId+" not found, link not done");
+					LogUtil.warn(_LOG, "Node id: "+fromNodeId+" not found, link not done");
 					continue;
 				}
 				if(toNode == null) {
-					trace("Node id: "+toNodeId+" not found, link not done");
+					LogUtil.warn(_LOG, "Node id: "+toNodeId+" not found, link not done");
 					continue;
 				}
 				link(fromNode,toNode,xedge);
-				//trace("Current nr of edges:"+_edges.length);
+				//LogUtil.warn(_LOG, "Current nr of edges:"+_edges.length);
 			}
 		}
 
@@ -385,7 +389,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 			
 			/* avoid using a duplicate string id */
 			while(_nodesByStringId.hasOwnProperty(mysid)) {
-				trace("sid: "+mysid+" already in use, trying alternative");
+				LogUtil.warn(_LOG, "sid: "+mysid+" already in use, trying alternative");
 				mysid = (++myaltid).toString();
 			}
 			
@@ -439,7 +443,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 				
 				// HMMM we assume that the throw will abort the script
 				// but I am not sure, we'll see
-				//trace("PASSED Check for node in _node list");
+				//LogUtil.debug(_LOG, "PASSED Check for node in _node list");
 				
 				/* remove node from list */
 				_nodes.splice(myindex,1);
@@ -481,7 +485,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 				/* we should give an error message, but
 				 * there is no need to abort the script
 				 * we should just do nothing */
-				trace("Link between nodes:"+node1.id+" and "+
+				LogUtil.warn(_LOG, "Link between nodes:"+node1.id+" and "+
 				node2.id+" already exists, returning existing edge");
 				
 				/* oh in fact, we should return the edge that was found 
@@ -521,11 +525,11 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 				 * which of the edges to return.... maybe it can be
 				 * handled using the same edge, if the in the directional
 				 * case, the edge returns always the other node */
-				//trace("Graph is directional? "+_directional.toString());
+				//LogUtil.debug(_LOG, "Graph is directional? "+_directional.toString());
 				if(!_directional) {
 					node1.addInEdge(newEdge);
 					node2.addOutEdge(newEdge);
-					//trace("graph is not directional adding same edge:"+newEdge.id+
+					//LogUtil.debug(_LOG, "graph is not directional adding same edge:"+newEdge.id+
 					//" the other way round");
 				}
 				retEdge = newEdge;

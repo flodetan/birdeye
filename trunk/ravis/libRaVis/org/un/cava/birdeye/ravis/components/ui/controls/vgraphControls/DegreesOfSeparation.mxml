@@ -50,9 +50,11 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 		
+		  private static const _LOG:String = "components.ui.controls.vgraphControls.DegreesOfSeparation";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -81,7 +83,7 @@
 				}
 				
 				if(_vgraph == null) {
-					trace("DegreeOfSeparation NOT changed, no valid vgraph!");
+					LogUtil.warn(_LOG, "DegreeOfSeparation NOT changed, no valid vgraph!");
 					return;
 				}
 				_vgraph.maxVisibleDistance = degreesOfSep.value;
@@ -97,7 +99,7 @@
 					return;
 				}
 				if(_vgraph == null) {
-					trace("DegreeOfSeparation NOT refreshed, no valid vgraph!");
+					LogUtil.warn(_LOG, "DegreeOfSeparation NOT refreshed, no valid vgraph!");
 					return;
 				}
 				degreesOfSep.value = _vgraph.maxVisibleDistance;

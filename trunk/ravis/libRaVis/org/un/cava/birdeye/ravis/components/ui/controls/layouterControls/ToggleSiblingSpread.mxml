@@ -35,10 +35,12 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.HierarchicalLayouter;
 			
+		  private static const _LOG:String = "components.ui.controls.layouterControls.ToggleSiblingSpread";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -92,7 +94,7 @@
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot togge SiblingSpread without vgraph or on null layouter");
+					LogUtil.warn(_LOG, "Cannot toggle SiblingSpread without vgraph or on null layouter");
 					return;
 				}
 				
@@ -118,13 +120,13 @@
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot toggle SiblingSpread without vgraph or on null layouter");
+					LogUtil.warn(_LOG, "Cannot toggle SiblingSpread without vgraph or on null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently Hierarchical only) */
 				if(!(_vgraph.layouter is HierarchicalLayouter)) {
-					trace("ToggleSiblingSpread is only available in HierarchicalLayouter");
+					LogUtil.warn(_LOG, "ToggleSiblingSpread is only available in HierarchicalLayouter");
 					return;
 				}
 				
@@ -144,13 +146,13 @@
 				
 				/* check if we have a layouter at all */
 				if(_vgraph == null || _vgraph.layouter == null) {
-					trace("Cannot refresh SiblingSpread without vgraph or from null layouter");
+					LogUtil.warn(_LOG, "Cannot refresh SiblingSpread without vgraph or from null layouter");
 					return;
 				}
 				
 				/* check if it is a supported layouter (currently Hierarchical only) */
 				if(!(_vgraph.layouter is HierarchicalLayouter)) {
-					trace("ToggleSiblingSpread is only available in HierarchicalLayouter");
+					LogUtil.warn(_LOG, "ToggleSiblingSpread is only available in HierarchicalLayouter");
 					return;
 				}
 				

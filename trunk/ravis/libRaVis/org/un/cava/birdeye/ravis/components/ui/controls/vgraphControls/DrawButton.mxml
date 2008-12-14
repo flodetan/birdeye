@@ -39,9 +39,11 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
 			
+		  private static const _LOG:String = "components.ui.controls.vgraphControls.DrawButton";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -60,7 +62,7 @@
 			
 			public function doDraw():void {
 				if(_vgraph == null) {
-					trace("Cannot redraw VisualGraph, no valid vgraph!");
+					LogUtil.warn(_LOG, "Cannot redraw VisualGraph, no valid vgraph!");
 					return;
 				}
 				_vgraph.draw();

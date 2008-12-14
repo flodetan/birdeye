@@ -40,11 +40,13 @@
 	<mx:Script>	
 		<![CDATA[
 			import mx.core.Container;
+			import org.un.cava.birdeye.ravis.utils.LogUtil;
 			
 			public static const INDEX_VIS_LAYOUT:uint = 0;
 			public static const INDEX_SEARCHFILTER:uint = 1;
 			public static const INDEX_DATADETAIL:uint = 2;
 			
+		  private static const _LOG:String = "components.ui.VGAccordion";
 			
 			/**
 			 * This property holds the child component
@@ -92,10 +94,10 @@
 							this.selectedChild = dataDetailComp;
 							break;
 						default:
-							trace("Unknown index selected");
+							LogUtil.warn(_LOG, "Unknown index selected");
 					}
 				} else {
-					trace("not all subcontainers properly registered");
+					LogUtil.warn(_LOG, "not all subcontainers properly registered");
 				}
 			}
 		]]>
