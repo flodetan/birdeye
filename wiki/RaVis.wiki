@@ -9,6 +9,9 @@ Component enabling users to create complex data visualization interfaces for the
 
 == News ==
 
+14 December 2008:
+Logging support has been added conforming to [http://livedocs.adobe.com/flex/3/html/help.html?content=logging_09.html Flex logging API]. Other trace targets such as [http://code.google.com/p/flash-thunderbolt Thunderbolt] can also be used.
+
 27 March 2008:
 All code and development migrated from flexvizgraphlib project.
 
