@@ -34,6 +34,7 @@ package org.un.cava.birdeye.geovis.symbols
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
+	import flash.geom.Matrix;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	
@@ -224,9 +225,13 @@ package org.un.cava.birdeye.geovis.symbols
 					var cooBC:String=GeoData.getBarryCenter(_key);
 					var arrPos:Array=cooBC.split(',')
 					
-					var myScaleX:Number=(_parent as dynamicClassRef).scaleX;
+/* 					var myScaleX:Number=(_parent as dynamicClassRef).scaleX;
 					var myScaleY:Number=(_parent as dynamicClassRef).scaleY;
-					
+ */					
+ 					var matr:Matrix = surf.transform.matrix;
+					var myScaleX:Number=matr.a;
+					var myScaleY:Number=matr.d;
+
 					if(this.getChildAt(0) is PieSpark)
 					{
 						this.x=(arrPos[0]-this.getChildAt(0).width/4)*myScaleX;

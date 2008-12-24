@@ -31,6 +31,7 @@ package org.un.cava.birdeye.geovis.analysis
 	
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.utils.*;
 	import flash.xml.XMLNode;
@@ -545,15 +546,23 @@ package org.un.cava.birdeye.geovis.analysis
 		  	cntrlpoint = new Point();
 		  	mid = new Point();
 		  
-		  	_scaleX=(this.parent as dynamicClassRef).scaleX;
-	  		_scaleY=(this.parent as dynamicClassRef).scaleY;
+/* 		  	_scaleX = (this.parent as dynamicClassRef).scaleX;
+	  		_scaleY = (this.parent as dynamicClassRef).scaleY;
 		 	flows.scaleX=_scaleX;
 	  		flows.scaleY=_scaleY;
 	  		cntrlpt.scaleX=_scaleX;
 	  		cntrlpt.scaleY=_scaleY;
-	  		surf.scaleX=_scaleX;
+  	  		surf.scaleX=_scaleX;
 	  		surf.scaleY=_scaleY;
-	  		
+ */ 
+ 			var matr:Matrix = surf.transform.matrix;
+		  	_scaleX = matr.a;
+	  		_scaleY = matr.d;
+		 	flows.scaleX=_scaleX;
+	  		flows.scaleY=_scaleY;
+	  		cntrlpt.scaleX=_scaleX;
+	  		cntrlpt.scaleY=_scaleY;
+ 	  		
 	  		if(getStyle("fill")){
 				_color=uint(getStyle("fill"));
 			}else{
