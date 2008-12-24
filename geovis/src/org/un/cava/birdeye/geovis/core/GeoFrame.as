@@ -29,25 +29,30 @@ package org.un.cava.birdeye.geovis.core
 {	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
-	import com.degrafa.Surface;
 	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.Polygon;
+	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.*;
 	
+	import flash.display.Shape;
 	import flash.events.MouseEvent;
 	import flash.filters.GlowFilter;
+	import flash.geom.Matrix;
 	import flash.utils.*;
 	
 	import mx.containers.Canvas;
-	import mx.events.FlexEvent;
+	import mx.core.UIComponent;
 	
 	import org.un.cava.birdeye.geovis.analysis.*;
 	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	import org.un.cava.birdeye.geovis.events.GeoMapEvents;
 	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
+	import org.un.cava.birdeye.geovis.events.MapEvent;
 	import org.un.cava.birdeye.geovis.features.Features;
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.geovis.styles.GeoStyles;
+	import org.un.cava.birdeye.geovis.views.toolbars.MainViewToolbarPanel;
+	import org.un.cava.birdeye.geovis.views.toolbars.ZoomSliderView;
 	
 	//--------------------------------------
 	//  Events
@@ -185,16 +190,6 @@ package org.un.cava.birdeye.geovis.core
 		/**
 	     *  @private
 	     */
-		private var _scaleX:Number=1;
-		
-		/**
-	     *  @private
-	     */
-		private var _scaleY:Number=1;
-		
-		/**
-	     *  @private
-	     */
 		private var listOfCountry:Array=new Array();
 		
 		/**
@@ -225,7 +220,7 @@ package org.un.cava.birdeye.geovis.core
     	/**
      	*  @private
      	*/
-    	public var surf:Surface;
+    	public var surf:Map;
     	
     	/**
      	*  @private
@@ -267,8 +262,8 @@ package org.un.cava.birdeye.geovis.core
 		{
 			_projection = value;
 			isProjectionChanged=true;
-			///invalidateDisplayList();
-			invalidateProperties();
+			invalidateDisplayList();
+			//invalidateProperties();
 			dispatchEvent(new GeoProjEvents(GeoProjEvents.PROJECTION_CHANGED,value));
 		}
 		
@@ -280,191 +275,82 @@ package org.un.cava.birdeye.geovis.core
 			return _projection;
 		}
 		
-		
-		//----------------------------------
-	    //  scaleX
-	    //----------------------------------
-	    
-		/**
-	     *  The X scale of the map.
-	     *  Any number, 2 is the double of the original size.
-	     */
-    	override public function set scaleX(value:Number):void
-    	{
-    		_scaleX=value;
-			/*for each (var gpGeom:GeometryGroup in _geoGroup)
-			{
-				gpGeom.scaleX = value;
-			}*/
-			
-			if(surf!=null){
-				for (var n:int = 0; n<surf.numChildren; n++) 
-				{
-					surf.getChildAt(n).x=surf.getChildAt(n).x*value/surf.scaleX;
-					surf.getChildAt(n).scaleX=value;
-				}
-				surf.scaleX=value;
-			}
-			isScaleXChanged=true;
-			//invalidateDisplayList();
-			
-    	}
-    	
-    	/**
-     	*  @private
-     	*/
-    	override public function get scaleX():Number
-    	{
-				return _scaleX;
-    	}
-    	
-    	
-    	//----------------------------------
-	    //  scaleY
-	    //----------------------------------
-	    
-	    
-    	/**
-	     *  The Y scale of the map.
-	     *  Any number, 2 is the double of the original size.
-	     */
-    	override public function set scaleY(value:Number):void
-    	{
-    		_scaleY=value;
-			/*for each (var gpGeom:GeometryGroup in _geoGroup)
-			{
-				gpGeom.scaleY = value;
-			}*/
-			if(surf!=null){
-				for (var n:int = 0; n<surf.numChildren; n++) 
-				{
-					surf.getChildAt(n).y=surf.getChildAt(n).y*value/surf.scaleY;
-					surf.getChildAt(n).scaleY=value;
-				}
-				surf.scaleY=value;
-			}
-			isScaleYChanged=true;
-			//invalidateDisplayList();
-			
-    	}
-    	
-    	/**
-     	*  @private
-     	*/
-    	override public function get scaleY():Number
-    	{
-				return _scaleY;
-    	}
-    	
-		//--------------------------------------------------------------------------
-    	//
-    	//  Constructor
-    	//
-    	//--------------------------------------------------------------------------
-
     	/**
      	*  Constructor.
      	*/
 		public function GeoFrame(region:String)
 		{
 			super();
-			//super.measure();
-			this.addEventListener(FlexEvent.CREATION_COMPLETE, setMap)
 			_region = region;
 			
 			_geoGroup = new Array();
+			verticalScrollPolicy = "off";
+			horizontalScrollPolicy = "off";
 			
 			this.mouseEnabled=false;
-			//this.setStyle("verticalCenter",0);
-			//this.setStyle("horizontalCenter",0);
 		}
-		
-		
-		
-		//--------------------------------------------------------------------------
-    	//
-    	//  Overridden methods
-    	//
-    	//--------------------------------------------------------------------------
-    	
-		
-		/**
-		 * @private
-		 * Create component child elements. Standard Flex component method.
-		 */
+
+ 		private var toolBar:MainViewToolbarPanel; 
+ 		private var zoomSlider:ZoomSliderView;
 	    override protected function createChildren():void
 	    {
 	    	super.createChildren();
-	    	surf=new Surface();
+	    	surf=new Map();
 			surf.name="Surface";
-			surf.scaleX=_scaleX;
-		    surf.scaleY=_scaleY;
+			surf.scaleX=surf.zoom;
+		    surf.scaleY=surf.zoom;
 		    this.addChild(surf);
+
+	  		maskShape = new Shape();
+	  		maskCont = new UIComponent();
+	  		maskCont.addChild(maskShape);
+	  		this.addChild(maskCont);
+	  		surf.mask = maskShape;
+	  		
+			toolBar = new MainViewToolbarPanel();
+		    toolBar.alpha = 0.7;
+		    this.addChild(toolBar);
 		    
-		    createMap();
-		
+		    zoomSlider = new ZoomSliderView(surf.zoom);
+	
+		    this.addChild(zoomSlider); 
 	    }
-		
-		
-		/**
-		 * @private
-		 * Draw child elements.
-		 * 
-	     *  @param unscaledWidth Specifies the width of the component, in pixels,
-	     *  in the component's coordinates, regardless of the value of the
-	     *  <code>scaleX</code> property of the component.
-	     *
-	     *  @param unscaledHeight Specifies the height of the component, in pixels,
-	     *  in the component's coordinates, regardless of the value of the
-	     *  <code>scaleY</code> property of the component.
-		 */		
+	    
+		private var maskShape:Shape; 
+		private var maskCont:UIComponent;
+		private var maskCreated:Boolean = false;
+		private var defaultZoom:Number = 0.9;
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			/*for each (var gpGeom:GeometryGroup in _geoGroup)
-			{
-				gpGeom.draw(null,null);			
-			}*/
-			//trace(isScaleXChanged  + ' || ' +  isScaleYChanged + ' || ' + isProjectionChanged)
-			///if(isScaleXChanged || isScaleYChanged || isProjectionChanged){// 
-				
-			///if(surf){
-				///trace('goodBye')
-				//if(isProjectionChanged){
-				///for(var i:int=surf.numChildren-1; i>=0; i--){
-				///	if(surf.getChildAt(i) is GeometryGroup){
-				///		surf.removeChildAt(i);
-				///	}
-				///}
-				//createMap();
-				
-				//}
-				/*if(isProjectionChanged==true && isAlreadyCreated==true){
-					for(var i:int=surf.numChildren-1; i>=0; i--){
-						surf.removeChildAt(i);
-					}
-					isProjectionChanged=false;
-					//isAlreadyCreated=false;
-				}*/
-				///createMap();
-			///}
-			//isProjectionChanged=false;
-			//isScaleXChanged=false;
-			//isScaleYChanged=false;
-			//isAlreadyCreated=true;
-
-			///}
-		}
-		
-		override protected function commitProperties():void {
-		    super.commitProperties();
-		    
+			
 		    if (isProjectionChanged) {
-		       createMap();
+	// --------------------
+	 			var matr:Matrix = surf.transform.matrix;
+	  	    	matr.identity();
+		    	surf.zoom = defaultZoom;
+	 	    	matr.scale(surf.zoom, surf.zoom);
+		    	surf.transform.matrix = matr;
+	 // uncomment above when symbols scaling works well in any zooming scenario
+	 // to do:
+	 // scale symbols accordingly
+	 // restore matrix after projection is changed
+	 			
+				createMap();
+				maskCreated = false;
 				isProjectionChanged=false;
 		    }
+	
+			if (!maskCreated)
+			{
+				maskCont.setActualSize(unscaledWidth, unscaledHeight);
+				maskCont.move(0,0);
+				maskShape.graphics.beginFill(0xffffff, 0);
+				maskShape.graphics.drawRect(0,0,unscaledWidth, unscaledHeight);
+				maskShape.graphics.endFill();
+				maskCreated = true;
+			} 
 		}
-
 		
 		//--------------------------------------------------------------------------
     	//
@@ -475,10 +361,10 @@ package org.un.cava.birdeye.geovis.core
 		/**
 		 * @private
 		 */
-		private function setMap(e:FlexEvent):void{
+/* 		private function setMap(e:FlexEvent):void{
 			
 			createMap();
-		}
+		} */
 		
 		/**
 		 * @private
@@ -522,8 +408,15 @@ package org.un.cava.birdeye.geovis.core
 			wcData = Projections.getData(_projection, _region);
 			listOfCountry = wcData.getCountriesListByRegion(_region);
 			
-			
-		    
+			// background is necessary to allow events that trigger dragging, zooming, 
+			// centering...all over the map and not only where countries are filled out with some fill 
+		    var backGround:GeometryGroup = new GeometryGroup(); 
+		    var backGroundPoly:RegularRectangle = new RegularRectangle(0,0,surf.unscaledMapWidth,surf.unscaledMapHeight);
+		    backGroundPoly.fill = new SolidFill(0xffffff,0)
+		    backGround.geometryCollection.addItem(backGroundPoly);
+		    backGround.target = surf;
+		    surf.graphicsCollection.addItem(backGround);
+		     
 			for each (var country:String in listOfCountry)
 			{
 				if(wcData.getCoordinates(country)!="")
@@ -533,8 +426,7 @@ package org.un.cava.birdeye.geovis.core
 					countryGeom.addEventListener(MouseEvent.DOUBLE_CLICK, itemDblClkEv);
 					countryGeom.addEventListener(MouseEvent.ROLL_OVER, itemRollOverEv);
 					countryGeom.addEventListener(MouseEvent.ROLL_OUT, itemRollOutEv);
-					countryGeom.scaleX=_scaleX;
-					countryGeom.scaleY=_scaleY;
+					countryGeom.scaleY = countryGeom.scaleX = surf.zoom;
 					countryGeom.name = country;
 					
 					/*
@@ -615,9 +507,7 @@ package org.un.cava.birdeye.geovis.core
 					
 					}
 					_geoGroup.push(countryGeom);
-				
 			}
-			
 			
 			dispatchEvent(new GeoCoreEvents(GeoCoreEvents.DRAW_BASEMAP_COMPLETE));
 			}
