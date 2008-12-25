@@ -35,6 +35,7 @@ package org.un.cava.birdeye.geovis.core
 	import com.degrafa.paint.*;
 	
 	import flash.display.Shape;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.filters.GlowFilter;
 	import flash.geom.Matrix;
@@ -299,20 +300,20 @@ package org.un.cava.birdeye.geovis.core
 			surf.name="Surface";
 			surf.scaleX=surf.zoom;
 		    surf.scaleY=surf.zoom;
-		    this.addChild(surf);
+		    this.addChild(surf); 
 
 	  		maskShape = new Shape();
 	  		maskCont = new UIComponent();
 	  		maskCont.addChild(maskShape);
 	  		this.addChild(maskCont);
+
 	  		surf.mask = maskShape;
 	  		
 			toolBar = new MainViewToolbarPanel();
 		    toolBar.alpha = 0.7;
 		    this.addChild(toolBar);
 		    
-		    zoomSlider = new ZoomSliderView(surf.zoom);
-	
+		    zoomSlider = new ZoomSliderView();
 		    this.addChild(zoomSlider); 
 	    }
 	    
@@ -339,6 +340,8 @@ package org.un.cava.birdeye.geovis.core
 				createMap();
 				maskCreated = false;
 				isProjectionChanged=false;
+				zoomSlider.height = unscaledHeight/2 - 10;
+				zoomSlider.y = unscaledHeight/2;
 		    }
 	
 			if (!maskCreated)
