@@ -311,9 +311,9 @@
 										<mx:Object label="Robinson"/>
 								</mx:ArrayCollection>
 							</mx:ComboBox>				
-							<mx:HRule width="100%" />
+<!--							<mx:HRule width="100%" />
 							<viewers:GeoZoom  id="zoomSelector" width="180" prompt="Zoom..." target="{myMap}" toolTip="Select map area for viewing..." />
-							<mx:HRule width="100%" />
+-->							<mx:HRule width="100%" />
 											
 							<!-- Colorize Styles -->
 							<mx:HBox width="95%" horizontalAlign="left" >
