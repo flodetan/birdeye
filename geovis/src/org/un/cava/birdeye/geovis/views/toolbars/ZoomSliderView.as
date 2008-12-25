@@ -29,8 +29,8 @@ package org.un.cava.birdeye.geovis.views.toolbars
 {
 	import flash.events.Event;
 	
-	import mx.containers.Canvas;
 	import mx.controls.VSlider;
+	import mx.core.Application;
 	import mx.events.FlexEvent;
 	
 	import org.un.cava.birdeye.geovis.core.Map;
@@ -38,25 +38,23 @@ package org.un.cava.birdeye.geovis.views.toolbars
 	
 	public class ZoomSliderView extends VSlider
 	{
-		public function ZoomSliderView(startValue:Number) 
+		public function ZoomSliderView() 
 		{
 		    minimum = 0.1;
 		    maximum = 20;
-		    value = startValue;
 		    labels = [0,5,10,15,20];
 		    liveDragging = true;
 		    enabled = true;
-		    addEventListener(FlexEvent.CREATION_COMPLETE, initListeners);
+		    Application.application.addEventListener(MapEvent.MAP_INSTANTIATED, init, true)
 		}
 		
 		private var map:Map;
-		
-		private function initListeners(e:Event):void
+		private function init(e:MapEvent):void
 		{
-			map = Map(Canvas(parent).getChildByName("Surface"));
+			map = Map(e.target);
+		    value = map.zoom;
 			map.addEventListener(MapEvent.MAP_ZOOM_COMPLETE, updateZoomValue);
 		    addEventListener(Event.CHANGE, sliderZoomHandler)
-		    y = height = parent.height/2;
 		}
 		
 		private function sliderZoomHandler(e:Event):void
