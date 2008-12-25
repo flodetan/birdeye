@@ -9,6 +9,7 @@ package org.un.cava.birdeye.geovis.core
 	
 	import mx.controls.HSlider;
 	import mx.controls.VSlider;
+	import mx.events.FlexEvent;
 	
 	import org.un.cava.birdeye.geovis.events.MapEvent;
 
@@ -27,6 +28,13 @@ package org.un.cava.birdeye.geovis.core
 		public function Map()
 		{
 			super();
+			addEventListener(FlexEvent.CREATION_COMPLETE, initListeners);
+		}
+		
+		private function initListeners(e:Event):void
+		{
+			var ev:MapEvent = new MapEvent(MapEvent.MAP_INSTANTIATED);
+			dispatchEvent(ev);
 		}
 		
 		private var _unscaledMapWidth:Number = 917.65; //1190.5511;
@@ -226,7 +234,6 @@ package org.un.cava.birdeye.geovis.core
 	    	e.updateAfterEvent();
 	    }
 	
-	[Bindable]
 		private var zoomSlider:VSlider;
 		public function zoomingWithSlider(e:Event):void
 		{

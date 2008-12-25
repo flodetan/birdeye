@@ -32,11 +32,10 @@ package org.un.cava.birdeye.geovis.views.toolbars
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
-	import mx.containers.Canvas;
 	import mx.containers.Panel;
 	import mx.controls.Button;
 	import mx.controls.CheckBox;
-	import mx.events.FlexEvent;
+	import mx.core.Application;
 	
 	import org.un.cava.birdeye.geovis.core.Map;
 	import org.un.cava.birdeye.geovis.events.MapEvent;
@@ -85,9 +84,9 @@ package org.un.cava.birdeye.geovis.views.toolbars
 		    dragBox.label = DRAG_MAP;
 		    dragBox.blendMode = BlendMode.ADD;
 		    dragBox.addEventListener(Event.CHANGE, toolbarListenersHandler);
-		    addChild(dragBox);
+		    addChild(dragBox); 
 	
-			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
+		    Application.application.addEventListener(MapEvent.MAP_INSTANTIATED, init, true)
 		}
 
 		private var isCenteringMap:CheckBox;
@@ -96,15 +95,14 @@ package org.un.cava.birdeye.geovis.views.toolbars
 		private var wheelZoom:CheckBox;
 		private var dragBox:CheckBox;
 		
-		private function creationCompleteHandler(event:Event):void
+		private function init(event:Event):void
 		{
 			// Add the resizing event handler.
+			map = Map(event.target);
  			this.doubleClickEnabled = true;
 			titleBar.addEventListener(MouseEvent.DOUBLE_CLICK, resizeToolbar);
 			addEventListener(MouseEvent.MOUSE_DOWN, moveToolbar);
-			map = Map(Canvas(parent).getChildByName("Surface")); 
 			registerMapListeners();
-			
  		}
  		
  		private function getMap(e:MapEvent):void
