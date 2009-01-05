@@ -28,13 +28,12 @@ package org.un.cava.birdeye.geovis.core
 		public function Map()
 		{
 			super();
-			addEventListener(FlexEvent.CREATION_COMPLETE, initListeners);
+			addEventListener(FlexEvent.CREATION_COMPLETE, notifyMapReady);
 		}
 		
-		private function initListeners(e:Event):void
+		private function notifyMapReady(e:Event):void
 		{
-			var ev:MapEvent = new MapEvent(MapEvent.MAP_INSTANTIATED);
-			dispatchEvent(ev);
+			dispatchEvent(new MapEvent(MapEvent.MAP_INSTANTIATED));
 		}
 		
 		private var _unscaledMapWidth:Number = 917.65; //1190.5511;
@@ -55,6 +54,8 @@ package org.un.cava.birdeye.geovis.core
 		private var _dragSelected:Boolean = false;
 		private var _centeringMapSelected:Boolean = false; 
 		private var _wheelZoomSelected:Boolean = false;
+		private var _skewMapVerticallySelected:Boolean = false;
+		private var _skewMapHorizontallySelected:Boolean = false;
 		
 		public function get zoomInSelected():Boolean
 		{
@@ -81,6 +82,16 @@ package org.un.cava.birdeye.geovis.core
 			return _wheelZoomSelected;
 		}
 		
+		public function get skewMapVerticallySelected():Boolean
+		{
+			return _skewMapVerticallySelected;
+		}
+
+		public function get skewMapHorizontallySelected():Boolean
+		{
+			return _skewMapHorizontallySelected;
+		}
+
 		public function set zoomInSelected(val:Boolean):void
 		{
 			_zoomInSelected = val;
@@ -146,10 +157,42 @@ package org.un.cava.birdeye.geovis.core
 			_wheelZoomSelected = val;
 			if (val)
 			{
+				skewMapVerticallySelected = false;
+				skewMapHorizontallySelected = false;
 				addEventListener(MouseEvent.MOUSE_WHEEL, zoomWheelMap);
 				dispatchEvent(new MapEvent(MapEvent.MAP_PROPERTY_ON));
 			} else {
 				removeEventListener(MouseEvent.MOUSE_WHEEL, zoomWheelMap);
+				dispatchEvent(new MapEvent(MapEvent.MAP_PROPERTY_OFF));
+			}
+		}
+
+		public function set skewMapVerticallySelected(val:Boolean):void
+		{
+			_skewMapVerticallySelected = val;
+			if (val)
+			{
+				wheelZoomSelected = false;
+				skewMapHorizontallySelected = false;
+				addEventListener(MouseEvent.MOUSE_WHEEL, skewMapVertically);
+				dispatchEvent(new MapEvent(MapEvent.MAP_PROPERTY_ON));
+			} else {
+				removeEventListener(MouseEvent.MOUSE_WHEEL, skewMapVertically);
+				dispatchEvent(new MapEvent(MapEvent.MAP_PROPERTY_OFF));
+			}
+		}
+
+		public function set skewMapHorizontallySelected(val:Boolean):void
+		{
+			_skewMapHorizontallySelected = val;
+			if (val)
+			{
+				wheelZoomSelected = false;
+				skewMapVerticallySelected = false;
+				addEventListener(MouseEvent.MOUSE_WHEEL, skewMapHorizontally);
+				dispatchEvent(new MapEvent(MapEvent.MAP_PROPERTY_ON));
+			} else {
+				removeEventListener(MouseEvent.MOUSE_WHEEL, skewMapHorizontally);
 				dispatchEvent(new MapEvent(MapEvent.MAP_PROPERTY_OFF));
 			}
 		}
@@ -187,6 +230,28 @@ package org.un.cava.birdeye.geovis.core
 				currentCenterX = unscaledMapWidth/2; 
 			if (isNaN(currentCenterY))
 				currentCenterY = unscaledMapHeight/2;
+		}
+		
+		private function skewMapVertically(e:MouseEvent):void
+		{
+			matr = transform.matrix;
+			if (e.delta > 0)
+				matr.b += .01;
+			else 
+				matr.b -= .01;
+			
+			transform.matrix = matr;
+		}
+		
+		private function skewMapHorizontally(e:MouseEvent):void
+		{
+			matr = transform.matrix;
+			if (e.delta > 0)
+				matr.c += .01;
+			else 
+				matr.c -= .01;
+
+			transform.matrix = matr;
 		}
 		
 		private function zoomDoubleClickMap(e:MouseEvent):void
@@ -288,7 +353,7 @@ trace (regPoint, _zoom);
 			matr.translate(-moveX, -moveY);
 	    	// scale the surface to the new zoom value
 	    	matr.scale(zoomValue, zoomValue);
-	    	// reposition the surface to the mouse point
+	    	// add the moveX/Y values to the new surface position
 		    matr.translate(moveX, moveY);
 		    // apply matrix transformation
 	 	    transform.matrix = matr;
