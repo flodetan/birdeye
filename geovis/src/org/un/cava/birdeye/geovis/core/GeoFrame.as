@@ -306,15 +306,9 @@ package org.un.cava.birdeye.geovis.core
 	  		maskCont = new UIComponent();
 	  		maskCont.addChild(maskShape);
 	  		this.addChild(maskCont);
-
-	  		surf.mask = maskShape;
+	  		this.setChildIndex(maskCont, 0);
 	  		
-			toolBar = new MainViewToolbarPanel();
-		    toolBar.alpha = 0.7;
-		    this.addChild(toolBar);
-		    
-		    zoomSlider = new ZoomSliderView();
-		    this.addChild(zoomSlider); 
+	  		surf.mask = maskShape;
 	    }
 	    
 		private var maskShape:Shape; 
@@ -340,8 +334,6 @@ package org.un.cava.birdeye.geovis.core
 				createMap();
 				maskCreated = false;
 				isProjectionChanged=false;
-				zoomSlider.height = unscaledHeight/2 - 10;
-				zoomSlider.y = unscaledHeight/2;
 		    }
 	
 			if (!maskCreated)
@@ -352,6 +344,7 @@ package org.un.cava.birdeye.geovis.core
 				maskShape.graphics.drawRect(0,0,unscaledWidth, unscaledHeight);
 				maskShape.graphics.endFill();
 				maskCreated = true;
+	  			this.setChildIndex(maskCont, 0);
 			} 
 		}
 		

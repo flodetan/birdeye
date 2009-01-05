@@ -9,6 +9,7 @@
 	xmlns:locators="org.un.cava.birdeye.geovis.locators.*"
 	xmlns:quarks="org.un.cava.birdeye.qavis.sparklines.*"
 	xmlns:surrounds="org.un.cava.birdeye.geovis.views.surrounds.*"
+	xmlns:tools="org.un.cava.birdeye.geovis.views.toolbars.*"
 	xmlns:views="views.*"
 	xmlns:maps="styles.maps.*"
 	xmlns:mate="http://mate.asfusion.com/"
@@ -248,8 +249,12 @@
 		
 		<!-- Need to add property for perspective, e.g. 2d, 3dPlane, 3dSphere -->
 		<geomap:WorldMap 
-			width="100%" height="85%"
-			visible="{isLoading}" projection="Miller cylindrical" id="myMap" ItemClick="showDetails(event)" DrawBaseMapComplete="{isLoading = true}"  scaleX=".942" scaleY=".942" x="0" y="20" ><!-- DrawBaseMapComplete="{progressBar.visible=false}" projection="{projectionSelector.selectedItem.label}"  ProjectionChanged="{progressBar.visible=true}"-->
+			width="100%" height="85%" 
+			visible="{isLoading}" projection="Miller cylindrical" id="myMap" 
+			ItemClick="showDetails(event)" DrawBaseMapComplete="{isLoading = true}"  
+			scaleX=".942" scaleY=".942" x="10" y="20" ><!-- DrawBaseMapComplete="{progressBar.visible=false}" projection="{projectionSelector.selectedItem.label}"  ProjectionChanged="{progressBar.visible=true}"-->
+			<tools:MainViewToolbarPanel x="710" alpha=".7" width="20" id="mainToolbar"/>
+			<tools:ZoomSliderView y="200" id="zoomSlider" activate="true"/>
 			<analysis:Choropleth id="choropleth" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" colorField="{featureSelector.selectedItem.data}" alpha="1" scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" dataTipFunction="customDataTip" highlighted="true"  />
 			<symbols:Symbols id="mySymbols" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" itemRenderer="renderers.MedalsRenderer" visible="false" />			
 			

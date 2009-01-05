@@ -45,6 +45,7 @@ package org.un.cava.birdeye.geovis.views.toolbars
 		    labels = [0,5,10,15,20];
 		    liveDragging = true;
 		    enabled = true;
+		    toolTip = "Center the map first and then use this slider"
 		    Application.application.addEventListener(MapEvent.MAP_INSTANTIATED, init, true)
 		}
 		
@@ -54,7 +55,8 @@ package org.un.cava.birdeye.geovis.views.toolbars
 			map = Map(e.target);
 		    value = map.zoom;
 			map.addEventListener(MapEvent.MAP_ZOOM_COMPLETE, updateZoomValue);
-		    addEventListener(Event.CHANGE, sliderZoomHandler)
+		    addEventListener(Event.CHANGE, sliderZoomHandler);
+			parent.setChildIndex(this, parent.numChildren-1);
 		}
 		
 		private function sliderZoomHandler(e:Event):void
