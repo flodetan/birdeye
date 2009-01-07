@@ -6,12 +6,14 @@ package org.un.cava.birdeye.geovis.core
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	import mx.controls.HSlider;
 	import mx.controls.VSlider;
 	import mx.events.FlexEvent;
 	
 	import org.un.cava.birdeye.geovis.events.MapEvent;
+	import org.un.cava.birdeye.geovis.locators.LatLong;
 
 	public class Map extends Surface
 	{
@@ -38,6 +40,17 @@ package org.un.cava.birdeye.geovis.core
 		
 		private var _unscaledMapWidth:Number = 917.65; //1190.5511;
 		private var _unscaledMapHeight:Number = 478.5; //841.8898;
+		public const DEFAULT_ZOOM:Number = 0.942;
+		
+		public var projection:String;
+		
+		public function updateUnscaledSize():void
+		{ 
+			var size:Rectangle = getBounds(this);
+			_unscaledMapWidth = size.width/_zoom;
+			_unscaledMapHeight = size.height/_zoom;
+trace(size);
+		}
 		
 		public function get unscaledMapWidth():Number
 		{
@@ -56,7 +69,7 @@ package org.un.cava.birdeye.geovis.core
 		private var _wheelZoomSelected:Boolean = false;
 		private var _skewMapVerticallySelected:Boolean = false;
 		private var _skewMapHorizontallySelected:Boolean = false;
-		
+		private var _zoomRectangleSelected:Boolean = false;
 		public function get zoomInSelected():Boolean
 		{
 			return _zoomInSelected;
@@ -90,6 +103,11 @@ package org.un.cava.birdeye.geovis.core
 		public function get skewMapHorizontallySelected():Boolean
 		{
 			return _skewMapHorizontallySelected;
+		}
+
+		public function get zoomRectangleSelected():Boolean
+		{
+			return _zoomRectangleSelected;
 		}
 
 		public function set zoomInSelected(val:Boolean):void
@@ -127,6 +145,7 @@ package org.un.cava.birdeye.geovis.core
 			_dragSelected = val;
 			if (val)
 			{
+				zoomRectangleSelected = false;
 				addEventListener(MouseEvent.MOUSE_DOWN, startMovingMap);
 				addEventListener(MouseEvent.MOUSE_UP, stopMovingMap);
 				dispatchEvent(new MapEvent(MapEvent.MAP_PROPERTY_ON));
@@ -144,10 +163,10 @@ package org.un.cava.birdeye.geovis.core
 			{
 				zoomInSelected = false;
 				zoomOutSelected = false;
-				addEventListener(MouseEvent.DOUBLE_CLICK, centerMap);
+				addEventListener(MouseEvent.DOUBLE_CLICK, centerMapOnMouseEvent);
 				dispatchEvent(new MapEvent(MapEvent.MAP_PROPERTY_ON));
 			} else {
-				removeEventListener(MouseEvent.DOUBLE_CLICK, centerMap);
+				removeEventListener(MouseEvent.DOUBLE_CLICK, centerMapOnMouseEvent);
 				dispatchEvent(new MapEvent(MapEvent.MAP_PROPERTY_OFF));
 			}
 		}
@@ -193,6 +212,22 @@ package org.un.cava.birdeye.geovis.core
 				dispatchEvent(new MapEvent(MapEvent.MAP_PROPERTY_ON));
 			} else {
 				removeEventListener(MouseEvent.MOUSE_WHEEL, skewMapHorizontally);
+				dispatchEvent(new MapEvent(MapEvent.MAP_PROPERTY_OFF));
+			}
+		}
+		
+		public function set zoomRectangleSelected(val:Boolean):void
+		{
+			_zoomRectangleSelected = val;
+			if (val)
+			{
+				dragSelected = false;
+				addEventListener(MouseEvent.MOUSE_DOWN, startRectangle);
+				addEventListener(MouseEvent.MOUSE_UP, zoomOnRectangle);
+				dispatchEvent(new MapEvent(MapEvent.MAP_PROPERTY_ON));
+			} else {
+				removeEventListener(MouseEvent.MOUSE_DOWN, startRectangle);
+				removeEventListener(MouseEvent.MOUSE_UP, zoomOnRectangle);
 				dispatchEvent(new MapEvent(MapEvent.MAP_PROPERTY_OFF));
 			}
 		}
@@ -265,12 +300,17 @@ package org.un.cava.birdeye.geovis.core
 		}
 	    
 	    private var currentCenterX:Number=NaN, currentCenterY:Number=NaN;
-	    public function centerMap(e:MouseEvent):void
+	    private function centerMapOnMouseEvent(e:MouseEvent):void
 	    {
-	    	currentCenterX = mouseX;
-	    	currentCenterY = mouseY;
-	    	x = (parent.width/2 - mouseX * _zoom);
-	    	y = (parent.height/2 - mouseY * _zoom);
+	    	centerMap(new Point(mouseX, mouseY));
+	    }
+	    
+	    public function centerMap(newCenter:Point):void
+	    {
+	    	x = (parent.width/2 - newCenter.x * _zoom);
+	    	y = (parent.height/2 - newCenter.y * _zoom);
+	    	currentCenterX = newCenter.x;
+	    	currentCenterY = newCenter.y;
 	    	dispatchEvent(new MapEvent(MapEvent.MAP_CENTERED));
 	    }
 	    
@@ -331,6 +371,85 @@ package org.un.cava.birdeye.geovis.core
 	
 	    	zoomMap(value, new Point(mouseX, mouseY));
 	    	dispatchEvent(new MapEvent(MapEvent.MAP_ZOOM_WHEEL));
+	    }
+	    
+	    private var rectUpperLeftX:Number, rectUpperLeftY:Number;
+		private function startRectangle(e:MouseEvent):void
+		{
+			rectUpperLeftX = this.mouseX;
+			rectUpperLeftY = this.mouseY;
+			addEventListener(MouseEvent.MOUSE_MOVE, drawArea);
+		}
+		
+		private function drawArea(e:MouseEvent):void
+		{
+			graphics.clear();
+			graphics.moveTo(rectUpperLeftX, rectUpperLeftY);
+			graphics.beginFill(0xffffff, .3);
+trace (mouseX-rectUpperLeftX, mouseY-rectUpperLeftY);
+			graphics.drawRect(rectUpperLeftX, rectUpperLeftY, mouseX-rectUpperLeftX, mouseY - rectUpperLeftY);
+			graphics.endFill();
+		}
+		
+	    private var rectLowerRightX:Number, rectLowerRightY:Number;
+		private function zoomOnRectangle(e:MouseEvent):void
+		{
+			rectLowerRightX = this.mouseX;
+			rectLowerRightY = this.mouseY;
+			if (rectLowerRightX != rectUpperLeftX && rectLowerRightY != rectUpperLeftY)
+				zoomMapRectangle(rectUpperLeftX, rectUpperLeftY, rectLowerRightX, rectLowerRightY);
+			graphics.clear();
+			removeEventListener(MouseEvent.MOUSE_MOVE, drawArea);
+		}
+		
+	    public function zoomMapLatLong(upperLeftLat:Number, upperLeftLong:Number, lowerRightLat:Number, lowerRightLong:Number):void
+	    {
+	    	var leftLatLong:LatLong = new LatLong();
+	    	leftLatLong.lat = upperLeftLat;
+	    	leftLatLong.long = upperLeftLong;
+	    	leftLatLong.target = this.parent;
+	    	
+	    	var rightLatLong:LatLong = new LatLong();
+	    	rightLatLong.lat = lowerRightLat;
+	    	rightLatLong.long = lowerRightLong;
+	    	rightLatLong.target = this.parent;
+	    	
+	    	leftLatLong.calculateXY();
+	    	rightLatLong.calculateXY();
+	    	
+	    	zoomMapScaledRectangle(leftLatLong.xval, leftLatLong.yval, rightLatLong.xval, rightLatLong.yval);
+	    }
+	    
+	    public function zoomMapScaledRectangle(upperLeftX:Number, upperLeftY:Number, lowerRightX:Number, lowerRightY:Number):void
+	    {
+	    	upperLeftX /= _zoom;
+	    	upperLeftY /= _zoom;
+	    	lowerRightX /= _zoom;
+	    	lowerRightY /= _zoom;
+	    	
+	    	zoomMapRectangle(upperLeftX, upperLeftY, lowerRightX, lowerRightY);
+	    }
+	    
+	    public function zoomMapRectangle(upperLeftX:Number, upperLeftY:Number, lowerRightX:Number, lowerRightY:Number):void
+	    {
+	    	var rect:Rectangle = new Rectangle(0, 0, Math.abs(upperLeftX-lowerRightX), Math.abs(upperLeftY-lowerRightY));
+	    	var zoomValue:Number = Math.min(unscaledMapWidth/rect.width, unscaledMapHeight/rect.height);
+	    	
+	    	var centerPoint:Point = new Point(upperLeftX + (lowerRightX - upperLeftX)/2,
+	    									upperLeftY + (lowerRightY - upperLeftY)/2);
+	    	
+		   	centerMap(centerPoint);
+trace(centerPoint);
+	    	zoomMap(1/_zoom,centerPoint); 
+	    	zoomMap(zoomValue, centerPoint);
+	    } 
+	    
+	    public function reset():void
+	    {
+	    	matr.identity();
+	    	matr.scale(DEFAULT_ZOOM, DEFAULT_ZOOM);
+	    	transform.matrix = matr;
+	    	zoom = DEFAULT_ZOOM;
 	    }
 	    
 	    private var matr:Matrix = new Matrix();
