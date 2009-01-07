@@ -162,7 +162,42 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    wheelSkewHorizontally.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
 		    addChild(wheelSkewHorizontally);
 
+		    zoomRect = new CheckBox();
+		    zoomRect.name = ZOOM_RECTANGLE;
+		    zoomRect.width = zoomRect.height = IconsUtils.size;
+		    zoomRect.setStyle("upIcon", ZoomRectangle);
+		    zoomRect.setStyle("selectedUpIcon", ZoomRectangle);
+		    zoomRect.setStyle("overIcon", ZoomRectangle);
+		    zoomRect.setStyle("downIcon", ZoomRectangle);
+		    zoomRect.setStyle("selectedOverIcon", ZoomRectangle);
+		    zoomRect.setStyle("selectedDownIcon", ZoomRectangle);
+		    zoomRect.blendMode = BlendMode.ADD;
+		    zoomRect.addEventListener(Event.CHANGE, toolbarListenersHandler);
+		    zoomRect.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
+		    addChild(zoomRect);
+
+		    resetMap = new CheckBox();
+		    resetMap.name = RESET_MAP;
+		    resetMap.width = resetMap.height = IconsUtils.size;
+		    resetMap.setStyle("upIcon", ResetMap);
+		    resetMap.setStyle("selectedUpIcon", ResetMap);
+		    resetMap.setStyle("overIcon", ResetMap);
+		    resetMap.setStyle("downIcon", ResetMap);
+		    resetMap.setStyle("selectedOverIcon", ResetMap);
+		    resetMap.setStyle("selectedDownIcon", ResetMap);
+		    resetMap.blendMode = BlendMode.ADD;
+		    resetMap.addEventListener(Event.CHANGE, toolbarListenersHandler);
+		    resetMap.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
+		    addChild(resetMap);
+
 		    Application.application.addEventListener(MapEvent.MAP_INSTANTIATED, init, true)
+		}
+		
+		override protected function measure():void
+		{
+			super.measure();
+			minWidth = IconsUtils.size + 5;
+			minHeight = IconsUtils.size * numChildren + 20;
 		}
 
 		private var isCenteringMap:CheckBox;
@@ -172,6 +207,8 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		private var dragBox:CheckBox;
 		private var wheelSkewVertically:CheckBox;
 		private var wheelSkewHorizontally:CheckBox;
+		private var zoomRect:CheckBox;
+		private var resetMap:CheckBox;
 		private function init(event:Event):void
 		{
 			// Add the resizing event handler.
@@ -270,6 +307,8 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		static private const DRAG_MAP:String = "drag map";
 		static private const WHEEL_SKEW_VERTICALLY:String = "skew map V";
 		static private const WHEEL_SKEW_HORIZONTALLY:String = "skew map H";
+		static private const ZOOM_RECTANGLE:String = "zoom rectangle";
+		static private const RESET_MAP:String = "reset map";
 		private function toolbarListenersHandler(e:Event):void
 		{
 			var selectedTool:String = CheckBox(e.target).name; 
@@ -295,6 +334,13 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		   		break;
 		   		case WHEEL_SKEW_HORIZONTALLY:
 		   			map.skewMapHorizontallySelected = wheelSkewHorizontally.selected;
+		   		break;
+		   		case ZOOM_RECTANGLE:
+		   			map.zoomRectangleSelected = zoomRect.selected;
+		   		break;
+		   		case RESET_MAP:
+		   			map.reset();
+		   			resetMap.selected = false;
 		   		break;
 	  		} 
 		}
@@ -326,9 +372,15 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		   		case WHEEL_SKEW_HORIZONTALLY:
 	  				toolTip = "Use mouse wheel to skew the map horizontally"
 		   		break;
+		   		case ZOOM_RECTANGLE:
+	  				toolTip = "Select a map area to zoom it"
+		   		break;
+		   		case RESET_MAP:
+	  				toolTip = "Reset map to its original position and scale"
+		   		break;
 	  		} 
-			
 		}
+
 		private function updateBoxValue(e:MapEvent):void
 		{
 			map = Map(e.target);
@@ -339,6 +391,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			wheelZoom.selected = map.wheelZoomSelected;
 			wheelSkewVertically.selected = map.skewMapVerticallySelected;
 			wheelSkewHorizontally.selected = map.skewMapHorizontallySelected;
+			zoomRect.selected = map.zoomRectangleSelected;
 		}
 		
 		private function registerMapListeners():void
@@ -509,6 +562,40 @@ class WheelSkewHorizontallyIcon extends BaseIcon
 		var matr:Matrix = transform.matrix;
 		matr.concat(new Matrix(1,0,.1,1,0,0));
 		transform.matrix = matr; 
+	}
+}
+
+class ZoomRectangle extends BaseIcon
+{
+	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+	{
+		super.updateDisplayList(unscaledWidth, unscaledHeight);
+		graphics.moveTo(0,0);
+		graphics.beginFill(c,1);
+		graphics.drawRect(0,0,IconsUtils.size,IconsUtils.size);
+		graphics.endFill();
+
+		graphics.moveTo(IconsUtils.size/3,IconsUtils.size/3);
+		graphics.beginFill(0x000000,1);
+		graphics.drawRect(IconsUtils.size/3,IconsUtils.size/3,IconsUtils.size/3,IconsUtils.size/3);
+		graphics.endFill();
+	}
+}
+
+class ResetMap extends BaseIcon
+{
+	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+	{
+		super.updateDisplayList(unscaledWidth, unscaledHeight);
+		graphics.moveTo(0,0);
+		graphics.beginFill(c,1);
+		graphics.drawRect(0,0,IconsUtils.size,IconsUtils.size);
+		graphics.endFill();
+
+		graphics.moveTo(2,2);
+		graphics.beginFill(IconsUtils.GREY,1);
+		graphics.drawRect(2,2,IconsUtils.size-4,IconsUtils.size-4);
+		graphics.endFill();
 	}
 }
 

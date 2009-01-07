@@ -3,8 +3,11 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
+	import mx.collections.ICollectionView;
+	import mx.collections.XMLListCollection;
 	import mx.controls.ComboBox;
 	import mx.core.Application;
 	
@@ -21,23 +24,23 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	    private var startDraggingPoint:Point;
 
 		private var arrDefaultZoom:ArrayCollection = new ArrayCollection(
-		[{label:"World",center:new Point(432,212), zoomLevel:"0.86"},
-		{label:"Africa",center:new Point(473,260), zoomLevel:"2.06"},
-		{label:"  -North",center:new Point(448,201), zoomLevel:"6.83"}, 
-		{label:"  -Sub-Sahara",center:new Point(450,232), zoomLevel:"5.62"},
-		{label:"Asia",center:new Point(633,131), zoomLevel:"2"},
-		{label:"  -Eastern",center:new Point(714,145), zoomLevel:"2.76"},
-		{label:"  -Southern",center:new Point(613,209), zoomLevel:"4.5"},
-		{label:"  -South-eastern",center:new Point(687,248), zoomLevel:"4.44"},
-		{label:"  -Western",center:new Point(585,146), zoomLevel:"3.72"},
-		{label:"CIS",center:new Point(522,147), zoomLevel:"7.72"},
-		{label:"Europe",center:new Point(435,127), zoomLevel:"3.82"},
-		{label:"North America",center:new Point(165,143), zoomLevel:"2.22"},
-		{label:"South America",center:new Point(273,321), zoomLevel:"2.07"},
-		{label:"Central America",center:new Point(220,235), zoomLevel:"13.35"},
-		{label:"Caribbean region",center:new Point(252,222), zoomLevel:"9.23"},
-		{label:"Oceania",center:new Point(769,328), zoomLevel:"3.38"},]);
-		
+		[{label:"World",ulLat:"90", ulLong:"-180", lrLat:"-90", lrLong:"180"},
+		{label:"Africa",ulLat:"32", ulLong:"-23", lrLat:"-25", lrLong:"55"},
+		{label:"  -North",ulLat:"34", ulLong:"-16", lrLat:"16", lrLong:"40"}, 
+		{label:"  -Sub-Sahara",ulLat:"21", ulLong:"-20", lrLat:"0", lrLong:"50"},
+		{label:"Asia",ulLat:"68", ulLong:"24", lrLat:"11", lrLong:"134"},
+		{label:"  -Eastern",ulLat:"48", ulLong:"77", lrLat:"18", lrLong:"136"},
+		{label:"  -Southern",ulLat:"37", ulLong:"58", lrLat:"4", lrLong:"93"},
+		{label:"  -South-eastern",ulLat:"30", ulLong:"84", lrLat:"-10", lrLong:"130"},
+		{label:"  -Western",ulLat:"58", ulLong:"28", lrLat:"25", lrLong:"75"},
+		{label:"CIS",ulLat:"52", ulLong:"19", lrLat:"36", lrLong:"54"},
+		{label:"Europe",ulLat:"66", ulLong:"-28", lrLat:"33", lrLong:"34"},
+		{label:"North America",ulLat:"67", ulLong:"-177", lrLat:"14", lrLong:"-75"},
+		{label:"South America",ulLat:"14", ulLong:"-90", lrLat:"-50", lrLong:"-9"},
+		{label:"Central America",ulLat:"21", ulLong:"-96", lrLat:"7", lrLong:"-76"},
+		{label:"Caribbean region",ulLat:"27", ulLong:"-86", lrLat:"9", lrLong:"-58"},
+		{label:"Oceania",ulLat:"-5", ulLong:"80", lrLat:"-48", lrLong:"160"}]);
+
 		private var _draggable:Boolean = false;
 		
 		[Inspectable(enumeration="true,false")]
@@ -46,13 +49,73 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			_draggable = val;
 		}
 
+		private var _dataProvider:Object; 
+		override public function set dataProvider(value:Object):void
+		{
+			super.dataProvider = value;
+			//_dataProvider = value;
+			if(typeof(value) == "string")
+	    	{
+	    		//string becomes XML
+	        	value = new XML(value);
+	     	}
+	        else if(value is XMLNode)
+	        {
+	        	//AS2-style XMLNodes become AS3 XML
+				value = new XML(XMLNode(value).toString());
+	        }
+			else if(value is XMLList)
+			{
+				//XMLLists become XMLListCollections
+				if(XMLList(value).children().length()>0){
+					value = new XMLListCollection(value.children() as XMLList);
+				}else{
+					value = new XMLListCollection(value as XMLList);
+				}
+			}
+			else if(value is Array)
+			{
+				value = new ArrayCollection(value as Array);
+			}
+			
+			if(value is XML)
+			{
+				var list:XMLList = new XMLList();
+				list += value;
+				this._dataProvider = new XMLListCollection(list.children());
+			}
+			//if already a collection dont make new one
+	        else if(value is ICollectionView)
+	        {
+	            this._dataProvider = ICollectionView(value);
+	        }else if(value is Object)
+			{
+				// convert to an array containing this one item
+				this._dataProvider = new ArrayCollection( [value] );
+	  		}
+	  		else
+	  		{
+	  			this._dataProvider = new ArrayCollection();
+	  		}
+		}
+
 		public function RegionZoom()
 		{
 			super();
-			dataProvider = arrDefaultZoom;
 		    toolTip = "Select map area for viewing";
 		    Application.application.addEventListener(MapEvent.MAP_INSTANTIATED, init, true);
 			addEventListener(MouseEvent.MOUSE_DOWN, moveToolbar);
+		}
+		
+		override protected function commitProperties():void
+		{
+			super.commitProperties();
+			
+			if (dataProvider == null || dataProvider == '')
+			{
+				dataProvider = arrDefaultZoom;
+				labelField = "label";
+			}
 		}
 		
 		private var map:Map;
@@ -109,17 +172,8 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	    
 		private function regionZoomHandler(e:Event):void
 	    {
-/* 	    	if (map.projection == 'Miller cylindrical')
-	    	{
- */			    currentZoomValue = map.zoom;
-		    	var regionPoint:Point = Point(ComboBox(e.target).selectedItem.center);
-		    	var zoomValue:Number = Number(ComboBox(e.target).selectedItem.zoomLevel);
-		    	map.centerMap(regionPoint);
-		    	map.zoomMap(1/currentZoomValue,regionPoint); 
-		    	map.zoomMap(zoomValue,regionPoint); 
-/* 	    	}
- */	    }
-	    
-	    private var currentZoomValue:Number;
+			map.zoomMapLatLong(Number(ComboBox(e.target).selectedItem.ulLat), Number(ComboBox(e.target).selectedItem.ulLong),
+								Number(ComboBox(e.target).selectedItem.lrLat), Number(ComboBox(e.target).selectedItem.lrLong));
+ 	    }
 	}
 }

@@ -52,8 +52,6 @@ package org.un.cava.birdeye.geovis.core
 	import org.un.cava.birdeye.geovis.features.Features;
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.geovis.styles.GeoStyles;
-	import org.un.cava.birdeye.geovis.views.toolbars.MainViewToolbarPanel;
-	import org.un.cava.birdeye.geovis.views.toolbars.ZoomSliderView;
 	
 	//--------------------------------------
 	//  Events
@@ -291,8 +289,6 @@ package org.un.cava.birdeye.geovis.core
 			this.mouseEnabled=false;
 		}
 
- 		private var toolBar:MainViewToolbarPanel; 
- 		private var zoomSlider:ZoomSliderView;
 	    override protected function createChildren():void
 	    {
 	    	super.createChildren();
@@ -314,7 +310,7 @@ package org.un.cava.birdeye.geovis.core
 		private var maskShape:Shape; 
 		private var maskCont:UIComponent;
 		private var maskCreated:Boolean = false;
-		private var defaultZoom:Number = 0.9;
+		private var defaultZoom:Number = .942;
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
@@ -332,6 +328,9 @@ package org.un.cava.birdeye.geovis.core
 	 // restore matrix after projection is changed
 	 			
 				createMap();
+				surf.updateUnscaledSize();
+trace (surf.getBounds(surf).width, surf.getBounds(surf).height);
+				surf.projection = _projection;
 				maskCreated = false;
 				isProjectionChanged=false;
 		    }

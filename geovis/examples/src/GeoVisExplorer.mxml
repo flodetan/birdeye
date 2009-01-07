@@ -255,7 +255,7 @@
 			visible="{isLoading}" projection="Miller cylindrical" id="myMap" 
 			ItemClick="showDetails(event)" DrawBaseMapComplete="{isLoading = true}"  
 			scaleX=".942" scaleY=".942" x="10" y="20" ><!-- DrawBaseMapComplete="{progressBar.visible=false}" projection="{projectionSelector.selectedItem.label}"  ProjectionChanged="{progressBar.visible=true}"-->
-			<tools:MainViewToolbarPanel x="710" alpha=".7" width="20" id="mainToolbar" draggable="true"/>
+			<tools:MainViewToolbarPanel x="710" alpha=".7" width="20" height="220" id="mainToolbar" draggable="true"/>
 			<tools:ZoomSliderView y="200" id="zoomSlider"/>
 			<analysis:Choropleth id="choropleth" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" colorField="{featureSelector.selectedItem.data}" alpha="1" scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" dataTipFunction="customDataTip" highlighted="true"  />
 			<symbols:Symbols id="mySymbols" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" itemRenderer="renderers.MedalsRenderer" visible="false" />			
@@ -269,7 +269,42 @@
 			<locators:LatLong lat=" 35.66667 " long=" 139.75 " > 
 				<mx:Label text=" Tokyo " /> 
 			</locators:LatLong> 
-			
+			<locators:LatLong lat="-34" long="151" > 
+				<mx:Label text="Sydney" /> 
+			</locators:LatLong> 
+			<locators:LatLong lat="22.56666667" long="88.4" > 
+				<mx:Label text="Calcutta" /> 
+			</locators:LatLong> 
+			<locators:LatLong lat="14.58333" long="120.95" >
+			 	<mx:Label text="Manila" /> 
+			</locators:LatLong> 
+			<locators:LatLong lat="-22.95" long="-43.2" >
+			 	<mx:Label text="Rio" /> 
+			</locators:LatLong> 
+			<locators:LatLong lat="61.216667" long="-149.9" >
+			 	<mx:Label text="Anchorage" /> 
+			</locators:LatLong> 
+			<locators:LatLong lat="-33.916667" long="18.36667" >
+			 	<mx:Label text="Cape Town" /> 
+			</locators:LatLong> 
+			<locators:LatLong lat="40.78333333" long="-73.96666667" >
+			 	<mx:Label text="New York" /> 
+			</locators:LatLong> 
+			<locators:LatLong lat="23.13333333" long="-82.38333333" > 
+			 	<mx:Label text="Havana" /> 
+			</locators:LatLong> 	
+			<locators:LatLong lat="38.73333333" long="-9.15" >
+			 	<mx:Label text="Lisbon" /> 
+			</locators:LatLong> 
+			<locators:LatLong lat="55.6667" long="12.56667" >
+			 	<mx:Label text="Copenhagen" /> 
+			</locators:LatLong> 	
+			<locators:LatLong lat="39.75" long="-105" >
+			 	<mx:Label text="Denver" /> 
+			</locators:LatLong> 	
+			<locators:LatLong lat="42.33333" long="-83.05" >	
+			 	<mx:Label text="Detroit" /> 
+			</locators:LatLong> 
 			<!-- Need to complete cartogram function -->
 <!--			<analysis:Cartogram id="cartogram" dataprovider="" foid="" areaField="" type="" form="" />
 -->			
@@ -319,7 +354,7 @@
 							<mx:HRule width="100%" />
 							<mx:HBox width="95%" horizontalAlign="left" >
 								<mx:Label text="Zoom on region:" textAlign="left" fontWeight="bold" fontSize="10" />
-								<tools:RegionZoom draggable="true"/>
+								<tools:RegionZoom draggable="false"/>
 							</mx:HBox>
 							<mx:HRule width="100%" />
 	
