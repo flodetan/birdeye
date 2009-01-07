@@ -4,12 +4,12 @@ package org.un.cava.birdeye.geovis.events
 
 	public class MapEvent extends Event
 	{
-		public function MapEvent(type:String)
+		public function MapEvent(type:String,bubble:Boolean = true)
 		{
 			super(type);
 		}
 		
-		public static const MAP_CREATION_COMPLETE:String = "MapCreationComplete";
+		public static const MAP_INSTANTIATED:String = "MapCreationComplete";
 		
 		public static const MAP_ZOOM_COMPLETE:String = "MapZoomComplete";
 		public static const MAP_ZOOM_WHEEL:String = "MapZoomWheel";
