@@ -42,7 +42,6 @@ package org.un.cava.birdeye.geovis.locators
 	
 	import org.un.cava.birdeye.geovis.core.Map;
 	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
-	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	import org.un.cava.birdeye.geovis.transformations.EckertIVTransformation;
 	import org.un.cava.birdeye.geovis.transformations.EckertVITransformation;
 	import org.un.cava.birdeye.geovis.transformations.LambertTransformation;
@@ -90,15 +89,15 @@ package org.un.cava.birdeye.geovis.locators
 		{
 			super(); 
 			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
-			Application.application.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projectionChangedHandler,true);
+//			Application.application.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projectionChangedHandler,true);
 		}
 		
-		private function projectionChangedHandler(e:Event):void
+/* 		private function projectionChangedHandler(e:Event):void
 		{
 			_isCalculationPending = true;
 			creationCompleteHandler(e);
 		}
-		
+ */		
 		//--------------------------------------------------------------------------
     	//
     	//  Functions for transforming lat and long to x and y
@@ -246,7 +245,7 @@ package org.un.cava.birdeye.geovis.locators
 			this.x = _xval-childWidth/2;
 			this.y = _yval-childHeight/2;
 			Surface((_target as DisplayObjectContainer).getChildByName("Surface")).addChild(this);
-			this.parent.addEventListener(GeoCoreEvents.DRAW_BASEMAP_COMPLETE, baseMapComplete);		
+			Application.application.addEventListener(GeoCoreEvents.DRAW_BASEMAP_COMPLETE, baseMapComplete, true);		
 		}
 		
 		/**
@@ -271,6 +270,8 @@ package org.un.cava.birdeye.geovis.locators
 			super.updateDisplayList( unscaledWidth, unscaledHeight );            
 			if(_isBaseMapComplete){
 				calculateXY();
+				this.x = _xval-childWidth/2;
+				this.y = _yval-childHeight/2;
 				Surface((_target as DisplayObjectContainer).getChildByName("Surface")).addChild(this);
 				_isBaseMapComplete=false;
 			}
