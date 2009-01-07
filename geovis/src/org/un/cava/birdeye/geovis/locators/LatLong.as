@@ -31,14 +31,18 @@ package org.un.cava.birdeye.geovis.locators
 	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	
 	import mx.containers.Canvas;
+	import mx.core.Application;
 	import mx.events.FlexEvent;
 	
+	import org.un.cava.birdeye.geovis.core.Map;
 	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
+	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	import org.un.cava.birdeye.geovis.transformations.EckertIVTransformation;
 	import org.un.cava.birdeye.geovis.transformations.EckertVITransformation;
 	import org.un.cava.birdeye.geovis.transformations.LambertTransformation;
@@ -84,8 +88,15 @@ package org.un.cava.birdeye.geovis.locators
 
 		public function LatLong()
 		{
-			super();
+			super(); 
 			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
+			Application.application.addEventListener(GeoProjEvents.PROJECTION_CHANGED, projectionChangedHandler,true);
+		}
+		
+		private function projectionChangedHandler(e:Event):void
+		{
+			_isCalculationPending = true;
+			creationCompleteHandler(e);
 		}
 		
 		//--------------------------------------------------------------------------
@@ -108,8 +119,8 @@ package org.un.cava.birdeye.geovis.locators
 				var transf:Transformation = createTransformation(_lat, _long, proj);
 			
 				//retrieve scale factors from _target and calculate x and y
-				transf.scaleX = (_target as dynamicClassRef).scaleX;
-				transf.scaleY = (_target as dynamicClassRef).scaleY;
+				transf.scaleX = Map((_target as DisplayObjectContainer).getChildByName("Surface")).zoom;
+				transf.scaleY = Map((_target as DisplayObjectContainer).getChildByName("Surface")).zoom;
 				_xval = transf.calculateX();
 				_yval = transf.calculateY();
 
@@ -228,7 +239,7 @@ package org.un.cava.birdeye.geovis.locators
 		/**
 	     *  @private
 	     */
-		private function creationCompleteHandler (event:FlexEvent):void {
+		private function creationCompleteHandler (event:Event):void {
 			if (_isCalculationPending) {
 				calculateXY();
 			}
