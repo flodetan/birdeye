@@ -47,8 +47,8 @@ package org.un.cava.birdeye.geovis.core
 		public function updateUnscaledSize():void
 		{ 
 			var size:Rectangle = getBounds(this);
-			_unscaledMapWidth = size.width/_zoom;
-			_unscaledMapHeight = size.height/_zoom;
+			_unscaledMapWidth = 770;//size.width/_zoom;
+			_unscaledMapHeight = 390;//size.height/_zoom;
 trace(size);
 		}
 		
@@ -337,6 +337,7 @@ trace(size);
 	    	x = e.stageX - offsetX;
 	    	y = e.stageY - offsetY;
 	    	e.updateAfterEvent();
+	    	dispatchEvent(new MapEvent(MapEvent.MAP_MOVING));
 	    }
 	
 		private var zoomSlider:VSlider;
@@ -446,10 +447,14 @@ trace(centerPoint);
 	    
 	    public function reset():void
 	    {
-	    	matr.identity();
+/* 	    	matr.identity();
 	    	matr.scale(DEFAULT_ZOOM, DEFAULT_ZOOM);
 	    	transform.matrix = matr;
 	    	zoom = DEFAULT_ZOOM;
+	    	dispatchEvent(new MapEvent(MapEvent.MAP_ZOOM_COMPLETE)); */
+	    	
+	    	centerMap(new Point(unscaledMapWidth/2,unscaledMapHeight/2));
+	    	zoomMap(1/_zoom * DEFAULT_ZOOM, new Point(currentCenterX,currentCenterY));
 	    }
 	    
 	    private var matr:Matrix = new Matrix();
@@ -465,7 +470,7 @@ trace (regPoint, _zoom);
 		    var moveX:int = regPoint.x * _zoom + globOrgPoint.x;
 		    var moveY:int = regPoint.y * _zoom + globOrgPoint.y;
 	
-		    _zoom *= zoomValue;
+		    zoom *= zoomValue;
 	
 	  		matr = transform.matrix; 
 	  		// position the mouse point to the (0,0) of the canvas (this)

@@ -35,7 +35,6 @@ package org.un.cava.birdeye.geovis.core
 	import com.degrafa.paint.*;
 	
 	import flash.display.Shape;
-	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.filters.GlowFilter;
 	import flash.geom.Matrix;
@@ -43,12 +42,12 @@ package org.un.cava.birdeye.geovis.core
 	
 	import mx.containers.Canvas;
 	import mx.core.UIComponent;
+	import mx.events.FlexEvent;
 	
 	import org.un.cava.birdeye.geovis.analysis.*;
 	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	import org.un.cava.birdeye.geovis.events.GeoMapEvents;
 	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
-	import org.un.cava.birdeye.geovis.events.MapEvent;
 	import org.un.cava.birdeye.geovis.features.Features;
 	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.geovis.styles.GeoStyles;
@@ -310,26 +309,24 @@ package org.un.cava.birdeye.geovis.core
 		private var maskShape:Shape; 
 		private var maskCont:UIComponent;
 		private var maskCreated:Boolean = false;
-		private var defaultZoom:Number = .942;
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
 		    if (isProjectionChanged) {
 	// --------------------
-	 			var matr:Matrix = surf.transform.matrix;
+ 	 			var matr:Matrix = surf.transform.matrix;
 	  	    	matr.identity();
-		    	surf.zoom = defaultZoom;
+		    	surf.zoom = surf.DEFAULT_ZOOM;
 	 	    	matr.scale(surf.zoom, surf.zoom);
-		    	surf.transform.matrix = matr;
-	 // uncomment above when symbols scaling works well in any zooming scenario
+		    	surf.transform.matrix = matr; 
+ 	 // uncomment above when symbols scaling works well in any zooming scenario
 	 // to do:
 	 // scale symbols accordingly
 	 // restore matrix after projection is changed
 	 			
 				createMap();
 				surf.updateUnscaledSize();
-trace (surf.getBounds(surf).width, surf.getBounds(surf).height);
 				surf.projection = _projection;
 				maskCreated = false;
 				isProjectionChanged=false;
@@ -352,14 +349,6 @@ trace (surf.getBounds(surf).width, surf.getBounds(surf).height);
     	//  Methods
     	//
     	//--------------------------------------------------------------------------
-		
-		/**
-		 * @private
-		 */
-/* 		private function setMap(e:FlexEvent):void{
-			
-			createMap();
-		} */
 		
 		/**
 		 * @private
