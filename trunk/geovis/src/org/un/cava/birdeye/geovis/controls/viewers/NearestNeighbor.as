@@ -27,28 +27,26 @@
 package org.un.cava.birdeye.geovis.controls.viewers
 {
 	import com.degrafa.GeometryGroup;
-	import com.degrafa.IGeometry;
 	import com.degrafa.Surface;
-	import com.degrafa.geometry.Path;
-	import com.degrafa.geometry.Polygon;
-	import com.degrafa.paint.SolidFill;
 	
-	import flash.events.MouseEvent;
-	import flash.filters.BitmapFilterQuality;
-	import flash.filters.BitmapFilterType;
-	import flash.filters.GradientGlowFilter;
+	import flash.events.Event;
+	import flash.geom.Point;
 	
 	import mx.collections.ArrayCollection;
 	import mx.controls.HSlider;
 	import mx.events.FlexEvent;
-	import mx.controls.Alert;
-	
+	import mx.core.Application;
+
+	import org.un.cava.birdeye.geovis.core.Map;
 	import org.un.cava.birdeye.geovis.dictionary.USANeighborhoods;
+	import org.un.cava.birdeye.geovis.dictionary.USAStates;
+	import org.un.cava.birdeye.geovis.dictionary.WorldCountries;
 	import org.un.cava.birdeye.geovis.dictionary.WorldNeighborhoods;
 	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
-	import org.un.cava.birdeye.geovis.projections.Projections;
 	import org.un.cava.birdeye.geovis.utils.ArrayUtils;
+	import org.un.cava.birdeye.geovis.events.MapEvent;
+	import org.un.cava.birdeye.geovis.projections.Projections;
 	//--------------------------------------
 	//  Other metadata
 	//--------------------------------------
@@ -91,32 +89,6 @@ package org.un.cava.birdeye.geovis.controls.viewers
 	     */
 	    private var _targets:Array = [];
 	    
-	    /**
-	     *  @private
-	     */
-	     private var arrCollNN:ArrayCollection;
-	     
-	     /**
-	     *  @private
-	     */
-	     [Bindable]
-	     private var cntryKey:String;
-	     
-	     /**
-	     *  @private
-	     */
-		private var myCoo:IGeometry;
-		
-		/**
-		 * @private
-		 */
-		 private var _gg:GeometryGroup;
-		
-		/**
-		 * @private
-		 */
-		 private var _color:uint;
-		 
 		 /**
 		 * @private
 		 */
@@ -134,16 +106,6 @@ package org.un.cava.birdeye.geovis.controls.viewers
 		 private var _isReady:Boolean=false;
 		
 		/**
-	     *  @private
-	     */
-		private var oldValue:int=0;
-		
-		/**
-		 *  @Private
-		 */
-		private var myBKUP:Object;
-		
-		/**
 		 *  @Private
 		 */
 		private var proj:String;
@@ -153,6 +115,10 @@ package org.un.cava.birdeye.geovis.controls.viewers
 		 */
 		private var region:String;
 		
+		/**
+		 *  @Private
+		 */
+		private var map:Map;
 		//--------------------------------------------------------------------------
 	    //
 	    //  Properties 
@@ -169,8 +135,6 @@ package org.un.cava.birdeye.geovis.controls.viewers
 		public function set foid(value:String):void{
 			_foid=value;
 			this.value=0;
-			revertColorization();
-			
 		}
 		
 		/**
@@ -208,25 +172,7 @@ package org.un.cava.birdeye.geovis.controls.viewers
 	            _targets[0].addEventListener(GeoProjEvents.PROJECTION_CHANGED, projChanged);
 	    }
 	
-    	//----------------------------------
-	    //  color
-	    //----------------------------------
 
-		/**
-     	 * Defines the colour of the nearby countries
-     	 */
-		public function set color(value:uint):void{
-			_color=value;
-		}
-		
-		/**
-	     *  @private
-	     */
-		public function get color():uint{
-			return _color;
-		}
-		
-		
     	
 		//--------------------------------------------------------------------------
     	//
@@ -242,8 +188,8 @@ package org.un.cava.birdeye.geovis.controls.viewers
 			super();
 			this.thumbCount=1;
 			this.snapInterval=1;
-			arrCollNN=new ArrayCollection();
 			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
+			Application.application.addEventListener(MapEvent.MAP_INSTANTIATED, init, true)
 		}
 		
 		//--------------------------------------------------------------------------
@@ -270,7 +216,15 @@ package org.un.cava.birdeye.geovis.controls.viewers
     	//  Methods
     	//
     	//--------------------------------------------------------------------------
-		
+    	
+		/**
+		 * @private
+		 */
+		private function init(event:Event):void
+		{
+			map = Map(event.target);
+ 		}
+ 		
 		/**
 		 * @private
 		 */
@@ -287,79 +241,53 @@ package org.un.cava.birdeye.geovis.controls.viewers
 			if(_foid!=""){
 				proj=_targets[0].projection;
 				region=_targets[0].region;
+				surface=Surface(_targets[0].getChildByName("Surface"))
 				if(region!=null){
-					if(this.value>oldValue){
 						var arrCntryKeys:Array=new Array();
-						arrCntryKeys=getNeighb(_foid);
+						var arrTempCntry:Array=new Array();
+						arrCntryKeys.push(_foid);
+						arrTempCntry.push(_foid);
 						for (var i:int=0; i<this.value; i++){
-							var arrTempCntry:Array=new Array();
-							for (var j:int=0; j<arrCntryKeys.length; j++){
-								cntryKey=arrCntryKeys[j]
-								myBKUP=new Object();
-								myBKUP["degOfSep"]=i;
-		   						myBKUP["key"]=cntryKey;
-		   						//myBKUP["stroke"]=myCoo.stroke;
-								colorize(cntryKey,new SolidFill(_color,1));
 							
-								if (checkIsAlreadyInList()){
-									arrCollNN.addItem(myBKUP);
-								}
+							for (var j:int=0; j<arrCntryKeys.length; j++){
 								for (var k:int=0; k<getNeighb(arrCntryKeys[j]).length; k++){
-									if(getNeighb(arrCntryKeys[j])[k]!=_foid){
-										arrTempCntry.push(getNeighb(arrCntryKeys[j])[k]);
-									}
+									arrTempCntry.push(getNeighb(arrCntryKeys[j])[k]);
 								}
 							}
 							arrTempCntry.sort();
 							ArrayUtils.removeDup(arrTempCntry);
 							arrCntryKeys=arrTempCntry;
-						}			
-					}else{
-						revertColorization();		
-					}
+							arrTempCntry=new Array();
+						}	
+						
+						for(var l:int=0; l<getCntryMap(region).length; l++){
+							geom=GeometryGroup(surface.getChildByName(getCntryMap(region)[l]));
+							if(this.value!=0){	
+								if(arrCntryKeys.indexOf(getCntryMap(region)[l])!=-1){
+									geom.alpha=1;
+								}else{
+									geom.alpha=0;
+								}
+								
+							}else{
+								geom.alpha=1;
+							}
+						}
+						if(this.value!=0){	
+							var GeoData:Object=Projections.getData(proj,region);
+							var cooBC:String=GeoData.getBarryCenter(_foid);
+							var arrPos:Array=cooBC.split(',');
+							var pt:Point=new Point()
+							pt.x=arrPos[0];
+							pt.y=arrPos[1];
+							map.centerMap(pt);	
+						}else{
+							map.reset();
+						}	
 				}
 			}
-				oldValue=this.value; 
 		}
 		
-		/**
-		 * @private
-		 */
-		private function colorize(CountryKey:String, SF:SolidFill):void{
-			
-			var GeoData:Object=Projections.getData(proj,region);
-			surface=Surface(_targets[0].getChildByName("Surface"))
-			geom=GeometryGroup(surface.getChildByName(CountryKey));			
-			if(geom!=null){
-				if(GeoData.getCoordinates(CountryKey)!=null){
-					if(isNaN(GeoData.getCoordinates(CountryKey).substr(0,1))){
-						myCoo = Path(GeometryGroup(surface.getChildByName(CountryKey)).geometryCollection.getItemAt(0));
-					}else{
-						myCoo = Polygon(GeometryGroup(surface.getChildByName(CountryKey)).geometryCollection.getItemAt(0));
-					}	
-					myBKUP["fill"]=myCoo.fill;
-					myCoo.fill=SF;
-				}
-			}
-		}
-		
-		/**
-		 * @private
-		 */
-		 private function revertColorization():void{
-		 	arrCollNN.filterFunction = itemToRemove;
-			arrCollNN.refresh();
-			for(var l:int=arrCollNN.length-1; l>=0; l--){
-				if(arrCollNN[l].fill!=null){
-					colorize(arrCollNN[l].key,arrCollNN[l].fill);
-				}else{
-					colorize(arrCollNN[l].key,new SolidFill(arrCollNN[l].fill,0));
-				}
-				arrCollNN.removeItemAt(l);
-			}
-			arrCollNN.filterFunction = null;
-            arrCollNN.refresh();
-		 }
 		 
 		/**
 		 * @private
@@ -382,40 +310,17 @@ package org.un.cava.birdeye.geovis.controls.viewers
 		/**
 		 * @private
 		 */
-		private function checkIsAlreadyInList():Boolean{
-			var retVal:Boolean=false;
-			arrCollNN.filterFunction = isAlreadyInclude;
-			arrCollNN.refresh();
-			if (arrCollNN.length==0){
-				retVal = true
+		private function getCntryMap(Region:String):Array{
+			var WCUS:Object;
+			if(region=="World" || region=="Africa" || region=="NorthAmerica" || region=="SouthAmerica" || region=="Asia" || region=="Europe" || region=="Oceania" || region=="Antartica" || region=="CIS" || region=="NorthAfrica" || region=="SubSahara" || region=="EasternAsia" || region=="SouthernAsia" || region=="SouthEasternAsia" || region=="WesternAsia"){
+				WCUS=new WorldCountries();
+			}else if(region=="USA" || region=="CONUS" || region=="OCONUS" || region=="NorthEast" || region=="MidWest" || region=="South" || region=="West" || region=="NewEngland" || region=="MiddleAtlantic" || region=="EastNorthCentral" || region=="WestNorthCentral" || region=="SouthAtlantic" || region=="EastSouthCentral" || region=="WestSouthCentral" || region=="Mountain" || region=="Pacific") {
+				WCUS=new USAStates();
 			}
-			arrCollNN.filterFunction = null;
-            arrCollNN.refresh();
-
-			return retVal
+			var arrCountryKeys:Array=new Array();
+			arrCountryKeys=WCUS.getCountriesListByRegion(Region);
+			return arrCountryKeys;
 		}
-		
-         /**
-		 * @private
-		 */
-          private function isAlreadyInclude(item:Object):Boolean{
-               var isMatch:Boolean = false
-               if(item.key.toUpperCase().search(cntryKey.toUpperCase()) != -1){
-                   isMatch = true
-               }               
-               return isMatch;               
-           }
-		
-		/**
-		 * @private
-		 */
-          private function itemToRemove(item:Object):Boolean{
-               var isMatch:Boolean = false
-               if(item.degOfSep>=this.value){
-                   isMatch = true
-               }               
-               return isMatch;               
-           }
 		
 		/**
      	*  @private
@@ -423,7 +328,6 @@ package org.un.cava.birdeye.geovis.controls.viewers
         private function projChanged(e:GeoProjEvents):void{
         	_isProjChanged=true;
         	this.value=0;
-        	arrCollNN=new ArrayCollection();
         	invalidateDisplayList();
         }
         
