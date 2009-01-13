@@ -189,7 +189,6 @@ package org.un.cava.birdeye.geovis.controls.viewers
 			this.thumbCount=1;
 			this.snapInterval=1;
 			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
-			Application.application.addEventListener(MapEvent.MAP_INSTANTIATED, init, true)
 		}
 		
 		//--------------------------------------------------------------------------
@@ -217,14 +216,7 @@ package org.un.cava.birdeye.geovis.controls.viewers
     	//
     	//--------------------------------------------------------------------------
     	
-		/**
-		 * @private
-		 */
-		private function init(event:Event):void
-		{
-			map = Map(event.target);
- 		}
- 		
+		
 		/**
 		 * @private
 		 */
@@ -242,6 +234,7 @@ package org.un.cava.birdeye.geovis.controls.viewers
 				proj=_targets[0].projection;
 				region=_targets[0].region;
 				surface=Surface(_targets[0].getChildByName("Surface"))
+				map = Map(surface);
 				if(region!=null){
 						var arrCntryKeys:Array=new Array();
 						var arrTempCntry:Array=new Array();
