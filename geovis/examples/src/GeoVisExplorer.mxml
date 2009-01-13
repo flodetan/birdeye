@@ -464,7 +464,7 @@
 							
 							<!--<mx:Spacer height="5" />-->
 							<mx:HRule width="100%" />
-							<viewers:NearestNeighbor id="NN" foid="CHE" minimum="0" maximum="15" target="{myMap}" color="0xFF0000"  width="95%"/>
+							<viewers:NearestNeighbor id="NN" foid="CHE" minimum="0" maximum="15" target="{myMap}" width="95%"/>
 							<mx:Label text="Nearest Neighbor" textAlign="center" fontWeight="bold" fontSize="10" />
 					
 	</mx:VBox>
