@@ -27,36 +27,18 @@
 
 package org.un.cava.birdeye.geovis.transformations
 {
+	import flash.geom.Point;
+
 	public class MollweideTransformation extends Transformation
 	{
-		private var _latRad:Number;
-		private var _longRad:Number;
-		private var _xscaler:Number=1;
-		private var _theta:Number=1;
+		protected var _xscaler:Number;
 		private var _loopCounter:int=0;
 		
-		public function MollweideTransformation(lat:Number,long:Number)
+		public function MollweideTransformation()
 		{
 			super();
-			_latRad=convertDegToRad(lat);
-			_longRad=convertDegToRad(long);
-			_xscaler=1;
-			this.scalefactor=153.7;
-			this.xoffset=2.69;
-			this.yoffset=1.37;
-
-			_theta = approx_theta(_latRad);
 		}
-
-		//When the Mollweide transformation is used for the central part of the Goode projection
-		public function setGoodeConstants():void
-		{
-			_xscaler = 1.05;
-			this.scalefactor = 131;
-			this.xoffset = 3.15;
-			this.yoffset = 1.39;
-		}
-		
+	
 		private function approxIsGoodEnough(tP:Number, la:Number):Boolean {
 			var maxDiff:Number = 1E-100; //acceptable deviation
 			_loopCounter++;
@@ -78,21 +60,36 @@ package org.un.cava.birdeye.geovis.transformations
 			return thetaPrim/2;
 		}
 
-		public override function calculateX():Number
+		public override function calcXY(latDeg:Number, longDeg:Number, zoom:Number):Point
 		{
-			var xCentered:Number;
 			const c:Number = 2*Math.sqrt(2)/Math.PI;
-			
-			xCentered = c * _longRad * Math.cos(_theta);
-			xCentered = xCentered *_xscaler;
-			return translateX(xCentered);
-		}
-
-		public override function calculateY():Number
-		{
+			var latRad:Number=convertDegToRad(latDeg);
+			var longRad:Number=convertDegToRad(longDeg);
+			var theta:Number=1;
+			var xCentered:Number;
 			var yCentered:Number;
-			yCentered = Math.sqrt(2) * Math.sin(_theta);
-			return translateY(yCentered);
+			
+			theta = approx_theta(latRad);
+			
+			xCentered = c * longRad * Math.cos(theta);
+			xCentered = xCentered *_xscaler;
+			
+			yCentered = Math.sqrt(2) * Math.sin(theta);
+									
+			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
+		}
+		
+		//--------------------------------------------------------------------------
+	    //
+	    //  Setters and Getters
+	    //
+	    //--------------------------------------------------------------------------
+		public function set xscaler(value:Number):void{
+			_xscaler=value;
+		}
+		
+		public function get xscaler():Number{
+			return _xscaler;
 		}
 				
 	}

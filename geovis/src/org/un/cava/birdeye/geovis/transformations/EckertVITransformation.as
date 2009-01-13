@@ -27,24 +27,18 @@
 
 package org.un.cava.birdeye.geovis.transformations
 {
+	import flash.geom.Point;
+
 	public class EckertVITransformation extends Transformation
 	{
-		private var _latRad:Number;
-		private var _longRad:Number;
-		private var _theta:Number=1;
 		private var _loopCounter:Number=0;
 
-		public function EckertVITransformation(lat:Number,long:Number)
+		public function EckertVITransformation()
 		{
 			super();
-			_latRad=convertDegToRad(lat);
-			_longRad=convertDegToRad(long);
-
 			this.scalefactor=157;
 			this.xoffset=2.63;
 			this.yoffset=1.37;
-			
-			_theta = approx_theta(_latRad);
 		}
 
 		private function approxIsGoodEnough(tP:Number, la:Number):Boolean {
@@ -64,33 +58,34 @@ package org.un.cava.birdeye.geovis.transformations
 
 		private function approx_theta(la:Number):Number
 		{
-			var _thetaPrim:Number = la;
-			while (approxIsGoodEnough(_thetaPrim, la)==false) {
+			var thetaPrim:Number = la;
+			while (approxIsGoodEnough(thetaPrim, la)==false) {
 				trace ("_loopCounter: " + _loopCounter);
-				trace ("_thetaPrim: " + _thetaPrim);
-				_thetaPrim = _thetaPrim + newtonRaphson(_thetaPrim, la);
+				trace ("_thetaPrim: " + thetaPrim);
+				thetaPrim = thetaPrim + newtonRaphson(thetaPrim, la);
 			}
-			return _thetaPrim;
+			return thetaPrim;
 		}
 
-		public override function calculateX():Number
+		public override function calcXY(latDeg:Number, longDeg:Number, zoom:Number):Point
 		{
 			const lstart:Number = 0;
-			var xCentered:Number;
-			
-			//x	=(long-lstart)*(1+cos(_theta)/(sqrt(2+pi))
-			xCentered = (_longRad-lstart)*(1+Math.cos(_theta))/Math.sqrt(2+Math.PI);
-			return translateX(xCentered);
-		}
-
-		public override function calculateY():Number
-		{
 			const c:Number = 2*Math.sqrt(Math.PI/(4+Math.PI));
+			var latRad:Number=convertDegToRad(latDeg);
+			var longRad:Number=convertDegToRad(longDeg);
+			var theta:Number;
+			var xCentered:Number;
 			var yCentered:Number;
 			
-			//y	= 2*_theta/sqrt(2+pi)
-			yCentered = 2*_theta/Math.sqrt(2+Math.PI);
-			return translateY(yCentered);
+			theta = approx_theta(latRad);
+			//x	=(long-lstart)*(1+cos(theta)/(sqrt(2+pi))
+			xCentered = (longRad-lstart)*(1+Math.cos(theta))/Math.sqrt(2+Math.PI);
+			//y	= 2*theta/sqrt(2+pi)
+			yCentered = 2*theta/Math.sqrt(2+Math.PI);
+						
+			var xval:Number=translateX(xCentered)*zoom;
+			var yval:Number=translateY(yCentered)*zoom;
+			return new Point(xval,yval);
 		}
 
 	}

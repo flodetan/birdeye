@@ -33,6 +33,7 @@ package org.un.cava.birdeye.geovis.locators
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	
@@ -42,16 +43,7 @@ package org.un.cava.birdeye.geovis.locators
 	
 	import org.un.cava.birdeye.geovis.core.Map;
 	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
-	import org.un.cava.birdeye.geovis.transformations.EckertIVTransformation;
-	import org.un.cava.birdeye.geovis.transformations.EckertVITransformation;
-	import org.un.cava.birdeye.geovis.transformations.LambertTransformation;
-	import org.un.cava.birdeye.geovis.transformations.MillerTransformation;
-	import org.un.cava.birdeye.geovis.transformations.MollweideTransformation;
-	import org.un.cava.birdeye.geovis.transformations.RobinsonTransformation;
-	import org.un.cava.birdeye.geovis.transformations.SinusoidalTransformation;
-	import org.un.cava.birdeye.geovis.transformations.Transformation;
-	import org.un.cava.birdeye.geovis.transformations.WinkelTripelTransformation;
-	import org.un.cava.birdeye.geovis.transformations.WorldGeographicTransformation;
+	import org.un.cava.birdeye.geovis.locators.Projector;
 	
 	/**
 	* Class for geographic location referencing via latitude and longitude
@@ -61,7 +53,7 @@ package org.un.cava.birdeye.geovis.locators
 	[Inspectable("lat")] 
 	[Inspectable("xval")] 
 	[Inspectable("yval")] 
-	//This class is intended to be overridden. Inheriting classes should implement the functions calculateX and calculateY
+	
 	public class LatLong extends Canvas//UIComponent
 	{
 		//--------------------------------------------------------------------------
@@ -76,7 +68,7 @@ package org.un.cava.birdeye.geovis.locators
 		private var _target:Object; //myMap. Used for retrieving projection, scaleX and scaleY
 		private var _childWidth:Number=0; //Optional. If set, the child UIComponent will be moved so that it's centered x-wise over the spot given by lat and long
 		private var _childHeight:Number=0; //Optional. If set, the child UIComponent will be moved so that it's centered y-wise over the spot given by lat and long
-		private var _isCalculationPending:Boolean=true; //Optional. If set, the child UIComponent will be moved so that it's centered y-wise over the spot given by lat and long
+		private var _isCalculationPending:Boolean=true; 
 		private var _isBaseMapComplete:Boolean=false;
 			            
 		//--------------------------------------------------------------------------
@@ -114,52 +106,19 @@ package org.un.cava.birdeye.geovis.locators
 				//retrieve projection from _target and create a transformation for the projection
 				var dynamicClassName:String = getQualifiedClassName(_target);
 				var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
-				var proj:String = (_target as dynamicClassRef).projection;
-				var transf:Transformation = createTransformation(_lat, _long, proj);
-			
+				var proj:String = (_target as dynamicClassRef).projection;		
 				//retrieve scale factors from _target and calculate x and y
-				transf.scaleX = Map((_target as DisplayObjectContainer).getChildByName("Surface")).zoom;
-				transf.scaleY = Map((_target as DisplayObjectContainer).getChildByName("Surface")).zoom;
-				_xval = transf.calculateX();
-				_yval = transf.calculateY();
-
+				var zoom:Number = Map((_target as DisplayObjectContainer).getChildByName("Surface")).zoom;
+				
+				var xyval:Point = Projector.calcXY(_lat, _long, proj, zoom);
+				_xval = xyval.x;
+				_yval = xyval.y;
+						
 				//Remember that x and y now are calculated.
 				_isCalculationPending = false; 
 			} //TODO: Else throw an error			 
 		}
 
-		public static function createTransformation(lat:Number, long:Number, projection:String):Transformation
-		{
-			var t:Transformation;
-			if (projection == "Geographic") {
-				t = new WorldGeographicTransformation(lat,long);
-			} else if (projection == "Mollweide") {
-				t = new MollweideTransformation(lat,long);
-			} else if (projection == "WinkelTripel") {
-				t = new WinkelTripelTransformation(lat,long);
-			} else if (projection == "Miller cylindrical") {
-				t = new MillerTransformation(lat,long);
-			} else if (projection == "EckertIV") {
-				t = new EckertIVTransformation(lat,long);
-			} else if (projection == "EckertVI") {
-				t = new EckertVITransformation(lat,long);
-			} else if (projection == "Robinson") {
-				t = new RobinsonTransformation(lat,long);
-			} else if (projection == "Sinsoidal") {
-				t = new SinusoidalTransformation(lat,long);
-			} else if (projection == "Lambert equal area") {
-				t = new LambertTransformation(lat,long);
-			} else if (projection == "Goode") {
-				if (Math.abs(lat) >= 40.73333403){
-					t = new MollweideTransformation(lat,long);
-					(t as MollweideTransformation).setGoodeConstants();
-				} else {
-					t = new SinusoidalTransformation(lat,long);
-					(t as SinusoidalTransformation).setGoodeConstants();
-				}
-			}
-			return t;
-		}
 
 		//--------------------------------------------------------------------------
     	//

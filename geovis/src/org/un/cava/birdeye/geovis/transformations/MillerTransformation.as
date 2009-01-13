@@ -27,35 +27,34 @@
 
 package org.un.cava.birdeye.geovis.transformations
 {
+	import flash.geom.Point;
+	import org.un.cava.birdeye.geovis.locators.Projector;
+	
 	public class MillerTransformation extends Transformation
 	{
-		private var _latRad:Number;
-		private var _longRad:Number;
-		
-		public function MillerTransformation(lat:Number,long:Number)
+				
+		public function MillerTransformation()
 		{
 			super();
-			_latRad=convertDegToRad(lat);
-			_longRad=convertDegToRad(long);
-
 			this.scalefactor=133.8;
 			this.xoffset=3.14;
-			this.yoffset=1.98;
+			this.yoffset=1.98; 
 		}
 
-		public override function calculateX():Number
+		public override function calcXY(latDeg:Number, longDeg:Number, zoom:Number):Point
 		{
-			var xCentered:Number=_longRad;
-			return translateX(xCentered);
-		}
-
-		public override function calculateY():Number
-		{
+			var latRad:Number=convertDegToRad(latDeg);
+			var longRad:Number=convertDegToRad(longDeg);
+			var xCentered:Number;
 			var yCentered:Number;
-			//y = 1.25 ln( tan(pi/4 + 0.8 lat/2) ) 
-			yCentered = 1.25*Math.log( Math.tan(Math.PI/4 + 0.4*_latRad) );
-			return translateY(yCentered);
+			
+			//x = long
+			xCentered = longRad;
+			//y = 1.25 ln( tan(pi/4 + 0.4 lat) ) 
+			yCentered = 1.25*Math.log( Math.tan(Math.PI/4 + 0.4*latRad) );
+						
+			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
 		}
-
+		
 	}
 }

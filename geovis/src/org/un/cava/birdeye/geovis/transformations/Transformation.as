@@ -27,6 +27,7 @@
 
 package org.un.cava.birdeye.geovis.transformations
 {
+	import flash.geom.Point;
 	
 	/**
 	* Superclass for transforming latitude and longitude coordinates into x and y for the maps of GeoVis
@@ -35,21 +36,21 @@ package org.un.cava.birdeye.geovis.transformations
 	//This class is intended to be overridden. Inheriting classes should implement the functions calculateX and calculateY
 	public class Transformation
 	{
-		//--------------------------------------------------------------------------
-	    //
-	    //  Variables
-	    //
-	    //--------------------------------------------------------------------------
-		private var _scalefactor:Number=1; //Projection-specific scaling factor for zooming in to match the size of the map polygon
-		private var _scaleX:Number=1; //Map-specific x-wise scaling factor, taken from map.scaleX
-		private var _scaleY:Number=1; //Map-specific y-wise scaling factor, taken from map.scaleY
-		private var _xoffset:Number=0; //x-wise translation so that x=0 becomes the left border of the map
-		private var _yoffset:Number=0; //y-wise translation so that y=0 becomes the top of the map
+		//These variables are supposed to be overridden
+		protected var _scalefactor:Number; //Projection-specific scaling factor for zooming in to match the size of the map polygon
+		protected var _xoffset:Number; //Projection-specific x-wise translation so that x=0 becomes the left border of the map
+		protected var _yoffset:Number; //Projection-specific y-wise translation so that y=0 becomes the top of the map
 
 		public function Transformation()
 		{
 		}
-			    
+		
+		//This function is supposed to be overridden
+		public function calcXY(lat:Number, long:Number, zoom:Number):Point
+		{
+			return null;
+		}
+
 		//This function is supposed to be overridden
 		public function calculateX():Number
 		{
@@ -61,15 +62,26 @@ package org.un.cava.birdeye.geovis.transformations
 		{
 			return 0;
 		}
-		
+			
+		protected function createTranslatedXYPoint(xCentered:Number,yCentered:Number,zoom:Number):Point
+		{
+			var xval:Number=translateX(xCentered)*zoom;
+			var yval:Number=translateY(yCentered)*zoom;
+			return new Point(xval,yval);
+		}
+
 		protected function translateX(xCentered:Number):Number
 		{
-			return (_xoffset+xCentered)*_scalefactor*_scaleX;
+			return (_xoffset+xCentered)*_scalefactor;
 		}
 
 		protected function translateY(yCentered:Number):Number
 		{
-			return (_yoffset-yCentered)*_scalefactor*_scaleY;
+			return (_yoffset-yCentered)*_scalefactor;
+		}
+		
+		public static function convertDegToRad(deg:Number):Number {
+			return deg * Math.PI / 180 ;
 		}
 
 		//--------------------------------------------------------------------------
@@ -86,22 +98,6 @@ package org.un.cava.birdeye.geovis.transformations
 			return _scalefactor;
 		}
 		
-		public function set scaleX(value:Number):void{
-			_scaleX=value;
-		}
-
-		public function get scaleX():Number{
-			return _scaleX;
-		}
-		
-		public function set scaleY(value:Number):void{
-			_scaleY=value;
-		}
-
-		public function get scaleY():Number{
-			return _scaleY;
-		}
-
 		public function set xoffset(value:Number):void{
 			_xoffset=value;
 		}
@@ -116,10 +112,6 @@ package org.un.cava.birdeye.geovis.transformations
 		
 		public function get yoffset():Number{
 			return _yoffset;
-		}
-
-		public static function convertDegToRad(deg:Number):Number {
-			return deg * Math.PI / 180 ;
 		}
 
 	}
