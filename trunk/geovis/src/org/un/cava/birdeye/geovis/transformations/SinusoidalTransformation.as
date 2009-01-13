@@ -27,42 +27,28 @@
 
 package org.un.cava.birdeye.geovis.transformations
 {
+	import flash.geom.Point;
+
 	public class SinusoidalTransformation extends Transformation
 	{
-		private var _latRad:Number;
-		private var _longRad:Number;
 		
-		public function SinusoidalTransformation(lat:Number,long:Number)
+		public function SinusoidalTransformation()
 		{
 			super();
-			_latRad=convertDegToRad(lat);
-			_longRad=convertDegToRad(long);
-
-			this.scalefactor=139;
-			this.xoffset=2.97;
-			this.yoffset=1.45;
 		}
 
-		//When the Sinusoidal transformation is used for the peripheral parts of the Goode projection
-		public function setGoodeConstants():void
+		public override function calcXY(latDeg:Number, longDeg:Number, zoom:Number):Point
 		{
-			this.scalefactor = 138.6;
-			this.xoffset = 2.98;
-			this.yoffset = 1.32;
-		}
-
-		public override function calculateX():Number
-		{
+			var latRad:Number=convertDegToRad(latDeg);
+			var longRad:Number=convertDegToRad(longDeg);
 			var xCentered:Number;
+			var yCentered:Number;
+			
 			//x = (long-lstart)*cos(lat)  //lstart=0
-			xCentered=(_longRad)*Math.cos(_latRad);
-			return translateX(xCentered);
-		}
-
-		public override function calculateY():Number
-		{
-			var yCentered:Number = _latRad;
-			return translateY(yCentered);
+			xCentered=(longRad)*Math.cos(latRad);
+			yCentered = latRad;
+			
+			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
 		}
 
 	}

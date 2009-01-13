@@ -27,21 +27,16 @@
 
 package org.un.cava.birdeye.geovis.transformations
 {
+	import flash.geom.Point;
+
 	public class LambertTransformation extends Transformation
 	{
-		private var _latRad:Number;
-		private var _longRad:Number;
 		private const _lstart:Number=0;		
 		private const _stdLat:Number=0;
-		private var _kayPrim:Number;
 		
-		public function LambertTransformation(lat:Number,long:Number)
+		public function LambertTransformation()
 		{
 			super();
-			_latRad=convertDegToRad(lat);
-			_longRad=convertDegToRad(long);
-
-			_kayPrim = calc_kayPrim(_latRad,_longRad);
 			this.scalefactor=152.2;
 			this.xoffset=1.98;
 			this.yoffset=1.94;
@@ -54,21 +49,21 @@ package org.un.cava.birdeye.geovis.transformations
 			return Math.sqrt(2/denominator);
 		}
 		
-		public override function calculateX():Number
+		public override function calcXY(latDeg:Number, longDeg:Number, zoom:Number):Point
 		{
+			var latRad:Number=convertDegToRad(latDeg);
+			var longRad:Number=convertDegToRad(longDeg);
+			var kayPrim:Number;
 			var xCentered:Number;
-
-			//x	= k'*cos(lat)*sin(long-_lstart)
-			xCentered = _kayPrim * Math.cos(_latRad)*Math.sin(_longRad-_lstart);
-			return translateX(xCentered);
-		}
-
-		public override function calculateY():Number
-		{
 			var yCentered:Number;
-			//y	= k'[cos(_stdLat)sin(lat)-sin(_stdLat)cos(lat)cos(long-_lstart)]
-			yCentered = _kayPrim * (Math.cos(_stdLat)*Math.sin(_latRad)-Math.sin(_stdLat)*Math.cos(_latRad)*Math.cos(_longRad-_lstart));
-			return translateY(yCentered);
+			
+			kayPrim = calc_kayPrim(latRad,longRad);
+			//x	= k'*cos(lat)*sin(long-_lstart)
+			xCentered = kayPrim * Math.cos(latRad)*Math.sin(longRad-_lstart);
+			//y	= k'[cos(stdLat)sin(lat)-sin(_stdLat)cos(lat)cos(long-_lstart)]
+			yCentered = kayPrim * (Math.cos(_stdLat)*Math.sin(latRad)-Math.sin(_stdLat)*Math.cos(latRad)*Math.cos(longRad-_lstart));
+						
+			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
 		}
 
 	}

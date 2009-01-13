@@ -27,36 +27,30 @@
 
 package org.un.cava.birdeye.geovis.transformations
 {
+	import flash.geom.Point;
+
 	public class WorldGeographicTransformation extends Transformation
 	{
-		private var _latRad:Number;
-		private var _longRad:Number;
 
-		public function WorldGeographicTransformation(lat:Number,long:Number)
+		public function WorldGeographicTransformation()
 		{
 			super();
-			_latRad=convertDegToRad(lat);
-			_longRad=convertDegToRad(long);
-
 			this.scalefactor=133.9;
 			this.xoffset=3.145;
 			this.yoffset=1.455;
 		}
 		
-		public override function calculateX():Number
+		public override function calcXY(lat:Number, long:Number, zoom:Number):Point
 		{
+			var latRad:Number=convertDegToRad(lat);
+			var longRad:Number=convertDegToRad(long);
 			var xCentered:Number;
-			
-			xCentered = _longRad;
-			return translateX(xCentered);
-		}
-
-		public override function calculateY():Number
-		{
 			var yCentered:Number;
-			var scaleY:Number = 100;
-			yCentered = _latRad;
-			return translateY(yCentered);
+			
+			xCentered = longRad;
+			yCentered = latRad;
+									
+			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
 		}
 		
 	}

@@ -27,13 +27,10 @@
 
 package org.un.cava.birdeye.geovis.transformations
 {
+	import flash.geom.Point;
+
 	public class RobinsonTransformation extends Transformation
 	{
-		private var _lat:Number;
-		private var _long:Number;
-		private var _lowLat:int;
-		private var _highLat:int;
-		private var _ratio:Number;
 		
  		private const arrProjDef:Object={
 			00 : {'PLEN':1.0000, 'PDFE' :0.0000},
@@ -57,19 +54,12 @@ package org.un.cava.birdeye.geovis.transformations
 			90 : {'PLEN':0.5322, 'PDFE' :0.127}
 		};
 
-		public function RobinsonTransformation(lat:Number,long:Number)
+		public function RobinsonTransformation()
 		{
 			super();
-			_lat=lat;
-			_long=long;
-
 			this.scalefactor=1729;
 			this.xoffset=0.239;
 			this.yoffset=0.1224;
-
-			_lowLat = roundDownToFive(_lat);
-			_highLat = roundUpToFive(_lat);
-			_ratio = calc_ratio(_lat-_lowLat, Math.abs(_highLat-_lowLat));
 		}
 
 		private function roundUpToFive(inVal:Number):int{
@@ -98,27 +88,27 @@ package org.un.cava.birdeye.geovis.transformations
 			}
 		}
 		
-		public override function calculateX():Number
+		public override function calcXY(lat:Number, long:Number, zoom:Number):Point
 		{
-			var xCentered:Number;		
-			var lowX:Number = arrProjDef[Math.abs(_lowLat)].PLEN*_long/4/180;//Math.PI;
-			var highX:Number = arrProjDef[Math.abs(_highLat)].PLEN*_long/4/180;//Math.PI;
-			
-//			xCentered = interpolate(_ratio, lowX, highX);
-			xCentered = lowX+_ratio*(highX-lowX);
-			return translateX(xCentered);
-		}
-
-		public override function calculateY():Number
-		{
+			var xCentered:Number;
 			var yCentered:Number;
-			var sign:int = sign(_lat)
-			var lowY:Number = sign*arrProjDef[Math.abs(_lowLat)].PDFE;
-			var highY:Number = sign*arrProjDef[Math.abs(_highLat)].PDFE;
+			var lowLat:int = roundDownToFive(lat);
+			var highLat:int = roundUpToFive(lat);
+ 			var ratio:Number = calc_ratio(lat-lowLat, Math.abs(highLat-lowLat));
 
-//			yCentered = interpolate(_ratio, lowY, highY);
-			yCentered = lowY+_ratio*(highY-lowY);			
-			return translateY(yCentered);
+			var lowX:Number = arrProjDef[Math.abs(lowLat)].PLEN*long/4/180;//Math.PI;
+			var highX:Number = arrProjDef[Math.abs(highLat)].PLEN*long/4/180;//Math.PI;
+			var sign:int = sign(lat)
+			var lowY:Number = sign*arrProjDef[Math.abs(lowLat)].PDFE;
+			var highY:Number = sign*arrProjDef[Math.abs(highLat)].PDFE;
+			
+//			xCentered = interpolate(ratio, lowX, highX);
+			xCentered = lowX+ratio*(highX-lowX);
+
+//			yCentered = interpolate(ratio, lowY, highY);
+			yCentered = lowY+ratio*(highY-lowY);
+									
+			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
 		}
 
 	}

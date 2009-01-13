@@ -33,8 +33,6 @@ package org.un.cava.birdeye.geovis.transformations
 	**/	 
 	public class USGeographicTransformation extends Transformation
 	{
-		private var _latRad:Number;
-		private var _longRad:Number;
 		//--------------------------------------------------------------------------
     	//
     	//  Constructor
@@ -43,29 +41,22 @@ package org.un.cava.birdeye.geovis.transformations
 		public function USGeographicTransformation(lat:Number,long:Number)
 		{
 			super();
-			_latRad=convertDegToRad(lat);
-			_longRad=convertDegToRad(long);
-
 			this.scalefactor=740;
 			this.xoffset=2.19;
 			this.yoffset=0.858
 		}
 
-		public override function calculateX():Number
+		public override function calcXY(lat:Number, long:Number, zoom:Number):Point
 		{
+			var latRad:Number=convertDegToRad(lat);
+			var longRad:Number=convertDegToRad(long);
 			var xCentered:Number;
-			var stdParallell:Number = 0;
-			
-			xCentered = _longRad * Math.cos(stdParallell);
-			return translateX(xCentered);
-		}
-
-		public override function calculateY():Number
-		{
 			var yCentered:Number;
-			var scaleY:Number = 100;
-			yCentered = _latRad;
-			return translateY(yCentered);
+			
+			xCentered = longRad;
+			yCentered = latRad;
+									
+			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
 		}
 		
 	}

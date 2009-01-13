@@ -27,24 +27,18 @@
 
 package org.un.cava.birdeye.geovis.transformations
 {
+	import flash.geom.Point;
+
 	public class EckertIVTransformation extends Transformation
 	{
-		private var _latRad:Number;
-		private var _longRad:Number;
-		private var _theta:Number=1;
 		private var _loopCounter:Number=0;
 
-		public function EckertIVTransformation(lat:Number,long:Number)
+		public function EckertIVTransformation()
 		{
 			super();
-			_latRad=convertDegToRad(lat);
-			_longRad=convertDegToRad(long);
-
 			this.scalefactor=163.6;
 			this.xoffset=2.524;
 			this.yoffset=1.31;
-			
-			_theta = approx_theta(_latRad);
 		}
 
 		private function approxIsGoodEnough(tP:Number, la:Number):Boolean {
@@ -70,23 +64,26 @@ package org.un.cava.birdeye.geovis.transformations
 			return _thetaPrim;
 		}
 
-		public override function calculateX():Number
+		public override function calcXY(latDeg:Number, longDeg:Number, zoom:Number):Point
 		{
 			const lstart:Number = 0;
-			const c:Number = 2/Math.sqrt(Math.PI*(4+Math.PI));
+			const c:Number = 2/Math.sqrt(4+Math.PI);
+			const sqrtPi:Number = Math.sqrt(Math.PI);
+			var latRad:Number=convertDegToRad(latDeg);
+			var longRad:Number=convertDegToRad(longDeg);
+			var theta:Number;
 			var xCentered:Number;
-			
-			xCentered = c *(_longRad-lstart)*(1+Math.cos(_theta));
-			return translateX(xCentered);
-		}
-
-		public override function calculateY():Number
-		{
-			const c:Number = 2*Math.sqrt(Math.PI/(4+Math.PI));
 			var yCentered:Number;
 			
-			yCentered = c * Math.sin(_theta);
-			return translateY(yCentered);
+			theta = approx_theta(latRad);
+			//x = 2/sqrt(pi*(4+pi)) * (long-lstart)*( 1+cos(theta) )
+			xCentered = c/sqrtPi *(longRad-lstart)*(1+Math.cos(theta));
+			//y = 2*sqrt(pi/(4+pi)) * sin(theta)
+			yCentered = c*sqrtPi * Math.sin(theta);
+						
+			var xval:Number=translateX(xCentered)*zoom;
+			var yval:Number=translateY(yCentered)*zoom;
+			return new Point(xval,yval);
 		}
 
 	}
