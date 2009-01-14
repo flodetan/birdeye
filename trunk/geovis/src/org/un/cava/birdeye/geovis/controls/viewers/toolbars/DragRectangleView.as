@@ -107,7 +107,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			addChild(msk);
 
 			graphics.moveTo(0,0);
-			graphics.beginFill(RectUtils.BLACK,.4);
+			graphics.beginFill(RectUtils.BLACK,.9);
 			graphics.drawRect(0,0,width,height);
 			graphics.endFill();
 
@@ -235,7 +235,7 @@ class RectangleView extends Sprite
 	internal function draw(w:Number,h:Number):void
 	{
 		graphics.moveTo(0,0);
-		graphics.beginFill(RectUtils.WHITE,.7);
+		graphics.beginFill(RectUtils.YELLOW,.5);
 		graphics.drawRect(0,0,w,h);
 		graphics.endFill();
 	}
