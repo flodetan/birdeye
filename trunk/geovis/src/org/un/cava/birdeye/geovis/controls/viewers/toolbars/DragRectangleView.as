@@ -27,10 +27,15 @@
  
 package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 {
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.DisplayObject;
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	import mx.core.Application;
 	import mx.core.UIComponent;
@@ -38,83 +43,132 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	import org.un.cava.birdeye.geovis.core.Map;
 	import org.un.cava.birdeye.geovis.events.MapEvent;
 	import org.un.cava.birdeye.geovis.views.maps.world.WorldMap;
-
+	
 	public class DragRectangleView extends UIComponent
-	{
-		private var rect:RectangleView;
+	{ 
+		private var draggableRect:RectangleView;
+		private var mapCopy:BitmapData;
+		private var mapCopyCont:Bitmap;
+		private var msk:Shape;
+	    private var maskWidth:Number, maskHeight:Number;
 		
-		override public function set width(value:Number):void
+		private var _scale:Number = 5;
+		
+		public function get scale():Number
 		{
-			super.width = value;
-			invalidateProperties();
+			return _scale;
 		}
-
-		override public function set height(value:Number):void
+		
+		public function set scale(val:Number):void
 		{
-			super.height = value;
-			invalidateProperties();
+			if (val >= 0)
+				_scale = val;
 		}
 
 		// Add the creationCOmplete event handler.
 		public function DragRectangleView()
 		{
-			super();
+			super(); 
 		    Application.application.addEventListener(MapEvent.MAP_INSTANTIATED, init, true);
+		    Application.application.addEventListener(MapEvent.MAP_CHANGED, init, true);
 		}
 		
-		override protected function createChildren():void
+ 		override protected function createChildren():void
 		{
 			super.createChildren();
-			rect = new RectangleView();
+			draggableRect = new RectangleView();
 			
-			var mask:Shape = new Shape();
-			mask.graphics.moveTo(0,0);
-			mask.graphics.beginFill(0xffffff,0);
-			mask.graphics.drawRect(0,0,width,height);
-			mask.graphics.endFill();
+			msk = new Shape();
 			
-			addChild(mask);
-			
-			rect.mask = mask;
-
-			addChild(rect);
-			rect.addEventListener(RectangleView.DRAGGING, moveMap);
-		}
-		
-		override protected function commitProperties():void
-		{
-			super.commitProperties();
-			rect.draw(width,height);
-		}
-		
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-		{
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			graphics.moveTo(0,0);
-			graphics.beginFill(RectUtils.RED,.2);
-			graphics.drawRect(0,0,width,height);
-			graphics.endFill();
-
-			graphics.moveTo(2,2);
-			graphics.beginFill(RectUtils.BLACK,.1);
-			graphics.drawRect(2,2,width-4,height-4);
-			graphics.endFill();
+			draggableRect.mask = msk;
 		}
 		
 		private function init(event:Event):void
 		{
 			// Add the resizing event handler.
-			map = Map(event.target);
-			rect.width = width/map.zoom;
-			rect.height = height/map.zoom;
-			var prop:Number = map.unscaledMapWidth / width;
-			rect.x = Math.max(0,-map.x/map.zoom)/prop;
-			rect.y = Math.max(0,-map.y/map.zoom)/prop;
+
+			map = Map(event.target); 
+			width = map.unscaledMapWidth / scale;
+			height = map.unscaledMapHeight / scale;
+			drawAll();
+		}
+	
+		private function drawAll():void
+		{
+			for (var childIndex:Number = 0; childIndex <= numChildren-1; childIndex++)
+				removeChildAt(childIndex);
+			
+			clearAll();
+
+			msk.graphics.moveTo(0,0);
+			msk.graphics.beginFill(0xffffff,0);
+			msk.graphics.drawRect(0,0,width,height);
+			msk.graphics.endFill();
+			addChild(msk);
+
+			graphics.moveTo(0,0);
+			graphics.beginFill(RectUtils.BLACK,.4);
+			graphics.drawRect(0,0,width,height);
+			graphics.endFill();
+
+			var tempMask:DisplayObject = DisplayObject(map.mask);
+			var maskBounds:Rectangle;
+			if (map.mask != null)
+				maskBounds = map.mask.getBounds(map.mask);
+			else
+				maskBounds = map.parent.getBounds(map.parent);
+			maskWidth = maskBounds.width;
+			maskHeight = maskBounds.height;
+ 			// map.mask must be temporarily set to null because otherwise the bitmapdata
+ 			// will cut the map on the top and left sides, probably because of a bug either 
+ 			// in the framework
+ 			map.mask = null;
+
+			var sourceRect:Rectangle = new Rectangle(0,0,width,height);
+			if (mapCopy != null)
+				mapCopy.dispose();
+			mapCopy = new BitmapData(sourceRect.width, sourceRect.height,true,0x000000);
+			var matr:Matrix = new Matrix(1/scale,0,0,1/scale,0,0); 
+			mapCopy.draw(map,matr,null,null,sourceRect,true);
+			mapCopyCont = new Bitmap(mapCopy);
+			addChild(mapCopyCont);
+			map.mask = tempMask;
+
+			graphics.moveTo(0,0);
+			graphics.lineStyle(2,RectUtils.RED,.4);
+			graphics.lineTo(width,0);
+			graphics.lineTo(width,height);
+			graphics.lineTo(0,height);
+			graphics.lineTo(0,0);
+			
+			draggableRect = new RectangleView();
+			draggableRect.mask = msk;
+			var w:Number = maskWidth/map.zoom/scale;
+			var h:Number = maskHeight/map.zoom/scale;
+			draggableRect.draw(w,h);
+			draggableRect.width = w;
+			draggableRect.height = h;
+			draggableRect.x = Math.max(0,-map.x/map.zoom)/scale;
+			draggableRect.y = Math.max(0,-map.y/map.zoom)/scale;
+			draggableRect.addEventListener(RectangleView.DRAGGING, moveMap);
+			addChild(draggableRect);
+
 			registerMapListeners();
 			if (parent is WorldMap) 
 				parent.setChildIndex(this, parent.numChildren-1);
  		}
  		
+ 		private function clearAll():void
+ 		{
+			if (msk != null)
+				msk.graphics.clear();
+			graphics.clear();
+			if (mapCopy != null)
+				mapCopy.dispose();
+			if (draggableRect != null)
+				draggableRect.graphics.clear();
+ 		}
+
 	    private var map:Map;
 	    private function moveMap(e:Event):void
 	    {
@@ -122,41 +176,34 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	    	xPos = RectangleView(e.target).x;
 	    	yPos = RectangleView(e.target).y;
 	    	
-			var prop:Number = map.unscaledMapWidth / width;
-
-	    	map.x = -xPos*prop*map.zoom;
-	    	map.y = -yPos*prop*map.zoom;
+	    	map.x = -xPos*scale*map.zoom;
+	    	map.y = -yPos*scale*map.zoom;
 	    }
 		
 		private function updateValuesOnZoom(e:MapEvent):void
 		{
 			map = Map(e.target);
-			rect.width = Math.min(width,width/map.zoom);
-			rect.height = Math.min(height,height/map.zoom);
-			var prop:Number = map.unscaledMapWidth / width;
-			rect.x = Math.max(0,-map.x/map.zoom)/prop;
-			rect.y = Math.max(0,-map.y/map.zoom)/prop;
+			draggableRect.width = maskWidth/map.zoom/scale;//map.parent.width/map.zoom/scale;
+			draggableRect.height = maskHeight/map.zoom/scale;//map.parent.height/map.zoom/scale;
+			draggableRect.x = -map.x/map.zoom/scale;
+			draggableRect.y = -map.y/map.zoom/scale;
+trace (map.zoom, draggableRect.width, draggableRect.height);
 		}
 		
-		private function updateValuesOnDrag(e:MapEvent):void
+		private function updateValuesOnDragOrCentering(e:MapEvent):void
 		{
 			map = Map(e.target);
-			var prop:Number = map.unscaledMapWidth / width;
-			if (map.zoom>1)
-				rect.x = -map.x/map.zoom/prop;
-			else 
-				rect.x = map.x/map.zoom/prop;
-				
-			if (map.zoom>1)
-				rect.y = -map.y/map.zoom/prop;
-			else
-				rect.y = map.y/map.zoom/prop;
+trace (map.zoom, draggableRect.width, draggableRect.height, map.parent.width, map.parent.height);
+			draggableRect.x = -map.x/map.zoom/scale;
+			draggableRect.y = -map.y/map.zoom/scale;
 		}
 
 		private function registerMapListeners():void
 		{
+			draggableRect.addEventListener(RectangleView.DRAGGING, moveMap);
 			map.addEventListener(MapEvent.MAP_ZOOM_COMPLETE, updateValuesOnZoom);
-			map.addEventListener(MapEvent.MAP_MOVING, updateValuesOnDrag);
+			map.addEventListener(MapEvent.MAP_MOVING, updateValuesOnDragOrCentering);
+		    map.addEventListener(MapEvent.MAP_CENTERED, updateValuesOnDragOrCentering);
 		}
 	}
 }
@@ -188,7 +235,7 @@ class RectangleView extends Sprite
 	internal function draw(w:Number,h:Number):void
 	{
 		graphics.moveTo(0,0);
-		graphics.beginFill(RectUtils.BLACK,.3);
+		graphics.beginFill(RectUtils.WHITE,.7);
 		graphics.drawRect(0,0,w,h);
 		graphics.endFill();
 	}
@@ -220,8 +267,8 @@ class RectangleView extends Sprite
     // Moving the toolbar while MOUSE_MOVE event is on
     private function dragRectangle(e:MouseEvent):void
     {
-    	this.x = Math.max(e.stageX - offsetX,0);
-    	this.y = Math.max(e.stageY - offsetY,0);
+    	this.x = e.stageX - offsetX;
+    	this.y = e.stageY - offsetY;
      	e.updateAfterEvent();
     	// dispatch moved toolbar event
   		dispatchEvent(new Event(RectangleView.DRAGGING));

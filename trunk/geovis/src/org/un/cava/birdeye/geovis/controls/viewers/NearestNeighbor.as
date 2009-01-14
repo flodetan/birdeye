@@ -76,7 +76,7 @@ package org.un.cava.birdeye.geovis.controls.viewers
 		/**
 	     *  @private
 	     */
-		private var surface:Surface;
+		private var surface:Map;
 		
 		/**
 	     *  @private
@@ -114,11 +114,7 @@ package org.un.cava.birdeye.geovis.controls.viewers
 		 *  @Private
 		 */
 		private var region:String;
-		
-		/**
-		 *  @Private
-		 */
-		private var map:Map;
+
 		//--------------------------------------------------------------------------
 	    //
 	    //  Properties 
@@ -233,8 +229,7 @@ package org.un.cava.birdeye.geovis.controls.viewers
 			if(_foid!=""){
 				proj=_targets[0].projection;
 				region=_targets[0].region;
-				surface=Surface(_targets[0].getChildByName("Surface"))
-				map = Map(surface);
+				surface=Map(_targets[0].getChildByName("Surface"));
 				if(region!=null){
 						var arrCntryKeys:Array=new Array();
 						var arrTempCntry:Array=new Array();
@@ -273,9 +268,9 @@ package org.un.cava.birdeye.geovis.controls.viewers
 							var pt:Point=new Point()
 							pt.x=arrPos[0];
 							pt.y=arrPos[1];
-							map.centerMap(pt);	
+							surface.centerMap(pt);	
 						}else{
-							map.reset();
+							surface.reset();
 						}	
 				}
 			}

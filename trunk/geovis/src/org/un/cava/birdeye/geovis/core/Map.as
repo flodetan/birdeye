@@ -1,6 +1,9 @@
 package org.un.cava.birdeye.geovis.core
 {
+	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
+	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.paint.SolidFill;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -10,6 +13,7 @@ package org.un.cava.birdeye.geovis.core
 	
 	import mx.controls.HSlider;
 	import mx.controls.VSlider;
+	import mx.core.Application;
 	import mx.events.FlexEvent;
 	
 	import org.un.cava.birdeye.geovis.events.MapEvent;
@@ -29,26 +33,46 @@ package org.un.cava.birdeye.geovis.core
 		// the MainViewToolbarPanel through the Canvas(event.target)
 		public function Map()
 		{
-			super();
-			addEventListener(FlexEvent.CREATION_COMPLETE, notifyMapReady);
+			super(); 
+			Application.application.addEventListener(FlexEvent.APPLICATION_COMPLETE, notifyMapReady);
 		}
 		
 		private function notifyMapReady(e:Event):void
 		{
 			dispatchEvent(new MapEvent(MapEvent.MAP_INSTANTIATED));
+			addEventListener(MapEvent.MAP_CHANGED, init);
+			Application.application.removeEventListener(FlexEvent.APPLICATION_COMPLETE, notifyMapReady);
+			init(e);
 		}
 		
-		private var _unscaledMapWidth:Number = 917.65; //1190.5511;
-		private var _unscaledMapHeight:Number = 478.5; //841.8898;
-		public const DEFAULT_ZOOM:Number = 0.942;
+		private function init(e:Event):void
+		{
+			reset();
+		}
 		
-		public var projection:String;
+		private var _unscaledMapWidth:Number = NaN;
+		private var _unscaledMapHeight:Number = NaN;
+		public const DEFAULT_ZOOM:Number = .65;
 		
+		private var _projection:String;
+		
+		public function set projection(val:String):void
+		{
+			_projection = val;
+			updateUnscaledSize();
+			dispatchEvent(new MapEvent(MapEvent.MAP_CHANGED));
+		}
+		
+		public function get projection():String
+		{
+			return _projection;
+		}
+
 		public function updateUnscaledSize():void
 		{ 
 			var size:Rectangle = getBounds(this);
-			_unscaledMapWidth = 770;//size.width/_zoom;
-			_unscaledMapHeight = 390;//size.height/_zoom;
+			_unscaledMapWidth = size.width/_zoom;
+			_unscaledMapHeight = size.height/_zoom;
 trace(size);
 		}
 		
@@ -61,7 +85,7 @@ trace(size);
 		{
 				return _unscaledMapHeight;
 		}
-			
+		
 		private var _zoomInSelected:Boolean = false;
 		private var _zoomOutSelected:Boolean = false;
 		private var _dragSelected:Boolean = false;
@@ -232,7 +256,7 @@ trace(size);
 			}
 		}
 
-		private var _zoom:Number=1;
+		private var _zoom:Number;
 
 		public function set zoom(value:Number):void
 		{
@@ -482,6 +506,7 @@ trace (regPoint, _zoom);
 		    // apply matrix transformation
 	 	    transform.matrix = matr;
 	 	    
+trace(matr.a, matr.d);
 	 	    dispatchEvent(new MapEvent(MapEvent.MAP_ZOOM_COMPLETE));
 	
 		    // dispatch zoomed map event and differentiate between in/out
