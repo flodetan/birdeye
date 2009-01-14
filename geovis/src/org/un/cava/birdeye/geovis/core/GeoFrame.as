@@ -313,11 +313,11 @@ package org.un.cava.birdeye.geovis.core
 	// --------------------
  	 			var matr:Matrix = surf.transform.matrix;
 	  	    	matr.identity();
-		    	surf.zoom = 1;
+		    	surf.zoom = Map.CREATION_ZOOM;
 		    	surf.scaleX = surf.scaleY = surf.zoom;
 	 	    	matr.scale(surf.zoom, surf.zoom);
 		    	surf.transform.matrix = matr; 
- 	 // uncomment above when symbols scaling works well in any zooming scenario
+ 	 // remove above when symbols scaling works well in any zooming scenario
 	 // to do:
 	 // scale symbols accordingly
 	 // restore matrix after projection is changed
@@ -484,7 +484,13 @@ trace (getStyle("stroke"));
 					_geoGroup.push(countryGeom);
 				}
 			}
+			
+			// the projection name is registered inside map
+			// this will also updates the unscaled map size with the proper values
+			// used for the background size 
 			surf.projection = _projection;
+
+			// complete map background to allow events all over the map
 		    var backGroundPoly:RegularRectangle = 
 		    	new RegularRectangle(0,0,surf.unscaledMapWidth,surf.unscaledMapHeight);
 		    backGroundPoly.fill = new SolidFill(0xffffff,0);

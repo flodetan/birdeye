@@ -34,13 +34,13 @@ package org.un.cava.birdeye.geovis.symbols
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
-	import flash.geom.Matrix;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	
 	import mx.containers.Canvas;
 	import mx.events.FlexEvent;
 	
+	import org.un.cava.birdeye.geovis.core.Map;
 	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	import org.un.cava.birdeye.geovis.projections.Projections;
@@ -227,10 +227,13 @@ package org.un.cava.birdeye.geovis.symbols
 					
 /* 					var myScaleX:Number=(_parent as dynamicClassRef).scaleX;
 					var myScaleY:Number=(_parent as dynamicClassRef).scaleY;
- */					
+ 					
  					var matr:Matrix = surf.transform.matrix;
 					var myScaleX:Number=matr.a;
 					var myScaleY:Number=matr.d;
+*/
+					var myScaleX:Number = Map.CREATION_ZOOM;
+					var myScaleY:Number = Map.CREATION_ZOOM;
 
 					if(this.getChildAt(0) is PieSpark)
 					{

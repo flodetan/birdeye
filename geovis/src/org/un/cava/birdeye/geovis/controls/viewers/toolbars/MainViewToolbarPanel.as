@@ -144,10 +144,10 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    wheelSkewVertically.setStyle("selectedOverIcon", WheelSkewVerticallyIcon);
 		    wheelSkewVertically.setStyle("selectedDownIcon", WheelSkewVerticallyIcon);
 		    wheelSkewVertically.blendMode = BlendMode.ADD;
-		    wheelSkewVertically.addEventListener(Event.CHANGE, toolbarListenersHandler);
+/* 		    wheelSkewVertically.addEventListener(Event.CHANGE, toolbarListenersHandler);
 		    wheelSkewVertically.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
 		    addChild(wheelSkewVertically);
-
+ */
 		    wheelSkewHorizontally = new CheckBox();
 		    wheelSkewHorizontally.name = WHEEL_SKEW_HORIZONTALLY;
 		    wheelSkewHorizontally.width = wheelSkewHorizontally.height = IconsUtils.size;
@@ -158,10 +158,10 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    wheelSkewHorizontally.setStyle("selectedOverIcon", WheelSkewHorizontallyIcon);
 		    wheelSkewHorizontally.setStyle("selectedDownIcon", WheelSkewHorizontallyIcon);
 		    wheelSkewHorizontally.blendMode = BlendMode.ADD;
-		    wheelSkewHorizontally.addEventListener(Event.CHANGE, toolbarListenersHandler);
+/* 		    wheelSkewHorizontally.addEventListener(Event.CHANGE, toolbarListenersHandler);
 		    wheelSkewHorizontally.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
 		    addChild(wheelSkewHorizontally);
-
+ */
 		    zoomRect = new CheckBox();
 		    zoomRect.name = ZOOM_RECTANGLE;
 		    zoomRect.width = zoomRect.height = IconsUtils.size;

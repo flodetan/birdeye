@@ -257,7 +257,7 @@
 			visible="{isLoading}" projection="Miller cylindrical" id="myMap" 
 			ItemClick="showDetails(event)" DrawBaseMapComplete="{isLoading = true}"  
 			x="10" y="20" ><!-- DrawBaseMapComplete="{progressBar.visible=false}" projection="{projectionSelector.selectedItem.label}"  ProjectionChanged="{progressBar.visible=true}"-->
-			<tools:MainViewToolbarPanel x="700" alpha=".7" width="20" height="220" id="mainToolbar" draggable="true"/>
+			<tools:MainViewToolbarPanel x="700" alpha=".7" width="20" height="180" id="mainToolbar" draggable="true"/>
 			<tools:ZoomSliderView y="200" id="zoomSlider"/>
 			<analysis:Choropleth id="choropleth" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" colorField="{featureSelector.selectedItem.data}" alpha="1" scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" dataTipFunction="customDataTip" highlighted="true"  />
 			<symbols:Symbols id="mySymbols" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" itemRenderer="renderers.MedalsRenderer" visible="false" />			

@@ -108,7 +108,7 @@ package org.un.cava.birdeye.geovis.locators
 				var dynamicClassRef:Class = getDefinitionByName(dynamicClassName) as Class;
 				var proj:String = (_target as dynamicClassRef).projection;		
 				//retrieve scale factors from _target and calculate x and y
-				var zoom:Number = Map((_target as DisplayObjectContainer).getChildByName("Surface")).zoom;
+				var zoom:Number = Map.CREATION_ZOOM;//Map((_target as DisplayObjectContainer).getChildByName("Surface")).zoom;
 				
 				var xyval:Point = Projector.calcXY(_lat, _long, proj, zoom);
 				_xval = xyval.x;

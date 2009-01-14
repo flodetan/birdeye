@@ -1,9 +1,6 @@
 package org.un.cava.birdeye.geovis.core
 {
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
-	import com.degrafa.geometry.RegularRectangle;
-	import com.degrafa.paint.SolidFill;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -53,6 +50,7 @@ package org.un.cava.birdeye.geovis.core
 		private var _unscaledMapWidth:Number = NaN;
 		private var _unscaledMapHeight:Number = NaN;
 		public const DEFAULT_ZOOM:Number = .65;
+		public static const CREATION_ZOOM:Number = 1;
 		
 		private var _projection:String;
 		
@@ -281,16 +279,6 @@ trace(size);
 			minHeight = 100;
 		}
 		
-	 	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-		{
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
-	
-			if (isNaN(currentCenterX))
-				currentCenterX = unscaledMapWidth/2; 
-			if (isNaN(currentCenterY))
-				currentCenterY = unscaledMapHeight/2;
-		}
-		
 		private function skewMapVertically(e:MouseEvent):void
 		{
 			matr = transform.matrix;
@@ -447,11 +435,12 @@ trace (mouseX-rectUpperLeftX, mouseY-rectUpperLeftY);
 	    
 	    public function zoomMapScaledRectangle(upperLeftX:Number, upperLeftY:Number, lowerRightX:Number, lowerRightY:Number):void
 	    {
-	    	upperLeftX /= _zoom;
-	    	upperLeftY /= _zoom;
-	    	lowerRightX /= _zoom;
-	    	lowerRightY /= _zoom;
-	    	
+	    	reset();
+ 	    	upperLeftX = upperLeftX / _zoom  * DEFAULT_ZOOM;
+	    	upperLeftY = upperLeftY / _zoom * DEFAULT_ZOOM;
+	    	lowerRightX = lowerRightX / _zoom * DEFAULT_ZOOM;
+	    	lowerRightY = lowerRightY / _zoom * DEFAULT_ZOOM;
+
 	    	zoomMapRectangle(upperLeftX, upperLeftY, lowerRightX, lowerRightY);
 	    }
 	    

@@ -270,7 +270,7 @@ package org.un.cava.birdeye.geovis.controls.viewers
 							pt.y=arrPos[1];
 							surface.centerMap(pt);	
 						}else{
-							surface.reset();
+//							surface.reset();
 						}	
 				}
 			}
