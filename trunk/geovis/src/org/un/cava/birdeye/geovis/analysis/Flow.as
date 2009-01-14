@@ -31,7 +31,6 @@ package org.un.cava.birdeye.geovis.analysis
 	
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
-	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.utils.*;
 	import flash.xml.XMLNode;
@@ -44,6 +43,7 @@ package org.un.cava.birdeye.geovis.analysis
 	import mx.events.FlexEvent;
 	import mx.styles.StyleManager;
 	
+	import org.un.cava.birdeye.geovis.core.Map;
 	import org.un.cava.birdeye.geovis.dictionary.*;
 	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
@@ -554,11 +554,16 @@ package org.un.cava.birdeye.geovis.analysis
 	  		cntrlpt.scaleY=_scaleY;
   	  		surf.scaleX=_scaleX;
 	  		surf.scaleY=_scaleY;
- */ 
+
  			var matr:Matrix = surf.transform.matrix;
 		  	_scaleX = matr.a;
 	  		_scaleY = matr.d;
-		 	flows.scaleX=_scaleX;
+ */ 
+ 
+		  	_scaleX = Map.CREATION_ZOOM;
+	  		_scaleY = Map.CREATION_ZOOM;
+
+ 		 	flows.scaleX=_scaleX;
 	  		flows.scaleY=_scaleY;
 	  		cntrlpt.scaleX=_scaleX;
 	  		cntrlpt.scaleY=_scaleY;

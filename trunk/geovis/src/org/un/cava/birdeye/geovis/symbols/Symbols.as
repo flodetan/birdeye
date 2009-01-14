@@ -34,7 +34,6 @@ package org.un.cava.birdeye.geovis.symbols
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
-	import flash.geom.Matrix;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	import flash.xml.XMLNode;
@@ -48,6 +47,7 @@ package org.un.cava.birdeye.geovis.symbols
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	
+	import org.un.cava.birdeye.geovis.core.Map;
 	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	import org.un.cava.birdeye.geovis.events.GeoProjEvents;
 	import org.un.cava.birdeye.geovis.projections.Projections;
@@ -341,11 +341,12 @@ package org.un.cava.birdeye.geovis.symbols
 						if(geom!=null){
 /* 							var myScaleX:Number=(this.parent as dynamicClassRef).scaleX;
 							var myScaleY:Number=(this.parent as dynamicClassRef).scaleY;
- */
+ 
 							var matr:Matrix = surf.transform.matrix;
-							var myScaleX:Number=matr.a;
-							var myScaleY:Number=matr.d;
-							
+*/							
+							var myScaleX:Number = Map.CREATION_ZOOM;
+							var myScaleY:Number = Map.CREATION_ZOOM;
+
  							if(_itemRenderer != null) {
 								myIR=_itemRenderer.newInstance()
 								myIR.data = cursor.current; 
