@@ -323,7 +323,6 @@ package org.un.cava.birdeye.geovis.core
 	 // restore matrix after projection is changed
 	 			
 				createMap();
-				surf.projection = _projection;
 				maskCreated = false;
 				isProjectionChanged=false;
 		    }
@@ -480,16 +479,12 @@ trace (getStyle("stroke"));
 								}
 							}
 						}
-						
-						
-						
 						countryGeom.geometryCollection.addItem(myCoo);
-					
 					}
 					_geoGroup.push(countryGeom);
+				}
 			}
-			
-			surf.updateUnscaledSize();
+			surf.projection = _projection;
 		    var backGroundPoly:RegularRectangle = 
 		    	new RegularRectangle(0,0,surf.unscaledMapWidth,surf.unscaledMapHeight);
 		    backGroundPoly.fill = new SolidFill(0xffffff,0);
@@ -497,7 +492,6 @@ trace (getStyle("stroke"));
 		    backGround.target = surf;
 
 			dispatchEvent(new GeoCoreEvents(GeoCoreEvents.DRAW_BASEMAP_COMPLETE));
-			}
 		}
 		
 		/**
