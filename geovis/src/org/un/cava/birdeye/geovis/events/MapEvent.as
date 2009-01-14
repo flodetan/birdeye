@@ -17,7 +17,9 @@ package org.un.cava.birdeye.geovis.events
         public static const MAP_MOVING:String = "MapMoving";
         public static const MAP_DRAG_COMPLETE:String = "MapDragComplete";
         public static const MAP_CENTERED:String = "MapCentered";
+        
         public static const MAP_INSTANTIATED:String = "MapInstantiated";
+        public static const MAP_CHANGED:String = "MapChanged";
         
         public static const MAP_PROPERTY_ON:String = "MapPropertyChanged";
         public static const MAP_PROPERTY_OFF:String = "MapPropertyChanged";

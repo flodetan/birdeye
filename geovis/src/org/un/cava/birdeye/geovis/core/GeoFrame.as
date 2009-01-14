@@ -42,7 +42,6 @@ package org.un.cava.birdeye.geovis.core
 	
 	import mx.containers.Canvas;
 	import mx.core.UIComponent;
-	import mx.events.FlexEvent;
 	
 	import org.un.cava.birdeye.geovis.analysis.*;
 	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
@@ -262,7 +261,6 @@ package org.un.cava.birdeye.geovis.core
 			isProjectionChanged=true;
 			invalidateDisplayList();
 			//invalidateProperties();
-			dispatchEvent(new GeoProjEvents(GeoProjEvents.PROJECTION_CHANGED,value));
 		}
 		
 		/**
@@ -291,10 +289,9 @@ package org.un.cava.birdeye.geovis.core
 	    override protected function createChildren():void
 	    {
 	    	super.createChildren();
+	    	
 	    	surf=new Map();
 			surf.name="Surface";
-			surf.scaleX=surf.zoom;
-		    surf.scaleY=surf.zoom;
 		    this.addChild(surf); 
 
 	  		maskShape = new Shape();
@@ -302,7 +299,6 @@ package org.un.cava.birdeye.geovis.core
 	  		maskCont.addChild(maskShape);
 	  		this.addChild(maskCont);
 	  		this.setChildIndex(maskCont, 0);
-	  		
 	  		surf.mask = maskShape;
 	    }
 	    
@@ -312,12 +308,13 @@ package org.un.cava.birdeye.geovis.core
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			
+
 		    if (isProjectionChanged) {
 	// --------------------
  	 			var matr:Matrix = surf.transform.matrix;
 	  	    	matr.identity();
-		    	surf.zoom = surf.DEFAULT_ZOOM;
+		    	surf.zoom = 1;
+		    	surf.scaleX = surf.scaleY = surf.zoom;
 	 	    	matr.scale(surf.zoom, surf.zoom);
 		    	surf.transform.matrix = matr; 
  	 // uncomment above when symbols scaling works well in any zooming scenario
@@ -326,15 +323,15 @@ package org.un.cava.birdeye.geovis.core
 	 // restore matrix after projection is changed
 	 			
 				createMap();
-				surf.updateUnscaledSize();
 				surf.projection = _projection;
 				maskCreated = false;
 				isProjectionChanged=false;
 		    }
-	
+
 			if (!maskCreated)
 			{
 				maskCont.setActualSize(unscaledWidth, unscaledHeight);
+trace (unscaledWidth, unscaledHeight);
 				maskCont.move(0,0);
 				maskShape.graphics.beginFill(0xffffff, 0);
 				maskShape.graphics.drawRect(0,0,unscaledWidth, unscaledHeight);
@@ -342,6 +339,7 @@ package org.un.cava.birdeye.geovis.core
 				maskCreated = true;
 	  			this.setChildIndex(maskCont, 0);
 			} 
+			
 		}
 		
 		//--------------------------------------------------------------------------
@@ -362,13 +360,14 @@ package org.un.cava.birdeye.geovis.core
 							surf.removeChildAt(i);
 						}
 					}
-			}	
+			}
 			arrStroke=new Array();
 			if(getStyle("fill"))
 			{
 				_color=new SolidFill(getStyle("fill"),1);
 			}
 			
+trace (getStyle("stroke"));
 			if(getStyle("stroke"))
 			{
 				if(typeof(getStyle("stroke"))=="number")
@@ -394,13 +393,10 @@ package org.un.cava.birdeye.geovis.core
 			
 			// background is necessary to allow events that trigger dragging, zooming, 
 			// centering...all over the map and not only where countries are filled out with some fill 
+			// check after the for loop to find the last instructions to define the background size
 		    var backGround:GeometryGroup = new GeometryGroup(); 
-		    var backGroundPoly:RegularRectangle = new RegularRectangle(0,0,surf.unscaledMapWidth,surf.unscaledMapHeight);
-		    backGroundPoly.fill = new SolidFill(0xffffff,0)
-		    backGround.geometryCollection.addItem(backGroundPoly);
-		    backGround.target = surf;
 		    surf.graphicsCollection.addItem(backGround);
-		     
+
 			for each (var country:String in listOfCountry)
 			{
 				if(wcData.getCoordinates(country)!="")
@@ -493,6 +489,13 @@ package org.un.cava.birdeye.geovis.core
 					_geoGroup.push(countryGeom);
 			}
 			
+			surf.updateUnscaledSize();
+		    var backGroundPoly:RegularRectangle = 
+		    	new RegularRectangle(0,0,surf.unscaledMapWidth,surf.unscaledMapHeight);
+		    backGroundPoly.fill = new SolidFill(0xffffff,0);
+		    backGround.geometryCollection.addItem(backGroundPoly);
+		    backGround.target = surf;
+
 			dispatchEvent(new GeoCoreEvents(GeoCoreEvents.DRAW_BASEMAP_COMPLETE));
 			}
 		}
