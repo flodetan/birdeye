@@ -397,12 +397,8 @@ trace (getStyle("stroke"));
 			// centering...all over the map and not only where countries are filled out with some fill 
 			// check after the for...loop to find the last instructions to define the background size
 		    var backGround:GeometryGroup = new GeometryGroup(); 
-		    surf.graphicsCollection.addItem(backGround);
-		    var backGroundPoly:RegularRectangle = 
-		    	new RegularRectangle(0,0,width, height);
-		    backGroundPoly.fill = new SolidFill(0xffffff,0);
-		    backGround.geometryCollection.addItem(backGroundPoly);
 		    backGround.target = surf;
+			surf.graphicsCollection.addItemAt(backGround,0);
 
 			for each (var country:String in listOfCountry)
 			{
@@ -502,12 +498,11 @@ trace (getStyle("stroke"));
 			// and creating the background directly there and appending it to the map as child 0, but the setChildIndex
 			// doesn't work and the background is put on top of the Map, thus removing all events over the countries.
 			// however, this will change with the new model structure
-			RegularRectangle(
-				GeometryGroup(
-					surf.graphicsCollection.getItemAt(0)).geometryCollection.getItemAt(0)).width = surf.unscaledMapWidth;
-			RegularRectangle(
-				GeometryGroup(
-					surf.graphicsCollection.getItemAt(0)).geometryCollection.getItemAt(0)).height = surf.unscaledMapHeight;
+
+		    var backGroundPoly:RegularRectangle = 
+		    	new RegularRectangle(0,0,surf.unscaledMapWidth, surf.unscaledMapHeight);
+		    backGroundPoly.fill = new SolidFill(0xffffff,0);
+		    backGround.geometryCollection.addItem(backGroundPoly);
 		
 			switch (_autosize)
 			{
