@@ -502,13 +502,13 @@ trace (getStyle("stroke"));
 			// and creating the background directly there and appending it to the map as child 0, but the setChildIndex
 			// doesn't work and the background is put on top of the Map, thus removing all events over the countries.
 			// however, this will change with the new model structure
-			backGroundPoly = 
-				RegularRectangle(
-					GeometryGroup(
-						surf.graphicsCollection.getItemAt(0)).geometryCollection.getItemAt(0));
-			backGroundPoly.width = surf.unscaledMapWidth;
-			backGroundPoly.height = surf.unscaledMapHeight;
-			
+			RegularRectangle(
+				GeometryGroup(
+					surf.graphicsCollection.getItemAt(0)).geometryCollection.getItemAt(0)).width = surf.unscaledMapWidth;
+			RegularRectangle(
+				GeometryGroup(
+					surf.graphicsCollection.getItemAt(0)).geometryCollection.getItemAt(0)).height = surf.unscaledMapHeight;
+		
 			switch (_autosize)
 			{
 				case "fit-height":
