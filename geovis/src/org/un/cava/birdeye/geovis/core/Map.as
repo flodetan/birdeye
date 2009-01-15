@@ -16,18 +16,22 @@ package org.un.cava.birdeye.geovis.core
 	import org.un.cava.birdeye.geovis.events.MapEvent;
 	import org.un.cava.birdeye.geovis.locators.LatLong;
 
+	 /**
+	 * The Map class is responsible for managing the zooming and positioning 
+	 * capabilities of the GeoFrame and provides methods (zoomMap, center...) 
+	 * and properties (zoom, currentCenterX...) to perform different ways for zooming and positioning.
+	 * Given the several possibilities offered by the map class for zooming and changing the position 
+	 * of the map, it also controls the activation/deactivation of each feature.
+	 * For example, similarly to a redlight, when selecting the ZOOM IN with a mouse double click, 
+	 * if just before the double click was selected to perform a centering of the map, than the Map class 
+	 * will switch off the double click listener for centering and will turn on the one for the zoom-in.
+	 * Therefore when external viewers or toolbars select the feature ZOOM IN with double click, 
+	 * the Map class will take care of resolving conflicts between the listeners.
+	 * All actions performed using Map are notified through MapEvent events. External viewers can listen 
+	 * to these events to update themselves.  
+	*/
 	public class Map extends Surface
 	{
-		// the surface of GeoFrame representing the map 
-		// shall be a separate object with his own methods (zoomMap, center...) 
-		// and properties (zoom, posX, currentCenterX...)
-		
-		// when clicking on toolBar buttons, the related map listeners will be triggered.
-		// than, when clicking on the map, these listeners will trigger the related action
-		// to be performed
-		
-		// the map surface, together with unscaledWidth and unscaledHeight of the canvas are passed to 
-		// the MainViewToolbarPanel through the Canvas(event.target)
 		public function Map()
 		{
 			super(); 
@@ -47,18 +51,49 @@ package org.un.cava.birdeye.geovis.core
 			reset();
 		}
 		
+		private var _zoom:Number = CREATION_ZOOM;
+		private var _defaultZoom:Number = 2;
+		/**
+		 * Used by all children of the GeoFrame to create themselves using a unique scaling reference,
+		 * thus avoiding differences between them. Only used during the creation phase. It will be dismissed 
+		 * with the new layered GeoFrame model
+		*/
+		public static const CREATION_ZOOM:Number = 1;
+
 		private var _unscaledMapWidth:Number = NaN;
 		private var _unscaledMapHeight:Number = NaN;
-		public const DEFAULT_ZOOM:Number = .65;
-		public static const CREATION_ZOOM:Number = 1;
-		
+
+		private var _zoomInSelected:Boolean = false;
+		private var _zoomOutSelected:Boolean = false;
+		private var _dragSelected:Boolean = false;
+		private var _centeringMapSelected:Boolean = false; 
+		private var _wheelZoomSelected:Boolean = false;
+		private var _skewMapVerticallySelected:Boolean = false;
+		private var _skewMapHorizontallySelected:Boolean = false;
+		private var _zoomRectangleSelected:Boolean = false;
+
 		private var _projection:String;
 		
-		public function set projection(val:String):void
+		public function get zoom():Number
 		{
-			_projection = val;
-			updateUnscaledSize();
-			dispatchEvent(new MapEvent(MapEvent.MAP_CHANGED));
+				return _zoom;
+		}
+
+		/**
+		 * This property updates the zoom value of the current map
+		*/
+		public function set zoom(value:Number):void
+		{
+			dispatchEvent(new MapEvent(MapEvent.MAP_ZOOM_CHANGED));
+			_zoom=value;
+		}
+	
+		/**
+		 * This property sets the default zoom value that will be used each time the map is reset
+		*/
+		public function set defaultZoom(val:Number):void
+		{
+			_defaultZoom = val;
 		}
 		
 		public function get projection():String
@@ -66,12 +101,14 @@ package org.un.cava.birdeye.geovis.core
 			return _projection;
 		}
 
-		public function updateUnscaledSize():void
-		{ 
-			var size:Rectangle = getBounds(this);
-			_unscaledMapWidth = size.width/_zoom;
-			_unscaledMapHeight = size.height/_zoom;
-trace(size);
+		/**
+		 * Set the name of the projection. When a new projection is set, the unscaled map sizes are recalculated
+		*/
+		public function set projection(val:String):void
+		{
+			_projection = val;
+			updateUnscaledSize();
+			dispatchEvent(new MapEvent(MapEvent.MAP_CHANGED));
 		}
 		
 		public function get unscaledMapWidth():Number
@@ -84,14 +121,6 @@ trace(size);
 				return _unscaledMapHeight;
 		}
 		
-		private var _zoomInSelected:Boolean = false;
-		private var _zoomOutSelected:Boolean = false;
-		private var _dragSelected:Boolean = false;
-		private var _centeringMapSelected:Boolean = false; 
-		private var _wheelZoomSelected:Boolean = false;
-		private var _skewMapVerticallySelected:Boolean = false;
-		private var _skewMapHorizontallySelected:Boolean = false;
-		private var _zoomRectangleSelected:Boolean = false;
 		public function get zoomInSelected():Boolean
 		{
 			return _zoomInSelected;
@@ -132,6 +161,10 @@ trace(size);
 			return _zoomRectangleSelected;
 		}
 
+		/**
+		 * When this property is true, it activates the listeners for zooming in with a double click and remove
+		 * the other double click listeners 
+		*/
 		public function set zoomInSelected(val:Boolean):void
 		{
 			_zoomInSelected = val;
@@ -147,6 +180,10 @@ trace(size);
 			}
 		}
 		
+		/**
+		 * When this property is true, it activates the listeners for zooming out with a double click and remove
+		 * the other double click listeners 
+		*/		
 		public function set zoomOutSelected(val:Boolean):void
 		{
 			_zoomOutSelected = val;
@@ -162,6 +199,10 @@ trace(size);
 			}
 		}
 
+		/**
+		 * When this property is true, it activates the listeners for dragging with a mouse down and remove
+		 * the other mouse down listeners 
+		*/		
 		public function set dragSelected(val:Boolean):void
 		{
 			_dragSelected = val;
@@ -178,6 +219,10 @@ trace(size);
 			}
 		}
 
+		/**
+		 * When this property is true, it activates the listeners for centering with a mouse double click and remove
+		 * the other mouse double click listeners 
+		*/		
 		public function set centeringMapSelected(val:Boolean):void
 		{
 			_centeringMapSelected = val;
@@ -193,6 +238,10 @@ trace(size);
 			}
 		}
 
+		/**
+		 * When this property is true, it activates the listeners for zooming in-out with the mouse wheeler 
+		 * and remove the other mouse wheeler click listeners 
+		*/		
 		public function set wheelZoomSelected(val:Boolean):void
 		{
 			_wheelZoomSelected = val;
@@ -208,6 +257,10 @@ trace(size);
 			}
 		}
 
+		/**
+		 * When this property is true, it activates the listeners for skewing vertically with the mouse wheeler 
+		 * and remove the other mouse wheeler click listeners 
+		*/		
 		public function set skewMapVerticallySelected(val:Boolean):void
 		{
 			_skewMapVerticallySelected = val;
@@ -223,6 +276,10 @@ trace(size);
 			}
 		}
 
+		/**
+		 * When this property is true, it activates the listeners for skewing horizontally with the mouse wheeler 
+		 * and remove the other mouse wheeler click listeners 
+		*/		
 		public function set skewMapHorizontallySelected(val:Boolean):void
 		{
 			_skewMapHorizontallySelected = val;
@@ -238,6 +295,10 @@ trace(size);
 			}
 		}
 		
+		/**
+		 * When this property is true, it activates the listeners for zooming in with the mouse down
+		 * and remove the other mouse down click listeners 
+		*/		
 		public function set zoomRectangleSelected(val:Boolean):void
 		{
 			_zoomRectangleSelected = val;
@@ -254,24 +315,18 @@ trace(size);
 			}
 		}
 
-		private var _zoom:Number;
-
-		public function set zoom(value:Number):void
-		{
-			dispatchEvent(new MapEvent(MapEvent.MAP_ZOOM_CHANGED));
-			_zoom=value;
-		}
-	
-		public function get zoom():Number
-		{
-				return _zoom;
-		}
-	
+		/**
+		 * @Private
+		 * Enable double click
+		*/		
 	    override protected function createChildren():void
 	    {
 		    doubleClickEnabled = true;
 		}
 		
+		/**
+		 * @Private
+		*/		
 		override protected function measure():void
 		{
 			super.measure();
@@ -279,6 +334,21 @@ trace(size);
 			minHeight = 100;
 		}
 		
+		/**
+		 * @Private
+		*/
+		private function updateUnscaledSize():void
+		{ 
+			var size:Rectangle = getBounds(this);
+			_unscaledMapWidth = size.width/_zoom;
+			_unscaledMapHeight = size.height/_zoom;
+trace(size);
+		}
+		
+		/**
+		 * @Private
+		 * Perform vertical skewing 
+		*/
 		private function skewMapVertically(e:MouseEvent):void
 		{
 			matr = transform.matrix;
@@ -290,6 +360,10 @@ trace(size);
 			transform.matrix = matr;
 		}
 		
+		/**
+		 * @Private
+		 * Perform horizontal skewing 
+		*/
 		private function skewMapHorizontally(e:MouseEvent):void
 		{
 			matr = transform.matrix;
@@ -301,6 +375,10 @@ trace(size);
 			transform.matrix = matr;
 		}
 		
+		/**
+		 * @Private
+		 * Perform zoom with double click 
+		*/
 		private function zoomDoubleClickMap(e:MouseEvent):void
 		{
 			if (zoomOutSelected)
@@ -317,6 +395,9 @@ trace(size);
 	    	centerMap(new Point(mouseX, mouseY));
 	    }
 	    
+		/**
+		 * Center the map on a specific point 
+		*/
 	    public function centerMap(newCenter:Point):void
 	    {
 	    	x = (parent.width/2 - newCenter.x * _zoom);
@@ -327,7 +408,11 @@ trace(size);
 	    }
 	    
 	    private var offsetX:Number, offsetY:Number;
-	    public function startMovingMap(e:MouseEvent):void
+		/**
+		 * @Private 
+		 * Starts map moving and trigger mouse move listener
+		*/
+	    private function startMovingMap(e:MouseEvent):void
 	    {
 	    	offsetX = e.stageX - x;
 	    	offsetY = e.stageY - y;
@@ -336,7 +421,11 @@ trace(size);
 	    	dispatchEvent(new MapEvent(MapEvent.MAP_DRAG_START));
 	    }
 	    
-	    public function stopMovingMap(e:MouseEvent):void
+		/**
+		 * @Private 
+		 * Stop map moving 
+		*/
+	    private function stopMovingMap(e:MouseEvent):void
 	    {
 	    	stage.removeEventListener(MouseEvent.MOUSE_MOVE, dragMap)
 	  		stage.removeEventListener(MouseEvent.MOUSE_UP, stopMovingMap);
@@ -344,7 +433,11 @@ trace(size);
 	    	dispatchEvent(new MapEvent(MapEvent.MAP_DRAG_COMPLETE));
 	    }
 	    
-	    public function dragMap(e:MouseEvent):void
+		/**
+		 * @Private 
+		 * Move the map while the mouse moves 
+		*/
+	    private function dragMap(e:MouseEvent):void
 	    {
 	    	x = e.stageX - offsetX;
 	    	y = e.stageY - offsetY;
@@ -353,6 +446,9 @@ trace(size);
 	    }
 	
 		private var zoomSlider:VSlider;
+		/** 
+		 * Zoom with sliders
+		*/
 		public function zoomingWithSlider(e:Event):void
 		{
 			var zoomValue:Number, sliderValue:Number;
@@ -374,7 +470,11 @@ trace(size);
 			dispatchEvent(new MapEvent(MapEvent.MAP_ZOOM_SLIDER));
 		}
 		
-	    public function zoomWheelMap(e:MouseEvent):void
+		/**
+		 * @Private 
+		 * Zoom with the mouse wheeler
+		*/
+	    private function zoomWheelMap(e:MouseEvent):void
 	    {
 	    	var value:Number;
 	    	if (e.delta > 0)
@@ -386,25 +486,11 @@ trace(size);
 	    	dispatchEvent(new MapEvent(MapEvent.MAP_ZOOM_WHEEL));
 	    }
 	    
-	    private var rectUpperLeftX:Number, rectUpperLeftY:Number;
-		private function startRectangle(e:MouseEvent):void
-		{
-			rectUpperLeftX = this.mouseX;
-			rectUpperLeftY = this.mouseY;
-			addEventListener(MouseEvent.MOUSE_MOVE, drawArea);
-		}
-		
-		private function drawArea(e:MouseEvent):void
-		{
-			graphics.clear();
-			graphics.moveTo(rectUpperLeftX, rectUpperLeftY);
-			graphics.beginFill(0xffffff, .3);
-trace (mouseX-rectUpperLeftX, mouseY-rectUpperLeftY);
-			graphics.drawRect(rectUpperLeftX, rectUpperLeftY, mouseX-rectUpperLeftX, mouseY - rectUpperLeftY);
-			graphics.endFill();
-		}
-		
 	    private var rectLowerRightX:Number, rectLowerRightY:Number;
+		/**
+		 * @Private 
+		 * Zoom in on a specified rectangle selected with the mouse
+		*/
 		private function zoomOnRectangle(e:MouseEvent):void
 		{
 			rectLowerRightX = this.mouseX;
@@ -415,6 +501,34 @@ trace (mouseX-rectUpperLeftX, mouseY-rectUpperLeftY);
 			removeEventListener(MouseEvent.MOUSE_MOVE, drawArea);
 		}
 		
+	    private var rectUpperLeftX:Number, rectUpperLeftY:Number;
+		/**
+		 * @Private 
+		 * Start the rectangle selection, used for the zoomOnRectangle
+		*/
+		private function startRectangle(e:MouseEvent):void
+		{
+			rectUpperLeftX = this.mouseX;
+			rectUpperLeftY = this.mouseY;
+			addEventListener(MouseEvent.MOUSE_MOVE, drawArea);
+		}
+		
+		/**
+		 * @Private 
+		 * Draw the rectangle selection, used for the zoomOnRectangle
+		*/
+		private function drawArea(e:MouseEvent):void
+		{
+			graphics.clear();
+			graphics.moveTo(rectUpperLeftX, rectUpperLeftY);
+			graphics.beginFill(0xff0000, .3);
+			graphics.drawRect(rectUpperLeftX, rectUpperLeftY, mouseX-rectUpperLeftX, mouseY - rectUpperLeftY);
+			graphics.endFill();
+		}
+		
+		/**
+		 * Zoom on a specified lat-long rectangle
+		*/
 	    public function zoomMapLatLong(upperLeftLat:Number, upperLeftLong:Number, lowerRightLat:Number, lowerRightLong:Number):void
 	    {
 	    	var leftLatLong:LatLong = new LatLong();
@@ -433,17 +547,25 @@ trace (mouseX-rectUpperLeftX, mouseY-rectUpperLeftY);
 	    	zoomMapScaledRectangle(leftLatLong.xval, leftLatLong.yval, rightLatLong.xval, rightLatLong.yval);
 	    }
 	    
-	    public function zoomMapScaledRectangle(upperLeftX:Number, upperLeftY:Number, lowerRightX:Number, lowerRightY:Number):void
+		/**
+		 * @Private
+		 * Zoom on a specified x,y rectangle (where x and y could be scaled)
+		*/
+	    private function zoomMapScaledRectangle(upperLeftX:Number, upperLeftY:Number, lowerRightX:Number, lowerRightY:Number):void
 	    {
+	    	// this has to be improved .....
 	    	reset();
- 	    	upperLeftX = upperLeftX / _zoom  * DEFAULT_ZOOM;
-	    	upperLeftY = upperLeftY / _zoom * DEFAULT_ZOOM;
-	    	lowerRightX = lowerRightX / _zoom * DEFAULT_ZOOM;
-	    	lowerRightY = lowerRightY / _zoom * DEFAULT_ZOOM;
+ 	    	upperLeftX = upperLeftX / _zoom  * _defaultZoom;
+	    	upperLeftY = upperLeftY / _zoom * _defaultZoom;
+	    	lowerRightX = lowerRightX / _zoom * _defaultZoom;
+	    	lowerRightY = lowerRightY / _zoom * _defaultZoom;
 
 	    	zoomMapRectangle(upperLeftX, upperLeftY, lowerRightX, lowerRightY);
 	    }
 	    
+		/**
+		 * Zoom on a specified x,y based rectangle (where x and y are unscaled)
+		*/
 	    public function zoomMapRectangle(upperLeftX:Number, upperLeftY:Number, lowerRightX:Number, lowerRightY:Number):void
 	    {
 	    	var rect:Rectangle = new Rectangle(0, 0, Math.abs(upperLeftX-lowerRightX), Math.abs(upperLeftY-lowerRightY));
@@ -458,19 +580,20 @@ trace(centerPoint);
 	    	zoomMap(zoomValue, centerPoint);
 	    } 
 	    
+		/**
+		 * Reset the map to the initial zooming and positioning, the zooming is based on defaultZoom
+		 * and positioning is the center of the map
+		*/
 	    public function reset():void
 	    {
-/* 	    	matr.identity();
-	    	matr.scale(DEFAULT_ZOOM, DEFAULT_ZOOM);
-	    	transform.matrix = matr;
-	    	zoom = DEFAULT_ZOOM;
-	    	dispatchEvent(new MapEvent(MapEvent.MAP_ZOOM_COMPLETE)); */
-	    	
 	    	centerMap(new Point(unscaledMapWidth/2,unscaledMapHeight/2));
-	    	zoomMap(1/_zoom * DEFAULT_ZOOM, new Point(currentCenterX,currentCenterY));
+	    	zoomMap(1/_zoom * _defaultZoom, new Point(currentCenterX,currentCenterY));
 	    }
 	    
 	    private var matr:Matrix = new Matrix();
+		/**
+		 * Zoom the map with a zoomValue on a specific point regPoint
+		*/
 	    public function zoomMap(zoomValue:Number, regPoint:Point):void
 	    {
 	    	// the absolute distance of the surface origins (0,0) from the the origins 
