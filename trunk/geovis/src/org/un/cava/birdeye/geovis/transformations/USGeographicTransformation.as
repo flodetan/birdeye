@@ -27,7 +27,7 @@
 
 package org.un.cava.birdeye.geovis.transformations
 {
-
+	import flash.geom.Point;
 	/**
 	* Class for geographic location referencing via latitude and longitude
 	**/	 
