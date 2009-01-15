@@ -271,6 +271,14 @@ package org.un.cava.birdeye.geovis.core
 			return _projection;
 		}
 		
+		
+		private var _autosize:String = "fit-height";
+		[Inspectable(enumeration="fit-height,fit-width")]
+		public function set autosize(val:String):void
+		{
+			_autosize = val;
+		}
+		
     	/**
      	*  Constructor.
      	*/
@@ -501,7 +509,14 @@ trace (getStyle("stroke"));
 			backGroundPoly.width = surf.unscaledMapWidth;
 			backGroundPoly.height = surf.unscaledMapHeight;
 			
-			surf.defaultZoom = unscaledHeight/surf.unscaledMapHeight;
+			switch (_autosize)
+			{
+				case "fit-height":
+					surf.defaultZoom = unscaledHeight/surf.unscaledMapHeight;
+				break;
+				case "fit-width":
+					surf.defaultZoom = unscaledHeight/surf.unscaledMapHeight;
+			}
 
 			dispatchEvent(new GeoCoreEvents(GeoCoreEvents.DRAW_BASEMAP_COMPLETE));
 		}
