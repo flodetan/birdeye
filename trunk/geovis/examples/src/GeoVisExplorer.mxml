@@ -252,7 +252,7 @@
 			<mx:CheckBox id="showFlows" x="625" top="0" label="Journey of Harmony:" labelPlacement="left" selected="false" change="toggleFlows();" />
 		
 		<!-- Need to add property for perspective, e.g. 2d, 3dPlane, 3dSphere -->
-		<geomap:WorldMap 
+		<geomap:WorldMap autosize="fit-width"
 			width="720" height="370" 
 			visible="{isLoading}" projection="Miller cylindrical" id="myMap" 
 			ItemClick="showDetails(event)" DrawBaseMapComplete="{isLoading = true}"  
@@ -316,7 +316,9 @@
 			
 		</geomap:WorldMap>
 		
-		<tools:DragRectangleView x="550" y="280" scale="5"/>
+		<tools:DragRectangleView x="550" y="280" scale="5" 
+			backgroundColor="0xffffff" backgroundAlpha=".6" 
+				borderColor="0xffd800" borderAlpha="1" dragRectangleColor="0xff0000" dragRectangleAlpha=".4"/>
 
 		<mx:ViewStack id="myVS" width="100%" selectedIndex="1" creationPolicy="all" horizontalScrollPolicy="off"  visible="{isLoading}" >
 			<mx:Canvas width="100%" horizontalScrollPolicy="off">

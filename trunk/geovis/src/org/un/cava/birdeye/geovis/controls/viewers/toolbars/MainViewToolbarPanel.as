@@ -42,14 +42,35 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 
 	public class MainViewToolbarPanel extends Panel
 	{
-		private var myRestoreHeight:int;
-		private var isMinimized:Boolean = false; 
+	    private var map:Map;
 
-		// Offset positions used when moving the toolbar on dragging/dropping
-	    private var offsetX:Number, offsetY:Number;
 	    // Keep the starting point position when dragging, if mouse goes out of the parents' view
 	    // than the toolbar will be repositioned to this point
 	    private var startDraggingPoint:Point;
+		private var myRestoreHeight:int;
+		private var isMinimized:Boolean = false; 
+		// Offset positions used when moving the toolbar on dragging/dropping
+	    private var offsetX:Number, offsetY:Number;
+
+		private var isCenteringMap:CheckBox;
+		private var zoomOut:CheckBox;
+		private var zoomIn:CheckBox;
+		private var wheelZoom:CheckBox;
+		private var dragBox:CheckBox;
+		private var wheelSkewVertically:CheckBox;
+		private var wheelSkewHorizontally:CheckBox;
+		private var zoomRect:CheckBox;
+		private var resetMap:CheckBox;
+
+		static private const CENTER:String = "center";
+		static private const ZOOM_OUT:String = "zoom out";
+		static private const ZOOM_IN:String = "zoom in";
+		static private const WHEEL_ZOOM:String = "wheel zoom";
+		static private const DRAG_MAP:String = "drag map";
+		static private const WHEEL_SKEW_VERTICALLY:String = "skew map V";
+		static private const WHEEL_SKEW_HORIZONTALLY:String = "skew map H";
+		static private const ZOOM_RECTANGLE:String = "zoom rectangle";
+		static private const RESET_MAP:String = "reset map";
 
 		private var _draggable:Boolean = false;
 		
@@ -193,22 +214,6 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    Application.application.addEventListener(MapEvent.MAP_INSTANTIATED, init, true)
 		}
 		
-		override protected function measure():void
-		{
-			super.measure();
-			minWidth = IconsUtils.size + 5;
-			minHeight = IconsUtils.size * numChildren + 20;
-		}
-
-		private var isCenteringMap:CheckBox;
-		private var zoomOut:CheckBox;
-		private var zoomIn:CheckBox;
-		private var wheelZoom:CheckBox;
-		private var dragBox:CheckBox;
-		private var wheelSkewVertically:CheckBox;
-		private var wheelSkewHorizontally:CheckBox;
-		private var zoomRect:CheckBox;
-		private var resetMap:CheckBox;
 		private function init(event:Event):void
 		{
 			// Add the resizing event handler.
@@ -222,6 +227,13 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 				parent.setChildIndex(this, parent.numChildren-1);
  		}
  		
+		override protected function measure():void
+		{
+			super.measure();
+			minWidth = IconsUtils.size + 5;
+			minHeight = IconsUtils.size * numChildren + 20;
+		}
+
  		private function getMap(e:MapEvent):void
  		{
  			map = Map(e.target);
@@ -299,16 +311,6 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	    	// dispatch moved toolbar event
 	    }
 	    
-	    private var map:Map;
-		static private const CENTER:String = "center";
-		static private const ZOOM_OUT:String = "zoom out";
-		static private const ZOOM_IN:String = "zoom in";
-		static private const WHEEL_ZOOM:String = "wheel zoom";
-		static private const DRAG_MAP:String = "drag map";
-		static private const WHEEL_SKEW_VERTICALLY:String = "skew map V";
-		static private const WHEEL_SKEW_HORIZONTALLY:String = "skew map H";
-		static private const ZOOM_RECTANGLE:String = "zoom rectangle";
-		static private const RESET_MAP:String = "reset map";
 		private function toolbarListenersHandler(e:Event):void
 		{
 			var selectedTool:String = CheckBox(e.target).name; 
@@ -344,7 +346,6 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		   		break;
 	  		} 
 		}
-		
 		
 		private function tooltipHandler(e:MouseEvent):void
 		{
@@ -435,6 +436,7 @@ class BaseIcon extends ProgrammaticSkin
 		}
 	}
 }
+
 class ZoomInIcon extends BaseIcon
 {
 	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
@@ -454,7 +456,6 @@ class ZoomInIcon extends BaseIcon
 		graphics.lineTo(IconsUtils.size/2,IconsUtils.size-3);
 	}
 }
-
 
 class ZoomOutIcon extends BaseIcon
 {
@@ -498,19 +499,19 @@ class WheelZoomIcon extends BaseIcon
 	{
 		super.updateDisplayList(unscaledWidth, unscaledHeight);
 		graphics.moveTo(0,0);
-		graphics.lineStyle(2,c,1);
+		graphics.lineStyle(3,c,1);
 		graphics.lineTo(IconsUtils.size,IconsUtils.size);
 
 		graphics.moveTo(IconsUtils.size/2,0);
-		graphics.lineStyle(2,c,1);
+		graphics.lineStyle(3,c,1);
 		graphics.lineTo(IconsUtils.size/2,IconsUtils.size);
 
 		graphics.moveTo(0,IconsUtils.size/2);
-		graphics.lineStyle(2,c,1);
+		graphics.lineStyle(3,c,1);
 		graphics.lineTo(IconsUtils.size,IconsUtils.size/2);
 
 		graphics.moveTo(0,0);
-		graphics.lineStyle(2,c,1);
+		graphics.lineStyle(3,c,1);
 		graphics.lineTo(IconsUtils.size,IconsUtils.size);
 	}
 }

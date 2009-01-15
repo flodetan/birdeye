@@ -31,10 +31,10 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	
 	import mx.controls.VSlider;
 	import mx.core.Application;
-	import mx.events.FlexEvent;
 	
 	import org.un.cava.birdeye.geovis.core.Map;
 	import org.un.cava.birdeye.geovis.events.MapEvent;
+	import org.un.cava.birdeye.geovis.views.maps.world.WorldMap;
 	
 	public class ZoomSliderView extends VSlider
 	{
@@ -56,9 +56,9 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			map = Map(e.target);
 		    value = map.zoom;
 			map.addEventListener(MapEvent.MAP_ZOOM_COMPLETE, updateZoomValue);
-//			map.addEventListener(MapEvent.MAP_CHANGED, updateZoomValue);
 		    addEventListener(Event.CHANGE, sliderZoomHandler);
-			parent.setChildIndex(this, parent.numChildren-1);
+			if (parent is WorldMap) 
+				parent.setChildIndex(this, parent.numChildren-1);
 		}
 		
 		private function sliderZoomHandler(e:Event):void

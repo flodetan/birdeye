@@ -46,6 +46,8 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	
 	public class DragRectangleView extends UIComponent
 	{ 
+	    private var map:Map;
+
 		private var draggableRect:RectangleView;
 		private var mapCopy:BitmapData;
 		private var mapCopyCont:Bitmap;
@@ -54,11 +56,55 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		
 		private var _scale:Number = 5;
 		
+		private var _backgroundColor:Number = RectUtils.BLACK;
+		private var _borderColor:Number = RectUtils.RED;
+		private var _dragRectangleColor:Number = RectUtils.YELLOW;
+		private var _backgroundAlpha:Number = 0.5;
+		private var _borderAlpha:Number = 0.5;
+		private var _dragRectangleAlpha:Number = 0.5;
+		
 		public function get scale():Number
 		{
 			return _scale;
 		}
 		
+		public function set backgroundColor(val:Number):void
+		{
+			_backgroundColor = val;
+		}
+		
+		public function set borderColor(val:Number):void
+		{
+			_borderColor = val;
+		}
+		
+		public function set dragRectangleColor(val:Number):void
+		{
+			_dragRectangleColor = val;
+		}
+		
+		public function set backgroundAlpha(val:Number):void
+		{
+			if (val <= 1 && val >= 0)
+				_backgroundAlpha = val;
+		}
+
+		public function set borderAlpha(val:Number):void
+		{
+			if (val <= 1 && val >= 0)
+				_borderAlpha = val;
+		}
+
+		public function set dragRectangleAlpha(val:Number):void
+		{
+			if (val <= 1 && val >= 0)
+				_dragRectangleAlpha = val;
+		}
+
+		/**
+		 * Set the scale value. The final size of this controller will be based on the map size
+		 * reduced by this value  
+		 */
 		public function set scale(val:Number):void
 		{
 			if (val >= 0)
@@ -73,44 +119,58 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    Application.application.addEventListener(MapEvent.MAP_CHANGED, init, true);
 		}
 		
+		/**
+		 * @Private
+		 * Register the map object and calculate this.sizes  
+		 */
+		private function init(event:Event):void
+		{
+			// Add the resizing event handler.
+
+			map = Map(event.target);
+			
+			// calculate the this.width and this.height based on a scale of the original map size 
+			width = map.unscaledMapWidth / scale;
+			height = map.unscaledMapHeight / scale;
+			drawAll();
+		}
+	
+		/**
+		 * @Private
+		 * Create draggableRect and its mask 
+		 */
  		override protected function createChildren():void
 		{
 			super.createChildren();
 			draggableRect = new RectangleView();
 			
 			msk = new Shape();
-			
 			draggableRect.mask = msk;
 		}
 		
-		private function init(event:Event):void
-		{
-			// Add the resizing event handler.
-
-			map = Map(event.target); 
-			width = map.unscaledMapWidth / scale;
-			height = map.unscaledMapHeight / scale;
-			drawAll();
-		}
-	
+		/**
+		 * @Private
+		 * Draw all graphics 
+		 */
 		private function drawAll():void
 		{
-			for (var childIndex:Number = 0; childIndex <= numChildren-1; childIndex++)
-				removeChildAt(childIndex);
-			
 			clearAll();
-
+			
+			// draw the rectangle mask so that the draggable rectangle 
+			// is hidden when going out of the rectangle 
 			msk.graphics.moveTo(0,0);
 			msk.graphics.beginFill(0xffffff,0);
 			msk.graphics.drawRect(0,0,width,height);
 			msk.graphics.endFill();
 			addChild(msk);
 
+			// fill the rectangle 
 			graphics.moveTo(0,0);
-			graphics.beginFill(RectUtils.BLACK,.9);
+			graphics.beginFill(_backgroundColor,_backgroundAlpha);
 			graphics.drawRect(0,0,width,height);
 			graphics.endFill();
 
+			// get the map-mask sizes, needed to size the draggable rectangle 
 			var tempMask:DisplayObject = DisplayObject(map.mask);
 			var maskBounds:Rectangle;
 			if (map.mask != null)
@@ -119,11 +179,13 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 				maskBounds = map.parent.getBounds(map.parent);
 			maskWidth = maskBounds.width;
 			maskHeight = maskBounds.height;
+
  			// map.mask must be temporarily set to null because otherwise the bitmapdata
  			// will cut the map on the top and left sides, probably because of a bug either 
  			// in the framework
  			map.mask = null;
 
+			// create the bitmap of the map and scale using the scale property value 
 			var sourceRect:Rectangle = new Rectangle(0,0,width,height);
 			if (mapCopy != null)
 				mapCopy.dispose();
@@ -134,8 +196,9 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			addChild(mapCopyCont);
 			map.mask = tempMask;
 
+			// draws rectangle border  
 			graphics.moveTo(0,0);
-			graphics.lineStyle(2,RectUtils.RED,.4);
+			graphics.lineStyle(2,_borderColor,_borderAlpha);
 			graphics.lineTo(width,0);
 			graphics.lineTo(width,height);
 			graphics.lineTo(0,height);
@@ -143,9 +206,15 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			
 			draggableRect = new RectangleView();
 			draggableRect.mask = msk;
+			// calculate the draggableRect.width and draggableRect.height based on the original map-mask size
+			// plus the scale property value and current map zoom value  
 			var w:Number = maskWidth/map.zoom/scale;
 			var h:Number = maskHeight/map.zoom/scale;
-			draggableRect.draw(w,h);
+			draggableRect.graphics.moveTo(0,0);
+			draggableRect.graphics.beginFill(_dragRectangleColor,_dragRectangleAlpha);
+			draggableRect.graphics.drawRect(0,0,w,h);
+			draggableRect.graphics.endFill();
+
 			draggableRect.width = w;
 			draggableRect.height = h;
 			draggableRect.x = Math.max(0,-map.x/map.zoom)/scale;
@@ -153,13 +222,35 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			draggableRect.addEventListener(RectangleView.DRAGGING, moveMap);
 			addChild(draggableRect);
 
+			// register listeners
 			registerMapListeners();
+
+			// if parent is the worldmap itself, than put this on top, so that it's viewable
 			if (parent is WorldMap) 
 				parent.setChildIndex(this, parent.numChildren-1);
  		}
  		
+		/**
+		 * @Private
+		 * Register listeners 
+		 */
+		private function registerMapListeners():void
+		{
+			draggableRect.addEventListener(RectangleView.DRAGGING, moveMap);
+			map.addEventListener(MapEvent.MAP_ZOOM_COMPLETE, updateValuesOnZoom);
+			map.addEventListener(MapEvent.MAP_MOVING, updateValuesOnDragOrCentering);
+		    map.addEventListener(MapEvent.MAP_CENTERED, updateValuesOnDragOrCentering);
+		}
+
+		/**
+		 * @Private
+		 * Remove and clear everything
+		 */
  		private function clearAll():void
  		{
+			for (var childIndex:Number = 0; childIndex <= numChildren-1; childIndex++)
+				removeChildAt(childIndex);
+			
 			if (msk != null)
 				msk.graphics.clear();
 			graphics.clear();
@@ -169,7 +260,10 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 				draggableRect.graphics.clear();
  		}
 
-	    private var map:Map;
+		/**
+		 * @Private
+		 * Move real map along with the rectangle dragging 
+		 */
 	    private function moveMap(e:Event):void
 	    {
 	    	var xPos:Number, yPos:Number;
@@ -179,31 +273,29 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	    	map.x = -xPos*scale*map.zoom;
 	    	map.y = -yPos*scale*map.zoom;
 	    }
-		
+	    
+		/**
+		 * @Private
+		 * Update the zoom values according to the new map zoom value.
+		 */
 		private function updateValuesOnZoom(e:MapEvent):void
 		{
 			map = Map(e.target);
-			draggableRect.width = maskWidth/map.zoom/scale;//map.parent.width/map.zoom/scale;
-			draggableRect.height = maskHeight/map.zoom/scale;//map.parent.height/map.zoom/scale;
+			draggableRect.width = maskWidth/map.zoom/scale;
+			draggableRect.height = maskHeight/map.zoom/scale;
 			draggableRect.x = -map.x/map.zoom/scale;
 			draggableRect.y = -map.y/map.zoom/scale;
-trace (map.zoom, draggableRect.width, draggableRect.height);
 		}
 		
+		/**
+		 * @Private
+		 * Update the position values according to the new map positioning.
+		 */
 		private function updateValuesOnDragOrCentering(e:MapEvent):void
 		{
 			map = Map(e.target);
-trace (map.zoom, draggableRect.width, draggableRect.height, map.parent.width, map.parent.height);
 			draggableRect.x = -map.x/map.zoom/scale;
 			draggableRect.y = -map.y/map.zoom/scale;
-		}
-
-		private function registerMapListeners():void
-		{
-			draggableRect.addEventListener(RectangleView.DRAGGING, moveMap);
-			map.addEventListener(MapEvent.MAP_ZOOM_COMPLETE, updateValuesOnZoom);
-			map.addEventListener(MapEvent.MAP_MOVING, updateValuesOnDragOrCentering);
-		    map.addEventListener(MapEvent.MAP_CENTERED, updateValuesOnDragOrCentering);
 		}
 	}
 }
@@ -230,14 +322,6 @@ class RectangleView extends Sprite
 	{
 		super();
 		addEventListener(MouseEvent.MOUSE_DOWN, moveRectangle);
-	}
-	
-	internal function draw(w:Number,h:Number):void
-	{
-		graphics.moveTo(0,0);
-		graphics.beginFill(RectUtils.YELLOW,.5);
-		graphics.drawRect(0,0,w,h);
-		graphics.endFill();
 	}
 	
 	// Resize panel event handler.
