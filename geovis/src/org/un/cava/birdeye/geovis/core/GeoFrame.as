@@ -311,12 +311,8 @@ package org.un.cava.birdeye.geovis.core
 
 		    if (isProjectionChanged) {
 	// --------------------
- 	 			var matr:Matrix = surf.transform.matrix;
-	  	    	matr.identity();
-		    	surf.zoom = Map.CREATION_ZOOM;
-		    	surf.scaleX = surf.scaleY = surf.zoom;
-	 	    	matr.scale(surf.zoom, surf.zoom);
-		    	surf.transform.matrix = matr; 
+				surf.transform.matrix = new Matrix();
+		    	surf.scaleX = surf.scaleY = surf.zoom = Map.CREATION_ZOOM;
  	 // remove above when symbols scaling works well in any zooming scenario
 	 // to do:
 	 // scale symbols accordingly
@@ -338,7 +334,6 @@ trace (unscaledWidth, unscaledHeight);
 				maskCreated = true;
 	  			this.setChildIndex(maskCont, 0);
 			} 
-			
 		}
 		
 		//--------------------------------------------------------------------------
@@ -392,9 +387,14 @@ trace (getStyle("stroke"));
 			
 			// background is necessary to allow events that trigger dragging, zooming, 
 			// centering...all over the map and not only where countries are filled out with some fill 
-			// check after the for loop to find the last instructions to define the background size
+			// check after the for...loop to find the last instructions to define the background size
 		    var backGround:GeometryGroup = new GeometryGroup(); 
 		    surf.graphicsCollection.addItem(backGround);
+		    var backGroundPoly:RegularRectangle = 
+		    	new RegularRectangle(0,0,width, height);
+		    backGroundPoly.fill = new SolidFill(0xffffff,0);
+		    backGround.geometryCollection.addItem(backGroundPoly);
+		    backGround.target = surf;
 
 			for each (var country:String in listOfCountry)
 			{
@@ -487,15 +487,21 @@ trace (getStyle("stroke"));
 			
 			// the projection name is registered inside map
 			// this will also updates the unscaled map size with the proper values
-			// used for the background size 
+			// that will be used for the background size 
 			surf.projection = _projection;
-
-			// complete map background to allow events all over the map
-		    var backGroundPoly:RegularRectangle = 
-		    	new RegularRectangle(0,0,surf.unscaledMapWidth,surf.unscaledMapHeight);
-		    backGroundPoly.fill = new SolidFill(0xffffff,0);
-		    backGround.geometryCollection.addItem(backGroundPoly);
-		    backGround.target = surf;
+			
+			// update the background size with the new surface unscaled size. I would have liked to put this into Map
+			// and creating the background directly there and appending it to the map as child 0, but the setChildIndex
+			// doesn't work and the background is put on top of the Map, thus removing all events over the countries.
+			// however, this will change with the new model structure
+			backGroundPoly = 
+				RegularRectangle(
+					GeometryGroup(
+						surf.graphicsCollection.getItemAt(0)).geometryCollection.getItemAt(0));
+			backGroundPoly.width = surf.unscaledMapWidth;
+			backGroundPoly.height = surf.unscaledMapHeight;
+			
+			surf.defaultZoom = unscaledHeight/surf.unscaledMapHeight;
 
 			dispatchEvent(new GeoCoreEvents(GeoCoreEvents.DRAW_BASEMAP_COMPLETE));
 		}
