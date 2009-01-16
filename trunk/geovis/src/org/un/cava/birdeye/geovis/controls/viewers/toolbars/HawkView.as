@@ -203,6 +203,8 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
  			switch (_shape)
  			{
  				case CIRCLE:
+ 					// radius size is width
+ 					height = width;
 					msk.graphics.moveTo(x,y);
 		 			msk.graphics.beginFill(_backgroundColor, _backgroundAlpha);
 		 			msk.graphics.drawCircle(width/2,height/2,width/2);
