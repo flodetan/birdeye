@@ -50,17 +50,14 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 
 		private var mapCopy:BitmapData;
 		private var mapCopyCont:Bitmap;
-		private var cont:Sprite; 
 	    private var maskWidth:Number = NaN, maskHeight:Number = NaN;
 		
 		private var _zoom:Number = 5;
 		
 		private var _backgroundColor:Number = HawkUtils.BLACK;
 		private var _borderColor:Number = HawkUtils.RED;
-		private var _dragRectangleColor:Number = HawkUtils.YELLOW;
 		private var _backgroundAlpha:Number = 0.5;
 		private var _borderAlpha:Number = 0.5;
-		private var _dragRectangleAlpha:Number = 0.5;
 		
 		public function set zoom(val:Number):void
 		{
@@ -76,12 +73,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		{
 			_borderColor = val;
 		}
-		
-		public function set dragRectangleColor(val:Number):void
-		{
-			_dragRectangleColor = val;
-		}
-		
+				
 		public function set backgroundAlpha(val:Number):void
 		{
 			if (val <= 1 && val >= 0)
@@ -92,12 +84,6 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		{
 			if (val <= 1 && val >= 0)
 				_borderAlpha = val;
-		}
-
-		public function set dragRectangleAlpha(val:Number):void
-		{
-			if (val <= 1 && val >= 0)
-				_dragRectangleAlpha = val;
 		}
 
 		/**
@@ -126,7 +112,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 
 			map = Map(event.target);
 			
-			Application.application.addEventListener(MouseEvent.CLICK, drawAll, true);
+			map.addEventListener(MouseEvent.CLICK, drawAll, true);
 		}
 	
 		/**
