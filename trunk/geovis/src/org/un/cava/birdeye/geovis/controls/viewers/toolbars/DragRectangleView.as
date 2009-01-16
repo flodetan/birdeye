@@ -52,7 +52,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		private var mapCopy:BitmapData;
 		private var mapCopyCont:Bitmap;
 		private var msk:Shape;
-	    private var maskWidth:Number, maskHeight:Number;
+	    private var maskWidth:Number = NaN, maskHeight:Number = NaN;
 		
 		private var _scale:Number = 5;
 		
@@ -111,11 +111,10 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 				_scale = val;
 		}
 
-		// Add the creationCOmplete event handler.
 		public function DragRectangleView()
 		{
 			super(); 
-		    Application.application.addEventListener(MapEvent.MAP_INSTANTIATED, init, true);
+//		    Application.application.addEventListener(MapEvent.MAP_INSTANTIATED, init, true);
 		    Application.application.addEventListener(MapEvent.MAP_CHANGED, init, true);
 		}
 		
@@ -175,10 +174,11 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			var maskBounds:Rectangle;
 			if (map.mask != null)
 				maskBounds = map.mask.getBounds(map.mask);
-			else
+			else if (map.parent != null)
 				maskBounds = map.parent.getBounds(map.parent);
-			maskWidth = maskBounds.width;
-			maskHeight = maskBounds.height;
+			
+			maskWidth = (maskBounds.width == 0) ? NaN : maskBounds.width;
+			maskHeight = (maskBounds.height == 0) ? NaN : maskBounds.height;
 
  			// map.mask must be temporarily set to null because otherwise the bitmapdata
  			// will cut the map on the top and left sides, probably because of a bug either 
@@ -212,7 +212,10 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			var h:Number = maskHeight/map.zoom/scale;
 			draggableRect.graphics.moveTo(0,0);
 			draggableRect.graphics.beginFill(_dragRectangleColor,_dragRectangleAlpha);
-			draggableRect.graphics.drawRect(0,0,w,h);
+			if (!isNaN(maskWidth) && !isNaN(maskHeight))
+				draggableRect.graphics.drawRect(0,0,w,h);
+			else
+				draggableRect.graphics.drawRect(0,0,width,height);
 			draggableRect.graphics.endFill();
 
 			draggableRect.width = w;
@@ -281,6 +284,15 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		private function updateValuesOnZoom(e:MapEvent):void
 		{
 			map = Map(e.target);
+			if (isNaN(maskWidth) || isNaN(maskHeight)) {
+				var maskBounds:Rectangle;
+				if (map.mask != null)
+					maskBounds = map.mask.getBounds(map.mask);
+				else if (map.parent != null)
+					maskBounds = map.parent.getBounds(map.parent);
+				maskWidth = maskBounds.width;
+				maskHeight = maskBounds.height;
+			}
 			draggableRect.width = maskWidth/map.zoom/scale;
 			draggableRect.height = maskHeight/map.zoom/scale;
 			draggableRect.x = -map.x/map.zoom/scale;
@@ -294,6 +306,15 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		private function updateValuesOnDragOrCentering(e:MapEvent):void
 		{
 			map = Map(e.target);
+			if (isNaN(maskWidth) || isNaN(maskHeight)) {
+				var maskBounds:Rectangle;
+				if (map.mask != null)
+					maskBounds = map.mask.getBounds(map.mask);
+				else if (map.parent != null)
+					maskBounds = map.parent.getBounds(map.parent);
+				maskWidth = maskBounds.width;
+				maskHeight = maskBounds.height;
+			}
 			draggableRect.x = -map.x/map.zoom/scale;
 			draggableRect.y = -map.y/map.zoom/scale;
 		}
