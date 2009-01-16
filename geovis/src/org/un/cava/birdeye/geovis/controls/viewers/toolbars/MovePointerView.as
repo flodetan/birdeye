@@ -107,7 +107,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		}
 
 		/**
-		 * Set the scale value. The final size of this controller will be based on the map size
+		 * Set the scale value. The final size of this controller will be based on the parent or mask size 
 		 * reduced by this value  
 		 */
 		public function set scale(val:Number):void
@@ -124,15 +124,12 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		
 		/**
 		 * @Private
-		 * Register the map object and calculate this.sizes  
+		 * Register the map object  
 		 */
 		private function init(event:Event):void
 		{
-			// Add the resizing event handler.
-
 			map = Map(event.target);
 			
-			// calculate the this.width and this.height based on a scale of the original map size 
 			drawAll();
 		}
 		
@@ -221,9 +218,9 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			var right:Sprite = new Sprite();
 			right.buttonMode = true;
 			right.name = rightName;
-			right.graphics.moveTo(width, lineLenght + _space);
+			right.graphics.moveTo(width-_thick/2, lineLenght + _space);
 			right.graphics.lineStyle(_thick,_borderColor, _borderAlpha);
-			right.graphics.lineTo(width, height - lineLenght - _space);
+			right.graphics.lineTo(width-_thick/2, height - lineLenght - _space);
 			right.graphics.moveTo(width-_thick,height/2);
 			right.graphics.beginFill(MoveUtils.BLACK,1);
 			right.graphics.drawCircle(width-_thick,height/2,_thick);
@@ -236,8 +233,8 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			upRightCorner.name = upRightName;
 			upRightCorner.graphics.moveTo(width - lineLenght + _space, 0);
 			upRightCorner.graphics.lineStyle(_thick,_borderColor, _borderAlpha);
-			upRightCorner.graphics.lineTo(width, 0);
-			upRightCorner.graphics.lineTo(width, lineLenght - _space);
+			upRightCorner.graphics.lineTo(width-_thick/2, 0);
+			upRightCorner.graphics.lineTo(width-_thick/2, lineLenght - _space);
 			upRightCorner.graphics.moveTo(width-_thick,_thick);
 			upRightCorner.graphics.beginFill(MoveUtils.BLACK,1);
 			upRightCorner.graphics.drawCircle(width-_thick,_thick,_thick);
@@ -248,9 +245,9 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			var lowRightCorner:Sprite = new Sprite();
 			lowRightCorner.buttonMode = true;
 			lowRightCorner.name = lowRightName;
-			lowRightCorner.graphics.moveTo(width, height - lineLenght + _space);
+			lowRightCorner.graphics.moveTo(width-_thick/2, height - lineLenght + _space);
 			lowRightCorner.graphics.lineStyle(_thick,_borderColor, _borderAlpha);
-			lowRightCorner.graphics.lineTo(width,height);
+			lowRightCorner.graphics.lineTo(width-_thick/2,height);
 			lowRightCorner.graphics.lineTo(width - lineLenght + _space, height);
 			lowRightCorner.graphics.moveTo(width-_thick,height-_thick);
 			lowRightCorner.graphics.beginFill(MoveUtils.BLACK,1);
@@ -262,9 +259,9 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			var down:Sprite = new Sprite();
 			down.buttonMode = true;
 			down.name = downName;
-			down.graphics.moveTo(width - lineLenght - _space, height);
+			down.graphics.moveTo(width - lineLenght - _space, height-_thick);
 			down.graphics.lineStyle(_thick,_borderColor, _borderAlpha);
-			down.graphics.lineTo(lineLenght + _space, height);
+			down.graphics.lineTo(lineLenght + _space, height-_thick);
 			down.graphics.moveTo(width/2,height-_thick);
 			down.graphics.beginFill(MoveUtils.BLACK,1);
 			down.graphics.drawCircle(width/2,height-_thick,_thick);
