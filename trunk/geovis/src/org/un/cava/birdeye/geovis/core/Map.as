@@ -439,12 +439,32 @@ trace(size);
 		*/
 	    private function dragMap(e:MouseEvent):void
 	    {
-	    	x = e.stageX - offsetX;
-	    	y = e.stageY - offsetY;
+	    	absoluteMoveMap(e.stageX - offsetX, e.stageY - offsetY);
 	    	e.updateAfterEvent();
+	    }
+	    
+		/**
+		 * @Private 
+		 * Move the origin point of the map to the specified x,y position
+		*/
+	    public function absoluteMoveMap(newX:Number, newY:Number):void
+	    {
+	    	x = newX;
+	    	y = newY;
 	    	dispatchEvent(new MapEvent(MapEvent.MAP_MOVING));
 	    }
 	
+		/**
+		 * @Private 
+		 * Move the origin point of the map to the specified x,y position
+		*/
+	    public function relativeMoveMap(xMove:Number, yMove:Number):void
+	    {
+	    	x += xMove;
+	    	y += yMove;
+	    	dispatchEvent(new MapEvent(MapEvent.MAP_MOVING));
+	    }
+
 		private var zoomSlider:VSlider;
 		/** 
 		 * Zoom with sliders
