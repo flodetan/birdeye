@@ -55,9 +55,9 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		
 		private var _zoom:Number = 5;
 		
-		private var _backgroundColor:Number = RectUtils.BLACK;
-		private var _borderColor:Number = RectUtils.RED;
-		private var _dragRectangleColor:Number = RectUtils.YELLOW;
+		private var _backgroundColor:Number = HawkUtils.BLACK;
+		private var _borderColor:Number = HawkUtils.RED;
+		private var _dragRectangleColor:Number = HawkUtils.YELLOW;
 		private var _backgroundAlpha:Number = 0.5;
 		private var _borderAlpha:Number = 0.5;
 		private var _dragRectangleAlpha:Number = 0.5;
@@ -209,66 +209,7 @@ trace (map.mouseX, map.mouseY);
 	}
 }
 
-
-import mx.core.UIComponent;
-import flash.events.MouseEvent;
-import flash.geom.Point;
-import flash.display.Sprite;
-import flash.events.Event;
-
-class RectangleView extends Sprite
-{
-	// Offset positions used when moving the rectanlge inside the container on dragging/dropping
-    private var offsetX:Number, offsetY:Number;
-    // Keep the starting point position when dragging, if mouse goes out of the parents' view
-    // than the toolbar will be repositioned to this point
-    private var startDraggingPoint:Point;
-    
-    public static const DRAG_COMPLETE:String = "Rectangle drag completed"; 
-    public static const DRAGGING:String = "Rectangle being dragged"; 
-
-	public function RectangleView():void
-	{
-		super();
-		addEventListener(MouseEvent.MOUSE_DOWN, moveRectangle);
-	}
-	
-	// Resize panel event handler.
-	public  function moveRectangle(event:MouseEvent):void
-	{
-  		startMovingRectangle(event);
-  		stage.addEventListener(MouseEvent.MOUSE_UP, stopMovingRectangle);
-	}
-	
-	// Start moving the toolbar
-    private function startMovingRectangle(e:MouseEvent):void
-    {
-    	startDraggingPoint = new Point(this.x, this.y);
-    	offsetX = e.stageX - this.x;
-    	offsetY = e.stageY - this.y;
-    	stage.addEventListener(MouseEvent.MOUSE_MOVE, dragRectangle);
-    }
-    
-    // Stop moving the toolbar 
-    private function stopMovingRectangle(e:MouseEvent):void
-    {
-    	stage.removeEventListener(MouseEvent.MOUSE_MOVE, dragRectangle)
-  		stage.removeEventListener(MouseEvent.MOUSE_UP, stopMovingRectangle);
-  		dispatchEvent(new Event(RectangleView.DRAG_COMPLETE));
-    }
-    
-    // Moving the toolbar while MOUSE_MOVE event is on
-    private function dragRectangle(e:MouseEvent):void
-    {
-    	this.x = e.stageX - offsetX;
-    	this.y = e.stageY - offsetY;
-     	e.updateAfterEvent();
-    	// dispatch moved toolbar event
-  		dispatchEvent(new Event(RectangleView.DRAGGING));
-    }
-}
-
-class RectUtils 
+class HawkUtils 
 {
 	public static const GREY:Number = 0x777777;
 	public static const WHITE:Number = 0xffffff;
