@@ -30,15 +30,15 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
-	import flash.display.Sprite;
+	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
-	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import mx.core.Application;
 	import mx.core.UIComponent;
+	import mx.events.FlexEvent;
 	
 	import org.un.cava.birdeye.geovis.core.Map;
 	import org.un.cava.birdeye.geovis.events.MapEvent;
@@ -54,11 +54,50 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		
 		private var _zoom:Number = 5;
 		
+		private static const CLICK:String = "click";
+		private static const DOUBLE_CLICK:String = "double-click";
+		private static const ROLL_OVER:String = "roll-over";
+		private static const CIRCLE:String = "circle";
+		private static const RECTANGLE:String = "rectangle";
+		
+		private var _shape:String = CIRCLE; 
+		private var _xOffsetFromMouse:Number = 10;
+		private var _yOffsetFromMouse:Number = 10;
+		private var _eventType:String = CLICK;
+		private var _followMouse:Boolean = false;
 		private var _backgroundColor:Number = HawkUtils.BLACK;
 		private var _borderColor:Number = HawkUtils.RED;
 		private var _backgroundAlpha:Number = 0.5;
 		private var _borderAlpha:Number = 0.5;
+
+		[Inspectable(enumeration="circle,rectangle")]
+		public function set shape(val:String):void
+		{
+			_shape = val;
+		}
+
+		public function set xOffsetFromMouse(val:Number):void
+		{
+			_xOffsetFromMouse = val;
+		}
 		
+		public function set yOffsetFromMouse(val:Number):void
+		{
+			_yOffsetFromMouse = val;
+		}
+		
+		[Inspectable(enumeration="click,roll-over,double-click")]
+		public function set eventType(val:String):void
+		{
+			_eventType = val;
+		}
+		
+		[Inspectable(enumeration="true,false")]
+		public function set followMouse(val:Boolean):void
+		{
+			_followMouse = val;
+		}
+
 		public function set zoom(val:Number):void
 		{
 			_zoom = val;
@@ -111,8 +150,23 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			// Add the resizing event handler.
 
 			map = Map(event.target);
-			
-			map.addEventListener(MouseEvent.CLICK, drawAll, true);
+			switch (_eventType)
+			{
+				case ROLL_OVER:
+					map.removeEventListener(MouseEvent.CLICK, drawAll, true);
+					map.removeEventListener(MouseEvent.DOUBLE_CLICK, drawAll, true);
+					map.addEventListener(MouseEvent.ROLL_OVER, drawAll, true);
+				break;
+				case DOUBLE_CLICK:
+					map.removeEventListener(MouseEvent.CLICK, drawAll, true);
+					map.removeEventListener(MouseEvent.ROLL_OVER, drawAll, true);
+					map.addEventListener(MouseEvent.DOUBLE_CLICK, drawAll, true);
+				break;
+				case CLICK:
+					map.removeEventListener(MouseEvent.DOUBLE_CLICK, drawAll, true);
+					map.removeEventListener(MouseEvent.ROLL_OVER, drawAll, true);
+					map.addEventListener(MouseEvent.CLICK, drawAll, true);
+			}
 		}
 	
 		/**
@@ -133,21 +187,52 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		{
 			clearAll();
 			
-/*   			x = map.mouseX - width/2;
-			y = map.mouseY - height/2;
- */			// get the map-mask sizes, needed to size the draggable rectangle 
+			if (_followMouse)
+			{
+	   			x = map.mouseX - width/2 + _xOffsetFromMouse;
+				y = map.mouseY - height/2 + _yOffsetFromMouse;
+			}
+
 			var tempMask:DisplayObject = DisplayObject(map.mask);
  			// map.mask must be temporarily set to null because otherwise the bitmapdata
  			// will cut the map on the top and left sides, probably because of a bug either 
  			// in the framework
  			map.mask = null;
  			
- 			graphics.moveTo(0,0);
- 			graphics.beginFill(_backgroundColor, _backgroundAlpha);
- 			graphics.drawRect(0,0,width,height);
- 			graphics.endFill();
+			var msk:Shape = new Shape();
+ 			switch (_shape)
+ 			{
+ 				case CIRCLE:
+					msk.graphics.moveTo(x,y);
+		 			msk.graphics.beginFill(_backgroundColor, _backgroundAlpha);
+		 			msk.graphics.drawCircle(width/2,height/2,width/2);
+		 			msk.graphics.endFill();
+					// draws rectangle border  
+					graphics.moveTo(x,y);
+		 			graphics.beginFill(_backgroundColor, _backgroundAlpha);
+		 			graphics.drawCircle(width/2,height/2,width/2);
+		 			graphics.endFill();
+ 				break;
+ 				case RECTANGLE:
+		  			msk.graphics.moveTo(0,0);
+		 			msk.graphics.beginFill(_backgroundColor, _backgroundAlpha);
+		 			msk.graphics.drawRect(0,0,width,height);
+		 			msk.graphics.endFill();
+					// draws rectangle border  
+		  			graphics.moveTo(0,0);
+		 			graphics.beginFill(_backgroundColor, _backgroundAlpha);
+		 			graphics.drawRect(0,0,width,height);
+		 			graphics.endFill();
+					graphics.moveTo(0,0);
+					graphics.lineStyle(2,_borderColor,_borderAlpha);
+					graphics.lineTo(width,0);
+					graphics.lineTo(width,height);
+					graphics.lineTo(0,height);
+					graphics.lineTo(0,0);
+ 				break;
+ 			}
+ 			addChild(msk);
 
-	    	var globOrgPoint:Point = localToContent(new Point(map.mouseX, map.mouseY));
 		    var moveX:int = map.mouseX;
 		    var moveY:int = map.mouseY;
 
@@ -157,23 +242,15 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 				mapCopy.dispose();
 			mapCopy = new BitmapData(sourceRect.width, sourceRect.height,true,0x000000);
 			var matr:Matrix = new Matrix();
-trace (map.mouseX, map.mouseY);
  			matr.translate(-moveX, -moveY);
  			matr.scale(_zoom, _zoom);
  			matr.translate(width/2, height/2);
  			mapCopy.draw(map,matr,null,null,sourceRect,true);
 			mapCopyCont = new Bitmap(mapCopy);
+			mapCopyCont.mask = msk;
 			addChild(mapCopyCont);
 			map.mask = tempMask;
 
-			// draws rectangle border  
-			graphics.moveTo(0,0);
-			graphics.lineStyle(2,_borderColor,_borderAlpha);
-			graphics.lineTo(width,0);
-			graphics.lineTo(width,height);
-			graphics.lineTo(0,height);
-			graphics.lineTo(0,0);
-			
 			// if parent is the worldmap itself, than put this on top, so that it's viewable
 			if (parent is WorldMap) 
 				parent.setChildIndex(this, parent.numChildren-1);
