@@ -32,15 +32,16 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
-	import mx.containers.HBox;
 	import mx.controls.CheckBox;
 	import mx.core.Application;
+	import mx.core.LayoutContainer;
 	
+	import org.un.cava.birdeye.geovis.controls.viewers.toolbars.icons.*;
 	import org.un.cava.birdeye.geovis.core.Map;
 	import org.un.cava.birdeye.geovis.events.MapEvent;
 	import org.un.cava.birdeye.geovis.views.maps.world.WorldMap;
 
-	public class MainViewToolbarHBox extends HBox
+	public class MainViewToolbar extends LayoutContainer implements IMainViewToolbar
 	{
 	    private var map:Map;
 
@@ -159,9 +160,10 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		}
 
 		// Add the creationCOmplete event handler.
-		public function MainViewToolbarHBox()
+		public function MainViewToolbar()
 		{
 			super();
+			
 		    isCenteringMap = new CheckBox();
 		    isCenteringMap.name = CENTER;
 		    isCenteringMap.width = isCenteringMap.height = IconsUtils.size;
@@ -477,219 +479,4 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			map.addEventListener(MapEvent.MAP_PROPERTY_ON, updateBoxValue);
 		}
 	}
-}
-
-
-import mx.skins.ProgrammaticSkin;
-import flash.geom.Matrix;
-import org.un.cava.birdeye.geovis.controls.viewers.toolbars.MainViewToolbarHBox;
-
-class BaseIcon extends ProgrammaticSkin
-{
-	protected var c:int;
-	private var parentCont:MainViewToolbarHBox;
-
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		parentCont = MainViewToolbarHBox(parent.parent);
-		graphics.clear();
-		switch (name) {
-			case "upIcon": 
-				c = parentCont.upIconColor;//IconsUtils.WHITE;
-				break;
-			case "overIcon":
-				c = parentCont.overIconColor;//IconsUtils.GREY;
-				break;
-			case "downIcon":
-				c = parentCont.downIconColor;//IconsUtils.BLUE;
-				break;
-			case "selectedUpIcon": 
-				c = parentCont.selectedUpIconColor;//IconsUtils.YELLOW;
-				break;
-			case "selectedOverIcon": 
-				c = parentCont.selectedOverIconColor;
-				break;
-			case "selectedDownIcon": 
-				c = parentCont.selectedDownIconColor;//IconsUtils.RED;
-				break;
-		}
-	}
-}
-
-class ZoomInIcon extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.moveTo(IconsUtils.size/2,IconsUtils.size/2);
-		graphics.beginFill(c,1);
-		graphics.drawCircle(IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/2);
-		graphics.endFill();
-		
-		graphics.moveTo(3,IconsUtils.size/2);
-		graphics.lineStyle(IconsUtils.thick,IconsUtils.BLACK,1);
-		graphics.lineTo(IconsUtils.size-3,IconsUtils.size/2);
-
-		graphics.moveTo(IconsUtils.size/2,3);
-		graphics.lineStyle(IconsUtils.thick,IconsUtils.BLACK,1);
-		graphics.lineTo(IconsUtils.size/2,IconsUtils.size-3);
-	}
-}
-
-class ZoomOutIcon extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.moveTo(IconsUtils.size/2,IconsUtils.size/2);
-		graphics.beginFill(c,1);
-		graphics.drawCircle(IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/2);
-		graphics.endFill();
-		
-		graphics.moveTo(3,IconsUtils.size/2);
-		graphics.lineStyle(2,IconsUtils.BLACK,1);
-		graphics.lineTo(IconsUtils.size-3,IconsUtils.size/2);
-	}
-}
-
-class CenteringMapIcon extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.moveTo(IconsUtils.size/2,IconsUtils.size/2);
-		graphics.beginFill(c,1);
-		graphics.drawRect(0,0,IconsUtils.size, IconsUtils.size);
-		graphics.endFill();
-		
-		graphics.moveTo(0,IconsUtils.size/2);
-		graphics.lineStyle(2,IconsUtils.BLACK,1);
-		graphics.lineTo(IconsUtils.size,IconsUtils.size/2);
-
-		graphics.moveTo(IconsUtils.size/2,0);
-		graphics.lineStyle(2,IconsUtils.BLACK,1);
-		graphics.lineTo(IconsUtils.size/2,IconsUtils.size);
-	}
-}
-
-class WheelZoomIcon extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.moveTo(0,0);
-		graphics.lineStyle(3,c,1);
-		graphics.lineTo(IconsUtils.size,IconsUtils.size);
-
-		graphics.moveTo(IconsUtils.size/2,0);
-		graphics.lineStyle(3,c,1);
-		graphics.lineTo(IconsUtils.size/2,IconsUtils.size);
-
-		graphics.moveTo(0,IconsUtils.size/2);
-		graphics.lineStyle(3,c,1);
-		graphics.lineTo(IconsUtils.size,IconsUtils.size/2);
-
-		graphics.moveTo(0,0);
-		graphics.lineStyle(3,c,1);
-		graphics.lineTo(IconsUtils.size,IconsUtils.size);
-	}
-}
-
-class DragBox extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		
-		graphics.moveTo(IconsUtils.size/2-3,IconsUtils.size/2-3);
-		graphics.beginFill(IconsUtils.YELLOW,1);
-		graphics.drawRect(IconsUtils.size/2-3,IconsUtils.size/2-3,IconsUtils.size/2+3,IconsUtils.size/2+3)
-		graphics.endFill();
-
-		graphics.moveTo(0,0);
-		graphics.beginFill(c,1);
-		graphics.drawRect(0,0,IconsUtils.size/2+3,IconsUtils.size/2+3)
-		graphics.endFill();
-	}
-}
-
-class WheelSkewVerticallyIcon extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.moveTo(0,0);
-		graphics.beginFill(c,1);
-		graphics.drawRect(0,0,IconsUtils.size,IconsUtils.size/2);
-		graphics.endFill();
-
-		var matr:Matrix = transform.matrix;
-		matr.concat(new Matrix(1,.1,0,1,0,0));
-		transform.matrix = matr; 
-	}
-}
-
-class WheelSkewHorizontallyIcon extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.moveTo(0,0);
-		graphics.beginFill(c,1);
-		graphics.drawRect(0,0,IconsUtils.size,IconsUtils.size/2);
-		graphics.endFill();
-
-		var matr:Matrix = transform.matrix;
-		matr.concat(new Matrix(1,0,.1,1,0,0));
-		transform.matrix = matr; 
-	}
-}
-
-class ZoomRectangle extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.moveTo(0,0);
-		graphics.beginFill(c,1);
-		graphics.drawRect(0,0,IconsUtils.size,IconsUtils.size);
-		graphics.endFill();
-
-		graphics.moveTo(IconsUtils.size/3,IconsUtils.size/3);
-		graphics.beginFill(0x000000,1);
-		graphics.drawRect(IconsUtils.size/3,IconsUtils.size/3,IconsUtils.size/3,IconsUtils.size/3);
-		graphics.endFill();
-	}
-}
-
-class ResetMap extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.moveTo(0,0);
-		graphics.beginFill(c,1);
-		graphics.drawRect(0,0,IconsUtils.size,IconsUtils.size);
-		graphics.endFill();
-
-		graphics.moveTo(2,2);
-		graphics.beginFill(IconsUtils.YELLOW,1);
-		graphics.drawRect(2,2,IconsUtils.size-4,IconsUtils.size-4);
-		graphics.endFill();
-	}
-}
-
-class IconsUtils 
-{
-	public static const GREY:Number = 0x777777;
-	public static const WHITE:Number = 0xffffff;
-	public static const YELLOW:Number = 0xffd800;
-	public static const RED:Number = 0xff0000;
-	public static const BLUE:Number = 0x009cff;
-	public static const GREEN:Number = 0x00ff54;
-	public static const BLACK:Number = 0x000000;
-	
-	public static const size:Number = 15;
-	public static const thick:Number = 2;
 }
