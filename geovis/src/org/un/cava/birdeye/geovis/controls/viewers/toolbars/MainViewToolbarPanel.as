@@ -36,11 +36,12 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	import mx.controls.CheckBox;
 	import mx.core.Application;
 	
+	import org.un.cava.birdeye.geovis.controls.viewers.toolbars.icons.*;
 	import org.un.cava.birdeye.geovis.core.Map;
 	import org.un.cava.birdeye.geovis.events.MapEvent;
 	import org.un.cava.birdeye.geovis.views.maps.world.WorldMap;
 
-	public class MainViewToolbarPanel extends Panel
+	public class MainViewToolbarPanel extends Panel implements IMainViewToolbar
 	{
 	    private var map:Map;
 
@@ -71,6 +72,81 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		static private const WHEEL_SKEW_HORIZONTALLY:String = "skew map H";
 		static private const ZOOM_RECTANGLE:String = "zoom rectangle";
 		static private const RESET_MAP:String = "reset map";
+
+		public static const GREY:Number = 0x777777;
+		public static const WHITE:Number = 0xffffff;
+		public static const YELLOW:Number = 0xffd800;
+		public static const RED:Number = 0xff0000;
+		public static const BLUE:Number = 0x009cff;
+		public static const GREEN:Number = 0x00ff54;
+		public static const BLACK:Number = 0x000000;
+		
+		private var _upIconColor:Number = GREY;
+		private var _overIconColor:Number = YELLOW;
+		private var _downIconColor:Number = RED;
+		private var _selectedUpIconColor:Number = GREEN;
+		private var _selectedOverIconColor:Number = GREY;
+		private var _selectedDownIconColor:Number = BLUE;
+		
+		public function get upIconColor():Number
+		{
+			return _upIconColor;
+		}
+
+		public function set upIconColor(val:Number):void
+		{
+			_upIconColor = val;
+		}
+
+		public function get overIconColor():Number
+		{
+			return _overIconColor;
+		}
+
+		public function set overIconColor(val:Number):void
+		{
+			_overIconColor = val;
+		}
+
+		public function get downIconColor():Number
+		{
+			return _downIconColor;
+		}
+
+		public function set downIconColor(val:Number):void
+		{
+			_downIconColor = val;
+		}
+
+		public function get selectedUpIconColor():Number
+		{
+			return _selectedUpIconColor;
+		}
+
+		public function set selectedUpIconColor(val:Number):void
+		{
+			_selectedUpIconColor = val;
+		}
+
+		public function get selectedOverIconColor():Number
+		{
+			return _selectedOverIconColor;
+		}
+
+		public function set selectedOverIconColor(val:Number):void
+		{
+			_selectedOverIconColor = val;
+		}
+
+		public function get selectedDownIconColor():Number
+		{
+			return _selectedDownIconColor;
+		}
+
+		public function set selectedDownIconColor(val:Number):void
+		{
+			_selectedDownIconColor = val;
+		}
 
 		private var _draggable:Boolean = false;
 		
@@ -400,216 +476,4 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			map.addEventListener(MapEvent.MAP_PROPERTY_ON, updateBoxValue);
 		}
 	}
-}
-
-
-import mx.skins.ProgrammaticSkin;
-import flash.geom.Matrix;
-
-class BaseIcon extends ProgrammaticSkin
-{
-	protected var c:int;
-
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.clear();
-		switch (name) {
-			case "upIcon": 
-				c = IconsUtils.WHITE;
-				break;
-			case "overIcon":
-				c = IconsUtils.GREY;
-				break;
-			case "downIcon":
-				c = IconsUtils.BLUE;
-				break;
-			case "selectedUpIcon": 
-				c = IconsUtils.YELLOW;
-				break;
-			case "selectedOverIcon": 
-				c = IconsUtils.GREEN;
-				break;
-			case "selectedDownIcon": 
-				c = IconsUtils.RED;
-				break;
-		}
-	}
-}
-
-class ZoomInIcon extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.moveTo(IconsUtils.size/2,IconsUtils.size/2);
-		graphics.beginFill(c,1);
-		graphics.drawCircle(IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/2);
-		graphics.endFill();
-		
-		graphics.moveTo(3,IconsUtils.size/2);
-		graphics.lineStyle(IconsUtils.thick,IconsUtils.BLACK,1);
-		graphics.lineTo(IconsUtils.size-3,IconsUtils.size/2);
-
-		graphics.moveTo(IconsUtils.size/2,3);
-		graphics.lineStyle(IconsUtils.thick,IconsUtils.BLACK,1);
-		graphics.lineTo(IconsUtils.size/2,IconsUtils.size-3);
-	}
-}
-
-class ZoomOutIcon extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.moveTo(IconsUtils.size/2,IconsUtils.size/2);
-		graphics.beginFill(c,1);
-		graphics.drawCircle(IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/2);
-		graphics.endFill();
-		
-		graphics.moveTo(3,IconsUtils.size/2);
-		graphics.lineStyle(2,IconsUtils.BLACK,1);
-		graphics.lineTo(IconsUtils.size-3,IconsUtils.size/2);
-	}
-}
-
-class CenteringMapIcon extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.moveTo(IconsUtils.size/2,IconsUtils.size/2);
-		graphics.beginFill(c,1);
-		graphics.drawRect(0,0,IconsUtils.size, IconsUtils.size);
-		graphics.endFill();
-		
-		graphics.moveTo(0,IconsUtils.size/2);
-		graphics.lineStyle(2,IconsUtils.BLACK,1);
-		graphics.lineTo(IconsUtils.size,IconsUtils.size/2);
-
-		graphics.moveTo(IconsUtils.size/2,0);
-		graphics.lineStyle(2,IconsUtils.BLACK,1);
-		graphics.lineTo(IconsUtils.size/2,IconsUtils.size);
-	}
-}
-
-class WheelZoomIcon extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.moveTo(0,0);
-		graphics.lineStyle(3,c,1);
-		graphics.lineTo(IconsUtils.size,IconsUtils.size);
-
-		graphics.moveTo(IconsUtils.size/2,0);
-		graphics.lineStyle(3,c,1);
-		graphics.lineTo(IconsUtils.size/2,IconsUtils.size);
-
-		graphics.moveTo(0,IconsUtils.size/2);
-		graphics.lineStyle(3,c,1);
-		graphics.lineTo(IconsUtils.size,IconsUtils.size/2);
-
-		graphics.moveTo(0,0);
-		graphics.lineStyle(3,c,1);
-		graphics.lineTo(IconsUtils.size,IconsUtils.size);
-	}
-}
-
-class DragBox extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		
-		graphics.moveTo(IconsUtils.size/2-3,IconsUtils.size/2-3);
-		graphics.beginFill(IconsUtils.GREY,1);
-		graphics.drawRect(IconsUtils.size/2-3,IconsUtils.size/2-3,IconsUtils.size/2+3,IconsUtils.size/2+3)
-		graphics.endFill();
-
-		graphics.moveTo(0,0);
-		graphics.beginFill(c,1);
-		graphics.drawRect(0,0,IconsUtils.size/2+3,IconsUtils.size/2+3)
-		graphics.endFill();
-	}
-}
-
-class WheelSkewVerticallyIcon extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.moveTo(0,0);
-		graphics.beginFill(c,1);
-		graphics.drawRect(0,0,IconsUtils.size,IconsUtils.size/2);
-		graphics.endFill();
-
-		var matr:Matrix = transform.matrix;
-		matr.concat(new Matrix(1,.1,0,1,0,0));
-		transform.matrix = matr; 
-	}
-}
-
-class WheelSkewHorizontallyIcon extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.moveTo(0,0);
-		graphics.beginFill(c,1);
-		graphics.drawRect(0,0,IconsUtils.size,IconsUtils.size/2);
-		graphics.endFill();
-
-		var matr:Matrix = transform.matrix;
-		matr.concat(new Matrix(1,0,.1,1,0,0));
-		transform.matrix = matr; 
-	}
-}
-
-class ZoomRectangle extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.moveTo(0,0);
-		graphics.beginFill(c,1);
-		graphics.drawRect(0,0,IconsUtils.size,IconsUtils.size);
-		graphics.endFill();
-
-		graphics.moveTo(IconsUtils.size/3,IconsUtils.size/3);
-		graphics.beginFill(0x000000,1);
-		graphics.drawRect(IconsUtils.size/3,IconsUtils.size/3,IconsUtils.size/3,IconsUtils.size/3);
-		graphics.endFill();
-	}
-}
-
-class ResetMap extends BaseIcon
-{
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		graphics.moveTo(0,0);
-		graphics.beginFill(c,1);
-		graphics.drawRect(0,0,IconsUtils.size,IconsUtils.size);
-		graphics.endFill();
-
-		graphics.moveTo(2,2);
-		graphics.beginFill(IconsUtils.GREY,1);
-		graphics.drawRect(2,2,IconsUtils.size-4,IconsUtils.size-4);
-		graphics.endFill();
-	}
-}
-
-class IconsUtils 
-{
-	public static const GREY:Number = 0x777777;
-	public static const WHITE:Number = 0xffffff;
-	public static const YELLOW:Number = 0xffd800;
-	public static const RED:Number = 0xff0000;
-	public static const BLUE:Number = 0x009cff;
-	public static const GREEN:Number = 0x00ff54;
-	public static const BLACK:Number = 0x000000;
-	
-	public static const size:Number = 15;
-	public static const thick:Number = 2;
 }
