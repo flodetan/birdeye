@@ -329,9 +329,11 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			hkView = new HawkView();
    			hkView.eventType = HawkView.ROLL_OVER;
    			hkView.shape = HawkView.CIRCLE;
-   			hkView.yOffsetFromMouse = 50;
+   			hkView.yOffsetFromMouse = 140;
+   			hkView.xOffsetFromMouse = 0;
    			hkView.width = 150;
-   			hkView.followMouse = true;
+   			hkView.height = 150;
+   			hkView.followMouse = false;
    			hkView.zoom = 4;
    			hkView.backgroundColor = IconsUtils.WHITE;
    			hkView.backgroundAlpha = 0.8;
@@ -511,9 +513,13 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		   		break;
 		   		case HAWK_EYE:
 			   		if (hawkEye.selected)
+			   		{
+			   			hkView.followMouse = true;
 			   			map.parent.addChildAt(hkView,map.parent.numChildren-1);
-			   		else 
+			   		} else {
+			   			hkView.followMouse = false;
 			   			map.parent.removeChild(hkView);
+			   		} 
 			   		if (customCursor)
 			   			manageCursor();
 		   		break;
