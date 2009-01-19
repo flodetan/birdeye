@@ -54,11 +54,11 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		
 		private var _zoom:Number = 5;
 		
-		private static const CLICK:String = "click";
-		private static const DOUBLE_CLICK:String = "double-click";
-		private static const ROLL_OVER:String = "roll-over";
-		private static const CIRCLE:String = "circle";
-		private static const RECTANGLE:String = "rectangle";
+		public static const CLICK:String = "click";
+		public static const DOUBLE_CLICK:String = "double-click";
+		public static const ROLL_OVER:String = "roll-over";
+		public static const CIRCLE:String = "circle";
+		public static const RECTANGLE:String = "rectangle";
 		
 		private var _shape:String = CIRCLE; 
 		private var _xOffsetFromMouse:Number = 10;
