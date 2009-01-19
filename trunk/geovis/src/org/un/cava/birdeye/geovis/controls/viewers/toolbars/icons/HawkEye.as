@@ -24,50 +24,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
  package org.un.cava.birdeye.geovis.controls.viewers.toolbars.icons
 {
-	import mx.skins.ProgrammaticSkin;
-	
-	import org.un.cava.birdeye.geovis.controls.viewers.toolbars.IMainViewToolbar;
-
-	public class BaseIcon extends ProgrammaticSkin
+	public class HawkEye extends BaseIcon
 	{
-		protected var c:int;
-		private var parentCont:IMainViewToolbar;
-		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			graphics.clear();
-
-			if (parent.parent is IMainViewToolbar)
-			{
-				parentCont = IMainViewToolbar(parent.parent);
-
-				switch (name) {
-					case "upIcon": 
-						c = parentCont.upIconColor;
-						break;
-					case "overIcon":
-						c = parentCont.overIconColor;
-						break;
-					case "downIcon":
-						c = parentCont.downIconColor;
-						break;
-					case "selectedUpIcon": 
-						c = parentCont.selectedUpIconColor;
-						break;
-					case "selectedOverIcon": 
-						c = parentCont.selectedOverIconColor;
-						break;
-					case "selectedDownIcon": 
-						c = parentCont.selectedDownIconColor;
-						break;
-				}
-			} else {
-				c = IconsUtils.RED;
-			}
+			graphics.moveTo(IconsUtils.size/2,IconsUtils.size/2);
+			graphics.beginFill(c,1);
+			graphics.drawCircle(IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/2);
+			graphics.endFill();
+			
+			graphics.moveTo(IconsUtils.size/2,IconsUtils.size/2);
+			graphics.beginFill(IconsUtils.BLACK,1);
+			graphics.drawCircle(IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/4);
+			graphics.endFill();
 		}
 	}
 }

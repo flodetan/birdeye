@@ -26,8 +26,20 @@
  */
  package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 {
-	public interface IMainViewToolbar
+	public interface IMainViewToolbar 
 	{
+		function get numChildren():int;
+		
+		function get width():Number;
+		
+		function get height():Number;
+		
+		function get layout():String;
+		
+		function get autosizeIcons():Boolean;
+		
+		function set autosizeIcons(val:Boolean):void;
+		
 		function get upIconColor():Number;
 		
  		function set upIconColor(val:Number):void;

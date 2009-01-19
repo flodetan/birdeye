@@ -28,6 +28,7 @@
 package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 {
 	import flash.display.BlendMode;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -62,7 +63,12 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		private var wheelSkewHorizontally:CheckBox;
 		private var zoomRect:CheckBox;
 		private var resetMap:CheckBox;
+		private var hawkEye:CheckBox;
 
+   		private var hkView:HawkView;
+   		 
+		private var cursor:Sprite = new Sprite(); 
+		
 		static private const CENTER:String = "center";
 		static private const ZOOM_OUT:String = "zoom out";
 		static private const ZOOM_IN:String = "zoom in";
@@ -72,6 +78,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		static private const WHEEL_SKEW_HORIZONTALLY:String = "skew map H";
 		static private const ZOOM_RECTANGLE:String = "zoom rectangle";
 		static private const RESET_MAP:String = "reset map";
+		static private const HAWK_EYE:String = "hawk view";
 
 		public static const GREY:Number = 0x777777;
 		public static const WHITE:Number = 0xffffff;
@@ -83,6 +90,9 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		
 		public static const size:Number = 15;
 		public static const thick:Number = 2;
+		
+		private var _autosizeIcons:Boolean = false;
+		private var _customCursor:Boolean = true;
 
 		private var _upIconColor:Number = GREY;
 		private var _overIconColor:Number = YELLOW;
@@ -91,6 +101,28 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		private var _selectedOverIconColor:Number = GREY;
 		private var _selectedDownIconColor:Number = BLUE;
 		
+		public function get autosizeIcons():Boolean
+		{
+			return _autosizeIcons;
+		}
+		
+		[Inspectable(enumeration="true,false")]
+		public function set autosizeIcons(val:Boolean):void
+		{
+			_autosizeIcons = val;
+		}
+		
+		public function get customCursor():Boolean
+		{
+			return _customCursor;
+		}
+		
+		[Inspectable(enumeration="true,false")]
+		public function set customCursor(val:Boolean):void
+		{
+			_customCursor = val;
+		}
+
 		public function get upIconColor():Number
 		{
 			return _upIconColor;
@@ -163,10 +195,9 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		public function MainViewToolbar()
 		{
 			super();
-			
+
 		    isCenteringMap = new CheckBox();
 		    isCenteringMap.name = CENTER;
-		    isCenteringMap.width = isCenteringMap.height = IconsUtils.size;
 		    isCenteringMap.setStyle("upIcon", CenteringMapIcon);
 		    isCenteringMap.setStyle("selectedUpIcon", CenteringMapIcon);
 		    isCenteringMap.setStyle("overIcon", CenteringMapIcon);
@@ -180,7 +211,6 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    
 		    zoomOut = new CheckBox();
 		    zoomOut.name = ZOOM_OUT
-		    zoomOut.width = zoomOut.height = IconsUtils.size;
 		    zoomOut.setStyle("upIcon", ZoomOutIcon);
 		    zoomOut.setStyle("selectedUpIcon", ZoomOutIcon);
 		    zoomOut.setStyle("overIcon", ZoomOutIcon);
@@ -194,7 +224,6 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	
 		    zoomIn = new CheckBox();
 		    zoomIn.name = ZOOM_IN;
-		    zoomIn.width = zoomIn.height = IconsUtils.size;
 		    zoomIn.setStyle("upIcon", ZoomInIcon);
 		    zoomIn.setStyle("selectedUpIcon", ZoomInIcon);
 		    zoomIn.setStyle("overIcon", ZoomInIcon);
@@ -208,7 +237,6 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	
 		    wheelZoom = new CheckBox();
 		    wheelZoom.name = WHEEL_ZOOM;
-		    wheelZoom.width = wheelZoom.height = IconsUtils.size;
 		    wheelZoom.setStyle("upIcon", WheelZoomIcon);
 		    wheelZoom.setStyle("selectedUpIcon", WheelZoomIcon);
 		    wheelZoom.setStyle("overIcon", WheelZoomIcon);
@@ -222,7 +250,6 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	
 		    dragBox = new CheckBox();
 		    dragBox.name = DRAG_MAP;
-		    dragBox.width = dragBox.height = IconsUtils.size;
 		    dragBox.setStyle("upIcon", DragBox);
 		    dragBox.setStyle("selectedUpIcon", DragBox);
 		    dragBox.setStyle("overIcon", DragBox);
@@ -236,7 +263,6 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	
 		    wheelSkewVertically = new CheckBox();
 		    wheelSkewVertically.name = WHEEL_SKEW_VERTICALLY;
-		    wheelSkewVertically.width = wheelSkewVertically.height = IconsUtils.size;
 		    wheelSkewVertically.setStyle("upIcon", WheelSkewVerticallyIcon);
 		    wheelSkewVertically.setStyle("selectedUpIcon", WheelSkewVerticallyIcon);
 		    wheelSkewVertically.setStyle("overIcon", WheelSkewVerticallyIcon);
@@ -250,7 +276,6 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
  */
 		    wheelSkewHorizontally = new CheckBox();
 		    wheelSkewHorizontally.name = WHEEL_SKEW_HORIZONTALLY;
-		    wheelSkewHorizontally.width = wheelSkewHorizontally.height = IconsUtils.size;
 		    wheelSkewHorizontally.setStyle("upIcon", WheelSkewHorizontallyIcon);
 		    wheelSkewHorizontally.setStyle("selectedUpIcon", WheelSkewHorizontallyIcon);
 		    wheelSkewHorizontally.setStyle("overIcon", WheelSkewHorizontallyIcon);
@@ -264,7 +289,6 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
  */
 		    zoomRect = new CheckBox();
 		    zoomRect.name = ZOOM_RECTANGLE;
-		    zoomRect.width = zoomRect.height = IconsUtils.size;
 		    zoomRect.setStyle("upIcon", ZoomRectangle);
 		    zoomRect.setStyle("selectedUpIcon", ZoomRectangle);
 		    zoomRect.setStyle("overIcon", ZoomRectangle);
@@ -278,7 +302,6 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 
 		    resetMap = new CheckBox();
 		    resetMap.name = RESET_MAP;
-		    resetMap.width = resetMap.height = IconsUtils.size;
 		    resetMap.setStyle("upIcon", ResetMap);
 		    resetMap.setStyle("selectedUpIcon", ResetMap);
 		    resetMap.setStyle("overIcon", ResetMap);
@@ -290,11 +313,81 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    resetMap.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
 		    addChild(resetMap);
 
+		    hawkEye = new CheckBox();
+		    hawkEye.name = HAWK_EYE;
+		    hawkEye.setStyle("upIcon", HawkEye);
+		    hawkEye.setStyle("selectedUpIcon", HawkEye);
+		    hawkEye.setStyle("overIcon", HawkEye);
+		    hawkEye.setStyle("downIcon", HawkEye);
+		    hawkEye.setStyle("selectedOverIcon", HawkEye);
+		    hawkEye.setStyle("selectedDownIcon", HawkEye);
+		    hawkEye.blendMode = BlendMode.ADD;
+		    hawkEye.addEventListener(Event.CHANGE, toolbarListenersHandler);
+		    hawkEye.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
+		    addChild(hawkEye);
+
+			hkView = new HawkView();
+   			hkView.eventType = HawkView.ROLL_OVER;
+   			hkView.shape = HawkView.CIRCLE;
+   			hkView.yOffsetFromMouse = 50;
+   			hkView.width = 150;
+   			hkView.followMouse = true;
+   			hkView.zoom = 4;
+   			hkView.backgroundColor = IconsUtils.WHITE;
+   			hkView.backgroundAlpha = 0.8;
+
 		    Application.application.addEventListener(MapEvent.MAP_INSTANTIATED, init, true)
 		}
 		
+		override protected function measure():void
+		{
+			if (layout == "horizontal")
+			{
+				minWidth = IconsUtils.size * numChildren;
+				minHeight = IconsUtils.size + 10;
+			} else {
+				minHeight = IconsUtils.size * numChildren;
+				minWidth = IconsUtils.size + 10;
+			}
+		} 
+		
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+		{
+			super.updateDisplayList(unscaledWidth, unscaledHeight);
+
+ 			var pos:Number = 0, size:Number = IconsUtils.size, space:Number = 4;
+ 			
+ 			if (autosizeIcons)
+ 			{
+				if (layout == "horizontal")
+					size = Math.min(unscaledHeight,IconsUtils.size,unscaledWidth/numChildren - space);
+				else
+					size = Math.min(unscaledWidth,IconsUtils.size,unscaledHeight/numChildren - space);
+					
+				IconsUtils.size = size;
+ 			}
+ 			
+			for (var i:Number = 0; i < numChildren; i++)
+			{
+				getChildAt(i).width = getChildAt(i).height = size;
+				if (layout == "horizontal")
+				{
+					getChildAt(i).x = pos;
+					getChildAt(i).y = 0;
+				} else {
+					getChildAt(i).y = pos;
+					getChildAt(i).x = 0;
+				}
+				
+				pos += size + space;
+			}
+		}
+
 		private function init(event:Event):void
 		{
+			if (_customCursor)
+				stage.addChild(cursor);
+
 			// Add the resizing event handler.
 			map = Map(event.target);
  			this.doubleClickEnabled = true;
@@ -306,13 +399,6 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 				parent.setChildIndex(this, parent.numChildren-1);
  		}
  		
-		override protected function measure():void
-		{
-			super.measure();
-			minWidth = IconsUtils.size * numChildren + 40;
-			minHeight = IconsUtils.size + 10;
-		}
-
  		private function getMap(e:MapEvent):void
  		{
  			map = Map(e.target);
@@ -423,7 +509,22 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		   			map.reset();
 		   			resetMap.selected = false;
 		   		break;
+		   		case HAWK_EYE:
+			   		if (hawkEye.selected)
+			   			map.parent.addChildAt(hkView,map.parent.numChildren-1);
+			   		else 
+			   			map.parent.removeChild(hkView);
+			   		if (customCursor)
+			   			manageCursor();
+		   		break;
 	  		} 
+		}
+		
+		private function redrawMouseCursor(e:MouseEvent):void
+		{
+			cursor.visible = true;
+			cursor.x = e.stageX;
+			cursor.y = e.stageY + 20;
 		}
 		
 		private function tooltipHandler(e:MouseEvent):void
@@ -458,25 +559,173 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		   		case RESET_MAP:
 	  				toolTip = "Reset map to its original position and scale"
 		   		break;
+		   		case HAWK_EYE:
+	  				toolTip = "Show circle with zoom when roll-over the map"
+		   		break;
 	  		} 
 		}
 
 		private function updateBoxValue(e:MapEvent):void
 		{
 			map = Map(e.target);
+
 			isCenteringMap.selected = map.centeringMapSelected;
 			dragBox.selected = map.dragSelected;
 			zoomIn.selected = map.zoomInSelected;
 			zoomOut.selected = map.zoomOutSelected;
+			zoomRect.selected = map.zoomRectangleSelected;
 			wheelZoom.selected = map.wheelZoomSelected;
 			wheelSkewVertically.selected = map.skewMapVerticallySelected;
 			wheelSkewHorizontally.selected = map.skewMapHorizontallySelected;
-			zoomRect.selected = map.zoomRectangleSelected;
+			
+			if (_customCursor)
+				manageCursor();
 		}
 		
 		private function registerMapListeners():void
 		{
 			map.addEventListener(MapEvent.MAP_PROPERTY_ON, updateBoxValue);
+		}
+		
+		private function manageCursor():void
+		{
+			var c:Number = selectedUpIconColor;
+
+			cursor.graphics.clear();
+			var xOffset:Number = 0, space:Number = 3;
+
+  			if (isCenteringMap.selected)
+  			{
+  				cursor.graphics.moveTo(xOffset + IconsUtils.size/2,IconsUtils.size/2);
+				cursor.graphics.beginFill(c,1);
+				cursor.graphics.drawRect(xOffset,0,IconsUtils.size, IconsUtils.size);
+				cursor.graphics.endFill();
+				
+				cursor.graphics.moveTo(xOffset,IconsUtils.size/2);
+				cursor.graphics.lineStyle(2,IconsUtils.BLACK,1);
+				cursor.graphics.lineTo(xOffset + IconsUtils.size,IconsUtils.size/2);
+		
+				cursor.graphics.moveTo(xOffset + IconsUtils.size/2,0);
+				cursor.graphics.lineStyle(2,IconsUtils.BLACK,1);
+				cursor.graphics.lineTo(xOffset + IconsUtils.size/2,IconsUtils.size);
+
+				xOffset += IconsUtils.size + space;
+  			} 
+  			
+			if (zoomIn.selected)
+			{
+				cursor.graphics.moveTo(xOffset + IconsUtils.size/2,IconsUtils.size/2);
+				cursor.graphics.beginFill(c,1);
+				cursor.graphics.drawCircle(xOffset + IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/2);
+				cursor.graphics.endFill();
+				
+				cursor.graphics.moveTo(xOffset + 3,IconsUtils.size/2);
+				cursor.graphics.lineStyle(IconsUtils.thick,IconsUtils.BLACK,1);
+				cursor.graphics.lineTo(xOffset + IconsUtils.size-3,IconsUtils.size/2);
+		
+				cursor.graphics.moveTo(xOffset + IconsUtils.size/2,3);
+				cursor.graphics.lineStyle(IconsUtils.thick,IconsUtils.BLACK,1);
+				cursor.graphics.lineTo(xOffset + IconsUtils.size/2,IconsUtils.size-3);
+				
+				xOffset += IconsUtils.size + space;
+			} 
+
+			if (zoomOut.selected)
+			{
+				cursor.graphics.moveTo(xOffset + IconsUtils.size/2,IconsUtils.size/2);
+				cursor.graphics.beginFill(c,1);
+				cursor.graphics.drawCircle(xOffset + IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/2);
+				cursor.graphics.endFill();
+				
+				cursor.graphics.moveTo(xOffset + 3,IconsUtils.size/2);
+				cursor.graphics.lineStyle(2,IconsUtils.BLACK,1);
+				cursor.graphics.lineTo(xOffset + IconsUtils.size-3,IconsUtils.size/2);
+
+				xOffset += IconsUtils.size + space;
+			} 
+			
+			if (dragBox.selected)
+			{
+				cursor.graphics.moveTo(xOffset + IconsUtils.size/2-3,IconsUtils.size/2-3);
+				cursor.graphics.beginFill(IconsUtils.YELLOW,1);
+				cursor.graphics.lineStyle(1,IconsUtils.YELLOW,1);
+				cursor.graphics.drawRect(xOffset + IconsUtils.size/2-3,IconsUtils.size/2-3,IconsUtils.size/2+3,IconsUtils.size/2+3)
+				cursor.graphics.endFill();
+		
+				cursor.graphics.moveTo(xOffset,0);
+				cursor.graphics.beginFill(c,1);
+				cursor.graphics.lineStyle(1,c,1);
+				cursor.graphics.drawRect(xOffset,0,IconsUtils.size/2+3,IconsUtils.size/2+3)
+				cursor.graphics.endFill();
+
+				xOffset += IconsUtils.size + space;
+			} 
+			
+			if (zoomRect.selected)
+			{
+				cursor.graphics.moveTo(xOffset,0);
+				cursor.graphics.beginFill(c,1);
+				cursor.graphics.lineStyle(1,c,1);
+				cursor.graphics.drawRect(xOffset,0,IconsUtils.size,IconsUtils.size);
+				cursor.graphics.endFill();
+		
+				cursor.graphics.moveTo(xOffset + IconsUtils.size/3,IconsUtils.size/3);
+				cursor.graphics.beginFill(IconsUtils.BLACK,1);
+				cursor.graphics.lineStyle(1,IconsUtils.BLACK,1);
+				cursor.graphics.drawRect(xOffset + IconsUtils.size/3,IconsUtils.size/3,IconsUtils.size/3,IconsUtils.size/3);
+				cursor.graphics.endFill();
+
+				xOffset += IconsUtils.size + space;
+			} 
+			
+			if (wheelZoom.selected)
+			{
+				cursor.graphics.moveTo(xOffset,0);
+				cursor.graphics.lineStyle(3,c,1);
+				cursor.graphics.lineTo(xOffset + IconsUtils.size,IconsUtils.size);
+		
+				cursor.graphics.moveTo(xOffset + IconsUtils.size/2,0);
+				cursor.graphics.lineStyle(3,c,1);
+				cursor.graphics.lineTo(xOffset + IconsUtils.size/2,IconsUtils.size);
+		
+				cursor.graphics.moveTo(xOffset,IconsUtils.size/2);
+				cursor.graphics.lineStyle(3,c,1);
+				cursor.graphics.lineTo(xOffset + IconsUtils.size,IconsUtils.size/2);
+		
+				cursor.graphics.moveTo(xOffset,0);
+				cursor.graphics.lineStyle(3,c,1);
+				cursor.graphics.lineTo(xOffset + IconsUtils.size,IconsUtils.size);
+
+				xOffset += IconsUtils.size + space;
+			} 
+
+			if (hawkEye.selected)
+			{
+				cursor.graphics.moveTo(xOffset + IconsUtils.size/2,IconsUtils.size/2);
+				cursor.graphics.beginFill(c,1);
+				cursor.graphics.lineStyle(1,c,1);
+				cursor.graphics.drawCircle(xOffset + IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/2);
+				cursor.graphics.endFill();
+				
+				cursor.graphics.moveTo(xOffset + IconsUtils.size/2,IconsUtils.size/2);
+				cursor.graphics.beginFill(IconsUtils.BLACK,1);
+				cursor.graphics.lineStyle(1,IconsUtils.BLACK,1);
+				cursor.graphics.drawCircle(xOffset + IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/4);
+				cursor.graphics.endFill();
+
+				xOffset += IconsUtils.size + space;
+			} 
+
+  			if (!(isCenteringMap.selected || dragBox.selected || wheelZoom.selected || hawkEye.selected
+  				|| zoomIn.selected || zoomOut.selected || zoomRect.selected))
+  			{
+  				cursor.visible = false;
+  				stage.removeEventListener(MouseEvent.MOUSE_MOVE, redrawMouseCursor);
+//  				Mouse.show();
+  			} else {
+				stage.addEventListener(MouseEvent.MOUSE_MOVE, redrawMouseCursor);
+//				Mouse.hide();
+  			}
 		}
 	}
 }

@@ -28,6 +28,12 @@
 {
 	public class CenteringMapIcon extends BaseIcon
 	{
+		public function CenteringMapIcon():void
+		{
+			super();
+			width = IconsUtils.size;
+			height = IconsUtils.size;
+		}
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
