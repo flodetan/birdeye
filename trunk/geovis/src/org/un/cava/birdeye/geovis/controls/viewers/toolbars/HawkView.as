@@ -155,16 +155,16 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 				case ROLL_OVER:
 					map.removeEventListener(MouseEvent.CLICK, drawAll, true);
 					map.removeEventListener(MouseEvent.DOUBLE_CLICK, drawAll, true);
-					map.addEventListener(MouseEvent.ROLL_OVER, drawAll, true);
+					map.addEventListener(MouseEvent.MOUSE_MOVE, drawAll, true);
 				break;
 				case DOUBLE_CLICK:
 					map.removeEventListener(MouseEvent.CLICK, drawAll, true);
-					map.removeEventListener(MouseEvent.ROLL_OVER, drawAll, true);
+					map.removeEventListener(MouseEvent.MOUSE_MOVE, drawAll, true);
 					map.addEventListener(MouseEvent.DOUBLE_CLICK, drawAll, true);
 				break;
 				case CLICK:
 					map.removeEventListener(MouseEvent.DOUBLE_CLICK, drawAll, true);
-					map.removeEventListener(MouseEvent.ROLL_OVER, drawAll, true);
+					map.removeEventListener(MouseEvent.MOUSE_MOVE, drawAll, true);
 					map.addEventListener(MouseEvent.CLICK, drawAll, true);
 			}
 		}
