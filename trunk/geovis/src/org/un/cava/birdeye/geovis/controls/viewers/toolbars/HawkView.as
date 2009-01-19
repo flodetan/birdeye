@@ -34,11 +34,11 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import mx.core.Application;
 	import mx.core.UIComponent;
-	import mx.events.FlexEvent;
 	
 	import org.un.cava.birdeye.geovis.core.Map;
 	import org.un.cava.birdeye.geovis.events.MapEvent;
@@ -189,8 +189,10 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			
 			if (_followMouse)
 			{
-	   			x = map.mouseX - width/2 + _xOffsetFromMouse;
-				y = map.mouseY - height/2 + _yOffsetFromMouse;
+				var localPoint:Point = localToContent(new Point(map.parent.mouseX, map.parent.mouseY))
+	   			x = localPoint.x - width/2 + _xOffsetFromMouse;
+				y = localPoint.y - height/2 + _yOffsetFromMouse;
+trace("hkView", x,y, map.mouseX, map.mouseY)
 			}
 
 			var tempMask:DisplayObject = DisplayObject(map.mask);
