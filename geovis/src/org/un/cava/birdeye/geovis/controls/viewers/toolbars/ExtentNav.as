@@ -42,7 +42,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	import org.un.cava.birdeye.geovis.events.MapEvent;
 	import org.un.cava.birdeye.geovis.views.maps.world.WorldMap;
 	
-	public class MovePointerView extends UIComponent
+	public class ExtentNav extends UIComponent
 	{ 
 	    private var map:Map;
 
@@ -122,7 +122,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 				_scale = val;
 		}
 
-		public function MovePointerView()
+		public function ExtentNav()
 		{
 			super(); 
 		    Application.application.addEventListener(MapEvent.MAP_INSTANTIATED, init, true);

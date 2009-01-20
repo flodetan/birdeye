@@ -64,7 +64,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		private var resetMap:CheckBox;
 		private var hawkEye:CheckBox;
 
-   		private var hkView:HawkView;
+   		private var hkView:ZoomReticle;
    		 
 		private var cursor:Sprite = new Sprite(); 
 		
@@ -333,9 +333,9 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    hawkEye.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
 		    addChild(hawkEye);
 
-			hkView = new HawkView();
-   			hkView.eventType = HawkView.ROLL_OVER;
-   			hkView.shape = HawkView.CIRCLE;
+			hkView = new ZoomReticle();
+   			hkView.eventType = ZoomReticle.ROLL_OVER;
+   			hkView.shape = ZoomReticle.CIRCLE;
    			hkView.yOffsetFromMouse = 140;
    			hkView.xOffsetFromMouse = 0;
    			hkView.width = 150;

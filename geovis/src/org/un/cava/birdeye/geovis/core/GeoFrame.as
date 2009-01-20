@@ -312,6 +312,7 @@ package org.un.cava.birdeye.geovis.core
 	    
 		private var maskShape:Shape; 
 		private var maskCont:UIComponent;
+		private var maskCreated:Boolean = false;
 		private var backgroundPoly:RegularRectangle;
 		private var background:GeometryGroup;
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
@@ -324,13 +325,18 @@ package org.un.cava.birdeye.geovis.core
 	 			
 				createMap();
 				isProjectionChanged=false;
-
-				maskCont.setActualSize(unscaledWidth, unscaledHeight);
-				maskCont.move(0,0);
-				maskShape.graphics.beginFill(0xffffff, 0);
-				maskShape.graphics.drawRect(0,0,unscaledWidth, unscaledHeight);
-				maskShape.graphics.endFill();
-	  			this.setChildIndex(maskCont, 0);
+				
+				if (!maskCreated)
+				{
+					maskCont.setActualSize(unscaledWidth, unscaledHeight);
+					maskCont.move(0,0);
+					maskShape.graphics.beginFill(0xffffff, 0);
+					maskShape.graphics.drawRect(0,0,unscaledWidth, unscaledHeight);
+					maskShape.graphics.endFill();
+		  			this.setChildIndex(maskCont, 0);
+		  			maskCreated = true;
+				}
+trace (maskShape.width, maskShape.height);
 
 				// the projection name is registered inside map
 				// this will also updates the unscaled map size with the proper values

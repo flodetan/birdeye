@@ -13,6 +13,7 @@ package org.un.cava.birdeye.geovis.core
 	import mx.core.Application;
 	import mx.events.FlexEvent;
 	
+	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	import org.un.cava.birdeye.geovis.events.MapEvent;
 	import org.un.cava.birdeye.geovis.locators.LatLong;
 
@@ -35,7 +36,10 @@ package org.un.cava.birdeye.geovis.core
 		public function Map()
 		{
 			super(); 
-			Application.application.addEventListener(FlexEvent.APPLICATION_COMPLETE, notifyMapReady);
+//			Application.application.addEventListener(FlexEvent.APPLICATION_COMPLETE, notifyMapReady);
+			
+// to be changed in the future model
+Application.application.addEventListener(GeoCoreEvents.RASTER_COMPLETE, notifyMapReady, true);
 		}
 		
 		private function notifyMapReady(e:Event):void
@@ -84,8 +88,8 @@ package org.un.cava.birdeye.geovis.core
 		*/
 		public function set zoom(value:Number):void
 		{
-			dispatchEvent(new MapEvent(MapEvent.MAP_ZOOM_CHANGED));
 			_zoom=value;
+			dispatchEvent(new MapEvent(MapEvent.MAP_ZOOM_CHANGED));
 		}
 	
 		/**

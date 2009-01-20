@@ -44,7 +44,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	import org.un.cava.birdeye.geovis.events.MapEvent;
 	import org.un.cava.birdeye.geovis.views.maps.world.WorldMap;
 	
-	public class HawkView extends UIComponent
+	public class ZoomReticle extends UIComponent
 	{ 
 	    private var map:Map;
 
@@ -149,7 +149,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 				_zoom = val;
 		}
 
-		public function HawkView()
+		public function ZoomReticle()
 		{
 			super(); 
 		    Application.application.addEventListener(MapEvent.MAP_CHANGED, init, true);
@@ -196,7 +196,6 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		// Start moving the toolbar
 	    private function startMovingToolBar(e:MouseEvent):void
 	    {
-	    	this.parent.addEventListener(MouseEvent.ROLL_OUT, resetToolBarPosition);
 	    	startDraggingPoint = new Point(this.x, this.y);
 	    	offsetX = e.stageX - this.x;
 	    	offsetY = e.stageY - this.y;

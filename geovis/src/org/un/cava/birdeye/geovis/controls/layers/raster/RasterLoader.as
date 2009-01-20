@@ -22,11 +22,11 @@ package org.un.cava.birdeye.geovis.controls.layers.raster
 	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	import org.un.cava.birdeye.geovis.events.MapEvent;
 	
-	public class RasterLoader extends UIComponent
+	public class RasterLoader extends UIComponent implements IRaster
 	{
 		private var map:Map;
 		
-		private var bkSurface:Surface = new Surface();
+		private var bkSurface:Surface;
 		private var _source:String = new String();
 		private var original:BitmapData;
 		
@@ -52,15 +52,28 @@ package org.un.cava.birdeye.geovis.controls.layers.raster
 		{
 			map = Map(e.target);
 			if (map.projection == _projection)
+			{
 				try 
 				{
-	 				var img:Loader = new Loader(); 
-					img.contentLoaderInfo.addEventListener(Event.COMPLETE, imgHandler);
-					img.load(new URLRequest(_source));  
+					if (bkSurface != null)
+					{
+						bkSurface.transform.matrix = map.transform.matrix;
+						visible = true;
+					} else {
+		 				var img:Loader = new Loader(); 
+						img.contentLoaderInfo.addEventListener(Event.COMPLETE, imgHandler);
+						img.load(new URLRequest(_source));  
+					}
 				} catch (e:Error)
 				{
-	trace (e);
+trace (e);
 				}
+			} else {
+				if (bkSurface != null)
+				{
+					visible = false;
+				}
+			}
 		}
 
 		private function imgHandler(e:Event):void
@@ -74,17 +87,21 @@ package org.un.cava.birdeye.geovis.controls.layers.raster
 			 	var scaleX:Number = map.unscaledMapWidth/originalWidth;
 			 	var scaleY:Number = map.unscaledMapHeight/originalHeight; 
 			 	
+
 			 	var m:Matrix = new Matrix();
 			 	m = map.transform.matrix;
 			 	m.scale(scaleX,scaleY);
 			 	m.translate(0,-7);
-			
+				
+				if (original != null)
+					original.dispose();
 			 	original = new BitmapData(map.unscaledMapWidth, map.unscaledMapHeight); 
 			 	original.draw(bmd,m);
 	
 				var bmp:Bitmap = new Bitmap(original,PixelSnapping.ALWAYS,true);
 			    var imgFill:BitmapFill = new BitmapFill(bmp);
 	
+				bkSurface = new Surface();
 				var bkGeomGroup:GeometryGroup = new GeometryGroup();
 				var bkPoly:RegularRectangle = 
 			    	new RegularRectangle(0,0,map.unscaledMapWidth, map.unscaledMapHeight);
@@ -96,7 +113,6 @@ package org.un.cava.birdeye.geovis.controls.layers.raster
 			    addChild(bkSurface);
 			    
 			    var mapMask:DisplayObject = DisplayObject(map.mask);
-			    
 			    var msk:Shape = new Shape();
 				msk.graphics.moveTo(0,0);
 				msk.graphics.beginFill(0xffffff, 0);
@@ -109,7 +125,7 @@ package org.un.cava.birdeye.geovis.controls.layers.raster
 				mskCont.move(0,0);
 			    this.addChildAt(mskCont,0);
 			    bkSurface.mask = msk;
-			    
+
 				map.addEventListener(MapEvent.MAP_ZOOM_COMPLETE, update);
 				map.addEventListener(MapEvent.MAP_MOVING, update);
 			    map.addEventListener(MapEvent.MAP_CENTERED, update);
@@ -122,11 +138,14 @@ trace (e);
 		private function update(e:MapEvent):void
 		{
 			map = Map(e.target);
-			bkSurface.transform.matrix = map.transform.matrix;
-			if (map.zoom > 4)
-				visible = false
-			else
-				visible = true;
+			if (_projection == map.projection)
+			{
+				bkSurface.transform.matrix = map.transform.matrix;
+				if (map.zoom > 4)
+					visible = false
+				else
+					visible = true;
+			}
 		}
 	}
 }
