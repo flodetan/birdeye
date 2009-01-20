@@ -27,7 +27,6 @@
  
 package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 {
-	import flash.display.BlendMode;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -100,6 +99,14 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		private var _selectedUpIconColor:Number = GREEN;
 		private var _selectedOverIconColor:Number = GREY;
 		private var _selectedDownIconColor:Number = BLUE;
+		
+		private var _dragHawkView:Boolean = true;
+		
+		[Inspectable(enumeration="true,false")]
+		public function set dragHawkView(val:Boolean):void
+		{
+			_dragHawkView = val;
+		}
 		
 		public function get autosizeIcons():Boolean
 		{
@@ -334,6 +341,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
    			hkView.width = 150;
    			hkView.height = 150;
    			hkView.followMouse = false;
+   			hkView.draggable = _dragHawkView;
    			hkView.zoom = 4;
    			hkView.backgroundColor = IconsUtils.WHITE;
    			hkView.backgroundAlpha = 0.8;
