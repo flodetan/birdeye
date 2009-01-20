@@ -72,6 +72,7 @@ package org.un.cava.birdeye.geovis.events
 	     *  @eventType DrawBaseMapComplete 
 		 */
         public static const DRAW_BASEMAP_COMPLETE:String = "DrawBaseMapComplete";
+        public static const RASTER_COMPLETE:String = "RasterComplete";
         
         
 		

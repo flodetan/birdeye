@@ -55,7 +55,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		{
 			map = Map(e.target);
 		    value = map.zoom;
-			map.addEventListener(MapEvent.MAP_ZOOM_COMPLETE, updateZoomValue);
+			map.addEventListener(MapEvent.MAP_ZOOM_CHANGED, updateZoomValue);
 		    addEventListener(Event.CHANGE, sliderZoomHandler);
 			if (parent is WorldMap) 
 				parent.setChildIndex(this, parent.numChildren-1);
