@@ -69,6 +69,20 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		private var _borderColor:Number = HawkUtils.RED;
 		private var _backgroundAlpha:Number = 0.5;
 		private var _borderAlpha:Number = 0.5;
+		
+		// Offset positions used when moving the toolbar on dragging/dropping
+	    private var offsetX:Number, offsetY:Number;
+	    // Keep the starting point position when dragging, if mouse goes out of the parents' view
+	    // than the toolbar will be repositioned to this point
+	    private var startDraggingPoint:Point;
+
+		private var _draggable:Boolean = false;
+		
+		[Inspectable(enumeration="true,false")]
+		public function set draggable(val:Boolean):void
+		{
+			_draggable = val;
+		}
 
 		[Inspectable(enumeration="circle,rectangle")]
 		public function set shape(val:String):void
@@ -167,8 +181,54 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 					map.removeEventListener(MouseEvent.MOUSE_MOVE, drawAll, true);
 					map.addEventListener(MouseEvent.CLICK, drawAll, true);
 			}
+			
+			if (_draggable)
+				addEventListener(MouseEvent.MOUSE_DOWN, moveToolbar);
 		}
 	
+		// Resize panel event handler.
+		public  function moveToolbar(event:MouseEvent):void
+		{
+	  		startMovingToolBar(event);
+	  		stage.addEventListener(MouseEvent.MOUSE_UP, stopMovingToolBar);
+		}
+		
+		// Start moving the toolbar
+	    private function startMovingToolBar(e:MouseEvent):void
+	    {
+	    	this.parent.addEventListener(MouseEvent.ROLL_OUT, resetToolBarPosition);
+	    	startDraggingPoint = new Point(this.x, this.y);
+	    	offsetX = e.stageX - this.x;
+	    	offsetY = e.stageY - this.y;
+	    	stage.addEventListener(MouseEvent.MOUSE_MOVE, dragToolBar);
+	    }
+	    
+	    // Reset the toolbar position to the starting point
+	    private function resetToolBarPosition(e:MouseEvent):void
+	    {
+	    	stopMovingToolBar(e);
+	    	this.x = startDraggingPoint.x;
+	    	this.y = startDraggingPoint.y;
+	    	this.parent.removeEventListener(MouseEvent.ROLL_OUT, resetToolBarPosition);
+	    }
+	    
+	    // Stop moving the toolbar 
+	    private function stopMovingToolBar(e:MouseEvent):void
+	    {
+	    	stage.removeEventListener(MouseEvent.MOUSE_MOVE, dragToolBar)
+	  		stage.removeEventListener(MouseEvent.MOUSE_UP, stopMovingToolBar);
+	    	this.parent.removeEventListener(MouseEvent.ROLL_OUT, resetToolBarPosition);
+	    }
+	    
+	    // Moving the toolbar while MOUSE_MOVE event is on
+	    private function dragToolBar(e:MouseEvent):void
+	    {
+	    	this.x = e.stageX - offsetX;
+	    	this.y = e.stageY - offsetY;
+	    	e.updateAfterEvent();
+	    	// dispatch moved toolbar event
+	    }
+	    
 		/**
 		 * @Private
 		 * Create draggableRect and its mask 
@@ -187,7 +247,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		{
 			clearAll();
 			
-			if (_followMouse)
+			if (_followMouse && !_draggable)
 			{
 				var localPoint:Point = localToContent(new Point(map.parent.mouseX, map.parent.mouseY))
 	   			x = localPoint.x - width/2 + _xOffsetFromMouse;
