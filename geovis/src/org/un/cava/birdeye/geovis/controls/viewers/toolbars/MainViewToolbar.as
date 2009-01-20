@@ -204,7 +204,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    isCenteringMap.setStyle("downIcon", CenteringMapIcon);
 		    isCenteringMap.setStyle("selectedOverIcon", CenteringMapIcon);
 		    isCenteringMap.setStyle("selectedDownIcon", CenteringMapIcon);
-		    isCenteringMap.blendMode = BlendMode.ADD;
+//		    isCenteringMap.blendMode = BlendMode.ADD;
 		    isCenteringMap.addEventListener(Event.CHANGE, toolbarListenersHandler);
 		    isCenteringMap.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
 		    addChild(isCenteringMap);
@@ -217,7 +217,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    zoomOut.setStyle("downIcon", ZoomOutIcon);
 		    zoomOut.setStyle("selectedOverIcon", ZoomOutIcon);
 		    zoomOut.setStyle("selectedDownIcon", ZoomOutIcon);
-		    zoomOut.blendMode = BlendMode.ADD;
+//		    zoomOut.blendMode = BlendMode.ADD;
 		    zoomOut.addEventListener(Event.CHANGE, toolbarListenersHandler);
 		    zoomOut.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
 		    addChild(zoomOut);
@@ -230,7 +230,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    zoomIn.setStyle("downIcon", ZoomInIcon);
 		    zoomIn.setStyle("selectedOverIcon", ZoomInIcon);
 		    zoomIn.setStyle("selectedDownIcon", ZoomInIcon);
-		    zoomIn.blendMode = BlendMode.ADD;
+//		    zoomIn.blendMode = BlendMode.ADD;
 		    zoomIn.addEventListener(Event.CHANGE, toolbarListenersHandler);
 		    zoomIn.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
 		    addChild(zoomIn);
@@ -243,7 +243,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    wheelZoom.setStyle("downIcon", WheelZoomIcon);
 		    wheelZoom.setStyle("selectedOverIcon", WheelZoomIcon);
 		    wheelZoom.setStyle("selectedDownIcon", WheelZoomIcon);
-		    wheelZoom.blendMode = BlendMode.ADD;
+//		    wheelZoom.blendMode = BlendMode.ADD;
 		    wheelZoom.addEventListener(Event.CHANGE, toolbarListenersHandler);
 		    wheelZoom.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
 		    addChild(wheelZoom);
@@ -256,7 +256,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    dragBox.setStyle("downIcon", DragBox);
 		    dragBox.setStyle("selectedOverIcon", DragBox);
 		    dragBox.setStyle("selectedDownIcon", DragBox);
-		    dragBox.blendMode = BlendMode.ADD;
+//		    dragBox.blendMode = BlendMode.ADD;
 		    dragBox.addEventListener(Event.CHANGE, toolbarListenersHandler);
 		    dragBox.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
 		    addChild(dragBox); 
@@ -269,7 +269,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    wheelSkewVertically.setStyle("downIcon", WheelSkewVerticallyIcon);
 		    wheelSkewVertically.setStyle("selectedOverIcon", WheelSkewVerticallyIcon);
 		    wheelSkewVertically.setStyle("selectedDownIcon", WheelSkewVerticallyIcon);
-		    wheelSkewVertically.blendMode = BlendMode.ADD;
+//		    wheelSkewVertically.blendMode = BlendMode.ADD;
 /* 		    wheelSkewVertically.addEventListener(Event.CHANGE, toolbarListenersHandler);
 		    wheelSkewVertically.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
 		    addChild(wheelSkewVertically);
@@ -282,7 +282,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    wheelSkewHorizontally.setStyle("downIcon", WheelSkewHorizontallyIcon);
 		    wheelSkewHorizontally.setStyle("selectedOverIcon", WheelSkewHorizontallyIcon);
 		    wheelSkewHorizontally.setStyle("selectedDownIcon", WheelSkewHorizontallyIcon);
-		    wheelSkewHorizontally.blendMode = BlendMode.ADD;
+//		    wheelSkewHorizontally.blendMode = BlendMode.ADD;
 /* 		    wheelSkewHorizontally.addEventListener(Event.CHANGE, toolbarListenersHandler);
 		    wheelSkewHorizontally.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
 		    addChild(wheelSkewHorizontally);
@@ -295,7 +295,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    zoomRect.setStyle("downIcon", ZoomRectangle);
 		    zoomRect.setStyle("selectedOverIcon", ZoomRectangle);
 		    zoomRect.setStyle("selectedDownIcon", ZoomRectangle);
-		    zoomRect.blendMode = BlendMode.ADD;
+//		    zoomRect.blendMode = BlendMode.ADD;
 		    zoomRect.addEventListener(Event.CHANGE, toolbarListenersHandler);
 		    zoomRect.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
 		    addChild(zoomRect);
@@ -308,7 +308,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    resetMap.setStyle("downIcon", ResetMap);
 		    resetMap.setStyle("selectedOverIcon", ResetMap);
 		    resetMap.setStyle("selectedDownIcon", ResetMap);
-		    resetMap.blendMode = BlendMode.ADD;
+//		    resetMap.blendMode = BlendMode.ADD;
 		    resetMap.addEventListener(Event.CHANGE, toolbarListenersHandler);
 		    resetMap.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
 		    addChild(resetMap);
@@ -321,7 +321,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		    hawkEye.setStyle("downIcon", HawkEye);
 		    hawkEye.setStyle("selectedOverIcon", HawkEye);
 		    hawkEye.setStyle("selectedDownIcon", HawkEye);
-		    hawkEye.blendMode = BlendMode.ADD;
+//		    hawkEye.blendMode = BlendMode.ADD;
 		    hawkEye.addEventListener(Event.CHANGE, toolbarListenersHandler);
 		    hawkEye.addEventListener(MouseEvent.MOUSE_OVER, tooltipHandler);
 		    addChild(hawkEye);
