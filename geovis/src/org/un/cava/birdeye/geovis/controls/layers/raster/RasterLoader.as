@@ -1,6 +1,34 @@
+
+/*  
+ * The MIT License
+ *
+ * Copyright (c) 2008
+ * United Nations Office at Geneva
+ * Center for Advanced Visual Analytics
+ * http://cava.unog.ch
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package org.un.cava.birdeye.geovis.controls.layers.raster
 {
 	import com.degrafa.GeometryGroup;
+	import com.degrafa.IGraphic;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.BitmapFill;
@@ -30,6 +58,7 @@ package org.un.cava.birdeye.geovis.controls.layers.raster
 		private var _source:String = new String();
 		private var original:BitmapData;
 		
+		private var _mask:IGraphic;
 		private var _projection:String;
 		
 		[Inspectable(enumeration="Geographic,Lambert equal area,Mercator,Mollweide,WinkelTripel,Miller cylindrical,EckertIV,EckertVI,Goode,Sinsoidal,Robinson")]
@@ -112,19 +141,7 @@ trace (e);
 			    
 			    addChild(bkSurface);
 			    
-			    var mapMask:DisplayObject = DisplayObject(map.mask);
-			    var msk:Shape = new Shape();
-				msk.graphics.moveTo(0,0);
-				msk.graphics.beginFill(0xffffff, 0);
-				msk.graphics.drawRect(0,0,mapMask.width,mapMask.height);
-				msk.graphics.endFill();
-
-			    var mskCont:UIComponent = new UIComponent();
-			    mskCont.addChild(msk);
-				mskCont.setActualSize(mapMask.width, mapMask.height);
-				mskCont.move(0,0);
-			    this.addChildAt(mskCont,0);
-			    bkSurface.mask = msk;
+			    bkSurface.mask = createMask(map.mask);
 
 				map.addEventListener(MapEvent.MAP_ZOOM_COMPLETE, update);
 				map.addEventListener(MapEvent.MAP_MOVING, update);
@@ -133,6 +150,26 @@ trace (e);
 			} catch (e:Error) {
 trace (e);
 			}
+		}
+		
+		public function createMask(geoMask:DisplayObject):DisplayObject
+		{
+			var msk:Shape;
+			if (geoMask != null)
+			{
+			    msk = new Shape();
+				msk.graphics.moveTo(0,0);
+				msk.graphics.beginFill(0xffffff, 0);
+				msk.graphics.drawRect(0,0,geoMask.width,geoMask.height);
+				msk.graphics.endFill();
+
+			    var mskCont:UIComponent = new UIComponent();
+			    mskCont.addChild(msk);
+				mskCont.setActualSize(geoMask.width, geoMask.height);
+				mskCont.move(0,0);
+			    this.addChildAt(mskCont,0);
+			}
+			return msk;
 		}
 		
 		private function update(e:MapEvent):void
