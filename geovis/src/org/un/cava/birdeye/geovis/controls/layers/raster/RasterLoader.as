@@ -121,8 +121,8 @@ trace (e);
 			 	
 
 			 	var m:Matrix = new Matrix();
-			 	m = map.transform.matrix;
 			 	m.scale(scaleX,scaleY);
+			 	map.transform.matrix.concat(m);
 			 	m.translate(0,-7);
 				
 				if (original != null)
@@ -182,7 +182,7 @@ trace (e);
 			if (_projection == map.projection)
 			{
 				bkSurface.transform.matrix = map.transform.matrix;
-				if (map.zoom > 4)
+				if (map.zoom > 2)
 					bkSurface.visible = false
 				else
 					bkSurface.visible = true;
