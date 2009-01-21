@@ -273,8 +273,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	    	xPos = RectangleView(e.target).x;
 	    	yPos = RectangleView(e.target).y;
 	    	
-	    	map.x = -xPos*scale*map.zoom;
-	    	map.y = -yPos*scale*map.zoom;
+	    	map.absoluteMoveMap(-xPos*scale*map.zoom,-yPos*scale*map.zoom);
 	    }
 	    
 		/**

@@ -87,7 +87,8 @@ package org.un.cava.birdeye.geovis.controls.layers.raster
 					if (bkSurface != null)
 					{
 						bkSurface.transform.matrix = map.transform.matrix;
-						visible = true;
+						bkSurface.visible = true;
+					    dispatchEvent(new GeoCoreEvents(GeoCoreEvents.RASTER_COMPLETE));
 					} else {
 		 				var img:Loader = new Loader(); 
 						img.contentLoaderInfo.addEventListener(Event.COMPLETE, imgHandler);
@@ -96,11 +97,13 @@ package org.un.cava.birdeye.geovis.controls.layers.raster
 				} catch (e:Error)
 				{
 trace (e);
+					dispatchEvent(new GeoCoreEvents(GeoCoreEvents.NO_RASTER));
 				}
 			} else {
+				dispatchEvent(new GeoCoreEvents(GeoCoreEvents.NO_RASTER));
 				if (bkSurface != null)
 				{
-					visible = false;
+					bkSurface.visible = false;
 				}
 			}
 		}
@@ -149,6 +152,7 @@ trace (e);
 			    dispatchEvent(new GeoCoreEvents(GeoCoreEvents.RASTER_COMPLETE));
 			} catch (e:Error) {
 trace (e);
+				dispatchEvent(new GeoCoreEvents(GeoCoreEvents.NO_RASTER));
 			}
 		}
 		
@@ -179,9 +183,9 @@ trace (e);
 			{
 				bkSurface.transform.matrix = map.transform.matrix;
 				if (map.zoom > 4)
-					visible = false
+					bkSurface.visible = false
 				else
-					visible = true;
+					bkSurface.visible = true;
 			}
 		}
 	}
