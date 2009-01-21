@@ -36,23 +36,46 @@ package org.un.cava.birdeye.geovis.core
 		public function Map()
 		{
 			super(); 
-//			Application.application.addEventListener(FlexEvent.APPLICATION_COMPLETE, notifyMapReady);
+			Application.application.addEventListener(FlexEvent.APPLICATION_COMPLETE, notifyMapReady);
 			
 // to be changed in the future model
-Application.application.addEventListener(GeoCoreEvents.RASTER_COMPLETE, notifyMapReady, true);
+Application.application.addEventListener(GeoCoreEvents.RASTER_COMPLETE, raster, true);
+Application.application.addEventListener(GeoCoreEvents.NO_RASTER, raster, true);
+		}
+		
+		private var isMapReady:Boolean = false;
+		private const no_raster:String = "no_raster"; 
+		private const unknown:String = "unknown"; 
+		private const raster_complete:String = "raster_complete";
+		private var rasterFlag:String = unknown;
+		private function raster(e:GeoCoreEvents):void
+		{
+			if (e.type == GeoCoreEvents.RASTER_COMPLETE)
+				rasterFlag = raster_complete;
+			else
+				rasterFlag = no_raster;
+
+			if (isMapReady)
+				init(e);
 		}
 		
 		private function notifyMapReady(e:Event):void
 		{
+			isMapReady = true;
 			dispatchEvent(new MapEvent(MapEvent.MAP_INSTANTIATED));
 			addEventListener(MapEvent.MAP_CHANGED, init);
 			Application.application.removeEventListener(FlexEvent.APPLICATION_COMPLETE, notifyMapReady);
-			init(e);
+			
+			
+			if (rasterFlag != unknown)
+				init(e);
 		}
 		
 		private function init(e:Event):void
 		{
 			reset();
+			rasterFlag = unknown;
+			isMapReady = false;
 		}
 		
 		private var _zoom:Number = CREATION_ZOOM;
