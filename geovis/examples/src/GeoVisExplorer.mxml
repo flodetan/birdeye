@@ -217,9 +217,9 @@
 			DrawBaseMapComplete="{isLoading = true}"  
 			x="10" y="20" >
 			
-			<raster:RasterLoader projection="Geographic" visible="false" source="raster/worldtopobathy.jpg" id="myRaster"/>
+			<raster:RasterLoader projection="Geographic" visible="false" source="raster/worldtopobathyNG.jpg" id="myRaster"/>
 			
-			<tools:ZoomSliderView x="20" y="200" id="zoomSlider"/>
+			<tools:ZoomSliderView x="20" y="200" id="zoomSlider" showLabels="true"/>
 			<analysis:Choropleth id="choropleth" alpha="0.7" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" colorField="{featureSelector.selectedItem.data}" scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" dataTipFunction="customDataTip" highlighted="true"  />
 			<symbols:Symbols id="mySymbols" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" itemRenderer="renderers.MedalsRenderer" visible="false" />			
 			
@@ -282,7 +282,7 @@
 					<tools:MainViewToolbar horizontalAlign="center"
 						layout="horizontal" customCursor="true"
 						autosizeIcons="true" height="20"
-						upIconColor="0x999999"
+						upIconColor="{MainViewToolbar.GREEN}"
 						downIconColor="{MainViewToolbar.RED}"
 						selectedOverIconColor="0x999999"
 						selectedDownIconColor="{MainViewToolbar.RED}"
