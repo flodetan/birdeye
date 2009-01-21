@@ -38,15 +38,23 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	
 	public class ZoomSliderView extends VSlider
 	{
+		private var _showLabel:Boolean = false;
+		
+		[Inspectable(enumeration="true,false")]
+		public function set showLabels(val:Boolean):void
+		{
+			_showLabel = val;
+		}
+		
 		public function ZoomSliderView() 
 		{
 			super();
 		    minimum = 0.1;
 		    maximum = 20;
-		    labels = [0,5,10,15,20];
 		    liveDragging = true;
 		    enabled = true;
-		    toolTip = "Center the map first and then use this slider"
+		    visible = false;
+		    toolTip = "Center the map first and then use this slider";
 		    Application.application.addEventListener(MapEvent.MAP_INSTANTIATED, init, true)
 		}
 		
@@ -54,6 +62,9 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		private function init(e:MapEvent):void
 		{
 			map = Map(e.target);
+		    if (_showLabel)
+			    labels = [0,5,10,15,20];
+			visible = true;
 		    value = map.zoom;
 			map.addEventListener(MapEvent.MAP_ZOOM_CHANGED, updateZoomValue);
 		    addEventListener(Event.CHANGE, sliderZoomHandler);
