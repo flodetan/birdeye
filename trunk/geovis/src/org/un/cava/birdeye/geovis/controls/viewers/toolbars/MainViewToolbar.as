@@ -84,7 +84,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		public static const YELLOW:Number = 0xffd800;
 		public static const RED:Number = 0xff0000;
 		public static const BLUE:Number = 0x009cff;
-		public static const GREEN:Number = 0x00ff54;
+		public static const GREEN:Number = 0x609677;
 		public static const BLACK:Number = 0x000000;
 		
 		public static const size:Number = 15;
