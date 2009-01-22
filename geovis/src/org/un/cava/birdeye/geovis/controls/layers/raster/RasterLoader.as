@@ -27,51 +27,37 @@
  */
 package org.un.cava.birdeye.geovis.controls.layers.raster
 {
-	import com.degrafa.GeometryGroup;
-	import com.degrafa.IGraphic;
-	import com.degrafa.Surface;
-	import com.degrafa.geometry.RegularRectangle;
-	import com.degrafa.paint.BitmapFill;
-	
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.display.DisplayObject;
-	import flash.display.Loader;
-	import flash.display.PixelSnapping;
-	import flash.display.Shape;
 	import flash.events.Event;
+	import flash.events.ProgressEvent;
 	import flash.geom.Matrix;
-	import flash.net.URLRequest;
 	
+	import mx.controls.Image;
 	import mx.core.Application;
-	import mx.core.UIComponent;
 	
 	import org.un.cava.birdeye.geovis.core.Map;
 	import org.un.cava.birdeye.geovis.events.GeoCoreEvents;
 	import org.un.cava.birdeye.geovis.events.MapEvent;
 	
-	public class RasterLoader extends UIComponent implements IRaster
+	public class RasterLoader extends Image implements IRaster
 	{
 		private var map:Map;
 		
-		private var bkSurface:Surface;
-		private var _source:String = new String();
-		private var original:BitmapData;
-		
-		private var _mask:IGraphic;
 		private var _projection:String;
+		private var _memVisibility:Boolean = true;
 		
 		[Inspectable(enumeration="Geographic,Lambert equal area,Mercator,Mollweide,WinkelTripel,Miller cylindrical,EckertIV,EckertVI,Goode,Sinsoidal,Robinson")]
 		public function set projection(val:String):void
 		{
 			_projection = val;
 		}
-
-		public function set source(val:String):void
-		{
-			_source = val;
-		}
 		
+		override public function set visible(value:Boolean):void
+		{
+			_memVisibility = value;
+			if (map != null && map.projection == _projection)
+				super.visible = value;
+		}
+
 		public function RasterLoader()
 		{
 			Application.application.addEventListener(MapEvent.MAP_CHANGED,init,true);
@@ -79,101 +65,45 @@ package org.un.cava.birdeye.geovis.controls.layers.raster
 		
 		private function init(e:MapEvent):void
 		{
-			map = Map(e.target);
+			map = Map(e.target); 
 			if (map.projection == _projection)
 			{
-				try 
+				if (source.toString().search("embed") == -1)
 				{
-					if (bkSurface != null)
-					{
-						bkSurface.transform.matrix = map.transform.matrix;
-						bkSurface.visible = true;
-					    dispatchEvent(new GeoCoreEvents(GeoCoreEvents.RASTER_COMPLETE));
-					} else {
-		 				var img:Loader = new Loader(); 
-						img.contentLoaderInfo.addEventListener(Event.COMPLETE, imgHandler);
-						img.load(new URLRequest(_source));  
+					addEventListener(Event.COMPLETE, imgHandler);
+					try {
+						load(source);
+					} catch (e:Error) {
+						trace(e.message, e.getStackTrace());
+						dispatchEvent(new GeoCoreEvents(GeoCoreEvents.NO_RASTER));
 					}
-				} catch (e:Error)
-				{
-trace (e);
-					dispatchEvent(new GeoCoreEvents(GeoCoreEvents.NO_RASTER));
+					
+				} else {
+					imgHandler(e);
 				}
+				super.visible = _memVisibility; 
 			} else {
-				dispatchEvent(new GeoCoreEvents(GeoCoreEvents.NO_RASTER));
-				if (bkSurface != null)
-				{
-					bkSurface.visible = false;
-				}
-			}
-		}
-
-		private function imgHandler(e:Event):void
-		{
-			try
-			{
-			 	var bmd:BitmapData = Bitmap(e.target.content).bitmapData; 
-			 				
-			 	var originalWidth:Number = bmd.width;
-			 	var originalHeight:Number = bmd.height;
-			 	var scaleX:Number = map.unscaledMapWidth/originalWidth;
-			 	var scaleY:Number = map.unscaledMapHeight/originalHeight; 
-			 	
-
-			 	var m:Matrix = new Matrix();
-			 	m.scale(scaleX,scaleY);
-			 	map.transform.matrix.concat(m);
-			 	m.translate(0,-7);
-				
-				if (original != null)
-					original.dispose();
-			 	original = new BitmapData(map.unscaledMapWidth, map.unscaledMapHeight); 
-			 	original.draw(bmd,m);
-	
-				var bmp:Bitmap = new Bitmap(original,PixelSnapping.ALWAYS,true);
-			    var imgFill:BitmapFill = new BitmapFill(bmp);
-	
-				bkSurface = new Surface();
-				var bkGeomGroup:GeometryGroup = new GeometryGroup();
-				var bkPoly:RegularRectangle = 
-			    	new RegularRectangle(0,0,map.unscaledMapWidth, map.unscaledMapHeight);
-			    bkPoly.fill = imgFill;
-			    bkGeomGroup.geometryCollection.addItem(bkPoly);
-			    bkSurface.graphicsCollection.addItem(bkGeomGroup);
-			    bkGeomGroup.target = bkSurface;
-			    
-			    addChild(bkSurface);
-			    
-			    bkSurface.mask = createMask(map.mask);
-
-				map.addEventListener(MapEvent.MAP_ZOOM_COMPLETE, update);
-				map.addEventListener(MapEvent.MAP_MOVING, update);
-			    map.addEventListener(MapEvent.MAP_CENTERED, update);
-			    dispatchEvent(new GeoCoreEvents(GeoCoreEvents.RASTER_COMPLETE));
-			} catch (e:Error) {
-trace (e);
+				super.visible = false;
 				dispatchEvent(new GeoCoreEvents(GeoCoreEvents.NO_RASTER));
 			}
 		}
 		
-		public function createMask(geoMask:DisplayObject):DisplayObject
+		private var rappX:Number, rappY:Number;
+		private function imgHandler(e:Event):void
 		{
-			var msk:Shape;
-			if (geoMask != null)
-			{
-			    msk = new Shape();
-				msk.graphics.moveTo(0,0);
-				msk.graphics.beginFill(0xffffff, 0);
-				msk.graphics.drawRect(0,0,geoMask.width,geoMask.height);
-				msk.graphics.endFill();
-
-			    var mskCont:UIComponent = new UIComponent();
-			    mskCont.addChild(msk);
-				mskCont.setActualSize(geoMask.width, geoMask.height);
-				mskCont.move(0,0);
-			    this.addChildAt(mskCont,0);
-			}
-			return msk;
+			removeEventListener(Event.COMPLETE, imgHandler);
+		 	var originalWidth:Number = contentWidth;
+		 	var originalHeight:Number = contentHeight;
+		 	rappX = map.unscaledMapWidth/originalWidth;
+		 	rappY = map.unscaledMapHeight/originalHeight; 
+		 	
+			updateSizeAndPosition();
+			
+			map.addEventListener(MapEvent.MAP_ZOOM_COMPLETE, update);
+			map.addEventListener(MapEvent.MAP_MOVING, update);
+		    map.addEventListener(MapEvent.MAP_CENTERED, update);
+		    
+		    dispatchEvent(new GeoCoreEvents(GeoCoreEvents.RASTER_COMPLETE));
 		}
 		
 		private function update(e:MapEvent):void
@@ -181,12 +111,18 @@ trace (e);
 			map = Map(e.target);
 			if (_projection == map.projection)
 			{
-				bkSurface.transform.matrix = map.transform.matrix;
-				if (map.zoom > 2)
-					bkSurface.visible = false
-				else
-					bkSurface.visible = true;
+				updateSizeAndPosition();
 			}
+		}
+		
+		private function updateSizeAndPosition():void
+		{
+		 	var m:Matrix = 	map.transform.matrix;
+
+			scaleX = m.a*rappX;
+			scaleY = m.d*rappY;
+			x = map.x;
+			y = map.y;
 		}
 	}
 }
