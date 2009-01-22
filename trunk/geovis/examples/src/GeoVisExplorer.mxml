@@ -217,7 +217,8 @@
 			DrawBaseMapComplete="{isLoading = true}"  
 			x="10" y="20" >
 			
-			<raster:RasterLoader projection="Geographic" visible="false" source="raster/worldtopobathyNG.jpg" id="myRaster"/>
+			<raster:RasterLoader projection="Geographic" visible="true" 
+				source="@Embed(source='raster/worldtopobathy.jpg')" id="myRaster"/>
 			
 			<tools:ZoomSliderView x="20" y="200" id="zoomSlider" showLabels="true"/>
 			<analysis:Choropleth id="choropleth" alpha="0.7" dataProvider="{myWorldMedals.regions.region.Countries}" foidField="@iso" colorField="{featureSelector.selectedItem.data}" scheme="{hueSelector.selectedItem.data}" steps="{stepsNum.value}" dataTipFunction="customDataTip" highlighted="true"  />
@@ -258,7 +259,7 @@
 			<mx:VBox id="titleBox" width="100%" height="100%" verticalAlign="middle" verticalGap="2" >
 				<mx:Label text="GeoVis" />
 				<mx:Label text="Version: Alpha" />
-				<mx:Label text="Last Update: 21 Jan 09" />
+				<mx:Label text="Last Update: 22 Jan 09" />
 				<mx:TextArea width="115" wordWrap="true" editable="false" borderStyle="none" text="***Work in progress to show status of development." />
 			</mx:VBox>
 			</mx:Panel>
@@ -292,7 +293,7 @@
 						alpha="1" backgroundAlpha="1" id="mainToolbar" draggable="false"/>
 					<tools:DragRectangleView scale="7" height="100" 
 						backgroundColor="0xffffff" backgroundAlpha=".6" 
-						borderColor="0x333333" borderAlpha=".8" dragRectangleColor="0x666666" dragRectangleAlpha=".4"/>
+						borderColor="0x333333" borderAlpha=".8" dragRectangleColor="0xff0000" dragRectangleAlpha=".4"/>
 					
 				</mx:VBox>
 				<mx:VBox horizontalAlign="left" verticalGap="2" >
@@ -326,7 +327,7 @@
 	<mx:Panel title="Projections" width="230" height="55" horizontalScrollPolicy="off" verticalScrollPolicy="off"
 		horizontalAlign="center" paddingLeft="5" paddingRight="5" paddingTop="5" >
 						
-						<mx:ComboBox id="projectionSelector" height="20" width="180" prompt="Projection..." change="projChange(event)" selectedIndex="3" toolTip="Select map area for viewing..." >
+						<mx:ComboBox id="projectionSelector" height="20" width="180" prompt="Projection..." change="projChange(event)" selectedIndex="0" toolTip="Select map area for viewing..." >
 								<mx:ArrayCollection>
 										<mx:Object label="Geographic"/>
 										<!--<mx:Object label="Lambert equal area"/>-->
@@ -458,7 +459,7 @@
 		horizontalAlign="center" paddingLeft="5" paddingRight="5" paddingTop="5"
 		>
 		
-		<mx:CheckBox id="rasterChkBox" label="Show Raster Layer:" labelPlacement="left" 
+		<mx:CheckBox id="rasterChkBox" label="Show Raster Layer:" labelPlacement="left" selected="true"
 			click="{myRaster.visible = rasterChkBox.selected}"/>
 		
 		</mx:Box>
