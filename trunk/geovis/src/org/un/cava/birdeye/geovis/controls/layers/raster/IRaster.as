@@ -30,7 +30,7 @@
 	import org.un.cava.birdeye.geovis.controls.layers.ILayer;
 	
 	public interface IRaster extends ILayer
-	{
-		function set source(val:String):void;
+	{ 
+		function set source(val:Object):void;
 	}
 }
