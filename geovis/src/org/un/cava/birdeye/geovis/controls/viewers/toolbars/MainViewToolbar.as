@@ -405,6 +405,11 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			if (_draggable)
 				addEventListener(MouseEvent.MOUSE_DOWN, moveToolbar);
 			registerMapListeners();
+			map.centeringMapSelected = isCenteringMap.selected = true;
+			map.wheelZoomSelected = wheelZoom.selected = true;
+			map.dragSelected = dragBox.selected = true;
+			hawkEye.selected = true; 
+			map.parent.addChildAt(hkView,map.parent.numChildren-1);
 			if (parent is WorldMap) 
 				parent.setChildIndex(this, parent.numChildren-1);
  		}
