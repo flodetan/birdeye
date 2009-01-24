@@ -87,9 +87,6 @@ Application.application.addEventListener(GeoCoreEvents.NO_RASTER, raster, true);
 		*/
 		public static const CREATION_ZOOM:Number = 1;
 
-		private var _unscaledMapWidth:Number = NaN;
-		private var _unscaledMapHeight:Number = NaN;
-
 		private var _zoomInSelected:Boolean = false;
 		private var _zoomOutSelected:Boolean = false;
 		private var _dragSelected:Boolean = false;
@@ -136,16 +133,6 @@ Application.application.addEventListener(GeoCoreEvents.NO_RASTER, raster, true);
 			_projection = val;
 			updateUnscaledSize();
 			dispatchEvent(new MapEvent(MapEvent.MAP_CHANGED));
-		}
-		
-		public function get unscaledMapWidth():Number
-		{
-				return _unscaledMapWidth;
-		}
-
-		public function get unscaledMapHeight():Number
-		{
-				return _unscaledMapHeight;
 		}
 		
 		public function get zoomInSelected():Boolean
@@ -367,8 +354,8 @@ Application.application.addEventListener(GeoCoreEvents.NO_RASTER, raster, true);
 		private function updateUnscaledSize():void
 		{ 
 			var size:Rectangle = getBounds(this);
-			_unscaledMapWidth = size.width/_zoom;
-			_unscaledMapHeight = size.height/_zoom;
+			width = size.width/_zoom;
+			height = size.height/_zoom;
 trace(size);
 		}
 		
@@ -616,7 +603,7 @@ trace(size);
 	    public function zoomMapRectangle(upperLeftX:Number, upperLeftY:Number, lowerRightX:Number, lowerRightY:Number):void
 	    {
 	    	var rect:Rectangle = new Rectangle(0, 0, Math.abs(upperLeftX-lowerRightX), Math.abs(upperLeftY-lowerRightY));
-	    	var zoomValue:Number = Math.min(unscaledMapWidth/rect.width, unscaledMapHeight/rect.height);
+	    	var zoomValue:Number = Math.min(width/rect.width, height/rect.height);
 	    	
 	    	var centerPoint:Point = new Point(upperLeftX + (lowerRightX - upperLeftX)/2,
 	    									upperLeftY + (lowerRightY - upperLeftY)/2);
@@ -633,7 +620,7 @@ trace(centerPoint);
 		*/
 	    public function reset():void
 	    {
-	    	centerMap(new Point(unscaledMapWidth/2,unscaledMapHeight/2));
+	    	centerMap(new Point(width/2,height/2));
 	    	zoomMap(1/_zoom * _defaultZoom, new Point(currentCenterX,currentCenterY));
 	    }
 	    

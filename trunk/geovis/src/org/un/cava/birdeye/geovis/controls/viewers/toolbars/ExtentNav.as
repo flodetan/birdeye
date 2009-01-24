@@ -149,14 +149,19 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			
 			// get the map-mask sizes, needed to size the draggable rectangle 
 			var tempMask:DisplayObject = DisplayObject(map.mask);
-			var maskBounds:Rectangle;
+			var maskWidth:Number;
+			var maskHeight:Number;
 			if (map.mask != null)
+			{
+				var maskBounds:Rectangle;
 				maskBounds = map.mask.getBounds(map.mask);
-			else if (map.parent != null)
-				maskBounds = map.parent.getBounds(map.parent);
-			
-			var maskWidth:Number = (maskBounds.width == 0) ? NaN : maskBounds.width;
-			var maskHeight:Number = (maskBounds.height == 0) ? NaN : maskBounds.height;
+				maskWidth = maskBounds.width;
+				maskHeight = maskBounds.height;
+			} else if (map.parent != null)
+			{
+				maskWidth = map.parent.width;
+				maskHeight = map.parent.height;
+			}
 			
 			width = maskWidth/scale-_thick - _offset;
 			height = maskHeight/scale-_thick - _offset;

@@ -301,18 +301,8 @@ package org.un.cava.birdeye.geovis.core
 	    	surf=new Map();
 			surf.name="Surface";
 		    this.addChild(surf); 
-
-	  		maskShape = new Shape();
-	  		maskCont = new UIComponent();
-	  		maskCont.addChild(maskShape);
-	  		this.addChild(maskCont);
-	  		this.setChildIndex(maskCont, 0);
-	  		surf.mask = maskShape;
 	    }
 	    
-		private var maskShape:Shape; 
-		private var maskCont:UIComponent;
-		private var maskCreated:Boolean = false;
 		private var backgroundPoly:RegularRectangle;
 		private var background:GeometryGroup;
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
@@ -326,18 +316,6 @@ package org.un.cava.birdeye.geovis.core
 				createMap();
 				isProjectionChanged=false;
 				
-				if (!maskCreated)
-				{
-					maskCont.setActualSize(unscaledWidth, unscaledHeight);
-					maskCont.move(0,0);
-					maskShape.graphics.beginFill(0xffffff, 0);
-					maskShape.graphics.drawRect(0,0,unscaledWidth, unscaledHeight);
-					maskShape.graphics.endFill();
-		  			this.setChildIndex(maskCont, 0);
-		  			maskCreated = true;
-				}
-trace (maskShape.width, maskShape.height);
-
 				// the projection name is registered inside map
 				// this will also updates the unscaled map size with the proper values
 				// that will be used for the background size 
@@ -349,17 +327,17 @@ trace (maskShape.width, maskShape.height);
 				// however, this will change with the new model structure
 	
 			    backgroundPoly = 
-			    	new RegularRectangle(0,0,surf.unscaledMapWidth, surf.unscaledMapHeight);
+			    	new RegularRectangle(0,0,surf.width, surf.height);
 			    backgroundPoly.fill = new SolidFill(0xffffff,0);
 			    background.geometryCollection.addItem(backgroundPoly);
 			
 				switch (_autosize)
 				{
 					case "fit-height":
-						surf.defaultZoom = unscaledHeight/surf.unscaledMapHeight;
+						surf.defaultZoom = unscaledHeight/surf.height;
 					break;
 					case "fit-width":
-						surf.defaultZoom = unscaledWidth/surf.unscaledMapWidth;
+						surf.defaultZoom = unscaledWidth/surf.width;
 				}
 		    }
 		}

@@ -114,7 +114,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		public function DragRectangleView()
 		{
 			super(); 
-//		    Application.application.addEventListener(MapEvent.MAP_INSTANTIATED, init, true);
+		    Application.application.addEventListener(MapEvent.MAP_INSTANTIATED, init, true);
 		    Application.application.addEventListener(MapEvent.MAP_CHANGED, init, true);
 		}
 		
@@ -129,8 +129,8 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			map = Map(event.target);
 			
 			// calculate the this.width and this.height based on a scale of the original map size 
-			width = map.unscaledMapWidth / scale;
-			height = map.unscaledMapHeight / scale;
+			width = map.width / scale;
+			height = map.height / scale;
 			drawAll();
 		}
 	
@@ -171,15 +171,18 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 
 			// get the map-mask sizes, needed to size the draggable rectangle 
 			var tempMask:DisplayObject = DisplayObject(map.mask);
-			var maskBounds:Rectangle;
 			if (map.mask != null)
+			{
+				var maskBounds:Rectangle;
 				maskBounds = map.mask.getBounds(map.mask);
-			else if (map.parent != null)
-				maskBounds = map.parent.getBounds(map.parent);
+				maskWidth = (maskBounds.width == 0) ? NaN : maskBounds.width;
+				maskHeight = (maskBounds.height == 0) ? NaN : maskBounds.height;
+			} else if (map.parent != null)
+			{
+				maskWidth = (map.parent.width == 0) ? NaN: map.parent.width;
+				maskHeight = (map.parent.height == 0) ? NaN: map.parent.height;
+			}
 			
-			maskWidth = (maskBounds.width == 0) ? NaN : maskBounds.width;
-			maskHeight = (maskBounds.height == 0) ? NaN : maskBounds.height;
-
  			// map.mask must be temporarily set to null because otherwise the bitmapdata
  			// will cut the map on the top and left sides, probably because of a bug either 
  			// in the framework
@@ -284,13 +287,17 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		{
 			map = Map(e.target);
 			if (isNaN(maskWidth) || isNaN(maskHeight)) {
-				var maskBounds:Rectangle;
 				if (map.mask != null)
+				{
+					var maskBounds:Rectangle;
 					maskBounds = map.mask.getBounds(map.mask);
-				else if (map.parent != null)
-					maskBounds = map.parent.getBounds(map.parent);
-				maskWidth = maskBounds.width;
-				maskHeight = maskBounds.height;
+					maskWidth = (maskBounds.width == 0) ? NaN : maskBounds.width;
+					maskHeight = (maskBounds.height == 0) ? NaN : maskBounds.height;
+				} else if (map.parent != null)
+				{
+					maskWidth = (map.parent.width == 0) ? NaN: map.parent.width;
+					maskHeight = (map.parent.height == 0) ? NaN: map.parent.height;
+				}
 			}
 			draggableRect.width = maskWidth/map.zoom/scale;
 			draggableRect.height = maskHeight/map.zoom/scale;
@@ -306,13 +313,17 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		{
 			map = Map(e.target);
 			if (isNaN(maskWidth) || isNaN(maskHeight)) {
-				var maskBounds:Rectangle;
 				if (map.mask != null)
+				{
+					var maskBounds:Rectangle;
 					maskBounds = map.mask.getBounds(map.mask);
-				else if (map.parent != null)
-					maskBounds = map.parent.getBounds(map.parent);
-				maskWidth = maskBounds.width;
-				maskHeight = maskBounds.height;
+					maskWidth = (maskBounds.width == 0) ? NaN : maskBounds.width;
+					maskHeight = (maskBounds.height == 0) ? NaN : maskBounds.height;
+				} else if (map.parent != null)
+				{
+					maskWidth = (map.parent.width == 0) ? NaN: map.parent.width;
+					maskHeight = (map.parent.height == 0) ? NaN: map.parent.height;
+				}
 			}
 			draggableRect.x = -map.x/map.zoom/scale;
 			draggableRect.y = -map.y/map.zoom/scale;
