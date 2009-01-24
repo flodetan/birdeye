@@ -94,8 +94,8 @@ package org.un.cava.birdeye.geovis.controls.layers.raster
 			removeEventListener(Event.COMPLETE, imgHandler);
 		 	var originalWidth:Number = contentWidth;
 		 	var originalHeight:Number = contentHeight;
-		 	rappX = map.unscaledMapWidth/originalWidth;
-		 	rappY = map.unscaledMapHeight/originalHeight; 
+		 	rappX = map.width/originalWidth;
+		 	rappY = map.height/originalHeight; 
 		 	
 			updateSizeAndPosition();
 			
