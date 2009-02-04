@@ -139,8 +139,6 @@ package org.un.cava.birdeye.geovis.core
 	[Exclude(name="color", kind="style")]
 	[Exclude(name="colorItem", kind="style")]
 	
-	[ExcludeClass]
-	
 	
 	/**
 	 *  The GeoFrame class is the main class that draw the maps.
@@ -301,8 +299,18 @@ package org.un.cava.birdeye.geovis.core
 	    	surf=new Map();
 			surf.name="Surface";
 		    this.addChild(surf); 
+
+	  		maskShape = new Shape();
+	  		maskCont = new UIComponent();
+	  		maskCont.addChild(maskShape);
+	  		this.addChild(maskCont);
+	  		this.setChildIndex(maskCont, 0);
+	  		surf.mask = maskShape;
 	    }
 	    
+		private var maskShape:Shape; 
+		private var maskCont:UIComponent;
+		private var maskCreated:Boolean = false;
 		private var backgroundPoly:RegularRectangle;
 		private var background:GeometryGroup;
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
@@ -316,6 +324,18 @@ package org.un.cava.birdeye.geovis.core
 				createMap();
 				isProjectionChanged=false;
 				
+				if (!maskCreated)
+				{
+					maskCont.setActualSize(unscaledWidth, unscaledHeight);
+					maskCont.move(0,0);
+					maskShape.graphics.beginFill(0xffffff, 0);
+					maskShape.graphics.drawRect(0,0,unscaledWidth, unscaledHeight);
+					maskShape.graphics.endFill();
+		  			this.setChildIndex(maskCont, 0);
+		  			maskCreated = true;
+				}
+trace (maskShape.width, maskShape.height);
+
 				// the projection name is registered inside map
 				// this will also updates the unscaled map size with the proper values
 				// that will be used for the background size 
