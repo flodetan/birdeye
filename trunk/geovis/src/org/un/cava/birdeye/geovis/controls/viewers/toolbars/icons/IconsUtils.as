@@ -36,7 +36,7 @@
 		public static const GREEN:Number = 0x00ff54;
 		public static const BLACK:Number = 0x000000;
 		
-		public static var size:Number = 15;
+		public static var size:Number = 20;
 		public static const thick:Number = 2;
 	}
 }

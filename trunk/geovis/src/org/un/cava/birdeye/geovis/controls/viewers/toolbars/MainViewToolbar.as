@@ -37,9 +37,9 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	import mx.core.LayoutContainer;
 	
 	import org.un.cava.birdeye.geovis.controls.viewers.toolbars.icons.*;
+	import org.un.cava.birdeye.geovis.core.GeoFrame;
 	import org.un.cava.birdeye.geovis.core.Map;
 	import org.un.cava.birdeye.geovis.events.MapEvent;
-	import org.un.cava.birdeye.geovis.views.maps.world.WorldMap;
 
 	public class MainViewToolbar extends LayoutContainer implements IMainViewToolbar
 	{
@@ -410,7 +410,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			map.dragSelected = dragBox.selected = true;
 			hawkEye.selected = true; 
 			map.parent.addChildAt(hkView,map.parent.numChildren-1);
-			if (parent is WorldMap) 
+			if (parent is GeoFrame) 
 				parent.setChildIndex(this, parent.numChildren-1);
  		}
  		
@@ -615,122 +615,169 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 
   			if (isCenteringMap.selected)
   			{
-  				cursor.graphics.moveTo(xOffset + IconsUtils.size/2,IconsUtils.size/2);
-				cursor.graphics.beginFill(c,1);
-				cursor.graphics.drawRect(xOffset,0,IconsUtils.size, IconsUtils.size);
-				cursor.graphics.endFill();
-				
-				cursor.graphics.moveTo(xOffset,IconsUtils.size/2);
-				cursor.graphics.lineStyle(2,IconsUtils.BLACK,1);
-				cursor.graphics.lineTo(xOffset + IconsUtils.size,IconsUtils.size/2);
-		
-				cursor.graphics.moveTo(xOffset + IconsUtils.size/2,0);
-				cursor.graphics.lineStyle(2,IconsUtils.BLACK,1);
-				cursor.graphics.lineTo(xOffset + IconsUtils.size/2,IconsUtils.size);
+				with (cursor.graphics)
+				{
+	  				moveTo(xOffset + IconsUtils.size/2,IconsUtils.size/2);
+					beginFill(c,1);
+					drawRect(xOffset,0,IconsUtils.size, IconsUtils.size);
+					endFill();
+					
+					moveTo(xOffset,IconsUtils.size/2);
+					lineStyle(2,IconsUtils.BLACK,1);
+					lineTo(xOffset + IconsUtils.size,IconsUtils.size/2);
+			
+					moveTo(xOffset + IconsUtils.size/2,0);
+					lineStyle(2,IconsUtils.BLACK,1);
+					lineTo(xOffset + IconsUtils.size/2,IconsUtils.size);
+				}
 
 				xOffset += IconsUtils.size + space;
   			} 
   			
 			if (zoomIn.selected)
 			{
-				cursor.graphics.moveTo(xOffset + IconsUtils.size/2,IconsUtils.size/2);
-				cursor.graphics.beginFill(c,1);
-				cursor.graphics.drawCircle(xOffset + IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/2);
-				cursor.graphics.endFill();
-				
-				cursor.graphics.moveTo(xOffset + 3,IconsUtils.size/2);
-				cursor.graphics.lineStyle(IconsUtils.thick,IconsUtils.BLACK,1);
-				cursor.graphics.lineTo(xOffset + IconsUtils.size-3,IconsUtils.size/2);
-		
-				cursor.graphics.moveTo(xOffset + IconsUtils.size/2,3);
-				cursor.graphics.lineStyle(IconsUtils.thick,IconsUtils.BLACK,1);
-				cursor.graphics.lineTo(xOffset + IconsUtils.size/2,IconsUtils.size-3);
+				with (cursor.graphics)
+				{
+					moveTo(xOffset + IconsUtils.size/2,IconsUtils.size/2);
+					beginFill(c,1);
+					drawCircle(xOffset + IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/2);
+					endFill();
+					
+					moveTo(xOffset + 3,IconsUtils.size/2);
+					lineStyle(IconsUtils.thick,IconsUtils.BLACK,1);
+					lineTo(xOffset + IconsUtils.size-3,IconsUtils.size/2);
+			
+					moveTo(xOffset + IconsUtils.size/2,3);
+					lineStyle(IconsUtils.thick,IconsUtils.BLACK,1);
+					lineTo(xOffset + IconsUtils.size/2,IconsUtils.size-3);
+				}
 				
 				xOffset += IconsUtils.size + space;
 			} 
 
 			if (zoomOut.selected)
 			{
-				cursor.graphics.moveTo(xOffset + IconsUtils.size/2,IconsUtils.size/2);
-				cursor.graphics.beginFill(c,1);
-				cursor.graphics.drawCircle(xOffset + IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/2);
-				cursor.graphics.endFill();
-				
-				cursor.graphics.moveTo(xOffset + 3,IconsUtils.size/2);
-				cursor.graphics.lineStyle(2,IconsUtils.BLACK,1);
-				cursor.graphics.lineTo(xOffset + IconsUtils.size-3,IconsUtils.size/2);
+				with (cursor.graphics)
+				{
+					moveTo(xOffset + IconsUtils.size/2,IconsUtils.size/2);
+					beginFill(c,1);
+					drawCircle(xOffset + IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/2);
+					endFill();
+					
+					moveTo(xOffset + 3,IconsUtils.size/2);
+					lineStyle(2,IconsUtils.BLACK,1);
+					lineTo(xOffset + IconsUtils.size-3,IconsUtils.size/2);
+				}
 
 				xOffset += IconsUtils.size + space;
 			} 
 			
 			if (dragBox.selected)
 			{
-				cursor.graphics.moveTo(xOffset + IconsUtils.size/2-3,IconsUtils.size/2-3);
-				cursor.graphics.beginFill(IconsUtils.YELLOW,1);
-				cursor.graphics.lineStyle(1,IconsUtils.YELLOW,1);
-				cursor.graphics.drawRect(xOffset + IconsUtils.size/2-3,IconsUtils.size/2-3,IconsUtils.size/2+3,IconsUtils.size/2+3)
-				cursor.graphics.endFill();
-		
-				cursor.graphics.moveTo(xOffset,0);
-				cursor.graphics.beginFill(c,1);
-				cursor.graphics.lineStyle(1,c,1);
-				cursor.graphics.drawRect(xOffset,0,IconsUtils.size/2+3,IconsUtils.size/2+3)
-				cursor.graphics.endFill();
+				with (cursor.graphics)
+				{
+					moveTo(xOffset + IconsUtils.size/2-3,IconsUtils.size/2-3);
+					beginFill(IconsUtils.YELLOW,1);
+					lineStyle(1,IconsUtils.YELLOW,1);
+					drawRect(xOffset + IconsUtils.size/2-3,IconsUtils.size/2-3,IconsUtils.size/2+3,IconsUtils.size/2+3)
+					endFill();
+			
+					moveTo(xOffset,0);
+					beginFill(c,1);
+					lineStyle(1,c,1);
+					drawRect(xOffset,0,IconsUtils.size/2+3,IconsUtils.size/2+3)
+					endFill();
+				}
 
 				xOffset += IconsUtils.size + space;
 			} 
 			
 			if (zoomRect.selected)
 			{
-				cursor.graphics.moveTo(xOffset,0);
-				cursor.graphics.beginFill(c,1);
-				cursor.graphics.lineStyle(1,c,1);
-				cursor.graphics.drawRect(xOffset,0,IconsUtils.size,IconsUtils.size);
-				cursor.graphics.endFill();
+				with (cursor.graphics)
+				{
+					// rect shape
+					moveTo(xOffset,0);
+					lineStyle(1,c,1);
+					beginFill(IconsUtils.RED,1);
+					drawRect(xOffset,0,IconsUtils.size*2/3,IconsUtils.size*2/3);
+					endFill();
 		
-				cursor.graphics.moveTo(xOffset + IconsUtils.size/3,IconsUtils.size/3);
-				cursor.graphics.beginFill(IconsUtils.BLACK,1);
-				cursor.graphics.lineStyle(1,IconsUtils.BLACK,1);
-				cursor.graphics.drawRect(xOffset + IconsUtils.size/3,IconsUtils.size/3,IconsUtils.size/3,IconsUtils.size/3);
-				cursor.graphics.endFill();
+					// zoom in shape
+					moveTo(xOffset + IconsUtils.size*2/3,IconsUtils.size*2/3);
+					lineStyle(1,IconsUtils.BLACK);
+					beginFill(c,1);
+					drawCircle(xOffset +IconsUtils.size*2/3,IconsUtils.size*2/3,IconsUtils.size/3);
+					endFill();
+					
+	 				moveTo(xOffset + IconsUtils.size*2/3,IconsUtils.size/3);
+					lineStyle(IconsUtils.thick/2,IconsUtils.BLACK,1);
+					lineTo(xOffset + IconsUtils.size*2/3,IconsUtils.size);
+			
+					moveTo(xOffset + IconsUtils.size/3,IconsUtils.size*2/3);
+					lineStyle(IconsUtils.thick/2,IconsUtils.BLACK,1);
+					lineTo(xOffset + IconsUtils.size,IconsUtils.size*2/3);
+				}
 
 				xOffset += IconsUtils.size + space;
 			} 
 			
 			if (wheelZoom.selected)
 			{
-				cursor.graphics.moveTo(xOffset,0);
-				cursor.graphics.lineStyle(3,c,1);
-				cursor.graphics.lineTo(xOffset + IconsUtils.size,IconsUtils.size);
-		
-				cursor.graphics.moveTo(xOffset + IconsUtils.size/2,0);
-				cursor.graphics.lineStyle(3,c,1);
-				cursor.graphics.lineTo(xOffset + IconsUtils.size/2,IconsUtils.size);
-		
-				cursor.graphics.moveTo(xOffset,IconsUtils.size/2);
-				cursor.graphics.lineStyle(3,c,1);
-				cursor.graphics.lineTo(xOffset + IconsUtils.size,IconsUtils.size/2);
-		
-				cursor.graphics.moveTo(xOffset,0);
-				cursor.graphics.lineStyle(3,c,1);
-				cursor.graphics.lineTo(xOffset + IconsUtils.size,IconsUtils.size);
+				with (cursor.graphics)
+				{
+					// wheel shape
+					moveTo(xOffset,0);
+					lineStyle(3,c,1);
+					lineTo(xOffset + IconsUtils.size,IconsUtils.size);
+			
+					moveTo(xOffset + IconsUtils.size/2,0);
+					lineStyle(3,c,1);
+					lineTo(xOffset + IconsUtils.size/2,IconsUtils.size);
+			
+					moveTo(xOffset,IconsUtils.size/2);
+					lineStyle(3,c,1);
+					lineTo(xOffset + IconsUtils.size,IconsUtils.size/2);
+			
+					moveTo(xOffset,0);
+					lineStyle(3,c,1);
+					lineTo(xOffset + IconsUtils.size,IconsUtils.size);
+	
+					// zoom shape
+					moveTo(xOffset + IconsUtils.size/2,IconsUtils.size/2);
+					lineStyle(1,IconsUtils.BLACK);
+					beginFill(c,1);
+					drawCircle(xOffset + IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/3);
+					endFill();
+					
+	 				moveTo(xOffset + IconsUtils.size/2,IconsUtils.size/4);
+					lineStyle(IconsUtils.thick/2,IconsUtils.BLACK,1);
+					lineTo(xOffset + IconsUtils.size/2,IconsUtils.size*3/4);
+			
+					moveTo(xOffset + IconsUtils.size/4,IconsUtils.size/2);
+					lineStyle(IconsUtils.thick/2,IconsUtils.BLACK,1);
+					lineTo(xOffset + IconsUtils.size*3/4,IconsUtils.size/2);				
+				}
 
 				xOffset += IconsUtils.size + space;
 			} 
 
 			if (hawkEye.selected)
 			{
-				cursor.graphics.moveTo(xOffset + IconsUtils.size/2,IconsUtils.size/2);
-				cursor.graphics.beginFill(c,1);
-				cursor.graphics.lineStyle(1,c,1);
-				cursor.graphics.drawCircle(xOffset + IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/2);
-				cursor.graphics.endFill();
-				
-				cursor.graphics.moveTo(xOffset + IconsUtils.size/2,IconsUtils.size/2);
-				cursor.graphics.beginFill(IconsUtils.BLACK,1);
-				cursor.graphics.lineStyle(1,IconsUtils.BLACK,1);
-				cursor.graphics.drawCircle(xOffset + IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/4);
-				cursor.graphics.endFill();
+				with (cursor.graphics)
+				{
+					moveTo(xOffset + IconsUtils.size/2,IconsUtils.size/2);
+					beginFill(c,1);
+					lineStyle(1,c,1);
+					drawCircle(xOffset + IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/2);
+					endFill();
+					
+					moveTo(xOffset + IconsUtils.size/2,IconsUtils.size/2);
+					beginFill(IconsUtils.BLACK,1);
+					lineStyle(1,IconsUtils.BLACK,1);
+					drawCircle(xOffset + IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/4);
+					endFill();
+				}
 
 				xOffset += IconsUtils.size + space;
 			} 

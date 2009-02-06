@@ -32,15 +32,18 @@
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
-			graphics.moveTo(IconsUtils.size/2-3,IconsUtils.size/2-3);
-			graphics.beginFill(IconsUtils.YELLOW,1);
-			graphics.drawRect(IconsUtils.size/2-3,IconsUtils.size/2-3,IconsUtils.size/2+3,IconsUtils.size/2+3)
-			graphics.endFill();
-	
-			graphics.moveTo(0,0);
-			graphics.beginFill(c,1);
-			graphics.drawRect(0,0,IconsUtils.size/2+3,IconsUtils.size/2+3)
-			graphics.endFill();
+			with (graphics)
+			{
+				moveTo(IconsUtils.size/2-3,IconsUtils.size/2-3);
+				beginFill(IconsUtils.YELLOW,1);
+				drawRect(IconsUtils.size/2-3,IconsUtils.size/2-3,IconsUtils.size/2+3,IconsUtils.size/2+3)
+				endFill();
+		
+				moveTo(0,0);
+				beginFill(c,1);
+				drawRect(0,0,IconsUtils.size/2+3,IconsUtils.size/2+3)
+				endFill();
+			}
 		}
 	}
 }
