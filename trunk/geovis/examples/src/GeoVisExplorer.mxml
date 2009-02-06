@@ -271,13 +271,13 @@
 					>
 				<mx:VBox horizontalAlign="center" verticalGap="2" >
 						<mx:Label text="Zoom:" />
-        				<tools:ZoomSliderView id="zoom" width="100" direction="horizontal"/>
+        				<tools:ZoomSliderView id="zoom" width="80" direction="horizontal"/>
 						
         				<mx:Label text="Pan:" />
-        				<mx:HSlider id="pan" width="100"  />
+        				<mx:HSlider id="pan" width="80"  />
         			
         				<mx:Label text="Tilt:" />
-        				<mx:HSlider id="tilt" width="100"  />
+        				<mx:HSlider id="tilt" width="80"  />
         		</mx:VBox>
         		<mx:VBox horizontalAlign="center" >
 					<tools:MainViewToolbar horizontalAlign="center"
@@ -291,20 +291,19 @@
 						overIconColor="{MainViewToolbar.RED}"
 						backgroundColor="0xFFFFFF" dragHawkView="true"
 						alpha="1" backgroundAlpha="1" id="mainToolbar" draggable="false"/>
-					<tools:DragRectangleView scale="7" height="100" 
+					<tools:DragRectangleView scale="5" height="100" 
 						backgroundColor="0xffffff" backgroundAlpha=".6" 
 						borderColor="0x333333" borderAlpha=".8" dragRectangleColor="0xff0000" dragRectangleAlpha=".4"/>
 					
 				</mx:VBox>
 				<mx:VBox horizontalAlign="left" verticalGap="2" >
-					<mx:TextInput text="Perspectives:" textAlign="center" width="100" editable="false" borderStyle="none" toolTip="Under development" />
 					<mx:RadioButtonGroup id="perspective" labelPlacement="right" />
 						<mx:RadioButton groupName="perspective" id="twod" value="twod" 
             					label="2D" selected="true" />
         				<mx:RadioButton groupName="perspective" id="plane" value="plane" 
-            					label="3D Plane" />
+            					label="3D" />
             			<mx:RadioButton groupName="perspective" id="sphere" value="sphere" 
-            					label="3D Sphere" />
+            					label="Sphere" />
 				</mx:VBox>
 			</mx:HBox>
 			</mx:Panel>
