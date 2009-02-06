@@ -37,18 +37,21 @@
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			graphics.moveTo(IconsUtils.size/2,IconsUtils.size/2);
-			graphics.beginFill(c,1);
-			graphics.drawRect(0,0,IconsUtils.size, IconsUtils.size);
-			graphics.endFill();
-			
-			graphics.moveTo(0,IconsUtils.size/2);
-			graphics.lineStyle(2,IconsUtils.BLACK,1);
-			graphics.lineTo(IconsUtils.size,IconsUtils.size/2);
-	
-			graphics.moveTo(IconsUtils.size/2,0);
-			graphics.lineStyle(2,IconsUtils.BLACK,1);
-			graphics.lineTo(IconsUtils.size/2,IconsUtils.size);
+			with (graphics)
+			{
+				moveTo(IconsUtils.size/2,IconsUtils.size/2);
+				beginFill(c,1);
+				drawRect(0,0,IconsUtils.size, IconsUtils.size);
+				endFill();
+				
+				moveTo(0,IconsUtils.size/2);
+				lineStyle(2,IconsUtils.BLACK,1);
+				lineTo(IconsUtils.size,IconsUtils.size/2);
+		
+				moveTo(IconsUtils.size/2,0);
+				lineStyle(2,IconsUtils.BLACK,1);
+				lineTo(IconsUtils.size/2,IconsUtils.size);
+			}
 		}
 	}
 }

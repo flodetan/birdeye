@@ -31,15 +31,18 @@
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			graphics.moveTo(IconsUtils.size/2,IconsUtils.size/2);
-			graphics.beginFill(c,1);
-			graphics.drawCircle(IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/2);
-			graphics.endFill();
-			
-			graphics.moveTo(IconsUtils.size/2,IconsUtils.size/2);
-			graphics.beginFill(IconsUtils.BLACK,1);
-			graphics.drawCircle(IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/4);
-			graphics.endFill();
+			with (graphics)
+			{
+				moveTo(IconsUtils.size/2,IconsUtils.size/2);
+				beginFill(c,1);
+				drawCircle(IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/2);
+				endFill();
+				
+				moveTo(IconsUtils.size/2,IconsUtils.size/2);
+				beginFill(IconsUtils.BLACK,1);
+				drawCircle(IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/4);
+				endFill();
+			}
 		}
 	}
 }

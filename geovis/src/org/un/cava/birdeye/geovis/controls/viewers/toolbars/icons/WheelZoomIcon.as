@@ -31,21 +31,41 @@
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			graphics.moveTo(0,0);
-			graphics.lineStyle(3,c,1);
-			graphics.lineTo(IconsUtils.size,IconsUtils.size);
-	
-			graphics.moveTo(IconsUtils.size/2,0);
-			graphics.lineStyle(3,c,1);
-			graphics.lineTo(IconsUtils.size/2,IconsUtils.size);
-	
-			graphics.moveTo(0,IconsUtils.size/2);
-			graphics.lineStyle(3,c,1);
-			graphics.lineTo(IconsUtils.size,IconsUtils.size/2);
-	
-			graphics.moveTo(0,0);
-			graphics.lineStyle(3,c,1);
-			graphics.lineTo(IconsUtils.size,IconsUtils.size);
+			
+			with (graphics)
+			{
+				// wheel shape
+				moveTo(0,0);
+				lineStyle(3,c,1);
+				lineTo(IconsUtils.size,IconsUtils.size);
+		
+				moveTo(IconsUtils.size/2,0);
+				lineStyle(3,c,1);
+				lineTo(IconsUtils.size/2,IconsUtils.size);
+		
+				moveTo(0,IconsUtils.size/2);
+				lineStyle(3,c,1);
+				lineTo(IconsUtils.size,IconsUtils.size/2);
+		
+				moveTo(0,0);
+				lineStyle(3,c,1);
+				lineTo(IconsUtils.size,IconsUtils.size);
+
+				// zoom shape
+				moveTo(IconsUtils.size/2,IconsUtils.size/2);
+				lineStyle(1,IconsUtils.BLACK);
+				beginFill(c,1);
+				drawCircle(IconsUtils.size/2,IconsUtils.size/2,IconsUtils.size/3);
+				endFill();
+				
+ 				moveTo(IconsUtils.size/2,IconsUtils.size/4);
+				lineStyle(IconsUtils.thick/2,IconsUtils.BLACK,1);
+				lineTo(IconsUtils.size/2,IconsUtils.size*3/4);
+		
+				moveTo(IconsUtils.size/4,IconsUtils.size/2);
+				lineStyle(IconsUtils.thick/2,IconsUtils.BLACK,1);
+				lineTo(IconsUtils.size*3/4,IconsUtils.size/2);
+			}
 		}
 	}
 }

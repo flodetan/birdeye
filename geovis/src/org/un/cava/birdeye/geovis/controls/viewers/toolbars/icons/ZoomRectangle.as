@@ -31,15 +31,30 @@
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			graphics.moveTo(0,0);
-			graphics.beginFill(c,1);
-			graphics.drawRect(0,0,IconsUtils.size,IconsUtils.size);
-			graphics.endFill();
+
+			with (graphics)
+			{
+				// rect shape
+				moveTo(0,0);
+				beginFill(IconsUtils.RED,1);
+				lineStyle(1,IconsUtils.BLACK);
+				drawRect(0,0,IconsUtils.size*2/3,IconsUtils.size*2/3);
+				endFill();
 	
-			graphics.moveTo(IconsUtils.size/3,IconsUtils.size/3);
-			graphics.beginFill(0x000000,1);
-			graphics.drawRect(IconsUtils.size/3,IconsUtils.size/3,IconsUtils.size/3,IconsUtils.size/3);
-			graphics.endFill();
+				// zoom in shape
+				moveTo(IconsUtils.size*2/3,IconsUtils.size*2/3);
+				beginFill(c,1);
+				drawCircle(IconsUtils.size*2/3,IconsUtils.size*2/3,IconsUtils.size/3);
+				endFill();
+				
+ 				moveTo(IconsUtils.size*2/3,IconsUtils.size/3);
+				lineStyle(IconsUtils.thick/2,IconsUtils.BLACK,1);
+				lineTo(IconsUtils.size*2/3,IconsUtils.size);
+		
+				moveTo(IconsUtils.size/3,IconsUtils.size*2/3);
+				lineStyle(IconsUtils.thick/2,IconsUtils.BLACK,1);
+				lineTo(IconsUtils.size,IconsUtils.size*2/3);
+ 			}
 		}
 	}
 }

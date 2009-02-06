@@ -40,9 +40,9 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	import mx.core.Application;
 	import mx.core.UIComponent;
 	
+	import org.un.cava.birdeye.geovis.core.GeoFrame;
 	import org.un.cava.birdeye.geovis.core.Map;
 	import org.un.cava.birdeye.geovis.events.MapEvent;
-	import org.un.cava.birdeye.geovis.views.maps.world.WorldMap;
 	
 	public class ZoomReticle extends UIComponent
 	{ 
@@ -315,7 +315,7 @@ trace("hkView", x,y, map.mouseX, map.mouseY)
 			map.mask = tempMask;
 
 			// if parent is the worldmap itself, than put this on top, so that it's viewable
-			if (parent is WorldMap) 
+			if (parent is GeoFrame) 
 				parent.setChildIndex(this, parent.numChildren-1);
  		}
  		
