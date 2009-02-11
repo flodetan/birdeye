@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:matrix="org.un.cava.birdeye.qavis.matrix.*"
+	initialize="start()">
+	
+	<mx:Script>
+		<![CDATA[
+			import org.un.cava.birdeye.qavis.matrix.ComparisonMatrixPlotCell;
+			import org.un.cava.birdeye.qavis.matrix.ComparisonMatrixCell;
+			import mx.binding.utils.BindingUtils;
+			import mx.managers.ToolTipManager;
+			import org.un.cava.birdeye.qavis.matrix.ComparisonItem;
+			import mx.collections.ArrayCollection;
+			
+			private const plainCellFactory:IFactory = new ClassFactory(ComparisonMatrixCell);
+			
+			private const plotCellFactory:IFactory = new ClassFactory(ComparisonMatrixPlotCell);
+			
+			private const fields:Array = ['A','B','C','D','E','F','G','H','I','J','K','L'];
+			
+			[Bindable]
+			public var dataProvider:ArrayCollection;
+			
+			private function start():void
+			{
+				BindingUtils.bindSetter(updateDataGridSelection,comparisonMatrix,"selectedItem");
+			}
+			
+			public function cellColorFunction(comparisonItem:ComparisonItem):uint
+			{
+				return comparisonItem.comparisonValue < 0
+					? negativeColorPicker.selectedColor
+					: positiveColorPicker.selectedColor;
+			}
+			
+			public function cellAlphaFunction(comparisonItem:ComparisonItem):Number
+			{
+				return Math.abs(comparisonItem.comparisonValue);
+			}
+			
+			private function updateDataGridSelection(value:Object):void
+			{
+				dg.selectedItem = value;
+			}
+			
+			private function triggerColorUpdate():void
+			{
+				comparisonMatrix.invalidateCells();
+				dg.invalidateList();
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:String id="csv" source="data/mulitdimensionalData.csv"/>
+	
+	<mx:ApplicationControlBar height="30" width="100%" >
+		<mx:HBox height="100%" width="100%" paddingLeft="5" paddingRight="5" verticalAlign="middle">
+			
+			<mx:Label text="Positive correlation color"/>
+			<mx:ColorPicker id="positiveColorPicker" selectedColor="0xff0000" change="triggerColorUpdate()"/>
+			<mx:Label text="Negative correlation color"/>
+			<mx:ColorPicker id="negativeColorPicker" selectedColor="0xff" change="triggerColorUpdate()"/>
+			
+			<!--<mx:Label text="Cell renderer"/>
+			<mx:RadioButtonGroup id="cellRendererRadioButtonGroup"/>
+			<mx:RadioButton id="plainRadioButton" label="Plain renderer" group="{cellRendererRadioButtonGroup}"/>
+			<mx:RadioButton id="plotRadioButton" label="Plot renderer" group="{cellRendererRadioButtonGroup}" selected="true"/>
+			-->
+			
+		</mx:HBox>
+	</mx:ApplicationControlBar>
+	
+	<mx:HBox width="100%" height="100%">
+		<matrix:ComparisonMatrix id="comparisonMatrix"
+			dataProvider="{dataProvider}"
+			fields="{fields}"
+			width="100%"
+			height="100%"
+			comparisonRenderer="{plotCellFactory}"
+			colorFunction="{cellColorFunction}"
+			selectedItem="{dg.selectedItem as ComparisonItem}"/>
+			
+		<mx:DataGrid id="dg"
+			dataProvider="{comparisonMatrix.comparisonItems}"
+			width="100%"
+			height="100%">
+			<mx:columns>
+				<mx:DataGridColumn dataField="xField"/>
+				<mx:DataGridColumn dataField="yField"/>
+				<mx:DataGridColumn dataField="comparisonValue">
+					<mx:itemRenderer>
+						<mx:Component>
+							<mx:Canvas backgroundColor="{outerDocument.cellColorFunction(ComparisonItem(data))}"
+								backgroundAlpha="{outerDocument.cellAlphaFunction(ComparisonItem(data))}">
+								<mx:Script>
+									<![CDATA[
+										import org.un.cava.birdeye.qavis.matrix.ComparisonItem;
+									]]>
+								</mx:Script>
+								<mx:Label text="{data.comparisonValue}"/>
+							</mx:Canvas>
+						</mx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
+			</mx:columns>
+		</mx:DataGrid>
+	</mx:HBox>
+	
+</mx:VBox>
