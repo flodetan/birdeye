@@ -11,6 +11,7 @@ This library is focused on conventional and novel approaches to the analysis, in
   * Treemaps
   * Conventional charting such as bar, column, pie, line, plot, x/y.
   * CoxComb, Parallel Coordinates Plot, Polar Chart, etc.
+  * [http://michaelvandaniker.com/blog/2009/01/07/the-comparisonmatrix-component/ Comparison Matrix]
 
 === Status ===
 
