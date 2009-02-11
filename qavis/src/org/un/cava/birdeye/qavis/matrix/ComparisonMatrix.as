@@ -65,6 +65,9 @@ package org.un.cava.birdeye.qavis.matrix
 	 * ComparisonItem for each pair of attributes in the fields property. An itemRenderer
 	 * is created for each of these ComparisonItems. The ComparisonItems can be accessed
 	 * through the read-only comparisonItems property.
+	 * 
+	 * See http://michaelvandaniker.com/blog/2009/01/21/visualizing-the-2008-nfl-season/
+	 * for an example application using this component.
 	 */
 	public class ComparisonMatrix extends UIComponent
 	{
