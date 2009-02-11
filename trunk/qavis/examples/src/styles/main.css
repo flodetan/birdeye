@@ -51,3 +51,7 @@ ToolTip {
 			font-size: 10;
 }
 
+ComparisonMatrix {
+			selection-color:#99ff99;
+			roll-over-color:#ccffcc;
+}

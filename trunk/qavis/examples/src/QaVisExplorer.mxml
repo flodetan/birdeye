@@ -4,32 +4,66 @@
 	xmlns:treemap="views.treemap.*"
 	xmlns:microcharts="views.microcharts.*"
 	xmlns:charts="views.charts.*"
-	backgroundGradientColors="[#333333,#999999]" layout="vertical"
-	width="100%" height="100%">
+	xmlns:matrix="views.matrix.*"
+	xmlns:parallel="views.parallel.*"
+	backgroundGradientColors="[#333333,#999999]"
+	layout="vertical"
+	initialize="start()">
 
-<mx:Style source="styles/main.css" />
+	<mx:Style source="styles/main.css" />
 	
-<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.ToolTipManager;
+			import mx.collections.ArrayCollection;
+			
+			private const fields:Array = ['A','B','C','D','E','F','G','H','I','J','K','L'];
+			
+			[Bindable]
+			private var multidimensionalData:ArrayCollection;
 		
-	<mx:VBox width="1024" height="100%" verticalGap="10" >
-	<mx:ApplicationControlBar width="100%" height="85" >
-		<mx:HBox width="100%" verticalAlign="middle" paddingLeft="5" paddingRight="5" >
-			<mx:Image source="assets/icons/BirdEyeLogoQaVis75.png" />
-			<mx:Label text="BIRDEYE: QaVis Explorer" color="#FFFFFF" fontSize="16" />
+			private function start():void
+			{
+				ToolTipManager.showDelay = 0;
+				
+				multidimensionalData = new ArrayCollection();
+				var rows:Array = csv.split("\r\n");
+				for(var a:int = 1; a < rows.length; a++)
+				{
+					var row:String = rows[a];
+					var items:Array = row.split("\t");
+					var o:Object = new Object();
+					for(var b:int = 0; b < fields.length; b++)
+					{
+						var cName:String = fields[b];
+						var value:String = items[b].replace("\"","").replace("\"","");
+						o[cName] = value;
+					}
+					multidimensionalData.addItem(o);
+				}
+			}
+		]]>
+	</mx:Script>
+
+	<mx:String id="csv" source="data/mulitdimensionalData.csv"/>
+
+	<mx:VBox minWidth="1024" height="100%" verticalGap="10" >
+		
+		<mx:ApplicationControlBar width="100%" height="85" >
+			<mx:HBox width="100%" verticalAlign="middle" paddingLeft="5" paddingRight="5" >
+				<mx:Image source="@Embed('assets/icons/BirdEyeLogoQaVis75.png')" />
+				<mx:Label text="BIRDEYE: QaVis Explorer" color="#FFFFFF" fontSize="16" />
 			</mx:HBox>
-	</mx:ApplicationControlBar>	
-	
-	<mx:TabNavigator width="100%" height="100%" paddingLeft="5" creationPolicy="all" >
+		</mx:ApplicationControlBar>	
+				
+		<mx:TabNavigator width="100%" height="100%" paddingLeft="5" paddingRight="5" creationPolicy="all">
+			<microcharts:Microcharts label="Microcharts" width="100%" height="100%" />
+			<treemap:TreeMap label="Treemap" width="100%" height="100%" />
+			<matrix:ComparisonMatrixExample label="Comparison Matrix" dataProvider="{multidimensionalData}" width="100%" height="100%"/>
+			<parallel:ParallelCoordinatePlotExample label="Parallel Coordinates Plot" dataProvider="{multidimensionalData}" width="100%" height="100%"/>
+			<charts:Charts label="Charts" width="100%" height="100%" />		
+		</mx:TabNavigator>
 		
-		<microcharts:Microcharts label="Microcharts" width="100%" height="100%" />
-		<treemap:TreeMap label="Treemap" width="100%" height="100%" />
-		<charts:Charts label="Charts" width="100%" height="100%" />
-		
-	</mx:TabNavigator>
-		
-	
 	</mx:VBox>
 
-</mx:VBox>
-	
 </mx:Application>
