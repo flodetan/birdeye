@@ -10,8 +10,9 @@ This library is focused on conventional and novel approaches to the analysis, in
   * MicroCharts/Sparklines
   * Treemaps
   * Conventional charting such as bar, column, pie, line, plot, x/y.
-  * CoxComb, Parallel Coordinates Plot, Polar Chart, etc.
-  * [http://michaelvandaniker.com/blog/2009/01/07/the-comparisonmatrix-component/ Comparison Matrix]
+  * Parallel Coordinates Plot
+  * [http://michaelvandaniker.com/blog/2009/01/07/the-comparisonmatrix-component/ ComparisonMatrix]
+  * CoxComb, Polar Chart, etc.
 
 === Status ===
 
