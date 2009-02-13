@@ -81,12 +81,23 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		public static const GREEN:Number = 0x00ff54;
 		public static const BLACK:Number = 0x000000;
 		
+		private var _autosizeIcons:Boolean;
 		private var _upIconColor:Number = GREY;
 		private var _overIconColor:Number = YELLOW;
 		private var _downIconColor:Number = RED;
 		private var _selectedUpIconColor:Number = GREEN;
 		private var _selectedOverIconColor:Number = GREY;
 		private var _selectedDownIconColor:Number = BLUE;
+		
+		public function get autosizeIcons():Boolean
+		{
+			return _autosizeIcons;
+		}
+		
+		public function set autosizeIcons(val:Boolean):void
+		{
+			_autosizeIcons = val;
+		}
 		
 		public function get upIconColor():Number
 		{
