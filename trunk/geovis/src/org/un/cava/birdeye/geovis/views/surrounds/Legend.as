@@ -34,7 +34,6 @@ package org.un.cava.birdeye.geovis.views.surrounds
 	import mx.events.FlexEvent;
 	import mx.formatters.NumberBaseRoundType;
 	import mx.formatters.NumberFormatter;
-	import mx.utils.ObjectUtil;
 	
 	import org.un.cava.birdeye.geovis.analysis.Choropleth;
 	import org.un.cava.birdeye.geovis.controls.choropleth.GeoAutoGauge;
@@ -280,6 +279,17 @@ package org.un.cava.birdeye.geovis.views.surrounds
 	     *  @private
 	     */
 	     private function willCreateLegend(e:FlexEvent):void{
+	     	 if(_targets[0] is Choropleth){
+	     	 	_targets[0].addEventListener(GeoChoroEvents.CHOROPLETH_COMPLETE, willCL);
+	     	 }else{
+	     		createLegend();
+	     	 }
+	     }
+	     
+	     /**
+	     *  @private
+	     */
+	     private function willCL(e:GeoChoroEvents):void{
 	     	createLegend();
 	     }
 	     
@@ -289,8 +299,11 @@ package org.un.cava.birdeye.geovis.views.surrounds
 	     private function createLegend():void{
 	     	arrStep=new Array();
 			arrCol=new Array();
-			setFormatter(_targets[0].decimalNumber);			
-	     	
+			if(_targets[0] is GeoAutoGauge){
+				setFormatter(_targets[0].decimalNumber);			
+			}else{
+			  	setFormatter(0);		
+			}
 			if(HBLegend){
 				HBLegend.removeAllChildren();
 				HBLegend.x=_x;
@@ -329,7 +342,7 @@ package org.un.cava.birdeye.geovis.views.surrounds
 				
 				arrStep=_targets[0].getStepsValues();
 				arrCol=_targets[0].getColors();
-				
+				trace(_targets[0])
 				for(var j:int=0; j<=arrCol.length-1; j++){
 					
 					var tt:String=new String();
