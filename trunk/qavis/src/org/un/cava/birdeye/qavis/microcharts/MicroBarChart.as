@@ -27,9 +27,11 @@
 
 package org.un.cava.birdeye.qavis.microcharts
 {
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
+	
+	import mx.collections.Sort;
+	import mx.collections.SortField;
 	
 	[Inspectable("negative")]
 	 /**
@@ -87,7 +89,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function sizeX(indexIteration:Number, w:Number):Number
 		{
-			var _sizeX:Number = data[indexIteration] / tot * w;
+			var _sizeX:Number = dataValue / tot * w;
 			return _sizeX;
 		}
 
@@ -113,8 +115,11 @@ package org.un.cava.birdeye.qavis.microcharts
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			data.sort(Array.DESCENDING | Array.NUMERIC);
-
+			var dataSortField:SortField = new SortField(_dataField, false, true, true);
+			var numDataSort:Sort = new Sort();
+			numDataSort.fields = [dataSortField];
+			data.sort = numDataSort;
+			data.refresh();
 			createBars(unscaledWidth, unscaledHeight);
 			this.graphicsCollection.addItem(geomGroup);
 		}
@@ -132,13 +137,18 @@ package org.un.cava.birdeye.qavis.microcharts
 			// create bars
 			for (var i:Number=0; i<data.length; i++)
 			{
+				geomGroup = new ExtendedGeometryGroup();
+				dataValue = Object(data.getItemAt(i))[_dataField];
+				
+				var posX:Number = sizeX(i,w);
+
 				var column:RegularRectangle = 
-					new RegularRectangle(space+startX, space+startY, sizeX(i,w), columnWidth);
+					new RegularRectangle(space+startX, space+startY, posX, columnWidth);
 				
 				startY += columnWidth + spacing;
 
 				if (colors == null)
-					if (negative && data[i] < 0)
+					if (negative && dataValue < 0)
 						column.fill = new SolidFill(_negativeColor);
 					else
 					{
@@ -149,6 +159,16 @@ package org.un.cava.birdeye.qavis.microcharts
 					}
 
 				geomGroup.geometryCollection.addItem(column);
+
+				if (showDataTips)
+				{
+					geomGroup.toolTipFill = column.fill;
+					super.initGGToolTip();
+					geomGroup.createToolTip(data.getItemAt(i), _dataField, space+startX + posX, space+ startY - columnWidth/2, 3);
+				} else {
+					geomGroup.target = this;
+					graphicsCollection.addItem(geomGroup);
+				}
 			}
 		}
 	}

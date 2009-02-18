@@ -27,6 +27,7 @@
  
  package org.un.cava.birdeye.qavis.microcharts
 {
+	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RegularRectangle;
@@ -113,7 +114,7 @@
 		*/
 		private function sizeY(indexIteration:Number, h:Number):Number
 		{
-			var _sizeY:Number = data[indexIteration] / tot * h;
+			var _sizeY:Number = dataValue / tot * h;
 			return _sizeY;
 		}
 
@@ -159,6 +160,10 @@
 		*/
 		private function createPlots(w:Number, h:Number):void
 		{
+			var realGeomGroup:GeometryGroup = new GeometryGroup(); 
+			realGeomGroup.target = this;
+			graphicsCollection.addItem(realGeomGroup);
+
 			var columnWidth:Number = w / data.length;
 			var startY:Number = h + Math.min(min,0)/tot * h;
 			var startX:Number = 0;
@@ -175,12 +180,18 @@
 			}
 			
 			// create columns
-			for (var i:Number=0; i<data.length; i++)
+			for (var i:Number=0; i<=data.length -1; i++)
 			{
-				var plot:Circle = 
-					new Circle(space+startX+columnWidth/2, space+ startY-sizeY(i,h), radius);
-				
+				dataValue = Object(data.getItemAt(i))[_dataField];
+
+				var posX:Number = space+startX+columnWidth/2;
+				var posY:Number = space+startY-sizeY(i, h);
+
+				var plot:Circle;
+				plot = new Circle(posX, posY, radius);
+			
 				startX += columnWidth;
+				realGeomGroup.geometryCollection.addItem(plot);
 
 				if (colors != null)
 					plot.fill = new SolidFill(useColor(i));
@@ -189,12 +200,21 @@
 					if (isNaN(color))
 						plot.fill = new SolidFill(black);
 					else 
-						plot.stroke = new SolidStroke(color);
+						plot.fill = new SolidFill(color);
 				}
 					
-				geomGroup.geometryCollection.addItem(plot);
+				if (showDataTips)
+				{
+					geomGroup = new ExtendedGeometryGroup();
+					geomGroup.toolTipFill = plot.fill;
+					var hitMouseArea:Circle = new Circle(posX, posY, 5); 
+					hitMouseArea.fill = new SolidFill(0x000000, 0);
+					geomGroup.geometryCollection.addItem(hitMouseArea);
+					
+					super.initGGToolTip();
+					geomGroup.createToolTip(data.getItemAt(i), _dataField, posX, posY, 3);
+				}
 			}
-
 		}
 	}
 }

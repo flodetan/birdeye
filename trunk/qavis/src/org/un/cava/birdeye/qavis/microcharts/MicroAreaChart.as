@@ -27,6 +27,8 @@
  
  package org.un.cava.birdeye.qavis.microcharts
 {
+	import com.degrafa.GeometryGroup;
+	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Polygon;
 	import com.degrafa.paint.SolidFill;
 	
@@ -42,7 +44,7 @@
 	public class MicroAreaChart extends BasicMicroChart
 	{
 		private var black:String = "0x000000";
-		
+
 		/**
 		* @private
 		 * Used to recalculate min, max and tot each time properties have to ba revalidated 
@@ -59,7 +61,8 @@
 		*/
 		private function sizeY(indexIteration:Number, h:Number):Number
 		{
-			var _sizeY:Number = data[indexIteration] / tot * h;
+			dataValue = Object(data.getItemAt(indexIteration))[_dataField]; 
+			var _sizeY:Number = dataValue / tot * h;
 			return _sizeY;
 		}
 
@@ -91,16 +94,31 @@
 			var startX:Number = 0;
 
 			// create polygons
-			for (var i:Number=0; i<data.length-1; i++)
-			{
-				var pol:Polygon = new Polygon ()
-				
-				pol.data =  String(space+startX+columnWidth/2) + "," + String(space+startY) + " " +
-							String(space+startX+columnWidth/2) + "," + String(space+startY-sizeY(i, h)) + " " +
-							String(space+startX+columnWidth*3/2) + "," + String(space+startY-sizeY(i+1, h)) + " " +
-							String(space+startX+columnWidth*3/2) + "," + String(space+startY);
 
-				startX += columnWidth;
+			var realGeomGroup:GeometryGroup = new GeometryGroup();
+			realGeomGroup.target = this;
+			graphicsCollection.addItem(realGeomGroup);
+			
+			for (var i:int=0; i<=data.length-1; i++)
+			{
+				var pol:Polygon = new Polygon ();
+				
+				dataValue = Object(data.getItemAt(i))[_dataField];
+
+				var posX:Number = space+startX+columnWidth/2;
+				var posY:Number = space+startY-sizeY(i, h);
+				
+				if (i != data.length-1)
+				{
+					pol.data =  String(space+startX+columnWidth/2) + "," + String(space+startY) + " " +
+								String(posX) + "," + String(posY) + " " +
+								String(space+startX+columnWidth*3/2) + "," + String(space+startY-sizeY(i+1, h)) + " " +
+								String(space+startX+columnWidth*3/2) + "," + String(space+startY);
+	
+					startX += columnWidth;
+	
+					realGeomGroup.geometryCollection.addItem(pol);
+				}
 
 				if (colors != null)
 					pol.fill = new SolidFill(useColor(i));
@@ -111,8 +129,18 @@
 					else 
 						pol.fill = new SolidFill(color);
 				}
+				
+				if (showDataTips)
+				{
+					geomGroup = new ExtendedGeometryGroup();
+					geomGroup.toolTipFill = pol.fill;
+					var hitMouseArea:Circle = new Circle(posX, posY, 5);
+					hitMouseArea.fill = new SolidFill(0x000000, 0);
+					geomGroup.geometryCollection.addItem(hitMouseArea);
 					
-				geomGroup.geometryCollection.addItem(pol);
+					super.initGGToolTip();
+					geomGroup.createToolTip(data.getItemAt(i), _dataField, posX, posY, 3);
+				}
 			}
 		}
 	}

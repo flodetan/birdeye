@@ -92,7 +92,7 @@
 		*/
 		private function sizeY(indexIteration:Number, h:Number):Number
 		{
-			var _sizeY:Number = (data[indexIteration] >= _referenceValue) ? - h/3 : h/3;
+			var _sizeY:Number = (dataValue >= _referenceValue) ? - h/3 : h/3;
 			return _sizeY;
 		}
 
@@ -122,13 +122,19 @@
 			// create columns
 			for (var i:Number=0; i<data.length; i++)
 			{
+				geomGroup = new ExtendedGeometryGroup();
+				dataValue = Object(data.getItemAt(i))[_dataField];
+				
+				var posX:Number = space+startX;
+				var posY:Number = sizeY(i, h);
+
 				var column:RegularRectangle = 
-					new RegularRectangle(space+startX, space+startY, columnWidth, sizeY(i,h));
+					new RegularRectangle(posX, space+startY, columnWidth, posY);
 				
 				startX += columnWidth + spacing;
 
 				if (colors == null)
-					if (data[i] < 0)
+					if (dataValue < 0)
 						column.fill = red;
 					else
 					{
@@ -141,6 +147,17 @@
 					column.fill = new SolidFill(useColor(i));
 
 				geomGroup.geometryCollection.addItem(column);
+
+				if (showDataTips)
+				{
+					geomGroup.toolTipFill = column.fill;
+					
+					super.initGGToolTip();
+					geomGroup.createToolTip(data.getItemAt(i), _dataField, posX +columnWidth/2, space+startY + posY, 3);
+				} else {
+					geomGroup.target = this;
+					graphicsCollection.addItem(geomGroup);
+				}
 			}
 		}
 	}

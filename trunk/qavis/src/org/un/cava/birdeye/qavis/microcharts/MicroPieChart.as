@@ -27,7 +27,6 @@
  
 package org.un.cava.birdeye.qavis.microcharts
 {
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.EllipticalArc;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
@@ -90,8 +89,10 @@ package org.un.cava.birdeye.qavis.microcharts
 			tot = 0;
 			for (var i:Number = 0; i < data.length; i++)
 			{
-				if (data[i] > 0)
-					tot += data[i];
+trace(data)
+				dataValue = Object(data.getItemAt(i))[_dataField]
+				if (dataValue > 0)
+					tot += dataValue;
 			}
 		}
 
@@ -101,7 +102,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function arcAngleSize(indexIteration:Number):Number
 		{
-			var arcAngleSize:Number = Math.max(0,data[indexIteration] * 360 / tot); 
+			var arcAngleSize:Number = Math.max(0,dataValue * 360 / tot); 
 			if (arcAngleSize == 360)
 				arcAngleSize = 359.9;
 			
@@ -115,7 +116,8 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function startAngle(indexIteration:Number):Number
 		{
-			var startAngle:Number = prevAngleSize + (indexIteration==0)? 0 : Math.max(0,data[indexIteration-1] * 360 / tot);
+			var startAngle:Number = prevAngleSize + (indexIteration==0)? 0 : 
+					Math.max(0,Object(data.getItemAt(indexIteration-1))[_dataField] * 360 / tot);
 			return startAngle;
 		}
 		
@@ -149,11 +151,26 @@ package org.un.cava.birdeye.qavis.microcharts
 			// create pies
 			for (var i:Number=0; i<data.length; i++)
 			{
+				dataValue = Object(data.getItemAt(i))[_dataField];
 				var pie:EllipticalArc;
 				
-				if (data[i] > 0) 
+				if (dataValue > 0) 
 				{
-					pie = new EllipticalArc(space, space, diameter, diameter, prevAngleSize, arcAngleSize(i),"pie");
+					geomGroup = new ExtendedGeometryGroup();
+
+					var posX:Number ;
+					var posY:Number ;
+					var arcAngle:Number;
+					pie = new EllipticalArc(space, space, diameter, diameter, prevAngleSize, arcAngle = arcAngleSize(i),"pie");
+					
+					var halfAngle:Number;
+					if (arcAngle == prevAngleSize)
+						halfAngle = arcAngle/2;
+					else
+						halfAngle = (prevAngleSize - arcAngle) + arcAngle/2;
+
+					posX = diameter/2 + diameter/3.5 * Math.cos(halfAngle * Math.PI / 180);
+					posY = diameter/2 - diameter/3.5 * Math.sin(halfAngle * Math.PI / 180);
 
 					pie.fill = useColor(i);
 						
@@ -161,6 +178,16 @@ package org.un.cava.birdeye.qavis.microcharts
 						pie.stroke = new SolidStroke(stroke);
 						
 					geomGroup.geometryCollection.addItem(pie);
+
+					if (showDataTips)
+					{
+						geomGroup.toolTipFill = pie.fill;
+						super.initGGToolTip();
+						geomGroup.createToolTip(data.getItemAt(i), _dataField, posX, posY, 3);
+					} else {
+						geomGroup.target = this;
+						graphicsCollection.addItem(geomGroup);
+					}
 				}
 			}
 		}

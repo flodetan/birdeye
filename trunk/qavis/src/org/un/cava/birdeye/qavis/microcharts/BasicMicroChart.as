@@ -27,7 +27,6 @@
  
 package org.un.cava.birdeye.qavis.microcharts
 {
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.RegularRectangle;
@@ -37,44 +36,55 @@ package org.un.cava.birdeye.qavis.microcharts
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.ICollectionView;
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
+	import mx.controls.ToolTip;
 	import mx.core.Container;
 	import mx.core.EdgeMetrics;
-	import mx.core.UIComponent;
 	import mx.events.ResizeEvent;
+	import mx.managers.ToolTipManager;
 	
 	 /**
-	 * This class is used as skeleton for most of microcharts in this library. It provides the common properties and methods 
+	 * This class is used as skeleton for most of charts in this library. It provides the common properties and methods 
 	 * that can be used or overridden by several microcharts components that extend this class.  
 	 * The dataProvider property can accept Array, ArrayCollection, String, XML, etc.
 	 * If dataProvider is different from a simple Array of values, than the dataField property cannot be null.
 	*/
 	public class BasicMicroChart extends Surface
 	{
-		protected var geomGroup:GeometryGroup;
-		protected var tot:Number = NaN;
+		protected var geomGroup:ExtendedGeometryGroup;
+		protected var tot:Number = NaN; 
 		protected var min:Number, max:Number, space:Number = 0;
 
 		private var tempColor:int = 0xbbbbbb;
+		private var wasDataFieldSet:Boolean = true;
 		
 		private var _colors:Array = null;
 		private var _color:Number = NaN;
 		private var _gradientColors:Array;
 		private var _dataProvider:Object = new Object();
-		private var _dataField:String;
+		private var _showDataTips:Boolean = false;
+		protected var _dataField:String;
+		protected var dataValue:Number; 
+		protected var _dataTipFunction:Function;
+		protected var _dataTipPrefix:String;
 		private var _stroke:Number = NaN; 
 		private var _backgroundColor:Number = NaN;
 		private var _backgroundStroke:Number = NaN;
 		private var _percentHeight:Number = NaN;
 		private var _percentWidth:Number = NaN;
 		
-		protected var data:Array;
-		
+		protected var data:ArrayCollection;
+		protected var cursor:IViewCursor;
+
+		private var tip:ToolTip; 
+
 		protected var tempWidth:Number, tempHeight:Number;
 		private var resizeListening:Boolean = false;
 		
@@ -218,11 +228,45 @@ package org.un.cava.birdeye.qavis.microcharts
 		/**
 		* Indicate the data field to be used to feed the chart. 
 		*/
+		[Inspectable(enumeration="true,false")]
+		public function set showDataTips(value:Boolean):void
+		{
+			_showDataTips = value;
+		}
+		
+		/**
+		* Indicate the function used to create tooltips. 
+		*/
+		public function get showDataTips():Boolean
+		{
+			return _showDataTips;
+		}
+
+		
+		/**
+		* Indicate the data field to be used to feed the chart. 
+		*/
 		public function set dataField(value:String):void
 		{
 			_dataField = value;
 		}
 		
+		/**
+		* Indicate the function used to create tooltips. 
+		*/
+		public function set dataTipFunction(value:Function):void
+		{
+			_dataTipFunction = value;
+		}
+
+		/**
+		* Indicate the prefix for the tooltip. 
+		*/
+		public function set dataTipPrefix(value:String):void
+		{
+			_dataTipPrefix = value;
+		}
+
 		/**
 		* Set the gradient colors. 
 		*/
@@ -257,7 +301,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
-			feedDataArray();
+			feedDataArrayCollection();
 			
 			// if autosize is set, than listen to parent's resize events
 			if (!resizeListening && (!isNaN(_percentHeight) || !isNaN(_percentWidth)))
@@ -271,20 +315,31 @@ package org.un.cava.birdeye.qavis.microcharts
 		* @private
 		* load values into data
 		*/
-		private function feedDataArray():void
+		private function feedDataArrayCollection():void
 		{
-			data = new Array();
-			var cursor:IViewCursor = _dataProvider.createCursor();
-			var i:int=0;
-			
-			while(!cursor.afterLast)
-			{
-				if (_dataField == null)
-					data[i] = Number(cursor.current);
-				else 
-					data[i] = cursor.current[_dataField];
-			    i++;
-			    cursor.moveNext();      
+			if (dataProvider is ArrayCollection && _dataField)
+				data = ArrayCollection(_dataProvider);
+			else {
+				data = new ArrayCollection();
+				cursor = _dataProvider.createCursor();
+				var i:int = 0;
+				
+				if (wasDataFieldSet)
+					wasDataFieldSet = _dataField ? true : false;
+				if (!wasDataFieldSet)
+					dataField = "value";
+				 
+				while(!cursor.afterLast)
+				{
+					// if the dataField is null, it might be a simple array and we still try to get 
+					// the data right to feed the chart
+					if (!wasDataFieldSet)
+						data.addItemAt({value:Number(cursor.current)},i);
+					else 
+						data.addItemAt(cursor.current,i);
+				    i++;
+				    cursor.moveNext();      
+				}
 			}
 		}
 
@@ -295,14 +350,18 @@ package org.un.cava.birdeye.qavis.microcharts
 		protected function minMaxTot():void
 		{
 			tot = 0;
-			min = max = data[0];
-			
+
 			for (var i:Number = 0; i < data.length; i++)
 			{
-				if (min > data[i])
-					min = data[i];
-				if (max < data[i])
-					max = data[i];
+				if (i == 0)
+					min = max = Object(data.getItemAt(0))[_dataField]; 
+			
+				dataValue = Object(data.getItemAt(i))[_dataField]; 
+
+				if (min > dataValue)
+					min = dataValue;
+				if (max < dataValue)
+					max = dataValue;
 			}
 
 			// in case all values are negative or all values are positive, the 0 is considered respectively 
@@ -371,10 +430,10 @@ package org.un.cava.birdeye.qavis.microcharts
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			for(var i:int=this.numChildren-1; i>=0; i--)
-				if(getChildAt(i) is GeometryGroup)
-						removeChildAt(i);
+				if(getChildAt(i))
+					removeChildAt(i);
 
-			geomGroup = new GeometryGroup();
+			geomGroup = new ExtendedGeometryGroup();
 			geomGroup.target = this;
 			
 			createBackground(unscaledWidth, unscaledHeight);
@@ -425,6 +484,49 @@ package org.un.cava.birdeye.qavis.microcharts
 		private function onParentResize(e:Event):void
 		{
 			invalidateSize();
+		}
+
+		/**
+		* @private 
+		 * Init the GeomGroupToolTip and its listeners
+		 * 
+		*/
+		protected function initGGToolTip():void
+		{
+			geomGroup.target = this;
+			if (_dataTipFunction != null)
+				geomGroup.dataTipFunction = _dataTipFunction;
+			if (_dataTipPrefix!= null)
+				geomGroup.dataTipPrefix = _dataTipPrefix;
+			graphicsCollection.addItem(geomGroup);
+			geomGroup.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
+			geomGroup.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
+		}
+
+		/**
+		* @private 
+		 * Show and position tooltip
+		 * 
+		*/
+		private function handleRollOver(e:MouseEvent):void
+		{
+			var pos:Point = localToGlobal(new Point(ExtendedGeometryGroup(e.target).posX, ExtendedGeometryGroup(e.target).posY));
+			tip = ToolTipManager.createToolTip(ExtendedGeometryGroup(e.target).toolTip, 
+												pos.x + 10,	pos.y + 10)	as ToolTip;
+
+			tip.alpha = 0.7;
+			ExtendedGeometryGroup(e.target).showToolTipGeometry();
+		}
+
+		/**
+		* @private 
+		 * Destroy/hide tooltip 
+		 * 
+		*/
+		private function handleRollOut(e:MouseEvent):void
+		{
+			ToolTipManager.destroyToolTip(tip);
+			ExtendedGeometryGroup(e.target).hideToolTipGeometry();
 		}
 	}
 }
