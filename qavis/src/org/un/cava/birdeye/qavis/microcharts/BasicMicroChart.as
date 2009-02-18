@@ -63,7 +63,10 @@ package org.un.cava.birdeye.qavis.microcharts
 		protected var min:Number, max:Number, space:Number = 0;
 
 		private var tempColor:int = 0xbbbbbb;
-		private var wasDataFieldSet:Boolean = true;
+		private var wasDataFieldSet:String = null;
+		
+		private static const YES:String = "y"
+		private static const NO:String = "n"
 		
 		private var _colors:Array = null;
 		private var _color:Number = NaN;
@@ -317,23 +320,24 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function feedDataArrayCollection():void
 		{
-			if (dataProvider is ArrayCollection && _dataField)
+			if (!wasDataFieldSet) 
+				wasDataFieldSet = _dataField ? YES : NO;
+				
+			if (dataProvider is ArrayCollection && wasDataFieldSet == YES)
 				data = ArrayCollection(_dataProvider);
 			else {
 				data = new ArrayCollection();
 				cursor = _dataProvider.createCursor();
 				var i:int = 0;
 				
-				if (wasDataFieldSet)
-					wasDataFieldSet = _dataField ? true : false;
-				if (!wasDataFieldSet)
+				if (wasDataFieldSet == NO)
 					dataField = "value";
 				 
 				while(!cursor.afterLast)
 				{
 					// if the dataField is null, it might be a simple array and we still try to get 
 					// the data right to feed the chart
-					if (!wasDataFieldSet)
+					if (wasDataFieldSet == NO)
 						data.addItemAt({value:Number(cursor.current)},i);
 					else 
 						data.addItemAt(cursor.current,i);

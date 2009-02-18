@@ -21,7 +21,7 @@
 			}
 		]]>
 	</mx:Script>
-	<mc:MicroBulletGraph orientation="vertical" noSnap="true" 
+	<mc:MicroBulletGraph orientation="vertical" noSnap="true" showDataTips="true"
 		qualitativeRanges="{data.Chart}" toolTip="Double click to zoom it" width="15" height="60"
 		target="{data.trg}" value="{data.val}"  doubleClick="popChart();" doubleClickEnabled="true"/>
 	<mx:Text selectable="false" fontSize="8" text="Zoom it with double click"/>

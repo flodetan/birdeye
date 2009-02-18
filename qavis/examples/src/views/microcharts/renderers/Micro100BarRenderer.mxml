@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:mc="org.un.cava.birdeye.qavis.microcharts.*" 
 	width="100%" height="100%" horizontalAlign="center">
-	<mc:Micro100BarChart dataProvider="{data.Chart}" 
+	<mc:Micro100BarChart dataProvider="{data.Chart}"  showDataTips="true"
 		colors="{data.Colors}" stroke="0xffffff"
 		height="25" width="90%"/>
 </mx:HBox>
