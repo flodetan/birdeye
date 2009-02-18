@@ -2,5 +2,5 @@
 <mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:mc="org.un.cava.birdeye.qavis.microcharts.*" 
 	verticalAlign="middle" horizontalAlign="center" width="100%" height="100%">
 	<mc:MicroLineChart dataProvider="{data.Chart}" referenceValue="30" referenceColor="0xaaaaaa"
-		height="30" width="90%"/>
+		height="30" width="90%" showDataTips="true"/>
 </mx:HBox>

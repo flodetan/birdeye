@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mc="microcharts.*" verticalAlign="middle" horizontalAlign="center"
 	xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
-	<mc:MicroAreaChart values="{data.Chart}"
+	<mc:MicroAreaChart values="{data.Chart}" showDataTips="true"
 		height="20" width="70" color="0x000000" backgroundColor="0xaaaaaa"/>
 	<mx:Spacer height="100%"/>
-	<mc:MicroPlotChart radius="1.5" values="{data.Chart}" 
+	<mc:MicroPlotChart radius="1.5" values="{data.Chart}"  showDataTips="true"
 		height="20" width="70" color="0x000000" backgroundColor="0xaaaaaa"/>
 	<mx:Spacer height="100%"/>
-	<mc:MicroLineChart values="{data.Chart}" 
+	<mc:MicroLineChart values="{data.Chart}"  showDataTips="true"
 		height="20" width="70" color="0x000000" backgroundColor="0xaaaaaa"/>
 	<mx:Spacer height="100%"/>
-	<mc:MicroColumnChart values="{data.Chart}"
+	<mc:MicroColumnChart values="{data.Chart}" showDataTips="true"
 		height="20" width="70" color="0x000000" backgroundColor="0xaaaaaa"/>
 </mx:VBox>

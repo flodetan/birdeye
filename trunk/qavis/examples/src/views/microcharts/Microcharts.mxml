@@ -128,7 +128,7 @@
 		        </mx:columns>
 		    </mx:DataGrid>
 			<mx:Panel width="{w.value}" height="{h.value}" title="MicroArea">
-				<mc:MicroAreaChart color="0x999999"
+				<mc:MicroAreaChart color="0x999999" showDataTips="true"
 					dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}"
 					width="100%" height="100%" backgroundColor="0xdddddd" backgroundStroke="0x888888"/>
 			</mx:Panel>
@@ -153,7 +153,7 @@
 		    </mx:DataGrid>
 			<mx:Panel width="{w.value}" height="{h.value}" title="MicroLine">
 				<mc:MicroLineChart dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}"
-					color="0x999999" 
+					color="0x999999"  showDataTips="true"
 					height="100%" width="100%" referenceValue="30" referenceColor="0xaaaaaa" backgroundColor="0xdddddd" backgroundStroke="0x888888"/>
 			</mx:Panel>
 		</mx:VBox>
@@ -177,7 +177,7 @@
 		    </mx:DataGrid>
 			<mx:Panel width="{w.value}" height="{h.value}" title="WinLose">
 				<mc:MicroWinLoseChart spacing="3" dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}" 
-					backgroundColor="0xdddddd" backgroundStroke="0x888888"
+					backgroundColor="0xdddddd" backgroundStroke="0x888888" showDataTips="true"
 					height="100%" width="100%"/>
 			</mx:Panel>
 		</mx:VBox>
@@ -201,7 +201,7 @@
 		    </mx:DataGrid>
 			<mx:Panel width="{w.value}" height="{h.value}" title="MicroPlot">
 				<mc:MicroPlotChart radius="2" dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}" 
-					backgroundColor="0xdddddd" backgroundStroke="0x888888"  color="0x999999"
+					backgroundColor="0xdddddd" backgroundStroke="0x888888"  color="0x999999" showDataTips="true"
 					height="100%" width="100%"/>
 			</mx:Panel>
 		</mx:VBox>
@@ -220,7 +220,7 @@
 			<mx:Label text="Click on the chart to open another sample showing refresh and resize binding performances" fontWeight="bold"/>
 			<mx:Panel width="{w.value}" height="{h.value}" title="MicroBar">
 				<mc:MicroBarChart dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}" 
-					backgroundColor="0xdddddd" backgroundStroke="0x888888" 
+					backgroundColor="0xdddddd" backgroundStroke="0x888888"  showDataTips="true"
 					click="navigateToURL(new URLRequest('MicroBarAutoSize.swf'));"
 					height="100%" width="100%" spacing="1"/>
 			</mx:Panel>
@@ -247,7 +247,7 @@
 				<mc:MicroColumnChart 
 					height="100%" width="100%" spacing="1" color="0x444444"
 					backgroundColor="0xdddddd" backgroundStroke="0x888888"
-					dataProvider="{dpAC}"
+					dataProvider="{dpAC}" showDataTips="true"
 					dataField="v"/>
 			</mx:Panel>
 		</mx:VBox>
@@ -270,7 +270,7 @@
 	        </mx:columns>
 		    </mx:DataGrid>
 			<mx:Panel width="{w.value}" height="{h.value}" title="Micro100Bar">
-				<mc:Micro100BarChart height="100%" width="100%"
+				<mc:Micro100BarChart height="100%" width="100%" showDataTips="true"
 				colors="{colors}" stroke="0xffffff" backgroundColor="0xeeeeee" backgroundStroke="0x888888"
 				dataField="v" dataProvider="{dpAC}"/>
 			</mx:Panel>
@@ -295,7 +295,7 @@
 		    </mx:DataGrid>
 			<mx:Label text="Sizing MicroPie"/>
 			<mx:HSlider id="s" value="80" minimum="0" maximum="400" snapInterval="1" liveDragging="true"/>
-			<mc:MicroPieChart id="pc" diameter="{s.value}" 
+			<mc:MicroPieChart id="pc" diameter="{s.value}" showDataTips="true"
 				colors="{colors}" backgroundColor="0xdddddd" backgroundStroke="0x888888" stroke="0xffffff"
 				dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}"/>
 		</mx:VBox>
@@ -320,7 +320,7 @@
 			<mx:Label fontSize="12" text="Double click on the datagrid microcharts to see the snapInterval"/>
 			<mc:MicroBulletGraph orientation="horizontal"  paddingTop="20" paddingLeft="20"
 				qualitativeRanges="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value]}" 
-				target="{t.value}" value="{v.value}" noSnap="true"
+				target="{t.value}" value="{v.value}" noSnap="true" showDataTips="true"
 				width="{hwd.value}" height="{hht.value}"/>
 		</mx:VBox>
 	</mx:TabNavigator>

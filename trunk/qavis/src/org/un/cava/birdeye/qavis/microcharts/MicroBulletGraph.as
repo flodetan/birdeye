@@ -27,7 +27,6 @@
 
 package org.un.cava.birdeye.qavis.microcharts
 {
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.Circle;
@@ -35,16 +34,22 @@ package org.un.cava.birdeye.qavis.microcharts
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
-	import flash.xml.XMLNode;
+	
+	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.text.TextFieldAutoSize;
-	import mx.core.UITextField;
-	import mx.formatters.NumberFormatter;
-	import mx.styles.CSSStyleDeclaration;
-	import mx.styles.StyleManager;
+	import flash.xml.XMLNode;
+	
 	import mx.collections.ArrayCollection;
 	import mx.collections.ICollectionView;
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
+	import mx.controls.ToolTip;
+	import mx.core.UITextField;
+	import mx.formatters.NumberFormatter;
+	import mx.managers.ToolTipManager;
+	import mx.styles.CSSStyleDeclaration;
+	import mx.styles.StyleManager;
 
 	[Inspectable("orientation")]
 	[Inspectable("noSnap")]
@@ -60,7 +65,7 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * Resizing keeps the right proportions of all of its parts.
 	 * The basic syntax to use and create a BulletGraph chart with mxml is:</p>
 	 * <p>&lt;BulletGraph orientation="vertical"
-	 * 	qualitativeRanges="{[0, 20, 40, 60, 80]}"
+	 * 	qualitativeRanges="{[0, 20, 40, 60, 80]}" showDataTips="true"
 	 * 	target="50" value="45" title="Vertical BG"
 	 * 	snapInterval="5" width="30" height="200"/></p>
 	 * 
@@ -80,11 +85,16 @@ package org.un.cava.birdeye.qavis.microcharts
 		private const VERTICAL:String = "vertical";
 		private const HORIZONTAL:String = "horizontal";
 		
-		private var geomGroup:GeometryGroup;
+		private var geomGroup:ExtendedGeometryGroup;
 		private var valueShape:IGeometry;
 		private var targetShape:RegularRectangle;
 		private var black:SolidFill = new SolidFill("0x000000",1);
-		
+
+		private var _showDataTips:Boolean = false;
+		protected var _dataTipFunction:Function;
+		protected var _dataTipPrefix:String;
+		private var tip:ToolTip; 
+
 		private var snapLine:Line;
 		private var snapLineColor:int = 0x9A9A98;
 		private var snapTextFontSize:int = 8;
@@ -105,6 +115,39 @@ package org.un.cava.birdeye.qavis.microcharts
 		private var _formatter:NumberFormatter = new NumberFormatter();
 
 		private var data:Array;
+
+		/**
+		* Indicate the function used to create tooltips. 
+		*/
+		public function set dataTipFunction(value:Function):void
+		{
+			_dataTipFunction = value;
+		}
+
+		/**
+		* Indicate the prefix for the tooltip. 
+		*/
+		public function set dataTipPrefix(value:String):void
+		{
+			_dataTipPrefix = value;
+		}
+
+		/**
+		* Indicate the data field to be used to feed the chart. 
+		*/
+		[Inspectable(enumeration="true,false")]
+		public function set showDataTips(value:Boolean):void
+		{
+			_showDataTips = value;
+		}
+		
+		/**
+		* Indicate the function used to create tooltips. 
+		*/
+		public function get showDataTips():Boolean
+		{
+			return _showDataTips;
+		}
 
 		public function set paddingLeft(val:Number):void
 		{
@@ -654,12 +697,9 @@ package org.un.cava.birdeye.qavis.microcharts
 			for(var i:int=this.numChildren-1; i>=0; i--)
 				removeChildAt(i);
 
-			geomGroup = new GeometryGroup();
-			geomGroup.target = this;
 			if (!noSnap)
 				createSnap();
 			createBulletGraph();
-			this.graphicsCollection.addItem(geomGroup);
 		}
 		
 		/**
@@ -751,35 +791,106 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function createBulletGraph():void
 		{
-			
 			// create value shape (as per the specs: (min == 0) ? rectangle : circle)
+			var valueTipX:Number, valueTipY:Number;
 			if (min == 0)
+			{
+				valueTipX = _paddingLeft+xValue() + xSizeShapeValue()/2;
+				valueTipY = paddingTop+yValue() + ySizeShapeValue()/2;
 				valueShape = new RegularRectangle(_paddingLeft+xValue(), _paddingTop+yValue(), xSizeShapeValue(), ySizeShapeValue());
+			}
 			else
+			{
 				if (orientation == VERTICAL)
+				{
+					valueTipX = _paddingLeft+unscaledWidth/2 + Math.min(xSizeShapeValue(), maxSize)/4;
+					valueTipY = _paddingTop+yValue() + Math.min(xSizeShapeValue(), maxSize)/4;
 					valueShape = new Circle(_paddingLeft+unscaledWidth/2, _paddingTop+yValue(), Math.min(xSizeShapeValue(), maxSize));
+				}
 				else
+				{
+					valueTipX = _paddingLeft+xValue() + Math.min(ySizeShapeValue(), maxSize)/4;
+					valueTipY = _paddingTop+unscaledHeight/2 + Math.min(ySizeShapeValue(), maxSize)/4; 
 					valueShape = new Circle(_paddingLeft+xValue(), _paddingTop+unscaledHeight/2, Math.min(ySizeShapeValue(), maxSize)); 
+				}
+			}
 			
 			// create target shape
+			var targetTipX:Number, targetTipY:Number;
 			if (orientation == VERTICAL)
+			{
+				targetTipX = _paddingLeft+xTarget() + xSizeRectTarget()/2;
+				targetTipY = _paddingTop+yTarget() + ySizeRectTarget()/2;
 				targetShape = new RegularRectangle(_paddingLeft+xTarget(), _paddingTop+yTarget(), xSizeRectTarget(), ySizeRectTarget());
+			}
 			else
+			{
+				targetTipX = _paddingLeft+xTarget() + xSizeRectTarget()/2
+				targetTipY = _paddingTop+yTarget() + ySizeRectTarget()/2;
 				targetShape = new RegularRectangle(_paddingLeft+xTarget(), _paddingTop+yTarget(), xSizeRectTarget(), ySizeRectTarget());
+			}
+				
+			targetTipX = targetShape.x + targetShape.width/2
+			targetTipY = targetShape.y + targetShape.height/2
 				
 			valueShape.fill = black;
 			targetShape.fill = black;
 			
+			var posX:Number;
+			var posY:Number;
+
 			// create qualitativeRanges
 			for (var i:Number=0; i<data.length; i++)
 			{
+				geomGroup = new ExtendedGeometryGroup();
+				geomGroup.target = this;
+
 				var qualitativeShape:RegularRectangle = 
 					new RegularRectangle(_paddingLeft+startX(i), _paddingTop+startY(i), offsetSizeX(i), offsetSizeY(i));
 				qualitativeShape.fill = new SolidFill(useColor(i));
+
 				geomGroup.geometryCollection.addItem(qualitativeShape);
+				
+				if (orientation == VERTICAL)
+				{
+					posX = qualitativeShape.x + qualitativeShape.width/2;
+					posY = qualitativeShape.y + 4;
+				} else {
+					posX = qualitativeShape.x + qualitativeShape.width -4;
+					posY = qualitativeShape.y + qualitativeShape.height/2;
+				}
+				
+				if (_showDataTips)
+				{
+					geomGroup.toolTipFill = qualitativeShape.fill;
+					initGGToolTip();
+					geomGroup.createToolTip((orientation == VERTICAL) ? data[i-1] : data[i], null, posX, posY, 3);
+				} else {
+					geomGroup.target = this;
+					graphicsCollection.addItem(geomGroup);
+				}
 			}
-			geomGroup.geometryCollection.addItem(valueShape);
-			geomGroup.geometryCollection.addItem(targetShape);
+			
+			if (showDataTips)
+			{
+				geomGroup = new ExtendedGeometryGroup();
+				geomGroup.target = this;
+				geomGroup.toolTipFill = valueShape.fill;
+				initGGToolTip();
+				geomGroup.geometryCollection.addItem(valueShape);
+				geomGroup.createToolTip(value, null, valueTipX, valueTipY, 3);
+
+				geomGroup = new ExtendedGeometryGroup();
+				geomGroup.target = this;
+				geomGroup.toolTipFill = targetShape.fill;
+				initGGToolTip();
+				geomGroup.geometryCollection.addItem(targetShape);
+				geomGroup.createToolTip(target, null, targetTipX, targetTipY, 3);
+			} else
+			{
+				geomGroup.geometryCollection.addItem(valueShape);
+				geomGroup.geometryCollection.addItem(targetShape);
+			}
 		}
 		
 		override protected function measure():void
@@ -794,6 +905,49 @@ package org.un.cava.birdeye.qavis.microcharts
 				minWidth = 50;
 				minHeight = 10;
 			}
+		}
+		
+		/**
+		* @private 
+		 * Init the GeomGroupToolTip and its listeners
+		 * 
+		*/
+		protected function initGGToolTip():void
+		{
+			geomGroup.target = this;
+			if (_dataTipFunction != null)
+				geomGroup.dataTipFunction = _dataTipFunction;
+			if (_dataTipPrefix!= null)
+				geomGroup.dataTipPrefix = _dataTipPrefix;
+			graphicsCollection.addItem(geomGroup);
+			geomGroup.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
+			geomGroup.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
+		}
+
+		/**
+		* @private 
+		 * Show and position tooltip
+		 * 
+		*/
+		private function handleRollOver(e:MouseEvent):void
+		{
+			var pos:Point = localToGlobal(new Point(ExtendedGeometryGroup(e.target).posX, ExtendedGeometryGroup(e.target).posY));
+			tip = ToolTipManager.createToolTip(ExtendedGeometryGroup(e.target).toolTip, 
+												pos.x + 10,	pos.y + 10)	as ToolTip;
+
+			tip.alpha = 0.7;
+			ExtendedGeometryGroup(e.target).showToolTipGeometry();
+		}
+
+		/**
+		* @private 
+		 * Destroy/hide tooltip 
+		 * 
+		*/
+		private function handleRollOut(e:MouseEvent):void
+		{ 
+			ToolTipManager.destroyToolTip(tip);
+			ExtendedGeometryGroup(e.target).hideToolTipGeometry();
 		}
 	}
 }
