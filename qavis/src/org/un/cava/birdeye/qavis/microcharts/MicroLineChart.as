@@ -27,7 +27,10 @@
 
 package org.un.cava.birdeye.qavis.microcharts
 {
+	import com.degrafa.GeometryGroup;
+	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Line;
+	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	[Inspectable("negative")]
@@ -49,7 +52,7 @@ package org.un.cava.birdeye.qavis.microcharts
 	*/
 	public class MicroLineChart extends BasicMicroChart
 	{
-		private var black:SolidStroke = new SolidStroke("0x000000",1);
+		private var black:Number = 0x000000;
 		
 		private var _referenceColor:Number = 0x000000;
 		private var _referenceValue:Number = NaN;
@@ -129,7 +132,8 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function sizeY(indexIteration:Number, h:Number):Number
 		{
-			var _sizeY:Number = data[indexIteration] / tot * h;
+			dataValue = Object(data.getItemAt(indexIteration))[_dataField]; 
+			var _sizeY:Number = dataValue / tot * h;
 			return _sizeY;
 		}
 
@@ -156,6 +160,10 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function createLines(w:Number, h:Number):void
 		{
+			var realGeomGroup:GeometryGroup = new GeometryGroup();
+			realGeomGroup.target = this;
+			graphicsCollection.addItem(realGeomGroup);
+
 			var columnWidth:Number = w / data.length;
 			var startY:Number = h + Math.min(min,0)/tot * h;
 			var startX:Number = 0;
@@ -181,24 +189,47 @@ package org.un.cava.birdeye.qavis.microcharts
 			}
 
 			// create value lines
-			for (var i:Number=0; i<data.length-1; i++)
+			for (var i:Number=0; i<=data.length-1; i++)
 			{
-				var line:Line = 
-					new Line(space+startX+columnWidth/2, space+startY-sizeY(i,h), space+startX + columnWidth*3/2, space+startY-sizeY(i+1,h));
+				dataValue = Object(data.getItemAt(i))[_dataField];
 				
-				startX += columnWidth;
+				var posX:Number = space+startX+columnWidth/2;
+				var posY:Number = space+startY-sizeY(i, h);
+				
+				var line:Line;
+				if (i != data.length-1)
+				{
+					line =	new Line(posX, posY, space+startX + columnWidth*3/2, space+startY-sizeY(i+1,h));
+	
+					startX += columnWidth;
+					realGeomGroup.geometryCollection.addItem(line);
+				}
+				
+				var strokeColor:Number;
 
 				if (colors != null)
-					line.stroke = new SolidStroke(useColor(i));
+					strokeColor = colors[i];
 				else 
 				{
 					if (isNaN(color))
-						line.stroke = new SolidStroke(black);
+						strokeColor = black;
 					else 
-						line.stroke = new SolidStroke(color);
+						strokeColor = color;
 				}
+				
+				line.stroke = new SolidStroke(strokeColor)
+				
+				if (showDataTips)
+				{
+					geomGroup = new ExtendedGeometryGroup();
+					geomGroup.toolTipFill = new SolidFill(strokeColor);
+					var hitMouseArea:Circle = new Circle(posX, posY, 5); 
+					hitMouseArea.fill = new SolidFill(0x000000, 0);
+					geomGroup.geometryCollection.addItem(hitMouseArea);
 					
-				geomGroup.geometryCollection.addItem(line);
+					super.initGGToolTip();
+					geomGroup.createToolTip(data.getItemAt(i), _dataField, posX, posY, 3);
+				}
 			}
 		}
 	}

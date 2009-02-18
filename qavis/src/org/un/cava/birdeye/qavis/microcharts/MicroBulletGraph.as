@@ -682,19 +682,20 @@ package org.un.cava.birdeye.qavis.microcharts
 						var yCoord:Number = unscaledHeight - ((snapValue-min)/(max-min) * unscaledHeight);
 
 						// create snap text (formatted number)
-/* 						var snapText:GraphicText = new GraphicText();
+/* 						
+ 						snapText = new RasterText();
 						snapText.text = formatter.format(Math.round(snapValue));
  						snapText.visible = true;
 						snapText.autoSize = TextFieldAutoSize.LEFT;
 						snapText.autoSizeField = true;
-						snapText.selectable = false;
 						snapText.fontSize = snapFontSize;
 						snapText.color = snapLineColor;
-						snapText.y = space + yCoord-snapText.height/3;
-						snapText.x = space - snapText.width; 
+						snapText.y = paddingTop + yCoord-snapText.height/3;
+						snapText.x = paddingLeft - snapText.width; 
 						snapText.fill = black;
 						snapText.draw(this.graphics, null);
-						geomGroup.geometryCollection.addItem(snapText);*/
+						geomGroup.geometryCollection.addItem(snapText);
+*/
 
 						// create snap line
  						snapLine = new Line(_paddingLeft - snapLong, _paddingTop + yCoord, _paddingLeft, _paddingTop + yCoord);

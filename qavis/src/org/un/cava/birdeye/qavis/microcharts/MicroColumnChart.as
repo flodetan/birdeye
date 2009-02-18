@@ -109,7 +109,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function sizeY(indexIteration:Number, h:Number):Number
 		{
-			var _sizeY:Number = - data[indexIteration] / tot * h;
+			var _sizeY:Number = - dataValue / tot * h;
 			return _sizeY;
 		}
 
@@ -143,13 +143,19 @@ package org.un.cava.birdeye.qavis.microcharts
 			// create columns
 			for (var i:Number=0; i<data.length; i++)
 			{
+				geomGroup = new ExtendedGeometryGroup();
+				dataValue = Object(data.getItemAt(i))[_dataField];
+				
+				var posX:Number = space+startX;
+				var posY:Number = sizeY(i, h);
+
 				var column:RegularRectangle = 
-					new RegularRectangle(space+startX, space+startY, columnWidth, sizeY(i, h));
+					new RegularRectangle(posX, space+startY, columnWidth, posY);
 				
 				startX += columnWidth + spacing;
 
 				if (colors == null || colors.lenght == 0)
-					if (negative && data[i] < 0)
+					if (negative && dataValue < 0)
 						column.fill = new SolidFill(_negativeColor);
 					else
 					{
@@ -160,6 +166,17 @@ package org.un.cava.birdeye.qavis.microcharts
 					}
 
 				geomGroup.geometryCollection.addItem(column);
+
+				if (showDataTips)
+				{
+					geomGroup.toolTipFill = column.fill;
+					
+					super.initGGToolTip();
+					geomGroup.createToolTip(data.getItemAt(i), _dataField, posX +columnWidth/2, space+startY + posY, 3);
+				} else {
+					geomGroup.target = this;
+					graphicsCollection.addItem(geomGroup);
+				}
 			}
 		}
 	}

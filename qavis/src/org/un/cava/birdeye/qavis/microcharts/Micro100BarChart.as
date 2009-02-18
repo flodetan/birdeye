@@ -27,7 +27,6 @@
  
 package org.un.cava.birdeye.qavis.microcharts
 {
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidStroke;
 	
@@ -57,8 +56,9 @@ package org.un.cava.birdeye.qavis.microcharts
 			tot = 0;
 			for (var i:Number = 0; i < data.length; i++)
 			{
-				if (data[i] > 0)
-					tot += data[i];
+				dataValue = Object(data.getItemAt(i))[_dataField]
+				if (dataValue > 0)
+					tot += dataValue;
 			}
 		}
 
@@ -68,7 +68,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function offsetSizeX(indexIteration:Number, w:Number):Number
 		{
-			var _offSizeX:Number = Math.max(0,data[indexIteration] * w / tot);
+			var _offSizeX:Number = Math.max(0,dataValue * w / tot);
 			prevSizeX += _offSizeX;
 			return _offSizeX;
 		}
@@ -118,20 +118,35 @@ package org.un.cava.birdeye.qavis.microcharts
 		private function createBars(w:Number, h:Number):void
 		{
 			// create 100% Bars
-			for (var i:Number=0; i<data.length; i++)
+			
+			for (var i:int=0; i<data.length;i++)
 			{
 				var bar:RegularRectangle;
-				
-				if (data[i] > 0) 
+				dataValue = Object(data.getItemAt(i))[_dataField];
+								
+				if (dataValue > 0) 
 				{
-					bar = new RegularRectangle(space+startX(i), space, offsetSizeX(i, w), h);
-					
+					geomGroup = new ExtendedGeometryGroup();
+
+					var posX:Number ;
+					var large:Number ;
+					bar = new RegularRectangle(posX = space+startX(i), space, large = offsetSizeX(i, w), h);
 					if (!isNaN(stroke))
 						bar.stroke = new SolidStroke(stroke);
 						
 					bar.fill = useColor(i);
-						
+
 					geomGroup.geometryCollection.addItem(bar);
+					
+					if (showDataTips)
+					{
+						geomGroup.toolTipFill = bar.fill;
+						super.initGGToolTip();
+						geomGroup.createToolTip(data.getItemAt(i), _dataField, (large)/2 + posX, h/2, 3);
+					} else {
+						geomGroup.target = this;
+						graphicsCollection.addItem(geomGroup);
+					}
 				}
 			}
 		}
