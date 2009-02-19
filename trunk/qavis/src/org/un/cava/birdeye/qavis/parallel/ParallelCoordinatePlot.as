@@ -30,13 +30,17 @@ package org.un.cava.birdeye.qavis.parallel
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import mx.collections.ArrayCollection;
+	import mx.core.Application;
+	import mx.core.IToolTip;
 	import mx.core.UIComponent;
 	import mx.events.CollectionEvent;
 	import mx.graphics.IStroke;
 	import mx.graphics.Stroke;
+	import mx.managers.ToolTipManager;
 
 	/**
 	 * A parallel coordinate plot.
@@ -48,7 +52,7 @@ package org.un.cava.birdeye.qavis.parallel
 		public function ParallelCoordinatePlot()
 		{
 			super();
-			itemUpStroke = new Stroke(0xff,1);
+			itemUpStroke = new Stroke(0xff,.5);
 			itemOverStroke = new Stroke(0xff0000,3,.5);
 			itemSelectedStroke = new Stroke(0xff0000,3);
 			addEventListener(MouseEvent.MOUSE_MOVE,handleMouseMove);
@@ -123,6 +127,8 @@ package org.un.cava.birdeye.qavis.parallel
 		 */
 		protected var selectedBitmapDataDirty:Boolean = true;
 		
+		protected var tt:IToolTip;
+		
 		/**
 		 * A hash mapping fieldNames to the minimum value of that field within the dataProvider
 		 */
@@ -149,7 +155,7 @@ package org.un.cava.birdeye.qavis.parallel
 		{
 			return _rolledOverParallelCoordinateItems;
 		}
-		private var _rolledOverParallelCoordinateItems:Array;
+		private var _rolledOverParallelCoordinateItems:Array = [];
 		
 		[Bindable(event="selectedItemsChange")]
 		public function set selectedItems(value:Array):void
@@ -190,31 +196,6 @@ package org.un.cava.birdeye.qavis.parallel
 			return _axisRenderers;
 		}
 		private var _axisRenderers:Array = [];
-		
-		[Bindable(event="dataProviderChange")]
-		/**
-		 * An ArrayCollection of Objects to render on this ParallelCoordinatePlot
-		 */
-        public function get dataProvider():ArrayCollection
-        {
-			return _dataProvider;
-        }
-		public function set dataProvider(value:ArrayCollection):void
-		{
-			if(_dataProvider != value)
-			{
-				if (_dataProvider)
-					_dataProvider.removeEventListener(CollectionEvent.COLLECTION_CHANGE, handleCollectionChange);
-				_dataProvider = value;
-				if(_dataProvider)
-	            	_dataProvider.addEventListener(CollectionEvent.COLLECTION_CHANGE, handleCollectionChange);
-	            dispatchEvent(new Event("dataProviderChange"));
-	            dataProviderDirty = true;
-	            invalidateProperties();
-	            invalidateAllBitmapData();
-			}
-        }
-        private var _dataProvider:ArrayCollection;
         
         [Bindable(event="itemUpStrokeChange")]
 		public function set itemUpStroke(value:IStroke):void
@@ -266,6 +247,61 @@ package org.un.cava.birdeye.qavis.parallel
 			return _itemSelectedStroke;
 		}
 		private var _itemSelectedStroke:IStroke;
+		
+		[Bindable(event="toolTipFunctionChange")]
+		public function set toolTipFunction(value:Function):void
+		{
+			if(value != _toolTipFunction)
+			{
+				_toolTipFunction = value;
+				dispatchEvent(new Event("toolTipFunctionChange"));
+			}
+		}
+		public function get toolTipFunction():Function
+		{
+			return _toolTipFunction;
+		}
+		private var _toolTipFunction:Function;
+		
+		[Bindable(event="dataProviderChange")]
+		/**
+		 * An ArrayCollection of Objects to render on this ParallelCoordinatePlot
+		 */
+        public function set dataProvider(value:Object):void
+		{
+			var collection:ArrayCollection;
+			if(value is ArrayCollection)
+			{
+				collection = value as ArrayCollection;
+			}
+			else if(value is Array)
+			{
+				if(_dataProvider)
+				{
+					if(_dataProvider.source == value)
+						return;
+				}
+				collection = new ArrayCollection(value as Array);
+			}
+			
+			if(collection != _dataProvider)
+			{
+				if(_dataProvider)
+					_dataProvider.removeEventListener(CollectionEvent.COLLECTION_CHANGE,handleCollectionChange);
+				_dataProvider = collection;
+				if(_dataProvider)
+					_dataProvider.addEventListener(CollectionEvent.COLLECTION_CHANGE,handleCollectionChange);
+				dataProviderDirty = true;
+				invalidateProperties();
+				invalidateDisplayList();
+				dispatchEvent(new Event("dataProviderChange"));
+			}
+		}
+		public function get dataProvider():Object
+		{
+			return _dataProvider;
+		}
+		private var _dataProvider:ArrayCollection;
         
         protected function handleCollectionChange(event:CollectionEvent):void
         {
@@ -282,7 +318,7 @@ package org.un.cava.birdeye.qavis.parallel
         		addChild(axesContainer);
         	}
         } 
-		
+        
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
@@ -304,13 +340,20 @@ package org.un.cava.birdeye.qavis.parallel
 			if(dataProviderDirty)
 			{
 				if(dataProvider)
-					items = dataProvider.toArray();
+					items = _dataProvider.toArray();
 				
 				updateAxisExtremeValues();
 				updateColorHash();
 				invalidateAllBitmapData();
 				dataProviderDirty = false;
 			}
+		}
+		
+		override protected function measure():void
+		{
+			super.measure();
+			measuredWidth = 400;
+			measuredHeight = 300;
 		}
 		
 		/**
@@ -320,7 +363,7 @@ package org.un.cava.birdeye.qavis.parallel
 		{
 			for each(var axisRenderer:IParallelCoordinateAxisRenderer in axisRenderers)
 			{
-				computeExtremeValues(dataProvider,axisRenderer.fieldName);
+				computeExtremeValues(_dataProvider,axisRenderer.fieldName);
 			}
 		}
 		
@@ -396,6 +439,8 @@ package org.un.cava.birdeye.qavis.parallel
 			drawBitmapDataToGraphics(graphics,upBitmapData);
 			drawBitmapDataToGraphics(graphics,overBitmapData);
 			drawBitmapDataToGraphics(graphics,selectedBitmapData);
+			
+			updateToolTip();
 		}
 		
 		protected function invalidateAllBitmapData():void
@@ -431,10 +476,7 @@ package org.un.cava.birdeye.qavis.parallel
 		protected function updateBitmapData(bitmapData:BitmapData,items:Array,useColorHash:Boolean,stroke:IStroke = null):void
 		{
 			if(!useColorHash && stroke == null)
-			{
-				trace("that's not going to fly");
 				return;
-			}
 			
 			var graphicsHolder:Shape = new Shape();
 			
@@ -559,11 +601,13 @@ package org.un.cava.birdeye.qavis.parallel
 				maxHash[fieldName] = NaN;
 			}
 		}
-		
+	
 		protected function handleMouseMove(event:MouseEvent):void
 		{
 			if(!hitTestBitmapData)
 				return;
+				
+			positionToolTip(tt);
 				
 			var colorUnderCursor:int = hitTestBitmapData.getPixel(event.localX,event.localY);
 			rolledOverParallelCoordinateItems = colorHash.getItemsWithColor(items,colorUnderCursor);
@@ -576,6 +620,44 @@ package org.un.cava.birdeye.qavis.parallel
 				
 			var colorUnderCursor:int = hitTestBitmapData.getPixel(event.localX,event.localY);
 			selectedItems = colorHash.getItemsWithColor(items,colorUnderCursor);
+		}
+		
+		protected function updateToolTip():void
+		{
+			if(toolTipFunction == null || rolledOverParallelCoordinateItems.length == 0)
+			{
+				if(tt)
+				{
+					ToolTipManager.destroyToolTip(tt);
+					tt = null;
+				}
+			}
+			else
+			{
+				var toolTipText:String = toolTipFunction(rolledOverParallelCoordinateItems);
+				if(!tt)
+					tt = ToolTipManager.createToolTip(toolTipText,mouseX,mouseY);
+				else
+					tt.text = toolTipFunction(rolledOverParallelCoordinateItems);
+				positionToolTip(tt);
+			}
+		}
+		
+		protected function positionToolTip(tt:IToolTip):void
+		{
+			if(!tt)
+				return;
+				
+			var toolTipLocation:Point = localToGlobal(new Point(mouseX + 16,mouseY + 16));
+			var screenWidth:Number = Application.application.screen.width;
+            var screenHeight:Number = Application.application.screen.height;
+            
+            if(toolTipLocation.x + tt.width > screenWidth)
+            	toolTipLocation.x -= tt.width;
+            if(toolTipLocation.y + tt.height > screenHeight)
+            	toolTipLocation.y -= tt.height;
+            
+			tt.move(toolTipLocation.x,toolTipLocation.y);
 		}
 	}
 }
