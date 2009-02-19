@@ -52,9 +52,13 @@ package org.un.cava.birdeye.qavis.microcharts
 	
 	 /**
 	 * This class is used as skeleton for most of charts in this library. It provides the common properties and methods 
-	 * that can be used or overridden by several microcharts components that extend this class.  
+	 * that can be used or overridden by several microcharts components that extend this class.
+	 * It's possible to show tooltips and define functions and prefix to customize them. If no function is defined for the 
+	 * tooltips, than the dataField value is taken for their content.
+	 * <p> A general example of creating a microchart is:</p>
+	 * <p>&lt;MicroBarChart dataProvider="{dp}" width="50%" height="50%" showDataTips="true" dataField="myValue"/></p>
 	 * The dataProvider property can accept Array, ArrayCollection, String, XML, etc.
-	 * If dataProvider is different from a simple Array of values, than the dataField property cannot be null.
+	 * If dataProvider is different from a simple Array of values, than the dataField property shouldn't be null.
 	*/
 	public class BasicMicroChart extends Surface
 	{
@@ -229,7 +233,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		}
 		
 		/**
-		* Indicate the data field to be used to feed the chart. 
+		* Indicate whether to show/create tooltips or not. 
 		*/
 		[Inspectable(enumeration="true,false")]
 		public function set showDataTips(value:Boolean):void
@@ -238,15 +242,11 @@ package org.un.cava.birdeye.qavis.microcharts
 			invalidateDisplayList();
 		}
 		
-		/**
-		* Indicate the function used to create tooltips. 
-		*/
 		public function get showDataTips():Boolean
 		{
 			return _showDataTips;
 		}
 
-		
 		/**
 		* Indicate the data field to be used to feed the chart. 
 		*/

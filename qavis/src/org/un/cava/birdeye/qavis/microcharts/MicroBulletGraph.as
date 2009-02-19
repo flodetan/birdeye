@@ -70,6 +70,9 @@ package org.un.cava.birdeye.qavis.microcharts
 	 * 	snapInterval="5" width="30" height="200"/></p>
 	 * 
 	 * <p>The qualitativeRanges can accept Array, ArrayCollection, XML, XMLListCollection, etc... 
+	 * It's possible to show tooltips and define functions and prefix to customize them. Since each qualitative range has 
+	 * a min and max values, the tooltip graphic is relative to the maximum value, therefore appear at the extreme of each 
+	 * qualitative range.
 	 * It's also possible to change colors by defining the following properties:</p>
 	 * <p>- colors: array that sets the color for each range. </p>
 	 * <p>- valueColor: to modify the value (bar or dot) color;</p>

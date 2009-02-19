@@ -1,3 +1,30 @@
+/*  
+ * The MIT License
+ *
+ * Copyright (c) 2008
+ * United Nations Office at Geneva
+ * Center for Advanced Visual Analytics
+ * http://cava.unog.ch
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+ 
 package org.un.cava.birdeye.qavis.microcharts
 {
 	import com.degrafa.GeometryGroup;
@@ -8,6 +35,12 @@ package org.un.cava.birdeye.qavis.microcharts
 	import com.degrafa.paint.SolidStroke;
 	import mx.collections.IViewCursor;
 	
+	 /**
+	 * This class extends the functionalities of the GeometryGroup with tooltips properties and methods.
+	 * It's therefore possible to define tooltips, their functions and prefix to customize them. 
+	 * If no function is defined for the tooltips, than the dataField value is taken for their content.
+	 * This class allows creating and positioning the graphics associated with the tooltips.
+	*/
 	public class ExtendedGeometryGroup extends GeometryGroup
 	{
 		public var toolTip:String;
@@ -22,6 +55,9 @@ package org.un.cava.birdeye.qavis.microcharts
 		private var _dataTipFunction:Function;
 		private var _dataTipPrefix:String;
 		
+		/**
+		* Indicate the prefix for the tooltip. 
+		*/
 		public function set dataTipPrefix(value:String):void
 		{
 			_dataTipPrefix = value;
@@ -32,7 +68,9 @@ package org.un.cava.birdeye.qavis.microcharts
 	        return _dataTipFunction;
 	    }
 
-	    
+		/**
+		* Indicate the function used to create tooltips. 
+		*/
     	public function set dataTipFunction(value:Function):void
 	    {
 	        _dataTipFunction = value;
@@ -43,6 +81,9 @@ package org.un.cava.birdeye.qavis.microcharts
 
 		}
 		
+		/**
+		* Create and position the tooltips for this ExtendedGeometryGroup. 
+		*/
 		public function createToolTip(item:Object, dataField:String, posX:Number, posY:Number, radius:Number):void
 		{
 			this.posX = posX;
@@ -65,12 +106,18 @@ package org.un.cava.birdeye.qavis.microcharts
 			hideToolTipGeometry();
 		} 
 		
+		/**
+		* Show the tooltip associated to this ExtendedGeometryGroup. 
+		*/
 		public function showToolTipGeometry():void
 		{
 			whiteCircle.visible = true;
 			toolTipGeometry.visible = true;
 		}
 		
+		/**
+		* Hide the tooltip associated to this ExtendedGeometryGroup. 
+		*/
 		public function hideToolTipGeometry():void
 		{
 			whiteCircle.visible = false;
