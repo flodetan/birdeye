@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" backgroundColor="#ffffff"
+	xmlns:local="views.microcharts.*" layout="horizontal"
+	xmlns:mr="org.un.cava.birdeye.qavis.microcharts.*"
+	xmlns:chart="org.un.cava.birdeye.qavis.charts.*"
+	width="100%" height="100%"
+	creationComplete="updateDataGrid();" xmlns:series="org.un.cava.birdeye.qavis.charts.series.*">
+	
+    <mx:Script>
+        <![CDATA[
+            import mx.collections.ArrayCollection;
+
+            [Bindable]
+            public var acBG:ArrayCollection;
+
+            [Bindable]
+            public var aBG:Array;
+
+            private function updateDataGrid():void
+            {
+            	aBG = [m1.value,m2.value,m3.value,m4.value,m5.value,m6.value];
+
+            	acBG = new ArrayCollection([
+            		{c1:m1.value, c2:m2.value, c3:m3.value, c4:m4.value, c5:m5.value, c6:m6.value, Chart:aBG}
+            	]);
+            }
+        ]]>
+    </mx:Script>
+
+	<mx:VBox width="200" height="100%">
+		<mx:Label text="dataProvider"/>
+		<mx:HSlider id="m1" value="-50" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m2" value="100" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m3" value="80" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m4" value="20" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m5" value="130" minimum="-500" change="updateDataGrid()" maximum="400"  snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m6" value="0" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m7" value="-80" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m8" value="40" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m9" value="-60" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m10" value="-30" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m11" value="-20" minimum="-500" change="updateDataGrid()" maximum="400"  snapInterval="1" liveDragging="true"/>
+		<mx:HSlider id="m12" value="-100" minimum="-500" change="updateDataGrid()" maximum="400" snapInterval="1" liveDragging="true"/>
+	</mx:VBox>
+
+	<mx:TabNavigator height="100%" width="100%">
+		<mx:VBox label="Bar" verticalAlign="middle" horizontalAlign="center">
+			<mx:Label text="Sizing the Panel. Chart width/height autosizes to 50% of the Panel"/>
+			<mx:HSlider id="w" value="150" minimum="10" maximum="1000" snapInterval="1" liveDragging="true"/>
+			<mx:HSlider id="h" value="150" minimum="30" maximum="1000" snapInterval="1" liveDragging="true"/>
+			<mx:Panel width="{w.value}" height="{h.value}" title="MicroBar" 
+				horizontalAlign="center" verticalAlign="middle">
+				<mr:MicroBarChart showDataTips="true" 
+					dataProvider="{[m1.value,m2.value,m3.value,m4.value,m5.value,m6.value,m7.value,m8.value,m9.value,m10.value,m11.value,m12.value]}" 
+					backgroundColor="0xdddddd" backgroundStroke="0x888888" verticalCenter="0" horizontalCenter="0" color="0x66CCFF"
+					
+					height="50%" width="50%" spacing="1"/>
+			</mx:Panel>
+		</mx:VBox>
+	</mx:TabNavigator>
+</mx:Application>
