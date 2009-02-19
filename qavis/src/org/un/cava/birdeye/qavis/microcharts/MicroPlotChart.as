@@ -27,12 +27,13 @@
  
  package org.un.cava.birdeye.qavis.microcharts
 {
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
+	
+	import flash.events.MouseEvent;
 	
 	[Inspectable("negative")]
 	 /**
@@ -51,6 +52,7 @@
 	{
 		private var red:SolidStroke = new SolidStroke("0xff0000",1);
 		private var black:SolidFill = new SolidFill("0x000000",1);
+		private var ttGeomGroup:ExtendedGeometryGroup;
 		
 		private var _negative:Boolean = true;
 		private var _negativeColor:Number = NaN;
@@ -133,7 +135,6 @@
 
 			createBackground(unscaledWidth, unscaledHeight);
 			createPlots(unscaledWidth, unscaledHeight);
-			this.graphicsCollection.addItem(geomGroup);
 		}
 		
 		/**
@@ -160,10 +161,6 @@
 		*/
 		private function createPlots(w:Number, h:Number):void
 		{
-			var realGeomGroup:GeometryGroup = new GeometryGroup(); 
-			realGeomGroup.target = this;
-			graphicsCollection.addItem(realGeomGroup);
-
 			var columnWidth:Number = w / data.length;
 			var startY:Number = h + Math.min(min,0)/tot * h;
 			var startX:Number = 0;
@@ -191,7 +188,7 @@
 				plot = new Circle(posX, posY, radius);
 			
 				startX += columnWidth;
-				realGeomGroup.geometryCollection.addItem(plot);
+				geomGroup.geometryCollection.addItem(plot);
 
 				if (colors != null)
 					plot.fill = new SolidFill(useColor(i));
@@ -205,16 +202,29 @@
 					
 				if (showDataTips)
 				{
-					geomGroup = new ExtendedGeometryGroup();
-					geomGroup.toolTipFill = plot.fill;
+					ttGeomGroup = new ExtendedGeometryGroup();
+					ttGeomGroup.target = this;
+					graphicsCollection.addItem(ttGeomGroup);
+					ttGeomGroup.toolTipFill = plot.fill;
 					var hitMouseArea:Circle = new Circle(posX, posY, 5); 
 					hitMouseArea.fill = new SolidFill(0x000000, 0);
-					geomGroup.geometryCollection.addItem(hitMouseArea);
-					
-					super.initGGToolTip();
-					geomGroup.createToolTip(data.getItemAt(i), _dataField, posX, posY, 3);
+					ttGeomGroup.geometryCollection.addItem(hitMouseArea);
+					initGGToolTip();
+					ttGeomGroup.createToolTip(data.getItemAt(i), _dataField, posX, posY, 3);
 				}
 			}
+		}
+		
+		override protected function initGGToolTip():void
+		{
+			ttGeomGroup.target = this;
+			if (_dataTipFunction != null)
+				ttGeomGroup.dataTipFunction = _dataTipFunction;
+			if (_dataTipPrefix!= null)
+				ttGeomGroup.dataTipPrefix = _dataTipPrefix;
+			graphicsCollection.addItem(ttGeomGroup);
+			ttGeomGroup.addEventListener(MouseEvent.ROLL_OVER, super.handleRollOver);
+			ttGeomGroup.addEventListener(MouseEvent.ROLL_OUT, super.handleRollOut);
 		}
 	}
 }

@@ -27,11 +27,12 @@
 
 package org.un.cava.birdeye.qavis.microcharts
 {
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
+	
+	import flash.events.MouseEvent;
 	
 	[Inspectable("negative")]
 	 /**
@@ -53,6 +54,7 @@ package org.un.cava.birdeye.qavis.microcharts
 	public class MicroLineChart extends BasicMicroChart
 	{
 		private var black:Number = 0x000000;
+		private var ttGeomGroup:ExtendedGeometryGroup;
 		
 		private var _referenceColor:Number = 0x000000;
 		private var _referenceValue:Number = NaN;
@@ -151,7 +153,6 @@ package org.un.cava.birdeye.qavis.microcharts
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 
 			createLines(unscaledWidth, unscaledHeight);
-			this.graphicsCollection.addItem(geomGroup);
 		}
 				
 		/**
@@ -160,10 +161,6 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function createLines(w:Number, h:Number):void
 		{
-			var realGeomGroup:GeometryGroup = new GeometryGroup();
-			realGeomGroup.target = this;
-			graphicsCollection.addItem(realGeomGroup);
-
 			var columnWidth:Number = w / data.length;
 			var startY:Number = h + Math.min(min,0)/tot * h;
 			var startX:Number = 0;
@@ -202,7 +199,7 @@ package org.un.cava.birdeye.qavis.microcharts
 					line =	new Line(posX, posY, space+startX + columnWidth*3/2, space+startY-sizeY(i+1,h));
 	
 					startX += columnWidth;
-					realGeomGroup.geometryCollection.addItem(line);
+					geomGroup.geometryCollection.addItem(line);
 				}
 				
 				var strokeColor:Number;
@@ -221,16 +218,30 @@ package org.un.cava.birdeye.qavis.microcharts
 				
 				if (showDataTips)
 				{
-					geomGroup = new ExtendedGeometryGroup();
-					geomGroup.toolTipFill = new SolidFill(strokeColor);
+					ttGeomGroup = new ExtendedGeometryGroup();
+					ttGeomGroup.target = this;
+					graphicsCollection.addItem(ttGeomGroup);
+					ttGeomGroup.toolTipFill = new SolidFill(strokeColor);
 					var hitMouseArea:Circle = new Circle(posX, posY, 5); 
 					hitMouseArea.fill = new SolidFill(0x000000, 0);
-					geomGroup.geometryCollection.addItem(hitMouseArea);
+					ttGeomGroup.geometryCollection.addItem(hitMouseArea);
 					
-					super.initGGToolTip();
-					geomGroup.createToolTip(data.getItemAt(i), _dataField, posX, posY, 3);
+					initGGToolTip();
+					ttGeomGroup.createToolTip(data.getItemAt(i), _dataField, posX, posY, 3);
 				}
 			}
+		}
+
+		override protected function initGGToolTip():void
+		{
+			ttGeomGroup.target = this;
+			if (_dataTipFunction != null)
+				ttGeomGroup.dataTipFunction = _dataTipFunction;
+			if (_dataTipPrefix!= null)
+				ttGeomGroup.dataTipPrefix = _dataTipPrefix;
+			graphicsCollection.addItem(ttGeomGroup);
+			ttGeomGroup.addEventListener(MouseEvent.ROLL_OVER, super.handleRollOver);
+			ttGeomGroup.addEventListener(MouseEvent.ROLL_OUT, super.handleRollOut);
 		}
 	}
 }

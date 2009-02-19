@@ -139,6 +139,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		public function set showDataTips(value:Boolean):void
 		{
 			_showDataTips = value;
+			invalidateDisplayList();
 		}
 		
 		/**
@@ -697,6 +698,9 @@ package org.un.cava.birdeye.qavis.microcharts
 			for(var i:int=this.numChildren-1; i>=0; i--)
 				removeChildAt(i);
 
+			geomGroup = new ExtendedGeometryGroup();
+			geomGroup.target = this;
+
 			if (!noSnap)
 				createSnap();
 			createBulletGraph();
@@ -803,8 +807,8 @@ package org.un.cava.birdeye.qavis.microcharts
 			{
 				if (orientation == VERTICAL)
 				{
-					valueTipX = _paddingLeft+unscaledWidth/2 + Math.min(xSizeShapeValue(), maxSize)/4;
-					valueTipY = _paddingTop+yValue() + Math.min(xSizeShapeValue(), maxSize)/4;
+					valueTipX = _paddingLeft+unscaledWidth/2;
+					valueTipY = _paddingTop+yValue();
 					valueShape = new Circle(_paddingLeft+unscaledWidth/2, _paddingTop+yValue(), Math.min(xSizeShapeValue(), maxSize));
 				}
 				else
@@ -842,8 +846,12 @@ package org.un.cava.birdeye.qavis.microcharts
 			// create qualitativeRanges
 			for (var i:Number=0; i<data.length; i++)
 			{
-				geomGroup = new ExtendedGeometryGroup();
-				geomGroup.target = this;
+				if (showDataTips)
+				{
+					geomGroup = new ExtendedGeometryGroup();
+					geomGroup.target = this;
+					geomGroup.name = "qualitative";
+				}
 
 				var qualitativeShape:RegularRectangle = 
 					new RegularRectangle(_paddingLeft+startX(i), _paddingTop+startY(i), offsetSizeX(i), offsetSizeY(i));
@@ -866,7 +874,6 @@ package org.un.cava.birdeye.qavis.microcharts
 					initGGToolTip();
 					geomGroup.createToolTip((orientation == VERTICAL) ? data[i-1] : data[i], null, posX, posY, 3);
 				} else {
-					geomGroup.target = this;
 					graphicsCollection.addItem(geomGroup);
 				}
 			}
@@ -931,12 +938,15 @@ package org.un.cava.birdeye.qavis.microcharts
 		*/
 		private function handleRollOver(e:MouseEvent):void
 		{
-			var pos:Point = localToGlobal(new Point(ExtendedGeometryGroup(e.target).posX, ExtendedGeometryGroup(e.target).posY));
-			tip = ToolTipManager.createToolTip(ExtendedGeometryGroup(e.target).toolTip, 
+			var extGG:ExtendedGeometryGroup = ExtendedGeometryGroup(e.target);
+			var pos:Point = localToGlobal(new Point(extGG.posX, extGG.posY));
+			tip = ToolTipManager.createToolTip(extGG.toolTip, 
 												pos.x + 10,	pos.y + 10)	as ToolTip;
 
 			tip.alpha = 0.7;
-			ExtendedGeometryGroup(e.target).showToolTipGeometry();
+			if (extGG.name == "qualitative" && numChildren >= 3 )
+				setChildIndex(extGG, numChildren-3);
+			extGG.showToolTipGeometry();
 		}
 
 		/**
