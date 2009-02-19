@@ -121,7 +121,6 @@ package org.un.cava.birdeye.qavis.microcharts
 			data.sort = numDataSort;
 			data.refresh();
 			createBars(unscaledWidth, unscaledHeight);
-			this.graphicsCollection.addItem(geomGroup);
 		}
 		
 		/**
@@ -137,7 +136,6 @@ package org.un.cava.birdeye.qavis.microcharts
 			// create bars
 			for (var i:Number=0; i<data.length; i++)
 			{
-				geomGroup = new ExtendedGeometryGroup();
 				dataValue = Object(data.getItemAt(i))[_dataField];
 				
 				var posX:Number = sizeX(i,w);
@@ -158,16 +156,16 @@ package org.un.cava.birdeye.qavis.microcharts
 							column.fill = new SolidFill(color);
 					}
 
-				geomGroup.geometryCollection.addItem(column);
-
 				if (showDataTips)
 				{
+					geomGroup = new ExtendedGeometryGroup();
+					geomGroup.target = this;
+					geomGroup.geometryCollection.addItem(column);
 					geomGroup.toolTipFill = column.fill;
 					super.initGGToolTip();
 					geomGroup.createToolTip(data.getItemAt(i), _dataField, space+startX + posX, space+ startY - columnWidth/2, 3);
 				} else {
-					geomGroup.target = this;
-					graphicsCollection.addItem(geomGroup);
+					geomGroup.geometryCollection.addItem(column);
 				}
 			}
 		}

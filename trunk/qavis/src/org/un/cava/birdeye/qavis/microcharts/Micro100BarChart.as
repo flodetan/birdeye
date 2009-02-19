@@ -108,7 +108,6 @@ package org.un.cava.birdeye.qavis.microcharts
 			prevSizeX = 0;
 
 			createBars(unscaledWidth, unscaledHeight);
-			this.graphicsCollection.addItem(geomGroup);
 		}
 		
 		/**
@@ -118,7 +117,6 @@ package org.un.cava.birdeye.qavis.microcharts
 		private function createBars(w:Number, h:Number):void
 		{
 			// create 100% Bars
-			
 			for (var i:int=0; i<data.length;i++)
 			{
 				var bar:RegularRectangle;
@@ -126,8 +124,6 @@ package org.un.cava.birdeye.qavis.microcharts
 								
 				if (dataValue > 0) 
 				{
-					geomGroup = new ExtendedGeometryGroup();
-
 					var posX:Number ;
 					var large:Number ;
 					bar = new RegularRectangle(posX = space+startX(i), space, large = offsetSizeX(i, w), h);
@@ -136,16 +132,16 @@ package org.un.cava.birdeye.qavis.microcharts
 						
 					bar.fill = useColor(i);
 
-					geomGroup.geometryCollection.addItem(bar);
-					
 					if (showDataTips)
 					{
+						geomGroup = new ExtendedGeometryGroup();
+						geomGroup.target = this;
+						geomGroup.geometryCollection.addItem(bar);
 						geomGroup.toolTipFill = bar.fill;
 						super.initGGToolTip();
 						geomGroup.createToolTip(data.getItemAt(i), _dataField, (large)/2 + posX, h/2, 3);
 					} else {
-						geomGroup.target = this;
-						graphicsCollection.addItem(geomGroup);
+						geomGroup.geometryCollection.addItem(bar);
 					}
 				}
 			}

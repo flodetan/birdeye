@@ -106,7 +106,6 @@
 
 			createBackground(unscaledWidth, unscaledHeight);
 			createColumns(unscaledWidth, unscaledHeight);
-			this.graphicsCollection.addItem(geomGroup);
 		}
 		
 		/**
@@ -122,7 +121,6 @@
 			// create columns
 			for (var i:Number=0; i<data.length; i++)
 			{
-				geomGroup = new ExtendedGeometryGroup();
 				dataValue = Object(data.getItemAt(i))[_dataField];
 				
 				var posX:Number = space+startX;
@@ -146,17 +144,16 @@
 				else
 					column.fill = new SolidFill(useColor(i));
 
-				geomGroup.geometryCollection.addItem(column);
-
 				if (showDataTips)
 				{
+					geomGroup = new ExtendedGeometryGroup();
+					geomGroup.target = this;
+					geomGroup.geometryCollection.addItem(column);
 					geomGroup.toolTipFill = column.fill;
-					
 					super.initGGToolTip();
 					geomGroup.createToolTip(data.getItemAt(i), _dataField, posX +columnWidth/2, space+startY + posY, 3);
 				} else {
-					geomGroup.target = this;
-					graphicsCollection.addItem(geomGroup);
+					geomGroup.geometryCollection.addItem(column);
 				}
 			}
 		}

@@ -235,6 +235,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		public function set showDataTips(value:Boolean):void
 		{
 			_showDataTips = value;
+			invalidateDisplayList();
 		}
 		
 		/**
@@ -335,8 +336,8 @@ package org.un.cava.birdeye.qavis.microcharts
 				 
 				while(!cursor.afterLast)
 				{
-					// if the dataField is null, it might be a simple array and we still try to get 
-					// the data right to feed the chart
+					// if the dataField is null, it might be because dataProvider was a simple 
+					// array and we still try to get the data right to feed the chart
 					if (wasDataFieldSet == NO)
 						data.addItemAt({value:Number(cursor.current)},i);
 					else 
@@ -439,6 +440,7 @@ package org.un.cava.birdeye.qavis.microcharts
 
 			geomGroup = new ExtendedGeometryGroup();
 			geomGroup.target = this;
+			graphicsCollection.addItem(geomGroup);
 			
 			createBackground(unscaledWidth, unscaledHeight);
 		}
@@ -512,14 +514,16 @@ package org.un.cava.birdeye.qavis.microcharts
 		 * Show and position tooltip
 		 * 
 		*/
-		private function handleRollOver(e:MouseEvent):void
+		protected function handleRollOver(e:MouseEvent):void
 		{
-			var pos:Point = localToGlobal(new Point(ExtendedGeometryGroup(e.target).posX, ExtendedGeometryGroup(e.target).posY));
-			tip = ToolTipManager.createToolTip(ExtendedGeometryGroup(e.target).toolTip, 
+			var extGG:ExtendedGeometryGroup = ExtendedGeometryGroup(e.target);
+			var pos:Point = localToGlobal(new Point(extGG.posX, extGG.posY));
+			tip = ToolTipManager.createToolTip(extGG.toolTip, 
 												pos.x + 10,	pos.y + 10)	as ToolTip;
 
 			tip.alpha = 0.7;
-			ExtendedGeometryGroup(e.target).showToolTipGeometry();
+			setChildIndex(extGG, numChildren-1);
+			extGG.showToolTipGeometry();
 		}
 
 		/**
@@ -527,7 +531,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		 * Destroy/hide tooltip 
 		 * 
 		*/
-		private function handleRollOut(e:MouseEvent):void
+		protected function handleRollOut(e:MouseEvent):void
 		{
 			ToolTipManager.destroyToolTip(tip);
 			ExtendedGeometryGroup(e.target).hideToolTipGeometry();

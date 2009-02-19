@@ -22,7 +22,7 @@
 		]]>
 	</mx:Script>
 	<mc:MicroBulletGraph orientation="horizontal" width="60" height="15" noSnap="true"
-		qualitativeRanges="{data.Chart}" toolTip="Double click to zoom it" showDataTips="true"
+		qualitativeRanges="{data.Chart}" toolTip="Double click to zoom it" showDataTips="{data.showTT}"
 		target="{data.trg}" value="{data.val}" doubleClick="popChart();" doubleClickEnabled="true"/>
 	<mx:Text selectable="false" fontSize="8" text="Zoom it with double click"/>
 </mx:VBox>

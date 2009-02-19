@@ -132,7 +132,6 @@ trace(data)
 
 			createBackground(unscaledWidth, unscaledHeight);
 			createPies();
-			this.graphicsCollection.addItem(geomGroup);
 		}
 		
 		override protected function createBackground(w:Number, h:Number):void
@@ -156,37 +155,35 @@ trace(data)
 				
 				if (dataValue > 0) 
 				{
-					geomGroup = new ExtendedGeometryGroup();
-
-					var posX:Number ;
-					var posY:Number ;
 					var arcAngle:Number;
 					pie = new EllipticalArc(space, space, diameter, diameter, prevAngleSize, arcAngle = arcAngleSize(i),"pie");
 					
-					var halfAngle:Number;
-					if (arcAngle == prevAngleSize)
-						halfAngle = arcAngle/2;
-					else
-						halfAngle = (prevAngleSize - arcAngle) + arcAngle/2;
-
-					posX = diameter/2 + diameter/3.5 * Math.cos(halfAngle * Math.PI / 180);
-					posY = diameter/2 - diameter/3.5 * Math.sin(halfAngle * Math.PI / 180);
-
 					pie.fill = useColor(i);
 						
 					if (!isNaN(stroke))
 						pie.stroke = new SolidStroke(stroke);
 						
-					geomGroup.geometryCollection.addItem(pie);
-
 					if (showDataTips)
 					{
+						var posX:Number ;
+						var posY:Number ;
+						var halfAngle:Number;
+						if (arcAngle == prevAngleSize)
+							halfAngle = arcAngle/2;
+						else
+							halfAngle = (prevAngleSize - arcAngle) + arcAngle/2;
+	
+						posX = diameter/2 + diameter/3.5 * Math.cos(halfAngle * Math.PI / 180);
+						posY = diameter/2 - diameter/3.5 * Math.sin(halfAngle * Math.PI / 180);
+
+						geomGroup = new ExtendedGeometryGroup();
+						geomGroup.target = this;
+						geomGroup.geometryCollection.addItem(pie);
 						geomGroup.toolTipFill = pie.fill;
 						super.initGGToolTip();
 						geomGroup.createToolTip(data.getItemAt(i), _dataField, posX, posY, 3);
 					} else {
-						geomGroup.target = this;
-						graphicsCollection.addItem(geomGroup);
+						geomGroup.geometryCollection.addItem(pie);
 					}
 				}
 			}
