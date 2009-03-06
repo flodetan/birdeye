@@ -28,9 +28,8 @@
 package org.un.cava.birdeye.geovis.features
 {
 	import com.degrafa.GeometryGroup;
-	import com.degrafa.IGeometry;
+	import com.degrafa.core.collections.GeometryCollection;
 	import com.degrafa.Surface;
-	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.Polygon;
 	import com.degrafa.paint.*;
 	
@@ -128,7 +127,7 @@ package org.un.cava.birdeye.geovis.features
 		/**
 	     *  @private
 	     */
-		private var myCoo:IGeometry;
+		private var polygonArray:GeometryCollection;
 	    /**
 	     *  @private
 	     */
@@ -260,8 +259,10 @@ package org.un.cava.birdeye.geovis.features
 		 */
        override protected function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void{
       		super.updateDisplayList( unscaledWidth, unscaledHeight );            
-      		if(myCoo){
-      			myCoo.fill=new SolidFill(getStyle("fillItem"),_alpha);
+      		if(polygonArray){
+      			for each (var myCoo:Polygon in polygonArray.items) {
+      				myCoo.fill=new SolidFill(getStyle("fillItem"),_alpha);
+      			}
       		}      
       		
       		if(geom!=null){
@@ -332,11 +333,7 @@ package org.un.cava.birdeye.geovis.features
 					
 					GeoData=Projections.getData(proj,region);
 					if(GeoData.getCoordinates(foid)!=null){
-						if(isNaN(GeoData.getCoordinates(foid).substr(0,1))){
-							myCoo = Path(GeometryGroup(surface.getChildByName(foid)).geometryCollection.getItemAt(0));
-						}else{
-							myCoo = Polygon(GeometryGroup(surface.getChildByName(foid)).geometryCollection.getItemAt(0));
-						}	
+						polygonArray = GeometryGroup(surface.getChildByName(foid)).geometryCollection;
 					}
 					
 					if(foid!=""){
@@ -357,6 +354,7 @@ package org.un.cava.birdeye.geovis.features
 							
 						}
 						stkItem.scaleMode="none";
+		      			for each (var myCoo:Polygon in polygonArray.items) {
 							if(getStyle("gradientItemFill")){
 								gradItemFill=getStyle("gradientItemFill");
 								if(gradItemFill.length!=0){
@@ -375,7 +373,7 @@ package org.un.cava.birdeye.geovis.features
 							if(stkItem){
 								myCoo.stroke=stkItem;
 							}
-						
+		      			} //end for each myCoo
 					}
 					
 					geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);

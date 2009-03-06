@@ -662,50 +662,47 @@
 								geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
 								geom.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
 								if(GeoData.getCoordinates(key)!=null){
-									if(isNaN(GeoData.getCoordinates(key).substr(0,1))){
-										myCoo = Path(GeometryGroup(surface.getChildByName(key)).geometryCollection.getItemAt(0));
-									}else{
-										myCoo = Polygon(GeometryGroup(surface.getChildByName(key)).geometryCollection.getItemAt(0));
-									}	
-								}
-								
-								if(_scheme!=null){	
-										if(val<=Number(arrStep[0])){
-											myCoo.fill=new SolidFill(arrCol[0],_alpha);
-											_colorItem=arrCol[0];
-										}else if(val>Number(arrStep[_steps-2])){
-											myCoo.fill=new SolidFill(arrCol[_steps-1],_alpha);
-											_colorItem=arrCol[_steps-1];
-										}else{
-											for (var k:int=0; k<_steps-2;k++){
-												if(val>Number(arrStep[k]) && val<=Number(arrStep[k+1])){
-													myCoo.fill=new SolidFill(arrCol[k+1],_alpha);
-													_colorItem=arrCol[k+1];
+									
+									for each (var myCoo:Polygon in GeometryGroup(surface.getChildByName(key)).geometryCollection.items) {
+										if(_scheme!=null){	
+											if(val<=Number(arrStep[0])){
+												myCoo.fill=new SolidFill(arrCol[0],_alpha);
+												_colorItem=arrCol[0];
+											}else if(val>Number(arrStep[_steps-2])){
+												myCoo.fill=new SolidFill(arrCol[_steps-1],_alpha);
+												_colorItem=arrCol[_steps-1];
+											}else{
+												for (var k:int=0; k<_steps-2;k++){
+													if(val>Number(arrStep[k]) && val<=Number(arrStep[k+1])){
+														myCoo.fill=new SolidFill(arrCol[k+1],_alpha);
+														_colorItem=arrCol[k+1];
+													}
 												}
 											}
-										}
-										
-										if(getStyle("strokeItem")){
-											if(typeof(getStyle("strokeItem"))=="number"){
-												arrStrokeItem.push(getStyle("strokeItem"));
-											}else{
-												arrStrokeItem=getStyle("strokeItem");
-											}
 											
-											while (arrStrokeItem.length<3) { 
-												arrStrokeItem.push(1); 
-											}
-											stkItem= new SolidStroke(arrStrokeItem[0], arrStrokeItem[1],arrStrokeItem[2]);
+											if(getStyle("strokeItem")){
+												if(typeof(getStyle("strokeItem"))=="number"){
+													arrStrokeItem.push(getStyle("strokeItem"));
+												}else{
+													arrStrokeItem=getStyle("strokeItem");
+												}
 											
-										}
-										stkItem.scaleMode="none";
+												while (arrStrokeItem.length<3) { 
+													arrStrokeItem.push(1); 
+												}
+												stkItem= new SolidStroke(arrStrokeItem[0], arrStrokeItem[1],arrStrokeItem[2]);
+											
+											}
+											stkItem.scaleMode="none";
 										
-										if(stkItem){
-											myCoo.stroke=stkItem;
-										}
-							 	}		
-							}
-						}
+											if(stkItem){
+												myCoo.stroke=stkItem;
+											}
+										}// end if(_scheme!=null)
+								 	} // end for each myCoo
+								} // end if GeoData.getCoordinates(key)!=null
+							} // end if geom!=null
+						} // end ifkey!=""
 						
 						
 						
@@ -717,7 +714,7 @@
 						
 						i++;
 						cursor.moveNext();  
-					} 
+					} // end while
 				}
 				
 				dispatchEvent(new GeoChoroEvents(GeoChoroEvents.CHOROPLETH_COMPLETE, _scheme, _steps, _colorField));
