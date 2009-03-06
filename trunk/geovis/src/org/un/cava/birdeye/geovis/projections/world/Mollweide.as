@@ -29,9 +29,6 @@ package org.un.cava.birdeye.geovis.projections.world
 {
 	import flash.utils.Dictionary;
 	import org.un.cava.birdeye.geovis.dictionary.WorldCountries;
-	import org.un.cava.birdeye.geovis.locators.Projector;
-	import org.un.cava.birdeye.geovis.locators.world.LatLongCoordinates;
-	import flash.geom.Point;
 	
 	[Exclude(name="translateX", kind="property")]
 	[Exclude(name="translateY", kind="property")]
