@@ -139,6 +139,7 @@ package org.un.cava.birdeye.geovis.core
 	[Exclude(name="color", kind="style")]
 	[Exclude(name="colorItem", kind="style")]
 	
+	[ExcludeClass]
 	
 	/**
 	 *  The GeoFrame class is the main class that draw the maps.
@@ -451,65 +452,50 @@ trace (getStyle("stroke"));
 					surf.graphicsCollection.addItem(countryGeom);
 					
 					var myCoo:IGeometry;
-					if(wcData.getCoordinates(country)!=null){
-						if(isNaN(wcData.getCoordinates(country).substr(0,1))){
-							myCoo = new Path();
-						}else{
+					for each (var polygonCoordinates:String in wcData.getCoordinates(country)) //a country may have several polygons
+					{
+						if(wcData.getCoordinates(country)!=null){
+
 							myCoo = new Polygon();
-						}
+							myCoo.data = polygonCoordinates;
 						
-						/*var trsf:Transform=new Transform();
-						trsf.registrationPoint="center";
-						trsf.scaleX=_scaleX;
-						trsf.scaleY=_scaleY;
-						
-						if(isNaN(wcData.getCoordinates(country).substr(0,1))){
-							Path(myCoo).transform = trsf;
-						}else{
-							Polygon(myCoo).transform = trsf;
-						}*/
-						
-						//var geoComp:GeometryComposition=new GeometryComposition();
-						//geoComp.transform=trsf;
-						
-						myCoo.data = wcData.getCoordinates(country);
-						
-						if(arrChildStrokes[country]===undefined)
-						{
-							myCoo.stroke=_stroke;
-						}
-						
-						
-						if(arrChildGradients[country]===undefined)
-						{
-							if(arrChildColors[country]===undefined)
+							if(arrChildStrokes[country]===undefined)
 							{
+								myCoo.stroke=_stroke;
+							}
+						
+						
+							if(arrChildGradients[country]===undefined)
+							{
+								if(arrChildColors[country]===undefined)
+								{
 							
-								if(getStyle("gradientFill")){
-									_gradientFill=getStyle("gradientFill");
-									if(_gradientFill.length!=0)
-									{
-										if(_gradientFill[2]==0)
+									if(getStyle("gradientFill")){
+										_gradientFill=getStyle("gradientFill");
+										if(_gradientFill.length!=0)
 										{
-											myCoo.fill=GeoStyles.setRadialGradient(_gradientFill);
-										}
-										else
-										{
-											myCoo.fill=GeoStyles.setLinearGradient(_gradientFill);
+											if(_gradientFill[2]==0)
+											{
+												myCoo.fill=GeoStyles.setRadialGradient(_gradientFill);
+											}
+											else
+											{
+												myCoo.fill=GeoStyles.setLinearGradient(_gradientFill);
+											}
 										}
 									}
-								}
-								else
-								{
-									if(_color)
+									else
 									{
-										myCoo.fill=_color;
+										if(_color)
+										{
+											myCoo.fill=_color;
+										}
 									}
 								}
 							}
-						}
-						countryGeom.geometryCollection.addItem(myCoo);
-					}
+							countryGeom.geometryCollection.addItem(myCoo);
+						} // end if getCoordinates contained data
+					} // end polygon loop for country
 					_geoGroup.push(countryGeom);
 				}
 			}
