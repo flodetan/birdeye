@@ -59,9 +59,8 @@ package org.un.cava.birdeye.geovis.transformations
 		private function approx_theta(la:Number):Number
 		{
 			var thetaPrim:Number = la;
+			_loopCounter = 0;
 			while (approxIsGoodEnough(thetaPrim, la)==false) {
-				trace ("_loopCounter: " + _loopCounter);
-				trace ("_thetaPrim: " + thetaPrim);
 				thetaPrim = thetaPrim + newtonRaphson(thetaPrim, la);
 			}
 			return thetaPrim;
