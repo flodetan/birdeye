@@ -31,7 +31,6 @@ package org.un.cava.birdeye.geovis.transformations
 
 	public class EckertVITransformation extends Transformation
 	{
-		private var _loopCounter:Number=0;
 
 		public function EckertVITransformation()
 		{
@@ -41,13 +40,12 @@ package org.un.cava.birdeye.geovis.transformations
 			this.yoffset=1.37;
 		}
 
-		private function approxIsGoodEnough(tP:Number, la:Number):Boolean {
+		private function approxNotGoodEnough(tP:Number, la:Number):Boolean {
 			var maxDiff:Number = 1E-100; //acceptable deviation
-			_loopCounter++;
 			//tP+sin(tP)=(1+pi/2)*sin(lat)
 			//diff = Left side - Right side = tP + sin(tP)- (1+pi/2)*sin(lat)
 			var diff:Number = tP+Math.sin(tP) - (1+Math.PI/2)*Math.sin(la); 
-			return (Math.abs(diff)<maxDiff || _loopCounter>=100);
+			return (Math.abs(diff)>maxDiff);
 		}
 		
 		private function newtonRaphson(tP:Number, la:Number):Number {
@@ -59,9 +57,10 @@ package org.un.cava.birdeye.geovis.transformations
 		private function approx_theta(la:Number):Number
 		{
 			var thetaPrim:Number = la;
-			_loopCounter = 0;
-			while (approxIsGoodEnough(thetaPrim, la)==false) {
+			var _loopCounter:Number=0; //insurance against infinite looping
+			while (approxNotGoodEnough(thetaPrim, la)==false && _loopCounter<100) {
 				thetaPrim = thetaPrim + newtonRaphson(thetaPrim, la);
+				_loopCounter++;
 			}
 			return thetaPrim;
 		}
