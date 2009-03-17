@@ -1,0 +1,159 @@
+/*  
+ * The MIT License
+ *
+ * Copyright (c) 2008
+ * United Nations Office at Geneva
+ * Center for Advanced Visual Analytics
+ * http://cava.unog.ch
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+ 
+package org.un.cava.birdeye.qavis.charts.series
+{
+	import com.degrafa.geometry.Polygon;
+	
+	import mx.collections.CursorBookmark;
+	
+	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxis;
+	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
+
+	public class AreaSeries extends StackableSeries
+	{
+		override public function get seriesType():String
+		{
+			return "area";
+		}
+
+		private var _baseAtZero:Boolean = true;
+		[Inspectable(enumeration="true,false")]
+		public function set baseAtZero(val:Boolean):void
+		{
+			_baseAtZero = val;
+		}
+		
+		private var _form:String;
+		public function set form(val:String):void
+		{
+			_form = val;
+		}
+		
+		public function AreaSeries()
+		{
+			super();
+		}
+
+		private var poly:Polygon;
+		override protected function updateDisplayList(w:Number, h:Number):void
+		{
+			super.updateDisplayList(w,h);
+			
+			for (var i:Number = gg.geometryCollection.items.length; i>0; i--)
+				gg.geometryCollection.removeItemAt(i-1);
+
+			var xPrev:Number, yPrev:Number;
+			var xPos:Number, yPos:Number;
+			var j:Number = 0;
+			
+			var y0:Number = getYMinPosition();
+
+			dataProvider.cursor.seek(CursorBookmark.FIRST);
+
+			while (!dataProvider.cursor.afterLast)
+			{
+				if (horizontalAxis)
+				{
+					if (horizontalAxis is NumericAxis)
+						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
+					else if (horizontalAxis is CategoryAxis)
+						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[displayName]);
+				} else {
+					if (dataProvider.horizontalAxis is NumericAxis)
+						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
+					else if (dataProvider.horizontalAxis is CategoryAxis)
+						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[displayName]);
+				}
+				
+				if (verticalAxis)
+				{
+					if (verticalAxis is NumericAxis)
+						yPos = verticalAxis.getPosition(dataProvider.cursor.current[yField]);
+					else if (verticalAxis is CategoryAxis)
+						yPos = verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
+				} else {
+					if (dataProvider.verticalAxis is NumericAxis)
+						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
+					else if (dataProvider.verticalAxis is CategoryAxis)
+						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
+				}
+				
+				if (j++ > 0)
+				{
+					poly = new Polygon()
+					poly.data =  String(xPrev) + "," + String(y0) + " " +
+								String(xPrev) + "," + String(yPrev) + " " +
+								String(xPos) + "," + String(yPos) + " " +
+								String(xPos) + "," + String(y0);
+					poly.fill = fill;
+					poly.stroke = stroke;
+					gg.geometryCollection.addItem(poly);
+				}
+				xPrev = xPos; yPrev = yPos;
+				dataProvider.cursor.moveNext();
+			}
+		}
+		
+		private function getXMinPosition():Number
+		{
+			var xPos:Number;
+			
+			if (horizontalAxis)
+			{
+				if (horizontalAxis is NumericAxis)
+					xPos = horizontalAxis.getPosition(minHorizontalValue);
+			} else {
+				if (dataProvider.horizontalAxis is NumericAxis)
+					xPos = dataProvider.horizontalAxis.getPosition(minHorizontalValue);
+			}
+			
+			return xPos;
+		}
+		
+		private function getYMinPosition():Number
+		{
+			var yPos:Number;
+			if (verticalAxis && verticalAxis is NumericAxis)
+			{
+				if (_baseAtZero)
+					yPos = verticalAxis.getPosition(0);
+				else
+					yPos = verticalAxis.getPosition(minVerticalValue);
+			} else {
+				if (dataProvider.verticalAxis is NumericAxis)
+				{
+					if (_baseAtZero)
+						yPos = dataProvider.verticalAxis.getPosition(0);
+					else
+						yPos = dataProvider.verticalAxis.getPosition(minVerticalValue);
+				}
+			}
+			return yPos;
+		}
+	}
+}
