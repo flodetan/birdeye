@@ -181,7 +181,7 @@ package org.un.cava.birdeye.qavis.charts.series
 						ttYoffset = 20;
 						var line:Line = new Line(xPos, yPos + barWidth/2, xPos + ttXoffset/3, yPos + barWidth/2 + ttYoffset);
 						line.stroke = new SolidStroke(0x000000,1,2);
-		 				ttShapes.push(line)
+		 				ttShapes[0] = line;
 						break;
 					case STACKED:
 						yPos = yPos + size/2 - size/_total * _stackPosition;
