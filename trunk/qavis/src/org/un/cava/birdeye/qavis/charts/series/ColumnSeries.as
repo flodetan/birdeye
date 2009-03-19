@@ -179,7 +179,7 @@ package org.un.cava.birdeye.qavis.charts.series
 						ttYoffset = 20;
 						var line:Line = new Line(xPos+ colWidth/2, yPos, xPos + colWidth/2 + ttXoffset/3, yPos + ttYoffset);
 						line.stroke = new SolidStroke(0x000000,1,2);
-		 				ttShapes.push(line)
+		 				ttShapes[0] = line;
 						break;
 					case STACKED:
 						xPos = xPos + size/2 - size/_total * _stackPosition;
@@ -197,8 +197,6 @@ package org.un.cava.birdeye.qavis.charts.series
 				poly.stroke = stroke;
 				gg.geometryCollection.addItemAt(poly,0);
 				dataProvider.cursor.moveNext();
-				
-				ttShapes = [];
 			}
 		}
 		
