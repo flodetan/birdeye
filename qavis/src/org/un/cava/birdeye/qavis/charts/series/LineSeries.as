@@ -28,11 +28,16 @@
 package org.un.cava.birdeye.qavis.charts.series
 {
 	import com.degrafa.geometry.Line;
+	import com.degrafa.geometry.Circle;
+	import com.degrafa.paint.SolidFill;
+	
+	import flash.events.MouseEvent;
 	
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
+	import org.un.cava.birdeye.qavis.charts.data.ExtendedGeometryGroup;
 
 	public class LineSeries extends CartesianSeries
 	{
@@ -52,53 +57,105 @@ package org.un.cava.birdeye.qavis.charts.series
 		{
 			super.updateDisplayList(w,h);
 			
-			for (var i:Number = gg.geometryCollection.items.length; i>0; i--)
-				gg.geometryCollection.removeItemAt(i-1);
+			for (var i:Number = numChildren - 1; i>=0; i--)
+				removeChildAt(i);
 
 			dataProvider.cursor.seek(CursorBookmark.FIRST);
 			
 			var xPrev:Number, yPrev:Number;
 			var xPos:Number, yPos:Number;
 			var j:Number = 0;
+			var dataFields:Array = [];
 			
+			gg = new ExtendedGeometryGroup();
+			gg.target = this;
+			graphicsCollection.addItem(gg);
 			while (!dataProvider.cursor.afterLast)
 			{
 				if (horizontalAxis)
 				{
 					if (horizontalAxis is NumericAxis)
+					{
 						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
-					else if (horizontalAxis is CategoryAxis)
+						dataFields[0] = xField;
+					} else if (horizontalAxis is CategoryAxis) {
 						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[displayName]);
+						dataFields[0] = displayName;
+					}
 				} else {
 					if (dataProvider.horizontalAxis is NumericAxis)
+					{
 						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
-					else if (dataProvider.horizontalAxis is CategoryAxis)
+						dataFields[0] = xField;
+					} else if (dataProvider.horizontalAxis is CategoryAxis) {
 						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[displayName]);
+						dataFields[0] = displayName;
+					}
 				}
 				
 				if (verticalAxis)
 				{
 					if (verticalAxis is NumericAxis)
+					{
 						yPos = verticalAxis.getPosition(dataProvider.cursor.current[yField]);
-					else if (verticalAxis is CategoryAxis)
+						dataFields[1] = yField;
+					} else if (verticalAxis is CategoryAxis) {
+						dataFields[1] = displayName;
 						yPos = verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
+					}
 				} else {
 					if (dataProvider.verticalAxis is NumericAxis)
+					{
 						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
-					else if (dataProvider.verticalAxis is CategoryAxis)
+						dataFields[1] = yField;
+					} else if (dataProvider.verticalAxis is CategoryAxis) {
 						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
+						dataFields[1] = displayName;
+					}
 				}
 				
+				createGG(dataProvider.cursor.current, dataFields, xPos, yPos, 3);
+				var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
+				hitMouseArea.fill = new SolidFill(0x000000, 0);
+				ttGG.geometryCollection.addItem(hitMouseArea);
+
 				if (j++ > 0)
 				{
 					line = new Line(xPrev,yPrev,xPos,yPos);
 					line.fill = fill;
 					line.stroke = stroke;
-					gg.geometryCollection.addItem(line);
+					gg.geometryCollection.addItemAt(line,0);
 				}
 				xPrev = xPos; yPrev = yPos;
 				dataProvider.cursor.moveNext();
 			}
+		}
+		
+		private var ttGG:ExtendedGeometryGroup;
+		override protected function createGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, radius:Number,
+									shapes:Array = null /* of IGeometry */, ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
+		{
+			ttGG = new ExtendedGeometryGroup();
+			ttGG.target = this;
+ 			if (dataProvider.showDataTips)
+			{
+				initGGToolTip();
+				ttGG.createToolTip(dataProvider.cursor.current, dataFields, xPos, yPos, radius);
+ 			} else {
+				graphicsCollection.addItem(ttGG);
+			}
+		}
+		
+		override protected function initGGToolTip():void
+		{
+			ttGG.target = this;
+ 			if (dataProvider.dataTipFunction != null)
+				ttGG.dataTipFunction = dataProvider.dataTipFunction;
+			if (dataProvider.dataTipPrefix!= null)
+				ttGG.dataTipPrefix = dataProvider.dataTipPrefix;
+ 			graphicsCollection.addItem(ttGG);
+			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
+			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 		}
 	}
 }

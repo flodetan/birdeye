@@ -29,67 +29,13 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 {
 	import mx.collections.CursorBookmark;
 	
-	import org.un.cava.birdeye.qavis.charts.series.BubbleSeries;
+	import org.un.cava.birdeye.qavis.charts.interfaces.IScatter;
 	
-	public class BubbleChart extends CartesianChart
+	public class BubbleChart extends ScatterPlot
 	{
-		private var _maxRadius:Number = 10;
-		public function set maxRadius(val:Number):void
-		{
-			_maxRadius = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get maxRadius():Number
-		{
-			return _maxRadius;
-		}
-		
 		public function BubbleChart()
 		{
 			super();
-		}
-		
-		override protected function commitProperties():void
-		{
-			super.commitProperties();
-			
-			var bubbleSeries:Array = [];
-			
-			for (var i:Number = 0; i<_series.length; i++)
-				if (_series[i] is BubbleSeries)
-					bubbleSeries.push(_series[i]);
-			
-			if (bubbleSeries.length > 0)
-			{
-				var maxRadiusValues:Array = [];
-				var minRadiusValues:Array = [];
-				cursor.seek(CursorBookmark.FIRST);
-				while (! cursor.afterLast)
-				{
-					for (i = 0; i<bubbleSeries.length; i++)
-					{
-						if (maxRadiusValues[i] == null)
-							maxRadiusValues[i] = cursor.current[BubbleSeries(bubbleSeries[i]).radiusField];
-						else
-							maxRadiusValues[i] = Math.max(maxRadiusValues[i],
-														cursor.current[BubbleSeries(bubbleSeries[i]).radiusField]);
-						if (minRadiusValues[i] == null)
-							minRadiusValues[i] = cursor.current[BubbleSeries(bubbleSeries[i]).radiusField];
-						else
-							minRadiusValues[i] = Math.min(minRadiusValues[i],
-														cursor.current[BubbleSeries(bubbleSeries[i]).radiusField]);
-					}
-						
-					cursor.moveNext();
-				}
-				
-				for (i = 0; i<bubbleSeries.length; i++)
-				{
-					BubbleSeries(bubbleSeries[i]).maxRadiusValue = maxRadiusValues[i];
-					BubbleSeries(bubbleSeries[i]).minRadiusValue = minRadiusValues[i];
-				}
-			}
 		}
 	}
 }

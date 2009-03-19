@@ -27,29 +27,43 @@
  
 package org.un.cava.birdeye.qavis.charts.series
 {
-	import com.degrafa.geometry.Circle;
+	import com.degrafa.IGeometry;
+	import com.degrafa.geometry.RegularRectangle;
 	
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
+	import org.un.cava.birdeye.qavis.charts.renderers.CircleRenderer;
 
 	public class PlotSeries extends CartesianSeries
 	{
+		private var _plotRadius:Number = 5;
+		public function set plotRadius(val:Number):void
+		{
+			_plotRadius = val;
+			invalidateDisplayList();
+		}
+		
 		public function PlotSeries()
 		{
 			super();
 		}
 		
-		private var plot:Circle;
+		private var plot:IGeometry;
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
 			super.updateDisplayList(w,h);
 			
-			for (var i:Number = gg.geometryCollection.items.length; i>0; i--)
-				gg.geometryCollection.removeItemAt(i-1);
+			for (var i:Number = numChildren - 1; i>=0; i--)
+				removeChildAt(i);
+
+			var dataFields:Array = [];
 
 			var xPos:Number, yPos:Number;
+			
+			if (!itemRenderer)
+				itemRenderer = CircleRenderer;
 			
 			dataProvider.cursor.seek(CursorBookmark.FIRST);
 			while (!dataProvider.cursor.afterLast)
@@ -57,34 +71,55 @@ package org.un.cava.birdeye.qavis.charts.series
 				if (horizontalAxis)
 				{
 					if (horizontalAxis is NumericAxis)
+					{
 						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
-					else if (horizontalAxis is CategoryAxis)
+						dataFields[0] = xField;
+					} else if (horizontalAxis is CategoryAxis) {
 						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[displayName]);
+						dataFields[0] = displayName;
+					}
 				} else {
 					if (dataProvider.horizontalAxis is NumericAxis)
+					{
 						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
-					else if (dataProvider.horizontalAxis is CategoryAxis)
+						dataFields[0] = xField;
+					} else if (dataProvider.horizontalAxis is CategoryAxis) {
 						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[displayName]);
+						dataFields[0] = displayName;
+					}
 				}
 				
 				if (verticalAxis)
 				{
 					if (verticalAxis is NumericAxis)
+					{
 						yPos = verticalAxis.getPosition(dataProvider.cursor.current[yField]);
-					else if (verticalAxis is CategoryAxis)
+						dataFields[1] = yField;
+					} else if (verticalAxis is CategoryAxis) {
+						dataFields[1] = displayName;
 						yPos = verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
+					}
 				} else {
 					if (dataProvider.verticalAxis is NumericAxis)
+					{
 						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
-					else if (dataProvider.verticalAxis is CategoryAxis)
+						dataFields[1] = yField;
+					} else if (dataProvider.verticalAxis is CategoryAxis) {
 						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
+						dataFields[1] = displayName;
+					}
 				}
 				
-				plot = new Circle(xPos, yPos, 5);
+ 				createGG(dataProvider.cursor.current, dataFields, xPos, yPos, 3);
+ 				
+ 				var bounds:RegularRectangle = new RegularRectangle(xPos - _plotRadius, yPos - _plotRadius, _plotRadius * 2, _plotRadius * 2);
+
+  				plot = new itemRenderer(bounds);
+  				
 				plot.fill = fill;
 				plot.stroke = stroke;
-				gg.geometryCollection.addItem(plot);
-				dataProvider.cursor.moveNext();
+				gg.geometryCollection.addItemAt(plot,0); 
+ 				dataProvider.cursor.moveNext();
 			}
 		}
 	}

@@ -27,27 +27,31 @@
  
 package org.un.cava.birdeye.qavis.charts.series
 {
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.geom.Point;
+	
 	import mx.collections.CursorBookmark;
-	import mx.core.UIComponent;
+	import mx.controls.ToolTip;
+	import mx.managers.ToolTipManager;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.XYAxis;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.CartesianChart;
+	import org.un.cava.birdeye.qavis.charts.data.ExtendedGeometryGroup;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ICartesianSeries;
 
-	public class CartesianSeries extends UIComponent implements ICartesianSeries
+	public class CartesianSeries extends Surface implements ICartesianSeries
 	{
-		protected var surf:Surface;
-		protected var gg:GeometryGroup;
+		protected var gg:ExtendedGeometryGroup;
 		protected var fill:SolidFill = new SolidFill(0x888888,0);
 		protected var stroke:SolidStroke = new SolidStroke(0x888888,1,1);
-
+		
 		private var _dataProvider:CartesianChart;
 		public function set dataProvider(val:CartesianChart):void
 		{
@@ -207,16 +211,6 @@ package org.un.cava.birdeye.qavis.charts.series
 			super();
 		}
 
-		override protected function createChildren():void
-		{
-			super.createChildren();
-			surf = new Surface();
-			gg = new GeometryGroup();
-			gg.target = surf;
-			surf.graphicsCollection.addItem(gg);
-			addChild(surf);
-		}
-		
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
@@ -274,6 +268,68 @@ package org.un.cava.birdeye.qavis.charts.series
 				
 				_dataProvider.cursor.moveNext();
 			}
+		}
+		
+		protected function createGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, radius:Number,
+									shapes:Array = null /* of IGeometry */, ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
+		{
+			gg = new ExtendedGeometryGroup();
+			gg.target = this;
+ 			if (dataProvider.showDataTips)
+			{
+				initGGToolTip();
+				gg.createToolTip(dataProvider.cursor.current, dataFields, xPos, yPos, radius, shapes, ttXoffset, ttYoffset);
+ 			} else {
+				graphicsCollection.addItem(gg);
+			}
+		}
+
+		private var tip:ToolTip; 
+		/**
+		* @private 
+		 * Init the GeomGroupToolTip and its listeners
+		 * 
+		*/
+		protected function initGGToolTip():void
+		{
+			gg.target = this;
+			gg.toolTipFill = fill;
+			gg.toolTipStroke = stroke;
+ 			if (dataProvider.dataTipFunction != null)
+				gg.dataTipFunction = dataProvider.dataTipFunction;
+			if (dataProvider.dataTipPrefix!= null)
+				gg.dataTipPrefix = dataProvider.dataTipPrefix;
+ 			graphicsCollection.addItem(gg);
+			gg.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
+			gg.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
+		}
+
+		/**
+		* @private 
+		 * Show and position tooltip
+		 * 
+		*/
+		protected function handleRollOver(e:MouseEvent):void 
+		{
+			var extGG:ExtendedGeometryGroup = ExtendedGeometryGroup(e.target);
+			var pos:Point = localToGlobal(new Point(extGG.posX, extGG.posY));
+			tip = ToolTipManager.createToolTip(extGG.toolTip, 
+												pos.x + extGG.xTTOffset,	pos.y + extGG.yTTOffset)	as ToolTip;
+
+			tip.alpha = 0.7;
+			dispatchEvent(new Event("showToolTip"));
+			extGG.showToolTipGeometry();
+		}
+
+		/**
+		* @private 
+		 * Destroy/hide tooltip 
+		 * 
+		*/
+		protected function handleRollOut(e:MouseEvent):void
+		{ 
+			ToolTipManager.destroyToolTip(tip);
+			ExtendedGeometryGroup(e.target).hideToolTipGeometry();
 		}
 	}
 }

@@ -28,11 +28,13 @@
 package org.un.cava.birdeye.qavis.charts.cartesianCharts
 {	
 	import flash.display.DisplayObject;
+	import flash.events.Event;
 	import flash.geom.Rectangle;
 	
 	import mx.collections.CursorBookmark;
 	import mx.containers.HBox;
 	import mx.containers.VBox;
+	import mx.core.Application;
 	import mx.core.Container;
 	import mx.core.UIComponent;
 	

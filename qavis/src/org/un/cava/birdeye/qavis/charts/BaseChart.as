@@ -41,19 +41,10 @@
 	[DefaultProperty("dataProvider")]
 	public class BaseChart extends UIComponent
 	{
-		protected var _dataProvider:Object=null;
-		protected var _showDataTips:Boolean = false;
-		protected var _dataTipFunction:Function = null;
-		protected var _dataTipPrefix:String;
-
 		protected var defaultTipFunction:Function;
 
-		private var _percentHeight:Number = NaN;
-		private var _percentWidth:Number = NaN;
 		private var tempWidth:Number, tempHeight:Number;
 		private var resizeListening:Boolean = false;
-		
-		protected var multipleAxes:Array = null; // of IAxisLayout 
 		
 		private var _cursor:IViewCursor;
 		public function get cursor():IViewCursor
@@ -107,6 +98,7 @@
 		{
 		}
 
+		private var _percentHeight:Number = NaN;
 		override public function set percentHeight(val:Number):void
 		{
 			_percentHeight = val;
@@ -120,6 +112,7 @@
 			return _percentHeight;
 		}
 		
+		private var _percentWidth:Number = NaN;
 		override public function set percentWidth(val:Number):void
 		{
 			_percentWidth = val;
@@ -133,6 +126,7 @@
 			return _percentWidth;
 		}
 		
+		protected var _dataProvider:Object=null;
 		public function set dataProvider(value:Object):void
 		{
 			//_dataProvider = value;
@@ -193,6 +187,7 @@
 			return _dataProvider;
 		}
 		
+		protected var _showDataTips:Boolean = true;
 		/**
 		* Indicate whether to show/create tooltips or not. 
 		*/
@@ -200,6 +195,7 @@
 		public function set showDataTips(value:Boolean):void
 		{
 			_showDataTips = value;
+			invalidateProperties();
 			invalidateDisplayList();
 		}		
 		public function get showDataTips():Boolean
@@ -207,22 +203,34 @@
 			return _showDataTips;
 		}
 
+		protected var _dataTipFunction:Function = null;
 		/**
 		* Indicate the function used to create tooltips. 
 		*/
 		public function set dataTipFunction(value:Function):void
 		{
 			_dataTipFunction = value;
+			invalidateProperties();
 			invalidateDisplayList();
 		}
+		public function get dataTipFunction():Function
+		{
+			return _dataTipFunction;
+		}
 
+		protected var _dataTipPrefix:String;
 		/**
 		* Indicate the prefix for the tooltip. 
 		*/
 		public function set dataTipPrefix(value:String):void
 		{
 			_dataTipPrefix = value;
+			invalidateProperties();
 			invalidateDisplayList();
+		}
+		public function get dataTipPrefix():String
+		{
+			return _dataTipPrefix;
 		}
 
 		protected var _tipDelay:Number;

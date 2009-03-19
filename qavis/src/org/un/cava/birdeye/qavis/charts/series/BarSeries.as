@@ -27,13 +27,18 @@
  
 package org.un.cava.birdeye.qavis.charts.series
 {
+	import com.degrafa.IGeometry;
+	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.Polygon;
+	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.paint.SolidStroke;
 	
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.BarChart;
+	import org.un.cava.birdeye.qavis.charts.renderers.RectangleRenderer;
 
 	public class BarSeries extends StackableSeries 
 	{
@@ -80,19 +85,26 @@ package org.un.cava.birdeye.qavis.charts.series
 			}
 		}
 
-		private var poly:Polygon;
+		private var poly:IGeometry;
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
 			super.updateDisplayList(w,h);
 			
-			for (var i:Number = gg.geometryCollection.items.length; i>0; i--)
-				gg.geometryCollection.removeItemAt(i-1);
+			for (var i:Number = numChildren - 1; i>=0; i--)
+				removeChildAt(i);
 
 			var xPos:Number, yPos:Number;
 			var j:Number = 0;
-			
+
+			if (!itemRenderer)
+				itemRenderer = RectangleRenderer;
+
+			var ttShapes:Array;
+			var ttXoffset:Number = NaN, ttYoffset:Number = NaN;
+		
 			var x0:Number = getXMinPosition();
 			var size:Number = NaN, barWidth:Number = 0; 
+			var dataFields:Array = [];
 
 			dataProvider.cursor.seek(CursorBookmark.FIRST);
 
@@ -101,17 +113,25 @@ package org.un.cava.birdeye.qavis.charts.series
 				if (verticalAxis)
 				{
 					if (verticalAxis is NumericAxis)
+					{
 						yPos = verticalAxis.getPosition(dataProvider.cursor.current[yField]);
-					else if (verticalAxis is CategoryAxis)
+						dataFields[0] = yField;
+					} else if (verticalAxis is CategoryAxis) {
 						yPos = verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
+						dataFields[0] = displayName;
+					}
 
 					if (isNaN(size))
 						size = verticalAxis.interval*(4/5);
 				} else {
 					if (dataProvider.verticalAxis is NumericAxis)
+					{
 						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
-					else if (dataProvider.verticalAxis is CategoryAxis)
+						dataFields[0] = yField;
+					} else if (dataProvider.verticalAxis is CategoryAxis) {
 						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
+						dataFields[0] = displayName;
+					}
 
 					if (isNaN(size))
 						size = dataProvider.verticalAxis.interval*(4/5);
@@ -127,6 +147,7 @@ package org.un.cava.birdeye.qavis.charts.series
 					} else {
 						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
 					}
+					dataFields[1] = xField;
 				}
 				else {
 					if (dataProvider.horizontalAxis is NumericAxis)
@@ -139,17 +160,28 @@ package org.un.cava.birdeye.qavis.charts.series
 						} else {
 							xPos = dataProvider.horizontalAxis..getPosition(dataProvider.cursor.current[xField]);
 						}
-					} else if (dataProvider.horizontalAxis is CategoryAxis)
+						dataFields[1] = xField;
+					} else if (dataProvider.horizontalAxis is CategoryAxis) {
 						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[displayName]);
+						dataFields[1] = displayName;
+					}
 				}
 				
 				switch (_stackType)
 				{
 					case OVERLAID:
 						barWidth = size;
+						yPos = yPos - size/2;
+						break;
 					case STACKED100:
 						barWidth  = size;
 						yPos = yPos - size/2;
+						ttShapes = [];
+						ttXoffset = -30;
+						ttYoffset = 20;
+						var line:Line = new Line(xPos, yPos + barWidth/2, xPos + ttXoffset/3, yPos + barWidth/2 + ttYoffset);
+						line.stroke = new SolidStroke(0x000000,1,2);
+		 				ttShapes.push(line)
 						break;
 					case STACKED:
 						yPos = yPos + size/2 - size/_total * _stackPosition;
@@ -157,14 +189,14 @@ package org.un.cava.birdeye.qavis.charts.series
 						break;
 				}
 				
-				poly = new Polygon();
-				poly.data =  String(x0) + "," + String(yPos) + " " +
-							String(xPos) + "," + String(yPos) + " " +
-							String(xPos) + "," + String(yPos+barWidth) + " " +
-							String(x0) + "," + String(yPos+barWidth);
+				createGG(dataProvider.cursor.current, dataFields, xPos, yPos+barWidth/2, 3,ttShapes,ttXoffset,ttYoffset);
+
+ 				var bounds:RegularRectangle = new RegularRectangle(x0, yPos, xPos -x0, barWidth);
+
+				poly = new itemRenderer(bounds);
 				poly.fill = fill;
 				poly.stroke = stroke;
-				gg.geometryCollection.addItem(poly);
+				gg.geometryCollection.addItemAt(poly,0);
 				dataProvider.cursor.moveNext();
 			}
 		}

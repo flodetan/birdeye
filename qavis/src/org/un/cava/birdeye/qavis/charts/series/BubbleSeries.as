@@ -27,100 +27,19 @@
  
 package org.un.cava.birdeye.qavis.charts.series
 {
-	import com.degrafa.geometry.Circle;
+	import org.un.cava.birdeye.qavis.charts.renderers.CircleRenderer;
 	
-	import mx.collections.CursorBookmark;
-	
-	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxis;
-	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
-	import org.un.cava.birdeye.qavis.charts.cartesianCharts.BubbleChart;
-
-	[Exclude(name="maxRadiusValue", kind="property")]
-	[Exclude(name="minRadiusValue", kind="property")]
-	public class BubbleSeries extends ScatterSeries
+	public class BubbleSeries extends ScatterSeries 
 	{
-		private var _maxRadiusValue:Number = NaN;
-		public function set maxRadiusValue(val:Number):void
-		{
-			_maxRadiusValue = val;
-			invalidateDisplayList();
-		}
-		
-		private var _minRadiusValue:Number = NaN;
-		public function set minRadiusValue(val:Number):void
-		{
-			_minRadiusValue = val;
-			invalidateDisplayList();
-		}
-		
 		public function BubbleSeries()
 		{
 			super();
 		}
 
-		private var bubble:Circle;
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
+			itemRenderer = CircleRenderer;
 			super.updateDisplayList(w,h);
-			
-			for (var i:Number = gg.geometryCollection.items.length; i>0; i--)
-				gg.geometryCollection.removeItemAt(i-1);
-
-			var xPos:Number, yPos:Number;
-			var dataValue:Number;
-			var radius:Number;
-			
-			dataProvider.cursor.seek(CursorBookmark.FIRST);
-			while (!dataProvider.cursor.afterLast)
-			{
-				if (horizontalAxis)
-				{
-					if (horizontalAxis is NumericAxis)
-						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
-					else if (horizontalAxis is CategoryAxis)
-						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[displayName]);
-				} else {
-					if (dataProvider.horizontalAxis is NumericAxis)
-						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
-					else if (dataProvider.horizontalAxis is CategoryAxis)
-						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[displayName]);
-				}
-				
-				if (verticalAxis)
-				{
-					if (verticalAxis is NumericAxis)
-						yPos = verticalAxis.getPosition(dataProvider.cursor.current[yField]);
-					else if (verticalAxis is CategoryAxis)
-						yPos = verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
-				} else {
-					if (dataProvider.verticalAxis is NumericAxis)
-						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
-					else if (dataProvider.verticalAxis is CategoryAxis)
-						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
-				}
-				
-				dataValue = dataProvider.cursor.current[radiusField];
-				
-				radius = getRadius(dataValue);
-				bubble = new Circle(xPos, yPos, radius);
-				bubble.fill = fill;
-				bubble.stroke = stroke;
-				gg.geometryCollection.addItem(bubble);
-				dataProvider.cursor.moveNext();
-			}
-		}
-		
-		private function getRadius(dataValue:Number):Number
-		{
-			var maxRadius:Number = 10;
-			var radius:Number = 1;
-			if (dataProvider && dataProvider is BubbleChart)
-			{
-				maxRadius = BubbleChart(dataProvider).maxRadius;
-				radius = maxRadius * (dataValue - _minRadiusValue)/(_maxRadiusValue - _minRadiusValue);
-			}
-			
-			return radius;
 		}
 	}
 }
