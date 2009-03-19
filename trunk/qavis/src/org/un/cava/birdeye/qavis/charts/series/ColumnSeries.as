@@ -27,13 +27,17 @@
  
 package org.un.cava.birdeye.qavis.charts.series
 {
-	import com.degrafa.geometry.Polygon;
+	import com.degrafa.IGeometry;
+	import com.degrafa.geometry.Line;
+	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.paint.SolidStroke;
 	
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.ColumnChart;
+	import org.un.cava.birdeye.qavis.charts.renderers.RectangleRenderer;
 
 	public class ColumnSeries extends StackableSeries 
 	{
@@ -80,16 +84,24 @@ package org.un.cava.birdeye.qavis.charts.series
 			}
 		}
 
-		private var poly:Polygon;
+		private var poly:IGeometry;
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
 			super.updateDisplayList(w,h);
 			
-			for (var i:Number = gg.geometryCollection.items.length; i>0; i--)
-				gg.geometryCollection.removeItemAt(i-1);
+			for (var i:Number = numChildren - 1; i>=0; i--)
+				removeChildAt(i);
+
+			var dataFields:Array = [];
 
 			var xPos:Number, yPos:Number;
 			var j:Number = 0;
+			
+			if (!itemRenderer)
+				itemRenderer = RectangleRenderer;
+
+			var ttShapes:Array;
+			var ttXoffset:Number = NaN, ttYoffset:Number = NaN;
 			
 			var y0:Number = getYMinPosition();
 			var size:Number = NaN, colWidth:Number = 0; 
@@ -101,23 +113,29 @@ package org.un.cava.birdeye.qavis.charts.series
 				if (horizontalAxis)
 				{
 					if (horizontalAxis is NumericAxis)
+					{
 						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
-					else if (horizontalAxis is CategoryAxis)
+						dataFields[0] = xField;
+					} else if (horizontalAxis is CategoryAxis) {
 						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[displayName]);
-
+						dataFields[0] = displayName;
+					}
 					if (isNaN(size))
 						size = horizontalAxis.interval*(4/5);
 				} else {
 					if (dataProvider.horizontalAxis is NumericAxis)
+					{
 						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
-					else if (dataProvider.horizontalAxis is CategoryAxis)
+						dataFields[0] = xField;
+					} else if (dataProvider.horizontalAxis is CategoryAxis) {
 						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[displayName]);
-
+						dataFields[0] = displayName;
+					}
 					if (isNaN(size))
 						size = dataProvider.horizontalAxis.interval*(4/5);
 				}
 				
-				if (verticalAxis)
+			if (verticalAxis)
 				{
 					if (_stackType == STACKED100)
 					{
@@ -127,6 +145,7 @@ package org.un.cava.birdeye.qavis.charts.series
 					} else {
 						yPos = verticalAxis.getPosition(dataProvider.cursor.current[yField]);
 					}
+					dataFields[1] = yField;
 				}
 				else {
 					if (dataProvider.verticalAxis is NumericAxis)
@@ -139,17 +158,28 @@ package org.un.cava.birdeye.qavis.charts.series
 						} else {
 							yPos = dataProvider.verticalAxis..getPosition(dataProvider.cursor.current[yField]);
 						}
-					} else if (dataProvider.verticalAxis is CategoryAxis)
+						dataFields[1] = yField;
+					} else if (dataProvider.verticalAxis is CategoryAxis) {
 						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
+						dataFields[1] = displayName;
+					}
 				}
 				
 				switch (_stackType)
 				{
 					case OVERLAID:
 						colWidth = size;
+						xPos = xPos - size/2;
+						break;
 					case STACKED100:
 						colWidth = size;
 						xPos = xPos - size/2;
+						ttShapes = [];
+						ttXoffset = -30;
+						ttYoffset = 20;
+						var line:Line = new Line(xPos+ colWidth/2, yPos, xPos + colWidth/2 + ttXoffset/3, yPos + ttYoffset);
+						line.stroke = new SolidStroke(0x000000,1,2);
+		 				ttShapes.push(line)
 						break;
 					case STACKED:
 						xPos = xPos + size/2 - size/_total * _stackPosition;
@@ -157,15 +187,18 @@ package org.un.cava.birdeye.qavis.charts.series
 						break;
 				}
 				
-				poly = new Polygon();
-				poly.data =  String(xPos) + "," + String(y0) + " " +
-							String(xPos) + "," + String(yPos) + " " +
-							String(xPos+colWidth) + "," + String(yPos) + " " +
-							String(xPos+colWidth) + "," + String(y0);
+				createGG(dataProvider.cursor.current, dataFields, xPos + colWidth/2, yPos, 3,ttShapes,ttXoffset,ttYoffset);
+
+ 				var bounds:RegularRectangle = new RegularRectangle(xPos, yPos, colWidth, y0 - yPos);
+
+				poly = new itemRenderer(bounds);
+
 				poly.fill = fill;
 				poly.stroke = stroke;
-				gg.geometryCollection.addItem(poly);
+				gg.geometryCollection.addItemAt(poly,0);
 				dataProvider.cursor.moveNext();
+				
+				ttShapes = [];
 			}
 		}
 		
