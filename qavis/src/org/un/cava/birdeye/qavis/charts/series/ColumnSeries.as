@@ -30,6 +30,7 @@ package org.un.cava.birdeye.qavis.charts.series
 	import com.degrafa.IGeometry;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	import mx.collections.CursorBookmark;
@@ -51,6 +52,8 @@ package org.un.cava.birdeye.qavis.charts.series
 		public function set baseAtZero(val:Boolean):void
 		{
 			_baseAtZero = val;
+			invalidateProperties();
+			invalidateDisplayList()
 		}
 		public function get baseAtZero():Boolean
 		{
@@ -62,7 +65,7 @@ package org.un.cava.birdeye.qavis.charts.series
 		{
 			_form = val;
 		}
-		
+
 		public function ColumnSeries()
 		{
 			super();
@@ -89,9 +92,6 @@ package org.un.cava.birdeye.qavis.charts.series
 		{
 			super.updateDisplayList(w,h);
 			
-			for (var i:Number = numChildren - 1; i>=0; i--)
-				removeChildAt(i);
-
 			var dataFields:Array = [];
 
 			var xPos:Number, yPos:Number;
@@ -135,7 +135,7 @@ package org.un.cava.birdeye.qavis.charts.series
 						size = dataProvider.horizontalAxis.interval*(4/5);
 				}
 				
-			if (verticalAxis)
+				if (verticalAxis)
 				{
 					if (_stackType == STACKED100)
 					{
@@ -152,11 +152,11 @@ package org.un.cava.birdeye.qavis.charts.series
 					{
 						if (_stackType == STACKED100)
 						{
-							y0 = dataProvider.verticalAxis..getPosition(baseValues[j]);
-							yPos = dataProvider.verticalAxis..getPosition(
+							y0 = dataProvider.verticalAxis.getPosition(baseValues[j]);
+							yPos = dataProvider.verticalAxis.getPosition(
 								baseValues[j++] + Math.max(0,dataProvider.cursor.current[yField]));
 						} else {
-							yPos = dataProvider.verticalAxis..getPosition(dataProvider.cursor.current[yField]);
+							yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
 						}
 						dataFields[1] = yField;
 					} else if (dataProvider.verticalAxis is CategoryAxis) {
@@ -187,9 +187,15 @@ package org.un.cava.birdeye.qavis.charts.series
 						break;
 				}
 				
-				createGG(dataProvider.cursor.current, dataFields, xPos + colWidth/2, yPos, 3,ttShapes,ttXoffset,ttYoffset);
-
  				var bounds:RegularRectangle = new RegularRectangle(xPos, yPos, colWidth, y0 - yPos);
+
+				if (dataProvider.showDataTips)
+				{
+					createGG(dataProvider.cursor.current, dataFields, xPos + colWidth/2, yPos, 3,ttShapes,ttXoffset,ttYoffset);
+					var hitMouseArea:RegularRectangle = bounds; 
+					hitMouseArea.fill = new SolidFill(0x000000, 0);
+					gg.geometryCollection.addItem(hitMouseArea);
+				}
 
 				poly = new itemRenderer(bounds);
 
@@ -200,7 +206,7 @@ package org.un.cava.birdeye.qavis.charts.series
 			}
 		}
 		
-		private function getXMinPosition():Number
+/* 		private function getXMinPosition():Number
 		{
 			var xPos:Number;
 			
@@ -215,7 +221,7 @@ package org.un.cava.birdeye.qavis.charts.series
 			
 			return xPos;
 		}
-		
+ */		
 		private function getYMinPosition():Number
 		{
 			var yPos:Number;

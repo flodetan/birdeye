@@ -37,6 +37,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	public class ScatterPlot extends CartesianChart implements ISizableItem
 	{
 		private var _maxRadius:Number = 10;
+		/** @Private
+		 * Set the maximum radius value for the scatter plot.*/
 		public function set maxRadius(val:Number):void
 		{
 			_maxRadius = val;
@@ -57,40 +59,46 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		{
 			super.commitProperties();
 			
-			var bubbleSeries:Array = [];
-			
+			var scatterSeries:Array = [];
+			// load all scatter series (there might be series that are not IScatter 
+			// in the ScatterPlot chart)
 			for (var i:Number = 0; i<_series.length; i++)
 				if (_series[i] is IScatter)
-					bubbleSeries.push(_series[i]);
+					scatterSeries.push(_series[i]);
 			
-			if (bubbleSeries.length > 0)
+			if (scatterSeries.length > 0)
 			{
 				var maxRadiusValues:Array = [];
 				var minRadiusValues:Array = [];
 				cursor.seek(CursorBookmark.FIRST);
+				
+				// calculate the min and max radius values for each scatter series
 				while (! cursor.afterLast)
 				{
-					for (i = 0; i<bubbleSeries.length; i++)
+					for (i = 0; i<scatterSeries.length; i++)
 					{
 						if (maxRadiusValues[i] == null)
-							maxRadiusValues[i] = cursor.current[IScatter(bubbleSeries[i]).radiusField];
+							maxRadiusValues[i] = cursor.current[IScatter(scatterSeries[i]).radiusField];
 						else
 							maxRadiusValues[i] = Math.max(maxRadiusValues[i],
-														cursor.current[IScatter(bubbleSeries[i]).radiusField]);
+														cursor.current[IScatter(scatterSeries[i]).radiusField]);
 						if (minRadiusValues[i] == null)
-							minRadiusValues[i] = cursor.current[IScatter(bubbleSeries[i]).radiusField];
+							minRadiusValues[i] = cursor.current[IScatter(scatterSeries[i]).radiusField];
 						else
 							minRadiusValues[i] = Math.min(minRadiusValues[i],
-														cursor.current[IScatter(bubbleSeries[i]).radiusField]);
+														cursor.current[IScatter(scatterSeries[i]).radiusField]);
 					}
 						
 					cursor.moveNext();
 				}
 				
-				for (i = 0; i<bubbleSeries.length; i++)
+				// set the min and max radius values for each scatter series
+				// this will needed by the scatter series when calculating the
+				// sizes for each data value
+				for (i = 0; i<scatterSeries.length; i++)
 				{
-					IScatter(bubbleSeries[i]).maxRadiusValue = maxRadiusValues[i];
-					IScatter(bubbleSeries[i]).minRadiusValue = minRadiusValues[i];
+					IScatter(scatterSeries[i]).maxRadiusValue = maxRadiusValues[i];
+					IScatter(scatterSeries[i]).minRadiusValue = minRadiusValues[i];
 				}
 			}
 		}

@@ -31,14 +31,12 @@ package org.un.cava.birdeye.qavis.charts.axis
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RasterText;
-	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
-	import flash.text.TextFieldAutoSize;
-	
 	import mx.core.Container;
 	import mx.core.UIComponent;
+	import mx.events.IndexChangedEvent;
 	
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisLayout;
 	
@@ -74,7 +72,12 @@ package org.un.cava.birdeye.qavis.charts.axis
 			return _scaleType;
 		}
 		
+		/** @Private
+		 * Set to true if the user has specified an interval for the axis.
+		 * Otherwise, the interval will be calculated automatically.
+		 */
 		protected var isGivenInterval:Boolean = false;
+
 		protected var _interval:Number;
 		/** Set the interval between axis values. */
 		public function set interval(val:Number):void
@@ -132,7 +135,9 @@ package org.un.cava.birdeye.qavis.charts.axis
 		}
 		
 		protected var maxLblSize:Number = 0;
-		/** @Private */
+		/** @Private 
+		 * Specifies the maximum label size needed to calculate the axis size
+		 **/
 		protected function maxLabelSize():void
 		{
 			// must be overridden 
@@ -160,9 +165,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 			gg = new GeometryGroup();
 			gg.target = surf;
 			surf.graphicsCollection.addItem(gg);
-			labelCont = new Container();
-			labelCont.addChild(surf);
-			addChild(labelCont);
+			addChild(surf);
 		}
 		
 		/** @Private */
@@ -175,23 +178,12 @@ package org.un.cava.birdeye.qavis.charts.axis
 		override protected function measure():void
 		{
 			super.measure();
-			switch (placement)
-			{
-				case XYAxis.LEFT:
-				case XYAxis.RIGHT:
-					explicitWidth = measuredWidth = minWidth = 30 + maxLblSize;
-					break;
-				case XYAxis.BOTTOM:
-				case XYAxis.TOP:
-					explicitHeight = measuredHeight = minHeight = 30 + maxLblSize;
-					break;
-			}
 		}
 		
 		private var xMin:Number = NaN, yMin:Number = NaN, xMax:Number = NaN, yMax:Number = NaN;
 		private var sign:Number = NaN
-		protected var line:Line; 
-		protected var thick:Line;
+		protected var line:Line; // draw the axis line
+		protected var thick:Line; 
 		protected var thickWidth:Number = 5;
 		protected var label:RasterText;
 		/** @Private */
@@ -199,9 +191,16 @@ package org.un.cava.birdeye.qavis.charts.axis
 		{
 			super.updateDisplayList(w,h);
 			setActualSize(w,h);
-			for (var i:Number = gg.geometryCollection.items.length; i>0; i--)
-				gg.geometryCollection.removeItemAt(i-1);
 			
+			if (gg)
+			{
+				gg.geometry = [];
+				gg.geometryCollection.items = [];
+			}
+			
+/* 			for (var i:Number = gg.geometryCollection.items.length; i>0; i--)
+				gg.geometryCollection.removeItemAt(i-1);
+ */			
 			drawAxisLine(w,h)
 
 			if (readyForLayout)
@@ -232,7 +231,9 @@ package org.un.cava.birdeye.qavis.charts.axis
 				drawAxes(xMin, xMax, yMin, yMax, sign);
 			}
 		}
-		
+		/** @Private
+		 * Draw the axis depending on the current unscaled size and its placement
+		 */
 		protected function drawAxisLine(w:Number, h:Number):void
 		{
 			var x0:Number, x1:Number, y0:Number, y1:Number;
@@ -263,12 +264,19 @@ package org.un.cava.birdeye.qavis.charts.axis
 			gg.geometryCollection.addItem(line);
 
 		}
+		
+		/** @Private
+		 * Override this method to draw the axis depending on its type (linear, category, etc)
+		 */
 		protected function drawAxes(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
 		{
 			// to be overridden
 		}
 
 		protected var size:Number;
+		/** @Private
+		 * Get the size of the axis ,i.e. either its width or height depending on the placement selected.
+		 */
 		protected function getSize():Number
 		{
 			switch (placement)
@@ -285,6 +293,10 @@ package org.un.cava.birdeye.qavis.charts.axis
 			return size;
 		}
 		
+		/** @Private
+		 * Given a data value, it returns the position of the data value on the current axis.
+		 * Override this method depending on the axis scaling (linear, log, category, etc).
+		 */
 		public function getPosition(dataValue:*):*
 		{
 			// to be overridden by implementing axis class (Category, Numeric, DateTime..)

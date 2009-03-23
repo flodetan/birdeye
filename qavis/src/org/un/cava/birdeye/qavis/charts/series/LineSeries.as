@@ -27,8 +27,8 @@
  
 package org.un.cava.birdeye.qavis.charts.series
 {
-	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.Circle;
+	import com.degrafa.geometry.Line;
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.events.MouseEvent;
@@ -52,14 +52,10 @@ package org.un.cava.birdeye.qavis.charts.series
 			super();
 		}
 
-		private var line:Line;
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
 			super.updateDisplayList(w,h);
 			
-			for (var i:Number = numChildren - 1; i>=0; i--)
-				removeChildAt(i);
-
 			dataProvider.cursor.seek(CursorBookmark.FIRST);
 			
 			var xPrev:Number, yPrev:Number;
@@ -114,26 +110,30 @@ package org.un.cava.birdeye.qavis.charts.series
 					}
 				}
 				
-				createGG(dataProvider.cursor.current, dataFields, xPos, yPos, 3);
-				var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
-				hitMouseArea.fill = new SolidFill(0x000000, 0);
-				ttGG.geometryCollection.addItem(hitMouseArea);
+				if (dataProvider.showDataTips)
+				{
+					createGG(dataProvider.cursor.current, dataFields, xPos, yPos, 3);
+					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
+					hitMouseArea.fill = new SolidFill(0x000000, 0);
+					ttGG.geometryCollection.addItem(hitMouseArea);
+				}
 
 				if (j++ > 0)
 				{
-					line = new Line(xPrev,yPrev,xPos,yPos);
+					var line:Line = new Line(xPrev,yPrev,xPos,yPos);
 					line.fill = fill;
 					line.stroke = stroke;
 					gg.geometryCollection.addItemAt(line,0);
+					line = null;
 				}
 				xPrev = xPos; yPrev = yPos;
 				dataProvider.cursor.moveNext();
 			}
 		}
 		
-		private var ttGG:ExtendedGeometryGroup;
+ 		private var ttGG:ExtendedGeometryGroup;
 		override protected function createGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, radius:Number,
-									shapes:Array = null /* of IGeometry */, ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
+									shapes:Array = null , ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
 		{
 			ttGG = new ExtendedGeometryGroup();
 			ttGG.target = this;
@@ -149,6 +149,8 @@ package org.un.cava.birdeye.qavis.charts.series
 		override protected function initGGToolTip():void
 		{
 			ttGG.target = this;
+			ttGG.toolTipFill = new SolidFill(fillStroke);
+			ttGG.toolTipStroke = stroke;
  			if (dataProvider.dataTipFunction != null)
 				ttGG.dataTipFunction = dataProvider.dataTipFunction;
 			if (dataProvider.dataTipPrefix!= null)
@@ -157,5 +159,5 @@ package org.un.cava.birdeye.qavis.charts.series
 			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 		}
-	}
+ 	}
 }

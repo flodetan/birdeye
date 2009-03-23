@@ -33,18 +33,25 @@ package org.un.cava.birdeye.qavis.charts.axis
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.text.TextFieldAutoSize;
+	
+	import mx.core.UIComponent;
 
 	public class NumericAxis extends XYAxis
 	{
+		/** @Private
+		 * The minimum data value of the axis, after that the min is formatted 
+		 * by the formatMin methods.*/
 		private var minFormatted:Boolean = false;
+
 		private var _min:Number = NaN;
 		/** The minimum value of the axis (if the axis is shared among more series, than
-		 * this is the minimun value among all series. */
+		 * this is the minimun value among all series.*/
 		public function set min(val:Number):void
 		{
 			_min = val;
 			minFormatted = false;
 			formatMin();
+			invalidateSize();
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -53,7 +60,11 @@ package org.un.cava.birdeye.qavis.charts.axis
 			return _min;
 		}
 		
+		/** @Private
+		 * The maximum data value of the axis, after that max is formatted 
+		 * by the formatMax methods.*/
 		private var maxFormatted:Boolean = false;
+
 		private var _max:Number = NaN;
 		/** The maximum value of the axis (if the axis is shared among more series, than
 		 * this is the maximum value among all series. */
@@ -62,6 +73,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 			_max = val;
 			maxFormatted = false;
 			formatMax();
+			invalidateSize();
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -71,8 +83,8 @@ package org.un.cava.birdeye.qavis.charts.axis
 		}
 		
 		private var _baseAtZero:Boolean = false;
-		/** Set the base of the axis at zero. If all values of the axis are positive (or negative), than the 
-		 * lowest base will be zero, even if the minimum value is higher (or lower). */
+		/** Set the base of the axis at zero. If all values of the axis are positive (negative), 
+		 * than the lowest base will be zero, even if the minimum value is higher (lower). */
 		public function set baseAtZero(val:Boolean):void
 		{
 			_baseAtZero = val;
@@ -95,6 +107,8 @@ package org.un.cava.birdeye.qavis.charts.axis
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
+
+			// if no interval is given, than divide the axis in 5 parts
 			if (!isNaN(max) && !isNaN(min) && !isGivenInterval)
 			{
 				if (baseAtZero)
@@ -108,26 +122,63 @@ package org.un.cava.birdeye.qavis.charts.axis
 				}
 			}
 			
+			// if the placement is set, and max, min and interval calculated
+			// than the axis is ready to be drawn
 			if (placement && !isNaN(max) && !isNaN(min) && interval)
 				readyForLayout = true;
 			else 
 				readyForLayout = false;
 		}
 		
+		override protected function measure():void
+		{
+			super.measure();/* 
+			if (!isNaN(min) && !isNaN(max) && placement)
+				maxLabelSize(); */
+		}
+		
 		// other methods
 		
+		/** @Private
+		 * Calculate the maximum label size, necessary to define the needed 
+		 * width (for vertical axes) or height (for horizontal axes) of the CategoryAxis.*/
 		override protected function maxLabelSize():void
 		{
-			maxLblSize = Math.max(String(min).length, String(max).length);
+ 			label = new RasterText();
+			label.text = String(String(min).length < String(max).length ?
+								max : min);
+
+			switch (placement)
+			{
+				case TOP:
+				case BOTTOM:
+					measuredHeight = label.height + thickWidth + 10;
+					break;
+				case LEFT:
+				case RIGHT:
+					measuredWidth = label.width + thickWidth + 10;
+			}
 			
+			// calculate the maximum label size according to the 
+			// styles defined for the axis 
 			super.calculateMaxLabelStyled();
 		}
 
+		/** @Private
+		 * Draw axes depending on their orientation:
+		 * xMin == xMax means that the orientation is vertical; 
+		 * yMin == yMax means that the orientation is horizontal.
+		 */
 		override protected function drawAxes(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
 		{
 			var snap:Number;
+			
+			// meanwhile the method updates the maximum label size
+			maxLblSize = 0;
+
 			size = getSize();
 			if (xMin == xMax)
+			{
 				for (snap = min; snap<max; snap += interval)
 				{
 					// create thick line
@@ -145,8 +196,11 @@ package org.un.cava.birdeye.qavis.charts.axis
 					label.x = thickWidth * sign; 
 					label.fill = new SolidFill(0x000000);
 					gg.geometryCollection.addItem(label);
+					if (maxLblSize < label.width)
+						maxLblSize = label.width;
 				}
-			else
+				explicitWidth = maxLblSize + thickWidth + 10;
+			} else {
 				for (snap = min; snap<max; snap += interval)
 				{
 					// create thick line
@@ -164,9 +218,16 @@ package org.un.cava.birdeye.qavis.charts.axis
 					label.x = getPosition(snap)-label.textField.width/2; 
 					label.fill = new SolidFill(0x000000);
 					gg.geometryCollection.addItem(label);
+					if (maxLblSize < label.height)
+						maxLblSize = label.height;
 				}
+				explicitHeight = maxLblSize + thickWidth + 10;
+			}
 		}
 		
+		/** @Private
+		 * Calculate the format of the axis values, in order to have 
+		 * the more rounded values possible.*/ 
 		private function formatMax():void
 		{
 			if (!maxFormatted && !isNaN(max))
@@ -181,10 +242,12 @@ package org.un.cava.birdeye.qavis.charts.axis
 				tempMax *= Math.pow(10, maxLenght-1);
 				_max = tempMax * sign;
 				maxFormatted = true; 
-trace ("vert ax: ", _max);
 			}
 		}
 
+		/** @Private
+		 * Calculate the format of the axis values, in order to have 
+		 * the more rounded values possible.*/ 
 		private function formatMin():void
 		{
 			if (!minFormatted && !isNaN(min))

@@ -29,14 +29,20 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 {
 	public interface IAxisLayout
 	{
+		/** Define the scale type (category, linear, log, date...)*/
 		function set scaleType(val:String):void
-		function set interval(val:Number):void
-		function set placement(val:String):void
-
 		function get scaleType():String
+
+		/** Set the interval between axis labels.*/
+		function set interval(val:Number):void
 		function get interval():Number
+
+		/** Set the axis placement.*/
+		function set placement(val:String):void
 		function get placement():String
 
+		/** Calculates and returns the coordinate of a data value in the axis (depends on 
+		 * scale type). */
 		function getPosition(dataValue:*):*
 	}
 }

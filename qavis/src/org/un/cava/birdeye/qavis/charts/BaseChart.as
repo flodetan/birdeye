@@ -35,7 +35,9 @@
 	import mx.collections.ICollectionView;
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
+	import mx.core.Application;
 	import mx.core.UIComponent;
+	import mx.events.FlexEvent;
 	import mx.events.ResizeEvent;
 
 	[DefaultProperty("dataProvider")]

@@ -29,9 +29,14 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 {
 	public interface IScatter
 	{
+		/** Set the radius field to filter the values that will give the size for the
+		 * scatter layout.*/
 		function set radiusField(val:String):void;
 		function get radiusField():String;
+
+		/** Set the max radius value.*/
 		function set maxRadiusValue(val:Number):void;
+		/** Set the min radius value.*/
 		function set minRadiusValue(val:Number):void;
 	}
 }

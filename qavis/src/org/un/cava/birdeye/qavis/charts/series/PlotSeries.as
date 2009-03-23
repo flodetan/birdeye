@@ -28,12 +28,17 @@
 package org.un.cava.birdeye.qavis.charts.series
 {
 	import com.degrafa.IGeometry;
+	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.paint.SolidFill;
+	
+	import flash.events.MouseEvent;
 	
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
+	import org.un.cava.birdeye.qavis.charts.data.ExtendedGeometryGroup;
 	import org.un.cava.birdeye.qavis.charts.renderers.CircleRenderer;
 
 	public class PlotSeries extends CartesianSeries
@@ -54,9 +59,6 @@ package org.un.cava.birdeye.qavis.charts.series
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
 			super.updateDisplayList(w,h);
-			
-			for (var i:Number = numChildren - 1; i>=0; i--)
-				removeChildAt(i);
 
 			var dataFields:Array = [];
 
@@ -110,8 +112,14 @@ package org.un.cava.birdeye.qavis.charts.series
 					}
 				}
 				
- 				createGG(dataProvider.cursor.current, dataFields, xPos, yPos, 3);
- 				
+				if (dataProvider.showDataTips)
+				{
+	 				createGG(dataProvider.cursor.current, dataFields, xPos, yPos, 3);
+					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
+					hitMouseArea.fill = new SolidFill(0x000000, 0);
+					gg.geometryCollection.addItem(hitMouseArea);
+				}
+
  				var bounds:RegularRectangle = new RegularRectangle(xPos - _plotRadius, yPos - _plotRadius, _plotRadius * 2, _plotRadius * 2);
 
   				plot = new itemRenderer(bounds);
