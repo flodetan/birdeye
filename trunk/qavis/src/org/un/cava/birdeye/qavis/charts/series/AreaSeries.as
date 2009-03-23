@@ -27,9 +27,11 @@
  
 package org.un.cava.birdeye.qavis.charts.series
 {
-	import com.degrafa.geometry.Polygon;
 	import com.degrafa.geometry.Circle;
+	import com.degrafa.geometry.Line;
+	import com.degrafa.geometry.Polygon;
 	import com.degrafa.paint.SolidFill;
+	import com.degrafa.paint.SolidStroke;
 	
 	import flash.events.MouseEvent;
 	
@@ -37,6 +39,7 @@ package org.un.cava.birdeye.qavis.charts.series
 	
 	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
+	import org.un.cava.birdeye.qavis.charts.cartesianCharts.AreaChart;
 	import org.un.cava.birdeye.qavis.charts.data.ExtendedGeometryGroup;
 
 	public class AreaSeries extends StackableSeries
@@ -51,6 +54,8 @@ package org.un.cava.birdeye.qavis.charts.series
 		public function set baseAtZero(val:Boolean):void
 		{
 			_baseAtZero = val;
+			invalidateProperties();
+			invalidateDisplayList()
 		}
 		
 		private var _form:String;
@@ -64,23 +69,40 @@ package org.un.cava.birdeye.qavis.charts.series
 			super();
 		}
 
+		override protected function commitProperties():void
+		{
+			super.commitProperties();
+			if (stackType == STACKED100)
+			{
+				if (verticalAxis)
+				{
+					if (verticalAxis is NumericAxis)
+						NumericAxis(verticalAxis).max = maxVerticalValue;
+				} else {
+					if (dataProvider && dataProvider.verticalAxis && dataProvider.verticalAxis is NumericAxis)
+						NumericAxis(dataProvider.verticalAxis).max = maxVerticalValue;
+				}
+			}
+		}
+
 		private var poly:Polygon;
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
 			super.updateDisplayList(w,h);
-			
-			for (var i:Number = numChildren - 1; i>=0; i--)
-				removeChildAt(i);
 
 			var xPrev:Number, yPrev:Number;
 			var xPos:Number, yPos:Number;
 			var j:Number = 0;
+			var t:Number = 0;
 			
 			var y0:Number = getYMinPosition();
+			var y0Prev:Number;
 			var dataFields:Array = [];
 
-			dataProvider.cursor.seek(CursorBookmark.FIRST);
+			var ttShapes:Array;
+			var ttXoffset:Number = NaN, ttYoffset:Number = NaN;
 
+			dataProvider.cursor.seek(CursorBookmark.FIRST);
 			gg = new ExtendedGeometryGroup();
 			gg.target = this;
 			graphicsCollection.addItem(gg);
@@ -109,18 +131,27 @@ package org.un.cava.birdeye.qavis.charts.series
 				
 				if (verticalAxis)
 				{
-					if (verticalAxis is NumericAxis)
+					if (_stackType == STACKED100)
 					{
+						y0 = verticalAxis.getPosition(baseValues[j]);
+						yPos = verticalAxis.getPosition(
+							baseValues[j++] + Math.max(0,dataProvider.cursor.current[yField]));
+					} else {
 						yPos = verticalAxis.getPosition(dataProvider.cursor.current[yField]);
-						dataFields[1] = yField;
-					} else if (verticalAxis is CategoryAxis) {
-						dataFields[1] = displayName;
-						yPos = verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
 					}
+					dataFields[1] = yField;
 				} else {
 					if (dataProvider.verticalAxis is NumericAxis)
 					{
-						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
+						if (_stackType == STACKED100)
+						{
+							y0 = dataProvider.verticalAxis.getPosition(baseValues[j]);
+							yPos = dataProvider.verticalAxis.getPosition(
+								baseValues[j++] + Math.max(0,dataProvider.cursor.current[yField]));
+						} else {
+							yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
+						}
+
 						dataFields[1] = yField;
 					} else if (dataProvider.verticalAxis is CategoryAxis) {
 						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
@@ -128,15 +159,27 @@ package org.un.cava.birdeye.qavis.charts.series
 					}
 				}
 				
-				createGG(dataProvider.cursor.current, dataFields, xPos, yPos, 3);
-				var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
-				hitMouseArea.fill = new SolidFill(0x000000, 0);
-				ttGG.geometryCollection.addItem(hitMouseArea);
+				if (_stackType == STACKED100)
+				{
+						ttShapes = [];
+						ttXoffset = -30;
+						ttYoffset = 20;
+						var line:Line = new Line(xPos, yPos, xPos + + ttXoffset/3, yPos + ttYoffset);
+						line.stroke = new SolidStroke(0x000000,1,2);
+		 				ttShapes[0] = line;
+				}
+				
+				if (dataProvider.showDataTips)
+				{
+					createGG(dataProvider.cursor.current, dataFields, xPos, yPos, 3, ttShapes,ttXoffset,ttYoffset);
+					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
+					hitMouseArea.fill = new SolidFill(0x000000, 0);
+					ttGG.geometryCollection.addItem(hitMouseArea);				}
 
-				if (j++ > 0)
+				if (t++ > 0) 
 				{
 					poly = new Polygon()
-					poly.data =  String(xPrev) + "," + String(y0) + " " +
+					poly.data =  String(xPrev) + "," + String(y0Prev) + " " +
 								String(xPrev) + "," + String(yPrev) + " " +
 								String(xPos) + "," + String(yPos) + " " +
 								String(xPos) + "," + String(y0);
@@ -144,6 +187,7 @@ package org.un.cava.birdeye.qavis.charts.series
 					poly.stroke = stroke;
 					gg.geometryCollection.addItemAt(poly,0);
 				}
+				y0Prev = y0;
 				xPrev = xPos; yPrev = yPos;
 				dataProvider.cursor.moveNext();
 			}
@@ -195,7 +239,7 @@ package org.un.cava.birdeye.qavis.charts.series
  			if (dataProvider.showDataTips)
 			{
 				initGGToolTip();
-				ttGG.createToolTip(dataProvider.cursor.current, dataFields, xPos, yPos, radius);
+				ttGG.createToolTip(dataProvider.cursor.current, dataFields, xPos, yPos, radius, shapes, ttXoffset, ttYoffset);
  			} else {
 				graphicsCollection.addItem(ttGG);
 			}
@@ -204,6 +248,8 @@ package org.un.cava.birdeye.qavis.charts.series
 		override protected function initGGToolTip():void
 		{
 			ttGG.target = this;
+			ttGG.toolTipFill = fill;
+			ttGG.toolTipStroke = stroke;
  			if (dataProvider.dataTipFunction != null)
 				ttGG.dataTipFunction = dataProvider.dataTipFunction;
 			if (dataProvider.dataTipPrefix!= null)
@@ -211,6 +257,13 @@ package org.un.cava.birdeye.qavis.charts.series
  			graphicsCollection.addItem(ttGG);
 			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
+		}
+
+		override protected function calculateMaxVertical():void
+		{
+			super.calculateMaxVertical();
+			if (dataProvider && dataProvider is AreaChart && stackType == STACKED100)
+				_maxVerticalValue = Math.max(_maxVerticalValue, AreaChart(dataProvider).maxStacked100);
 		}
 	}
 }

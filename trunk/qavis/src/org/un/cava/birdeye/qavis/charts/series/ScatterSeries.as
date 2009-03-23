@@ -29,6 +29,7 @@ package org.un.cava.birdeye.qavis.charts.series
 {
 	import com.degrafa.IGeometry;
 	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.paint.SolidFill;
 	
 	import mx.collections.CursorBookmark;
 	
@@ -78,9 +79,6 @@ package org.un.cava.birdeye.qavis.charts.series
 		{
 			super.updateDisplayList(w,h);
 			
-			for (var i:Number = numChildren - 1; i>=0; i--)
-				removeChildAt(i);
-
 			var dataFields:Array = [];
 
 			var xPos:Number, yPos:Number;
@@ -137,11 +135,16 @@ package org.un.cava.birdeye.qavis.charts.series
 
 				dataValue = dataProvider.cursor.current[radiusField];
 
-				createGG(dataProvider.cursor.current, dataFields, xPos, yPos, 3);
-				
 				radius = getRadius(dataValue);
-
  				var bounds:RegularRectangle = new RegularRectangle(xPos - radius, yPos - radius, radius * 2, radius * 2);
+
+				if (dataProvider.showDataTips)
+				{
+					createGG(dataProvider.cursor.current, dataFields, xPos, yPos, 3);
+					var hitMouseArea:RegularRectangle = bounds; 
+					hitMouseArea.fill = new SolidFill(0x000000, 0);
+					gg.geometryCollection.addItem(hitMouseArea);
+				}
 
 				scatter = new itemRenderer(bounds);
 				scatter.fill = fill;

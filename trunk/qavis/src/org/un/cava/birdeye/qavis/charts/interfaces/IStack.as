@@ -29,10 +29,16 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 {
 	public interface IStack
 	{
+		/** Set the position of the current component (series) inside a stack.*/
 		function set stackPosition(val:Number):void;
+		
+		/** Set the total of stacked series inside a stack.*/
 		function set total(val:Number):void;
 
-		function get stackType():String;
+		/** Set the series type (columns, area, bars).*/
 		function get seriesType():String;
+
+		/** Get the stack type (overlaid, stacked, stacked100).*/
+		function get stackType():String;
 	}
 }

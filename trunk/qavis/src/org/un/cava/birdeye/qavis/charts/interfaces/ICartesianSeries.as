@@ -31,14 +31,34 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 	
 	public interface ICartesianSeries
 	{
+		/** Remove all elements from the series (Surface component).*/
+		function removeAllElements():void;
+		
+		/** Set the data provider of a cartesian series, which must be a CartesianChart.*/
 		function set dataProvider(val:CartesianChart):void;
+
+		/** Set the yField to filter vertical data values.*/
 		function set yField(val:String):void;
+
+		/** Set the xField to filter horizontal data values.*/
 		function set xField(val:String):void;
+
+		/** Set the name to display (legends..).*/
 		function set displayName(val:String):void;
+
+		/** Set the fill color.*/
 		function set fillColor(val:Number):void;
+
+		/** Set the stroke color.*/
 		function set fillStroke(val:Number):void;
+
+		/** Set the itemRenderer used for the layout of data values.*/
 		function set itemRenderer(val:Class):void;
+
+		/** Set the horizontal axis.*/
 		function set horizontalAxis(val:IAxisLayout):void;
+
+		/** Set the vertical axis.*/
 		function set verticalAxis(val:IAxisLayout):void;
 
 		function get dataProvider():CartesianChart;

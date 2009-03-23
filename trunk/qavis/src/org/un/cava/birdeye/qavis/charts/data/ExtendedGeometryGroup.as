@@ -74,17 +74,25 @@ package org.un.cava.birdeye.qavis.charts.data
 	        _dataTipFunction = value;
 	    }
 	    
+		/**
+		* Set the tooltip geometry fill. 
+		*/
 		public var toolTipFill:IGraphicsFill;
 
+		/**
+		* Set the tooltip geometry stroke. 
+		*/
 		public var toolTipStroke:IGraphicsStroke;
 		
 		private var _xTTOffset:Number = -20;
+		/** Set the x offset from the tooltip to the hit area position.*/
 		public function get xTTOffset():Number
 		{
 			return _xTTOffset;
 		}
 
 		private var _yTTOffset:Number = 20;
+		/** Set the y offset from the tooltip to the hit area position.*/
 		public function get yTTOffset():Number
 		{
 			return _yTTOffset;
@@ -94,7 +102,8 @@ package org.un.cava.birdeye.qavis.charts.data
 		{
 			super();
 		}
-
+		
+		// allows to define custom shapes for the tooltip geometry
 		private var shapes:Array = [];		
 		/**
 		* Create and position the tooltips for this ExtendedGeometryGroup. 
@@ -106,6 +115,7 @@ package org.un.cava.birdeye.qavis.charts.data
 			this.posX = posX;
 			this.posY = posY;
 			
+			// if no custom shapes than create the default one
 			if (! ttShapes)
 			{
 				shapes[0] = new Circle(posX,posY,4);
@@ -116,6 +126,7 @@ package org.un.cava.birdeye.qavis.charts.data
 			} else 
 				shapes = ttShapes;
 			
+			// if tip function is set, use it, otherwise use a default one
 			if (_dataTipFunction != null)
 				toolTip = ((_dataTipPrefix) ? _dataTipPrefix : "") 
 							+ _dataTipFunction(item);
@@ -137,10 +148,24 @@ package org.un.cava.birdeye.qavis.charts.data
 					}
 			}
 			
+			// hide tip geometry, they will show up only when mouse is over the hit area
 			for (var i:Number = 0; i<shapes.length; i++)
 				geometryCollection.addItem(IGeometry(shapes[i]));
 			hideToolTipGeometry();
 		} 
+		
+		/** @Private
+		 * Remove all elements from the component*/
+		public function removeAllElements():void
+		{
+			for (var i:Number = 0; i<numChildren; i++)
+				removeChildAt(0);
+			
+			for (i = 0; i<geometryCollection.items.length; i++)
+				geometryCollection.removeItemAt(0);
+				
+			geometry = geometryCollection.items = [];
+		}
 		
 		/**
 		* Show the tooltip associated to this ExtendedGeometryGroup. 

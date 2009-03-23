@@ -25,46 +25,19 @@
  * THE SOFTWARE.
  */
  
-package org.un.cava.birdeye.qavis.charts.transformation
+package org.un.cava.birdeye.qavis.charts.renderers
 {
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
-	
-	import org.un.cava.birdeye.qavis.charts.axis.XYAxis;
-	
-	public class DataToXY
-	{
-		private var xAxis:XYAxis, yAxis:XYAxis;
+	import com.degrafa.geometry.Polygon;
+	import com.degrafa.geometry.RegularRectangle;
 
-		private var _bounds:Rectangle;
-		public function set bounds(val:Rectangle):void
+	public class TriangleRenderer extends Polygon
+	{
+		public function TriangleRenderer (bounds:RegularRectangle)
 		{
-			_bounds = val;
-			validateElements();
-		}
-		
-		public function DataToXY(xAxis:XYAxis, yAxis:XYAxis, bounds:Rectangle = null)
-		{
-			if (bounds) 
-				this.bounds = bounds;
-			this.xAxis = xAxis;
-			this.yAxis = yAxis;
-		}
-		
-		public function getXY(horizontalValue:Object, verticalValue:Object):Point
-		{
-			var p:Point = new Point();
-			return p;
-		}
-		
-		public function getData(xPos:Number, yPos:Number):Object
-		{
-			return new Object();
-		}
-		
-		private function validateElements():void
-		{
-			
+			data =  String(bounds.x) + "," + String(bounds.y + bounds.height/2) + " " +
+					String(bounds.x + bounds.width/2) + "," + String(bounds.y) + " " +
+					String(bounds.x + bounds.width) + "," + String(bounds.y + bounds.height/2) + " " +
+					String(bounds.x) + "," + String(bounds.y + bounds.height/2) + " ";
 		}
 	}
 }

@@ -32,6 +32,8 @@
 	[Exclude(name="scaleType", kind="property")]
 	public class LinearAxis extends NumericAxis 
 	{
+		/** @Private
+		 * the scaleType cannot be changed, since it's inherently "linear".*/
 		override public function set scaleType(val:String):void
 		{}
 		 
@@ -55,6 +57,8 @@
 		
 		// other methods
 
+		/** @Private
+		 * Override the XYZAxis getPostion method based on the linear scaling.*/
 		override public function getPosition(dataValue:*):*
 		{
 			var pos:Number = NaN;

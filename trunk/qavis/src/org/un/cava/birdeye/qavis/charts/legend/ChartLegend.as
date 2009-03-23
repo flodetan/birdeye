@@ -25,13 +25,27 @@
  * THE SOFTWARE.
  */
  
-package org.un.cava.birdeye.qavis.charts
+package org.un.cava.birdeye.qavis.charts.legend
 {
+	import com.degrafa.GeometryGroup;
+	import com.degrafa.Surface;
+	import com.degrafa.geometry.Geometry;
+	import com.degrafa.geometry.RasterText;
+	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.paint.SolidFill;
+	import com.degrafa.paint.SolidStroke;
+	
+	import flash.events.Event;
+	import flash.geom.Rectangle;
+	
+	import mx.containers.Box;
 	import mx.core.Application;
-	import mx.core.UIComponent;
+	
+	import org.un.cava.birdeye.qavis.charts.cartesianCharts.CartesianChart;
+	import org.un.cava.birdeye.qavis.charts.interfaces.ICartesianSeries;
 	
 	[DefaultProperty("dataProvider")]
-	public class ChartLegend extends UIComponent
+	public class ChartLegend extends Box
 	{
 		private var _legendTitle:String;
 		public function set legendTitle(val:String):void
@@ -55,6 +69,8 @@ package org.un.cava.birdeye.qavis.charts
 		public function set dataProvider(val:CartesianChart):void
 		{
 			_dataProvider = val;
+			invalidateSize();
+			invalidateDisplayList();
 		}
 		
 		public function ChartLegend()
@@ -68,7 +84,49 @@ package org.un.cava.birdeye.qavis.charts
 			if (e.target == _dataProvider)
 			{
 				for (var i:Number = 0; i<numChildren-1; i++)
-					removeChildAt(i);
+				{
+					if (getChildAt(0) is Surface)
+						for (var j:int = 0; j<Surface(getChildAt(0)).numChildren; j++)
+							Surface(getChildAt(0)).removeChildAt(0);
+					removeChildAt(0);
+				}
+
+				for (i = 0; i<_dataProvider.series.length; i++)
+				{
+					var surf:Surface = new Surface();
+					var gg:GeometryGroup = new GeometryGroup();
+					gg.target = surf;
+					surf.graphicsCollection.addItem(gg)
+					
+					var label:RasterText = new RasterText();
+					if (ICartesianSeries(_dataProvider.series[i]).displayName)
+						label.text = ICartesianSeries(_dataProvider.series[i]).displayName;
+
+					var bounds:RegularRectangle = new RegularRectangle(0,0, 10,10);
+					if (ICartesianSeries(_dataProvider.series[i]).itemRenderer)
+					{
+						var renderer:Class = ICartesianSeries(_dataProvider.series[i]).itemRenderer;
+						var geom:Geometry = new renderer(bounds);
+						Geometry(geom).fill = ICartesianSeries(_dataProvider.series[i]).fillColor ? 
+								new SolidFill(ICartesianSeries(_dataProvider.series[i]).fillColor)
+								 : new SolidFill(0xdddddd);
+						geom.stroke = ICartesianSeries(_dataProvider.series[i]).fillStroke ?
+								new SolidStroke(ICartesianSeries(_dataProvider.series[i]).fillStroke)
+								 : new SolidStroke(0x999999);
+						gg.geometryCollection.addItem(geom);
+					}
+
+					if (label.text)
+						gg.geometryCollection.addItem(label);
+						
+					if (geom || label.text)
+					{
+						surf.graphicsCollection.addItem(gg);
+						surf.width = Rectangle(surf.getBounds(surf)).width;
+						surf.height = Rectangle(surf.getBounds(surf)).height;
+						addChild(surf);
+					}
+				}
 				
 				// create/add legend items					
 			}

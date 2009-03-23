@@ -29,8 +29,8 @@ package org.un.cava.birdeye.qavis.charts.series
 {
 	import com.degrafa.IGeometry;
 	import com.degrafa.geometry.Line;
-	import com.degrafa.geometry.Polygon;
 	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	import mx.collections.CursorBookmark;
@@ -52,6 +52,8 @@ package org.un.cava.birdeye.qavis.charts.series
 		public function set baseAtZero(val:Boolean):void
 		{
 			_baseAtZero = val;
+			invalidateProperties();
+			invalidateDisplayList()
 		}
 		public function get baseAtZero():Boolean
 		{
@@ -90,8 +92,7 @@ package org.un.cava.birdeye.qavis.charts.series
 		{
 			super.updateDisplayList(w,h);
 			
-			for (var i:Number = numChildren - 1; i>=0; i--)
-				removeChildAt(i);
+			var dataFields:Array = [];
 
 			var xPos:Number, yPos:Number;
 			var j:Number = 0;
@@ -104,7 +105,6 @@ package org.un.cava.birdeye.qavis.charts.series
 		
 			var x0:Number = getXMinPosition();
 			var size:Number = NaN, barWidth:Number = 0; 
-			var dataFields:Array = [];
 
 			dataProvider.cursor.seek(CursorBookmark.FIRST);
 
@@ -189,9 +189,15 @@ package org.un.cava.birdeye.qavis.charts.series
 						break;
 				}
 				
-				createGG(dataProvider.cursor.current, dataFields, xPos, yPos+barWidth/2, 3,ttShapes,ttXoffset,ttYoffset);
+				var bounds:RegularRectangle = new RegularRectangle(x0, yPos, xPos -x0, barWidth);
 
- 				var bounds:RegularRectangle = new RegularRectangle(x0, yPos, xPos -x0, barWidth);
+				if (dataProvider.showDataTips)
+				{
+					createGG(dataProvider.cursor.current, dataFields, xPos, yPos+barWidth/2, 3,ttShapes,ttXoffset,ttYoffset);
+					var hitMouseArea:RegularRectangle = bounds; 
+					hitMouseArea.fill = new SolidFill(0x000000, 0);
+					gg.geometryCollection.addItem(hitMouseArea);
+				}
 
 				poly = new itemRenderer(bounds);
 				poly.fill = fill;

@@ -25,11 +25,24 @@
  * THE SOFTWARE.
  */
  
- package org.un.cava.birdeye.qavis.charts.interfaces
+package org.un.cava.birdeye.qavis.charts.renderers
 {
-	public interface ISizableItem
+	import com.degrafa.geometry.Polygon;
+	import com.degrafa.geometry.RegularRectangle;
+
+	public class CrossRenderer extends Polygon
 	{
-		/** Return the max radius value of a sizable item.*/
-		function get maxRadius():Number;
+		public function CrossRenderer(bounds:RegularRectangle)
+		{
+			data =  String(bounds.x) + "," + String(bounds.y + bounds.height/2) + " " +
+					String(bounds.x + bounds.width/2) + "," + String(bounds.y + bounds.height/2) + " " +
+					String(bounds.x + bounds.width/2) + "," + String(bounds.y) + " " +
+					String(bounds.x + bounds.width/2) + "," + String(bounds.y + bounds.height/2) + " " +
+					String(bounds.x + bounds.width) + "," + String(bounds.y + bounds.height/2) + " " +
+					String(bounds.x + bounds.width/2) + "," + String(bounds.y + bounds.height/2) + " " +
+					String(bounds.x + bounds.width/2) + "," + String(bounds.y + bounds.height) + " " +
+					String(bounds.x + bounds.width/2) + "," + String(bounds.y + bounds.height/2) + " " +
+					String(bounds.x) + "," + String(bounds.y + bounds.height/2) + " ";
+		}
 	}
 }

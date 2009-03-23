@@ -34,8 +34,12 @@
 	
 	import flash.text.TextFieldAutoSize;
 	
+	import mx.formatters.SwitchSymbolFormatter;
+	
 	public class CategoryAxis extends XYAxis 
 	{
+		/** @Private
+		 * The scale type cannot be changed, since it's already "category".*/
 		[Exclude(name="scaleType", kind="property")]
 		override public function set scaleType(val:String):void
 		{}
@@ -45,10 +49,8 @@
 		public function set elements(val:Array):void
 		{
 			_elements = val;
-trace(_elements)			
-			maxLabelSize();
-			invalidateProperties();
 			invalidateSize();
+			invalidateProperties();
 			invalidateDisplayList();
 		}
 		public function get elements():Array
@@ -57,9 +59,14 @@ trace(_elements)
 		}
 		
 		private var _categoryField:String;
+		/** Category field that will filter the category values from the 
+		 * dataprovider.*/
 		public function set categoryField(val:String):void
 		{
 			_categoryField = val;
+			invalidateSize();
+			invalidateProperties();
+			invalidateDisplayList();
 		}
 		public function get categoryField():String
 		{
@@ -79,75 +86,133 @@ trace(_elements)
 			super.commitProperties();
 			
 			size = getSize();
-
+			
+			// the interval is given by the axis lenght divided the number of 
+			// category elements loaded in the CategoryAxis
 			if (elements)
-				interval = size/elements.length;
-
+				_interval = size/elements.length;
+			
+			// if placement is set, elements are loaded and interval calculated
+			// than the axis is ready to be drawn
 			if (placement && elements && interval)
 				readyForLayout = true;
 			else 
 				readyForLayout = false;
 		}
 		
+		override protected function measure():void
+		{
+			super.measure();
+/* 			if (elements && placement)
+				maxLabelSize();
+ */		}
+		
 		// other methods
 		
+		/** @Private
+		 * Calculate the maximum label size, necessary to define the needed 
+		 * width (for vertical axes) or height (for horizontal axes) of the CategoryAxis.*/
 		override protected function maxLabelSize():void
 		{
 			maxLblSize = String(_elements[0]).length;
-			for (var i:Number; i<_elements.length; i++)
+			for (var i:Number = 0; i<_elements.length; i++)
 			{
-				var tmpSize:Number = String(_elements[i]).length;
-				if (tmpSize > maxLblSize)
-					maxLblSize = tmpSize;
+ 				label = new RasterText();
+				label.text = String(elements[i]);
+				
+				switch (placement)
+				{
+					case TOP:
+					case BOTTOM:
+						if (maxLblSize < label.height)
+							maxLblSize = label.height;
+						break;
+					case LEFT:
+					case RIGHT:
+						if (label.width > maxLblSize)
+							maxLblSize = label.width;
+				}
 			}
+				switch (placement)
+				{
+					case TOP:
+					case BOTTOM:
+						measuredHeight = maxLblSize + thickWidth + 10;
+						break;
+					case LEFT:
+					case RIGHT:
+						measuredWidth = maxLblSize + thickWidth + 10;
+				}
+			
+			// calculate the maximum label size according to the 
+			// styles defined for the axis 
 			super.calculateMaxLabelStyled();
 		}
 		
+		/** @Private
+		 * Implement the drawAxes method to draw the axis according to its orientation.*/
 		override protected function drawAxes(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
 		{
 			var snap:Number, elementIndex:Number=0;
-			size = getSize();
-			if (xMin == xMax)
-				for (snap = yMax - interval/2; snap>yMin; snap -= interval)
-				{
-					// create thick line
-		 			thick = new Line(xMin + thickWidth * sign, snap, xMax, snap);
-					thick.stroke = new SolidStroke(stroke,1,1);
-					gg.geometryCollection.addItem(thick);
-		
-					// create label 
- 					label = new RasterText();
-					label.text = String(elements[elementIndex++]);
-trace(label.text);
- 					label.visible = true;
-					label.autoSize = TextFieldAutoSize.LEFT;
-					label.autoSizeField = true;
-					label.y = snap-label.textField.height/2;
-					label.x = thickWidth; 
-					label.fill = new SolidFill(0x000000);
-					gg.geometryCollection.addItem(label);
-				}
-			else
-				for (snap = xMin + interval/2; snap<xMax; snap += interval)
-				{
-					// create thick line
-		 			thick = new Line(snap, yMin + thickWidth * sign, snap, yMax);
-					thick.stroke = new SolidStroke(stroke,1,1);
-					gg.geometryCollection.addItem(thick);
+			maxLblSize = 0;
 
-					// create label 
- 					label = new RasterText();
-					label.text = String(elements[elementIndex++]);
- 					label.visible = true;
-					label.autoSize = TextFieldAutoSize.LEFT;
-					label.autoSizeField = true;
-					label.y = thickWidth;
-					label.x = snap-label.textField.width/2; 
-					label.fill = new SolidFill(0x000000);
-					gg.geometryCollection.addItem(label);
+			if (interval > 0)
+			{
+				// vertical orientation
+				if (xMin == xMax)
+				{
+					for (snap = yMax - interval/2; snap>yMin; snap -= interval)
+					{
+						// create thick line
+			 			thick = new Line(xMin + thickWidth * sign, snap, xMax, snap);
+						thick.stroke = new SolidStroke(stroke,1,1);
+						gg.geometryCollection.addItem(thick);
+			
+						// create label 
+	 					label = new RasterText();
+						label.text = String(elements[elementIndex++]);
+	 					label.visible = true;
+						label.autoSize = TextFieldAutoSize.LEFT;
+						label.autoSizeField = true;
+						label.y = snap-label.textField.height/2;
+						label.x = thickWidth; 
+						label.fill = new SolidFill(0x000000);
+						gg.geometryCollection.addItem(label);
+						if (maxLblSize < label.width)
+							maxLblSize = label.width;
+					}
+					explicitWidth = maxLblSize + thickWidth + 5;
+				} 
+				else 
+				// horizontal orientation
+				{
+					for (snap = xMin + interval/2; snap<xMax; snap += interval)
+					{
+						// create thick line
+			 			thick = new Line(snap, yMin + thickWidth * sign, snap, yMax);
+						thick.stroke = new SolidStroke(stroke,1,1);
+						gg.geometryCollection.addItem(thick);
+	
+						// create label 
+	 					label = new RasterText();
+						label.text = String(elements[elementIndex++]);
+	 					label.visible = true;
+						label.autoSize = TextFieldAutoSize.LEFT;
+						label.autoSizeField = true;
+						label.y = thickWidth;
+						label.x = snap-label.textField.width/2; 
+						label.fill = new SolidFill(0x000000);
+						gg.geometryCollection.addItem(label);
+						if (maxLblSize < label.height)
+							maxLblSize = label.height;
+					}
+					explicitHeight = maxLblSize + thickWidth + 5;
 				}
+			}
 		}
 		
+		/** @Private
+		 * Override the XYZAxis getPostion method based on the linear scaling.*/
 		override public function getPosition(dataValue:*):*
 		{
 			var pos:Number = NaN;

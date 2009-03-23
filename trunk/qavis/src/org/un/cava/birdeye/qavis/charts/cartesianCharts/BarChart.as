@@ -35,6 +35,9 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	public class BarChart extends CartesianChart
 	{
 		private var _type:String = StackableSeries.OVERLAID;
+		/** Set the type of stack, overlaid if the series are shown on top of the other, 
+		 * or stacked100 if they appear staked one after the other (horizontally), or 
+		 * stacked if the bars are stacked one after the other (vertically).*/
 		[Inspectable(enumeration="overlaid,stacked,stacked100")]
 		public function set type(val:String):void
 		{
@@ -44,6 +47,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		}
 		
 		private var _maxStacked100:Number = NaN;
+		/** @Private
+		 * The maximum value among all series stacked according to stacked100 type.
+		 * This is needed to "enlarge" the related axis to include all the stacked values
+		 * so that all stacked100 series fit into the chart.*/
 		public function get maxStacked100():Number
 		{
 			return _maxStacked100;
@@ -58,6 +65,13 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		{
 			super.commitProperties();
 			
+			// when series are loaded, set their stack type to the 
+			// current "type" value. if the type is STACKED100
+			// calculate the maxStacked100 value, and load the baseValues
+			// arrays for each BarSeries. The baseValues arrays will be used to know
+			// the x0 starting point for each series values, which corresponds to 
+			// the understair series highest x value;
+
 			if (_series)
 			{
 				var _barSeries:Array = [];
@@ -106,11 +120,12 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 						cursor.moveNext();
 					}
 					
+					// set the baseValues array for each BarSeries
+					// The baseValues array will be used to know
+					// the x0 starting point for each series values, 
+					// which corresponds to the understair series highest x value;
 					for (s = 0; s<_barSeries.length; s++)
-					{
 						BarSeries(_barSeries[s]).baseValues = allSeriesBaseValues[s].baseValues;
-trace (allSeriesBaseValues[s].baseValues, "max", _maxStacked100);
-					}
 				}
 			}
 		}

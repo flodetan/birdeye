@@ -165,6 +165,7 @@ package org.un.cava.birdeye.qavis.charts.series
 		public function set itemRenderer(val:Class):void
 		{
 			_itemRenderer = val;
+			invalidateProperties();
 			invalidateDisplayList();
 		}
 		public function get itemRenderer():Class
@@ -210,14 +211,93 @@ package org.un.cava.birdeye.qavis.charts.series
 		{
 			super();
 		}
+		
+		override protected function createChildren():void
+		{
+			super.createChildren();
+			gg = new ExtendedGeometryGroup();
+			gg.target = this;
+			graphicsCollection.addItem(gg);
+		}
 
+		private var resizeListenerSet:Boolean = false;
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
+			
+/* 			if (parent && parent.parent is CartesianChart && !resizeListenerSet)
+			{
+				CartesianChart(parent.parent).addEventListener("ProviderReady",validateBounds);
+				resizeListenerSet = true;
+			}
+ */				
 		}
 		
+/* 		private function validateBounds(e:Event):void
+		{
+			validateNow();
+		}
+ */		
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+		{
+			super.updateDisplayList(unscaledWidth, unscaledHeight);
+
+			removeAllElements();
+		}
+
 		// other methods
 		
+/* 		public function removeAllElements():void
+		{
+			var nElements:int = graphicsCollection.items.length;
+			if (nElements > 1)
+			{
+				for (var i:int = 0; i<nElements; i++)
+				{
+					if (getChildAt(0) is ExtendedGeometryGroup)
+						ExtendedGeometryGroup(getChildAt(0)).removeAllElements();
+				}
+			} else if (gg) {
+				gg.geometryCollection.items = [];
+				gg.geometry = [];
+			}
+			for (i = numChildren - 1; i>=0; i--)
+				removeChildAt(i);
+			graphicsCollection.items = [];
+		}
+ */		
+		public function removeAllElements():void
+		{
+/* 			if (ttGG)
+			{
+				ttGG.removeAllElements();
+				graphicsCollection.removeItem(ttGG);
+			}
+ */			
+			if (dataProvider.showDataTips) 
+			{
+				var nElements:int = graphicsCollection.items.length;
+				if (nElements > 1)
+				{
+					for (var i:int = 0; i<nElements; i++)
+					{
+						if (getChildAt(0) is ExtendedGeometryGroup)
+							ExtendedGeometryGroup(getChildAt(0)).removeAllElements();
+					}
+				} else if (gg) {
+					gg.geometryCollection.items = [];
+					gg.geometry = [];
+				}
+				for (i = numChildren - 1; i>=0; i--)
+					removeChildAt(i);
+				graphicsCollection.items = [];
+			} else if (gg)
+			{
+				gg.geometryCollection.items = [];
+				gg.geometry = [];
+			}
+		}
+
 		protected function calculateMaxVertical():void
 		{
 			_maxVerticalValue = NaN;
@@ -229,7 +309,6 @@ package org.un.cava.birdeye.qavis.charts.series
 				
 				_dataProvider.cursor.moveNext();
 			}
-			_maxVerticalValue = _maxVerticalValue;
 		}
 
 		protected function calculateMaxHorizontal():void
@@ -270,7 +349,7 @@ package org.un.cava.birdeye.qavis.charts.series
 			}
 		}
 		
-		protected function createGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, radius:Number,
+ 		protected function createGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, radius:Number,
 									shapes:Array = null /* of IGeometry */, ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
 		{
 			gg = new ExtendedGeometryGroup();
@@ -283,14 +362,14 @@ package org.un.cava.birdeye.qavis.charts.series
 				graphicsCollection.addItem(gg);
 			}
 		}
-
+ 
 		private var tip:ToolTip; 
 		/**
 		* @private 
 		 * Init the GeomGroupToolTip and its listeners
 		 * 
 		*/
-		protected function initGGToolTip():void
+ 		protected function initGGToolTip():void
 		{
 			gg.target = this;
 			gg.toolTipFill = fill;
@@ -303,7 +382,36 @@ package org.un.cava.birdeye.qavis.charts.series
 			gg.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 			gg.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 		}
-
+/*  
+		protected var ttGG:ExtendedGeometryGroup;
+		protected function createGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, radius:Number,
+									shapes:Array = null , ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
+		{
+			ttGG = new ExtendedGeometryGroup();
+			ttGG.target = this;
+			ttGG.toolTipFill = fill;
+			ttGG.toolTipStroke = stroke;
+ 			if (dataProvider.showDataTips)
+			{
+				initGGToolTip();
+				ttGG.createToolTip(dataProvider.cursor.current, dataFields, xPos, yPos, radius,shapes, ttXoffset, ttYoffset);
+ 			} else {
+				graphicsCollection.addItem(ttGG);
+			}
+		}
+		
+		protected function initGGToolTip():void
+		{
+			ttGG.target = this;
+ 			if (dataProvider.dataTipFunction != null)
+				ttGG.dataTipFunction = dataProvider.dataTipFunction;
+			if (dataProvider.dataTipPrefix!= null)
+				ttGG.dataTipPrefix = dataProvider.dataTipPrefix;
+ 			graphicsCollection.addItem(ttGG);
+			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
+			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
+		}
+ */
 		/**
 		* @private 
 		 * Show and position tooltip
