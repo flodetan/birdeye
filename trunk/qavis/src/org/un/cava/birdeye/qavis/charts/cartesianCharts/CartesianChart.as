@@ -274,22 +274,24 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			if (needDefaultYAxis)
 			{
 				if (!_verticalAxis)
-				{
-					verticalAxis = new LinearAxis();
-					verticalAxis.placement = XYAxis.LEFT;
-				}
-				leftContainer.addChild(DisplayObject(_verticalAxis));
+					createVerticalAxis();
+					
+				if (_verticalAxis.placement == XYAxis.RIGHT)
+					rightContainer.addChild(DisplayObject(_verticalAxis));
+				else
+					leftContainer.addChild(DisplayObject(_verticalAxis));
 			}
 			// if some series have no own horizontal axis, than create a default one for the chart
 			// that will be used by all series without a horizontal axis
 			if (needDefaultXAxis)
 			{
 				if (!_horizontalAxis)
-				{
-					horizontalAxis = new LinearAxis();
-					horizontalAxis.placement = XYAxis.BOTTOM;
-				}
-				bottomContainer.addChild(DisplayObject(_horizontalAxis));
+					createHorizontalAxis();
+
+				if (_horizontalAxis.placement == XYAxis.TOP)
+					topContainer.addChild(DisplayObject(_horizontalAxis));
+				else
+					bottomContainer.addChild(DisplayObject(_horizontalAxis));
 			}
 			
 			// init all axes, default and series owned 
@@ -567,5 +569,22 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 					ICartesianSeries(series).minVerticalValue;
 			}
 		}
+		
+		/** @Private
+		 * The creation of default axes can be overrided so that it's possible to 
+		 * select a specific default setup. For example, for the bar chart the default 
+		 * vertical axis is a category axis and the horizontal one is linear.*/
+		protected function createVerticalAxis():void
+		{
+				verticalAxis = new LinearAxis();
+				verticalAxis.placement = XYAxis.LEFT;
+		}
+		/** @Private */
+		protected function createHorizontalAxis():void
+		{
+			horizontalAxis = new LinearAxis();
+			horizontalAxis.placement = XYAxis.BOTTOM;
+		}
+
 	}
 }
