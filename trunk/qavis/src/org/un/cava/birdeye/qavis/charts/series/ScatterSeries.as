@@ -93,44 +93,20 @@ package org.un.cava.birdeye.qavis.charts.series
 			{
 				if (horizontalAxis)
 				{
-					if (horizontalAxis is NumericAxis)
-					{
-						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
-						dataFields[0] = xField;
-					} else if (horizontalAxis is CategoryAxis) {
-						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[displayName]);
-						dataFields[0] = displayName;
-					}
+					xPos = horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
+					dataFields[0] = xField;
 				} else {
-					if (dataProvider.horizontalAxis is NumericAxis)
-					{
-						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
-						dataFields[0] = xField;
-					} else if (dataProvider.horizontalAxis is CategoryAxis) {
-						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[displayName]);
-						dataFields[0] = displayName;
-					}
+					xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
+					dataFields[0] = xField;
 				}
 				
 				if (verticalAxis)
 				{
-					if (verticalAxis is NumericAxis)
-					{
-						yPos = verticalAxis.getPosition(dataProvider.cursor.current[yField]);
-						dataFields[1] = yField;
-					} else if (verticalAxis is CategoryAxis) {
-						dataFields[1] = displayName;
-						yPos = verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
-					}
+					yPos = verticalAxis.getPosition(dataProvider.cursor.current[yField]);
+					dataFields[1] = yField;
 				} else {
-					if (dataProvider.verticalAxis is NumericAxis)
-					{
-						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
-						dataFields[1] = yField;
-					} else if (dataProvider.verticalAxis is CategoryAxis) {
-						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
-						dataFields[1] = displayName;
-					}
+					yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
+					dataFields[1] = yField;
 				}
 
 				dataValue = dataProvider.cursor.current[radiusField];

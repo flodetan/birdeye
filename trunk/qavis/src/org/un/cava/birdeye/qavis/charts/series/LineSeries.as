@@ -35,9 +35,8 @@ package org.un.cava.birdeye.qavis.charts.series
 	
 	import mx.collections.CursorBookmark;
 	
-	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxis;
-	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
 	import org.un.cava.birdeye.qavis.charts.data.ExtendedGeometryGroup;
+	import org.un.cava.birdeye.qavis.charts.renderers.LineRenderer;
 
 	public class LineSeries extends CartesianSeries
 	{
@@ -63,6 +62,9 @@ package org.un.cava.birdeye.qavis.charts.series
 			var j:Number = 0;
 			var dataFields:Array = [];
 			
+			if (! itemRenderer)
+				itemRenderer = LineRenderer;
+			
 			gg = new ExtendedGeometryGroup();
 			gg.target = this;
 			graphicsCollection.addItem(gg);
@@ -70,44 +72,20 @@ package org.un.cava.birdeye.qavis.charts.series
 			{
 				if (horizontalAxis)
 				{
-					if (horizontalAxis is NumericAxis)
-					{
-						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
-						dataFields[0] = xField;
-					} else if (horizontalAxis is CategoryAxis) {
-						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[displayName]);
-						dataFields[0] = displayName;
-					}
+					xPos = horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
+					dataFields[0] = xField;
 				} else {
-					if (dataProvider.horizontalAxis is NumericAxis)
-					{
-						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
-						dataFields[0] = xField;
-					} else if (dataProvider.horizontalAxis is CategoryAxis) {
-						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[displayName]);
-						dataFields[0] = displayName;
-					}
+					xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
+					dataFields[0] = xField;
 				}
 				
 				if (verticalAxis)
 				{
-					if (verticalAxis is NumericAxis)
-					{
-						yPos = verticalAxis.getPosition(dataProvider.cursor.current[yField]);
-						dataFields[1] = yField;
-					} else if (verticalAxis is CategoryAxis) {
-						dataFields[1] = displayName;
-						yPos = verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
-					}
+					yPos = verticalAxis.getPosition(dataProvider.cursor.current[yField]);
+					dataFields[1] = yField;
 				} else {
-					if (dataProvider.verticalAxis is NumericAxis)
-					{
-						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
-						dataFields[1] = yField;
-					} else if (dataProvider.verticalAxis is CategoryAxis) {
-						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
-						dataFields[1] = displayName;
-					}
+					yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
+					dataFields[1] = yField;
 				}
 				
 				if (dataProvider.showDataTips)
@@ -149,7 +127,7 @@ package org.un.cava.birdeye.qavis.charts.series
 		override protected function initGGToolTip():void
 		{
 			ttGG.target = this;
-			ttGG.toolTipFill = new SolidFill(fillStroke);
+			ttGG.toolTipFill = new SolidFill(strokeColor);
 			ttGG.toolTipStroke = stroke;
  			if (dataProvider.dataTipFunction != null)
 				ttGG.dataTipFunction = dataProvider.dataTipFunction;

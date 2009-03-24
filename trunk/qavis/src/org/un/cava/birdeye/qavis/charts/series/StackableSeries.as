@@ -27,6 +27,9 @@
  
 package org.un.cava.birdeye.qavis.charts.series
 {
+	import flash.events.Event;
+	
+	import org.un.cava.birdeye.qavis.charts.axis.XYAxis;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IStack;
 	
 	[Exclude(name="stackType", kind="property")] 
@@ -36,6 +39,13 @@ package org.un.cava.birdeye.qavis.charts.series
 
 	public class StackableSeries extends CartesianSeries implements IStack
 	{
+		private const OWN_VERTICAL_INTERVAL_CHANGES:String = "is_own_vertical_listening_interval_changes"; 
+		private const DATAPROVIDER_VERTICAL_INTERVAL_CHANGES:String = "is_own_horizontal_listening_interval_changes"; 
+		private const OWN_HORIZONTAL_INTERVAL_CHANGES:String = "is_own_horizontal_listening_interval_changes"; 
+		private const DATAPROVIDER_HORIZONTAL_INTERVAL_CHANGES:String = "is_own_dataprovider_horizontal_listening_interval_changes"; 
+		
+		private var isListening:Array = [];
+		
 		public static const OVERLAID:String = "overlaid";
 		public static const STACKED:String = "stacked";
 		public static const STACKED100:String = "stacked100";
@@ -90,7 +100,58 @@ package org.un.cava.birdeye.qavis.charts.series
 		public function StackableSeries()
 		{
 			super();
+			
+			isListening [OWN_VERTICAL_INTERVAL_CHANGES] = false;
+			isListening [OWN_HORIZONTAL_INTERVAL_CHANGES] = false;
+			isListening [DATAPROVIDER_VERTICAL_INTERVAL_CHANGES] = false;
+			isListening [DATAPROVIDER_HORIZONTAL_INTERVAL_CHANGES] = false;
 		}
 		
+		override protected function commitProperties():void
+		{
+			super.commitProperties();
+			if (verticalAxis)
+			{
+				if (! isListening[OWN_VERTICAL_INTERVAL_CHANGES])
+				{
+					XYAxis(verticalAxis).addEventListener("IntervalChanged", update);
+					isListening[OWN_VERTICAL_INTERVAL_CHANGES] = true;
+				}
+				if (isListening[DATAPROVIDER_VERTICAL_INTERVAL_CHANGES])
+				{
+					XYAxis(dataProvider.verticalAxis).removeEventListener("IntervalChanged", update);
+				}
+			} else if (dataProvider && dataProvider.verticalAxis) {
+				if (! isListening[DATAPROVIDER_VERTICAL_INTERVAL_CHANGES])
+				{
+					XYAxis(dataProvider.verticalAxis).addEventListener("IntervalChanged", update);
+					isListening[DATAPROVIDER_VERTICAL_INTERVAL_CHANGES] = true;
+				}
+			}
+
+			if (horizontalAxis)
+			{
+				if (! isListening[OWN_HORIZONTAL_INTERVAL_CHANGES])
+				{
+					XYAxis(horizontalAxis).addEventListener("IntervalChanged", update);
+					isListening[OWN_HORIZONTAL_INTERVAL_CHANGES] = true;
+				}
+				if (isListening[DATAPROVIDER_HORIZONTAL_INTERVAL_CHANGES])
+				{
+					XYAxis(dataProvider.horizontalAxis).removeEventListener("IntervalChanged", update);
+				}
+			} else if (dataProvider && dataProvider.horizontalAxis) {
+				if (! isListening[DATAPROVIDER_HORIZONTAL_INTERVAL_CHANGES])
+				{
+					XYAxis(dataProvider.horizontalAxis).addEventListener("IntervalChanged", update);
+					isListening[DATAPROVIDER_HORIZONTAL_INTERVAL_CHANGES] = true;
+				}
+			}
+		}
+		
+		private function update(e:Event):void
+		{
+			invalidateDisplayList();
+		}
 	}
 }

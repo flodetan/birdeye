@@ -33,8 +33,6 @@ package org.un.cava.birdeye.qavis.charts.axis
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.text.TextFieldAutoSize;
-	
-	import mx.core.UIComponent;
 
 	public class NumericAxis extends XYAxis
 	{
@@ -108,7 +106,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		{
 			super.commitProperties();
 
-			// if no interval is given, than divide the axis in 5 parts
+			// if no interval is specified by the user, than divide the axis in 5 parts
 			if (!isNaN(max) && !isNaN(min) && !isGivenInterval)
 			{
 				if (baseAtZero)
@@ -119,6 +117,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 						_interval = -min / 5;
 				} else {
 					interval = Math.abs((max - min) / 5)
+					isGivenInterval = false;
 				}
 			}
 			
@@ -132,10 +131,11 @@ package org.un.cava.birdeye.qavis.charts.axis
 		
 		override protected function measure():void
 		{
-			super.measure();/* 
-			if (!isNaN(min) && !isNaN(max) && placement)
-				maxLabelSize(); */
-		}
+			super.measure();
+ 
+ 			if (!isNaN(min) && !isNaN(max) && placement)
+				maxLabelSize(); 
+ 		}
 		
 		// other methods
 		
@@ -144,19 +144,20 @@ package org.un.cava.birdeye.qavis.charts.axis
 		 * width (for vertical axes) or height (for horizontal axes) of the CategoryAxis.*/
 		override protected function maxLabelSize():void
 		{
- 			label = new RasterText();
-			label.text = String(String(min).length < String(max).length ?
-								max : min);
+			var text:String = String(String(min).length < String(max).length ?
+									max : min);
 
 			switch (placement)
 			{
 				case TOP:
 				case BOTTOM:
-					measuredHeight = label.height + thickWidth + 10;
+					maxLblSize = 10 /* pixels for 1 char height */ + thickWidth + 10;
+					height = maxLblSize;
 					break;
 				case LEFT:
 				case RIGHT:
-					measuredWidth = label.width + thickWidth + 10;
+					maxLblSize = text.length * 5 /* pixels for 1 char width */ + thickWidth + 10;
+					width = maxLblSize;
 			}
 			
 			// calculate the maximum label size according to the 
@@ -173,8 +174,8 @@ package org.un.cava.birdeye.qavis.charts.axis
 		{
 			var snap:Number;
 			
-			// meanwhile the method updates the maximum label size
-			maxLblSize = 0;
+			if (isNaN(maxLblSize) && !isNaN(min) && !isNaN(max) && placement)
+				maxLabelSize();
 
 			size = getSize();
 			if (xMin == xMax)
@@ -188,6 +189,8 @@ package org.un.cava.birdeye.qavis.charts.axis
 		
 					// create label 
  					label = new RasterText();
+ 					label.fontFamily = "verdana";
+ 					label.fontSize = 9;
 					label.text = String(Math.round(snap));
  					label.visible = true;
 					label.autoSize = TextFieldAutoSize.LEFT;
@@ -196,10 +199,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 					label.x = thickWidth * sign; 
 					label.fill = new SolidFill(0x000000);
 					gg.geometryCollection.addItem(label);
-					if (maxLblSize < label.width)
-						maxLblSize = label.width;
 				}
-				explicitWidth = maxLblSize + thickWidth + 10;
 			} else {
 				for (snap = min; snap<max; snap += interval)
 				{
@@ -211,6 +211,8 @@ package org.un.cava.birdeye.qavis.charts.axis
 					// create label 
  					label = new RasterText();
 					label.text = String(Math.round(snap));
+ 					label.fontFamily = "verdana";
+ 					label.fontSize = 9;
  					label.visible = true;
 					label.autoSize = TextFieldAutoSize.LEFT;
 					label.autoSizeField = true;
@@ -218,10 +220,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 					label.x = getPosition(snap)-label.textField.width/2; 
 					label.fill = new SolidFill(0x000000);
 					gg.geometryCollection.addItem(label);
-					if (maxLblSize < label.height)
-						maxLblSize = label.height;
 				}
-				explicitHeight = maxLblSize + thickWidth + 10;
 			}
 		}
 		

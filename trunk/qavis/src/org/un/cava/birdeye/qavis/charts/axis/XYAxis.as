@@ -34,9 +34,10 @@ package org.un.cava.birdeye.qavis.charts.axis
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
+	import flash.events.Event;
+	
 	import mx.core.Container;
 	import mx.core.UIComponent;
-	import mx.events.IndexChangedEvent;
 	
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisLayout;
 	
@@ -51,6 +52,8 @@ package org.un.cava.birdeye.qavis.charts.axis
 
 		/** Scale type: Linear */
 		public static const LINEAR:String = "linear";
+		/** Scale type: Numeric (general numeric scale that could be used for custom numeric axes)*/
+		public static const NUMERIC:String = "linear";
 		/** Scale type: Category */
 		public static const CATEGORY:String = "category";
 		/** Scale type: Logaritmic */
@@ -84,6 +87,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		{
 			_interval = val;
 			isGivenInterval = true;
+			dispatchEvent(new Event("IntervalChanged"));
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -134,7 +138,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 			return _showTicks;
 		}
 		
-		protected var maxLblSize:Number = 0;
+		public var maxLblSize:Number = NaN;
 		/** @Private 
 		 * Specifies the maximum label size needed to calculate the axis size
 		 **/

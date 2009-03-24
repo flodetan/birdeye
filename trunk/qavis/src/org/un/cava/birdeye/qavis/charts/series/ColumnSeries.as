@@ -33,10 +33,12 @@ package org.un.cava.birdeye.qavis.charts.series
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
+	import flash.events.Event;
+	
 	import mx.collections.CursorBookmark;
 	
-	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
+	import org.un.cava.birdeye.qavis.charts.axis.XYAxis;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.ColumnChart;
 	import org.un.cava.birdeye.qavis.charts.renderers.RectangleRenderer;
 
@@ -53,7 +55,7 @@ package org.un.cava.birdeye.qavis.charts.series
 		{
 			_baseAtZero = val;
 			invalidateProperties();
-			invalidateDisplayList()
+			invalidateDisplayList();
 		}
 		public function get baseAtZero():Boolean
 		{
@@ -112,25 +114,17 @@ package org.un.cava.birdeye.qavis.charts.series
 			{
 				if (horizontalAxis)
 				{
-					if (horizontalAxis is NumericAxis)
-					{
-						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
-						dataFields[0] = xField;
-					} else if (horizontalAxis is CategoryAxis) {
-						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[displayName]);
-						dataFields[0] = displayName;
-					}
+					xPos = horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
+
+					dataFields[0] = xField;
+
 					if (isNaN(size))
 						size = horizontalAxis.interval*(4/5);
 				} else {
-					if (dataProvider.horizontalAxis is NumericAxis)
-					{
-						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
-						dataFields[0] = xField;
-					} else if (dataProvider.horizontalAxis is CategoryAxis) {
-						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[displayName]);
-						dataFields[0] = displayName;
-					}
+					xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
+
+					dataFields[0] = xField;
+
 					if (isNaN(size))
 						size = dataProvider.horizontalAxis.interval*(4/5);
 				}
@@ -148,21 +142,15 @@ package org.un.cava.birdeye.qavis.charts.series
 					dataFields[1] = yField;
 				}
 				else {
-					if (dataProvider.verticalAxis is NumericAxis)
+					if (_stackType == STACKED100)
 					{
-						if (_stackType == STACKED100)
-						{
-							y0 = dataProvider.verticalAxis.getPosition(baseValues[j]);
-							yPos = dataProvider.verticalAxis.getPosition(
-								baseValues[j++] + Math.max(0,dataProvider.cursor.current[yField]));
-						} else {
-							yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
-						}
-						dataFields[1] = yField;
-					} else if (dataProvider.verticalAxis is CategoryAxis) {
-						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[displayName]);
-						dataFields[1] = displayName;
-					}
+						y0 = dataProvider.verticalAxis.getPosition(baseValues[j]);
+						yPos = dataProvider.verticalAxis.getPosition(
+							baseValues[j++] + Math.max(0,dataProvider.cursor.current[yField]));
+					} else 
+						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
+
+					dataFields[1] = yField;
 				}
 				
 				switch (_stackType)
@@ -178,7 +166,7 @@ package org.un.cava.birdeye.qavis.charts.series
 						ttXoffset = -30;
 						ttYoffset = 20;
 						var line:Line = new Line(xPos+ colWidth/2, yPos, xPos + colWidth/2 + ttXoffset/3, yPos + ttYoffset);
-						line.stroke = new SolidStroke(0x000000,1,2);
+						line.stroke = new SolidStroke(0xaaaaaa,1,2);
 		 				ttShapes[0] = line;
 						break;
 					case STACKED:

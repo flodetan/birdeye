@@ -50,7 +50,7 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 		function set fillColor(val:Number):void;
 
 		/** Set the stroke color.*/
-		function set fillStroke(val:Number):void;
+		function set strokeColor(val:Number):void;
 
 		/** Set the itemRenderer used for the layout of data values.*/
 		function set itemRenderer(val:Class):void;
@@ -66,7 +66,7 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 		function get xField():String;
 		function get displayName():String;
 		function get fillColor():Number;
-		function get fillStroke():Number;
+		function get strokeColor():Number;
 		function get itemRenderer():Class;
 		function get horizontalAxis():IAxisLayout;
 		function get verticalAxis():IAxisLayout;

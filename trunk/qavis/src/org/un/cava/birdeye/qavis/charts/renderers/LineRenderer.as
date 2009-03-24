@@ -25,58 +25,16 @@
  * THE SOFTWARE.
  */
  
- package org.un.cava.birdeye.qavis.charts.axis
+package org.un.cava.birdeye.qavis.charts.renderers
 {
+	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RegularRectangle;
-	
-	[Exclude(name="scaleType", kind="property")]
-	public class LinearAxis extends NumericAxis 
-	{
-		/** @Private
-		 * the scaleType cannot be changed, since it's inherently "linear".*/
-		override public function set scaleType(val:String):void
-		{}
-		 
-		// UIComponent flow
-		
-		public function LinearAxis()
-		{
-			super();
-			_scaleType = XYAxis.LINEAR;
-		}
-		
-		override protected function commitProperties():void
-		{
-			super.commitProperties();
-		}
-		
-		override protected function updateDisplayList(w:Number, h:Number):void
-		{
-			super.updateDisplayList(w,h);
-		}
-		
-		// other methods
 
-		/** @Private
-		 * Override the XYZAxis getPostion method based on the linear scaling.*/
-		override public function getPosition(dataValue:*):*
+	public class LineRenderer extends Line
+	{
+		public function LineRenderer(bounds:RegularRectangle)
 		{
-			var pos:Number = NaN;
-			size = getSize();
-			if (! (isNaN(max) || isNaN(min)))
-				switch (placement)
-				{
-					case BOTTOM:
-					case TOP:
-						pos = size * (Number(dataValue) - min)/(max - min);
-						break;
-					case LEFT:
-					case RIGHT:
-						pos = size * (1 - (Number(dataValue) - min)/(max - min));
-						break;
-				}
-				
-			return pos;
+			super(bounds.x, bounds.y, bounds.width, bounds.height);
 		}
 	}
 }
