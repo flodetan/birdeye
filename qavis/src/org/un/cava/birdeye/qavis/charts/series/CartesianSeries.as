@@ -114,16 +114,16 @@ package org.un.cava.birdeye.qavis.charts.series
 			return _fillColor;
 		}
 
-		private var _fillStroke:Number = NaN;
-		public function set fillStroke(val:Number):void
+		private var _strokeColor:Number = NaN;
+		public function set strokeColor(val:Number):void
 		{
-			_fillStroke = val;
-			stroke = new SolidStroke(_fillStroke);
+			_strokeColor = val;
+			stroke = new SolidStroke(_strokeColor);
 			invalidateDisplayList();
 		}
-		public function get fillStroke():Number
+		public function get strokeColor():Number
 		{
-			return _fillStroke;
+			return _strokeColor;
 		}
 
 		public function get index():Number

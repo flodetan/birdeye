@@ -30,19 +30,30 @@
 	import com.degrafa.geometry.RegularRectangle;
 	
 	[Exclude(name="scaleType", kind="property")]
-	public class LinearAxis extends NumericAxis 
+	public class CustomNumericAxis extends NumericAxis 
 	{
 		/** @Private
-		 * the scaleType cannot be changed, since it's inherently "linear".*/
+		 * the scaleType cannot be changed, since it's a customized "numeric" scale.*/
 		override public function set scaleType(val:String):void
 		{}
+		
+		private var _function:Function;
+		/** Set the function that will be applied to calculate the getPosition of a 
+		 * data value in the axis. The function will basically define a custom 
+		 * scale for the axis.*/
+		public function set function(val:Function):void
+		{
+			_function = val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
 		 
 		// UIComponent flow
 		
-		public function LinearAxis()
+		public function CustomNumericAxis()
 		{
 			super();
-			_scaleType = XYAxis.LINEAR;
+			_scaleType = XYAxis.NUMERIC;
 		}
 		
 		override protected function commitProperties():void
@@ -61,22 +72,7 @@
 		 * Override the XYZAxis getPostion method based on the linear scaling.*/
 		override public function getPosition(dataValue:*):*
 		{
-			var pos:Number = NaN;
-			size = getSize();
-			if (! (isNaN(max) || isNaN(min)))
-				switch (placement)
-				{
-					case BOTTOM:
-					case TOP:
-						pos = size * (Number(dataValue) - min)/(max - min);
-						break;
-					case LEFT:
-					case RIGHT:
-						pos = size * (1 - (Number(dataValue) - min)/(max - min));
-						break;
-				}
-				
-			return pos;
+			return _function(dataValue);
 		}
 	}
 }

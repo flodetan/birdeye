@@ -35,9 +35,9 @@
 	import mx.collections.ICollectionView;
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
-	import mx.core.Application;
+	import mx.core.Container;
+	import mx.core.EdgeMetrics;
 	import mx.core.UIComponent;
-	import mx.events.FlexEvent;
 	import mx.events.ResizeEvent;
 
 	[DefaultProperty("dataProvider")]
@@ -258,13 +258,14 @@
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
+			
 			// if % size is set, than listen to parent's resize events
-			if (!resizeListening && (!isNaN(_percentHeight) || !isNaN(_percentWidth)))
+/*  			if (!resizeListening && (!isNaN(_percentHeight) || !isNaN(_percentWidth)))
 			{
 				resizeListening = true;
 				parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
 			}
-		}
+ */ 		}
 
 		/**
 		* @private 
@@ -277,6 +278,29 @@
 		override protected function measure():void
 		{
 			super.measure();
+			if (!isNaN(explicitWidth))
+				tempWidth = explicitWidth;
+			if (!isNaN(explicitHeight))
+				tempHeight = explicitHeight;
+
+			if (!isNaN(percentWidth) || !isNaN(percentHeight))
+			{
+				var edgeMet:EdgeMetrics = Container(parent).viewMetricsAndPadding;
+				if (!isNaN(percentWidth) && parent.width != 0)
+					tempWidth = Math.max(0, percentWidth/100 * (parent.width - edgeMet.left - edgeMet.right));
+	
+				if (!isNaN(percentHeight) && parent.height!= 0)
+					tempHeight = Math.max(0, percentHeight/100 * (parent.height - edgeMet.top - edgeMet.bottom));
+			}
+
+			if (isNaN(tempWidth))
+				tempWidth = 200;
+
+			if (isNaN(tempHeight))
+				tempHeight = 200;
+				
+			explicitWidth = minWidth = tempWidth;
+			explicitHeight = minHeight = tempHeight;
 		}
 
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
@@ -291,7 +315,9 @@
 		*/
 		private function onParentResize(e:Event):void
 		{
-			invalidateProperties();
-		}
+// 			invalidateProperties();
+
+			invalidateDisplayList();
+ 		}
 	}
 }

@@ -186,23 +186,26 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			addChild(topContainer = new VBox());
 			addChild(bottomContainer = new VBox());
 			addChild(seriesContainer);
-			seriesContainer.name = "series";
 			
 			leftContainer.verticalScrollPolicy = "off";
 			leftContainer.clipContent = false;
 			leftContainer.horizontalScrollPolicy = "off";
+			leftContainer.setStyle("horizontalAlign", "right");
 
 			rightContainer.verticalScrollPolicy = "off";
 			rightContainer.clipContent = false;
 			rightContainer.horizontalScrollPolicy = "off";
+			rightContainer.setStyle("horizontalAlign", "left");
 
 			topContainer.verticalScrollPolicy = "off";
 			topContainer.clipContent = false;
 			topContainer.horizontalScrollPolicy = "off";
+			topContainer.setStyle("verticalAlign", "bottom");
 
 			bottomContainer.verticalScrollPolicy = "off";
 			bottomContainer.clipContent = false;
 			bottomContainer.horizontalScrollPolicy = "off";
+			bottomContainer.setStyle("verticalAlign", "top");
 		}
 
 		/** @Private 
@@ -306,7 +309,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
 			super.updateDisplayList(w,h);
-
+			
 			validateBounds();
 			leftContainer.y = rightContainer.y = topContainer.height;
 			bottomContainer.x = topContainer.x = leftContainer.width;
@@ -324,28 +327,26 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				= chartBounds.width;
 			leftContainer.height = rightContainer.height 
 				= chartBounds.height;
-			
+				
 			if (seriesContainer.x != chartBounds.x ||
 				seriesContainer.y != chartBounds.y ||
 				seriesContainer.width != chartBounds.width ||
 				seriesContainer.height != chartBounds.height)
 			{
-				leftContainer.validateNow();
-				rightContainer.validateNow();
-				topContainer.validateNow();
-				bottomContainer.validateNow();
-				
 				seriesContainer.x = chartBounds.x;
 				seriesContainer.y = chartBounds.y;
 				seriesContainer.width = chartBounds.width;
 				seriesContainer.height = chartBounds.height;
-				for (var i:Number = 0; i<_series.length; i++)
+  				for (var i:int = 0; i<_series.length; i++)
 				{
 					CartesianSeries(_series[i]).width = chartBounds.width;
 					CartesianSeries(_series[i]).height = chartBounds.height;
 				}
-//				dispatchEvent(new Event("ProviderReady"));
-			}
+	
+				
+				// listeners like legends will listen to this event
+				dispatchEvent(new Event("ProviderReady"));
+ 			}
 		}
 		
 		// other methods
@@ -357,7 +358,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			var tmpSize:Number = 0;
 			for (var i:Number = 0; i<leftContainer.numChildren; i++)
 			{
-				tmpSize += XYAxis(leftContainer.getChildAt(i)).width + 1;
+				tmpSize += XYAxis(leftContainer.getChildAt(i)).maxLblSize;
 				XYAxis(leftContainer.getChildAt(i)).height = leftContainer.height;
 			}
 			
@@ -366,7 +367,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 
 			for (i = 0; i<rightContainer.numChildren; i++)
 			{
-				tmpSize += XYAxis(rightContainer.getChildAt(i)).width + 5;
+				tmpSize += XYAxis(rightContainer.getChildAt(i)).maxLblSize;
 				XYAxis(rightContainer.getChildAt(i)).height = rightContainer.height;				
 			}
 			
@@ -375,7 +376,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 
 			for (i = 0; i<bottomContainer.numChildren; i++)
 			{
-				tmpSize += XYAxis(bottomContainer.getChildAt(i)).height + 5;
+				tmpSize += XYAxis(bottomContainer.getChildAt(i)).maxLblSize;
 				XYAxis(bottomContainer.getChildAt(i)).width = bottomContainer.width;
 			}
 			
@@ -384,7 +385,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 
 			for (i = 0; i<topContainer.numChildren; i++)
 			{
-				tmpSize += XYAxis(topContainer.getChildAt(i)).height + 3;
+				tmpSize += XYAxis(topContainer.getChildAt(i)).maxLblSize;
 				XYAxis(topContainer.getChildAt(i)).width = topContainer.width;
 			}
 			

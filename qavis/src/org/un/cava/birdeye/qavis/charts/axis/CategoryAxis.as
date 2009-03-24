@@ -27,14 +27,13 @@
  
  package org.un.cava.birdeye.qavis.charts.axis
 {
+	import com.degrafa.geometry.Geometry;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RasterText;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.text.TextFieldAutoSize;
-	
-	import mx.formatters.SwitchSymbolFormatter;
 	
 	public class CategoryAxis extends XYAxis 
 	{
@@ -89,8 +88,12 @@
 			
 			// the interval is given by the axis lenght divided the number of 
 			// category elements loaded in the CategoryAxis
-			if (elements)
-				_interval = size/elements.length;
+			if (elements && elements.length >0)
+			{
+				var recIsGivenInterval:Boolean = isGivenInterval;
+				interval = size/elements.length;
+				isGivenInterval = recIsGivenInterval;
+			}
 			
 			// if placement is set, elements are loaded and interval calculated
 			// than the axis is ready to be drawn
@@ -103,10 +106,10 @@
 		override protected function measure():void
 		{
 			super.measure();
-/* 			if (elements && placement)
+ 			if (elements && elements.length>0 && placement)
 				maxLabelSize();
- */		}
-		
+ 		}
+ 		
 		// other methods
 		
 		/** @Private
@@ -114,35 +117,23 @@
 		 * width (for vertical axes) or height (for horizontal axes) of the CategoryAxis.*/
 		override protected function maxLabelSize():void
 		{
-			maxLblSize = String(_elements[0]).length;
-			for (var i:Number = 0; i<_elements.length; i++)
+			switch (placement)
 			{
- 				label = new RasterText();
-				label.text = String(elements[i]);
-				
-				switch (placement)
-				{
-					case TOP:
-					case BOTTOM:
-						if (maxLblSize < label.height)
-							maxLblSize = label.height;
-						break;
-					case LEFT:
-					case RIGHT:
-						if (label.width > maxLblSize)
-							maxLblSize = label.width;
-				}
+				case TOP:
+				case BOTTOM:
+					maxLblSize = 10 /* pixels for 1 char height */  + thickWidth + 10;
+					height = maxLblSize;
+					break;
+				case LEFT:
+				case RIGHT:
+					maxLblSize = String(_elements[0]).length;
+					for (var i:Number = 0; i<_elements.length; i++)
+						maxLblSize = Math.max(maxLblSize, String(_elements[i]).length); 
+
+					maxLblSize = maxLblSize * 5 /* pixels for 1 char width */ + thickWidth + 10;
+					width = maxLblSize;
+					break;
 			}
-				switch (placement)
-				{
-					case TOP:
-					case BOTTOM:
-						measuredHeight = maxLblSize + thickWidth + 10;
-						break;
-					case LEFT:
-					case RIGHT:
-						measuredWidth = maxLblSize + thickWidth + 10;
-				}
 			
 			// calculate the maximum label size according to the 
 			// styles defined for the axis 
@@ -153,10 +144,17 @@
 		 * Implement the drawAxes method to draw the axis according to its orientation.*/
 		override protected function drawAxes(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
 		{
-			var snap:Number, elementIndex:Number=0;
-			maxLblSize = 0;
+			if (elements && elements.length>0)
+				_interval = getSize()/elements.length;
+			else 
+				_interval = NaN;
 
-			if (interval > 0)
+			var snap:Number, elementIndex:Number=0;
+
+			if (isNaN(maxLblSize) && elements && elements.length>0 && placement)
+				maxLabelSize();
+
+			if (_interval > 0)
 			{
 				// vertical orientation
 				if (xMin == xMax)
@@ -171,6 +169,8 @@
 						// create label 
 	 					label = new RasterText();
 						label.text = String(elements[elementIndex++]);
+	 					label.fontFamily = "verdana";
+	 					label.fontSize = 9;
 	 					label.visible = true;
 						label.autoSize = TextFieldAutoSize.LEFT;
 						label.autoSizeField = true;
@@ -178,10 +178,7 @@
 						label.x = thickWidth; 
 						label.fill = new SolidFill(0x000000);
 						gg.geometryCollection.addItem(label);
-						if (maxLblSize < label.width)
-							maxLblSize = label.width;
 					}
-					explicitWidth = maxLblSize + thickWidth + 5;
 				} 
 				else 
 				// horizontal orientation
@@ -196,6 +193,8 @@
 						// create label 
 	 					label = new RasterText();
 						label.text = String(elements[elementIndex++]);
+	 					label.fontFamily = "verdana";
+	 					label.fontSize = 9;
 	 					label.visible = true;
 						label.autoSize = TextFieldAutoSize.LEFT;
 						label.autoSizeField = true;
@@ -203,10 +202,7 @@
 						label.x = snap-label.textField.width/2; 
 						label.fill = new SolidFill(0x000000);
 						gg.geometryCollection.addItem(label);
-						if (maxLblSize < label.height)
-							maxLblSize = label.height;
 					}
-					explicitHeight = maxLblSize + thickWidth + 5;
 				}
 			}
 		}
@@ -217,7 +213,18 @@
 		{
 			var pos:Number = NaN;
 			size = getSize();
-			pos = ((elements.indexOf(dataValue)+.5) / elements.length) * size;
+			
+			switch (placement)
+			{
+				case BOTTOM:
+				case TOP:
+					pos = ((elements.indexOf(dataValue)+.5) / elements.length) * size;
+					break;
+				case LEFT:
+				case RIGHT:
+					pos = size - ((elements.indexOf(dataValue)+.5) / elements.length) * size;
+					break;
+			}
 				
 			return pos;
 		}

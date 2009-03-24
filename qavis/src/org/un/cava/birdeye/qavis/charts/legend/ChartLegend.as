@@ -76,6 +76,10 @@ package org.un.cava.birdeye.qavis.charts.legend
 		public function ChartLegend()
 		{
 			super();
+			
+			verticalScrollPolicy = "off";
+			clipContent = false;
+			horizontalScrollPolicy = "off";
 			Application.application.addEventListener("ProviderReady",createLegend,true);
 		}
 		
@@ -83,12 +87,13 @@ package org.un.cava.birdeye.qavis.charts.legend
 		{
 			if (e.target == _dataProvider)
 			{
-				for (var i:Number = 0; i<numChildren-1; i++)
+				var nC:Number = numChildren;
+				for (var i:Number = 0; i<nC; i++)
 				{
 					if (getChildAt(0) is Surface)
 						for (var j:int = 0; j<Surface(getChildAt(0)).numChildren; j++)
 							Surface(getChildAt(0)).removeChildAt(0);
-					removeChildAt(0);
+ 					removeChildAt(0);
 				}
 
 				for (i = 0; i<_dataProvider.series.length; i++)
@@ -96,9 +101,9 @@ package org.un.cava.birdeye.qavis.charts.legend
 					var surf:Surface = new Surface();
 					var gg:GeometryGroup = new GeometryGroup();
 					gg.target = surf;
-					surf.graphicsCollection.addItem(gg)
 					
 					var label:RasterText = new RasterText();
+					label.x = 15;
 					if (ICartesianSeries(_dataProvider.series[i]).displayName)
 						label.text = ICartesianSeries(_dataProvider.series[i]).displayName;
 
@@ -110,8 +115,8 @@ package org.un.cava.birdeye.qavis.charts.legend
 						Geometry(geom).fill = ICartesianSeries(_dataProvider.series[i]).fillColor ? 
 								new SolidFill(ICartesianSeries(_dataProvider.series[i]).fillColor)
 								 : new SolidFill(0xdddddd);
-						geom.stroke = ICartesianSeries(_dataProvider.series[i]).fillStroke ?
-								new SolidStroke(ICartesianSeries(_dataProvider.series[i]).fillStroke)
+						geom.stroke = ICartesianSeries(_dataProvider.series[i]).strokeColor ?
+								new SolidStroke(ICartesianSeries(_dataProvider.series[i]).strokeColor)
 								 : new SolidStroke(0x999999);
 						gg.geometryCollection.addItem(geom);
 					}
