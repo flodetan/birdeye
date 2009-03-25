@@ -75,6 +75,20 @@ package org.un.cava.birdeye.qavis.charts.axis
 			return _scaleType;
 		}
 		
+		/** Position the pointer to the specified x position. Used by a cartesian series
+		 * if the current axis is horizontal.*/
+		public function set pointerX(val:Number):void
+		{
+			pointer.x = pointer.x1 = val;
+		}
+		
+		/** Position the pointer to the specified y position. Used by a cartesian series
+		 * if the current axis is vertical.*/
+		public function set pointerY(val:Number):void
+		{
+			pointer.y = pointer.y1 = val;
+		}
+
 		/** @Private
 		 * Set to true if the user has specified an interval for the axis.
 		 * Otherwise, the interval will be calculated automatically.
@@ -190,6 +204,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		protected var thick:Line; 
 		protected var thickWidth:Number = 5;
 		protected var label:RasterText;
+		public var pointer:Line;
 		/** @Private */
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
@@ -215,24 +230,30 @@ package org.un.cava.birdeye.qavis.charts.axis
 						xMin = 0; xMax = w;
 						yMin = 0; yMax = 0;
 						sign = 1;
+						pointer = new Line(0,0, 0, 7);
 						break;
 					case TOP:
 						xMin = 0; xMax = w;
 						yMin = h; yMax = h;
 						sign = -1;
+						pointer = new Line(0,h-7, 0, h);
 						break;
 					case LEFT:
 						xMin = w; xMax = w;
 						yMin = 0; yMax = h;
 						sign = -1;
+						pointer = new Line(w-7,h, w, h);
 						break;
 					case RIGHT:
 						xMin = 0; xMax = 0;
 						yMin = 0; yMax = h;
 						sign = 1;
+						pointer = new Line(0,h, +7, h);
 						break;
 				}
 				drawAxes(xMin, xMax, yMin, yMax, sign);
+				pointer.stroke = new SolidStroke(0xff0000,1,3);
+				gg.geometryCollection.addItem(pointer);
 			}
 		}
 		/** @Private
