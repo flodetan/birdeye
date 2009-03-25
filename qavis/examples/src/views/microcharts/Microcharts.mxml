@@ -126,7 +126,7 @@
 		<mx:HSlider id="h" value="0" minimum="100" maximum="1000" snapInterval="1" liveDragging="true"/>
 	</mx:VBox>
 
-	<mx:TabNavigator id="nav" height="100%" width="100%">
+	<mx:TabNavigator id="nav" height="100%" width="100%" creationPolicy="auto">
 		<mx:VBox label="All">
 		    <mx:DataGrid selectable="false" rowCount="2" dataProvider="{acMC}">
 		        <mx:columns>
