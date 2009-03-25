@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:charts="org.un.cava.birdeye.qavis.charts.cartesianCharts.*"
+	xmlns:series="org.un.cava.birdeye.qavis.charts.series.*"
+	xmlns:axis="org.un.cava.birdeye.qavis.charts.axis.*"
+	xmlns:legend="org.un.cava.birdeye.qavis.charts.legend.*"
+	backgroundColor="#ffffff" 
+	creationComplete="createDT()"
+	width="100%" height="100%" horizontalAlign="center">
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+			private var regions:Array;
+			
+			private function createDT():void
+			{
+				regions = ["region1","region2","region3","region4","region5","region6","region7"];
+				var ac:ArrayCollection = new ArrayCollection();
+				for (var i:Number = 0; i<regions.length; i++)
+				{
+					var gold:Number = Math.round(Math.random() * 1000),
+						silver:Number = Math.round(Math.random() * 1000),
+						bronze:Number = Math.round(Math.random() * 1000);
+					ac.addItem({
+						index: i,
+						year: 2000 + i,
+						region: regions[i],
+						gold: gold,
+						silver: silver,
+						bronze: bronze,
+						total: gold + bronze + silver
+					});
+				}
+				dt = ac;
+			}
+			
+			private function dtFunc(currDatatip:Object):String{
+				return  currDatatip.index + ' (' + currDatatip.total + ')' + '\n' 
+						+ "Bronze: " + currDatatip.bronze + '\n'
+						+ "Gold: " + currDatatip.gold + '\n'
+						+ "Silver: " + currDatatip.silver;
+			}
+		]]>
+	</mx:Script>
+	<mx:Button label="Generate" click="createDT()"/>
+	<charts:BubbleChart maxRadius="30" id="bb" width="80%" height="80%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
+ 	<charts:horizontalAxis>
+ 		<axis:CategoryAxis categoryField="index" placement="top"/>
+ 	</charts:horizontalAxis>
+		 <charts:series>
+		 	<series:BubbleSeries xField="index" radiusField="total" strokeColor="0xff" fillAlpha=".6" fillColor="0xdddddd" yField="silver" displayName="silver">
+		 	</series:BubbleSeries>
+		 	<series:BubbleSeries xField="index" radiusField="total" strokeColor="0x000000" fillAlpha=".6" fillColor="0xff00" yField="bronze" displayName="bronze">
+		 	</series:BubbleSeries>
+		 	<series:BubbleSeries xField="index" radiusField="total" strokeColor="0x000000" fillAlpha=".6" fillColor="0xff0000" yField="gold" displayName="gold">
+		 	</series:BubbleSeries>
+		 </charts:series>
+	</charts:BubbleChart>
+	<legend:ChartLegend dataProvider="{bb}" direction="horizontal"/>	
+</mx:VBox>
