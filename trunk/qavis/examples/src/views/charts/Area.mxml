@@ -13,12 +13,15 @@
 			
 			[Bindable]
 			public var dt:ArrayCollection;;
+			[Bindable]
+			public var dt1:ArrayCollection;;
 			private var regions:Array;
 			
 			private function createDT():void
 			{
 				regions = ["region1","region2","region3","region4","region5","region6","region7"];
 				var ac:ArrayCollection = new ArrayCollection();
+				var ac1:ArrayCollection = new ArrayCollection();
 				for (var i:Number = 0; i<regions.length; i++)
 				{
 					var gold:Number = Math.round(Math.random() * 1000),
@@ -33,8 +36,17 @@
 						bronze: bronze,
 						total: gold + bronze + silver
 					});
-				}
+					ac1.addItem({
+						index: i,
+						year: 2000 + i,
+						region: regions[i],
+						gold: gold*(-1),
+						silver: silver*(-1),
+						bronze: bronze*(-1),
+						total: gold + bronze + silver
+					});				}
 				dt = ac;
+				dt1 = ac1;
 			}
 			
 			private function dtFunc(currDatatip:Object):String{
@@ -52,25 +64,25 @@
 	 			<axis:CategoryAxis categoryField="index" placement="bottom"/>
 	 		</charts:horizontalAxis>
     		 <charts:series>
-    		 	<series:AreaSeries yField="gold" xField="index" fillColor="0x444444" displayName="gold">
+    		 	<series:AreaSeries yField="gold" xField="index" baseAtZero="true" fillColor="0x444444" displayName="gold">
     		 	</series:AreaSeries>
-    		 	<series:AreaSeries yField="silver" xField="index" fillColor="0xff" displayName="silver">
+    		 	<series:AreaSeries yField="silver" xField="index" baseAtZero="true" fillColor="0xff" displayName="silver">
     		 	</series:AreaSeries>
-    		 	<series:AreaSeries yField="bronze" xField="index" fillColor="0xff00" displayName="bronze">
+    		 	<series:AreaSeries yField="bronze" xField="index" baseAtZero="true" fillColor="0xff00" displayName="bronze">
     		 	</series:AreaSeries>
     		 </charts:series>
     	</charts:AreaChart>
 	<legend:ChartLegend dataProvider="{ac3}" direction="vertical"/>
 	</mx:HBox>
 	<mx:HBox width="80%" height="100%" verticalAlign="top">
-		<charts:AreaChart id="ac2" width="80%" height="80%" type="overlaid" dataProvider="{dt}" showDataTips="true">
+		<charts:AreaChart id="ac2" width="80%" height="80%" type="overlaid" dataProvider="{dt1}" showDataTips="true">
 	 		<charts:horizontalAxis>
 	 			<axis:CategoryAxis categoryField="index" placement="top"/>
 	 		</charts:horizontalAxis>
 			 <charts:series>
-			 	<series:AreaSeries yField="silver" fillAlpha=".5" xField="index" fillColor="0xff" displayName="silver">
+			 	<series:AreaSeries yField="silver" fillAlpha=".5" xField="index" baseAtZero="true" fillColor="0xff" displayName="silver">
 			 	</series:AreaSeries>
-			 	<series:AreaSeries yField="bronze" fillAlpha=".5" xField="index" fillColor="0xff00" displayName="bronze">
+			 	<series:AreaSeries yField="bronze" fillAlpha=".5" xField="index" fillColor="0xff00" baseAtZero="true" displayName="bronze">
 			 	</series:AreaSeries>
 			 </charts:series>
 		</charts:AreaChart>
