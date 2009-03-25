@@ -34,9 +34,9 @@
 	
 	import flash.text.TextFieldAutoSize;
 	
-	import org.un.cava.birdeye.qavis.charts.interfaces.IENumerable;
+	import org.un.cava.birdeye.qavis.charts.interfaces.IEnumerable;
 	
-	public class CategoryAxis extends XYAxis implements IENumerable
+	public class CategoryAxis extends XYAxis implements IEnumerable
 	{
 		/** @Private
 		 * The scale type cannot be changed, since it's already "category".*/

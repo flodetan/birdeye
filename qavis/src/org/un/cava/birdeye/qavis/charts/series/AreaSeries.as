@@ -44,12 +44,18 @@ package org.un.cava.birdeye.qavis.charts.series
 
 	public class AreaSeries extends StackableSeries
 	{
+		/** It overrides the get seriesType to force the result to be "area".
+		 * seriesType is used to provide the possibility of using stackable series
+		 * within any type of chart instead of only using them inside their own 
+		 * chart type.*/
 		override public function get seriesType():String
 		{
 			return "area";
 		}
 
 		private var _baseAtZero:Boolean = true;
+		/** If true, if min and max values of a series are positive (negative), 
+		 * than the base of the AreaSeries will be 0, instead of the min (max) value.*/
 		[Inspectable(enumeration="true,false")]
 		public function set baseAtZero(val:Boolean):void
 		{
@@ -59,9 +65,11 @@ package org.un.cava.birdeye.qavis.charts.series
 		}
 		
 		private var _form:String;
+		/** The form defines the shape type of the series, ("curve", "line").*/
 		public function set form(val:String):void
 		{
 			_form = val;
+			invalidateDisplayList();
 		}
 		
 		public function AreaSeries()
@@ -71,7 +79,7 @@ package org.un.cava.birdeye.qavis.charts.series
 
 		override protected function commitProperties():void
 		{
-			// doesn't need to override commitProperties, since it doesn't need to listen
+			// doesn't need to call super.commitProperties(), since it doesn't need to listen
 			// to axes interval changes 
 			if (stackType == STACKED100)
 			{
@@ -89,6 +97,7 @@ package org.un.cava.birdeye.qavis.charts.series
 		private var poly:Polygon;
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
+			// first call super to removeAllElements and set the fillAlpha
 			super.updateDisplayList(w,h);
 
 			var xPrev:Number, yPrev:Number;
@@ -100,37 +109,59 @@ package org.un.cava.birdeye.qavis.charts.series
 			var y0Prev:Number;
 			var dataFields:Array = [];
 
+			// shapes array defining the tooltip geometries
 			var ttShapes:Array;
+			// tooltip distance from the hitarea position
 			var ttXoffset:Number = NaN, ttYoffset:Number = NaN;
 			
+			// select the item renderer (must be an IGeomentry)
 			if (! itemRenderer)
 				itemRenderer = TriangleRenderer;
 
+			// move data provider cursor at the beginning
 			dataProvider.cursor.seek(CursorBookmark.FIRST);
+
+			// gg will be the GeometryGroup that will store the global Area 
+			// polygon. All hit area elements will be put in ttGeom
+			// this increases performances in case the user doesn't set
+			// showDataTips to true in the parent chart
 			gg = new ExtendedGeometryGroup();
 			gg.target = this;
 			graphicsCollection.addItem(gg);
 			while (!dataProvider.cursor.afterLast)
 			{
+				// if the series has its own x axis, than get the x coordinate
+				// position of the data value filtered by xField
 				if (horizontalAxis)
 						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
 				else 
+						// otherwise use the parent chart x axis to do that
 						xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
 				
+				// prepare data for a standard tooltip message in case the user
+				// has not set a dataTipFunction
 				dataFields[0] = xField;
 				
+				// if the series has its own y axis, than get the y coordinate
+				// position of the data value filtered by yField
 				if (verticalAxis)
 				{
+					// if the stackType is stacked100, than the y0 coordinate of 
+					// the current baseValue is added to the y coordinate of the current
+					// data value filtered by yField
 					if (_stackType == STACKED100)
 					{
 						y0 = verticalAxis.getPosition(baseValues[j]);
 						yPos = verticalAxis.getPosition(
 							baseValues[j++] + Math.max(0,dataProvider.cursor.current[yField]));
 					} else 
+						// if not stacked, than the y coordinate is given by the own vertical axis
 						yPos = verticalAxis.getPosition(dataProvider.cursor.current[yField]);
 
 					dataFields[1] = yField;
 				} else {
+					// if no own vertical axis than use the parent chart y axis to achive the same
+					// as above
 					if (_stackType == STACKED100)
 					{
 						y0 = dataProvider.verticalAxis.getPosition(baseValues[j]);
@@ -143,6 +174,8 @@ package org.un.cava.birdeye.qavis.charts.series
 					dataFields[1] = yField;
 				}
 				
+				// if stacked 100 than change the default tooltip shape to a line
+				// that won't be covered by the children layering
 				if (_stackType == STACKED100)
 				{
 						ttShapes = [];
@@ -153,13 +186,18 @@ package org.un.cava.birdeye.qavis.charts.series
 		 				ttShapes[0] = line;
 				}
 				
+				// if showdatatips than create a new GeometryGroup and set its 
+				// tooltip along with the hit area and events
 				if (dataProvider.showDataTips)
 				{
 					createGG(dataProvider.cursor.current, dataFields, xPos, yPos, 3, ttShapes,ttXoffset,ttYoffset);
 					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
 					hitMouseArea.fill = new SolidFill(0x000000, 0);
-					ttGG.geometryCollection.addItem(hitMouseArea);				}
+					ttGG.geometryCollection.addItem(hitMouseArea);				
+				}
 
+				// create the polygon only if there is more than 1 data value
+				// there cannot be an area with only the first data value 
 				if (t++ > 0) 
 				{
 					poly = new Polygon()
@@ -171,12 +209,18 @@ package org.un.cava.birdeye.qavis.charts.series
 					poly.stroke = stroke;
 					gg.geometryCollection.addItemAt(poly,0);
 				}
+
+				// store previous data values coordinates, to rely them 
+				// to the next data value coordinates
 				y0Prev = y0;
 				xPrev = xPos; yPrev = yPos;
 				dataProvider.cursor.moveNext();
 			}
 		}
 		
+		/** @Private 
+		 * Get the x minimum position of the AreaSeries (only used in case the AreaSeries is drawn 
+		 * vertically, i.e. the horizontal axis is linear).*/ 
 		private function getXMinPosition():Number
 		{
 			var xPos:Number;
@@ -193,6 +237,8 @@ package org.un.cava.birdeye.qavis.charts.series
 			return xPos;
 		}
 		
+		/** @Private 
+		 * Returns the y minimum position of the AreaSeries.*/ 
 		private function getYMinPosition():Number
 		{
 			var yPos:Number;
@@ -215,6 +261,10 @@ package org.un.cava.birdeye.qavis.charts.series
 		}
 
 		private var ttGG:ExtendedGeometryGroup;
+		/** @Private
+		 * Override the creation of ttGeom in order to avoid the usage of gg also in case
+		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
+		 * AreaSeries, thus improving performances.*/ 
 		override protected function createGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, radius:Number,
 									shapes:Array = null /* of IGeometry */, ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
 		{
@@ -229,6 +279,10 @@ package org.un.cava.birdeye.qavis.charts.series
 			}
 		}
 		
+		/** @Private
+		 * Override the init initGGToolTip in order to avoid the usage of gg also in case
+		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
+		 * AreaSeries, thus improving performances.*/ 
 		override protected function initGGToolTip():void
 		{
 			ttGG.target = this;
@@ -243,6 +297,10 @@ package org.un.cava.birdeye.qavis.charts.series
 			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 		}
 
+		/** @Private
+		 * Override the init initGGToolTip in order to avoid the usage of gg also in case
+		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
+		 * AreaSeries, thus improving performances.*/ 
 		override protected function calculateMaxVertical():void
 		{
 			super.calculateMaxVertical();
