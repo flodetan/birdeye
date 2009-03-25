@@ -201,6 +201,18 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * */
 		protected var _moveNodeInDrag:Boolean = true;
 
+		/**
+		 * To enable/disable movement while edge is being
+		 * dragged 
+		 * */
+		protected var _moveEdgeInDrag:Boolean = true;
+		
+		/**
+		 * To enable/disable movement while background is being
+		 * dragged 
+		 * */
+		protected var _moveGraphInDrag:Boolean = true;
+		
 		/* Rendering */
 
 		/**
@@ -436,7 +448,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			_edgeRenderer = new BaseEdgeRenderer(_drawingSurface.graphics);
 			
 			/* initialize the canvas, we are our own canvas obviously */
-			_canvas = this;
+			//_canvas = this;
+			
+			/* Fix ScrollBar problem*/
+			_canvas = new Canvas();
+			this.addChild(_canvas);
+
 			_canvas.addChild(_drawingSurface);
 			
 			/* disable scrollbars */
@@ -445,7 +462,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* add event handlers for background drag/drop i.e. scrolling */
 			_canvas.addEventListener(MouseEvent.MOUSE_DOWN,backgroundDragBegin);
-			_canvas.addEventListener(MouseEvent.MOUSE_UP,dragEnd);
+			
+			/* Optimize drag and drop, Only add event listener for mouse up if there is mouse move event. */
+			//_canvas.addEventListener(MouseEvent.MOUSE_UP,dragEnd);
 			
 			_origin = new Point(0,0);
 		}
@@ -648,7 +667,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * @inheritDoc
 		 * */
 		public function get center():Point {
-			return new Point(_canvas.width / 2.0, _canvas.height / 2.0);
+			return new Point(this.width / 2.0, this.height / 2.0);
 		}
 
 		/**
@@ -842,16 +861,52 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		public function get scale():Number {
 			return _scale;
 		}
+
+		/**
+		 * @inheritDoc
+		 * */
+		public override function get scaleY():Number
+		{
+			var curScale:Number;
+			curScale = super.scaleY;
+			var parentComp:DisplayObject = this.parent;
+			while(parentComp && !(parentComp is VisualGraph))
+			{
+				curScale *= parentComp.scaleY;
+				parentComp = parentComp.parent;
+			}
+			return curScale;
+		}
+
+		/**
+		 * @inheritDoc
+		 * */		
+		public override function get scaleX():Number
+		{
+			var curScale:Number;
+			curScale = super.scaleX;
+			var parentComp:DisplayObject = this.parent;
+			while(parentComp && !(parentComp is VisualGraph))
+			{
+				curScale *= parentComp.scaleX;
+				parentComp = parentComp.parent;
+			}
+			return curScale;
+		}
 		
 		/**
 		 * @private
 		 * */
 		public function set scale(s:Number):void {
 			/* get the current value */
-			const s0:Number = scaleX;
+			const s0:Number = _canvas.scaleX;
 			/* set the new value */
-			scaleX = s;
-			scaleY = s;
+			
+			/* Fix Scaling problem (Scrollbar shouldn't scale with graph)*/	
+			//scaleX = s;
+			//scaleY = s;
+			_canvas.scaleX = s;
+			_canvas.scaleY = s;
 			/* scroll to the center */
 			scroll(center.x * (1 - s / s0) / s, center.y * (1 - s / s0) / s);
 			/* redraw the edges */
@@ -1180,7 +1235,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* this forces the next call of updateDisplayList()
 			 * to redraw all edges */
 			_forceUpdateEdges = true;
-			_canvas.invalidateDisplayList();
+			//_canvas.invalidateDisplayList();
+			this.invalidateDisplayList();
 		}
 
 		/**
@@ -1344,7 +1400,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			/* call the original function */
 			super.updateDisplayList(unscaledWidth,unscaledHeight);
-			
+			/* invalidate edge and node in _canvas*/
+			_canvas.invalidateDisplayList();
 			/* now add part to redraw edges */
 			if(_layouter) {
 				if(_forceUpdateEdges || _layouter.layoutChanged) {
@@ -1658,7 +1715,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			mycomponent.doubleClickEnabled = true;
 			mycomponent.addEventListener(MouseEvent.DOUBLE_CLICK, nodeDoubleClick);
 			mycomponent.addEventListener(MouseEvent.MOUSE_DOWN,nodeMouseDown);
-			mycomponent.addEventListener(MouseEvent.MOUSE_UP, dragEnd);
+			/* Optimize drag and drop, Only add event listener for mouse up if there is mouse move event. */
+			//mycomponent.addEventListener(MouseEvent.MOUSE_UP, dragEnd);
 
 			/* enable bitmap cachine if required */
 			mycomponent.cacheAsBitmap = cacheRendererObjects;
@@ -1929,9 +1987,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 					/* Save the offset values in the map 
 					 * so we can compute x and y correctly in case
 					 * we use lockCenter */
-					_drag_x_offsetMap[ecomponent] = pt.x / scaleX - ecomponent.x;
-					_drag_y_offsetMap[ecomponent] = pt.y / scaleY - ecomponent.y;
-			
+					
+					//_drag_x_offsetMap[ecomponent] = pt.x / scaleX - ecomponent.x;
+					//_drag_y_offsetMap[ecomponent] = pt.y / scaleY - ecomponent.y;
+					_drag_x_offsetMap[ecomponent] = pt.x / (scaleX*_canvas.scaleX) - ecomponent.x;
+					_drag_y_offsetMap[ecomponent] = pt.y / (scaleY*_canvas.scaleY) - ecomponent.y;
+					
+
 					/* now we would need to set the bounds
 					 * rectangle in _drag_boundsMap, but this is
 					 * currently not implemented *
@@ -1950,7 +2012,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 					 */
 					_dragComponent = ecomponent;
 					ecomponent.stage.addEventListener(MouseEvent.MOUSE_MOVE, handleDrag);
-			
+					_canvas.addEventListener(MouseEvent.MOUSE_UP,dragEnd);
 					/* also register a drop event listener */
 					// ecomponent.stage.addEventListener(MouseEvent.MOUSE_UP, dragEnd);
 					
@@ -1994,9 +2056,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				/* update the coordinates with the current
 				 * event's stage coordinates (i.e. current mouse position),
 				 * modified by the lock-center offset */
-				sp.x = event.stageX / scaleX - _drag_x_offsetMap[sp];
-				sp.y = event.stageY / scaleY - _drag_y_offsetMap[sp];
-				
+				//sp.x = event.stageX / scaleX - _drag_x_offsetMap[sp];
+				//sp.y = event.stageY / scaleY - _drag_y_offsetMap[sp];
+				sp.x = event.stageX / (scaleX*_canvas.scaleX) - _drag_x_offsetMap[sp];
+				sp.y = event.stageY / (scaleY*_canvas.scaleY) - _drag_y_offsetMap[sp];
+
+
 				/* bounds code, currently unused 
 				if ( bounds != null ) {
 					if ( sp.x < bounds.left ) {
@@ -2065,6 +2130,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			if(_layouter) {
 				_layouter.bgDragEvent(event);
 			}
+			
+			/* There is mouse move event so listen to mouse up event */
+			_canvas.addEventListener(MouseEvent.MOUSE_UP,dragEnd);
 		}
 		
 		/**
@@ -2086,9 +2154,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				deltaX = mpoint.x - _dragCursorStartX;
 				deltaY = mpoint.y - _dragCursorStartY;
 			 
-				deltaX /= scaleX
-				deltaY /= scaleY
-			
+				//deltaX /= scaleX
+				//deltaY /= scaleY
+				deltaX /= (scaleX*_canvas.scaleX);
+				deltaY /= (scaleY*_canvas.scaleY);
+
 				/* scroll all objects by this offset */
 				scroll(deltaX, deltaY);
 			}
@@ -2118,7 +2188,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			var mycomp:UIComponent;
 			var myback:DisplayObject;
 			var myvnode:IVisualNode;
-			
+
+			_canvas.removeEventListener(MouseEvent.MOUSE_UP,dragEnd);
+
 			if(_backgroundDragInProgress) {
 				
 				/* if it was a background drag we stop it here */
@@ -2186,7 +2258,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* and stop propagation, as otherwise we could get the
 			 * event multiple times */
-			event.stopImmediatePropagation();			
+			 
+			/* it's no need stop this event with new implmentation */ 
+			//event.stopImmediatePropagation();			
 		}
 		
 		/**
