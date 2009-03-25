@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
-	<mx:VBox width="100%" height="100%" horizontalAlign="center" >
-	<mx:ApplicationControlBar width="100%" height="35" >
-		<mx:Label fontSize="11" fontWeight="bold" text="Chart Type:"/>
-		<mx:RadioButtonGroup id="layoutStrategy" />
-		<mx:RadioButton groupName="layoutStrategy" label="Pie" selected="true"/>
-		<mx:RadioButton groupName="layoutStrategy" label="Bar" />
-		<mx:RadioButton groupName="layoutStrategy" label="Column" />
-		<mx:RadioButton groupName="layoutStrategy" label="Line" />
-		<mx:RadioButton groupName="layoutStrategy" label="Plot" />
-		<mx:RadioButton groupName="layoutStrategy" label="Area" />
-	</mx:ApplicationControlBar>
-	
-	<mx:ViewStack width="100%" height="100%" >
-		
-		
-		
-		
-	</mx:ViewStack>
-		
-		
-	</mx:VBox>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:charts="org.un.cava.birdeye.qavis.charts.cartesianCharts.*"
+	xmlns:series="org.un.cava.birdeye.qavis.charts.series.*"
+	xmlns:axis="org.un.cava.birdeye.qavis.charts.axis.*"
+	xmlns:legend="org.un.cava.birdeye.qavis.charts.legend.*"
+	backgroundColor="#ffffff"
+	width="100%" height="100%" xmlns:charts1="org.un.cava.birdeye.qavis.charts.*" xmlns:charts2="views.charts.*">
+
+	<mx:TabNavigator id="nav" height="100%" width="100%">
+		<charts2:Column label="Column"/>
+		<charts2:Area label="Area"/>
+		<charts2:Bar label="Bar"/>
+		<charts2:Plot label="Plot"/>
+		<charts2:Line label="Line"/>
+		<charts2:Scatter label="Scatter"/>
+		<charts2:Bubble label="Bubble"/>
+		<charts2:Mixed label="Mixed"/>
+	</mx:TabNavigator>
 </mx:Canvas>
