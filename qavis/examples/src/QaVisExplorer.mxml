@@ -57,11 +57,11 @@
 		</mx:ApplicationControlBar>	
 				
 		<mx:TabNavigator width="100%" height="100%" paddingLeft="5" paddingRight="5" creationPolicy="all">
+			<charts:Charts label="Charts" width="100%" height="100%" />		
 			<microcharts:Microcharts label="Microcharts" width="100%" height="100%" />
 			<treemap:TreeMap label="Treemap" width="100%" height="100%" />
 			<matrix:ComparisonMatrixExample label="Comparison Matrix" dataProvider="{multidimensionalData}" width="100%" height="100%"/>
 			<parallel:ParallelCoordinatePlotExample label="Parallel Coordinates Plot" dataProvider="{multidimensionalData}" width="100%" height="100%"/>
-			<charts:Charts label="Charts" width="100%" height="100%" />		
 		</mx:TabNavigator>
 		
 	</mx:VBox>
