@@ -71,11 +71,9 @@
 			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			import mx.core.Container;
 			import mx.core.UIComponent;
-			import org.un.cava.birdeye.ravis.utils.LogUtil;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
 			
-		  private static const _LOG:String = "components.ui.controls.vgraphControls.ScaleLabels";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -103,7 +101,7 @@
 				var child:UIComponent;
 
 				if(_vgraph == null) {
-					LogUtil.warn(_LOG, "Cannot update Scale of VGraph, no valid vgraph!");
+					trace("Cannot update Scale of VGraph, no valid vgraph!");
 					return;
 				}
 	
@@ -122,7 +120,7 @@
 				if(_vgraph.layouter != null) {
 					_vgraph.layouter.layoutChanged = true;
 				} else {
-					LogUtil.warn(_LOG, "Cannot notify null layouter of layout change due to scaling.");
+					trace("Cannot notify null layouter of layout change due to scaling.");
 				}
 				_vgraph.draw();
 			}
@@ -137,13 +135,22 @@
 				var children:Array;
 
 				if(_vgraph == null) {
-					LogUtil.warn(_LOG, "Cannot refresh ScaleSlider of VGraph, no valid vgraph!");
+					trace("Cannot refresh ScaleSlider of VGraph, no valid vgraph!");
 					return;
 				}	
-				
-				//Fix scaling function					
-				scaleSlider.value = _vgraph.scale;
-				LogUtil.warn(_LOG, "VGraph has no child except drawing surface, no reference for scale refresh");
+									
+				children = _vgraph.getChildren();
+				for each(child in children) {
+					/* we would need to make sure we don't scale the drawing
+					 * surface
+					 */
+					if(child != _vgraph.drawingSurface) {
+						scaleSlider.value = child.scaleX;
+						/* and we can abort here */
+						return;
+					}
+					trace("VGraph has no child except drawing surface, no reference for scale refresh");
+				}
 			}
 			
 			/**
