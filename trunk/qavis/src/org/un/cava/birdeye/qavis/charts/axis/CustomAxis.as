@@ -28,7 +28,7 @@
  package org.un.cava.birdeye.qavis.charts.axis
 {
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisLayout;
-	import org.un.cava.birdeye.qavis.charts.interfaces.IENumerable;
+	import org.un.cava.birdeye.qavis.charts.interfaces.IEnumerable;
 	import org.un.cava.birdeye.qavis.charts.interfaces.INumerable;
 	
 	[Exclude(name="scaleType", kind="property")]
@@ -85,8 +85,8 @@
 		{
 			if (IAxisLayout(_axis).scaleType == CATEGORY)
 				return _function(dataValue, 
-								IENumerable(IAxisLayout(_axis)).elements,
-								IENumerable(IAxisLayout(_axis)).categoryField);
+								IEnumerable(IAxisLayout(_axis)).elements,
+								IEnumerable(IAxisLayout(_axis)).categoryField);
 			 
 			if (IAxisLayout(_axis).scaleType == NUMERIC 
 				|| IAxisLayout(_axis).scaleType == LINEAR
