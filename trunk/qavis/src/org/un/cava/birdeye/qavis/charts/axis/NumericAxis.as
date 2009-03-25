@@ -33,8 +33,10 @@ package org.un.cava.birdeye.qavis.charts.axis
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.text.TextFieldAutoSize;
+	
+	import org.un.cava.birdeye.qavis.charts.interfaces.INumerable;
 
-	public class NumericAxis extends XYAxis
+	public class NumericAxis extends XYAxis implements INumerable
 	{
 		/** @Private
 		 * The minimum data value of the axis, after that the min is formatted 
@@ -78,6 +80,17 @@ package org.un.cava.birdeye.qavis.charts.axis
 		public function get max():Number
 		{
 			return _max;
+		}
+		
+		private var _function:Function;
+		/** Set the function that will be applied to calculate the getPosition of a 
+		 * data value in the axis. The function will basically define a custom 
+		 * scale for the axis.*/
+		public function set f(val:Function):void
+		{
+			_function = val;
+			invalidateProperties();
+			invalidateDisplayList();
 		}
 		
 		private var _baseAtZero:Boolean = false;
@@ -272,6 +285,16 @@ package org.un.cava.birdeye.qavis.charts.axis
 					maxFormatted = true;
 				} 
 			}
+		}
+
+		/** @Private
+		 * Override the XYZAxis getPostion method with a generic numeric function.
+		 * This allows to define any type of scaling for a numeric axis.*/
+		override public function getPosition(dataValue:*):*
+		{
+			size = getSize();
+trace (Number(_function(dataValue, min, max, _baseAtZero, size, placement)));
+			return _function(dataValue, min, max, _baseAtZero, size, placement);
 		}
 	}
 }

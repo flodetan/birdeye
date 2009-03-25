@@ -427,6 +427,17 @@ package org.un.cava.birdeye.qavis.charts.series
 			tip.alpha = 0.7;
 			dispatchEvent(new Event("showToolTip"));
 			extGG.showToolTipGeometry();
+			
+			if (verticalAxis)
+				verticalAxis.pointerY = extGG.posY;
+			else 
+				dataProvider.verticalAxis.pointerY = extGG.posY;
+
+			if (horizontalAxis)
+				horizontalAxis.pointerX = extGG.posX;
+			else 
+				dataProvider.horizontalAxis.pointerX = extGG.posX;
+				
 		}
 
 		/**
@@ -436,6 +447,16 @@ package org.un.cava.birdeye.qavis.charts.series
 		*/
 		protected function handleRollOut(e:MouseEvent):void
 		{ 
+			if (verticalAxis)
+				XYAxis(verticalAxis).pointerY = height;
+			else 
+				XYAxis(dataProvider.verticalAxis).pointerY = height;
+
+			if (horizontalAxis)
+				XYAxis(horizontalAxis).pointerX = 0;
+			else 
+				XYAxis(dataProvider.horizontalAxis).pointerX = 0;
+
 			ToolTipManager.destroyToolTip(tip);
 			ExtendedGeometryGroup(e.target).hideToolTipGeometry();
 		}

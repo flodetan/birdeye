@@ -27,10 +27,12 @@
  
  package org.un.cava.birdeye.qavis.charts.axis
 {
-	import com.degrafa.geometry.RegularRectangle;
+	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisLayout;
+	import org.un.cava.birdeye.qavis.charts.interfaces.IENumerable;
+	import org.un.cava.birdeye.qavis.charts.interfaces.INumerable;
 	
 	[Exclude(name="scaleType", kind="property")]
-	public class CustomNumericAxis extends NumericAxis 
+	public class CustomAxis extends NumericAxis 
 	{
 		/** @Private
 		 * the scaleType cannot be changed, since it's a customized "numeric" scale.*/
@@ -47,10 +49,19 @@
 			invalidateProperties();
 			invalidateDisplayList();
 		}
+		
+		private var _axis:IAxisLayout;
+		/** Set the axis layout (linear, log, category, etc) to be used as the base for the custom axis.*/
+		public function set axis(val:IAxisLayout):void
+		{
+			_axis = val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
 		 
 		// UIComponent flow
 		
-		public function CustomNumericAxis()
+		public function CustomAxis()
 		{
 			super();
 			_scaleType = XYAxis.NUMERIC;
@@ -72,6 +83,18 @@
 		 * Override the XYZAxis getPostion method based on the linear scaling.*/
 		override public function getPosition(dataValue:*):*
 		{
+			if (IAxisLayout(_axis).scaleType == CATEGORY)
+				return _function(dataValue, 
+								IENumerable(IAxisLayout(_axis)).elements,
+								IENumerable(IAxisLayout(_axis)).categoryField);
+			 
+			if (IAxisLayout(_axis).scaleType == NUMERIC 
+				|| IAxisLayout(_axis).scaleType == LINEAR
+				|| IAxisLayout(_axis).scaleType == LOG)
+				return _function(dataValue, INumerable(IAxisLayout(_axis)).min,
+										INumerable(IAxisLayout(_axis)).max,
+										INumerable(IAxisLayout(_axis)).baseAtZero);
+										
 			return _function(dataValue);
 		}
 	}

@@ -25,30 +25,15 @@
  * THE SOFTWARE.
  */
  
-package org.un.cava.birdeye.qavis.charts.interfaces
+ package org.un.cava.birdeye.qavis.charts.interfaces
 {
-	public interface IAxisLayout
+	public interface IENumerable
 	{
-		/** Define the scale type (category, linear, log, date...)*/
-		function set scaleType(val:String):void
-		function get scaleType():String
-
-		/** Set the interval between axis labels.*/
-		function set interval(val:Number):void
-		function get interval():Number
-
-		/** Set the axis placement.*/
-		function set placement(val:String):void
-		function get placement():String
-
-		/** Calculates and returns the coordinate of a data value in the axis (depends on 
-		 * scale type). */
-		function getPosition(dataValue:*):*
+		/** Set-get the elements that have to be enumerable. */
+		function set elements(val:Array):void
+		function get elements():Array
 		
-		/** Position the axis pointer on the specific Y coordinate value. */ 
-		function set pointerY(val:Number):void;
-
-		/** Position the axis pointer on the specific X coordinate value. */ 
-		function set pointerX(val:Number):void;
+		/** Category field that is used to filter elements.*/
+		function set categoryField(val:String):void
 	}
 }

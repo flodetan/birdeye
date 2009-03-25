@@ -27,7 +27,6 @@
  
  package org.un.cava.birdeye.qavis.charts.axis
 {
-	import com.degrafa.geometry.Geometry;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RasterText;
 	import com.degrafa.paint.SolidFill;
@@ -35,7 +34,9 @@
 	
 	import flash.text.TextFieldAutoSize;
 	
-	public class CategoryAxis extends XYAxis 
+	import org.un.cava.birdeye.qavis.charts.interfaces.IENumerable;
+	
+	public class CategoryAxis extends XYAxis implements IENumerable
 	{
 		/** @Private
 		 * The scale type cannot be changed, since it's already "category".*/
