@@ -106,12 +106,23 @@ package org.un.cava.birdeye.qavis.charts.series
 		public function set fillColor(val:Number):void
 		{
 			_fillColor = val;
-			fill = new SolidFill(_fillColor);
+			fill = new SolidFill(_fillColor, fillAlpha);
 			invalidateDisplayList();
 		}
 		public function get fillColor():Number
 		{
 			return _fillColor;
+		}
+
+		private var _fillAlpha:Number = 1;
+		public function set fillAlpha(val:Number):void
+		{
+			_fillAlpha = val;
+			invalidateDisplayList();
+		}
+		public function get fillAlpha():Number
+		{
+			return _fillAlpha;
 		}
 
 		private var _strokeColor:Number = NaN;
@@ -241,6 +252,9 @@ package org.un.cava.birdeye.qavis.charts.series
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
+			
+			if (fill)
+				fill.alpha = fillAlpha;
 
 			removeAllElements();
 		}

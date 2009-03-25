@@ -30,9 +30,9 @@ package org.un.cava.birdeye.qavis.charts.renderers
 	import com.degrafa.geometry.Polygon;
 	import com.degrafa.geometry.RegularRectangle;
 
-	public class BatterflyRenderer extends Polygon
+	public class ButterflyRenderer extends Polygon
 	{
-		public function BatterflyRenderer (bounds:RegularRectangle)
+		public function ButterflyRenderer (bounds:RegularRectangle)
 		{
 			data =  String(bounds.x) + "," + String(bounds.y + bounds.height/2) + " " +
 					String(bounds.x + bounds.width/2) + "," + String(bounds.y) + " " +
