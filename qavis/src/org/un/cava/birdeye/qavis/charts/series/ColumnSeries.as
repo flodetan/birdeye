@@ -33,12 +33,9 @@ package org.un.cava.birdeye.qavis.charts.series
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
-	import flash.events.Event;
-	
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
-	import org.un.cava.birdeye.qavis.charts.axis.XYAxis;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.ColumnChart;
 	import org.un.cava.birdeye.qavis.charts.renderers.RectangleRenderer;
 
@@ -180,7 +177,7 @@ package org.un.cava.birdeye.qavis.charts.series
 				if (dataProvider.showDataTips)
 				{
 					createGG(dataProvider.cursor.current, dataFields, xPos + colWidth/2, yPos, 3,ttShapes,ttXoffset,ttYoffset);
-					var hitMouseArea:RegularRectangle = bounds; 
+					var hitMouseArea:IGeometry = new itemRenderer(bounds); 
 					hitMouseArea.fill = new SolidFill(0x000000, 0);
 					gg.geometryCollection.addItem(hitMouseArea);
 				}
