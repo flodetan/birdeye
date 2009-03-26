@@ -295,7 +295,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			}
 			
 			// init all axes, default and series owned 
-			feedAxes();
+			if (! axesFeeded)
+				feedAxes();
 		}
 		
 		override protected function measure():void
@@ -330,10 +331,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			leftContainer.height = rightContainer.height 
 				= chartBounds.height;
 				
-			if (seriesContainer.x != chartBounds.x ||
+			if (axesFeeded && (seriesContainer.x != chartBounds.x ||
 				seriesContainer.y != chartBounds.y ||
 				seriesContainer.width != chartBounds.width ||
-				seriesContainer.height != chartBounds.height)
+				seriesContainer.height != chartBounds.height))
 			{
 				seriesContainer.x = chartBounds.x;
 				seriesContainer.y = chartBounds.y;
@@ -459,8 +460,12 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				} 
 				
 				// init all series that have their own axes
+				// since these are children of each series, they are 
+				// for sure ready for feeding and it won't affect the axesNotFeeded status
 				for (var i:Number = 0; i<series.length; i++)
 					initSeriesAxes(series[i]);
+					
+				axesFeeded = true;
 			}
 		}
 		

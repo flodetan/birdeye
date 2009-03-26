@@ -136,7 +136,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 			
 			// if the placement is set, and max, min and interval calculated
 			// than the axis is ready to be drawn
-			if (placement && !isNaN(max) && !isNaN(min) && interval)
+			if (placement && !isNaN(max) && !isNaN(min) && !isNaN(interval))
 				readyForLayout = true;
 			else 
 				readyForLayout = false;
@@ -191,48 +191,51 @@ package org.un.cava.birdeye.qavis.charts.axis
 				maxLabelSize();
 
 			size = getSize();
-			if (xMin == xMax)
-			{
-				for (snap = min; snap<max; snap += interval)
+			if (size > 0 && !isNaN(interval))
+			{	
+				if (xMin == xMax)
 				{
-					// create thick line
-		 			thick = new Line(xMin + thickWidth * sign, getPosition(snap), xMax, getPosition(snap));
-					thick.stroke = new SolidStroke(stroke,1,1);
-					gg.geometryCollection.addItem(thick);
-		
-					// create label 
- 					label = new RasterText();
- 					label.fontFamily = "verdana";
- 					label.fontSize = 9;
-					label.text = String(Math.round(snap));
- 					label.visible = true;
-					label.autoSize = TextFieldAutoSize.LEFT;
-					label.autoSizeField = true;
-					label.y = getPosition(snap)-label.textField.height/2;
-					label.x = thickWidth * sign; 
-					label.fill = new SolidFill(0x000000);
-					gg.geometryCollection.addItem(label);
-				}
-			} else {
-				for (snap = min; snap<max; snap += interval)
-				{
-					// create thick line
-		 			thick = new Line(getPosition(snap), yMin + thickWidth * sign, getPosition(snap), yMax);
-					thick.stroke = new SolidStroke(stroke,1,1);
-					gg.geometryCollection.addItem(thick);
-
-					// create label 
- 					label = new RasterText();
-					label.text = String(Math.round(snap));
- 					label.fontFamily = "verdana";
- 					label.fontSize = 9;
- 					label.visible = true;
-					label.autoSize = TextFieldAutoSize.LEFT;
-					label.autoSizeField = true;
-					label.y = thickWidth;
-					label.x = getPosition(snap)-label.textField.width/2; 
-					label.fill = new SolidFill(0x000000);
-					gg.geometryCollection.addItem(label);
+					for (snap = min; snap<max; snap += interval)
+					{
+						// create thick line
+			 			thick = new Line(xMin + thickWidth * sign, getPosition(snap), xMax, getPosition(snap));
+						thick.stroke = new SolidStroke(stroke,1,1);
+						gg.geometryCollection.addItem(thick);
+			
+						// create label 
+	 					label = new RasterText();
+	 					label.fontFamily = "verdana";
+	 					label.fontSize = 9;
+						label.text = String(Math.round(snap));
+	 					label.visible = true;
+						label.autoSize = TextFieldAutoSize.LEFT;
+						label.autoSizeField = true;
+						label.y = getPosition(snap)-label.textField.height/2;
+						label.x = thickWidth * sign; 
+						label.fill = new SolidFill(0x000000);
+						gg.geometryCollection.addItem(label);
+					}
+				} else {
+					for (snap = min; snap<max; snap += interval)
+					{
+						// create thick line
+			 			thick = new Line(getPosition(snap), yMin + thickWidth * sign, getPosition(snap), yMax);
+						thick.stroke = new SolidStroke(stroke,1,1);
+						gg.geometryCollection.addItem(thick);
+	
+						// create label 
+	 					label = new RasterText();
+						label.text = String(Math.round(snap));
+	 					label.fontFamily = "verdana";
+	 					label.fontSize = 9;
+	 					label.visible = true;
+						label.autoSize = TextFieldAutoSize.LEFT;
+						label.autoSizeField = true;
+						label.y = thickWidth;
+						label.x = getPosition(snap)-label.textField.width/2; 
+						label.fill = new SolidFill(0x000000);
+						gg.geometryCollection.addItem(label);
+					}
 				}
 			}
 		}
@@ -293,7 +296,6 @@ package org.un.cava.birdeye.qavis.charts.axis
 		override public function getPosition(dataValue:*):*
 		{
 			size = getSize();
-trace (Number(_function(dataValue, min, max, _baseAtZero, size, placement)));
 			return _function(dataValue, min, max, _baseAtZero, size, placement);
 		}
 	}

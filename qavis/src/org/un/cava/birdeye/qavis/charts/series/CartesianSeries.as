@@ -40,6 +40,7 @@ package org.un.cava.birdeye.qavis.charts.series
 	import mx.managers.ToolTipManager;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxis;
+	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.XYAxis;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.CartesianChart;
 	import org.un.cava.birdeye.qavis.charts.data.ExtendedGeometryGroup;
@@ -243,12 +244,7 @@ package org.un.cava.birdeye.qavis.charts.series
 			}
  */				
 		}
-		
-/* 		private function validateBounds(e:Event):void
-		{
-			validateNow();
-		}
- */		
+ 
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
@@ -257,37 +253,54 @@ package org.un.cava.birdeye.qavis.charts.series
 				fill.alpha = fillAlpha;
 
 			removeAllElements();
+			
+			if (isReadyForLayout())
+				drawSeries()
+		}
+		
+		protected function drawSeries():void
+		{
+			// to be overridden by each series implementation
+		}
+		
+		private function isReadyForLayout():Boolean
+		{
+			var minMaxCheck:Boolean = true;
+			
+			if (verticalAxis)
+			{
+				if (verticalAxis is NumericAxis)
+					minMaxCheck = !isNaN(maxVerticalValue) || !isNaN(minVerticalValue)
+			} else if (dataProvider && dataProvider.verticalAxis && dataProvider.verticalAxis is NumericAxis)
+				minMaxCheck = !isNaN(maxVerticalValue) || !isNaN(minVerticalValue)
+				
+			if (horizontalAxis)
+			{
+				if (horizontalAxis is NumericAxis)
+					minMaxCheck = minMaxCheck && (!isNaN(maxHorizontalValue) || !isNaN(minHorizontalValue))
+			} else if (dataProvider && dataProvider.horizontalAxis && dataProvider.horizontalAxis is NumericAxis)
+				minMaxCheck = minMaxCheck && (!isNaN(maxHorizontalValue) || !isNaN(minHorizontalValue))
+
+			var yAxisCheck:Boolean = 
+				(verticalAxis || (dataProvider && dataProvider.verticalAxis));
+			
+			var xAxisCheck:Boolean = 
+				(horizontalAxis || (dataProvider && dataProvider.horizontalAxis));
+
+			var colorsCheck:Boolean = 
+				(fillColor || strokeColor);
+
+			var globalCheck:Boolean = 
+				   (!isNaN(minHorizontalValue) || !isNaN(minVerticalValue))
+				&& (!isNaN(maxHorizontalValue) || !isNaN(maxVerticalValue))
+				&& width>0 && height>0
+				&& dataProvider && xField && yField;
+			
+			return globalCheck && yAxisCheck && xAxisCheck && colorsCheck && minMaxCheck;
 		}
 
-		// other methods
-		
-/* 		public function removeAllElements():void
-		{
-			var nElements:int = graphicsCollection.items.length;
-			if (nElements > 1)
-			{
-				for (var i:int = 0; i<nElements; i++)
-				{
-					if (getChildAt(0) is ExtendedGeometryGroup)
-						ExtendedGeometryGroup(getChildAt(0)).removeAllElements();
-				}
-			} else if (gg) {
-				gg.geometryCollection.items = [];
-				gg.geometry = [];
-			}
-			for (i = numChildren - 1; i>=0; i--)
-				removeChildAt(i);
-			graphicsCollection.items = [];
-		}
- */		
 		public function removeAllElements():void
 		{
-/* 			if (ttGG)
-			{
-				ttGG.removeAllElements();
-				graphicsCollection.removeItem(ttGG);
-			}
- */			
 			if (dataProvider.showDataTips) 
 			{
 				var nElements:int = graphicsCollection.items.length;
@@ -396,36 +409,7 @@ package org.un.cava.birdeye.qavis.charts.series
 			gg.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 			gg.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 		}
-/*  
-		protected var ttGG:ExtendedGeometryGroup;
-		protected function createGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, radius:Number,
-									shapes:Array = null , ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
-		{
-			ttGG = new ExtendedGeometryGroup();
-			ttGG.target = this;
-			ttGG.toolTipFill = fill;
-			ttGG.toolTipStroke = stroke;
- 			if (dataProvider.showDataTips)
-			{
-				initGGToolTip();
-				ttGG.createToolTip(dataProvider.cursor.current, dataFields, xPos, yPos, radius,shapes, ttXoffset, ttYoffset);
- 			} else {
-				graphicsCollection.addItem(ttGG);
-			}
-		}
-		
-		protected function initGGToolTip():void
-		{
-			ttGG.target = this;
- 			if (dataProvider.dataTipFunction != null)
-				ttGG.dataTipFunction = dataProvider.dataTipFunction;
-			if (dataProvider.dataTipPrefix!= null)
-				ttGG.dataTipPrefix = dataProvider.dataTipPrefix;
- 			graphicsCollection.addItem(ttGG);
-			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
-			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
-		}
- */
+
 		/**
 		* @private 
 		 * Show and position tooltip
@@ -443,15 +427,22 @@ package org.un.cava.birdeye.qavis.charts.series
 			extGG.showToolTipGeometry();
 			
 			if (verticalAxis)
+			{
 				verticalAxis.pointerY = extGG.posY;
-			else 
+				verticalAxis.pointer.visible = true;
+			} else {
 				dataProvider.verticalAxis.pointerY = extGG.posY;
+				dataProvider.verticalAxis.pointer.visible = true;
+			} 
 
 			if (horizontalAxis)
+			{
 				horizontalAxis.pointerX = extGG.posX;
-			else 
+				horizontalAxis.pointer.visible = true;
+			} else {
 				dataProvider.horizontalAxis.pointerX = extGG.posX;
-				
+				dataProvider.horizontalAxis.pointer.visible = true;
+			} 
 		}
 
 		/**
@@ -462,14 +453,24 @@ package org.un.cava.birdeye.qavis.charts.series
 		protected function handleRollOut(e:MouseEvent):void
 		{ 
 			if (verticalAxis)
-				XYAxis(verticalAxis).pointerY = height;
-			else 
-				XYAxis(dataProvider.verticalAxis).pointerY = height;
+				verticalAxis.pointer.visible = false;
+			else
+				dataProvider.verticalAxis.pointer.visible = false;
 
 			if (horizontalAxis)
-				XYAxis(horizontalAxis).pointerX = 0;
+				horizontalAxis.pointer.visible = false;
+			else
+				dataProvider.horizontalAxis.pointer.visible = false;
+
+/* 			if (verticalAxis)
+				verticalAxis.pointerY = height;
 			else 
-				XYAxis(dataProvider.horizontalAxis).pointerX = 0;
+				dataProvider.verticalAxis.pointerY = height;
+
+			if (horizontalAxis)
+				horizontalAxis.pointerX = 0;
+			else 
+				dataProvider.horizontalAxis.pointerX = 0; */
 
 			ToolTipManager.destroyToolTip(tip);
 			ExtendedGeometryGroup(e.target).hideToolTipGeometry();

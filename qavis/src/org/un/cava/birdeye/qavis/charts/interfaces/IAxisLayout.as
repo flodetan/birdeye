@@ -27,6 +27,8 @@
  
 package org.un.cava.birdeye.qavis.charts.interfaces
 {
+	import com.degrafa.geometry.Line;
+	
 	public interface IAxisLayout
 	{
 		/** Define the scale type (category, linear, log, date...)*/
@@ -50,5 +52,8 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 
 		/** Position the axis pointer on the specific X coordinate value. */ 
 		function set pointerX(val:Number):void;
+		
+		/** Get the axis pointer. Can be used to change colors, stroke, visibility...*/
+		function get pointer():Line;
 	}
 }

@@ -38,7 +38,6 @@
 	import mx.core.Container;
 	import mx.core.EdgeMetrics;
 	import mx.core.UIComponent;
-	import mx.events.ResizeEvent;
 
 	[DefaultProperty("dataProvider")]
 	public class BaseChart extends UIComponent
@@ -128,6 +127,7 @@
 			return _percentWidth;
 		}
 		
+		protected var axesFeeded:Boolean = true;
 		protected var _dataProvider:Object=null;
 		public function set dataProvider(value:Object):void
 		{
@@ -177,6 +177,7 @@
 	  		
 	  		_cursor = ICollectionView(_dataProvider).createCursor();
 	  		
+	  		axesFeeded = false;
 	  		invalidateSize();
 	  		invalidateProperties();
 			invalidateDisplayList();

@@ -129,7 +129,7 @@ package org.un.cava.birdeye.qavis.charts.data
 			// if tip function is set, use it, otherwise use a default one
 			if (_dataTipFunction != null)
 				toolTip = ((_dataTipPrefix) ? _dataTipPrefix : "") 
-							+ _dataTipFunction(item);
+							+ _dataTipFunction(item, dataFields);
 			else 
 			{
 				if (_dataTipPrefix) 

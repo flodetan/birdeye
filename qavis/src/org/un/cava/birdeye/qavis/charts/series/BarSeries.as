@@ -74,6 +74,10 @@ package org.un.cava.birdeye.qavis.charts.series
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
+
+			if (!itemRenderer)
+				itemRenderer = RectangleRenderer;
+
 			if (stackType == STACKED100)
 			{
 				if (horizontalAxis)
@@ -88,17 +92,14 @@ package org.un.cava.birdeye.qavis.charts.series
 		}
 
 		private var poly:IGeometry;
-		override protected function updateDisplayList(w:Number, h:Number):void
+		/** @Private 
+		 * Called by super.updateDisplayList when the series is ready for layout.*/
+		override protected function drawSeries():void
 		{
-			super.updateDisplayList(w,h);
-			
 			var dataFields:Array = [];
 
 			var xPos:Number, yPos:Number;
 			var j:Number = 0;
-
-			if (!itemRenderer)
-				itemRenderer = RectangleRenderer;
 
 			var ttShapes:Array;
 			var ttXoffset:Number = NaN, ttYoffset:Number = NaN;

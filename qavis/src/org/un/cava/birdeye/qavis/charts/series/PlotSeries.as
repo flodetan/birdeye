@@ -55,11 +55,18 @@ package org.un.cava.birdeye.qavis.charts.series
 			super();
 		}
 		
-		private var plot:IGeometry;
-		override protected function updateDisplayList(w:Number, h:Number):void
+		override protected function commitProperties():void
 		{
-			super.updateDisplayList(w,h);
+			super.commitProperties();
+			if (! itemRenderer)
+				itemRenderer = CircleRenderer;
+		}
 
+		private var plot:IGeometry;
+		/** @Private 
+		 * Called by super.updateDisplayList when the series is ready for layout.*/
+		override protected function drawSeries():void
+		{
 			var dataFields:Array = [];
 
 			var xPos:Number, yPos:Number;

@@ -92,13 +92,15 @@
 			if (elements && elements.length >0)
 			{
 				var recIsGivenInterval:Boolean = isGivenInterval;
-				interval = size/elements.length;
+				if (_interval != size/elements.length)
+					interval = size/elements.length;
+					
 				isGivenInterval = recIsGivenInterval;
 			}
 			
 			// if placement is set, elements are loaded and interval calculated
 			// than the axis is ready to be drawn
-			if (placement && elements && interval)
+			if (placement && elements && interval && _categoryField)
 				readyForLayout = true;
 			else 
 				readyForLayout = false;
@@ -146,7 +148,10 @@
 		override protected function drawAxes(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
 		{
 			if (elements && elements.length>0)
-				_interval = getSize()/elements.length;
+			{
+				if (_interval != (size=getSize())/elements.length)
+					interval = size/elements.length;
+			}
 			else 
 				_interval = NaN;
 

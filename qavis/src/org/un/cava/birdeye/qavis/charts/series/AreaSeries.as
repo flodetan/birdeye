@@ -79,6 +79,10 @@ package org.un.cava.birdeye.qavis.charts.series
 
 		override protected function commitProperties():void
 		{
+			// select the item renderer (must be an IGeomentry)
+			if (! itemRenderer)
+				itemRenderer = TriangleRenderer;
+
 			// doesn't need to call super.commitProperties(), since it doesn't need to listen
 			// to axes interval changes 
 			if (stackType == STACKED100)
@@ -95,11 +99,10 @@ package org.un.cava.birdeye.qavis.charts.series
 		}
 
 		private var poly:Polygon;
-		override protected function updateDisplayList(w:Number, h:Number):void
+		/** @Private 
+		 * Called by super.updateDisplayList when the series is ready for layout.*/
+		override protected function drawSeries():void
 		{
-			// first call super to removeAllElements and set the fillAlpha
-			super.updateDisplayList(w,h);
-
 			var xPrev:Number, yPrev:Number;
 			var xPos:Number, yPos:Number;
 			var j:Number = 0;
@@ -114,10 +117,6 @@ package org.un.cava.birdeye.qavis.charts.series
 			// tooltip distance from the hitarea position
 			var ttXoffset:Number = NaN, ttYoffset:Number = NaN;
 			
-			// select the item renderer (must be an IGeomentry)
-			if (! itemRenderer)
-				itemRenderer = TriangleRenderer;
-
 			// move data provider cursor at the beginning
 			dataProvider.cursor.seek(CursorBookmark.FIRST);
 
