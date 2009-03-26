@@ -36,7 +36,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 	
 	import org.un.cava.birdeye.qavis.charts.interfaces.INumerable;
 
-	public class NumericAxis extends XYAxis implements INumerable
+	public class NumericAxis extends XYZAxis implements INumerable
 	{
 		/** @Private
 		 * The minimum data value of the axis, after that the min is formatted 
@@ -112,7 +112,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		public function NumericAxis()
 		{
 			super();
-			scaleType = XYAxis.LINEAR;
+			scaleType = XYZAxis.LINEAR;
 		}
 		
 		override protected function commitProperties():void
@@ -154,7 +154,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		
 		/** @Private
 		 * Calculate the maximum label size, necessary to define the needed 
-		 * width (for vertical axes) or height (for horizontal axes) of the CategoryAxis.*/
+		 * width (for y axes) or height (for x axes) of the CategoryAxis.*/
 		override protected function maxLabelSize():void
 		{
 			var text:String = String(String(min).length < String(max).length ?

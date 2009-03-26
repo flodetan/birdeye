@@ -36,6 +36,7 @@ package org.un.cava.birdeye.qavis.charts.series
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
+	import org.un.cava.birdeye.qavis.charts.axis.XYZAxis;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.ColumnChart;
 	import org.un.cava.birdeye.qavis.charts.renderers.RectangleRenderer;
 
@@ -79,13 +80,13 @@ package org.un.cava.birdeye.qavis.charts.series
 
 			if (stackType == STACKED100)
 			{
-				if (verticalAxis)
+				if (yAxis)
 				{
-					if (verticalAxis is NumericAxis)
-						NumericAxis(verticalAxis).max = maxVerticalValue;
+					if (yAxis is NumericAxis)
+						NumericAxis(yAxis).max = maxYValue;
 				} else {
-					if (dataProvider && dataProvider.verticalAxis && dataProvider.verticalAxis is NumericAxis)
-						NumericAxis(dataProvider.verticalAxis).max = maxVerticalValue;
+					if (dataProvider && dataProvider.yAxis && dataProvider.yAxis is NumericAxis)
+						NumericAxis(dataProvider.yAxis).max = maxYValue;
 				}
 			}
 		}
@@ -97,7 +98,7 @@ package org.un.cava.birdeye.qavis.charts.series
 		{
 			var dataFields:Array = [];
 
-			var xPos:Number, yPos:Number;
+			var xPos:Number, yPos:Number, zPos:Number;
 			var j:Number = 0;
 			
 			var ttShapes:Array;
@@ -110,43 +111,43 @@ package org.un.cava.birdeye.qavis.charts.series
 
 			while (!dataProvider.cursor.afterLast)
 			{
-				if (horizontalAxis)
+				if (xAxis)
 				{
-					xPos = horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
+					xPos = xAxis.getPosition(dataProvider.cursor.current[xField]);
 
 					dataFields[0] = xField;
 
 					if (isNaN(size))
-						size = horizontalAxis.interval*(4/5);
+						size = xAxis.interval*(4/5);
 				} else {
-					xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
+					xPos = dataProvider.xAxis.getPosition(dataProvider.cursor.current[xField]);
 
 					dataFields[0] = xField;
 
 					if (isNaN(size))
-						size = dataProvider.horizontalAxis.interval*(4/5);
+						size = dataProvider.xAxis.interval*(4/5);
 				}
 				
-				if (verticalAxis)
+				if (yAxis)
 				{
 					if (_stackType == STACKED100)
 					{
-						y0 = verticalAxis.getPosition(baseValues[j]);
-						yPos = verticalAxis.getPosition(
+						y0 = yAxis.getPosition(baseValues[j]);
+						yPos = yAxis.getPosition(
 							baseValues[j++] + Math.max(0,dataProvider.cursor.current[yField]));
 					} else {
-						yPos = verticalAxis.getPosition(dataProvider.cursor.current[yField]);
+						yPos = yAxis.getPosition(dataProvider.cursor.current[yField]);
 					}
 					dataFields[1] = yField;
 				}
 				else {
 					if (_stackType == STACKED100)
 					{
-						y0 = dataProvider.verticalAxis.getPosition(baseValues[j]);
-						yPos = dataProvider.verticalAxis.getPosition(
+						y0 = dataProvider.yAxis.getPosition(baseValues[j]);
+						yPos = dataProvider.yAxis.getPosition(
 							baseValues[j++] + Math.max(0,dataProvider.cursor.current[yField]));
 					} else 
-						yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
+						yPos = dataProvider.yAxis.getPosition(dataProvider.cursor.current[yField]);
 
 					dataFields[1] = yField;
 				}
@@ -173,11 +174,32 @@ package org.un.cava.birdeye.qavis.charts.series
 						break;
 				}
 				
+				var yAxisRelativeValue:Number = NaN;
+
+				if (zAxis)
+				{
+					zPos = zAxis.getPosition(dataProvider.cursor.current[zField]);
+					yAxisRelativeValue = XYZAxis(zAxis).height - zPos;
+				} else {
+					zPos = dataProvider.zAxis.getPosition(dataProvider.cursor.current[zField]);
+					// since there is no method yet to draw a real z axis 
+					// we create an y axis and rotate it to properly visualize 
+					// a 'fake' z axis. however zPos over this y axis corresponds to 
+					// the axis height - zPos, because the y axis in Flex is 
+					// up side down. this trick allows to visualize the y axis as
+					// if it would be a z. when there will be a 3d line class, it will 
+					// be replaced
+					yAxisRelativeValue = XYZAxis(dataProvider.zAxis).height - zPos;
+				}
+
+				dataFields[2] = zField;
+
  				var bounds:RegularRectangle = new RegularRectangle(xPos, yPos, colWidth, y0 - yPos);
 
 				if (dataProvider.showDataTips)
-				{
-					createGG(dataProvider.cursor.current, dataFields, xPos + colWidth/2, yPos, 3,ttShapes,ttXoffset,ttYoffset);
+				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
+					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
+					createGG(dataProvider.cursor.current, dataFields, xPos + colWidth/2, yPos, yAxisRelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
 					var hitMouseArea:IGeometry = new itemRenderer(bounds); 
 					hitMouseArea.fill = new SolidFill(0x000000, 0);
 					gg.geometryCollection.addItem(hitMouseArea);
@@ -188,21 +210,26 @@ package org.un.cava.birdeye.qavis.charts.series
 				poly.fill = fill;
 				poly.stroke = stroke;
 				gg.geometryCollection.addItemAt(poly,0);
+				if (isNaN(zPos))
+					zPos = 0;
+				gg.z = zPos;
 				dataProvider.cursor.moveNext();
 			}
+
+			zSort();
 		}
 		
 /* 		private function getXMinPosition():Number
 		{
 			var xPos:Number;
 			
-			if (horizontalAxis)
+			if (xAxis)
 			{
-				if (horizontalAxis is NumericAxis)
-					xPos = horizontalAxis.getPosition(minHorizontalValue);
+				if (xAxis is NumericAxis)
+					xPos = xAxis.getPosition(minXValue);
 			} else {
-				if (dataProvider.horizontalAxis is NumericAxis)
-					xPos = dataProvider.horizontalAxis.getPosition(minHorizontalValue);
+				if (dataProvider.xAxis is NumericAxis)
+					xPos = dataProvider.xAxis.getPosition(minXValue);
 			}
 			
 			return xPos;
@@ -211,29 +238,47 @@ package org.un.cava.birdeye.qavis.charts.series
 		private function getYMinPosition():Number
 		{
 			var yPos:Number;
-			if (verticalAxis && verticalAxis is NumericAxis)
+			if (yAxis && yAxis is NumericAxis)
 			{
 				if (_baseAtZero)
-					yPos = verticalAxis.getPosition(0);
+					yPos = yAxis.getPosition(0);
 				else
-					yPos = verticalAxis.getPosition(NumericAxis(verticalAxis).min);
+					yPos = yAxis.getPosition(NumericAxis(yAxis).min);
 			} else {
-				if (dataProvider.verticalAxis is NumericAxis)
+				if (dataProvider.yAxis is NumericAxis)
 				{
 					if (_baseAtZero)
-						yPos = dataProvider.verticalAxis.getPosition(0);
+						yPos = dataProvider.yAxis.getPosition(0);
 					else
-						yPos = dataProvider.verticalAxis.getPosition(NumericAxis(dataProvider.verticalAxis).min);
+						yPos = dataProvider.yAxis.getPosition(NumericAxis(dataProvider.yAxis).min);
 				}
 			}
 			return yPos;
 		}
 		
-		override protected function calculateMaxVertical():void
+		override protected function calculateMaxY():void
 		{
-			super.calculateMaxVertical();
+			super.calculateMaxY();
 			if (dataProvider && dataProvider is ColumnChart && stackType == STACKED100)
-				_maxVerticalValue = Math.max(_maxVerticalValue, ColumnChart(dataProvider).maxStacked100);
+				_maxYValue = Math.max(_maxYValue, ColumnChart(dataProvider).maxStacked100);
+		}
+
+		private function zSort():void
+		{
+			var sortLayers:Array = new Array();
+			var nChildren:int = numChildren;
+			for(var i:int = 0; i < nChildren; i++) 
+			{
+				var child:* = getChildAt(0); 
+				var zPos:uint = child.transform.getRelativeMatrix3D(root).position.z;
+				sortLayers.push([zPos, child]);
+				removeChildAt(0);
+			}
+			// sort them and add them back (in reverse order).
+			sortLayers.sortOn("0", Array.NUMERIC | Array.DESCENDING);
+			for (i = 0; i < nChildren; i++) {
+				addChild(sortLayers[i][1]);
+			}
 		}
 	}
 }

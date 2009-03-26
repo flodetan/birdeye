@@ -55,12 +55,16 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 		/** Set the itemRenderer used for the layout of data values.*/
 		function set itemRenderer(val:Class):void;
 
-		/** Set the horizontal axis.*/
-		function set horizontalAxis(val:IAxisLayout):void;
+		/** Set the x axis.*/
+		function set xAxis(val:IAxisLayout):void;
 
-		/** Set the vertical axis.*/
-		function set verticalAxis(val:IAxisLayout):void;
+		/** Set the y axis.*/
+		function set yAxis(val:IAxisLayout):void;
 
+		/** Set the z axis.*/
+		function set zAxis(val:IAxisLayout):void;
+
+		
 		function get dataProvider():CartesianChart;
 		function get yField():String;
 		function get xField():String;
@@ -68,11 +72,18 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 		function get fillColor():Number;
 		function get strokeColor():Number;
 		function get itemRenderer():Class;
-		function get horizontalAxis():IAxisLayout;
-		function get verticalAxis():IAxisLayout;
-		function get maxVerticalValue():Number;
-		function get maxHorizontalValue():Number;
-		function get minVerticalValue():Number;
-		function get minHorizontalValue():Number;
+
+		function get xAxis():IAxisLayout;
+		function get yAxis():IAxisLayout;
+		function get zAxis():IAxisLayout;
+
+		function get maxZValue():Number;
+		function get minZValue():Number;
+
+		function get maxYValue():Number;
+		function get minYValue():Number;
+
+		function get maxXValue():Number;
+		function get minXValue():Number;
 	}
 }

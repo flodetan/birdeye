@@ -41,7 +41,7 @@ package org.un.cava.birdeye.qavis.charts.series
 	
 	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
-	import org.un.cava.birdeye.qavis.charts.axis.XYAxis;
+	import org.un.cava.birdeye.qavis.charts.axis.XYZAxis;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.CartesianChart;
 	import org.un.cava.birdeye.qavis.charts.data.ExtendedGeometryGroup;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisLayout;
@@ -97,6 +97,18 @@ package org.un.cava.birdeye.qavis.charts.series
 			return _yField;
 		}
 
+		private var _zField:String;
+		public function set zField(val:String):void
+		{
+			_zField= val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		public function get zField():String
+		{
+			return _zField;
+		}
+
 		private var _index:Number;
 		public function set index(val:Number):void
 		{
@@ -143,34 +155,49 @@ package org.un.cava.birdeye.qavis.charts.series
 			return _index;
 		}
 		
-		private var _horizontalAxis:IAxisLayout;
-		public function set horizontalAxis(val:IAxisLayout):void
+		private var _xAxis:IAxisLayout;
+		public function set xAxis(val:IAxisLayout):void
 		{
-			_horizontalAxis = val;
-			if (_horizontalAxis.placement != XYAxis.BOTTOM && _horizontalAxis.placement != XYAxis.TOP)
-				_horizontalAxis.placement = XYAxis.BOTTOM;
+			_xAxis = val;
+			if (_xAxis.placement != XYZAxis.BOTTOM && _xAxis.placement != XYZAxis.TOP)
+				_xAxis.placement = XYZAxis.BOTTOM;
 
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get horizontalAxis():IAxisLayout
+		public function get xAxis():IAxisLayout
 		{
-			return _horizontalAxis;
+			return _xAxis;
 		}
 		
-		private var _verticalAxis:IAxisLayout;
-		public function set verticalAxis(val:IAxisLayout):void
+		private var _yAxis:IAxisLayout;
+		public function set yAxis(val:IAxisLayout):void
 		{
-			_verticalAxis = val;
-			if (_verticalAxis.placement != XYAxis.LEFT && _verticalAxis.placement != XYAxis.RIGHT)
-				_verticalAxis.placement = XYAxis.LEFT;
+			_yAxis = val;
+			if (_yAxis.placement != XYZAxis.LEFT && _yAxis.placement != XYZAxis.RIGHT)
+				_yAxis.placement = XYZAxis.LEFT;
 
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get verticalAxis():IAxisLayout
+		public function get yAxis():IAxisLayout
 		{
-			return _verticalAxis;
+			return _yAxis;
+		}
+		
+		private var _zAxis:IAxisLayout;
+		public function set zAxis(val:IAxisLayout):void
+		{
+			_zAxis = val;
+			if (_zAxis.placement != XYZAxis.DIAGONAL)
+				_zAxis.placement = XYZAxis.DIAGONAL;
+
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		public function get zAxis():IAxisLayout
+		{
+			return _zAxis;
 		}
 		
 		private var _itemRenderer:Class;
@@ -185,36 +212,52 @@ package org.un.cava.birdeye.qavis.charts.series
 			return _itemRenderer;
 		}
 		
-		protected var _maxVerticalValue:Number = NaN;
-		public function get maxVerticalValue():Number
+		protected var _maxYValue:Number = NaN;
+		public function get maxYValue():Number
 		{
-			if (! (verticalAxis is CategoryAxis))
-				calculateMaxVertical();
-			return _maxVerticalValue;
+			if (! (yAxis is CategoryAxis))
+				calculateMaxY();
+			return _maxYValue;
 		}
 
-		protected var _maxHorizontalValue:Number = NaN;
-		public function get maxHorizontalValue():Number
+		protected var _maxXValue:Number = NaN;
+		public function get maxXValue():Number
 		{
-			if (! (horizontalAxis is CategoryAxis))
-				calculateMaxHorizontal();
-			return _maxHorizontalValue;
+			if (! (xAxis is CategoryAxis))
+				calculateMaxX();
+			return _maxXValue;
 		}
 
-		private var _minVerticalValue:Number = NaN;
-		public function get minVerticalValue():Number
+		private var _minYValue:Number = NaN;
+		public function get minYValue():Number
 		{
-			if (! (verticalAxis is CategoryAxis))
-				calculateMinVertical();
-			return _minVerticalValue;
+			if (! (yAxis is CategoryAxis))
+				calculateMinY();
+			return _minYValue;
 		}
 
-		private var _minHorizontalValue:Number = NaN;
-		public function get minHorizontalValue():Number
+		private var _minXValue:Number = NaN;
+		public function get minXValue():Number
 		{
-			if (! (horizontalAxis is CategoryAxis))
-				calculateMinHorizontal();
-			return _minHorizontalValue;
+			if (! (xAxis is CategoryAxis))
+				calculateMinX();
+			return _minXValue;
+		}
+
+		protected var _maxZValue:Number = NaN;
+		public function get maxZValue():Number
+		{
+			if (! (zAxis is CategoryAxis))
+				calculateMaxZ();
+			return _maxZValue;
+		}
+
+		private var _minZValue:Number = NaN;
+		public function get minZValue():Number
+		{
+			if (! (zAxis is CategoryAxis))
+				calculateMinZ();
+			return _minZValue;
 		}
 
 		// UIComponent flow
@@ -267,32 +310,32 @@ package org.un.cava.birdeye.qavis.charts.series
 		{
 			var minMaxCheck:Boolean = true;
 			
-			if (verticalAxis)
+			if (yAxis)
 			{
-				if (verticalAxis is NumericAxis)
-					minMaxCheck = !isNaN(maxVerticalValue) || !isNaN(minVerticalValue)
-			} else if (dataProvider && dataProvider.verticalAxis && dataProvider.verticalAxis is NumericAxis)
-				minMaxCheck = !isNaN(maxVerticalValue) || !isNaN(minVerticalValue)
+				if (yAxis is NumericAxis)
+					minMaxCheck = !isNaN(maxYValue) || !isNaN(minYValue)
+			} else if (dataProvider && dataProvider.yAxis && dataProvider.yAxis is NumericAxis)
+				minMaxCheck = !isNaN(maxYValue) || !isNaN(minYValue)
 				
-			if (horizontalAxis)
+			if (xAxis)
 			{
-				if (horizontalAxis is NumericAxis)
-					minMaxCheck = minMaxCheck && (!isNaN(maxHorizontalValue) || !isNaN(minHorizontalValue))
-			} else if (dataProvider && dataProvider.horizontalAxis && dataProvider.horizontalAxis is NumericAxis)
-				minMaxCheck = minMaxCheck && (!isNaN(maxHorizontalValue) || !isNaN(minHorizontalValue))
+				if (xAxis is NumericAxis)
+					minMaxCheck = minMaxCheck && (!isNaN(maxXValue) || !isNaN(minXValue))
+			} else if (dataProvider && dataProvider.xAxis && dataProvider.xAxis is NumericAxis)
+				minMaxCheck = minMaxCheck && (!isNaN(maxXValue) || !isNaN(minXValue))
 
 			var yAxisCheck:Boolean = 
-				(verticalAxis || (dataProvider && dataProvider.verticalAxis));
+				(yAxis || (dataProvider && dataProvider.yAxis));
 			
 			var xAxisCheck:Boolean = 
-				(horizontalAxis || (dataProvider && dataProvider.horizontalAxis));
+				(xAxis || (dataProvider && dataProvider.xAxis));
 
 			var colorsCheck:Boolean = 
 				(fillColor || strokeColor);
 
 			var globalCheck:Boolean = 
-				   (!isNaN(minHorizontalValue) || !isNaN(minVerticalValue))
-				&& (!isNaN(maxHorizontalValue) || !isNaN(maxVerticalValue))
+				   (!isNaN(minXValue) || !isNaN(minYValue))
+				&& (!isNaN(maxXValue) || !isNaN(maxYValue))
 				&& width>0 && height>0
 				&& dataProvider && xField && yField;
 			
@@ -325,58 +368,83 @@ package org.un.cava.birdeye.qavis.charts.series
 			}
 		}
 
-		protected function calculateMaxVertical():void
+		protected function calculateMaxY():void
 		{
-			_maxVerticalValue = NaN;
+			_maxYValue = NaN;
 			_dataProvider.cursor.seek(CursorBookmark.FIRST);
 			while (!_dataProvider.cursor.afterLast && yField)
 			{
-				if (isNaN(_maxVerticalValue) || _maxVerticalValue < _dataProvider.cursor.current[yField])
-					_maxVerticalValue = _dataProvider.cursor.current[yField];
+				if (isNaN(_maxYValue) || _maxYValue < _dataProvider.cursor.current[yField])
+					_maxYValue = _dataProvider.cursor.current[yField];
 				
 				_dataProvider.cursor.moveNext();
 			}
 		}
 
-		protected function calculateMaxHorizontal():void
+		protected function calculateMaxZ():void
 		{
-			_maxHorizontalValue = NaN;
+			_maxZValue = NaN;
 			_dataProvider.cursor.seek(CursorBookmark.FIRST);
-			while (!_dataProvider.cursor.afterLast && xField)
+			while (!_dataProvider.cursor.afterLast && zField)
 			{
-				if (isNaN(_maxHorizontalValue) || _maxHorizontalValue < _dataProvider.cursor.current[xField])
-					_maxHorizontalValue = _dataProvider.cursor.current[xField];
+				if (isNaN(_maxZValue) || _maxZValue < _dataProvider.cursor.current[zField])
+					_maxXValue = _dataProvider.cursor.current[zField];
 				_dataProvider.cursor.moveNext();
 			}
 		}
 
-		private function calculateMinVertical():void
+		protected function calculateMaxX():void
 		{
-			_minVerticalValue = NaN;
+			_maxXValue = NaN;
+			_dataProvider.cursor.seek(CursorBookmark.FIRST);
+			while (!_dataProvider.cursor.afterLast && xField)
+			{
+				if (isNaN(_maxXValue) || _maxXValue < _dataProvider.cursor.current[xField])
+					_maxXValue = _dataProvider.cursor.current[xField];
+				_dataProvider.cursor.moveNext();
+			}
+		}
+
+		private function calculateMinY():void
+		{
+			_minYValue = NaN;
 			_dataProvider.cursor.seek(CursorBookmark.FIRST);
 			while (!_dataProvider.cursor.afterLast && yField)
 			{
-				if (isNaN(_minVerticalValue) || _minVerticalValue > _dataProvider.cursor.current[yField])
-					_minVerticalValue = _dataProvider.cursor.current[yField];
+				if (isNaN(_minYValue) || _minYValue > _dataProvider.cursor.current[yField])
+					_minYValue = _dataProvider.cursor.current[yField];
 				
 				_dataProvider.cursor.moveNext();
 			}
 		}
 
-		private function calculateMinHorizontal():void
+		private function calculateMinZ():void
 		{
-			_minHorizontalValue = NaN;
+			_minZValue = NaN;
+			_dataProvider.cursor.seek(CursorBookmark.FIRST);
+			while (!_dataProvider.cursor.afterLast && zField)
+			{
+				if (isNaN(_minZValue) || _minZValue > _dataProvider.cursor.current[zField])
+					_minZValue = _dataProvider.cursor.current[zField];
+				
+				_dataProvider.cursor.moveNext();
+			}
+		}
+
+		private function calculateMinX():void
+		{
+			_minXValue = NaN;
 			_dataProvider.cursor.seek(CursorBookmark.FIRST);
 			while (!_dataProvider.cursor.afterLast && xField)
 			{
-				if (isNaN(_minHorizontalValue) || _minHorizontalValue > _dataProvider.cursor.current[xField])
-					_minHorizontalValue = _dataProvider.cursor.current[xField];
+				if (isNaN(_minXValue) || _minXValue > _dataProvider.cursor.current[xField])
+					_minXValue = _dataProvider.cursor.current[xField];
 				
 				_dataProvider.cursor.moveNext();
 			}
 		}
 		
- 		protected function createGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, radius:Number,
+ 		protected function createGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, zPos:Number, radius:Number,
 									shapes:Array = null /* of IGeometry */, ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
 		{
 			gg = new ExtendedGeometryGroup();
@@ -384,7 +452,7 @@ package org.un.cava.birdeye.qavis.charts.series
  			if (dataProvider.showDataTips)
 			{
 				initGGToolTip();
-				gg.createToolTip(dataProvider.cursor.current, dataFields, xPos, yPos, radius, shapes, ttXoffset, ttYoffset);
+				gg.createToolTip(dataProvider.cursor.current, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset);
  			} else {
 				graphicsCollection.addItem(gg);
 			}
@@ -422,26 +490,35 @@ package org.un.cava.birdeye.qavis.charts.series
 			tip = ToolTipManager.createToolTip(extGG.toolTip, 
 												pos.x + extGG.xTTOffset,	pos.y + extGG.yTTOffset)	as ToolTip;
 
-			tip.alpha = 0.7;
+			tip.alpha = 0.8;
 			dispatchEvent(new Event("showToolTip"));
 			extGG.showToolTipGeometry();
 			
-			if (verticalAxis)
+			if (yAxis)
 			{
-				verticalAxis.pointerY = extGG.posY;
-				verticalAxis.pointer.visible = true;
+				yAxis.pointerY = extGG.posY;
+				yAxis.pointer.visible = true;
 			} else {
-				dataProvider.verticalAxis.pointerY = extGG.posY;
-				dataProvider.verticalAxis.pointer.visible = true;
+				dataProvider.yAxis.pointerY = extGG.posY;
+				dataProvider.yAxis.pointer.visible = true;
 			} 
 
-			if (horizontalAxis)
+			if (xAxis)
 			{
-				horizontalAxis.pointerX = extGG.posX;
-				horizontalAxis.pointer.visible = true;
+				xAxis.pointerX = extGG.posX;
+				xAxis.pointer.visible = true;
 			} else {
-				dataProvider.horizontalAxis.pointerX = extGG.posX;
-				dataProvider.horizontalAxis.pointer.visible = true;
+				dataProvider.xAxis.pointerX = extGG.posX;
+				dataProvider.xAxis.pointer.visible = true;
+			} 
+
+			if (zAxis)
+			{
+				zAxis.pointerY = extGG.posZ;
+				zAxis.pointer.visible = true;
+			} else if (dataProvider.zAxis) {
+				dataProvider.zAxis.pointerY = extGG.posZ;
+				dataProvider.zAxis.pointer.visible = true;
 			} 
 		}
 
@@ -452,25 +529,30 @@ package org.un.cava.birdeye.qavis.charts.series
 		*/
 		protected function handleRollOut(e:MouseEvent):void
 		{ 
-			if (verticalAxis)
-				verticalAxis.pointer.visible = false;
+			if (yAxis)
+				yAxis.pointer.visible = false;
 			else
-				dataProvider.verticalAxis.pointer.visible = false;
+				dataProvider.yAxis.pointer.visible = false;
 
-			if (horizontalAxis)
-				horizontalAxis.pointer.visible = false;
+			if (xAxis)
+				xAxis.pointer.visible = false;
 			else
-				dataProvider.horizontalAxis.pointer.visible = false;
+				dataProvider.xAxis.pointer.visible = false;
 
-/* 			if (verticalAxis)
-				verticalAxis.pointerY = height;
-			else 
-				dataProvider.verticalAxis.pointerY = height;
+			if (zAxis)
+				zAxis.pointer.visible = false;
+			else if (dataProvider.zAxis)
+				dataProvider.zAxis.pointer.visible = false;
 
-			if (horizontalAxis)
-				horizontalAxis.pointerX = 0;
+/* 			if (yAxis)
+				yAxis.pointerY = height;
 			else 
-				dataProvider.horizontalAxis.pointerX = 0; */
+				dataProvider.yAxis.pointerY = height;
+
+			if (xAxis)
+				xAxis.pointerX = 0;
+			else 
+				dataProvider.xAxis.pointerX = 0; */
 
 			ToolTipManager.destroyToolTip(tip);
 			ExtendedGeometryGroup(e.target).hideToolTipGeometry();

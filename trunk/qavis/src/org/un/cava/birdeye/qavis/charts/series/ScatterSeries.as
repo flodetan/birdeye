@@ -33,8 +33,7 @@ package org.un.cava.birdeye.qavis.charts.series
 	
 	import mx.collections.CursorBookmark;
 	
-	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxis;
-	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
+	import org.un.cava.birdeye.qavis.charts.axis.XYZAxis;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IScatter;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ISizableItem;
 	import org.un.cava.birdeye.qavis.charts.renderers.CircleRenderer;
@@ -88,39 +87,60 @@ package org.un.cava.birdeye.qavis.charts.series
 		{
 			var dataFields:Array = [];
 
-			var xPos:Number, yPos:Number;
+			var xPos:Number, yPos:Number, zPos:Number;
 			var dataValue:Number;
 			var radius:Number;
 			
 			dataProvider.cursor.seek(CursorBookmark.FIRST);
 			while (!dataProvider.cursor.afterLast)
 			{
-				if (horizontalAxis)
+				if (xAxis)
 				{
-					xPos = horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
+					xPos = xAxis.getPosition(dataProvider.cursor.current[xField]);
 					dataFields[0] = xField;
 				} else {
-					xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
+					xPos = dataProvider.xAxis.getPosition(dataProvider.cursor.current[xField]);
 					dataFields[0] = xField;
 				}
 				
-				if (verticalAxis)
+				if (yAxis)
 				{
-					yPos = verticalAxis.getPosition(dataProvider.cursor.current[yField]);
+					yPos = yAxis.getPosition(dataProvider.cursor.current[yField]);
 					dataFields[1] = yField;
 				} else {
-					yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
+					yPos = dataProvider.yAxis.getPosition(dataProvider.cursor.current[yField]);
 					dataFields[1] = yField;
 				}
 
 				dataValue = dataProvider.cursor.current[radiusField];
-
 				radius = getRadius(dataValue);
+				dataFields[2] = radiusField;
  				var bounds:RegularRectangle = new RegularRectangle(xPos - radius, yPos - radius, radius * 2, radius * 2);
 
-				if (dataProvider.showDataTips)
+				var yAxisRelativeValue:Number = NaN;
+
+				if (zAxis)
 				{
-					createGG(dataProvider.cursor.current, dataFields, xPos, yPos, 3);
+					zPos = zAxis.getPosition(dataProvider.cursor.current[zField]);
+					yAxisRelativeValue = XYZAxis(zAxis).height - zPos;
+				} else if (dataProvider.zAxis) {
+					zPos = dataProvider.zAxis.getPosition(dataProvider.cursor.current[zField]);
+					// since there is no method yet to draw a real z axis 
+					// we create an y axis and rotate it to properly visualize 
+					// a 'fake' z axis. however zPos over this y axis corresponds to 
+					// the axis height - zPos, because the y axis in Flex is 
+					// up side down. this trick allows to visualize the y axis as
+					// if it would be a z. when there will be a 3d line class, it will 
+					// be replaced
+					yAxisRelativeValue = XYZAxis(dataProvider.zAxis).height - zPos;
+				}
+
+				dataFields[2] = zField;
+
+				if (dataProvider.showDataTips)
+				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
+					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
+					createGG(dataProvider.cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3);
 					var hitMouseArea:RegularRectangle = bounds; 
 					hitMouseArea.fill = new SolidFill(0x000000, 0);
 					gg.geometryCollection.addItem(hitMouseArea);

@@ -48,6 +48,8 @@ package org.un.cava.birdeye.qavis.charts.data
 		public var toolTip:String;
 		public var posX:Number;
 		public var posY:Number;
+		public var posZ:Number;
+
 		private var line:Line;		 
 		private var _showDataTips:Boolean = false;
 		private var _dataTipFunction:Function;
@@ -109,11 +111,13 @@ package org.un.cava.birdeye.qavis.charts.data
 		* Create and position the tooltips for this ExtendedGeometryGroup. 
 		*/
 		public function createToolTip(item:Object, dataFields:Array /* of String */, 
-										posX:Number, posY:Number, radius:Number, 
+										posX:Number, posY:Number, posZ:Number, radius:Number, 
 										ttShapes:Array = null/* of IGeometry */, xOffSet:Number = NaN, yOffset:Number = NaN):void
 		{
 			this.posX = posX;
 			this.posY = posY;
+			this.posZ = posZ;
+trace (posZ);
 			
 			// if no custom shapes than create the default one
 			if (! ttShapes)

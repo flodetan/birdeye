@@ -64,7 +64,7 @@
 		public function CustomAxis()
 		{
 			super();
-			_scaleType = XYAxis.NUMERIC;
+			_scaleType = XYZAxis.NUMERIC;
 		}
 		
 		override protected function commitProperties():void

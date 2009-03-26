@@ -43,7 +43,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 	
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisLayout;
 	
-	public class XYAxis extends UIComponent implements IAxisLayout
+	public class XYZAxis extends UIComponent implements IAxisLayout
 	{
 		protected var surf:Surface;
 		protected var gg:GeometryGroup;
@@ -78,7 +78,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		}
 		
 		/** Position the pointer to the specified x position. Used by a cartesian series
-		 * if the current axis is horizontal.*/
+		 * if the current axis is x.*/
 		public function set pointerX(val:Number):void
 		{
 			pointer.x = pointer.x1 = val;
@@ -130,7 +130,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		
 		private var _placement:String;
 		/** Set the placement for this axis. */
-		[Inspectable(enumeration="top,bottom,left,right,vertical_center,horizontal_center")]
+		[Inspectable(enumeration="top,bottom,left,right,vertical_center,horizontal_center,diagonal")]
 		public function set placement(val:String):void
 		{
 			_placement = val;
@@ -172,7 +172,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		}
 
 		// UIComponent flow
-		public function XYAxis()
+		public function XYZAxis()
 		{
 			super();
 		}
@@ -230,10 +230,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 				gg.geometry = [];
 				gg.geometryCollection.items = [];
 			}
-			
-/* 			for (var i:Number = gg.geometryCollection.items.length; i>0; i--)
-				gg.geometryCollection.removeItemAt(i-1);
- */			
+						
 			drawAxisLine(w,h)
 
 			if (readyForLayout)
@@ -259,6 +256,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 						_pointer = new Line(w-7,h, w, h);
 						break;
 					case RIGHT:
+					case DIAGONAL:
 						xMin = 0; xMax = 0;
 						yMin = 0; yMax = h;
 						sign = 1;
@@ -293,10 +291,15 @@ package org.un.cava.birdeye.qavis.charts.axis
 					y0 = 0; y1 = h;
 					break;
 				case RIGHT:
+ 				case DIAGONAL:
 					x0 = 0; x1 = 0;
 					y0 = 0; y1 = h;
 					break;
-			}
+/*  				case DIAGONAL:
+					x0 = 0; x1 = w;
+					y0 = h; y1 = h;
+					break;
+ */ 			}
 
 			line = new Line(x0,y0,x1,y1);
 			line.fill = fill;
@@ -327,6 +330,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 					break;
 				case LEFT:
 				case RIGHT:
+				case DIAGONAL:
 					size = height;
 					break;
 			}

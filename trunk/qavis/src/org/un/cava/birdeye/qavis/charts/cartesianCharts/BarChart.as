@@ -30,7 +30,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.LinearAxis;
-	import org.un.cava.birdeye.qavis.charts.axis.XYAxis;
+	import org.un.cava.birdeye.qavis.charts.axis.XYZAxis;
 	import org.un.cava.birdeye.qavis.charts.series.BarSeries;
 	import org.un.cava.birdeye.qavis.charts.series.StackableSeries;
 
@@ -133,16 +133,16 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		}
 		
 		/** @Private */
-		override protected function createVerticalAxis():void
+		override protected function createYAxis():void
 		{
 			// must be defined by the user since it's probably a category axis
 			// and need the category field to be defined
 		}
 		/** @Private */
-		override protected function createHorizontalAxis():void
+		override protected function createXAxis():void
 		{
-			horizontalAxis = new LinearAxis();
-			horizontalAxis.placement = XYAxis.BOTTOM;
+			xAxis = new LinearAxis();
+			xAxis.placement = XYZAxis.BOTTOM;
 		}
 	}
 }

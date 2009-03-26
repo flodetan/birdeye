@@ -42,7 +42,7 @@
 		public function LinearAxis()
 		{
 			super();
-			_scaleType = XYAxis.LINEAR;
+			_scaleType = XYZAxis.LINEAR;
 		}
 		
 		override protected function commitProperties():void
