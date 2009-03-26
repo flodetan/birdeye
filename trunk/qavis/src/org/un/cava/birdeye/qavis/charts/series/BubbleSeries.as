@@ -35,11 +35,11 @@ package org.un.cava.birdeye.qavis.charts.series
 		{
 			super();
 		}
-
-		override protected function updateDisplayList(w:Number, h:Number):void
+		
+		override protected function commitProperties():void
 		{
+			super.commitProperties();
 			itemRenderer = CircleRenderer;
-			super.updateDisplayList(w,h);
 		}
 	}
 }

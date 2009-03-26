@@ -28,7 +28,9 @@
 package org.un.cava.birdeye.qavis.charts.axis
 {
 	import com.degrafa.GeometryGroup;
+	import com.degrafa.IGeometry;
 	import com.degrafa.Surface;
+	import com.degrafa.geometry.Geometry;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RasterText;
 	import com.degrafa.paint.SolidFill;
@@ -95,13 +97,14 @@ package org.un.cava.birdeye.qavis.charts.axis
 		 */
 		protected var isGivenInterval:Boolean = false;
 
-		protected var _interval:Number;
+		protected var _interval:Number = NaN;
 		/** Set the interval between axis values. */
 		public function set interval(val:Number):void
 		{
 			_interval = val;
 			isGivenInterval = true;
-			dispatchEvent(new Event("IntervalChanged"));
+			if (scaleType == CATEGORY)
+				dispatchEvent(new Event("IntervalChanged"));
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -204,7 +207,18 @@ package org.un.cava.birdeye.qavis.charts.axis
 		protected var thick:Line; 
 		protected var thickWidth:Number = 5;
 		protected var label:RasterText;
-		public var pointer:Line;
+		
+		private var _pointer:Line;
+		public function set pointer(val:Line):void
+		{
+			_pointer = val;
+			invalidateDisplayList();
+		}
+		public function get pointer():Line
+		{
+			return _pointer;
+		}
+		
 		/** @Private */
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
@@ -230,30 +244,31 @@ package org.un.cava.birdeye.qavis.charts.axis
 						xMin = 0; xMax = w;
 						yMin = 0; yMax = 0;
 						sign = 1;
-						pointer = new Line(0,0, 0, 7);
+						_pointer = new Line(0,0, 0, 7);
 						break;
 					case TOP:
 						xMin = 0; xMax = w;
 						yMin = h; yMax = h;
 						sign = -1;
-						pointer = new Line(0,h-7, 0, h);
+						_pointer = new Line(0,h-7, 0, h);
 						break;
 					case LEFT:
 						xMin = w; xMax = w;
 						yMin = 0; yMax = h;
 						sign = -1;
-						pointer = new Line(w-7,h, w, h);
+						_pointer = new Line(w-7,h, w, h);
 						break;
 					case RIGHT:
 						xMin = 0; xMax = 0;
 						yMin = 0; yMax = h;
 						sign = 1;
-						pointer = new Line(0,h, +7, h);
+						_pointer = new Line(0,h, +7, h);
 						break;
 				}
 				drawAxes(xMin, xMax, yMin, yMax, sign);
-				pointer.stroke = new SolidStroke(0xff0000,1,3);
-				gg.geometryCollection.addItem(pointer);
+				_pointer.stroke = new SolidStroke(0xff0000,1,3);
+				_pointer.visible = false;
+				gg.geometryCollection.addItem(_pointer);
 			}
 		}
 		/** @Private

@@ -50,20 +50,24 @@ package org.un.cava.birdeye.qavis.charts.series
 		{
 			super();
 		}
-
-		override protected function updateDisplayList(w:Number, h:Number):void
+		
+		override protected function commitProperties():void
 		{
-			super.updateDisplayList(w,h);
-			
+			super.commitProperties();
+			if (! itemRenderer)
+				itemRenderer = LineRenderer;
+		}
+
+		/** @Private 
+		 * Called by super.updateDisplayList when the series is ready for layout.*/
+		override protected function drawSeries():void
+		{
 			dataProvider.cursor.seek(CursorBookmark.FIRST);
 			
 			var xPrev:Number, yPrev:Number;
 			var xPos:Number, yPos:Number;
 			var j:Number = 0;
 			var dataFields:Array = [];
-			
-			if (! itemRenderer)
-				itemRenderer = LineRenderer;
 			
 			gg = new ExtendedGeometryGroup();
 			gg.target = this;
