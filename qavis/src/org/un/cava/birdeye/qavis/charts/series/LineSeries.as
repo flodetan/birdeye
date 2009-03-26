@@ -133,6 +133,9 @@ package org.un.cava.birdeye.qavis.charts.series
 				xPrev = xPos; yPrev = yPos;
 				dataProvider.cursor.moveNext();
 			}
+
+			if (dataProvider.is3D)
+				zSort();
 		}
 		
  		private var ttGG:ExtendedGeometryGroup;

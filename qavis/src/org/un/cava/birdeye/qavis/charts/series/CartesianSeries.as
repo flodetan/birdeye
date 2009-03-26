@@ -557,5 +557,25 @@ package org.un.cava.birdeye.qavis.charts.series
 			ToolTipManager.destroyToolTip(tip);
 			ExtendedGeometryGroup(e.target).hideToolTipGeometry();
 		}
+
+		/** @Private
+		 * Sort the surface elements according their z position.*/ 
+		protected function zSort():void
+		{
+			var sortLayers:Array = new Array();
+			var nChildren:int = numChildren;
+			for(var i:int = 0; i < nChildren; i++) 
+			{
+				var child:* = getChildAt(0); 
+				var zPos:uint = child.transform.getRelativeMatrix3D(root).position.z;
+				sortLayers.push([zPos, child]);
+				removeChildAt(0);
+			}
+			// sort them and add them back (in reverse order).
+			sortLayers.sortOn("0", Array.NUMERIC | Array.DESCENDING);
+			for (i = 0; i < nChildren; i++) {
+				addChild(sortLayers[i][1]);
+			}
+		}
 	}
 }

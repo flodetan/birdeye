@@ -152,6 +152,9 @@ package org.un.cava.birdeye.qavis.charts.series
 				gg.geometryCollection.addItemAt(scatter,0);
 				dataProvider.cursor.moveNext();
 			}
+
+			if (dataProvider.is3D)
+				zSort();
 		}
 		
 		private function getRadius(dataValue:Number):Number

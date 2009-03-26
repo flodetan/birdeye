@@ -34,7 +34,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	import flash.geom.Rectangle;
 	
 	import mx.collections.CursorBookmark;
-	import mx.containers.Canvas;
 	import mx.containers.HBox;
 	import mx.containers.VBox;
 	import mx.core.Container;
@@ -44,7 +43,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	import org.un.cava.birdeye.qavis.charts.axis.LinearAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxis;
-	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisDepth;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ICartesianSeries;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IStack;
@@ -117,6 +115,12 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			invalidateDisplayList();
 		}
 
+		private var _is3D:Boolean = false;
+		public function get is3D():Boolean
+		{
+			return _is3D;
+		}
+
 		protected var needDefaultXAxis:Boolean;
 		protected var needDefaultYAxis:Boolean;
 		protected var _xAxis:IAxisLayout;
@@ -176,7 +180,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		
 		private var leftContainer:Container, rightContainer:Container;
 		private var topContainer:Container, bottomContainer:Container;
-		private var zContainer:Canvas;
+		private var zContainer:Container;
 		private var seriesContainer:Surface = new Surface();
 		/** @Private
 		 * Crete and add all containers that define the chart structure.
@@ -189,7 +193,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			addChild(rightContainer = new HBox());
 			addChild(topContainer = new VBox());
 			addChild(bottomContainer = new VBox());
-			addChild(zContainer = new Canvas());
+			addChild(zContainer = new HBox());
 			addChild(seriesContainer);
 			
 			zContainer.verticalScrollPolicy = "off";
@@ -242,9 +246,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 					ICartesianSeries(series[0]).removeAllElements();
 				seriesContainer.removeChildAt(0);
 			}
-  			
-			var numZaxis:Number = 0;
-  			
+
 			if (series)
 			{
  				for (i = 0; i<series.length; i++)
@@ -280,28 +282,27 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 					} else 
 						needDefaultYAxis = true;
 
-					var zAxis:IAxisLayout = ICartesianSeries(series[i]).zAxis;
-					if (zAxis)
+					var tmpZAxis:IAxisLayout = ICartesianSeries(series[i]).zAxis;
+					if (tmpZAxis)
 					{
-						zContainer.addChild(DisplayObject(zAxis));
- 						XYZAxis(zAxis).height = 500; 
+						zContainer.addChild(DisplayObject(tmpZAxis));
+ 						XYZAxis(tmpZAxis).height = 500; 
 						zContainer.rotationX = -90;
 						zContainer.z = 500;
-						DisplayObject(zAxis).y = numZaxis * 50; 
-						numZaxis += 1;
+						_is3D = true;
  					}
 				}
 			}
-			
+
 			if (_zAxis)
 			{
+				_is3D = true;
 				zContainer.addChild(DisplayObject(_zAxis));
- 				XYZAxis(zAxis).height = 500; 
+ 				XYZAxis(_zAxis).height = 500; 
 				zContainer.rotationX = -90;
 				zContainer.z = 500;
-				DisplayObject(zAxis).y = numZaxis * 50; 
-				numZaxis += 1;
 			}
+			
 			// if some series have no own y axis, than create a default one for the chart
 			// that will be used by all series without a y axis
 			if (needDefaultYAxis)
@@ -388,6 +389,11 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				
 				// listeners like legends will listen to this event
 				dispatchEvent(new Event("ProviderReady"));
+				
+				if (_is3D)
+					rotationY = 39;
+				else
+					transform.matrix3D = null;
  			}
 		}
 		
@@ -498,6 +504,34 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 					}
 				} 
 				
+				elements = [];
+				j = 0;
+				cursor.seek(CursorBookmark.FIRST);
+
+				// check if a default y axis exists
+				if (zAxis)
+				{
+					if (zAxis is CategoryAxis)
+					{
+						while (!cursor.afterLast)
+						{
+							// if the category value already exists in the axis, than skip it
+							if (elements.indexOf(cursor.current[CategoryAxis(zAxis).categoryField]) == -1)
+								elements[j++] = 
+									cursor.current[CategoryAxis(zAxis).categoryField];
+							cursor.moveNext();
+						}
+						// set the elements property of the CategoryAxis
+						if (elements.length > 0)
+							CategoryAxis(zAxis).elements = elements;
+					} else {
+						// if the default x axis is numeric, than calculate its min max values
+						maxMin = getMaxMinZValueFromSeriesWithoutHAxis();
+						NumericAxis(zAxis).max = maxMin[0];
+						NumericAxis(zAxis).min = maxMin[1];
+					}
+				} 
+
 				// init all series that have their own axes
 				// since these are children of each series, they are 
 				// for sure ready for feeding and it won't affect the axesNotFeeded status
@@ -545,6 +579,28 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				// is higher than the current max
 				if (!CartesianSeries(series[i]).xAxis && (isNaN(min) || min > CartesianSeries(series[i]).minXValue))
 					min = CartesianSeries(series[i]).minXValue;
+			}
+					
+			return [max,min];
+		}
+		
+		
+		/** @Private
+		 * Calculate the min max values for the default z axis. Return an array of 2 values, the 1st (0) 
+		 * for the max value, and the 2nd for the min value.*/
+		private function getMaxMinZValueFromSeriesWithoutHAxis():Array
+		{
+			var max:Number = NaN, min:Number = NaN;
+			for (var i:Number = 0; i<series.length; i++)
+			{
+				// check if the series has its own z axis and if its max value exists and 
+				// is higher than the current max
+				if (!CartesianSeries(series[i]).zAxis && (isNaN(max) || max < CartesianSeries(series[i]).maxZValue))
+					max = CartesianSeries(series[i]).maxZValue;
+				// check if the series has its own z axis and if its max value exists and 
+				// is higher than the current max
+				if (!CartesianSeries(series[i]).zAxis && (isNaN(min) || min > CartesianSeries(series[i]).minZValue))
+					min = CartesianSeries(series[i]).minZValue;
 			}
 					
 			return [max,min];
