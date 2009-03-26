@@ -17,7 +17,7 @@
 			
 			private function createDT():void
 			{
-				regions = ["region1","region2","region3","region4","region5","region6","region7"];
+				regions = ["R1","R2","R3","R4","R5","R6","R7"];
 				var ac:ArrayCollection = new ArrayCollection();
 				for (var i:Number = 0; i<regions.length; i++)
 				{
@@ -37,11 +37,14 @@
 				dt = ac;
 			}
 			
-			private function dtFunc(currDatatip:Object):String{
-				return  currDatatip.index + ' (' + currDatatip.total + ')' + '\n' 
-						+ "Bronze: " + currDatatip.bronze + '\n'
-						+ "Gold: " + currDatatip.gold + '\n'
-						+ "Silver: " + currDatatip.silver;
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = "Total: " + ' (' + currDatatip.total + ')';
+				
+				for (var i:Number = 0; i<dataFields.length; i++)
+					tt += '\n' + dataFields[i] + ": " + currDatatip[dataFields[i]];
+
+				return  tt;
 			}
 		]]>
 	</mx:Script>
