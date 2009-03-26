@@ -35,6 +35,7 @@ package org.un.cava.birdeye.qavis.charts.series
 	
 	import mx.collections.CursorBookmark;
 	
+	import org.un.cava.birdeye.qavis.charts.axis.XYZAxis;
 	import org.un.cava.birdeye.qavis.charts.data.ExtendedGeometryGroup;
 	import org.un.cava.birdeye.qavis.charts.renderers.LineRenderer;
 
@@ -65,7 +66,7 @@ package org.un.cava.birdeye.qavis.charts.series
 			dataProvider.cursor.seek(CursorBookmark.FIRST);
 			
 			var xPrev:Number, yPrev:Number;
-			var xPos:Number, yPos:Number;
+			var xPos:Number, yPos:Number, zPos:Number;
 			var j:Number = 0;
 			var dataFields:Array = [];
 			
@@ -74,27 +75,48 @@ package org.un.cava.birdeye.qavis.charts.series
 			graphicsCollection.addItem(gg);
 			while (!dataProvider.cursor.afterLast)
 			{
-				if (horizontalAxis)
+				if (xAxis)
 				{
-					xPos = horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
+					xPos = xAxis.getPosition(dataProvider.cursor.current[xField]);
 					dataFields[0] = xField;
 				} else {
-					xPos = dataProvider.horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
+					xPos = dataProvider.xAxis.getPosition(dataProvider.cursor.current[xField]);
 					dataFields[0] = xField;
 				}
 				
-				if (verticalAxis)
+				if (yAxis)
 				{
-					yPos = verticalAxis.getPosition(dataProvider.cursor.current[yField]);
+					yPos = yAxis.getPosition(dataProvider.cursor.current[yField]);
 					dataFields[1] = yField;
 				} else {
-					yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
+					yPos = dataProvider.yAxis.getPosition(dataProvider.cursor.current[yField]);
 					dataFields[1] = yField;
 				}
 				
+				var yAxisRelativeValue:Number = NaN;
+
+				if (zAxis)
+				{
+					zPos = zAxis.getPosition(dataProvider.cursor.current[zField]);
+					yAxisRelativeValue = XYZAxis(zAxis).height - zPos;
+				} else if (dataProvider.zAxis) {
+					zPos = dataProvider.zAxis.getPosition(dataProvider.cursor.current[zField]);
+					// since there is no method yet to draw a real z axis 
+					// we create an y axis and rotate it to properly visualize 
+					// a 'fake' z axis. however zPos over this y axis corresponds to 
+					// the axis height - zPos, because the y axis in Flex is 
+					// up side down. this trick allows to visualize the y axis as
+					// if it would be a z. when there will be a 3d line class, it will 
+					// be replaced
+					yAxisRelativeValue = XYZAxis(dataProvider.zAxis).height - zPos;
+				}
+
+				dataFields[2] = zField;
+
 				if (dataProvider.showDataTips)
-				{
-					createGG(dataProvider.cursor.current, dataFields, xPos, yPos, 3);
+				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
+					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
+					createGG(dataProvider.cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3);
 					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
 					hitMouseArea.fill = new SolidFill(0x000000, 0);
 					ttGG.geometryCollection.addItem(hitMouseArea);
@@ -114,15 +136,16 @@ package org.un.cava.birdeye.qavis.charts.series
 		}
 		
  		private var ttGG:ExtendedGeometryGroup;
-		override protected function createGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, radius:Number,
-									shapes:Array = null , ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
+		override protected function createGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
+									zPos:Number, radius:Number, shapes:Array = null /* of IGeomtry */, 
+									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
 		{
 			ttGG = new ExtendedGeometryGroup();
 			ttGG.target = this;
  			if (dataProvider.showDataTips)
 			{
 				initGGToolTip();
-				ttGG.createToolTip(dataProvider.cursor.current, dataFields, xPos, yPos, radius);
+				ttGG.createToolTip(dataProvider.cursor.current, dataFields, xPos, yPos, zPos, radius);
  			} else {
 				graphicsCollection.addItem(ttGG);
 			}

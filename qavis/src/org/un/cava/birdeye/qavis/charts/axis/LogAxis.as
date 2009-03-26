@@ -36,7 +36,7 @@
 		public function LogAxis()
 		{
 			super();
-			_scaleType = XYAxis.CATEGORY;
+			_scaleType = XYZAxis.CATEGORY;
 		}
 		
 	}

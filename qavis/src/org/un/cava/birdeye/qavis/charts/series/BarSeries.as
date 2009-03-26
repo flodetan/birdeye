@@ -35,8 +35,8 @@ package org.un.cava.birdeye.qavis.charts.series
 	
 	import mx.collections.CursorBookmark;
 	
-	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
+	import org.un.cava.birdeye.qavis.charts.axis.XYZAxis;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.BarChart;
 	import org.un.cava.birdeye.qavis.charts.renderers.RectangleRenderer;
 
@@ -80,13 +80,13 @@ package org.un.cava.birdeye.qavis.charts.series
 
 			if (stackType == STACKED100)
 			{
-				if (horizontalAxis)
+				if (xAxis)
 				{
-					if (horizontalAxis is NumericAxis)
-						NumericAxis(horizontalAxis).max = maxHorizontalValue;
+					if (xAxis is NumericAxis)
+						NumericAxis(xAxis).max = maxXValue;
 				} else {
-					if (dataProvider && dataProvider.horizontalAxis && dataProvider.horizontalAxis is NumericAxis)
-						NumericAxis(dataProvider.horizontalAxis).max = maxHorizontalValue;
+					if (dataProvider && dataProvider.xAxis && dataProvider.xAxis is NumericAxis)
+						NumericAxis(dataProvider.xAxis).max = maxXValue;
 				}
 			}
 		}
@@ -98,7 +98,7 @@ package org.un.cava.birdeye.qavis.charts.series
 		{
 			var dataFields:Array = [];
 
-			var xPos:Number, yPos:Number;
+			var xPos:Number, yPos:Number, zPos:Number;
 			var j:Number = 0;
 
 			var ttShapes:Array;
@@ -111,43 +111,43 @@ package org.un.cava.birdeye.qavis.charts.series
 
 			while (!dataProvider.cursor.afterLast)
 			{
-				if (verticalAxis)
+				if (yAxis)
 				{
-					yPos = verticalAxis.getPosition(dataProvider.cursor.current[yField]);
+					yPos = yAxis.getPosition(dataProvider.cursor.current[yField]);
 
 					dataFields[0] = yField;
 
 					if (isNaN(size))
- 						size = verticalAxis.interval*(3/5);
+ 						size = yAxis.interval*(3/5);
 				} else {
-					yPos = dataProvider.verticalAxis.getPosition(dataProvider.cursor.current[yField]);
+					yPos = dataProvider.yAxis.getPosition(dataProvider.cursor.current[yField]);
 
 					dataFields[0] = yField;
 
 					if (isNaN(size))
-						size = dataProvider.verticalAxis.interval*(3/5);
+						size = dataProvider.yAxis.interval*(3/5);
 				}
 				
-				if (horizontalAxis)
+				if (xAxis)
 				{
 					if (_stackType == STACKED100)
 					{
-						x0 = horizontalAxis.getPosition(baseValues[j]);
-						xPos = horizontalAxis.getPosition(
+						x0 = xAxis.getPosition(baseValues[j]);
+						xPos = xAxis.getPosition(
 							baseValues[j++] + Math.max(0,dataProvider.cursor.current[xField]));
 					} else {
-						xPos = horizontalAxis.getPosition(dataProvider.cursor.current[xField]);
+						xPos = xAxis.getPosition(dataProvider.cursor.current[xField]);
 					}
 					dataFields[1] = xField;
 				}
 				else {
 					if (_stackType == STACKED100)
 					{
-						x0 = dataProvider.horizontalAxis..getPosition(baseValues[j]);
-						xPos = dataProvider.horizontalAxis..getPosition(
+						x0 = dataProvider.xAxis..getPosition(baseValues[j]);
+						xPos = dataProvider.xAxis..getPosition(
 							baseValues[j++] + Math.max(0,dataProvider.cursor.current[xField]));
 					} else 
-						xPos = dataProvider.horizontalAxis..getPosition(dataProvider.cursor.current[xField]);
+						xPos = dataProvider.xAxis..getPosition(dataProvider.cursor.current[xField]);
 
 					dataFields[1] = xField;
 				}
@@ -176,9 +176,30 @@ package org.un.cava.birdeye.qavis.charts.series
 				
 				var bounds:RegularRectangle = new RegularRectangle(x0, yPos, xPos -x0, barWidth);
 
-				if (dataProvider.showDataTips)
+				var yAxisRelativeValue:Number = NaN;
+
+				if (zAxis)
 				{
-					createGG(dataProvider.cursor.current, dataFields, xPos, yPos+barWidth/2, 3,ttShapes,ttXoffset,ttYoffset);
+					zPos = zAxis.getPosition(dataProvider.cursor.current[zField]);
+					yAxisRelativeValue = XYZAxis(zAxis).height - zPos;
+				} else if (dataProvider.zAxis) {
+					zPos = dataProvider.zAxis.getPosition(dataProvider.cursor.current[zField]);
+					// since there is no method yet to draw a real z axis 
+					// we create an y axis and rotate it to properly visualize 
+					// a 'fake' z axis. however zPos over this y axis corresponds to 
+					// the axis height - zPos, because the y axis in Flex is 
+					// up side down. this trick allows to visualize the y axis as
+					// if it would be a z. when there will be a 3d line class, it will 
+					// be replaced
+					yAxisRelativeValue = XYZAxis(dataProvider.zAxis).height - zPos;
+				}
+
+				dataFields[2] = zField;
+
+				if (dataProvider.showDataTips)
+				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
+					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
+					createGG(dataProvider.cursor.current, dataFields, xPos, yPos+barWidth/2, yAxisRelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
 					var hitMouseArea:RegularRectangle = bounds; 
 					hitMouseArea.fill = new SolidFill(0x000000, 0);
 					gg.geometryCollection.addItem(hitMouseArea);
@@ -195,29 +216,29 @@ package org.un.cava.birdeye.qavis.charts.series
 		private function getXMinPosition():Number
 		{
 			var xPos:Number;
-			if (horizontalAxis && horizontalAxis is NumericAxis)
+			if (xAxis && xAxis is NumericAxis)
 			{
 				if (_baseAtZero)
-					xPos = horizontalAxis.getPosition(0);
+					xPos = xAxis.getPosition(0);
 				else
-					xPos = horizontalAxis.getPosition(NumericAxis(horizontalAxis).min);
+					xPos = xAxis.getPosition(NumericAxis(xAxis).min);
 			} else {
-				if (dataProvider.horizontalAxis is NumericAxis)
+				if (dataProvider.xAxis is NumericAxis)
 				{
 					if (_baseAtZero)
-						xPos = dataProvider.horizontalAxis.getPosition(0);
+						xPos = dataProvider.xAxis.getPosition(0);
 					else
-						xPos = dataProvider.horizontalAxis.getPosition(NumericAxis(dataProvider.horizontalAxis).min);
+						xPos = dataProvider.xAxis.getPosition(NumericAxis(dataProvider.xAxis).min);
 				}
 			}
 			return xPos;
 		}
 		
-		override protected function calculateMaxHorizontal():void
+		override protected function calculateMaxX():void
 		{
-			super.calculateMaxHorizontal();
+			super.calculateMaxX();
 			if (dataProvider && dataProvider is BarChart && stackType == STACKED100) 
-				_maxHorizontalValue = Math.max(_maxHorizontalValue, BarChart(dataProvider).maxStacked100);
+				_maxXValue = Math.max(_maxXValue, BarChart(dataProvider).maxStacked100);
 		}
 	}
 }

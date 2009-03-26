@@ -36,7 +36,7 @@
 	
 	import org.un.cava.birdeye.qavis.charts.interfaces.IEnumerable;
 	
-	public class CategoryAxis extends XYAxis implements IEnumerable
+	public class CategoryAxis extends XYZAxis implements IEnumerable
 	{
 		/** @Private
 		 * The scale type cannot be changed, since it's already "category".*/
@@ -78,7 +78,7 @@
 		public function CategoryAxis()
 		{
 			super();
-			_scaleType = XYAxis.CATEGORY;
+			_scaleType = XYZAxis.CATEGORY;
 		}
 		
 		override protected function commitProperties():void
@@ -117,7 +117,7 @@
 		
 		/** @Private
 		 * Calculate the maximum label size, necessary to define the needed 
-		 * width (for vertical axes) or height (for horizontal axes) of the CategoryAxis.*/
+		 * width (for y axes) or height (for x axes) of the CategoryAxis.*/
 		override protected function maxLabelSize():void
 		{
 			switch (placement)
@@ -129,6 +129,7 @@
 					break;
 				case LEFT:
 				case RIGHT:
+				case DIAGONAL:
 					maxLblSize = String(_elements[0]).length;
 					for (var i:Number = 0; i<_elements.length; i++)
 						maxLblSize = Math.max(maxLblSize, String(_elements[i]).length); 
@@ -229,6 +230,9 @@
 				case LEFT:
 				case RIGHT:
 					pos = size - ((elements.indexOf(dataValue)+.5) / elements.length) * size;
+					break;
+				case DIAGONAL:
+					pos = ((elements.indexOf(dataValue)+.5) / elements.length) * size;
 					break;
 			}
 				

@@ -29,7 +29,7 @@ package org.un.cava.birdeye.qavis.charts.series
 {
 	import flash.events.Event;
 	
-	import org.un.cava.birdeye.qavis.charts.axis.XYAxis;
+	import org.un.cava.birdeye.qavis.charts.axis.XYZAxis;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IStack;
 	
 	[Exclude(name="stackType", kind="property")] 
@@ -110,40 +110,40 @@ package org.un.cava.birdeye.qavis.charts.series
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
-			if (verticalAxis)
+			if (yAxis)
 			{
 				if (! isListening[OWN_VERTICAL_INTERVAL_CHANGES])
 				{
-					XYAxis(verticalAxis).addEventListener("IntervalChanged", update);
+					XYZAxis(yAxis).addEventListener("IntervalChanged", update);
 					isListening[OWN_VERTICAL_INTERVAL_CHANGES] = true;
 				}
 				if (isListening[DATAPROVIDER_VERTICAL_INTERVAL_CHANGES])
 				{
-					XYAxis(dataProvider.verticalAxis).removeEventListener("IntervalChanged", update);
+					XYZAxis(dataProvider.yAxis).removeEventListener("IntervalChanged", update);
 				}
-			} else if (dataProvider && dataProvider.verticalAxis) {
+			} else if (dataProvider && dataProvider.yAxis) {
 				if (! isListening[DATAPROVIDER_VERTICAL_INTERVAL_CHANGES])
 				{
-					XYAxis(dataProvider.verticalAxis).addEventListener("IntervalChanged", update);
+					XYZAxis(dataProvider.yAxis).addEventListener("IntervalChanged", update);
 					isListening[DATAPROVIDER_VERTICAL_INTERVAL_CHANGES] = true;
 				}
 			}
 
-			if (horizontalAxis)
+			if (xAxis)
 			{
 				if (! isListening[OWN_HORIZONTAL_INTERVAL_CHANGES])
 				{
-					XYAxis(horizontalAxis).addEventListener("IntervalChanged", update);
+					XYZAxis(xAxis).addEventListener("IntervalChanged", update);
 					isListening[OWN_HORIZONTAL_INTERVAL_CHANGES] = true;
 				}
 				if (isListening[DATAPROVIDER_HORIZONTAL_INTERVAL_CHANGES])
 				{
-					XYAxis(dataProvider.horizontalAxis).removeEventListener("IntervalChanged", update);
+					XYZAxis(dataProvider.xAxis).removeEventListener("IntervalChanged", update);
 				}
-			} else if (dataProvider && dataProvider.horizontalAxis) {
+			} else if (dataProvider && dataProvider.xAxis) {
 				if (! isListening[DATAPROVIDER_HORIZONTAL_INTERVAL_CHANGES])
 				{
-					XYAxis(dataProvider.horizontalAxis).addEventListener("IntervalChanged", update);
+					XYZAxis(dataProvider.xAxis).addEventListener("IntervalChanged", update);
 					isListening[DATAPROVIDER_HORIZONTAL_INTERVAL_CHANGES] = true;
 				}
 			}
