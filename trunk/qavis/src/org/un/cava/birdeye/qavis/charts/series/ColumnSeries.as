@@ -118,14 +118,14 @@ package org.un.cava.birdeye.qavis.charts.series
 					dataFields[0] = xField;
 
 					if (isNaN(size))
-						size = xAxis.interval*(4/5);
+						size = xAxis.interval*deltaSize;
 				} else {
 					xPos = dataProvider.xAxis.getPosition(dataProvider.cursor.current[xField]);
 
 					dataFields[0] = xField;
 
 					if (isNaN(size))
-						size = dataProvider.xAxis.interval*(4/5);
+						size = dataProvider.xAxis.interval*deltaSize;
 				}
 				
 				if (yAxis)
@@ -180,7 +180,7 @@ package org.un.cava.birdeye.qavis.charts.series
 				{
 					zPos = zAxis.getPosition(dataProvider.cursor.current[zField]);
 					yAxisRelativeValue = XYZAxis(zAxis).height - zPos;
-				} else {
+				} else if (dataProvider.zAxis) {
 					zPos = dataProvider.zAxis.getPosition(dataProvider.cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 
 					// we create an y axis and rotate it to properly visualize 
@@ -216,7 +216,8 @@ package org.un.cava.birdeye.qavis.charts.series
 				dataProvider.cursor.moveNext();
 			}
 
-			zSort();
+			if (dataProvider.is3D)
+				zSort();
 		}
 		
 /* 		private function getXMinPosition():Number
@@ -261,24 +262,6 @@ package org.un.cava.birdeye.qavis.charts.series
 			super.calculateMaxY();
 			if (dataProvider && dataProvider is ColumnChart && stackType == STACKED100)
 				_maxYValue = Math.max(_maxYValue, ColumnChart(dataProvider).maxStacked100);
-		}
-
-		private function zSort():void
-		{
-			var sortLayers:Array = new Array();
-			var nChildren:int = numChildren;
-			for(var i:int = 0; i < nChildren; i++) 
-			{
-				var child:* = getChildAt(0); 
-				var zPos:uint = child.transform.getRelativeMatrix3D(root).position.z;
-				sortLayers.push([zPos, child]);
-				removeChildAt(0);
-			}
-			// sort them and add them back (in reverse order).
-			sortLayers.sortOn("0", Array.NUMERIC | Array.DESCENDING);
-			for (i = 0; i < nChildren; i++) {
-				addChild(sortLayers[i][1]);
-			}
 		}
 	}
 }

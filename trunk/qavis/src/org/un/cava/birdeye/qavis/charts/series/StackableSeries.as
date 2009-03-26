@@ -46,6 +46,8 @@ package org.un.cava.birdeye.qavis.charts.series
 		
 		private var isListening:Array = [];
 		
+		protected var deltaSize:Number;
+		
 		public static const OVERLAID:String = "overlaid";
 		public static const STACKED:String = "stacked";
 		public static const STACKED100:String = "stacked100";
@@ -147,6 +149,11 @@ package org.un.cava.birdeye.qavis.charts.series
 					isListening[DATAPROVIDER_HORIZONTAL_INTERVAL_CHANGES] = true;
 				}
 			}
+			
+			if (dataProvider.is3D)
+				deltaSize = 1/5;
+			else 
+				deltaSize = 3/5;
 		}
 		
 		private function update(e:Event):void

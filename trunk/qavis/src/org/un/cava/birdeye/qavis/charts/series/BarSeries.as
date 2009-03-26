@@ -118,14 +118,14 @@ package org.un.cava.birdeye.qavis.charts.series
 					dataFields[0] = yField;
 
 					if (isNaN(size))
- 						size = yAxis.interval*(3/5);
+ 						size = yAxis.interval*deltaSize;
 				} else {
 					yPos = dataProvider.yAxis.getPosition(dataProvider.cursor.current[yField]);
 
 					dataFields[0] = yField;
 
 					if (isNaN(size))
-						size = dataProvider.yAxis.interval*(3/5);
+						size = dataProvider.yAxis.interval*deltaSize;
 				}
 				
 				if (xAxis)
@@ -211,6 +211,9 @@ package org.un.cava.birdeye.qavis.charts.series
 				gg.geometryCollection.addItemAt(poly,0);
 				dataProvider.cursor.moveNext();
 			}
+
+			if (dataProvider.is3D)
+				zSort();
 		}
 		
 		private function getXMinPosition():Number

@@ -132,6 +132,9 @@ package org.un.cava.birdeye.qavis.charts.series
 				gg.z = zPos;
  				dataProvider.cursor.moveNext();
 			}
+			
+			if (dataProvider.is3D)
+				zSort();
 		}
 	}
 }
