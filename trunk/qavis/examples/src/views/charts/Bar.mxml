@@ -50,49 +50,49 @@
 	</mx:Script>
 	<mx:Button label="Generate" click="createDT()"/>
 	<charts:BarChart id="bc2" width="80%" height="80%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true" type="overlaid">
-    	<charts:verticalAxis>
+    	<charts:yAxis>
     		<axis:CategoryAxis categoryField="index" placement="right"/>
-    	</charts:verticalAxis>
+    	</charts:yAxis>
 		 <charts:series>
 		 	<series:BarSeries xField="gold" fillColor="0xff00" yField="index" displayName="gold">
-		 		<series:verticalAxis>
+		 		<series:yAxis>
 		 			<axis:CategoryAxis categoryField="index" placement="right"/>
-		 		</series:verticalAxis>
-		 		<series:horizontalAxis>
+		 		</series:yAxis>
+		 		<series:xAxis>
 		 			<axis:LinearAxis placement="top"/>
-		 		</series:horizontalAxis>
+		 		</series:xAxis>
 		 	</series:BarSeries>
 		 	<series:BarSeries xField="silver" fillColor="0xff" yField="index" displayName="silver"/>
 		 </charts:series>
 	</charts:BarChart>
 	<charts:BarChart id="bc3" width="80%" height="80%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true" type="stacked">
-    	<charts:verticalAxis>
+    	<charts:yAxis>
     		<axis:CategoryAxis categoryField="index" placement="right"/>
-    	</charts:verticalAxis>
+    	</charts:yAxis>
 		 <charts:series>
 		 	<series:BarSeries xField="gold" fillColor="0xff00" yField="index" displayName="gold">
-		 		<series:verticalAxis>
+		 		<series:yAxis>
 		 			<axis:CategoryAxis categoryField="index" placement="right"/>
-		 		</series:verticalAxis>
-		 		<series:horizontalAxis>
+		 		</series:yAxis>
+		 		<series:xAxis>
 		 			<axis:LinearAxis placement="top"/>
-		 		</series:horizontalAxis>
+		 		</series:xAxis>
 		 	</series:BarSeries>
 		 	<series:BarSeries xField="silver" fillColor="0xff" yField="index" displayName="silver"/>
 		 </charts:series>
 	</charts:BarChart>
 	<charts:BarChart id="bc4" width="80%" height="80%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true" type="stacked100">
-    	<charts:verticalAxis>
+    	<charts:yAxis>
     		<axis:CategoryAxis categoryField="index" placement="right"/>
-    	</charts:verticalAxis>
+    	</charts:yAxis>
 		 <charts:series>
 		 	<series:BarSeries xField="gold" fillColor="0xff00" yField="index" displayName="gold">
-		 		<series:verticalAxis>
+		 		<series:yAxis>
 		 			<axis:CategoryAxis categoryField="index" placement="right"/>
-		 		</series:verticalAxis>
-		 		<series:horizontalAxis>
+		 		</series:yAxis>
+		 		<series:xAxis>
 		 			<axis:LinearAxis placement="top"/>
-		 		</series:horizontalAxis>
+		 		</series:xAxis>
 		 	</series:BarSeries>
 		 	<series:BarSeries xField="silver" fillColor="0xff" yField="index" displayName="silver"/>
 		 </charts:series>

@@ -52,9 +52,9 @@
 	<mx:HBox width="80%" height="100%" verticalAlign="middle" horizontalAlign="center">
 		<legend:ChartLegend dataProvider="{pc1}" direction="vertical"/>	
 		<charts:CartesianChart id="pc1" width="80%" height="80%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
-	    	<charts:verticalAxis>
+	    	<charts:yAxis>
 	    		<axis:CategoryAxis categoryField="index" placement="right"/>
-	    	</charts:verticalAxis>
+	    	</charts:yAxis>
 			 <charts:series>
 			 	<series:PlotSeries xField="silver" itemRenderer="org.un.cava.birdeye.qavis.charts.renderers.DiamondRenderer" strokeColor="0xff" fillColor="0xdddddd" yField="index" displayName="silver"/>
 			 </charts:series>
@@ -62,9 +62,9 @@
 	</mx:HBox>
 	<mx:HBox width="80%" height="100%" verticalAlign="middle" horizontalAlign="center">
 		<charts:CartesianChart id="pc2" width="80%" height="80%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
-	    	<charts:horizontalAxis>
+	    	<charts:xAxis>
 	    		<axis:CategoryAxis categoryField="index" placement="right"/>
-	    	</charts:horizontalAxis>
+	    	</charts:xAxis>
 			 <charts:series>
 			 	<series:PlotSeries yField="silver" strokeColor="0xff0000" fillColor="0xff00" xField="index" displayName="silver">
 			 	</series:PlotSeries>
@@ -76,20 +76,20 @@
 		<charts:CartesianChart id="pc3" width="80%" height="80%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
 			 <charts:series>
 			 	<series:PlotSeries xField="index" strokeColor="0xff" fillColor="0xdddddd" yField="silver" displayName="silver">
-			 		<series:verticalAxis>
+			 		<series:yAxis>
 			 			<axis:LinearAxis placement="left"/>
-			 		</series:verticalAxis>
-			 		<series:horizontalAxis>
+			 		</series:yAxis>
+			 		<series:xAxis>
 			 			<axis:CategoryAxis categoryField="index" placement="bottom"/>
-			 		</series:horizontalAxis>
+			 		</series:xAxis>
 			 	</series:PlotSeries>
 			 	<series:PlotSeries xField="silver" itemRenderer="org.un.cava.birdeye.qavis.charts.renderers.DiamondRenderer" strokeColor="0xff0000" fillColor="0xff00" yField="index" displayName="silver">
-			 		<series:horizontalAxis>
+			 		<series:xAxis>
 			 			<axis:LinearAxis placement="top"/>
-			 		</series:horizontalAxis>
-			 		<series:verticalAxis>
+			 		</series:xAxis>
+			 		<series:yAxis>
 			 			<axis:CategoryAxis categoryField="index" placement="left"/>
-			 		</series:verticalAxis>
+			 		</series:yAxis>
 			 	</series:PlotSeries>
 			 </charts:series>
 		</charts:CartesianChart>
