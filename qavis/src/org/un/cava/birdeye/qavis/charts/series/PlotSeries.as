@@ -114,7 +114,7 @@ package org.un.cava.birdeye.qavis.charts.series
 				if (dataProvider.showDataTips)
 				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createGG(dataProvider.cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3);
+					createGG(dataProvider.cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, _plotRadius);
 					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
 					hitMouseArea.fill = new SolidFill(0x000000, 0);
 					gg.geometryCollection.addItem(hitMouseArea);

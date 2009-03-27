@@ -125,6 +125,7 @@ package org.un.cava.birdeye.qavis.charts.series
 			// polygon. All hit area elements will be put in ttGeom
 			// this increases performances in case the user doesn't set
 			// showDataTips to true in the parent chart
+			// if it's a 3D chart, than gg will be instantiated for each pair of datavalues
 			gg = new ExtendedGeometryGroup();
 			gg.target = this;
 			graphicsCollection.addItem(gg);
@@ -236,6 +237,9 @@ package org.un.cava.birdeye.qavis.charts.series
 				// to the next data value coordinates
 				y0Prev = y0;
 				xPrev = xPos; yPrev = yPos;
+				if (isNaN(zPos))
+					zPos = 0;
+				gg.z = zPos;
 				dataProvider.cursor.moveNext();
 			}
 			if (dataProvider.is3D)

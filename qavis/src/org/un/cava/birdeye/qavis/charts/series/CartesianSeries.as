@@ -567,7 +567,7 @@ package org.un.cava.birdeye.qavis.charts.series
 			for(var i:int = 0; i < nChildren; i++) 
 			{
 				var child:* = getChildAt(0); 
-				var zPos:uint = child.transform.getRelativeMatrix3D(root).position.z;
+				var zPos:uint = ExtendedGeometryGroup(child).posZ;//child.transform.getRelativeMatrix3D(root).position.z;
 				sortLayers.push([zPos, child]);
 				removeChildAt(0);
 			}

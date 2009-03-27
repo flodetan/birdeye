@@ -209,6 +209,9 @@ package org.un.cava.birdeye.qavis.charts.series
 				poly.fill = fill;
 				poly.stroke = stroke;
 				gg.geometryCollection.addItemAt(poly,0);
+				if (isNaN(zPos))
+					zPos = 0;
+				gg.z = zPos;
 				dataProvider.cursor.moveNext();
 			}
 
