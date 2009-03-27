@@ -4,11 +4,12 @@
 	xmlns:treemap="views.treemap.*"
 	xmlns:microcharts="views.microcharts.*"
 	xmlns:charts="views.charts.*"
+	xmlns:charts3d="views.charts3d.*"
 	xmlns:matrix="views.matrix.*"
 	xmlns:parallel="views.parallel.*"
 	backgroundGradientColors="[#333333,#999999]"
-	layout="vertical"
-	initialize="start()">
+	layout="vertical" width="100%" height="100%"
+	initialize="start()" xmlns:charts3D="views.charts3D.*">
 
 	<mx:Style source="styles/main.css" />
 	
@@ -57,7 +58,8 @@
 		</mx:ApplicationControlBar>	
 				
 		<mx:TabNavigator width="100%" height="100%" paddingLeft="5" paddingRight="5" creationPolicy="auto">
-			<charts:Charts label="Charts" width="100%" height="100%"/>		
+			<charts:Charts2D label="Charts 2D" width="100%" height="100%"/>		
+			<charts3D:Charts3D label="Charts 3D" width="100%" height="100%"/>		
 			<microcharts:Microcharts label="Microcharts" width="100%" height="100%"/>
 			<treemap:TreeMap label="Treemap" width="100%" height="100%"/>
 			<matrix:ComparisonMatrixExample label="Comparison Matrix" dataProvider="{multidimensionalData}" width="100%" height="100%"/>
