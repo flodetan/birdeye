@@ -5,7 +5,7 @@
 	xmlns:axis="org.un.cava.birdeye.qavis.charts.axis.*"
 	xmlns:legend="org.un.cava.birdeye.qavis.charts.legend.*"
 	backgroundColor="#ffffff" 
-	creationComplete="createDT(); transform.matrix3D = null;"
+	creationComplete="createDT()" verticalScrollPolicy="off" horizontalScrollPolicy="off"
 	width="100%" height="100%">
 	<mx:Script>
 		<![CDATA[
@@ -55,7 +55,7 @@
 		<mx:HSlider minimum="-200" maximum="600" value="30" id="yPos" allowTrackClick="true" snapInterval="1" enabled="true" change="bb1.y = yPos.value" liveDragging="true"/>
 	</mx:VBox>
 	<legend:ChartLegend dataProvider="{bb1}" direction="horizontal" x="100" y="150"/>
-    <charts:BubbleChart width="400" height="500" id="bb1" maxRadius="20" x="150" y="200" dataTipFunction="dtFunc" showDataTips="true" dataProvider="{dt}">
+    <charts:BubbleChart id="bb1" width="20%" maxRadius="20" height="20%" x="150" y="200" dataTipFunction="dtFunc" showDataTips="true" dataProvider="{dt}">
 	 	<charts:xAxis>
 	 		<axis:CategoryAxis categoryField="index" placement="bottom" interval="1"/>
 	 	</charts:xAxis>
