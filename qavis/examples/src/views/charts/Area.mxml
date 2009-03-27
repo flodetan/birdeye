@@ -64,9 +64,9 @@
 	<mx:Button label="Generate" click="createDT()"/>
 	<mx:HBox width="80%" height="100%" verticalAlign="top">
     	<charts:AreaChart id="ac3" width="80%" height="80%" type="stacked100" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
-	 		<charts:horizontalAxis>
+	 		<charts:xAxis>
 	 			<axis:CategoryAxis categoryField="index" placement="bottom"/>
-	 		</charts:horizontalAxis>
+	 		</charts:xAxis>
     		 <charts:series>
     		 	<series:AreaSeries yField="gold" xField="index" baseAtZero="true" fillColor="0x444444" displayName="gold">
     		 	</series:AreaSeries>
@@ -80,9 +80,9 @@
 	</mx:HBox>
 	<mx:HBox width="80%" height="100%" verticalAlign="top">
 		<charts:AreaChart id="ac2" width="80%" height="80%" type="overlaid" dataProvider="{dt1}" showDataTips="true">
-	 		<charts:horizontalAxis>
+	 		<charts:xAxis>
 	 			<axis:CategoryAxis categoryField="index" placement="top"/>
-	 		</charts:horizontalAxis>
+	 		</charts:xAxis>
 			 <charts:series>
 			 	<series:AreaSeries yField="silver" fillAlpha=".5" xField="index" baseAtZero="true" fillColor="0xff" displayName="silver">
 			 	</series:AreaSeries>

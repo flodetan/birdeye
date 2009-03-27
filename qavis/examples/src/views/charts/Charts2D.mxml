@@ -9,9 +9,9 @@
 
 	<mx:TabNavigator id="nav" height="100%" width="100%" creationPolicy="auto">
 		<charts2:Column label="Column"/>
+		<charts2:Plot label="Plot"/>
 		<charts2:Area label="Area"/>
 		<charts2:Bar label="Bar"/>
-		<charts2:Plot label="Plot"/>
 		<charts2:Line label="Line"/>
 		<charts2:Scatter label="Scatter"/>
 		<charts2:Bubble label="Bubble"/>

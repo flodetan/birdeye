@@ -52,9 +52,9 @@
 	<mx:HBox width="80%" height="100%" verticalAlign="middle">
 		<legend:ChartLegend dataProvider="{lc1}" direction="horizontal"/>	
 		<charts:CartesianChart id="lc1" width="80%" height="80%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
-	    	<charts:verticalAxis>
+	    	<charts:yAxis>
 	    		<axis:CategoryAxis categoryField="index" placement="right"/>
-	    	</charts:verticalAxis>
+	    	</charts:yAxis>
 			 <charts:series>
 			 	<series:LineSeries xField="silver" strokeColor="0xff0000" yField="index" displayName="silver">
 			 	</series:LineSeries>
@@ -63,9 +63,9 @@
 	</mx:HBox>
 	<mx:HBox width="80%" height="100%" verticalAlign="middle">
     	<charts:CartesianChart id="lc2" width="80%" height="80%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
-    	<charts:horizontalAxis>
+    	<charts:xAxis>
     		<axis:CategoryAxis categoryField="index" placement="right"/>
-    	</charts:horizontalAxis>
+    	</charts:xAxis>
     		 <charts:series>
     		 	<series:LineSeries yField="silver" strokeColor="0xff" xField="index" displayName="silver">
     		 	</series:LineSeries>
@@ -77,20 +77,20 @@
     	<charts:CartesianChart id="lc3" width="80%" height="80%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
     		 <charts:series>
     		 	<series:LineSeries xField="index" strokeColor="0xff" yField="silver" displayName="silver">
-			 		<series:verticalAxis>
+			 		<series:yAxis>
     		 			<axis:LinearAxis placement="left"/>
-			 		</series:verticalAxis>
-    		 		<series:horizontalAxis>
+			 		</series:yAxis>
+    		 		<series:xAxis>
 			 			<axis:CategoryAxis categoryField="index" placement="bottom"/>
-    		 		</series:horizontalAxis>
+    		 		</series:xAxis>
     		 	</series:LineSeries>
     		 	<series:LineSeries xField="silver" strokeColor="0xff0000" yField="index" displayName="silver">
-			 		<series:horizontalAxis>
+			 		<series:xAxis>
     		 			<axis:LinearAxis placement="top"/>
-			 		</series:horizontalAxis>
-    		 		<series:verticalAxis>
+			 		</series:xAxis>
+    		 		<series:yAxis>
 			 			<axis:CategoryAxis categoryField="index" placement="left"/>
-    		 		</series:verticalAxis>
+    		 		</series:yAxis>
     		 	</series:LineSeries>
     		 </charts:series>
     	</charts:CartesianChart>

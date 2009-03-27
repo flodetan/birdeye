@@ -50,17 +50,17 @@
 	</mx:Script>
 	<mx:Button label="Generate" click="createDT()"/>
 	<charts:CartesianChart id="mix" width="50%" height="50%" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true">
- 		<charts:horizontalAxis>
+ 		<charts:xAxis>
  			<axis:CategoryAxis categoryField="index" placement="bottom"/>
- 		</charts:horizontalAxis>
+ 		</charts:xAxis>
 		 <charts:series>
 		 	<series:BarSeries yField="region" fillAlpha=".5" xField="silver" fillColor="0xff00" displayName="silver">
-		 		<series:horizontalAxis>
+		 		<series:xAxis>
 		 			<axis:LinearAxis placement="top"/>
-		 		</series:horizontalAxis>
-		 		<series:verticalAxis>
+		 		</series:xAxis>
+		 		<series:yAxis>
 		 			<axis:CategoryAxis categoryField="region" placement="right"/>
-		 		</series:verticalAxis>
+		 		</series:yAxis>
 		 	</series:BarSeries>
 		 	<series:AreaSeries yField="gold" fillAlpha=".7" xField="index" fillColor="0xdddddd" displayName="gold">
 		 	</series:AreaSeries>

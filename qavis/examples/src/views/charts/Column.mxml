@@ -54,9 +54,9 @@
 			<legend:ChartLegend dataProvider="{cc1}" direction="horizontal"/>
 	       	<charts:ColumnChart id="cc1" width="80%" height="80%" dataTipFunction="dtFunc" showDataTips="true" dataProvider="{dt}" 
 	       		type="overlaid">
-		 		<charts:horizontalAxis>
+		 		<charts:xAxis>
 		 			<axis:CategoryAxis categoryField="index" placement="bottom" interval="1"/>
-		 		</charts:horizontalAxis>
+		 		</charts:xAxis>
         		 <charts:series>
         		 	<series:ColumnSeries xField="index" yField="gold" baseAtZero="true" 
         		 		fillColor="0xff0000" fillAlpha="1" strokeColor="0x000000" displayName="gold">
@@ -66,9 +66,9 @@
 		</mx:VBox>
        	<charts:ColumnChart id="cc2" width="80%" height="80%" dataTipFunction="dtFunc" showDataTips="true" dataProvider="{dt}" 
        		type="overlaid">
-	 		<charts:horizontalAxis>
+	 		<charts:xAxis>
 	 			<axis:CategoryAxis categoryField="index" placement="top" interval="1"/>
-	 		</charts:horizontalAxis>
+	 		</charts:xAxis>
     		 <charts:series>
     		 	<series:ColumnSeries xField="index" fillAlpha=".5" yField="gold" baseAtZero="true" fillColor="0xff0000" itemRenderer="org.un.cava.birdeye.qavis.charts.renderers.DiamondRenderer" displayName="gold">
     		 	</series:ColumnSeries>
@@ -84,9 +84,9 @@
 		<mx:VBox width="100%" height="100%" horizontalAlign="center">
 	       	<charts:ColumnChart id="cc3" width="80%" height="80%" dataTipFunction="dtFunc" showDataTips="true" dataProvider="{dt}" 
 	       		type="stacked">
-		 		<charts:horizontalAxis>
+		 		<charts:xAxis>
 		 			<axis:CategoryAxis categoryField="index" placement="top" interval="1"/>
-		 		</charts:horizontalAxis>
+		 		</charts:xAxis>
         		 <charts:series>
         		 	<series:ColumnSeries xField="index" yField="gold" baseAtZero="true" fillColor="0xff0000" displayName="gold">
         		 	</series:ColumnSeries>
@@ -101,9 +101,9 @@
 		<mx:VBox width="100%" height="100%" horizontalAlign="center">
 	       	<charts:ColumnChart id="cc4" width="80%" height="80%" dataTipFunction="dtFunc" showDataTips="true" dataProvider="{dt}" 
 	       		type="stacked100">
-		 		<charts:horizontalAxis>
+		 		<charts:xAxis>
 		 			<axis:CategoryAxis categoryField="index" placement="top" interval="1"/>
-		 		</charts:horizontalAxis>
+		 		</charts:xAxis>
         		 <charts:series>
         		 	<series:ColumnSeries xField="index" yField="gold" baseAtZero="true" fillColor="0xff0000" displayName="gold">
         		 	</series:ColumnSeries>

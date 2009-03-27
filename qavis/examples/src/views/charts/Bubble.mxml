@@ -19,14 +19,15 @@
 			{
 				regions = ["R1","R2","R3","R4","R5","R6","R7"];
 				var ac:ArrayCollection = new ArrayCollection();
+				for (var j:Number = 0; j<5; j++)
 				for (var i:Number = 0; i<regions.length; i++)
 				{
 					var gold:Number = Math.round(Math.random() * 1000),
 						silver:Number = Math.round(Math.random() * 1000),
 						bronze:Number = Math.round(Math.random() * 1000);
 					ac.addItem({
-						index: i,
-						year: 2000 + i,
+						index: j+i,
+						year: 2000 + j,
 						region: regions[i],
 						gold: gold,
 						silver: silver,
@@ -39,7 +40,7 @@
 			
 			private function dtFunc(currDatatip:Object, dataFields:Array):String
 			{
-				var tt:String = "Total: " + ' (' + currDatatip.total + ')';
+				var tt:String = "Data:";
 				
 				for (var i:Number = 0; i<dataFields.length; i++)
 					tt += '\n' + dataFields[i] + ": " + currDatatip[dataFields[i]];
@@ -50,9 +51,9 @@
 	</mx:Script>
 	<mx:Button label="Generate" click="createDT()"/>
 	<charts:BubbleChart maxRadius="30" id="bb" width="80%" height="80%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
- 	<charts:horizontalAxis>
+ 	<charts:xAxis>
  		<axis:CategoryAxis categoryField="index" placement="top"/>
- 	</charts:horizontalAxis>
+ 	</charts:xAxis>
 		 <charts:series>
 		 	<series:BubbleSeries xField="index" radiusField="total" strokeColor="0xff" fillAlpha=".6" fillColor="0xdddddd" yField="silver" displayName="silver">
 		 	</series:BubbleSeries>
