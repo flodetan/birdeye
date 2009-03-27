@@ -131,6 +131,9 @@ package org.un.cava.birdeye.qavis.charts.series
 					line = null;
 				}
 				xPrev = xPos; yPrev = yPos;
+				if (isNaN(zPos))
+					zPos = 0;
+				gg.z = zPos;
 				dataProvider.cursor.moveNext();
 			}
 

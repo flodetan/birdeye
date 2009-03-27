@@ -286,9 +286,9 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 					if (tmpZAxis)
 					{
 						zContainer.addChild(DisplayObject(tmpZAxis));
- 						XYZAxis(tmpZAxis).height = 500; 
+ 						XYZAxis(tmpZAxis).height = width; 
 						zContainer.rotationX = -90;
-						zContainer.z = 500;
+						zContainer.z = width;
 						_is3D = true;
  					}
 				}
@@ -298,9 +298,9 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			{
 				_is3D = true;
 				zContainer.addChild(DisplayObject(_zAxis));
- 				XYZAxis(_zAxis).height = 500; 
+ 				XYZAxis(_zAxis).height = width; 
 				zContainer.rotationX = -90;
-				zContainer.z = 500;
+				zContainer.z = width;
 			}
 			
 			// if some series have no own y axis, than create a default one for the chart

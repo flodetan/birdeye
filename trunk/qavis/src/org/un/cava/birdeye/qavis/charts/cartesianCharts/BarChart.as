@@ -137,6 +137,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		{
 			// must be defined by the user since it's probably a category axis
 			// and need the category field to be defined
+			throw new Error("No yAxis defined for the Bar char. Please make sure that an yAxis is created in the chart declaration.");
 		}
 		/** @Private */
 		override protected function createXAxis():void

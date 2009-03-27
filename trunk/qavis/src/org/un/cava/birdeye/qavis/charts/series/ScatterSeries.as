@@ -150,6 +150,9 @@ package org.un.cava.birdeye.qavis.charts.series
 				scatter.fill = fill;
 				scatter.stroke = stroke;
 				gg.geometryCollection.addItemAt(scatter,0);
+				if (isNaN(zPos))
+					zPos = 0;
+				gg.z = zPos;
 				dataProvider.cursor.moveNext();
 			}
 
