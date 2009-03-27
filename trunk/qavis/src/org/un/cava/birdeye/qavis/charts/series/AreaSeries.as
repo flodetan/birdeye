@@ -194,6 +194,7 @@ package org.un.cava.birdeye.qavis.charts.series
 				{
 					zPos = zAxis.getPosition(dataProvider.cursor.current[zField]);
 					yAxisRelativeValue = XYZAxis(zAxis).height - zPos;
+					dataFields[2] = zField;
 				} else if (dataProvider.zAxis) {
 					zPos = dataProvider.zAxis.getPosition(dataProvider.cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 
@@ -204,9 +205,8 @@ package org.un.cava.birdeye.qavis.charts.series
 					// if it would be a z. when there will be a 3d line class, it will 
 					// be replaced
 					yAxisRelativeValue = XYZAxis(dataProvider.zAxis).height - zPos;
+					dataFields[2] = zField;
 				}
-
-				dataFields[2] = zField;
 
 				// if showdatatips than create a new GeometryGroup and set its 
 				// tooltip along with the hit area and events
@@ -237,9 +237,12 @@ package org.un.cava.birdeye.qavis.charts.series
 				// to the next data value coordinates
 				y0Prev = y0;
 				xPrev = xPos; yPrev = yPos;
-				if (isNaN(zPos))
-					zPos = 0;
-				gg.z = zPos;
+				if (dataProvider.is3D)
+				{
+					gg.z = zPos;
+					if (isNaN(zPos))
+						zPos = 0;
+				}
 				dataProvider.cursor.moveNext();
 			}
 			if (dataProvider.is3D)

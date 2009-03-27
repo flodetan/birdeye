@@ -99,6 +99,7 @@ package org.un.cava.birdeye.qavis.charts.series
 				{
 					zPos = zAxis.getPosition(dataProvider.cursor.current[zField]);
 					yAxisRelativeValue = XYZAxis(zAxis).height - zPos;
+					dataFields[2] = zField;
 				} else if (dataProvider.zAxis) {
 					zPos = dataProvider.zAxis.getPosition(dataProvider.cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 
@@ -109,9 +110,8 @@ package org.un.cava.birdeye.qavis.charts.series
 					// if it would be a z. when there will be a 3d line class, it will 
 					// be replaced
 					yAxisRelativeValue = XYZAxis(dataProvider.zAxis).height - zPos;
+					dataFields[2] = zField;
 				}
-
-				dataFields[2] = zField;
 
 				if (dataProvider.showDataTips)
 				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
@@ -131,9 +131,12 @@ package org.un.cava.birdeye.qavis.charts.series
 					line = null;
 				}
 				xPrev = xPos; yPrev = yPos;
-				if (isNaN(zPos))
-					zPos = 0;
-				gg.z = zPos;
+				if (dataProvider.is3D)
+				{
+					gg.z = zPos;
+					if (isNaN(zPos))
+						zPos = 0;
+				}
 				dataProvider.cursor.moveNext();
 			}
 
