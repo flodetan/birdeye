@@ -180,6 +180,7 @@ package org.un.cava.birdeye.qavis.charts.series
 				{
 					zPos = zAxis.getPosition(dataProvider.cursor.current[zField]);
 					yAxisRelativeValue = XYZAxis(zAxis).height - zPos;
+					dataFields[2] = zField;
 				} else if (dataProvider.zAxis) {
 					zPos = dataProvider.zAxis.getPosition(dataProvider.cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 
@@ -190,9 +191,8 @@ package org.un.cava.birdeye.qavis.charts.series
 					// if it would be a z. when there will be a 3d line class, it will 
 					// be replaced
 					yAxisRelativeValue = XYZAxis(dataProvider.zAxis).height - zPos;
+					dataFields[2] = zField;
 				}
-
-				dataFields[2] = zField;
 
  				var bounds:RegularRectangle = new RegularRectangle(xPos, yPos, colWidth, y0 - yPos);
 
@@ -210,9 +210,12 @@ package org.un.cava.birdeye.qavis.charts.series
 				poly.fill = fill;
 				poly.stroke = stroke;
 				gg.geometryCollection.addItemAt(poly,0);
-				if (isNaN(zPos))
-					zPos = 0;
-				gg.z = zPos;
+				if (dataProvider.is3D)
+				{
+					gg.z = zPos;
+					if (isNaN(zPos))
+						zPos = 0;
+				}
 				dataProvider.cursor.moveNext();
 			}
 
