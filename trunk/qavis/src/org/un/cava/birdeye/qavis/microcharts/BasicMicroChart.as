@@ -47,6 +47,7 @@ package org.un.cava.birdeye.qavis.microcharts
 	import mx.controls.ToolTip;
 	import mx.core.Container;
 	import mx.core.EdgeMetrics;
+	import mx.core.IInvalidating;
 	import mx.events.ResizeEvent;
 	import mx.managers.ToolTipManager;
 	
@@ -98,6 +99,11 @@ package org.un.cava.birdeye.qavis.microcharts
 		override public function set percentHeight(val:Number):void
 		{
 			_percentHeight = val;
+			var p:IInvalidating = parent as IInvalidating;
+			if (p) {
+				p.invalidateSize();
+				p.invalidateDisplayList();
+			}
 		}
 		
 		/** 
@@ -111,6 +117,12 @@ package org.un.cava.birdeye.qavis.microcharts
 		override public function set percentWidth(val:Number):void
 		{
 			_percentWidth = val;
+
+			var p:IInvalidating = parent as IInvalidating;
+			if (p) {
+				p.invalidateSize();
+				p.invalidateDisplayList();
+			}
 		}
 		
 		/** 
@@ -306,13 +318,6 @@ package org.un.cava.birdeye.qavis.microcharts
 		{
 			super.commitProperties();
 			feedDataArrayCollection();
-			
-			// if autosize is set, than listen to parent's resize events
-			if (!resizeListening && (!isNaN(_percentHeight) || !isNaN(_percentWidth)))
-			{
-				resizeListening = true;
-				parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
-			}
 		}
 		
 		/**
@@ -437,6 +442,7 @@ package org.un.cava.birdeye.qavis.microcharts
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
+			setActualSize(unscaledWidth, unscaledHeight);
 			for(var i:int=this.numChildren-1; i>=0; i--)
 				if(getChildAt(i))
 					removeChildAt(i);
@@ -446,43 +452,6 @@ package org.un.cava.birdeye.qavis.microcharts
 			graphicsCollection.addItem(geomGroup);
 			
 			createBackground(unscaledWidth, unscaledHeight);
-		}
-		
-		/**
-		* @private 
-		 * Set the default and minimum width and height.
-		 * If percentWidth/percentHeight are used than it autosize the chart according the 
-		 * parent container size.
-		 * If explicitWidth/explicitHeight are set, than measure won't be called anymore, 
-		 * even if invalidateSize is called.
-		*/
-		override protected function measure():void
-		{
-			super.measure();
-			
-			if (!isNaN(explicitWidth))
-				tempWidth = explicitWidth;
-			if (!isNaN(explicitHeight))
-				tempHeight = explicitHeight;
-
-			if (!isNaN(percentWidth) || !isNaN(percentHeight))
-			{
-				var edgeMet:EdgeMetrics = Container(parent).viewMetricsAndPadding;
-				if (!isNaN(percentWidth) && parent.width != 0)
-					tempWidth = Math.max(0, percentWidth/100 * (parent.width - edgeMet.left - edgeMet.right));
-	
-				if (!isNaN(percentHeight) && parent.height!= 0)
-					tempHeight = Math.max(0, percentHeight/100 * (parent.height - edgeMet.top - edgeMet.bottom));
-			}
-
-			if (isNaN(tempWidth))
-				tempWidth = 50;
-
-			if (isNaN(tempHeight))
-				tempHeight = 10;
-				
-			measuredWidth = minWidth = tempWidth;
-			measuredHeight = minHeight = tempHeight;
 		}
 		
 		/**
