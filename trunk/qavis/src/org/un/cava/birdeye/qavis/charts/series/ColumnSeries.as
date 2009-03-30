@@ -85,8 +85,8 @@ package org.un.cava.birdeye.qavis.charts.series
 					if (yAxis is NumericAxis)
 						NumericAxis(yAxis).max = maxYValue;
 				} else {
-					if (dataProvider && dataProvider.yAxis && dataProvider.yAxis is NumericAxis)
-						NumericAxis(dataProvider.yAxis).max = maxYValue;
+					if (chart && chart.yAxis && chart.yAxis is NumericAxis)
+						NumericAxis(chart.yAxis).max = maxYValue;
 				}
 			}
 		}
@@ -107,25 +107,25 @@ package org.un.cava.birdeye.qavis.charts.series
 			var y0:Number = getYMinPosition();
 			var size:Number = NaN, colWidth:Number = 0; 
 
-			dataProvider.cursor.seek(CursorBookmark.FIRST);
+			cursor.seek(CursorBookmark.FIRST);
 
-			while (!dataProvider.cursor.afterLast)
+			while (!cursor.afterLast)
 			{
 				if (xAxis)
 				{
-					xPos = xAxis.getPosition(dataProvider.cursor.current[xField]);
+					xPos = xAxis.getPosition(cursor.current[xField]);
 
 					dataFields[0] = xField;
 
 					if (isNaN(size))
 						size = xAxis.interval*deltaSize;
 				} else {
-					xPos = dataProvider.xAxis.getPosition(dataProvider.cursor.current[xField]);
+					xPos = chart.xAxis.getPosition(cursor.current[xField]);
 
 					dataFields[0] = xField;
 
 					if (isNaN(size))
-						size = dataProvider.xAxis.interval*deltaSize;
+						size = chart.xAxis.interval*deltaSize;
 				}
 				
 				if (yAxis)
@@ -134,20 +134,20 @@ package org.un.cava.birdeye.qavis.charts.series
 					{
 						y0 = yAxis.getPosition(baseValues[j]);
 						yPos = yAxis.getPosition(
-							baseValues[j++] + Math.max(0,dataProvider.cursor.current[yField]));
+							baseValues[j++] + Math.max(0,cursor.current[yField]));
 					} else {
-						yPos = yAxis.getPosition(dataProvider.cursor.current[yField]);
+						yPos = yAxis.getPosition(cursor.current[yField]);
 					}
 					dataFields[1] = yField;
 				}
 				else {
 					if (_stackType == STACKED100)
 					{
-						y0 = dataProvider.yAxis.getPosition(baseValues[j]);
-						yPos = dataProvider.yAxis.getPosition(
-							baseValues[j++] + Math.max(0,dataProvider.cursor.current[yField]));
+						y0 = chart.yAxis.getPosition(baseValues[j]);
+						yPos = chart.yAxis.getPosition(
+							baseValues[j++] + Math.max(0,cursor.current[yField]));
 					} else 
-						yPos = dataProvider.yAxis.getPosition(dataProvider.cursor.current[yField]);
+						yPos = chart.yAxis.getPosition(cursor.current[yField]);
 
 					dataFields[1] = yField;
 				}
@@ -178,11 +178,11 @@ package org.un.cava.birdeye.qavis.charts.series
 
 				if (zAxis)
 				{
-					zPos = zAxis.getPosition(dataProvider.cursor.current[zField]);
+					zPos = zAxis.getPosition(cursor.current[zField]);
 					yAxisRelativeValue = XYZAxis(zAxis).height - zPos;
 					dataFields[2] = zField;
-				} else if (dataProvider.zAxis) {
-					zPos = dataProvider.zAxis.getPosition(dataProvider.cursor.current[zField]);
+				} else if (chart.zAxis) {
+					zPos = chart.zAxis.getPosition(cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 
 					// we create an y axis and rotate it to properly visualize 
 					// a 'fake' z axis. however zPos over this y axis corresponds to 
@@ -190,16 +190,16 @@ package org.un.cava.birdeye.qavis.charts.series
 					// up side down. this trick allows to visualize the y axis as
 					// if it would be a z. when there will be a 3d line class, it will 
 					// be replaced
-					yAxisRelativeValue = XYZAxis(dataProvider.zAxis).height - zPos;
+					yAxisRelativeValue = XYZAxis(chart.zAxis).height - zPos;
 					dataFields[2] = zField;
 				}
 
  				var bounds:RegularRectangle = new RegularRectangle(xPos, yPos, colWidth, y0 - yPos);
 
-				if (dataProvider.showDataTips)
+				if (chart.showDataTips)
 				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createGG(dataProvider.cursor.current, dataFields, xPos + colWidth/2, yPos, yAxisRelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
+					createGG(cursor.current, dataFields, xPos + colWidth/2, yPos, yAxisRelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
 					var hitMouseArea:IGeometry = new itemRenderer(bounds); 
 					hitMouseArea.fill = new SolidFill(0x000000, 0);
 					gg.geometryCollection.addItem(hitMouseArea);
@@ -210,16 +210,16 @@ package org.un.cava.birdeye.qavis.charts.series
 				poly.fill = fill;
 				poly.stroke = stroke;
 				gg.geometryCollection.addItemAt(poly,0);
-				if (dataProvider.is3D)
+				if (zField)
 				{
 					gg.z = zPos;
 					if (isNaN(zPos))
 						zPos = 0;
 				}
-				dataProvider.cursor.moveNext();
+				cursor.moveNext();
 			}
 
-			if (dataProvider.is3D)
+			if (zField)
 				zSort();
 		}
 		
@@ -232,8 +232,8 @@ package org.un.cava.birdeye.qavis.charts.series
 				if (xAxis is NumericAxis)
 					xPos = xAxis.getPosition(minXValue);
 			} else {
-				if (dataProvider.xAxis is NumericAxis)
-					xPos = dataProvider.xAxis.getPosition(minXValue);
+				if (chart.xAxis is NumericAxis)
+					xPos = chart.xAxis.getPosition(minXValue);
 			}
 			
 			return xPos;
@@ -249,12 +249,12 @@ package org.un.cava.birdeye.qavis.charts.series
 				else
 					yPos = yAxis.getPosition(NumericAxis(yAxis).min);
 			} else {
-				if (dataProvider.yAxis is NumericAxis)
+				if (chart.yAxis is NumericAxis)
 				{
 					if (_baseAtZero)
-						yPos = dataProvider.yAxis.getPosition(0);
+						yPos = chart.yAxis.getPosition(0);
 					else
-						yPos = dataProvider.yAxis.getPosition(NumericAxis(dataProvider.yAxis).min);
+						yPos = chart.yAxis.getPosition(NumericAxis(chart.yAxis).min);
 				}
 			}
 			return yPos;
@@ -263,8 +263,8 @@ package org.un.cava.birdeye.qavis.charts.series
 		override protected function calculateMaxY():void
 		{
 			super.calculateMaxY();
-			if (dataProvider && dataProvider is ColumnChart && stackType == STACKED100)
-				_maxYValue = Math.max(_maxYValue, ColumnChart(dataProvider).maxStacked100);
+			if (chart && chart is ColumnChart && stackType == STACKED100)
+				_maxYValue = Math.max(_maxYValue, ColumnChart(chart).maxStacked100);
 		}
 	}
 }

@@ -29,31 +29,18 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 {
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.CartesianChart;
 	
-	public interface ICartesianSeries
+	public interface ICartesianSeries extends ISeries
 	{
-		/** Remove all elements from the series (Surface component).*/
-		function removeAllElements():void;
+		/** Set the chart target. This allows to share axes and other properties
+		 * of the chart among several series.*/
+		function set chart(val:CartesianChart):void;
+		function get chart():CartesianChart
 		
-		/** Set the data provider of a cartesian series, which must be a CartesianChart.*/
-		function set dataProvider(val:CartesianChart):void;
-
 		/** Set the yField to filter vertical data values.*/
 		function set yField(val:String):void;
 
 		/** Set the xField to filter horizontal data values.*/
 		function set xField(val:String):void;
-
-		/** Set the name to display (legends..).*/
-		function set displayName(val:String):void;
-
-		/** Set the fill color.*/
-		function set fillColor(val:Number):void;
-
-		/** Set the stroke color.*/
-		function set strokeColor(val:Number):void;
-
-		/** Set the itemRenderer used for the layout of data values.*/
-		function set itemRenderer(val:Class):void;
 
 		/** Set the x axis.*/
 		function set xAxis(val:IAxisLayout):void;
@@ -65,14 +52,8 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 		function set zAxis(val:IAxisLayout):void;
 
 		
-		function get dataProvider():CartesianChart;
 		function get yField():String;
 		function get xField():String;
-		function get displayName():String;
-		function get fillColor():Number;
-		function get strokeColor():Number;
-		function get itemRenderer():Class;
-
 		function get xAxis():IAxisLayout;
 		function get yAxis():IAxisLayout;
 		function get zAxis():IAxisLayout;

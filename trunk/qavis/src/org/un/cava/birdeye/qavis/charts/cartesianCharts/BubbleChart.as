@@ -31,6 +31,9 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	
 	import org.un.cava.birdeye.qavis.charts.interfaces.IScatter;
 	
+	/**
+	 * The BubbleChart is a ScatterPlot where BubbleSeries' itemRenderer can only be a Circle.
+	 * @see ScatterPlot */
 	public class BubbleChart extends ScatterPlot
 	{
 		public function BubbleChart()

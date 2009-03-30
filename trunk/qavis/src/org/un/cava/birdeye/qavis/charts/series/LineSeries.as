@@ -36,7 +36,7 @@ package org.un.cava.birdeye.qavis.charts.series
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxis;
-	import org.un.cava.birdeye.qavis.charts.data.ExtendedGeometryGroup;
+	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.renderers.LineRenderer;
 
 	public class LineSeries extends CartesianSeries
@@ -63,33 +63,33 @@ package org.un.cava.birdeye.qavis.charts.series
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
 		override protected function drawSeries():void
 		{
-			dataProvider.cursor.seek(CursorBookmark.FIRST);
+			cursor.seek(CursorBookmark.FIRST);
 			
 			var xPrev:Number, yPrev:Number;
 			var xPos:Number, yPos:Number, zPos:Number;
 			var j:Number = 0;
 			var dataFields:Array = [];
 			
-			gg = new ExtendedGeometryGroup();
+			gg = new DataItemLayout();
 			gg.target = this;
-			graphicsCollection.addItem(gg);
-			while (!dataProvider.cursor.afterLast)
+			addChild(gg);
+			while (!cursor.afterLast)
 			{
 				if (xAxis)
 				{
-					xPos = xAxis.getPosition(dataProvider.cursor.current[xField]);
+					xPos = xAxis.getPosition(cursor.current[xField]);
 					dataFields[0] = xField;
 				} else {
-					xPos = dataProvider.xAxis.getPosition(dataProvider.cursor.current[xField]);
+					xPos = chart.xAxis.getPosition(cursor.current[xField]);
 					dataFields[0] = xField;
 				}
 				
 				if (yAxis)
 				{
-					yPos = yAxis.getPosition(dataProvider.cursor.current[yField]);
+					yPos = yAxis.getPosition(cursor.current[yField]);
 					dataFields[1] = yField;
 				} else {
-					yPos = dataProvider.yAxis.getPosition(dataProvider.cursor.current[yField]);
+					yPos = chart.yAxis.getPosition(cursor.current[yField]);
 					dataFields[1] = yField;
 				}
 				
@@ -97,11 +97,11 @@ package org.un.cava.birdeye.qavis.charts.series
 
 				if (zAxis)
 				{
-					zPos = zAxis.getPosition(dataProvider.cursor.current[zField]);
+					zPos = zAxis.getPosition(cursor.current[zField]);
 					yAxisRelativeValue = XYZAxis(zAxis).height - zPos;
 					dataFields[2] = zField;
-				} else if (dataProvider.zAxis) {
-					zPos = dataProvider.zAxis.getPosition(dataProvider.cursor.current[zField]);
+				} else if (chart.zAxis) {
+					zPos = chart.zAxis.getPosition(cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 
 					// we create an y axis and rotate it to properly visualize 
 					// a 'fake' z axis. however zPos over this y axis corresponds to 
@@ -109,14 +109,14 @@ package org.un.cava.birdeye.qavis.charts.series
 					// up side down. this trick allows to visualize the y axis as
 					// if it would be a z. when there will be a 3d line class, it will 
 					// be replaced
-					yAxisRelativeValue = XYZAxis(dataProvider.zAxis).height - zPos;
+					yAxisRelativeValue = XYZAxis(chart.zAxis).height - zPos;
 					dataFields[2] = zField;
 				}
 
-				if (dataProvider.showDataTips)
+				if (chart.showDataTips)
 				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createGG(dataProvider.cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3);
+					createGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3);
 					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
 					hitMouseArea.fill = new SolidFill(0x000000, 0);
 					ttGG.geometryCollection.addItem(hitMouseArea);
@@ -131,32 +131,32 @@ package org.un.cava.birdeye.qavis.charts.series
 					line = null;
 				}
 				xPrev = xPos; yPrev = yPos;
-				if (dataProvider.is3D)
+				if (zField)
 				{
 					gg.z = zPos;
 					if (isNaN(zPos))
 						zPos = 0;
 				}
-				dataProvider.cursor.moveNext();
+				cursor.moveNext();
 			}
 
-			if (dataProvider.is3D)
+			if (zField)
 				zSort();
 		}
 		
- 		private var ttGG:ExtendedGeometryGroup;
+ 		private var ttGG:DataItemLayout;
 		override protected function createGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
 									zPos:Number, radius:Number, shapes:Array = null /* of IGeomtry */, 
 									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
 		{
-			ttGG = new ExtendedGeometryGroup();
+			ttGG = new DataItemLayout();
 			ttGG.target = this;
- 			if (dataProvider.showDataTips)
+ 			if (chart.showDataTips)
 			{
 				initGGToolTip();
-				ttGG.createToolTip(dataProvider.cursor.current, dataFields, xPos, yPos, zPos, radius);
+				ttGG.createToolTip(cursor.current, dataFields, xPos, yPos, zPos, radius);
  			} else {
-				graphicsCollection.addItem(ttGG);
+				addChild(ttGG);
 			}
 		}
 		
@@ -165,11 +165,11 @@ package org.un.cava.birdeye.qavis.charts.series
 			ttGG.target = this;
 			ttGG.toolTipFill = new SolidFill(strokeColor);
 			ttGG.toolTipStroke = stroke;
- 			if (dataProvider.dataTipFunction != null)
-				ttGG.dataTipFunction = dataProvider.dataTipFunction;
-			if (dataProvider.dataTipPrefix!= null)
-				ttGG.dataTipPrefix = dataProvider.dataTipPrefix;
- 			graphicsCollection.addItem(ttGG);
+ 			if (chart.dataTipFunction != null)
+				ttGG.dataTipFunction = chart.dataTipFunction;
+			if (chart.dataTipPrefix!= null)
+				ttGG.dataTipPrefix = chart.dataTipPrefix;
+ 			addChild(ttGG);
 			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 		}

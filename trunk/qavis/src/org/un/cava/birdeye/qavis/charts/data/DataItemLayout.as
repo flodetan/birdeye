@@ -43,7 +43,7 @@ package org.un.cava.birdeye.qavis.charts.data
 	 * If no function is defined for the tooltips, than the dataField value is taken for their content.
 	 * This class allows creating and positioning the graphics associated with the tooltips.
 	*/
-	public class ExtendedGeometryGroup extends GeometryGroup
+	public class DataItemLayout extends GeometryGroup
 	{
 		public var toolTip:String;
 		public var posX:Number;
@@ -100,7 +100,7 @@ package org.un.cava.birdeye.qavis.charts.data
 			return _yTTOffset;
 		}
 
-		public function ExtendedGeometryGroup()
+		public function DataItemLayout()
 		{
 			super();
 		}

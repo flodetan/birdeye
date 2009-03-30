@@ -47,7 +47,7 @@
 		private var tempWidth:Number, tempHeight:Number;
 		private var resizeListening:Boolean = false;
 		
-		private var _cursor:IViewCursor;
+		private var _cursor:IViewCursor = null;
 		public function get cursor():IViewCursor
 		{
 			return _cursor;
@@ -90,7 +90,7 @@
 			invalidateDisplayList();
 		}
 		
-		protected var _series:Array;
+		protected var _series:Array; // of ISeries
 		public function get series():Array
 		{
 			return _series;
@@ -127,7 +127,7 @@
 			return _percentWidth;
 		}
 		
-		protected var axesFeeded:Boolean = true;
+		public var axesFeeded:Boolean = true;
 		protected var _dataProvider:Object=null;
 		public function set dataProvider(value:Object):void
 		{
@@ -175,12 +175,15 @@
 	  			this._dataProvider = new ArrayCollection();
 	  		}
 	  		
-	  		_cursor = ICollectionView(_dataProvider).createCursor();
+	  		if (ICollectionView(_dataProvider).length > 0)
+	  		{
+	  			_cursor = ICollectionView(_dataProvider).createCursor();
 	  		
-	  		axesFeeded = false;
-	  		invalidateSize();
-	  		invalidateProperties();
-			invalidateDisplayList();
+		  		axesFeeded = false;
+		  		invalidateSize();
+		  		invalidateProperties();
+				invalidateDisplayList();
+	  		}
 		}		
 		/**
 		* Set the dataProvider to feed the chart. 

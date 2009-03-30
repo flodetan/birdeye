@@ -45,9 +45,33 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxis;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ICartesianSeries;
+	import org.un.cava.birdeye.qavis.charts.interfaces.ISeries;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IStack;
 	import org.un.cava.birdeye.qavis.charts.series.CartesianSeries;
 	
+	/** A CartesianChart can be used to create any 2D or 3D cartesian charts available in the library
+	 * apart from those who might have specific features, like stackable series or data-sizable items.
+	 * Those specific features are managed directly by charts that extends the CartesianChart 
+	 * (AreaChart, BarChart, ColumnChart for stackable series and ScatterPlot, BubbleChart for 
+	 * data-sizable items.
+	 * The CartesianChart serves as container for all axes and series and coordinates the different
+	 * data loading and creation of each component.
+	 * If a CartesianChart is provided with an axis, this axis will be shared by all series that have 
+	 * not that same axis (x, y or z). In the same way, the CartesianChart provides a dataProvider property 
+	 * that can be shared with series that have not a dataProvider. In case the CartesianChart dataProvider 
+	 * is used along with some Series dataProvider, than the relevant values defined be the series fields
+	 * of all these dataProviders will define the axes (min, max for NumericAxis elements 
+	 * for CategoryAxis, etc).
+	 * 
+	 * A CartesianChart may have multiple and different type of series, multiple axes and 
+	 * multiple dataProvider(s).
+	 * Most of available cartesian charts are also 3D. If a series specifies the zField, than the chart will
+	 * be a 3D chart. By default zAxis is placed at the bottom right of the chart, for this reason it's
+	 * recommended to place yAxis to the left of the chart when using 3D charts.
+	 * Given the current 3D limitations of the FP platform, for which is not possible to draw
+	 * real 3D graphics (moveTo, drawRect, drawLine etc don't include the z coordinate), the AreaChart 
+	 * and LineChart are not 3D yet. 
+	 * */ 
 	[DefaultProperty("dataProvider")]
 	public class CartesianChart extends BaseChart
 	{
@@ -82,9 +106,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				if (! ICartesianSeries(_series[i]).yAxis)
 					needDefaultYAxis = true;
 					
-				// set the data provider inside the series to 'this'
-				if (! ICartesianSeries(_series[i]).dataProvider)
-					ICartesianSeries(_series[i]).dataProvider = this;
+				// set the chart target inside the series to 'this'
+				// in the future the seriestarget could be an external chart 
+				if (! ICartesianSeries(_series[i]).chart)
+					ICartesianSeries(_series[i]).chart = this;
 					
 				// count all stackable series according their type (overlaid, stacked100...)
 				// and store its position. This allows to have a general CartesianChart 
@@ -222,6 +247,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			bottomContainer.setStyle("verticalAlign", "top");
 		}
 
+		private var nCursors:Number;
 		/** @Private 
 		 * When properties are committed, first remove all current children, second check for series owned axes 
 		 * and put them on the corresponding container (left, top, right, bottom). If no axes are defined for one 
@@ -233,24 +259,25 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			super.commitProperties();
 			needDefaultXAxis = needDefaultYAxis = false;
 			
-			leftContainer.removeAllChildren();
-			rightContainer.removeAllChildren();
-			topContainer.removeAllChildren();
-			bottomContainer.removeAllChildren();
-			zContainer.removeAllChildren();
-						
-  			var nChildren:int = seriesContainer.numChildren;
-			for (var i:Number = 0; i<nChildren; i++)
-			{
-				if (seriesContainer.getChildAt(0) is ICartesianSeries)
-					ICartesianSeries(series[0]).removeAllElements();
-				seriesContainer.removeChildAt(0);
-			}
-
+			removeAllElements();
+			
+			nCursors = 0;
+			
 			if (series)
 			{
- 				for (i = 0; i<series.length; i++)
+ 				for (var i:int = 0; i<series.length; i++)
 				{
+					// if series dataprovider doesn' exist or it refers to the
+					// chart dataProvider, than set its cursor to this chart cursor (this.cursor)
+					if (cursor && (! ISeries(_series[i]).dataProvider 
+									|| ISeries(_series[i]).dataProvider == this.dataProvider))
+						ISeries(_series[i]).cursor = cursor;
+
+					// nCursors is used in feedAxes to check that all series cursors are ready
+					// and therefore check that axes can be properly feeded
+					if (cursor || ISeries(_series[i]).cursor)
+						nCursors += 1;
+
 					seriesContainer.addChild(DisplayObject(series[i]));
 					var xAxis:IAxisLayout = ICartesianSeries(series[i]).xAxis;
 					if (xAxis)
@@ -286,8 +313,15 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 					if (tmpZAxis)
 					{
 						zContainer.addChild(DisplayObject(tmpZAxis));
+						
+						// this will be replaced by a depth property 
  						XYZAxis(tmpZAxis).height = width; 
+ 						// the zAxis is in reality an yAxis which is rotated of 90 degrees
+ 						// on its X coordinate. This will be replaced by a real z axis, when 
+ 						// FP will provide methods to draw real 3d lines
 						zContainer.rotationX = -90;
+						
+						// this adjusts the positioning of the axis after the rotation
 						zContainer.z = width;
 						_is3D = true;
  					}
@@ -298,8 +332,13 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			{
 				_is3D = true;
 				zContainer.addChild(DisplayObject(_zAxis));
+				// this will be replaced by a depth property 
  				XYZAxis(_zAxis).height = width; 
+ 				// the zAxis is in reality an yAxis which is rotated of 90 degrees
+ 				// on its X coordinate. This will be replaced by a real z axis, when 
+ 				// FP will provide methods to draw real 3d lines
 				zContainer.rotationX = -90;
+				// this adjusts the positioning of the axis after the rotation
 				zContainer.z = width;
 			}
 			
@@ -366,10 +405,9 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			leftContainer.height = rightContainer.height 
 				= chartBounds.height;
 			
-			var zContX:int = chartBounds.width + leftContainer.width;
-			var zContY:int = chartBounds.height;
-  			zContainer.x = zContX;
-			zContainer.y = zContY;
+			// the z container is placed at the right of the chart
+  			zContainer.x = int(chartBounds.width + leftContainer.width);
+			zContainer.y = int(chartBounds.height);
 
 			if (axesFeeded && (seriesContainer.x != chartBounds.x ||
 				seriesContainer.y != chartBounds.y ||
@@ -440,15 +478,16 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			topContainer.height = tmpSize;
 		}
 		
+
+		private var currentSeries:ICartesianSeries;
 		/** @Private
 		 * Feed the axes with either elements (for ex. CategoryAxis) or max and min (for numeric axis).*/
 		private function feedAxes():void
 		{
-			if (cursor)
+			if (nCursors == series.length)
 			{
 				var elements:Array = [];
 				var j:Number = 0;
-				cursor.seek(CursorBookmark.FIRST);
 				
 				var maxMin:Array;
 				
@@ -457,20 +496,48 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				{
 					if (yAxis is CategoryAxis)
 					{
-						while (!cursor.afterLast)
+						for (i = 0; i<nCursors; i++)
 						{
-							// if the category value already exists in the axis, than skip it
-							if (elements.indexOf(cursor.current[CategoryAxis(yAxis).categoryField]) == -1)
-								elements[j++] = 
-									cursor.current[CategoryAxis(yAxis).categoryField];
-							cursor.moveNext();
+							currentSeries = ICartesianSeries(_series[i]);
+							// if the series have their own data provider but have not their own
+							// yAxis, than load their elements and add them to the elements
+							// loaded by the chart data provider
+							if (currentSeries.dataProvider 
+								&& currentSeries.dataProvider != dataProvider
+								&& ! currentSeries.yAxis)
+							{
+								currentSeries.cursor.seek(CursorBookmark.FIRST);
+								while (!currentSeries.cursor.afterLast)
+								{
+									if (elements.indexOf(
+										currentSeries.cursor.current[CategoryAxis(yAxis).categoryField]) 
+										== -1)
+										elements[j++] = 
+											currentSeries.cursor.current[CategoryAxis(yAxis).categoryField];
+									currentSeries.cursor.moveNext();
+								}
+							}
 						}
+						
+						if (cursor)
+						{
+							cursor.seek(CursorBookmark.FIRST);
+							while (!cursor.afterLast)
+							{
+								// if the category value already exists in the axis, than skip it
+								if (elements.indexOf(cursor.current[CategoryAxis(yAxis).categoryField]) == -1)
+									elements[j++] = 
+										cursor.current[CategoryAxis(yAxis).categoryField];
+								cursor.moveNext();
+							}
+						}
+
 						// set the elements property of the CategoryAxis
 						if (elements.length > 0)
 							CategoryAxis(yAxis).elements = elements;
 					} else {
 						// if the default y axis is numeric, than calculate its min max values
-						maxMin = getMaxMinYValueFromSeriesWithoutVAxis();
+						maxMin = getMaxMinYValueFromSeriesWithoutYAxis();
 						NumericAxis(yAxis).max = maxMin[0];
 						NumericAxis(yAxis).min = maxMin[1];
 					}
@@ -478,27 +545,53 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				
 				elements = [];
 				j = 0;
-				cursor.seek(CursorBookmark.FIRST);
 
 				// check if a default y axis exists
 				if (xAxis)
 				{
 					if (xAxis is CategoryAxis)
 					{
-						while (!cursor.afterLast)
+						for (i = 0; i<nCursors; i++)
 						{
-							// if the category value already exists in the axis, than skip it
-							if (elements.indexOf(cursor.current[CategoryAxis(xAxis).categoryField]) == -1)
-								elements[j++] = 
-									cursor.current[CategoryAxis(xAxis).categoryField];
-							cursor.moveNext();
+							currentSeries = ICartesianSeries(_series[i]);
+							// if the series have their own data provider but have not their own
+							// xAxis, than load their elements and add them to the elements
+							// loaded by the chart data provider
+							if (currentSeries.dataProvider 
+								&& currentSeries.dataProvider != dataProvider
+								&& ! currentSeries.xAxis)
+							{
+								currentSeries.cursor.seek(CursorBookmark.FIRST);
+								while (!currentSeries.cursor.afterLast)
+								{
+									if (elements.indexOf(
+										currentSeries.cursor.current[CategoryAxis(xAxis).categoryField]) 
+										== -1)
+										elements[j++] = 
+											currentSeries.cursor.current[CategoryAxis(xAxis).categoryField];
+									currentSeries.cursor.moveNext();
+								}
+							}
 						}
+						if (cursor)
+						{
+							cursor.seek(CursorBookmark.FIRST);
+							while (!cursor.afterLast)
+							{
+								// if the category value already exists in the axis, than skip it
+								if (elements.indexOf(cursor.current[CategoryAxis(xAxis).categoryField]) == -1)
+									elements[j++] = 
+										cursor.current[CategoryAxis(xAxis).categoryField];
+								cursor.moveNext();
+							}
+						}
+						
 						// set the elements property of the CategoryAxis
 						if (elements.length > 0)
 							CategoryAxis(xAxis).elements = elements;
 					} else {
 						// if the default x axis is numeric, than calculate its min max values
-						maxMin = getMaxMinXValueFromSeriesWithoutHAxis();
+						maxMin = getMaxMinXValueFromSeriesWithoutXAxis();
 						NumericAxis(xAxis).max = maxMin[0];
 						NumericAxis(xAxis).min = maxMin[1];
 					}
@@ -506,35 +599,61 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				
 				elements = [];
 				j = 0;
-				cursor.seek(CursorBookmark.FIRST);
 
-				// check if a default y axis exists
+				// check if a default z axis exists
 				if (zAxis)
 				{
 					if (zAxis is CategoryAxis)
 					{
-						while (!cursor.afterLast)
+						for (i = 0; i<nCursors; i++)
 						{
-							// if the category value already exists in the axis, than skip it
-							if (elements.indexOf(cursor.current[CategoryAxis(zAxis).categoryField]) == -1)
-								elements[j++] = 
-									cursor.current[CategoryAxis(zAxis).categoryField];
-							cursor.moveNext();
+							currentSeries = ICartesianSeries(_series[i]);
+							// if the series have their own data provider but have not their own
+							// zAxis, than load their elements and add them to the elements
+							// loaded by the chart data provider
+							if (currentSeries.dataProvider 
+								&& currentSeries.dataProvider != dataProvider
+								&& ! currentSeries.zAxis)
+							{
+								currentSeries.cursor.seek(CursorBookmark.FIRST);
+								while (!currentSeries.cursor.afterLast)
+								{
+									if (elements.indexOf(
+										currentSeries.cursor.current[CategoryAxis(zAxis).categoryField]) 
+										== -1)
+										elements[j++] = 
+											currentSeries.cursor.current[CategoryAxis(zAxis).categoryField];
+									currentSeries.cursor.moveNext();
+								}
+							}
 						}
+						if (cursor)
+						{
+							cursor.seek(CursorBookmark.FIRST);
+							while (!cursor.afterLast)
+							{
+								// if the category value already exists in the axis, than skip it
+								if (elements.indexOf(cursor.current[CategoryAxis(zAxis).categoryField]) == -1)
+									elements[j++] = 
+										cursor.current[CategoryAxis(zAxis).categoryField];
+								cursor.moveNext();
+							}
+						}
+						
 						// set the elements property of the CategoryAxis
 						if (elements.length > 0)
 							CategoryAxis(zAxis).elements = elements;
 					} else {
 						// if the default x axis is numeric, than calculate its min max values
-						maxMin = getMaxMinZValueFromSeriesWithoutHAxis();
+						maxMin = getMaxMinZValueFromSeriesWithoutZAxis();
 						NumericAxis(zAxis).max = maxMin[0];
 						NumericAxis(zAxis).min = maxMin[1];
 					}
 				} 
 
-				// init all series that have their own axes
+				// init axes of all series that have their own axes
 				// since these are children of each series, they are 
-				// for sure ready for feeding and it won't affect the axesNotFeeded status
+				// for sure ready for feeding and it won't affect the axesFeeded status
 				for (var i:Number = 0; i<series.length; i++)
 					initSeriesAxes(series[i]);
 					
@@ -545,19 +664,20 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		/** @Private
 		 * Calculate the min max values for the default vertical (y) axis. Return an array of 2 values, the 1st (0) 
 		 * for the max value, and the 2nd for the min value.*/
-		private function getMaxMinYValueFromSeriesWithoutVAxis():Array
+		private function getMaxMinYValueFromSeriesWithoutYAxis():Array
 		{
 			var max:Number = NaN, min:Number = NaN;
 			for (var i:Number = 0; i<series.length; i++)
 			{
+				currentSeries = CartesianSeries(series[i]);
 				// check if the series has its own y axis and if its max value exists and 
 				// is higher than the current max
-				if (!CartesianSeries(series[i]).yAxis && (isNaN(max) || max < CartesianSeries(series[i]).maxYValue))
-					max = CartesianSeries(series[i]).maxYValue;
+				if (!currentSeries.yAxis && (isNaN(max) || max < currentSeries.maxYValue))
+					max = currentSeries.maxYValue;
 				// check if the series has its own y axis and if its min value exists and 
 				// is lower than the current min
-				if (!CartesianSeries(series[i]).yAxis && (isNaN(min) || min > CartesianSeries(series[i]).minYValue))
-					min = CartesianSeries(series[i]).minYValue;
+				if (!currentSeries.yAxis && (isNaN(min) || min > currentSeries.minYValue))
+					min = currentSeries.minYValue;
 			}
 					
 			return [max,min];
@@ -566,19 +686,21 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		/** @Private
 		 * Calculate the min max values for the default x (x) axis. Return an array of 2 values, the 1st (0) 
 		 * for the max value, and the 2nd for the min value.*/
-		private function getMaxMinXValueFromSeriesWithoutHAxis():Array
+		private function getMaxMinXValueFromSeriesWithoutXAxis():Array
 		{
 			var max:Number = NaN, min:Number = NaN;
+
 			for (var i:Number = 0; i<series.length; i++)
 			{
+				currentSeries = CartesianSeries(series[i]);
 				// check if the series has its own x axis and if its max value exists and 
 				// is higher than the current max
-				if (!CartesianSeries(series[i]).xAxis && (isNaN(max) || max < CartesianSeries(series[i]).maxXValue))
-					max = CartesianSeries(series[i]).maxXValue;
+				if (!currentSeries.xAxis && (isNaN(max) || max < currentSeries.maxXValue))
+					max = currentSeries.maxXValue;
 				// check if the series has its own x axis and if its max value exists and 
 				// is higher than the current max
-				if (!CartesianSeries(series[i]).xAxis && (isNaN(min) || min > CartesianSeries(series[i]).minXValue))
-					min = CartesianSeries(series[i]).minXValue;
+				if (!currentSeries.xAxis && (isNaN(min) || min > currentSeries.minXValue))
+					min = currentSeries.minXValue;
 			}
 					
 			return [max,min];
@@ -588,19 +710,20 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		/** @Private
 		 * Calculate the min max values for the default z axis. Return an array of 2 values, the 1st (0) 
 		 * for the max value, and the 2nd for the min value.*/
-		private function getMaxMinZValueFromSeriesWithoutHAxis():Array
+		private function getMaxMinZValueFromSeriesWithoutZAxis():Array
 		{
 			var max:Number = NaN, min:Number = NaN;
 			for (var i:Number = 0; i<series.length; i++)
 			{
+				currentSeries = CartesianSeries(series[i]);
 				// check if the series has its own z axis and if its max value exists and 
 				// is higher than the current max
-				if (!CartesianSeries(series[i]).zAxis && (isNaN(max) || max < CartesianSeries(series[i]).maxZValue))
-					max = CartesianSeries(series[i]).maxZValue;
+				if (!currentSeries.zAxis && (isNaN(max) || max < currentSeries.maxZValue))
+					max = currentSeries.maxZValue;
 				// check if the series has its own z axis and if its max value exists and 
 				// is higher than the current max
-				if (!CartesianSeries(series[i]).zAxis && (isNaN(min) || min > CartesianSeries(series[i]).minZValue))
-					min = CartesianSeries(series[i]).minZValue;
+				if (!currentSeries.zAxis && (isNaN(min) || min > currentSeries.minZValue))
+					min = currentSeries.minZValue;
 			}
 					
 			return [max,min];
@@ -611,91 +734,95 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		 * Init the axes owned by the series passed to this method.*/
 		private function initSeriesAxes(series:ICartesianSeries):void
 		{
-			var elements:Array = [];
-			var j:Number = 0;
-			cursor.seek(CursorBookmark.FIRST);
+			if (series.cursor)
+			{
+				var elements:Array = [];
+				var j:Number = 0;
+
+				series.cursor.seek(CursorBookmark.FIRST);
 				
-			if (ICartesianSeries(series).xAxis is CategoryAxis)
-			{
-				while (!cursor.afterLast)
+				if (series.xAxis is CategoryAxis)
 				{
-					// if the category value already exists in the axis, than skip it
-					if (elements.indexOf(cursor.current[CategoryAxis(ICartesianSeries(series).xAxis).categoryField]) == -1)
-						elements[j++] = 
-							cursor.current[CategoryAxis(ICartesianSeries(series).xAxis).categoryField];
-					cursor.moveNext();
+					while (!series.cursor.afterLast)
+					{
+						// if the category value already exists in the axis, than skip it
+						if (elements.indexOf(series.cursor.current[CategoryAxis(series.xAxis).categoryField]) == -1)
+							elements[j++] = 
+								series.cursor.current[CategoryAxis(series.xAxis).categoryField];
+						series.cursor.moveNext();
+					}
+					
+					// set the elements propery of the CategoryAxis owned by the current series
+					if (elements.length > 0)
+						CategoryAxis(series.xAxis).elements = elements;
+	
+				} else if (series.xAxis is NumericAxis)
+				{
+					// if the x axis is numeric than set its maximum and minimum values 
+					// if the max and min are not yet defined for the series, than they are calculated now
+					NumericAxis(series.xAxis).max =
+						series.maxXValue;
+					NumericAxis(series.xAxis).min =
+						series.minXValue;
 				}
+	
+				elements = [];
+				j = 0;
+				series.cursor.seek(CursorBookmark.FIRST);
 				
-				// set the elements propery of the CategoryAxis owned by the current series
-				if (elements.length > 0)
-					CategoryAxis(ICartesianSeries(series).xAxis).elements = elements;
-
-			} else if (ICartesianSeries(series).xAxis is NumericAxis)
-			{
-				// if the x axis is numeric than set its maximum and minimum values 
-				// if the max and min are not yet defined for the series, than they are calculated now
-				NumericAxis(ICartesianSeries(series).xAxis).max =
-					ICartesianSeries(series).maxXValue;
-				NumericAxis(ICartesianSeries(series).xAxis).min =
-					ICartesianSeries(series).minXValue;
-			}
-
-			elements = [];
-			j = 0;
-			cursor.seek(CursorBookmark.FIRST);
-			
-			if (ICartesianSeries(series).yAxis is CategoryAxis)
-			{
-				while (!cursor.afterLast)
+				if (series.yAxis is CategoryAxis)
 				{
-					// if the category value already exists in the axis, than skip it
-					if (elements.indexOf(cursor.current[CategoryAxis(ICartesianSeries(series).yAxis).categoryField]) == -1)
-						elements[j++] = 
-							cursor.current[CategoryAxis(ICartesianSeries(series).yAxis).categoryField];
-					cursor.moveNext();
-				}
-						
-				// set the elements propery of the CategoryAxis owned by the current series
-				if (elements.length > 0)
-					CategoryAxis(ICartesianSeries(series).yAxis).elements = elements;
-
-			} else if (ICartesianSeries(series).yAxis is NumericAxis)
-			{
-				// if the y axis is numeric than set its maximum and minimum values 
-				// if the max and min are not yet defined for the series, than they are calculated now
-				NumericAxis(ICartesianSeries(series).yAxis).max =
-					ICartesianSeries(series).maxYValue;
-				NumericAxis(ICartesianSeries(series).yAxis).min =
-					ICartesianSeries(series).minYValue;
-			}
-
-			elements = [];
-			j = 0;
-			cursor.seek(CursorBookmark.FIRST);
-			
-			if (ICartesianSeries(series).zAxis is CategoryAxis)
-			{
-				while (!cursor.afterLast)
+					while (!series.cursor.afterLast)
+					{
+						// if the category value already exists in the axis, than skip it
+						if (elements.indexOf(series.cursor.current[CategoryAxis(series.yAxis).categoryField]) == -1)
+							elements[j++] = 
+								series.cursor.current[CategoryAxis(series.yAxis).categoryField];
+						series.cursor.moveNext();
+					}
+							
+					// set the elements propery of the CategoryAxis owned by the current series
+					if (elements.length > 0)
+						CategoryAxis(series.yAxis).elements = elements;
+	
+				} else if (series.yAxis is NumericAxis)
 				{
-					// if the category value already exists in the axis, than skip it
-					if (elements.indexOf(cursor.current[CategoryAxis(ICartesianSeries(series).zAxis).categoryField]) == -1)
-						elements[j++] = 
-							cursor.current[CategoryAxis(ICartesianSeries(series).zAxis).categoryField];
-					cursor.moveNext();
+					// if the y axis is numeric than set its maximum and minimum values 
+					// if the max and min are not yet defined for the series, than they are calculated now
+					NumericAxis(series.yAxis).max =
+						series.maxYValue;
+					NumericAxis(series.yAxis).min =
+						series.minYValue;
 				}
-						
-				// set the elements propery of the CategoryAxis owned by the current series
-				if (elements.length > 0)
-					CategoryAxis(ICartesianSeries(series).zAxis).elements = elements;
-
-			} else if (ICartesianSeries(series).zAxis is NumericAxis)
-			{
-				// if the axis is numeric than set its maximum and minimum values 
-				// if the max and min are not yet defined for the series, than they are calculated now
-				NumericAxis(ICartesianSeries(series).zAxis).max =
-					ICartesianSeries(series).maxZValue;
-				NumericAxis(ICartesianSeries(series).yAxis).min =
-					ICartesianSeries(series).minZValue;
+	
+				elements = [];
+				j = 0;
+				series.cursor.seek(CursorBookmark.FIRST);
+				
+				if (series.zAxis is CategoryAxis)
+				{
+					while (!series.cursor.afterLast)
+					{
+						// if the category value already exists in the axis, than skip it
+						if (elements.indexOf(series.cursor.current[CategoryAxis(series.zAxis).categoryField]) == -1)
+							elements[j++] = 
+								series.cursor.current[CategoryAxis(series.zAxis).categoryField];
+						series.cursor.moveNext();
+					}
+							
+					// set the elements propery of the CategoryAxis owned by the current series
+					if (elements.length > 0)
+						CategoryAxis(series.zAxis).elements = elements;
+	
+				} else if (series.zAxis is NumericAxis)
+				{
+					// if the axis is numeric than set its maximum and minimum values 
+					// if the max and min are not yet defined for the series, than they are calculated now
+					NumericAxis(series.zAxis).max =
+						series.maxZValue;
+					NumericAxis(series.yAxis).min =
+						series.minZValue;
+				}
 			}
 		}
 		
@@ -715,5 +842,77 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			xAxis.placement = XYZAxis.BOTTOM;
 		}
 
+		private function removeAllElements():void
+		{
+			var i:int; 
+			var child:*;
+			
+			if (leftContainer)
+			{
+				for (i = 0; i<leftContainer.numChildren; i++)
+				{
+					child = leftContainer.getChildAt(0); 
+					if (child is IAxisLayout)
+						IAxisLayout(child).removeAllElements();
+				}
+				leftContainer.removeAllChildren();
+			}
+
+			if (rightContainer)
+			{
+				for (i = 0; i<rightContainer.numChildren; i++)
+				{
+					child = rightContainer.getChildAt(0); 
+					if (child is IAxisLayout)
+						IAxisLayout(child).removeAllElements();
+				}
+				rightContainer.removeAllChildren();
+			}
+			
+			if (topContainer)
+			{
+				for (i = 0; i<topContainer.numChildren; i++)
+				{
+					child = topContainer.getChildAt(0); 
+					if (child is IAxisLayout)
+						IAxisLayout(child).removeAllElements();
+				}
+				topContainer.removeAllChildren();
+			}
+
+			if (bottomContainer)
+			{
+				for (i = 0; i<bottomContainer.numChildren; i++)
+				{
+					child = bottomContainer.getChildAt(0); 
+					if (child is IAxisLayout)
+						IAxisLayout(child).removeAllElements();
+				}
+				bottomContainer.removeAllChildren();
+			}
+
+			if (bottomContainer)
+			{
+				for (i = 0; i<bottomContainer.numChildren; i++)
+				{
+					child = bottomContainer.getChildAt(0); 
+					if (child is IAxisLayout)
+						IAxisLayout(child).removeAllElements();
+				}
+				bottomContainer.removeAllChildren();
+			}
+
+			if (seriesContainer)
+			{
+	  			var nChildren:int = seriesContainer.numChildren;
+				for (i = 0; i<nChildren; i++)
+				{
+					child = seriesContainer.getChildAt(0); 
+					if (child is ISeries)
+						ISeries(child).removeAllElements();
+					seriesContainer.removeChildAt(0);
+				}
+			}
+		}
 	}
 }

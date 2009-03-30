@@ -55,5 +55,9 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 		
 		/** Get the axis pointer. Can be used to change colors, stroke, visibility...*/
 		function get pointer():Line;
+		
+		/** The axis must provide the removal all elements when refreshed, thus insuring
+		 * both display refresh and memory clearing.*/
+		function removeAllElements():void
 	}
 }

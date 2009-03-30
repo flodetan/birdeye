@@ -40,7 +40,7 @@ package org.un.cava.birdeye.qavis.charts.series
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxis;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.AreaChart;
-	import org.un.cava.birdeye.qavis.charts.data.ExtendedGeometryGroup;
+	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.renderers.TriangleRenderer;
 
 	public class AreaSeries extends StackableSeries
@@ -93,8 +93,8 @@ package org.un.cava.birdeye.qavis.charts.series
 					if (yAxis is NumericAxis)
 						NumericAxis(yAxis).max = maxYValue;
 				} else {
-					if (dataProvider && dataProvider.yAxis && dataProvider.yAxis is NumericAxis)
-						NumericAxis(dataProvider.yAxis).max = maxYValue;
+					if (chart && chart.yAxis && chart.yAxis is NumericAxis)
+						NumericAxis(chart.yAxis).max = maxYValue;
 				}
 			}
 		}
@@ -119,25 +119,25 @@ package org.un.cava.birdeye.qavis.charts.series
 			var ttXoffset:Number = NaN, ttYoffset:Number = NaN;
 			
 			// move data provider cursor at the beginning
-			dataProvider.cursor.seek(CursorBookmark.FIRST);
+			cursor.seek(CursorBookmark.FIRST);
 
 			// gg will be the GeometryGroup that will store the global Area 
 			// polygon. All hit area elements will be put in ttGeom
 			// this increases performances in case the user doesn't set
 			// showDataTips to true in the parent chart
 			// if it's a 3D chart, than gg will be instantiated for each pair of datavalues
-			gg = new ExtendedGeometryGroup();
+			gg = new DataItemLayout();
 			gg.target = this;
-			graphicsCollection.addItem(gg);
-			while (!dataProvider.cursor.afterLast)
+			addChild(gg);
+			while (!cursor.afterLast)
 			{
 				// if the series has its own x axis, than get the x coordinate
 				// position of the data value filtered by xField
 				if (xAxis)
-						xPos = xAxis.getPosition(dataProvider.cursor.current[xField]);
+						xPos = xAxis.getPosition(cursor.current[xField]);
 				else 
 						// otherwise use the parent chart x axis to do that
-						xPos = dataProvider.xAxis.getPosition(dataProvider.cursor.current[xField]);
+						xPos = chart.xAxis.getPosition(cursor.current[xField]);
 				
 				// prepare data for a standard tooltip message in case the user
 				// has not set a dataTipFunction
@@ -154,10 +154,10 @@ package org.un.cava.birdeye.qavis.charts.series
 					{
 						y0 = yAxis.getPosition(baseValues[j]);
 						yPos = yAxis.getPosition(
-							baseValues[j++] + Math.max(0,dataProvider.cursor.current[yField]));
+							baseValues[j++] + Math.max(0,cursor.current[yField]));
 					} else 
 						// if not stacked, than the y coordinate is given by the own y axis
-						yPos = yAxis.getPosition(dataProvider.cursor.current[yField]);
+						yPos = yAxis.getPosition(cursor.current[yField]);
 
 					dataFields[1] = yField;
 				} else {
@@ -165,11 +165,11 @@ package org.un.cava.birdeye.qavis.charts.series
 					// as above
 					if (_stackType == STACKED100)
 					{
-						y0 = dataProvider.yAxis.getPosition(baseValues[j]);
-						yPos = dataProvider.yAxis.getPosition(
-							baseValues[j++] + Math.max(0,dataProvider.cursor.current[yField]));
+						y0 = chart.yAxis.getPosition(baseValues[j]);
+						yPos = chart.yAxis.getPosition(
+							baseValues[j++] + Math.max(0,cursor.current[yField]));
 					} else {
-						yPos = dataProvider.yAxis.getPosition(dataProvider.cursor.current[yField]);
+						yPos = chart.yAxis.getPosition(cursor.current[yField]);
 					}
 
 					dataFields[1] = yField;
@@ -192,11 +192,11 @@ package org.un.cava.birdeye.qavis.charts.series
 
 				if (zAxis)
 				{
-					zPos = zAxis.getPosition(dataProvider.cursor.current[zField]);
+					zPos = zAxis.getPosition(cursor.current[zField]);
 					yAxisRelativeValue = XYZAxis(zAxis).height - zPos;
 					dataFields[2] = zField;
-				} else if (dataProvider.zAxis) {
-					zPos = dataProvider.zAxis.getPosition(dataProvider.cursor.current[zField]);
+				} else if (chart.zAxis) {
+					zPos = chart.zAxis.getPosition(cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 
 					// we create an y axis and rotate it to properly visualize 
 					// a 'fake' z axis. however zPos over this y axis corresponds to 
@@ -204,16 +204,16 @@ package org.un.cava.birdeye.qavis.charts.series
 					// up side down. this trick allows to visualize the y axis as
 					// if it would be a z. when there will be a 3d line class, it will 
 					// be replaced
-					yAxisRelativeValue = XYZAxis(dataProvider.zAxis).height - zPos;
+					yAxisRelativeValue = XYZAxis(chart.zAxis).height - zPos;
 					dataFields[2] = zField;
 				}
 
 				// if showdatatips than create a new GeometryGroup and set its 
 				// tooltip along with the hit area and events
-				if (dataProvider.showDataTips)
+				if (chart.showDataTips)
 				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createGG(dataProvider.cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3, ttShapes,ttXoffset,ttYoffset);
+					createGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3, ttShapes,ttXoffset,ttYoffset);
 					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
 					hitMouseArea.fill = new SolidFill(0x000000, 0);
 					ttGG.geometryCollection.addItem(hitMouseArea);				
@@ -237,15 +237,15 @@ package org.un.cava.birdeye.qavis.charts.series
 				// to the next data value coordinates
 				y0Prev = y0;
 				xPrev = xPos; yPrev = yPos;
-				if (dataProvider.is3D)
+				if (zField)
 				{
 					gg.z = zPos;
 					if (isNaN(zPos))
 						zPos = 0;
 				}
-				dataProvider.cursor.moveNext();
+				cursor.moveNext();
 			}
-			if (dataProvider.is3D)
+			if (zField)
 				zSort();
 		}
 		
@@ -261,8 +261,8 @@ package org.un.cava.birdeye.qavis.charts.series
 				if (xAxis is NumericAxis)
 					xPos = xAxis.getPosition(minXValue);
 			} else {
-				if (dataProvider.xAxis is NumericAxis)
-					xPos = dataProvider.xAxis.getPosition(minXValue);
+				if (chart.xAxis is NumericAxis)
+					xPos = chart.xAxis.getPosition(minXValue);
 			}
 			
 			return xPos;
@@ -280,18 +280,18 @@ package org.un.cava.birdeye.qavis.charts.series
 				else
 					yPos = yAxis.getPosition(minYValue);
 			} else {
-				if (dataProvider.yAxis is NumericAxis)
+				if (chart.yAxis is NumericAxis)
 				{
 					if (_baseAtZero)
-						yPos = dataProvider.yAxis.getPosition(0);
+						yPos = chart.yAxis.getPosition(0);
 					else
-						yPos = dataProvider.yAxis.getPosition(minYValue);
+						yPos = chart.yAxis.getPosition(minYValue);
 				}
 			}
 			return yPos;
 		}
 
-		private var ttGG:ExtendedGeometryGroup;
+		private var ttGG:DataItemLayout;
 		/** @Private
 		 * Override the creation of ttGeom in order to avoid the usage of gg also in case
 		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
@@ -300,14 +300,14 @@ package org.un.cava.birdeye.qavis.charts.series
 									zPos:Number, radius:Number, shapes:Array = null /* of IGeometry */, 
 									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
 		{
-			ttGG = new ExtendedGeometryGroup();
+			ttGG = new DataItemLayout();
 			ttGG.target = this;
- 			if (dataProvider.showDataTips)
+ 			if (chart.showDataTips)
 			{
 				initGGToolTip();
-				ttGG.createToolTip(dataProvider.cursor.current, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset);
+				ttGG.createToolTip(cursor.current, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset);
  			} else {
-				graphicsCollection.addItem(ttGG);
+				addChild(ttGG);
 			}
 		}
 		
@@ -320,10 +320,10 @@ package org.un.cava.birdeye.qavis.charts.series
 			ttGG.target = this;
 			ttGG.toolTipFill = fill;
 			ttGG.toolTipStroke = stroke;
- 			if (dataProvider.dataTipFunction != null)
-				ttGG.dataTipFunction = dataProvider.dataTipFunction;
-			if (dataProvider.dataTipPrefix!= null)
-				ttGG.dataTipPrefix = dataProvider.dataTipPrefix;
+ 			if (chart.dataTipFunction != null)
+				ttGG.dataTipFunction = chart.dataTipFunction;
+			if (chart.dataTipPrefix!= null)
+				ttGG.dataTipPrefix = chart.dataTipPrefix;
  			graphicsCollection.addItem(ttGG);
 			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
@@ -336,8 +336,8 @@ package org.un.cava.birdeye.qavis.charts.series
 		override protected function calculateMaxY():void
 		{
 			super.calculateMaxY();
-			if (dataProvider && dataProvider is AreaChart && stackType == STACKED100)
-				_maxYValue = Math.max(_maxYValue, AreaChart(dataProvider).maxStacked100);
+			if (chart && chart is AreaChart && stackType == STACKED100)
+				_maxYValue = Math.max(_maxYValue, AreaChart(chart).maxStacked100);
 		}
 	}
 }
