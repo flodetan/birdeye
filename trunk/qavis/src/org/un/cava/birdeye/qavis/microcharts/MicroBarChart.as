@@ -174,7 +174,8 @@ package org.un.cava.birdeye.qavis.microcharts
 					geomGroup.geometryCollection.addItem(column);
 					geomGroup.toolTipFill = column.fill;
 					super.initGGToolTip();
-					geomGroup.createToolTip(data.getItemAt(i), _dataField, space+startX + posX, space+ startY - columnWidth/2, 3);
+					geomGroup.createToolTip(data.getItemAt(i), _dataField, space+startX + posX, 
+						space -spacing + startY - columnWidth/2, 3);
 				} else {
 					geomGroup.geometryCollection.addItem(column);
 				}
