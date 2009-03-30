@@ -152,7 +152,8 @@ package org.un.cava.birdeye.qavis.microcharts
 				
 				startX += columnWidth + spacing;
 
-				if (colors == null || colors.lenght == 0)
+				if (!colors)
+				{
 					if (negative && dataValue < 0)
 						column.fill = new SolidFill(_negativeColor);
 					else
@@ -162,6 +163,16 @@ package org.un.cava.birdeye.qavis.microcharts
 						else 
 							column.fill = new SolidFill(color);
 					}
+				} else {
+					if (i < colors.length) {
+				        column.fill = new SolidFill(colors[i]);
+				    }	
+				    else {
+				        // Use the last color in the array if colors size is less
+				        // than the number of data points.	
+				        column.fill = new SolidFill(colors[colors.length - 1]);
+				    }		
+				}
 
 
 				if (showDataTips)

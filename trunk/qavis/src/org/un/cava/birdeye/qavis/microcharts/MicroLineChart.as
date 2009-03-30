@@ -205,9 +205,12 @@ package org.un.cava.birdeye.qavis.microcharts
 				var strokeColor:Number;
 
 				if (colors != null)
-					strokeColor = colors[i];
-				else 
 				{
+					if (i < colors.length)
+						strokeColor = colors[i];
+					else 
+						strokeColor = colors[colors.length-1];
+				}else {
 					if (isNaN(color))
 						strokeColor = black;
 					else 
