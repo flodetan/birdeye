@@ -191,7 +191,7 @@
 				geomGroup.geometryCollection.addItem(plot);
 
 				if (colors != null)
-					plot.fill = new SolidFill(useColor(i));
+					plot.fill = useColor(i);
 				else
 				{
 					if (isNaN(color))

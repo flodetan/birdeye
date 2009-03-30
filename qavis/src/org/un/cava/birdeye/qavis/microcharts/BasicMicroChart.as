@@ -412,8 +412,11 @@ package org.un.cava.birdeye.qavis.microcharts
 					}
 					else
 						fill = new SolidFill(_color);
-				} else
+				} else if (indexIteration < _colors.length)
+				{
 					fill = new SolidFill(_colors[indexIteration]);
+				} else
+					fill = new SolidFill(_colors[_colors.length - 1]);
 			} else 
 			{
 				fill = new LinearGradientFill();

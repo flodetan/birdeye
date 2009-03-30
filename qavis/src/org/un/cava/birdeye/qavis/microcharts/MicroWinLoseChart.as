@@ -132,6 +132,7 @@
 				startX += columnWidth + spacing;
 
 				if (colors == null)
+				{
 					if (dataValue < 0)
 						column.fill = red;
 					else
@@ -141,7 +142,7 @@
 						else 
 							column.fill = new SolidFill(color);
 					}
-				else
+				} else
 					column.fill = new SolidFill(useColor(i));
 
 				if (showDataTips)
