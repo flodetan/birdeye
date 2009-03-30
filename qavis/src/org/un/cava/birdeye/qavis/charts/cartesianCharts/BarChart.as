@@ -34,6 +34,12 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	import org.un.cava.birdeye.qavis.charts.series.BarSeries;
 	import org.un.cava.birdeye.qavis.charts.series.StackableSeries;
 
+	/**
+	 * The BarChart is a CartesianChart that provides the type property
+	 * that can be used by the BarSeries to define their stackable type.
+	 * Besides it provides some further control over the BarSeries layout
+	 * to insure the proper stack layout, particularly for the stacked100 type.
+	 * @see CartesianChart */
 	public class BarChart extends CartesianChart
 	{
 		private var _type:String = StackableSeries.OVERLAID;
@@ -74,7 +80,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			// the x0 starting point for each series values, which corresponds to 
 			// the understair series highest x value;
 
-			if (_series)
+			if (_series && cursor)
 			{
 				var _barSeries:Array = [];
 			

@@ -40,9 +40,9 @@ package org.un.cava.birdeye.qavis.charts.series
 	public class StackableSeries extends CartesianSeries implements IStack
 	{
 		private const OWN_VERTICAL_INTERVAL_CHANGES:String = "is_own_vertical_listening_interval_changes"; 
-		private const DATAPROVIDER_VERTICAL_INTERVAL_CHANGES:String = "is_own_horizontal_listening_interval_changes"; 
+		private const CHART_VERTICAL_INTERVAL_CHANGES:String = "is_own_horizontal_listening_interval_changes"; 
 		private const OWN_HORIZONTAL_INTERVAL_CHANGES:String = "is_own_horizontal_listening_interval_changes"; 
-		private const DATAPROVIDER_HORIZONTAL_INTERVAL_CHANGES:String = "is_own_dataprovider_horizontal_listening_interval_changes"; 
+		private const CHART_HORIZONTAL_INTERVAL_CHANGES:String = "is_own_chart_horizontal_listening_interval_changes"; 
 		
 		private var isListening:Array = [];
 		
@@ -105,8 +105,8 @@ package org.un.cava.birdeye.qavis.charts.series
 			
 			isListening [OWN_VERTICAL_INTERVAL_CHANGES] = false;
 			isListening [OWN_HORIZONTAL_INTERVAL_CHANGES] = false;
-			isListening [DATAPROVIDER_VERTICAL_INTERVAL_CHANGES] = false;
-			isListening [DATAPROVIDER_HORIZONTAL_INTERVAL_CHANGES] = false;
+			isListening [CHART_VERTICAL_INTERVAL_CHANGES] = false;
+			isListening [CHART_HORIZONTAL_INTERVAL_CHANGES] = false;
 		}
 		
 		override protected function commitProperties():void
@@ -119,15 +119,15 @@ package org.un.cava.birdeye.qavis.charts.series
 					XYZAxis(yAxis).addEventListener("IntervalChanged", update);
 					isListening[OWN_VERTICAL_INTERVAL_CHANGES] = true;
 				}
-				if (isListening[DATAPROVIDER_VERTICAL_INTERVAL_CHANGES])
+				if (isListening[CHART_VERTICAL_INTERVAL_CHANGES])
 				{
-					XYZAxis(dataProvider.yAxis).removeEventListener("IntervalChanged", update);
+					XYZAxis(chart.yAxis).removeEventListener("IntervalChanged", update);
 				}
-			} else if (dataProvider && dataProvider.yAxis) {
-				if (! isListening[DATAPROVIDER_VERTICAL_INTERVAL_CHANGES])
+			} else if (chart && chart.yAxis) {
+				if (! isListening[CHART_VERTICAL_INTERVAL_CHANGES])
 				{
-					XYZAxis(dataProvider.yAxis).addEventListener("IntervalChanged", update);
-					isListening[DATAPROVIDER_VERTICAL_INTERVAL_CHANGES] = true;
+					XYZAxis(chart.yAxis).addEventListener("IntervalChanged", update);
+					isListening[CHART_VERTICAL_INTERVAL_CHANGES] = true;
 				}
 			}
 
@@ -138,19 +138,19 @@ package org.un.cava.birdeye.qavis.charts.series
 					XYZAxis(xAxis).addEventListener("IntervalChanged", update);
 					isListening[OWN_HORIZONTAL_INTERVAL_CHANGES] = true;
 				}
-				if (isListening[DATAPROVIDER_HORIZONTAL_INTERVAL_CHANGES])
+				if (isListening[CHART_HORIZONTAL_INTERVAL_CHANGES])
 				{
-					XYZAxis(dataProvider.xAxis).removeEventListener("IntervalChanged", update);
+					XYZAxis(chart.xAxis).removeEventListener("IntervalChanged", update);
 				}
-			} else if (dataProvider && dataProvider.xAxis) {
-				if (! isListening[DATAPROVIDER_HORIZONTAL_INTERVAL_CHANGES])
+			} else if (chart && chart.xAxis) {
+				if (! isListening[CHART_HORIZONTAL_INTERVAL_CHANGES])
 				{
-					XYZAxis(dataProvider.xAxis).addEventListener("IntervalChanged", update);
-					isListening[DATAPROVIDER_HORIZONTAL_INTERVAL_CHANGES] = true;
+					XYZAxis(chart.xAxis).addEventListener("IntervalChanged", update);
+					isListening[CHART_HORIZONTAL_INTERVAL_CHANGES] = true;
 				}
 			}
 			
-			if (dataProvider.is3D)
+			if (chart.is3D)
 				deltaSize = 1/5;
 			else 
 				deltaSize = 3/5;

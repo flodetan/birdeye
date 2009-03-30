@@ -32,6 +32,12 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	import org.un.cava.birdeye.qavis.charts.series.AreaSeries;
 	import org.un.cava.birdeye.qavis.charts.series.StackableSeries;
 	
+	/**
+	 * The AreaChart is a CartesianChart that provides the type property
+	 * that can be used by the AreaSeries to define their stackable type.
+	 * Besides it provides some further control over the AreaSeries layout
+	 * to insure the proper stack layout, particularly for the stacked100 type.
+	 * @see CartesianChart */
 	public class AreaChart extends CartesianChart
 	{
 		private var _type:String = StackableSeries.OVERLAID;
@@ -70,7 +76,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			// arrays for each AreaSeries. The baseValues arrays will be used to know
 			// the y0 starting point for each series values, which corresponds to 
 			// the understair series highest y value;
-			if (_series)
+			if (_series && cursor)
 			{
 				var _areaSeries:Array = [];
 			

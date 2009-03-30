@@ -32,6 +32,12 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	import org.un.cava.birdeye.qavis.charts.series.ColumnSeries;
 	import org.un.cava.birdeye.qavis.charts.series.StackableSeries;
 
+	/**
+	 * The ColumnChart is a CartesianChart that provides the type property
+	 * that can be used by the ColumnSeries to define their stackable type.
+	 * Besides it provides some further control over the ColumnSeries layout
+	 * to insure the proper stack layout, particularly for the stacked100 type.
+	 * @see CartesianChart */
 	public class ColumnChart extends CartesianChart
 	{
 		private var _type:String = StackableSeries.OVERLAID;
@@ -72,7 +78,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			// the y0 starting point for each series values, which corresponds to 
 			// the understair series highest y value;
 
-			if (_series)
+			if (_series && cursor)
 			{
 				var _columnSeries:Array = [];
 			

@@ -185,7 +185,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 			surf = new Surface();
 			gg = new GeometryGroup();
 			gg.target = surf;
-			surf.graphicsCollection.addItem(gg);
+			surf.addChild(gg);
 			addChild(surf);
 		}
 		
@@ -225,12 +225,8 @@ package org.un.cava.birdeye.qavis.charts.axis
 			super.updateDisplayList(w,h);
 			setActualSize(w,h);
 			
-			if (gg)
-			{
-				gg.geometry = [];
-				gg.geometryCollection.items = [];
-			}
-						
+			removeAllElements();
+			
 			drawAxisLine(w,h)
 
 			if (readyForLayout)
@@ -345,6 +341,15 @@ package org.un.cava.birdeye.qavis.charts.axis
 		{
 			// to be overridden by implementing axis class (Category, Numeric, DateTime..)
 			return null;
+		}
+		
+		public function removeAllElements():void
+		{
+			if (gg)
+			{
+				gg.geometry = [];
+				gg.geometryCollection.items = [];
+			}
 		}
 	}
 }

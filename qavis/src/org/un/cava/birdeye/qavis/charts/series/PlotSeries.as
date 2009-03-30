@@ -70,24 +70,24 @@ package org.un.cava.birdeye.qavis.charts.series
 			if (!itemRenderer)
 				itemRenderer = CircleRenderer;
 			
-			dataProvider.cursor.seek(CursorBookmark.FIRST);
-			while (!dataProvider.cursor.afterLast)
+			cursor.seek(CursorBookmark.FIRST);
+			while (!cursor.afterLast)
 			{
 				if (xAxis)
 				{
-					xPos = xAxis.getPosition(dataProvider.cursor.current[xField]);
+					xPos = xAxis.getPosition(cursor.current[xField]);
 					dataFields[0] = xField;
 				} else {
-					xPos = dataProvider.xAxis.getPosition(dataProvider.cursor.current[xField]);
+					xPos = chart.xAxis.getPosition(cursor.current[xField]);
 					dataFields[0] = xField;
 				}
 				
 				if (yAxis)
 				{
-					yPos = yAxis.getPosition(dataProvider.cursor.current[yField]);
+					yPos = yAxis.getPosition(cursor.current[yField]);
 					dataFields[1] = yField;
 				} else {
-					yPos = dataProvider.yAxis.getPosition(dataProvider.cursor.current[yField]);
+					yPos = chart.yAxis.getPosition(cursor.current[yField]);
 					dataFields[1] = yField;
 				}
 
@@ -95,11 +95,11 @@ package org.un.cava.birdeye.qavis.charts.series
 
 				if (zAxis)
 				{
-					zPos = zAxis.getPosition(dataProvider.cursor.current[zField]);
+					zPos = zAxis.getPosition(cursor.current[zField]);
 					yAxisRelativeValue = XYZAxis(zAxis).height - zPos;
 					dataFields[2] = zField;
-				} else if (dataProvider.zAxis) {
-					zPos = dataProvider.zAxis.getPosition(dataProvider.cursor.current[zField]);
+				} else if (chart.zAxis) {
+					zPos = chart.zAxis.getPosition(cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 
 					// we create an y axis and rotate it to properly visualize 
 					// a 'fake' z axis. however zPos over this y axis corresponds to 
@@ -107,14 +107,14 @@ package org.un.cava.birdeye.qavis.charts.series
 					// up side down. this trick allows to visualize the y axis as
 					// if it would be a z. when there will be a 3d line class, it will 
 					// be replaced
-					yAxisRelativeValue = XYZAxis(dataProvider.zAxis).height - zPos;
+					yAxisRelativeValue = XYZAxis(chart.zAxis).height - zPos;
 					dataFields[2] = zField;
 				}
 
-				if (dataProvider.showDataTips)
+				if (chart.showDataTips)
 				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createGG(dataProvider.cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, _plotRadius);
+					createGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, _plotRadius);
 					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
 					hitMouseArea.fill = new SolidFill(0x000000, 0);
 					gg.geometryCollection.addItem(hitMouseArea);
@@ -127,16 +127,16 @@ package org.un.cava.birdeye.qavis.charts.series
 				plot.fill = fill;
 				plot.stroke = stroke;
 				gg.geometryCollection.addItemAt(plot,0); 
-				if (dataProvider.is3D)
+				if (zField)
 				{
 					gg.z = zPos;
 					if (isNaN(zPos))
 						zPos = 0;
 				}
- 				dataProvider.cursor.moveNext();
+ 				cursor.moveNext();
 			}
 			
-			if (dataProvider.is3D)
+			if (zField)
 				zSort();
 		}
 	}

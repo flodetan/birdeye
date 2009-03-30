@@ -27,6 +27,8 @@
  
 package org.un.cava.birdeye.qavis.charts.cartesianCharts
 {
+	/**
+	 * @see CartesianChart */
 	public class LineChart extends CartesianChart
 	{
 		public function LineChart()
