@@ -37,6 +37,7 @@
 	import mx.collections.XMLListCollection;
 	import mx.core.Container;
 	import mx.core.EdgeMetrics;
+	import mx.core.IInvalidating;
 	import mx.core.UIComponent;
 
 	[DefaultProperty("dataProvider")]
@@ -44,9 +45,6 @@
 	{
 		protected var defaultTipFunction:Function;
 
-		private var tempWidth:Number, tempHeight:Number;
-		private var resizeListening:Boolean = false;
-		
 		private var _cursor:IViewCursor = null;
 		public function get cursor():IViewCursor
 		{
@@ -103,7 +101,11 @@
 		override public function set percentHeight(val:Number):void
 		{
 			_percentHeight = val;
-			invalidateSize();
+			var p:IInvalidating = parent as IInvalidating;
+			if (p) {
+				p.invalidateSize();
+				p.invalidateDisplayList();
+			}
 		}
 		/** 
 		 * @private
@@ -117,7 +119,11 @@
 		override public function set percentWidth(val:Number):void
 		{
 			_percentWidth = val;
-			invalidateSize();
+			var p:IInvalidating = parent as IInvalidating;
+			if (p) {
+				p.invalidateSize();
+				p.invalidateDisplayList();
+			}
 		}
 		/** 
 		 * @private
@@ -263,65 +269,11 @@
 		{
 			super.commitProperties();
 			
-			// if % size is set, than listen to parent's resize events
-/*  			if (!resizeListening && (!isNaN(_percentHeight) || !isNaN(_percentWidth)))
-			{
-				resizeListening = true;
-				parent.addEventListener(ResizeEvent.RESIZE, onParentResize);
-			}
- */ 		}
-
-		/**
-		* @private 
-		 * Set the default and minimum width and height.
-		 * If percentWidth/percentHeight are used than it autosize the chart according the 
-		 * parent container size.
-		 * If explicitWidth/explicitHeight are set, than measure won't be called anymore, 
-		 * even if invalidateSize is called.
-		*/
-		override protected function measure():void
-		{
-			super.measure();
-			if (!isNaN(explicitWidth))
-				tempWidth = explicitWidth;
-			if (!isNaN(explicitHeight))
-				tempHeight = explicitHeight;
-
-			if (!isNaN(percentWidth) || !isNaN(percentHeight))
-			{
-				var edgeMet:EdgeMetrics = Container(parent).viewMetricsAndPadding;
-				if (!isNaN(percentWidth) && parent.width != 0)
-					tempWidth = Math.max(0, percentWidth/100 * (parent.width - edgeMet.left - edgeMet.right));
-	
-				if (!isNaN(percentHeight) && parent.height!= 0)
-					tempHeight = Math.max(0, percentHeight/100 * (parent.height - edgeMet.top - edgeMet.bottom));
-			}
-
-			if (isNaN(tempWidth))
-				tempWidth = 200;
-
-			if (isNaN(tempHeight))
-				tempHeight = 200;
-				
-			explicitWidth = minWidth = tempWidth;
-			explicitHeight = minHeight = tempHeight;
 		}
 
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 		}
-
-		/**
-		* @private 
-		 * Only called when there is a parent resize event and the chart uses autosize 
-		 * values (percentWidth or percentHeight).
-		*/
-		private function onParentResize(e:Event):void
-		{
-// 			invalidateProperties();
-
-			invalidateDisplayList();
- 		}
 	}
 }
