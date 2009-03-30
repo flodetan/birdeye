@@ -479,10 +479,11 @@ package org.un.cava.birdeye.qavis.charts.series
 				sortLayers.push([zPos, child]);
 				removeChildAt(0);
 			}
-			// sort them and add them back (in reverse order).
-			sortLayers.sortOn("0", Array.NUMERIC | Array.DESCENDING);
+			// sort them and add them back
+			sortLayers.sortOn("0", Array.NUMERIC);
 			for (i = 0; i < nChildren; i++) {
 				addChild(sortLayers[i][1]);
+trace(sortLayers[i][0]);
 			}
 		}
 	}
