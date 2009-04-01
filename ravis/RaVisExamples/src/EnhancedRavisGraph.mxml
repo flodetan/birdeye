@@ -278,6 +278,37 @@
 											<lc:HierLayoutControls id="myHierLC" vgraph="{vgraph}" />
 										</mx:VBox>
 									</flexlib:WindowShade>
+									<flexlib:WindowShade
+										id="viewControlsContainer"
+										styleName="linkButtonWindowShade" 
+							  			label="View Controls"
+							  			width="100%"
+							  			opened="true"
+							  			horizontalAlign="center"
+							  			paddingBottom="5"
+							  			>
+							  			<mx:VBox
+											width="97%"
+											horizontalAlign="center"
+											paddingLeft="5"
+											paddingRight="5"
+											paddingBottom="5"
+											paddingTop="5"
+											borderColor="#666666"
+											borderThickness="1"
+											cornerRadius="5"
+											borderStyle="solid"
+											backgroundColor="#CCCCCC"
+											backgroundAlpha=".2" >
+											<vc:ScaleControls id="mySCs" vgraph="{vgraph}" />
+											<vc:DrawButton id="myDB" vgraph="{vgraph}" />
+											<vc:FullRefreshButton
+												id="myFRB"
+												vgraph="{vgraph}"
+												directional="true"
+												xmlData="{xmldata}" />
+										</mx:VBox>
+									</flexlib:WindowShade>
 								</mx:VBox>		
 							</mx:Canvas>
 						</mx:Accordion>
