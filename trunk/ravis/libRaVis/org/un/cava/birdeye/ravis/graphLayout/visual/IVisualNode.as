@@ -160,5 +160,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * visual coordinates point to.
 		 * */
 		function commit():void;
+		
 	}
 }

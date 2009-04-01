@@ -22,9 +22,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.un.cava.birdeye.ravis.graphLayout.visual
+package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 {
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
@@ -33,12 +32,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 	import mx.core.UIComponent;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 	
 	/**
 	 * The VisualNode to be used in the Graph.
 	 * */
-	public class VisualNode extends EventDispatcher implements IVisualNode, IDataRenderer {
+	public class EnhancedVisualNode extends EventDispatcher implements IEnhancedVisualNode, IDataRenderer {
 		
 		/* The associated VisualGraph */
 		private var _vgraph:IVisualGraph;
@@ -68,6 +68,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		 * be displayed in Flashplayer */
 		private var _view:UIComponent;
 		
+		/* the associated label view if set */
+		private var _labelView:UIComponent;
+		
 		/* instead of a left/top corner orientation
 		 * we can implicitly do a centered orientation 
 		 * this will be applied during the commit() method
@@ -95,7 +98,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		 * @param data The VisualNode's associated data object.
 		 * @param mv Indicator if the node is moveable (currently ignored).
 		 * */
-		public function VisualNode(vg:IVisualGraph, node:INode, id:int, view:UIComponent = null, data:Object = null, mv:Boolean = true):void {
+		public function EnhancedVisualNode(vg:IVisualGraph, node:INode, id:int, view:UIComponent = null, data:Object = null, mv:Boolean = true):void {
 			_vgraph = vg;
 			_node = node;
 			_id = id;
@@ -141,6 +144,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		public function set isVisible(v:Boolean):void {
 			_visible = v;
 			
+			/* set the views visibility, if we currently
+			 * have one */
+			if(	_labelView != null) {
+				_labelView.visible = v;
+			}
+
 			/* set the views visibility, if we currently
 			 * have one */
 			if(_view != null) {
@@ -265,6 +274,31 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		/**
 		 * @inheritDoc
 		 * */
+		public function get labelView():UIComponent {
+			return _labelView;
+		}
+		
+		/**
+		 * @private
+		 * */
+		public function set labelView(lv:UIComponent):void {
+			_labelView = lv;
+		}
+		
+		/**
+		 * @inheritDoc
+		 * */
+		public function setNodeLabelCoordinates():void {
+			if(_labelView != null) {
+				var p:Point = INodeRenderer(this.view).labelCoordinates(_labelView);
+				_labelView.x = p.x;
+				_labelView.y = p.y;
+			}
+		}
+		
+		/**
+		 * @inheritDoc
+		 * */
 		public function get rawview():UIComponent {
 			return _view;
 		}
@@ -337,6 +371,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 				this.viewY = _y;
 			}
 			
+			setNodeLabelCoordinates();
+						
 			if(this.view is IEventDispatcher) {
 				(this.view as IEventDispatcher).dispatchEvent(new VGraphEvent(VGraphEvent.VNODE_UPDATED));
 			}
@@ -356,6 +392,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 				_x = this.viewX;
 				_y = this.viewY;
 			}
+			setNodeLabelCoordinates();
 		}
 	}
 }

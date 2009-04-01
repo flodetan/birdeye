@@ -40,10 +40,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	import mx.events.EffectEvent;
 	import mx.utils.ObjectUtil;
 	
-	import org.un.cava.birdeye.ravis.graphLayout.data.Graph;
-	import org.un.cava.birdeye.ravis.graphLayout.data.IEdge;
-	import org.un.cava.birdeye.ravis.graphLayout.data.IGraph;
-	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
+	import org.un.cava.birdeye.ravis.graphLayout.data.*;
 	import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
 	import org.un.cava.birdeye.ravis.utils.LogUtil;
@@ -452,6 +449,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* Fix ScrollBar problem*/
 			_canvas = new Canvas();
+			_canvas.setStyle("backgroundColor", 0xFFFFFF);
+			_canvas.setStyle("backgroundAlpha", 0.0000001);
 			this.addChild(_canvas);
 
 			_canvas.addChild(_drawingSurface);
