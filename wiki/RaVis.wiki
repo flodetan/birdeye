@@ -26,5 +26,51 @@ Stable: Project is at RC2; 27 May 2008
 
   * Try the RaVis Explorer: [http://birdeye.googlecode.com/svn/trunk/ravis/RaVisExamples/example-binaries/RaVisExplorer.html here] (work in progress)
 
+== Enhancements ==
+  * Useful Enhancement from Hung LE (letronghung@gmail.com). In this enhancements, I do some implementations to improve the Ravis Library for some requests from another members. These enhancements will be useful in your self business
+
+  * Try the Enhancement Demo: [http://birdeye.googlecode.com/svn/trunk/ravis/RaVisExamples/example-binaries/EnhancedRavisGraph.html here]
+
+  * Features:
+ 	
+ - Graph Data Interface
+
+  .  Initialize graph from ValueObject. 
+	 
+  .  Initialize NodeRenderer from ValueObject 	   
+
+  .  Initialize EdgeRenderer from ValueObject 	
+ 
+ - Programming API
+
+  .  Support Edge, Node event seperately. 	 
+
+  .  Keep the original FLEX Event in Graph, Node, Edge Event. 	 
+
+  .  Support Add/Remove/Edit Node, Edge easier 	 
+ - Edge
+
+  .  Support Edge Renderer (similar to NodeRenderer) because in many case, we want to move, handle event, resize edge 	 
+
+  .  Change EdgeRenderer --> EdgeDrawer 	 
+
+  .  Add control point to Edge (Edge Control Renderer) which is built from Straight Section (similar to Ms Power Point Line) 	 
+
+ - Node
+
+  .  Support Node Label Renderer (Similar to Edge Label Renderer) 	 
+
+  .  Node Renderer is another typed of Visual Graph (Sub-graph function) 	 
+
+ - Enhanced Visual Graph
+
+  .  Support multiple drag on Node (Example: Drag node and its successors together) 	 
+
+  .  Support Adding Node Label Renderer 	 
+
+  .  Support Adding Edge Control Renderer 	 
+
+  .  Add one static function to create VisualGraph from Data  (XML, VO)
+
 == Support ==
   * Check out the User Group: [http://groups.google.com/group/flexvizgraphlib here]
