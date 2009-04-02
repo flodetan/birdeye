@@ -33,24 +33,24 @@ Stable: Project is at RC2; 27 May 2008
 
   * Features:
    # Graph Data Interface
-     # Initialize graph from ValueObject - Finished
-     # Initialize NodeRenderer from ValueObject - Finished 	   
-     # Initialize EdgeRenderer from ValueObject - Finished 	
+     - Initialize graph from ValueObject - Finished
+     - Initialize NodeRenderer from ValueObject - Finished 	   
+     - Initialize EdgeRenderer from ValueObject - Finished 	
    # Programming API
-     # Support Edge, Node event seperately. - Finished 	 
-     # Keep the original FLEX Event in Graph, Node, Edge Event. - Finished 	 
-     # Support Add/Remove/Edit Node, Edge easier - In progress
+     - Support Edge, Node event seperately. - Finished 	 
+     - Keep the original FLEX Event in Graph, Node, Edge Event. - Finished 	 
+     - Support Add/Remove/Edit Node, Edge easier - In progress
    # Edge
-     # Support Edge Renderer (similar to NodeRenderer) because in many case, we want to move, handle event, resize edge  - Finished (Cheating way)	 	 
-     # Add control point to Edge (Edge Control Renderer) which is built from Straight Section (similar to Ms Power Point Line)  - Finished	 
+     - Support Edge Renderer (similar to NodeRenderer) because in many case, we want to move, handle event, resize edge  - Finished (Cheating way)	 	 
+     - Add control point to Edge (Edge Control Renderer) which is built from Straight Section (similar to Ms Power Point Line)  - Finished	 
    # Node
-     # Support Node Label Renderer (Similar to Edge Label Renderer)  - Finished	 
-     # Node Renderer is another typed of Visual Graph (Sub-graph function)  - In Progress
+     - Support Node Label Renderer (Similar to Edge Label Renderer)  - Finished	 
+     - Node Renderer is another typed of Visual Graph (Sub-graph function)  - In Progress
    # Enhanced Visual Graph
-     # Support multiple drag on Node (Example: Drag node and its successors together)  - In Progress	 
-     # Support Adding Node Label Renderer  - Finished	 
-     # Support Adding Edge Control Renderer  - Finished	 
-     # Add one function to create VisualGraph from Data (XML, VO) - Finished
+     - Support multiple drag on Node (Example: Drag node and its successors together)  - In Progress	 
+     - Support Adding Node Label Renderer  - Finished	 
+     - Support Adding Edge Control Renderer  - Finished	 
+     - Add one function to create VisualGraph from Data (XML, VO) - Finished
 
 == Support ==
   * Check out the User Group: [http://groups.google.com/group/flexvizgraphlib here]
