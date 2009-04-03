@@ -47,7 +47,7 @@ Stable: Project is at RC2; 27 May 2008
      * Support Node Label Renderer (Similar to Edge Label Renderer)  - Finished	 
      * Node Renderer is another typed of Visual Graph (Sub-graph function)  - In Progress
    # Enhanced Visual Graph
-     * Support multiple drag on Node (Example: Drag node and its successors together)  - In Progress	 
+     * Support multiple drag on Node (Example: Drag node and its successors together)  - Finished	 
      * Support Adding Node Label Renderer  - Finished	 
      * Support Adding Edge Control Renderer  - Finished	 
      * Add one function to create VisualGraph from Data (XML, VO) - Finished
