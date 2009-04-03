@@ -5,6 +5,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	
+	import mx.collections.ArrayCollection;
 	import mx.core.IDataRenderer;
 	import mx.core.IFactory;
 	import mx.core.UIComponent;
@@ -24,6 +25,10 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 	public class EnhancedVisualGraph extends VisualGraph
 	{
 		protected var _viewToVEdgeRendererMap:Dictionary;
+		
+		protected var _enableDefaultDoubleClick:Boolean = true;
+		
+		protected var _enableDragNodeWithSubTree:Boolean = false;
 		
         /**
          * This is the current Edge Control component that is dragged by the mouse.
@@ -431,11 +436,129 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 		 * @see handleDrag()
 		 * */
 		protected override function dragBegin(event:MouseEvent):void {
-
+			
+			var ecomponent:UIComponent;
+			var evnode:IVisualNode;
+			var node:INode;
+			
+			var pt:Point;
+			
 			if (_moveNodeInDrag == false)
 				return;
-			super.dragBegin(event); 	
-
+				
+			//trace("DragBegin was called...");
+			
+			/* if there is an animation in progress, we ignore
+			 * the drag attempt */
+			if(_layouter && _layouter.animInProgress) {
+				trace("Animation in progress, drag attempt ignored");
+				return;
+			}
+			
+			/* make sure we get the right component */
+			if(event.currentTarget is UIComponent) {
+				
+				ecomponent = (event.currentTarget as UIComponent);
+				
+				/* get the associated VNode of the view */
+				evnode = _viewToVNodeMap[ecomponent];
+				
+				/* stop propagation to prevent a concurrent backgroundDrag */
+				event.stopImmediatePropagation();
+				
+				if(evnode != null) {
+					node = evnode.node;
+					
+					/* if (ElectricalGraph.isConnected(node) == false)
+					{
+						var dragSource:DragSource = new DragSource();
+						dragSource.addData(node, 'node');
+						DragManager.doDrag(ecomponent, dragSource, event);
+						return;
+					} */
+					
+					if(!dragLockCenter) {
+						// lockCenter is false, use the mouse coordinates at the point
+						pt = ecomponent.localToGlobal(new Point(ecomponent.mouseX, ecomponent.mouseY));
+					} else {
+						// lockCenter is true, ignore the mouse coordinates
+						// and use (0,0) instead as the point
+						//TODO: change to the components`s center instead
+						pt = ecomponent.localToGlobal(new Point(0,0));
+					}
+			
+					/* Save the offset values in the map 
+					 * so we can compute x and y correctly in case
+					 * we use lockCenter */
+					var nodeComponent:UIComponent;
+					var enode:INode = evnode.node;
+					
+					var arrTreeNodes:ArrayCollection = new ArrayCollection();
+					var arrTreeRoots:Array = [enode];
+					var curTreeRoot:INode = arrTreeRoots.pop();
+					
+					if (_enableDragNodeWithSubTree)
+					{
+						while(curTreeRoot)
+						{
+							if (arrTreeNodes.contains(curTreeRoot) == false)
+							{
+								arrTreeNodes.addItem(curTreeRoot);
+								for each (var nextTreeRoot:INode in curTreeRoot.successors)
+									arrTreeRoots.push(nextTreeRoot);
+							}
+							curTreeRoot = arrTreeRoots.pop();
+						}
+					}
+					else
+					{
+						arrTreeNodes.addItem(enode);
+					}
+					
+					for each (var movedNode:INode in arrTreeNodes)
+					{
+						nodeComponent = movedNode.vnode.view;
+						if (nodeComponent)
+						{
+							_drag_x_offsetMap[nodeComponent] = pt.x / (scaleX*_canvas.scaleX) - nodeComponent.x;
+							_drag_y_offsetMap[nodeComponent] = pt.y / (scaleY*_canvas.scaleY) - nodeComponent.y;
+						}
+					}
+					
+					
+					//_drag_x_offsetMap[ecomponent] = pt.x / (scaleX*_canvas.scaleX) - ecomponent.x;
+					//_drag_y_offsetMap[ecomponent] = pt.y / (scaleY*_canvas.scaleY) - ecomponent.y;
+			
+					/* now we would need to set the bounds
+					 * rectangle in _drag_boundsMap, but this is
+					 * currently not implemented *
+					_drag_boundsMap[ecomponent] = rectangle;
+					 */
+					
+					/* Registeran eventListener with the component's stage that
+					 * handles any mouse move. This wires the component
+					 * to the mouse. On every mouse move, the event handler
+					 * is called, which updates its coordinates.
+					 * We need to save the drag component, since we have to 
+					 * register the event handler with the stage, not the component
+					 * itself. But from the stage we have no way to get back to
+					 * the component or the VNode in case of the mouse move or 
+					 * drop event. 
+					 */
+					_dragComponent = ecomponent;
+					ecomponent.stage.addEventListener(MouseEvent.MOUSE_MOVE, handleDrag);
+					_canvas.addEventListener(MouseEvent.MOUSE_UP,dragEnd);
+					/* also register a drop event listener */
+					// ecomponent.stage.addEventListener(MouseEvent.MOUSE_UP, dragEnd);
+					
+					/* and inform the layouter about the dragEvent */
+					_layouter.dragEvent(event, evnode);
+				} else {
+					throw Error("Event Component was not in the viewToVNode Map");
+				}
+			} else {
+				throw Error("MouseEvent target was no UIComponent");
+			}
 		}
 		
 		protected function dragControlBegin(event:MouseEvent):void {
@@ -505,23 +628,77 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 		 * @param event The MouseMove event that has been triggered.
 		 */
 		protected override function handleDrag(event:MouseEvent):void {
+			var myvnode:IVisualNode;
+			var sp:UIComponent;
+			
 			if (_moveNodeInDrag == false) {
 				if (_moveGraphInDrag == false) {
 					//this.parent.dispatchEvent(event);
 				}	
 				return;
 			}
+			//var bounds:Rectangle;
 			
-			super.handleDrag(event);
+			/* we set our Component to be the saved
+			 * dragComponent, because we cannot access it
+			 * through the event. */
+			sp = _dragComponent;
 			
-			if (_moveNodeInDrag && _dragComponent) {
-				var sp:UIComponent;
-				var enhancedVisualNode:IEnhancedVisualNode;
-				
-				sp = _dragComponent;
-				enhancedVisualNode = _viewToVNodeMap[sp];
-				enhancedVisualNode.setNodeLabelCoordinates();
+			/* Sometimes we get spurious events */
+			if(_dragComponent == null) {
+				trace("received handleDrag event but _dragComponent is null, ignoring");
+				return;
 			}
+			
+			/* bounds are not implemented:
+			bounds = _drag_boundsMap[sp];
+			*/
+			
+			/* update the coordinates with the current
+			 * event's stage coordinates (i.e. current mouse position),
+			 * modified by the lock-center offset */
+			
+			var ptrObj:Object;
+			for (ptrObj in _drag_x_offsetMap)
+			{
+				sp = ptrObj as UIComponent;
+				sp.x = event.stageX / (scaleX*_canvas.scaleX) - _drag_x_offsetMap[sp];	
+			}
+			for (ptrObj in _drag_y_offsetMap)
+			{
+				sp = ptrObj as UIComponent;
+				sp.y = event.stageY / (scaleY*_canvas.scaleY) - _drag_y_offsetMap[sp];
+			}
+			
+			
+			/* bounds code, currently unused 
+			if ( bounds != null ) {
+				if ( sp.x < bounds.left ) {
+					sp.x = bounds.left;
+				} else if ( sp.x > bounds.right ) {
+					sp.x = bounds.right;
+				}	
+				if ( sp.y < bounds.top ) {
+					sp.y = bounds.top;	
+				} else if ( sp.y > bounds.bottom ) {
+					sp.y = bounds.bottom;	
+				}
+			}
+			*/
+			
+			/* and inform the layouter about the dragEvent */
+			for (ptrObj in _drag_x_offsetMap)
+			{
+				sp = ptrObj as UIComponent;
+				myvnode = _viewToVNodeMap[sp];
+				if (myvnode is IEnhancedVisualNode)
+					IEnhancedVisualNode(myvnode).setNodeLabelCoordinates();
+				_layouter.dragContinue(event, myvnode);
+			}
+			
+			/* make sure flashplayer does an update after the event */
+			refresh();
+			event.updateAfterEvent();			
 		}
 		
 		protected function handleDragControl(event:MouseEvent):void {
@@ -900,5 +1077,32 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			super.draw(flags);
 			//_canvas.dispatchEvent(new VGraphEvent(VGraphEvent.VGRAPH_CHANGED)); 
 		} 
+		
+		public function get enableDefaultDoubleClick():Boolean
+		{
+			return _enableDefaultDoubleClick;
+		}
+		
+		public function set enableDefaultDoubleClick(value:Boolean):void
+		{
+			_enableDefaultDoubleClick = value;
+		}
+		
+		protected override function nodeDoubleClick(e:MouseEvent):void 
+		{
+			if (_enableDefaultDoubleClick)
+				super.nodeDoubleClick(e);
+		}
+		
+		public function get enableDragNodeWithSubTree():Boolean
+		{
+			return _enableDragNodeWithSubTree;
+		}
+			
+		public function set enableDragNodeWithSubTree(value:Boolean):void
+		{
+			_enableDragNodeWithSubTree = value;
+		}
+		
 	}
 }
