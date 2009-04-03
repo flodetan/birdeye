@@ -36,7 +36,7 @@
 	xmlns:dp="org.un.cava.birdeye.ravis.components.ui.dataPresentation.*"
 	xmlns:flexlib="http://code.google.com/p/flexlib/"
 	backgroundGradientColors="[#333333,#999999]" layout="vertical"
-	creationPolicy="all">
+	creationPolicy="all" xmlns:controls="org.un.cava.birdeye.ravis.enhancedGraphLayout.ui.controls.*">
 
 	<mx:Script>
 		<![CDATA[
@@ -257,7 +257,7 @@
 										styleName="linkButtonWindowShade" 
 		  								label="Layout"
 		  								width="100%"
-		  								opened="false"
+		  								opened="true"
 		  								horizontalAlign="center"
 		  								paddingBottom="5"
 		  								>
@@ -276,6 +276,47 @@
 											backgroundAlpha=".2" >
 					
 											<lc:HierLayoutControls id="myHierLC" vgraph="{vgraph}" />
+										</mx:VBox>
+									</flexlib:WindowShade>
+									<flexlib:WindowShade
+										id="operationContainer"
+										styleName="linkButtonWindowShade" 
+		  								label="Operation"
+		  								width="100%"
+		  								opened="true"
+		  								horizontalAlign="center"
+		  								paddingBottom="5"
+		  								>
+										<mx:VBox
+											width="99%"
+											horizontalAlign="center"
+											paddingLeft="5"
+											paddingRight="5"
+											paddingBottom="5"
+											paddingTop="5"
+											borderColor="#666666"
+											borderThickness="1"
+											cornerRadius="5"
+											borderStyle="solid"
+											backgroundColor="#CCCCCC"
+											backgroundAlpha=".2" >
+											<mx:VBox
+												width="97%"
+												horizontalAlign="left"
+												paddingLeft="5"
+												paddingRight="5"
+												paddingBottom="5"
+												paddingTop="5"
+												borderColor="#666666"
+												borderThickness="1"
+												cornerRadius="5"
+												borderStyle="solid"
+												backgroundColor="#CCCCCC"
+												backgroundAlpha=".2">
+												<controls:ToggleDragSubTree vgraph="{vgraph}" width="90%"/>
+												<controls:ToggleNodeDoubleClick vgraph="{vgraph}" width="90%"/>
+											</mx:VBox>
+											
 										</mx:VBox>
 									</flexlib:WindowShade>
 									<flexlib:WindowShade
