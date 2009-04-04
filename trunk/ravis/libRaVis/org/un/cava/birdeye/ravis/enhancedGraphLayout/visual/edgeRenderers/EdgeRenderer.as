@@ -1,6 +1,9 @@
 package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 {
+	import flash.events.ContextMenuEvent;
 	import flash.events.MouseEvent;
+	import flash.ui.ContextMenu;
+	import flash.ui.ContextMenuItem;
 	
 	import mx.controls.Label;
 	import mx.core.IDataRenderer;
@@ -8,8 +11,10 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 	import mx.core.UIComponent;
 	import mx.events.DragEvent;
 	import mx.managers.DragManager;
+	import mx.utils.UIDUtil;
 	
 	import org.un.cava.birdeye.ravis.enhancedGraphLayout.event.VGEdgeEvent;
+	import org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.EnhancedVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.data.IEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
 	import org.un.cava.birdeye.ravis.utils.TypeUtil;
@@ -31,6 +36,25 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 		
 		public function EdgeRenderer()
 		{
+			super();
+			this.contextMenu = createContextMenu();
+		}
+		
+		protected function createContextMenu():ContextMenu
+		{
+			var contextMenu:ContextMenu = new ContextMenu();
+			contextMenu.hideBuiltInItems();
+			
+			var insertNode:ContextMenuItem = new ContextMenuItem("Insert Node");
+			insertNode.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, insertNodeItemClick);
+			contextMenu.customItems.push(insertNode);
+			return contextMenu;	
+		}
+		
+		private function insertNodeItemClick(event:ContextMenuEvent):void
+		{
+			var nodeData:Object = {id:UIDUtil.createUID(), nodeColor:0x8F8FFF, nodeSize:10, nodeClass:"leaf", nodeIcon:15};
+			EnhancedVisualGraph(IVisualEdge(this.data).vgraph).addVNodeToEdge(nodeData.id, nodeData, IVisualEdge(this.data).edge, true);	
 		}
 		
 		private function addEventListeners():void
