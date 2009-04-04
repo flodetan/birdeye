@@ -1,13 +1,19 @@
 package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.nodeRenderers
 {
+	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
 	import flash.geom.Point;
+	import flash.ui.ContextMenu;
+	import flash.ui.ContextMenuItem;
 	
 	import mx.core.Container;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
+	import mx.utils.ObjectUtil;
+	import mx.utils.UIDUtil;
 	
 	import org.un.cava.birdeye.ravis.components.renderers.RendererIconFactory;
+	import org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.EnhancedVisualGraph;
 	import org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.INodeRenderer;
 	import org.un.cava.birdeye.ravis.graphLayout.layout.HierarchicalLayouter;
 	import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
@@ -43,8 +49,46 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.nodeRenderers
 				img.toolTip = this.data.data.name; // needs check
 			}
 			this.addChild(img);
+			this.contextMenu = createContextMenu();
 		}
 		
+		protected function createContextMenu():ContextMenu 
+		{
+			var contextMenu:ContextMenu = new ContextMenu();
+			contextMenu.hideBuiltInItems();
+			
+			var newChild:ContextMenuItem = new ContextMenuItem("New Child");
+			newChild.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, newChildItemClick);
+			contextMenu.customItems.push(newChild);
+			
+			var delNode:ContextMenuItem = new ContextMenuItem("Delete Node");
+			delNode.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, deleteNodeItemClick);
+			contextMenu.customItems.push(delNode);
+			
+			var delNodeAndRebindChild:ContextMenuItem = new ContextMenuItem("Delete Node and Rebind Child");
+			delNodeAndRebindChild.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, deleteNodeAndRebindChildItemClick);
+			contextMenu.customItems.push(delNodeAndRebindChild);
+			
+			return contextMenu;	
+		}
+		
+		private function newChildItemClick(event:ContextMenuEvent):void
+		{
+			var childData:Object = ObjectUtil.copy(IVisualNode(this.data).data);
+			childData.id = UIDUtil.createUID();
+			childData.description = 'This is new node';
+			EnhancedVisualGraph(IVisualNode(this.data).vgraph).addVNodeAsChild(childData.id, childData, IVisualNode(this.data).node);
+		}
+		
+		private function deleteNodeItemClick(event:ContextMenuEvent):void
+		{
+			EnhancedVisualGraph(IVisualNode(this.data).vgraph).removeNodeWithOption(IVisualNode(this.data).node, false);
+		}
+		
+		private function deleteNodeAndRebindChildItemClick(event:ContextMenuEvent):void
+		{
+			EnhancedVisualGraph(IVisualNode(this.data).vgraph).removeNodeWithOption(IVisualNode(this.data).node, true);
+		}	
 		public function labelCoordinates(label:UIComponent):Point
 		{
 			if (this.data is IVisualNode)

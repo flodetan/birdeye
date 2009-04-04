@@ -1104,5 +1104,174 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			_enableDragNodeWithSubTree = value;
 		}
 		
+		public function createVNodeFromVO(sid:String, data:Object):IVisualNode
+		{
+			var tmpVEdge:IVisualEdge;
+			var tmpEdge:IEdge;
+			var edgeData:Object;
+			var node:INode;
+			var vnode:IVisualNode;
+			
+			if (_graph == null)
+				return null;
+				
+			node = _graph.createNode(sid, data);
+			
+			vnode = createVNode(node);
+			setNodeVisibility(vnode, true);
+		
+			return vnode;
+		}
+		
+		public function addVNodeAsChild(sid:String, data:Object, parentNode:INode):Boolean
+		{
+			var tmpVEdge:IVisualEdge;
+			var tmpEdge:IEdge;
+			var edgeData:Object;
+			var node:INode;
+			var vnode:IVisualNode;
+			
+			if (_graph == null)
+				return false;
+				
+			node = _graph.createNode(sid, data);
+			vnode = createVNode(node);
+			setNodeVisibility(vnode, true);
+			
+			var nodeID:String = node.stringid;
+			edgeData = new Object()
+			edgeData.fromID = parentNode.stringid;
+			edgeData.toID = node.stringid;
+			
+			tmpEdge = _graph.link(parentNode,node,edgeData);
+			
+			if(tmpEdge == null) {
+				throw Error("Could not create or find Graph edge!!");
+			} else {
+				if(tmpEdge.vedge == null) {
+					/* we have a new edge, so we create a new VEdge */
+					tmpVEdge = createVEdge(tmpEdge);
+				} else {
+					/* existing one, so we use the existing vedge */
+					tmpVEdge = tmpEdge.vedge;
+				}
+			}
+			draw();
+			return true;
+		}
+		
+		public function addVNodeToEdge(sid:String, data:Object, edge:IEdge, removeOldEdge:Boolean = false):Boolean
+		{
+			var fromNode:INode = edge.fromNode;
+			var toNode:INode = edge.toNode;	
+			var tmpVEdge:IVisualEdge;
+			var tmpEdge:IEdge;
+			var edgeData:Object;
+			var node:INode;
+			var vnode:IVisualNode;
+			
+			node = _graph.createNode(sid, data);
+			node.data['id'] = node.stringid;
+
+			vnode = createVNode(node);
+			setNodeVisibility(vnode, true);
+			var nodeID:String = node.stringid;
+							
+			edgeData = new Object();
+			edgeData.fromID = fromNode.stringid;
+			edgeData.toID = node.stringid;
+			
+			//tmpVEdge = linkNodes(fromNode.vnode, node.vnode, edgeData);
+			
+			tmpEdge = _graph.link(fromNode,node,edgeData);
+			
+			if(tmpEdge == null) {
+				throw Error("Could not create or find Graph edge!!");
+			} else {
+				if(tmpEdge.vedge == null) {
+					/* we have a new edge, so we create a new VEdge */
+					tmpVEdge = createVEdge(tmpEdge);
+				} else {
+					/* existing one, so we use the existing vedge */
+					tmpVEdge = tmpEdge.vedge;
+				}
+			}
+			
+			edgeData = new Object();
+			edgeData.fromID = node.stringid;
+			edgeData.toID = toNode.stringid;
+			//tmpVEdge = linkNodes(node.vnode, toNode.vnode, edgeData);
+			
+			tmpEdge = _graph.link(node,toNode,edgeData);
+			
+			if(tmpEdge == null) {
+				throw Error("Could not create or find Graph edge!!");
+			} else {
+				if(tmpEdge.vedge == null) {
+					/* we have a new edge, so we create a new VEdge */
+					tmpVEdge = createVEdge(tmpEdge);
+				} else {
+					/* existing one, so we use the existing vedge */
+					tmpVEdge = tmpEdge.vedge;
+				}
+			}
+			
+			if (removeOldEdge)
+			{
+				//unlinkNodes(fromNode.vnode, toNode.vnode);
+				tmpEdge = _graph.getEdge(fromNode,toNode);
+				if (tmpEdge)
+				{
+					tmpVEdge = tmpEdge.vedge;			
+					removeVEdge(tmpVEdge);
+					_graph.removeEdge(tmpEdge);
+				}
+			}
+			
+			draw();
+			return true;
+		}
+		
+		public function removeNodeWithOption(node:INode, rebindEdge:Boolean = true):Boolean
+		{
+			var vnode:IVisualNode = node.vnode;
+			var successors:Array = node.successors;
+			var precessors:Array = node.predecessors;
+			
+			var tmpEdge:IEdge;
+			var tmpVEdge:IVisualEdge;
+			
+			if (rebindEdge && (precessors.length == 1))
+			{
+				var precessor:INode = precessors[0] as INode;
+				var oldEdge:IEdge = _graph.getEdge(precessor, node);
+				if (oldEdge != null)
+				{
+					for (var i:int = 0; i < successors.length; i++)
+					{
+						var fromNode:INode = precessor;
+						var toNode:INode = successors[i] as INode;
+						var edgeData:Object = ObjectUtil.copy(oldEdge.data);
+						edgeData.toID = toNode.stringid;
+						tmpEdge = _graph.link(fromNode,toNode,edgeData);
+						if(tmpEdge == null) {
+							throw Error("Could not create or find Graph edge!!");
+						} else {
+							if(tmpEdge.vedge == null) {
+								/* we have a new edge, so we create a new VEdge */
+								tmpVEdge = createVEdge(tmpEdge);
+							} else {
+								/* existing one, so we use the existing vedge */
+								tmpVEdge = tmpEdge.vedge;
+							}
+						}
+					}
+				}
+			}
+
+			removeNode(vnode);
+			draw();
+			return true;
+		}
 	}
 }
