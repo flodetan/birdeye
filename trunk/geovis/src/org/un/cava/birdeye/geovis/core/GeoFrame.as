@@ -171,11 +171,6 @@ package org.un.cava.birdeye.geovis.core
 		/**
 	     *  @private
 	     */
-		private var _geoGroup:Array;
-		
-		/**
-	     *  @private
-	     */
 		private var _stroke:SolidStroke=new SolidStroke(0x000000,1,1);
 		
 		/**
@@ -286,7 +281,6 @@ package org.un.cava.birdeye.geovis.core
 			super();
 			_region = region;
 			
-			_geoGroup = new Array();
 			verticalScrollPolicy = "off";
 			horizontalScrollPolicy = "off";
 			
@@ -496,7 +490,6 @@ trace (getStyle("stroke"));
 							countryGeom.geometryCollection.addItem(myCoo);
 						} // end if getCoordinates contained data
 					} // end polygon loop for country
-					_geoGroup.push(countryGeom);
 				}
 			}
 			dispatchEvent(new GeoCoreEvents(GeoCoreEvents.DRAW_BASEMAP_COMPLETE));
