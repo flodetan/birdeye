@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2008
+ * Copyright (c) 2009
  * United Nations Office at Geneva
  * Center for Advanced Visual Analytics
  * http://cava.unog.ch
