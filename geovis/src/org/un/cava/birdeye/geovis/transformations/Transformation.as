@@ -62,7 +62,8 @@ package org.un.cava.birdeye.geovis.transformations
 		{
 			return 0;
 		}
-			
+		
+		// zoom is the application wide scale factor
 		protected function createTranslatedXYPoint(xCentered:Number,yCentered:Number,zoom:Number):Point
 		{
 			var xval:Number=translateX(xCentered)*zoom;
@@ -70,11 +71,13 @@ package org.un.cava.birdeye.geovis.transformations
 			return new Point(xval,yval);
 		}
 
+		// _scalefactor is a projection specific scale factor
 		protected function translateX(xCentered:Number):Number
 		{
 			return (_xoffset+xCentered)*_scalefactor;
 		}
 
+		// _scalefactor is a projection specific scale factor
 		protected function translateY(yCentered:Number):Number
 		{
 			return (_yoffset-yCentered)*_scalefactor;

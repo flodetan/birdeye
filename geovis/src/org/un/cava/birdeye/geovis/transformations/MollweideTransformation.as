@@ -32,7 +32,6 @@ package org.un.cava.birdeye.geovis.transformations
 	public class MollweideTransformation extends Transformation
 	{
 		protected var _xscaler:Number;
-		private var _loopCounter:int=0;
 		
 		public function MollweideTransformation()
 		{
