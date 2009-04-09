@@ -27,69 +27,15 @@
  
 package org.un.cava.birdeye.qavis.charts.axis
 {
-	import com.degrafa.GeometryGroup;
-	import com.degrafa.IGeometry;
-	import com.degrafa.Surface;
-	import com.degrafa.geometry.Geometry;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RasterText;
-	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.events.Event;
 	
-	import mx.core.Container;
-	import mx.core.UIComponent;
-	
-	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisLayout;
-	
-	public class XYZAxis extends UIComponent implements IAxisLayout
+	public class XYZAxisUI extends BaseAxisUI 
 	{
-		protected var surf:Surface;
-		protected var gg:GeometryGroup;
-		protected var fill:SolidFill = new SolidFill(0x888888,0);
-		protected var stroke:SolidStroke = new SolidStroke(0x888888,1,1);
-		
 		protected var readyForLayout:Boolean = false;
-
-		/** Scale type: Linear */
-		public static const LINEAR:String = "linear";
-		/** Scale type: Numeric (general numeric scale that could be used for custom numeric axes)*/
-		public static const NUMERIC:String = "linear";
-		/** Scale type: Category */
-		public static const CATEGORY:String = "category";
-		/** Scale type: Logaritmic */
-		public static const LOG:String = "log";
-		/** Scale type: DateTime */
-		public static const DATE_TIME:String = "date_time";
-		
-		protected var _scaleType:String = LINEAR;
-		/** Set the scale type, LINEAR by default. */
-		public function set scaleType(val:String):void
-		{
-			_scaleType = val;
-			invalidateProperties()
-			invalidateSize();
-			invalidateDisplayList();
-		}
-		public function get scaleType():String
-		{
-			return _scaleType;
-		}
-		
-		/** Position the pointer to the specified x position. Used by a cartesian series
-		 * if the current axis is x.*/
-		public function set pointerX(val:Number):void
-		{
-			pointer.x = pointer.x1 = val;
-		}
-		
-		/** Position the pointer to the specified y position. Used by a cartesian series
-		 * if the current axis is vertical.*/
-		public function set pointerY(val:Number):void
-		{
-			pointer.y = pointer.y1 = val;
-		}
 
 		/** @Private
 		 * Set to true if the user has specified an interval for the axis.
@@ -97,9 +43,8 @@ package org.un.cava.birdeye.qavis.charts.axis
 		 */
 		protected var isGivenInterval:Boolean = false;
 
-		protected var _interval:Number = NaN;
 		/** Set the interval between axis values. */
-		public function set interval(val:Number):void
+		override public function set interval(val:Number):void
 		{
 			_interval = val;
 			isGivenInterval = true;
@@ -108,41 +53,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get interval():Number
-		{
-			return _interval;
-		}
-		
-		/** Diagonal placement for the Z axis. */
-		public static const DIAGONAL:String = "diagonal";
-		/** TOP placement for the axis. */
-		public static const TOP:String = "top";
-		/** BOTTOM placement for the axis. */
-		public static const BOTTOM:String = "bottom";
-		/** LEFT placement for the axis. */
-		public static const LEFT:String = "left";
-		/** RIGHT placement for the axis. */
-		public static const RIGHT:String = "right";
-		/** VERTICAL_CENTER placement for the axis. */
-		public static const VERTICAL_CENTER:String = "vertical_center";
-		/** HORIZONTAL_CENTER placement for the axis. */
-		public static const HORIZONTAL_CENTER:String = "horizontal_center";
-		
-		private var _placement:String;
-		/** Set the placement for this axis. */
-		[Inspectable(enumeration="top,bottom,left,right,vertical_center,horizontal_center,diagonal")]
-		public function set placement(val:String):void
-		{
-			_placement = val;
-			invalidateProperties()
-			invalidateSize();
-			invalidateDisplayList();
-		}
-		public function get placement():String
-		{
-			return _placement;
-		}
-		
+
 		private var _showTicks:Boolean = true;
 		/** Show ticks on the axis */
 		[Inspectable(enumeration="false,true")]
@@ -172,21 +83,15 @@ package org.un.cava.birdeye.qavis.charts.axis
 		}
 
 		// UIComponent flow
-		public function XYZAxis()
+		public function XYZAxisUI()
 		{
 			super();
 		}
 		
-		private var labelCont:Container;
 		/** @Private */
 		override protected function createChildren():void
 		{
 			super.createChildren();
-			surf = new Surface();
-			gg = new GeometryGroup();
-			gg.target = surf;
-			surf.addChild(gg);
-			addChild(surf);
 		}
 		
 		/** @Private */
@@ -207,18 +112,6 @@ package org.un.cava.birdeye.qavis.charts.axis
 		protected var thick:Line; 
 		protected var thickWidth:Number = 5;
 		protected var label:RasterText;
-		
-		private var _pointer:Line;
-		public function set pointer(val:Line):void
-		{
-			_pointer = val;
-			invalidateDisplayList();
-		}
-		public function get pointer():Line
-		{
-			return _pointer;
-		}
-		
 		/** @Private */
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
@@ -234,6 +127,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 				switch (placement)
 				{
 					case BOTTOM:
+					case HORIZONTAL_CENTER:
 						xMin = 0; xMax = w;
 						yMin = 0; yMax = 0;
 						sign = 1;
@@ -246,6 +140,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 						_pointer = new Line(0,h-7, 0, h);
 						break;
 					case LEFT:
+					case VERTICAL_CENTER:
 						xMin = w; xMax = w;
 						yMin = 0; yMax = h;
 						sign = -1;
@@ -275,6 +170,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 			switch (placement)
 			{
 				case BOTTOM:
+				case HORIZONTAL_CENTER:
 					x0 = 0; x1 = w;
 					y0 = 0; y1 = 0;
 					break;
@@ -283,6 +179,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 					y0 = h; y1 = h;
 					break;
 				case LEFT:
+				case VERTICAL_CENTER:
 					x0 = w; x1 = w;
 					y0 = 0; y1 = h;
 					break;
@@ -291,11 +188,11 @@ package org.un.cava.birdeye.qavis.charts.axis
 					x0 = 0; x1 = 0;
 					y0 = 0; y1 = h;
 					break;
-/*  				case DIAGONAL:
-					x0 = 0; x1 = w;
-					y0 = h; y1 = h;
+ 				case DIAGONAL:
+					x0 = 0; x1 = 0;
+					y0 = 0; y1 = h;
 					break;
- */ 			}
+			}
 
 			line = new Line(x0,y0,x1,y1);
 			line.fill = fill;
@@ -322,34 +219,17 @@ package org.un.cava.birdeye.qavis.charts.axis
 			{
 				case BOTTOM:
 				case TOP:
+				case HORIZONTAL_CENTER:
 					size = width;
 					break;
 				case LEFT:
 				case RIGHT:
 				case DIAGONAL:
+				case VERTICAL_CENTER:
 					size = height;
 					break;
 			}
 			return size;
-		}
-		
-		/** @Private
-		 * Given a data value, it returns the position of the data value on the current axis.
-		 * Override this method depending on the axis scaling (linear, log, category, etc).
-		 */
-		public function getPosition(dataValue:*):*
-		{
-			// to be overridden by implementing axis class (Category, Numeric, DateTime..)
-			return null;
-		}
-		
-		public function removeAllElements():void
-		{
-			if (gg)
-			{
-				gg.geometry = [];
-				gg.geometryCollection.items = [];
-			}
 		}
 	}
 }

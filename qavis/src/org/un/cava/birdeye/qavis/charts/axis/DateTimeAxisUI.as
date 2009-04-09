@@ -27,9 +27,9 @@
  
 package org.un.cava.birdeye.qavis.charts.axis
 {
-	public class DateTimeAxis extends XYZAxis 
+	public class DateTimeAxisUI extends XYZAxisUI 
 	{
-		public function DateTimeAxis()
+		public function DateTimeAxisUI()
 		{
 			super();
 		}
