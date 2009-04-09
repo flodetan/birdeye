@@ -27,44 +27,21 @@
  
 package org.un.cava.birdeye.qavis.charts.interfaces
 {
-	import org.un.cava.birdeye.qavis.charts.cartesianCharts.CartesianChart;
-	
-	public interface ICartesianSeries extends ISeries
+	public interface IAxis
 	{
-		/** Set the chart target. This allows to share axes and other properties
-		 * of the chart among several series.*/
-		function set chart(val:CartesianChart):void;
-		function get chart():CartesianChart
-		
-		/** Set the yField to filter vertical data values.*/
-		function set yField(val:String):void;
+		/** Calculates and returns the coordinate of a data value in the axis (depends on 
+		 * scale type). */
+		function getPosition(dataValue:*):*
 
-		/** Set the xField to filter horizontal data values.*/
-		function set xField(val:String):void;
+		/** Set the interval between axis labels.*/
+		function set interval(val:Number):void
+		function get interval():Number
 
-		/** Set the x axis.*/
-		function set xAxis(val:IAxisUI):void;
+		/** Set the function used by getPosition to calculate the position of the data value over the axis.*/
+		function set f(val:Function):void
 
-		/** Set the y axis.*/
-		function set yAxis(val:IAxisUI):void;
-
-		/** Set the z axis.*/
-		function set zAxis(val:IAxisUI):void;
-
-		
-		function get yField():String;
-		function get xField():String;
-		function get xAxis():IAxisUI;
-		function get yAxis():IAxisUI;
-		function get zAxis():IAxisUI;
-
-		function get maxZValue():Number;
-		function get minZValue():Number;
-
-		function get maxYValue():Number;
-		function get minYValue():Number;
-
-		function get maxXValue():Number;
-		function get minXValue():Number;
+		/** Define the scale type (category, linear, log, date...)*/
+		function set scaleType(val:String):void
+		function get scaleType():String
 	}
 }

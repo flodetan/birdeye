@@ -24,20 +24,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
- package org.un.cava.birdeye.qavis.charts.interfaces
-{
-	public interface INumerable
-	{
-		/** Set-get the minimum value.*/
-		function set min(val:Number):void
-		function get min():Number
-		
-		/** Set-get the maximum value.*/
-		function set max(val:Number):void
-		function get max():Number
 
-		/** Set the base at zero. */
-		function set baseAtZero(val:Boolean):void
+package org.un.cava.birdeye.qavis.charts.interfaces
+{
+	import com.degrafa.geometry.Line;
+	
+	public interface IAxisUI extends IAxis
+	{
+		/** Position the axis pointer on the specific Y coordinate value. */ 
+		function set pointerY(val:Number):void;
+
+		/** Position the axis pointer on the specific X coordinate value. */ 
+		function set pointerX(val:Number):void;
+		
+		/** Get the axis pointer. Can be used to change colors, stroke, visibility...*/
+		function get pointer():Line;
+
+		/** Set the axis placement.*/
+		function set placement(val:String):void
+		function get placement():String
+
+		/** The axis must provide the removal all elements when refreshed, thus insuring
+		 * both display refresh and memory clearing.*/
+		function removeAllElements():void
 	}
 }
