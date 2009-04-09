@@ -42,6 +42,7 @@ package org.un.cava.birdeye.qavis.charts
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.CartesianChart;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ISeries;
+	import org.un.cava.birdeye.qavis.charts.polarCharts.PolarChart;
 
 	[Exclude(name="chart", kind="property")]
 	[Exclude(name="cursor", kind="property")]
@@ -51,18 +52,6 @@ package org.un.cava.birdeye.qavis.charts
 		protected var fill:SolidFill = new SolidFill(0x888888,0);
 		protected var stroke:SolidStroke = new SolidStroke(0x888888,1,1);
 		
-		private var _chart:CartesianChart;
-		public function set chart(val:CartesianChart):void
-		{
-			_chart = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get chart():CartesianChart
-		{
-			return _chart;
-		}
-
 		protected var _dataProvider:Object=null;
 		/** Set the data provider for the series, if the series doesn't have its own dataProvider
 		 * than it will automatically takes the chart data provider. It's not necessary
@@ -111,23 +100,6 @@ package org.un.cava.birdeye.qavis.charts
 	  		else
 	  		{
 	  			this._dataProvider = new ArrayCollection();
-	  		}
-	  		
-	  		if (ICollectionView(_dataProvider).length > 0)
-	  		{
-		  		_cursor = ICollectionView(_dataProvider).createCursor();
-		  		
-		  		// we must invalidate also the chart properties and display list
-		  		// to let the chart update with the series data provider change. in fact
-		  		// the series dataprovider modifies the chart data and axes properties
-		  		// therefore it modifies the chart properties and displaying
-		  		chart.axesFeeded = false;
-		  		chart.invalidateProperties();
-		  		chart.invalidateDisplayList();
-
-		  		invalidateSize();
-		  		invalidateProperties();
-				invalidateDisplayList();
 	  		}
 		}		
 		/**
@@ -214,7 +186,7 @@ package org.un.cava.birdeye.qavis.charts
 			return _fillColor;
 		}
 
-		private var _fillAlpha:Number = 1;
+		protected var _fillAlpha:Number = 1;
 		public function set fillAlpha(val:Number):void
 		{
 			_fillAlpha = val;
@@ -225,7 +197,7 @@ package org.un.cava.birdeye.qavis.charts
 			return _fillAlpha;
 		}
 
-		private var _strokeColor:Number = NaN;
+		protected var _strokeColor:Number = NaN;
 		public function set strokeColor(val:Number):void
 		{
 			_strokeColor = val;
@@ -282,28 +254,7 @@ package org.un.cava.birdeye.qavis.charts
 
 		public function removeAllElements():void
 		{
-			if (chart.showDataTips) 
-			{
-				var nElements:int = graphicsCollection.items.length;
-				if (nElements > 1)
-				{
-					for (var i:int = 0; i<nElements; i++)
-					{
-						if (graphicsCollection.items[i] is DataItemLayout)
-							DataItemLayout(graphicsCollection.items[i]).removeAllElements();
-					}
-				} else if (gg) {
-					gg.geometryCollection.items = [];
-					gg.geometry = [];
-				}
-				for (i = numChildren - 1; i>=0; i--)
-					removeChildAt(i);
-				graphicsCollection.items = [];
-			} else if (gg)
-			{
-				gg.geometryCollection.items = [];
-				gg.geometry = [];
-			}
+			// override
 		}
 
 		/** Implement function to manage mouse click events.*/
