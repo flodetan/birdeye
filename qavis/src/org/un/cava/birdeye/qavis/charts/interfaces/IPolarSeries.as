@@ -25,15 +25,37 @@
  * THE SOFTWARE.
  */
  
- package org.un.cava.birdeye.qavis.charts.interfaces
+package org.un.cava.birdeye.qavis.charts.interfaces
 {
-	public interface IEnumerable
+	import org.un.cava.birdeye.qavis.charts.polarCharts.PolarChart;
+	
+	public interface IPolarSeries extends ISeries
 	{
-		/** Set-get the elements that have to be enumerable. */
-		function set elements(val:Array):void
-		function get elements():Array
+		/** Set the chart target. This allows to share axes and other properties
+		 * of the chart among several series.*/
+		function set polarChart(val:PolarChart):void;
+		function get polarChart():PolarChart
 		
-		/** Category field that is used to filter elements.*/
-		function set categoryField(val:String):void
+		/** Set the angleField to filter vertical data values.*/
+		function set angleField(val:String):void;
+		function get angleField():String;
+
+		/** Set the radiusField to filter horizontal data values.*/
+		function set radiusField(val:String):void;
+		function get radiusField():String;
+
+		/** Set the angle axis.*/
+		function set angleAxis(val:IAxis):void;
+		function get angleAxis():IAxis;
+
+		/** Set the radius axis.*/
+		function set radiusAxis(val:IAxisUI):void;
+		function get radiusAxis():IAxisUI;
+
+		function get maxAngleValue():Number;
+		function get minAngleValue():Number;
+
+		function get maxRadiusValue():Number;
+		function get minRadiusValue():Number;
 	}
 }

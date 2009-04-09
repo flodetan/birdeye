@@ -25,39 +25,19 @@
  * THE SOFTWARE.
  */
  
-package org.un.cava.birdeye.qavis.charts.interfaces
+ package org.un.cava.birdeye.qavis.charts.interfaces
 {
-	import com.degrafa.geometry.Line;
-	
-	public interface IAxisLayout
+	public interface INumerableAxis extends IAxis
 	{
-		/** Define the scale type (category, linear, log, date...)*/
-		function set scaleType(val:String):void
-		function get scaleType():String
-
-		/** Set the interval between axis labels.*/
-		function set interval(val:Number):void
-		function get interval():Number
-
-		/** Set the axis placement.*/
-		function set placement(val:String):void
-		function get placement():String
-
-		/** Calculates and returns the coordinate of a data value in the axis (depends on 
-		 * scale type). */
-		function getPosition(dataValue:*):*
+		/** Set-get the minimum value.*/
+		function set min(val:Number):void
+		function get min():Number
 		
-		/** Position the axis pointer on the specific Y coordinate value. */ 
-		function set pointerY(val:Number):void;
+		/** Set-get the maximum value.*/
+		function set max(val:Number):void
+		function get max():Number
 
-		/** Position the axis pointer on the specific X coordinate value. */ 
-		function set pointerX(val:Number):void;
-		
-		/** Get the axis pointer. Can be used to change colors, stroke, visibility...*/
-		function get pointer():Line;
-		
-		/** The axis must provide the removal all elements when refreshed, thus insuring
-		 * both display refresh and memory clearing.*/
-		function removeAllElements():void
+		/** Set the base at zero. */
+		function set baseAtZero(val:Boolean):void
 	}
 }

@@ -25,46 +25,15 @@
  * THE SOFTWARE.
  */
  
-package org.un.cava.birdeye.qavis.charts.interfaces
+ package org.un.cava.birdeye.qavis.charts.interfaces
 {
-	import org.un.cava.birdeye.qavis.charts.cartesianCharts.CartesianChart;
-	
-	public interface ICartesianSeries extends ISeries
+	public interface IEnumerableAxis extends IAxis
 	{
-		/** Set the chart target. This allows to share axes and other properties
-		 * of the chart among several series.*/
-		function set chart(val:CartesianChart):void;
-		function get chart():CartesianChart
+		/** Set-get the elements that have to be enumerable. */
+		function set elements(val:Array):void
+		function get elements():Array
 		
-		/** Set the yField to filter vertical data values.*/
-		function set yField(val:String):void;
-
-		/** Set the xField to filter horizontal data values.*/
-		function set xField(val:String):void;
-
-		/** Set the x axis.*/
-		function set xAxis(val:IAxisUI):void;
-
-		/** Set the y axis.*/
-		function set yAxis(val:IAxisUI):void;
-
-		/** Set the z axis.*/
-		function set zAxis(val:IAxisUI):void;
-
-		
-		function get yField():String;
-		function get xField():String;
-		function get xAxis():IAxisUI;
-		function get yAxis():IAxisUI;
-		function get zAxis():IAxisUI;
-
-		function get maxZValue():Number;
-		function get minZValue():Number;
-
-		function get maxYValue():Number;
-		function get minYValue():Number;
-
-		function get maxXValue():Number;
-		function get minXValue():Number;
+		/** Category field that is used to filter elements.*/
+		function set categoryField(val:String):void
 	}
 }
