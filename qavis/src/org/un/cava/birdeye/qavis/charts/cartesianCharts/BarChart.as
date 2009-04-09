@@ -29,10 +29,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 {
 	import mx.collections.CursorBookmark;
 	
-	import org.un.cava.birdeye.qavis.charts.axis.LinearAxis;
-	import org.un.cava.birdeye.qavis.charts.axis.XYZAxis;
-	import org.un.cava.birdeye.qavis.charts.series.BarSeries;
-	import org.un.cava.birdeye.qavis.charts.series.StackableSeries;
+	import org.un.cava.birdeye.qavis.charts.axis.BaseAxisUI;
+	import org.un.cava.birdeye.qavis.charts.axis.LinearAxisUI;
+	import org.un.cava.birdeye.qavis.charts.cartesianSeries.BarSeries;
+	import org.un.cava.birdeye.qavis.charts.cartesianSeries.StackableSeries;
 
 	/**
 	 * The BarChart is a CartesianChart that provides the type property
@@ -148,8 +148,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		/** @Private */
 		override protected function createXAxis():void
 		{
-			xAxis = new LinearAxis();
-			xAxis.placement = XYZAxis.BOTTOM;
+			xAxis = new LinearAxisUI();
+			xAxis.placement = BaseAxisUI.BOTTOM;
 		}
 	}
 }

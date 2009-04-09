@@ -44,7 +44,6 @@ package org.un.cava.birdeye.qavis.charts.legend
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.CartesianChart;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ICartesianSeries;
 	
-	[DefaultProperty("dataProvider")]
 	public class ChartLegend extends Box
 	{
 		private var _legendTitle:String;

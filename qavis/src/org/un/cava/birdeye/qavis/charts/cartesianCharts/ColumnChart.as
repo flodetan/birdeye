@@ -29,8 +29,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 {
 	import mx.collections.CursorBookmark;
 	
-	import org.un.cava.birdeye.qavis.charts.series.ColumnSeries;
-	import org.un.cava.birdeye.qavis.charts.series.StackableSeries;
+	import org.un.cava.birdeye.qavis.charts.cartesianSeries.ColumnSeries;
+	import org.un.cava.birdeye.qavis.charts.cartesianSeries.StackableSeries;
 
 	/**
 	 * The ColumnChart is a CartesianChart that provides the type property
