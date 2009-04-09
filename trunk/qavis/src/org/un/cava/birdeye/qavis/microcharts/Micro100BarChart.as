@@ -83,9 +83,11 @@ package org.un.cava.birdeye.qavis.microcharts
 			return _startX;
 		}	
 		
-		public function Micro100BarChart()
+		public function Micro100BarChart(data:Object = null)
 		{
 			super();
+			if (data) 
+				this.dataProvider = data;
 		}
 		
 		/**

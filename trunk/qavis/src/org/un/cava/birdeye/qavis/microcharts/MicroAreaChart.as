@@ -68,9 +68,11 @@
 			return _sizeY;
 		}
 
-		public function MicroAreaChart()
+		public function MicroAreaChart(data:Object = null)
 		{
 			super();
+			if (data) 
+				this.dataProvider = data;
 		}
 		
 		/**

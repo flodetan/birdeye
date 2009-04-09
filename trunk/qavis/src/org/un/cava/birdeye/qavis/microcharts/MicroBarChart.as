@@ -27,6 +27,7 @@
 
 package org.un.cava.birdeye.qavis.microcharts
 {
+	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
 	
@@ -93,9 +94,11 @@ package org.un.cava.birdeye.qavis.microcharts
 			return _sizeX;
 		}
 
-		public function MicroBarChart()
+		public function MicroBarChart(data:Object = null)
 		{
 			super();
+			if (data) 
+				this.dataProvider = data;
 		}
 		
 		/**
@@ -157,14 +160,14 @@ package org.un.cava.birdeye.qavis.microcharts
 							column.fill = new SolidFill(color);
 					}
 				} else {
-					if (i < colors.length) {
-				        column.fill = new SolidFill(colors[i]);
-				    }	
-				    else {
-				        // Use the last color in the array if colors size is less
-				        // than the number of data points.	
-				        column.fill = new SolidFill(colors[colors.length - 1]);
-				    }		
+					if (i < colors.length) 
+					{
+						if (colors[i] is IGraphicsFill)
+							column.fill = colors[i];
+						else if (colors[i] is Number)
+							column.fill = new SolidFill(colors[i]);
+					} else
+						column.fill = new SolidFill(0x999999);
 				}
 
 				if (showDataTips)

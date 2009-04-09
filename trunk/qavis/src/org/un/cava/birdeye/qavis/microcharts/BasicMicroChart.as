@@ -419,9 +419,12 @@ package org.un.cava.birdeye.qavis.microcharts
 						fill = new SolidFill(_color);
 				} else if (indexIteration < _colors.length)
 				{
-					fill = new SolidFill(_colors[indexIteration]);
+					if (_colors[indexIteration] is IGraphicsFill)
+						fill = _colors[indexIteration];
+					else if (_colors[indexIteration] is Number)
+						fill = new SolidFill(_colors[indexIteration]);
 				} else
-					fill = new SolidFill(_colors[_colors.length - 1]);
+					fill = new SolidFill(0x999999);
 			} else 
 			{
 				fill = new LinearGradientFill();
