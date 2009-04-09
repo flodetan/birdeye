@@ -27,7 +27,8 @@
  
  package org.un.cava.birdeye.qavis.charts
 {
-	import flash.events.Event;
+	import com.degrafa.Surface;
+	
 	import flash.geom.Rectangle;
 	import flash.xml.XMLNode;
 	
@@ -35,14 +36,23 @@
 	import mx.collections.ICollectionView;
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
-	import mx.core.Container;
-	import mx.core.EdgeMetrics;
 	import mx.core.IInvalidating;
-	import mx.core.UIComponent;
+	
+	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 
 	[DefaultProperty("dataProvider")]
-	public class BaseChart extends UIComponent
+	public class BaseChart extends Surface
 	{
+		private var _customTooltTipFunction:Function;
+		public function set customTooltTipFunction(val:Function):void
+		{
+			_customTooltTipFunction = val;
+		}
+		public function get customTooltTipFunction():Function
+		{
+			return _customTooltTipFunction;
+		}
+
 		protected var defaultTipFunction:Function;
 
 		private var _cursor:IViewCursor = null;
@@ -215,6 +225,22 @@
 			return _showDataTips;
 		}
 
+		protected var _showAllDataTips:Boolean = false;
+		/**
+		* Indicate whether to show/create tooltips or not. 
+		*/
+		[Inspectable(enumeration="true,false")]
+		public function set showAllDataTips(value:Boolean):void
+		{
+			_showAllDataTips = value;
+			invalidateProperties();
+			invalidateDisplayList();
+		}		
+		public function get showAllDataTips():Boolean
+		{
+			return _showAllDataTips;
+		}
+
 		protected var _dataTipFunction:Function = null;
 		/**
 		* Indicate the function used to create tooltips. 
@@ -255,6 +281,8 @@
 			invalidateDisplayList();
 		}
 		
+		// UIComponent flow
+		
 		public function BaseChart():void
 		{
 			super();
@@ -274,6 +302,23 @@
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
+		}
+
+		protected function removeDataItems():void
+		{
+			var i:int; 
+			var child:*;
+			
+			for (i = numChildren-1; i>=0; i--)
+			{
+				child = getChildAt(i); 
+				if (child is DataItemLayout)
+				{
+					DataItemLayout(child).hideToolTip();
+					DataItemLayout(child).removeAllElements();
+					removeChildAt(i);
+				}
+			}
 		}
 	}
 }
