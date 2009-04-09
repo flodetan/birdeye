@@ -37,6 +37,12 @@ package org.un.cava.birdeye.qavis.charts.data
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
+	import flash.events.Event;
+	import flash.geom.Point;
+	
+	import mx.controls.ToolTip;
+	import mx.managers.ToolTipManager;
+	
 	 /**
 	 * This class extends the functionalities of the GeometryGroup with tooltips properties and methods.
 	 * It's therefore possible to define tooltips, their functions and prefix to customize them. 
@@ -100,6 +106,32 @@ package org.un.cava.birdeye.qavis.charts.data
 			return _yTTOffset;
 		}
 
+		private var _currentItem:Object;
+		/**
+		* Set the current data item. 
+		*/
+    	public function set currentItem(value:Object):void
+	    {
+	        _currentItem = value;
+	    }
+		public function get currentItem():Object
+		{
+			return _currentItem;
+		}
+
+		private var _dataFields:Array;
+		/**
+		* Set the current data item. 
+		*/
+    	public function set dataFields(value:Array):void
+	    {
+	        _dataFields = value;
+	    }
+		public function get dataFields():Array
+		{
+			return _dataFields;
+		}
+
 		public function DataItemLayout()
 		{
 			super();
@@ -117,9 +149,10 @@ package org.un.cava.birdeye.qavis.charts.data
 			this.posX = posX;
 			this.posY = posY;
 			this.posZ = posZ;
-trace (posZ);
 			
-			// if no custom shapes than create the default one
+			this.currentItem = item;
+			this.dataFields = dataFields;
+						// if no custom shapes than create the default one
 			if (! ttShapes)
 			{
 				shapes[0] = new Circle(posX,posY,4);
@@ -158,6 +191,23 @@ trace (posZ);
 			hideToolTipGeometry();
 		} 
 		
+		public function createInteractiveGG(item:Object, dataFields:Array, 
+								xPos:Number, yPos:Number,	zPos:Number):void
+		{
+			this.posX = posX;
+			this.posY = posY;
+			this.posZ = posZ;
+			
+			this.currentItem = item;
+			this.dataFields = dataFields;
+		}
+		
+		public function addInteractive(items:Object, dataFields:Array):void
+		{
+			this.currentItem = items;
+			this.dataFields = dataFields;
+		}
+
 		/** @Private
 		 * Remove all elements from the component*/
 		public function removeAllElements():void
@@ -172,7 +222,7 @@ trace (posZ);
 		}
 		
 		/**
-		* Show the tooltip associated to this ExtendedGeometryGroup. 
+		* Show the tooltip shape associated to this DataItemLayout. 
 		*/
 		public function showToolTipGeometry():void
 		{
@@ -181,12 +231,38 @@ trace (posZ);
 		}
 		
 		/**
-		* Hide the tooltip associated to this ExtendedGeometryGroup. 
+		* Hide the tooltip shape associated to this DataItemLayout. 
 		*/
 		public function hideToolTipGeometry():void
 		{
 			for (var i:Number = 0; i<shapes.length; i++)
 				Geometry(shapes[i]).visible = false;
+		}
+		
+		private var tip:ToolTip; 
+		/**
+		* Show the tooltip of this DataItemLayout. 
+		*/
+		public function showToolTip():void
+		{
+			var pos:Point = localToGlobal(new Point(posX, posY));
+			tip = ToolTipManager.createToolTip(toolTip, 
+												pos.x + xTTOffset,	pos.y + yTTOffset) as ToolTip;
+
+			tip.alpha = 0.8;
+//			dispatchEvent(new Event("showToolTip"));
+			showToolTipGeometry();
+		}
+		
+		/**
+		* Hide the tooltip of this DataItemLayout. 
+		*/
+		public function hideToolTip():void
+		{
+			try {
+				ToolTipManager.destroyToolTip(tip);
+			} catch (e:Error) {}
+			hideToolTipGeometry();
 		}
 	}
 }
