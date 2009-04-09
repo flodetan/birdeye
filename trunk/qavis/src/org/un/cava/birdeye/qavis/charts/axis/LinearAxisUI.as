@@ -27,17 +27,58 @@
  
  package org.un.cava.birdeye.qavis.charts.axis
 {
+	import com.degrafa.geometry.RegularRectangle;
+	
 	[Exclude(name="scaleType", kind="property")]
-	public class LogAxis extends NumericAxis 
+	public class LinearAxisUI extends NumericAxisUI 
 	{
+		/** @Private
+		 * the scaleType cannot be changed, since it's inherently "linear".*/
 		override public function set scaleType(val:String):void
 		{}
 		 
-		public function LogAxis()
+		// UIComponent flow
+		
+		public function LinearAxisUI()
 		{
 			super();
-			_scaleType = XYZAxis.CATEGORY;
+			_scaleType = BaseAxisUI.LINEAR;
 		}
 		
+		override protected function commitProperties():void
+		{
+			super.commitProperties();
+		}
+		
+		override protected function updateDisplayList(w:Number, h:Number):void
+		{
+			super.updateDisplayList(w,h);
+		}
+		
+		// other methods
+
+		/** @Private
+		 * Override the XYZAxis getPostion method based on the linear scaling.*/
+		override public function getPosition(dataValue:*):*
+		{
+			var pos:Number = NaN;
+			size = getSize();
+			if (! (isNaN(max) || isNaN(min)))
+				switch (placement)
+				{
+					case BOTTOM:
+					case TOP:
+					case HORIZONTAL_CENTER:
+						pos = size * (Number(dataValue) - min)/(max - min);
+						break;
+					case LEFT:
+					case RIGHT:
+					case VERTICAL_CENTER:
+						pos = size * (1 - (Number(dataValue) - min)/(max - min));
+						break;
+				}
+				
+			return pos;
+		}
 	}
 }

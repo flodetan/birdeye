@@ -27,31 +27,53 @@
  
  package org.un.cava.birdeye.qavis.charts.axis
 {
-	import com.degrafa.geometry.Line;
-	import com.degrafa.geometry.RasterText;
-	import com.degrafa.paint.SolidFill;
-	import com.degrafa.paint.SolidStroke;
+	import org.un.cava.birdeye.qavis.charts.interfaces.IEnumerableAxis;
 	
-	import flash.text.TextFieldAutoSize;
-	
-	import org.un.cava.birdeye.qavis.charts.interfaces.IEnumerable;
-	
-	public class CategoryAxis extends XYZAxis implements IEnumerable
+	public class CategoryAxis implements IEnumerableAxis
 	{
+		protected var _function:Function;
+		/** Set the function that will be applied to calculate the getPosition of a 
+		 * data value in the axis. The function will basically define a custom 
+		 * scale for the axis.*/
+		public function set f(val:Function):void
+		{
+			_function = val;
+		}
+		
+		private var _axisSize:Number;
+		public function set axisSize(val:Number):void
+		{
+			_axisSize = val;
+		}
+		public function get axisSize():Number
+		{
+			return _axisSize;
+		}
+		
 		/** @Private
 		 * The scale type cannot be changed, since it's already "category".*/
-		[Exclude(name="scaleType", kind="property")]
-		override public function set scaleType(val:String):void
+		public function set scaleType(val:String):void
 		{}
-		
-		/** Elements for labeling */
+		public function get scaleType():String
+		{return null}
+
+		protected var _interval:Number = NaN;
+		public function set interval(val:Number):void
+		{
+			_interval = val;
+		}
+		public function get interval():Number
+		{
+			return _interval;
+		}
+
+		/** Elements defining the category angle axis.*/
 		private var _elements:Array = [];
 		public function set elements(val:Array):void
 		{
 			_elements = val;
-			invalidateSize();
-			invalidateProperties();
-			invalidateDisplayList();
+			if (elements && elements.length>0 && !isNaN(_axisSize))
+				interval = axisSize / elements.length;
 		}
 		public function get elements():Array
 		{
@@ -64,179 +86,26 @@
 		public function set categoryField(val:String):void
 		{
 			_categoryField = val;
-			invalidateSize();
-			invalidateProperties();
-			invalidateDisplayList();
 		}
 		public function get categoryField():String
 		{
 			return _categoryField;
 		}
-		 
-		// UIComponent flow
-		
+
 		public function CategoryAxis()
 		{
-			super();
-			_scaleType = XYZAxis.CATEGORY;
+			scaleType = BaseAxisUI.CATEGORY;
 		}
 		
-		override protected function commitProperties():void
+		public function getPosition(dataValue:*):*
 		{
-			super.commitProperties();
-			
-			size = getSize();
-			
-			// the interval is given by the axis lenght divided the number of 
-			// category elements loaded in the CategoryAxis
-			if (elements && elements.length >0)
+			if (! isNaN(_interval) && _elements && _elements.indexOf(dataValue) != -1)
 			{
-				var recIsGivenInterval:Boolean = isGivenInterval;
-				if (_interval != size/elements.length)
-					interval = size/elements.length;
-					
-				isGivenInterval = recIsGivenInterval;
-			}
-			
-			// if placement is set, elements are loaded and interval calculated
-			// than the axis is ready to be drawn
-			if (placement && elements && interval && _categoryField)
-				readyForLayout = true;
-			else 
-				readyForLayout = false;
-		}
-		
-		override protected function measure():void
-		{
-			super.measure();
- 			if (elements && elements.length>0 && placement)
-				maxLabelSize();
- 		}
- 		
-		// other methods
-		
-		/** @Private
-		 * Calculate the maximum label size, necessary to define the needed 
-		 * width (for y axes) or height (for x axes) of the CategoryAxis.*/
-		override protected function maxLabelSize():void
-		{
-			switch (placement)
-			{
-				case TOP:
-				case BOTTOM:
-					maxLblSize = 10 /* pixels for 1 char height */  + thickWidth + 10;
-					height = maxLblSize;
-					break;
-				case LEFT:
-				case RIGHT:
-				case DIAGONAL:
-					maxLblSize = String(_elements[0]).length;
-					for (var i:Number = 0; i<_elements.length; i++)
-						maxLblSize = Math.max(maxLblSize, String(_elements[i]).length); 
-
-					maxLblSize = maxLblSize * 5 /* pixels for 1 char width */ + thickWidth + 10;
-					width = maxLblSize;
-					break;
-			}
-			
-			// calculate the maximum label size according to the 
-			// styles defined for the axis 
-			super.calculateMaxLabelStyled();
-		}
-		
-		/** @Private
-		 * Implement the drawAxes method to draw the axis according to its orientation.*/
-		override protected function drawAxes(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
-		{
-			if (elements && elements.length>0)
-			{
-				if (_interval != (size=getSize())/elements.length)
-					interval = size/elements.length;
-			}
-			else 
-				_interval = NaN;
-
-			var snap:Number, elementIndex:Number=0;
-
-			if (isNaN(maxLblSize) && elements && elements.length>0 && placement)
-				maxLabelSize();
-
-			if (_interval > 0)
-			{
-				// vertical orientation
-				if (xMin == xMax)
-				{
-					for (snap = yMax - interval/2; snap>yMin; snap -= interval)
-					{
-						// create thick line
-			 			thick = new Line(xMin + thickWidth * sign, snap, xMax, snap);
-						thick.stroke = new SolidStroke(stroke,1,1);
-						gg.geometryCollection.addItem(thick);
-			
-						// create label 
-	 					label = new RasterText();
-						label.text = String(elements[elementIndex++]);
-	 					label.fontFamily = "verdana";
-	 					label.fontSize = 9;
-	 					label.visible = true;
-						label.autoSize = TextFieldAutoSize.LEFT;
-						label.autoSizeField = true;
-						label.y = snap-label.textField.height/2;
-						label.x = thickWidth; 
-						label.fill = new SolidFill(0x000000);
-						gg.geometryCollection.addItem(label);
-					}
-				} 
+				if (_function == null)
+					return _elements.indexOf(dataValue) * _interval;
 				else 
-				// horizontal orientation
-				{
-					for (snap = xMin + interval/2; snap<xMax; snap += interval)
-					{
-						// create thick line
-			 			thick = new Line(snap, yMin + thickWidth * sign, snap, yMax);
-						thick.stroke = new SolidStroke(stroke,1,1);
-						gg.geometryCollection.addItem(thick);
-	
-						// create label 
-	 					label = new RasterText();
-						label.text = String(elements[elementIndex++]);
-	 					label.fontFamily = "verdana";
-	 					label.fontSize = 9;
-	 					label.visible = true;
-						label.autoSize = TextFieldAutoSize.LEFT;
-						label.autoSizeField = true;
-						label.y = thickWidth;
-						label.x = snap-label.textField.width/2; 
-						label.fill = new SolidFill(0x000000);
-						gg.geometryCollection.addItem(label);
-					}
-				}
+					return  _function(dataValue, axisSize, interval);
 			}
-		}
-		
-		/** @Private
-		 * Override the XYZAxis getPostion method based on the linear scaling.*/
-		override public function getPosition(dataValue:*):*
-		{
-			var pos:Number = NaN;
-			size = getSize();
-			
-			switch (placement)
-			{
-				case BOTTOM:
-				case TOP:
-					pos = ((elements.indexOf(dataValue)+.5) / elements.length) * size;
-					break;
-				case LEFT:
-				case RIGHT:
-					pos = size - ((elements.indexOf(dataValue)+.5) / elements.length) * size;
-					break;
-				case DIAGONAL:
-					pos = ((elements.indexOf(dataValue)+.5) / elements.length) * size;
-					break;
-			}
-				
-			return pos;
 		}
 	}
 }

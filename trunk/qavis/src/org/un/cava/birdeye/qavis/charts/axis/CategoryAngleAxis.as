@@ -27,56 +27,47 @@
  
  package org.un.cava.birdeye.qavis.charts.axis
 {
-	import com.degrafa.geometry.RegularRectangle;
+	import org.un.cava.birdeye.qavis.charts.interfaces.IEnumerableAxis;
 	
-	[Exclude(name="scaleType", kind="property")]
-	public class LinearAxis extends NumericAxis 
+	public class CategoryAngleAxis extends CategoryAxis
 	{
-		/** @Private
-		 * the scaleType cannot be changed, since it's inherently "linear".*/
-		override public function set scaleType(val:String):void
-		{}
-		 
-		// UIComponent flow
+		private var _angle:Number;
 		
-		public function LinearAxis()
+		private var _minAngle:Number = 0;
+		/** Minimum angle for the angle axis.*/
+		public function set minAngle(val:Number):void
 		{
-			super();
-			_scaleType = XYZAxis.LINEAR;
+			_minAngle = val;
+			if (elements && elements.length>0)
+				_interval = (_maxAngle - _minAngle) / elements.length;
 		}
-		
-		override protected function commitProperties():void
-		{
-			super.commitProperties();
-		}
-		
-		override protected function updateDisplayList(w:Number, h:Number):void
-		{
-			super.updateDisplayList(w,h);
-		}
-		
-		// other methods
 
-		/** @Private
-		 * Override the XYZAxis getPostion method based on the linear scaling.*/
+		private var _maxAngle:Number = 360;
+		/** Maximum angle for the angle axis.*/
+		public function set maxAngle(val:Number):void
+		{
+			_maxAngle = val;
+			if (elements && elements.length>0)
+				_interval = (_maxAngle - _minAngle) / elements.length;
+		}
+
+		/** Elements defining the category angle axis.*/
+		override public function set elements(val:Array):void
+		{
+			super.elements = val;
+			if (elements && elements.length>0)
+				interval = (_maxAngle - _minAngle) / elements.length;
+		}
+
 		override public function getPosition(dataValue:*):*
 		{
-			var pos:Number = NaN;
-			size = getSize();
-			if (! (isNaN(max) || isNaN(min)))
-				switch (placement)
-				{
-					case BOTTOM:
-					case TOP:
-						pos = size * (Number(dataValue) - min)/(max - min);
-						break;
-					case LEFT:
-					case RIGHT:
-						pos = size * (1 - (Number(dataValue) - min)/(max - min));
-						break;
-				}
-				
-			return pos;
+			if (! isNaN(_interval) && elements && elements.indexOf(dataValue) != -1)
+			{
+				if (_function == null)
+					return elements.indexOf(dataValue) * _interval;
+				else 
+					return  _function(dataValue, _minAngle, _maxAngle, interval);
+			}
 		}
 	}
 }
