@@ -139,9 +139,11 @@ package org.un.cava.birdeye.qavis.microcharts
 			return _sizeY;
 		}
 
-		public function MicroLineChart()
+		public function MicroLineChart(data:Object = null)
 		{
 			super();
+			if (data) 
+				this.dataProvider = data;
 		}
 		
 		/**

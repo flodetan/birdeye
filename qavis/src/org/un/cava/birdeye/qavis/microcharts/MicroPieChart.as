@@ -28,7 +28,6 @@
 package org.un.cava.birdeye.qavis.microcharts
 {
 	import com.degrafa.geometry.EllipticalArc;
-	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	 /**
@@ -65,9 +64,11 @@ package org.un.cava.birdeye.qavis.microcharts
 			return _diameter;
 		}
 					
-		public function MicroPieChart()
+		public function MicroPieChart(data:Object = null)
 		{
 			super();
+			if (data) 
+				this.dataProvider = data;
 		}
 		
 		/**

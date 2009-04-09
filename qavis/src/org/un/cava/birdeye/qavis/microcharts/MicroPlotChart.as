@@ -120,9 +120,11 @@
 			return _sizeY;
 		}
 
-		public function MicroPlotChart()
+		public function MicroPlotChart(data:Object = null)
 		{
 			super();
+			if (data) 
+				this.dataProvider = data;
 		}
 		
 		/**

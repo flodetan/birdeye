@@ -81,9 +81,11 @@
 			return _referenceValue; 
 		}
 
-		public function MicroWinLoseChart()
+		public function MicroWinLoseChart(data:Object = null)
 		{
 			super();
+			if (data) 
+				this.dataProvider = data;
 		}
 		
 		/**
