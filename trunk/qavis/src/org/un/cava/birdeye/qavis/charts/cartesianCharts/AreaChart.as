@@ -29,8 +29,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 {
 	import mx.collections.CursorBookmark;
 	
-	import org.un.cava.birdeye.qavis.charts.series.AreaSeries;
-	import org.un.cava.birdeye.qavis.charts.series.StackableSeries;
+	import org.un.cava.birdeye.qavis.charts.cartesianSeries.AreaSeries;
+	import org.un.cava.birdeye.qavis.charts.cartesianSeries.StackableSeries;
 	
 	/**
 	 * The AreaChart is a CartesianChart that provides the type property
