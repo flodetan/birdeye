@@ -33,13 +33,10 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 	
 	import mx.collections.CursorBookmark;
 	
-	import org.un.cava.birdeye.qavis.charts.axis.PolarCoordinateTransform;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
-	import org.un.cava.birdeye.qavis.charts.polarCharts.RadarChart;
-	import org.un.cava.birdeye.qavis.charts.renderers.CircleRenderer;
+	import org.un.cava.birdeye.qavis.charts.axis.PolarCoordinateTransform;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
-
-	import flash.events.MouseEvent;
+	import org.un.cava.birdeye.qavis.charts.renderers.TriangleRenderer;
 
 	public class PolarColumnSeries extends PolarStackableSeries
 	{
@@ -58,8 +55,10 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
+
 			if (! itemRenderer)
-				itemRenderer = CircleRenderer;
+				itemRenderer = TriangleRenderer;
+
 			if (isNaN(_strokeColor))
 				_strokeColor = 0x000000;
 		}
@@ -74,9 +73,6 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			
 			var arcSize:Number = NaN;
 			
-			if (!itemRenderer)
-				itemRenderer = CircleRenderer;
-			
 			var angleInterval:Number;
 			if (angleAxis) 
 				angleInterval = angleAxis.interval * polarChart.columnWidthRate;
@@ -87,7 +83,15 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			else if (polarChart.radarAxis)
 				angleInterval = polarChart.radarAxis.angleAxis.interval * polarChart.columnWidthRate;
 				
-			arcSize = angleInterval/_total;
+			switch (_stackType)
+			{
+				case STACKED:
+					arcSize = angleInterval/_total;
+					break;
+				case OVERLAID:
+					arcSize = angleInterval;
+					break;
+			}
 				
 			gg = new DataItemLayout();
 			gg.target = this;
@@ -133,7 +137,16 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 				var arcCenterX:Number = polarChart.origin.x - radius;
 				var arcCenterY:Number = polarChart.origin.y - radius;
-				var startAngle:Number = angle - angleInterval/2 +arcSize*(_stackPosition-1);
+				var startAngle:Number; 
+				switch (_stackType) 
+				{
+					case STACKED:
+						startAngle = angle - angleInterval/2 +arcSize*(_stackPosition-1);
+						break;
+					case OVERLAID:
+						startAngle = angle - angleInterval/2;
+						break;
+				}
 				var wSize:Number, hSize:Number;
 				wSize = hSize = radius*2;
 
