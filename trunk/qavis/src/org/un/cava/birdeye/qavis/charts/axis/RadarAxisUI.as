@@ -107,7 +107,14 @@ package org.un.cava.birdeye.qavis.charts.axis
 		{
 			return _radiusAxes;
 		}
-		
+
+		private var _fontSize:Number = 8;
+		public function set fontSize(val:Number):void
+		{
+			_fontSize = val;
+			invalidateDisplayList();
+		}
+
 		// UIComponent methods
 		
 		private var gg:GeometryGroup;
@@ -192,7 +199,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 					var label:RasterText = new RasterText();
 					label.text = String(snap);
 	 				label.fontFamily = "verdana";
-	 				label.fontSize = 9;
+	 				label.fontSize = _fontSize;
 	 				label.visible = true;
 					label.autoSize = TextFieldAutoSize.LEFT;
 					label.autoSizeField = true;

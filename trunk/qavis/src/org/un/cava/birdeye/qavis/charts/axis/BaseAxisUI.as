@@ -66,6 +66,13 @@ package org.un.cava.birdeye.qavis.charts.axis
 			invalidateDisplayList();
 		}
 		
+		protected var _fontSize:Number = 10;
+		public function set fontSize(val:Number):void
+		{
+			_fontSize = val;
+			invalidateDisplayList();
+		}
+		
 		/** Position the pointer to the specified x position. Used by a cartesian series
 		 * if the current axis is x.*/
 		public function set pointerX(val:Number):void

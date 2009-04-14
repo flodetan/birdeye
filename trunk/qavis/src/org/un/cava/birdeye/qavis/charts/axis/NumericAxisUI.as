@@ -155,13 +155,13 @@ package org.un.cava.birdeye.qavis.charts.axis
 				case TOP:
 				case BOTTOM:
 				case HORIZONTAL_CENTER:
-					maxLblSize = 10 /* pixels for 1 char height */ + thickWidth + 10;
+					maxLblSize = _fontSize /* pixels for 1 char height */ + thickWidth + 10;
 					height = maxLblSize;
 					break;
 				case LEFT:
 				case RIGHT:
 				case VERTICAL_CENTER:
-					maxLblSize = text.length * 5 /* pixels for 1 char width */ + thickWidth + 10;
+					maxLblSize = text.length * _fontSize/2 /* pixels for 1 char width */ + thickWidth + 10;
 					width = maxLblSize;
 			}
 			
@@ -197,7 +197,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 						// create label 
 	 					label = new RasterText();
 	 					label.fontFamily = "verdana";
-	 					label.fontSize = 9;
+	 					label.fontSize = _fontSize;
 						label.text = String(Math.round(snap));
 	 					label.visible = true;
 						label.autoSize = TextFieldAutoSize.LEFT;
@@ -219,7 +219,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 	 					label = new RasterText();
 						label.text = String(Math.round(snap));
 	 					label.fontFamily = "verdana";
-	 					label.fontSize = 9;
+	 					label.fontSize = _fontSize;
 	 					label.visible = true;
 						label.autoSize = TextFieldAutoSize.LEFT;
 						label.autoSizeField = true;
