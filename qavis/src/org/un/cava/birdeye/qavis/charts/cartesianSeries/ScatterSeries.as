@@ -28,12 +28,14 @@
 package org.un.cava.birdeye.qavis.charts.cartesianSeries
 {
 	import com.degrafa.IGeometry;
+	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
 	
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
+	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IScatter;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ISizableItem;
 	import org.un.cava.birdeye.qavis.charts.renderers.CircleRenderer;
@@ -87,10 +89,14 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		{
 			var dataFields:Array = [];
 
-			var xPos:Number, yPos:Number, zPos:Number;
+			var xPos:Number, yPos:Number, zPos:Number = NaN;
 			var dataValue:Number;
 			var radius:Number;
 			
+			gg = new DataItemLayout();
+			gg.target = this;
+			addChild(gg);
+
 			cursor.seek(CursorBookmark.FIRST);
 			while (!cursor.afterLast)
 			{
@@ -140,12 +146,21 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				if (chart.showDataTips)
 				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3);
-					var hitMouseArea:RegularRectangle = bounds; 
+					createTTGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3);
+					var hitMouseArea:Circle = new Circle(xPos, yPos, 5);
 					hitMouseArea.fill = new SolidFill(0x000000, 0);
-					gg.geometryCollection.addItem(hitMouseArea);
+					ttGG.geometryCollection.addItem(hitMouseArea);
+					if (zField)
+					{
+						ttGG.z = zPos;
+						if (isNaN(zPos))
+							zPos = 0;
+					}
+				} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null || !isNaN(zPos))
+				{
+					createInteractiveGG(cursor.current, dataFields, xPos, yPos, NaN);
 				}
-
+				
 				scatter = new itemRenderer(bounds);
 				scatter.fill = fill;
 				scatter.stroke = stroke;

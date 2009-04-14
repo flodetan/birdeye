@@ -27,7 +27,10 @@
  
  package org.un.cava.birdeye.qavis.charts
 {
+	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
+	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
 	import flash.xml.XMLNode;
@@ -290,9 +293,17 @@
 			super();
 		}
 		
+		protected var rectBackGround:RegularRectangle;
+		protected var ggBackGround:GeometryGroup;
 		override protected function createChildren():void
 		{
 			super.createChildren();
+			ggBackGround = new GeometryGroup();
+			addChildAt(ggBackGround, 0);
+			ggBackGround.target = this;
+			rectBackGround = new RegularRectangle(0,0,0, 0);
+			rectBackGround.fill = new SolidFill(0x000000,0);
+			ggBackGround.geometryCollection.addItem(rectBackGround);
 		}
 		
 		override protected function commitProperties():void
@@ -304,6 +315,14 @@
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
+			if (ggBackGround)
+			{
+				rectBackGround.width = unscaledWidth;
+				rectBackGround.height = unscaledHeight;
+
+				if (!contains(ggBackGround))
+					addChildAt(ggBackGround, 0);
+			}
 		}
 
 		protected function removeDataItems():void
@@ -321,6 +340,18 @@
 					removeChildAt(i);
 				}
 			}
+			
+			var nItems:Number = graphicsCollection.items.length;
+			for (i = 0; i<nItems; i++)
+			{
+				child = graphicsCollection.getItemAt(i);
+				if (child is DataItemLayout)
+				{
+					DataItemLayout(child).hideToolTip();
+					DataItemLayout(child).removeAllElements();
+				}
+			}
+			graphicsCollection.items = [];
 		}
 	}
 }
