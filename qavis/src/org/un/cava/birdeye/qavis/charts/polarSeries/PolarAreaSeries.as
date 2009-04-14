@@ -36,6 +36,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.PolarCoordinateTransform;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
+	import org.un.cava.birdeye.qavis.charts.renderers.DiamondRenderer;
 
 	public class PolarAreaSeries extends PolarSeries
 	{
@@ -54,6 +55,9 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
+
+			if (! itemRenderer)
+				itemRenderer = DiamondRenderer;
 
 			if (isNaN(_strokeColor))
 				_strokeColor = 0x000000;

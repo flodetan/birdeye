@@ -58,8 +58,10 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
+			
 			if (! itemRenderer)
 				itemRenderer = CircleRenderer;
+				
 			if (isNaN(_strokeColor))
 				_strokeColor = 0x000000;
 		}
