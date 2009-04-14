@@ -47,6 +47,8 @@
 		public function set customTooltTipFunction(val:Function):void
 		{
 			_customTooltTipFunction = val;
+			invalidateProperties();
+			invalidateDisplayList();
 		}
 		public function get customTooltTipFunction():Function
 		{
