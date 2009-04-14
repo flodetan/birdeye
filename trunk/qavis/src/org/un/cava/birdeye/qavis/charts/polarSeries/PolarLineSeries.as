@@ -28,6 +28,8 @@
 package org.un.cava.birdeye.qavis.charts.polarSeries
 {
 	import com.degrafa.paint.SolidFill;
+	
+	import org.un.cava.birdeye.qavis.charts.renderers.LineRenderer;
 
 	public class PolarLineSeries extends PolarAreaSeries
 	{
@@ -145,6 +147,14 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
  				}
 			}
 		} */
+		
+		override protected function commitProperties():void
+		{
+			if (! itemRenderer)
+				itemRenderer = LineRenderer;
+
+			super.commitProperties();
+		}
 		
 		/** @Private 
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
