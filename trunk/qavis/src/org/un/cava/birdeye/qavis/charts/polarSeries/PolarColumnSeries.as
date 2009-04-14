@@ -95,7 +95,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 				
 			gg = new DataItemLayout();
 			gg.target = this;
-			addChild(gg);
+			graphicsCollection.addItem(gg);
 
 			cursor.seek(CursorBookmark.FIRST);
 			while (!cursor.afterLast)
@@ -159,9 +159,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
 					hitMouseArea.fill = new SolidFill(0x000000, 0);
 					ttGG.geometryCollection.addItem(hitMouseArea);
-				}
-				
-				if (mouseClickFunction!=null || mouseDoubleClickFunction!=null)
+				} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null)
 				{
 					createInteractiveGG(cursor.current, dataFields, xPos, yPos, NaN);
 				}

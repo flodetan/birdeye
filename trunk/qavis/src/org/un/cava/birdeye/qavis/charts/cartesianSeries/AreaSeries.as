@@ -119,17 +119,13 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			// tooltip distance from the hitarea position
 			var ttXoffset:Number = NaN, ttYoffset:Number = NaN;
 			
-			// move data provider cursor at the beginning
-			cursor.seek(CursorBookmark.FIRST);
-
-			// gg will be the GeometryGroup that will store the global Area 
-			// polygon. All hit area elements will be put in ttGeom
-			// this increases performances in case the user doesn't set
-			// showDataTips to true in the parent chart
-			// if it's a 3D chart, than gg will be instantiated for each pair of datavalues
 			gg = new DataItemLayout();
 			gg.target = this;
 			addChild(gg);
+			
+			// move data provider cursor at the beginning
+			cursor.seek(CursorBookmark.FIRST);
+
 			while (!cursor.afterLast)
 			{
 				// if the series has its own x axis, than get the x coordinate
@@ -215,12 +211,15 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				if (chart.showDataTips)
 				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3);
+					createTTGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3);
 					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
-					hitMouseArea.fill = new SolidFill(0x000000, 0);
+					hitMouseArea.fill = new SolidFill(0x000000, 1);
 					ttGG.geometryCollection.addItem(hitMouseArea);				
+				} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null || !isNaN(zPos))
+				{
+					createInteractiveGG(cursor.current, dataFields, xPos, yPos, NaN);
 				}
-
+				
 				// create the polygon only if there is more than 1 data value
 				// there cannot be an area with only the first data value 
 				if (t++ > 0) 
@@ -239,6 +238,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				// to the next data value coordinates
 				y0Prev = y0;
 				xPrev = xPos; yPrev = yPos;
+				
 				if (zField)
 				{
 					gg.z = zPos;
@@ -291,44 +291,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				}
 			}
 			return yPos;
-		}
-
-		private var ttGG:DataItemLayout;
-		/** @Private
-		 * Override the creation of ttGeom in order to avoid the usage of gg also in case
-		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
-		 * AreaSeries, thus improving performances.*/ 
-		override protected function createGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
-									zPos:Number, radius:Number, shapes:Array = null /* of IGeometry */, 
-									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
-		{
-			ttGG = new DataItemLayout();
-			ttGG.target = this;
- 			if (chart.showDataTips)
-			{
-				initGGToolTip();
-				ttGG.createToolTip(cursor.current, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset);
- 			} else {
-				addChild(ttGG);
-			}
-		}
-		
-		/** @Private
-		 * Override the init initGGToolTip in order to avoid the usage of gg also in case
-		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
-		 * AreaSeries, thus improving performances.*/ 
-		override protected function initGGToolTip():void
-		{
-			ttGG.target = chart.seriesContainer;
-			ttGG.toolTipFill = fill;
-			ttGG.toolTipStroke = stroke;
- 			if (chart.dataTipFunction != null)
-				ttGG.dataTipFunction = chart.dataTipFunction;
-			if (chart.dataTipPrefix!= null)
-				ttGG.dataTipPrefix = chart.dataTipPrefix;
- 			graphicsCollection.addItem(ttGG);
-			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
-			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 		}
 
 		/** @Private

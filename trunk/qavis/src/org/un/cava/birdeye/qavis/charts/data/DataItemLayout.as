@@ -250,7 +250,6 @@ package org.un.cava.birdeye.qavis.charts.data
 												pos.x + xTTOffset,	pos.y + yTTOffset) as ToolTip;
 
 			tip.alpha = 0.8;
-//			dispatchEvent(new Event("showToolTip"));
 			showToolTipGeometry();
 		}
 		

@@ -31,16 +31,13 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
 	
-	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
 	import mx.collections.CursorBookmark;
 	import mx.collections.ICollectionView;
-	import mx.controls.ToolTip;
 	import mx.core.IToolTip;
 	import mx.events.ToolTipEvent;
-	import mx.managers.ToolTipManager;
 	
 	import org.un.cava.birdeye.qavis.charts.BaseSeries;
 	import org.un.cava.birdeye.qavis.charts.axis.BaseAxisUI;
@@ -235,27 +232,26 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			super();
 		}
 		
-		private var rectBackGround:RegularRectangle;
-		private var ggBackGround:GeometryGroup;
-		private var tooltipCreationListening:Boolean = false;
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
 			
-			if (chart && chart.customTooltTipFunction!=null && !tooltipCreationListening)
+			// since we use Degrafa, the background is needed in the series
+			// to allow events for tooltips all over the series.
+			// tooltips are triggered by ttGG objects. 
+			// if showdatatips is true all interactivity events are triggered and
+			// managed through ttGG.
+			
+			// if showDataTips is false than it's still possible to manage 
+			// interactivity events thourgh gg, but in this case we must 
+			// remove the background to allow these interactivities, since gg is at the series
+			// level and not the chart one. if we don't remove the background, gg
+			// belonging to other series could be covered by the background and 
+			// interactivity becomes impossible
+			// therefore background is created only if showDataTips is true
+			if (chart && chart.customTooltTipFunction!=null && chart.showDataTips && !tooltipCreationListening)
 			{
-				addEventListener(ToolTipEvent.TOOL_TIP_CREATE, onTTCreate);
-				toolTip = "";
-	
-				// background is needed on each series to allow mouse events
-				// all over the series space, mostly on those elements 
-				// that are located at the border of the series
-				ggBackGround = new GeometryGroup();
-				graphicsCollection.addItemAt(ggBackGround,0);
-				rectBackGround = new RegularRectangle(0,0,0, 0);
-				rectBackGround.fill = new SolidFill(0x000000,0);
-				ggBackGround.geometryCollection.addItem(rectBackGround);
-				tooltipCreationListening = true;
+				initCustomTip();
 			}
 		}
  
@@ -416,46 +412,12 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			}
 		}
 		
- 		protected function createGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, zPos:Number, radius:Number,
-									shapes:Array = null /* of IGeometry */, ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
-		{
-			gg = new DataItemLayout();
-			gg.target = this;
- 			if (chart.showDataTips)
-			{
-				initGGToolTip();
-				gg.createToolTip(cursor.current, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset);
- 			} else {
-				graphicsCollection.addItem(gg);
-			}
-		}
- 
-		/**
-		* @private 
-		 * Init the GeomGroupToolTip and its listeners
-		 * 
-		*/
- 		protected function initGGToolTip():void
-		{
-			gg.target = chart.seriesContainer;
-			gg.toolTipFill = fill;
-			gg.toolTipStroke = stroke;
- 			if (chart.dataTipFunction != null)
-				gg.dataTipFunction = chart.dataTipFunction;
-			if (chart.dataTipPrefix!= null)
-				gg.dataTipPrefix = chart.dataTipPrefix;
-			graphicsCollection.addItem(gg);
-			gg.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
-			gg.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
-		}
-
-		private var myTT:IToolTip;
 		/**
 		* @private 
 		 * Show and position tooltip
 		 * 
 		*/
-		protected function handleRollOver(e:MouseEvent):void 
+		override protected function handleRollOver(e:MouseEvent):void 
 		{
 			var extGG:DataItemLayout = DataItemLayout(e.target);
 
@@ -468,13 +430,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			}
 
 			var pos:Point = localToGlobal(new Point(extGG.posX, extGG.posY));
-/* 			tip = ToolTipManager.createToolTip(extGG.toolTip, 
-												pos.x + extGG.xTTOffset,	pos.y + extGG.yTTOffset)	as ToolTip;
-
-			tip.alpha = 0.8;
-			dispatchEvent(new Event("showToolTip"));
-			extGG.showToolTipGeometry();
- */			
+	
 			if (yAxis)
 			{
 				yAxis.pointerY = extGG.posY;
@@ -503,39 +459,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			} 
 		}
 
-		/**
-		* @private 
-		 * Destroy/hide tooltip 
-		 * 
-		*/
-		protected function handleRollOut(e:MouseEvent):void
-		{ 
-
-			var extGG:DataItemLayout = 	DataItemLayout(e.target);
-			extGG.hideToolTip();
-			myTT = null;
-			toolTip = null;
-
-			if (yAxis)
-				yAxis.pointer.visible = false;
-			else
-				chart.yAxis.pointer.visible = false;
-
-			if (xAxis)
-				xAxis.pointer.visible = false;
-			else
-				chart.xAxis.pointer.visible = false;
-
-			if (zAxis)
-				zAxis.pointer.visible = false;
-			else if (chart.zAxis)
-				chart.zAxis.pointer.visible = false;
-
-/* 			if (tip)
-				ToolTipManager.destroyToolTip(tip);
-			DataItemLayout(e.target).hideToolTipGeometry();
- */		}
-
 		/** @Private
 		 * Sort the surface elements according their z position.*/ 
 		protected function zSort():void
@@ -555,28 +478,81 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				addChild(sortLayers[i][1]);
 		}
 
-		override public function removeAllElements():void
-		{
-			if (gg) 
-				gg.removeAllElements();
-			
-			var nElements:int = graphicsCollection.items.length;
-			if (nElements > 1)
-			{
-				for (var i:int = 0; i<nElements; i++)
-				{
-					if (graphicsCollection.items[i] is DataItemLayout)
-						DataItemLayout(graphicsCollection.items[i]).removeAllElements();
-				}
-			} 
+		/**
+		* @private 
+		 * Destroy/hide tooltip 
+		 * 
+		*/
+		override protected function handleRollOut(e:MouseEvent):void
+		{ 
+			var extGG:DataItemLayout = 	DataItemLayout(e.target);
+			extGG.hideToolTip();
+			myTT = null;
+			toolTip = null;
 
-			for (i = numChildren - 1; i>=0; i--)
+			if (yAxis)
+				yAxis.pointer.visible = false;
+			else
+				chart.yAxis.pointer.visible = false;
+
+			if (xAxis)
+				xAxis.pointer.visible = false;
+			else
+				chart.xAxis.pointer.visible = false;
+
+			if (zAxis)
+				zAxis.pointer.visible = false;
+			else if (chart.zAxis)
+				chart.zAxis.pointer.visible = false;
+		}
+
+		/** @Private
+		 * Override the creation of ttGeom in order to avoid the usage of gg also in case
+		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
+		 * AreaSeries, thus improving performances.*/ 
+		override protected function createTTGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
+									zPos:Number, radius:Number, shapes:Array = null /* of IGeometry */, 
+									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
+		{
+			ttGG = new DataItemLayout();
+			ttGG.target = this;
+ 			if (chart.showDataTips || chart.showAllDataTips)
 			{
-				if (getChildAt(i) is DataItemLayout)
-					DataItemLayout(getChildAt(i)).removeAllElements();
-				removeChildAt(i);
+				initGGToolTip();
+				ttGG.createToolTip(cursor.current, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset);
+ 			} else {
+				graphicsCollection.addItem(ttGG);
 			}
-			graphicsCollection.items = [];
+			
+			if (chart.showAllDataTips)
+			{
+				ttGG.showToolTip();
+				ttGG.showToolTipGeometry();
+			}
+		}
+		
+		/** @Private
+		 * Override the init initGGToolTip in order to avoid the usage of gg also in case
+		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
+		 * series, thus improving performances.*/ 
+		override protected function initGGToolTip():void
+		{
+			ttGG.target = chart.seriesContainer;
+			ttGG.toolTipFill = fill;
+			ttGG.toolTipStroke = stroke;
+ 			if (chart.dataTipFunction != null)
+				ttGG.dataTipFunction = chart.dataTipFunction;
+			if (chart.dataTipPrefix!= null)
+				ttGG.dataTipPrefix = chart.dataTipPrefix;
+ 			graphicsCollection.addItem(ttGG);
+			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
+			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
+			
+			if (mouseClickFunction != null)
+				ttGG.addEventListener(MouseEvent.CLICK, super.onMouseClick);
+
+			if (mouseDoubleClickFunction != null)
+				ttGG.addEventListener(MouseEvent.DOUBLE_CLICK, super.onMouseDoubleClick);
 		}
 	}
 }

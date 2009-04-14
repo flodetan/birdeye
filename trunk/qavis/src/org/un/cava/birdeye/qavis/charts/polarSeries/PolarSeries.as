@@ -191,27 +191,26 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			
 		}
 		
-		private var rectBackGround:RegularRectangle;
-		private var ggBackGround:GeometryGroup;
-		private var tooltipCreationListening:Boolean = false;
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
 			
-			if (polarChart && polarChart.customTooltTipFunction!=null && !tooltipCreationListening)
+			// since we use Degrafa, the background is needed in the series
+			// to allow events for tooltips all over the series.
+			// tooltips are triggered by ttGG objects. 
+			// if showdatatips is true all interactivity events are triggered and
+			// managed through ttGG.
+			
+			// if showDataTips is false than it's still possible to manage 
+			// interactivity events thourgh gg, but in this case we must 
+			// remove the background to allow these interactivities, since gg is at the series
+			// level and not the chart one. if we don't remove the background, gg
+			// belonging to other series could be covered by the background and 
+			// interactivity becomes impossible
+			// therefore background is created only if showDataTips is true
+			if (polarChart && polarChart.customTooltTipFunction!=null && polarChart.showDataTips && !tooltipCreationListening)
 			{
-				addEventListener(ToolTipEvent.TOOL_TIP_CREATE, onTTCreate);
-				toolTip = "";
-	
-				// background is needed on each series to allow mouse events
-				// all over the series space, mostly on those elements 
-				// that are located at the border of the series
-				ggBackGround = new GeometryGroup();
-				graphicsCollection.addItemAt(ggBackGround,0);
-				rectBackGround = new RegularRectangle(0,0,0, 0);
-				rectBackGround.fill = new SolidFill(0x000000,0);
-				ggBackGround.geometryCollection.addItem(rectBackGround);
-				tooltipCreationListening = true;
+				initCustomTip();
 			}
 		}
 		
@@ -345,18 +344,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			}
 		}
 		
-		private function onTTCreate(e:ToolTipEvent):void
-		{
-			e.toolTip = myTT;
-		}
-
-		private var myTT:IToolTip;
-		/**
-		* @private 
-		 * Show and position tooltip
-		 * 
-		*/
-		protected function handleRollOver(e:MouseEvent):void 
+		override protected function handleRollOver(e:MouseEvent):void 
 		{
 			var extGG:DataItemLayout = DataItemLayout(e.target);
 
@@ -369,51 +357,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			}
 		}
 
-		/**
-		* @private 
-		 * Destroy/hide tooltip 
-		 * 
-		*/
-		protected function handleRollOut(e:MouseEvent):void
-		{ 
-			var extGG:DataItemLayout = 	DataItemLayout(e.target);
-			extGG.hideToolTip();
-			myTT = null;
-			toolTip = null;
-/* 			if (ToolTipManager.currentToolTip)
-				ToolTipManager.currentToolTip = null;
- */		}
-
-		override public function removeAllElements():void
-		{
-			if (gg) 
-				gg.removeAllElements();
-			
-			var nElements:int = graphicsCollection.items.length;
-			if (nElements > 1)
-			{
-				for (var i:int = 0; i<nElements; i++)
-				{
-					if (graphicsCollection.items[i] is DataItemLayout)
-						DataItemLayout(graphicsCollection.items[i]).removeAllElements();
-				}
-			} 
-
-			for (i = numChildren - 1; i>=0; i--)
-			{
-				if (getChildAt(i) is DataItemLayout)
-					DataItemLayout(getChildAt(i)).removeAllElements();
-				removeChildAt(i);
-			}
-			graphicsCollection.items = [];
-		}
-
-		protected var ttGG:DataItemLayout;
-		/** @Private
-		 * Override the creation of ttGeom in order to avoid the usage of gg also in case
-		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
-		 * AreaSeries, thus improving performances.*/ 
-		protected function createTTGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
+		override protected function createTTGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
 									zPos:Number, radius:Number, shapes:Array = null /* of IGeometry */, 
 									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
 		{
@@ -438,7 +382,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		 * Override the init initGGToolTip in order to avoid the usage of gg also in case
 		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
 		 * AreaSeries, thus improving performances.*/ 
-		protected function initGGToolTip():void
+		override protected function initGGToolTip():void
 		{
 			ttGG.target = polarChart;
 			ttGG.toolTipFill = fill;
@@ -450,19 +394,12 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
  			graphicsCollection.addItem(ttGG);
 			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
-		}
-		
-		protected function createInteractiveGG(item:Object, dataFields:Array, 
-								xPos:Number, yPos:Number,	zPos:Number):void
-		{
-			gg = new DataItemLayout();
-			gg.target = this;
-			gg.createInteractiveGG(item,dataFields,xPos,yPos,zPos);
-		}
 
-		protected function addInteractive(items:Object, dataFields:Array):void
-		{
-			gg.addInteractive(items,dataFields);
+			if (mouseClickFunction != null)
+				ttGG.addEventListener(MouseEvent.CLICK, super.onMouseClick);
+
+			if (mouseDoubleClickFunction != null)
+				ttGG.addEventListener(MouseEvent.DOUBLE_CLICK, super.onMouseDoubleClick);
 		}
 	}
 }

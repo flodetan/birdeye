@@ -78,7 +78,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 			gg = new DataItemLayout();
 			gg.target = this;
-			addChild(gg);
+			graphicsCollection.addItem(gg);
 
 			cursor.seek(CursorBookmark.FIRST);
 			while (!cursor.afterLast)

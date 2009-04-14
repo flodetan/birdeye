@@ -28,6 +28,7 @@
 package org.un.cava.birdeye.qavis.charts.cartesianSeries
 {
 	import com.degrafa.IGeometry;
+	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
@@ -38,6 +39,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.ColumnChart;
+	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.renderers.RectangleRenderer;
 
 	public class ColumnSeries extends StackableSeries 
@@ -98,7 +100,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		{
 			var dataFields:Array = [];
 
-			var xPos:Number, yPos:Number, zPos:Number;
+			var xPos:Number, yPos:Number, zPos:Number = NaN;
 			var j:Object;
 			
 			var ttShapes:Array;
@@ -106,6 +108,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			
 			var y0:Number = getYMinPosition();
 			var size:Number = NaN, colWidth:Number = 0; 
+
+			gg = new DataItemLayout();
+			gg.target = this;
+			addChild(gg);
 
 			cursor.seek(CursorBookmark.FIRST);
 
@@ -201,12 +207,21 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				if (chart.showDataTips)
 				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createGG(cursor.current, dataFields, xPos + colWidth/2, yPos, yAxisRelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
-					var hitMouseArea:IGeometry = new itemRenderer(bounds); 
+					createTTGG(cursor.current, dataFields, xPos + colWidth/2, yPos, yAxisRelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
+					var hitMouseArea:Circle = new Circle(xPos + colWidth/2, yPos, 5); 
 					hitMouseArea.fill = new SolidFill(0x000000, 0);
-					gg.geometryCollection.addItem(hitMouseArea);
+					ttGG.geometryCollection.addItem(hitMouseArea);
+					if (zField)
+					{
+						ttGG.z = zPos;
+						if (isNaN(zPos))
+							zPos = 0;
+					}
+				} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null || !isNaN(zPos))
+				{
+					createInteractiveGG(cursor.current, dataFields, xPos, yPos, NaN);
 				}
-
+				
 				poly = new itemRenderer(bounds);
 
 				poly.fill = fill;

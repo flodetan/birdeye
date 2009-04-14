@@ -27,7 +27,11 @@
  
 package org.un.cava.birdeye.qavis.charts
 {
+	import adobe.utils.CustomActions;
+	
+	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
+	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
@@ -38,11 +42,11 @@ package org.un.cava.birdeye.qavis.charts
 	import mx.collections.ICollectionView;
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
+	import mx.core.IToolTip;
+	import mx.events.ToolTipEvent;
 	
-	import org.un.cava.birdeye.qavis.charts.cartesianCharts.CartesianChart;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ISeries;
-	import org.un.cava.birdeye.qavis.charts.polarCharts.PolarChart;
 
 	[Exclude(name="chart", kind="property")]
 	[Exclude(name="cursor", kind="property")]
@@ -54,7 +58,7 @@ package org.un.cava.birdeye.qavis.charts
 		
 		protected var _dataProvider:Object=null;
 		/** Set the data provider for the series, if the series doesn't have its own dataProvider
-		 * than it will automatically takes the chart data provider. It's not necessary
+		 * than it will automatically take the chart data provider. It's not necessary
 		 * to specify the chart data provider, and it's recommended not to do it. */
 		public function set dataProvider(value:Object):void
 		{
@@ -114,12 +118,6 @@ package org.un.cava.birdeye.qavis.charts
 		public function set cursor(val:IViewCursor):void
 		{
 			_cursor = val;
-
-	  		// we don't need to invalidate here the chart properties and display list
-	  		// because this is only used by the chart itself to set the series cursor
-	  		// to the chart cursor, in case the series has not an own dataprovider
-	  		// or the series dataprovider corresponds to the chart's 
-		  		
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -138,6 +136,11 @@ package org.un.cava.birdeye.qavis.charts
 		public function set mouseDoubleClickFunction(val:Function):void
 		{
 			_mouseDoubleClickFunction = val;
+			if (val != null)
+				doubleClickEnabled = true;
+			else
+				doubleClickEnabled = false;
+				
 			// necessary to invalidate properties to register the listener
 			registerListeners();
 		}
@@ -165,6 +168,7 @@ package org.un.cava.birdeye.qavis.charts
 		}
 		
 		private var _displayName:String;
+		/** Set the display name to be used for the legend.*/
 		public function set displayName(val:String):void
 		{
 			_displayName= val;
@@ -175,6 +179,7 @@ package org.un.cava.birdeye.qavis.charts
 		}
 		
 		private var _fillColor:Number = NaN;
+		/** Set the fill color to be used for data items.*/
 		public function set fillColor(val:Number):void
 		{
 			_fillColor = val;
@@ -187,6 +192,7 @@ package org.un.cava.birdeye.qavis.charts
 		}
 
 		protected var _fillAlpha:Number = 1;
+		/** Set the fill alpha to be used for the data items.*/
 		public function set fillAlpha(val:Number):void
 		{
 			_fillAlpha = val;
@@ -198,6 +204,7 @@ package org.un.cava.birdeye.qavis.charts
 		}
 
 		protected var _strokeColor:Number = NaN;
+		/** Set the stroke color to be used for the data items.*/
 		public function set strokeColor(val:Number):void
 		{
 			_strokeColor = val;
@@ -210,6 +217,7 @@ package org.un.cava.birdeye.qavis.charts
 		}
 
 		private var _itemRenderer:Class;
+		/** Set the item renderer to be used for both data items layout and related legend item.*/
 		public function set itemRenderer(val:Class):void
 		{
 			_itemRenderer = val;
@@ -232,11 +240,22 @@ package org.un.cava.birdeye.qavis.charts
 		override protected function createChildren():void
 		{
 			super.createChildren();
+
+			// gg will be the GeometryGroup that will store the global series geometries
+			// All hit area will be put in ttGeom
+			// this increases performances in case the user doesn't set
+			// showDataTips to true in the parent chart or interactive functions
+			// Being gg a data item layout, it's still possible to add interactivity to gg
+			// in this case there will be a gg instance for each data item 
+			// if it's a 3D chart (apart from area and line series), 
+			// than gg will be instantiated for each triple of datavalues
 			gg = new DataItemLayout();
 			gg.target = this;
-			addChild(gg);
+			graphicsCollection.addItem(gg);
 		}
 		
+		/** @Private
+		 * Register listeners for mouse events.*/
 		private function registerListeners():void
 		{
 			if (_mouseClickFunction != null && !isMouseClickListening)
@@ -252,9 +271,93 @@ package org.un.cava.birdeye.qavis.charts
 			}
 		}
 
+		/** Remove all graphic elements of the series.*/
 		public function removeAllElements():void
 		{
+			if (gg) 
+				gg.removeAllElements();
+			
+			var nElements:int = graphicsCollection.items.length;
+			if (nElements > 1)
+			{
+				for (var i:int = 0; i<nElements; i++)
+				{
+					if (graphicsCollection.items[i] is DataItemLayout)
+					{
+						DataItemLayout(graphicsCollection.items[i]).removeEventListener(MouseEvent.ROLL_OVER, handleRollOver);
+						DataItemLayout(graphicsCollection.items[i]).removeEventListener(MouseEvent.ROLL_OUT, handleRollOut);
+						DataItemLayout(graphicsCollection.items[i]).removeAllElements();
+					}
+				}
+			} 
+
+			for (i = numChildren - 1; i>=0; i--)
+			{
+				if (getChildAt(i) is DataItemLayout)
+					DataItemLayout(getChildAt(i)).removeAllElements();
+				removeChildAt(i);
+			}
+			graphicsCollection.items = [];
+		}
+		
+		protected var rectBackGround:RegularRectangle;
+		protected var ggBackGround:GeometryGroup;
+		protected var tooltipCreationListening:Boolean = false;
+		/** @Private 
+		 * Init the custom tooltip of the series in case showdatatips is true.*/
+		protected function initCustomTip():void
+		{
+			addEventListener(ToolTipEvent.TOOL_TIP_CREATE, onTTCreate);
+			toolTip = "";
+
+			// background is needed on each series to allow custom tooltip events
+			// all over the series space, mostly on those elements 
+			// that are located at the border of the series
+			ggBackGround = new GeometryGroup();
+			graphicsCollection.addItemAt(ggBackGround,0);
+			rectBackGround = new RegularRectangle(0,0,0, 0);
+			rectBackGround.fill = new SolidFill(0x000000,0);
+			ggBackGround.geometryCollection.addItem(rectBackGround);
+			
+			// once this is true, the listener will not be added anymore
+			tooltipCreationListening = true;
+		}
+
+		protected var ttGG:DataItemLayout;
+		/** @Private
+		 * Override the creation of ttGeom. This should be unified among polar and cartesian series.
+		 * In order to improve performances in case the showdatatips is false
+		 * the ttGG creation will not be called and there will be only 1 gg, unless
+		 * interactivity is required or zField is not null and gg must be placed in the 3D space.*/ 
+		protected function createTTGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
+									zPos:Number, radius:Number, shapes:Array = null /* of IGeometry */, 
+									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
+		{
 			// override
+		}
+		
+		/** @Private
+		 * Init the ttGG after its creation.*/ 
+		protected function initGGToolTip():void
+		{
+			// override
+		}
+		
+		/** @Private
+		 * Create a gg ready to bring interactive information.*/ 
+		protected function createInteractiveGG(item:Object, dataFields:Array, 
+								xPos:Number, yPos:Number,	zPos:Number):void
+		{
+			gg = new DataItemLayout();
+			gg.target = this;
+			gg.createInteractiveGG(item,dataFields,xPos,yPos,zPos);
+		}
+
+		/** @Private
+		 * Add interactive information to an existing gg.*/ 
+		protected function addInteractive(items:Object, dataFields:Array):void
+		{
+			gg.addInteractive(items,dataFields);
 		}
 
 		/** Implement function to manage mouse click events.*/
@@ -269,7 +372,7 @@ package org.un.cava.birdeye.qavis.charts
 			}
 		}
 
-		/** Implement function to manage mouse click events.*/
+		/** Implement function to manage mouse double click events.*/
 		public function onMouseDoubleClick(e:MouseEvent):void
 		{
 			var target:DataItemLayout;
@@ -279,6 +382,43 @@ package org.un.cava.birdeye.qavis.charts
 				 
 				_mouseDoubleClickFunction(target);
 			}
+		}
+
+		/** @Private 
+		 * Custom tooltip variable.*/
+		protected var myTT:IToolTip;
+		/**
+		* @private 
+		 * Show and position tooltip.*/
+		protected function handleRollOver(e:MouseEvent):void 
+		{
+			// override
+			// depends on chart type (polar, cartesian,..)
+		}
+
+		/**
+		* @private 
+		 * Destroy/hide tooltip 
+		 * 
+		*/
+		protected function handleRollOut(e:MouseEvent):void
+		{ 
+			var extGG:DataItemLayout = 	DataItemLayout(e.target);
+			extGG.hideToolTip();
+			myTT = null;
+			toolTip = null;
+/* 			if (ToolTipManager.currentToolTip)
+				ToolTipManager.currentToolTip = null;
+ */		}
+
+		/**
+		* @Private 
+		 * Triggered when a value is assigned to the UIComponent tooltip (String), 
+		 * and the event target is the tooltip created during the assignement.
+		 * Here you we can change the created tooltip with a custom one.*/
+		private function onTTCreate(e:ToolTipEvent):void
+		{
+			e.toolTip = myTT;
 		}
 	}
 }

@@ -63,8 +63,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
 		override protected function drawSeries():void
 		{
-			cursor.seek(CursorBookmark.FIRST);
-			
 			var xPrev:Number, yPrev:Number;
 			var xPos:Number, yPos:Number, zPos:Number;
 			var j:Number = 0;
@@ -73,6 +71,9 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			gg = new DataItemLayout();
 			gg.target = this;
 			addChild(gg);
+
+			cursor.seek(CursorBookmark.FIRST);
+			
 			while (!cursor.afterLast)
 			{
 				if (xAxis)
@@ -116,12 +117,15 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				if (chart.showDataTips)
 				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3);
+					createTTGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3);
 					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
-					hitMouseArea.fill = new SolidFill(0x000000, 0);
+					hitMouseArea.fill = new SolidFill(0x000000, 1);
 					ttGG.geometryCollection.addItem(hitMouseArea);
+				} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null || !isNaN(zPos))
+				{
+					createInteractiveGG(cursor.current, dataFields, xPos, yPos, NaN);
 				}
-
+				
 				if (j++ > 0)
 				{
 					var line:Line = new Line(xPrev,yPrev,xPos,yPos);
@@ -142,36 +146,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 
 			if (zField)
 				zSort();
-		}
-		
- 		private var ttGG:DataItemLayout;
-		override protected function createGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
-									zPos:Number, radius:Number, shapes:Array = null /* of IGeomtry */, 
-									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
-		{
-			ttGG = new DataItemLayout();
-			ttGG.target = this;
- 			if (chart.showDataTips)
-			{
-				initGGToolTip();
-				ttGG.createToolTip(cursor.current, dataFields, xPos, yPos, zPos, radius);
- 			} else {
-				addChild(ttGG);
-			}
-		}
-		
-		override protected function initGGToolTip():void
-		{
-			ttGG.target = this;
-			ttGG.toolTipFill = new SolidFill(strokeColor);
-			ttGG.toolTipStroke = stroke;
- 			if (chart.dataTipFunction != null)
-				ttGG.dataTipFunction = chart.dataTipFunction;
-			if (chart.dataTipPrefix!= null)
-				ttGG.dataTipPrefix = chart.dataTipPrefix;
- 			addChild(ttGG);
-			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
-			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 		}
  	}
 }
