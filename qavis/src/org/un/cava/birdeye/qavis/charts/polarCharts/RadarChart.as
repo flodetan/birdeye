@@ -44,12 +44,25 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.PolarCoordinateTransform;
+	import org.un.cava.birdeye.qavis.charts.polarSeries.PolarColumnSeries;
 	import org.un.cava.birdeye.qavis.charts.polarSeries.PolarSeries;
+	import org.un.cava.birdeye.qavis.charts.polarSeries.PolarStackableSeries;
 	
 	public class RadarChart extends PolarChart
 	{
 		private const COLUMN:String = "column";
 		private const RADAR:String = "radar";
+		
+		private var _type:String = PolarStackableSeries.OVERLAID;
+		/** Set the type of stack, overlaid if the series are shown on top of the other, 
+		 * or stacked if they appear staked one after the other (horizontally).*/
+		[Inspectable(enumeration="overlaid,stacked")]
+		public function set type(val:String):void
+		{
+			_type = val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
 		
 		private var _layout:String;
 		[Inspectable(enumeration="column,radar")]
@@ -81,6 +94,20 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 				
 			if (!contains(labels))
 				addChild(labels);
+
+			if (_series)
+			{
+				var _columnSeries:Array = [];
+			
+				for (var i:Number = 0; i<_series.length; i++)
+				{
+					if (_series[i] is PolarColumnSeries)
+					{
+						PolarColumnSeries(_series[i]).stackType = _type;
+						_columnSeries.push(_series[i])
+					}
+				}
+			}
 		}
 		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
