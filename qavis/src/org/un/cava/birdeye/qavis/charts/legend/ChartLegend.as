@@ -41,8 +41,9 @@ package org.un.cava.birdeye.qavis.charts.legend
 	import mx.containers.Box;
 	import mx.core.Application;
 	
-	import org.un.cava.birdeye.qavis.charts.cartesianCharts.CartesianChart;
+	import org.un.cava.birdeye.qavis.charts.BaseChart;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ICartesianSeries;
+	import org.un.cava.birdeye.qavis.charts.interfaces.ISeries;
 	
 	public class ChartLegend extends Box
 	{
@@ -64,8 +65,8 @@ package org.un.cava.birdeye.qavis.charts.legend
 			_legendField= val;
 		}
 		
-		private var _dataProvider:CartesianChart;
-		public function set dataProvider(val:CartesianChart):void
+		private var _dataProvider:BaseChart;
+		public function set dataProvider(val:BaseChart):void
 		{
 			_dataProvider = val;
 			invalidateSize();
@@ -103,19 +104,19 @@ package org.un.cava.birdeye.qavis.charts.legend
 					
 					var label:RasterText = new RasterText();
 					label.x = 15;
-					if (ICartesianSeries(_dataProvider.series[i]).displayName)
-						label.text = ICartesianSeries(_dataProvider.series[i]).displayName;
+					if (ISeries(_dataProvider.series[i]).displayName)
+						label.text = ISeries(_dataProvider.series[i]).displayName;
 
 					var bounds:RegularRectangle = new RegularRectangle(0,0, 10,10);
-					if (ICartesianSeries(_dataProvider.series[i]).itemRenderer)
+					if (ISeries(_dataProvider.series[i]).itemRenderer)
 					{
-						var renderer:Class = ICartesianSeries(_dataProvider.series[i]).itemRenderer;
+						var renderer:Class = ISeries(_dataProvider.series[i]).itemRenderer;
 						var geom:Geometry = new renderer(bounds);
-						Geometry(geom).fill = ICartesianSeries(_dataProvider.series[i]).fillColor ? 
-								new SolidFill(ICartesianSeries(_dataProvider.series[i]).fillColor)
+						Geometry(geom).fill = ISeries(_dataProvider.series[i]).fillColor ? 
+								new SolidFill(ISeries(_dataProvider.series[i]).fillColor)
 								 : new SolidFill(0xdddddd);
-						geom.stroke = ICartesianSeries(_dataProvider.series[i]).strokeColor ?
-								new SolidStroke(ICartesianSeries(_dataProvider.series[i]).strokeColor)
+						geom.stroke = ISeries(_dataProvider.series[i]).strokeColor ?
+								new SolidStroke(ISeries(_dataProvider.series[i]).strokeColor)
 								 : new SolidStroke(0x999999);
 						gg.geometryCollection.addItem(geom);
 					}

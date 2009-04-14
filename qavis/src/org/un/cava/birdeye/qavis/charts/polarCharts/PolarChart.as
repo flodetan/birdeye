@@ -28,6 +28,7 @@
 package org.un.cava.birdeye.qavis.charts.polarCharts
 {
 	import flash.display.DisplayObject;
+	import flash.events.Event;
 	import flash.geom.Point;
 	
 	import mx.collections.CursorBookmark;
@@ -303,6 +304,9 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 						DataItemLayout(getChildAt(i)).showToolTip();
 				}
 			}
+
+			// listeners like legends will listen to this event
+			dispatchEvent(new Event("ProviderReady"));
 		}
 
 		protected var currentSeries:IPolarSeries;
