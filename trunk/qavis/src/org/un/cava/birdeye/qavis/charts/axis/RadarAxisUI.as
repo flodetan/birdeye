@@ -121,7 +121,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		override protected function createChildren():void
 		{
 			super.createChildren();
-			addChild(gg);
+			graphicsCollection.addItem(gg);
 		}
 		
 		override protected function commitProperties():void
