@@ -156,7 +156,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 			surf = new Surface();
 			gg = new GeometryGroup();
 			gg.target = surf;
-			surf.addChild(gg);
+			surf.graphicsCollection.addItem(gg);
 			addChild(surf);
 		}
 		
