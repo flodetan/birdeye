@@ -44,11 +44,11 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	import org.un.cava.birdeye.qavis.charts.axis.LinearAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
+	import org.un.cava.birdeye.qavis.charts.cartesianSeries.CartesianSeries;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisUI;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ICartesianSeries;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ISeries;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IStack;
-	import org.un.cava.birdeye.qavis.charts.cartesianSeries.CartesianSeries;
 	
 	/** A CartesianChart can be used to create any 2D or 3D cartesian charts available in the library
 	 * apart from those who might have specific features, like stackable series or data-sizable items.
@@ -74,6 +74,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	 * and LineChart are not 3D yet. 
 	 * */ 
 	[DefaultProperty("dataProvider")]
+	[Exclude(name="seriesContainer", kind="property")]
 	public class CartesianChart extends BaseChart
 	{
 		/** Array of series, mandatory for any cartesian chart.
@@ -197,6 +198,12 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			return _zAxis;
 		}
 
+		private var _seriesContainer:Surface = new Surface();
+		public function get seriesContainer():Surface
+		{
+			return _seriesContainer;
+		}
+
 		// UIComponent flow
 
 		public function CartesianChart() 
@@ -207,7 +214,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		private var leftContainer:Container, rightContainer:Container;
 		private var topContainer:Container, bottomContainer:Container;
 		private var zContainer:Container;
-		private var seriesContainer:Surface = new Surface();
 		/** @Private
 		 * Crete and add all containers that define the chart structure.
 		 * The seriesContainer will contain all chart series. Remove scrolling and clip the content 
@@ -220,7 +226,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			addChild(topContainer = new VBox());
 			addChild(bottomContainer = new VBox());
 			addChild(zContainer = new HBox());
-			addChild(seriesContainer);
+			addChild(_seriesContainer);
 			
 			zContainer.verticalScrollPolicy = "off";
 			zContainer.clipContent = false;
@@ -248,7 +254,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			bottomContainer.setStyle("verticalAlign", "top");
 		}
 
-		private var nCursors:Number;
+		protected var nCursors:Number;
 		/** @Private 
 		 * When properties are committed, first remove all current children, second check for series owned axes 
 		 * and put them on the corresponding container (left, top, right, bottom). If no axes are defined for one 
@@ -279,7 +285,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 					if (cursor || ISeries(_series[i]).cursor)
 						nCursors += 1;
 
-					seriesContainer.addChild(DisplayObject(series[i]));
+					_seriesContainer.addChild(DisplayObject(series[i]));
 					var xAxis:IAxisUI = ICartesianSeries(series[i]).xAxis;
 					if (xAxis)
 					{
@@ -411,15 +417,15 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
   			zContainer.x = int(chartBounds.width + leftContainer.width);
 			zContainer.y = int(chartBounds.height);
 
-			if (axesFeeded && (seriesContainer.x != chartBounds.x ||
-				seriesContainer.y != chartBounds.y ||
-				seriesContainer.width != chartBounds.width ||
-				seriesContainer.height != chartBounds.height))
+			if (axesFeeded && (_seriesContainer.x != chartBounds.x ||
+				_seriesContainer.y != chartBounds.y ||
+				_seriesContainer.width != chartBounds.width ||
+				_seriesContainer.height != chartBounds.height))
 			{
-				seriesContainer.x = chartBounds.x;
-				seriesContainer.y = chartBounds.y;
-				seriesContainer.width = chartBounds.width;
-				seriesContainer.height = chartBounds.height;
+				_seriesContainer.x = chartBounds.x;
+				_seriesContainer.y = chartBounds.y;
+				_seriesContainer.width = chartBounds.width;
+				_seriesContainer.height = chartBounds.height;
   				for (var i:int = 0; i<_series.length; i++)
 				{
 					CartesianSeries(_series[i]).width = chartBounds.width;
@@ -904,15 +910,15 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				bottomContainer.removeAllChildren();
 			}
 
-			if (seriesContainer)
+			if (_seriesContainer)
 			{
-	  			var nChildren:int = seriesContainer.numChildren;
+	  			var nChildren:int = _seriesContainer.numChildren;
 				for (i = 0; i<nChildren; i++)
 				{
-					child = seriesContainer.getChildAt(0); 
+					child = _seriesContainer.getChildAt(0); 
 					if (child is ISeries)
 						ISeries(child).removeAllElements();
-					seriesContainer.removeChildAt(0);
+					_seriesContainer.removeChildAt(0);
 				}
 			}
 		}

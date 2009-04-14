@@ -28,6 +28,7 @@
 package org.un.cava.birdeye.qavis.charts.cartesianCharts
 {
 	import mx.collections.CursorBookmark;
+	import mx.collections.IViewCursor;
 	
 	import org.un.cava.birdeye.qavis.charts.cartesianSeries.AreaSeries;
 	import org.un.cava.birdeye.qavis.charts.cartesianSeries.StackableSeries;
@@ -76,7 +77,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			// arrays for each AreaSeries. The baseValues arrays will be used to know
 			// the y0 starting point for each series values, which corresponds to 
 			// the understair series highest y value;
-			if (_series && cursor)
+			if (_series && nCursors == _series.length)
 			{
 				var _areaSeries:Array = [];
 			
@@ -98,30 +99,86 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 					for (i=0;i < _areaSeries.length;i++)
 						allSeriesBaseValues[i] = {indexSeries: i, baseValues: []};
 					
-					var j:Number = 0;
-					cursor.seek(CursorBookmark.FIRST);
-					while (!cursor.afterLast)
+					// keep index of last series been processed 
+					// with the same xField data value
+					// k[xFieldDataValue] = last series processed
+					var k:Array = [];
+					
+					// the baseValues are indexed with the xField objects
+					var j:Object;
+					
+					for (var s:Number = 0; s<_areaSeries.length; s++)
 					{
-						for (var s:Number = 0; s<_areaSeries.length; s++)
+						var sCursor:IViewCursor;
+						
+						if (AreaSeries(_areaSeries[s]).cursor &&
+							AreaSeries(_areaSeries[s]).cursor != cursor)
 						{
-							if (s>0)
-								allSeriesBaseValues[s].baseValues[j] = 
-									allSeriesBaseValues[s-1].baseValues[j] + 
-									Math.max(0,cursor.current[AreaSeries(_areaSeries[s-1]).yField]);
-							else 
-								allSeriesBaseValues[s].baseValues[j] = 0;
-							
-							if (isNaN(_maxStacked100))
-								_maxStacked100 = 
-									allSeriesBaseValues[s].baseValues[j] + 
-									Math.max(0,cursor.current[AreaSeries(_areaSeries[s]).yField]);
-							else
-								_maxStacked100 = Math.max(_maxStacked100,
-									allSeriesBaseValues[s].baseValues[j] + 
-									Math.max(0,cursor.current[AreaSeries(_areaSeries[s]).yField]));
+							sCursor = AreaSeries(_areaSeries[s]).cursor;
+							sCursor.seek(CursorBookmark.FIRST);
+							while (!sCursor.afterLast)
+							{
+								j = sCursor.current[AreaSeries(_areaSeries[s]).xField];
+
+								if (s>0 && k[j]>=0)
+									allSeriesBaseValues[s].baseValues[j] = 
+										allSeriesBaseValues[k[j]].baseValues[j] + 
+										Math.max(0,sCursor.current[AreaSeries(_areaSeries[k[j]]).yField]);
+								else 
+									allSeriesBaseValues[s].baseValues[j] = 0;
+
+								if (isNaN(_maxStacked100))
+									_maxStacked100 = 
+										allSeriesBaseValues[s].baseValues[j] + 
+										Math.max(0,sCursor.current[AreaSeries(_areaSeries[s]).yField]);
+								else
+									_maxStacked100 = Math.max(_maxStacked100,
+										allSeriesBaseValues[s].baseValues[j] + 
+										Math.max(0,sCursor.current[AreaSeries(_areaSeries[s]).yField]));
+
+								sCursor.moveNext();
+								k[j] = s;
+							}
 						}
-						j++;
-						cursor.moveNext();
+					}
+					
+					if (cursor)
+					
+					{
+						cursor.seek(CursorBookmark.FIRST);
+						while (!cursor.afterLast)
+						{
+							// index of last series without own cursor with the same xField data value 
+							// (because they've already been processed in the previous loop)
+							var t:Array = [];
+							for (s = 0; s<_areaSeries.length; s++)
+							{
+								if (! (AreaSeries(_areaSeries[s]).cursor &&
+									AreaSeries(_areaSeries[s]).cursor != cursor))
+								{
+									j = cursor.current[AreaSeries(_areaSeries[s]).xField];
+							
+									if (t[j]>=0)
+										allSeriesBaseValues[s].baseValues[j] = 
+											allSeriesBaseValues[t[j]].baseValues[j] + 
+											Math.max(0,cursor.current[AreaSeries(_areaSeries[t[j]]).yField]);
+									else 
+										allSeriesBaseValues[s].baseValues[j] = 0;
+									
+									if (isNaN(_maxStacked100))
+										_maxStacked100 = 
+											allSeriesBaseValues[s].baseValues[j] + 
+											Math.max(0,cursor.current[AreaSeries(_areaSeries[s]).yField]);
+									else
+										_maxStacked100 = Math.max(_maxStacked100,
+											allSeriesBaseValues[s].baseValues[j] + 
+											Math.max(0,cursor.current[AreaSeries(_areaSeries[s]).yField]));
+
+									t[j] = s;
+								}
+							}
+							cursor.moveNext();
+						}
 					}
 					
 					// set the baseValues array for each AreaSeries

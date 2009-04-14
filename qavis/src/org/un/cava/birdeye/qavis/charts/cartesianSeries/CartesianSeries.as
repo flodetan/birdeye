@@ -27,6 +27,10 @@
  
 package org.un.cava.birdeye.qavis.charts.cartesianSeries
 {
+	import com.degrafa.GeometryGroup;
+	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.paint.SolidFill;
+	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -34,6 +38,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 	import mx.collections.CursorBookmark;
 	import mx.collections.ICollectionView;
 	import mx.controls.ToolTip;
+	import mx.core.IToolTip;
+	import mx.events.ToolTipEvent;
 	import mx.managers.ToolTipManager;
 	
 	import org.un.cava.birdeye.qavis.charts.BaseSeries;
@@ -229,17 +235,28 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			super();
 		}
 		
-		private var resizeListenerSet:Boolean = false;
+		private var rectBackGround:RegularRectangle;
+		private var ggBackGround:GeometryGroup;
+		private var tooltipCreationListening:Boolean = false;
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
 			
-/* 			if (parent && parent.parent is CartesianChart && !resizeListenerSet)
+			if (chart && chart.customTooltTipFunction!=null && !tooltipCreationListening)
 			{
-				CartesianChart(parent.parent).addEventListener("ProviderReady",validateBounds);
-				resizeListenerSet = true;
+				addEventListener(ToolTipEvent.TOOL_TIP_CREATE, onTTCreate);
+				toolTip = "";
+	
+				// background is needed on each series to allow mouse events
+				// all over the series space, mostly on those elements 
+				// that are located at the border of the series
+				ggBackGround = new GeometryGroup();
+				graphicsCollection.addItemAt(ggBackGround,0);
+				rectBackGround = new RegularRectangle(0,0,0, 0);
+				rectBackGround.fill = new SolidFill(0x000000,0);
+				ggBackGround.geometryCollection.addItem(rectBackGround);
+				tooltipCreationListening = true;
 			}
- */				
 		}
  
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
@@ -251,10 +268,23 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 
 			removeAllElements();
 			
+			if (ggBackGround)
+			{
+				ggBackGround.target = this;
+				rectBackGround.width = unscaledWidth;
+				rectBackGround.height = unscaledHeight;
+			}
+
  			if (isReadyForLayout())
  				drawSeries()
 		}
 		
+		private function onTTCreate(e:ToolTipEvent):void
+		{
+			e.toolTip = myTT;
+		}
+
+
 		protected function drawSeries():void
 		{
 			// to be overridden by each series implementation
@@ -396,11 +426,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				initGGToolTip();
 				gg.createToolTip(cursor.current, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset);
  			} else {
-				addChild(gg);
+				graphicsCollection.addItem(gg);
 			}
 		}
  
-		private var tip:ToolTip; 
 		/**
 		* @private 
 		 * Init the GeomGroupToolTip and its listeners
@@ -408,18 +437,19 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		*/
  		protected function initGGToolTip():void
 		{
-			gg.target = this;
+			gg.target = chart.seriesContainer;
 			gg.toolTipFill = fill;
 			gg.toolTipStroke = stroke;
  			if (chart.dataTipFunction != null)
 				gg.dataTipFunction = chart.dataTipFunction;
 			if (chart.dataTipPrefix!= null)
 				gg.dataTipPrefix = chart.dataTipPrefix;
-			addChild(gg);
+			graphicsCollection.addItem(gg);
 			gg.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 			gg.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 		}
 
+		private var myTT:IToolTip;
 		/**
 		* @private 
 		 * Show and position tooltip
@@ -428,14 +458,23 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		protected function handleRollOver(e:MouseEvent):void 
 		{
 			var extGG:DataItemLayout = DataItemLayout(e.target);
+
+			if (chart.customTooltTipFunction != null)
+			{
+				myTT = chart.customTooltTipFunction(extGG);
+	 			toolTip = myTT.text;
+			} else {
+				extGG.showToolTip();
+			}
+
 			var pos:Point = localToGlobal(new Point(extGG.posX, extGG.posY));
-			tip = ToolTipManager.createToolTip(extGG.toolTip, 
+/* 			tip = ToolTipManager.createToolTip(extGG.toolTip, 
 												pos.x + extGG.xTTOffset,	pos.y + extGG.yTTOffset)	as ToolTip;
 
 			tip.alpha = 0.8;
 			dispatchEvent(new Event("showToolTip"));
 			extGG.showToolTipGeometry();
-			
+ */			
 			if (yAxis)
 			{
 				yAxis.pointerY = extGG.posY;
@@ -471,6 +510,12 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		*/
 		protected function handleRollOut(e:MouseEvent):void
 		{ 
+
+			var extGG:DataItemLayout = 	DataItemLayout(e.target);
+			extGG.hideToolTip();
+			myTT = null;
+			toolTip = null;
+
 			if (yAxis)
 				yAxis.pointer.visible = false;
 			else
@@ -486,10 +531,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			else if (chart.zAxis)
 				chart.zAxis.pointer.visible = false;
 
-			if (tip)
+/* 			if (tip)
 				ToolTipManager.destroyToolTip(tip);
 			DataItemLayout(e.target).hideToolTipGeometry();
-		}
+ */		}
 
 		/** @Private
 		 * Sort the surface elements according their z position.*/ 
@@ -512,28 +557,26 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 
 		override public function removeAllElements():void
 		{
-			if (chart.showDataTips) 
+			if (gg) 
+				gg.removeAllElements();
+			
+			var nElements:int = graphicsCollection.items.length;
+			if (nElements > 1)
 			{
-				var nElements:int = graphicsCollection.items.length;
-				if (nElements > 1)
+				for (var i:int = 0; i<nElements; i++)
 				{
-					for (var i:int = 0; i<nElements; i++)
-					{
-						if (graphicsCollection.items[i] is DataItemLayout)
-							DataItemLayout(graphicsCollection.items[i]).removeAllElements();
-					}
-				} else if (gg) {
-					gg.geometryCollection.items = [];
-					gg.geometry = [];
+					if (graphicsCollection.items[i] is DataItemLayout)
+						DataItemLayout(graphicsCollection.items[i]).removeAllElements();
 				}
-				for (i = numChildren - 1; i>=0; i--)
-					removeChildAt(i);
-				graphicsCollection.items = [];
-			} else if (gg)
+			} 
+
+			for (i = numChildren - 1; i>=0; i--)
 			{
-				gg.geometryCollection.items = [];
-				gg.geometry = [];
+				if (getChildAt(i) is DataItemLayout)
+					DataItemLayout(getChildAt(i)).removeAllElements();
+				removeChildAt(i);
 			}
+			graphicsCollection.items = [];
 		}
 	}
 }
