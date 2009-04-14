@@ -27,6 +27,8 @@
  
 package org.un.cava.birdeye.qavis.charts.polarSeries
 {
+	import adobe.utils.CustomActions;
+	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
@@ -35,7 +37,6 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 	
 	import mx.collections.CursorBookmark;
 	import mx.collections.ICollectionView;
-	import mx.controls.ToolTip;
 	import mx.core.IToolTip;
 	import mx.events.ToolTipEvent;
 	
@@ -184,23 +185,34 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 		// UIComponent flow
 		
-		private var rectBackGround:RegularRectangle;
-		private var ggBackGround:GeometryGroup;
 		public function PolarSeries():void
 		{
 			super();
-			addEventListener(ToolTipEvent.TOOL_TIP_CREATE, onTTCreate);
-			toolTip = "";
-
-
-			// background is needed on each series to allow mouse events
-			// all over the series space, mostly on those elements 
-			// that are located at the border of the series
-			ggBackGround = new GeometryGroup();
-			graphicsCollection.addItemAt(ggBackGround,0);
-			rectBackGround = new RegularRectangle(0,0,0, 0);
-			rectBackGround.fill = new SolidFill(0x000000,0);
-			ggBackGround.geometryCollection.addItem(rectBackGround);
+			
+		}
+		
+		private var rectBackGround:RegularRectangle;
+		private var ggBackGround:GeometryGroup;
+		private var tooltipCreationListening:Boolean = false;
+		override protected function commitProperties():void
+		{
+			super.commitProperties();
+			
+			if (polarChart && polarChart.customTooltTipFunction!=null && !tooltipCreationListening)
+			{
+				addEventListener(ToolTipEvent.TOOL_TIP_CREATE, onTTCreate);
+				toolTip = "";
+	
+				// background is needed on each series to allow mouse events
+				// all over the series space, mostly on those elements 
+				// that are located at the border of the series
+				ggBackGround = new GeometryGroup();
+				graphicsCollection.addItemAt(ggBackGround,0);
+				rectBackGround = new RegularRectangle(0,0,0, 0);
+				rectBackGround.fill = new SolidFill(0x000000,0);
+				ggBackGround.geometryCollection.addItem(rectBackGround);
+				tooltipCreationListening = true;
+			}
 		}
 		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
@@ -212,9 +224,12 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 			removeAllElements();
 			
-			ggBackGround.target = this;
-			rectBackGround.width = unscaledWidth;
-			rectBackGround.height = unscaledHeight;
+			if (ggBackGround)
+			{
+				ggBackGround.target = this;
+				rectBackGround.width = unscaledWidth;
+				rectBackGround.height = unscaledHeight;
+			}
 
  			if (isReadyForLayout())
  				drawSeries()
@@ -330,6 +345,11 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			}
 		}
 		
+		private function onTTCreate(e:ToolTipEvent):void
+		{
+			e.toolTip = myTT;
+		}
+
 		private var myTT:IToolTip;
 		/**
 		* @private 
@@ -347,11 +367,6 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			} else {
 				extGG.showToolTip();
 			}
-		}
-
-		private function onTTCreate(e:ToolTipEvent):void
-		{
-			e.toolTip = myTT;
 		}
 
 		/**
