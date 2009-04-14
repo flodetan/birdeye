@@ -80,13 +80,14 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 
 		override protected function commitProperties():void
 		{
+			super.commitProperties();
 			// select the item renderer (must be an IGeomentry)
 			if (! itemRenderer)
 				itemRenderer = TriangleRenderer;
 
 			// doesn't need to call super.commitProperties(), since it doesn't need to listen
 			// to axes interval changes 
-			if (stackType == STACKED100)
+			if (stackType == STACKED100 && cursor)
 			{
 				if (yAxis)
 				{
@@ -106,7 +107,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		{
 			var xPrev:Number, yPrev:Number;
 			var xPos:Number, yPos:Number, zPos:Number;
-			var j:Number = 0;
+			var j:Object;
 			var t:Number = 0;
 			
 			var y0:Number = getYMinPosition();
@@ -143,6 +144,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				// has not set a dataTipFunction
 				dataFields[0] = xField;
 				
+				j = cursor.current[xField];
 				// if the series has its own y axis, than get the y coordinate
 				// position of the data value filtered by yField
 				if (yAxis)
@@ -154,7 +156,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					{
 						y0 = yAxis.getPosition(baseValues[j]);
 						yPos = yAxis.getPosition(
-							baseValues[j++] + Math.max(0,cursor.current[yField]));
+							baseValues[j] + Math.max(0,cursor.current[yField]));
 					} else 
 						// if not stacked, than the y coordinate is given by the own y axis
 						yPos = yAxis.getPosition(cursor.current[yField]);
@@ -167,7 +169,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					{
 						y0 = chart.yAxis.getPosition(baseValues[j]);
 						yPos = chart.yAxis.getPosition(
-							baseValues[j++] + Math.max(0,cursor.current[yField]));
+							baseValues[j] + Math.max(0,cursor.current[yField]));
 					} else {
 						yPos = chart.yAxis.getPosition(cursor.current[yField]);
 					}
@@ -213,7 +215,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				if (chart.showDataTips)
 				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3, ttShapes,ttXoffset,ttYoffset);
+					createGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3);
 					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
 					hitMouseArea.fill = new SolidFill(0x000000, 0);
 					ttGG.geometryCollection.addItem(hitMouseArea);				
@@ -317,7 +319,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		 * AreaSeries, thus improving performances.*/ 
 		override protected function initGGToolTip():void
 		{
-			ttGG.target = this;
+			ttGG.target = chart.seriesContainer;
 			ttGG.toolTipFill = fill;
 			ttGG.toolTipStroke = stroke;
  			if (chart.dataTipFunction != null)

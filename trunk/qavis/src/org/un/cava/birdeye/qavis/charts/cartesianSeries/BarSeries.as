@@ -78,7 +78,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			if (!itemRenderer)
 				itemRenderer = RectangleRenderer;
 
-			if (stackType == STACKED100)
+			if (stackType == STACKED100 && cursor)
 			{
 				if (xAxis)
 				{
@@ -99,7 +99,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			var dataFields:Array = [];
 
 			var xPos:Number, yPos:Number, zPos:Number;
-			var j:Number = 0;
+			var j:Object;
 
 			var ttShapes:Array;
 			var ttXoffset:Number = NaN, ttYoffset:Number = NaN;
@@ -128,13 +128,14 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 						size = chart.yAxis.interval*deltaSize;
 				}
 				
+				j = cursor.current[yField];
 				if (xAxis)
 				{
 					if (_stackType == STACKED100)
 					{
 						x0 = xAxis.getPosition(baseValues[j]);
 						xPos = xAxis.getPosition(
-							baseValues[j++] + Math.max(0,cursor.current[xField]));
+							baseValues[j] + Math.max(0,cursor.current[xField]));
 					} else {
 						xPos = xAxis.getPosition(cursor.current[xField]);
 					}
@@ -145,7 +146,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					{
 						x0 = chart.xAxis.getPosition(baseValues[j]);
 						xPos = chart.xAxis.getPosition(
-							baseValues[j++] + Math.max(0,cursor.current[xField]));
+							baseValues[j] + Math.max(0,cursor.current[xField]));
 					} else 
 						xPos = chart.xAxis.getPosition(cursor.current[xField]);
 

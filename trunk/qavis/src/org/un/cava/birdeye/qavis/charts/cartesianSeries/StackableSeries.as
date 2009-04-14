@@ -40,9 +40,9 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 	public class StackableSeries extends CartesianSeries implements IStack
 	{
 		private const OWN_VERTICAL_INTERVAL_CHANGES:String = "is_own_vertical_listening_interval_changes"; 
-		private const CHART_VERTICAL_INTERVAL_CHANGES:String = "is_own_horizontal_listening_interval_changes"; 
+		private const CHART_VERTICAL_INTERVAL_CHANGES:String = "is_chart_vertical_listening_interval_changes"; 
 		private const OWN_HORIZONTAL_INTERVAL_CHANGES:String = "is_own_horizontal_listening_interval_changes"; 
-		private const CHART_HORIZONTAL_INTERVAL_CHANGES:String = "is_own_chart_horizontal_listening_interval_changes"; 
+		private const CHART_HORIZONTAL_INTERVAL_CHANGES:String = "is_chart_horizontal_listening_interval_changes"; 
 		
 		private var isListening:Array = [];
 		
@@ -112,6 +112,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
+
 			if (yAxis)
 			{
 				if (! isListening[OWN_VERTICAL_INTERVAL_CHANGES])
