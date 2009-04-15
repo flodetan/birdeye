@@ -161,7 +161,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 					// the columns with minium values won't show up in the chart
 					NumericAxis(radiusAxes[element]).min = Math.min(0, elementsMinMax[element].min);
 					NumericAxis(radiusAxes[element]).max = elementsMinMax[element].max;
-					NumericAxis(radiusAxes[element]).radiusSize = radiusSize;
+					NumericAxis(radiusAxes[element]).size = radiusSize;
 					NumericAxis(radiusAxes[element]).interval = (NumericAxis(radiusAxes[element]).max 
 																- NumericAxis(radiusAxes[element]).min)/5;
 				}
@@ -181,7 +181,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 
 			for (var i:int = 0; i<nEle; i++)
 			{
-				NumericAxis(radiusAxes[ele[i]]).radiusSize = radiusSize;
+				NumericAxis(radiusAxes[ele[i]]).size = radiusSize;
 				var angle:int = angleAxis.getPosition(ele[i]);
 				var endPosition:Point = PolarCoordinateTransform.getXY(angle,radiusSize,_polarChart.origin);
 				

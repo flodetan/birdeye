@@ -35,5 +35,6 @@
 		
 		/** Category field that is used to filter elements.*/
 		function set categoryField(val:String):void
+		function get categoryField():String
 	}
 }

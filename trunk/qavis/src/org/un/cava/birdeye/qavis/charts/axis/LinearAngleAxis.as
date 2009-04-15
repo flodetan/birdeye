@@ -25,37 +25,33 @@
  * THE SOFTWARE.
  */
  
-package org.un.cava.birdeye.qavis.charts.interfaces
+package org.un.cava.birdeye.qavis.charts.axis
 {
-	import org.un.cava.birdeye.qavis.charts.polarCharts.PolarChart;
+	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
 	
-	public interface IPolarSeries extends ISeries
+	public class LinearAngleAxis extends NumericAxis
 	{
-		/** Set the chart target. This allows to share axes and other properties
-		 * of the chart among several series.*/
-		function set polarChart(val:PolarChart):void;
-		function get polarChart():PolarChart
+		/** Set the scale type, LINEAR by default. */
+		override public function set scaleType(val:String):void
+		{
+			_scaleType = BaseAxisUI.LINEAR;
+		}
 		
-		/** Set the angleField to filter vertical data values.*/
-		function set angleField(val:String):void;
-		function get angleField():String;
+		override public function set min(val:Number):void
+		{
+			_min = val;
+		}
 
-		/** Set the radiusField to filter horizontal data values.*/
-		function set radiusField(val:String):void;
-		function get radiusField():String;
-
-		/** Set the angle axis.*/
-		function set angleAxis(val:IAxis):void;
-		function get angleAxis():IAxis;
-
-		/** Set the radius axis.*/
-		function set radiusAxis(val:IAxis):void;
-		function get radiusAxis():IAxis;
-
-		function get maxAngleValue():Number;
-		function get minAngleValue():Number;
-
-		function get maxRadiusValue():Number;
-		function get minRadiusValue():Number;
+		override public function set max(val:Number):void
+		{
+			_max = val;
+		}
+		
+		override public function getPosition(dataValue:*):*
+		{
+			if (isNaN(_size))
+				size = 360;
+			return super.getPosition(dataValue);
+		} 
 	}
 }

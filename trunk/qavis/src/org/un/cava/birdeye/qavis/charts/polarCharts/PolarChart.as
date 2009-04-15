@@ -37,12 +37,15 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 	import org.un.cava.birdeye.qavis.charts.axis.BaseAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.CategoryAngleAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxisUI;
-	import org.un.cava.birdeye.qavis.charts.axis.LinearAxisUI;
+	import org.un.cava.birdeye.qavis.charts.axis.LinearAngleAxis;
+	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.RadarAxisUI;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxis;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisUI;
+	import org.un.cava.birdeye.qavis.charts.interfaces.IEnumerableAxis;
+	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IPolarSeries;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ISeries;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IStack;
@@ -150,19 +153,20 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 			return _angleAxis;
 		}
 
-		protected var _radiusAxis:IAxisUI;
+		protected var _radiusAxis:IAxis;
 		/** Define the radius axis. If it has not defined its placement, than set it to 
 		 * horizontal-center*/ 
-		public function set radiusAxis(val:IAxisUI):void
+		public function set radiusAxis(val:IAxis):void
 		{
 			_radiusAxis = val;
-			if (_radiusAxis.placement != BaseAxisUI.HORIZONTAL_CENTER && _radiusAxis.placement != BaseAxisUI.VERTICAL_CENTER)
-				_radiusAxis.placement = BaseAxisUI.HORIZONTAL_CENTER;
+			if (val is IAxisUI 	&& IAxisUI(_radiusAxis).placement != BaseAxisUI.HORIZONTAL_CENTER 
+								&& IAxisUI(_radiusAxis).placement != BaseAxisUI.VERTICAL_CENTER)
+				IAxisUI(_radiusAxis).placement = BaseAxisUI.HORIZONTAL_CENTER;
 
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get radiusAxis():IAxisUI
+		public function get radiusAxis():IAxis
 		{
 			return _radiusAxis;
 		}
@@ -187,6 +191,13 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 		public function get columnWidthRate():Number
 		{
 			return _columnWidthRate;
+		}
+		
+		protected var _fontSize:Number = 10;
+		public function set fontSize(val:Number):void
+		{
+			_fontSize = val;
+			invalidateDisplayList();
 		}
 		
 		public function PolarChart()
@@ -230,6 +241,9 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 						addChild(DisplayObject(IPolarSeries(series[i]).radiusAxis));
 					else 
 						needDefaultRadiusAxis = true;
+
+					if (! IPolarSeries(series[i]).angleAxis)
+						needDefaultAngleAxis = true;
 				}
 			}
 
@@ -239,8 +253,9 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 			{
 				if (!_radiusAxis)
 					createRadiusAxis();
-					
-				addChild(DisplayObject(_radiusAxis));
+
+				if (_radiusAxis is IAxisUI)
+					addChild(DisplayObject(_radiusAxis));
 			}
 
 			// if some series have no own angle axis, than create a default one for the chart
@@ -272,9 +287,9 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 					= Math.min(unscaledWidth, unscaledHeight)/2;
 			} 
 			
-			if (radiusAxis)
+			if (radiusAxis && radiusAxis is IAxisUI)
 			{
-				switch (radiusAxis.placement)
+				switch (IAxisUI(radiusAxis).placement)
 				{
 					case BaseAxisUI.HORIZONTAL_CENTER:
 						DisplayObject(radiusAxis).width = DisplayObject(radiusAxis).x 
@@ -324,7 +339,7 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 				// check if a default y axis exists
 				if (angleAxis)
 				{
-					if (angleAxis is CategoryAngleAxis)
+					if (angleAxis is IEnumerableAxis)
 					{
 						for (i = 0; i<nCursors; i++)
 						{
@@ -340,10 +355,10 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 								while (!currentSeries.cursor.afterLast)
 								{
 									if (elements.indexOf(
-										currentSeries.cursor.current[CategoryAngleAxis(angleAxis).categoryField]) 
+										currentSeries.cursor.current[IEnumerableAxis(angleAxis).categoryField]) 
 										== -1)
 										elements[j++] = 
-											currentSeries.cursor.current[CategoryAngleAxis(angleAxis).categoryField];
+											currentSeries.cursor.current[IEnumerableAxis(angleAxis).categoryField];
 									currentSeries.cursor.moveNext();
 								}
 							}
@@ -355,9 +370,9 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 							while (!cursor.afterLast)
 							{
 								// if the category value already exists in the axis, than skip it
-								if (elements.indexOf(cursor.current[CategoryAngleAxis(angleAxis).categoryField]) == -1)
+								if (elements.indexOf(cursor.current[IEnumerableAxis(angleAxis).categoryField]) == -1)
 									elements[j++] = 
-										cursor.current[CategoryAngleAxis(angleAxis).categoryField];
+										cursor.current[IEnumerableAxis(angleAxis).categoryField];
 								cursor.moveNext();
 							}
 						}
@@ -365,7 +380,18 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 						// set the elements property of the CategoryAxis
 						if (elements.length > 0)
 							CategoryAngleAxis(angleAxis).elements = elements;
-					} 
+					} else if (angleAxis is INumerableAxis){
+						
+						if (INumerableAxis(angleAxis).scaleType != BaseAxisUI.CONSTANT)
+						{
+							// if the default x axis is numeric, than calculate its min max values
+							maxMin = getMaxMinAngleValueFromSeriesWithoutAngleAxis();
+						} else {
+							maxMin = [1,1];
+						}
+						INumerableAxis(angleAxis).max = maxMin[0];
+						INumerableAxis(angleAxis).min = maxMin[1];
+					}
 				} 
 				
 				elements = [];
@@ -374,7 +400,7 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 				// check if a default y axis exists
 				if (radiusAxis)
 				{
-					if (radiusAxis is CategoryAxisUI)
+					if (radiusAxis is IEnumerableAxis)
 					{
 						for (i = 0; i<nCursors; i++)
 						{
@@ -390,10 +416,10 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 								while (!currentSeries.cursor.afterLast)
 								{
 									if (elements.indexOf(
-										currentSeries.cursor.current[CategoryAxisUI(radiusAxis).categoryField]) 
+										currentSeries.cursor.current[IEnumerableAxis(radiusAxis).categoryField]) 
 										== -1)
 										elements[j++] = 
-											currentSeries.cursor.current[CategoryAxisUI(radiusAxis).categoryField];
+											currentSeries.cursor.current[IEnumerableAxis(radiusAxis).categoryField];
 									currentSeries.cursor.moveNext();
 								}
 							}
@@ -404,21 +430,27 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 							while (!cursor.afterLast)
 							{
 								// if the category value already exists in the axis, than skip it
-								if (elements.indexOf(cursor.current[CategoryAxisUI(radiusAxis).categoryField]) == -1)
+								if (elements.indexOf(cursor.current[IEnumerableAxis(radiusAxis).categoryField]) == -1)
 									elements[j++] = 
-										cursor.current[CategoryAxisUI(radiusAxis).categoryField];
+										cursor.current[IEnumerableAxis(radiusAxis).categoryField];
 								cursor.moveNext();
 							}
 						}
 						
 						// set the elements property of the CategoryAxis
 						if (elements.length > 0)
-							CategoryAxisUI(radiusAxis).elements = elements;
-					} else {
-						// if the default x axis is numeric, than calculate its min max values
-						maxMin = getMaxMinRadiusValueFromSeriesWithoutRadiusAxis();
-						NumericAxisUI(radiusAxis).max = maxMin[0];
-						NumericAxisUI(radiusAxis).min = maxMin[1];
+							IEnumerableAxis(radiusAxis).elements = elements;
+					} else if (radiusAxis is INumerableAxis){
+						
+						if (INumerableAxis(radiusAxis).scaleType != BaseAxisUI.CONSTANT)
+						{
+							// if the default x axis is numeric, than calculate its min max values
+							maxMin = getMaxMinRadiusValueFromSeriesWithoutRadiusAxis();
+						} else {
+							maxMin = [1,1];
+						}
+						INumerableAxis(radiusAxis).max = maxMin[0];
+						INumerableAxis(radiusAxis).min = maxMin[1];
 					}
 				} 
 
@@ -448,8 +480,30 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 					max = currentSeries.maxRadiusValue;
 				// check if the series has its own y axis and if its min value exists and 
 				// is lower than the current min
-				if (!currentSeries.radiusAxis && (isNaN(min) || min > currentSeries.maxRadiusValue))
+				if (!currentSeries.radiusAxis && (isNaN(min) || min > currentSeries.minRadiusValue))
 					min = currentSeries.minRadiusValue;
+			}
+					
+			return [max,min];
+		}
+
+		/** @Private
+		 * Calculate the min max values for the default vertical (y) axis. Return an array of 2 values, the 1st (0) 
+		 * for the max value, and the 2nd for the min value.*/
+		private function getMaxMinAngleValueFromSeriesWithoutAngleAxis():Array
+		{
+			var max:Number = NaN, min:Number = NaN;
+			for (var i:Number = 0; i<series.length; i++)
+			{
+				currentSeries = PolarSeries(series[i]);
+				// check if the series has its own y axis and if its max value exists and 
+				// is higher than the current max
+				if (!currentSeries.angleAxis && (isNaN(max) || max < currentSeries.maxAngleValue))
+					max = currentSeries.maxAngleValue;
+				// check if the series has its own y axis and if its min value exists and 
+				// is lower than the current min
+				if (!currentSeries.angleAxis && (isNaN(min) || min > currentSeries.minAngleValue))
+					min = currentSeries.minAngleValue;
 			}
 					
 			return [max,min];
@@ -481,7 +535,13 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 					if (elements.length > 0)
 						CategoryAngleAxis(series.angleAxis).elements = elements;
 	
-				} 
+				} else if (series.angleAxis is INumerableAxis)
+				{
+					INumerableAxis(series.angleAxis).max =
+						series.maxAngleValue;
+					INumerableAxis(series.angleAxis).min =
+						series.minAngleValue;
+				}
 	
 				elements = [];
 				j = 0;
@@ -502,13 +562,11 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 					if (elements.length > 0)
 						CategoryAxisUI(series.radiusAxis).elements = elements;
 	
-				} else if (series.radiusAxis is NumericAxisUI)
+				} else if (series.radiusAxis is INumerableAxis)
 				{
-					// if the y axis is numeric than set its maximum and minimum values 
-					// if the max and min are not yet defined for the series, than they are calculated now
-					NumericAxisUI(series.radiusAxis).max =
+					INumerableAxis(series.radiusAxis).max =
 						series.maxRadiusValue;
-					NumericAxisUI(series.radiusAxis).min =
+					INumerableAxis(series.radiusAxis).min =
 						series.minRadiusValue;
 				}
 	
@@ -520,13 +578,16 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 		 * select a specific default setup.*/
 		protected function createAngleAxis():void
 		{
-			// to be overridden
+			angleAxis = new LinearAngleAxis();
+
+			// and/or to be overridden
 		}
 		/** @Private */
 		protected function createRadiusAxis():void
 		{
-			radiusAxis = new LinearAxisUI();
-			radiusAxis.placement = BaseAxisUI.BOTTOM;
+			radiusAxis = new NumericAxis();
+
+			// and/or to be overridden
 		}
 
 		private function removeAllElements():void

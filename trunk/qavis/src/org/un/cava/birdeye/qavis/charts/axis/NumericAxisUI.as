@@ -137,7 +137,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 			super.measure();
  
  			if (!isNaN(min) && !isNaN(max) && placement)
-				maxLabelSize(); 
+				maxLabelSize();
  		}
 		
 		// other methods

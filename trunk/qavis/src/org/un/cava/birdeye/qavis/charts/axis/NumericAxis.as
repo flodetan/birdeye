@@ -44,18 +44,19 @@ package org.un.cava.birdeye.qavis.charts.axis
 			_function = val;
 		}
 		
-		private var _radiusSize:Number;
-		public function set radiusSize(val:Number):void
+		protected var _size:Number;
+		public function set size(val:Number):void
 		{
-			_radiusSize = val;
+			_size = val;
 		}
-		public function get radiusSize():Number
+		public function get size():Number
 		{
-			return _radiusSize;
+			return _size;
 		}
 	
 		protected var _scaleType:String = BaseAxisUI.LINEAR;
 		/** Set the scale type, LINEAR by default. */
+		[Inspectable(enumeration="linear,constant,log")]
 		public function set scaleType(val:String):void
 		{
 			_scaleType = val;
@@ -81,9 +82,14 @@ package org.un.cava.birdeye.qavis.charts.axis
 		public function getPosition(dataValue:*):*
 		{
 			if (_function == null)
-				return _radiusSize * (Number(dataValue) - min)/(max - min);
+			{
+				if (scaleType == BaseAxisUI.CONSTANT)
+					return _size;
+				else
+					return _size * (Number(dataValue) - min)/(max - min);
+			}
 			else 
-				return _function(dataValue, min, max, _baseAtZero, _radiusSize);
+				return _function(dataValue, min, max, _baseAtZero, _size);
 		}
 	
 		/** @Private
@@ -91,7 +97,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		 * by the formatMin methods.*/
 		private var minFormatted:Boolean = false;
 	
-		private var _min:Number = NaN;
+		protected var _min:Number = NaN;
 		/** The minimum value of the axis (if the axis is shared among more series, than
 		 * this is the minimun value among all series.*/
 		public function set min(val:Number):void
@@ -110,7 +116,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		 * by the formatMax methods.*/
 		private var maxFormatted:Boolean = false;
 	
-		private var _max:Number = NaN;
+		protected var _max:Number = NaN;
 		/** The maximum value of the axis (if the axis is shared among more series, than
 		 * this is the maximum value among all series. */
 		public function set max(val:Number):void

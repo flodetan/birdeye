@@ -179,7 +179,7 @@
 	 					label = new RasterText();
 						label.text = String(elements[elementIndex++]);
 	 					label.fontFamily = "verdana";
-	 					label.fontSize = 9;
+	 					label.fontSize = _fontSize;
 	 					label.visible = true;
 						label.autoSize = TextFieldAutoSize.LEFT;
 						label.autoSizeField = true;
@@ -203,7 +203,7 @@
 	 					label = new RasterText();
 						label.text = String(elements[elementIndex++]);
 	 					label.fontFamily = "verdana";
-	 					label.fontSize = 9;
+	 					label.fontSize = _fontSize;
 	 					label.visible = true;
 						label.autoSize = TextFieldAutoSize.LEFT;
 						label.autoSizeField = true;

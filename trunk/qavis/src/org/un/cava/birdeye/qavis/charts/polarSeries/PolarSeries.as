@@ -27,18 +27,10 @@
  
 package org.un.cava.birdeye.qavis.charts.polarSeries
 {
-	import adobe.utils.CustomActions;
-	
-	import com.degrafa.GeometryGroup;
-	import com.degrafa.geometry.RegularRectangle;
-	import com.degrafa.paint.SolidFill;
-	
 	import flash.events.MouseEvent;
 	
 	import mx.collections.CursorBookmark;
 	import mx.collections.ICollectionView;
-	import mx.core.IToolTip;
-	import mx.events.ToolTipEvent;
 	
 	import org.un.cava.birdeye.qavis.charts.BaseSeries;
 	import org.un.cava.birdeye.qavis.charts.axis.BaseAxisUI;
@@ -124,17 +116,18 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			return _angleAxis;
 		}
 		
-		private var _radiusAxis:IAxisUI;
-		public function set radiusAxis(val:IAxisUI):void
+		private var _radiusAxis:IAxis;
+		public function set radiusAxis(val:IAxis):void
 		{
 			_radiusAxis = val;
-			if (_radiusAxis.placement != BaseAxisUI.HORIZONTAL_CENTER && _radiusAxis.placement != BaseAxisUI.VERTICAL_CENTER)
-				_radiusAxis.placement = BaseAxisUI.HORIZONTAL_CENTER;
+			if (val is IAxisUI && IAxisUI(_radiusAxis).placement != BaseAxisUI.HORIZONTAL_CENTER 
+								&& IAxisUI(_radiusAxis).placement != BaseAxisUI.VERTICAL_CENTER)
+				IAxisUI(_radiusAxis).placement = BaseAxisUI.HORIZONTAL_CENTER;
 
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get radiusAxis():IAxisUI
+		public function get radiusAxis():IAxis
 		{
 			return _radiusAxis;
 		}
@@ -249,13 +242,13 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			if (angleAxis)
 			{
 				if (angleAxis is INumerableAxis)
-					axesCheck = !isNaN(_maxAngleValue) || !isNaN(_minAngleValue)
+					axesCheck = !isNaN(INumerableAxis(angleAxis).min) || !isNaN(INumerableAxis(angleAxis).max);
 				else if (angleAxis is IEnumerableAxis)
 					axesCheck = Boolean(IEnumerableAxis(angleAxis).elements);
 			} else if (polarChart && polarChart.angleAxis)
 			{
 				if (polarChart.angleAxis is INumerableAxis)
-					axesCheck = !isNaN(_maxAngleValue) || !isNaN(_minAngleValue)
+					axesCheck = !isNaN(INumerableAxis(polarChart.angleAxis).min) || !isNaN(INumerableAxis(polarChart.angleAxis).max);
 				else if (polarChart.angleAxis is IEnumerableAxis)
 					axesCheck = Boolean(IEnumerableAxis(polarChart.angleAxis ).elements);
 			} else
@@ -264,13 +257,13 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			if (radiusAxis)
 			{
 				if (radiusAxis is INumerableAxis)
-					axesCheck = axesCheck && (!isNaN(_maxRadiusValue) || !isNaN(_minRadiusValue))
+					axesCheck = axesCheck && (!isNaN(INumerableAxis(radiusAxis).min) || !isNaN(INumerableAxis(radiusAxis).max));
 				else if (radiusAxis is IEnumerableAxis)
 					axesCheck = axesCheck && IEnumerableAxis(radiusAxis).elements;
 			} else if (polarChart && polarChart.radiusAxis)
 			{
 				if (polarChart.radiusAxis is INumerableAxis)
-					axesCheck = axesCheck && (!isNaN(_maxRadiusValue) || !isNaN(_minRadiusValue))
+					axesCheck = axesCheck && (!isNaN(INumerableAxis(polarChart.radiusAxis).min) || !isNaN(INumerableAxis(polarChart.radiusAxis).max))
 				else if (polarChart.radiusAxis is IEnumerableAxis)
 					axesCheck = axesCheck && IEnumerableAxis(polarChart.radiusAxis).elements;
 			} else
@@ -283,9 +276,9 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 				(fill || stroke || isNaN(fillColor) || isNaN(strokeColor));
 
 			var globalCheck:Boolean = 
-				   (!isNaN(_minAngleValue) || !isNaN(_minRadiusValue))
-				&& (!isNaN(_maxAngleValue) || !isNaN(_maxRadiusValue))
-				&& width>0 && height>0
+/* 				   (!isNaN(_minAngleValue) || !isNaN(_minRadiusValue))
+				&& (!isNaN(_maxAngleValue) || !isNaN(_maxRadiusValue)) */
+				width>0 && height>0
 				&& polarChart && angleField && radiusField
 				&& (polarChart.origin)
 				&& cursor;
