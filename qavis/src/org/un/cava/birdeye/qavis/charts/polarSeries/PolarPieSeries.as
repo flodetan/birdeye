@@ -28,6 +28,7 @@
 package org.un.cava.birdeye.qavis.charts.polarSeries
 {
 	import com.degrafa.GeometryGroup;
+	import com.degrafa.IGeometry;
 	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.EllipticalArc;
 	import com.degrafa.paint.SolidFill;
@@ -35,14 +36,20 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 	
 	import mx.collections.CursorBookmark;
 	
-	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.PolarCoordinateTransform;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.renderers.ArcPath;
 	import org.un.cava.birdeye.qavis.charts.renderers.TriangleRenderer;
 
-	public class PolarColumnSeries extends PolarStackableSeries
+	public class PolarPieSeries extends PolarStackableSeries
 	{
+		private var _innerRadius:Number = 0;
+		public function set innerRadius(val:Number):void
+		{
+			_innerRadius = val;
+			invalidateDisplayList();
+		}
+
 		private var _plotRadius:Number = 5;
 		public function set plotRadius(val:Number):void
 		{
@@ -50,7 +57,13 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			invalidateDisplayList();
 		}
 		
-		public function PolarColumnSeries()
+		[Inspectable(enumeration="overlaid,stacked100")]
+		override public function set stackType(val:String):void
+		{
+			super.stackType = val;
+		}
+		
+		public function PolarPieSeries()
 		{
 			super();
 		}
@@ -58,6 +71,9 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
+
+			if (_stackType != OVERLAID || _stackType != STACKED100)
+				_stackType = STACKED100;
 
 			if (! itemRenderer)
 				itemRenderer = TriangleRenderer;
@@ -74,31 +90,36 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 			var angle:Number, radius:Number;
 			
+			var startAngle:Number = 0; 
+			
 			var arcSize:Number = NaN;
 			
-			var angleInterval:Number;
-			if (angleAxis) 
-				angleInterval = angleAxis.interval * polarChart.columnWidthRate;
-			else if (polarChart.angleAxis)
-				angleInterval = polarChart.angleAxis.interval * polarChart.columnWidthRate;
-			else if (radarAxis)
-				angleInterval = radarAxis.angleAxis.interval * polarChart.columnWidthRate;
-			else if (polarChart.radarAxis)
-				angleInterval = polarChart.radarAxis.angleAxis.interval * polarChart.columnWidthRate;
-				
 			switch (_stackType)
 			{
-				case STACKED:
-					arcSize = angleInterval/_total;
+				case STACKED100:
 					break;
 				case OVERLAID:
-					arcSize = angleInterval;
 					break;
 			}
 				
 			gg = new DataItemLayout();
 			gg.target = this;
 			graphicsCollection.addItem(gg);
+
+			if (radiusAxis)
+			{
+				radius = radiusAxis.getPosition(null);
+				dataFields[1] = radiusField;
+			} else if (polarChart.radiusAxis) {
+				radius = polarChart.radiusAxis.getPosition(null);
+				dataFields[1] = radiusField;
+			}
+			
+			var arcCenterX:Number = polarChart.origin.x - radius;
+			var arcCenterY:Number = polarChart.origin.y - radius;
+
+			var wSize:Number, hSize:Number;
+			wSize = hSize = radius*2;
 
 			cursor.seek(CursorBookmark.FIRST);
 			while (!cursor.afterLast)
@@ -112,49 +133,8 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 					dataFields[0] = angleField;
 				}
 				
-				if (radiusAxis)
-				{
-					radius = radiusAxis.getPosition(cursor.current[radiusField]);
-					dataFields[1] = radiusField;
-				} else if (polarChart.radiusAxis) {
-					radius = polarChart.radiusAxis.getPosition(cursor.current[radiusField]);
-					dataFields[1] = radiusField;
-				}
-				
-				if (radarAxis)
-				{
-					angle = radarAxis.angleAxis.getPosition(cursor.current[angleField]);
-					radius = NumericAxis(radarAxis.radiusAxes[
-										cursor.current[radarAxis.angleCategory]
-										]).getPosition(cursor.current[radiusField]);
-					dataFields[0] = angleField;
-					dataFields[1] = radiusField;
-				} else if (polarChart.radarAxis) {
-					angle = polarChart.radarAxis.angleAxis.getPosition(cursor.current[angleField]);
-					radius = NumericAxis(polarChart.radarAxis.radiusAxes[
-										cursor.current[polarChart.radarAxis.angleCategory]
-										]).getPosition(cursor.current[radiusField]);
-					dataFields[0] = angleField;
-					dataFields[1] = radiusField;
-				}
-
-				var arcCenterX:Number = polarChart.origin.x - radius;
-				var arcCenterY:Number = polarChart.origin.y - radius;
-				var startAngle:Number; 
-				switch (_stackType) 
-				{
-					case STACKED:
-						startAngle = angle - angleInterval/2 +arcSize*(_stackPosition-1);
-						break;
-					case OVERLAID:
-						startAngle = angle - angleInterval/2;
-						break;
-				}
-				var wSize:Number, hSize:Number;
-				wSize = hSize = radius*2;
-
-				var xPos:Number = PolarCoordinateTransform.getX(startAngle+arcSize/2, radius, polarChart.origin);
-				var yPos:Number = PolarCoordinateTransform.getY(startAngle+arcSize/2, radius, polarChart.origin); 
+				var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, radius, polarChart.origin);
+				var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, radius, polarChart.origin); 
 
 				if (polarChart.showDataTips)
 				{	
@@ -167,14 +147,22 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 					createInteractiveGG(cursor.current, dataFields, xPos, yPos, NaN);
 				}
 				
-				var arc:EllipticalArc = 
-					new EllipticalArc(arcCenterX, arcCenterY, wSize, hSize, startAngle, arcSize, "pie");
-
 				stroke.weight = 1;
 
+				var arc:IGeometry;
+				
+				if (_innerRadius>0)
+					arc = new ArcPath(Math.max(0, radius - 10), radius, startAngle, arcSize, polarChart.origin);
+				else
+					arc = 
+						new EllipticalArc(arcCenterX, arcCenterY, wSize, hSize, startAngle, angle, "pie");
+	
 				arc.fill = fill;
 				arc.stroke = stroke;
+
 				gg.geometryCollection.addItemAt(arc,0); 
+				
+				startAngle = angle;
  				cursor.moveNext();
 			}
 		}

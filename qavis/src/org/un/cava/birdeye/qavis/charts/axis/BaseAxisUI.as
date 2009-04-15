@@ -46,6 +46,8 @@ package org.un.cava.birdeye.qavis.charts.axis
 		
 		/** Scale type: Linear */
 		public static const LINEAR:String = "linear";
+		/** Scale type: Linear */
+		public static const CONSTANT:String = "constant";
 		/** Scale type: Numeric (general numeric scale that could be used for custom numeric axes)*/
 		public static const NUMERIC:String = "linear";
 		/** Scale type: Category */

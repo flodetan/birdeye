@@ -156,9 +156,16 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 						if (isNaN(zPos))
 							zPos = 0;
 					}
+					
+					if (! isNaN(zPos))
+					{
+						gg = new DataItemLayout();
+						gg.target = this;
+						addChild(gg);
+					}
 				} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null || !isNaN(zPos))
 				{
-					createInteractiveGG(cursor.current, dataFields, xPos, yPos, NaN);
+					createInteractiveGG(cursor.current, dataFields, xPos, yPos, zPos);
 				}
 				
 				scatter = new itemRenderer(bounds);

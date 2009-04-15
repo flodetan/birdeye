@@ -38,21 +38,15 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 	import flash.geom.Point;
 	import flash.text.TextFieldAutoSize;
 	
-	import mx.collections.CursorBookmark;
-	
 	import org.un.cava.birdeye.qavis.charts.axis.CategoryAngleAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.PolarCoordinateTransform;
-	import org.un.cava.birdeye.qavis.charts.polarSeries.PolarColumnSeries;
-	import org.un.cava.birdeye.qavis.charts.polarSeries.PolarSeries;
+	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
 	import org.un.cava.birdeye.qavis.charts.polarSeries.PolarStackableSeries;
 	
-	public class RadarChart extends PolarChart
+	public class PieChart extends PolarChart
 	{
-		private const COLUMN:String = "column";
-		private const RADAR:String = "radar";
-		
 		private var _type:String = PolarStackableSeries.OVERLAID;
 		/** Set the type of stack, overlaid if the series are shown on top of the other, 
 		 * or stacked if they appear staked one after the other (horizontally).*/
@@ -61,14 +55,6 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 		{
 			_type = val;
 			invalidateProperties();
-			invalidateDisplayList();
-		}
-		
-		private var _layout:String;
-		[Inspectable(enumeration="column,radar")]
-		public function set layout(val:String):void
-		{
-			_layout = val;
 			invalidateDisplayList();
 		}
 		
@@ -86,142 +72,27 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 		{
 			super.commitProperties();
 			
-			if (! _layout)
-				_layout = RADAR;
-			
-			if (radarAxis && !contains(radarAxis))
-				addChild(radarAxis);
-				
 			if (!contains(labels))
 				addChild(labels);
-
-			if (_series)
-			{
-				var _columnSeries:Array = [];
-			
-				for (var i:Number = 0; i<_series.length; i++)
-				{
-					if (_series[i] is PolarColumnSeries)
-					{
-						PolarColumnSeries(_series[i]).stackType = _type;
-						_columnSeries.push(_series[i])
-					}
-				}
-			}
 		}
 		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
-			if ((radarAxis && radarAxis.angleAxis) ||
-				(angleAxis && angleAxis is CategoryAngleAxis))
-				drawLabels()
-		}
-		
-		private var elementsMinMax:Array;
-		override protected function feedAxes():void
-		{
-			var elements:Array = [];
-			var j:Number = 0;
-			elementsMinMax = [];
-			
-			if (nCursors == series.length)
-			{
-				// check if a default y axis exists
-				if (_radarAxis && _radarAxis.angleCategory && _radarAxis.angleAxis)
-				{
-					var angleCategory:String = radarAxis.angleCategory;
-					for (var i:int = 0; i<nCursors; i++)
-					{
-						currentSeries = PolarSeries(_series[i]);
-						// if the series has its own data provider but has not its own
-						// angleAxis, than load their elements and add them to the elements
-						// loaded by the chart data provider
-						if (currentSeries.dataProvider 
-							&& currentSeries.dataProvider != dataProvider)
-						{
-							currentSeries.cursor.seek(CursorBookmark.FIRST);
-							while (!currentSeries.cursor.afterLast)
-							{
-								var category:String = currentSeries.cursor.current[angleCategory];
-								if (elements.indexOf(category) == -1)
-									elements[j++] = category;
-								
-								if (!elementsMinMax[category])
-								{
-									elementsMinMax[category] = {min: int.MAX_VALUE,
-																	 max: int.MIN_VALUE};
-								} 
-								elementsMinMax[category].min = 
-									Math.min(elementsMinMax[category].min, 
-										currentSeries.cursor.current[currentSeries.radiusField]);
-
-								elementsMinMax[category].max = 
-									Math.max(elementsMinMax[category].max, 
-										currentSeries.cursor.current[currentSeries.radiusField]);
-								
-								currentSeries.cursor.moveNext();
-							}
-						}
-						
-						if (cursor)
-						{
-							cursor.seek(CursorBookmark.FIRST);
-							while (!cursor.afterLast)
-							{
-								category = cursor.current[angleCategory]
-								// if the category value already exists in the axis, than skip it
-								if (elements.indexOf(category) == -1)
-									elements[j++] = category;
-								
-								for (var t:int = 0; t<series.length; t++)
-								{
-									currentSeries = PolarSeries(_series[t]);
-									if (!elementsMinMax[category])
-									{
-										elementsMinMax[category] = {min: int.MAX_VALUE,
-																		 max: int.MIN_VALUE};
-									} 
-									elementsMinMax[category].min = 
-										Math.min(elementsMinMax[category].min, 
-											cursor.current[currentSeries.radiusField]);
-
-									elementsMinMax[category].max = 
-										Math.max(elementsMinMax[category].max, 
-											cursor.current[currentSeries.radiusField]);
-								}
-								cursor.moveNext();
-							}
-						}
-	
-						// set the elements property of the CategoryAxis
-						if (elements.length > 0)
-							_radarAxis.angleAxis.elements = elements;
-					} 
-					
-					_radarAxis.feedRadiusAxes(elementsMinMax);
-				}
-			}
-			super.feedAxes();
+			if (angleAxis && origin)
+				drawLabels();
 		}
 		
 		private var labels:Surface;
 		private var gg:GeometryGroup;
 		private function drawLabels():void
 		{
-			var aAxis:CategoryAngleAxis;
-			if (radarAxis)
-				aAxis = radarAxis.angleAxis;
-			else
-				aAxis = CategoryAngleAxis(angleAxis);
-			
-			var ele:Array = aAxis.elements;
-			var interval:int = aAxis.interval;
-			var nEle:int = ele.length;
+			var aAxis:INumerableAxis = INumerableAxis(angleAxis);
+
 			var radius:int = Math.min(unscaledWidth, unscaledHeight)/2;
 
-			if (aAxis && radius>0 && ele && nEle>0 && !isNaN(interval))
+			if (aAxis && radius>0)
 			{
 				removeAllLabels();
 				for (var i:int = 0; i<nEle; i++)
@@ -232,7 +103,7 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 					var label:RasterText = new RasterText();
 					label.text = String(ele[i]);
  					label.fontFamily = "verdana";
- 					label.fontSize = _fontSize;
+ 					label.fontSize = 9;
  					label.visible = true;
 					label.autoSize = TextFieldAutoSize.LEFT;
 					label.autoSizeField = true;
@@ -271,7 +142,7 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 			var ele:Array = aAxis.elements;
 			var rAxis:NumericAxis = radarAxis.radiusAxes[ele[0]];
 			
-			if (aAxis && rAxis && !isNaN(rAxis.interval))
+			if (aAxis && rAxis)
 			{
 				var interval:int = aAxis.interval;
 				var nEle:int = ele.length;
@@ -307,7 +178,7 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 			var interval:int = aAxis.interval;
 			var nEle:int = ele.length;
 			
-			if (radiusAxis is NumericAxisUI && !isNaN(NumericAxisUI(radiusAxis).interval))
+			if (radiusAxis is NumericAxisUI)
 			{
 				var rAxis:NumericAxisUI = NumericAxisUI(radiusAxis);
 				var rMin:Number = rAxis.min;

@@ -121,7 +121,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			
 			gg = new DataItemLayout();
 			gg.target = this;
-			addChild(gg);
+			graphicsCollection.addItem(gg);
 			
 			// move data provider cursor at the beginning
 			cursor.seek(CursorBookmark.FIRST);
