@@ -36,10 +36,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 	
 	import mx.collections.CursorBookmark;
 	
-	import org.un.cava.birdeye.qavis.charts.axis.NumericAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.ColumnChart;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
+	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
 	import org.un.cava.birdeye.qavis.charts.renderers.RectangleRenderer;
 
 	public class ColumnSeries extends StackableSeries 
@@ -84,11 +84,11 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			{
 				if (yAxis)
 				{
-					if (yAxis is NumericAxisUI)
-						NumericAxisUI(yAxis).max = maxYValue;
+					if (yAxis is INumerableAxis)
+						INumerableAxis(yAxis).max = maxYValue;
 				} else {
-					if (chart && chart.yAxis && chart.yAxis is NumericAxisUI)
-						NumericAxisUI(chart.yAxis).max = maxYValue;
+					if (chart && chart.yAxis && chart.yAxis is INumerableAxis)
+						INumerableAxis(chart.yAxis).max = maxYValue;
 				}
 			}
 		}
@@ -266,19 +266,19 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		private function getYMinPosition():Number
 		{
 			var yPos:Number;
-			if (yAxis && yAxis is NumericAxisUI)
+			if (yAxis && yAxis is INumerableAxis)
 			{
 				if (_baseAtZero)
 					yPos = yAxis.getPosition(0);
 				else
-					yPos = yAxis.getPosition(NumericAxisUI(yAxis).min);
+					yPos = yAxis.getPosition(INumerableAxis(yAxis).min);
 			} else {
-				if (chart.yAxis is NumericAxisUI)
+				if (chart.yAxis is INumerableAxis)
 				{
 					if (_baseAtZero)
 						yPos = chart.yAxis.getPosition(0);
 					else
-						yPos = chart.yAxis.getPosition(NumericAxisUI(chart.yAxis).min);
+						yPos = chart.yAxis.getPosition(INumerableAxis(chart.yAxis).min);
 				}
 			}
 			return yPos;

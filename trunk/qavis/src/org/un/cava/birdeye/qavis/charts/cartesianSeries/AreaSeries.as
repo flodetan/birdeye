@@ -33,14 +33,12 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
-	import flash.events.MouseEvent;
-	
 	import mx.collections.CursorBookmark;
 	
-	import org.un.cava.birdeye.qavis.charts.axis.NumericAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.AreaChart;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
+	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
 	import org.un.cava.birdeye.qavis.charts.renderers.TriangleRenderer;
 
 	public class AreaSeries extends StackableSeries
@@ -91,11 +89,11 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			{
 				if (yAxis)
 				{
-					if (yAxis is NumericAxisUI)
-						NumericAxisUI(yAxis).max = maxYValue;
+					if (yAxis is INumerableAxis)
+						INumerableAxis(yAxis).max = maxYValue;
 				} else {
-					if (chart && chart.yAxis && chart.yAxis is NumericAxisUI)
-						NumericAxisUI(chart.yAxis).max = maxYValue;
+					if (chart && chart.yAxis && chart.yAxis is INumerableAxis)
+						INumerableAxis(chart.yAxis).max = maxYValue;
 				}
 			}
 		}
@@ -213,7 +211,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
 					createTTGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3);
 					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
-					hitMouseArea.fill = new SolidFill(0x000000, 1);
+					hitMouseArea.fill = new SolidFill(0x000000, 0);
 					ttGG.geometryCollection.addItem(hitMouseArea);				
 				} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null || !isNaN(zPos))
 				{
@@ -260,10 +258,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			
 			if (xAxis)
 			{
-				if (xAxis is NumericAxisUI)
+				if (xAxis is INumerableAxis)
 					xPos = xAxis.getPosition(minXValue);
 			} else {
-				if (chart.xAxis is NumericAxisUI)
+				if (chart.xAxis is INumerableAxis)
 					xPos = chart.xAxis.getPosition(minXValue);
 			}
 			
@@ -275,14 +273,14 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		private function getYMinPosition():Number
 		{
 			var yPos:Number;
-			if (yAxis && yAxis is NumericAxisUI)
+			if (yAxis && yAxis is INumerableAxis)
 			{
 				if (_baseAtZero)
 					yPos = yAxis.getPosition(0);
 				else
 					yPos = yAxis.getPosition(minYValue);
 			} else {
-				if (chart.yAxis is NumericAxisUI)
+				if (chart.yAxis is INumerableAxis)
 				{
 					if (_baseAtZero)
 						yPos = chart.yAxis.getPosition(0);

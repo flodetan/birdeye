@@ -119,7 +119,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
 					createTTGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3);
 					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
-					hitMouseArea.fill = new SolidFill(0x000000, 1);
+					hitMouseArea.fill = new SolidFill(0x000000, 0);
 					ttGG.geometryCollection.addItem(hitMouseArea);
 				} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null || !isNaN(zPos))
 				{
