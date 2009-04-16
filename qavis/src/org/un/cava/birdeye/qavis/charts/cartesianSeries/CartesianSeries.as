@@ -27,21 +27,15 @@
  
 package org.un.cava.birdeye.qavis.charts.cartesianSeries
 {
-	import com.degrafa.GeometryGroup;
-	import com.degrafa.geometry.RegularRectangle;
-	import com.degrafa.paint.SolidFill;
-	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
 	import mx.collections.CursorBookmark;
 	import mx.collections.ICollectionView;
-	import mx.core.IToolTip;
 	import mx.events.ToolTipEvent;
 	
 	import org.un.cava.birdeye.qavis.charts.BaseSeries;
 	import org.un.cava.birdeye.qavis.charts.axis.BaseAxisUI;
-	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxisUI;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.CartesianChart;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisUI;
@@ -180,7 +174,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		protected var _maxYValue:Number = NaN;
 		public function get maxYValue():Number
 		{
-			if (! (yAxis is CategoryAxisUI))
+			if (! (yAxis is IEnumerableAxis))
 				calculateMaxY();
 			return _maxYValue;
 		}
@@ -188,7 +182,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		protected var _maxXValue:Number = NaN;
 		public function get maxXValue():Number
 		{
-			if (! (xAxis is CategoryAxisUI))
+			if (! (xAxis is IEnumerableAxis))
 				calculateMaxX();
 			return _maxXValue;
 		}
@@ -196,7 +190,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		private var _minYValue:Number = NaN;
 		public function get minYValue():Number
 		{
-			if (! (yAxis is CategoryAxisUI))
+			if (! (yAxis is IEnumerableAxis))
 				calculateMinY();
 			return _minYValue;
 		}
@@ -204,7 +198,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		private var _minXValue:Number = NaN;
 		public function get minXValue():Number
 		{
-			if (! (xAxis is CategoryAxisUI))
+			if (! (xAxis is IEnumerableAxis))
 				calculateMinX();
 			return _minXValue;
 		}
@@ -212,7 +206,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		protected var _maxZValue:Number = NaN;
 		public function get maxZValue():Number
 		{
-			if (! (zAxis is CategoryAxisUI))
+			if (! (zAxis is IEnumerableAxis))
 				calculateMaxZ();
 			return _maxZValue;
 		}
@@ -220,7 +214,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		private var _minZValue:Number = NaN;
 		public function get minZValue():Number
 		{
-			if (! (zAxis is CategoryAxisUI))
+			if (! (zAxis is IEnumerableAxis))
 				calculateMinZ();
 			return _minZValue;
 		}
