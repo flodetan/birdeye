@@ -147,7 +147,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		protected var _maxAngleValue:Number = 360;
 		public function get maxAngleValue():Number
 		{
-			if (! (_angleAxis is CategoryAngleAxis))
+			if (! (_angleAxis is IEnumerableAxis))
 				calculateMaxAngle();
 			return _maxAngleValue;
 		}
@@ -155,7 +155,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		protected var _maxRadiusValue:Number = NaN;
 		public function get maxRadiusValue():Number
 		{
-			if (! (_radiusAxis is CategoryAxisUI))
+			if (! (_radiusAxis is IEnumerableAxis))
 				calculateMaxRadius();
 			return _maxRadiusValue;
 		}
@@ -163,7 +163,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		private var _minAngleValue:Number = 0;
 		public function get minAngleValue():Number
 		{
-			if (! (_angleAxis is CategoryAngleAxis))
+			if (! (_angleAxis is IEnumerableAxis))
 				calculateMinAngle();
 			return _minAngleValue;
 		}
@@ -171,7 +171,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		private var _minRadiusValue:Number = NaN;
 		public function get minRadiusValue():Number
 		{
-			if (! (_radiusAxis is CategoryAngleAxis))
+			if (! (_radiusAxis is IEnumerableAxis))
 				calculateMinRadius();
 			return _minRadiusValue;
 		}
