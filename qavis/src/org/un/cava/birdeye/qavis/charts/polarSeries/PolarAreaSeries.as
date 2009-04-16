@@ -120,15 +120,10 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 				var xPos:Number = PolarCoordinateTransform.getX(angle, radius, polarChart.origin);
 				var yPos:Number = PolarCoordinateTransform.getY(angle, radius, polarChart.origin); 
+
 				// if showdatatips than create a new GeometryGroup and set its 
 				// tooltip along with the hit area and events
-				if (polarChart.showDataTips)
-				{	
-					createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
-					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
-					hitMouseArea.fill = new SolidFill(0x000000, 0);
-					ttGG.geometryCollection.addItem(hitMouseArea);
-				}
+				createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
 				
 				items.push(cursor.current);
 
@@ -142,10 +137,6 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 				poly.fill = fill;
 				poly.stroke = stroke;
 				gg.geometryCollection.addItem(poly);
-			}
-			if (mouseClickFunction!=null || mouseDoubleClickFunction!=null)
-			{
-				addInteractive(items, dataFields);
 			}
 		}
 	}

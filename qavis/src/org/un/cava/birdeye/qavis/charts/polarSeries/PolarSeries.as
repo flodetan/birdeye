@@ -27,6 +27,9 @@
  
 package org.un.cava.birdeye.qavis.charts.polarSeries
 {
+	import com.degrafa.geometry.Circle;
+	import com.degrafa.paint.SolidFill;
+	
 	import flash.events.MouseEvent;
 	
 	import mx.collections.CursorBookmark;
@@ -352,21 +355,44 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 									zPos:Number, radius:Number, shapes:Array = null /* of IGeometry */, 
 									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
 		{
-			ttGG = new DataItemLayout();
-			ttGG.target = this;
- 			if (polarChart.showDataTips || polarChart.showAllDataTips)
-			{
-				initGGToolTip();
-				ttGG.createToolTip(cursor.current, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset);
- 			} else {
+			// no need to create a ttGG for a polar chart unless interactivity
+			// or tooltips are requested 
+ 			if (polarChart.showDataTips || polarChart.showAllDataTips 
+ 				|| mouseClickFunction!=null || mouseDoubleClickFunction!=null)
+ 			{
+				ttGG = new DataItemLayout();
+				ttGG.target = polarChart;
 				graphicsCollection.addItem(ttGG);
-			}
-			
-			if (polarChart.showAllDataTips)
-			{
-				ttGG.showToolTip();
-				ttGG.showToolTipGeometry();
-			}
+	
+				var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
+				hitMouseArea.fill = new SolidFill(0x000000, 0);
+				ttGG.geometryCollection.addItem(hitMouseArea);
+	
+	 			if (polarChart.showDataTips || polarChart.showAllDataTips)
+				{
+					initGGToolTip();
+					ttGG.create(cursor.current, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset);
+					ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
+					ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
+	 			} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null)
+				{
+					// if no tips but interactivity is required than add roll over events and pass
+					// data and positioning information about the current data item 
+					ttGG.create(cursor.current, dataFields, xPos, yPos, zPos, NaN, null, NaN, NaN, false);
+				} 
+				
+				if (polarChart.showAllDataTips)
+				{
+					ttGG.showToolTip();
+					ttGG.showToolTipGeometry();
+				}
+	
+				if (mouseClickFunction != null)
+					ttGG.addEventListener(MouseEvent.CLICK, onMouseClick);
+	
+				if (mouseDoubleClickFunction != null)
+					ttGG.addEventListener(MouseEvent.DOUBLE_CLICK, onMouseDoubleClick);
+ 			}
 		}
 		
 		/** @Private
@@ -375,22 +401,12 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		 * AreaSeries, thus improving performances.*/ 
 		override protected function initGGToolTip():void
 		{
-			ttGG.target = polarChart;
 			ttGG.toolTipFill = fill;
 			ttGG.toolTipStroke = stroke;
  			if (polarChart.dataTipFunction != null)
 				ttGG.dataTipFunction = polarChart.dataTipFunction;
 			if (polarChart.dataTipPrefix!= null)
 				ttGG.dataTipPrefix = polarChart.dataTipPrefix;
- 			graphicsCollection.addItem(ttGG);
-			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
-			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
-
-			if (mouseClickFunction != null)
-				ttGG.addEventListener(MouseEvent.CLICK, super.onMouseClick);
-
-			if (mouseDoubleClickFunction != null)
-				ttGG.addEventListener(MouseEvent.DOUBLE_CLICK, super.onMouseDoubleClick);
 		}
 	}
 }

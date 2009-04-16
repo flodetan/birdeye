@@ -28,10 +28,8 @@
 package org.un.cava.birdeye.qavis.charts.cartesianSeries
 {
 	import com.degrafa.IGeometry;
-	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RegularRectangle;
-	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	import mx.collections.CursorBookmark;
@@ -185,6 +183,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 
 				var yAxisRelativeValue:Number = NaN;
 
+				// TODO: fix stacked100 on 3D
 				if (zAxis)
 				{
 					zPos = zAxis.getPosition(cursor.current[zField]);
@@ -203,41 +202,26 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					dataFields[2] = zField;
 				}
 
-				if (chart.showDataTips)
-				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
-					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createTTGG(cursor.current, dataFields, xPos, yPos+barWidth/2, yAxisRelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
-					var hitMouseArea:Circle = new Circle(xPos, yPos+barWidth/2, 5); 
-					hitMouseArea.fill = new SolidFill(0x000000, 0);
-					ttGG.geometryCollection.addItem(hitMouseArea);
-					if (zField)
-					{
-						ttGG.z = zPos;
-						if (isNaN(zPos))
-							zPos = 0;
-					}
+				// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
+				// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
+				createTTGG(cursor.current, dataFields, xPos, yPos+barWidth/2, yAxisRelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
 
-					if (! isNaN(zPos))
+				if (zField)
+				{
+					if (!isNaN(zPos))
 					{
 						gg = new DataItemLayout();
 						gg.target = this;
-						addChild(gg);
-					}
-				} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null || !isNaN(zPos))
-				{
-					createInteractiveGG(cursor.current, dataFields, xPos, yPos, zPos);
+						graphicsCollection.addItem(gg);
+						ttGG.z = gg.z = zPos;
+					} else
+						zPos = 0;
 				}
-				
+
 				poly = new itemRenderer(bounds);
 				poly.fill = fill;
 				poly.stroke = stroke;
 				gg.geometryCollection.addItemAt(poly,0);
-				if (zField)
-				{
-					gg.z = zPos;
-					if (isNaN(zPos))
-						zPos = 0;
-				}
 				cursor.moveNext();
 			}
 

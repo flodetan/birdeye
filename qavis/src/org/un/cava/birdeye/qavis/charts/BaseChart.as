@@ -291,6 +291,7 @@
 		public function BaseChart():void
 		{
 			super();
+			doubleClickEnabled = true;
 		}
 		
 		protected var rectBackGround:RegularRectangle;

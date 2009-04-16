@@ -125,27 +125,8 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 				var xPos:Number = PolarCoordinateTransform.getX(angle, radius, polarChart.origin);
 				var yPos:Number = PolarCoordinateTransform.getY(angle, radius, polarChart.origin); 
-				if (polarChart.showDataTips)
-				{	
-					if (polarChart.customTooltTipFunction == null)
-					{
-	 					ttShapes = [];
-						ttXoffset = -30;
-						ttYoffset = 20;
-						var line:Line = new Line(xPos, yPos, xPos + ttXoffset/3, yPos + ttYoffset);
-						line.stroke = new SolidStroke(0xaaaaaa,1,2);
-		 				ttShapes[0] = line;
-						createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius,ttShapes,ttXoffset,ttYoffset);
-					} else 
-						createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
-						
- 					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
-					hitMouseArea.fill = new SolidFill(0x000000, 0);
-					ttGG.geometryCollection.addItem(hitMouseArea);
-				} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null)
-				{
-					createInteractiveGG(cursor.current, dataFields, xPos, yPos, NaN);
-				}
+
+				createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
 				
  				var bounds:RegularRectangle = new RegularRectangle(xPos - _plotRadius, yPos - _plotRadius, _plotRadius * 2, _plotRadius * 2);
 

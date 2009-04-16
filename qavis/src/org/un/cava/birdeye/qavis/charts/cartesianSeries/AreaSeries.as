@@ -204,19 +204,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					dataFields[2] = zField;
 				}
 
-				// if showdatatips than create a new GeometryGroup and set its 
-				// tooltip along with the hit area and events
-				if (chart.showDataTips)
-				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
-					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createTTGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3);
-					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
-					hitMouseArea.fill = new SolidFill(0x000000, 0);
-					ttGG.geometryCollection.addItem(hitMouseArea);				
-				} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null || !isNaN(zPos))
-				{
-					createInteractiveGG(cursor.current, dataFields, xPos, yPos, NaN);
-				}
+				// create a separate GeometryGroup to manage interactivity and tooltips 
+				createTTGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3);
 				
 				// create the polygon only if there is more than 1 data value
 				// there cannot be an area with only the first data value 

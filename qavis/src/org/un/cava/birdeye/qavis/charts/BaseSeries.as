@@ -136,13 +136,6 @@ package org.un.cava.birdeye.qavis.charts
 		public function set mouseDoubleClickFunction(val:Function):void
 		{
 			_mouseDoubleClickFunction = val;
-			if (val != null)
-				doubleClickEnabled = true;
-			else
-				doubleClickEnabled = false;
-				
-			// necessary to invalidate properties to register the listener
-			registerListeners();
 		}
 		public function get mouseDoubleClickFunction():Function
 		{
@@ -159,8 +152,6 @@ package org.un.cava.birdeye.qavis.charts
 		public function set mouseClickFunction(val:Function):void
 		{
 			_mouseClickFunction = val;
-			// necessary to invalidate properties to register the listener
-			registerListeners();
 		}
 		public function get mouseClickFunction():Function
 		{
@@ -253,23 +244,6 @@ package org.un.cava.birdeye.qavis.charts
 			gg.target = this;
 			graphicsCollection.addItem(gg);
 		}
-		
-		/** @Private
-		 * Register listeners for mouse events.*/
-		private function registerListeners():void
-		{
-			if (_mouseClickFunction != null && !isMouseClickListening)
-			{
-				addEventListener(MouseEvent.CLICK, onMouseClick);
-				isMouseClickListening = true;
-			}
-
-			if (_mouseDoubleClickFunction != null && !isMouseDoubleClickListening)
-			{
-				addEventListener(MouseEvent.CLICK, onMouseDoubleClick);
-				isMouseDoubleClickListening = true;
-			}
-		}
 
 		/** Remove all graphic elements of the series.*/
 		public function removeAllElements():void
@@ -286,6 +260,8 @@ package org.un.cava.birdeye.qavis.charts
 					{
 						DataItemLayout(graphicsCollection.items[i]).removeEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 						DataItemLayout(graphicsCollection.items[i]).removeEventListener(MouseEvent.ROLL_OUT, handleRollOut);
+						DataItemLayout(graphicsCollection.items[i]).removeEventListener(MouseEvent.DOUBLE_CLICK, onMouseDoubleClick);
+						DataItemLayout(graphicsCollection.items[i]).removeEventListener(MouseEvent.CLICK, onMouseClick);
 						DataItemLayout(graphicsCollection.items[i]).removeAllElements();
 					}
 				}
@@ -343,23 +319,6 @@ package org.un.cava.birdeye.qavis.charts
 			// override
 		}
 		
-		/** @Private
-		 * Create a gg ready to bring interactive information.*/ 
-		protected function createInteractiveGG(item:Object, dataFields:Array, 
-								xPos:Number, yPos:Number,	zPos:Number):void
-		{
-			gg = new DataItemLayout();
-			gg.target = this;
-			gg.createInteractiveGG(item,dataFields,xPos,yPos,zPos);
-		}
-
-		/** @Private
-		 * Add interactive information to an existing gg.*/ 
-		protected function addInteractive(items:Object, dataFields:Array):void
-		{
-			gg.addInteractive(items,dataFields);
-		}
-
 		/** Implement function to manage mouse click events.*/
 		public function onMouseClick(e:MouseEvent):void
 		{
