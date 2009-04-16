@@ -40,13 +40,14 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	
 	import org.un.cava.birdeye.qavis.charts.BaseChart;
 	import org.un.cava.birdeye.qavis.charts.axis.BaseAxisUI;
-	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.LinearAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
 	import org.un.cava.birdeye.qavis.charts.cartesianSeries.CartesianSeries;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisUI;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ICartesianSeries;
+	import org.un.cava.birdeye.qavis.charts.interfaces.IEnumerableAxis;
+	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ISeries;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IStack;
 	
@@ -502,7 +503,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				// check if a default y axis exists
 				if (yAxis)
 				{
-					if (yAxis is CategoryAxisUI)
+					if (yAxis is IEnumerableAxis)
 					{
 						for (i = 0; i<nCursors; i++)
 						{
@@ -518,10 +519,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 								while (!currentSeries.cursor.afterLast)
 								{
 									if (elements.indexOf(
-										currentSeries.cursor.current[CategoryAxisUI(yAxis).categoryField]) 
+										currentSeries.cursor.current[IEnumerableAxis(yAxis).categoryField]) 
 										== -1)
 										elements[j++] = 
-											currentSeries.cursor.current[CategoryAxisUI(yAxis).categoryField];
+											currentSeries.cursor.current[IEnumerableAxis(yAxis).categoryField];
 									currentSeries.cursor.moveNext();
 								}
 							}
@@ -533,21 +534,21 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 							while (!cursor.afterLast)
 							{
 								// if the category value already exists in the axis, than skip it
-								if (elements.indexOf(cursor.current[CategoryAxisUI(yAxis).categoryField]) == -1)
+								if (elements.indexOf(cursor.current[IEnumerableAxis(yAxis).categoryField]) == -1)
 									elements[j++] = 
-										cursor.current[CategoryAxisUI(yAxis).categoryField];
+										cursor.current[IEnumerableAxis(yAxis).categoryField];
 								cursor.moveNext();
 							}
 						}
 
 						// set the elements property of the CategoryAxis
 						if (elements.length > 0)
-							CategoryAxisUI(yAxis).elements = elements;
+							IEnumerableAxis(yAxis).elements = elements;
 					} else {
 						// if the default y axis is numeric, than calculate its min max values
 						maxMin = getMaxMinYValueFromSeriesWithoutYAxis();
-						NumericAxisUI(yAxis).max = maxMin[0];
-						NumericAxisUI(yAxis).min = maxMin[1];
+						INumerableAxis(yAxis).max = maxMin[0];
+						INumerableAxis(yAxis).min = maxMin[1];
 					}
 				} 
 				
@@ -557,7 +558,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				// check if a default y axis exists
 				if (xAxis)
 				{
-					if (xAxis is CategoryAxisUI)
+					if (xAxis is IEnumerableAxis)
 					{
 						for (i = 0; i<nCursors; i++)
 						{
@@ -573,10 +574,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 								while (!currentSeries.cursor.afterLast)
 								{
 									if (elements.indexOf(
-										currentSeries.cursor.current[CategoryAxisUI(xAxis).categoryField]) 
+										currentSeries.cursor.current[IEnumerableAxis(xAxis).categoryField]) 
 										== -1)
 										elements[j++] = 
-											currentSeries.cursor.current[CategoryAxisUI(xAxis).categoryField];
+											currentSeries.cursor.current[IEnumerableAxis(xAxis).categoryField];
 									currentSeries.cursor.moveNext();
 								}
 							}
@@ -587,21 +588,21 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 							while (!cursor.afterLast)
 							{
 								// if the category value already exists in the axis, than skip it
-								if (elements.indexOf(cursor.current[CategoryAxisUI(xAxis).categoryField]) == -1)
+								if (elements.indexOf(cursor.current[IEnumerableAxis(xAxis).categoryField]) == -1)
 									elements[j++] = 
-										cursor.current[CategoryAxisUI(xAxis).categoryField];
+										cursor.current[IEnumerableAxis(xAxis).categoryField];
 								cursor.moveNext();
 							}
 						}
 						
 						// set the elements property of the CategoryAxis
 						if (elements.length > 0)
-							CategoryAxisUI(xAxis).elements = elements;
+							IEnumerableAxis(xAxis).elements = elements;
 					} else {
 						// if the default x axis is numeric, than calculate its min max values
 						maxMin = getMaxMinXValueFromSeriesWithoutXAxis();
-						NumericAxisUI(xAxis).max = maxMin[0];
-						NumericAxisUI(xAxis).min = maxMin[1];
+						INumerableAxis(xAxis).max = maxMin[0];
+						INumerableAxis(xAxis).min = maxMin[1];
 					}
 				} 
 				
@@ -611,7 +612,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				// check if a default z axis exists
 				if (zAxis)
 				{
-					if (zAxis is CategoryAxisUI)
+					if (zAxis is IEnumerableAxis)
 					{
 						for (i = 0; i<nCursors; i++)
 						{
@@ -627,10 +628,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 								while (!currentSeries.cursor.afterLast)
 								{
 									if (elements.indexOf(
-										currentSeries.cursor.current[CategoryAxisUI(zAxis).categoryField]) 
+										currentSeries.cursor.current[IEnumerableAxis(zAxis).categoryField]) 
 										== -1)
 										elements[j++] = 
-											currentSeries.cursor.current[CategoryAxisUI(zAxis).categoryField];
+											currentSeries.cursor.current[IEnumerableAxis(zAxis).categoryField];
 									currentSeries.cursor.moveNext();
 								}
 							}
@@ -641,21 +642,21 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 							while (!cursor.afterLast)
 							{
 								// if the category value already exists in the axis, than skip it
-								if (elements.indexOf(cursor.current[CategoryAxisUI(zAxis).categoryField]) == -1)
+								if (elements.indexOf(cursor.current[IEnumerableAxis(zAxis).categoryField]) == -1)
 									elements[j++] = 
-										cursor.current[CategoryAxisUI(zAxis).categoryField];
+										cursor.current[IEnumerableAxis(zAxis).categoryField];
 								cursor.moveNext();
 							}
 						}
 						
 						// set the elements property of the CategoryAxis
 						if (elements.length > 0)
-							CategoryAxisUI(zAxis).elements = elements;
+							IEnumerableAxis(zAxis).elements = elements;
 					} else {
 						// if the default x axis is numeric, than calculate its min max values
 						maxMin = getMaxMinZValueFromSeriesWithoutZAxis();
-						NumericAxisUI(zAxis).max = maxMin[0];
-						NumericAxisUI(zAxis).min = maxMin[1];
+						INumerableAxis(zAxis).max = maxMin[0];
+						INumerableAxis(zAxis).min = maxMin[1];
 					}
 				} 
 
@@ -677,7 +678,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			var max:Number = NaN, min:Number = NaN;
 			for (var i:Number = 0; i<series.length; i++)
 			{
-				currentSeries = CartesianSeries(series[i]);
+				currentSeries = ICartesianSeries(series[i]);
 				// check if the series has its own y axis and if its max value exists and 
 				// is higher than the current max
 				if (!currentSeries.yAxis && (isNaN(max) || max < currentSeries.maxYValue))
@@ -700,7 +701,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 
 			for (var i:Number = 0; i<series.length; i++)
 			{
-				currentSeries = CartesianSeries(series[i]);
+				currentSeries = ICartesianSeries(series[i]);
 				// check if the series has its own x axis and if its max value exists and 
 				// is higher than the current max
 				if (!currentSeries.xAxis && (isNaN(max) || max < currentSeries.maxXValue))
@@ -723,7 +724,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			var max:Number = NaN, min:Number = NaN;
 			for (var i:Number = 0; i<series.length; i++)
 			{
-				currentSeries = CartesianSeries(series[i]);
+				currentSeries = ICartesianSeries(series[i]);
 				// check if the series has its own z axis and if its max value exists and 
 				// is higher than the current max
 				if (!currentSeries.zAxis && (isNaN(max) || max < currentSeries.maxZValue))
@@ -749,28 +750,28 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 
 				series.cursor.seek(CursorBookmark.FIRST);
 				
-				if (series.xAxis is CategoryAxisUI)
+				if (series.xAxis is IEnumerableAxis)
 				{
 					while (!series.cursor.afterLast)
 					{
 						// if the category value already exists in the axis, than skip it
-						if (elements.indexOf(series.cursor.current[CategoryAxisUI(series.xAxis).categoryField]) == -1)
+						if (elements.indexOf(series.cursor.current[IEnumerableAxis(series.xAxis).categoryField]) == -1)
 							elements[j++] = 
-								series.cursor.current[CategoryAxisUI(series.xAxis).categoryField];
+								series.cursor.current[IEnumerableAxis(series.xAxis).categoryField];
 						series.cursor.moveNext();
 					}
 					
 					// set the elements propery of the CategoryAxis owned by the current series
 					if (elements.length > 0)
-						CategoryAxisUI(series.xAxis).elements = elements;
+						IEnumerableAxis(series.xAxis).elements = elements;
 	
-				} else if (series.xAxis is NumericAxisUI)
+				} else if (series.xAxis is INumerableAxis)
 				{
 					// if the x axis is numeric than set its maximum and minimum values 
 					// if the max and min are not yet defined for the series, than they are calculated now
-					NumericAxisUI(series.xAxis).max =
+					INumerableAxis(series.xAxis).max =
 						series.maxXValue;
-					NumericAxisUI(series.xAxis).min =
+					INumerableAxis(series.xAxis).min =
 						series.minXValue;
 				}
 	
@@ -778,28 +779,28 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				j = 0;
 				series.cursor.seek(CursorBookmark.FIRST);
 				
-				if (series.yAxis is CategoryAxisUI)
+				if (series.yAxis is IEnumerableAxis)
 				{
 					while (!series.cursor.afterLast)
 					{
 						// if the category value already exists in the axis, than skip it
-						if (elements.indexOf(series.cursor.current[CategoryAxisUI(series.yAxis).categoryField]) == -1)
+						if (elements.indexOf(series.cursor.current[IEnumerableAxis(series.yAxis).categoryField]) == -1)
 							elements[j++] = 
-								series.cursor.current[CategoryAxisUI(series.yAxis).categoryField];
+								series.cursor.current[IEnumerableAxis(series.yAxis).categoryField];
 						series.cursor.moveNext();
 					}
 							
 					// set the elements propery of the CategoryAxis owned by the current series
 					if (elements.length > 0)
-						CategoryAxisUI(series.yAxis).elements = elements;
+						IEnumerableAxis(series.yAxis).elements = elements;
 	
-				} else if (series.yAxis is NumericAxisUI)
+				} else if (series.yAxis is INumerableAxis)
 				{
 					// if the y axis is numeric than set its maximum and minimum values 
 					// if the max and min are not yet defined for the series, than they are calculated now
-					NumericAxisUI(series.yAxis).max =
+					INumerableAxis(series.yAxis).max =
 						series.maxYValue;
-					NumericAxisUI(series.yAxis).min =
+					INumerableAxis(series.yAxis).min =
 						series.minYValue;
 				}
 	
@@ -807,28 +808,28 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				j = 0;
 				series.cursor.seek(CursorBookmark.FIRST);
 				
-				if (series.zAxis is CategoryAxisUI)
+				if (series.zAxis is IEnumerableAxis)
 				{
 					while (!series.cursor.afterLast)
 					{
 						// if the category value already exists in the axis, than skip it
-						if (elements.indexOf(series.cursor.current[CategoryAxisUI(series.zAxis).categoryField]) == -1)
+						if (elements.indexOf(series.cursor.current[IEnumerableAxis(series.zAxis).categoryField]) == -1)
 							elements[j++] = 
-								series.cursor.current[CategoryAxisUI(series.zAxis).categoryField];
+								series.cursor.current[IEnumerableAxis(series.zAxis).categoryField];
 						series.cursor.moveNext();
 					}
 							
 					// set the elements propery of the CategoryAxis owned by the current series
 					if (elements.length > 0)
-						CategoryAxisUI(series.zAxis).elements = elements;
+						IEnumerableAxis(series.zAxis).elements = elements;
 	
 				} else if (series.zAxis is NumericAxisUI)
 				{
 					// if the axis is numeric than set its maximum and minimum values 
 					// if the max and min are not yet defined for the series, than they are calculated now
-					NumericAxisUI(series.zAxis).max =
+					INumerableAxis(series.zAxis).max =
 						series.maxZValue;
-					NumericAxisUI(series.yAxis).min =
+					INumerableAxis(series.yAxis).min =
 						series.minZValue;
 				}
 			}
