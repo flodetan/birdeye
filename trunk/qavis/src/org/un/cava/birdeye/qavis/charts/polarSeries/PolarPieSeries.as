@@ -136,16 +136,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 				var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, radius, polarChart.origin);
 				var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, radius, polarChart.origin); 
 
-				if (polarChart.showDataTips)
-				{	
-					createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
-					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
-					hitMouseArea.fill = new SolidFill(0x000000, 0);
-					ttGG.geometryCollection.addItem(hitMouseArea);
-				} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null)
-				{
-					createInteractiveGG(cursor.current, dataFields, xPos, yPos, NaN);
-				}
+				createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
 				
 				stroke.weight = 1;
 

@@ -27,6 +27,9 @@
  
 package org.un.cava.birdeye.qavis.charts.cartesianSeries
 {
+	import com.degrafa.geometry.Circle;
+	import com.degrafa.paint.SolidFill;
+	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
@@ -415,12 +418,13 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		{
 			var extGG:DataItemLayout = DataItemLayout(e.target);
 
-			if (chart.customTooltTipFunction != null)
-			{
-				myTT = chart.customTooltTipFunction(extGG);
-	 			toolTip = myTT.text;
-			} else {
-				extGG.showToolTip();
+			if (chart.showDataTips) {
+				if (chart.customTooltTipFunction != null)
+				{
+					myTT = chart.customTooltTipFunction(extGG);
+		 			toolTip = myTT.text;
+				} else 
+					extGG.showToolTip();
 			}
 
 			var pos:Point = localToGlobal(new Point(extGG.posX, extGG.posY));
@@ -453,6 +457,37 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			} 
 		}
 
+		/**
+		* @private 
+		 * Destroy/hide tooltip 
+		 * 
+		*/
+		override protected function handleRollOut(e:MouseEvent):void
+		{ 
+			var extGG:DataItemLayout = 	DataItemLayout(e.target);
+			if (chart.showDataTips)
+			{
+				extGG.hideToolTip();
+				myTT = null;
+				toolTip = null;
+			}
+
+			if (yAxis)
+				yAxis.pointer.visible = false;
+			else
+				chart.yAxis.pointer.visible = false;
+
+			if (xAxis)
+				xAxis.pointer.visible = false;
+			else
+				chart.xAxis.pointer.visible = false;
+
+			if (zAxis)
+				zAxis.pointer.visible = false;
+			else if (chart.zAxis)
+				chart.zAxis.pointer.visible = false;
+		}
+
 		/** @Private
 		 * Sort the surface elements according their z position.*/ 
 		protected function zSort():void
@@ -472,34 +507,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				addChild(sortLayers[i][1]);
 		}
 
-		/**
-		* @private 
-		 * Destroy/hide tooltip 
-		 * 
-		*/
-		override protected function handleRollOut(e:MouseEvent):void
-		{ 
-			var extGG:DataItemLayout = 	DataItemLayout(e.target);
-			extGG.hideToolTip();
-			myTT = null;
-			toolTip = null;
-
-			if (yAxis)
-				yAxis.pointer.visible = false;
-			else
-				chart.yAxis.pointer.visible = false;
-
-			if (xAxis)
-				xAxis.pointer.visible = false;
-			else
-				chart.xAxis.pointer.visible = false;
-
-			if (zAxis)
-				zAxis.pointer.visible = false;
-			else if (chart.zAxis)
-				chart.zAxis.pointer.visible = false;
-		}
-
 		/** @Private
 		 * Override the creation of ttGeom in order to avoid the usage of gg also in case
 		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
@@ -509,20 +516,40 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
 		{
 			ttGG = new DataItemLayout();
-			ttGG.target = this;
+			ttGG.target = chart.seriesContainer;
+			graphicsCollection.addItem(ttGG);
+			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
+			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
+
+			var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
+			hitMouseArea.fill = new SolidFill(0x000000, 0);
+			ttGG.geometryCollection.addItem(hitMouseArea);
+
  			if (chart.showDataTips || chart.showAllDataTips)
-			{
+			{ 
 				initGGToolTip();
-				ttGG.createToolTip(cursor.current, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset);
- 			} else {
-				graphicsCollection.addItem(ttGG);
+				ttGG.create(cursor.current, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset);
+			} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null)
+			{
+				// if no tips but interactivity is required than add roll over events and pass
+				// data and positioning information about the current data item 
+				ttGG.create(cursor.current, dataFields, xPos, yPos, zPos, NaN, null, NaN, NaN, false);
+			} else {
+				// if no tips and no interactivity than just add location info needed for pointers
+				ttGG.create(null, null, xPos, yPos, zPos, NaN, null, NaN, NaN, false);
 			}
-			
+
 			if (chart.showAllDataTips)
 			{
 				ttGG.showToolTip();
 				ttGG.showToolTipGeometry();
 			}
+
+			if (mouseClickFunction != null)
+				ttGG.addEventListener(MouseEvent.CLICK, onMouseClick);
+
+			if (mouseDoubleClickFunction != null)
+				ttGG.addEventListener(MouseEvent.DOUBLE_CLICK, onMouseDoubleClick);
 		}
 		
 		/** @Private
@@ -531,22 +558,12 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		 * series, thus improving performances.*/ 
 		override protected function initGGToolTip():void
 		{
-			ttGG.target = chart.seriesContainer;
 			ttGG.toolTipFill = fill;
 			ttGG.toolTipStroke = stroke;
  			if (chart.dataTipFunction != null)
 				ttGG.dataTipFunction = chart.dataTipFunction;
 			if (chart.dataTipPrefix!= null)
 				ttGG.dataTipPrefix = chart.dataTipPrefix;
- 			graphicsCollection.addItem(ttGG);
-			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
-			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
-			
-			if (mouseClickFunction != null)
-				ttGG.addEventListener(MouseEvent.CLICK, super.onMouseClick);
-
-			if (mouseDoubleClickFunction != null)
-				ttGG.addEventListener(MouseEvent.DOUBLE_CLICK, super.onMouseDoubleClick);
 		}
 	}
 }

@@ -37,7 +37,6 @@ package org.un.cava.birdeye.qavis.charts.data
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
-	import flash.events.Event;
 	import flash.geom.Point;
 	
 	import mx.controls.ToolTip;
@@ -142,9 +141,10 @@ package org.un.cava.birdeye.qavis.charts.data
 		/**
 		* Create and position the tooltips for this ExtendedGeometryGroup. 
 		*/
-		public function createToolTip(item:Object, dataFields:Array /* of String */, 
-										posX:Number, posY:Number, posZ:Number, radius:Number, 
-										ttShapes:Array = null/* of IGeometry */, xOffSet:Number = NaN, yOffset:Number = NaN):void
+		public function create(item:Object, dataFields:Array /* of String */, 
+								posX:Number, posY:Number, posZ:Number, radius:Number, 
+								ttShapes:Array = null/* of IGeometry */, xOffSet:Number = NaN, yOffset:Number = NaN,
+								isTooltip:Boolean = true):void
 		{
 			this.posX = posX;
 			this.posY = posY;
@@ -152,62 +152,49 @@ package org.un.cava.birdeye.qavis.charts.data
 			
 			this.currentItem = item;
 			this.dataFields = dataFields;
-						// if no custom shapes than create the default one
-			if (! ttShapes)
-			{
-				shapes[0] = new Circle(posX,posY,4);
-				shapes[0].fill = new SolidFill(0xffffff);
-				shapes[0].stroke = (toolTipStroke) ? toolTipStroke : new SolidStroke(0x999999,1);
-				shapes[1] = new Circle(posX,posY,2);
-				shapes[1].fill = (toolTipFill) ? toolTipFill : new SolidFill(0xffffff,1);
-			} else 
-				shapes = ttShapes;
 			
-			// if tip function is set, use it, otherwise use a default one
-			if (_dataTipFunction != null)
-				toolTip = ((_dataTipPrefix) ? _dataTipPrefix : "") 
-							+ _dataTipFunction(item, dataFields);
-			else 
+			if (isTooltip)
 			{
-				if (_dataTipPrefix) 
-					toolTip = _dataTipPrefix;
-				for (i = 0; i<dataFields.length; i++)
-					if (dataFields[i])
-					{
-						if (! _dataTipPrefix)
+							// if no custom shapes than create the default one
+				if (! ttShapes)
+				{
+					shapes[0] = new Circle(posX,posY,4);
+					shapes[0].fill = new SolidFill(0xffffff);
+					shapes[0].stroke = (toolTipStroke) ? toolTipStroke : new SolidStroke(0x999999,1);
+					shapes[1] = new Circle(posX,posY,2);
+					shapes[1].fill = (toolTipFill) ? toolTipFill : new SolidFill(0xffffff,1);
+				} else 
+					shapes = ttShapes;
+				
+				// if tip function is set, use it, otherwise use a default one
+				if (_dataTipFunction != null)
+					toolTip = ((_dataTipPrefix) ? _dataTipPrefix : "") 
+								+ _dataTipFunction(item, dataFields);
+				else 
+				{
+					if (_dataTipPrefix) 
+						toolTip = _dataTipPrefix;
+					for (i = 0; i<dataFields.length; i++)
+						if (dataFields[i])
 						{
-							if (i==0)
-								toolTip = String(((dataFields[i]) ? item[dataFields[i]] : Number(item)));
-							else
+							if (! _dataTipPrefix)
+							{
+								if (i==0)
+									toolTip = String(((dataFields[i]) ? item[dataFields[i]] : Number(item)));
+								else
+									toolTip += "\n" + ((dataFields[i]) ? item[dataFields[i]] : Number(item)); 
+							} else 
 								toolTip += "\n" + ((dataFields[i]) ? item[dataFields[i]] : Number(item)); 
-						} else 
-							toolTip += "\n" + ((dataFields[i]) ? item[dataFields[i]] : Number(item)); 
-					}
+						}
+				}
+				
+				// hide tip geometry, they will show up only when mouse is over the hit area
+				for (var i:Number = 0; i<shapes.length; i++)
+					geometryCollection.addItem(IGeometry(shapes[i]));
+				hideToolTipGeometry();
 			}
-			
-			// hide tip geometry, they will show up only when mouse is over the hit area
-			for (var i:Number = 0; i<shapes.length; i++)
-				geometryCollection.addItem(IGeometry(shapes[i]));
-			hideToolTipGeometry();
 		} 
 		
-		public function createInteractiveGG(item:Object, dataFields:Array, 
-								xPos:Number, yPos:Number,	zPos:Number):void
-		{
-			this.posX = posX;
-			this.posY = posY;
-			this.posZ = posZ;
-			
-			this.currentItem = item;
-			this.dataFields = dataFields;
-		}
-		
-		public function addInteractive(items:Object, dataFields:Array):void
-		{
-			this.currentItem = items;
-			this.dataFields = dataFields;
-		}
-
 		/** @Private
 		 * Remove all elements from the component*/
 		public function removeAllElements():void

@@ -116,30 +116,20 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					dataFields[2] = zField;
 				}
 
-				if (chart.showDataTips)
-				{	// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
-					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createTTGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, _plotRadius);
-					var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
-					hitMouseArea.fill = new SolidFill(0x000000, 0);
-					ttGG.geometryCollection.addItem(hitMouseArea);
+				// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
+				// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
+				createTTGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, _plotRadius);
 
-					if (zField)
-					{
-						ttGG.z = zPos;
-						if (isNaN(zPos))
-							zPos = 0;
-					}
-					
-					if (! isNaN(zPos))
+				if (zField)
+				{
+					if (!isNaN(zPos))
 					{
 						gg = new DataItemLayout();
 						gg.target = this;
-						addChild(gg);
-					}
-				} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null || !isNaN(zPos))
-				{
-					createInteractiveGG(cursor.current, dataFields, xPos, yPos, zPos);
+						graphicsCollection.addItem(gg);
+						ttGG.z = gg.z = zPos;
+					} else
+						zPos = 0;
 				}
 				
  				var bounds:RegularRectangle = new RegularRectangle(xPos - _plotRadius, yPos - _plotRadius, _plotRadius * 2, _plotRadius * 2);
