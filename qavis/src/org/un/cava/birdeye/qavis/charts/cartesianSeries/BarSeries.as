@@ -36,10 +36,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 	
 	import mx.collections.CursorBookmark;
 	
-	import org.un.cava.birdeye.qavis.charts.axis.NumericAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.BarChart;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
+	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
 	import org.un.cava.birdeye.qavis.charts.renderers.RectangleRenderer;
 
 	public class BarSeries extends StackableSeries 
@@ -84,11 +84,11 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			{
 				if (xAxis)
 				{
-					if (xAxis is NumericAxisUI)
-						NumericAxisUI(xAxis).max = maxXValue;
+					if (xAxis is INumerableAxis)
+						INumerableAxis(xAxis).max = maxXValue;
 				} else {
-					if (chart && chart.xAxis && chart.xAxis is NumericAxisUI)
-						NumericAxisUI(chart.xAxis).max = maxXValue;
+					if (chart && chart.xAxis && chart.xAxis is INumerableAxis)
+						INumerableAxis(chart.xAxis).max = maxXValue;
 				}
 			}
 		}
@@ -208,7 +208,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
 					createTTGG(cursor.current, dataFields, xPos, yPos+barWidth/2, yAxisRelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
 					var hitMouseArea:Circle = new Circle(xPos, yPos+barWidth/2, 5); 
-					hitMouseArea.fill = new SolidFill(0x000000, 1);
+					hitMouseArea.fill = new SolidFill(0x000000, 0);
 					ttGG.geometryCollection.addItem(hitMouseArea);
 					if (zField)
 					{
@@ -248,19 +248,19 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		private function getXMinPosition():Number
 		{
 			var xPos:Number;
-			if (xAxis && xAxis is NumericAxisUI)
+			if (xAxis && xAxis is INumerableAxis)
 			{
 				if (_baseAtZero)
 					xPos = xAxis.getPosition(0);
 				else
-					xPos = xAxis.getPosition(NumericAxisUI(xAxis).min);
+					xPos = xAxis.getPosition(INumerableAxis(xAxis).min);
 			} else {
-				if (chart.xAxis is NumericAxisUI)
+				if (chart.xAxis is INumerableAxis)
 				{
 					if (_baseAtZero)
 						xPos = chart.xAxis.getPosition(0);
 					else
-						xPos = chart.xAxis.getPosition(NumericAxisUI(chart.xAxis).min);
+						xPos = chart.xAxis.getPosition(INumerableAxis(chart.xAxis).min);
 				}
 			}
 			return xPos;
