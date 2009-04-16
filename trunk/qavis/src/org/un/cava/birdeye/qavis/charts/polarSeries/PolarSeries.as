@@ -34,8 +34,6 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 	
 	import org.un.cava.birdeye.qavis.charts.BaseSeries;
 	import org.un.cava.birdeye.qavis.charts.axis.BaseAxisUI;
-	import org.un.cava.birdeye.qavis.charts.axis.CategoryAngleAxis;
-	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.RadarAxisUI;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxis;

@@ -27,18 +27,15 @@
  
 package org.un.cava.birdeye.qavis.charts.polarSeries
 {
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.EllipticalArc;
 	import com.degrafa.paint.SolidFill;
-	import com.degrafa.paint.SolidStroke;
 	
 	import mx.collections.CursorBookmark;
 	
-	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.PolarCoordinateTransform;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
-	import org.un.cava.birdeye.qavis.charts.renderers.ArcPath;
+	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
 	import org.un.cava.birdeye.qavis.charts.renderers.TriangleRenderer;
 
 	public class PolarColumnSeries extends PolarStackableSeries
@@ -124,14 +121,14 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 				if (radarAxis)
 				{
 					angle = radarAxis.angleAxis.getPosition(cursor.current[angleField]);
-					radius = NumericAxis(radarAxis.radiusAxes[
+					radius = INumerableAxis(radarAxis.radiusAxes[
 										cursor.current[radarAxis.angleCategory]
 										]).getPosition(cursor.current[radiusField]);
 					dataFields[0] = angleField;
 					dataFields[1] = radiusField;
 				} else if (polarChart.radarAxis) {
 					angle = polarChart.radarAxis.angleAxis.getPosition(cursor.current[angleField]);
-					radius = NumericAxis(polarChart.radarAxis.radiusAxes[
+					radius = INumerableAxis(polarChart.radarAxis.radiusAxes[
 										cursor.current[polarChart.radarAxis.angleCategory]
 										]).getPosition(cursor.current[radiusField]);
 					dataFields[0] = angleField;
