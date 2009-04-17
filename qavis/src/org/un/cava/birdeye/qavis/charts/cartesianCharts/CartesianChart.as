@@ -41,9 +41,9 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	import org.un.cava.birdeye.qavis.charts.BaseChart;
 	import org.un.cava.birdeye.qavis.charts.axis.BaseAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.LinearAxisUI;
-	import org.un.cava.birdeye.qavis.charts.axis.NumericAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
 	import org.un.cava.birdeye.qavis.charts.cartesianSeries.CartesianSeries;
+	import org.un.cava.birdeye.qavis.charts.interfaces.IAxis;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisUI;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ICartesianSeries;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IEnumerableAxis;
@@ -323,7 +323,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 						zContainer.addChild(DisplayObject(tmpZAxis));
 						
 						// this will be replaced by a depth property 
- 						XYZAxisUI(tmpZAxis).height = width; 
+ 						IAxis(tmpZAxis).size = width; 
  						// the zAxis is in reality an yAxis which is rotated of 90 degrees
  						// on its X coordinate. This will be replaced by a real z axis, when 
  						// FP will provide methods to draw real 3d lines
@@ -341,7 +341,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				_is3D = true;
 				zContainer.addChild(DisplayObject(_zAxis));
 				// this will be replaced by a depth property 
- 				XYZAxisUI(_zAxis).height = width; 
+ 				IAxis(_zAxis).size = width; 
  				// the zAxis is in reality an yAxis which is rotated of 90 degrees
  				// on its X coordinate. This will be replaced by a real z axis, when 
  				// FP will provide methods to draw real 3d lines
@@ -454,7 +454,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			for (var i:Number = 0; i<leftContainer.numChildren; i++)
 			{
 				tmpSize += XYZAxisUI(leftContainer.getChildAt(i)).maxLblSize;
-				XYZAxisUI(leftContainer.getChildAt(i)).height = leftContainer.height;
+				IAxis(leftContainer.getChildAt(i)).size = leftContainer.height;
 			}
 			
 			leftContainer.width = tmpSize;
@@ -463,7 +463,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			for (i = 0; i<rightContainer.numChildren; i++)
 			{
 				tmpSize += XYZAxisUI(rightContainer.getChildAt(i)).maxLblSize;
-				XYZAxisUI(rightContainer.getChildAt(i)).height = rightContainer.height;				
+				IAxis(rightContainer.getChildAt(i)).size = rightContainer.height;				
 			}
 			
 			rightContainer.width = tmpSize;
@@ -472,7 +472,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			for (i = 0; i<bottomContainer.numChildren; i++)
 			{
 				tmpSize += XYZAxisUI(bottomContainer.getChildAt(i)).maxLblSize;
-				XYZAxisUI(bottomContainer.getChildAt(i)).width = bottomContainer.width;
+				IAxis(bottomContainer.getChildAt(i)).size = bottomContainer.width;
 			}
 			
 			bottomContainer.height = tmpSize;
@@ -481,7 +481,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			for (i = 0; i<topContainer.numChildren; i++)
 			{
 				tmpSize += XYZAxisUI(topContainer.getChildAt(i)).maxLblSize;
-				XYZAxisUI(topContainer.getChildAt(i)).width = topContainer.width;
+				IAxis(topContainer.getChildAt(i)).size = topContainer.width;
 			}
 			
 			topContainer.height = tmpSize;
@@ -823,7 +823,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 					if (elements.length > 0)
 						IEnumerableAxis(series.zAxis).elements = elements;
 	
-				} else if (series.zAxis is NumericAxisUI)
+				} else if (series.zAxis is INumerableAxis)
 				{
 					// if the axis is numeric than set its maximum and minimum values 
 					// if the max and min are not yet defined for the series, than they are calculated now
