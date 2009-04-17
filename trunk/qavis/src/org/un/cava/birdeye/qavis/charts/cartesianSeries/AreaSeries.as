@@ -27,10 +27,8 @@
  
 package org.un.cava.birdeye.qavis.charts.cartesianSeries
 {
-	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.Polygon;
-	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	import mx.collections.CursorBookmark;
@@ -278,17 +276,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				}
 			}
 			return yPos;
-		}
-
-		/** @Private
-		 * Override the init initGGToolTip in order to avoid the usage of gg also in case
-		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
-		 * AreaSeries, thus improving performances.*/ 
-		override protected function calculateMaxY():void
-		{
-			super.calculateMaxY();
-			if (chart && chart is AreaChart && stackType == STACKED100)
-				_maxYValue = Math.max(_maxYValue, AreaChart(chart).maxStacked100);
 		}
 	}
 }

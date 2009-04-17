@@ -30,6 +30,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 	import flash.events.Event;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
+	import org.un.cava.birdeye.qavis.charts.cartesianCharts.StackableChart;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IStack;
 	
 	[Exclude(name="stackType", kind="property")] 
@@ -160,6 +161,15 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		private function update(e:Event):void
 		{
 			invalidateDisplayList();
+		}
+
+		override protected function getMaxValue(field:String):Number
+		{
+			var max:Number = super.getMaxValue(field);
+			if (chart && chart is StackableChart && stackType == STACKED100) 
+				max = Math.max(max, StackableChart(chart).maxStacked100);
+				
+			return max;
 		}
 	}
 }

@@ -178,7 +178,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		public function get maxYValue():Number
 		{
 			if (! (yAxis is IEnumerableAxis))
-				calculateMaxY();
+				_maxYValue = getMaxValue(yField);
 			return _maxYValue;
 		}
 
@@ -186,7 +186,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		public function get maxXValue():Number
 		{
 			if (! (xAxis is IEnumerableAxis))
-				calculateMaxX();
+				_maxXValue = getMaxValue(xField);
 			return _maxXValue;
 		}
 
@@ -194,7 +194,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		public function get minYValue():Number
 		{
 			if (! (yAxis is IEnumerableAxis))
-				calculateMinY();
+				_minYValue = getMinValue(yField);
 			return _minYValue;
 		}
 
@@ -202,7 +202,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		public function get minXValue():Number
 		{
 			if (! (xAxis is IEnumerableAxis))
-				calculateMinX();
+				_minXValue = getMinValue(xField);
 			return _minXValue;
 		}
 
@@ -210,7 +210,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		public function get maxZValue():Number
 		{
 			if (! (zAxis is IEnumerableAxis))
-				calculateMaxZ();
+				_maxZValue = getMaxValue(zField);
 			return _maxZValue;
 		}
 
@@ -218,7 +218,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		public function get minZValue():Number
 		{
 			if (! (zAxis is IEnumerableAxis))
-				calculateMinZ();
+				_minZValue = getMinValue(zField);
 			return _minZValue;
 		}
 
@@ -333,82 +333,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			return globalCheck && axesCheck && colorsCheck;
 		}
 
-		protected function calculateMaxY():void
-		{
-			_maxYValue = NaN;
-			_cursor.seek(CursorBookmark.FIRST);
-			while (!_cursor.afterLast && yField)
-			{
-				if (isNaN(_maxYValue) || _maxYValue < _cursor.current[yField])
-					_maxYValue = _cursor.current[yField];
-				
-				_cursor.moveNext();
-			}
-		}
-
-		protected function calculateMaxZ():void
-		{
-			_maxZValue = NaN;
-			_cursor.seek(CursorBookmark.FIRST);
-			while (!_cursor.afterLast && zField)
-			{
-				if (isNaN(_maxZValue) || _maxZValue < _cursor.current[zField])
-					_maxXValue = _cursor.current[zField];
-				_cursor.moveNext();
-			}
-		}
-
-		protected function calculateMaxX():void
-		{
-			_maxXValue = NaN;
-			_cursor.seek(CursorBookmark.FIRST);
-			while (!_cursor.afterLast && xField)
-			{
-				if (isNaN(_maxXValue) || _maxXValue < _cursor.current[xField])
-					_maxXValue = _cursor.current[xField];
-				_cursor.moveNext();
-			}
-		}
-
-		private function calculateMinY():void
-		{
-			_minYValue = NaN;
-			_cursor.seek(CursorBookmark.FIRST);
-			while (!_cursor.afterLast && yField)
-			{
-				if (isNaN(_minYValue) || _minYValue > _cursor.current[yField])
-					_minYValue = _cursor.current[yField];
-				
-				_cursor.moveNext();
-			}
-		}
-
-		private function calculateMinZ():void
-		{
-			_minZValue = NaN;
-			_cursor.seek(CursorBookmark.FIRST);
-			while (!_cursor.afterLast && zField)
-			{
-				if (isNaN(_minZValue) || _minZValue > _cursor.current[zField])
-					_minZValue = _cursor.current[zField];
-				
-				_cursor.moveNext();
-			}
-		}
-
-		private function calculateMinX():void
-		{
-			_minXValue = NaN;
-			_cursor.seek(CursorBookmark.FIRST);
-			while (!_cursor.afterLast && xField)
-			{
-				if (isNaN(_minXValue) || _minXValue > _cursor.current[xField])
-					_minXValue = _cursor.current[xField];
-				
-				_cursor.moveNext();
-			}
-		}
-		
 		/**
 		* @private 
 		 * Show and position tooltip
