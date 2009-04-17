@@ -39,7 +39,6 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.LinearAngleAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
-	import org.un.cava.birdeye.qavis.charts.axis.NumericAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.RadarAxisUI;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxis;
@@ -379,7 +378,7 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 
 						// set the elements property of the CategoryAxis
 						if (elements.length > 0)
-							CategoryAngleAxis(angleAxis).elements = elements;
+							IEnumerableAxis(angleAxis).elements = elements;
 					} else if (angleAxis is INumerableAxis){
 						
 						if (INumerableAxis(angleAxis).scaleType != BaseAxisUI.CONSTANT)
@@ -520,20 +519,20 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 
 				series.cursor.seek(CursorBookmark.FIRST);
 				
-				if (series.angleAxis is CategoryAngleAxis)
+				if (series.angleAxis is IEnumerableAxis)
 				{
 					while (!series.cursor.afterLast)
 					{
 						// if the category value already exists in the axis, than skip it
-						if (elements.indexOf(series.cursor.current[CategoryAngleAxis(series.angleAxis).categoryField]) == -1)
+						if (elements.indexOf(series.cursor.current[IEnumerableAxis(series.angleAxis).categoryField]) == -1)
 							elements[j++] = 
-								series.cursor.current[CategoryAngleAxis(series.angleAxis).categoryField];
+								series.cursor.current[IEnumerableAxis(series.angleAxis).categoryField];
 						series.cursor.moveNext();
 					}
 					
 					// set the elements propery of the CategoryAxis owned by the current series
 					if (elements.length > 0)
-						CategoryAngleAxis(series.angleAxis).elements = elements;
+						IEnumerableAxis(series.angleAxis).elements = elements;
 	
 				} else if (series.angleAxis is INumerableAxis)
 				{
@@ -547,20 +546,20 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 				j = 0;
 				series.cursor.seek(CursorBookmark.FIRST);
 				
-				if (series.radiusAxis is CategoryAxisUI)
+				if (series.radiusAxis is IEnumerableAxis)
 				{
 					while (!series.cursor.afterLast)
 					{
 						// if the category value already exists in the axis, than skip it
-						if (elements.indexOf(series.cursor.current[CategoryAxisUI(series.radiusAxis).categoryField]) == -1)
+						if (elements.indexOf(series.cursor.current[IEnumerableAxis(series.radiusAxis).categoryField]) == -1)
 							elements[j++] = 
-								series.cursor.current[CategoryAxisUI(series.radiusAxis).categoryField];
+								series.cursor.current[IEnumerableAxis(series.radiusAxis).categoryField];
 						series.cursor.moveNext();
 					}
 							
 					// set the elements propery of the CategoryAxis owned by the current series
 					if (elements.length > 0)
-						CategoryAxisUI(series.radiusAxis).elements = elements;
+						IEnumerableAxis(series.radiusAxis).elements = elements;
 	
 				} else if (series.radiusAxis is INumerableAxis)
 				{
