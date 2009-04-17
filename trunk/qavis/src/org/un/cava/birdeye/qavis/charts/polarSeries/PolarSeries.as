@@ -149,7 +149,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		public function get maxAngleValue():Number
 		{
 			if (! (_angleAxis is IEnumerableAxis))
-				calculateMaxAngle();
+				_maxAngleValue = getMaxValue(angleField);
 			return _maxAngleValue;
 		}
 
@@ -157,7 +157,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		public function get maxRadiusValue():Number
 		{
 			if (! (_radiusAxis is IEnumerableAxis))
-				calculateMaxRadius();
+				_maxRadiusValue = getMaxValue(radiusField);
 			return _maxRadiusValue;
 		}
 
@@ -165,7 +165,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		public function get minAngleValue():Number
 		{
 			if (! (_angleAxis is IEnumerableAxis))
-				calculateMinAngle();
+				_minAngleValue = getMinValue(angleField);
 			return _minAngleValue;
 		}
 
@@ -173,10 +173,17 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		public function get minRadiusValue():Number
 		{
 			if (! (_radiusAxis is IEnumerableAxis))
-				calculateMinRadius();
+				_minRadiusValue = getMinValue(radiusField);
 			return _minRadiusValue;
 		}
 
+		private var _totalAnglePositiveValue:Number = NaN;
+		public function get totalAnglePositiveValue():Number
+		{
+			_totalAnglePositiveValue = getTotalPositiveValue(angleField);
+			return _totalAnglePositiveValue;
+		}
+		
 		// UIComponent flow
 		
 		public function PolarSeries():void
@@ -196,12 +203,9 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			// managed through ttGG.
 			
 			// if showDataTips is false than it's still possible to manage 
-			// interactivity events thourgh gg, but in this case we must 
-			// remove the background to allow these interactivities, since gg is at the series
-			// level and not the chart one. if we don't remove the background, gg
-			// belonging to other series could be covered by the background and 
-			// interactivity becomes impossible
-			// therefore background is created only if showDataTips is true
+			// interactivity events thourgh ttGG but it's not necessary to 
+			// have a background for these other events
+
 			if (polarChart && polarChart.customTooltTipFunction!=null && polarChart.showDataTips && !tooltipCreationListening)
 			{
 				initCustomTip();
@@ -243,13 +247,15 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			if (angleAxis)
 			{
 				if (angleAxis is INumerableAxis)
-					axesCheck = !isNaN(INumerableAxis(angleAxis).min) || !isNaN(INumerableAxis(angleAxis).max);
+					axesCheck = !isNaN(INumerableAxis(angleAxis).min) || !isNaN(INumerableAxis(angleAxis).max)
+								|| !isNaN(INumerableAxis(angleAxis).totalPositiveValue);
 				else if (angleAxis is IEnumerableAxis)
 					axesCheck = Boolean(IEnumerableAxis(angleAxis).elements);
 			} else if (polarChart && polarChart.angleAxis)
 			{
 				if (polarChart.angleAxis is INumerableAxis)
-					axesCheck = !isNaN(INumerableAxis(polarChart.angleAxis).min) || !isNaN(INumerableAxis(polarChart.angleAxis).max);
+					axesCheck = !isNaN(INumerableAxis(polarChart.angleAxis).min) || !isNaN(INumerableAxis(polarChart.angleAxis).max)
+								|| !isNaN(INumerableAxis(polarChart.angleAxis).totalPositiveValue);
 				else if (polarChart.angleAxis is IEnumerableAxis)
 					axesCheck = Boolean(IEnumerableAxis(polarChart.angleAxis ).elements);
 			} else
@@ -287,57 +293,6 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			return globalCheck && axesCheck && colorsCheck;
 		}
 
-		protected function calculateMaxRadius():void
-		{
-			_maxRadiusValue = NaN;
-			_cursor.seek(CursorBookmark.FIRST);
-			while (!_cursor.afterLast && radiusField)
-			{
-				if (isNaN(_maxRadiusValue) || _maxRadiusValue < _cursor.current[radiusField])
-					_maxRadiusValue = _cursor.current[radiusField];
-				
-				_cursor.moveNext();
-			}
-		}
-
-		protected function calculateMaxAngle():void
-		{
-			_maxAngleValue = NaN;
-			_cursor.seek(CursorBookmark.FIRST);
-			while (!_cursor.afterLast && angleField)
-			{
-				if (isNaN(_maxAngleValue) || _maxAngleValue < _cursor.current[angleField])
-					_maxAngleValue = _cursor.current[angleField];
-				_cursor.moveNext();
-			}
-		}
-
-		private function calculateMinRadius():void
-		{
-			_minRadiusValue = NaN;
-			_cursor.seek(CursorBookmark.FIRST);
-			while (!_cursor.afterLast && radiusField)
-			{
-				if (isNaN(_minRadiusValue) || _minRadiusValue > _cursor.current[radiusField])
-					_minRadiusValue = _cursor.current[radiusField];
-				
-				_cursor.moveNext();
-			}
-		}
-
-		private function calculateMinAngle():void
-		{
-			_minAngleValue = NaN;
-			_cursor.seek(CursorBookmark.FIRST);
-			while (!_cursor.afterLast && angleField)
-			{
-				if (isNaN(_minAngleValue) || _minAngleValue > _cursor.current[angleField])
-					_minAngleValue = _cursor.current[angleField];
-				
-				_cursor.moveNext();
-			}
-		}
-		
 		override protected function handleRollOver(e:MouseEvent):void 
 		{
 			var extGG:DataItemLayout = DataItemLayout(e.target);
@@ -364,7 +319,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 				ttGG.target = polarChart;
 				graphicsCollection.addItem(ttGG);
 	
-				var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
+				var hitMouseArea:Circle = new Circle(xPos, yPos, radius); 
 				hitMouseArea.fill = new SolidFill(0x000000, 0);
 				ttGG.geometryCollection.addItem(hitMouseArea);
 	
