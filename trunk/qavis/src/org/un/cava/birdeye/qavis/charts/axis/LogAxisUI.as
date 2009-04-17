@@ -61,7 +61,6 @@
 			if (isNaN(maxLblSize) && !isNaN(min) && !isNaN(max) && placement)
 				maxLabelSize();
 
-			size = getSize();
 			if (size > 0 && !isNaN(interval))
 			{	
 				if (xMin == xMax)
@@ -121,7 +120,6 @@
 		override public function getPosition(dataValue:*):*
 		{
 			var pos:Number = NaN;
-			size = getSize();
 			var logMin:Number = (min<=1) ? 0 : Math.log(min);
 			var logMax:Number = (max<=1) ? 0 : Math.log(max);
 			var logDataValue:Number = (Number(dataValue)<=1) ? 0 : Math.log(Number(dataValue));

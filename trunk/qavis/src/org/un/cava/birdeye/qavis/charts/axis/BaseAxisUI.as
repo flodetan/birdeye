@@ -46,7 +46,9 @@ package org.un.cava.birdeye.qavis.charts.axis
 		
 		/** Scale type: Linear */
 		public static const LINEAR:String = "linear";
-		/** Scale type: Linear */
+		/** Scale type: Percent */
+		public static const PERCENT:String = "percent";
+		/** Scale type: CONSTANT */
 		public static const CONSTANT:String = "constant";
 		/** Scale type: Numeric (general numeric scale that could be used for custom numeric axes)*/
 		public static const NUMERIC:String = "linear";
@@ -57,6 +59,37 @@ package org.un.cava.birdeye.qavis.charts.axis
 		/** Scale type: DateTime */
 		public static const DATE_TIME:String = "date_time";
 		
+		protected var _size:Number;
+		public function set size(val:Number):void
+		{
+			_size = val;
+			switch (placement)
+			{
+				case HORIZONTAL_CENTER:
+				case BOTTOM:
+				case TOP:
+					width = _size;
+					break;
+				case VERTICAL_CENTER:
+				case RIGHT:
+				case LEFT:
+				case DIAGONAL:
+					height = _size;
+					break;
+			}
+			invalidateDisplayList();
+
+		}
+		/** @Private
+		 * Get the size of the axis ,i.e. either its width or height depending on the placement selected.
+		 */
+		public function get size():Number
+		{
+			if (isNaN(_size))
+				_size = getSize();
+			return _size;
+		}
+
 		protected var _function:Function;
 		/** Set the function that will be applied to calculate the getPosition of a 
 		 * data value in the axis. The function will basically define a custom 
@@ -186,6 +219,25 @@ package org.un.cava.birdeye.qavis.charts.axis
 				gg.geometry = [];
 				gg.geometryCollection.items = [];
 			}
+		}
+
+ 		protected function getSize():Number
+		{
+			switch (placement)
+			{
+				case BOTTOM:
+				case TOP:
+				case HORIZONTAL_CENTER:
+					size = width;
+					break;
+				case LEFT:
+				case RIGHT:
+				case DIAGONAL:
+				case VERTICAL_CENTER:
+					size = height;
+					break;
+			}
+			return size;
 		}
 	}
 }

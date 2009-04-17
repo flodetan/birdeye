@@ -25,59 +25,33 @@
  * THE SOFTWARE.
  */
  
- package org.un.cava.birdeye.qavis.charts.axis
+package org.un.cava.birdeye.qavis.charts.axis
 {
-	import com.degrafa.geometry.RegularRectangle;
+	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
 	
-	[Exclude(name="scaleType", kind="property")]
-	public class LinearAxisUI extends NumericAxisUI 
+	public class PercentAxis extends NumericAxis
 	{
-		/** @Private
-		 * the scaleType cannot be changed, since it's inherently "linear".*/
+		/** Set the scale type, LINEAR by default. */
 		override public function set scaleType(val:String):void
-		{}
-		 
-		// UIComponent flow
-		
-		public function LinearAxisUI()
 		{
-			super();
-			_scaleType = BaseAxisUI.LINEAR;
+			_scaleType = BaseAxisUI.PERCENT;
 		}
 		
-		override protected function commitProperties():void
+		override public function set min(val:Number):void
 		{
-			super.commitProperties();
+			_min = NaN;
 		}
-		
-		override protected function updateDisplayList(w:Number, h:Number):void
-		{
-			super.updateDisplayList(w,h);
-		}
-		
-		// other methods
 
-		/** @Private
-		 * Override the XYZAxis getPostion method based on the linear scaling.*/
+		override public function set max(val:Number):void
+		{
+			_max = NaN;
+		}
+		
 		override public function getPosition(dataValue:*):*
 		{
-			var pos:Number = NaN;
-			if (! (isNaN(max) || isNaN(min)))
-				switch (placement)
-				{
-					case BOTTOM:
-					case TOP:
-					case HORIZONTAL_CENTER:
-						pos = size * (Number(dataValue) - min)/(max - min);
-						break;
-					case LEFT:
-					case RIGHT:
-					case VERTICAL_CENTER:
-						pos = size * (1 - (Number(dataValue) - min)/(max - min));
-						break;
-				}
-				
-			return pos;
-		}
+			if (isNaN(_size))
+				size = 100;
+			return size * Number(dataValue) / _totalPositiveValue;
+		} 
 	}
 }

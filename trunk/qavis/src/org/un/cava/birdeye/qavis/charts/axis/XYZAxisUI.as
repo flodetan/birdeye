@@ -208,30 +208,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		{
 			// to be overridden
 		}
-
-		protected var size:Number;
-		/** @Private
-		 * Get the size of the axis ,i.e. either its width or height depending on the placement selected.
-		 */
-		protected function getSize():Number
-		{
-			switch (placement)
-			{
-				case BOTTOM:
-				case TOP:
-				case HORIZONTAL_CENTER:
-					size = width;
-					break;
-				case LEFT:
-				case RIGHT:
-				case DIAGONAL:
-				case VERTICAL_CENTER:
-					size = height;
-					break;
-			}
-			return size;
-		}
-	}
+ 	}
 }
 
 

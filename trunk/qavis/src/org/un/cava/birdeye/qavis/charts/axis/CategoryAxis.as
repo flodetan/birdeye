@@ -40,14 +40,14 @@
 			_function = val;
 		}
 		
-		private var _axisSize:Number;
-		public function set axisSize(val:Number):void
+		private var _size:Number;
+		public function set size(val:Number):void
 		{
-			_axisSize = val;
+			_size = val;
 		}
-		public function get axisSize():Number
+		public function get size():Number
 		{
-			return _axisSize;
+			return _size;
 		}
 		
 		/** @Private
@@ -72,8 +72,8 @@
 		public function set elements(val:Array):void
 		{
 			_elements = val;
-			if (elements && elements.length>0 && !isNaN(_axisSize))
-				interval = axisSize / elements.length;
+			if (elements && elements.length>0 && !isNaN(_size))
+				interval = size / elements.length;
 		}
 		public function get elements():Array
 		{
@@ -104,7 +104,7 @@
 				if (_function == null)
 					return _elements.indexOf(dataValue) * _interval;
 				else 
-					return  _function(dataValue, axisSize, interval);
+					return  _function(dataValue, size, interval);
 			}
 		}
 	}

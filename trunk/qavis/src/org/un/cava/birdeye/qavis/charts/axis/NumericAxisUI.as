@@ -39,11 +39,23 @@ package org.un.cava.birdeye.qavis.charts.axis
 
 	public class NumericAxisUI extends XYZAxisUI implements INumerableAxis, IAxisUI
 	{
+	
 		/** @Private
 		 * The minimum data value of the axis, after that the min is formatted 
 		 * by the formatMin methods.*/
 		private var minFormatted:Boolean = false;
 
+		protected var _totalPositiveValue:Number = NaN;
+		/** The total sum of positive values of the axis.*/
+		public function set totalPositiveValue(val:Number):void
+		{
+			_totalPositiveValue = val;
+		}
+		public function get totalPositiveValue():Number
+		{
+			return _totalPositiveValue;
+		}
+		
 		private var _min:Number = NaN;
 		/** The minimum value of the axis (if the axis is shared among more series, than
 		 * this is the minimun value among all series.*/
@@ -182,7 +194,6 @@ package org.un.cava.birdeye.qavis.charts.axis
 			if (isNaN(maxLblSize) && !isNaN(min) && !isNaN(max) && placement)
 				maxLabelSize();
 
-			size = getSize();
 			if (size > 0 && !isNaN(interval))
 			{	
 				if (xMin == xMax)
@@ -287,7 +298,6 @@ package org.un.cava.birdeye.qavis.charts.axis
 		 * This allows to define any type of scaling for a numeric axis.*/
 		override public function getPosition(dataValue:*):*
 		{
-			size = getSize();
 			return _function(dataValue, min, max, _baseAtZero, size, placement);
 		}
 	}

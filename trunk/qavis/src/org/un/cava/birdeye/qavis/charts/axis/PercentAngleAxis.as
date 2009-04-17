@@ -29,29 +29,36 @@ package org.un.cava.birdeye.qavis.charts.axis
 {
 	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
 	
-	public class LinearAngleAxis extends NumericAxis
+	public class PercentAngleAxis extends PercentAxis
 	{
 		/** Set the scale type, LINEAR by default. */
 		override public function set scaleType(val:String):void
 		{
-			_scaleType = BaseAxisUI.LINEAR;
+			_scaleType = BaseAxisUI.PERCENT;
 		}
 		
 		override public function set min(val:Number):void
 		{
-			_min = val;
+			_min = NaN;
 		}
 
 		override public function set max(val:Number):void
 		{
-			_max = val;
+			_max = NaN;
 		}
 		
+		public function PercentAngleAxis():void
+		{
+			super();
+			_scaleType = BaseAxisUI.PERCENT;
+			_size = 359.99;
+		}
+
 		override public function getPosition(dataValue:*):*
 		{
-			if (isNaN(_size))
-				size = 360;
-			return super.getPosition(dataValue);
+			if (isNaN(_size) || _size == 360)
+				size = 359.99;
+			return size * Number(dataValue) / _totalPositiveValue;
 		} 
 	}
 }
