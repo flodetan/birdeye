@@ -35,10 +35,8 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 	
 	import org.un.cava.birdeye.qavis.charts.BaseChart;
 	import org.un.cava.birdeye.qavis.charts.axis.BaseAxisUI;
-	import org.un.cava.birdeye.qavis.charts.axis.CategoryAngleAxis;
-	import org.un.cava.birdeye.qavis.charts.axis.CategoryAxisUI;
-	import org.un.cava.birdeye.qavis.charts.axis.LinearAngleAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
+	import org.un.cava.birdeye.qavis.charts.axis.PercentAngleAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.RadarAxisUI;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxis;
@@ -286,24 +284,29 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 					= Math.min(unscaledWidth, unscaledHeight)/2;
 			} 
 			
-			if (radiusAxis && radiusAxis is IAxisUI)
+			if (radiusAxis)
 			{
-				switch (IAxisUI(radiusAxis).placement)
+				if (radiusAxis is IAxis)
 				{
-					case BaseAxisUI.HORIZONTAL_CENTER:
-						DisplayObject(radiusAxis).width = DisplayObject(radiusAxis).x 
-							= Math.min(unscaledWidth, unscaledHeight)/2;
-						DisplayObject(radiusAxis).x = _origin.x;
-						DisplayObject(radiusAxis).y = _origin.y;
-						break;
-					case BaseAxisUI.VERTICAL_CENTER:
-						DisplayObject(radiusAxis).height = DisplayObject(radiusAxis).y 
-							= Math.min(unscaledWidth, unscaledHeight)/2;
-						DisplayObject(radiusAxis).x = _origin.x;
-						DisplayObject(radiusAxis).y = _origin.y;
-						break;
+					radiusAxis.size = Math.min(unscaledWidth, unscaledHeight)/2;
 				}
-			}
+				
+				if (radiusAxis is IAxisUI)
+				{
+					switch (IAxisUI(radiusAxis).placement)
+					{
+						case BaseAxisUI.HORIZONTAL_CENTER:
+							DisplayObject(radiusAxis).x = _origin.x;
+							DisplayObject(radiusAxis).y = _origin.y;
+							break;
+						case BaseAxisUI.VERTICAL_CENTER:
+							DisplayObject(radiusAxis).x = _origin.x;
+							DisplayObject(radiusAxis).y = _origin.y;
+							break;
+					}
+				}
+			} 
+			
 			for (var i:int = 0; i<_series.length; i++)
 			{
 				DisplayObject(_series[i]).width = unscaledWidth;
@@ -381,15 +384,15 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 							IEnumerableAxis(angleAxis).elements = elements;
 					} else if (angleAxis is INumerableAxis){
 						
-						if (INumerableAxis(angleAxis).scaleType != BaseAxisUI.CONSTANT)
+						if (INumerableAxis(angleAxis).scaleType != BaseAxisUI.PERCENT)
 						{
 							// if the default x axis is numeric, than calculate its min max values
 							maxMin = getMaxMinAngleValueFromSeriesWithoutAngleAxis();
+							INumerableAxis(angleAxis).max = maxMin[0];
+							INumerableAxis(angleAxis).min = maxMin[1];
 						} else {
-							maxMin = [1,1];
+							setPositiveTotalAngleValueInSeries();
 						}
-						INumerableAxis(angleAxis).max = maxMin[0];
-						INumerableAxis(angleAxis).min = maxMin[1];
 					}
 				} 
 				
@@ -447,11 +450,15 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 							maxMin = getMaxMinRadiusValueFromSeriesWithoutRadiusAxis();
 						} else {
 							maxMin = [1,1];
+							INumerableAxis(radiusAxis).size = Math.min(width, height)/2;
 						}
 						INumerableAxis(radiusAxis).max = maxMin[0];
 						INumerableAxis(radiusAxis).min = maxMin[1];
 					}
 				} 
+
+				elements = [];
+				j = 0;
 
 				// init axes of all series that have their own axes
 				// since these are children of each series, they are 
@@ -506,6 +513,21 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 			}
 					
 			return [max,min];
+		}
+
+		/** @Private
+		 * Calculate the total of positive values to set in the percent axis and set it for each series.*/
+		private function setPositiveTotalAngleValueInSeries():void
+		{
+			var tot:Number = NaN;
+			for (var i:Number = 0; i<series.length; i++)
+			{
+				currentSeries = PolarSeries(series[i]);
+				// check if the series has its own y axis and if its max value exists and 
+				// is higher than the current max
+				if (!isNaN(currentSeries.totalAnglePositiveValue))
+					INumerableAxis(angleAxis).totalPositiveValue = currentSeries.totalAnglePositiveValue;
+			}
 		}
 
 		/** @Private
@@ -577,7 +599,7 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 		 * select a specific default setup.*/
 		protected function createAngleAxis():void
 		{
-			angleAxis = new LinearAngleAxis();
+			angleAxis = new PercentAngleAxis();
 
 			// and/or to be overridden
 		}
