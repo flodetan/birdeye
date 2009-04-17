@@ -27,12 +27,8 @@
  
 package org.un.cava.birdeye.qavis.charts.polarSeries
 {
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
-	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.EllipticalArc;
-	import com.degrafa.paint.SolidFill;
-	import com.degrafa.paint.SolidStroke;
 	
 	import mx.collections.CursorBookmark;
 	
@@ -43,14 +39,29 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 	public class PolarPieSeries extends PolarStackableSeries
 	{
-		private var _innerRadius:Number = 0;
+		private var _extendMouseEvents:Boolean = false;
+		[Inspectable(enumeration="true,false")]
+		public function set extendMouseEvents(val:Boolean):void
+		{
+			_extendMouseEvents = val;
+			invalidateDisplayList();
+		}
+		
+		private var _innerRadius:Number;
 		public function set innerRadius(val:Number):void
 		{
 			_innerRadius = val;
 			invalidateDisplayList();
 		}
 
-		private var _plotRadius:Number = 5;
+		private var _weight:Number;
+		public function set weight(val:Number):void
+		{
+			_weight = val;
+			invalidateDisplayList();
+		}
+
+		private var _plotRadius:Number = 10;
 		public function set plotRadius(val:Number):void
 		{
 			_plotRadius = val;
@@ -108,10 +119,10 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 			if (radiusAxis)
 			{
-				radius = radiusAxis.getPosition(null);
+				radius = radiusAxis.size;
 				dataFields[1] = radiusField;
 			} else if (polarChart.radiusAxis) {
-				radius = polarChart.radiusAxis.getPosition(null);
+				radius = polarChart.radiusAxis.size;
 				dataFields[1] = radiusField;
 			}
 			
@@ -138,12 +149,17 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 				createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
 				
+ 				if (ttGG && _extendMouseEvents)
+					gg = ttGG;
+ 				
 				stroke.weight = 1;
 
 				var arc:IGeometry;
 				
-				if (_innerRadius>0)
-					arc = new ArcPath(Math.max(0, radius - 10), radius, startAngle, arcSize, polarChart.origin);
+				if (_innerRadius>0 && _innerRadius < radius)
+					arc = new ArcPath(Math.max(0, _innerRadius), radius, startAngle, angle, polarChart.origin);
+				else if (_weight>0 && _weight < radius)
+					arc = new ArcPath(Math.max(0, radius - _weight), radius, startAngle, angle, polarChart.origin);
 				else
 					arc = 
 						new EllipticalArc(arcCenterX, arcCenterY, wSize, hSize, startAngle, angle, "pie");
@@ -153,7 +169,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 				gg.geometryCollection.addItemAt(arc,0); 
 				
-				startAngle = angle;
+				startAngle += angle;
  				cursor.moveNext();
 			}
 		}
