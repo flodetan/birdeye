@@ -37,6 +37,10 @@
 		function set max(val:Number):void
 		function get max():Number
 
+		/** Set-get the total sum of positive values that are feeding the axis.*/
+		function set totalPositiveValue(val:Number):void
+		function get totalPositiveValue():Number
+
 		/** Set the base at zero. */
 		function set baseAtZero(val:Boolean):void
 	}
