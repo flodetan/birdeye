@@ -49,17 +49,24 @@ package org.un.cava.birdeye.qavis.charts.renderers
 			var RP1:Point = PolarCoordinateTransform.getXY(startAngle, R, center);
 			var RP2:Point = PolarCoordinateTransform.getXY(startAngle + arcAngle, R, center);
 
+var arcFlag:String = "0";
+if (arcAngle > 180)
+{
+trace (startAngle, arcAngle, center);
+trace ("\n\n");
+arcFlag = "1"
+}
 			// move to 1st inner point
 			data = "M" + String(rP1.x) + "," + String(rP1.y) + " ";
 
 			// arc to 2nd inner point with radius = r
-			data+= "A" + String(r) + "," + String(r) + " 0 0,0 " + String(rP2.x) + "," + String(rP2.y);
+			data+= "A" + String(r) + "," + String(r) + " 0 " + arcFlag + ",0 " + String(rP2.x) + "," + String(rP2.y);
 
 			// line to 2nd outer point
 			data+= "L" + String(RP2.x) + "," + String(RP2.y) + " ";
 
 			// arc to 1st outer point with radius = R and close the path
-			data+= "A" + String(R) + "," + String(R) + " 0 0,1 " + String(RP1.x) + "," + String(RP1.y) + " z";
+			data+= "A" + String(R) + "," + String(R) + " 0 " + arcFlag + ",1 " + String(RP1.x) + "," + String(RP1.y) + " z";
 			
 			super(data);
 		}
