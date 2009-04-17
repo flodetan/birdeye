@@ -57,5 +57,7 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 
 		function get maxRadiusValue():Number;
 		function get minRadiusValue():Number;
+
+		function get totalAnglePositiveValue():Number;
 	}
 }
