@@ -49,13 +49,12 @@ package org.un.cava.birdeye.qavis.charts.renderers
 			var RP1:Point = PolarCoordinateTransform.getXY(startAngle, R, center);
 			var RP2:Point = PolarCoordinateTransform.getXY(startAngle + arcAngle, R, center);
 
-var arcFlag:String = "0";
-if (arcAngle > 180)
-{
-trace (startAngle, arcAngle, center);
-trace ("\n\n");
-arcFlag = "1"
-}
+			var arcFlag:String = "0";
+			if (arcAngle >= 180)
+			{
+				arcFlag = "1"
+			}
+			
 			// move to 1st inner point
 			data = "M" + String(rP1.x) + "," + String(rP1.y) + " ";
 
