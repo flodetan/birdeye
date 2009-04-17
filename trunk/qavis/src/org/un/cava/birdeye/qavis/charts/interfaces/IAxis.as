@@ -37,6 +37,10 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 		function set interval(val:Number):void
 		function get interval():Number
 
+		/** Set-get the size of this axis.*/
+		function set size(val:Number):void
+		function get size():Number
+
 		/** Set the function used by getPosition to calculate the position of the data value over the axis.*/
 		function set f(val:Function):void
 
