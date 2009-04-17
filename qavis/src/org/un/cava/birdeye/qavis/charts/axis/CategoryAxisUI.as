@@ -85,8 +85,6 @@
 		{
 			super.commitProperties();
 			
-			size = getSize();
-			
 			// the interval is given by the axis lenght divided the number of 
 			// category elements loaded in the CategoryAxis
 			if (elements && elements.length >0)
@@ -152,8 +150,7 @@
 		{
 			if (elements && elements.length>0)
 			{
-				if (_interval != (size=getSize())/elements.length)
-					interval = size/elements.length;
+				interval = size/elements.length;
 			}
 			else 
 				_interval = NaN;
@@ -221,7 +218,6 @@
 		override public function getPosition(dataValue:*):*
 		{
 			var pos:Number = NaN;
-			size = getSize();
 			
 			switch (placement)
 			{

@@ -31,10 +31,6 @@ package org.un.cava.birdeye.qavis.charts.axis
 	
 	public class NumericAxis implements INumerableAxis
 	{
-		public function NumericAxis()
-		{
-		}
-
 		private var _function:Function;
 		/** Set the function that will be applied to calculate the getPosition of a 
 		 * data value in the axis. The function will basically define a custom 
@@ -42,6 +38,16 @@ package org.un.cava.birdeye.qavis.charts.axis
 		public function set f(val:Function):void
 		{
 			_function = val;
+		}
+		
+		protected var _totalPositiveValue:Number = NaN;
+		public function set totalPositiveValue(val:Number):void
+		{
+			_totalPositiveValue = val;
+		}
+		public function get totalPositiveValue():Number
+		{
+			return _totalPositiveValue;
 		}
 		
 		protected var _size:Number;
