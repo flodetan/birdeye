@@ -34,35 +34,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	import org.un.cava.birdeye.qavis.charts.cartesianSeries.StackableSeries;
 
 	/**
-	 * The ColumnChart is a CartesianChart that provides the type property
-	 * that can be used by the ColumnSeries to define their stackable type.
-	 * Besides it provides some further control over the ColumnSeries layout
-	 * to insure the proper stack layout, particularly for the stacked100 type.
-	 * @see CartesianChart */
-	public class ColumnChart extends CartesianChart
+	 * The ColumnChart is a StackableChart providing a vertical layout
+	 * @see StackableChart */
+	public class ColumnChart extends StackableChart
 	{
-		private var _type:String = StackableSeries.OVERLAID;
-		/** Set the type of stack, overlaid if the series are shown on top of the other, 
-		 * or stacked if they appear staked one after the other (horizontally), or 
-		 * stacked100 if the columns are stacked one after the other (vertically).*/
-		[Inspectable(enumeration="overlaid,stacked,stacked100")]
-		public function set type(val:String):void
-		{
-			_type = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		
-		private var _maxStacked100:Number = NaN;
-		/** @Private
-		 * The maximum value among all series stacked according to stacked100 type.
-		 * This is needed to "enlarge" the related axis to include all the stacked values
-		 * so that all stacked100 series fit into the chart.*/
-		public function get maxStacked100():Number
-		{
-			return _maxStacked100;
-		}
-
 		public function ColumnChart()
 		{
 			super();

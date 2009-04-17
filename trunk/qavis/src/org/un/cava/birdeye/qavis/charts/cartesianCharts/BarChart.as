@@ -41,30 +41,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	 * Besides it provides some further control over the BarSeries layout
 	 * to insure the proper stack layout, particularly for the stacked100 type.
 	 * @see CartesianChart */
-	public class BarChart extends CartesianChart
+	public class BarChart extends StackableChart
 	{
-		private var _type:String = StackableSeries.OVERLAID;
-		/** Set the type of stack, overlaid if the series are shown on top of the other, 
-		 * or stacked100 if they appear staked one after the other (horizontally), or 
-		 * stacked if the bars are stacked one after the other (vertically).*/
-		[Inspectable(enumeration="overlaid,stacked,stacked100")]
-		public function set type(val:String):void
-		{
-			_type = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		
-		private var _maxStacked100:Number = NaN;
-		/** @Private
-		 * The maximum value among all series stacked according to stacked100 type.
-		 * This is needed to "enlarge" the related axis to include all the stacked values
-		 * so that all stacked100 series fit into the chart.*/
-		public function get maxStacked100():Number
-		{
-			return _maxStacked100;
-		}
-
 		public function BarChart()
 		{
 			super();
