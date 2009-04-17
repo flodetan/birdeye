@@ -28,16 +28,15 @@
 package org.un.cava.birdeye.qavis.charts.cartesianSeries
 {
 	import com.degrafa.IGeometry;
-	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RegularRectangle;
-	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.ColumnChart;
+	import org.un.cava.birdeye.qavis.charts.cartesianCharts.StackableChart;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
 	import org.un.cava.birdeye.qavis.charts.renderers.RectangleRenderer;
@@ -268,13 +267,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				}
 			}
 			return yPos;
-		}
-		
-		override protected function calculateMaxY():void
-		{
-			super.calculateMaxY();
-			if (chart && chart is ColumnChart && stackType == STACKED100)
-				_maxYValue = Math.max(_maxYValue, ColumnChart(chart).maxStacked100);
 		}
 	}
 }

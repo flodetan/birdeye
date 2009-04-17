@@ -249,12 +249,5 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			}
 			return xPos;
 		}
-		
-		override protected function calculateMaxX():void
-		{
-			super.calculateMaxX();
-			if (chart && chart is BarChart && stackType == STACKED100) 
-				_maxXValue = Math.max(_maxXValue, BarChart(chart).maxStacked100);
-		}
 	}
 }
