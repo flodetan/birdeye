@@ -27,8 +27,6 @@
  
 package org.un.cava.birdeye.qavis.charts
 {
-	import adobe.utils.CustomActions;
-	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.RegularRectangle;
@@ -39,6 +37,7 @@ package org.un.cava.birdeye.qavis.charts
 	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
+	import mx.collections.CursorBookmark;
 	import mx.collections.ICollectionView;
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
@@ -126,7 +125,6 @@ package org.un.cava.birdeye.qavis.charts
 			return _cursor;
 		}
 
-		private var isMouseDoubleClickListening:Boolean = false;
 		private var _mouseDoubleClickFunction:Function;
 		/** Set the function that should be used when a mouse double click event is triggered.
 		 * This function must accept an DataItemLayout as input value.
@@ -142,7 +140,6 @@ package org.un.cava.birdeye.qavis.charts
 			return _mouseDoubleClickFunction;
 		}
 
-		private var isMouseClickListening:Boolean = false;
 		private var _mouseClickFunction:Function;
 		/** Set the function that should be used when a mouse click event is triggered.
 		 * This function must accept an DataItemLayout as input value.
@@ -220,7 +217,6 @@ package org.un.cava.birdeye.qavis.charts
 			return _itemRenderer;
 		}
 		
-		
 		// UIComponent flow
 		
 		public function BaseSeries()
@@ -243,6 +239,70 @@ package org.un.cava.birdeye.qavis.charts
 			gg = new DataItemLayout();
 			gg.target = this;
 			graphicsCollection.addItem(gg);
+		}
+		
+		// other methods
+		
+		private var currentValue:Number;
+		protected function getTotalPositiveValue(field:String):Number
+		{
+			var tot:Number = NaN;
+			if (cursor && field)
+			{
+				cursor.seek(CursorBookmark.FIRST);
+				while (!cursor.afterLast)
+				{
+					currentValue = cursor.current[field];
+					if (currentValue > 0)
+					{
+						if (isNaN(tot))
+							tot = currentValue;
+						else
+							tot += currentValue;
+					}
+
+					_cursor.moveNext();
+				}
+			}
+			return tot;
+		}
+
+		protected function getMinValue(field:String):Number
+		{
+			var min:Number = NaN;
+
+			if (cursor && field)
+			{
+				_cursor.seek(CursorBookmark.FIRST);
+				while (!_cursor.afterLast)
+				{
+					currentValue = _cursor.current[field];
+					if (isNaN(min) || min > currentValue)
+						min = currentValue;
+					
+					_cursor.moveNext();
+				}
+			}
+			return min;
+		}
+
+		protected function getMaxValue(field:String):Number
+		{
+			var max:Number = NaN;
+
+			if (cursor && field)
+			{
+				_cursor.seek(CursorBookmark.FIRST);
+				while (!_cursor.afterLast)
+				{
+					currentValue = _cursor.current[field];
+					if (isNaN(max) || max < currentValue)
+						max = currentValue;
+					
+					_cursor.moveNext();
+				}
+			}
+			return max;
 		}
 
 		/** Remove all graphic elements of the series.*/
@@ -270,7 +330,13 @@ package org.un.cava.birdeye.qavis.charts
 			for (i = numChildren - 1; i>=0; i--)
 			{
 				if (getChildAt(i) is DataItemLayout)
+				{
+					DataItemLayout(getChildAt(i)).removeEventListener(MouseEvent.ROLL_OVER, handleRollOver);
+					DataItemLayout(getChildAt(i)).removeEventListener(MouseEvent.ROLL_OUT, handleRollOut);
+					DataItemLayout(getChildAt(i)).removeEventListener(MouseEvent.DOUBLE_CLICK, onMouseDoubleClick);
+					DataItemLayout(getChildAt(i)).removeEventListener(MouseEvent.CLICK, onMouseClick);
 					DataItemLayout(getChildAt(i)).removeAllElements();
+				}
 				removeChildAt(i);
 			}
 			graphicsCollection.items = [];
@@ -287,8 +353,8 @@ package org.un.cava.birdeye.qavis.charts
 			toolTip = "";
 
 			// background is needed on each series to allow custom tooltip events
-			// all over the series space, mostly on those elements 
-			// that are located at the border of the series
+			// all over the series space, mostly on those data items  
+			// located at the border of the series or gg
 			ggBackGround = new GeometryGroup();
 			graphicsCollection.addItemAt(ggBackGround,0);
 			rectBackGround = new RegularRectangle(0,0,0, 0);
