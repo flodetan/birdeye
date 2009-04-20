@@ -262,8 +262,8 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			
 				IEnhancedVisualNode(vn).labelView = null;
 			
-				if (labelView != null) {
-					_canvas.removeChild(labelView);	
+				if (labelView != null && labelView.parent) {
+					labelView.parent.removeChild(labelView);	
 				}
 			}
 			
