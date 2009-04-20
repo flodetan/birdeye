@@ -180,7 +180,7 @@
 			
 			private function nodeEventHandler(event:VGNodeEvent):void
 			{
-				Alert.show("NODE EVENT: " + event.type);
+				trace("NODE EVENT: " + event.type);
 			}
 			
 			private function edgeLabelEventHandler(event:VGEdgeEvent):void
