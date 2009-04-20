@@ -2,10 +2,11 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 {
 	import flash.events.ContextMenuEvent;
 	import flash.events.MouseEvent;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	
-	import mx.controls.Label;
 	import mx.core.IDataRenderer;
 	import mx.core.IUIComponent;
 	import mx.core.UIComponent;
@@ -28,11 +29,11 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 		public var layoutOrientation:int;
 		public var fromDistance:Number = 0;
 		public var toDistance:Number = 0;
-		public var label:Label;
+		public var label:TextField;
 		private var _fromControl:UIComponent;
 		private var _toControl:UIComponent;
 		
-		public var enableLabel:Boolean = false;
+		public var enableLabel:Boolean = true;
 		
 		public function EdgeRenderer()
 		{
@@ -305,19 +306,26 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 			{
 				if (enableLabel)
 				{
-					label = new Label();
-					label.width = 20;
-					label.height = 10;
+					label = new TextField();
+					var text:String;
 					if (edgeVO is XML)
 					{
 						if (edgeVO.@edgeLabel)
-							label.text = edgeVO.@edgeLabel.toString();
+							text = edgeVO.@edgeLabel.toString();
 					}
 					else
 					{
 						if (edgeVO.edgeLabel)
-							label.text = edgeVO.edgeLabel;
+							text = edgeVO.edgeLabel;
 					}
+					
+					label.text = text;
+					//text.htmlText = "this is br<br><b>gggg</b>";
+					label.autoSize = TextFieldAutoSize.CENTER;
+					
+					/* this.width = this.label.textWidth;
+					this.height = this.label.textHeight; */
+
 					this.addChild(label);
 				}
 				
