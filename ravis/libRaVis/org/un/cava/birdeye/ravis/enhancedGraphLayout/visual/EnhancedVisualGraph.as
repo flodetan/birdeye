@@ -9,6 +9,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 	import mx.core.IDataRenderer;
 	import mx.core.IFactory;
 	import mx.core.UIComponent;
+	import mx.events.EffectEvent;
 	import mx.utils.ObjectUtil;
 	
 	import org.un.cava.birdeye.ravis.enhancedGraphLayout.event.VGEdgeEvent;
@@ -227,7 +228,27 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			
 			
 			return vnode;
-		}		
+		}
+		
+		protected override function removeComponent(component:UIComponent, honorEffect:Boolean = true):void {
+			
+			var vn:IVisualNode;
+			
+			/* if there is an effect, start the effect and register a
+			 * handler that actually calls this method again, but
+			 * with honorEffect set to false */
+			if(honorEffect && (removeItemEffect != null)) {
+				super.removeComponent(component, honorEffect);
+			} else {
+				vn = _viewToVNodeMap[component];
+				super.removeComponent(component, honorEffect);
+				var labelView:UIComponent = IEnhancedVisualNode(vn).labelView;
+				if (labelView && labelView.parent){
+					labelView.parent.removeChild(labelView);
+				}
+			}
+		}
+		
 		/**
 		 * Removes a VNode, this also removes the node's view
 		 * if it existed, but does not touch the Graph node.
@@ -1270,6 +1291,52 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			}
 
 			removeNode(vnode);
+			draw();
+			return true;
+		}
+		
+		/**
+		 * Removes a subtree from the main tree for which the root node is @node.
+		 */ 
+		public function removeSubTree(node:INode):Boolean
+		{
+			var arrTreeRoots:Array = [node];
+			var curTreeRoot:INode = arrTreeRoots.pop();
+			
+			while(curTreeRoot)
+			{
+				for each (var nextTreeRoot:INode in curTreeRoot.successors)
+					arrTreeRoots.push(nextTreeRoot)
+				removeNode(curTreeRoot.vnode);
+				
+				curTreeRoot = arrTreeRoots.pop();
+			}
+			
+			draw();
+			return true;
+		}
+		
+		/**
+		 * Removes all hierarchical children of the node referred to by parameter
+		 * @node.
+		 */ 
+		public function removeNodeChildren(node:INode):Boolean
+		{
+			var arrTreeRoots:Array = new Array();
+			for each (var nextTreeRoot:INode in node.successors)
+				arrTreeRoots.push(nextTreeRoot);
+				
+			var curTreeRoot:INode = arrTreeRoots.pop();
+			
+			while(curTreeRoot)
+			{
+				for each (var nextTreeRoot:INode in curTreeRoot.successors)
+					arrTreeRoots.push(nextTreeRoot)
+				removeNode(curTreeRoot.vnode);
+				
+				curTreeRoot = arrTreeRoots.pop();
+			}
+			
 			draw();
 			return true;
 		}

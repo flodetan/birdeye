@@ -307,7 +307,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 				if (enableLabel)
 				{
 					label = new TextField();
-					var text:String;
+					var text:String = '';
 					if (edgeVO is XML)
 					{
 						if (edgeVO.@edgeLabel)

@@ -7,6 +7,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.nodeRenderers
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	
+	import mx.controls.Alert;
 	import mx.core.Container;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
@@ -68,6 +69,14 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.nodeRenderers
 			delNode.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, deleteNodeItemClick);
 			contextMenu.customItems.push(delNode);
 			
+			var delTree:ContextMenuItem = new ContextMenuItem("Delete Sub Tree");
+			delTree.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, deleteTreeItemClick);
+			contextMenu.customItems.push(delTree);
+			
+			var delStationChildren:ContextMenuItem = new ContextMenuItem("Delete Child");
+			delStationChildren.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, deleteNodeChildrenItemClick);
+			contextMenu.customItems.push(delStationChildren);
+			
 			var delNodeAndRebindChild:ContextMenuItem = new ContextMenuItem("Delete Node and Rebind Child");
 			delNodeAndRebindChild.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, deleteNodeAndRebindChildItemClick);
 			contextMenu.customItems.push(delNodeAndRebindChild);
@@ -83,13 +92,38 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.nodeRenderers
 			EnhancedVisualGraph(IVisualNode(this.data).vgraph).addVNodeAsChild(childData.id, childData, IVisualNode(this.data).node);
 		}
 		
+		private function deleteTreeItemClick(event:ContextMenuEvent):void
+		{
+			if (IVisualNode(this.data) == IVisualNode(this.data).vgraph.currentRootVNode)
+			{
+				Alert.show("Cannot delete root node");
+				return;
+			}
+			EnhancedVisualGraph(IVisualNode(this.data).vgraph).removeSubTree(IVisualNode(this.data).node);
+		}
+		
+		private function deleteNodeChildrenItemClick(event:ContextMenuEvent):void
+		{
+			EnhancedVisualGraph(IVisualNode(this.data).vgraph).removeNodeChildren(IVisualNode(this.data).node);
+		}
+		
 		private function deleteNodeItemClick(event:ContextMenuEvent):void
 		{
+			if (IVisualNode(this.data) == IVisualNode(this.data).vgraph.currentRootVNode)
+			{
+				Alert.show("Cannot delete root node");
+				return;
+			}
 			EnhancedVisualGraph(IVisualNode(this.data).vgraph).removeNodeWithOption(IVisualNode(this.data).node, false);
 		}
 		
 		private function deleteNodeAndRebindChildItemClick(event:ContextMenuEvent):void
 		{
+			if (IVisualNode(this.data) == IVisualNode(this.data).vgraph.currentRootVNode)
+			{
+				Alert.show("Cannot delete root node");
+				return;
+			}
 			EnhancedVisualGraph(IVisualNode(this.data).vgraph).removeNodeWithOption(IVisualNode(this.data).node, true);
 		}
 		
