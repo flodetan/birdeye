@@ -147,13 +147,13 @@
 			
 			private function addEventListeners():void
 			{
-				vgraph.addEventListener(VGNodeEvent.VG_NODE_CLICK, nodeEventHandler);
+				//vgraph.addEventListener(VGNodeEvent.VG_NODE_CLICK, nodeEventHandler);
 				vgraph.addEventListener(VGNodeEvent.VG_NODE_DOUBLE_CLICK, nodeEventHandler);
 				/* vgraph.addEventListener(VGNodeEvent.VG_NODE_MOUSE_DOWN, nodeEventHandler);
 				vgraph.addEventListener(VGNodeEvent.VG_NODE_MOUSE_UP, nodeEventHandler); */
 				
 				vgraph.addEventListener(VGEdgeEvent.VG_EDGE_CLICK, edgeEventHandler);
-				vgraph.addEventListener(VGEdgeEvent.VG_EDGE_DOUBLE_CLICK, edgeEventHandler);
+				//vgraph.addEventListener(VGEdgeEvent.VG_EDGE_DOUBLE_CLICK, edgeEventHandler);
 				/* vgraph.addEventListener(VGEdgeEvent.VG_EDGE_MOUSE_DOWN, edgeEventHandler);
 				vgraph.addEventListener(VGEdgeEvent.VG_EDGE_MOUSE_UP, edgeEventHandler); */
 				
@@ -180,7 +180,11 @@
 			
 			private function nodeEventHandler(event:VGNodeEvent):void
 			{
-				trace("NODE EVENT: " + event.type);
+				if (vgraph.enableDefaultDoubleClick == false)
+				{
+					var node:INode = event.node;
+					vgraph.setVisibleNodeWithRelated(node.vnode);
+				}
 			}
 			
 			private function edgeLabelEventHandler(event:VGEdgeEvent):void
@@ -368,7 +372,7 @@
 				
 					<visual:EnhancedVisualGraph id="vgraph" width="100%" height="100%" 
 						paddingBottom="5" left="0" right="0" top="0" bottom="0"
-						backgroundColor="#FFFFFF" alpha="1"
+						backgroundColor="#FFFFFF" alpha="1" enableDefaultDoubleClick="false"
 						visibilityLimitActive="true"
 						>
 					</visual:EnhancedVisualGraph>
