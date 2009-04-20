@@ -1,7 +1,9 @@
 package org.un.cava.birdeye.ravis.enhancedGraphLayout.data
 {
 	import org.un.cava.birdeye.ravis.graphLayout.data.Graph;
+	import org.un.cava.birdeye.ravis.graphLayout.data.IEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
+	import org.un.cava.birdeye.ravis.utils.TypeUtil;
 	
 	public class EnhancedGraph extends Graph
 	{
@@ -88,5 +90,34 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.data
 			}
 		}
 		
+		public override function get xmlData():XML
+		{
+			var data:Object;
+			var tabStr:String = '';
+			var attrStr:String = TypeUtil.objectPropertyToXMLAttributeString(this);
+			var tempStr:String = '<' + 'root' + ' ' + attrStr +' >';
+			//var arrNodes:Array = nodes.reverse();
+			var arrNodes:Array = nodes;
+			for each (var node:INode in arrNodes)
+			{
+				data = node.data;
+				attrStr = TypeUtil.objectPropertyToXMLAttributeString(data);
+				tempStr += ("<" + DEFAULTNAME_NODE + " " + attrStr + "/>\n");
+			}
+			
+			//var arrEdges:Array = edges.reverse();
+			var arrEdges:Array = edges;
+			for each (var edge:IEdge in arrEdges)
+			{
+				data = edge.data;
+				attrStr = TypeUtil.objectPropertyToXMLAttributeString(data);
+				tempStr += ("<" + DEFAULTNAME_EDGE + " " + attrStr + "/>\n");
+			}
+			
+			
+			tempStr += '</' + 'root' + '>';
+			return new XML(tempStr);
+		}
+
 	}
 }

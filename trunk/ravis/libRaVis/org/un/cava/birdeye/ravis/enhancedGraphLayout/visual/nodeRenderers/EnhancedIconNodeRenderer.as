@@ -2,6 +2,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.nodeRenderers
 {
 	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
@@ -13,6 +14,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.nodeRenderers
 	import mx.utils.UIDUtil;
 	
 	import org.un.cava.birdeye.ravis.components.renderers.RendererIconFactory;
+	import org.un.cava.birdeye.ravis.enhancedGraphLayout.event.VGNodeEvent;
 	import org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.EnhancedVisualGraph;
 	import org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.INodeRenderer;
 	import org.un.cava.birdeye.ravis.graphLayout.layout.HierarchicalLayouter;
@@ -50,6 +52,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.nodeRenderers
 			}
 			this.addChild(img);
 			this.contextMenu = createContextMenu();
+			addEventListeners();
 		}
 		
 		protected function createContextMenu():ContextMenu 
@@ -88,7 +91,42 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.nodeRenderers
 		private function deleteNodeAndRebindChildItemClick(event:ContextMenuEvent):void
 		{
 			EnhancedVisualGraph(IVisualNode(this.data).vgraph).removeNodeWithOption(IVisualNode(this.data).node, true);
-		}	
+		}
+		
+		private function addEventListeners():void
+		{
+			this.addEventListener(MouseEvent.CLICK, mouseEventHandler);
+			this.addEventListener(MouseEvent.MOUSE_DOWN, mouseEventHandler);
+			this.addEventListener(MouseEvent.MOUSE_UP, mouseEventHandler);
+			this.addEventListener(MouseEvent.MOUSE_MOVE, mouseEventHandler);
+			this.addEventListener(MouseEvent.MOUSE_OVER, mouseEventHandler);
+			this.addEventListener(MouseEvent.MOUSE_OUT, mouseEventHandler);
+			this.addEventListener(MouseEvent.DOUBLE_CLICK, mouseEventHandler);
+		}
+		
+		private function removeEventListeners():void
+		{
+			this.removeEventListener(MouseEvent.CLICK, mouseEventHandler);
+			this.removeEventListener(MouseEvent.MOUSE_DOWN, mouseEventHandler);
+			this.removeEventListener(MouseEvent.MOUSE_UP, mouseEventHandler);
+			this.removeEventListener(MouseEvent.MOUSE_MOVE, mouseEventHandler);
+			this.removeEventListener(MouseEvent.MOUSE_OVER, mouseEventHandler);
+			this.removeEventListener(MouseEvent.MOUSE_OUT, mouseEventHandler);
+			this.removeEventListener(MouseEvent.DOUBLE_CLICK, mouseEventHandler);
+		}
+		
+		private function mouseEventHandler(event:MouseEvent):void
+		{
+			var vnode:IVisualNode = data as IVisualNode;
+			if ((vnode) && (vnode.vgraph))
+			{
+				var nodeEvent:VGNodeEvent = new VGNodeEvent(VGNodeEvent.VG_NODE_EVENT_PREFIX + event.type);
+				nodeEvent.originalEvent = event;
+				nodeEvent.node = vnode.node;
+				vnode.vgraph.dispatchEvent(nodeEvent);
+			}
+		}
+			
 		public function labelCoordinates(label:UIComponent):Point
 		{
 			if (this.data is IVisualNode)

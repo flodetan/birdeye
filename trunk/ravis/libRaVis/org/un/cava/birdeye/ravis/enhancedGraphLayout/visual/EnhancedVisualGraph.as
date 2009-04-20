@@ -1273,5 +1273,97 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			draw();
 			return true;
 		}
+		
+		public function setVNodeData(vn:IVisualNode, data:Object):void
+		{
+			vn.data = data;
+			vn.node.data = data;
+			
+			if (vn.view)
+			{
+				IDataRenderer(vn.view).data = vn;
+			}
+			
+			this.refresh();
+		}
+		
+		public function setVEdgeData(ve:IVisualEdge, data:Object):void
+		{
+			ve.data = data;
+			ve.edge.data = data;
+			if (ve.labelView)
+			{
+				IDataRenderer(ve.labelView).data = ve;
+			}
+			this.refresh();
+		}
+		
+		public function setVisibleNodeWithRelated(vn:IVisualNode):void
+		{
+			_layouter.resetAll();
+			
+			for each(var tmpNode:IVisualNode in _visibleVNodes) {
+				setNodeVisibility(tmpNode, false);
+			}
+			
+			for each(var e:IEdge in _graph.edges) {
+				setEdgeVisibility(e.vedge, true);
+			}
+								
+			var enode:INode = vn.node;
+					
+			var arrTreeNodes:ArrayCollection = new ArrayCollection();
+			var arrTreeRoots:Array = [enode];
+			var curTreeRoot:INode = arrTreeRoots.pop();
+			
+			while(curTreeRoot)
+			{
+				if (arrTreeNodes.contains(curTreeRoot) == false)
+				{
+					arrTreeNodes.addItem(curTreeRoot);
+				}
+				for each (var prevTreeRoot:INode in curTreeRoot.predecessors)
+				{
+					if (arrTreeRoots.indexOf(prevTreeRoot) < 0)
+						arrTreeRoots.push(prevTreeRoot);
+				}
+	
+				curTreeRoot = arrTreeRoots.pop();
+			}
+			
+			arrTreeRoots = [enode];
+			curTreeRoot = arrTreeRoots.pop();
+			
+			while(curTreeRoot)
+			{
+				if (arrTreeNodes.contains(curTreeRoot) == false)
+				{
+					arrTreeNodes.addItem(curTreeRoot);
+				}
+				
+				for each (var nextTreeRoot:INode in curTreeRoot.successors)
+				{
+					if (arrTreeRoots.indexOf(nextTreeRoot) < 0)
+						arrTreeRoots.push(nextTreeRoot);
+				}
+				curTreeRoot = arrTreeRoots.pop();
+			}
+			
+			
+			for each (var movedNode:INode in arrTreeNodes)
+			{
+				setNodeVisibility(movedNode.vnode, true);
+			}
+			
+			for each(var tmpEdge:IVisualEdge in _visibleVEdges) {
+				if (tmpEdge.edge.fromNode.vnode.isVisible == false ||
+					tmpEdge.edge.toNode.vnode.isVisible == false)
+				{
+					setEdgeVisibility(tmpEdge, false);
+				}
+			}
+			
+			this.draw();
+		}
 	}
 }
