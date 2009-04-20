@@ -1389,12 +1389,15 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				{
 					arrTreeNodes.addItem(curTreeRoot);
 				}
-				for each (var prevTreeRoot:INode in curTreeRoot.predecessors)
+				
+				if 	(curTreeRoot.vnode != currentRootVNode)
 				{
-					if (arrTreeRoots.indexOf(prevTreeRoot) < 0)
-						arrTreeRoots.push(prevTreeRoot);
+					for each (var prevTreeRoot:INode in curTreeRoot.predecessors)
+					{
+						if (arrTreeRoots.indexOf(prevTreeRoot) < 0)
+							arrTreeRoots.push(prevTreeRoot);
+					}
 				}
-	
 				curTreeRoot = arrTreeRoots.pop();
 			}
 			
