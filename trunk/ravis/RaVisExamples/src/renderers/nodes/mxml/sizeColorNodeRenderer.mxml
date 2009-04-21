@@ -9,9 +9,9 @@
 	
 	<mx:VBox verticalAlign="bottom" horizontalAlign="center" verticalGap="0" >
 	<mx:Spacer height="11" />
-	<primitive:Circle id="circle" toolTip="{this.data.data.@name}"
+	<primitive:Circle id="circle" toolTip="{XML(this.data.data).@name}"
             />
-    <mx:Text id="nodeText" text="{this.data.data.@name}" width="75" height="11" textAlign="center" fontSize="10" />
+    <mx:Text id="nodeText" text="{XML(this.data.data).@name}" width="75" height="11" textAlign="center" fontSize="10" />
 	</mx:VBox>
 	
 	<mx:Script>
