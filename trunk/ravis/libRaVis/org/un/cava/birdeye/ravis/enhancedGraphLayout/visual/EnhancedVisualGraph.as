@@ -9,7 +9,6 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 	import mx.core.IDataRenderer;
 	import mx.core.IFactory;
 	import mx.core.UIComponent;
-	import mx.events.EffectEvent;
 	import mx.utils.ObjectUtil;
 	
 	import org.un.cava.birdeye.ravis.enhancedGraphLayout.event.VGEdgeEvent;
@@ -1298,8 +1297,11 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 		/**
 		 * Removes a subtree from the main tree for which the root node is @node.
 		 */ 
-		public function removeSubTree(node:INode):Boolean
+		public function removeSubTree(node:INode, isRootNodeRemovable:Boolean = true):Boolean
 		{
+			if ((isRootNodeRemovable == false) && (node.vnode == currentRootVNode))
+				return false;
+				
 			var arrTreeRoots:Array = [node];
 			var curTreeRoot:INode = arrTreeRoots.pop();
 			
