@@ -1,5 +1,6 @@
 package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.nodeRenderers
 {
+	import flash.display.DisplayObject;
 	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -8,14 +9,17 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.nodeRenderers
 	import flash.ui.ContextMenuItem;
 	
 	import mx.controls.Alert;
+	import mx.core.Application;
 	import mx.core.Container;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
+	import mx.managers.PopUpManager;
 	import mx.utils.ObjectUtil;
 	import mx.utils.UIDUtil;
 	
 	import org.un.cava.birdeye.ravis.components.renderers.RendererIconFactory;
 	import org.un.cava.birdeye.ravis.enhancedGraphLayout.event.VGNodeEvent;
+	import org.un.cava.birdeye.ravis.enhancedGraphLayout.ui.dataProperty.NodeProperty;
 	import org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.EnhancedVisualGraph;
 	import org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.INodeRenderer;
 	import org.un.cava.birdeye.ravis.graphLayout.layout.HierarchicalLayouter;
@@ -39,27 +43,55 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.nodeRenderers
 			this.removeEventListener(FlexEvent.CREATION_COMPLETE, initComponent);
 			var img:UIComponent;
 			
-			/* add an icon as specified in the XML, this should
-			 * be checked */
 			if (this.data.data is XML)
 			{
 				img = RendererIconFactory.createIcon(this.data.data.@nodeIcon,size);
-				img.toolTip = this.data.data.@name; // needs check
+				img.toolTip = this.data.data.@desc; // needs check
 			}
 			else
 			{
 				img = RendererIconFactory.createIcon(this.data.data.nodeIcon,size - 2*this.getStyle("borderThickness"));
-				img.toolTip = this.data.data.name; // needs check
+				img.toolTip = this.data.data.desc; // needs check
 			}
 			this.addChild(img);
 			this.contextMenu = createContextMenu();
 			addEventListeners();
 		}
 		
+		public override function set data(value:Object):void
+		{
+			var vo:Object = value.data;
+			var img:UIComponent;
+			if (vo is XML)
+			{
+				img = RendererIconFactory.createIcon(vo.@nodeIcon,size);
+				img.toolTip = vo.@desc; // needs check
+				this.setStyle('backgroundColor', vo.@nodeColor);
+			}
+			else
+			{
+				img = RendererIconFactory.createIcon(vo.nodeIcon,size - 2*this.getStyle("borderThickness"));
+				img.toolTip = vo.desc; // needs check
+				this.setStyle('backgroundColor', vo.nodeColor); 
+			}
+			this.addChild(img); 
+			
+			if (this.data != value)
+			{
+				removeEventListeners();
+				addEventListeners();
+			}
+			super.data = value;
+		}
+		
 		protected function createContextMenu():ContextMenu 
 		{
 			var contextMenu:ContextMenu = new ContextMenu();
 			contextMenu.hideBuiltInItems();
+			
+			var editNode:ContextMenuItem = new ContextMenuItem("Edit Node");
+			editNode.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, editNodeItemClick);
+			contextMenu.customItems.push(editNode);
 			
 			var newChild:ContextMenuItem = new ContextMenuItem("New Child");
 			newChild.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, newChildItemClick);
@@ -84,11 +116,19 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.nodeRenderers
 			return contextMenu;	
 		}
 		
+		private function editNodeItemClick(event:ContextMenuEvent):void
+		{
+			var popUp:NodeProperty = PopUpManager.createPopUp(Application.application as DisplayObject, NodeProperty, true) as NodeProperty;
+			PopUpManager.centerPopUp(popUp);
+			popUp.data = IVisualNode(this.data).node;
+			
+		}
+		
 		private function newChildItemClick(event:ContextMenuEvent):void
 		{
 			var childData:Object = ObjectUtil.copy(IVisualNode(this.data).data);
 			childData.id = UIDUtil.createUID();
-			childData.description = 'This is new node';
+			childData.desc = 'This is new node';
 			EnhancedVisualGraph(IVisualNode(this.data).vgraph).addVNodeAsChild(childData.id, childData, IVisualNode(this.data).node);
 		}
 		

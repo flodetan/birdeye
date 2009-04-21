@@ -1,5 +1,6 @@
 package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 {
+	import flash.display.DisplayObject;
 	import flash.events.ContextMenuEvent;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
@@ -7,14 +8,17 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	
+	import mx.core.Application;
 	import mx.core.IDataRenderer;
 	import mx.core.IUIComponent;
 	import mx.core.UIComponent;
 	import mx.events.DragEvent;
 	import mx.managers.DragManager;
+	import mx.managers.PopUpManager;
 	import mx.utils.UIDUtil;
 	
 	import org.un.cava.birdeye.ravis.enhancedGraphLayout.event.VGEdgeEvent;
+	import org.un.cava.birdeye.ravis.enhancedGraphLayout.ui.dataProperty.EdgeProperty;
 	import org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.EnhancedVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.data.IEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
@@ -29,7 +33,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 		public var layoutOrientation:int;
 		public var fromDistance:Number = 0;
 		public var toDistance:Number = 0;
-		public var label:TextField;
+		public var label:TextField = new TextField();
 		private var _fromControl:UIComponent;
 		private var _toControl:UIComponent;
 		
@@ -46,10 +50,22 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 			var contextMenu:ContextMenu = new ContextMenu();
 			contextMenu.hideBuiltInItems();
 			
+			var editEdge:ContextMenuItem = new ContextMenuItem("Edit Line");
+			editEdge.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, editEdgeItemClick);
+			contextMenu.customItems.push(editEdge);
+			
 			var insertNode:ContextMenuItem = new ContextMenuItem("Insert Node");
 			insertNode.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, insertNodeItemClick);
 			contextMenu.customItems.push(insertNode);
 			return contextMenu;	
+		}
+		
+		private function editEdgeItemClick(event:ContextMenuEvent):void
+		{
+			var popUp:EdgeProperty = PopUpManager.createPopUp(Application.application as DisplayObject, EdgeProperty, true) as EdgeProperty;
+			PopUpManager.centerPopUp(popUp);
+			popUp.data = IVisualEdge(this.data).edge;
+			
 		}
 		
 		private function insertNodeItemClick(event:ContextMenuEvent):void
@@ -60,11 +76,8 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 		
 		private function addEventListeners():void
 		{
-			if (fromControl || toControl)
-			{
-				this.addEventListener(MouseEvent.MOUSE_OVER, internalMouseOverHandler);
-				this.addEventListener(MouseEvent.MOUSE_OUT, internalMouseOutHandler);
-			}
+			this.addEventListener(MouseEvent.MOUSE_OVER, internalMouseOverHandler);
+			this.addEventListener(MouseEvent.MOUSE_OUT, internalMouseOutHandler);
 			
 			this.addEventListener(MouseEvent.CLICK, mouseEventHandler);
 			this.addEventListener(MouseEvent.MOUSE_DOWN, mouseEventHandler);
@@ -119,11 +132,8 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 		
 		private function removeEventListeners():void
 		{
-			if (fromControl || toControl)
-			{
-				this.removeEventListener(MouseEvent.MOUSE_OVER, internalMouseOverHandler);
-				this.removeEventListener(MouseEvent.MOUSE_OUT, internalMouseOutHandler);
-			}
+			this.removeEventListener(MouseEvent.MOUSE_OVER, internalMouseOverHandler);
+			this.removeEventListener(MouseEvent.MOUSE_OUT, internalMouseOutHandler);
 			
 			this.removeEventListener(MouseEvent.CLICK, mouseEventHandler);
 			this.removeEventListener(MouseEvent.MOUSE_DOWN, mouseEventHandler);
@@ -290,6 +300,17 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 		protected override function createChildren():void
 		{
 			super.createChildren();
+		}
+		
+		private var _data:Object;
+		public function get data():Object
+		{
+			return _data;
+		}
+		
+		public function set data(value:Object):void
+		{
+			_data = value;
 			var edge:IEdge = (data as IVisualEdge).edge;
 			var edgeVO:Object = data.data;
 			var visible:String = String(edgeVO.visible);
@@ -306,26 +327,21 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 			{
 				if (enableLabel)
 				{
-					label = new TextField();
-					var text:String = '';
+					label.doubleClickEnabled = true;
+					var html:String = '';
 					if (edgeVO is XML)
 					{
 						if (edgeVO.@edgeLabel)
-							text = edgeVO.@edgeLabel.toString();
+							html = edgeVO.@edgeLabel.toString();
 					}
 					else
 					{
 						if (edgeVO.edgeLabel)
-							text = edgeVO.edgeLabel;
+							html = edgeVO.edgeLabel;
 					}
 					
-					label.text = text;
-					//text.htmlText = "this is br<br><b>gggg</b>";
 					label.autoSize = TextFieldAutoSize.CENTER;
-					
-					/* this.width = this.label.textWidth;
-					this.height = this.label.textHeight; */
-
+					label.text = html;
 					this.addChild(label);
 				}
 				
@@ -364,17 +380,6 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 			}
 		}
 		
-		private var _data:Object;
-		public function get data():Object
-		{
-			return _data;
-		}
-		
-		public function set data(value:Object):void
-		{
-			_data = value;
-		}
-		
 		public function get fromControl():UIComponent
 		{
 			return _fromControl;
@@ -384,6 +389,13 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 		{
 			if (fromControl)
 			{
+				fromControl.removeEventListener(MouseEvent.CLICK, fromControlMouseEventHandler);
+				fromControl.removeEventListener(MouseEvent.MOUSE_DOWN, fromControlMouseEventHandler);
+				fromControl.removeEventListener(MouseEvent.MOUSE_UP, fromControlMouseEventHandler);
+				fromControl.removeEventListener(MouseEvent.MOUSE_MOVE, fromControlMouseEventHandler);
+				fromControl.removeEventListener(MouseEvent.MOUSE_OVER, fromControlMouseEventHandler);
+				fromControl.removeEventListener(MouseEvent.MOUSE_OUT, fromControlMouseEventHandler);
+				fromControl.removeEventListener(MouseEvent.DOUBLE_CLICK, fromControlMouseEventHandler);
 				if (this.contains(fromControl))
 					this.removeChild(fromControl);
 				fromControl = null;
@@ -394,6 +406,13 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 			{
 				fromControl.visible = false;
 				this.addChild(fromControl);
+				fromControl.addEventListener(MouseEvent.CLICK, fromControlMouseEventHandler);
+				fromControl.addEventListener(MouseEvent.MOUSE_DOWN, fromControlMouseEventHandler);
+				fromControl.addEventListener(MouseEvent.MOUSE_UP, fromControlMouseEventHandler);
+				fromControl.addEventListener(MouseEvent.MOUSE_MOVE, fromControlMouseEventHandler);
+				fromControl.addEventListener(MouseEvent.MOUSE_OVER, fromControlMouseEventHandler);
+				fromControl.addEventListener(MouseEvent.MOUSE_OUT, fromControlMouseEventHandler);
+				fromControl.addEventListener(MouseEvent.DOUBLE_CLICK, fromControlMouseEventHandler);
 			}
 		}
 		
@@ -406,6 +425,13 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 		{
 			if (toControl)
 			{
+				toControl.removeEventListener(MouseEvent.CLICK, toControlMouseEventHandler);
+				toControl.removeEventListener(MouseEvent.MOUSE_DOWN, toControlMouseEventHandler);
+				toControl.removeEventListener(MouseEvent.MOUSE_UP, toControlMouseEventHandler);
+				toControl.removeEventListener(MouseEvent.MOUSE_MOVE, toControlMouseEventHandler);
+				toControl.removeEventListener(MouseEvent.MOUSE_OVER, toControlMouseEventHandler);
+				toControl.removeEventListener(MouseEvent.MOUSE_OUT, toControlMouseEventHandler);
+				toControl.removeEventListener(MouseEvent.DOUBLE_CLICK, toControlMouseEventHandler);
 				if (this.contains(toControl))
 					this.removeChild(toControl);
 				toControl = null;
@@ -416,6 +442,13 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 			{
 				toControl.visible = false;
 				this.addChild(toControl);
+				toControl.addEventListener(MouseEvent.CLICK, toControlMouseEventHandler);
+				toControl.addEventListener(MouseEvent.MOUSE_DOWN, toControlMouseEventHandler);
+				toControl.addEventListener(MouseEvent.MOUSE_UP, toControlMouseEventHandler);
+				toControl.addEventListener(MouseEvent.MOUSE_MOVE, toControlMouseEventHandler);
+				toControl.addEventListener(MouseEvent.MOUSE_OVER, toControlMouseEventHandler);
+				toControl.addEventListener(MouseEvent.MOUSE_OUT, toControlMouseEventHandler);
+				toControl.addEventListener(MouseEvent.DOUBLE_CLICK, toControlMouseEventHandler);
 			}
 		}
 	}
