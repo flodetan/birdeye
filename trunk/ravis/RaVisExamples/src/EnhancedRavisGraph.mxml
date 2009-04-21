@@ -119,7 +119,7 @@
 				layouter = new HierarchicalLayouter(vgraph);
 				HierarchicalLayouter(layouter).orientation = HierarchicalLayouter.ORIENT_TOP_DOWN;
 				vgraph.layouter = layouter;
-					
+				
 				/* set autofit */
 				layouter.autoFitEnabled = true;
 				vgraph.edgeRenderer = new EdgeDrawer(vgraph.edgeDrawGraphics);
@@ -212,7 +212,7 @@
 			<mx:ApplicationControlBar width="100%" height="85" >
 				<mx:HBox width="100%" verticalAlign="middle" paddingLeft="5" paddingRight="5" >
 					<mx:Image source="{EmbeddedIcons.ravisIcon}" />
-					<mx:Label text="BIRDEYE: Enhanced RaVis Explorer by Hung Le (letronghung@gmail.com)" color="#FFFFFF" fontSize="16" />
+					<mx:Label text="BIRDEYE: Enhanced RaVis Explorer" color="#FFFFFF" fontSize="16" />
 				</mx:HBox>
 			</mx:ApplicationControlBar>	
 			
