@@ -28,14 +28,16 @@
 package org.un.cava.birdeye.qavis.charts.polarSeries
 {
 	import com.degrafa.IGeometry;
-	import com.degrafa.geometry.EllipticalArc;
+	import com.degrafa.geometry.RasterText;
+	import com.degrafa.paint.SolidFill;
 	
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.PolarCoordinateTransform;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
+	import org.un.cava.birdeye.qavis.charts.interfaces.IAxis;
 	import org.un.cava.birdeye.qavis.charts.renderers.ArcPath;
-	import org.un.cava.birdeye.qavis.charts.renderers.TriangleRenderer;
+	import org.un.cava.birdeye.qavis.charts.renderers.CircleRenderer;
 
 	public class PolarPieSeries extends PolarStackableSeries
 	{
@@ -51,13 +53,6 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		public function set innerRadius(val:Number):void
 		{
 			_innerRadius = val;
-			invalidateDisplayList();
-		}
-
-		private var _weight:Number;
-		public function set weight(val:Number):void
-		{
-			_weight = val;
 			invalidateDisplayList();
 		}
 
@@ -87,7 +82,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 				_stackType = STACKED100;
 
 			if (! itemRenderer)
-				itemRenderer = TriangleRenderer;
+				itemRenderer = CircleRenderer;
 
 			if (isNaN(_strokeColor))
 				_strokeColor = 0x000000;
@@ -99,7 +94,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		{
 			var dataFields:Array = [];
 
-			var angle:Number, radius:Number;
+			var angle:Number, radius:Number = NaN;
 			
 			var startAngle:Number = 0; 
 			
@@ -126,6 +121,12 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 				dataFields[1] = radiusField;
 			}
 			
+			if (_total>0)
+			{
+				_innerRadius = radius/_total * _stackPosition; 
+				radius = radius/_total * (1 + _stackPosition) * polarChart.columnWidthRate;
+			}
+
 			var arcCenterX:Number = polarChart.origin.x - radius;
 			var arcCenterY:Number = polarChart.origin.y - radius;
 
@@ -156,21 +157,60 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 				var arc:IGeometry;
 				
-				if (_innerRadius>0 && _innerRadius < radius)
-					arc = new ArcPath(Math.max(0, _innerRadius), radius, startAngle, angle, polarChart.origin);
-				else if (_weight>0 && _weight < radius)
-					arc = new ArcPath(Math.max(0, radius - _weight), radius, startAngle, angle, polarChart.origin);
-				else
-					arc = 
-						new EllipticalArc(arcCenterX, arcCenterY, wSize, hSize, startAngle, angle, "pie");
+				if (_innerRadius > radius)
+					_innerRadius = radius;
+
+				arc = new ArcPath(Math.max(0, _innerRadius), radius, startAngle, angle, polarChart.origin);
 	
-				arc.fill = fill;
+				var tempColor:int;
+				
+				if (randomColors)
+				{
+					tempColor = Math.random() * 255 * 255 * 255;
+					arc.fill = new SolidFill(tempColor);
+				} else if (fill)
+				{
+					arc.fill = fill;
+				}
+
 				arc.stroke = stroke;
 
 				gg.geometryCollection.addItemAt(arc,0); 
 				
 				startAngle += angle;
+
+				if (labelField)
+				{
+					var label:RasterText = new RasterText();
+					label.text = cursor.current[labelField];
+					label.fontFamily = "verdana";
+					label.fontWeight = "bold";
+					label.fill = new SolidFill(0x000000);
+					label.x = xPos;
+					label.y = yPos;
+					gg.geometryCollection.addItem(label); 
+				}
+
  				cursor.moveNext();
+			}
+			
+			var aAxis:IAxis = null;
+			
+			if (angleAxis)
+				aAxis = angleAxis;
+			else 
+				aAxis = polarChart.angleAxis;
+				
+			if (displayName && aAxis && aAxis.size < 360)
+			{
+				label = new RasterText();
+				label.text = displayName;
+				label.fontFamily = "verdana";
+				label.fontWeight = "bold";
+				label.fill = new SolidFill(0x000000);
+				label.x = PolarCoordinateTransform.getX(0, _innerRadius, polarChart.origin);
+				label.y = PolarCoordinateTransform.getY(0, _innerRadius, polarChart.origin);
+				gg.geometryCollection.addItem(label); 
 			}
 		}
 	}
