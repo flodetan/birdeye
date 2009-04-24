@@ -127,10 +127,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				// if the series has its own x axis, than get the x coordinate
 				// position of the data value filtered by xField
 				if (xAxis)
-						xPos = xAxis.getPosition(cursor.current[xField]);
+					xPos = xAxis.getPosition(cursor.current[xField]);
 				else 
-						// otherwise use the parent chart x axis to do that
-						xPos = chart.xAxis.getPosition(cursor.current[xField]);
+					// otherwise use the parent chart x axis to do that
+					xPos = chart.xAxis.getPosition(cursor.current[xField]);
 				
 				// prepare data for a standard tooltip message in case the user
 				// has not set a dataTipFunction
