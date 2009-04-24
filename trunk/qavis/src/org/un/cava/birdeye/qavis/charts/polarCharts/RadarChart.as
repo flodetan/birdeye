@@ -163,9 +163,7 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 								
 								currentSeries.cursor.moveNext();
 							}
-						}
-						
-						if (cursor)
+						} else if (cursor)
 						{
 							cursor.seek(CursorBookmark.FIRST);
 							while (!cursor.afterLast)
@@ -178,18 +176,22 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 								for (var t:int = 0; t<series.length; t++)
 								{
 									currentSeries = PolarSeries(_series[t]);
-									if (!elementsMinMax[category])
+									if (!(currentSeries.dataProvider 
+										&& currentSeries.dataProvider != dataProvider))
 									{
-										elementsMinMax[category] = {min: int.MAX_VALUE,
-																		 max: int.MIN_VALUE};
-									} 
-									elementsMinMax[category].min = 
-										Math.min(elementsMinMax[category].min, 
-											cursor.current[currentSeries.radiusField]);
-
-									elementsMinMax[category].max = 
-										Math.max(elementsMinMax[category].max, 
-											cursor.current[currentSeries.radiusField]);
+										if (!elementsMinMax[category])
+										{
+											elementsMinMax[category] = {min: int.MAX_VALUE,
+																			 max: int.MIN_VALUE};
+										} 
+										elementsMinMax[category].min = 
+											Math.min(elementsMinMax[category].min, 
+												cursor.current[currentSeries.radiusField]);
+	
+										elementsMinMax[category].max = 
+											Math.max(elementsMinMax[category].max, 
+												cursor.current[currentSeries.radiusField]);
+									}
 								}
 								cursor.moveNext();
 							}
