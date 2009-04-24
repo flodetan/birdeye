@@ -27,15 +27,16 @@
  
 package org.un.cava.birdeye.qavis.charts.polarSeries
 {
-	import com.degrafa.geometry.Circle;
+	import com.degrafa.IGeometry;
 	import com.degrafa.geometry.EllipticalArc;
-	import com.degrafa.paint.SolidFill;
 	
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.PolarCoordinateTransform;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
+	import org.un.cava.birdeye.qavis.charts.polarCharts.CoxComb;
+	import org.un.cava.birdeye.qavis.charts.renderers.ArcPath;
 	import org.un.cava.birdeye.qavis.charts.renderers.TriangleRenderer;
 
 	public class PolarColumnSeries extends PolarStackableSeries
@@ -61,6 +62,20 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 			if (isNaN(_strokeColor))
 				_strokeColor = 0x000000;
+
+			// doesn't need to call super.commitProperties(), since it doesn't need to listen
+			// to axes interval changes 
+
+			if (stackType == STACKED100 && cursor)
+			{
+				if (radiusAxis)
+				{
+					if (radiusAxis is INumerableAxis)
+						INumerableAxis(radiusAxis).max = maxRadiusValue;
+				} else if (polarChart && polarChart.radiusAxis && polarChart.radiusAxis is INumerableAxis){
+						INumerableAxis(polarChart.radiusAxis).max = maxRadiusValue;
+				} 
+			}
 		}
 
 		/** @Private 
@@ -68,8 +83,9 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		override protected function drawSeries():void
 		{
 			var dataFields:Array = [];
+			var j:Object;
 
-			var angle:Number, radius:Number;
+			var angle:Number, radius:Number, radius0:Number;
 			
 			var arcSize:Number = NaN;
 			
@@ -89,6 +105,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 					arcSize = angleInterval/_total;
 					break;
 				case OVERLAID:
+				case STACKED100:
 					arcSize = angleInterval;
 					break;
 			}
@@ -109,12 +126,36 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 					dataFields[0] = angleField;
 				}
 				
+				j = cursor.current[angleField];
+				// if the series has its own radius axis, than get the radius coordinate
+				// position of the data value filtered by radiusField
 				if (radiusAxis)
 				{
-					radius = radiusAxis.getPosition(cursor.current[radiusField]);
+					// if the stackType is stacked100, than the radius0 coordinate of 
+					// the current baseValue is added to the radius coordinate of the current
+					// data value filtered by radiusField
+					if (_stackType == STACKED100)
+					{
+						radius0 = radiusAxis.getPosition(baseValues[j]);
+						radius = radiusAxis.getPosition(
+							baseValues[j] + Math.max(0,cursor.current[radiusField]));
+					} else 
+						// if not stacked, than the y coordinate is given by the own y axis
+						radius = radiusAxis.getPosition(cursor.current[radiusField]);
+
 					dataFields[1] = radiusField;
-				} else if (polarChart.radiusAxis) {
-					radius = polarChart.radiusAxis.getPosition(cursor.current[radiusField]);
+				} else {
+					// if no own y axis than use the parent chart y axis to achive the same
+					// as above
+					if (_stackType == STACKED100)
+					{
+						radius0 = polarChart.radiusAxis.getPosition(baseValues[j]);
+						radius = polarChart.radiusAxis.getPosition(
+							baseValues[j] + Math.max(0,cursor.current[radiusField]));
+					} else {
+						radius = polarChart.radiusAxis.getPosition(cursor.current[radiusField]);
+					}
+
 					dataFields[1] = radiusField;
 				}
 				
@@ -144,6 +185,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 						startAngle = angle - angleInterval/2 +arcSize*(_stackPosition-1);
 						break;
 					case OVERLAID:
+					case STACKED100:
 						startAngle = angle - angleInterval/2;
 						break;
 				}
@@ -155,8 +197,14 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 				createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
 				
-				var arc:EllipticalArc = 
-					new EllipticalArc(arcCenterX, arcCenterY, wSize, hSize, startAngle, arcSize, "pie");
+				var arc:IGeometry;
+				
+				if (stackType == STACKED100)
+					arc = 
+						new ArcPath(Math.max(0, radius0), radius, startAngle, arcSize, polarChart.origin);
+				else
+					arc = 
+						new EllipticalArc(arcCenterX, arcCenterY, wSize, hSize, startAngle, arcSize, "pie");
 
 				stroke.weight = 1;
 
@@ -165,6 +213,15 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 				gg.geometryCollection.addItemAt(arc,0); 
  				cursor.moveNext();
 			}
+		}
+
+		override protected function getMaxValue(field:String):Number
+		{
+			var max:Number = super.getMaxValue(field);
+			if (polarChart && polarChart is CoxComb && stackType == STACKED100) 
+				max = Math.max(max, CoxComb(polarChart).maxStacked100);
+				
+			return max;
 		}
 	}
 }
