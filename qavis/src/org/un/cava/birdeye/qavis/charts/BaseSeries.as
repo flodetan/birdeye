@@ -124,6 +124,53 @@ package org.un.cava.birdeye.qavis.charts
 		{
 			return _cursor;
 		}
+		
+		private var _labelField:String;
+		public function set labelField(val:String):void
+		{
+			_labelField = val;
+			invalidateDisplayList();
+		}
+		public function get labelField():String
+		{
+			return _labelField;
+		}
+
+		private var _randomColors:Boolean = false;
+		[Inspectable(enumeration="true,false")]
+		public function set randomColors(val:Boolean):void
+		{
+			_randomColors = val;
+			invalidateDisplayList();
+		}
+		public function get randomColors():Boolean
+		{
+			return _randomColors;
+		}
+		
+		private var _fillAlpha:Number = 1;
+		/** Set the fill alpha.*/
+		public function set fillAlpha(val:Number):void
+		{
+			_fillAlpha = val;
+			invalidateDisplayList();
+		}
+		public function get fillAlpha():Number
+		{
+			return _fillAlpha;
+		}
+		
+		private var _strokeAlpha:Number = 1;
+		/** Set the stroke alpha.*/
+		public function set strokeAlpha(val:Number):void
+		{
+			_strokeAlpha = val;
+			invalidateDisplayList();
+		}
+		public function get strokeAlpha():Number
+		{
+			return _strokeAlpha;
+		}
 
 		private var _mouseDoubleClickFunction:Function;
 		/** Set the function that should be used when a mouse double click event is triggered.
@@ -177,18 +224,6 @@ package org.un.cava.birdeye.qavis.charts
 		public function get fillColor():Number
 		{
 			return _fillColor;
-		}
-
-		protected var _fillAlpha:Number = 1;
-		/** Set the fill alpha to be used for the data items.*/
-		public function set fillAlpha(val:Number):void
-		{
-			_fillAlpha = val;
-			invalidateDisplayList();
-		}
-		public function get fillAlpha():Number
-		{
-			return _fillAlpha;
 		}
 
 		protected var _strokeColor:Number = NaN;
