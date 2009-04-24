@@ -519,6 +519,7 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 		 * Calculate the total of positive values to set in the percent axis and set it for each series.*/
 		private function setPositiveTotalAngleValueInSeries():void
 		{
+			INumerableAxis(angleAxis).totalPositiveValue = NaN;
 			var tot:Number = NaN;
 			for (var i:Number = 0; i<series.length; i++)
 			{
@@ -526,7 +527,14 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 				// check if the series has its own y axis and if its max value exists and 
 				// is higher than the current max
 				if (!isNaN(currentSeries.totalAnglePositiveValue))
-					INumerableAxis(angleAxis).totalPositiveValue = currentSeries.totalAnglePositiveValue;
+				{
+					if (isNaN(INumerableAxis(angleAxis).totalPositiveValue))
+						INumerableAxis(angleAxis).totalPositiveValue = currentSeries.totalAnglePositiveValue;
+					else
+						INumerableAxis(angleAxis).totalPositiveValue = 
+							Math.max(INumerableAxis(angleAxis).totalPositiveValue, 
+									currentSeries.totalAnglePositiveValue);
+				}
 			}
 		}
 
@@ -558,10 +566,19 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 	
 				} else if (series.angleAxis is INumerableAxis)
 				{
-					INumerableAxis(series.angleAxis).max =
-						series.maxAngleValue;
-					INumerableAxis(series.angleAxis).min =
-						series.minAngleValue;
+					if (INumerableAxis(series.angleAxis).scaleType != BaseAxisUI.PERCENT)
+					{
+						// if the series angle axis is just numeric, than calculate get its min max data values
+						INumerableAxis(series.angleAxis).max =
+							series.maxAngleValue;
+						INumerableAxis(series.angleAxis).min =
+							series.minAngleValue;
+					} else {
+						// if the series angle axis is percent numeric, than get the sum
+						// of total positive data values from the series
+						if (!isNaN(series.totalAnglePositiveValue))
+							INumerableAxis(series.angleAxis).totalPositiveValue = series.totalAnglePositiveValue;
+					}
 				}
 	
 				elements = [];
