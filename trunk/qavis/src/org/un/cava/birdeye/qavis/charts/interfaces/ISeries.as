@@ -48,6 +48,14 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 		function set strokeColor(val:Number):void;
 		function get strokeColor():Number;
 
+		/** Set the fill alpha.*/
+		function set fillAlpha(val:Number):void;
+		function get fillAlpha():Number;
+
+		/** Set the stroke alpha.*/
+		function set strokeAlpha(val:Number):void;
+		function get strokeAlpha():Number;
+
 		/** Set the itemRenderer used for the layout of data values.*/
 		function set itemRenderer(val:Class):void;
 		function get itemRenderer():Class;
