@@ -54,16 +54,17 @@ package org.un.cava.birdeye.qavis.charts.axis
 			invalidateDisplayList();
 		}
 
-		private var _showTicks:Boolean = true;
-		/** Show ticks on the axis */
+		private var _showLabels:Boolean = true;
+		/** Show labels on the axis */
 		[Inspectable(enumeration="false,true")]
-		public function set showTicks(val:Boolean):void
+		public function set showLabels(val:Boolean):void
 		{
-			_showTicks = val;
+			_showLabels = val;
+			invalidateDisplayList();
 		}
-		public function get showTicks():Boolean
+		public function get showLabels():Boolean
 		{
-			return _showTicks;
+			return _showLabels;
 		}
 		
 		public var maxLblSize:Number = NaN;
