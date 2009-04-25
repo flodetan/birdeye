@@ -239,7 +239,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		
 		private function isReadyForLayout():Boolean
 		{
-			// verify than all series axes (or chart's if none owned by the series)
+			// verify that all series axes (or chart's if none owned by the series)
 			// are ready. If they aren't the series can't be drawn, since data values
 			// cannot be positioned yet in the axis.
 			var axesCheck:Boolean = true;
