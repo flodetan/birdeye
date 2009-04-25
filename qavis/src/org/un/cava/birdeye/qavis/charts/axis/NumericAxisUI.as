@@ -194,7 +194,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 			if (isNaN(maxLblSize) && !isNaN(min) && !isNaN(max) && placement)
 				maxLabelSize();
 
-			if (size > 0 && !isNaN(interval))
+			if (size > 0 && !isNaN(interval) && showLabels)
 			{	
 				if (xMin == xMax)
 				{
