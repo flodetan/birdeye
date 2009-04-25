@@ -27,8 +27,6 @@
  
 package org.un.cava.birdeye.qavis.charts.cartesianCharts
 {	
-	import com.degrafa.Surface;
-	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
@@ -40,6 +38,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	
 	import org.un.cava.birdeye.qavis.charts.BaseChart;
 	import org.un.cava.birdeye.qavis.charts.axis.BaseAxisUI;
+	import org.un.cava.birdeye.qavis.charts.axis.ConstantAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.LinearAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
 	import org.un.cava.birdeye.qavis.charts.cartesianSeries.CartesianSeries;
@@ -199,12 +198,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			return _zAxis;
 		}
 
-		private var _seriesContainer:Surface = new Surface();
-		public function get seriesContainer():Surface
-		{
-			return _seriesContainer;
-		}
-
 		// UIComponent flow
 
 		public function CartesianChart() 
@@ -352,7 +345,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			
 			// if some series have no own y axis, than create a default one for the chart
 			// that will be used by all series without a y axis
-			if (needDefaultYAxis)
+ 			if (needDefaultYAxis)
 			{
 				if (!_yAxis)
 					createYAxis();
@@ -362,7 +355,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				else
 					leftContainer.addChild(DisplayObject(_yAxis));
 			}
-			// if some series have no own x axis, than create a default one for the chart
+ 			// if some series have no own x axis, than create a default one for the chart
 			// that will be used by all series without a x axis
 			if (needDefaultXAxis)
 			{
@@ -838,16 +831,21 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		/** @Private
 		 * The creation of default axes can be overrided so that it's possible to 
 		 * select a specific default setup. For example, for the bar chart the default 
-		 * y axis is a category axis and the x one is linear.*/
+		 * y axis is a category axis and the x one is linear.
+		 * However if CartesianChart is used to build the chart, than a constant axis is used, 
+		 * since the user might want to have a single axis only for the chart. 
+		 * In this case the constant axis, returning a constant value for any input data,
+		 * allows to have all shapes (plots, scatters, etc) aligned on the other remaining 
+		 * axis's positions. */
 		protected function createYAxis():void
 		{
-				yAxis = new LinearAxisUI();
+				yAxis = new ConstantAxisUI();
 				yAxis.placement = BaseAxisUI.LEFT;
 		}
 		/** @Private */
 		protected function createXAxis():void
 		{
-			xAxis = new LinearAxisUI();
+			xAxis = new ConstantAxisUI();
 			xAxis.placement = BaseAxisUI.BOTTOM;
 		}
 
