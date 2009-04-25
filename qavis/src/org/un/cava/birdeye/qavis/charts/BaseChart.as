@@ -67,7 +67,13 @@
 		}
 		
 		protected var chartBounds:Rectangle;
-		
+
+		protected var _seriesContainer:Surface = new Surface();
+		public function get seriesContainer():Surface
+		{
+			return _seriesContainer;
+		}
+
 		protected var _lineColor:Number = NaN;
 		public function set lineColor(val:Number):void
 		{
