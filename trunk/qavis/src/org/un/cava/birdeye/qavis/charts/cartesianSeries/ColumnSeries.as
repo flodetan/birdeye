@@ -98,6 +98,12 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		override protected function drawSeries():void
 		{
 			var dataFields:Array = [];
+			// prepare data for a standard tooltip message in case the user
+			// has not set a dataTipFunction
+			dataFields[0] = xField;
+			dataFields[1] = yField;
+			if (zField) 
+				dataFields[2] = zField;
 
 			var xPos:Number, yPos:Number, zPos:Number = NaN;
 			var j:Object;
@@ -120,14 +126,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				{
 					xPos = xAxis.getPosition(cursor.current[xField]);
 
-					dataFields[0] = xField;
-
 					if (isNaN(size))
 						size = xAxis.interval*deltaSize;
-				} else {
+				} else if (chart.xAxis) {
 					xPos = chart.xAxis.getPosition(cursor.current[xField]);
-
-					dataFields[0] = xField;
 
 					if (isNaN(size))
 						size = chart.xAxis.interval*deltaSize;
@@ -145,9 +147,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					} else {
 						yPos = yAxis.getPosition(cursor.current[yField]);
 					}
-					dataFields[1] = yField;
-				}
-				else {
+				} else if (chart.yAxis) {
 					if (_stackType == STACKED100)
 					{
 						y0 = chart.yAxis.getPosition(baseValues[j]);
@@ -155,8 +155,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 							baseValues[j] + Math.max(0,cursor.current[yField]));
 					} else 
 						yPos = chart.yAxis.getPosition(cursor.current[yField]);
-
-					dataFields[1] = yField;
 				}
 				
 				switch (_stackType)
@@ -188,7 +186,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				{
 					zPos = zAxis.getPosition(cursor.current[zField]);
 					yAxisRelativeValue = XYZAxisUI(zAxis).height - zPos;
-					dataFields[2] = zField;
 				} else if (chart.zAxis) {
 					zPos = chart.zAxis.getPosition(cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 
@@ -199,7 +196,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					// if it would be a z. when there will be a 3d line class, it will 
 					// be replaced
 					yAxisRelativeValue = XYZAxisUI(chart.zAxis).height - zPos;
-					dataFields[2] = zField;
 				}
 
  				var bounds:RegularRectangle = new RegularRectangle(xPos, yPos, colWidth, y0 - yPos);

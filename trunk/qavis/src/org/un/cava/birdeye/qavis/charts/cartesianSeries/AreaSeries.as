@@ -109,6 +109,12 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			var y0:Number = getYMinPosition();
 			var y0Prev:Number;
 			var dataFields:Array = [];
+			// prepare data for a standard tooltip message in case the user
+			// has not set a dataTipFunction
+			dataFields[0] = xField;
+			dataFields[1] = yField;
+			if (zField) 
+				dataFields[2] = zField;
 
 			// shapes array defining the tooltip geometries
 			var ttShapes:Array;
@@ -128,13 +134,9 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				// position of the data value filtered by xField
 				if (xAxis)
 					xPos = xAxis.getPosition(cursor.current[xField]);
-				else 
+				else if (chart.xAxis) 
 					// otherwise use the parent chart x axis to do that
 					xPos = chart.xAxis.getPosition(cursor.current[xField]);
-				
-				// prepare data for a standard tooltip message in case the user
-				// has not set a dataTipFunction
-				dataFields[0] = xField;
 				
 				j = cursor.current[xField];
 				// if the series has its own y axis, than get the y coordinate
@@ -152,9 +154,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					} else 
 						// if not stacked, than the y coordinate is given by the own y axis
 						yPos = yAxis.getPosition(cursor.current[yField]);
-
-					dataFields[1] = yField;
-				} else {
+				} else if (chart.yAxis) {
 					// if no own y axis than use the parent chart y axis to achive the same
 					// as above
 					if (_stackType == STACKED100)
@@ -165,8 +165,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					} else {
 						yPos = chart.yAxis.getPosition(cursor.current[yField]);
 					}
-
-					dataFields[1] = yField;
 				}
 				
 				// if stacked 100 than change the default tooltip shape to a line
@@ -181,14 +179,12 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		 				ttShapes[0] = line;
 				}
 				
-
 				var yAxisRelativeValue:Number = NaN;
 
 				if (zAxis)
 				{
 					zPos = zAxis.getPosition(cursor.current[zField]);
 					yAxisRelativeValue = XYZAxisUI(zAxis).height - zPos;
-					dataFields[2] = zField;
 				} else if (chart.zAxis) {
 					zPos = chart.zAxis.getPosition(cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 
@@ -199,7 +195,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					// if it would be a z. when there will be a 3d line class, it will 
 					// be replaced
 					yAxisRelativeValue = XYZAxisUI(chart.zAxis).height - zPos;
-					dataFields[2] = zField;
 				}
 
 				// create a separate GeometryGroup to manage interactivity and tooltips 
