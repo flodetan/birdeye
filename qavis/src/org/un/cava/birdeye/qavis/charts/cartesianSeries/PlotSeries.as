@@ -65,6 +65,12 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		override protected function drawSeries():void
 		{
 			var dataFields:Array = [];
+			// prepare data for a standard tooltip message in case the user
+			// has not set a dataTipFunction
+			dataFields[0] = xField;
+			dataFields[1] = yField;
+			if (zField) 
+				dataFields[2] = zField;
 
 			var xPos:Number, yPos:Number, zPos:Number = NaN;
 			
@@ -81,19 +87,15 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				if (xAxis)
 				{
 					xPos = xAxis.getPosition(cursor.current[xField]);
-					dataFields[0] = xField;
-				} else {
+				} else if (chart.xAxis) {
 					xPos = chart.xAxis.getPosition(cursor.current[xField]);
-					dataFields[0] = xField;
 				}
 				
 				if (yAxis)
 				{
 					yPos = yAxis.getPosition(cursor.current[yField]);
-					dataFields[1] = yField;
-				} else {
+				} else if (chart.yAxis) {
 					yPos = chart.yAxis.getPosition(cursor.current[yField]);
-					dataFields[1] = yField;
 				}
 
 				var yAxisRelativeValue:Number = NaN;
@@ -102,7 +104,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				{
 					zPos = zAxis.getPosition(cursor.current[zField]);
 					yAxisRelativeValue = XYZAxisUI(zAxis).height - zPos;
-					dataFields[2] = zField;
 				} else if (chart.zAxis) {
 					zPos = chart.zAxis.getPosition(cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 
@@ -113,7 +114,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					// if it would be a z. when there will be a 3d line class, it will 
 					// be replaced
 					yAxisRelativeValue = XYZAxisUI(chart.zAxis).height - zPos;
-					dataFields[2] = zField;
 				}
 
 				// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly

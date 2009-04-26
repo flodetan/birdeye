@@ -97,6 +97,12 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		override protected function drawSeries():void
 		{
 			var dataFields:Array = [];
+			// prepare data for a standard tooltip message in case the user
+			// has not set a dataTipFunction
+			dataFields[0] = yField;
+			dataFields[1] = xField;
+			if (zField) 
+				dataFields[2] = zField;
 
 			var xPos:Number, yPos:Number, zPos:Number = NaN;
 			var j:Object;
@@ -119,14 +125,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				{
 					yPos = yAxis.getPosition(cursor.current[yField]);
 
-					dataFields[0] = yField;
-
 					if (isNaN(size))
  						size = yAxis.interval*deltaSize;
-				} else {
+				} else if (chart.yAxis) {
 					yPos = chart.yAxis.getPosition(cursor.current[yField]);
-
-					dataFields[0] = yField;
 
 					if (isNaN(size))
 						size = chart.yAxis.interval*deltaSize;
@@ -144,8 +146,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 						xPos = xAxis.getPosition(cursor.current[xField]);
 					}
 					dataFields[1] = xField;
-				}
-				else {
+				} else if (chart.xAxis) {
 					if (_stackType == STACKED100)
 					{
 						x0 = chart.xAxis.getPosition(baseValues[j]);
@@ -153,8 +154,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 							baseValues[j] + Math.max(0,cursor.current[xField]));
 					} else 
 						xPos = chart.xAxis.getPosition(cursor.current[xField]);
-
-					dataFields[1] = xField;
 				}
 				
 				switch (_stackType)
@@ -188,7 +187,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				{
 					zPos = zAxis.getPosition(cursor.current[zField]);
 					yAxisRelativeValue = XYZAxisUI(zAxis).height - zPos;
-					dataFields[2] = zField;
 				} else if (chart.zAxis) {
 					zPos = chart.zAxis.getPosition(cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 
@@ -199,7 +197,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					// if it would be a z. when there will be a 3d line class, it will 
 					// be replaced
 					yAxisRelativeValue = XYZAxisUI(chart.zAxis).height - zPos;
-					dataFields[2] = zField;
 				}
 
 				// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
