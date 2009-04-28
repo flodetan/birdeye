@@ -50,6 +50,7 @@
 			super();
 			_scaleType = BaseAxisUI.CONSTANT;
 			showLabels = false;
+			maxLblSize = 0;
 		}
 		
 		override protected function commitProperties():void

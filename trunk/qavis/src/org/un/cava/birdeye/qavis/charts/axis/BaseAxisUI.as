@@ -41,8 +41,6 @@ package org.un.cava.birdeye.qavis.charts.axis
 	{
 		protected var surf:Surface;
 		protected var gg:GeometryGroup;
-		protected var fill:SolidFill = new SolidFill(0x888888,0);
-		protected var stroke:SolidStroke = new SolidStroke(0x888888,1,1);
 		
 		/** Scale type: Linear */
 		public static const LINEAR:String = "linear";
@@ -85,8 +83,6 @@ package org.un.cava.birdeye.qavis.charts.axis
 		 */
 		public function get size():Number
 		{
-			if (isNaN(_size))
-				_size = getSize();
 			return _size;
 		}
 
@@ -102,24 +98,51 @@ package org.un.cava.birdeye.qavis.charts.axis
 		}
 		
 		protected var _fontSize:Number = 10;
+		/** Set the font size for the labels.*/
 		public function set fontSize(val:Number):void
 		{
 			_fontSize = val;
 			invalidateDisplayList();
 		}
 		
+		protected var _fontColor:Number = 0x000000;
+		/** Set the font color for the labels.*/
+		public function set fontColor(val:Number):void
+		{
+			_fontColor = val;
+			invalidateDisplayList();
+		}
+		
+		protected var _lineColor:Number = 0x000000;
+		/** Set the axis line color.*/
+		public function set lineColor(val:Number):void
+		{
+			_lineColor = val;
+			invalidateDisplayList();
+		}
+
+		protected var _lineWeight:Number = 1;
+		/** Set the axis line weight.*/
+		public function set lineWeight(val:Number):void
+		{
+			_lineWeight = val;
+			invalidateDisplayList();
+		}
+
 		/** Position the pointer to the specified x position. Used by a cartesian series
 		 * if the current axis is x.*/
 		public function set pointerX(val:Number):void
 		{
-			pointer.x = pointer.x1 = val;
+			if (pointer)
+				pointer.x = pointer.x1 = val;
 		}
 		
 		/** Position the pointer to the specified y position. Used by a cartesian series
 		 * if the current axis is vertical.*/
 		public function set pointerY(val:Number):void
 		{
-			pointer.y = pointer.y1 = val;
+			if (pointer) 
+				pointer.y = pointer.y1 = val;
 		}
 
 		protected var _pointer:Line;
@@ -219,25 +242,6 @@ package org.un.cava.birdeye.qavis.charts.axis
 				gg.geometry = [];
 				gg.geometryCollection.items = [];
 			}
-		}
-
- 		protected function getSize():Number
-		{
-			switch (placement)
-			{
-				case BOTTOM:
-				case TOP:
-				case HORIZONTAL_CENTER:
-					size = width;
-					break;
-				case LEFT:
-				case RIGHT:
-				case DIAGONAL:
-				case VERTICAL_CENTER:
-					size = height;
-					break;
-			}
-			return size;
 		}
 	}
 }

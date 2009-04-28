@@ -29,6 +29,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 {
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RasterText;
+	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
@@ -202,20 +203,20 @@ package org.un.cava.birdeye.qavis.charts.axis
 					{
 						// create thick line
 			 			thick = new Line(xMin + thickWidth * sign, getPosition(snap), xMax, getPosition(snap));
-						thick.stroke = new SolidStroke(stroke,1,1);
+						thick.stroke = new SolidStroke(_lineColor,1,_lineWeight);
 						gg.geometryCollection.addItem(thick);
 			
 						// create label 
-	 					label = new RasterText();
+	 					label = new RasterTextPlus();
 	 					label.fontFamily = "verdana";
 	 					label.fontSize = _fontSize;
 						label.text = String(Math.round(snap));
 	 					label.visible = true;
 						label.autoSize = TextFieldAutoSize.LEFT;
 						label.autoSizeField = true;
-						label.y = getPosition(snap)-label.textField.height/2;
+						label.y = getPosition(snap)-label.displayObject.height/2;
 						label.x = thickWidth * sign; 
-						label.fill = new SolidFill(0x000000);
+						label.fill = new SolidFill(_fontColor);
 						gg.geometryCollection.addItem(label);
 					}
 				} else {
@@ -223,11 +224,11 @@ package org.un.cava.birdeye.qavis.charts.axis
 					{
 						// create thick line
 			 			thick = new Line(getPosition(snap), yMin + thickWidth * sign, getPosition(snap), yMax);
-						thick.stroke = new SolidStroke(stroke,1,1);
+						thick.stroke = new SolidStroke(_lineColor,1,_lineWeight);
 						gg.geometryCollection.addItem(thick);
 	
 						// create label 
-	 					label = new RasterText();
+	 					label = new RasterTextPlus();
 						label.text = String(Math.round(snap));
 	 					label.fontFamily = "verdana";
 	 					label.fontSize = _fontSize;
@@ -235,8 +236,8 @@ package org.un.cava.birdeye.qavis.charts.axis
 						label.autoSize = TextFieldAutoSize.LEFT;
 						label.autoSizeField = true;
 						label.y = thickWidth;
-						label.x = getPosition(snap)-label.textField.width/2; 
-						label.fill = new SolidFill(0x000000);
+						label.x = getPosition(snap)-label.displayObject.width/2; 
+						label.fill = new SolidFill(_fontColor);
 						gg.geometryCollection.addItem(label);
 					}
 				}
