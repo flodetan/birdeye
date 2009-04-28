@@ -32,6 +32,7 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Polygon;
 	import com.degrafa.geometry.RasterText;
+	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
@@ -231,7 +232,7 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 					var angle:int = aAxis.getPosition(ele[i]);
 					var position:Point = PolarCoordinateTransform.getXY(angle,radius,origin);
 					
-					var label:RasterText = new RasterText();
+					var label:RasterTextPlus = new RasterTextPlus();
 					label.text = String(ele[i]);
  					label.fontFamily = "verdana";
  					label.fontSize = _fontSize;
@@ -240,8 +241,8 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 					label.autoSizeField = true;
 					label.fill = new SolidFill(0x000000);
 
-					label.x = position.x;
-					label.y = position.y;
+					label.x = position.x - label.displayObject.width/2;
+					label.y = position.y - label.displayObject.height/2;
 					
 					gg.geometryCollection.addItem(label);
 				}
