@@ -28,8 +28,10 @@
 package org.un.cava.birdeye.qavis.charts.polarSeries
 {
 	import com.degrafa.IGeometry;
-	import com.degrafa.geometry.RasterText;
+	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
+	
+	import flash.text.TextFieldAutoSize;
 	
 	import mx.collections.CursorBookmark;
 	
@@ -41,20 +43,19 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 	public class PolarPieSeries extends PolarStackableSeries
 	{
-		private var _extendMouseEvents:Boolean = false;
-		[Inspectable(enumeration="true,false")]
-		public function set extendMouseEvents(val:Boolean):void
-		{
-			_extendMouseEvents = val;
-			invalidateDisplayList();
-		}
-		
 		private var _innerRadius:Number;
 		public function set innerRadius(val:Number):void
 		{
 			_innerRadius = val;
 			invalidateDisplayList();
 		}
+		
+		private var _radiusLabelOffset:Number;
+		public function set radiusLabelOffset(val:Number):void
+		{
+			_radiusLabelOffset = val;
+			invalidateDisplayList();
+		}		
 
 		private var _plotRadius:Number = 10;
 		public function set plotRadius(val:Number):void
@@ -121,10 +122,11 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 				dataFields[1] = radiusField;
 			}
 			
+			var tmpRadius:Number = radius;
 			if (_total>0)
 			{
 				_innerRadius = radius/_total * _stackPosition; 
-				radius = radius/_total * (1 + _stackPosition) * polarChart.columnWidthRate;
+				tmpRadius = _innerRadius + radius/_total * polarChart.columnWidthRate;
 			}
 
 			var arcCenterX:Number = polarChart.origin.x - radius;
@@ -133,20 +135,21 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			var wSize:Number, hSize:Number;
 			wSize = hSize = radius*2;
 
+			var aAxis:IAxis;
+			if (angleAxis)
+				aAxis = angleAxis;
+			else if (polarChart.angleAxis)
+				aAxis = polarChart.angleAxis;
+
+			dataFields[0] = angleField;
+
 			cursor.seek(CursorBookmark.FIRST);
 			while (!cursor.afterLast)
 			{
-				if (angleAxis)
-				{
-					angle = angleAxis.getPosition(cursor.current[angleField]);
-					dataFields[0] = angleField;
-				} else if (polarChart.angleAxis) {
-					angle = polarChart.angleAxis.getPosition(cursor.current[angleField]);
-					dataFields[0] = angleField;
-				}
+				angle = aAxis.getPosition(cursor.current[angleField]);
 				
-				var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, radius, polarChart.origin);
-				var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, radius, polarChart.origin); 
+				var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius, polarChart.origin);
+				var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius, polarChart.origin); 
 
 				createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
 				
@@ -157,10 +160,10 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 				var arc:IGeometry;
 				
-				if (_innerRadius > radius)
-					_innerRadius = radius;
+				if (_innerRadius > tmpRadius)
+					_innerRadius = tmpRadius;
 
-				arc = new ArcPath(Math.max(0, _innerRadius), radius, startAngle, angle, polarChart.origin);
+				arc = new ArcPath(Math.max(0, _innerRadius), tmpRadius, startAngle, angle, polarChart.origin);
 	
 				var tempColor:int;
 				
@@ -177,36 +180,37 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 				gg.geometryCollection.addItemAt(arc,0); 
 				
-				startAngle += angle;
-
 				if (labelField)
 				{
-					var label:RasterText = new RasterText();
+					var xLlb:Number = xPos, yLlb:Number = yPos;
+					if (!isNaN(_radiusLabelOffset))
+					{
+						xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, polarChart.origin);
+						yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, polarChart.origin);
+					}
+					var label:RasterTextPlus = new RasterTextPlus();
 					label.text = cursor.current[labelField];
 					label.fontFamily = "verdana";
 					label.fontWeight = "bold";
+					label.autoSize = TextFieldAutoSize.LEFT;
 					label.fill = new SolidFill(0x000000);
-					label.x = xPos;
-					label.y = yPos;
+					label.x = xLlb- label.displayObject.width/2;
+					label.y = yLlb - label.displayObject.height/2;
 					gg.geometryCollection.addItem(label); 
 				}
+
+				startAngle += angle;
 
  				cursor.moveNext();
 			}
 			
-			var aAxis:IAxis = null;
-			
-			if (angleAxis)
-				aAxis = angleAxis;
-			else 
-				aAxis = polarChart.angleAxis;
-				
 			if (displayName && aAxis && aAxis.size < 360)
 			{
-				label = new RasterText();
+				label = new RasterTextPlus();
 				label.text = displayName;
 				label.fontFamily = "verdana";
 				label.fontWeight = "bold";
+				label.autoSize = TextFieldAutoSize.LEFT;
 				label.fill = new SolidFill(0x000000);
 				label.x = PolarCoordinateTransform.getX(0, _innerRadius, polarChart.origin);
 				label.y = PolarCoordinateTransform.getY(0, _innerRadius, polarChart.origin);
