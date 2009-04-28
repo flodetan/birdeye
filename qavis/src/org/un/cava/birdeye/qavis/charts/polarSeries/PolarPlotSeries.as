@@ -28,11 +28,8 @@
 package org.un.cava.birdeye.qavis.charts.polarSeries
 {
 	import com.degrafa.IGeometry;
-	import com.degrafa.geometry.Circle;
-	import com.degrafa.geometry.Line;
-	import com.degrafa.geometry.RegularRectangle;
-	import com.degrafa.paint.SolidFill;
-	import com.degrafa.paint.SolidStroke;
+	
+	import flash.geom.Rectangle;
 	
 	import mx.collections.CursorBookmark;
 	
@@ -40,6 +37,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
 	import org.un.cava.birdeye.qavis.charts.renderers.CircleRenderer;
+	import org.un.cava.birdeye.qavis.charts.renderers.RasterRenderer;
 
 	public class PolarPlotSeries extends PolarSeries
 	{
@@ -128,10 +126,13 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 				createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
 				
- 				var bounds:RegularRectangle = new RegularRectangle(xPos - _plotRadius, yPos - _plotRadius, _plotRadius * 2, _plotRadius * 2);
+ 				var bounds:Rectangle = new Rectangle(xPos - _plotRadius, yPos - _plotRadius, _plotRadius * 2, _plotRadius * 2);
 
-  				plot = new itemRenderer(bounds);
-  				
+ 				if (_source)
+					plot = new RasterRenderer(bounds, _source);
+ 				else 
+					plot = new itemRenderer(bounds);
+
 				plot.fill = fill;
 				plot.stroke = stroke;
 				gg.geometryCollection.addItemAt(plot,0); 
