@@ -197,6 +197,9 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 				createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
 				
+				if (ttGG && _extendMouseEvents)
+					gg = ttGG;
+					
 				var arc:IGeometry;
 				
 				if (stackType == STACKED100)
