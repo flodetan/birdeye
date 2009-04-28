@@ -292,31 +292,23 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			
 			if (yAxis)
 			{
-				if (yAxis is INumerableAxis)
-					axesCheck = !isNaN(_maxYValue) || !isNaN(_minYValue)
-				else if (yAxis is IEnumerableAxis)
+				if (yAxis is IEnumerableAxis)
 					axesCheck = Boolean(IEnumerableAxis(yAxis).elements);
 			} else if (chart && chart.yAxis)
 			{
-				if (chart.yAxis is INumerableAxis)
-					axesCheck = !isNaN(_maxYValue) || !isNaN(_minYValue)
-				else if (chart.yAxis is IEnumerableAxis)
+				if (chart.yAxis is IEnumerableAxis)
 					axesCheck = Boolean(IEnumerableAxis(chart.yAxis).elements);
 			} else
 				axesCheck = false;
 
 			if (xAxis)
 			{
-				if (xAxis is INumerableAxis)
-					axesCheck = axesCheck && (!isNaN(_maxXValue) || !isNaN(_minXValue))
-				else if (xAxis is IEnumerableAxis)
-					axesCheck = axesCheck && IEnumerableAxis(xAxis).elements;
+				if (xAxis is IEnumerableAxis)
+					axesCheck = axesCheck && Boolean(IEnumerableAxis(xAxis).elements);
 			} else if (chart && chart.xAxis)
 			{
-				if (chart.xAxis is INumerableAxis)
-					axesCheck = axesCheck && (!isNaN(_maxXValue) || !isNaN(_minXValue))
-				else if (chart.xAxis is IEnumerableAxis)
-					axesCheck = axesCheck && IEnumerableAxis(chart.xAxis).elements;
+				if (chart.xAxis is IEnumerableAxis)
+					axesCheck = axesCheck && Boolean(IEnumerableAxis(chart.xAxis).elements);
 			} else
 				axesCheck = false;
 
@@ -327,7 +319,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				   (!isNaN(_minXValue) || !isNaN(_minYValue))
 				&& (!isNaN(_maxXValue) || !isNaN(_maxYValue))
 				&& width>0 && height>0
-				&& chart && xField && yField
+				&& chart && (xField || yField)
 				&& cursor;
 			
 			return globalCheck && axesCheck && colorsCheck;
@@ -353,29 +345,29 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 
 			var pos:Point = localToGlobal(new Point(extGG.posX, extGG.posY));
 	
-			if (yAxis)
+			if (yAxis && yAxis.pointer)
 			{
 				yAxis.pointerY = extGG.posY;
 				yAxis.pointer.visible = true;
-			} else {
+			} else if (chart.yAxis && chart.yAxis.pointer) {
 				chart.yAxis.pointerY = extGG.posY;
 				chart.yAxis.pointer.visible = true;
 			} 
 
-			if (xAxis)
+			if (xAxis && xAxis.pointer)
 			{
 				xAxis.pointerX = extGG.posX;
 				xAxis.pointer.visible = true;
-			} else {
+			} else if (chart.xAxis && chart.xAxis.pointer) {
 				chart.xAxis.pointerX = extGG.posX;
 				chart.xAxis.pointer.visible = true;
 			} 
 
-			if (zAxis)
+			if (zAxis && zAxis.pointer)
 			{
 				zAxis.pointerY = extGG.posZ;
 				zAxis.pointer.visible = true;
-			} else if (chart.zAxis) {
+			} else if (chart.zAxis && chart.zAxis.pointer) {
 				chart.zAxis.pointerY = extGG.posZ;
 				chart.zAxis.pointer.visible = true;
 			} 
@@ -396,19 +388,19 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				toolTip = null;
 			}
 
-			if (yAxis)
-				yAxis.pointer.visible = false;
-			else
-				chart.yAxis.pointer.visible = false;
-
-			if (xAxis)
+			if (xAxis && xAxis.pointer)
 				xAxis.pointer.visible = false;
-			else
+			else if (chart.xAxis && chart.xAxis.pointer) 
 				chart.xAxis.pointer.visible = false;
 
-			if (zAxis)
+			if (yAxis && yAxis.pointer)
+				yAxis.pointer.visible = false;
+			else if (chart.yAxis && chart.yAxis.pointer) 
+				chart.yAxis.pointer.visible = false;
+
+			if (zAxis && zAxis.pointer)
 				zAxis.pointer.visible = false;
-			else if (chart.zAxis)
+			else if (chart.zAxis && chart.zAxis.pointer) 
 				chart.zAxis.pointer.visible = false;
 		}
 
