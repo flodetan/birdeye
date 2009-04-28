@@ -27,6 +27,10 @@
  
 package org.un.cava.birdeye.qavis.charts.cartesianCharts
 {	
+	import com.degrafa.GeometryGroup;
+	import com.degrafa.geometry.Line;
+	import com.degrafa.paint.SolidStroke;
+	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
@@ -39,7 +43,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	import org.un.cava.birdeye.qavis.charts.BaseChart;
 	import org.un.cava.birdeye.qavis.charts.axis.BaseAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.ConstantAxisUI;
-	import org.un.cava.birdeye.qavis.charts.axis.LinearAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
 	import org.un.cava.birdeye.qavis.charts.cartesianSeries.CartesianSeries;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxis;
@@ -401,7 +404,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 										topContainer.y + topContainer.height,
 										w - (leftContainer.width + rightContainer.width),
 										h - (topContainer.height + bottomContainer.height));
-
+										
 			topContainer.width = bottomContainer.width 
 				= chartBounds.width;
 			leftContainer.height = rightContainer.height 
@@ -411,6 +414,9 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
   			zContainer.x = int(chartBounds.width + leftContainer.width);
 			zContainer.y = int(chartBounds.height);
 
+			if (showGrid)
+				drawGrid();
+				
 			if (axesFeeded && (_seriesContainer.x != chartBounds.x ||
 				_seriesContainer.y != chartBounds.y ||
 				_seriesContainer.width != chartBounds.width ||
@@ -426,7 +432,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 					CartesianSeries(_series[i]).height = chartBounds.height;
 				}
 	
-				
 				// listeners like legends will listen to this event
 				dispatchEvent(new Event("ProviderReady"));
 				
@@ -824,6 +829,53 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 						series.maxZValue;
 					INumerableAxis(series.yAxis).min =
 						series.minZValue;
+				}
+			}
+		}
+		
+		private var gridGG:GeometryGroup;
+		protected function drawGrid():void
+		{
+			if (xAxis && yAxis && _seriesContainer.width>0 && _seriesContainer.height>0)
+			{
+				if (!gridGG)
+				{
+					gridGG = new GeometryGroup();
+				}
+
+				if (yAxis is INumerableAxis)
+				{
+					var minY:Number = 0;
+					var maxY:Number = yAxis.size;
+					
+					// since the yAxis is up side down, the y interval is given by:
+					var interval:Number = yAxis.getPosition(INumerableAxis(yAxis).max - yAxis.interval);
+					var i:Number = 0;
+					
+					for (var yValue:Number = minY; yValue < maxY; yValue += interval)
+					{
+						var item:Line = Line(gridGG.geometryCollection.getItemAt(i));
+						if (item)
+						{
+							item.x = 0;
+							item.y = yValue;
+							item.x1 = _seriesContainer.width;
+							item.y1 = yValue;
+						} else {
+							item = new Line(0, yValue, xAxis.size, yValue);
+							item.stroke = new SolidStroke(_gridColor, _gridAlpha, _gridWeight)
+							gridGG.geometryCollection.addItem(item);
+						}
+						i++;
+					}
+					
+					var n:Number = gridGG.geometryCollection.items.length;
+					if (i<n)
+						for (var j:Number = n; j>=i; j--)
+							gridGG.geometryCollection.removeItemAt(j);
+
+					gridGG.target = _seriesContainer;
+					_seriesContainer.graphicsCollection.addItem(gridGG);
 				}
 			}
 		}
