@@ -28,15 +28,15 @@
 package org.un.cava.birdeye.qavis.charts.cartesianSeries
 {
 	import com.degrafa.IGeometry;
-	import com.degrafa.geometry.Circle;
-	import com.degrafa.geometry.RegularRectangle;
-	import com.degrafa.paint.SolidFill;
+	
+	import flash.geom.Rectangle;
 	
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.renderers.CircleRenderer;
+	import org.un.cava.birdeye.qavis.charts.renderers.RasterRenderer;
 
 	public class PlotSeries extends CartesianSeries
 	{
@@ -132,9 +132,12 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 						zPos = 0;
 				}
 				
- 				var bounds:RegularRectangle = new RegularRectangle(xPos - _plotRadius, yPos - _plotRadius, _plotRadius * 2, _plotRadius * 2);
+ 				var bounds:Rectangle = new Rectangle(xPos - _plotRadius, yPos - _plotRadius, _plotRadius * 2, _plotRadius * 2);
 
-  				plot = new itemRenderer(bounds);
+ 				if (_source)
+					plot = new RasterRenderer(bounds, _source);
+ 				else 
+					plot = new itemRenderer(bounds);
   				
 				plot.fill = fill;
 				plot.stroke = stroke;

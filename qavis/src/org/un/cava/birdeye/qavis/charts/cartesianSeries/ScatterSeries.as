@@ -28,17 +28,18 @@
 package org.un.cava.birdeye.qavis.charts.cartesianSeries
 {
 	import com.degrafa.IGeometry;
-	import com.degrafa.geometry.Circle;
-	import com.degrafa.geometry.RegularRectangle;
-	import com.degrafa.paint.SolidFill;
+	
+	import flash.geom.Rectangle;
 	
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
+	import org.un.cava.birdeye.qavis.charts.interfaces.IRasterRenderer;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IScatter;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ISizableItem;
 	import org.un.cava.birdeye.qavis.charts.renderers.CircleRenderer;
+	import org.un.cava.birdeye.qavis.charts.renderers.RasterRenderer;
 
 	[Exclude(name="maxRadiusValue", kind="property")]
 	[Exclude(name="minRadiusValue", kind="property")]
@@ -123,7 +124,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 
 				dataValue = cursor.current[radiusField];
 				radius = getRadius(dataValue);
- 				var bounds:RegularRectangle = new RegularRectangle(xPos - radius, yPos - radius, radius * 2, radius * 2);
+ 				var bounds:Rectangle = new Rectangle(xPos - radius, yPos - radius, radius * 2, radius * 2);
 
 				var yAxisRelativeValue:Number = NaN;
 
@@ -159,7 +160,11 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 						zPos = 0;
 				}
 				
-				scatter = new itemRenderer(bounds);
+ 				if (_source)
+					scatter = new RasterRenderer(bounds, _source);
+ 				else 
+					scatter = new itemRenderer(bounds);
+  
 				scatter.fill = fill;
 				scatter.stroke = stroke;
 				gg.geometryCollection.addItemAt(scatter,0);
