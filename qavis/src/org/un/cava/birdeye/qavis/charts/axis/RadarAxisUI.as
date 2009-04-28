@@ -31,6 +31,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RasterText;
+	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
@@ -196,7 +197,7 @@ package org.un.cava.birdeye.qavis.charts.axis
  				{
  					rad = radiusAxis.getPosition(snap);
 	 				var labelPosition:Point = PolarCoordinateTransform.getXY(angle,rad,_polarChart.origin);
-					var label:RasterText = new RasterText();
+					var label:RasterTextPlus = new RasterTextPlus();
 					label.text = String(snap);
 	 				label.fontFamily = "verdana";
 	 				label.fontSize = _fontSize;
@@ -205,7 +206,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 					label.autoSizeField = true;
 					label.fill = new SolidFill(0x000000);
 	
-					label.x = labelPosition.x;
+					label.x = labelPosition.x - label.displayObject.width/2;
 					label.y = labelPosition.y;
 
 					gg.geometryCollection.addItem(label);

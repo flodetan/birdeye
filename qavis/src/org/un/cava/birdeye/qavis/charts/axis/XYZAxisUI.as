@@ -28,7 +28,8 @@
 package org.un.cava.birdeye.qavis.charts.axis
 {
 	import com.degrafa.geometry.Line;
-	import com.degrafa.geometry.RasterText;
+	import com.degrafa.geometry.RasterTextPlus;
+	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.events.Event;
@@ -112,7 +113,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		protected var line:Line; // draw the axis line
 		protected var thick:Line; 
 		protected var thickWidth:Number = 5;
-		protected var label:RasterText;
+		protected var label:RasterTextPlus;
 		/** @Private */
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
@@ -196,8 +197,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 			}
 
 			line = new Line(x0,y0,x1,y1);
-			line.fill = fill;
-			line.stroke = stroke;
+			line.stroke = new SolidStroke(_lineColor, 1, _lineWeight);
 			gg.geometryCollection.addItem(line);
 
 		}
