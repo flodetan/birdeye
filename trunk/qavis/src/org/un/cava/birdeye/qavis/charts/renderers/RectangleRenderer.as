@@ -28,12 +28,19 @@
 package org.un.cava.birdeye.qavis.charts.renderers
 {
 	import com.degrafa.geometry.RegularRectangle;
+	
+	import flash.geom.Rectangle;
 
-	public class RectangleRenderer extends RegularRectangle
+	public class RectangleRenderer extends RegularRectangle // implements ISeriesDataRenderer
 	{
-		public function RectangleRenderer(bounds:RegularRectangle)
+		public function RectangleRenderer(bounds:Rectangle):void
 		{
-			super(bounds.x, bounds.y, bounds.width, bounds.height);
+			super (bounds.x, bounds.y, bounds.width, bounds.height);
 		}
-	}
+
+/* 		public function getGeometry(bounds:Rectangle):Geometry
+		{
+			return new RegularRectangle(bounds.x, bounds.y, bounds.width, bounds.height);
+		}
+ */	}
 }

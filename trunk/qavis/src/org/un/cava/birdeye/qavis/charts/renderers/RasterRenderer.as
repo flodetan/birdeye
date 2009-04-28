@@ -27,15 +27,30 @@
  
 package org.un.cava.birdeye.qavis.charts.renderers
 {
-	import com.degrafa.geometry.Line;
+	import com.degrafa.geometry.RasterImage;
 	
 	import flash.geom.Rectangle;
-
-	public class LineRenderer extends Line
+	
+	import org.un.cava.birdeye.qavis.charts.interfaces.IRasterRenderer;
+	
+	public class RasterRenderer extends RasterImage implements IRasterRenderer
 	{
-		public function LineRenderer(bounds:Rectangle)
+		private var _s:Object;
+		public function get source():Object
 		{
-			super(bounds.x, bounds.y, bounds.width, bounds.height);
+			return _s;
+		}
+		
+		public function RasterRenderer(bounds:Rectangle, _source:Object = null)
+		{
+			super();
+			width = bounds.width;
+			height = bounds.height;
+			x = bounds.x;
+			y = bounds.y;
+			
+			if (_source)
+				source = _source;
 		}
 	}
 }

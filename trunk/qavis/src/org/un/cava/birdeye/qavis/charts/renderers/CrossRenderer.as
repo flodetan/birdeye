@@ -28,11 +28,12 @@
 package org.un.cava.birdeye.qavis.charts.renderers
 {
 	import com.degrafa.geometry.Polygon;
-	import com.degrafa.geometry.RegularRectangle;
+	
+	import flash.geom.Rectangle;
 
 	public class CrossRenderer extends Polygon
 	{
-		public function CrossRenderer(bounds:RegularRectangle)
+		public function CrossRenderer(bounds:Rectangle)
 		{
 			data =  String(bounds.x) + "," + String(bounds.y + bounds.height/2) + " " +
 					String(bounds.x + bounds.width/2) + "," + String(bounds.y + bounds.height/2) + " " +

@@ -28,16 +28,17 @@
 package org.un.cava.birdeye.qavis.charts.renderers
 {
 	import com.degrafa.geometry.Polygon;
-	import com.degrafa.geometry.RegularRectangle;
+	
+	import flash.geom.Rectangle;
 
 	public class TriangleRenderer extends Polygon
 	{
-		public function TriangleRenderer (bounds:RegularRectangle)
+		public function TriangleRenderer (bounds:Rectangle)
 		{
-			data =  String(bounds.x) + "," + String(bounds.y + bounds.height/2) + " " +
+			data =  String(bounds.x) + "," + String(bounds.y + bounds.height) + " " +
 					String(bounds.x + bounds.width/2) + "," + String(bounds.y) + " " +
-					String(bounds.x + bounds.width) + "," + String(bounds.y + bounds.height/2) + " " +
-					String(bounds.x) + "," + String(bounds.y + bounds.height/2) + " ";
+					String(bounds.x + bounds.width) + "," + String(bounds.y + bounds.height) + " " +
+					String(bounds.x) + "," + String(bounds.y + bounds.height) + " ";
 		}
 	}
 }
