@@ -52,6 +52,7 @@ package org.un.cava.birdeye.qavis.charts
 	public class BaseSeries extends Surface implements ISeries
 	{
 		protected var gg:DataItemLayout;
+		protected var dataItems:Array = [];
 		protected var fill:SolidFill = new SolidFill(0x888888,0);
 		protected var stroke:SolidStroke = new SolidStroke(0x888888,1,1);
 		
@@ -252,6 +253,17 @@ package org.un.cava.birdeye.qavis.charts
 			return _itemRenderer;
 		}
 		
+		protected var _source:Object;
+		public function set source(val:Object):void
+		{
+			_source = val;
+			invalidateDisplayList();
+		}
+		public function get source():Object
+		{
+			return _source;
+		}
+		
 		// UIComponent flow
 		
 		public function BaseSeries()
@@ -277,7 +289,7 @@ package org.un.cava.birdeye.qavis.charts
 		}
 		
 		// other methods
-		
+
 		private var currentValue:Number;
 		protected function getTotalPositiveValue(field:String):Number
 		{

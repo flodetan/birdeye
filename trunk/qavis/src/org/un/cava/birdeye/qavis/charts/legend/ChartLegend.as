@@ -30,8 +30,7 @@ package org.un.cava.birdeye.qavis.charts.legend
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.Geometry;
-	import com.degrafa.geometry.RasterText;
-	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
@@ -42,8 +41,8 @@ package org.un.cava.birdeye.qavis.charts.legend
 	import mx.core.Application;
 	
 	import org.un.cava.birdeye.qavis.charts.BaseChart;
-	import org.un.cava.birdeye.qavis.charts.interfaces.ICartesianSeries;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ISeries;
+	import org.un.cava.birdeye.qavis.charts.renderers.RasterRenderer;
 	
 	public class ChartLegend extends Box
 	{
@@ -102,17 +101,30 @@ package org.un.cava.birdeye.qavis.charts.legend
 					var gg:GeometryGroup = new GeometryGroup();
 					gg.target = surf;
 					
-					var label:RasterText = new RasterText();
+					var label:RasterTextPlus = new RasterTextPlus();
 					label.fontFamily = "verdana";
 					label.x = 15;
 					if (ISeries(_dataProvider.series[i]).displayName)
+					{
 						label.text = ISeries(_dataProvider.series[i]).displayName;
+						label.fill = new SolidFill(0x000000);
+					}
 
-					var bounds:RegularRectangle = new RegularRectangle(0,0, 10,10);
+					var bounds:Rectangle = new Rectangle(0,0, 10,10);
 					if (ISeries(_dataProvider.series[i]).itemRenderer)
 					{
+/* 						var rendererClass:Class = ISeries(_dataProvider.series[i]).itemRenderer;
+						var renderer:ISeriesDataRenderer = new rendererClass();
+ */
 						var renderer:Class = ISeries(_dataProvider.series[i]).itemRenderer;
-						var geom:Geometry = new renderer(bounds);
+						
+ 						var geom:Geometry;
+ 						if (ISeries(_dataProvider.series[i]).source)
+ 						{
+ 							geom = new RasterRenderer(bounds, ISeries(_dataProvider.series[i]).source);
+ 						} else {
+ 							geom = new renderer(bounds);
+ 						}
 						Geometry(geom).fill = ISeries(_dataProvider.series[i]).fillColor ? 
 								new SolidFill(ISeries(_dataProvider.series[i]).fillColor, ISeries(_dataProvider.series[i]).fillAlpha)
 								 : new SolidFill(0xdddddd);

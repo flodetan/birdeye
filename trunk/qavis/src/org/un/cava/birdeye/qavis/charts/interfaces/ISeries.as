@@ -31,7 +31,7 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 	
 	import mx.collections.IViewCursor;
 	
-	public interface ISeries
+	public interface ISeries extends IRasterRenderer
 	{
 		/** Remove all elements from the series (Surface component).*/
 		function removeAllElements():void;
