@@ -28,11 +28,12 @@
 package org.un.cava.birdeye.qavis.charts.renderers
 {
 	import com.degrafa.geometry.Polygon;
-	import com.degrafa.geometry.RegularRectangle;
+	
+	import flash.geom.Rectangle;
 
 	public class ButterflyRenderer extends Polygon
 	{
-		public function ButterflyRenderer (bounds:RegularRectangle)
+		public function ButterflyRenderer (bounds:Rectangle)
 		{
 			data =  String(bounds.x) + "," + String(bounds.y + bounds.height/2) + " " +
 					String(bounds.x + bounds.width/2) + "," + String(bounds.y) + " " +

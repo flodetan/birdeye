@@ -28,11 +28,12 @@
 package org.un.cava.birdeye.qavis.charts.renderers
 {
 	import com.degrafa.geometry.Circle;
-	import com.degrafa.geometry.RegularRectangle;
+	
+	import flash.geom.Rectangle;
 
 	public class CircleRenderer extends Circle
 	{
-		public function CircleRenderer(bounds:RegularRectangle)
+		public function CircleRenderer(bounds:Rectangle)
 		{
 			var xCenter:Number = bounds.x + bounds.width/2
 			var yCenter:Number = bounds.y + bounds.height/2;
