@@ -45,6 +45,14 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		public static const STACKED:String = "stacked";
 		public static const STACKED100:String = "stacked100";
 		
+		protected var _extendMouseEvents:Boolean = false;
+		[Inspectable(enumeration="true,false")]
+		public function set extendMouseEvents(val:Boolean):void
+		{
+			_extendMouseEvents = val;
+			invalidateDisplayList();
+		}
+		
 		protected var _stackType:String = OVERLAID;
 		public function set stackType(val:String):void
 		{
