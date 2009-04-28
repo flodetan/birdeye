@@ -46,6 +46,42 @@
 	[DefaultProperty("dataProvider")]
 	public class BaseChart extends Surface
 	{
+		private var _showGrid:Boolean = true;
+		/** Draw the grid lines of the chart (only default chart axes and not series having own axes).*/
+		public function set showGrid(val:Boolean):void
+		{
+			_showGrid = val;
+			invalidateDisplayList();
+		}
+		public function get showGrid():Boolean
+		{
+			return _showGrid;
+		}
+		
+		protected var _gridColor:Number = 0x000000;
+		/** Set the grid color.*/
+		public function set gridColor(val:Number):void
+		{
+			_gridColor = val;
+			invalidateDisplayList();
+		}
+
+		protected var _gridWeight:Number = 1;
+		/** Set the line grid weight.*/
+		public function set gridWeight(val:Number):void
+		{
+			_gridWeight = val;
+			invalidateDisplayList();
+		}
+
+		protected var _gridAlpha:Number = .3;
+		/** Set the grid alpha.*/
+		public function set gridAlpha(val:Number):void
+		{
+			_gridAlpha = val;
+			invalidateDisplayList();
+		}
+		
 		private var _customTooltTipFunction:Function;
 		public function set customTooltTipFunction(val:Function):void
 		{
@@ -322,6 +358,7 @@
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
+			
 			if (ggBackGround)
 			{
 				rectBackGround.width = unscaledWidth;
