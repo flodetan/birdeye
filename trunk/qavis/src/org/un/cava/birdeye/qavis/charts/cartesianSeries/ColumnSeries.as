@@ -29,16 +29,16 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 {
 	import com.degrafa.IGeometry;
 	import com.degrafa.geometry.Line;
-	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidStroke;
+	
+	import flash.geom.Rectangle;
 	
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
-	import org.un.cava.birdeye.qavis.charts.cartesianCharts.ColumnChart;
-	import org.un.cava.birdeye.qavis.charts.cartesianCharts.StackableChart;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
+	import org.un.cava.birdeye.qavis.charts.renderers.RasterRenderer;
 	import org.un.cava.birdeye.qavis.charts.renderers.RectangleRenderer;
 
 	public class ColumnSeries extends StackableSeries 
@@ -97,6 +97,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
 		override protected function drawSeries():void
 		{
+//			var renderer:ISeriesDataRenderer = new itemRenderer();
+			
 			var dataFields:Array = [];
 			// prepare data for a standard tooltip message in case the user
 			// has not set a dataTipFunction
@@ -198,7 +200,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					yAxisRelativeValue = XYZAxisUI(chart.zAxis).height - zPos;
 				}
 
- 				var bounds:RegularRectangle = new RegularRectangle(xPos, yPos, colWidth, y0 - yPos);
+ 				var bounds:Rectangle = new Rectangle(xPos, yPos, colWidth, y0 - yPos);
 
 				// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
 				// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
@@ -216,7 +218,13 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 						zPos = 0;
 				}
 				
-				poly = new itemRenderer(bounds);
+//				poly = renderer.getGeometry(bounds);
+
+ 				if (_source)
+					poly = new RasterRenderer(bounds, _source);
+ 				else 
+					poly = new itemRenderer(bounds);
+
 				poly.fill = fill;
 				poly.stroke = stroke;
 				gg.geometryCollection.addItemAt(poly,0);

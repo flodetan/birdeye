@@ -29,15 +29,16 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 {
 	import com.degrafa.IGeometry;
 	import com.degrafa.geometry.Line;
-	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidStroke;
+	
+	import flash.geom.Rectangle;
 	
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
-	import org.un.cava.birdeye.qavis.charts.cartesianCharts.BarChart;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
+	import org.un.cava.birdeye.qavis.charts.renderers.RasterRenderer;
 	import org.un.cava.birdeye.qavis.charts.renderers.RectangleRenderer;
 
 	public class BarSeries extends StackableSeries 
@@ -178,7 +179,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 						break;
 				}
 				
-				var bounds:RegularRectangle = new RegularRectangle(x0, yPos, xPos -x0, barWidth);
+				var bounds:Rectangle = new Rectangle(x0, yPos, xPos -x0, barWidth);
 
 				var yAxisRelativeValue:Number = NaN;
 
@@ -215,7 +216,11 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 						zPos = 0;
 				}
 
-				poly = new itemRenderer(bounds);
+ 				if (_source)
+					poly = new RasterRenderer(bounds, _source);
+ 				else 
+					poly = new itemRenderer(bounds);
+
 				poly.fill = fill;
 				poly.stroke = stroke;
 				gg.geometryCollection.addItemAt(poly,0);
