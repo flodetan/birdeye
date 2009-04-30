@@ -55,7 +55,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		{
 			return _maxRadius;
 		}
-		
+
 		public function ScatterPlot()
 		{
 			super();

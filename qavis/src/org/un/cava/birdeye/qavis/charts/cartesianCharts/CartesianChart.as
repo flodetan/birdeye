@@ -41,9 +41,9 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	import mx.core.Container;
 	
 	import org.un.cava.birdeye.qavis.charts.BaseChart;
-	import org.un.cava.birdeye.qavis.charts.axis.BaseAxisUI;
-	import org.un.cava.birdeye.qavis.charts.axis.ConstantAxisUI;
-	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
+	import org.un.cava.birdeye.qavis.charts.axis.BaseAxis;
+	import org.un.cava.birdeye.qavis.charts.axis.ConstantAxis;
+	import org.un.cava.birdeye.qavis.charts.axis.XYZAxis;
 	import org.un.cava.birdeye.qavis.charts.cartesianSeries.CartesianSeries;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxis;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisUI;
@@ -158,8 +158,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		public function set xAxis(val:IAxisUI):void
 		{
 			_xAxis = val;
-			if (_xAxis.placement != BaseAxisUI.BOTTOM && _xAxis.placement != BaseAxisUI.TOP)
-				_xAxis.placement = BaseAxisUI.BOTTOM;
+			if (_xAxis.placement != BaseAxis.BOTTOM && _xAxis.placement != BaseAxis.TOP)
+				_xAxis.placement = BaseAxis.BOTTOM;
 
 			invalidateProperties();
 			invalidateDisplayList();
@@ -174,8 +174,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		public function set yAxis(val:IAxisUI):void
 		{
 			_yAxis = val;
-			if (_yAxis.placement != BaseAxisUI.LEFT && _yAxis.placement != BaseAxisUI.RIGHT)
-				_yAxis.placement = BaseAxisUI.LEFT;
+			if (_yAxis.placement != BaseAxis.LEFT && _yAxis.placement != BaseAxis.RIGHT)
+				_yAxis.placement = BaseAxis.LEFT;
 
 			invalidateProperties();
 			invalidateDisplayList();
@@ -190,8 +190,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		public function set zAxis(val:IAxisUI):void
 		{
 			_zAxis = val;
-			if (_zAxis.placement != BaseAxisUI.DIAGONAL)
-				_zAxis.placement = BaseAxisUI.DIAGONAL;
+			if (_zAxis.placement != BaseAxis.DIAGONAL)
+				_zAxis.placement = BaseAxis.DIAGONAL;
 
 			invalidateProperties();
 			invalidateDisplayList();
@@ -288,10 +288,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 					{
 						switch (xAxis.placement)
 						{
-							case BaseAxisUI.TOP:
+							case BaseAxis.TOP:
 								topContainer.addChild(DisplayObject(xAxis));
 								break; 
-							case BaseAxisUI.BOTTOM:
+							case BaseAxis.BOTTOM:
 								bottomContainer.addChild(DisplayObject(xAxis));
 								break;
 						}
@@ -303,10 +303,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 					{
 						switch (yAxis.placement)
 						{
-							case BaseAxisUI.LEFT:
+							case BaseAxis.LEFT:
 								leftContainer.addChild(DisplayObject(yAxis));
 								break;
-							case BaseAxisUI.RIGHT:
+							case BaseAxis.RIGHT:
 								rightContainer.addChild(DisplayObject(yAxis));
 								break;
 						}
@@ -353,7 +353,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				if (!_yAxis)
 					createYAxis();
 					
-				if (_yAxis.placement == BaseAxisUI.RIGHT)
+				if (_yAxis.placement == BaseAxis.RIGHT)
 					rightContainer.addChild(DisplayObject(_yAxis));
 				else
 					leftContainer.addChild(DisplayObject(_yAxis));
@@ -365,7 +365,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				if (!_xAxis)
 					createXAxis();
 
-				if (_xAxis.placement == BaseAxisUI.TOP)
+				if (_xAxis.placement == BaseAxis.TOP)
 					topContainer.addChild(DisplayObject(_xAxis));
 				else
 					bottomContainer.addChild(DisplayObject(_xAxis));
@@ -424,14 +424,14 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			{
 				_seriesContainer.x = chartBounds.x;
 				_seriesContainer.y = chartBounds.y;
-				_seriesContainer.width = chartBounds.width;
+ 				_seriesContainer.width = chartBounds.width;
 				_seriesContainer.height = chartBounds.height;
-  				for (var i:int = 0; i<_series.length; i++)
+    			for (var i:int = 0; i<_series.length; i++)
 				{
 					CartesianSeries(_series[i]).width = chartBounds.width;
 					CartesianSeries(_series[i]).height = chartBounds.height;
 				}
-	
+ 	
 				// listeners like legends will listen to this event
 				dispatchEvent(new Event("ProviderReady"));
 				
@@ -451,7 +451,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			var tmpSize:Number = 0;
 			for (var i:Number = 0; i<leftContainer.numChildren; i++)
 			{
-				tmpSize += XYZAxisUI(leftContainer.getChildAt(i)).maxLblSize;
+				tmpSize += XYZAxis(leftContainer.getChildAt(i)).maxLblSize;
 				IAxis(leftContainer.getChildAt(i)).size = leftContainer.height;
 			}
 			
@@ -460,7 +460,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 
 			for (i = 0; i<rightContainer.numChildren; i++)
 			{
-				tmpSize += XYZAxisUI(rightContainer.getChildAt(i)).maxLblSize;
+				tmpSize += XYZAxis(rightContainer.getChildAt(i)).maxLblSize;
 				IAxis(rightContainer.getChildAt(i)).size = rightContainer.height;				
 			}
 			
@@ -469,7 +469,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 
 			for (i = 0; i<bottomContainer.numChildren; i++)
 			{
-				tmpSize += XYZAxisUI(bottomContainer.getChildAt(i)).maxLblSize;
+				tmpSize += XYZAxis(bottomContainer.getChildAt(i)).maxLblSize;
 				IAxis(bottomContainer.getChildAt(i)).size = bottomContainer.width;
 			}
 			
@@ -478,14 +478,13 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 
 			for (i = 0; i<topContainer.numChildren; i++)
 			{
-				tmpSize += XYZAxisUI(topContainer.getChildAt(i)).maxLblSize;
+				tmpSize += XYZAxis(topContainer.getChildAt(i)).maxLblSize;
 				IAxis(topContainer.getChildAt(i)).size = topContainer.width;
 			}
 			
 			topContainer.height = tmpSize;
 		}
 		
-
 		private var currentSeries:ICartesianSeries;
 		/** @Private
 		 * Feed the axes with either elements (for ex. CategoryAxis) or max and min (for numeric axis).*/
@@ -658,6 +657,18 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 					}
 				} 
 
+				elements = [];
+				j = 0;
+				
+				// check if a default color axis exists
+				if (colorAxis)
+				{
+						// if the default color axis is numeric, than calculate its min max values
+						maxMin = getMaxMinColorValueFromSeriesWithoutColorAxis();
+						colorAxis.max = maxMin[0];
+						colorAxis.min = maxMin[1];
+				} 
+				
 				// init axes of all series that have their own axes
 				// since these are children of each series, they are 
 				// for sure ready for feeding and it won't affect the axesFeeded status
@@ -736,6 +747,31 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			return [max,min];
 		}
 		
+		/** @Private
+		 * Calculate the min max values for the default color axis. Return an array of 2 values, the 1st (0) 
+		 * for the max value, and the 2nd for the min value.*/
+		private function getMaxMinColorValueFromSeriesWithoutColorAxis():Array
+		{
+			var max:Number = NaN, min:Number = NaN;
+			for (var i:Number = 0; i<series.length; i++)
+			{
+				currentSeries = series[i];
+				if (currentSeries.colorField)
+				{
+					// check if the series has its own color axis and if its max value exists and 
+					// is higher than the current max
+					if (!currentSeries.colorAxis && (isNaN(max) || max < currentSeries.maxColorValue))
+						max = currentSeries.maxColorValue;
+					// check if the series has its own color axis and if its min value exists and 
+					// is lower than the current min
+					if (!currentSeries.colorAxis && (isNaN(min) || min > currentSeries.minColorValue))
+						min = currentSeries.minColorValue;
+				}
+			}
+					
+			return [max,min];
+		}
+
 		
 		/** @Private
 		 * Init the axes owned by the series passed to this method.*/
@@ -830,6 +866,16 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 					INumerableAxis(series.yAxis).min =
 						series.minZValue;
 				}
+
+				if (series.colorAxis)
+				{
+					// if the axis is numeric than set its maximum and minimum values 
+					// if the max and min are not yet defined for the series, than they are calculated now
+					series.colorAxis.max =
+						series.maxColorValue;
+					series.colorAxis.min =
+						series.minColorValue;
+				}
 			}
 		}
 		
@@ -891,14 +937,14 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		 * axis's positions. */
 		protected function createYAxis():void
 		{
-				yAxis = new ConstantAxisUI();
-				yAxis.placement = BaseAxisUI.LEFT;
+				yAxis = new ConstantAxis();
+				yAxis.placement = BaseAxis.LEFT;
 		}
 		/** @Private */
 		protected function createXAxis():void
 		{
-			xAxis = new ConstantAxisUI();
-			xAxis.placement = BaseAxisUI.BOTTOM;
+			xAxis = new ConstantAxis();
+			xAxis.placement = BaseAxis.BOTTOM;
 		}
 
 		private function removeAllElements():void
