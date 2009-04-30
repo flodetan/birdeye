@@ -104,6 +104,7 @@ package org.un.cava.birdeye.qavis.charts.legend
 					var label:RasterTextPlus = new RasterTextPlus();
 					label.fontFamily = "verdana";
 					label.x = 15;
+
 					if (ISeries(_dataProvider.series[i]).displayName)
 					{
 						label.text = ISeries(_dataProvider.series[i]).displayName;
@@ -125,11 +126,11 @@ package org.un.cava.birdeye.qavis.charts.legend
  						} else {
  							geom = new renderer(bounds);
  						}
-						Geometry(geom).fill = ISeries(_dataProvider.series[i]).fillColor ? 
-								new SolidFill(ISeries(_dataProvider.series[i]).fillColor, ISeries(_dataProvider.series[i]).fillAlpha)
+						Geometry(geom).fill = ISeries(_dataProvider.series[i]).getFill() != null ? 
+								ISeries(_dataProvider.series[i]).getFill()
 								 : new SolidFill(0xdddddd);
-						geom.stroke = ISeries(_dataProvider.series[i]).strokeColor ?
-								new SolidStroke(ISeries(_dataProvider.series[i]).strokeColor, ISeries(_dataProvider.series[i]).strokeAlpha)
+						geom.stroke = ISeries(_dataProvider.series[i]).getStroke() != null ?
+								ISeries(_dataProvider.series[i]).getStroke() 
 								 : new SolidStroke(0x999999);
 						gg.geometryCollection.addItem(geom);
 					}
