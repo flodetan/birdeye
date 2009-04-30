@@ -37,7 +37,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
 	import org.un.cava.birdeye.qavis.charts.polarCharts.CoxComb;
 	import org.un.cava.birdeye.qavis.charts.renderers.ArcPath;
-	import org.un.cava.birdeye.qavis.charts.renderers.TriangleRenderer;
+	import org.un.cava.birdeye.qavis.charts.renderers.UpTriangleRenderer;
 
 	public class PolarColumnSeries extends PolarStackableSeries
 	{
@@ -58,7 +58,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			super.commitProperties();
 
 			if (! itemRenderer)
-				itemRenderer = TriangleRenderer;
+				itemRenderer = UpTriangleRenderer;
 
 			// doesn't need to call super.commitProperties(), since it doesn't need to listen
 			// to axes interval changes 
