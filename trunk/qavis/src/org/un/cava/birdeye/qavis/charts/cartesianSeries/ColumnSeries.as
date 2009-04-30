@@ -34,8 +34,10 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 	import flash.geom.Rectangle;
 	
 	import mx.collections.CursorBookmark;
+	import mx.styles.CSSStyleDeclaration;
+	import mx.styles.StyleManager;
 	
-	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
+	import org.un.cava.birdeye.qavis.charts.axis.XYZAxis;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
 	import org.un.cava.birdeye.qavis.charts.renderers.RasterRenderer;
@@ -168,12 +170,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					case STACKED100:
 						colWidth = size;
 						xPos = xPos - size/2;
-						ttShapes = [];
 						ttXoffset = -30;
 						ttYoffset = 20;
-						var line:Line = new Line(xPos+ colWidth/2, yPos, xPos + colWidth/2 + ttXoffset/3, yPos + ttYoffset);
-						line.stroke = new SolidStroke(0xaaaaaa,1,2);
-		 				ttShapes[0] = line;
 						break;
 					case STACKED:
 						xPos = xPos + size/2 - size/_total * _stackPosition;
@@ -187,7 +185,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				if (zAxis)
 				{
 					zPos = zAxis.getPosition(cursor.current[zField]);
-					yAxisRelativeValue = XYZAxisUI(zAxis).height - zPos;
+					yAxisRelativeValue = XYZAxis(zAxis).height - zPos;
 				} else if (chart.zAxis) {
 					zPos = chart.zAxis.getPosition(cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 
@@ -197,7 +195,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					// up side down. this trick allows to visualize the y axis as
 					// if it would be a z. when there will be a 3d line class, it will 
 					// be replaced
-					yAxisRelativeValue = XYZAxisUI(chart.zAxis).height - zPos;
+					yAxisRelativeValue = XYZAxis(chart.zAxis).height - zPos;
 				}
 
  				var bounds:Rectangle = new Rectangle(xPos, yPos, colWidth, y0 - yPos);
@@ -217,6 +215,9 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					} else
 						zPos = 0;
 				}
+
+				if (ttGG && _extendMouseEvents)
+					gg = ttGG;
 				
 //				poly = renderer.getGeometry(bounds);
 
