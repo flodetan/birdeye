@@ -43,7 +43,6 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 	
 	import org.un.cava.birdeye.qavis.charts.axis.CategoryAngleAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
-	import org.un.cava.birdeye.qavis.charts.axis.NumericAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.PolarCoordinateTransform;
 	import org.un.cava.birdeye.qavis.charts.polarSeries.PolarColumnSeries;
 	import org.un.cava.birdeye.qavis.charts.polarSeries.PolarSeries;
@@ -53,18 +52,7 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 	{
 		private const COLUMN:String = "column";
 		private const RADAR:String = "radar";
-		
-		private var _type:String = PolarStackableSeries.OVERLAID;
-		/** Set the type of stack, overlaid if the series are shown on top of the other, 
-		 * or stacked if they appear staked one after the other (horizontally).*/
-		[Inspectable(enumeration="overlaid,stacked")]
-		public function set type(val:String):void
-		{
-			_type = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		
+				
 		private var _layout:String;
 		[Inspectable(enumeration="column,radar")]
 		public function set layout(val:String):void
@@ -310,9 +298,9 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 			var interval:int = aAxis.interval;
 			var nEle:int = ele.length;
 			
-			if (radiusAxis is NumericAxisUI && !isNaN(NumericAxisUI(radiusAxis).interval))
+			if (radiusAxis is NumericAxis && !isNaN(NumericAxis(radiusAxis).interval))
 			{
-				var rAxis:NumericAxisUI = NumericAxisUI(radiusAxis);
+				var rAxis:NumericAxis = NumericAxis(radiusAxis);
 				var rMin:Number = rAxis.min;
 				var rMax:Number = rAxis.max;
 				
