@@ -36,15 +36,15 @@
 	import flash.text.TextFieldAutoSize;
 	
 	[Exclude(name="scaleType", kind="property")]
-	public class LogAxisUI extends NumericAxisUI 
+	public class LogAxis extends NumericAxis 
 	{
 		override public function set scaleType(val:String):void
 		{}
 		 
-		public function LogAxisUI()
+		public function LogAxis()
 		{
 			super();
-			_scaleType = BaseAxisUI.LOG;
+			_scaleType = BaseAxis.LOG;
 		}
 		
 		// other methods

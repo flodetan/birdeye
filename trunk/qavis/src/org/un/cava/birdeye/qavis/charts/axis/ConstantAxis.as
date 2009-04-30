@@ -30,7 +30,7 @@
 	import com.degrafa.geometry.RegularRectangle;
 	
 	[Exclude(name="scaleType", kind="property")]
-	public class ConstantAxisUI extends NumericAxisUI 
+	public class ConstantAxis extends NumericAxis 
 	{
 		/** @Private
 		 * the scaleType cannot be changed, since it's inherently "constant".*/
@@ -45,10 +45,10 @@
 		 
 		// UIComponent flow
 		
-		public function ConstantAxisUI()
+		public function ConstantAxis()
 		{
 			super();
-			_scaleType = BaseAxisUI.CONSTANT;
+			_scaleType = BaseAxis.CONSTANT;
 			showLabels = false;
 			maxLblSize = 0;
 		}

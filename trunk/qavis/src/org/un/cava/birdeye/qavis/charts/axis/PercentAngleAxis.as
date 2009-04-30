@@ -34,7 +34,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		/** Set the scale type, LINEAR by default. */
 		override public function set scaleType(val:String):void
 		{
-			_scaleType = BaseAxisUI.PERCENT;
+			_scaleType = BaseAxis.PERCENT;
 		}
 		
 		override public function set min(val:Number):void
@@ -50,7 +50,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		public function PercentAngleAxis():void
 		{
 			super();
-			_scaleType = BaseAxisUI.PERCENT;
+			_scaleType = BaseAxis.PERCENT;
 			_size = 359.99;
 		}
 

@@ -34,7 +34,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 	
 	import flash.events.Event;
 	
-	public class XYZAxisUI extends BaseAxisUI 
+	public class XYZAxis extends BaseAxis 
 	{
 		protected var readyForLayout:Boolean = false;
 
@@ -85,7 +85,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		}
 
 		// UIComponent flow
-		public function XYZAxisUI()
+		public function XYZAxis()
 		{
 			super();
 		}
@@ -117,49 +117,52 @@ package org.un.cava.birdeye.qavis.charts.axis
 		/** @Private */
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
-			super.updateDisplayList(w,h);
-			setActualSize(w,h);
-			
-			removeAllElements();
-			
-			drawAxisLine(w,h)
-
-			if (readyForLayout)
+			if (showAxis)
 			{
-				switch (placement)
+				super.updateDisplayList(w,h);
+				setActualSize(w,h);
+				
+				removeAllElements();
+				
+				drawAxisLine(w,h)
+	
+				if (readyForLayout)
 				{
-					case BOTTOM:
-					case HORIZONTAL_CENTER:
-						xMin = 0; xMax = w;
-						yMin = 0; yMax = 0;
-						sign = 1;
-						_pointer = new Line(0,0, 0, 7);
-						break;
-					case TOP:
-						xMin = 0; xMax = w;
-						yMin = h; yMax = h;
-						sign = -1;
-						_pointer = new Line(0,h-7, 0, h);
-						break;
-					case LEFT:
-					case VERTICAL_CENTER:
-						xMin = w; xMax = w;
-						yMin = 0; yMax = h;
-						sign = -1;
-						_pointer = new Line(w-7,h, w, h);
-						break;
-					case RIGHT:
-					case DIAGONAL:
-						xMin = 0; xMax = 0;
-						yMin = 0; yMax = h;
-						sign = 1;
-						_pointer = new Line(0,h, +7, h);
-						break;
+					switch (placement)
+					{
+						case BOTTOM:
+						case HORIZONTAL_CENTER:
+							xMin = 0; xMax = w;
+							yMin = 0; yMax = 0;
+							sign = 1;
+							_pointer = new Line(0,0, 0, sizePointer);
+							break;
+						case TOP:
+							xMin = 0; xMax = w;
+							yMin = h; yMax = h;
+							sign = -1;
+							_pointer = new Line(0,h-sizePointer, 0, h);
+							break;
+						case LEFT:
+						case VERTICAL_CENTER:
+							xMin = w; xMax = w;
+							yMin = 0; yMax = h;
+							sign = -1;
+							_pointer = new Line(w-sizePointer,h, w, h);
+							break;
+						case RIGHT:
+						case DIAGONAL:
+							xMin = 0; xMax = 0;
+							yMin = 0; yMax = h;
+							sign = 1;
+							_pointer = new Line(0,h, +sizePointer, h);
+							break;
+					}
+					drawAxes(xMin, xMax, yMin, yMax, sign);
+					_pointer.stroke = new SolidStroke(colorPointer, 1, weightPointer);
+					_pointer.visible = false;
+					gg.geometryCollection.addItem(_pointer);
 				}
-				drawAxes(xMin, xMax, yMin, yMax, sign);
-				_pointer.stroke = new SolidStroke(0xff0000,1,3);
-				_pointer.visible = false;
-				gg.geometryCollection.addItem(_pointer);
 			}
 		}
 		/** @Private
@@ -197,7 +200,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 			}
 
 			line = new Line(x0,y0,x1,y1);
-			line.stroke = new SolidStroke(_lineColor, 1, _lineWeight);
+			line.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 			gg.geometryCollection.addItem(line);
 
 		}

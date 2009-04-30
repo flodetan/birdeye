@@ -40,7 +40,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 	
 	import org.un.cava.birdeye.qavis.charts.polarCharts.PolarChart;
 
-	public class RadarAxisUI extends Surface
+	public class RadarAxis extends Surface
 	{
 		private var _function:Function;
 		/** Set the function that will be applied to calculate the getPosition of a 
@@ -119,7 +119,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		// UIComponent methods
 		
 		private var gg:GeometryGroup;
-		public function RadarAxisUI()
+		public function RadarAxis()
 		{
 			super();
 			gg = new GeometryGroup();
@@ -155,6 +155,8 @@ package org.un.cava.birdeye.qavis.charts.axis
 				for each (var element:String in angleAxis.elements)
 				{
 					radiusAxes[element] = new NumericAxis();
+					NumericAxis(radiusAxes[element]).showAxis = false;
+					
 					if (_function != null)
 						NumericAxis(radiusAxes[element]).f = _function;
 					

@@ -58,6 +58,11 @@
 			if (elements && elements.length>0)
 				interval = (_maxAngle - _minAngle) / elements.length;
 		}
+		
+		public function CategoryAngleAxis():void
+		{
+			showAxis = false;
+		}
 
 		override public function getPosition(dataValue:*):*
 		{

@@ -30,29 +30,19 @@
 	import com.degrafa.geometry.RegularRectangle;
 	
 	[Exclude(name="scaleType", kind="property")]
-	public class LinearAxisUI extends NumericAxisUI 
+	public class ColorAxis extends LinearAxis
 	{
-		/** @Private
-		 * the scaleType cannot be changed, since it's inherently "linear".*/
-		override public function set scaleType(val:String):void
-		{}
-		 
-		// UIComponent flow
+		public var minColor:Number = 0x000000;
+		public var maxColor:Number = 0xffffff;
 		
-		public function LinearAxisUI()
+		public function ColorAxis():void
 		{
-			super();
-			_scaleType = BaseAxisUI.LINEAR;
-		}
-		
-		override protected function commitProperties():void
-		{
-			super.commitProperties();
+			showAxis = false;
 		}
 		
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
-			super.updateDisplayList(w,h);
+			// no need to draw
 		}
 		
 		// other methods
@@ -61,23 +51,37 @@
 		 * Override the XYZAxis getPostion method based on the linear scaling.*/
 		override public function getPosition(dataValue:*):*
 		{
-			var pos:Number = NaN;
+			// max-min colors might be confused, therefore 
+			// we must insure that the calc
+			size = Math.abs(maxColor-minColor);
+			
+			var color:uint = NaN;
 			if (! (isNaN(max) || isNaN(min)))
-				switch (placement)
-				{
-					case BOTTOM:
-					case TOP:
-					case HORIZONTAL_CENTER:
-						pos = size * (Number(dataValue) - min)/(max - min);
-						break;
-					case LEFT:
-					case RIGHT:
-					case VERTICAL_CENTER:
-						pos = size * (1 - (Number(dataValue) - min)/(max - min));
-						break;
-				}
+				color = size * (Number(dataValue) - min)/(max - min);
 				
-			return pos;
+			return isNaN(color) ? color: decimalToHex(Math.min(maxColor, minColor) + color);
+		}
+
+		private function decimalToHex(value:uint):String
+		{
+			var hexDigits:String = "0123456789ABCDEF";
+			var hex:String = '';
+			
+			while (value > 0)
+			{
+				//get the next hex digit by masking everything except the last 4 bits (a single hex digit)
+				var next:uint = value & 0xF;
+				//shift number by 4 bits (the value in 'next')
+				value >>= 4;
+				//add the hex value of 'next' to the string
+				hex = hexDigits.charAt(next) + hex;
+			}
+			//ensure there's at least one digit
+			if (hex.length == 0)
+				hex = '0'
+			
+			//add the hexadecimal prefix
+			return '0x'+hex;
 		}
 	}
 }
