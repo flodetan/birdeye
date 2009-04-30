@@ -51,7 +51,6 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 		/** Set the z axis.*/
 		function set zAxis(val:IAxisUI):void;
 
-		
 		function get yField():String;
 		function get xField():String;
 		function get xAxis():IAxisUI;
