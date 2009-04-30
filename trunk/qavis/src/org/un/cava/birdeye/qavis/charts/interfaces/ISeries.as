@@ -27,12 +27,25 @@
  
 package org.un.cava.birdeye.qavis.charts.interfaces
 {
+	import com.degrafa.core.IGraphicsFill;
+	import com.degrafa.core.IGraphicsStroke;
+	
 	import flash.events.MouseEvent;
 	
 	import mx.collections.IViewCursor;
 	
 	public interface ISeries extends IRasterRenderer
 	{
+		/** Set the colorField to filter horizontal data values.*/
+		function set colorField(val:String):void;
+		function get colorField():String;
+
+		/** Set the color axis.*/
+		function set colorAxis(val:INumerableAxis):void;
+		function get colorAxis():INumerableAxis;
+		function get maxColorValue():Number;
+		function get minColorValue():Number;
+
 		/** Remove all elements from the series (Surface component).*/
 		function removeAllElements():void;
 		
@@ -41,20 +54,10 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 		function get dataProvider():Object;
 
 		/** Set the fill color.*/
-		function set fillColor(val:Number):void;
-		function get fillColor():Number;
+		function getFill():IGraphicsFill;
 
 		/** Set the stroke color.*/
-		function set strokeColor(val:Number):void;
-		function get strokeColor():Number;
-
-		/** Set the fill alpha.*/
-		function set fillAlpha(val:Number):void;
-		function get fillAlpha():Number;
-
-		/** Set the stroke alpha.*/
-		function set strokeAlpha(val:Number):void;
-		function get strokeAlpha():Number;
+		function getStroke():IGraphicsStroke;
 
 		/** Set the itemRenderer used for the layout of data values.*/
 		function set itemRenderer(val:Class):void;
