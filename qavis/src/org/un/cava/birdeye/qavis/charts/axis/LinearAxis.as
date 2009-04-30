@@ -25,14 +25,59 @@
  * THE SOFTWARE.
  */
  
-package org.un.cava.birdeye.qavis.charts.axis
+ package org.un.cava.birdeye.qavis.charts.axis
 {
-	public class DateTimeAxisUI extends XYZAxisUI 
+	import com.degrafa.geometry.RegularRectangle;
+	
+	[Exclude(name="scaleType", kind="property")]
+	public class LinearAxis extends NumericAxis
 	{
-		public function DateTimeAxisUI()
+		/** @Private
+		 * the scaleType cannot be changed, since it's inherently "linear".*/
+		override public function set scaleType(val:String):void
+		{}
+		 
+		// UIComponent flow
+		
+		public function LinearAxis()
 		{
 			super();
+			_scaleType = BaseAxis.LINEAR;
 		}
 		
+		override protected function commitProperties():void
+		{
+			super.commitProperties();
+		}
+		
+		override protected function updateDisplayList(w:Number, h:Number):void
+		{
+			super.updateDisplayList(w,h);
+		}
+		
+		// other methods
+
+		/** @Private
+		 * Override the XYZAxis getPostion method based on the linear scaling.*/
+		override public function getPosition(dataValue:*):*
+		{
+			var pos:Number = NaN;
+			if (! (isNaN(max) || isNaN(min)))
+				switch (placement)
+				{
+					case BOTTOM:
+					case TOP:
+					case HORIZONTAL_CENTER:
+						pos = size * (Number(dataValue) - min)/(max - min);
+						break;
+					case LEFT:
+					case RIGHT:
+					case VERTICAL_CENTER:
+						pos = size * (1 - (Number(dataValue) - min)/(max - min));
+						break;
+				}
+				
+			return pos;
+		}
 	}
 }

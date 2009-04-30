@@ -27,36 +27,12 @@
  
 package org.un.cava.birdeye.qavis.charts.axis
 {
-	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
-	
-	public class PercentAxis extends NumericAxis
+	public class DateTimeAxis extends XYZAxis 
 	{
-		/** Set the scale type, LINEAR by default. */
-		override public function set scaleType(val:String):void
+		public function DateTimeAxis()
 		{
-			_scaleType = BaseAxis.PERCENT;
+			super();
 		}
 		
-		override public function set min(val:Number):void
-		{
-			_min = NaN;
-		}
-
-		override public function set max(val:Number):void
-		{
-			_max = NaN;
-		}
-		
-		public function PercentAxis():void
-		{
-			showAxis = false;
-		}
-
-		override public function getPosition(dataValue:*):*
-		{
-			if (isNaN(_size))
-				size = 100;
-			return size * Number(dataValue) / _totalPositiveValue;
-		} 
 	}
 }

@@ -27,20 +27,27 @@
  
 package org.un.cava.birdeye.qavis.charts.axis
 {
-	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
+	import com.degrafa.geometry.Line;
+	import com.degrafa.geometry.RasterText;
+	import com.degrafa.geometry.RasterTextPlus;
+	import com.degrafa.paint.SolidFill;
+	import com.degrafa.paint.SolidStroke;
 	
-	public class NumericAxis implements INumerableAxis
+	import flash.text.TextFieldAutoSize;
+	
+	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisUI;
+	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
+
+	public class NumericAxis extends XYZAxis implements INumerableAxis, IAxisUI
 	{
-		private var _function:Function;
-		/** Set the function that will be applied to calculate the getPosition of a 
-		 * data value in the axis. The function will basically define a custom 
-		 * scale for the axis.*/
-		public function set f(val:Function):void
-		{
-			_function = val;
-		}
-		
+	
+		/** @Private
+		 * The minimum data value of the axis, after that the min is formatted 
+		 * by the formatMin methods.*/
+		private var minFormatted:Boolean = false;
+
 		protected var _totalPositiveValue:Number = NaN;
+		/** The total sum of positive values of the axis.*/
 		public function set totalPositiveValue(val:Number):void
 		{
 			_totalPositiveValue = val;
@@ -50,59 +57,6 @@ package org.un.cava.birdeye.qavis.charts.axis
 			return _totalPositiveValue;
 		}
 		
-		protected var _size:Number;
-		public function set size(val:Number):void
-		{
-			_size = val;
-		}
-		public function get size():Number
-		{
-			return _size;
-		}
-	
-		protected var _scaleType:String = BaseAxisUI.LINEAR;
-		/** Set the scale type, LINEAR by default. */
-		[Inspectable(enumeration="linear,constant,log")]
-		public function set scaleType(val:String):void
-		{
-			_scaleType = val;
-		}
-		public function get scaleType():String
-		{
-			return _scaleType;
-		}
-		
-		private var _interval:Number;
-		public function set interval(val:Number):void
-		{
-			_interval = val;
-		}
-		public function get interval():Number
-		{
-			return _interval;
-		}
-
-		/** @Private
-		 * Implement the IAxis getPostion method with a generic numeric function.
-		 * This allows to define any type of scaling for a numeric axis.*/
-		public function getPosition(dataValue:*):*
-		{
-			if (_function == null)
-			{
-				if (scaleType == BaseAxisUI.CONSTANT)
-					return _size;
-				else
-					return _size * (Number(dataValue) - min)/(max - min);
-			}
-			else 
-				return _function(dataValue, min, max, _baseAtZero, _size);
-		}
-	
-		/** @Private
-		 * The minimum data value of the axis, after that the min is formatted 
-		 * by the formatMin methods.*/
-		private var minFormatted:Boolean = false;
-	
 		protected var _min:Number = NaN;
 		/** The minimum value of the axis (if the axis is shared among more series, than
 		 * this is the minimun value among all series.*/
@@ -111,6 +65,9 @@ package org.un.cava.birdeye.qavis.charts.axis
 			_min = val;
 			minFormatted = false;
 			formatMin();
+			invalidateSize();
+			invalidateProperties();
+			invalidateDisplayList();
 		}
 		public function get min():Number
 		{
@@ -121,7 +78,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		 * The maximum data value of the axis, after that max is formatted 
 		 * by the formatMax methods.*/
 		private var maxFormatted:Boolean = false;
-	
+
 		protected var _max:Number = NaN;
 		/** The maximum value of the axis (if the axis is shared among more series, than
 		 * this is the maximum value among all series. */
@@ -130,6 +87,9 @@ package org.un.cava.birdeye.qavis.charts.axis
 			_max = val;
 			maxFormatted = false;
 			formatMax();
+			invalidateSize();
+			invalidateProperties();
+			invalidateDisplayList();
 		}
 		public function get max():Number
 		{
@@ -142,12 +102,151 @@ package org.un.cava.birdeye.qavis.charts.axis
 		public function set baseAtZero(val:Boolean):void
 		{
 			_baseAtZero = val;
+			invalidateProperties()
+			invalidateDisplayList();
 		}
 		public function get baseAtZero():Boolean
 		{
 			return _baseAtZero;
 		}
+		
+		// UIComponent flow
+		
+		public function NumericAxis()
+		{
+			super();
+			scaleType = BaseAxis.LINEAR;
+		}
+		
+		override protected function commitProperties():void
+		{
+			super.commitProperties();
+
+			// if no interval is specified by the user, than divide the axis in 5 parts
+			if (!isNaN(max) && !isNaN(min) && !isGivenInterval)
+			{
+				if (baseAtZero)
+				{
+					if (max > 0)
+						_interval = max / 5;
+					else
+						_interval = -min / 5;
+				} else {
+					interval = Math.abs((max - min) / 5)
+					isGivenInterval = false;
+				}
+			}
+			
+			// if the placement is set, and max, min and interval calculated
+			// than the axis is ready to be drawn
+			if (placement && !isNaN(max) && !isNaN(min) && !isNaN(interval))
+			{
+				if (showAxis)
+					readyForLayout = true;
+			}
+			else 
+				readyForLayout = false;
+		}
+		
+		override protected function measure():void
+		{
+			super.measure();
+ 
+ 			if (!isNaN(min) && !isNaN(max) && placement)
+				maxLabelSize();
+ 		}
+		
+		// other methods
+		
+		/** @Private
+		 * Calculate the maximum label size, necessary to define the needed 
+		 * width (for y axes) or height (for x axes) of the CategoryAxis.*/
+		override protected function maxLabelSize():void
+		{
+			var text:String = String(String(min).length < String(max).length ?
+									max : min);
+
+			switch (placement)
+			{
+				case TOP:
+				case BOTTOM:
+				case HORIZONTAL_CENTER:
+					maxLblSize = sizeLabel /* pixels for 1 char height */ + thickWidth + 10;
+					height = maxLblSize;
+					break;
+				case LEFT:
+				case RIGHT:
+				case VERTICAL_CENTER:
+					maxLblSize = text.length * sizeLabel/2 /* pixels for 1 char width */ + thickWidth + 10;
+					width = maxLblSize;
+			}
+			
+			// calculate the maximum label size according to the 
+			// styles defined for the axis 
+			super.calculateMaxLabelStyled();
+		}
+
+		/** @Private
+		 * Draw axes depending on their orientation:
+		 * xMin == xMax means that the orientation is vertical; 
+		 * yMin == yMax means that the orientation is horizontal.
+		 */
+		override protected function drawAxes(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
+		{
+			var snap:Number;
+			
+			if (isNaN(maxLblSize) && !isNaN(min) && !isNaN(max) && placement)
+				maxLabelSize();
+
+			if (size > 0 && !isNaN(interval) && showLabels)
+			{	
+				if (xMin == xMax)
+				{
+					for (snap = min; snap<max; snap += interval)
+					{
+						// create thick line
+			 			thick = new Line(xMin + thickWidth * sign, getPosition(snap), xMax, getPosition(snap));
+						thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
+						gg.geometryCollection.addItem(thick);
+			
+						// create label 
+	 					label = new RasterTextPlus();
+	 					label.fontFamily = fontLabel;
+	 					label.fontSize = sizeLabel;
+						label.text = String(Math.round(snap));
+	 					label.visible = true;
+						label.autoSize = TextFieldAutoSize.LEFT;
+						label.autoSizeField = true;
+						label.y = getPosition(snap)-label.displayObject.height/2;
+						label.x = thickWidth * sign; 
+						label.fill = new SolidFill(colorLabel);
+						gg.geometryCollection.addItem(label);
+					}
+				} else {
+					for (snap = min; snap<max; snap += interval)
+					{
+						// create thick line
+			 			thick = new Line(getPosition(snap), yMin + thickWidth * sign, getPosition(snap), yMax);
+						thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
+						gg.geometryCollection.addItem(thick);
 	
+						// create label 
+	 					label = new RasterTextPlus();
+						label.text = String(Math.round(snap));
+	 					label.fontFamily = fontLabel;
+	 					label.fontSize = sizeLabel;
+	 					label.visible = true;
+						label.autoSize = TextFieldAutoSize.LEFT;
+						label.autoSizeField = true;
+						label.y = thickWidth;
+						label.x = getPosition(snap)-label.displayObject.width/2; 
+						label.fill = new SolidFill(colorLabel);
+						gg.geometryCollection.addItem(label);
+					}
+				}
+			}
+		}
+		
 		/** @Private
 		 * Calculate the format of the axis values, in order to have 
 		 * the more rounded values possible.*/ 
@@ -167,7 +266,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 				maxFormatted = true; 
 			}
 		}
-	
+
 		/** @Private
 		 * Calculate the format of the axis values, in order to have 
 		 * the more rounded values possible.*/ 
@@ -196,6 +295,22 @@ package org.un.cava.birdeye.qavis.charts.axis
 					maxFormatted = true;
 				} 
 			}
+		}
+
+		/** @Private
+		 * Override the XYZAxis getPostion method with a generic numeric function.
+		 * This allows to define any type of scaling for a numeric axis.*/
+		override public function getPosition(dataValue:*):*
+		{
+			if (_function == null)
+			{
+				if (scaleType == BaseAxis.CONSTANT)
+					return _size;
+				else
+					return _size * (Number(dataValue) - min)/(max - min);
+			}
+			else 
+				return _function(dataValue, min, max, _baseAtZero, _size);
 		}
 	}
 }
