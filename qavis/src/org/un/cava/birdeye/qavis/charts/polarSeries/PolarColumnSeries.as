@@ -60,9 +60,6 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			if (! itemRenderer)
 				itemRenderer = TriangleRenderer;
 
-			if (isNaN(_strokeColor))
-				_strokeColor = 0x000000;
-
 			// doesn't need to call super.commitProperties(), since it doesn't need to listen
 			// to axes interval changes 
 
@@ -182,7 +179,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 				switch (_stackType) 
 				{
 					case STACKED:
-						startAngle = angle - angleInterval/2 +arcSize*(_stackPosition-1);
+						startAngle = angle - angleInterval/2 +arcSize*_stackPosition;
 						break;
 					case OVERLAID:
 					case STACKED100:
@@ -208,8 +205,6 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 				else
 					arc = 
 						new EllipticalArc(arcCenterX, arcCenterY, wSize, hSize, startAngle, arcSize, "pie");
-
-				stroke.weight = 1;
 
 				arc.fill = fill;
 				arc.stroke = stroke;
