@@ -27,54 +27,20 @@
 
 package org.un.cava.birdeye.qavis.charts.polarCharts
 {
-	import org.un.cava.birdeye.qavis.charts.polarSeries.PolarPieSeries;
-	import org.un.cava.birdeye.qavis.charts.polarSeries.PolarStackableSeries;
+	import org.un.cava.birdeye.qavis.charts.axis.BaseAxis;
+	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
+	import org.un.cava.birdeye.qavis.charts.axis.PercentAngleAxis;
 	
 	public class PieChart extends PolarChart
-	{
-		private var _type:String = PolarStackableSeries.OVERLAID;
-		/** Set the type of stack, overlaid if the series are shown on top of the other, 
-		 * or stacked if they appear staked one after the other (horizontally).*/
-		[Inspectable(enumeration="stacked")]
-		public function set type(val:String):void
-		{
-			_type = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		
+	{		
 		public function PieChart()
 		{
 			super();
-		}
-		
-		override protected function commitProperties():void
-		{
-			super.commitProperties();
-			if (_series)
-			{
-				var _pieSeries:Array = [];
-			
-				for (var i:Number = 0; i<_series.length; i++)
-				{
-					if (_series[i] is PolarPieSeries)
-					{
-						PolarPieSeries(_series[i]).stackType = _type;
-						_pieSeries.push(_series[i]);
-					}
-				}
-				
-				for (i = 0; i<_pieSeries.length; i++)
-				{
-					PolarPieSeries(_pieSeries[i]).stackPosition = i;
-					PolarPieSeries(_pieSeries[i]).total = _pieSeries.length;
-				}
-			}
-		}
-		
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-		{
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
+			angleAxis = new PercentAngleAxis();
+			angleAxis.size = 360;
+			radiusAxis = new NumericAxis();
+			NumericAxis(radiusAxis).showAxis = false;
+			radiusAxis.scaleType = BaseAxis.CONSTANT;
 		}
 	}
 }
