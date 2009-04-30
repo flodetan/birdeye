@@ -29,7 +29,11 @@ package org.un.cava.birdeye.qavis.charts
 {
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
+	import com.degrafa.core.IGraphicsFill;
+	import com.degrafa.core.IGraphicsStroke;
 	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.paint.GradientStop;
+	import com.degrafa.paint.LinearGradientFill;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
@@ -43,18 +47,93 @@ package org.un.cava.birdeye.qavis.charts
 	import mx.collections.XMLListCollection;
 	import mx.core.IToolTip;
 	import mx.events.ToolTipEvent;
+	import mx.styles.CSSStyleDeclaration;
+	import mx.styles.StyleManager;
 	
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
+	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ISeries;
+
+	[Style(name="gradientColors",type="Array",inherit="no")]
+	[Style(name="gradientAlphas",type="Array",inherit="no")]
+
+	[Style(name="fillColor",type="uint",inherit="no")]
+	[Style(name="fillAlpha",type="Number",inherit="no")]
+
+	[Style(name="strokeColor",type="uint",inherit="yes")]
+	[Style(name="strokeAlpha",type="Number",inherit="no")]
+	[Style(name="strokeWeight",type="uint",inherit="no")]
+	
+	[Style(name="labelFont",type="String",inherit="no")]
+	[Style(name="labelSize",type="uint",inherit="no")]
+	[Style(name="labelColor",type="uint",inherit="no")]
 
 	[Exclude(name="chart", kind="property")]
 	[Exclude(name="cursor", kind="property")]
+	
 	public class BaseSeries extends Surface implements ISeries
 	{
+		protected var _extendMouseEvents:Boolean = false;
+		[Inspectable(enumeration="true,false")]
+		public function set extendMouseEvents(val:Boolean):void
+		{
+			_extendMouseEvents = val;
+			invalidateDisplayList();
+		}
+		
+		private var _colorAxis:INumerableAxis;
+		/** Define an axis to set the colorField for data items.*/
+		public function set colorAxis(val:INumerableAxis):void
+		{
+			_colorAxis = val;
+
+			invalidateDisplayList();
+		}
+		public function get colorAxis():INumerableAxis
+		{
+			return _colorAxis;
+		}
+
+		protected var _maxColorValue:Number = NaN;
+		public function get maxColorValue():Number
+		{
+			_maxColorValue = getMaxValue(colorField);
+			return _maxColorValue;
+		}
+
+		private var _minColorValue:Number = NaN;
+		public function get minColorValue():Number
+		{
+			_minColorValue = getMinValue(colorField);
+			return _minColorValue;
+		}
+
+		private var _colorField:String;
+		public function set colorField(val:String):void
+		{
+			_colorField = val;
+			invalidateDisplayList();
+		}
+		public function get colorField():String
+		{
+			return _colorField;
+		}
+
+		private var _labelField:String;
+		public function set labelField(val:String):void
+		{
+			_labelField = val;
+			invalidateDisplayList();
+		}
+		public function get labelField():String
+		{
+			return _labelField;
+		}
+
 		protected var gg:DataItemLayout;
 		protected var dataItems:Array = [];
-		protected var fill:SolidFill = new SolidFill(0x888888,0);
-		protected var stroke:SolidStroke = new SolidStroke(0x888888,1,1);
+		protected var fill:IGraphicsFill = new SolidFill(0x888888,0);
+		protected var stroke:IGraphicsStroke = new SolidStroke(0x888888,1,1);
 		
 		protected var _dataProvider:Object=null;
 		/** Set the data provider for the series, if the series doesn't have its own dataProvider
@@ -126,17 +205,6 @@ package org.un.cava.birdeye.qavis.charts
 			return _cursor;
 		}
 		
-		private var _labelField:String;
-		public function set labelField(val:String):void
-		{
-			_labelField = val;
-			invalidateDisplayList();
-		}
-		public function get labelField():String
-		{
-			return _labelField;
-		}
-
 		private var _randomColors:Boolean = false;
 		[Inspectable(enumeration="true,false")]
 		public function set randomColors(val:Boolean):void
@@ -149,28 +217,124 @@ package org.un.cava.birdeye.qavis.charts
 			return _randomColors;
 		}
 		
-		private var _fillAlpha:Number = 1;
+		private var _alphaFill:Number = 1;
 		/** Set the fill alpha.*/
-		public function set fillAlpha(val:Number):void
+		public function set alphaFill(val:Number):void
 		{
-			_fillAlpha = val;
+			_alphaFill = val;
 			invalidateDisplayList();
 		}
-		public function get fillAlpha():Number
+		public function get alphaFill():Number
 		{
-			return _fillAlpha;
+			return _alphaFill;
 		}
 		
-		private var _strokeAlpha:Number = 1;
+		private var _alphaStroke:Number = 1;
 		/** Set the stroke alpha.*/
-		public function set strokeAlpha(val:Number):void
+		public function set alphaStroke(val:Number):void
 		{
-			_strokeAlpha = val;
+			_alphaStroke = val;
 			invalidateDisplayList();
 		}
-		public function get strokeAlpha():Number
+		public function get alphaStroke():Number
 		{
-			return _strokeAlpha;
+			return _alphaStroke;
+		}
+
+		private var _colorFill:uint;
+		/** Set the fill color to be used for data items.*/
+		public function set colorFill(val:uint):void
+		{
+			_colorFill = val;
+			invalidateDisplayList();
+		}
+		public function get colorFill():uint
+		{
+			return _colorFill;
+		}
+
+		protected var _colorStroke:uint;
+		/** Set the stroke color to be used for the data items.*/
+		public function set colorStroke(val:uint):void
+		{
+			_colorStroke = val;
+			invalidateDisplayList();
+		}
+		public function get colorStroke():uint
+		{
+			return _colorStroke;
+		}
+		
+		protected var _weightStroke:uint;
+		/** Set the stroke color to be used for the data items.*/
+		public function set weightStroke(val:uint):void
+		{
+			_weightStroke = val;
+			invalidateDisplayList();
+		}
+		public function get weightStroke():uint
+		{
+			return _weightStroke;
+		}
+
+		protected var _colorGradients:Array;
+		/** Set the gradientColors to be used for the data items.*/
+		public function set colorGradients(val:Array):void
+		{
+			_colorGradients = val;
+			invalidateDisplayList();
+		}
+		public function get colorGradients():Array
+		{
+			return _colorGradients;
+		}
+
+		protected var _alphaGradients:Array;
+		/** Set the gradientAlphas to be used for the data items.*/
+		public function set alphaGradients(val:Array):void
+		{
+			_alphaGradients = val;
+			invalidateDisplayList();
+		}
+		public function get alphaGradients():Array
+		{
+			return _alphaGradients;
+		}
+
+		protected var _fontLabel:String;
+		/** Set the gradientAlphas to be used for the data items.*/
+		public function set fontLabel(val:String):void
+		{
+			_fontLabel = val;
+			invalidateDisplayList();
+		}
+		public function get fontLabel():String
+		{
+			return _fontLabel;
+		}
+
+		protected var _sizeLabel:uint;
+		/** Set the gradientAlphas to be used for the data items.*/
+		public function set sizeLabel(val:uint):void
+		{
+			_sizeLabel = val;
+			invalidateDisplayList();
+		}
+		public function get sizeLabel():uint
+		{
+			return _sizeLabel;
+		}
+
+		protected var _colorLabel:uint;
+		/** Set the gradientAlphas to be used for the data items.*/
+		public function set colorLabel(val:uint):void
+		{
+			_colorLabel = val;
+			invalidateDisplayList();
+		}
+		public function get colorLabel():uint
+		{
+			return _colorLabel;
 		}
 
 		private var _mouseDoubleClickFunction:Function;
@@ -214,32 +378,6 @@ package org.un.cava.birdeye.qavis.charts
 			return _displayName;
 		}
 		
-		private var _fillColor:Number = NaN;
-		/** Set the fill color to be used for data items.*/
-		public function set fillColor(val:Number):void
-		{
-			_fillColor = val;
-			fill = new SolidFill(_fillColor, fillAlpha);
-			invalidateDisplayList();
-		}
-		public function get fillColor():Number
-		{
-			return _fillColor;
-		}
-
-		protected var _strokeColor:Number = NaN;
-		/** Set the stroke color to be used for the data items.*/
-		public function set strokeColor(val:Number):void
-		{
-			_strokeColor = val;
-			stroke = new SolidStroke(_strokeColor);
-			invalidateDisplayList();
-		}
-		public function get strokeColor():Number
-		{
-			return _strokeColor;
-		}
-
 		private var _itemRenderer:Class;
 		/** Set the item renderer to be used for both data items layout and related legend item.*/
 		public function set itemRenderer(val:Class):void
@@ -270,7 +408,7 @@ package org.un.cava.birdeye.qavis.charts
 		{
 			super();
 		}
-		
+
 		override protected function createChildren():void
 		{
 			super.createChildren();
@@ -288,8 +426,92 @@ package org.un.cava.birdeye.qavis.charts
 			graphicsCollection.addItem(gg);
 		}
 		
+		// Override updateDisplayList() to update the component
+		// based on the style setting.
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void 
+		{
+			super.updateDisplayList(unscaledWidth, unscaledHeight);
+
+			if (stylesChanged)
+			{
+				// Redraw gradient fill only if style changed.
+				colorGradients = getStyle("gradientColors");
+				alphaGradients = getStyle("gradientAlphas");
+				
+				colorFill = getStyle("fillColor");
+				alphaFill = getStyle("fillAlpha");
+				
+				colorStroke = getStyle("strokeColor");
+				alphaStroke = getStyle("strokeAlpha");
+				weightStroke = getStyle("strokeWeight");
+
+				fontLabel = getStyle("labelFont");
+				colorLabel = getStyle("labelColor");
+				sizeLabel = getStyle("labelSize");
+
+				stylesChanged = false;
+			}
+
+			if (colorGradients)
+			{
+				fill = new LinearGradientFill();
+				var grStop:GradientStop = new GradientStop(colorGradients[0])
+				grStop.alpha = alphaGradients[0];
+				var g:Array = new Array();
+				g.push(grStop);
+
+				grStop = new GradientStop(colorGradients[1]);
+				grStop.alpha = alphaGradients[1];
+				g.push(grStop);
+
+				LinearGradientFill(fill).gradientStops = g;
+			} else 
+				fill = new SolidFill(colorFill, alphaFill);
+			
+			stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
+		}
+
 		// other methods
 
+		private var stylesChanged:Boolean = true;
+		initializeStyles();
+		public static function initializeStyles():void
+		{
+			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("BaseSeries");
+			if(!selector)
+			{
+				selector = new CSSStyleDeclaration();
+			}
+			selector.defaultFactory = function():void
+			{
+				this.gradientColors = null;
+				this.gradientAlphas = [0.5, 0.5];
+
+				this.fillColor = 0x000000;
+				this.fillAlpha = 1;
+
+				this.strokeColor = 0x111111;
+				this.strokeAlpha = 1;
+				this.strokeWeight = 1;
+
+				this.labelFont = "verdana";
+				this.labelSize = 9;
+				this.labelColor = 0x000000;
+
+				this.stylesChanged = true;
+			} 
+			StyleManager.setStyleDeclaration("BaseSeries", selector, true);
+		}
+		
+		// Override the styleChanged() method to detect changes in your new style.
+		override public function styleChanged(styleProp:String):void 
+		{
+			super.styleChanged(styleProp);
+			// Check to see if style changed.
+			if (styleProp == "gradientColors" || styleProp == "gradientAlphas")
+				invalidateDisplayList();
+		}
+		
 		private var currentValue:Number;
 		protected function getTotalPositiveValue(field:String):Number
 		{
@@ -491,6 +713,16 @@ package org.un.cava.birdeye.qavis.charts
 		private function onTTCreate(e:ToolTipEvent):void
 		{
 			e.toolTip = myTT;
+		}
+		
+		public function getFill():IGraphicsFill
+		{
+			return fill;
+		}
+
+		public function getStroke():IGraphicsStroke
+		{
+			return stroke;
 		}
 	}
 }
