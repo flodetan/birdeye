@@ -30,8 +30,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 	import mx.collections.CursorBookmark;
 	import mx.collections.IViewCursor;
 	
-	import org.un.cava.birdeye.qavis.charts.axis.BaseAxisUI;
-	import org.un.cava.birdeye.qavis.charts.axis.LinearAxisUI;
+	import org.un.cava.birdeye.qavis.charts.axis.BaseAxis;
+	import org.un.cava.birdeye.qavis.charts.axis.LinearAxis;
 	import org.un.cava.birdeye.qavis.charts.cartesianSeries.BarSeries;
 	import org.un.cava.birdeye.qavis.charts.cartesianSeries.StackableSeries;
 
@@ -179,8 +179,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 		/** @Private */
 		override protected function createXAxis():void
 		{
-			xAxis = new LinearAxisUI();
-			xAxis.placement = BaseAxisUI.BOTTOM;
+			xAxis = new LinearAxis();
+			xAxis.placement = BaseAxis.BOTTOM;
 		}
 	}
 }
