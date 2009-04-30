@@ -36,8 +36,8 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 	import mx.collections.ICollectionView;
 	
 	import org.un.cava.birdeye.qavis.charts.BaseSeries;
-	import org.un.cava.birdeye.qavis.charts.axis.BaseAxisUI;
-	import org.un.cava.birdeye.qavis.charts.axis.RadarAxisUI;
+	import org.un.cava.birdeye.qavis.charts.axis.BaseAxis;
+	import org.un.cava.birdeye.qavis.charts.axis.RadarAxis;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxis;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisUI;
@@ -121,9 +121,9 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		public function set radiusAxis(val:IAxis):void
 		{
 			_radiusAxis = val;
-			if (val is IAxisUI && IAxisUI(_radiusAxis).placement != BaseAxisUI.HORIZONTAL_CENTER 
-								&& IAxisUI(_radiusAxis).placement != BaseAxisUI.VERTICAL_CENTER)
-				IAxisUI(_radiusAxis).placement = BaseAxisUI.HORIZONTAL_CENTER;
+			if (val is IAxisUI && IAxisUI(_radiusAxis).placement != BaseAxis.HORIZONTAL_CENTER 
+								&& IAxisUI(_radiusAxis).placement != BaseAxis.VERTICAL_CENTER)
+				IAxisUI(_radiusAxis).placement = BaseAxis.HORIZONTAL_CENTER;
 
 			invalidateProperties();
 			invalidateDisplayList();
@@ -133,14 +133,14 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			return _radiusAxis;
 		}
 		
-		private var _radarAxis:RadarAxisUI;
-		public function set radarAxis(val:RadarAxisUI):void
+		private var _radarAxis:RadarAxis;
+		public function set radarAxis(val:RadarAxis):void
 		{
 			_radarAxis = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get radarAxis():RadarAxisUI
+		public function get radarAxis():RadarAxis
 		{
 			return _radarAxis;
 		}
@@ -216,9 +216,6 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
-			if (fill)
-				fill.alpha = fillAlpha;
-
 			removeAllElements();
 			
 			if (ggBackGround)
@@ -280,7 +277,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 				axesCheck = true;
 
 			var colorsCheck:Boolean = 
-				(fill || stroke || isNaN(fillColor) || isNaN(strokeColor));
+				(fill || stroke || isNaN(colorFill) || isNaN(colorStroke));
 
 			var globalCheck:Boolean = 
 /* 				   (!isNaN(_minAngleValue) || !isNaN(_minRadiusValue))

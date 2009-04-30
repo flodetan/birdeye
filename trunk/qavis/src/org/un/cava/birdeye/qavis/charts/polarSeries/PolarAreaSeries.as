@@ -58,9 +58,6 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 			if (! itemRenderer)
 				itemRenderer = DiamondRenderer;
-
-			if (isNaN(_strokeColor))
-				_strokeColor = 0x000000;
 		}
 
 		protected var poly:Polygon;
