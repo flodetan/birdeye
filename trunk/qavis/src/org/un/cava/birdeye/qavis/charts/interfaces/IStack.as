@@ -38,7 +38,8 @@ package org.un.cava.birdeye.qavis.charts.interfaces
 		/** Set the series type (columns, area, bars).*/
 		function get seriesType():String;
 
-		/** Get the stack type (overlaid, stacked, stacked100).*/
+		/** Set/Get the stack type (overlaid, stacked, stacked100).*/
+		function set stackType(val:String):void;
 		function get stackType():String;
 	}
 }
