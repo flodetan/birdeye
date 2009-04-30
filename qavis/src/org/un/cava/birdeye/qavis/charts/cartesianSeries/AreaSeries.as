@@ -37,7 +37,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.AreaChart;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
-	import org.un.cava.birdeye.qavis.charts.renderers.TriangleRenderer;
+	import org.un.cava.birdeye.qavis.charts.renderers.UpTriangleRenderer;
 
 	public class AreaSeries extends StackableSeries
 	{
@@ -79,7 +79,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			super.commitProperties();
 			// select the item renderer (must be an IGeomentry)
 			if (! itemRenderer)
-				itemRenderer = TriangleRenderer;
+				itemRenderer = UpTriangleRenderer;
 
 			// doesn't need to call super.commitProperties(), since it doesn't need to listen
 			// to axes interval changes 
