@@ -35,7 +35,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 	
 	import mx.collections.CursorBookmark;
 	
-	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
+	import org.un.cava.birdeye.qavis.charts.axis.XYZAxis;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
 	import org.un.cava.birdeye.qavis.charts.renderers.RasterRenderer;
@@ -170,7 +170,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 						ttXoffset = -30;
 						ttYoffset = 20;
 						var line:Line = new Line(xPos, yPos + barWidth/2, xPos + ttXoffset/3, yPos + barWidth/2 + ttYoffset);
-						line.stroke = new SolidStroke(0xaaaaaa,1,2);
+						line.stroke = stroke;
 		 				ttShapes[0] = line;
 						break;
 					case STACKED:
@@ -187,7 +187,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				if (zAxis)
 				{
 					zPos = zAxis.getPosition(cursor.current[zField]);
-					yAxisRelativeValue = XYZAxisUI(zAxis).height - zPos;
+					yAxisRelativeValue = XYZAxis(zAxis).height - zPos;
 				} else if (chart.zAxis) {
 					zPos = chart.zAxis.getPosition(cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 
@@ -197,7 +197,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					// up side down. this trick allows to visualize the y axis as
 					// if it would be a z. when there will be a 3d line class, it will 
 					// be replaced
-					yAxisRelativeValue = XYZAxisUI(chart.zAxis).height - zPos;
+					yAxisRelativeValue = XYZAxis(chart.zAxis).height - zPos;
 				}
 
 				// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly

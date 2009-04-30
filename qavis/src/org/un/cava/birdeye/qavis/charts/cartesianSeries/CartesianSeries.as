@@ -33,18 +33,17 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
-	import mx.collections.CursorBookmark;
 	import mx.collections.ICollectionView;
 	import mx.events.ToolTipEvent;
 	
 	import org.un.cava.birdeye.qavis.charts.BaseSeries;
-	import org.un.cava.birdeye.qavis.charts.axis.BaseAxisUI;
+	import org.un.cava.birdeye.qavis.charts.axis.BaseAxis;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.CartesianChart;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisUI;
 	import org.un.cava.birdeye.qavis.charts.interfaces.ICartesianSeries;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IEnumerableAxis;
-	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
+	import org.un.cava.birdeye.qavis.charts.interfaces.ISizableItem;
 
 	[Exclude(name="index", kind="property")]
 	public class CartesianSeries extends BaseSeries implements ICartesianSeries
@@ -133,8 +132,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		public function set xAxis(val:IAxisUI):void
 		{
 			_xAxis = val;
-			if (_xAxis.placement != BaseAxisUI.BOTTOM && _xAxis.placement != BaseAxisUI.TOP)
-				_xAxis.placement = BaseAxisUI.BOTTOM;
+			if (_xAxis.placement != BaseAxis.BOTTOM && _xAxis.placement != BaseAxis.TOP)
+				_xAxis.placement = BaseAxis.BOTTOM;
 
 			invalidateProperties();
 			invalidateDisplayList();
@@ -148,8 +147,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		public function set yAxis(val:IAxisUI):void
 		{
 			_yAxis = val;
-			if (_yAxis.placement != BaseAxisUI.LEFT && _yAxis.placement != BaseAxisUI.RIGHT)
-				_yAxis.placement = BaseAxisUI.LEFT;
+			if (_yAxis.placement != BaseAxis.LEFT && _yAxis.placement != BaseAxis.RIGHT)
+				_yAxis.placement = BaseAxis.LEFT;
 
 			invalidateProperties();
 			invalidateDisplayList();
@@ -163,8 +162,8 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		public function set zAxis(val:IAxisUI):void
 		{
 			_zAxis = val;
-			if (_zAxis.placement != BaseAxisUI.DIAGONAL)
-				_zAxis.placement = BaseAxisUI.DIAGONAL;
+			if (_zAxis.placement != BaseAxis.DIAGONAL)
+				_zAxis.placement = BaseAxis.DIAGONAL;
 
 			invalidateProperties();
 			invalidateDisplayList();
@@ -256,9 +255,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
-			if (fill)
-				fill.alpha = fillAlpha;
-
 			removeAllElements();
 			
 			if (ggBackGround)
@@ -313,7 +309,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 				axesCheck = false;
 
 			var colorsCheck:Boolean = 
-				(fillColor || strokeColor);
+				(fill || stroke);
 
 			var globalCheck:Boolean = 
 				   (!isNaN(_minXValue) || !isNaN(_minYValue))

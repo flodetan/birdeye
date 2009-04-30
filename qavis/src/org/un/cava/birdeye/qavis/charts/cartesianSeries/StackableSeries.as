@@ -29,7 +29,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 {
 	import flash.events.Event;
 	
-	import org.un.cava.birdeye.qavis.charts.axis.XYZAxisUI;
+	import org.un.cava.birdeye.qavis.charts.axis.XYZAxis;
 	import org.un.cava.birdeye.qavis.charts.cartesianCharts.StackableChart;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IStack;
 	
@@ -118,17 +118,17 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			{
 				if (! isListening[OWN_VERTICAL_INTERVAL_CHANGES])
 				{
-					XYZAxisUI(yAxis).addEventListener("IntervalChanged", update);
+					XYZAxis(yAxis).addEventListener("IntervalChanged", update);
 					isListening[OWN_VERTICAL_INTERVAL_CHANGES] = true;
 				}
 				if (isListening[CHART_VERTICAL_INTERVAL_CHANGES])
 				{
-					XYZAxisUI(chart.yAxis).removeEventListener("IntervalChanged", update);
+					XYZAxis(chart.yAxis).removeEventListener("IntervalChanged", update);
 				}
 			} else if (chart && chart.yAxis) {
 				if (! isListening[CHART_VERTICAL_INTERVAL_CHANGES])
 				{
-					XYZAxisUI(chart.yAxis).addEventListener("IntervalChanged", update);
+					XYZAxis(chart.yAxis).addEventListener("IntervalChanged", update);
 					isListening[CHART_VERTICAL_INTERVAL_CHANGES] = true;
 				}
 			}
@@ -137,17 +137,17 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			{
 				if (! isListening[OWN_HORIZONTAL_INTERVAL_CHANGES])
 				{
-					XYZAxisUI(xAxis).addEventListener("IntervalChanged", update);
+					XYZAxis(xAxis).addEventListener("IntervalChanged", update);
 					isListening[OWN_HORIZONTAL_INTERVAL_CHANGES] = true;
 				}
 				if (isListening[CHART_HORIZONTAL_INTERVAL_CHANGES])
 				{
-					XYZAxisUI(chart.xAxis).removeEventListener("IntervalChanged", update);
+					XYZAxis(chart.xAxis).removeEventListener("IntervalChanged", update);
 				}
 			} else if (chart && chart.xAxis) {
 				if (! isListening[CHART_HORIZONTAL_INTERVAL_CHANGES])
 				{
-					XYZAxisUI(chart.xAxis).addEventListener("IntervalChanged", update);
+					XYZAxis(chart.xAxis).addEventListener("IntervalChanged", update);
 					isListening[CHART_HORIZONTAL_INTERVAL_CHANGES] = true;
 				}
 			}
