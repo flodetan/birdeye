@@ -34,10 +34,10 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 	import mx.collections.CursorBookmark;
 	
 	import org.un.cava.birdeye.qavis.charts.BaseChart;
-	import org.un.cava.birdeye.qavis.charts.axis.BaseAxisUI;
+	import org.un.cava.birdeye.qavis.charts.axis.BaseAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.PercentAngleAxis;
-	import org.un.cava.birdeye.qavis.charts.axis.RadarAxisUI;
+	import org.un.cava.birdeye.qavis.charts.axis.RadarAxis;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxis;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IAxisUI;
@@ -47,6 +47,7 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 	import org.un.cava.birdeye.qavis.charts.interfaces.ISeries;
 	import org.un.cava.birdeye.qavis.charts.interfaces.IStack;
 	import org.un.cava.birdeye.qavis.charts.polarSeries.PolarSeries;
+	import org.un.cava.birdeye.qavis.charts.polarSeries.PolarStackableSeries;
 	
 	/** 
 	 * The PolarChart is the base chart that is extended by all charts that are
@@ -121,15 +122,27 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 					IStack(_series[i]).total = stackableSeries[IStack(_series[i]).seriesType]; 
 		}
 
-		protected var _radarAxis:RadarAxisUI;
-		public function set radarAxis(val:RadarAxisUI):void
+		protected var _type:String = PolarStackableSeries.STACKED100;
+		/** Set the type of stack, overlaid if the series are shown on top of the other, 
+		 * or stacked if they appear staked one after the other (horizontally), or 
+		 * stacked100 if the columns are stacked one after the other (vertically).*/
+		[Inspectable(enumeration="overlaid,stacked,stacked100")]
+		public function set type(val:String):void
+		{
+			_type = val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+
+		protected var _radarAxis:RadarAxis;
+		public function set radarAxis(val:RadarAxis):void
 		{
 			_radarAxis = val;
 			_radarAxis.polarChart = this;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get radarAxis():RadarAxisUI
+		public function get radarAxis():RadarAxis
 		{
 			return _radarAxis;
 		}
@@ -156,9 +169,9 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 		public function set radiusAxis(val:IAxis):void
 		{
 			_radiusAxis = val;
-			if (val is IAxisUI 	&& IAxisUI(_radiusAxis).placement != BaseAxisUI.HORIZONTAL_CENTER 
-								&& IAxisUI(_radiusAxis).placement != BaseAxisUI.VERTICAL_CENTER)
-				IAxisUI(_radiusAxis).placement = BaseAxisUI.HORIZONTAL_CENTER;
+			if (val is IAxisUI 	&& IAxisUI(_radiusAxis).placement != BaseAxis.HORIZONTAL_CENTER 
+								&& IAxisUI(_radiusAxis).placement != BaseAxis.VERTICAL_CENTER)
+				IAxisUI(_radiusAxis).placement = BaseAxis.HORIZONTAL_CENTER;
 
 			invalidateProperties();
 			invalidateDisplayList();
@@ -220,6 +233,8 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 			
 			if (series)
 			{
+				var _stackedSeries:Array = [];
+
  				for (var i:int = 0; i<series.length; i++)
 				{
 					// if series dataprovider doesn' exist or it refers to the
@@ -241,6 +256,18 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 
 					if (! IPolarSeries(series[i]).angleAxis)
 						needDefaultAngleAxis = true;
+
+					if (_series[i] is IStack)
+					{
+						IStack(_series[i]).stackType = _type;
+						_stackedSeries.push(_series[i]);
+					}
+				}
+
+				for (i = 0; i<_stackedSeries.length; i++)
+				{
+					IStack(_stackedSeries[i]).stackPosition = i;
+					IStack(_stackedSeries[i]).total = _stackedSeries.length;
 				}
 			}
 
@@ -295,11 +322,11 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 				{
 					switch (IAxisUI(radiusAxis).placement)
 					{
-						case BaseAxisUI.HORIZONTAL_CENTER:
+						case BaseAxis.HORIZONTAL_CENTER:
 							DisplayObject(radiusAxis).x = _origin.x;
 							DisplayObject(radiusAxis).y = _origin.y;
 							break;
-						case BaseAxisUI.VERTICAL_CENTER:
+						case BaseAxis.VERTICAL_CENTER:
 							DisplayObject(radiusAxis).x = _origin.x;
 							DisplayObject(radiusAxis).y = _origin.y;
 							break;
@@ -384,7 +411,7 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 							IEnumerableAxis(angleAxis).elements = elements;
 					} else if (angleAxis is INumerableAxis){
 						
-						if (INumerableAxis(angleAxis).scaleType != BaseAxisUI.PERCENT)
+						if (INumerableAxis(angleAxis).scaleType != BaseAxis.PERCENT)
 						{
 							// if the default x axis is numeric, than calculate its min max values
 							maxMin = getMaxMinAngleValueFromSeriesWithoutAngleAxis();
@@ -444,7 +471,7 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 							IEnumerableAxis(radiusAxis).elements = elements;
 					} else if (radiusAxis is INumerableAxis){
 						
-						if (INumerableAxis(radiusAxis).scaleType != BaseAxisUI.CONSTANT)
+						if (INumerableAxis(radiusAxis).scaleType != BaseAxis.CONSTANT)
 						{
 							// if the default x axis is numeric, than calculate its min max values
 							maxMin = getMaxMinRadiusValueFromSeriesWithoutRadiusAxis();
@@ -566,7 +593,7 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 	
 				} else if (series.angleAxis is INumerableAxis)
 				{
-					if (INumerableAxis(series.angleAxis).scaleType != BaseAxisUI.PERCENT)
+					if (INumerableAxis(series.angleAxis).scaleType != BaseAxis.PERCENT)
 					{
 						// if the series angle axis is just numeric, than calculate get its min max data values
 						INumerableAxis(series.angleAxis).max =
@@ -624,6 +651,7 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 		protected function createRadiusAxis():void
 		{
 			radiusAxis = new NumericAxis();
+			NumericAxis(radiusAxis).showAxis = false;
 
 			// and/or to be overridden
 		}
