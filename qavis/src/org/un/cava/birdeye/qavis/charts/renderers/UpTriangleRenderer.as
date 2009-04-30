@@ -31,9 +31,9 @@ package org.un.cava.birdeye.qavis.charts.renderers
 	
 	import flash.geom.Rectangle;
 
-	public class TriangleRenderer extends Polygon
+	public class UpTriangleRenderer extends Polygon
 	{
-		public function TriangleRenderer (bounds:Rectangle)
+		public function UpTriangleRenderer (bounds:Rectangle)
 		{
 			data =  String(bounds.x) + "," + String(bounds.y + bounds.height) + " " +
 					String(bounds.x + bounds.width/2) + "," + String(bounds.y) + " " +
