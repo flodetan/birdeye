@@ -45,9 +45,6 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
 		override protected function drawSeries():void
 		{
-			if (isNaN(_strokeColor))
-				_strokeColor = 0x000000;
-			
 			super.drawSeries();
 			if (poly) 
 				poly.fill = new SolidFill(null,0);

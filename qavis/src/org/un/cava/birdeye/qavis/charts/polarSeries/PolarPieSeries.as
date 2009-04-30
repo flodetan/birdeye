@@ -84,9 +84,6 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 
 			if (! itemRenderer)
 				itemRenderer = CircleRenderer;
-
-			if (isNaN(_strokeColor))
-				_strokeColor = 0x000000;
 		}
 
 		/** @Private 
@@ -156,8 +153,6 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
  				if (ttGG && _extendMouseEvents)
 					gg = ttGG;
  				
-				stroke.weight = 1;
-
 				var arc:IGeometry;
 				
 				if (_innerRadius > tmpRadius)

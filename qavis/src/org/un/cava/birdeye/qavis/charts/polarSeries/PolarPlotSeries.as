@@ -59,9 +59,6 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 			
 			if (! itemRenderer)
 				itemRenderer = CircleRenderer;
-				
-			if (isNaN(_strokeColor))
-				_strokeColor = 0x000000;
 		}
 
 		private var plot:IGeometry;
