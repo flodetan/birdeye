@@ -43,7 +43,6 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 	
 	import org.un.cava.birdeye.qavis.charts.axis.CategoryAngleAxis;
 	import org.un.cava.birdeye.qavis.charts.axis.NumericAxis;
-	import org.un.cava.birdeye.qavis.charts.axis.NumericAxisUI;
 	import org.un.cava.birdeye.qavis.charts.axis.PolarCoordinateTransform;
 	import org.un.cava.birdeye.qavis.charts.polarSeries.PolarColumnSeries;
 	import org.un.cava.birdeye.qavis.charts.polarSeries.PolarSeries;
@@ -53,18 +52,6 @@ package org.un.cava.birdeye.qavis.charts.polarCharts
 	{
 		private const COLUMN:String = "column";
 		private const RADAR:String = "radar";
-		
-		private var _type:String = PolarStackableSeries.STACKED100;
-		/** Set the type of stack, overlaid if the series are shown on top of the other, 
-		 * or stacked if they appear staked one after the other (horizontally), or 
-		 * stacked100 if the columns are stacked one after the other (vertically).*/
-		[Inspectable(enumeration="overlaid,stacked,stacked100")]
-		public function set type(val:String):void
-		{
-			_type = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
 		
 		protected var _maxStacked100:Number = NaN;
 		/** @Private
