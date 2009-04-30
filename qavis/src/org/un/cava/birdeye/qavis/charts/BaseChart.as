@@ -42,10 +42,24 @@
 	import mx.core.IInvalidating;
 	
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
+	import org.un.cava.birdeye.qavis.charts.interfaces.IAxis;
+	import org.un.cava.birdeye.qavis.charts.interfaces.INumerableAxis;
 
 	[DefaultProperty("dataProvider")]
 	public class BaseChart extends Surface
 	{
+		private var _colorAxis:INumerableAxis;
+		/** Define an axis to set the colorField for data items.*/
+		public function set colorAxis(val:INumerableAxis):void
+		{
+			_colorAxis = val;
+			invalidateDisplayList();
+		}
+		public function get colorAxis():INumerableAxis
+		{
+			return _colorAxis;
+		}
+
 		private var _showGrid:Boolean = true;
 		/** Draw the grid lines of the chart (only default chart axes and not series having own axes).*/
 		public function set showGrid(val:Boolean):void
