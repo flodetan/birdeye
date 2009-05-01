@@ -436,7 +436,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 				dispatchEvent(new Event("ProviderReady"));
 				
 				if (_is3D)
-					rotationY = 39;
+					rotationY = 42;
 				else
 					transform.matrix3D = null;
  			}

@@ -62,6 +62,7 @@
 
 		private var _showGrid:Boolean = true;
 		/** Draw the grid lines of the chart (only default chart axes and not series having own axes).*/
+		[Inspectable(enumeration="true,false")]
 		public function set showGrid(val:Boolean):void
 		{
 			_showGrid = val;
