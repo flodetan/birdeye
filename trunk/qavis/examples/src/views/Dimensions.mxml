@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:polar="org.un.cava.birdeye.qavis.charts.polarCharts.*"
+	xmlns:cartesian="org.un.cava.birdeye.qavis.charts.cartesianCharts.*"
+	xmlns:pseries="org.un.cava.birdeye.qavis.charts.polarSeries.*"
+	xmlns:cseries="org.un.cava.birdeye.qavis.charts.cartesianSeries.*"
+	xmlns:axis="org.un.cava.birdeye.qavis.charts.axis.*"
+	xmlns:legend="org.un.cava.birdeye.qavis.charts.legend.*"
+	backgroundColor="#888888" 
+	creationComplete="createDT()"
+	width="100%" height="100%" horizontalAlign="center">
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+			[Bindable]
+			public var dt1:ArrayCollection;
+			private var subject:Array;
+			
+			private function createDT():void
+			{
+				subject = ["Area", "Density", "Etnies", "GDP", "Growth", "Birth rate"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var ac1:ArrayCollection = new ArrayCollection();
+				var R1:Number, R2:Number, R3:Number, R4:Number;
+				
+				for (var j:Number = 2000; j<2002; j++)
+				{
+					for (var i:Number = 1; i<subject.length; i++)
+					{
+						ac.addItem({
+							subject: subject[i],
+							R1: R1=Math.round(Math.random() * 1000),
+							R2: R2=Math.round(Math.random() * 1000),
+							R3: R3=Math.round(Math.random() * 1000),
+							R4: R4=Math.round(Math.random() * 1000),
+							year: j
+						});
+					}
+				}
+				dt = ac;
+
+				for (i = 1; i<subject.length; i++)
+				{
+					ac1.addItem({
+					subject: subject[i],
+					R1: R1= 10 + Math.round(Math.random() * 1000),
+					R2: R2= R1 + Math.round(Math.random() * 1000),
+					R3: R3= R2 + Math.round(Math.random() * 1000),
+					total: R1 + R2 + R3
+					});
+				}
+				dt1 = ac1;
+			}
+		]]>
+	</mx:Script>
+	<mx:HBox width="100%" height="100%">
+	<mx:Box width="300" height="70%">
+	<mx:Spacer height="20"/>
+	   <cartesian:ColumnChart type="stacked" showGrid="false" id="cc1" width="90%" height="80%" x="50" y="50" showDataTips="false" dataProvider="{dt}">
+	 	<cartesian:xAxis>
+	 		<axis:CategoryAxis categoryField="subject" placement="bottom" interval="1" pointerColor="0xffff00"/>
+	 	</cartesian:xAxis>
+	 	<cartesian:yAxis>
+	 		<axis:LinearAxis placement="left" pointerColor="0xffff00"/>
+	 	</cartesian:yAxis>
+	 	<cartesian:zAxis>
+	 		<axis:CategoryAxis categoryField="year" pointerColor="0xffff00"/>
+	 	</cartesian:zAxis>
+		 <cartesian:series>
+		 	<cseries:ColumnSeries extendMouseEvents="true" zField="year" xField="subject" yField="R1" baseAtZero="true" 
+		 		fillColor="0xff00" fillAlpha="1" strokeColor="0x000000"/>
+		 	<cseries:ColumnSeries extendMouseEvents="true" zField="year" xField="subject" yField="R2" baseAtZero="true" 
+		 		fillColor="0xff0000" fillAlpha="1" strokeColor="0x000000"/>
+		 </cartesian:series>
+	</cartesian:ColumnChart>
+	</mx:Box>
+	<mx:VBox width="100%" height="100%" horizontalAlign="center">
+<mx:Spacer height="10"/>
+	<cartesian:ScatterPlot maxRadius="10" id="sp" width="80%" height="80%" dataProvider="{dt1}" showDataTips="false">
+ 	<cartesian:xAxis>
+ 		<axis:CategoryAxis categoryField="subject" placement="bottom" pointerColor="0xffff00"/>
+ 	</cartesian:xAxis>
+ 	<cartesian:yAxis>
+ 		<axis:LinearAxis placement="right" pointerColor="0xffff00"/>
+ 	</cartesian:yAxis>
+	 <cartesian:series>
+	 	<cseries:ScatterSeries xField="subject" extendMouseEvents="true" radiusField="total" styleName="greenGradient" itemRenderer="org.un.cava.birdeye.qavis.charts.renderers.DiamondRenderer" yField="R1">
+		 	<cseries:yAxis>
+		 		<axis:LinearAxis placement="right" pointerColor="0x00ff00"/>
+		 	</cseries:yAxis>
+	 	</cseries:ScatterSeries>
+	 	<cseries:ScatterSeries xField="subject" extendMouseEvents="true" radiusField="total" styleName="yellowGradient" itemRenderer="org.un.cava.birdeye.qavis.charts.renderers.ButterflyRenderer" yField="R2"/>
+	 	<cseries:ScatterSeries xField="subject" extendMouseEvents="true" radiusField="total" styleName="redGradient" itemRenderer="org.un.cava.birdeye.qavis.charts.renderers.CircleRenderer" yField="R3"/>
+	 </cartesian:series>
+	</cartesian:ScatterPlot>
+<mx:Spacer height="25"/>
+	<cartesian:CartesianChart id="pc" width="80%" height="50" dataProvider="{dt}" showDataTips="false">
+		 <cartesian:series>
+		 	<cseries:PlotSeries xField="R1" strokeColor="0xff" colorFill="0xff0000">
+		 		<cseries:xAxis>
+		 			<axis:LinearAxis placement="bottom" pointerColor="0xffff00"/>
+		 		</cseries:xAxis>
+		 	</cseries:PlotSeries>
+		 </cartesian:series>
+	</cartesian:CartesianChart>
+	</mx:VBox>
+	</mx:HBox>
+ <mx:Panel title="1D, 2D, 3D, multiple and different types of axes: colorAxis, angleAxis, logAxis, radiusAxis, categoryAxis, linearAxis, percentAxis ..." backgroundColor="0x999999" fontSize="14" width="100%" height="250">
+	<mx:Text fontSize="12">
+	     <mx:text>
+	        <![CDATA[
+
+]]>
+	     </mx:text>
+	
+	</mx:Text>
+ </mx:Panel>
+</mx:VBox>
