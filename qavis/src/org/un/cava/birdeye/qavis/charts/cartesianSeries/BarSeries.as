@@ -215,6 +215,9 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					} else
 						zPos = 0;
 				}
+				
+				if (_extendMouseEvents)
+					gg = ttGG;
 
  				if (_source)
 					poly = new RasterRenderer(bounds, _source);

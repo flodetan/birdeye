@@ -409,7 +409,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 			for(var i:int = 0; i < nChildren; i++) 
 			{
 				var child:* = getChildAt(0); 
-				var zPos:uint = DataItemLayout(child).posZ;
+				var zPos:uint = DataItemLayout(child).z;
 				sortLayers.push([zPos, child]);
 				removeChildAt(0);
 			}
