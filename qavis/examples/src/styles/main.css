@@ -55,3 +55,124 @@ ComparisonMatrix {
 			selection-color:#99ff99;
 			roll-over-color:#ccffcc;
 }
+
+BaseAxis {
+	/* axis label */
+	labelFont: "verdana";
+	labelSize: 9;
+	labelColor: #000000;
+
+	/* axis pointer */
+	pointerColor: #FF0000;
+	pointerSize: 8;
+	pointerWeight: 4;
+
+	/* axis stroke */
+	strokeColor: #000000;
+	strokeWeight: 2;
+
+	/* following are not used yet 
+	strokeAlpha: 1;
+	gradientColors: #FF0000, #0000FF;
+	gradientAlphas: 0.5, 0.5;
+	fillColor: #000000;
+	fillAlpha: 1;*/
+}
+
+.white{
+	labelColor: #FFFFFF;
+	pointerColor: #FFFFFF;
+	strokeColor: #FFFFFF;
+	fillColor: #FFFFFF;
+}
+
+BaseSeries {
+	/* series color, stroke, alpha, gradients */
+	/*	gradientColors: #000000, #FFFFFF; not set by default */
+	gradientAlphas: 0.5, 0.5;
+	fillColor: #FF0000;
+	fillAlpha: .2;
+	strokeColor: #000000;
+	strokeWeight: 1;
+	strokeAlpha: 1;
+	
+	/* series label */
+	labelFont: "verdana";
+	labelSize: 8;
+	labelColor: #000000;
+}
+
+.redGradient {
+	gradientColors: #FF0000, #000000;
+	gradientAlphas: 1, 1;
+}
+
+.greyGradient {
+	gradientColors: #FFFFFF, #000000;
+	gradientAlphas: 1, 1;
+}
+
+.blueGradient {
+	gradientColors: #0000FF, #000000;
+	gradientAlphas: 1, 1;
+}
+
+.greenGradient {
+	gradientColors: #00FF00, #000000;
+	gradientAlphas: 1, 1;
+}
+
+.yellowGradient {
+	gradientColors: #FFFF00, #000000;
+	gradientAlphas: 1, 1;
+}
+
+.redGradientAlpha {
+	gradientColors: #FF0000, #000000;
+	gradientAlphas: .2, .2;
+}
+
+.greyGradientAlpha {
+	gradientColors: #FFFFFF, #000000;
+	gradientAlphas: .2, .2;
+}
+
+.blueGradientAlpha {
+	gradientColors: #00FF00, #000000;
+	gradientAlphas: .2, .2;
+}
+
+.greenGradientAlpha {
+	gradientColors: #0000FF, #000000;
+	gradientAlphas: .2, .2;
+}
+
+.yellowGradientAlpha {
+	gradientColors: #FFFF00, #000000;
+	gradientAlphas: .2, .2;
+}
+
+.redSolid {
+	fillColor: #FF0000;
+	fillAlpha: 1;
+}
+
+.greySolid {
+	fillColor: #999999;
+	fillAlpha: 1;
+}
+
+.greenSolid {
+	fillColor: #0000FF;
+	fillAlpha: 1;
+}
+
+.blueSolid {
+	fillColor: #00FF00;
+	fillAlpha: 1;
+}
+
+.yellowSolid {
+	fillColor: #FFFF00;
+	fillAlpha: 1;
+}
