@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:polar="org.un.cava.birdeye.qavis.charts.polarCharts.*"
+	xmlns:cartesian="org.un.cava.birdeye.qavis.charts.cartesianCharts.*"
+	xmlns:pseries="org.un.cava.birdeye.qavis.charts.polarSeries.*"
+	xmlns:cseries="org.un.cava.birdeye.qavis.charts.cartesianSeries.*"
+	xmlns:axis="org.un.cava.birdeye.qavis.charts.axis.*"
+	xmlns:legend="org.un.cava.birdeye.qavis.charts.legend.*"
+	backgroundColor="#888888" 
+	creationComplete="createDT()"
+	width="100%" height="100%" horizontalAlign="center">
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			private var subject:Array;
+			
+			private function createDT():void
+			{
+				subject = ["Area", "Density", "Population", "GDP", "Mortality rate", "Birth rate"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var ac1:ArrayCollection = new ArrayCollection();
+				for (var i:Number = 1; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: Math.round(Math.random() * 1000),
+						R2: Math.round(Math.random() * 1000),
+						R3: Math.round(Math.random() * 1000),
+						R4: Math.round(Math.random() * 1000)
+					});
+				}
+				dt = ac;
+			}
+
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = "Info: " + currDatatip[dataFields[0]];
+				tt += '\n' + dataFields[1] + ": " + currDatatip[dataFields[1]];
+				return  tt;
+			}
+		]]>
+	</mx:Script>
+ <mx:Fade id="fadeIn" alphaFrom="0" alphaTo="1" duration="1000"/>
+<mx:HBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
+	<legend:ChartLegend dataProvider="{rd}" direction="vertical"/>
+	<polar:RadarChart id="rd" type="stacked" showDataTips="true" columnWidthRate=".7" dataTipFunction="dtFunc" dataProvider="{dt}" width="100%" height="100%" layout="radar">
+		<polar:radarAxis>
+			<axis:RadarAxis angleCategory="subject"/>
+		</polar:radarAxis>
+		<polar:radiusAxis>
+			<axis:LinearAxis/>
+		</polar:radiusAxis>
+		<polar:series>
+			<pseries:PolarColumnSeries extendMouseEvents="true" styleName="greyGradientAlpha" angleField="subject" radiusField="R2" displayName="R2"/>
+			<pseries:PolarColumnSeries extendMouseEvents="true" styleName="redGradientAlpha" angleField="subject" radiusField="R2" displayName="R2"/>
+			<pseries:PolarColumnSeries extendMouseEvents="true" styleName="greenGradientAlpha" angleField="subject" radiusField="R1" displayName="R1"/>
+			<pseries:PolarColumnSeries extendMouseEvents="true" styleName="blueGradientAlpha" angleField="subject" radiusField="R3" displayName="R3"/>
+		</polar:series>
+	</polar:RadarChart>
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
+	<mx:HBox width="100%" height="100%" verticalAlign="middle">
+    	<cartesian:AreaChart id="ac3" width="80%" height="80%" dataProvider="{dt}" type="stacked100" showDataTips="false">
+	 		<cartesian:xAxis>
+	 			<axis:CategoryAxis categoryField="subject" placement="bottom" pointerColor="0xffff00"/>
+	 		</cartesian:xAxis>
+	 		<cartesian:yAxis>
+	 			<axis:LinearAxis placement="left" pointerColor="0xffff00"/>
+	 		</cartesian:yAxis>
+    		 <cartesian:series>
+    		 	<cseries:AreaSeries styleName="greenSolid" yField="R1" xField="subject" baseAtZero="true" displayName="R1"/>
+    		 	<cseries:AreaSeries styleName="blueSolid" yField="R3" xField="subject"  baseAtZero="true" displayName="R3"/>
+    		 	<cseries:AreaSeries styleName="redSolid" yField="R4" xField="subject" baseAtZero="true" displayName="R4"/>
+    		 	<cseries:AreaSeries styleName="yellowSolid" yField="R2" xField="subject"  baseAtZero="true" displayName="R2"/>
+    		 </cartesian:series>
+    	</cartesian:AreaChart>
+	<legend:ChartLegend dataProvider="{ac3}" direction="vertical"/>
+	</mx:HBox>
+	<mx:HBox width="100%" height="100%" verticalAlign="middle">
+    	<cartesian:ColumnChart id="cc" width="80%" height="80%" dataProvider="{dt}" type="stacked100" showDataTips="false">
+	 		<cartesian:xAxis>
+	 			<axis:CategoryAxis categoryField="subject" placement="bottom" pointerColor="0xffff00"/>
+	 		</cartesian:xAxis>
+	 		<cartesian:yAxis>
+	 			<axis:LinearAxis placement="left" pointerColor="0xffff00"/>
+	 		</cartesian:yAxis>
+    		 <cartesian:series>
+    		 	<cseries:ColumnSeries styleName="redGradient" extendMouseEvents="true" yField="R1" xField="subject" baseAtZero="true" displayName="R1"/>
+    		 	<cseries:ColumnSeries styleName="greenGradient" extendMouseEvents="true" yField="R2" xField="subject"  baseAtZero="true" displayName="R2"/>
+    		 	<cseries:ColumnSeries styleName="blueGradient" extendMouseEvents="true" yField="R3" xField="subject"  baseAtZero="true" displayName="R3"/>
+    		 	<cseries:ColumnSeries styleName="greyGradient" extendMouseEvents="true" yField="R4" xField="subject" baseAtZero="true" displayName="R4"/>
+    		 </cartesian:series>
+    	</cartesian:ColumnChart>
+	<legend:ChartLegend dataProvider="{cc}" direction="vertical"/>
+	</mx:HBox>
+	</mx:VBox>
+</mx:HBox>
+ <mx:Panel title="Overlaid, stacked, 100-stacked for both polar and cartesian coordinates..." backgroundColor="0x999999" fontSize="14" width="100%" height="250">
+	<mx:Text fontSize="12">
+	     <mx:text>
+	        <![CDATA[
+]]>
+	     </mx:text>
+	
+	</mx:Text>
+ </mx:Panel>
+</mx:VBox>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:polar="org.un.cava.birdeye.qavis.charts.polarCharts.*"
+	xmlns:cartesian="org.un.cava.birdeye.qavis.charts.cartesianCharts.*"
+	xmlns:pseries="org.un.cava.birdeye.qavis.charts.polarSeries.*"
+	xmlns:cseries="org.un.cava.birdeye.qavis.charts.cartesianSeries.*"
+	xmlns:axis="org.un.cava.birdeye.qavis.charts.axis.*"
+	xmlns:legend="org.un.cava.birdeye.qavis.charts.legend.*"
+	backgroundColor="#888888" 
+	creationComplete="createDT()"
+	width="100%" height="100%" horizontalAlign="center">
+	<mx:Script>
+		<![CDATA[
+			import views.charts.MyTip2;
+			import views.charts.MyTip;
+			import com.degrafa.paint.SolidFill;
+			import mx.managers.ToolTipManager;
+			import mx.core.IToolTip;
+			import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			private var subject:Array;
+			
+			private function createDT():void
+			{
+				subject = ["Area", "Density", "Population", "GDP", "Mortality rate", "Birth rate"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var ac1:ArrayCollection = new ArrayCollection();
+				for (var i:Number = 1; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: Math.round(Math.random() * i*10* 1000),
+						R2: Math.round(Math.random() * i*10* 1000),
+						R3: Math.round(Math.random() * i*10* 1000),
+						R4: Math.round(Math.random() * i*10* 1000)
+					});
+				}
+				dt = ac;
+			}
+
+            private var myTT2:MyTip2;
+            private function customTT2(extGG:DataItemLayout):IToolTip
+            {
+            	var item:Object = extGG.currentItem;
+            	var regions:Array = ["R1", "R2", "R3", "R4"];
+            	var data:Array = [];
+            	var currentFieldIndex:Number = regions.indexOf(extGG.dataFields[1]);
+            	var colors:Array = [];
+
+	 			for (var i:Number = 0; i<regions.length; i++)
+	 			{
+	 				data[i] = item[regions[i]];
+	 				
+	 				if (i != currentFieldIndex)
+	 					colors[i] = 0x000000;
+	 				else
+	 					colors[i] = extGG.toolTipFill;
+	 			}
+	 			myTT2 = new MyTip2();
+	 			MyTip2(myTT2).dataProvider = data;
+	 			MyTip2(myTT2).barChart.colors = colors;
+	 			MyTip2(myTT2).barChart.width = 50;
+	 			MyTip2(myTT2).barChart.height = 20;
+	 			MyTip2(myTT2).barChart.stroke = 0xffffff;
+	 			myTT2.title = extGG.toolTip;
+				myTT2.text = extGG.dataFields[1] + ": " + item[extGG.dataFields[1]];
+				extGG.showToolTipGeometry();
+				return myTT2;
+            }
+
+			[Bindable]
+			[Embed(source="/assets/icons/raster.gif")]
+		 	public var rasterImage:Class;
+		]]>
+	</mx:Script>
+ <mx:Fade id="fadeIn" alphaFrom="0" alphaTo="1" duration="1000"/>
+<mx:HBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
+<mx:Spacer width="10"/>
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
+	<mx:Spacer height="30"/>
+		<legend:ChartLegend dataProvider="{cc}" direction="horizontal"/>
+	   	<cartesian:CartesianChart id="cc" gridColor="0xffffff" width="100%" height="60%" customTooltTipFunction="customTT2" showDataTips="true" dataProvider="{dt}">
+	   		<cartesian:yAxis>
+	   			<axis:LinearAxis styleName="white"/>
+	   		</cartesian:yAxis>
+	 		<cartesian:xAxis>
+	 			<axis:CategoryAxis categoryField="subject" placement="bottom" interval="1" styleName="white"/>
+	 		</cartesian:xAxis>
+			 <cartesian:series>
+			 	<cseries:PlotSeries extendMouseEvents="true" styleName="redGradient" xField="subject" yField="R1"  itemRenderer="org.un.cava.birdeye.qavis.charts.renderers.DownTriangleRenderer" displayName="R1" plotRadius="10"/>
+			 	<cseries:PlotSeries extendMouseEvents="true" styleName="blueGradient" xField="subject" yField="R2" itemRenderer="org.un.cava.birdeye.qavis.charts.renderers.DiamondRenderer" displayName="R2" plotRadius="10"/>
+			 	<cseries:PlotSeries extendMouseEvents="true" styleName="greyGradient" xField="subject" yField="R3" source="{rasterImage}" displayName="R3" plotRadius="7"/>
+			 </cartesian:series>
+		</cartesian:CartesianChart>
+	</mx:VBox>
+	<polar:RadarChart id="rd" type="stacked" showDataTips="true" dataProvider="{dt}" customTooltTipFunction="customTT2" width="100%" height="100%" layout="radar">
+		<polar:radarAxis>
+			<axis:RadarAxis angleCategory="subject"/>
+		</polar:radarAxis>
+		<polar:radiusAxis>
+			<axis:LinearAxis/>
+		</polar:radiusAxis>
+		<polar:series>
+			<pseries:PolarAreaSeries styleName="redGradientAlpha" angleField="subject" radiusField="R2" displayName="R2"/>
+			<pseries:PolarAreaSeries styleName="greenGradientAlpha" angleField="subject" radiusField="R1" displayName="R1"/>
+			<pseries:PolarAreaSeries styleName="blueGradientAlpha" angleField="subject" radiusField="R3" displayName="R3"/>
+		</polar:series>
+	</polar:RadarChart>
+</mx:HBox>
+ <mx:Panel title="Styles, fully customizable tooltips, renderers ..." backgroundColor="0x999999" fontSize="14" width="100%" height="250">
+	<mx:Text fontSize="12">
+	     <mx:text>
+	        <![CDATA[
+
+]]>
+	     </mx:text>
+	
+	</mx:Text>
+ </mx:Panel>
+</mx:VBox>
