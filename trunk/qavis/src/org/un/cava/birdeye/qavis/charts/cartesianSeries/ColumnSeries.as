@@ -218,7 +218,7 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 						gg = new DataItemLayout();
 						gg.target = this;
 						graphicsCollection.addItem(gg);
-						ttGG.z = gg.z = zPos;
+						ttGG.posZ = ttGG.z = gg.posZ = gg.z = zPos;
 					} else
 						zPos = 0;
 				}

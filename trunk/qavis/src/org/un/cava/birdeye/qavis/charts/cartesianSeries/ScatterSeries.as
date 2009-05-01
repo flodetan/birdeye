@@ -160,6 +160,9 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 						zPos = 0;
 				}
 				
+				if (_extendMouseEvents)
+					gg = ttGG;
+					
  				if (_source)
 					scatter = new RasterRenderer(bounds, _source);
  				else 
@@ -184,11 +187,13 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 		private function getRadius(dataValue:Number):Number
 		{
 			var maxRadius:Number = 10;
+			var minRadius:Number = 1;
 			var radius:Number = 1;
 			if (chart && chart is ISizableItem)
 			{
 				maxRadius = ISizableItem(chart).maxRadius;
-				radius = maxRadius * (dataValue - _minRadiusValue)/(_maxRadiusValue - _minRadiusValue);
+				minRadius = ISizableItem(chart).minRadius;
+				radius = minRadius + maxRadius * (dataValue - _minRadiusValue)/(_maxRadiusValue - _minRadiusValue);
 			}
 			
 			return radius;
