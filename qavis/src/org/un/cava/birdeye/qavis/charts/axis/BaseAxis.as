@@ -441,7 +441,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		initializeStyles();
 		public static function initializeStyles():void
 		{
-			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("BaseAxis");
+			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("org.un.cava.birdeye.qavis.axis.BaseAxis");
 			if(!selector)
 			{
 				selector = new CSSStyleDeclaration();
@@ -468,7 +468,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 
 				this.stylesChanged = true;
 			} 
-			StyleManager.setStyleDeclaration("BaseAxis", selector, true);
+			StyleManager.setStyleDeclaration("org.un.cava.birdeye.qavis.axis.BaseAxis", selector, true);
 		}
 		
 		/** @Private
