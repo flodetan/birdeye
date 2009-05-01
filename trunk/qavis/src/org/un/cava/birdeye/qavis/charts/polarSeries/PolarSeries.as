@@ -283,7 +283,7 @@ package org.un.cava.birdeye.qavis.charts.polarSeries
 /* 				   (!isNaN(_minAngleValue) || !isNaN(_minRadiusValue))
 				&& (!isNaN(_maxAngleValue) || !isNaN(_maxRadiusValue)) */
 				width>0 && height>0
-				&& polarChart && angleField && radiusField
+				&& polarChart && (angleField || radiusField)
 				&& (polarChart.origin)
 				&& cursor;
 			
