@@ -56,6 +56,20 @@ package org.un.cava.birdeye.qavis.charts.cartesianCharts
 			return _maxRadius;
 		}
 
+		private var _minRadius:Number = 10;
+		/** @Private
+		 * Set the minimum radius value for the scatter plot.*/
+		public function set minRadius(val:Number):void
+		{
+			_minRadius = val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		public function get minRadius():Number
+		{
+			return _minRadius;
+		}
+
 		public function ScatterPlot()
 		{
 			super();
