@@ -27,6 +27,8 @@
  
 package org.un.cava.birdeye.qavis.charts.cartesianSeries
 {
+	import adobe.utils.CustomActions;
+	
 	import com.degrafa.IGeometry;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.paint.SolidStroke;
@@ -34,8 +36,6 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 	import flash.geom.Rectangle;
 	
 	import mx.collections.CursorBookmark;
-	import mx.styles.CSSStyleDeclaration;
-	import mx.styles.StyleManager;
 	
 	import org.un.cava.birdeye.qavis.charts.axis.XYZAxis;
 	import org.un.cava.birdeye.qavis.charts.data.DataItemLayout;
@@ -170,8 +170,15 @@ package org.un.cava.birdeye.qavis.charts.cartesianSeries
 					case STACKED100:
 						colWidth = size;
 						xPos = xPos - size/2;
+						ttShapes = [];
 						ttXoffset = -30;
 						ttYoffset = 20;
+						if (chart.customTooltTipFunction == null)
+						{
+							var line:Line = new Line(xPos+ colWidth/2, yPos, xPos + colWidth/2 + ttXoffset/3, yPos + ttYoffset);
+							line.stroke = new SolidStroke(0xaaaaaa,1,2);
+			 				ttShapes[0] = line;
+						}
 						break;
 					case STACKED:
 						xPos = xPos + size/2 - size/_total * _stackPosition;
