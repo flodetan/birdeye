@@ -31,5 +31,8 @@
 	{
 		/** Return the max radius value of a sizable item.*/
 		function get maxRadius():Number;
+
+		/** Return the min radius value of a sizable item.*/
+		function get minRadius():Number;
 	}
 }
