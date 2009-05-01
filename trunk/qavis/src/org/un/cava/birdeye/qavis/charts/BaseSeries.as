@@ -477,7 +477,7 @@ package org.un.cava.birdeye.qavis.charts
 		initializeStyles();
 		public static function initializeStyles():void
 		{
-			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("org.un.cava.birdeye.qavis.charts.BaseSeries");
+			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("BaseSeries");
 			if(!selector)
 			{
 				selector = new CSSStyleDeclaration();
@@ -500,7 +500,7 @@ package org.un.cava.birdeye.qavis.charts
 
 				this.stylesChanged = true;
 			} 
-			StyleManager.setStyleDeclaration("org.un.cava.birdeye.qavis.charts.BaseSeries", selector, true);
+			StyleManager.setStyleDeclaration("BaseSeries", selector, true);
 		}
 		
 		// Override the styleChanged() method to detect changes in your new style.
