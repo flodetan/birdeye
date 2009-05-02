@@ -435,21 +435,21 @@ package org.un.cava.birdeye.qavis.charts
 			if (stylesChanged)
 			{
 				// Redraw gradient fill only if style changed.
-				colorGradients = getStyle("gradientColors");
-				alphaGradients = getStyle("gradientAlphas");
+				_colorGradients = getStyle("gradientColors");
+				_alphaGradients = getStyle("gradientAlphas");
 				
-				colorFill = getStyle("fillColor");
-				alphaFill = getStyle("fillAlpha");
+				_colorFill = getStyle("fillColor");
+				_alphaFill = getStyle("fillAlpha");
 				
-				colorStroke = getStyle("strokeColor");
-				alphaStroke = getStyle("strokeAlpha");
-				weightStroke = getStyle("strokeWeight");
+				_colorStroke = getStyle("strokeColor");
+				_alphaStroke = getStyle("strokeAlpha");
+				_weightStroke = getStyle("strokeWeight");
 
-				fontLabel = getStyle("labelFont");
-				colorLabel = getStyle("labelColor");
-				sizeLabel = getStyle("labelSize");
+				_fontLabel = getStyle("labelFont");
+				_colorLabel = getStyle("labelColor");
+				_sizeLabel = getStyle("labelSize");
 
-				stylesChanged = false;
+ 				stylesChanged = false;
 			}
 
 			if (colorGradients)
@@ -508,8 +508,21 @@ package org.un.cava.birdeye.qavis.charts
 		{
 			super.styleChanged(styleProp);
 			// Check to see if style changed.
-			if (styleProp == "gradientColors" || styleProp == "gradientAlphas")
-				invalidateDisplayList();
+			switch(styleProp)
+			{
+				case "gradientColors":
+				case "gradientAlphas":
+				case "fillColor":
+				case "fillAlpha":
+				case "strokeColor":
+				case "strokeAlpha":
+				case "strokeWeight":
+				case "labelFont":
+				case "labelSize":
+				case "labelColor":
+					invalidateDisplayList();
+				break;
+			} 
 		}
 		
 		private var currentValue:Number;

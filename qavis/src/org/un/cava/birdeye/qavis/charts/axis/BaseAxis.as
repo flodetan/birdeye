@@ -406,27 +406,27 @@ package org.un.cava.birdeye.qavis.charts.axis
 			if (stylesChanged)
 			{
 				// Redraw gradient fill only if style changed.
-				colorGradients = getStyle("gradientColors");
-				alphaGradients = getStyle("gradientAlphas");
+				_colorGradients = getStyle("gradientColors");
+				_alphaGradients = getStyle("gradientAlphas");
 				
-				colorFill = getStyle("fillColor");
-				alphaFill = getStyle("fillAlpha");
+				_colorFill = getStyle("fillColor");
+				_alphaFill = getStyle("fillAlpha");
 				
-				colorStroke = getStyle("strokeColor");
-				alphaStroke = getStyle("strokeAlpha");
-				weightStroke = getStyle("strokeWeight");
+				_colorStroke = getStyle("strokeColor");
+				_alphaStroke = getStyle("strokeAlpha");
+				_weightStroke = getStyle("strokeWeight");
 
-				fontLabel = getStyle("labelFont");
-				colorLabel = getStyle("labelColor");
-				sizeLabel = getStyle("labelSize");
+				_fontLabel = getStyle("labelFont");
+				_colorLabel = getStyle("labelColor");
+				_sizeLabel = getStyle("labelSize");
 
-				fontLabel = getStyle("labelFont");
-				colorLabel = getStyle("labelColor");
-				sizeLabel = getStyle("labelSize");
+				_fontLabel = getStyle("labelFont");
+				_colorLabel = getStyle("labelColor");
+				_sizeLabel = getStyle("labelSize");
 
-				colorPointer = getStyle("pointerColor");
-				sizePointer = getStyle("pointerSize");
-				weightPointer = getStyle("pointerWeight");
+				_colorPointer = getStyle("pointerColor");
+				_sizePointer = getStyle("pointerSize");
+				_weightPointer = getStyle("pointerWeight");
 
 				stylesChanged = false;
 			}
@@ -437,7 +437,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		
 		// other methods
 		
-		private var stylesChanged:Boolean = false;
+		private var stylesChanged:Boolean = true;
 		initializeStyles();
 		public static function initializeStyles():void
 		{
