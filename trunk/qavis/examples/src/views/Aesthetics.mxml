@@ -94,6 +94,7 @@
 			 	<cseries:PlotSeries extendMouseEvents="true" styleName="redGradient" xField="subject" yField="R1"  itemRenderer="org.un.cava.birdeye.qavis.charts.renderers.DownTriangleRenderer" displayName="R1" plotRadius="10"/>
 			 	<cseries:PlotSeries extendMouseEvents="true" styleName="blueGradient" xField="subject" yField="R2" itemRenderer="org.un.cava.birdeye.qavis.charts.renderers.DiamondRenderer" displayName="R2" plotRadius="10"/>
 			 	<cseries:PlotSeries extendMouseEvents="true" styleName="greyGradient" xField="subject" yField="R3" source="{rasterImage}" displayName="R3" plotRadius="7"/>
+			 	<cseries:LabelSeries extendMouseEvents="true" labelField="R4" labelSize="15" labelFont="verdana" labelColor="#FFFF00" xField="subject" yField="R4" displayName="R4"/>
 			 </cartesian:series>
 		</cartesian:CartesianChart>
 	</mx:VBox>
