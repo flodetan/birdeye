@@ -36,6 +36,7 @@ package org.un.cava.birdeye.qavis.charts.legend
 	
 	import flash.events.Event;
 	import flash.geom.Rectangle;
+	import flash.utils.getQualifiedClassName;
 	
 	import mx.containers.Box;
 	import mx.core.Application;
@@ -118,7 +119,7 @@ package org.un.cava.birdeye.qavis.charts.legend
 						var renderer:ISeriesDataRenderer = new rendererClass();
  */
 						var renderer:Class = ISeries(_dataProvider.series[i]).itemRenderer;
-						
+
  						var geom:Geometry;
  						if (ISeries(_dataProvider.series[i]).source)
  						{
@@ -133,6 +134,12 @@ package org.un.cava.birdeye.qavis.charts.legend
 								ISeries(_dataProvider.series[i]).getStroke() 
 								 : new SolidStroke(0x999999);
 						gg.geometryCollection.addItem(geom);
+
+						if (label.text && getQualifiedClassName(renderer) == 
+								"org.un.cava.birdeye.qavis.charts.renderers::TextRenderer")
+						{
+							label.fill = Geometry(geom).fill;
+						}
 					}
 
 					if (label.text)
