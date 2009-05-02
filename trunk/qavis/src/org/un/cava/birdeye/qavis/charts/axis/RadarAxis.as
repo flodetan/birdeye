@@ -311,7 +311,7 @@ package org.un.cava.birdeye.qavis.charts.axis
 		
 		// other methods
 		
-		private var stylesChanged:Boolean = true;
+		private var stylesChanged:Boolean = false;
 		initializeStyles();
 		public static function initializeStyles():void
 		{
