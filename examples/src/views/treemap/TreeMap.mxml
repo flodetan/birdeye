@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:qavis="birdeye.treemap.controls.*"
+	width="100%" height="100%"
+	initialize="calculateMaxAbsoluteChange();"
+	>
+
+<!--
+	Copyright (c) 2008 Josh Tynjala
+	
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to 
+	deal in the Software without restriction, including without limitation the
+	rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+	sell copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+	
+	The above copyright notice and this permission notice shall be included in
+	all copies or substantial portions of the Software.
+	
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+	FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+	IN THE SOFTWARE.
+-->
+
+<mx:Style>
+		.autoFitNone
+		{
+			/* When fontSizeMode is "noChange", the font size on leaves alway matches
+			   the fontSize style */
+			   
+			fontSizeMode: "noChange";
+			fontSize: 14;
+		}
+		
+		.autoFitFull
+		{
+			/* When fontSizeMode is "fitToBounds", the font size on leaves increases to
+			   fill as much space as possible. Words may be broken onto multiple
+			   lines within the renderer */
+			   
+			fontSizeMode: "fitToBounds";
+			fontSize: 12;
+		}
+		
+		.autoFitPartial
+		{
+			/* When fontSizeMode is "fitToBoundsWithoutBreaks", the font size of leaves increases
+			   to fill empty space in the renderer, but it stops if a word will
+			   be broken onto multiple lines. The fontSize style is used as a
+			   minimum size, and words that break at this size will remain
+			   broken. Decrease fontSize to set a lower minimum if this isn't
+			   the desired behavior. */
+			    
+			fontSizeMode: "fitToBoundsWithoutBreaks";
+			fontSize: 12;
+		}
+	</mx:Style>
+
+
+<mx:ApplicationControlBar height="30" width="100%" >
+	<mx:HBox height="100%" width="100%" paddingLeft="5" paddingRight="5" verticalAlign="middle" >
+		
+		<mx:Label fontSize="10" fontWeight="bold" text="Layout Strategy:"/>
+		<mx:RadioButtonGroup id="layoutStrategy" change="treeMap.layoutStrategy = new layoutStrategy.selectedValue();"/>
+		<mx:RadioButton groupName="layoutStrategy" label="Squarify" value="{SquarifyLayout}" selected="true"/>
+		<mx:RadioButton groupName="layoutStrategy" label="Slice-and-Dice" value="{SliceAndDiceLayout}"/>
+		<mx:VRule height="25" width="5" />
+		<mx:Label fontSize="10" fontWeight="bold" text="Color Function:"/>
+		<mx:ComboBox id="colorFunction" width="150" toolTip="Select color function algorithm" >
+			<mx:ArrayCollection>
+				<mx:Object label="Sequential" data="Sequential" />
+				<mx:Object label="Qualitative" data="Qualitative" />
+				<mx:Object label="Diverging" data="Diverging" />
+			</mx:ArrayCollection>
+		</mx:ComboBox>
+		
+		<mx:VRule height="25" width="5" />
+		<mx:Label fontSize="10" fontWeight="bold" text="FontSizeMode:"/>
+		<mx:RadioButtonGroup id="textMode" change="treeMap.setStyle('leafStyleName', textMode.selectedValue);"/>
+		<mx:RadioButton groupName="textMode" label="noChange" value="autoFitNone" selected="true"/>
+		<mx:RadioButton groupName="textMode" label="fitToBounds" value="autoFitFull"/>
+		<mx:RadioButton groupName="textMode" label="fitToBoundsWithoutBreaks" value="autoFitPartial"/>
+
+	</mx:HBox>
+	
+</mx:ApplicationControlBar>
+
+<qavis:TreeMap id="treeMap" width="100%" height="100%" showRoot="false"
+		dataProvider="{sampleData}" labelField="@name" weightField="@x"
+		colorFunction="{itemToColor}" dataTipFunction="{itemToToolTip}"
+		/>
+	
+	<mx:XML id="sampleData" source="data/qavis.xml" />
+
+	<mx:Script>
+		<![CDATA[
+			import birdeye.treemap.controls.treeMapClasses.*;
+			
+			/*
+				This app displays the "change" value using red for negative values,
+				green for positive values, and black for zero.
+			*/
+		
+			private const MIN_COLOR:uint = 0x990016;
+			private const ZERO_COLOR:uint = 0x990016;
+			private const MAX_COLOR:uint = 0x333333;
+			
+			private var _maxAbsoluteChange:Number;
+			
+			/**
+			 * Takes the absolute value of each change value and determines the maximum.
+			 */
+			private function calculateMaxAbsoluteChange():void
+			{
+				var children:XMLList = this.sampleData..child;
+				this._maxAbsoluteChange = 0;
+				for each(var child:XML in children)
+				{
+					var change:Number = Number(child.@x);
+					this._maxAbsoluteChange = Math.max(this._maxAbsoluteChange, Math.abs(change));
+				}
+			}
+			
+			/**
+			 * For each item, determines the background color.
+			 */
+			private function itemToColor(item:Object):uint
+			{
+				var change:Number = Number(item.@x);
+				if(change < 0)
+				{
+					return this.blendColors(MIN_COLOR, ZERO_COLOR, Math.abs(change) / this._maxAbsoluteChange);
+				}
+				else if(change > 0)
+				{
+					return this.blendColors(ZERO_COLOR, MAX_COLOR, 1 - (Math.abs(change) / this._maxAbsoluteChange));
+				}
+				return ZERO_COLOR;
+			}
+			
+			/**
+			 * Determines the blended color between two separate colors using a range from 0 to 1.
+			 */
+			private function blendColors(color1:uint, color2:uint, percent:Number = 0.5):uint
+			{
+				var remaining:Number = 1 - percent;
+				
+				var red1:uint = (color1 >> 16) & 0xff;
+				var green1:uint = (color1 >> 8) & 0xff;
+				var blue1:uint = color1 & 0xff;
+				
+				var red2:uint = (color2 >> 16) & 0xff;
+				var green2:uint = (color2 >> 8) & 0xff;
+				var blue2:uint = color2 & 0xff;
+				 
+				color1 = ((red1 * percent) << 16) + ((green1 * percent) << 8) + blue1 * percent;
+				color2 = ((red2 * remaining) << 16) + ((green2 * remaining) << 8) + blue2 * remaining;
+	
+				return color1 + color2;
+	
+			}
+			
+			/**
+			 * For each item, determines the tooltip text.
+			 */
+			private function itemToToolTip(item:Object):String
+			{
+				//one tooltip for branches and one for leaves
+				if(this.treeMap.dataDescriptor.isBranch(item))
+				{
+					return null;
+				}
+				return "x: " + item.@x + "\n" +
+					"y: " + item.@y + "\n" +
+					"z: " + item.@y;
+			}
+
+			
+		]]>
+	</mx:Script>
+	
+
+
+
+</mx:VBox>

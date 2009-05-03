@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:line="birdeye.vis.recipes.cartesianCharts.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	backgroundColor="#ffffff" 
+	creationComplete="createDT()" >
+
+<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			private var subject:Array;
+			
+			private function createDT():void
+			{
+				subject = ["A", "B", "C", "D", "E", "F"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var ac1:ArrayCollection = new ArrayCollection();
+				for (var i:Number = 1; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: Math.round(Math.random() * 1000),
+						R2: Math.round(Math.random() * 1000),
+						R3: Math.round(Math.random() * 1000),
+						R4: Math.round(Math.random() * 1000)
+					});
+				}
+				dt = ac;
+			}
+
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = "Info: " + currDatatip[dataFields[0]];
+				tt += '\n' + dataFields[1] + ": " + currDatatip[dataFields[1]];
+				return  tt;
+			}
+		]]>
+	</mx:Script>
+	
+	
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+    	<mx:Button label="Generate" click="createDT()"/>
+    	<coords:Cartesian id="lc3" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
+    		 <coords:xAxis>
+	 			<scales:CategoryAxis categoryField="subject" placement="bottom" pointerColor="0xffff00"/>
+	 		</coords:xAxis>
+	 		<coords:yAxis>
+	 			<scales:LinearAxis placement="left" pointerColor="0xffff00"/>
+	 		</coords:yAxis>
+    		 <coords:series>
+    		 	<elements:LineElement xField="subject" yField="R1" styleName="solid1" displayName="A" />
+			 	<elements:LineElement xField="subject" yField="R2" styleName="solid2" displayName="B" />
+			 	<elements:LineElement xField="subject" yField="R3" styleName="solid3" displayName="C" />
+			 	<elements:LineElement xField="subject" yField="R4" styleName="solid4" displayName="D" />
+			 	<elements:LineElement xField="subject" yField="R5" styleName="solid5" displayName="E" />
+			 </coords:series>
+    	</coords:Cartesian>
+		<legend:Legend dataProvider="{lc3}" direction="horizontal"/>	
+    
+    </mx:VBox>
+</mx:VBox>

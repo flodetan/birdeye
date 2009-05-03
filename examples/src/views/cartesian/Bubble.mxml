@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:recipes="birdeye.vis.recipes.cartesianCharts.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:guides="birdeye.vis.guides.legend.*"
+	backgroundColor="#ffffff" 
+	creationComplete="createDT()"
+	width="100%" height="100%" horizontalAlign="center">
+
+<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			private var subject:Array;
+			
+			private function createDT():void
+			{
+				subject = ["A", "B", "C", "D", "E", "F"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var ac1:ArrayCollection = new ArrayCollection();
+				for (var i:Number = 1; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: Math.round(Math.random() * 1000),
+						R2: Math.round(Math.random() * 1000),
+						R3: Math.round(Math.random() * 1000),
+						R4: Math.round(Math.random() * 1000)
+					});
+				}
+				dt = ac;
+			}
+
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = "Info: " + currDatatip[dataFields[0]];
+				tt += '\n' + dataFields[1] + ": " + currDatatip[dataFields[1]];
+				return  tt;
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+	<mx:Button label="Generate" click="createDT()"/>
+	<recipes:BubbleChart maxRadius="30" id="bb" width="90%" height="90%" dataProvider="{dt}" showDataTips="true">
+ 	<recipes:xAxis>
+ 		<scales:CategoryAxis categoryField="subject" placement="bottom"/>
+ 	</recipes:xAxis>
+ 	<recipes:yAxis>
+	 	<scales:LinearAxis placement="left" pointerColor="0xffff00"/>
+	 </recipes:yAxis>
+		 <recipes:series>
+		 	<elements:BubbleElement xField="subject" radiusField="R1" styleName="grad1" yField="R1" displayName="A">
+		 	</elements:BubbleElement>
+		 	<elements:BubbleElement xField="subject" radiusField="R2" styleName="grad3" yField="R2" displayName="B">
+		 	</elements:BubbleElement>
+		 	<elements:BubbleElement xField="subject" radiusField="R3" styleName="grad5" yField="R3" displayName="C">
+		 	</elements:BubbleElement>
+		 </recipes:series>
+	</recipes:BubbleChart>
+	<guides:Legend dataProvider="{bb}" direction="horizontal"/>
+	</mx:VBox>
+</mx:VBox>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:recipes="birdeye.vis.recipes.cartesianCharts.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	backgroundColor="#ffffff" 
+	creationComplete="createDT()"
+	width="100%" height="100%" horizontalAlign="center">
+
+<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			private var subject:Array;
+			
+			private function createDT():void
+			{
+				subject = ["A", "B", "C", "D", "E", "F"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var ac1:ArrayCollection = new ArrayCollection();
+				for (var i:Number = 1; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: Math.round(Math.random() * 1000),
+						R2: Math.round(Math.random() * 1000),
+						R3: Math.round(Math.random() * 1000),
+						R4: Math.round(Math.random() * 1000),
+						R5: Math.round(Math.random() * 1000)
+					});
+				}
+				dt = ac;
+			}
+
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = "Info: " + currDatatip[dataFields[0]];
+				tt += '\n' + dataFields[1] + ": " + currDatatip[dataFields[1]];
+				return  tt;
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Button label="Generate" click="createDT()"/>
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+	       	<recipes:ColumnChart id="cc4" width="90%" height="90%" dataTipFunction="dtFunc" showDataTips="true" dataProvider="{dt}" 
+	       		type="stacked100">
+		 		<recipes:xAxis>
+ 					<scales:CategoryAxis categoryField="subject" placement="bottom"/>
+ 				</recipes:xAxis>
+ 				<recipes:yAxis>
+	 				<scales:LinearAxis placement="left" pointerColor="0xffff00"/>
+	 			</recipes:yAxis>
+        		 <recipes:series>
+        		 	<elements:ColumnElement xField="subject" yField="R1" baseAtZero="true" styleName="grad1" displayName="A">
+        		 	</elements:ColumnElement>
+        		 	<elements:ColumnElement xField="subject" yField="R2" baseAtZero="true" styleName="grad3" displayName="B">
+        		 	</elements:ColumnElement>
+        		 	<elements:ColumnElement xField="subject" yField="R3" baseAtZero="true" styleName="grad5" displayName="C">
+        		 	</elements:ColumnElement>
+        		 	<elements:ColumnElement xField="subject" yField="R4" baseAtZero="true" styleName="grad2" displayName="D">
+        		 	</elements:ColumnElement>
+        		 	<elements:ColumnElement xField="subject" yField="R5" baseAtZero="true" styleName="grad4" displayName="E">
+        		 	</elements:ColumnElement>
+        		 </recipes:series>
+        	</recipes:ColumnChart>
+			<legend:Legend dataProvider="{cc4}" direction="horizontal"/>
+	</mx:VBox>
+
+
+</mx:VBox>

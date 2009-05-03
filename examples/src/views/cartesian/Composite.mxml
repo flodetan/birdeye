@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:guides="birdeye.vis.guides.legend.*"
+	backgroundColor="#ffffff" 
+	creationComplete="createDT()"
+	width="100%" height="100%" horizontalAlign="center">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			private var subject:Array;
+			
+			private function createDT():void
+			{
+				subject = ["A", "B", "C", "D", "E", "F"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var ac1:ArrayCollection = new ArrayCollection();
+				for (var i:Number = 1; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: Math.round(Math.random() * i*10* 1000),
+						R2: Math.round(Math.random() * i*10* 1000),
+						R3: Math.round(Math.random() * i*10* 1000),
+						R4: Math.round(Math.random() * i*10* 1000)
+					});
+				}
+				dt = ac;
+			}
+
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = "Info: " + currDatatip[dataFields[0]];
+				tt += '\n' + dataFields[1] + ": " + currDatatip[dataFields[1]];
+				return  tt;
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+	<mx:Button label="Generate" click="createDT()"/>
+	<coords:Cartesian id="mix" width="90%" height="90%" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true">
+ 		<coords:xAxis>
+ 			<scales:CategoryAxis categoryField="subject" placement="bottom" pointerColor="0xffffff"/>
+ 		</coords:xAxis>
+ 		<coords:yAxis>
+ 			<scales:LinearAxis placement="left" pointerColor="0xffffff"/>
+ 		</coords:yAxis>
+		 <coords:series>
+		 	<elements:LineElement yField="R3" xField="subject" styleName="solid1" displayName="R3">
+		 	</elements:LineElement>
+		 	<elements:BarElement yField="subject" xField="R2" styleName="grad1" displayName="R2">
+		 		<elements:xAxis>
+		 			<scales:LinearAxis placement="top" pointerColor="0xffff00"/>
+		 		</elements:xAxis>
+		 		<elements:yAxis>
+		 			<scales:CategoryAxis categoryField="subject" placement="right" pointerColor="0xffff00"/>
+		 		</elements:yAxis>
+		 	</elements:BarElement>
+		 	<elements:AreaElement yField="R3" xField="subject" styleName="grad3" displayName="R3">
+		 	</elements:AreaElement>
+		 	<elements:PointElement yField="R3" xField="subject" styleName="grad4" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" displayName="R3">
+		 	</elements:PointElement>
+		 </coords:series>
+	</coords:Cartesian>
+	<guides:Legend dataProvider="{mix}" direction="horizontal"/>
+	</mx:VBox>
+</mx:VBox>

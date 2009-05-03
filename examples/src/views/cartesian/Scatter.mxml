@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:charts="birdeye.vis.recipes.cartesianCharts.*"
+	xmlns:series="birdeye.vis.elements.geometry.*"
+	xmlns:axis="birdeye.vis.scales.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	backgroundColor="#ffffff" 
+	creationComplete="createDT()"
+	width="100%" height="100%" horizontalAlign="center">
+
+<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			private var subject:Array;
+			
+			private function createDT():void
+			{
+				subject = ["A", "B", "C", "D", "E", "F"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var ac1:ArrayCollection = new ArrayCollection();
+				for (var i:Number = 1; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: Math.round(Math.random() * 1000),
+						R2: Math.round(Math.random() * 1000),
+						R3: Math.round(Math.random() * 1000),
+						R4: Math.round(Math.random() * 1000)
+					});
+				}
+				dt = ac;
+			}
+
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = "Info: " + currDatatip[dataFields[0]];
+				tt += '\n' + dataFields[1] + ": " + currDatatip[dataFields[1]];
+				return  tt;
+			}
+		]]>
+	</mx:Script>
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+	<mx:Button label="Generate" click="createDT()"/>
+	<charts:ScatterPlot maxRadius="30" id="sp" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
+ 	<charts:xAxis>
+ 		<axis:CategoryAxis categoryField="subject" placement="bottom"/>
+ 	</charts:xAxis>
+ 	<charts:yAxis>
+	 	<axis:LinearAxis placement="left" pointerColor="0xffff00"/>
+	 </charts:yAxis>
+		 <charts:series>
+		 	<series:ScatterElement xField="subject" radiusField="R1" yField="R1" itemRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" styleName="grad1" displayName="A">
+		 	</series:ScatterElement>
+		 	<series:ScatterElement xField="subject" radiusField="R2" yField="R2" itemRenderer="birdeye.vis.guides.renderers.ButterflyRenderer" styleName="grad3" displayName="B">
+		 	</series:ScatterElement>
+		 	<series:ScatterElement xField="subject" radiusField="R3" yField="R3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="grad5" displayName="C">
+		 	</series:ScatterElement>
+		 </charts:series>
+	</charts:ScatterPlot>
+	<legend:Legend dataProvider="{sp}" direction="horizontal"/>
+	</mx:VBox>
+</mx:VBox>
