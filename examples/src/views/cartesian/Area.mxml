@@ -50,10 +50,10 @@
     	<mx:Button label="Generate" click="createDT()"/>
     	<coords:Cartesian id="ac3" width="90%" height="90%" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true">
  		<coords:xAxis>
- 			<scales:CategoryAxis categoryField="subject" placement="bottom" pointerColor="0xffffff"/>
+ 			<scales:CategoryAxis categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
  		</coords:xAxis>
  		<coords:yAxis>
- 			<scales:LinearAxis placement="left" pointerColor="0xffffff"/>
+ 			<scales:LinearAxis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
  		</coords:yAxis>
 		 <coords:series>
 		 	<elements:PointElement xField="subject" yField="R1" styleName="solid1" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />

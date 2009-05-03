@@ -57,10 +57,10 @@
 	<mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
 		<coords:Cartesian id="pc3" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
 			 <coords:yAxis>
-			 			<scales:LinearAxis placement="left"/>
+			 			<scales:LinearAxis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 			 	</coords:yAxis>
 			 	<coords:xAxis>
-			 			<scales:CategoryAxis categoryField="index" placement="bottom"/>
+			 			<scales:CategoryAxis categoryField="index" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 			 </coords:xAxis>
 			 <coords:series>
 			 	<elements:PointElement xField="index" yField="bronze" source="{rasterImage}" displayName="A" />

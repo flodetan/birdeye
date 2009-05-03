@@ -50,7 +50,7 @@
 	<coxcomb:CoxComb type="stacked100" columnWidthRate="1" id="pc1" dataProvider="{dt}" 
 		showDataTips="true" width="500" height="500">
 		<coxcomb:angleAxis>
-			<axis:CategoryAngleAxis categoryField="subject"/>
+			<axis:CategoryAngleAxis categoryField="subject" />
 		</coxcomb:angleAxis>
 		<coxcomb:radiusAxis>
 			<axis:LinearAxis showAxis="false"/>

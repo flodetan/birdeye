@@ -47,10 +47,10 @@
 	<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
 	<recipes:BarChart id="bc2" width="90%" height="90%" dataProvider="{dt}" showDataTips="true" type="stacked100">
     	<recipes:yAxis>
-    		<scales:CategoryAxis categoryField="subject" placement="left" pointerColor="0xffffff"/>
+    		<scales:CategoryAxis categoryField="subject" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
     	</recipes:yAxis>
     	<recipes:xAxis>
-    		<scales:LinearAxis placement="top" pointerColor="0xffffff"/>
+    		<scales:LinearAxis placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
     	</recipes:xAxis>
     	 <recipes:series>
 		 	<elements:BarElement xField="R1" styleName="grad1" yField="subject" displayName="R1" />
