@@ -52,7 +52,7 @@
 			<axis:RadarAxis angleCategory="subject"/>
 		</polar:radarAxis>
 		<polar:radiusAxis>
-			<axis:LinearAxis/>
+			<axis:LinearAxis />
 		</polar:radiusAxis>
 		<polar:series>
 			<pseries:PolarColumnElement extendMouseEvents="true" styleName="grad1" angleField="subject" radiusField="R1" displayName="R1"/>

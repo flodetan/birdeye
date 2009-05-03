@@ -342,13 +342,6 @@ BaseAxis {
 	fillAlpha: 1;*/
 }
 
-.white{
-	labelColor: #FFFFFF;
-	pointerColor: #FFFFFF;
-	strokeColor: #FFFFFF;
-	fillColor: #FFFFFF;
-}
-
 BaseSeries {
 	/* series color, stroke, alpha, gradients */
 	/*	gradientColors: #000000, #FFFFFF; not set by default */

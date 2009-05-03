@@ -48,10 +48,10 @@
 	<mx:Button label="Generate" click="createDT()"/>
 	<recipes:BubbleChart maxRadius="30" id="bb" width="90%" height="90%" dataProvider="{dt}" showDataTips="true">
  	<recipes:xAxis>
- 		<scales:CategoryAxis categoryField="subject" placement="bottom"/>
+ 		<scales:CategoryAxis categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
  	</recipes:xAxis>
  	<recipes:yAxis>
-	 	<scales:LinearAxis placement="left" pointerColor="0xffff00"/>
+	 	<scales:LinearAxis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
 	 </recipes:yAxis>
 		 <recipes:series>
 		 	<elements:BubbleElement xField="subject" radiusField="R1" styleName="grad1" yField="R1" displayName="A">
