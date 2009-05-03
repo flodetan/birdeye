@@ -1,4 +1,4 @@
-/*  
+/* 
  * The MIT License
  *
  * Copyright (c) 2008
@@ -24,17 +24,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
-package birdeye.vis.recipes.cartesianCharts
+
+package birdeye.vis.trans.projections
 {
-	import birdeye.vis.coords.Cartesian
-	/**
-	 * @see CartesianChart */
-	public class PlotChart extends Cartesian
+	import flash.geom.Point;
+
+	public class WinkelTripelTransformation extends Transformation
 	{
-		public function PlotChart()
+		
+		public function WinkelTripelTransformation()
 		{
 			super();
+			this.scalefactor=68;
+			this.xoffset=6.13;
+			this.yoffset=2.88;
+		}
+
+		private function calcSincAlpha(la:Number,lo:Number):Number
+		{
+			var alpha:Number = Math.acos(Math.cos(la)*Math.cos(lo/2));
+			if (alpha==0) {
+				return 1;
+			}else{
+				return (Math.sin(alpha)/alpha);
+			}
+		}
+
+		public override function calcXY(lat:Number, long:Number, zoom:Number):Point
+		{
+			const cosEquirect:Number = 1;
+			var latRad:Number=convertDegToRad(lat);
+			var longRad:Number=convertDegToRad(long);
+			var sincAlpha:Number;
+			var xCentered:Number;
+			var yCentered:Number;
+			
+			sincAlpha=calcSincAlpha(latRad,longRad);
+
+			//x = long*cosEquirect + 2cos(lat)*sin(long/2)/sincAlpha
+			xCentered = longRad*cosEquirect + 2*Math.cos(latRad)*Math.sin(longRad/2)/sincAlpha;
+
+			//y = lat + sin(lat)/sincAlpha
+			yCentered = latRad + Math.sin(latRad)/sincAlpha;
+									
+			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
 		}
 
 	}

@@ -1,4 +1,4 @@
-/*  
+/* 
  * The MIT License
  *
  * Copyright (c) 2008
@@ -24,18 +24,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
-package birdeye.vis.recipes.cartesianCharts
+
+package birdeye.vis.trans.projections
 {
-	import birdeye.vis.coords.Cartesian
-	/**
-	 * @see CartesianChart */
-	public class PlotChart extends Cartesian
+	import flash.geom.Point;
+
+	public class GoodeMollweideTransformation extends MollweideTransformation
 	{
-		public function PlotChart()
+		public function GoodeMollweideTransformation()
 		{
 			super();
+			this.xscaler = 1.05;
+			this.scalefactor = 131;
+			this.xoffset = 3.15;
+			this.yoffset = 1.39;
 		}
-
 	}
 }

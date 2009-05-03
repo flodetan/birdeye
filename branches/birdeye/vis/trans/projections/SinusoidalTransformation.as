@@ -1,4 +1,4 @@
-/*  
+/* 
  * The MIT License
  *
  * Copyright (c) 2008
@@ -24,17 +24,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
-package birdeye.vis.recipes.cartesianCharts
+
+package birdeye.vis.trans.projections
 {
-	import birdeye.vis.coords.Cartesian
-	/**
-	 * @see CartesianChart */
-	public class PlotChart extends Cartesian
+	import flash.geom.Point;
+
+	public class SinusoidalTransformation extends Transformation
 	{
-		public function PlotChart()
+		
+		public function SinusoidalTransformation()
 		{
 			super();
+		}
+
+		public override function calcXY(latDeg:Number, longDeg:Number, zoom:Number):Point
+		{
+			var latRad:Number=convertDegToRad(latDeg);
+			var longRad:Number=convertDegToRad(longDeg);
+			var xCentered:Number;
+			var yCentered:Number;
+			
+			//x = (long-lstart)*cos(lat)  //lstart=0
+			xCentered=(longRad)*Math.cos(latRad);
+			yCentered = latRad;
+			
+			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
 		}
 
 	}

@@ -25,11 +25,13 @@
  * THE SOFTWARE.
  */
  
-package birdeye.vis.cartesianCharts
+package birdeye.vis.recipes.cartesianCharts
 {
+	
+	import birdeye.vis.coords.Cartesian
 	/**
 	 * @see CartesianChart */
-	public class LineChart extends CartesianChart
+	public class LineChart extends Cartesian
 	{
 		public function LineChart()
 		{

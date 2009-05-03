@@ -1,4 +1,4 @@
-/*  
+/* 
  * The MIT License
  *
  * Copyright (c) 2008
@@ -24,18 +24,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
-package birdeye.vis.recipes.cartesianCharts
+
+package birdeye.vis.trans.projections
 {
-	import birdeye.vis.coords.Cartesian
+	import flash.geom.Point;
 	/**
-	 * @see CartesianChart */
-	public class PlotChart extends Cartesian
+	* Class for geographic location referencing via latitude and longitude
+	**/	 
+	public class USGeographicTransformation extends Transformation
 	{
-		public function PlotChart()
+		//--------------------------------------------------------------------------
+    	//
+    	//  Constructor
+    	//
+    	//--------------------------------------------------------------------------
+		public function USGeographicTransformation(lat:Number,long:Number)
 		{
 			super();
+			this.scalefactor=740;
+			this.xoffset=2.19;
+			this.yoffset=0.858
 		}
 
+		public override function calcXY(lat:Number, long:Number, zoom:Number):Point
+		{
+			var latRad:Number=convertDegToRad(lat);
+			var longRad:Number=convertDegToRad(long);
+			var xCentered:Number;
+			var yCentered:Number;
+			
+			xCentered = longRad;
+			yCentered = latRad;
+									
+			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
+		}
+		
 	}
 }

@@ -25,11 +25,10 @@
  * THE SOFTWARE.
  */
 
-package birdeye.vis.polarCharts
+package birdeye.vis.recipes.polarCharts
 {
-	import birdeye.vis.axis.BaseAxis;
-	import birdeye.vis.axis.NumericAxis;
-	import birdeye.vis.axis.PercentAngleAxis;
+	import birdeye.vis.scales.*;
+	import birdeye.vis.coords.Polar;
 	
 	public class PieChart extends Polar
 	{		
