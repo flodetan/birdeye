@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:parallel="birdeye.parallel.*"
+	initialize="start()">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.controls.dataGridClasses.DataGridColumn;
+			import birdeye.parallel.ParallelCoordinateAxisRenderer;
+			import mx.controls.CheckBox;
+			import mx.graphics.Stroke;
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var dataProvider:ArrayCollection;
+			
+			private const fields:Array = ['A','B','C','D','E','F'];
+		
+			private function start():void
+			{
+				BindingUtils.bindSetter(updateDataGridSelection,pcp,"selectedItems");
+				updateStroke("up");
+				updateStroke("over");
+				updateStroke("selected");
+			}
+			
+			private function updateStroke(strokeType:String):void
+			{
+				var stroke:Stroke = new Stroke();
+				if(strokeType == "up")
+				{
+					stroke.color = upStrokeColorPicker.selectedColor;
+					stroke.alpha = .25;
+					pcp.itemUpStroke =  stroke;
+				}
+				else if(strokeType == "over")
+				{
+					stroke.color = rollOverColorPicker.selectedColor;
+					stroke.alpha = .5;
+					stroke.weight = 3;
+					pcp.itemOverStroke =  stroke;
+				}
+				else if(strokeType == "selected")
+				{
+					stroke.color = selectedColorPicker.selectedColor;
+					stroke.alpha = 1;
+					stroke.weight = 3;
+					pcp.itemSelectedStroke =  stroke;
+				}
+			}
+			
+			private function updateAxisRenderers():void
+			{
+				var columns:Array = [];
+				var axisRenderers:Array = [];
+				for(var a:int = 0; a < checkBoxes.length; a++)
+				{
+					var checkBox:CheckBox = CheckBox(checkBoxes[a]);
+					if(checkBox.selected)
+					{
+						var axisRenderer:ParallelCoordinateAxisRenderer = new ParallelCoordinateAxisRenderer();
+						axisRenderer.fieldName = checkBox.label;
+						axisRenderers.push(axisRenderer);
+						
+						var column:DataGridColumn = new DataGridColumn(checkBox.label)
+						columns.push(column);
+					}
+				}
+				pcp.axisRenderers = axisRenderers;
+				dg.columns = columns;
+			}
+			
+			private function updateDataGridSelection(value:Object):void
+			{
+				dg.selectedItems = value as Array;
+			}
+		]]>
+	</mx:Script>
+
+	<mx:String id="csv" source="data/mulitdimensionalData.csv"/>
+	
+	<mx:ApplicationControlBar width="100%" >
+		<mx:HBox height="100%" width="100%" paddingLeft="5" paddingRight="5" verticalAlign="middle">
+			
+			<mx:Label text="Default color"/>
+			<mx:ColorPicker id="upStrokeColorPicker" selectedColor="0x59574B" change="updateStroke('up')"/>
+			
+			<mx:Label text="Roll-over color"/>
+			<mx:ColorPicker id="rollOverColorPicker" selectedColor="0x990016" change="updateStroke('over')"/>
+			
+			<mx:Label text="Selection color"/>
+			<mx:ColorPicker id="selectedColorPicker" selectedColor="0x990016" change="updateStroke('selected')"/>
+			
+			<mx:VRule height="45"/>
+			
+			<mx:Label text="Axes"/>
+			<mx:Repeater id="fieldRepeater" dataProvider="{fields}">
+				<mx:CheckBox id="checkBoxes" label="{fieldRepeater.currentItem.toString()}"
+					labelPlacement="top" selected="true" click="updateAxisRenderers()"/>
+			</mx:Repeater>
+			
+		</mx:HBox>
+	</mx:ApplicationControlBar>
+
+	<parallel:ParallelCoordinatePlot id="pcp" dataProvider="{dataProvider}" width="100%" height="100%"
+		selectedItems="{dg.selectedItems}">
+		<parallel:axisRenderers>
+			<parallel:ParallelCoordinateAxisRenderer fieldName="A" />
+			<parallel:ParallelCoordinateAxisRenderer fieldName="B" />
+			<parallel:ParallelCoordinateAxisRenderer fieldName="C" />
+			<parallel:ParallelCoordinateAxisRenderer fieldName="D" />
+			<parallel:ParallelCoordinateAxisRenderer fieldName="E" />
+			<parallel:ParallelCoordinateAxisRenderer fieldName="F" />
+		</parallel:axisRenderers>
+	</parallel:ParallelCoordinatePlot>
+	
+	<mx:DataGrid id="dg" dataProvider="{dataProvider}"
+		allowMultipleSelection="true"
+		sortableColumns="false"
+		width="100%" height="100%">
+		<mx:columns>
+			<mx:DataGridColumn dataField="A"/>
+			<mx:DataGridColumn dataField="B"/>
+			<mx:DataGridColumn dataField="C"/>
+			<mx:DataGridColumn dataField="D"/>
+			<mx:DataGridColumn dataField="E"/>
+			<mx:DataGridColumn dataField="F"/>
+		</mx:columns>
+	</mx:DataGrid>
+</mx:VBox>

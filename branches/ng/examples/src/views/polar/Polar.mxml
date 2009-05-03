@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	backgroundColor="#ffffff"
+	width="100%" height="100%" 
+	xmlns:polar="views.polar.*"
+	 >
+	
+
+	<mx:TabNavigator id="nav" height="100%" width="100%" creationPolicy="auto">
+		<polar:RadarColumn label="Radar Column" width="100%" height="100%" />
+		<polar:RadarArea label="Radar Area" width="100%" height="100%" />
+		<polar:Pie label="Pie" width="100%" height="100%" />
+		<polar:Coxcomb label="Coxcomb" width="100%" height="100%" />
+	
+	</mx:TabNavigator>
+</mx:VBox>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	backgroundColor="#ffffff"
+	width="100%" height="100%" 
+	xmlns:cartesian="views.cartesian.*"
+	 >
+	
+
+	<mx:TabNavigator id="nav" height="100%" width="100%" creationPolicy="auto">
+		<cartesian:Area label="Area" width="100%" height="100%"/>
+		<cartesian:Bar label="Bar" width="100%" height="100%"/>
+		<cartesian:Bubble label="Bubble" width="100%" height="100%"/>
+		<cartesian:Column label="Column" width="100%" height="100%"/>
+		<cartesian:Line label="Line" width="100%" height="100%"/>
+		<cartesian:Plot label="Plot" width="100%" height="100%"/>
+		<cartesian:Scatter label="Scatter" width="100%" height="100%"/>
+		<cartesian:Composite label="Composite" width="100%" height="100%"/>
+	</mx:TabNavigator>
+</mx:VBox>

@@ -1,0 +1,431 @@
+@font-face
+{
+	src:					url("../assets/fonts/BasicLig_ltd.ttf");
+	fontFamily: 			franklin;
+	font-anti-alias-type: 	advanced;
+	font-weight: 			normal;
+}
+
+
+@font-face
+{
+	src:					url("../assets/fonts/gnuolane.ttf");
+	fontFamily: 			franklin1;
+	font-anti-alias-type: 	advanced;
+	font-weight: 			normal;
+}
+
+global
+{
+    color: #000000;
+    cornerRadius:0;
+}
+
+
+Application
+{
+	font-family: 				franklin;
+	font-size: 					11;
+	background-gradient-alphas: 1, 1;
+	backgroundGradientColors: 	#FFFFFF, #FFFFFF;
+	font-weight:				normal;
+}
+
+Label
+{
+	font-family: 				franklin;
+	font-size: 					11;
+}
+/*
+//------------------------------
+//  ComboBox
+//------------------------------
+*/
+Button
+{
+	fontSize: 9;
+   	fontFamily: franklin;
+	fontWeight: normal;
+}
+
+ComboBox
+{
+    cornerRadius: 0;
+    fillAlphas: 1.0, 1.0;
+    fillColors: #FFFFFF, #FFFFFF;
+    fontFamily: franklin;
+	fontWeight: normal;
+	dropdownStyleName: "myComboBoxDropDowns"
+	
+}
+
+.myComboBoxDropDowns {
+   	fontSize: 9;
+   	fontFamily: franklin;
+	fontWeight: normal;
+}
+
+
+/*
+------------------------------------------------------------------------
+RADIOS & CHECKBOX
+------------------------------------------------------------------------
+*/
+
+
+CheckBox {
+   highlightAlphas: 1, 1;
+   fillAlphas: 1, 1, 1, 1;
+   fillColors: #ffffff, #ffffff, #ffffff, #ffffff;
+   borderColor: #333333;
+   iconColor: #333333;
+   color: #333333;
+   textSelectedColor: #666666;
+   textRollOverColor: #666666;
+   themeColor: #333333;
+   fontFamily: franklin;
+   fontWeight: normal;
+   labelPlacement: right;
+}
+
+
+RadioButton
+{
+	up-icon: 			Embed("/assets/botones/radio.png");
+	over-icon: 			Embed("/assets/botones/radio1.png");
+	down-icon: 			Embed("/assets/botones/radio2.png");
+	selected-up-icon: 	Embed("/assets/botones/radio3.png");
+	selected-over-icon: Embed("/assets/botones/radio3.png");
+	selected-down-icon: Embed("/assets/botones/radio4.png");
+	disabled-icon: 		Embed("/assets/botones/radio_dis.png");
+	color:				#333333;
+	font-family:		franklin;
+}
+
+
+/*
+------------------------------------------------------------------------
+PANELS & WINDOWS
+------------------------------------------------------------------------
+*/
+
+
+Panel {
+   borderStyle: solid;
+   borderColor: #333333;
+   borderAlpha: 1;
+   borderThickness: 0.75;
+   cornerRadius: 0;
+   headerHeight: 15;
+   highlightAlphas: 1, 1;
+   headerColors: #ffffff, #ffffff;
+   dropShadowEnabled: false;
+   titleStyleName: "mypanelTitle";
+}
+
+.mypanelTitle {
+   fontFamily: franklin1;
+   fontWeight: normal;
+   fontSize: 12;
+}
+
+
+
+
+ScrollBar
+{
+	up-arrow-up-skin: 		Embed("/assets/botones/Scroll_up.png" );
+	up-arrow-over-skin:		Embed("/assets/botones/Scroll_up.png");
+	up-arrow-down-skin:		Embed("/assets/botones/Scroll_up1.png");
+	
+	down-arrow-up-skin:		Embed("/assets/botones/Scroll_down.png" );
+	down-arrow-over-skin:	Embed("/assets/botones/Scroll_down.png");
+	down-arrow-down-skin:	Embed("/assets/botones/Scroll_down1.png");
+	
+	thumb-up-skin:			Embed("/assets/botones/Scroll_barra.png", scaleGridTop="3", scaleGridBottom="7", scaleGridLeft="2", scaleGridRight="11");
+	thumb-over-skin:		Embed("/assets/botones/Scroll_barra1.png", scaleGridTop="3", scaleGridBottom="7", scaleGridLeft="2", scaleGridRight="11");
+	thumb-down-skin:		Embed("/assets/botones/Scroll_barra2.png", scaleGridTop="3", scaleGridBottom="7", scaleGridLeft="2", scaleGridRight="11");
+	
+	track-skin: 			Embed("/assets/botones/Scroll_fondo.png", scaleGridTop="17", scaleGridBottom="28", scaleGridLeft="3", scaleGridRight="12");
+	/*track-down-skin: 		Embed("/assets/botones/Scroll_fondo.png", scaleGridTop="26", scaleGridBottom="28", scaleGridLeft="8", scaleGridRight="9");*/
+
+	thumb-icon:				Embed("/assets/botones/Scroll_icon.png");
+}
+
+NumericStepper
+{
+    borderThickness: 1;
+    cornerRadius: 0;
+    borderStyle: inset;
+}
+
+
+HRule
+{
+	stroke-color: 	#cccccc;
+	stroke-width:	2;
+	shadow-color:	#ffffff;
+	font-family:	franklin;
+}
+
+
+VRule
+{
+	stroke-color:	#cccccc;
+	stroke-width:	2;
+	shadow-color:	#ffffff;
+	font-family:	franklin;
+}
+
+
+HSlider
+{
+	thumb-skin: 			Embed("/assets/botones/bullet.png");
+	thumb-down-skin: 		Embed(source="/assets/botones/bullet1.png");
+	thumb-disabled-skin:	Embed(source="/assets/botones/bullet_dis.png");
+	track-skin: 			Embed(source="/assets/botones/barra.png", scaleGridTop="2", scaleGridBottom="3", scaleGridLeft="4", scaleGridRight="50");
+	data-tip-offset:		0;
+}
+
+
+VSlider
+{
+	thumb-skin: 			Embed("/assets/botones/bullet_v.png");
+	thumb-down-skin: 		Embed(source="/assets/botones/bullet_v1.png");
+	thumb-disabled-skin:	Embed(source="/assets/botones/bullet_V_dis.png");
+	track-skin: 			Embed(source="/assets/botones/barra.png", scaleGridTop="2", scaleGridBottom="3", scaleGridLeft="4", scaleGridRight="50");
+	data-tip-offset:		0;
+}
+
+
+ProgressBar
+{
+	bar-skin:						Embed(source="/assets/botones/progress_barra.png", scaleGridTop="3", scaleGridBottom="4", scaleGridLeft="5", scaleGridRight="6");
+	track-skin:						Embed(source="/assets/botones/progress.png", scaleGridTop="4", scaleGridBottom="5", scaleGridLeft="4", scaleGridRight="6");
+	track-disabled-skin:			Embed(source="/assets/botones/progress_dis.png", scaleGridTop="4", scaleGridBottom="5", scaleGridLeft="4", scaleGridRight="6");
+	font-family: 					franklin1;
+	color: 							#333333;
+	font-weight: 					normal;
+	font-size: 						11;
+	label-placement: 				top;
+	indeterminate-skin:				Embed(source="/assets/botones/progress_charning.png");
+	indeterminate-move-interval: 	13;
+}
+
+TabNavigator {
+   tabStyleName: "myTabs";
+   firstTabStyleName: "myTabs";
+   lastTabStyleName: "myTabs";
+   selectedTabTextStyleName: "mySelectedTabs";
+}
+
+.myTabs {
+   cornerRadius: 0;
+   highlightAlphas: 0, 0;
+   fillAlphas: 1, 1;
+   fillColors: #ffffff, #ffffff;
+   backgroundColor: #ffffff;
+   borderColor: #333333;
+   color: #333333;
+   textRollOverColor: #333333;
+   themeColor: #333333;
+   fontFamily: franklin1;
+   font-size: 11;
+   font-weight: normal;
+
+}
+
+.mySelectedTabs {
+   fontFamily: franklin1;
+   font-size: 11;
+   font-weight: normal;
+}
+
+DataGrid {
+   fontFamily: franklin;
+   font-size: 11;
+   font-weight: normal;
+   headerStyleName: "mydataGridHeaderStyle";
+}
+
+.mydataGridHeaderStyle {
+   fontFamily: franklin1;
+   font-size: 11;
+   font-weight: normal;
+}
+
+
+/*
+------------------------------------------------------------------------
+TEXT INPUT - AREA
+------------------------------------------------------------------------
+*/
+
+.personalTextInput
+{
+	background-image: 			Embed("/assets/botones/textInput.png", scaleGridTop="6", scaleGridBottom="16", scaleGridLeft="6", scaleGridRight="16");
+	background-disabled-color:	none;
+	background-size: 			"100%";
+	color:						#333333;
+	disabled-color:				#999999;
+	border-thickness:			0;
+	focus-thickness:			0;
+	font-size:					11;
+	font-family:				franklin;
+	border-style:				none;
+	font-weight:				normal;
+	padding-left:				3;
+	padding-top:				2;
+}
+
+TextArea
+{
+	background-image: 			Embed("/assets/botones/textArea.png", scaleGridTop="6", scaleGridBottom="16", scaleGridLeft="6", scaleGridRight="16");
+	background-size:			"100%";
+	background-disabled-color:	none;
+	disabled-color:				#999999;
+	border-thickness:			0;
+	focus-thickness:			0;
+	color:						#333333;
+	font-family:				franklin;
+	font-weight:				normal;
+	font-size:					11;
+}
+
+
+
+ToolTip
+{
+	background-image: 		Embed("/assets/botones/toolTip.png", scaleGridTop="4", scaleGridBottom="5", scaleGridLeft="7", scaleGridRight="16");
+	color:					#333333;
+	border-style:			none;
+	border-color:			none;
+	background-size: 		"100%";
+	font-family: 			franklin;
+	font-weight: 			normal;
+	font-size: 				10;
+	drop-shadow-enabled:	false;
+	padding-bottom: 		5;
+	dding-left:				6;
+	dding-right:			6;
+	dding-top:				3;
+}
+
+
+
+
+ComparisonMatrix {
+			selection-color:#99ff99;
+			roll-over-color:#ccffcc;
+}
+
+BaseAxis {
+	/* axis label */
+	labelFont: franklin;
+	labelSize: 9;
+	labelColor: #000000;
+
+	/* axis pointer */
+	pointerColor: #FF0000;
+	pointerSize: 8;
+	pointerWeight: 4;
+
+	/* axis stroke */
+	strokeColor: #000000;
+	strokeWeight: 2;
+
+	/* following are not used yet 
+	strokeAlpha: 1;
+	gradientColors: #FF0000, #0000FF;
+	gradientAlphas: 0.5, 0.5;
+	fillColor: #000000;
+	fillAlpha: 1;*/
+}
+
+.white{
+	labelColor: #FFFFFF;
+	pointerColor: #FFFFFF;
+	strokeColor: #FFFFFF;
+	fillColor: #FFFFFF;
+}
+
+BaseSeries {
+	/* series color, stroke, alpha, gradients */
+	/*	gradientColors: #000000, #FFFFFF; not set by default */
+	gradientAlphas: 0.5, 0.5;
+	fillColor: #FF0000;
+	fillAlpha: .2;
+	strokeColor: #000000;
+	strokeWeight: 1;
+	strokeAlpha: 1;
+	
+	/* series label */
+	labelFont: franklin;
+	labelSize: 8;
+	labelColor: #000000;
+}
+
+.grad1 {
+	gradientColors: #990016, #990016;
+	gradientAlphas: .8, .7;
+}
+
+.solid1 {
+	fillColor: #990016;
+	fillAlpha: .7;
+	strokeColor: #990016;
+	strokeAlpha: .8;
+	strokeWeight: 3;
+}
+
+.grad2 {
+	gradientColors: #59574B, #59574B;
+	gradientAlphas: .7, .6;
+}
+
+.solid2 {
+	fillColor: #59574B;
+	fillAlpha: .7;
+	strokeColor: #59574B;
+	strokeAlpha: .8;
+	strokeWeight: 3;
+}
+
+.grad3 {
+	gradientColors: #829690, #829690;
+	gradientAlphas: .7, .6;
+}
+
+.solid3 {
+	fillColor: #829690;
+	fillAlpha: .7;
+	strokeColor: #829690;
+	strokeAlpha: .8;
+	strokeWeight: 3;
+}
+
+.grad4 {
+	gradientColors: #B5B09A, #B5B09A;
+	gradientAlphas: .7, .6;
+}
+
+.solid4 {
+	fillColor: #B5B09A;
+	fillAlpha: .7;
+	strokeColor: #B5B09A;
+	strokeAlpha: .8;
+	strokeWeight: 3;
+}
+
+.grad5 {
+	gradientColors: #E1E3CB, #E1E3CB;
+	gradientAlphas: .7, .6;
+}
+
+.solid5 {
+	fillColor: #E1E3CB;
+	fillAlpha: .7;
+	strokeColor: #E1E3CB;
+	strokeAlpha: .8;
+	strokeWeight: 3;
+}

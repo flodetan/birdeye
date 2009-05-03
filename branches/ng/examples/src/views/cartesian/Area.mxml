@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:recipe="birdeye.vis.recipes.cartesianCharts.*"
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:guides="birdeye.vis.guides.legend.*"
+	backgroundColor="#FFFFFF" 
+	creationComplete="createDT()"
+	width="100%" height="100%" horizontalAlign="center">
+
+<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			private var subject:Array;
+			
+			private function createDT():void
+			{
+				subject = ["A", "B", "C", "D", "E", "F"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var ac1:ArrayCollection = new ArrayCollection();
+				for (var i:Number = 1; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: Math.round(Math.random() * 1000),
+						R2: Math.round(Math.random() * 1000),
+						R3: Math.round(Math.random() * 1000),
+						R4: Math.round(Math.random() * 1000)
+					});
+				}
+				dt = ac;
+			}
+
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = "Info: " + currDatatip[dataFields[0]];
+				tt += '\n' + dataFields[1] + ": " + currDatatip[dataFields[1]];
+				return  tt;
+			}
+		]]>
+	</mx:Script>
+	
+	
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+    	<mx:Button label="Generate" click="createDT()"/>
+    	<coords:Cartesian id="ac3" width="90%" height="90%" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true">
+ 		<coords:xAxis>
+ 			<scales:CategoryAxis categoryField="subject" placement="bottom" pointerColor="0xffffff"/>
+ 		</coords:xAxis>
+ 		<coords:yAxis>
+ 			<scales:LinearAxis placement="left" pointerColor="0xffffff"/>
+ 		</coords:yAxis>
+		 <coords:series>
+		 	<elements:PointElement xField="subject" yField="R1" styleName="solid1" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
+		 	<elements:PointElement xField="subject" yField="R2" styleName="solid2" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
+		 	<elements:PointElement xField="subject" yField="R3" styleName="solid3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
+		 	<elements:PointElement xField="subject" yField="R4" styleName="solid4" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
+		 	
+		 	<elements:LineElement xField="subject" yField="R1"  styleName="solid1" />
+		 	<elements:LineElement xField="subject" yField="R2"  styleName="solid2" />
+		 	<elements:LineElement xField="subject" yField="R3"  styleName="solid3" />
+		 	<elements:LineElement xField="subject" yField="R4"  styleName="solid4" />
+		 	
+		 	<elements:AreaElement xField="subject" yField="R1" styleName="grad1" displayName="A"/>
+    		<elements:AreaElement xField="subject" yField="R2" styleName="grad2" displayName="B"/>
+    		<elements:AreaElement xField="subject" yField="R3" styleName="grad3" displayName="C"/>
+    		<elements:AreaElement xField="subject" yField="R4" styleName="grad4" displayName="D"/>
+		 </coords:series>
+	</coords:Cartesian>
+    <guides:Legend dataProvider="{ac3}" direction="horizontal"/>
+	</mx:VBox>
+</mx:VBox>
