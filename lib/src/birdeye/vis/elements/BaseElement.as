@@ -54,6 +54,10 @@ package birdeye.vis.elements
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
 
+	[Style(name="rendererSize",type="Number",inherit="no")]
+
+	[Style(name="colors",type="Array",inherit="no")]
+
 	[Style(name="gradientColors",type="Array",inherit="no")]
 	[Style(name="gradientAlphas",type="Array",inherit="no")]
 
@@ -300,6 +304,8 @@ package birdeye.vis.elements
 			return _weightStroke;
 		}
 
+		protected var _colors:Array;
+
 		protected var _colorGradients:Array;
 		/** Set the gradientColors to be used for the data items.*/
 		public function set colorGradients(val:Array):void
@@ -358,6 +364,18 @@ package birdeye.vis.elements
 		public function get colorLabel():uint
 		{
 			return _colorLabel;
+		}
+
+		protected var _sizeRenderer:uint;
+		/** Set the _sizeRenderer to be used for the data items.*/
+		public function set sizeRenderer(val:uint):void
+		{
+			_sizeRenderer = val;
+			invalidateDisplayList();
+		}
+		public function get sizeRenderer():uint
+		{
+			return _sizeRenderer;
 		}
 
 		private var _mouseDoubleClickFunction:Function;
@@ -458,6 +476,8 @@ package birdeye.vis.elements
 			if (stylesChanged)
 			{
 				// Redraw gradient fill only if style changed.
+				_colors = getStyle("colors");
+
 				_colorGradients = getStyle("gradientColors");
 				_alphaGradients = getStyle("gradientAlphas");
 				
@@ -471,6 +491,8 @@ package birdeye.vis.elements
 				_fontLabel = getStyle("labelFont");
 				_colorLabel = getStyle("labelColor");
 				_sizeLabel = getStyle("labelSize");
+
+				_sizeRenderer = getStyle("rendererSize");
 
  				stylesChanged = false;
 			}
@@ -488,7 +510,7 @@ package birdeye.vis.elements
 				g.push(grStop);
 
 				LinearGradientFill(fill).gradientStops = g;
-			} else 
+			} else if (!_colors)
 				fill = new SolidFill(colorFill, alphaFill);
 			
 			stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
@@ -520,6 +542,8 @@ package birdeye.vis.elements
 				this.labelFont = "verdana";
 				this.labelSize = 9;
 				this.labelColor = 0x000000;
+				
+				this.rendererSize = 10;
 
 				this.stylesChanged = true;
 			} 
