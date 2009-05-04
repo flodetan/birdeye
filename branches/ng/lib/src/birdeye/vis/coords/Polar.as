@@ -482,6 +482,15 @@ package birdeye.vis.coords
 					}
 				} 
 
+				// check if a default color axis exists
+				if (colorAxis)
+				{
+						// if the default color axis is numeric, than calculate its min max values
+						maxMin = getMaxMinColorValueFromSeriesWithoutColorAxis();
+						colorAxis.max = maxMin[0];
+						colorAxis.min = maxMin[1];
+				} 
+
 				elements = [];
 				j = 0;
 
@@ -561,6 +570,31 @@ package birdeye.vis.coords
 									currentSeries.totalAnglePositiveValue);
 				}
 			}
+		}
+
+		/** @Private
+		 * Calculate the min max values for the default color axis. Return an array of 2 values, the 1st (0) 
+		 * for the max value, and the 2nd for the min value.*/
+		private function getMaxMinColorValueFromSeriesWithoutColorAxis():Array
+		{
+			var max:Number = NaN, min:Number = NaN;
+			for (var i:Number = 0; i<series.length; i++)
+			{
+				currentSeries = series[i];
+				if (currentSeries.colorField)
+				{
+					// check if the series has its own color axis and if its max value exists and 
+					// is higher than the current max
+					if (!currentSeries.colorAxis && (isNaN(max) || max < currentSeries.maxColorValue))
+						max = currentSeries.maxColorValue;
+					// check if the series has its own color axis and if its min value exists and 
+					// is lower than the current min
+					if (!currentSeries.colorAxis && (isNaN(min) || min > currentSeries.minColorValue))
+						min = currentSeries.minColorValue;
+				}
+			}
+					
+			return [max,min];
 		}
 
 		/** @Private
