@@ -55,11 +55,11 @@
 	 			<scales:LinearAxis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 	 		</coords:yAxis>
     		 <coords:series>
-    		 	<elements:LineElement xField="subject" yField="R1" styleName="solid1" displayName="A" />
-			 	<elements:LineElement xField="subject" yField="R2" styleName="solid2" displayName="B" />
-			 	<elements:LineElement xField="subject" yField="R3" styleName="solid3" displayName="C" />
-			 	<elements:LineElement xField="subject" yField="R4" styleName="solid4" displayName="D" />
-			 	<elements:LineElement xField="subject" yField="R5" styleName="solid5" displayName="E" />
+    		 	<elements:LineElement showAllDataItems="true" xField="subject" yField="R1" styleName="solid1" displayName="A" />
+			 	<elements:LineElement showAllDataItems="true" xField="subject" yField="R2" styleName="solid2" displayName="B" />
+			 	<elements:LineElement showAllDataItems="true" xField="subject" yField="R3" styleName="solid3" displayName="C" />
+			 	<elements:LineElement showAllDataItems="true" xField="subject" yField="R4" styleName="solid4" displayName="D" />
+			 	<elements:LineElement showAllDataItems="true" xField="subject" yField="R5" styleName="solid5" displayName="E" />
 			 </coords:series>
     	</coords:Cartesian>
 		<legend:Legend dataProvider="{lc3}" direction="horizontal"/>	

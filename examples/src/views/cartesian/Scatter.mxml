@@ -53,11 +53,11 @@
 	 	<axis:LinearAxis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 	 </charts:yAxis>
 		 <charts:series>
-		 	<series:ScatterElement xField="subject" radiusField="R1" yField="R1" itemRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" styleName="grad1" displayName="A">
+		 	<series:ScatterElement extendMouseEvents="true" xField="subject" radiusField="R1" yField="R1" itemRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" styleName="grad1" displayName="A">
 		 	</series:ScatterElement>
-		 	<series:ScatterElement xField="subject" radiusField="R2" yField="R2" itemRenderer="birdeye.vis.guides.renderers.ButterflyRenderer" styleName="grad3" displayName="B">
+		 	<series:ScatterElement extendMouseEvents="true" xField="subject" radiusField="R2" yField="R2" itemRenderer="birdeye.vis.guides.renderers.ButterflyRenderer" styleName="grad3" displayName="B">
 		 	</series:ScatterElement>
-		 	<series:ScatterElement xField="subject" radiusField="R3" yField="R3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="grad5" displayName="C">
+		 	<series:ScatterElement extendMouseEvents="true" xField="subject" radiusField="R3" yField="R3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="grad5" displayName="C">
 		 	</series:ScatterElement>
 		 </charts:series>
 	</charts:ScatterPlot>

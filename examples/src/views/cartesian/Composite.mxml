@@ -54,9 +54,9 @@
  			<scales:LinearAxis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
  		</coords:yAxis>
 		 <coords:series>
-		 	<elements:LineElement yField="R3" xField="subject" styleName="solid1" displayName="R3">
+		 	<elements:LineElement showAllDataItems="true" yField="R3" xField="subject" styleName="solid1" displayName="R3">
 		 	</elements:LineElement>
-		 	<elements:BarElement yField="subject" xField="R2" styleName="grad1" displayName="R2">
+		 	<elements:BarElement extendMouseEvents="true" yField="subject" xField="R2" styleName="grad1" displayName="R2">
 		 		<elements:xAxis>
 		 			<scales:LinearAxis placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 		 		</elements:xAxis>
@@ -66,8 +66,6 @@
 		 	</elements:BarElement>
 		 	<elements:AreaElement yField="R3" xField="subject" styleName="grad3" displayName="R3">
 		 	</elements:AreaElement>
-		 	<elements:PointElement yField="R3" xField="subject" styleName="grad4" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" displayName="R3">
-		 	</elements:PointElement>
 		 </coords:series>
 	</coords:Cartesian>
 	<guides:Legend dataProvider="{mix}" direction="horizontal"/>
