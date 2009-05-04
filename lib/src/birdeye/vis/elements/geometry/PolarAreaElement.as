@@ -27,16 +27,17 @@
  
 package birdeye.vis.elements.geometry
 {
-	import com.degrafa.geometry.Circle;
+	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.guides.renderers.DiamondRenderer;
+	import birdeye.vis.interfaces.INumerableAxis;
+	import birdeye.vis.scales.*;
+	
+	import com.degrafa.IGeometry;
 	import com.degrafa.geometry.Polygon;
-	import com.degrafa.paint.SolidFill;
+	
+	import flash.geom.Rectangle;
 	
 	import mx.collections.CursorBookmark;
-	
-	import birdeye.vis.scales.*;
-	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.interfaces.INumerableAxis;
-	import birdeye.vis.guides.renderers.DiamondRenderer;
 
 	public class PolarAreaElement extends PolarElement
 	{
@@ -134,6 +135,15 @@ package birdeye.vis.elements.geometry
 				poly.fill = fill;
 				poly.stroke = stroke;
 				gg.geometryCollection.addItem(poly);
+			}
+
+			if (_showItemRenderer)
+			{
+ 				var bounds:Rectangle = new Rectangle(xPos - _rendererSize/2, yPos - _rendererSize/2, _rendererSize, _rendererSize);
+				var shape:IGeometry = new itemRenderer(bounds);
+				shape.fill = fill;
+				shape.stroke = stroke;
+				gg.geometryCollection.addItem(shape);
 			}
 		}
 	}

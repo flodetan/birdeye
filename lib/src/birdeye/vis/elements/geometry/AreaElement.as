@@ -215,6 +215,7 @@ package birdeye.vis.elements.geometry
 					poly.stroke = stroke;
 					gg.geometryCollection.addItemAt(poly,0);
 				}
+				
 				if (_showItemRenderer)
 				{
 	 				var bounds:Rectangle = new Rectangle(xPos - _rendererSize/2, yPos - _rendererSize/2, _rendererSize, _rendererSize);

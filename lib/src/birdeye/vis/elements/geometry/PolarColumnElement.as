@@ -27,18 +27,20 @@
  
 package birdeye.vis.elements.geometry
 {
+	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.elements.collision.*;
+	import birdeye.vis.guides.renderers.ArcPath;
+	import birdeye.vis.guides.renderers.UpTriangleRenderer;
+	import birdeye.vis.interfaces.INumerableAxis;
+	import birdeye.vis.recipes.polarCharts.CoxComb;
+	import birdeye.vis.scales.*;
+	
 	import com.degrafa.IGeometry;
 	import com.degrafa.geometry.EllipticalArc;
 	
-	import mx.collections.CursorBookmark;
+	import flash.geom.Rectangle;
 	
-	import birdeye.vis.scales.*;
-	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.interfaces.INumerableAxis;
-	import birdeye.vis.recipes.polarCharts.CoxComb;
-	import birdeye.vis.guides.renderers.ArcPath;
-	import birdeye.vis.guides.renderers.UpTriangleRenderer;
-	import birdeye.vis.elements.collision.*;
+	import mx.collections.CursorBookmark;
 
 	public class PolarColumnElement extends PolarStackElement
 	{
@@ -210,6 +212,15 @@ package birdeye.vis.elements.geometry
 				arc.fill = fill;
 				arc.stroke = stroke;
 				gg.geometryCollection.addItemAt(arc,0); 
+
+				if (_showItemRenderer)
+				{
+	 				var bounds:Rectangle = new Rectangle(xPos - _rendererSize/2, yPos - _rendererSize/2, _rendererSize, _rendererSize);
+					var shape:IGeometry = new itemRenderer(bounds);
+					shape.fill = fill;
+					shape.stroke = stroke;
+					gg.geometryCollection.addItem(shape);
+				}
  				cursor.moveNext();
 			}
 		}

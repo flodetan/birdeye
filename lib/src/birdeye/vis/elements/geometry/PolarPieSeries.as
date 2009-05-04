@@ -27,6 +27,13 @@
  
 package birdeye.vis.elements.geometry
 {
+	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.elements.collision.*;
+	import birdeye.vis.guides.renderers.ArcPath;
+	import birdeye.vis.guides.renderers.CircleRenderer;
+	import birdeye.vis.interfaces.IAxis;
+	import birdeye.vis.scales.*;
+	
 	import com.degrafa.IGeometry;
 	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
@@ -34,13 +41,6 @@ package birdeye.vis.elements.geometry
 	import flash.text.TextFieldAutoSize;
 	
 	import mx.collections.CursorBookmark;
-	
-	import birdeye.vis.scales.*;
-	import birdeye.vis.elements.collision.*;
-	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.interfaces.IAxis;
-	import birdeye.vis.guides.renderers.ArcPath;
-	import birdeye.vis.guides.renderers.CircleRenderer;
 
 	public class PolarPieSeries extends PolarStackElement
 	{
@@ -91,6 +91,8 @@ package birdeye.vis.elements.geometry
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
 		override protected function drawSeries():void
 		{
+			var c:uint = 0;
+			
 			var dataFields:Array = [];
 
 			var angle:Number, radius:Number = NaN;
@@ -163,11 +165,31 @@ package birdeye.vis.elements.geometry
 	
 				var tempColor:int;
 				
-				if (randomColors)
+				if (colorField)
+				{
+					if (colorAxis)
+					{
+						colorFill = colorAxis.getPosition(cursor.current[colorField]);
+						fill = new SolidFill(colorFill);
+					} else if (polarChart.colorAxis) {
+						colorFill = polarChart.colorAxis.getPosition(cursor.current[colorField]);
+						fill = new SolidFill(colorFill);
+					}
+				} else if (_colors)
+				{
+					if (c < _colors.length)
+						fill = new SolidFill(_colors[c]);
+					else
+						fill = new SolidFill(_colors[_colors.length]);
+					
+					c++;
+				} else if (randomColors)
 				{
 					tempColor = Math.random() * 255 * 255 * 255;
 					arc.fill = new SolidFill(tempColor);
-				} else if (fill)
+				}
+				
+				if (fill)
 				{
 					arc.fill = fill;
 				}
