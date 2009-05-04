@@ -48,7 +48,7 @@
 			}
 			
 			[Bindable]
-			[Embed(source="/assets/icons/raster.png")]
+			[Embed(source="/assets/icons/raster.gif")]
 		 	public var rasterImage:Class;
 
 		]]>
@@ -63,7 +63,7 @@
 			 			<scales:CategoryAxis categoryField="index" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 			 </coords:xAxis>
 			 <coords:series>
-			 	<elements:PointElement xField="index" yField="bronze" source="{rasterImage}" displayName="A" />
+			 	<elements:PointElement xField="index" yField="bronze" source="{rasterImage}" strokeAlpha="0" displayName="A" plotRadius="13"/>
 			 	<elements:PointElement xField="index" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="solid4" yField="silver" displayName="B" />
 			 	<elements:PointElement xField="index" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="solid1" yField="gold" displayName="C" />
 			 </coords:series>

@@ -53,10 +53,10 @@
     		<scales:LinearAxis placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
     	</recipes:xAxis>
     	 <recipes:series>
-		 	<elements:BarElement xField="R1" styleName="grad1" yField="subject" displayName="R1" />
-		 	<elements:BarElement xField="R2" styleName="grad2" yField="subject" displayName="R2" />
-		 	<elements:BarElement xField="R3" styleName="grad3" yField="subject" displayName="R3" />
-		 	<elements:BarElement xField="R4" styleName="grad4" yField="subject" displayName="R4" />
+		 	<elements:BarElement extendMouseEvents="true" xField="R1" styleName="grad1" yField="subject" displayName="R1" />
+		 	<elements:BarElement extendMouseEvents="true" xField="R2" styleName="grad2" yField="subject" displayName="R2" />
+		 	<elements:BarElement extendMouseEvents="true" xField="R3" styleName="grad3" yField="subject" displayName="R3" />
+		 	<elements:BarElement extendMouseEvents="true" xField="R4" styleName="grad4" yField="subject" displayName="R4" />
 		 </recipes:series>
 	</recipes:BarChart>
 	<guides:Legend dataProvider="{bc2}" direction="horizontal" backgroundColor="0xffffff"/>	

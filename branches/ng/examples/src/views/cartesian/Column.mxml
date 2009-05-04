@@ -56,15 +56,15 @@
 	 				<scales:LinearAxis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 	 			</recipes:yAxis>
         		 <recipes:series>
-        		 	<elements:ColumnElement xField="subject" yField="R1" baseAtZero="true" styleName="grad1" displayName="A">
+        		 	<elements:ColumnElement extendMouseEvents="true" xField="subject" yField="R1" baseAtZero="true" styleName="grad1" displayName="A">
         		 	</elements:ColumnElement>
-        		 	<elements:ColumnElement xField="subject" yField="R2" baseAtZero="true" styleName="grad3" displayName="B">
+        		 	<elements:ColumnElement extendMouseEvents="true" xField="subject" yField="R2" baseAtZero="true" styleName="grad3" displayName="B">
         		 	</elements:ColumnElement>
-        		 	<elements:ColumnElement xField="subject" yField="R3" baseAtZero="true" styleName="grad5" displayName="C">
+        		 	<elements:ColumnElement extendMouseEvents="true" xField="subject" yField="R3" baseAtZero="true" styleName="grad5" displayName="C">
         		 	</elements:ColumnElement>
-        		 	<elements:ColumnElement xField="subject" yField="R4" baseAtZero="true" styleName="grad2" displayName="D">
+        		 	<elements:ColumnElement extendMouseEvents="true" xField="subject" yField="R4" baseAtZero="true" styleName="grad2" displayName="D">
         		 	</elements:ColumnElement>
-        		 	<elements:ColumnElement xField="subject" yField="R5" baseAtZero="true" styleName="grad4" displayName="E">
+        		 	<elements:ColumnElement extendMouseEvents="true" xField="subject" yField="R5" baseAtZero="true" styleName="grad4" displayName="E">
         		 	</elements:ColumnElement>
         		 </recipes:series>
         	</recipes:ColumnChart>

@@ -23,7 +23,7 @@
 				subject = ["A", "B", "C", "D", "E", "F"];
 				var ac:ArrayCollection = new ArrayCollection();
 				var ac1:ArrayCollection = new ArrayCollection();
-				for (var i:Number = 1; i<subject.length; i++)
+				for (var i:Number = 0; i<subject.length; i++)
 				{
 					ac.addItem({
 						subject: subject[i],
@@ -56,20 +56,15 @@
  			<scales:LinearAxis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
  		</coords:yAxis>
 		 <coords:series>
-		 	<elements:PointElement xField="subject" yField="R1" styleName="solid1" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
-		 	<elements:PointElement xField="subject" yField="R2" styleName="solid2" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
-		 	<elements:PointElement xField="subject" yField="R3" styleName="solid3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
-		 	<elements:PointElement xField="subject" yField="R4" styleName="solid4" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
-		 	
-		 	<elements:LineElement xField="subject" yField="R1"  styleName="solid1" />
-		 	<elements:LineElement xField="subject" yField="R2"  styleName="solid2" />
-		 	<elements:LineElement xField="subject" yField="R3"  styleName="solid3" />
-		 	<elements:LineElement xField="subject" yField="R4"  styleName="solid4" />
-		 	
-		 	<elements:AreaElement xField="subject" yField="R1" styleName="grad1" displayName="A"/>
-    		<elements:AreaElement xField="subject" yField="R2" styleName="grad2" displayName="B"/>
-    		<elements:AreaElement xField="subject" yField="R3" styleName="grad3" displayName="C"/>
-    		<elements:AreaElement xField="subject" yField="R4" styleName="grad4" displayName="D"/>
+		 	<elements:LineElement showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" xField="subject" yField="R1"  styleName="solid1" />
+		 	<elements:LineElement showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" xField="subject" yField="R2"  styleName="solid2" />
+		 	<elements:LineElement showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" xField="subject" yField="R3"  styleName="solid3" />
+		 	<elements:LineElement showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" xField="subject" yField="R4"  styleName="solid4" />
+
+		 	<elements:AreaElement xField="subject" yField="R1" styleName="grad1" strokeAlpha="0" displayName="R1"/>
+    		<elements:AreaElement xField="subject" yField="R2" styleName="grad2" strokeAlpha="0" displayName="R2"/>
+    		<elements:AreaElement xField="subject" yField="R3" styleName="grad3" strokeAlpha="0" displayName="R3"/>
+    		<elements:AreaElement xField="subject" yField="R4" styleName="grad4" strokeAlpha="0" displayName="R4"/>
 		 </coords:series>
 	</coords:Cartesian>
     <guides:Legend dataProvider="{ac3}" direction="horizontal"/>
