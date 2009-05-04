@@ -56,11 +56,11 @@
 			<axis:LinearAxis showAxis="false"/>
 		</coxcomb:radiusAxis>
 		<coxcomb:series>
-			<pseries:PolarColumnElement styleName="grad1" angleField="subject" radiusField="R1" displayName="R1"/>
-			<pseries:PolarColumnElement styleName="grad2" angleField="subject" radiusField="R2" displayName="R2"/>
-			<pseries:PolarColumnElement styleName="grad3" angleField="subject" radiusField="R3" displayName="R3"/>
-			<pseries:PolarColumnElement styleName="grad4" angleField="subject" radiusField="R4" displayName="R4"/>
-			<pseries:PolarColumnElement styleName="grad5" angleField="subject" radiusField="R5" displayName="R5"/>
+			<pseries:PolarColumnElement extendMouseEvents="true" styleName="grad1" angleField="subject" radiusField="R1" displayName="R1"/>
+			<pseries:PolarColumnElement extendMouseEvents="true" styleName="grad2" angleField="subject" radiusField="R2" displayName="R2"/>
+			<pseries:PolarColumnElement extendMouseEvents="true" styleName="grad3" angleField="subject" radiusField="R3" displayName="R3"/>
+			<pseries:PolarColumnElement extendMouseEvents="true" styleName="grad4" angleField="subject" radiusField="R4" displayName="R4"/>
+			<pseries:PolarColumnElement extendMouseEvents="true" styleName="grad5" angleField="subject" radiusField="R5" displayName="R5"/>
 		</coxcomb:series>
 	</coxcomb:CoxComb>
 	<legend:Legend dataProvider="{pc1}" direction="horizontal" backgroundColor="0xffffff"/>
