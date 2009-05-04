@@ -22,7 +22,7 @@
 				subject = ["A", "B", "C", "D", "E", "F"];
 				var ac:ArrayCollection = new ArrayCollection();
 				var ac1:ArrayCollection = new ArrayCollection();
-				for (var i:Number = 1; i<subject.length; i++)
+				for (var i:Number = 0; i<subject.length; i++)
 				{
 					ac.addItem({
 						subject: subject[i],

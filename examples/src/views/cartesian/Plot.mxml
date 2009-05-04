@@ -64,8 +64,8 @@
 			 </coords:xAxis>
 			 <coords:series>
 			 	<elements:PointElement xField="index" yField="bronze" source="{rasterImage}" strokeAlpha="0" displayName="A" plotRadius="13"/>
-			 	<elements:PointElement xField="index" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="solid4" yField="silver" displayName="B" />
 			 	<elements:PointElement xField="index" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="solid1" yField="gold" displayName="C" />
+			 	<elements:LabelElement extendMouseEvents="true" labelField="R4" labelSize="15" labelFont="verdana" labelColor="#00FF00" xField="index" yField="silver" displayName="B"/>
 			 </coords:series>
 		</coords:Cartesian>
 		<guides:Legend dataProvider="{pc3}" direction="horizontal"/>	
