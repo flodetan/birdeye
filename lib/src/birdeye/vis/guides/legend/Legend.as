@@ -113,7 +113,7 @@ package birdeye.vis.guides.legend
 					}
 
 					var bounds:Rectangle = new Rectangle(0,0, 10,10);
-					if (ISeries(_dataProvider.series[i]).itemRenderer)
+					if (ISeries(_dataProvider.series[i]).itemRenderer && ISeries(_dataProvider.series[i]).displayName)
 					{
 /* 						var rendererClass:Class = ISeries(_dataProvider.series[i]).itemRenderer;
 						var renderer:ISeriesDataRenderer = new rendererClass();

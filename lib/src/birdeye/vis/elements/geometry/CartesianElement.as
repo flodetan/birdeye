@@ -380,6 +380,8 @@ package birdeye.vis.elements.geometry
 			if (chart.showDataTips)
 			{
 				extGG.hideToolTip();
+				if (!_showAllDataItems)
+					extGG.hideToolTipGeometry();
 				myTT = null;
 				toolTip = null;
 			}
@@ -455,7 +457,8 @@ package birdeye.vis.elements.geometry
 			{
 				ttGG.showToolTip();
 				ttGG.showToolTipGeometry();
-			}
+			} else if (_showAllDataItems)
+				ttGG.showToolTipGeometry();
 
 			if (mouseClickFunction != null)
 				ttGG.addEventListener(MouseEvent.CLICK, onMouseClick);
