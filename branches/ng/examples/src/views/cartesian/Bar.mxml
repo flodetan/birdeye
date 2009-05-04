@@ -26,7 +26,7 @@
 				var ac:ArrayCollection = new ArrayCollection();
 				var R1:Number, R2:Number, R3:Number, R4:Number;
 				
-				for (var i:Number = 1; i<subject.length; i++)
+				for (var i:Number = 0; i<subject.length; i++)
 				{
 					ac.addItem({
 						subject: subject[i],
