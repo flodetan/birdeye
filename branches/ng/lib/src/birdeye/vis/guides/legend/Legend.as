@@ -136,7 +136,7 @@ package birdeye.vis.guides.legend
 						gg.geometryCollection.addItem(geom);
 
 						if (label.text && getQualifiedClassName(renderer) == 
-								"org.un.cava.birdeye.qavis.charts.renderers::TextRenderer")
+								"birdeye.vis.guides.renderers::TextRenderer")
 						{
 							label.fill = Geometry(geom).fill;
 						}
