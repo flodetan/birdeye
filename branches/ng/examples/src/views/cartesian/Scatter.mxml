@@ -21,15 +21,15 @@
 			{
 				subject = ["A", "B", "C", "D", "E", "F"];
 				var ac:ArrayCollection = new ArrayCollection();
-				var ac1:ArrayCollection = new ArrayCollection();
+				var r1:Number, r2:Number, r3:Number;
 				for (var i:Number = 0; i<subject.length; i++)
 				{
 					ac.addItem({
 						subject: subject[i],
-						R1: Math.round(Math.random() * 1000),
-						R2: Math.round(Math.random() * 1000),
-						R3: Math.round(Math.random() * 1000),
-						R4: Math.round(Math.random() * 1000)
+						R1: r1=Math.round(Math.random() * 1000),
+						R2: r2=Math.round(Math.random() * 1000),
+						R3: r3=Math.round(Math.random() * 1000),
+						total: r1+r2+r3
 					});
 				}
 				dt = ac;
@@ -53,11 +53,11 @@
 	 	<axis:LinearAxis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 	 </charts:yAxis>
 		 <charts:series>
-		 	<series:ScatterElement extendMouseEvents="true" xField="subject" radiusField="R1" yField="R1" itemRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" styleName="grad1" displayName="A">
+		 	<series:ScatterElement extendMouseEvents="true" xField="subject" radiusField="total" yField="R1" itemRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" styleName="grad1" displayName="R1">
 		 	</series:ScatterElement>
-		 	<series:ScatterElement extendMouseEvents="true" xField="subject" radiusField="R2" yField="R2" itemRenderer="birdeye.vis.guides.renderers.ButterflyRenderer" styleName="grad3" displayName="B">
+		 	<series:ScatterElement extendMouseEvents="true" xField="subject" radiusField="total" yField="R2" itemRenderer="birdeye.vis.guides.renderers.ButterflyRenderer" styleName="grad3" displayName="R2">
 		 	</series:ScatterElement>
-		 	<series:ScatterElement extendMouseEvents="true" xField="subject" radiusField="R3" yField="R3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="grad5" displayName="C">
+		 	<series:ScatterElement extendMouseEvents="true" xField="subject" radiusField="total" yField="R3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="grad5" displayName="R3">
 		 	</series:ScatterElement>
 		 </charts:series>
 	</charts:ScatterPlot>

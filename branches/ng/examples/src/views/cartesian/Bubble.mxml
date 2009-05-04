@@ -54,11 +54,11 @@
 	 	<scales:LinearAxis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
 	 </recipes:yAxis>
 		 <recipes:series>
-		 	<elements:BubbleElement extendMouseEvents="true" xField="subject" radiusField="R1" styleName="grad1" yField="R1" displayName="A">
+		 	<elements:BubbleElement extendMouseEvents="true" xField="subject" radiusField="R1" styleName="grad1" yField="R1" displayName="R1">
 		 	</elements:BubbleElement>
-		 	<elements:BubbleElement extendMouseEvents="true" xField="subject" radiusField="R2" styleName="grad3" yField="R2" displayName="B">
+		 	<elements:BubbleElement extendMouseEvents="true" xField="subject" radiusField="R2" styleName="grad3" yField="R2" displayName="R2">
 		 	</elements:BubbleElement>
-		 	<elements:BubbleElement extendMouseEvents="true" xField="subject" radiusField="R3" styleName="grad5" yField="R3" displayName="C">
+		 	<elements:BubbleElement extendMouseEvents="true" xField="subject" radiusField="R3" styleName="grad5" yField="R3" displayName="R3">
 		 	</elements:BubbleElement>
 		 </recipes:series>
 	</recipes:BubbleChart>
