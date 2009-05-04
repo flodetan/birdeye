@@ -226,6 +226,14 @@ package birdeye.vis.elements.geometry
  				else 
 					poly = new itemRenderer(bounds);
 
+				if (_showItemRenderer)
+				{
+					var shape:IGeometry = new itemRenderer(bounds);
+					shape.fill = fill;
+					shape.stroke = stroke;
+					gg.geometryCollection.addItem(shape);
+				}
+
 				poly.fill = fill;
 				poly.stroke = stroke;
 				gg.geometryCollection.addItemAt(poly,0);
