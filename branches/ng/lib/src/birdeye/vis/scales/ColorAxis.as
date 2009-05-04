@@ -55,7 +55,7 @@
 			// we must insure that the calc
 			size = Math.abs(maxColor-minColor);
 			
-			var color:uint = NaN;
+			var color:Number = NaN;
 			if (! (isNaN(max) || isNaN(min)))
 				color = size * (Number(dataValue) - min)/(max - min);
 				
