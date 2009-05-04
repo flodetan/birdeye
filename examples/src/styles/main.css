@@ -422,3 +422,7 @@ BaseSeries {
 	strokeAlpha: .8;
 	strokeWeight: 3;
 }
+
+.itemsColors {
+	colors: #777777,#999999,#333333;
+} 
