@@ -27,18 +27,16 @@
  
 package birdeye.vis.elements.geometry
 {
-	import com.degrafa.geometry.Circle;
-	import com.degrafa.geometry.Line;
-	import com.degrafa.paint.SolidFill;
-	
-	import flash.events.MouseEvent;
-	
-	import mx.collections.CursorBookmark;
-	
-	import birdeye.vis.scales.*;
-	import birdeye.vis.elements.geometry.*;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.guides.renderers.LineRenderer;
+	import birdeye.vis.scales.*;
+	
+	import com.degrafa.IGeometry;
+	import com.degrafa.geometry.Line;
+	
+	import flash.geom.Rectangle;
+	
+	import mx.collections.CursorBookmark;
 
 	public class LineElement extends CartesianElement
 	{
@@ -141,6 +139,16 @@ package birdeye.vis.elements.geometry
 					gg.geometryCollection.addItemAt(line,0);
 					line = null;
 				}
+
+				if (_showItemRenderer)
+				{
+	 				var bounds:Rectangle = new Rectangle(xPos - _rendererSize/2, yPos - _rendererSize/2, _rendererSize, _rendererSize);
+					var shape:IGeometry = new itemRenderer(bounds);
+					shape.fill = fill;
+					shape.stroke = stroke;
+					gg.geometryCollection.addItem(shape);
+				}
+
 				xPrev = xPos; yPrev = yPos;
 				if (zField)
 				{

@@ -44,8 +44,8 @@ package birdeye.vis.guides.renderers
 		public function RasterRenderer(bounds:Rectangle, _source:Object = null)
 		{
 			super();
-			width = 32;
-			height = 32;
+			width = bounds.width;
+			height = bounds.height;
 			x = bounds.x;
 			y = bounds.y;
 			

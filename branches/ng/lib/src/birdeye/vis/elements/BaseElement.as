@@ -27,6 +27,10 @@
  
 package birdeye.vis.elements
 {
+	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.interfaces.INumerableAxis;
+	import birdeye.vis.interfaces.ISeries;
+	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	import com.degrafa.core.IGraphicsFill;
@@ -49,10 +53,6 @@ package birdeye.vis.elements
 	import mx.events.ToolTipEvent;
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
-	
-	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.interfaces.INumerableAxis;
-	import birdeye.vis.interfaces.ISeries;
 
 	[Style(name="gradientColors",type="Array",inherit="no")]
 	[Style(name="gradientAlphas",type="Array",inherit="no")]
@@ -73,6 +73,21 @@ package birdeye.vis.elements
 	
 	public class BaseElement extends Surface implements ISeries
 	{
+		protected var _showItemRenderer:Boolean = false;
+		[Inspectable(enumeration="true,false")]
+		public function set showItemRenderer(val:Boolean):void
+		{
+			_showItemRenderer = val;
+			invalidateDisplayList();
+		}
+
+		protected var _rendererSize:Number = 10;
+		public function set rendererSize(val:Number):void
+		{
+			_rendererSize = val;
+			invalidateDisplayList();
+		}
+
 		protected var _extendMouseEvents:Boolean = false;
 		[Inspectable(enumeration="true,false")]
 		public function set extendMouseEvents(val:Boolean):void
@@ -81,6 +96,14 @@ package birdeye.vis.elements
 			invalidateDisplayList();
 		}
 		
+		protected var _showAllDataItems:Boolean = false;
+		[Inspectable(enumeration="true,false")]
+		public function set showAllDataItems(val:Boolean):void
+		{
+			_showAllDataItems = val;
+			invalidateDisplayList();
+		}
+
 		private var _colorAxis:INumerableAxis;
 		/** Define an axis to set the colorField for data items.*/
 		public function set colorAxis(val:INumerableAxis):void
@@ -712,6 +735,8 @@ package birdeye.vis.elements
 		{ 
 			var extGG:DataItemLayout = 	DataItemLayout(e.target);
 			extGG.hideToolTip();
+			if (!_showAllDataItems)
+				extGG.hideToolTipGeometry();
 			myTT = null;
 			toolTip = null;
 /* 			if (ToolTipManager.currentToolTip)

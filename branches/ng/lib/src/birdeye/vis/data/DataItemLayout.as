@@ -248,7 +248,6 @@ package birdeye.vis.data
 			try {
 				ToolTipManager.destroyToolTip(tip);
 			} catch (e:Error) {}
-			hideToolTipGeometry();
 		}
 	}
 }

@@ -332,7 +332,8 @@ package birdeye.vis.elements.geometry
 				{
 					ttGG.showToolTip();
 					ttGG.showToolTipGeometry();
-				}
+				} else if (_showAllDataItems)
+					ttGG.showToolTipGeometry()
 	
 				if (mouseClickFunction != null)
 					ttGG.addEventListener(MouseEvent.CLICK, onMouseClick);
