@@ -1,45 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application 
-	xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="views.*" xmlns:treemap="views.treemap.*"
-	xmlns:microcharts="views.microcharts.*" xmlns:matrix="views.matrix.*" xmlns:cartesian="views.cartesian.*" xmlns:polar="views.polar.*"
-	xmlns:parallel="views.parallel.*" initialize="start()" >
-
-	<mx:Script>
-		<![CDATA[
-			import mx.managers.ToolTipManager;
-			import mx.collections.ArrayCollection;
-			
-			private const fields:Array = ['A','B','C','D','E','F','G','H','I','J','K','L'];
-			
-			[Bindable]
-			private var multidimensionalData:ArrayCollection;
-		
-			private function start():void
-			{
-				ToolTipManager.showDelay = 0;
-				
-				multidimensionalData = new ArrayCollection();
-				var rows:Array = csv.split("\r\n");
-				for(var a:int = 1; a < rows.length; a++)
-				{
-					var row:String = rows[a];
-					var items:Array = row.split("\t");
-					var o:Object = new Object();
-					for(var b:int = 0; b < fields.length; b++)
-					{
-						var cName:String = fields[b];
-						var value:String = items[b].replace("\"","").replace("\"","");
-						o[cName] = value;
-					}
-					multidimensionalData.addItem(o);
-				}
-			}
-		]]>
-	</mx:Script>
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:cartesian="views.cartesian.*" xmlns:polar="views.polar.*"
+	>
 
 	<mx:Style source="styles/main.css" />
-	
-	<mx:String id="csv" source="data/mulitdimensionalData.csv"/>
 	
 	<mx:Box width="100%" height="100%" 
 	horizontalAlign="center" verticalAlign="top" 
