@@ -16,8 +16,7 @@ This library is focused on conventional and novel approaches to the analysis, in
 
 === Status ===
 
-Currently under development;
-Beta 1.0 MicroChart components released 25-Nov-2008
+Currently under heavy development (5 May, 2009). See demo for complete status.
 
 === Demos ===
   * Check out the QaVisExplorer [http://birdeye.googlecode.com/svn/trunk/qavis/examples/bin/QaVisExplorer.html here] (work in progress)
