@@ -52,14 +52,14 @@
  	<charts:yAxis>
 	 	<axis:LinearAxis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 	 </charts:yAxis>
-		 <charts:series>
+		 <charts:elements>
 		 	<series:ScatterElement extendMouseEvents="true" xField="subject" radiusField="total" yField="R1" itemRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" styleName="grad1" displayName="R1">
 		 	</series:ScatterElement>
 		 	<series:ScatterElement extendMouseEvents="true" xField="subject" radiusField="total" yField="R2" itemRenderer="birdeye.vis.guides.renderers.ButterflyRenderer" styleName="grad3" displayName="R2">
 		 	</series:ScatterElement>
 		 	<series:ScatterElement extendMouseEvents="true" xField="subject" radiusField="total" yField="R3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="grad5" displayName="R3">
 		 	</series:ScatterElement>
-		 </charts:series>
+		 </charts:elements>
 	</charts:ScatterPlot>
 	<legend:Legend dataProvider="{sp}" direction="horizontal"/>
 	</mx:VBox>
