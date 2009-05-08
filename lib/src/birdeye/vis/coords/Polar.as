@@ -41,8 +41,8 @@ package birdeye.vis.coords
 	import birdeye.vis.interfaces.IAxisUI;
 	import birdeye.vis.interfaces.IEnumerableAxis;
 	import birdeye.vis.interfaces.INumerableAxis;
-	import birdeye.vis.interfaces.IPolarSeries;
-	import birdeye.vis.interfaces.ISeries;
+	import birdeye.vis.interfaces.IPolarElement;
+	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.IStack;
 	import birdeye.vis.elements.geometry.PolarElement;
 	import birdeye.vis.elements.collision.PolarStackElement;
@@ -50,78 +50,78 @@ package birdeye.vis.coords
 	/** 
 	 * The PolarChart is the base chart that is extended by all charts that are
 	 * based on polar coordinates (PieChart, RadarChart, CoxCombo, etc). 
-	 * The PolarChart serves as container for all axes and series and coordinates the different
+	 * The PolarChart serves as container for all axes and elements and coordinates the different
 	 * data loading and creation of each component.
 	 * 
-	 * If a PolarChart is provided with an axis, this axis will be shared by all series that have 
+	 * If a PolarChart is provided with an axis, this axis will be shared by all elements that have 
 	 * not that same axis (angle, and/or radius). 
 	 * In the same way, the PolarChart provides a dataProvider property 
-	 * that can be shared with series that have not a dataProvider. In case the PolarChart dataProvider 
-	 * is used along with some Series dataProvider, than the relevant values defined be the series fields
+	 * that can be shared with elements that have not a dataProvider. In case the PolarChart dataProvider 
+	 * is used along with some elements dataProvider, than the relevant values defined be the elements fields
 	 * of all these dataProviders will define the axes.
 	 * 
-	 * A PolarChart may have multiple and different type of series, multiple axes and 
+	 * A PolarChart may have multiple and different type of elements, multiple axes and 
 	 * multiple dataProvider(s).
 	 * */ 
 	[DefaultProperty("dataProvider")]
 	public class Polar extends VisScene
 	{
-        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IPolarSeries")]
-        [ArrayElementType("birdeye.vis.interfaces.IPolarSeries")]
-		override public function set series(val:Array):void
+        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IPolarElement")]
+        [ArrayElementType("birdeye.vis.interfaces.IPolarElement")]
+		override public function set elements(val:Array):void
 		{
-			_series = val;
-			var stackableSeries:Array = [];
+			_elements = val;
+			var stackableElements:Array = [];
 
-			for (var i:Number = 0; i<_series.length; i++)
+			for (var i:Number = 0; i<_elements.length; i++)
 			{
-				// if the series doesn't have an own angle axis, than
+				// if the elements doesn't have an own angle axis, than
 				// it's necessary to create a default angle axis inside the
-				// polar chart. This axis will be shared by all series that
+				// polar chart. This axis will be shared by all elements that
 				// have no own angle axis
-				if (! IPolarSeries(_series[i]).angleAxis)
+				if (! IPolarElement(_elements[i]).angleAxis)
 					needDefaultAngleAxis = true;
 
-				// if the series doesn't have an own radius axis, than
+				// if the elements doesn't have an own radius axis, than
 				// it's necessary to create a default radius axis inside the
-				// polar chart. This axis will be shared by all series that
+				// polar chart. This axis will be shared by all elements that
 				// have no own radius axis
-				if (! IPolarSeries(_series[i]).radiusAxis)
+				if (! IPolarElement(_elements[i]).radiusAxis)
 					needDefaultRadiusAxis = true;
 					
-				// set the chart target inside the series to 'this'
-				// in the future the series target could be an external chart 
-				if (! IPolarSeries(_series[i]).polarChart)
-					IPolarSeries(_series[i]).polarChart = this;
+				// set the chart target inside the elements to 'this'
+				// in the future the elements target could be an external chart 
+				if (! IPolarElement(_elements[i]).polarChart)
+					IPolarElement(_elements[i]).polarChart = this;
 				
-				// count all stackable series according their type (overlaid, stacked100...)
+				// count all stackable elements according their type (overlaid, stacked100...)
 				// and store their position. This allows to have a general PolarChart 
-				// series that are stackable, where the type of stack used is defined internally
-				// the series itself. In case of RadarChart, is used, than
-				// the series stack type is defined directly by the chart.
-				// however the following allows keeping the possibility of using stackable series inside
+				// elements that are stackable, where the type of stack used is defined internally
+				// the elements itself. In case of RadarChart, is used, than
+				// the elements stack type is defined directly by the chart.
+				// however the following allows keeping the possibility of using stackable elements inside
 				// a general polar chart
-				if (_series[i] is IStack)
+				if (_elements[i] is IStack)
 				{
-					if (isNaN(stackableSeries[IStack(_series[i]).seriesType]) || stackableSeries[IStack(_series[i]).seriesType] == undefined) 
-						stackableSeries[IStack(_series[i]).seriesType] = 1;
+					if (isNaN(stackableElements[IStack(_elements[i]).elementType]) || stackableElements[IStack(_elements[i]).elementType] == undefined) 
+						stackableElements[IStack(_elements[i]).elementType] = 1;
 					else 
-						stackableSeries[IStack(_series[i]).seriesType] += 1;
+						stackableElements[IStack(_elements[i]).elementType] += 1;
 					
-					IStack(_series[i]).stackPosition = stackableSeries[IStack(_series[i]).seriesType]; 
+					IStack(_elements[i]).stackPosition = stackableElements[IStack(_elements[i]).elementType]; 
 				} 
 			}
 
-			// if a series is stackable, than its total property 
-			// represents the number of all stackable series with the same type inside the
-			// same chart. This allows having multiple series type inside the same chart 
-			for (i = 0; i<_series.length; i++)
-				if (_series[i] is IStack)
-					IStack(_series[i]).total = stackableSeries[IStack(_series[i]).seriesType]; 
+			// if a element is stackable, than its total property 
+			// represents the number of all stackable elements with the same type inside the
+			// same chart. This allows having multiple elements type inside the same chart 
+			for (i = 0; i<_elements.length; i++)
+				if (_elements[i] is IStack)
+					IStack(_elements[i]).total = stackableElements[IStack(_elements[i]).elementType]; 
 		}
 
 		protected var _type:String = PolarStackElement.STACKED100;
-		/** Set the type of stack, overlaid if the series are shown on top of the other, 
+		/** Set the type of stack, overlaid if the element are shown on top of the other, 
 		 * or stacked if they appear staked one after the other (horizontally), or 
 		 * stacked100 if the columns are stacked one after the other (vertically).*/
 		[Inspectable(enumeration="overlaid,stacked,stacked100")]
@@ -215,9 +215,9 @@ package birdeye.vis.coords
 
 		protected var nCursors:Number;
 		/** @Private 
-		 * When properties are committed, first remove all current children, second check for series owned axes 
+		 * When properties are committed, first remove all current children, second check for elements owned axes 
 		 * and put them on the corresponding container (left, top, right, bottom). If no axes are defined for one 
-		 * or more series, than create the default axes and add them to the related container.
+		 * or more elements, than create the default axes and add them to the related container.
 		 * Once all axes are identified (including the default ones), than we can feed them with the 
 		 * corresponding data.*/
 		override protected function commitProperties():void
@@ -229,48 +229,48 @@ package birdeye.vis.coords
 			
 			nCursors = 0;
 			
-			if (series)
+			if (elements)
 			{
-				var _stackedSeries:Array = [];
+				var _stackedElements:Array = [];
 
- 				for (var i:int = 0; i<series.length; i++)
+ 				for (var i:int = 0; i<elements.length; i++)
 				{
-					// if series dataprovider doesn' exist or it refers to the
+					// if elements dataprovider doesn' exist or it refers to the
 					// chart dataProvider, than set its cursor to this chart cursor (this.cursor)
-					if (cursor && (! ISeries(_series[i]).dataProvider 
-									|| ISeries(_series[i]).dataProvider == this.dataProvider))
-						ISeries(_series[i]).cursor = cursor;
+					if (cursor && (! IElement(_elements[i]).dataProvider 
+									|| IElement(_elements[i]).dataProvider == this.dataProvider))
+						IElement(_elements[i]).cursor = cursor;
 
-					// nCursors is used in feedAxes to check that all series cursors are ready
+					// nCursors is used in feedAxes to check that all elements cursors are ready
 					// and therefore check that axes can be properly feeded
-					if (cursor || ISeries(_series[i]).cursor)
+					if (cursor || IElement(_elements[i]).cursor)
 						nCursors += 1;
 
-					addChild(DisplayObject(series[i]));
-					if (IPolarSeries(series[i]).radiusAxis)
-						addChild(DisplayObject(IPolarSeries(series[i]).radiusAxis));
+					addChild(DisplayObject(elements[i]));
+					if (IPolarElement(elements[i]).radiusAxis)
+						addChild(DisplayObject(IPolarElement(elements[i]).radiusAxis));
 					else 
 						needDefaultRadiusAxis = true;
 
-					if (! IPolarSeries(series[i]).angleAxis)
+					if (! IPolarElement(elements[i]).angleAxis)
 						needDefaultAngleAxis = true;
 
-					if (_series[i] is IStack)
+					if (_elements[i] is IStack)
 					{
-						IStack(_series[i]).stackType = _type;
-						_stackedSeries.push(_series[i]);
+						IStack(_elements[i]).stackType = _type;
+						_stackedElements.push(_elements[i]);
 					}
 				}
 
-				for (i = 0; i<_stackedSeries.length; i++)
+				for (i = 0; i<_stackedElements.length; i++)
 				{
-					IStack(_stackedSeries[i]).stackPosition = i;
-					IStack(_stackedSeries[i]).total = _stackedSeries.length;
+					IStack(_stackedElements[i]).stackPosition = i;
+					IStack(_stackedElements[i]).total = _stackedElements.length;
 				}
 			}
 
-			// if some series have no own radius axis, than create a default one for the chart
-			// that will be used by all series without a radius axis
+			// if some elements have no own radius axis, than create a default one for the chart
+			// that will be used by all elements without a radius axis
 			if (needDefaultRadiusAxis && !_radarAxis)
 			{
 				if (!_radiusAxis)
@@ -280,15 +280,15 @@ package birdeye.vis.coords
 					addChild(DisplayObject(_radiusAxis));
 			}
 
-			// if some series have no own angle axis, than create a default one for the chart
-			// that will be used by all series without a angle axis
+			// if some elements have no own angle axis, than create a default one for the chart
+			// that will be used by all elements without a angle axis
 			if (needDefaultAngleAxis && !_radarAxis)
 			{
 				if (!_angleAxis)
 					createAngleAxis();
 			}
 			
-			// init all axes, default and series owned 
+			// init all axes, default and elements owned 
 			if (! axesFeeded)
 				feedAxes();
 		}
@@ -332,10 +332,10 @@ package birdeye.vis.coords
 				}
 			} 
 			
-			for (var i:int = 0; i<_series.length; i++)
+			for (var i:int = 0; i<_elements.length; i++)
 			{
-				DisplayObject(_series[i]).width = unscaledWidth;
-				DisplayObject(_series[i]).height = unscaledHeight;
+				DisplayObject(_elements[i]).width = unscaledWidth;
+				DisplayObject(_elements[i]).height = unscaledHeight;
 			}
 			
 			if (_showAllDataTips)
@@ -351,14 +351,14 @@ package birdeye.vis.coords
 			dispatchEvent(new Event("ProviderReady"));
 		}
 
-		protected var currentSeries:IPolarSeries;
+		protected var currentElement:IPolarElement;
 		/** @Private
 		 * Feed the axes with either elements (for ex. CategoryAxis) or max and min (for numeric axis).*/
 		protected function feedAxes():void
 		{
-			if (nCursors == series.length)
+			if (nCursors == elements.length)
 			{
-				var elements:Array = [];
+				var catElements:Array = [];
 				var j:Number = 0;
 				
 				var maxMin:Array;
@@ -370,23 +370,23 @@ package birdeye.vis.coords
 					{
 						for (i = 0; i<nCursors; i++)
 						{
-							currentSeries = PolarElement(_series[i]);
+							currentElement = PolarElement(_elements[i]);
 							// if the series has its own data provider but has not its own
 							// angleAxis, than load their elements and add them to the elements
 							// loaded by the chart data provider
-							if (currentSeries.dataProvider 
-								&& currentSeries.dataProvider != dataProvider
-								&& ! currentSeries.angleAxis)
+							if (currentElement.dataProvider 
+								&& currentElement.dataProvider != dataProvider
+								&& ! currentElement.angleAxis)
 							{
-								currentSeries.cursor.seek(CursorBookmark.FIRST);
-								while (!currentSeries.cursor.afterLast)
+								currentElement.cursor.seek(CursorBookmark.FIRST);
+								while (!currentElement.cursor.afterLast)
 								{
-									if (elements.indexOf(
-										currentSeries.cursor.current[IEnumerableAxis(angleAxis).categoryField]) 
+									if (catElements.indexOf(
+										currentElement.cursor.current[IEnumerableAxis(angleAxis).categoryField]) 
 										== -1)
-										elements[j++] = 
-											currentSeries.cursor.current[IEnumerableAxis(angleAxis).categoryField];
-									currentSeries.cursor.moveNext();
+										catElements[j++] = 
+											currentElement.cursor.current[IEnumerableAxis(angleAxis).categoryField];
+									currentElement.cursor.moveNext();
 								}
 							}
 						}
@@ -397,16 +397,16 @@ package birdeye.vis.coords
 							while (!cursor.afterLast)
 							{
 								// if the category value already exists in the axis, than skip it
-								if (elements.indexOf(cursor.current[IEnumerableAxis(angleAxis).categoryField]) == -1)
-									elements[j++] = 
+								if (catElements.indexOf(cursor.current[IEnumerableAxis(angleAxis).categoryField]) == -1)
+									catElements[j++] = 
 										cursor.current[IEnumerableAxis(angleAxis).categoryField];
 								cursor.moveNext();
 							}
 						}
 
 						// set the elements property of the CategoryAxis
-						if (elements.length > 0)
-							IEnumerableAxis(angleAxis).elements = elements;
+						if (catElements.length > 0)
+							IEnumerableAxis(angleAxis).dataProvider = catElements;
 					} else if (angleAxis is INumerableAxis){
 						
 						if (INumerableAxis(angleAxis).scaleType != BaseScale.PERCENT)
@@ -421,7 +421,7 @@ package birdeye.vis.coords
 					}
 				} 
 				
-				elements = [];
+				catElements = [];
 				j = 0;
 
 				// check if a default y axis exists
@@ -431,23 +431,23 @@ package birdeye.vis.coords
 					{
 						for (i = 0; i<nCursors; i++)
 						{
-							currentSeries = IPolarSeries(_series[i]);
-							// if the series have their own data provider but have not their own
+							currentElement = IPolarElement(_elements[i]);
+							// if the elements have their own data provider but have not their own
 							// xAxis, than load their elements and add them to the elements
 							// loaded by the chart data provider
-							if (currentSeries.dataProvider 
-								&& currentSeries.dataProvider != dataProvider
-								&& ! currentSeries.radiusAxis)
+							if (currentElement.dataProvider 
+								&& currentElement.dataProvider != dataProvider
+								&& ! currentElement.radiusAxis)
 							{
-								currentSeries.cursor.seek(CursorBookmark.FIRST);
-								while (!currentSeries.cursor.afterLast)
+								currentElement.cursor.seek(CursorBookmark.FIRST);
+								while (!currentElement.cursor.afterLast)
 								{
-									if (elements.indexOf(
-										currentSeries.cursor.current[IEnumerableAxis(radiusAxis).categoryField]) 
+									if (catElements.indexOf(
+										currentElement.cursor.current[IEnumerableAxis(radiusAxis).categoryField]) 
 										== -1)
-										elements[j++] = 
-											currentSeries.cursor.current[IEnumerableAxis(radiusAxis).categoryField];
-									currentSeries.cursor.moveNext();
+										catElements[j++] = 
+											currentElement.cursor.current[IEnumerableAxis(radiusAxis).categoryField];
+									currentElement.cursor.moveNext();
 								}
 							}
 						}
@@ -457,16 +457,16 @@ package birdeye.vis.coords
 							while (!cursor.afterLast)
 							{
 								// if the category value already exists in the axis, than skip it
-								if (elements.indexOf(cursor.current[IEnumerableAxis(radiusAxis).categoryField]) == -1)
-									elements[j++] = 
+								if (catElements.indexOf(cursor.current[IEnumerableAxis(radiusAxis).categoryField]) == -1)
+									catElements[j++] = 
 										cursor.current[IEnumerableAxis(radiusAxis).categoryField];
 								cursor.moveNext();
 							}
 						}
 						
 						// set the elements property of the CategoryAxis
-						if (elements.length > 0)
-							IEnumerableAxis(radiusAxis).elements = elements;
+						if (catElements.length > 0)
+							IEnumerableAxis(radiusAxis).dataProvider = catElements;
 					} else if (radiusAxis is INumerableAxis){
 						
 						if (INumerableAxis(radiusAxis).scaleType != BaseScale.CONSTANT)
@@ -491,14 +491,11 @@ package birdeye.vis.coords
 						colorAxis.min = maxMin[1];
 				} 
 
-				elements = [];
-				j = 0;
-
-				// init axes of all series that have their own axes
-				// since these are children of each series, they are 
+				// init axes of all elements that have their own axes
+				// since these are children of each elements, they are 
 				// for sure ready for feeding and it won't affect the axesFeeded status
-				for (var i:Number = 0; i<series.length; i++)
-					initSeriesAxes(series[i]);
+				for (var i:Number = 0; i<elements.length; i++)
+					initSeriesAxes(elements[i]);
 					
 				axesFeeded = true;
 			}
@@ -511,17 +508,17 @@ package birdeye.vis.coords
 		private function getMaxMinRadiusValueFromSeriesWithoutRadiusAxis():Array
 		{
 			var max:Number = NaN, min:Number = NaN;
-			for (var i:Number = 0; i<series.length; i++)
+			for (var i:Number = 0; i<elements.length; i++)
 			{
-				currentSeries = PolarElement(series[i]);
-				// check if the series has its own y axis and if its max value exists and 
+				currentElement = PolarElement(elements[i]);
+				// check if the elements has its own y axis and if its max value exists and 
 				// is higher than the current max
-				if (!currentSeries.radiusAxis && (isNaN(max) || max < currentSeries.maxRadiusValue))
-					max = currentSeries.maxRadiusValue;
-				// check if the series has its own y axis and if its min value exists and 
+				if (!currentElement.radiusAxis && (isNaN(max) || max < currentElement.maxRadiusValue))
+					max = currentElement.maxRadiusValue;
+				// check if the elements has its own y axis and if its min value exists and 
 				// is lower than the current min
-				if (!currentSeries.radiusAxis && (isNaN(min) || min > currentSeries.minRadiusValue))
-					min = currentSeries.minRadiusValue;
+				if (!currentElement.radiusAxis && (isNaN(min) || min > currentElement.minRadiusValue))
+					min = currentElement.minRadiusValue;
 			}
 					
 			return [max,min];
@@ -533,41 +530,41 @@ package birdeye.vis.coords
 		private function getMaxMinAngleValueFromSeriesWithoutAngleAxis():Array
 		{
 			var max:Number = NaN, min:Number = NaN;
-			for (var i:Number = 0; i<series.length; i++)
+			for (var i:Number = 0; i<elements.length; i++)
 			{
-				currentSeries = PolarElement(series[i]);
-				// check if the series has its own y axis and if its max value exists and 
+				currentElement = PolarElement(elements[i]);
+				// check if the elements has its own y axis and if its max value exists and 
 				// is higher than the current max
-				if (!currentSeries.angleAxis && (isNaN(max) || max < currentSeries.maxAngleValue))
-					max = currentSeries.maxAngleValue;
-				// check if the series has its own y axis and if its min value exists and 
+				if (!currentElement.angleAxis && (isNaN(max) || max < currentElement.maxAngleValue))
+					max = currentElement.maxAngleValue;
+				// check if the elements has its own y axis and if its min value exists and 
 				// is lower than the current min
-				if (!currentSeries.angleAxis && (isNaN(min) || min > currentSeries.minAngleValue))
-					min = currentSeries.minAngleValue;
+				if (!currentElement.angleAxis && (isNaN(min) || min > currentElement.minAngleValue))
+					min = currentElement.minAngleValue;
 			}
 					
 			return [max,min];
 		}
 
 		/** @Private
-		 * Calculate the total of positive values to set in the percent axis and set it for each series.*/
+		 * Calculate the total of positive values to set in the percent axis and set it for each elements.*/
 		private function setPositiveTotalAngleValueInSeries():void
 		{
 			INumerableAxis(angleAxis).totalPositiveValue = NaN;
 			var tot:Number = NaN;
-			for (var i:Number = 0; i<series.length; i++)
+			for (var i:Number = 0; i<elements.length; i++)
 			{
-				currentSeries = PolarElement(series[i]);
-				// check if the series has its own y axis and if its max value exists and 
+				currentElement = PolarElement(elements[i]);
+				// check if the elements has its own y axis and if its max value exists and 
 				// is higher than the current max
-				if (!isNaN(currentSeries.totalAnglePositiveValue))
+				if (!isNaN(currentElement.totalAnglePositiveValue))
 				{
 					if (isNaN(INumerableAxis(angleAxis).totalPositiveValue))
-						INumerableAxis(angleAxis).totalPositiveValue = currentSeries.totalAnglePositiveValue;
+						INumerableAxis(angleAxis).totalPositiveValue = currentElement.totalAnglePositiveValue;
 					else
 						INumerableAxis(angleAxis).totalPositiveValue = 
 							Math.max(INumerableAxis(angleAxis).totalPositiveValue, 
-									currentSeries.totalAnglePositiveValue);
+									currentElement.totalAnglePositiveValue);
 				}
 			}
 		}
@@ -578,19 +575,19 @@ package birdeye.vis.coords
 		private function getMaxMinColorValueFromSeriesWithoutColorAxis():Array
 		{
 			var max:Number = NaN, min:Number = NaN;
-			for (var i:Number = 0; i<series.length; i++)
+			for (var i:Number = 0; i<elements.length; i++)
 			{
-				currentSeries = series[i];
-				if (currentSeries.colorField)
+				currentElement = elements[i];
+				if (currentElement.colorField)
 				{
-					// check if the series has its own color axis and if its max value exists and 
+					// check if the elements has its own color axis and if its max value exists and 
 					// is higher than the current max
-					if (!currentSeries.colorAxis && (isNaN(max) || max < currentSeries.maxColorValue))
-						max = currentSeries.maxColorValue;
-					// check if the series has its own color axis and if its min value exists and 
+					if (!currentElement.colorAxis && (isNaN(max) || max < currentElement.maxColorValue))
+						max = currentElement.maxColorValue;
+					// check if the element has its own color axis and if its min value exists and 
 					// is lower than the current min
-					if (!currentSeries.colorAxis && (isNaN(min) || min > currentSeries.minColorValue))
-						min = currentSeries.minColorValue;
+					if (!currentElement.colorAxis && (isNaN(min) || min > currentElement.minColorValue))
+						min = currentElement.minColorValue;
 				}
 			}
 					
@@ -598,73 +595,73 @@ package birdeye.vis.coords
 		}
 
 		/** @Private
-		 * Init the axes owned by the series passed to this method.*/
-		private function initSeriesAxes(series:IPolarSeries):void
+		 * Init the axes owned by the element passed to this method.*/
+		private function initSeriesAxes(element:IPolarElement):void
 		{
-			if (series.cursor)
+			if (element.cursor)
 			{
 				var elements:Array = [];
 				var j:Number = 0;
 
-				series.cursor.seek(CursorBookmark.FIRST);
+				element.cursor.seek(CursorBookmark.FIRST);
 				
-				if (series.angleAxis is IEnumerableAxis)
+				if (element.angleAxis is IEnumerableAxis)
 				{
-					while (!series.cursor.afterLast)
+					while (!element.cursor.afterLast)
 					{
 						// if the category value already exists in the axis, than skip it
-						if (elements.indexOf(series.cursor.current[IEnumerableAxis(series.angleAxis).categoryField]) == -1)
+						if (elements.indexOf(element.cursor.current[IEnumerableAxis(element.angleAxis).categoryField]) == -1)
 							elements[j++] = 
-								series.cursor.current[IEnumerableAxis(series.angleAxis).categoryField];
-						series.cursor.moveNext();
+								element.cursor.current[IEnumerableAxis(element.angleAxis).categoryField];
+						element.cursor.moveNext();
 					}
 					
-					// set the elements propery of the CategoryAxis owned by the current series
+					// set the elements propery of the CategoryAxis owned by the current element
 					if (elements.length > 0)
-						IEnumerableAxis(series.angleAxis).elements = elements;
+						IEnumerableAxis(element.angleAxis).dataProvider = elements;
 	
-				} else if (series.angleAxis is INumerableAxis)
+				} else if (element.angleAxis is INumerableAxis)
 				{
-					if (INumerableAxis(series.angleAxis).scaleType != BaseScale.PERCENT)
+					if (INumerableAxis(element.angleAxis).scaleType != BaseScale.PERCENT)
 					{
-						// if the series angle axis is just numeric, than calculate get its min max data values
-						INumerableAxis(series.angleAxis).max =
-							series.maxAngleValue;
-						INumerableAxis(series.angleAxis).min =
-							series.minAngleValue;
+						// if the element angle axis is just numeric, than calculate get its min max data values
+						INumerableAxis(element.angleAxis).max =
+							element.maxAngleValue;
+						INumerableAxis(element.angleAxis).min =
+							element.minAngleValue;
 					} else {
-						// if the series angle axis is percent numeric, than get the sum
-						// of total positive data values from the series
-						if (!isNaN(series.totalAnglePositiveValue))
-							INumerableAxis(series.angleAxis).totalPositiveValue = series.totalAnglePositiveValue;
+						// if the element angle axis is percent numeric, than get the sum
+						// of total positive data values from the element
+						if (!isNaN(element.totalAnglePositiveValue))
+							INumerableAxis(element.angleAxis).totalPositiveValue = element.totalAnglePositiveValue;
 					}
 				}
 	
 				elements = [];
 				j = 0;
-				series.cursor.seek(CursorBookmark.FIRST);
+				element.cursor.seek(CursorBookmark.FIRST);
 				
-				if (series.radiusAxis is IEnumerableAxis)
+				if (element.radiusAxis is IEnumerableAxis)
 				{
-					while (!series.cursor.afterLast)
+					while (!element.cursor.afterLast)
 					{
 						// if the category value already exists in the axis, than skip it
-						if (elements.indexOf(series.cursor.current[IEnumerableAxis(series.radiusAxis).categoryField]) == -1)
+						if (elements.indexOf(element.cursor.current[IEnumerableAxis(element.radiusAxis).categoryField]) == -1)
 							elements[j++] = 
-								series.cursor.current[IEnumerableAxis(series.radiusAxis).categoryField];
-						series.cursor.moveNext();
+								element.cursor.current[IEnumerableAxis(element.radiusAxis).categoryField];
+						element.cursor.moveNext();
 					}
 							
-					// set the elements propery of the CategoryAxis owned by the current series
+					// set the elements propery of the CategoryAxis owned by the current element
 					if (elements.length > 0)
-						IEnumerableAxis(series.radiusAxis).elements = elements;
+						IEnumerableAxis(element.radiusAxis).dataProvider = elements;
 	
-				} else if (series.radiusAxis is INumerableAxis)
+				} else if (element.radiusAxis is INumerableAxis)
 				{
-					INumerableAxis(series.radiusAxis).max =
-						series.maxRadiusValue;
-					INumerableAxis(series.radiusAxis).min =
-						series.minRadiusValue;
+					INumerableAxis(element.radiusAxis).max =
+						element.maxRadiusValue;
+					INumerableAxis(element.radiusAxis).min =
+						element.minRadiusValue;
 				}
 	
 			}
