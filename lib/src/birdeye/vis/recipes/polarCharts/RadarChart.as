@@ -82,16 +82,16 @@ package birdeye.vis.recipes.polarCharts
 			if (!contains(labels))
 				addChild(labels);
 
-			if (_series)
+			if (_elements)
 			{
-				var _columnSeries:Array = [];
+				var _columnElements:Array = [];
 			
-				for (var i:Number = 0; i<_series.length; i++)
+				for (var i:Number = 0; i<_elements.length; i++)
 				{
-					if (_series[i] is PolarColumnElement)
+					if (_elements[i] is PolarColumnElement)
 					{
-						PolarColumnElement(_series[i]).stackType = _type;
-						_columnSeries.push(_series[i])
+						PolarColumnElement(_elements[i]).stackType = _type;
+						_columnElements.push(_elements[i])
 					}
 				}
 			}
@@ -109,11 +109,11 @@ package birdeye.vis.recipes.polarCharts
 		private var elementsMinMax:Array;
 		override protected function feedAxes():void
 		{
-			var elements:Array = [];
+			var catElements:Array = [];
 			var j:Number = 0;
 			elementsMinMax = [];
 			
-			if (nCursors == series.length)
+			if (nCursors == elements.length)
 			{
 				// check if a default y axis exists
 				if (_radarAxis && _radarAxis.angleCategory && _radarAxis.angleAxis)
@@ -121,19 +121,19 @@ package birdeye.vis.recipes.polarCharts
 					var angleCategory:String = radarAxis.angleCategory;
 					for (var i:int = 0; i<nCursors; i++)
 					{
-						currentSeries = PolarElement(_series[i]);
-						// if the series has its own data provider but has not its own
+						currentElement = PolarElement(_elements[i]);
+						// if the element has its own data provider but has not its own
 						// angleAxis, than load their elements and add them to the elements
 						// loaded by the chart data provider
-						if (currentSeries.dataProvider 
-							&& currentSeries.dataProvider != dataProvider)
+						if (currentElement.dataProvider 
+							&& currentElement.dataProvider != dataProvider)
 						{
-							currentSeries.cursor.seek(CursorBookmark.FIRST);
-							while (!currentSeries.cursor.afterLast)
+							currentElement.cursor.seek(CursorBookmark.FIRST);
+							while (!currentElement.cursor.afterLast)
 							{
-								var category:String = currentSeries.cursor.current[angleCategory];
-								if (elements.indexOf(category) == -1)
-									elements[j++] = category;
+								var category:String = currentElement.cursor.current[angleCategory];
+								if (catElements.indexOf(category) == -1)
+									catElements[j++] = category;
 								
 								if (!elementsMinMax[category])
 								{
@@ -142,13 +142,13 @@ package birdeye.vis.recipes.polarCharts
 								} 
 								elementsMinMax[category].min = 
 									Math.min(elementsMinMax[category].min, 
-										currentSeries.cursor.current[currentSeries.radiusField]);
+										currentElement.cursor.current[currentElement.radiusField]);
 
 								elementsMinMax[category].max = 
 									Math.max(elementsMinMax[category].max, 
-										currentSeries.cursor.current[currentSeries.radiusField]);
+										currentElement.cursor.current[currentElement.radiusField]);
 								
-								currentSeries.cursor.moveNext();
+								currentElement.cursor.moveNext();
 							}
 						} else if (cursor)
 						{
@@ -157,14 +157,14 @@ package birdeye.vis.recipes.polarCharts
 							{
 								category = cursor.current[angleCategory]
 								// if the category value already exists in the axis, than skip it
-								if (elements.indexOf(category) == -1)
-									elements[j++] = category;
+								if (catElements.indexOf(category) == -1)
+									catElements[j++] = category;
 								
-								for (var t:int = 0; t<series.length; t++)
+								for (var t:int = 0; t<elements.length; t++)
 								{
-									currentSeries = PolarElement(_series[t]);
-									if (!(currentSeries.dataProvider 
-										&& currentSeries.dataProvider != dataProvider))
+									currentElement = PolarElement(_elements[t]);
+									if (!(currentElement.dataProvider 
+										&& currentElement.dataProvider != dataProvider))
 									{
 										if (!elementsMinMax[category])
 										{
@@ -173,11 +173,11 @@ package birdeye.vis.recipes.polarCharts
 										} 
 										elementsMinMax[category].min = 
 											Math.min(elementsMinMax[category].min, 
-												cursor.current[currentSeries.radiusField]);
+												cursor.current[currentElement.radiusField]);
 	
 										elementsMinMax[category].max = 
 											Math.max(elementsMinMax[category].max, 
-												cursor.current[currentSeries.radiusField]);
+												cursor.current[currentElement.radiusField]);
 									}
 								}
 								cursor.moveNext();
@@ -185,8 +185,8 @@ package birdeye.vis.recipes.polarCharts
 						}
 	
 						// set the elements property of the CategoryAxis
-						if (elements.length > 0)
-							_radarAxis.angleAxis.elements = elements;
+						if (catElements.length > 0)
+							_radarAxis.angleAxis.dataProvider = catElements;
 					} 
 					
 					_radarAxis.feedRadiusAxes(elementsMinMax);
@@ -205,21 +205,21 @@ package birdeye.vis.recipes.polarCharts
 			else
 				aAxis = CategoryAngleAxis(angleAxis);
 			
-			var ele:Array = aAxis.elements;
+			var catElements:Array = aAxis.dataProvider;
 			var interval:int = aAxis.interval;
-			var nEle:int = ele.length;
+			var nEle:int = catElements.length;
 			var radius:int = Math.min(unscaledWidth, unscaledHeight)/2;
 
-			if (aAxis && radius>0 && ele && nEle>0 && !isNaN(interval))
+			if (aAxis && radius>0 && catElements && nEle>0 && !isNaN(interval))
 			{
 				removeAllLabels();
 				for (var i:int = 0; i<nEle; i++)
 				{
-					var angle:int = aAxis.getPosition(ele[i]);
+					var angle:int = aAxis.getPosition(catElements[i]);
 					var position:Point = PolarCoordinateTransform.getXY(angle,radius,origin);
 					
 					var label:RasterTextPlus = new RasterTextPlus();
-					label.text = String(ele[i]);
+					label.text = String(catElements[i]);
  					label.fontFamily = "verdana";
  					label.fontSize = _fontSize;
  					label.visible = true;
@@ -257,13 +257,13 @@ package birdeye.vis.recipes.polarCharts
 		private function createRadarLayout1():void
 		{
 			var aAxis:CategoryAngleAxis = radarAxis.angleAxis;
-			var ele:Array = aAxis.elements;
-			var rAxis:NumericAxis = radarAxis.radiusAxes[ele[0]];
+			var catElements:Array = aAxis.dataProvider;
+			var rAxis:NumericAxis = radarAxis.radiusAxes[catElements[0]];
 			
 			if (aAxis && rAxis && !isNaN(rAxis.interval))
 			{
 				var interval:int = aAxis.interval;
-				var nEle:int = ele.length;
+				var nEle:int = catElements.length;
 	
 				var rMin:Number = rAxis.min;
 				var rMax:Number = rAxis.max;
@@ -279,7 +279,7 @@ package birdeye.vis.recipes.polarCharts
 	
 					for (var j:int = 0; j<nEle; j++)
 					{
-						angle = aAxis.getPosition(ele[j]);
+						angle = aAxis.getPosition(catElements[j]);
 						position = PolarCoordinateTransform.getXY(angle, rAxis.getPosition(radius), origin)
 						poly.data += String(position.x) + "," + String(position.y) + " ";
 					}
@@ -292,9 +292,9 @@ package birdeye.vis.recipes.polarCharts
 		private function createRadarLayout2():void
 		{
 			var aAxis:CategoryAngleAxis = CategoryAngleAxis(angleAxis);
-			var ele:Array = aAxis.elements;
+			var catElements:Array = aAxis.dataProvider;
 			var interval:int = aAxis.interval;
-			var nEle:int = ele.length;
+			var nEle:int = catElements.length;
 			
 			if (radiusAxis is NumericAxis && !isNaN(NumericAxis(radiusAxis).interval))
 			{
@@ -313,7 +313,7 @@ package birdeye.vis.recipes.polarCharts
 
 					for (var j:int = 0; j<nEle; j++)
 					{
-						angle = aAxis.getPosition(ele[j]);
+						angle = aAxis.getPosition(catElements[j]);
 						position = PolarCoordinateTransform.getXY(angle, rAxis.getPosition(radius), origin)
 						poly.data += String(position.x) + "," + String(position.y) + " ";
 					}
