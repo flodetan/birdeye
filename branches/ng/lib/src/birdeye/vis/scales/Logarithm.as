@@ -28,7 +28,6 @@
  package birdeye.vis.scales
 {
 	import com.degrafa.geometry.Line;
-	import com.degrafa.geometry.RasterText;
 	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
@@ -44,7 +43,7 @@
 		public function Logarithm()
 		{
 			super();
-			_scaleType = BaseAxis.LOG;
+			_scaleType = BaseScale.LOG;
 		}
 		
 		// other methods
@@ -74,7 +73,7 @@
 						{
 							// create thick line
 				 			thick = new Line(xMin + thickWidth * sign, getPosition(snap), xMax, getPosition(snap));
-							thick.stroke = new SolidStroke(_lineColor,1,_lineWeight);
+							thick.stroke = new SolidStroke(_colorStroke, 1,_weightStroke);
 							gg.geometryCollection.addItem(thick);
 				
 							// create label 
@@ -96,7 +95,7 @@
 					{
 						// create thick line
 			 			thick = new Line(getPosition(snap), yMin + thickWidth * sign, getPosition(snap), yMax);
-						thick.stroke = new SolidStroke(_lineColor,1,_lineWeight);
+						thick.stroke = new SolidStroke(_colorStroke, 1,_weightStroke);
 						gg.geometryCollection.addItem(thick);
 	
 						// create label 
