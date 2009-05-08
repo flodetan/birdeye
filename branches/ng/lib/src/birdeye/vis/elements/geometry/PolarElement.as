@@ -100,20 +100,20 @@ package birdeye.vis.elements.geometry
 		}
 
 		private var _angleAxis:IScale;
-		public function set angleAxis(val:IScale):void
+		public function set angleScale(val:IScale):void
 		{
 			_angleAxis = val;
 
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get angleAxis():IScale
+		public function get angleScale():IScale
 		{
 			return _angleAxis;
 		}
 		
 		private var _radiusAxis:IScale;
-		public function set radiusAxis(val:IScale):void
+		public function set radiusScale(val:IScale):void
 		{
 			_radiusAxis = val;
 			if (val is IScaleUI && IScaleUI(_radiusAxis).placement != BaseScale.HORIZONTAL_CENTER 
@@ -123,7 +123,7 @@ package birdeye.vis.elements.geometry
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get radiusAxis():IScale
+		public function get radiusScale():IScale
 		{
 			return _radiusAxis;
 		}
@@ -236,35 +236,35 @@ package birdeye.vis.elements.geometry
 			// cannot be positioned yet in the axis.
 			var axesCheck:Boolean = true;
 
-			if (angleAxis)
+			if (angleScale)
 			{
-				if (angleAxis is INumerableScale)
-					axesCheck = !isNaN(INumerableScale(angleAxis).min) || !isNaN(INumerableScale(angleAxis).max)
-								|| !isNaN(INumerableScale(angleAxis).totalPositiveValue);
-				else if (angleAxis is IEnumerableScale)
-					axesCheck = Boolean(IEnumerableScale(angleAxis).dataProvider);
-			} else if (polarChart && polarChart.angleAxis)
+				if (angleScale is INumerableScale)
+					axesCheck = !isNaN(INumerableScale(angleScale).min) || !isNaN(INumerableScale(angleScale).max)
+								|| !isNaN(INumerableScale(angleScale).totalPositiveValue);
+				else if (angleScale is IEnumerableScale)
+					axesCheck = Boolean(IEnumerableScale(angleScale).dataProvider);
+			} else if (polarChart && polarChart.angleScale)
 			{
-				if (polarChart.angleAxis is INumerableScale)
-					axesCheck = !isNaN(INumerableScale(polarChart.angleAxis).min) || !isNaN(INumerableScale(polarChart.angleAxis).max)
-								|| !isNaN(INumerableScale(polarChart.angleAxis).totalPositiveValue);
-				else if (polarChart.angleAxis is IEnumerableScale)
-					axesCheck = Boolean(IEnumerableScale(polarChart.angleAxis ).dataProvider);
+				if (polarChart.angleScale is INumerableScale)
+					axesCheck = !isNaN(INumerableScale(polarChart.angleScale).min) || !isNaN(INumerableScale(polarChart.angleScale).max)
+								|| !isNaN(INumerableScale(polarChart.angleScale).totalPositiveValue);
+				else if (polarChart.angleScale is IEnumerableScale)
+					axesCheck = Boolean(IEnumerableScale(polarChart.angleScale ).dataProvider);
 			} else
 				axesCheck = false;
 
-			if (radiusAxis)
+			if (radiusScale)
 			{
-				if (radiusAxis is INumerableScale)
-					axesCheck = axesCheck && (!isNaN(INumerableScale(radiusAxis).min) || !isNaN(INumerableScale(radiusAxis).max));
-				else if (radiusAxis is IEnumerableScale)
-					axesCheck = axesCheck && IEnumerableScale(radiusAxis).dataProvider;
-			} else if (polarChart && polarChart.radiusAxis)
+				if (radiusScale is INumerableScale)
+					axesCheck = axesCheck && (!isNaN(INumerableScale(radiusScale).min) || !isNaN(INumerableScale(radiusScale).max));
+				else if (radiusScale is IEnumerableScale)
+					axesCheck = axesCheck && IEnumerableScale(radiusScale).dataProvider;
+			} else if (polarChart && polarChart.radiusScale)
 			{
-				if (polarChart.radiusAxis is INumerableScale)
-					axesCheck = axesCheck && (!isNaN(INumerableScale(polarChart.radiusAxis).min) || !isNaN(INumerableScale(polarChart.radiusAxis).max))
-				else if (polarChart.radiusAxis is IEnumerableScale)
-					axesCheck = axesCheck && IEnumerableScale(polarChart.radiusAxis).dataProvider;
+				if (polarChart.radiusScale is INumerableScale)
+					axesCheck = axesCheck && (!isNaN(INumerableScale(polarChart.radiusScale).min) || !isNaN(INumerableScale(polarChart.radiusScale).max))
+				else if (polarChart.radiusScale is IEnumerableScale)
+					axesCheck = axesCheck && IEnumerableScale(polarChart.radiusScale).dataProvider;
 			} else
 				axesCheck = false;
 				

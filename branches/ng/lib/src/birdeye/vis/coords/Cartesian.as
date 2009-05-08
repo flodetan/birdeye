@@ -769,7 +769,7 @@ package birdeye.vis.coords
 			if (element.cursor)
 			{
 				var catElements:Array;
-				var j:Number = 0;
+				var j:Number;
 
 				element.cursor.seek(CursorBookmark.FIRST);
 				
@@ -861,12 +861,21 @@ package birdeye.vis.coords
 							Math.min(INumerableScale(element.yScale).min, element.minYValue);
 				}
 	
-				catElements = [];
-				j = 0;
 				element.cursor.seek(CursorBookmark.FIRST);
 				
 				if (element.zScale is IEnumerableScale)
-				{
+				{	
+					// if the scale dataProvider already exists than load it and update the index
+					// in fact the same scale might be shared among several elements 
+					if (IEnumerableScale(element.zScale).dataProvider)
+					{
+						catElements = IEnumerableScale(element.zScale).dataProvider;
+						j = catElements.length;
+					} else {
+						j = 0;
+						catElements = [];
+					}
+
 					while (!element.cursor.afterLast)
 					{
 						// if the category value already exists in the axis, than skip it

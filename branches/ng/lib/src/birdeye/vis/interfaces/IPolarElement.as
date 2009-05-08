@@ -45,12 +45,12 @@ package birdeye.vis.interfaces
 		function get radiusField():String;
 
 		/** Set the angle axis.*/
-		function set angleAxis(val:IScale):void;
-		function get angleAxis():IScale;
+		function set angleScale(val:IScale):void;
+		function get angleScale():IScale;
 
 		/** Set the radius axis.*/
-		function set radiusAxis(val:IScale):void;
-		function get radiusAxis():IScale;
+		function set radiusScale(val:IScale):void;
+		function get radiusScale():IScale;
 
 		function get maxAngleValue():Number;
 		function get minAngleValue():Number;

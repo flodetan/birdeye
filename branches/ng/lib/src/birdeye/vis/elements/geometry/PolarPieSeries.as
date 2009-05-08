@@ -113,12 +113,12 @@ package birdeye.vis.elements.geometry
 			gg.target = this;
 			graphicsCollection.addItem(gg);
 
-			if (radiusAxis)
+			if (radiusScale)
 			{
-				radius = radiusAxis.size;
+				radius = radiusScale.size;
 				dataFields[1] = radiusField;
-			} else if (polarChart.radiusAxis) {
-				radius = polarChart.radiusAxis.size;
+			} else if (polarChart.radiusScale) {
+				radius = polarChart.radiusScale.size;
 				dataFields[1] = radiusField;
 			}
 			
@@ -136,10 +136,10 @@ package birdeye.vis.elements.geometry
 			wSize = hSize = radius*2;
 
 			var aAxis:IScale;
-			if (angleAxis)
-				aAxis = angleAxis;
-			else if (polarChart.angleAxis)
-				aAxis = polarChart.angleAxis;
+			if (angleScale)
+				aAxis = angleScale;
+			else if (polarChart.angleScale)
+				aAxis = polarChart.angleScale;
 
 			dataFields[0] = angleField;
 
