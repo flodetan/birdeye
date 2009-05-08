@@ -27,6 +27,8 @@
  
 package birdeye.vis.interfaces
 {
+	import flash.geom.Point;
+	
 	public interface IAxis
 	{
 		/** Calculates and returns the coordinate of a data value in the axis (depends on 
@@ -47,5 +49,17 @@ package birdeye.vis.interfaces
 		/** Define the scale type (category, linear, log, date...)*/
 		function set scaleType(val:String):void
 		function get scaleType():String
-	}
+		
+/* 		/** Define the range values for the scale (for ex. type [minColor, maxColor] or [minRadius, maxRadius])
+		function set range(val:Array):void
+		function get range():Array
+
+		/** Set the origin point of the scale.
+		function set origin(val:Point):void
+		function get origin():Point
+		
+		/** Set the angle of the scale.
+		function set angle(val:Number):void
+		function get angle():Number
+ */	}
 }

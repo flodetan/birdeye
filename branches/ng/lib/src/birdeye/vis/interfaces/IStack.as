@@ -29,14 +29,14 @@ package birdeye.vis.interfaces
 {
 	public interface IStack
 	{
-		/** Set the position of the current component (series) inside a stack.*/
+		/** Set the position of the current component (element) inside a stack.*/
 		function set stackPosition(val:Number):void;
 		
-		/** Set the total of stacked series inside a stack.*/
+		/** Set the total of stacked elements inside a stack.*/
 		function set total(val:Number):void;
 
-		/** Set the series type (columns, area, bars).*/
-		function get seriesType():String;
+		/** Set the element type (columns, area, bars).*/
+		function get elementType():String;
 
 		/** Set/Get the stack type (overlaid, stacked, stacked100).*/
 		function set stackType(val:String):void;

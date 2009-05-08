@@ -29,9 +29,9 @@
 {
 	public interface IEnumerableAxis extends IAxis
 	{
-		/** Set-get the elements that have to be enumerable. */
-		function set elements(val:Array):void
-		function get elements():Array
+		/** Set-get the dataProvider that have to be enumerable. */
+		function set dataProvider(val:Array):void
+		function get dataProvider():Array
 		
 		/** Category field that is used to filter elements.*/
 		function set categoryField(val:String):void
