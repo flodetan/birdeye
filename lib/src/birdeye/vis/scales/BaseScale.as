@@ -524,5 +524,11 @@ package birdeye.vis.scales
 					break;
 			}
 		}
+		
+		public function resetValues():void
+		{
+			_interval = NaN
+			// override
+		}
 	}
 }

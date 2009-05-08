@@ -256,13 +256,17 @@ package birdeye.vis.elements.geometry
 			if (radiusScale)
 			{
 				if (radiusScale is INumerableScale)
-					axesCheck = axesCheck && (!isNaN(INumerableScale(radiusScale).min) || !isNaN(INumerableScale(radiusScale).max));
+					axesCheck = axesCheck && (!isNaN(INumerableScale(radiusScale).min) 
+												|| !isNaN(INumerableScale(radiusScale).max)
+												|| !isNaN(INumerableScale(radiusScale).totalPositiveValue));
 				else if (radiusScale is IEnumerableScale)
 					axesCheck = axesCheck && IEnumerableScale(radiusScale).dataProvider;
 			} else if (polarChart && polarChart.radiusScale)
 			{
 				if (polarChart.radiusScale is INumerableScale)
-					axesCheck = axesCheck && (!isNaN(INumerableScale(polarChart.radiusScale).min) || !isNaN(INumerableScale(polarChart.radiusScale).max))
+					axesCheck = axesCheck && (!isNaN(INumerableScale(polarChart.radiusScale).min)
+												|| !isNaN(INumerableScale(polarChart.radiusScale).max)
+												|| !isNaN(INumerableScale(polarChart.radiusScale).totalPositiveValue))
 				else if (polarChart.radiusScale is IEnumerableScale)
 					axesCheck = axesCheck && IEnumerableScale(polarChart.radiusScale).dataProvider;
 			} else

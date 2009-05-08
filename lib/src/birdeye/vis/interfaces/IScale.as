@@ -50,6 +50,9 @@ package birdeye.vis.interfaces
 		function set scaleType(val:String):void
 		function get scaleType():String
 		
+		/** Reset the scale.*/
+		function resetValues():void;
+		
  		/** Define the range values for the scale (for ex. type [minColor, maxColor] or [minRadius, maxRadius])*/
 		function set range(val:Array):void
 		function get range():Array

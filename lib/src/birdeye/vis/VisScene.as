@@ -29,6 +29,7 @@
 {
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.interfaces.INumerableScale;
+	import birdeye.vis.interfaces.IScale;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
@@ -421,6 +422,13 @@
 				}
 			}
 			graphicsCollection.items = [];
+		}
+		
+		protected function resetAxes():void
+		{
+			if (_scales)
+				for (var i:Number = 0; i<_scales.length; i++)
+					IScale(_scales[i]).resetValues();
 		}
 	}
 }

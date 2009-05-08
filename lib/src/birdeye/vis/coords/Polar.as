@@ -27,25 +27,24 @@
  
 package birdeye.vis.coords
 {
+	import birdeye.vis.VisScene;
+	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.elements.collision.PolarStackElement;
+	import birdeye.vis.elements.geometry.PolarElement;
+	import birdeye.vis.interfaces.IElement;
+	import birdeye.vis.interfaces.IEnumerableScale;
+	import birdeye.vis.interfaces.INumerableScale;
+	import birdeye.vis.interfaces.IPolarElement;
+	import birdeye.vis.interfaces.IScale;
+	import birdeye.vis.interfaces.IScaleUI;
+	import birdeye.vis.interfaces.IStack;
+	import birdeye.vis.scales.*;
+	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.geom.Point;
 	
 	import mx.collections.CursorBookmark;
-	
-	import birdeye.vis.VisScene;
-	import birdeye.vis.coords.Polar;
-	import birdeye.vis.scales.*;
-	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.interfaces.IScale;
-	import birdeye.vis.interfaces.IScaleUI;
-	import birdeye.vis.interfaces.IEnumerableScale;
-	import birdeye.vis.interfaces.INumerableScale;
-	import birdeye.vis.interfaces.IPolarElement;
-	import birdeye.vis.interfaces.IElement;
-	import birdeye.vis.interfaces.IStack;
-	import birdeye.vis.elements.geometry.PolarElement;
-	import birdeye.vis.elements.collision.PolarStackElement;
 	
 	/** 
 	 * The PolarChart is the base chart that is extended by all charts that are
@@ -290,7 +289,10 @@ package birdeye.vis.coords
 			
 			// init all axes, default and elements owned 
 			if (! axesFeeded)
+			{
+				resetAxes();
 				feedAxes();
+			}
 		}
 		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
@@ -490,7 +492,7 @@ package birdeye.vis.coords
 						colorAxis.max = maxMin[0];
 						colorAxis.min = maxMin[1];
 				} 
-
+				
 				// init axes of all elements that have their own axes
 				// since these are children of each elements, they are 
 				// for sure ready for feeding and it won't affect the axesFeeded status
@@ -648,8 +650,10 @@ package birdeye.vis.coords
 					} else {
 						// if the element angle axis is percent numeric, than get the sum
 						// of total positive data values from the element
-						if (!isNaN(element.totalAnglePositiveValue))
+						if (isNaN(INumerableScale(element.angleScale).totalPositiveValue))
 							INumerableScale(element.angleScale).totalPositiveValue = element.totalAnglePositiveValue;
+						else
+							INumerableScale(element.angleScale).totalPositiveValue += element.totalAnglePositiveValue;
 					}
 				}
 	
@@ -718,6 +722,23 @@ package birdeye.vis.coords
 
 				removeChildAt(0);
 			}
+		}
+		
+		override protected function resetAxes():void
+		{
+			super.resetAxes();
+			if (angleScale)
+				angleScale.resetValues();
+			if (radiusScale)
+				radiusScale.resetValues();
+			
+			for (var i:Number = 0; i<elements.length; i++)
+				if (IPolarElement(elements[i]).angleScale)
+					IScale(IPolarElement(elements[i]).angleScale).resetValues();
+
+			for (i = 0; i<elements.length; i++)
+				if (IPolarElement(elements[i]).radiusScale)
+					IScale(IPolarElement(elements[i]).radiusScale).resetValues();
 		}
 	}
 }
