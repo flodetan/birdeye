@@ -30,6 +30,7 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
+	import flash.display.IBitmapDrawable;
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -62,6 +63,12 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 		private var _backgroundAlpha:Number = 0.5;
 		private var _borderAlpha:Number = 0.5;
 		private var _dragRectangleAlpha:Number = 0.5;
+		
+		private var _target:IBitmapDrawable;
+		public function set target(val:IBitmapDrawable):void
+		{
+			_target = val;
+		}
 		
 		public function get scale():Number
 		{
@@ -168,6 +175,12 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 			graphics.beginFill(_backgroundColor,_backgroundAlpha);
 			graphics.drawRect(0,0,width,height);
 			graphics.endFill();
+
+			var bmpSource:IBitmapDrawable;
+			if (_target != null && _target is Map)
+				bmpSource = Map(_target);
+			else 
+				bmpSource = map;
 
 			// get the map-mask sizes, needed to size the draggable rectangle 
 			var tempMask:DisplayObject = DisplayObject(map.mask);
