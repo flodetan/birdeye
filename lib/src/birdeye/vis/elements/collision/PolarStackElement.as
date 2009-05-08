@@ -35,7 +35,7 @@ package birdeye.vis.elements.collision
 	[Exclude(name="stackType", kind="property")] 
 	[Exclude(name="total", kind="property")] 
 	[Exclude(name="stackPosition", kind="property")] 
-	[Exclude(name="seriesType", kind="property")] 
+	[Exclude(name="elementType", kind="property")] 
 
 	public class PolarStackElement extends PolarElement implements IStack
 	{
@@ -85,7 +85,7 @@ package birdeye.vis.elements.collision
 			invalidateDisplayList();
 		}
 		
-		public function get seriesType():String
+		public function get elementType():String
 		{
 			// to be overridden
 			
