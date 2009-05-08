@@ -128,49 +128,49 @@ package birdeye.vis.elements.geometry
 			return _index;
 		}
 		
-		private var _xAxis:IScaleUI;
+		private var _xScale:IScaleUI;
 		public function set xScale(val:IScaleUI):void
 		{
-			_xAxis = val;
-			if (_xAxis.placement != BaseScale.BOTTOM && _xAxis.placement != BaseScale.TOP)
-				_xAxis.placement = BaseScale.BOTTOM;
+			_xScale = val;
+			if (_xScale.placement != BaseScale.BOTTOM && _xScale.placement != BaseScale.TOP)
+				_xScale.placement = BaseScale.BOTTOM;
 
 			invalidateProperties();
 			invalidateDisplayList();
 		}
 		public function get xScale():IScaleUI
 		{
-			return _xAxis;
+			return _xScale;
 		}
 		
-		private var _yAxis:IScaleUI;
+		private var _yScale:IScaleUI;
 		public function set yScale(val:IScaleUI):void
 		{
-			_yAxis = val;
-			if (_yAxis.placement != BaseScale.LEFT && _yAxis.placement != BaseScale.RIGHT)
-				_yAxis.placement = BaseScale.LEFT;
+			_yScale = val;
+			if (_yScale.placement != BaseScale.LEFT && _yScale.placement != BaseScale.RIGHT)
+				_yScale.placement = BaseScale.LEFT;
 
 			invalidateProperties();
 			invalidateDisplayList();
 		}
 		public function get yScale():IScaleUI
 		{
-			return _yAxis;
+			return _yScale;
 		}
 		
-		private var _zAxis:IScaleUI;
+		private var _zScale:IScaleUI;
 		public function set zScale(val:IScaleUI):void
 		{
-			_zAxis = val;
-			if (_zAxis.placement != BaseScale.DIAGONAL)
-				_zAxis.placement = BaseScale.DIAGONAL;
+			_zScale = val;
+			if (_zScale.placement != BaseScale.DIAGONAL)
+				_zScale.placement = BaseScale.DIAGONAL;
 
 			invalidateProperties();
 			invalidateDisplayList();
 		}
 		public function get zScale():IScaleUI
 		{
-			return _zAxis;
+			return _zScale;
 		}
 		
 		protected var _maxYValue:Number = NaN;

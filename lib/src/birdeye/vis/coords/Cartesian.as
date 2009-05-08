@@ -27,6 +27,11 @@
  
 package birdeye.vis.coords
 {	
+	import birdeye.vis.VisScene;
+	import birdeye.vis.elements.geometry.CartesianElement;
+	import birdeye.vis.interfaces.*;
+	import birdeye.vis.scales.*;
+	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.paint.SolidStroke;
@@ -39,12 +44,6 @@ package birdeye.vis.coords
 	import mx.containers.HBox;
 	import mx.containers.VBox;
 	import mx.core.Container;
-	
-	import birdeye.vis.VisScene;
-	import birdeye.vis.scales.BaseScale;
-	import birdeye.vis.scales.*;
-	import birdeye.vis.elements.geometry.CartesianElement;
-	import birdeye.vis.interfaces.*;
 	
 	/** A CartesianChart can be used to create any 2D or 3D cartesian charts available in the library
 	 * apart from those who might have specific features, like stackable element or data-sizable items.
@@ -769,13 +768,24 @@ package birdeye.vis.coords
 		{
 			if (element.cursor)
 			{
-				var catElements:Array = [];
+				var catElements:Array;
 				var j:Number = 0;
 
 				element.cursor.seek(CursorBookmark.FIRST);
 				
 				if (element.xScale is IEnumerableScale)
 				{
+					// if the scale dataProvider already exists than load it and update the index
+					// in fact the same scale might be shared among several elements 
+					if (IEnumerableScale(element.xScale).dataProvider)
+					{
+						catElements = IEnumerableScale(element.xScale).dataProvider;
+						j = catElements.length;
+					} else {
+						j = 0;
+						catElements = [];
+					}
+						
 					while (!element.cursor.afterLast)
 					{
 						// if the category value already exists in the axis, than skip it
@@ -793,18 +803,32 @@ package birdeye.vis.coords
 				{
 					// if the x axis is numeric than set its maximum and minimum values 
 					// if the max and min are not yet defined for the element, than they are calculated now
-					INumerableScale(element.xScale).max =
-						element.maxXValue;
-					INumerableScale(element.xScale).min =
-						element.minXValue;
+					if (isNaN(INumerableScale(element.xScale).max))
+						INumerableScale(element.xScale).max = element.maxXValue;
+					else 
+						INumerableScale(element.xScale).max =
+							Math.max(INumerableScale(element.xScale).max, element.maxXValue);
+					
+					if (isNaN(INumerableScale(element.xScale).min))
+						INumerableScale(element.xScale).min = element.minXValue;
+					else 
+						INumerableScale(element.xScale).min =
+							Math.min(INumerableScale(element.xScale).min, element.minXValue);
 				}
 	
-				catElements = [];
-				j = 0;
 				element.cursor.seek(CursorBookmark.FIRST);
 				
 				if (element.yScale is IEnumerableScale)
 				{
+					if (IEnumerableScale(element.yScale).dataProvider)
+					{
+						catElements = IEnumerableScale(element.yScale).dataProvider;
+						j = catElements.length;
+					} else {
+						j = 0;
+						catElements = [];
+					}
+						
 					while (!element.cursor.afterLast)
 					{
 						// if the category value already exists in the axis, than skip it
@@ -822,10 +846,19 @@ package birdeye.vis.coords
 				{
 					// if the y axis is numeric than set its maximum and minimum values 
 					// if the max and min are not yet defined for the element, than they are calculated now
-					INumerableScale(element.yScale).max =
-						element.maxYValue;
-					INumerableScale(element.yScale).min =
-						element.minYValue;
+					// since the same scale can be shared among several elements, the precedent min and max
+					// are also taken into account
+					if (isNaN(INumerableScale(element.yScale).max))
+						INumerableScale(element.yScale).max = element.maxYValue;
+					else 
+						INumerableScale(element.yScale).max =
+							Math.max(INumerableScale(element.yScale).max, element.maxYValue);
+					
+					if (isNaN(INumerableScale(element.yScale).min))
+						INumerableScale(element.yScale).min = element.minYValue;
+					else 
+						INumerableScale(element.yScale).min =
+							Math.min(INumerableScale(element.yScale).min, element.minYValue);
 				}
 	
 				catElements = [];
@@ -849,12 +882,19 @@ package birdeye.vis.coords
 	
 				} else if (element.zScale is INumerableScale)
 				{
-					// if the axis is numeric than set its maximum and minimum values 
-					// if the max and min are not yet defined for the element, than they are calculated now
-					INumerableScale(element.zScale).max =
-						element.maxZValue;
-					INumerableScale(element.yScale).min =
-						element.minZValue;
+					// since the same scale can be shared among several elements, the precedent min and max
+					// are also taken into account
+					if (isNaN(INumerableScale(element.zScale).max))
+						INumerableScale(element.zScale).max = element.maxZValue;
+					else 
+						INumerableScale(element.zScale).max =
+							Math.max(INumerableScale(element.yScale).max, element.maxZValue);
+					
+					if (isNaN(INumerableScale(element.zScale).min))
+						INumerableScale(element.zScale).min = element.minZValue;
+					else 
+						INumerableScale(element.zScale).min =
+							Math.min(INumerableScale(element.zScale).min, element.minZValue);
 				}
 
 				if (element.colorAxis)

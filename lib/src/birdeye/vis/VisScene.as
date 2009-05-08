@@ -54,7 +54,6 @@
 		public function set scales(val:Array):void
 		{
 			_scales = val;
-
 			invalidateProperties();
 			invalidateDisplayList();
 		}
