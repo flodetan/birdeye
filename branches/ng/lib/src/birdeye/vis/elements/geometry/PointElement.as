@@ -63,7 +63,7 @@ package birdeye.vis.elements.geometry
 		private var plot:IGeometry;
 		/** @Private 
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
-		override protected function drawSeries():void
+		override protected function drawElement():void
 		{
 			var dataFields:Array = [];
 			// prepare data for a standard tooltip message in case the user

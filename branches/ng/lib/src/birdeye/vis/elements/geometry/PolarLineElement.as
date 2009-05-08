@@ -43,9 +43,9 @@ package birdeye.vis.elements.geometry
 		
 		/** @Private 
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
-		override protected function drawSeries():void
+		override protected function drawElement():void
 		{
-			super.drawSeries();
+			super.drawElement();
 			if (poly) 
 				poly.fill = new SolidFill(null,0);
 		}
