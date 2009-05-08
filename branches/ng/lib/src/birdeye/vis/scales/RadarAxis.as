@@ -347,24 +347,24 @@ package birdeye.vis.scales
 		
  		public function feedRadiusAxes(elementsMinMax:Array):void
 		{
-			if (_angleCategory && _angleAxis && _angleAxis.elements)
+			if (_angleCategory && _angleAxis && _angleAxis.dataProvider)
 			{
 				radiusAxes = [];
-				for each (var element:String in angleAxis.elements)
+				for each (var category:String in angleAxis.dataProvider)
 				{
-					radiusAxes[element] = new NumericAxis();
-					NumericAxis(radiusAxes[element]).showAxis = false;
+					radiusAxes[category] = new NumericAxis();
+					NumericAxis(radiusAxes[category]).showAxis = false;
 					
 					if (_function != null)
-						NumericAxis(radiusAxes[element]).f = _function;
+						NumericAxis(radiusAxes[category]).f = _function;
 					
 					// if all values are positive, than we fix the base at zero, otherwise
 					// the columns with minium values won't show up in the chart
-					NumericAxis(radiusAxes[element]).min = Math.min(0, elementsMinMax[element].min);
-					NumericAxis(radiusAxes[element]).max = elementsMinMax[element].max;
-					NumericAxis(radiusAxes[element]).size = radiusSize;
-					NumericAxis(radiusAxes[element]).interval = (NumericAxis(radiusAxes[element]).max 
-																- NumericAxis(radiusAxes[element]).min)/5;
+					NumericAxis(radiusAxes[category]).min = Math.min(0, elementsMinMax[category].min);
+					NumericAxis(radiusAxes[category]).max = elementsMinMax[category].max;
+					NumericAxis(radiusAxes[category]).size = radiusSize;
+					NumericAxis(radiusAxes[category]).interval = (NumericAxis(radiusAxes[category]).max 
+																- NumericAxis(radiusAxes[category]).min)/5;
 				}
 			}
 		} 
@@ -376,21 +376,21 @@ package birdeye.vis.scales
 			
 			var line:Line;
 			
-			var ele:Array = angleAxis.elements;
+			var catElements:Array = angleAxis.dataProvider;
 			var interval:int = angleAxis.interval;
-			var nEle:int = angleAxis.elements.length;
+			var nEle:int = angleAxis.dataProvider.length;
 
 			for (var i:int = 0; i<nEle; i++)
 			{
-				NumericAxis(radiusAxes[ele[i]]).size = radiusSize;
-				var angle:int = angleAxis.getPosition(ele[i]);
+				NumericAxis(radiusAxes[catElements[i]]).size = radiusSize;
+				var angle:int = angleAxis.getPosition(catElements[i]);
 				var endPosition:Point = PolarCoordinateTransform.getXY(angle,radiusSize,_polarChart.origin);
 				
  				line = new Line(_polarChart.origin.x, _polarChart.origin.y, endPosition.x, endPosition.y);
 				line.stroke = stroke;
 				gg.geometryCollection.addItem(line);
 
- 				var radiusAxis:NumericAxis = NumericAxis(radiusAxes[ele[i]]);
+ 				var radiusAxis:NumericAxis = NumericAxis(radiusAxes[catElements[i]]);
  				var rad:Number;
  				
  				for (var snap:int = radiusAxis.min; snap<radiusAxis.max; snap += radiusAxis.interval)

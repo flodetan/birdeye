@@ -353,7 +353,19 @@ package birdeye.vis.scales
 			return _showAxis;
 		}
 
-		/** Diagonal placement for the axis (for ex. used for the z axis). */
+/* 		/** Define the range values for the scale (for ex. type [minColor, maxColor] or [minRadius, maxRadius])*
+		public function set range(val:Array):void
+		public function get range():Array
+
+		/** Set the origin point of the scale.*
+		public function set origin(val:Point):void
+		public function get origin():Point
+		
+		/** Set the angle of the scale.*
+		public function set angle(val:Number):void
+		public function get angle():Number */
+
+		/** Diagonal placement for the axis (used for the z axis). */
 		public static const DIAGONAL:String = "diagonal";
 		/** TOP placement for the axis. */
 		public static const TOP:String = "top";
@@ -441,7 +453,7 @@ package birdeye.vis.scales
 		initializeStyles();
 		public static function initializeStyles():void
 		{
-			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("BaseAxis");
+			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("BaseScale");
 			if(!selector)
 			{
 				selector = new CSSStyleDeclaration();
@@ -468,7 +480,7 @@ package birdeye.vis.scales
 
 				this.stylesChanged = true;
 			} 
-			StyleManager.setStyleDeclaration("BaseAxis", selector, true);
+			StyleManager.setStyleDeclaration("BaseScale", selector, true);
 		}
 		
 		/** @Private
