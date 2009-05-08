@@ -47,7 +47,7 @@
 	<mx:Button label="Generate" click="createDT()"/>
 	<charts:ScatterPlot maxRadius="30" id="sp" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
  	<charts:xAxis>
- 		<axis:CategoryAxis categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
+ 		<axis:Category categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
  	</charts:xAxis>
  	<charts:yAxis>
 	 	<axis:LinearAxis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
