@@ -48,7 +48,7 @@
 	<mx:Button label="Generate" click="createDT()"/>
 	<coords:Cartesian id="mix" width="90%" height="90%" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true">
  		<coords:xAxis>
- 			<scales:CategoryAxis categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+ 			<scales:Category categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
  		</coords:xAxis>
  		<coords:yAxis>
  			<scales:LinearAxis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
@@ -61,7 +61,7 @@
 		 			<scales:LinearAxis placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 		 		</elements:xAxis>
 		 		<elements:yAxis>
-		 			<scales:CategoryAxis categoryField="subject" placement="right" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
+		 			<scales:Category categoryField="subject" placement="right" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 		 		</elements:yAxis>
 		 	</elements:BarElement>
 		 	<elements:AreaElement yField="R3" xField="subject" styleName="grad3" displayName="R3">

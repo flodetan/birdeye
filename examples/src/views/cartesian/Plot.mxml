@@ -60,7 +60,7 @@
 			 			<scales:LinearAxis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 			 	</coords:yAxis>
 			 	<coords:xAxis>
-			 			<scales:CategoryAxis categoryField="index" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
+			 			<scales:Category categoryField="index" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 			 </coords:xAxis>
 			 <coords:elements>
 			 	<elements:PointElement xField="index" yField="bronze" source="{rasterImage}" strokeAlpha="0" displayName="A" plotRadius="13"/>
