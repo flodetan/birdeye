@@ -64,7 +64,7 @@
 		<polar:colorAxis>
 			<axis:ColorAxis minColor="#990016" maxColor="#9900ff"/>
 		</polar:colorAxis>
-		<polar:series>
+		<polar:elements>
 			<pseries:PolarPieSeries radiusLabelOffset="5" colorField="Density" extendMouseEvents="true" angleField="GDP" displayName="A">
 				<pseries:angleAxis>
 					<axis:PercentAngleAxis size="270"/>
@@ -80,7 +80,7 @@
 					<axis:PercentAngleAxis size="270"/>
 				</pseries:angleAxis>
 			</pseries:PolarPieSeries>
-		</polar:series>
+		</polar:elements>
 	</polar:Polar>
 	
 </mx:VBox>
