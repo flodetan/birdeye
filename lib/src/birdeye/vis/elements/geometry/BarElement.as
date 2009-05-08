@@ -45,7 +45,7 @@ package birdeye.vis.elements.geometry
 
 	public class BarElement extends StackElement 
 	{
-		override public function get seriesType():String
+		override public function get elementType():String
 		{
 			return "column";
 		}
@@ -96,8 +96,8 @@ package birdeye.vis.elements.geometry
 
 		private var poly:IGeometry;
 		/** @Private 
-		 * Called by super.updateDisplayList when the series is ready for layout.*/
-		override protected function drawSeries():void
+		 * Called by super.updateDisplayList when the element is ready for layout.*/
+		override protected function drawElement():void
 		{
 			var dataFields:Array = [];
 			// prepare data for a standard tooltip message in case the user

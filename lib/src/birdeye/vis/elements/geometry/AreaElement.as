@@ -43,17 +43,17 @@ package birdeye.vis.elements.geometry
 
 	public class AreaElement extends StackElement
 	{
-		/** It overrides the get seriesType to force the result to be "area".
-		 * seriesType is used to provide the possibility of using stackable series
+		/** It overrides the get elementType to force the result to be "area".
+		 * elementType is used to provide the possibility of using stackable element
 		 * within any type of chart instead of only using them inside their own 
 		 * chart type.*/
-		override public function get seriesType():String
+		override public function get elementType():String
 		{
 			return "area";
 		}
 
 		private var _baseAtZero:Boolean = true;
-		/** If true, if min and max values of a series are positive (negative), 
+		/** If true, if min and max values of a element are positive (negative), 
 		 * than the base of the AreaElement will be 0, instead of the min (max) value.*/
 		[Inspectable(enumeration="true,false")]
 		public function set baseAtZero(val:Boolean):void
@@ -64,7 +64,7 @@ package birdeye.vis.elements.geometry
 		}
 		
 		private var _form:String;
-		/** The form defines the shape type of the series, ("curve", "line").*/
+		/** The form defines the shape type of the element, ("curve", "line").*/
 		public function set form(val:String):void
 		{
 			_form = val;
@@ -100,8 +100,8 @@ package birdeye.vis.elements.geometry
 
 		private var poly:Polygon;
 		/** @Private 
-		 * Called by super.updateDisplayList when the series is ready for layout.*/
-		override protected function drawSeries():void
+		 * Called by super.updateDisplayList when the element is ready for layout.*/
+		override protected function drawElement():void
 		{
 			var xPrev:Number, yPrev:Number;
 			var xPos:Number, yPos:Number, zPos:Number;
@@ -132,7 +132,7 @@ package birdeye.vis.elements.geometry
 
 			while (!cursor.afterLast)
 			{
-				// if the series has its own x axis, than get the x coordinate
+				// if the Element has its own x axis, than get the x coordinate
 				// position of the data value filtered by xField
 				if (xAxis)
 					xPos = xAxis.getPosition(cursor.current[xField]);
@@ -141,7 +141,7 @@ package birdeye.vis.elements.geometry
 					xPos = chart.xAxis.getPosition(cursor.current[xField]);
 				
 				j = cursor.current[xField];
-				// if the series has its own y axis, than get the y coordinate
+				// if the Element has its own y axis, than get the y coordinate
 				// position of the data value filtered by yField
 				if (yAxis)
 				{

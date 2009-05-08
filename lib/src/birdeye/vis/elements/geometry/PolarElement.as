@@ -41,7 +41,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.interfaces.*;
 	import birdeye.vis.coords.Polar;
 
-	public class PolarElement extends BaseElement implements IPolarSeries
+	public class PolarElement extends BaseElement implements IPolarElement
 	{
 		private var _polarChart:Polar;
 		public function set polarChart(val:Polar):void
@@ -221,10 +221,10 @@ package birdeye.vis.elements.geometry
 			}
 
  			if (isReadyForLayout())
- 				drawSeries()
+ 				drawElement()
 		}
 		
-		protected function drawSeries():void
+		protected function drawElement():void
 		{
 			// to be overridden by each series implementation
 		}
@@ -242,14 +242,14 @@ package birdeye.vis.elements.geometry
 					axesCheck = !isNaN(INumerableAxis(angleAxis).min) || !isNaN(INumerableAxis(angleAxis).max)
 								|| !isNaN(INumerableAxis(angleAxis).totalPositiveValue);
 				else if (angleAxis is IEnumerableAxis)
-					axesCheck = Boolean(IEnumerableAxis(angleAxis).elements);
+					axesCheck = Boolean(IEnumerableAxis(angleAxis).dataProvider);
 			} else if (polarChart && polarChart.angleAxis)
 			{
 				if (polarChart.angleAxis is INumerableAxis)
 					axesCheck = !isNaN(INumerableAxis(polarChart.angleAxis).min) || !isNaN(INumerableAxis(polarChart.angleAxis).max)
 								|| !isNaN(INumerableAxis(polarChart.angleAxis).totalPositiveValue);
 				else if (polarChart.angleAxis is IEnumerableAxis)
-					axesCheck = Boolean(IEnumerableAxis(polarChart.angleAxis ).elements);
+					axesCheck = Boolean(IEnumerableAxis(polarChart.angleAxis ).dataProvider);
 			} else
 				axesCheck = false;
 
@@ -258,17 +258,17 @@ package birdeye.vis.elements.geometry
 				if (radiusAxis is INumerableAxis)
 					axesCheck = axesCheck && (!isNaN(INumerableAxis(radiusAxis).min) || !isNaN(INumerableAxis(radiusAxis).max));
 				else if (radiusAxis is IEnumerableAxis)
-					axesCheck = axesCheck && IEnumerableAxis(radiusAxis).elements;
+					axesCheck = axesCheck && IEnumerableAxis(radiusAxis).dataProvider;
 			} else if (polarChart && polarChart.radiusAxis)
 			{
 				if (polarChart.radiusAxis is INumerableAxis)
 					axesCheck = axesCheck && (!isNaN(INumerableAxis(polarChart.radiusAxis).min) || !isNaN(INumerableAxis(polarChart.radiusAxis).max))
 				else if (polarChart.radiusAxis is IEnumerableAxis)
-					axesCheck = axesCheck && IEnumerableAxis(polarChart.radiusAxis).elements;
+					axesCheck = axesCheck && IEnumerableAxis(polarChart.radiusAxis).dataProvider;
 			} else
 				axesCheck = false;
 				
-			if (radarAxis || polarChart.radarAxis)
+			if ((radarAxis && radarAxis.radiusAxes) || (polarChart.radarAxis && polarChart.radarAxis.radiusAxes))
 				axesCheck = true;
 
 			var colorsCheck:Boolean = 

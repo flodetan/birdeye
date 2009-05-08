@@ -64,7 +64,7 @@ package birdeye.vis.elements.geometry
 		protected var poly:Polygon;
 		/** @Private 
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
-		override protected function drawSeries():void
+		override protected function drawElement():void
 		{
 			var dataFields:Array = [];
 			var items:Array = [];

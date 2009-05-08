@@ -46,7 +46,7 @@ package birdeye.vis.elements.geometry
 
 	public class ColumnElement extends StackElement 
 	{
-		override public function get seriesType():String
+		override public function get elementType():String
 		{
 			return "column";
 		}
@@ -97,8 +97,8 @@ package birdeye.vis.elements.geometry
 
 		private var poly:IGeometry;
 		/** @Private 
-		 * Called by super.updateDisplayList when the series is ready for layout.*/
-		override protected function drawSeries():void
+		 * Called by super.updateDisplayList when the element is ready for layout.*/
+		override protected function drawElement():void
 		{
 //			var renderer:ISeriesDataRenderer = new itemRenderer();
 			

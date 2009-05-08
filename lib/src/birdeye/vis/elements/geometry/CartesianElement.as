@@ -41,12 +41,12 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.coords.Cartesian;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.interfaces.IAxisUI;
-	import birdeye.vis.interfaces.ICartesianSeries;
+	import birdeye.vis.interfaces.ICartesianElement;
 	import birdeye.vis.interfaces.IEnumerableAxis;
 	import birdeye.vis.interfaces.ISizableItem;
 
 	[Exclude(name="index", kind="property")]
-	public class CartesianElement extends BaseElement implements ICartesianSeries
+	public class CartesianElement extends BaseElement implements ICartesianElement
 	{
 		private var _chart:Cartesian;
 		public function set chart(val:Cartesian):void
@@ -68,8 +68,8 @@ package birdeye.vis.elements.geometry
 		  		_cursor = ICollectionView(_dataProvider).createCursor();
 		  		
 		  		// we must invalidate also the chart properties and display list
-		  		// to let the chart update with the series data provider change. in fact
-		  		// the series dataprovider modifies the chart data and axes properties
+		  		// to let the chart update with the element data provider change. in fact
+		  		// the element dataprovider modifies the chart data and axes properties
 		  		// therefore it modifies the chart properties and displaying
 		  		chart.axesFeeded = false;
 		  		chart.invalidateProperties();
@@ -232,17 +232,17 @@ package birdeye.vis.elements.geometry
 		{
 			super.commitProperties();
 			
-			// since we use Degrafa, the background is needed in the series
-			// to allow events for tooltips all over the series.
+			// since we use Degrafa, the background is needed in the element
+			// to allow events for tooltips all over the element.
 			// tooltips are triggered by ttGG objects. 
 			// if showdatatips is true all interactivity events are triggered and
 			// managed through ttGG.
 			
 			// if showDataTips is false than it's still possible to manage 
 			// interactivity events thourgh gg, but in this case we must 
-			// remove the background to allow these interactivities, since gg is at the series
+			// remove the background to allow these interactivities, since gg is at the element
 			// level and not the chart one. if we don't remove the background, gg
-			// belonging to other series could be covered by the background and 
+			// belonging to other element could be covered by the background and 
 			// interactivity becomes impossible
 			// therefore background is created only if showDataTips is true
 			if (chart && chart.customTooltTipFunction!=null && chart.showDataTips && !tooltipCreationListening)
@@ -265,7 +265,7 @@ package birdeye.vis.elements.geometry
 			}
 
  			if (isReadyForLayout())
- 				drawSeries()
+ 				drawElement()
 		}
 		
 		private function onTTCreate(e:ToolTipEvent):void
@@ -274,37 +274,37 @@ package birdeye.vis.elements.geometry
 		}
 
 
-		protected function drawSeries():void
+		protected function drawElement():void
 		{
-			// to be overridden by each series implementation
+			// to be overridden by each element implementation
 		}
 		
 		private function isReadyForLayout():Boolean
 		{
-			// verify than all series axes (or chart's if none owned by the series)
-			// are ready. If they aren't the series can't be drawn, since data values
+			// verify than all element axes (or chart's if none owned by the element)
+			// are ready. If they aren't the element can't be drawn, since data values
 			// cannot be positioned yet in the axis.
 			var axesCheck:Boolean = true;
 			
 			if (yAxis)
 			{
 				if (yAxis is IEnumerableAxis)
-					axesCheck = Boolean(IEnumerableAxis(yAxis).elements);
+					axesCheck = Boolean(IEnumerableAxis(yAxis).dataProvider);
 			} else if (chart && chart.yAxis)
 			{
 				if (chart.yAxis is IEnumerableAxis)
-					axesCheck = Boolean(IEnumerableAxis(chart.yAxis).elements);
+					axesCheck = Boolean(IEnumerableAxis(chart.yAxis).dataProvider);
 			} else
 				axesCheck = false;
 
 			if (xAxis)
 			{
 				if (xAxis is IEnumerableAxis)
-					axesCheck = axesCheck && Boolean(IEnumerableAxis(xAxis).elements);
+					axesCheck = axesCheck && Boolean(IEnumerableAxis(xAxis).dataProvider);
 			} else if (chart && chart.xAxis)
 			{
 				if (chart.xAxis is IEnumerableAxis)
-					axesCheck = axesCheck && Boolean(IEnumerableAxis(chart.xAxis).elements);
+					axesCheck = axesCheck && Boolean(IEnumerableAxis(chart.xAxis).dataProvider);
 			} else
 				axesCheck = false;
 
@@ -430,7 +430,7 @@ package birdeye.vis.elements.geometry
 									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
 		{
 			ttGG = new DataItemLayout();
-			ttGG.target = chart.seriesContainer;
+			ttGG.target = chart.elementsContainer;
 			graphicsCollection.addItem(ttGG);
 			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
@@ -470,7 +470,7 @@ package birdeye.vis.elements.geometry
 		/** @Private
 		 * Override the init initGGToolTip in order to avoid the usage of gg also in case
 		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
-		 * series, thus improving performances.*/ 
+		 * element, thus improving performances.*/ 
 		override protected function initGGToolTip():void
 		{
 			ttGG.toolTipFill = fill;

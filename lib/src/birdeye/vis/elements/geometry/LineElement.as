@@ -60,7 +60,7 @@ package birdeye.vis.elements.geometry
 
 		/** @Private 
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
-		override protected function drawSeries():void
+		override protected function drawElement():void
 		{
 			var xPrev:Number, yPrev:Number;
 			var xPos:Number, yPos:Number, zPos:Number;
