@@ -46,17 +46,17 @@
 		{}
 		
 		/** Elements for labeling */
-		private var _elements:Array = [];
-		public function set elements(val:Array):void
+		private var _dataProvider:Array = [];
+		public function set dataProvider(val:Array):void
 		{
-			_elements = val;
+			_dataProvider = val;
 			invalidateSize();
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get elements():Array
+		public function get dataProvider():Array
 		{
-			return _elements;
+			return _dataProvider;
 		}
 		
 		private var _categoryField:String;
@@ -88,18 +88,18 @@
 			
 			// the interval is given by the axis lenght divided the number of 
 			// category elements loaded in the CategoryAxis
-			if (elements && elements.length >0)
+			if (dataProvider && dataProvider.length >0)
 			{
 				var recIsGivenInterval:Boolean = isGivenInterval;
-				if (_interval != size/elements.length)
-					interval = size/elements.length;
+				if (_interval != size/dataProvider.length)
+					interval = size/dataProvider.length;
 					
 				isGivenInterval = recIsGivenInterval;
 			}
 			
 			// if placement is set, elements are loaded and interval calculated
 			// than the axis is ready to be drawn
-			if (placement && elements && interval && _categoryField)
+			if (placement && dataProvider && interval && _categoryField)
 				readyForLayout = true;
 			else 
 				readyForLayout = false;
@@ -108,7 +108,7 @@
 		override protected function measure():void
 		{
 			super.measure();
- 			if (elements && elements.length>0 && placement)
+ 			if (dataProvider && dataProvider.length>0 && placement)
 				maxLabelSize();
  		}
  		
@@ -131,9 +131,9 @@
 				case RIGHT:
 				case DIAGONAL:
 				case VERTICAL_CENTER:
-					maxLblSize = String(_elements[0]).length;
-					for (var i:Number = 0; i<_elements.length; i++)
-						maxLblSize = Math.max(maxLblSize, String(_elements[i]).length); 
+					maxLblSize = String(_dataProvider[0]).length;
+					for (var i:Number = 0; i<_dataProvider.length; i++)
+						maxLblSize = Math.max(maxLblSize, String(_dataProvider[i]).length); 
 
 					maxLblSize = maxLblSize * 5 /* pixels for 1 char width */ + thickWidth + 10;
 					width = maxLblSize;
@@ -149,16 +149,16 @@
 		 * Implement the drawAxes method to draw the axis according to its orientation.*/
 		override protected function drawAxes(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
 		{
-			if (elements && elements.length>0)
+			if (dataProvider && dataProvider.length>0)
 			{
-				interval = size/elements.length;
+				interval = size/dataProvider.length;
 			}
 			else 
 				_interval = NaN;
 
-			var snap:Number, elementIndex:Number=0;
+			var snap:Number, dataProviderIndex:Number=0;
 
-			if (isNaN(maxLblSize) && elements && elements.length>0 && placement)
+			if (isNaN(maxLblSize) && dataProvider && dataProvider.length>0 && placement)
 				maxLabelSize();
 
 			if (_interval > 0)
@@ -175,7 +175,7 @@
 			
 						// create label 
 	 					label = new RasterTextPlus();
-						label.text = String(elements[elementIndex++]);
+						label.text = String(dataProvider[dataProviderIndex++]);
 	 					label.fontFamily = "verdana";
 	 					label.fontSize = sizeLabel;
 	 					label.visible = true;
@@ -199,7 +199,7 @@
 	
 						// create label 
 	 					label = new RasterTextPlus();
-						label.text = String(elements[elementIndex++]);
+						label.text = String(dataProvider[dataProviderIndex++]);
 	 					label.fontFamily = "verdana";
 	 					label.fontSize = sizeLabel;
 	 					label.visible = true;
@@ -224,14 +224,14 @@
 			{
 				case BOTTOM:
 				case TOP:
-					pos = ((elements.indexOf(dataValue)+.5) / elements.length) * size;
+					pos = ((dataProvider.indexOf(dataValue)+.5) / dataProvider.length) * size;
 					break;
 				case LEFT:
 				case RIGHT:
-					pos = size - ((elements.indexOf(dataValue)+.5) / elements.length) * size;
+					pos = size - ((dataProvider.indexOf(dataValue)+.5) / dataProvider.length) * size;
 					break;
 				case DIAGONAL:
-					pos = ((elements.indexOf(dataValue)+.5) / elements.length) * size;
+					pos = ((dataProvider.indexOf(dataValue)+.5) / dataProvider.length) * size;
 					break;
 			}
 				

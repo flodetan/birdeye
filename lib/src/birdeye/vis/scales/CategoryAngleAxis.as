@@ -38,8 +38,8 @@
 		public function set minAngle(val:Number):void
 		{
 			_minAngle = val;
-			if (elements && elements.length>0)
-				_interval = (_maxAngle - _minAngle) / elements.length;
+			if (dataProvider && dataProvider.length>0)
+				_interval = (_maxAngle - _minAngle) / dataProvider.length;
 		}
 
 		private var _maxAngle:Number = 360;
@@ -47,16 +47,16 @@
 		public function set maxAngle(val:Number):void
 		{
 			_maxAngle = val;
-			if (elements && elements.length>0)
-				_interval = (_maxAngle - _minAngle) / elements.length;
+			if (dataProvider && dataProvider.length>0)
+				_interval = (_maxAngle - _minAngle) / dataProvider.length;
 		}
 
 		/** Elements defining the category angle axis.*/
-		override public function set elements(val:Array):void
+		override public function set dataProvider(val:Array):void
 		{
-			super.elements = val;
-			if (elements && elements.length>0)
-				interval = (_maxAngle - _minAngle) / elements.length;
+			super.dataProvider = val;
+			if (dataProvider && dataProvider.length>0)
+				interval = (_maxAngle - _minAngle) / dataProvider.length;
 		}
 		
 		public function CategoryAngleAxis():void
@@ -66,10 +66,10 @@
 
 		override public function getPosition(dataValue:*):*
 		{
-			if (! isNaN(_interval) && elements && elements.indexOf(dataValue) != -1)
+			if (! isNaN(_interval) && dataProvider && dataProvider.indexOf(dataValue) != -1)
 			{
 				if (_function == null)
-					return elements.indexOf(dataValue) * _interval;
+					return dataProvider.indexOf(dataValue) * _interval;
 				else 
 					return  _function(dataValue, _minAngle, _maxAngle, interval);
 			}
