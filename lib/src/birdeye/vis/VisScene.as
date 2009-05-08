@@ -61,7 +61,7 @@
 		}
 
 		private var _showGrid:Boolean = true;
-		/** Draw the grid lines of the chart (only default chart axes and not series having own axes).*/
+		/** Draw the grid lines of the chart (only default chart axes and not elements having own axes).*/
 		[Inspectable(enumeration="true,false")]
 		public function set showGrid(val:Boolean):void
 		{
@@ -119,10 +119,10 @@
 		
 		protected var chartBounds:Rectangle;
 
-		protected var _seriesContainer:Surface = new Surface();
-		public function get seriesContainer():Surface
+		protected var _elementsContainer:Surface = new Surface();
+		public function get elementsContainer():Surface
 		{
-			return _seriesContainer;
+			return _elementsContainer;
 		}
 
 		protected var _lineColor:Number = NaN;
@@ -160,12 +160,12 @@
 			invalidateDisplayList();
 		}
 		
-		protected var _series:Array; // of ISeries
-		public function get series():Array
+		protected var _elements:Array; // of IElement
+		public function get elements():Array
 		{
-			return _series;
+			return _elements;
 		}
-		public function set series(val:Array):void 	// to be overridden
+		public function set elements(val:Array):void 	// to be overridden
 		{
 		}
 
