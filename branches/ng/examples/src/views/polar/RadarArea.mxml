@@ -54,13 +54,13 @@
 		<polar:radiusAxis>
 			<axis:LinearAxis/>
 		</polar:radiusAxis>
-		<polar:series>
+		<polar:elements>
 			<pseries:PolarAreaElement styleName="grad1" angleField="subject" radiusField="R1" displayName="R1"/>
 			<pseries:PolarAreaElement styleName="grad2" angleField="subject" radiusField="R2" displayName="R2"/>
 			<pseries:PolarAreaElement styleName="grad3" angleField="subject" radiusField="R3" displayName="R3"/>
 			<pseries:PolarAreaElement styleName="grad4" angleField="subject" radiusField="R4" displayName="R4"/>
 			<pseries:PolarAreaElement styleName="grad5" angleField="subject" radiusField="R5" displayName="R5"/>
-		</polar:series>
+		</polar:elements>
 	</polar:RadarChart>
 	<legend:Legend dataProvider="{rd}" direction="horizontal" backgroundColor="0xffffff"/>
 	
