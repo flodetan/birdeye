@@ -24,42 +24,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
+
 package birdeye.vis.interfaces
 {
-	import flash.geom.Point;
+	import com.degrafa.geometry.Line;
 	
-	public interface IAxis
+	public interface IScaleUI extends IScale
 	{
-		/** Calculates and returns the coordinate of a data value in the axis (depends on 
-		 * scale type). */
-		function getPosition(dataValue:*):*
+		/** Position the axis pointer on the specific Y coordinate value. */ 
+		function set pointerY(val:Number):void;
 
-		/** Set the interval between axis labels.*/
-		function set interval(val:Number):void
-		function get interval():Number
-
-		/** Set-get the size of this axis.*/
-		function set size(val:Number):void
-		function get size():Number
-
-		/** Set the function used by getPosition to calculate the position of the data value over the axis.*/
-		function set f(val:Function):void
-
-		/** Define the scale type (category, linear, log, date...)*/
-		function set scaleType(val:String):void
-		function get scaleType():String
+		/** Position the axis pointer on the specific X coordinate value. */ 
+		function set pointerX(val:Number):void;
 		
-/* 		/** Define the range values for the scale (for ex. type [minColor, maxColor] or [minRadius, maxRadius])
-		function set range(val:Array):void
-		function get range():Array
+		/** Get the axis pointer. Can be used to change colors, stroke, visibility...*/
+		function get pointer():Line;
 
-		/** Set the origin point of the scale.
-		function set origin(val:Point):void
-		function get origin():Point
-		
-		/** Set the angle of the scale.
-		function set angle(val:Number):void
-		function get angle():Number
- */	}
+		/** Set the axis placement.*/
+		function set placement(val:String):void
+		function get placement():String
+
+		/** The axis must provide the removal all elements when refreshed, thus insuring
+		 * both display refresh and memory clearing.*/
+		function removeAllElements():void
+	}
 }

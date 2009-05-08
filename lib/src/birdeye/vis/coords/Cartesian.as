@@ -146,9 +146,9 @@ package birdeye.vis.coords
 
 		protected var needDefaultXAxis:Boolean;
 		protected var needDefaultYAxis:Boolean;
-		protected var _xAxis:IAxisUI;
+		protected var _xAxis:IScaleUI;
 		/** Define the x axis. If it has not defined its placement, than set it to BOTTOM*/ 
-		public function set xAxis(val:IAxisUI):void
+		public function set xAxis(val:IScaleUI):void
 		{
 			_xAxis = val;
 			if (_xAxis.placement != BaseScale.BOTTOM && _xAxis.placement != BaseScale.TOP)
@@ -157,14 +157,14 @@ package birdeye.vis.coords
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get xAxis():IAxisUI
+		public function get xAxis():IScaleUI
 		{
 			return _xAxis;
 		}
 
-		protected var _yAxis:IAxisUI;
+		protected var _yAxis:IScaleUI;
 		/** Define the y axis. If it has not defined its placement, than set it to TOP*/ 
-		public function set yAxis(val:IAxisUI):void
+		public function set yAxis(val:IScaleUI):void
 		{
 			_yAxis = val;
 			if (_yAxis.placement != BaseScale.LEFT && _yAxis.placement != BaseScale.RIGHT)
@@ -173,14 +173,14 @@ package birdeye.vis.coords
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get yAxis():IAxisUI
+		public function get yAxis():IScaleUI
 		{
 			return _yAxis;
 		}
 
- 		protected var _zAxis:IAxisUI;
+ 		protected var _zAxis:IScaleUI;
 		/** Define the z axis. If it has not defined its placement, than set it to DIAGONAL*/ 
-		public function set zAxis(val:IAxisUI):void
+		public function set zAxis(val:IScaleUI):void
 		{
 			_zAxis = val;
 			if (_zAxis.placement != BaseScale.DIAGONAL)
@@ -189,7 +189,7 @@ package birdeye.vis.coords
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get zAxis():IAxisUI
+		public function get zAxis():IScaleUI
 		{
 			return _zAxis;
 		}
@@ -276,7 +276,7 @@ package birdeye.vis.coords
 						nCursors += 1;
 
 					_elementsContainer.addChild(DisplayObject(elements[i]));
-					var xAxis:IAxisUI = ICartesianElement(elements[i]).xAxis;
+					var xAxis:IScaleUI = ICartesianElement(elements[i]).xAxis;
 					if (xAxis)
 					{
 						switch (xAxis.placement)
@@ -291,7 +291,7 @@ package birdeye.vis.coords
 					} else 
 						needDefaultXAxis = true;
 						
-					var yAxis:IAxisUI = ICartesianElement(elements[i]).yAxis;
+					var yAxis:IScaleUI = ICartesianElement(elements[i]).yAxis;
 					if (yAxis)
 					{
 						switch (yAxis.placement)
@@ -306,13 +306,13 @@ package birdeye.vis.coords
 					} else 
 						needDefaultYAxis = true;
 
-					var tmpZAxis:IAxisUI = ICartesianElement(elements[i]).zAxis;
+					var tmpZAxis:IScaleUI = ICartesianElement(elements[i]).zAxis;
 					if (tmpZAxis)
 					{
 						zContainer.addChild(DisplayObject(tmpZAxis));
 						
 						// this will be replaced by a depth property 
- 						IAxis(tmpZAxis).size = width; 
+ 						IScale(tmpZAxis).size = width; 
  						// the zAxis is in reality an yAxis which is rotated of 90 degrees
  						// on its X coordinate. This will be replaced by a real z axis, when 
  						// FP will provide methods to draw real 3d lines
@@ -330,7 +330,7 @@ package birdeye.vis.coords
 				_is3D = true;
 				zContainer.addChild(DisplayObject(_zAxis));
 				// this will be replaced by a depth property 
- 				IAxis(_zAxis).size = width; 
+ 				IScale(_zAxis).size = width; 
  				// the zAxis is in reality an yAxis which is rotated of 90 degrees
  				// on its X coordinate. This will be replaced by a real z axis, when 
  				// FP will provide methods to draw real 3d lines
@@ -445,7 +445,7 @@ package birdeye.vis.coords
 			for (var i:Number = 0; i<leftContainer.numChildren; i++)
 			{
 				tmpSize += XYZAxis(leftContainer.getChildAt(i)).maxLblSize;
-				IAxis(leftContainer.getChildAt(i)).size = leftContainer.height;
+				IScale(leftContainer.getChildAt(i)).size = leftContainer.height;
 			}
 			
 			leftContainer.width = tmpSize;
@@ -454,7 +454,7 @@ package birdeye.vis.coords
 			for (i = 0; i<rightContainer.numChildren; i++)
 			{
 				tmpSize += XYZAxis(rightContainer.getChildAt(i)).maxLblSize;
-				IAxis(rightContainer.getChildAt(i)).size = rightContainer.height;				
+				IScale(rightContainer.getChildAt(i)).size = rightContainer.height;				
 			}
 			
 			rightContainer.width = tmpSize;
@@ -463,7 +463,7 @@ package birdeye.vis.coords
 			for (i = 0; i<bottomContainer.numChildren; i++)
 			{
 				tmpSize += XYZAxis(bottomContainer.getChildAt(i)).maxLblSize;
-				IAxis(bottomContainer.getChildAt(i)).size = bottomContainer.width;
+				IScale(bottomContainer.getChildAt(i)).size = bottomContainer.width;
 			}
 			
 			bottomContainer.height = tmpSize;
@@ -472,7 +472,7 @@ package birdeye.vis.coords
 			for (i = 0; i<topContainer.numChildren; i++)
 			{
 				tmpSize += XYZAxis(topContainer.getChildAt(i)).maxLblSize;
-				IAxis(topContainer.getChildAt(i)).size = topContainer.width;
+				IScale(topContainer.getChildAt(i)).size = topContainer.width;
 			}
 			
 			topContainer.height = tmpSize;
@@ -493,7 +493,7 @@ package birdeye.vis.coords
 				// check if a default y axis exists
 				if (yAxis)
 				{
-					if (yAxis is IEnumerableAxis)
+					if (yAxis is IEnumerableScale)
 					{
 						for (i = 0; i<nCursors; i++)
 						{
@@ -509,10 +509,10 @@ package birdeye.vis.coords
 								while (!currentElement.cursor.afterLast)
 								{
 									if (catElements.indexOf(
-										currentElement.cursor.current[IEnumerableAxis(yAxis).categoryField]) 
+										currentElement.cursor.current[IEnumerableScale(yAxis).categoryField]) 
 										== -1)
 										catElements[j++] = 
-											currentElement.cursor.current[IEnumerableAxis(yAxis).categoryField];
+											currentElement.cursor.current[IEnumerableScale(yAxis).categoryField];
 									currentElement.cursor.moveNext();
 								}
 							}
@@ -524,21 +524,21 @@ package birdeye.vis.coords
 							while (!cursor.afterLast)
 							{
 								// if the category value already exists in the axis, than skip it
-								if (catElements.indexOf(cursor.current[IEnumerableAxis(yAxis).categoryField]) == -1)
+								if (catElements.indexOf(cursor.current[IEnumerableScale(yAxis).categoryField]) == -1)
 									catElements[j++] = 
-										cursor.current[IEnumerableAxis(yAxis).categoryField];
+										cursor.current[IEnumerableScale(yAxis).categoryField];
 								cursor.moveNext();
 							}
 						}
 
 						// set the elements property of the CategoryAxis
 						if (catElements.length > 0)
-							IEnumerableAxis(yAxis).dataProvider = catElements;
+							IEnumerableScale(yAxis).dataProvider = catElements;
 					} else {
 						// if the default y axis is numeric, than calculate its min max values
 						maxMin = getMaxMinYValueFromElementsWithoutYAxis();
-						INumerableAxis(yAxis).max = maxMin[0];
-						INumerableAxis(yAxis).min = maxMin[1];
+						INumerableScale(yAxis).max = maxMin[0];
+						INumerableScale(yAxis).min = maxMin[1];
 					}
 				} 
 				
@@ -548,7 +548,7 @@ package birdeye.vis.coords
 				// check if a default y axis exists
 				if (xAxis)
 				{
-					if (xAxis is IEnumerableAxis)
+					if (xAxis is IEnumerableScale)
 					{
 						for (i = 0; i<nCursors; i++)
 						{
@@ -564,10 +564,10 @@ package birdeye.vis.coords
 								while (!currentElement.cursor.afterLast)
 								{
 									if (catElements.indexOf(
-										currentElement.cursor.current[IEnumerableAxis(xAxis).categoryField]) 
+										currentElement.cursor.current[IEnumerableScale(xAxis).categoryField]) 
 										== -1)
 										catElements[j++] = 
-											currentElement.cursor.current[IEnumerableAxis(xAxis).categoryField];
+											currentElement.cursor.current[IEnumerableScale(xAxis).categoryField];
 									currentElement.cursor.moveNext();
 								}
 							}
@@ -578,21 +578,21 @@ package birdeye.vis.coords
 							while (!cursor.afterLast)
 							{
 								// if the category value already exists in the axis, than skip it
-								if (catElements.indexOf(cursor.current[IEnumerableAxis(xAxis).categoryField]) == -1)
+								if (catElements.indexOf(cursor.current[IEnumerableScale(xAxis).categoryField]) == -1)
 									catElements[j++] = 
-										cursor.current[IEnumerableAxis(xAxis).categoryField];
+										cursor.current[IEnumerableScale(xAxis).categoryField];
 								cursor.moveNext();
 							}
 						}
 						
 						// set the elements property of the CategoryAxis
 						if (catElements.length > 0)
-							IEnumerableAxis(xAxis).dataProvider = catElements;
+							IEnumerableScale(xAxis).dataProvider = catElements;
 					} else {
 						// if the default x axis is numeric, than calculate its min max values
 						maxMin = getMaxMinXValueFromElementsWithoutXAxis();
-						INumerableAxis(xAxis).max = maxMin[0];
-						INumerableAxis(xAxis).min = maxMin[1];
+						INumerableScale(xAxis).max = maxMin[0];
+						INumerableScale(xAxis).min = maxMin[1];
 					}
 				} 
 				
@@ -602,7 +602,7 @@ package birdeye.vis.coords
 				// check if a default z axis exists
 				if (zAxis)
 				{
-					if (zAxis is IEnumerableAxis)
+					if (zAxis is IEnumerableScale)
 					{
 						for (i = 0; i<nCursors; i++)
 						{
@@ -618,10 +618,10 @@ package birdeye.vis.coords
 								while (!currentElement.cursor.afterLast)
 								{
 									if (catElements.indexOf(
-										currentElement.cursor.current[IEnumerableAxis(zAxis).categoryField]) 
+										currentElement.cursor.current[IEnumerableScale(zAxis).categoryField]) 
 										== -1)
 										catElements[j++] = 
-											currentElement.cursor.current[IEnumerableAxis(zAxis).categoryField];
+											currentElement.cursor.current[IEnumerableScale(zAxis).categoryField];
 									currentElement.cursor.moveNext();
 								}
 							}
@@ -632,21 +632,21 @@ package birdeye.vis.coords
 							while (!cursor.afterLast)
 							{
 								// if the category value already exists in the axis, than skip it
-								if (catElements.indexOf(cursor.current[IEnumerableAxis(zAxis).categoryField]) == -1)
+								if (catElements.indexOf(cursor.current[IEnumerableScale(zAxis).categoryField]) == -1)
 									catElements[j++] = 
-										cursor.current[IEnumerableAxis(zAxis).categoryField];
+										cursor.current[IEnumerableScale(zAxis).categoryField];
 								cursor.moveNext();
 							}
 						}
 						
 						// set the elements property of the CategoryAxis
 						if (catElements.length > 0)
-							IEnumerableAxis(zAxis).dataProvider = catElements;
+							IEnumerableScale(zAxis).dataProvider = catElements;
 					} else {
 						// if the default x axis is numeric, than calculate its min max values
 						maxMin = getMaxMinZValueFromElementsWithoutZAxis();
-						INumerableAxis(zAxis).max = maxMin[0];
-						INumerableAxis(zAxis).min = maxMin[1];
+						INumerableScale(zAxis).max = maxMin[0];
+						INumerableScale(zAxis).min = maxMin[1];
 					}
 				} 
 
@@ -774,28 +774,28 @@ package birdeye.vis.coords
 
 				element.cursor.seek(CursorBookmark.FIRST);
 				
-				if (element.xAxis is IEnumerableAxis)
+				if (element.xAxis is IEnumerableScale)
 				{
 					while (!element.cursor.afterLast)
 					{
 						// if the category value already exists in the axis, than skip it
-						if (catElements.indexOf(element.cursor.current[IEnumerableAxis(element.xAxis).categoryField]) == -1)
+						if (catElements.indexOf(element.cursor.current[IEnumerableScale(element.xAxis).categoryField]) == -1)
 							catElements[j++] = 
-								element.cursor.current[IEnumerableAxis(element.xAxis).categoryField];
+								element.cursor.current[IEnumerableScale(element.xAxis).categoryField];
 						element.cursor.moveNext();
 					}
 					
 					// set the elements propery of the CategoryAxis owned by the current element
 					if (catElements.length > 0)
-						IEnumerableAxis(element.xAxis).dataProvider = catElements;
+						IEnumerableScale(element.xAxis).dataProvider = catElements;
 	
-				} else if (element.xAxis is INumerableAxis)
+				} else if (element.xAxis is INumerableScale)
 				{
 					// if the x axis is numeric than set its maximum and minimum values 
 					// if the max and min are not yet defined for the element, than they are calculated now
-					INumerableAxis(element.xAxis).max =
+					INumerableScale(element.xAxis).max =
 						element.maxXValue;
-					INumerableAxis(element.xAxis).min =
+					INumerableScale(element.xAxis).min =
 						element.minXValue;
 				}
 	
@@ -803,28 +803,28 @@ package birdeye.vis.coords
 				j = 0;
 				element.cursor.seek(CursorBookmark.FIRST);
 				
-				if (element.yAxis is IEnumerableAxis)
+				if (element.yAxis is IEnumerableScale)
 				{
 					while (!element.cursor.afterLast)
 					{
 						// if the category value already exists in the axis, than skip it
-						if (catElements.indexOf(element.cursor.current[IEnumerableAxis(element.yAxis).categoryField]) == -1)
+						if (catElements.indexOf(element.cursor.current[IEnumerableScale(element.yAxis).categoryField]) == -1)
 							catElements[j++] = 
-								element.cursor.current[IEnumerableAxis(element.yAxis).categoryField];
+								element.cursor.current[IEnumerableScale(element.yAxis).categoryField];
 						element.cursor.moveNext();
 					}
 							
 					// set the elements propery of the CategoryAxis owned by the current element
 					if (catElements.length > 0)
-						IEnumerableAxis(element.yAxis).dataProvider = catElements;
+						IEnumerableScale(element.yAxis).dataProvider = catElements;
 	
-				} else if (element.yAxis is INumerableAxis)
+				} else if (element.yAxis is INumerableScale)
 				{
 					// if the y axis is numeric than set its maximum and minimum values 
 					// if the max and min are not yet defined for the element, than they are calculated now
-					INumerableAxis(element.yAxis).max =
+					INumerableScale(element.yAxis).max =
 						element.maxYValue;
-					INumerableAxis(element.yAxis).min =
+					INumerableScale(element.yAxis).min =
 						element.minYValue;
 				}
 	
@@ -832,28 +832,28 @@ package birdeye.vis.coords
 				j = 0;
 				element.cursor.seek(CursorBookmark.FIRST);
 				
-				if (element.zAxis is IEnumerableAxis)
+				if (element.zAxis is IEnumerableScale)
 				{
 					while (!element.cursor.afterLast)
 					{
 						// if the category value already exists in the axis, than skip it
-						if (catElements.indexOf(element.cursor.current[IEnumerableAxis(element.zAxis).categoryField]) == -1)
+						if (catElements.indexOf(element.cursor.current[IEnumerableScale(element.zAxis).categoryField]) == -1)
 							catElements[j++] = 
-								element.cursor.current[IEnumerableAxis(element.zAxis).categoryField];
+								element.cursor.current[IEnumerableScale(element.zAxis).categoryField];
 						element.cursor.moveNext();
 					}
 							
 					// set the elements propery of the CategoryAxis owned by the current element
 					if (catElements.length > 0)
-						IEnumerableAxis(element.zAxis).dataProvider = catElements;
+						IEnumerableScale(element.zAxis).dataProvider = catElements;
 	
-				} else if (element.zAxis is INumerableAxis)
+				} else if (element.zAxis is INumerableScale)
 				{
 					// if the axis is numeric than set its maximum and minimum values 
 					// if the max and min are not yet defined for the element, than they are calculated now
-					INumerableAxis(element.zAxis).max =
+					INumerableScale(element.zAxis).max =
 						element.maxZValue;
-					INumerableAxis(element.yAxis).min =
+					INumerableScale(element.yAxis).min =
 						element.minZValue;
 				}
 
@@ -879,13 +879,13 @@ package birdeye.vis.coords
 					gridGG = new GeometryGroup();
 				}
 
-				if (yAxis is INumerableAxis)
+				if (yAxis is INumerableScale)
 				{
 					var minY:Number = 0;
 					var maxY:Number = yAxis.size;
 					
 					// since the yAxis is up side down, the y interval is given by:
-					var interval:Number = yAxis.getPosition(INumerableAxis(yAxis).max - yAxis.interval);
+					var interval:Number = yAxis.getPosition(INumerableScale(yAxis).max - yAxis.interval);
 					var i:Number = 0;
 					
 					for (var yValue:Number = minY; yValue < maxY; yValue += interval)
@@ -947,8 +947,8 @@ package birdeye.vis.coords
 				for (i = 0; i<leftContainer.numChildren; i++)
 				{
 					child = leftContainer.getChildAt(0); 
-					if (child is IAxisUI)
-						IAxisUI(child).removeAllElements();
+					if (child is IScaleUI)
+						IScaleUI(child).removeAllElements();
 				}
 				leftContainer.removeAllChildren();
 			}
@@ -958,8 +958,8 @@ package birdeye.vis.coords
 				for (i = 0; i<rightContainer.numChildren; i++)
 				{
 					child = rightContainer.getChildAt(0); 
-					if (child is IAxisUI)
-						IAxisUI(child).removeAllElements();
+					if (child is IScaleUI)
+						IScaleUI(child).removeAllElements();
 				}
 				rightContainer.removeAllChildren();
 			}
@@ -969,8 +969,8 @@ package birdeye.vis.coords
 				for (i = 0; i<topContainer.numChildren; i++)
 				{
 					child = topContainer.getChildAt(0); 
-					if (child is IAxisUI)
-						IAxisUI(child).removeAllElements();
+					if (child is IScaleUI)
+						IScaleUI(child).removeAllElements();
 				}
 				topContainer.removeAllChildren();
 			}
@@ -980,8 +980,8 @@ package birdeye.vis.coords
 				for (i = 0; i<bottomContainer.numChildren; i++)
 				{
 					child = bottomContainer.getChildAt(0); 
-					if (child is IAxisUI)
-						IAxisUI(child).removeAllElements();
+					if (child is IScaleUI)
+						IScaleUI(child).removeAllElements();
 				}
 				bottomContainer.removeAllChildren();
 			}
@@ -991,8 +991,8 @@ package birdeye.vis.coords
 				for (i = 0; i<bottomContainer.numChildren; i++)
 				{
 					child = bottomContainer.getChildAt(0); 
-					if (child is IAxisUI)
-						IAxisUI(child).removeAllElements();
+					if (child is IScaleUI)
+						IScaleUI(child).removeAllElements();
 				}
 				bottomContainer.removeAllChildren();
 			}

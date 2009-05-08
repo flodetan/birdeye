@@ -35,10 +35,10 @@
 	import flash.text.TextFieldAutoSize;
 	
 	import birdeye.vis.scales.*;
-	import birdeye.vis.interfaces.IEnumerableAxis;
+	import birdeye.vis.interfaces.IEnumerableScale;
 	
 	[Exclude(name="scaleType", kind="property")]
-	public class CategoryAxis extends XYZAxis implements IEnumerableAxis
+	public class Category extends XYZAxis implements IEnumerableScale
 	{
 		/** @Private
 		 * The scale type cannot be changed, since it's already "category".*/
@@ -76,7 +76,7 @@
 		 
 		// UIComponent flow
 		
-		public function CategoryAxis()
+		public function Category()
 		{
 			super();
 			_scaleType = BaseScale.CATEGORY;

@@ -29,7 +29,7 @@ package birdeye.vis.elements
 {
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.interfaces.IElement;
-	import birdeye.vis.interfaces.INumerableAxis;
+	import birdeye.vis.interfaces.INumerableScale;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
@@ -108,15 +108,15 @@ package birdeye.vis.elements
 			invalidateDisplayList();
 		}
 
-		private var _colorAxis:INumerableAxis;
+		private var _colorAxis:INumerableScale;
 		/** Define an axis to set the colorField for data items.*/
-		public function set colorAxis(val:INumerableAxis):void
+		public function set colorAxis(val:INumerableScale):void
 		{
 			_colorAxis = val;
 
 			invalidateDisplayList();
 		}
-		public function get colorAxis():INumerableAxis
+		public function get colorAxis():INumerableScale
 		{
 			return _colorAxis;
 		}

@@ -27,7 +27,7 @@
  
  package birdeye.vis.interfaces
 {
-	public interface IEnumerableAxis extends IAxis
+	public interface IEnumerableScale extends IScale
 	{
 		/** Set-get the dataProvider that have to be enumerable. */
 		function set dataProvider(val:Array):void

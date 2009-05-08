@@ -36,10 +36,10 @@ package birdeye.vis.scales
 	import flash.text.TextFieldAutoSize;
 	
 	import birdeye.vis.scales.BaseScale;
-	import birdeye.vis.interfaces.IAxisUI;
-	import birdeye.vis.interfaces.INumerableAxis;
+	import birdeye.vis.interfaces.IScaleUI;
+	import birdeye.vis.interfaces.INumerableScale;
 
-	public class NumericAxis extends XYZAxis implements INumerableAxis, IAxisUI
+	public class NumericAxis extends XYZAxis implements INumerableScale, IScaleUI
 	{
 	
 		/** @Private

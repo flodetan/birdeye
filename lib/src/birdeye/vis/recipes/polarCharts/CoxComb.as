@@ -217,7 +217,7 @@ package birdeye.vis.recipes.polarCharts
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
- 			if ((angleAxis && angleAxis is CategoryAngleAxis))
+ 			if ((angleAxis && angleAxis is CategoryAngle))
 				drawLabels()
  		}
 		
@@ -312,11 +312,11 @@ package birdeye.vis.recipes.polarCharts
 		private var gg:GeometryGroup;
 		private function drawLabels():void
 		{
-			var aAxis:CategoryAngleAxis;
+			var aAxis:CategoryAngle;
 			if (radarAxis)
 				aAxis = radarAxis.angleAxis;
 			else
-				aAxis = CategoryAngleAxis(angleAxis);
+				aAxis = CategoryAngle(angleAxis);
 			
 			var catElements:Array = aAxis.dataProvider;
 			var interval:int = aAxis.interval;

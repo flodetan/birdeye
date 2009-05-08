@@ -27,8 +27,8 @@
 
 package birdeye.vis.recipes.polarCharts
 {
-	import birdeye.vis.scales.*;
 	import birdeye.vis.coords.Polar;
+	import birdeye.vis.scales.*;
 	
 	public class PieChart extends Polar
 	{		
@@ -39,7 +39,7 @@ package birdeye.vis.recipes.polarCharts
 			angleAxis.size = 360;
 			radiusAxis = new NumericAxis();
 			NumericAxis(radiusAxis).showAxis = false;
-			radiusAxis.scaleType = BaseAxis.CONSTANT;
+			radiusAxis.scaleType = BaseScale.CONSTANT;
 		}
 	}
 }
