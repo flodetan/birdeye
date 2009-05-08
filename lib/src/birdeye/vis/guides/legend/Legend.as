@@ -42,7 +42,7 @@ package birdeye.vis.guides.legend
 	import mx.core.Application;
 	
 	import birdeye.vis.VisScene;
-	import birdeye.vis.interfaces.ISeries;
+	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	
 	public class Legend extends Box
@@ -96,7 +96,7 @@ package birdeye.vis.guides.legend
  					removeChildAt(0);
 				}
 
-				for (i = 0; i<_dataProvider.series.length; i++)
+				for (i = 0; i<_dataProvider.elements.length; i++)
 				{
 					var surf:Surface = new Surface();
 					var gg:GeometryGroup = new GeometryGroup();
@@ -106,32 +106,32 @@ package birdeye.vis.guides.legend
 					label.fontFamily = "verdana";
 					label.x = 15;
 
-					if (ISeries(_dataProvider.series[i]).displayName)
+					if (IElement(_dataProvider.elements[i]).displayName)
 					{
-						label.text = ISeries(_dataProvider.series[i]).displayName;
+						label.text = IElement(_dataProvider.elements[i]).displayName;
 						label.fill = new SolidFill(0x000000);
 					}
 
 					var bounds:Rectangle = new Rectangle(0,0, 10,10);
-					if (ISeries(_dataProvider.series[i]).itemRenderer && ISeries(_dataProvider.series[i]).displayName)
+					if (IElement(_dataProvider.elements[i]).itemRenderer && IElement(_dataProvider.elements[i]).displayName)
 					{
-/* 						var rendererClass:Class = ISeries(_dataProvider.series[i]).itemRenderer;
-						var renderer:ISeriesDataRenderer = new rendererClass();
+/* 						var rendererClass:Class = IElement(_dataProvider.series[i]).itemRenderer;
+						var renderer:IElementDataRenderer = new rendererClass();
  */
-						var renderer:Class = ISeries(_dataProvider.series[i]).itemRenderer;
+						var renderer:Class = IElement(_dataProvider.elements[i]).itemRenderer;
 
  						var geom:Geometry;
- 						if (ISeries(_dataProvider.series[i]).source)
+ 						if (IElement(_dataProvider.elements[i]).source)
  						{
- 							geom = new RasterRenderer(bounds, ISeries(_dataProvider.series[i]).source);
+ 							geom = new RasterRenderer(bounds, IElement(_dataProvider.elements[i]).source);
  						} else {
  							geom = new renderer(bounds);
  						}
-						Geometry(geom).fill = ISeries(_dataProvider.series[i]).getFill() != null ? 
-								ISeries(_dataProvider.series[i]).getFill()
+						Geometry(geom).fill = IElement(_dataProvider.elements[i]).getFill() != null ? 
+								IElement(_dataProvider.elements[i]).getFill()
 								 : new SolidFill(0xdddddd);
-						geom.stroke = ISeries(_dataProvider.series[i]).getStroke() != null ?
-								ISeries(_dataProvider.series[i]).getStroke() 
+						geom.stroke = IElement(_dataProvider.elements[i]).getStroke() != null ?
+								IElement(_dataProvider.elements[i]).getStroke() 
 								 : new SolidStroke(0x999999);
 						gg.geometryCollection.addItem(geom);
 
