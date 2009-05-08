@@ -27,43 +27,37 @@
  
 package birdeye.vis.interfaces
 {
-	import birdeye.vis.coords.Cartesian;
+	import birdeye.vis.coords.Polar;
 	
-	public interface ICartesianSeries extends ISeries
+	public interface IPolarElement extends IElement
 	{
 		/** Set the chart target. This allows to share axes and other properties
-		 * of the chart among several series.*/
-		function set chart(val:Cartesian):void;
-		function get chart():Cartesian;
+		 * of the chart among several elements.*/
+		function set polarChart(val:Polar):void;
+		function get polarChart():Polar
 		
-		/** Set the yField to filter vertical data values.*/
-		function set yField(val:String):void;
+		/** Set the angleField to filter vertical data values.*/
+		function set angleField(val:String):void;
+		function get angleField():String;
 
-		/** Set the xField to filter horizontal data values.*/
-		function set xField(val:String):void;
+		/** Set the radiusField to filter horizontal data values.*/
+		function set radiusField(val:String):void;
+		function get radiusField():String;
 
-		/** Set the x axis.*/
-		function set xAxis(val:IAxisUI):void;
+		/** Set the angle axis.*/
+		function set angleAxis(val:IAxis):void;
+		function get angleAxis():IAxis;
 
-		/** Set the y axis.*/
-		function set yAxis(val:IAxisUI):void;
+		/** Set the radius axis.*/
+		function set radiusAxis(val:IAxis):void;
+		function get radiusAxis():IAxis;
 
-		/** Set the z axis.*/
-		function set zAxis(val:IAxisUI):void;
+		function get maxAngleValue():Number;
+		function get minAngleValue():Number;
 
-		function get yField():String;
-		function get xField():String;
-		function get xAxis():IAxisUI;
-		function get yAxis():IAxisUI;
-		function get zAxis():IAxisUI;
+		function get maxRadiusValue():Number;
+		function get minRadiusValue():Number;
 
-		function get maxZValue():Number;
-		function get minZValue():Number;
-
-		function get maxYValue():Number;
-		function get minYValue():Number;
-
-		function get maxXValue():Number;
-		function get minXValue():Number;
+		function get totalAnglePositiveValue():Number;
 	}
 }

@@ -34,7 +34,7 @@ package birdeye.vis.interfaces
 	
 	import mx.collections.IViewCursor;
 	
-	public interface ISeries extends IRasterRenderer
+	public interface IElement extends IRasterRenderer
 	{
 		/** Set the colorField to filter horizontal data values.*/
 		function set colorField(val:String):void;
@@ -46,10 +46,10 @@ package birdeye.vis.interfaces
 		function get maxColorValue():Number;
 		function get minColorValue():Number;
 
-		/** Remove all elements from the series (Surface component).*/
+		/** Remove all elements from the Element (Surface component).*/
 		function removeAllElements():void;
 		
-		/** Set the data provider of a cartesian series, which must be a CartesianChart.*/
+		/** Set the data provider of a cartesian Element, which must be a CartesianChart.*/
 		function set dataProvider(val:Object):void;
 		function get dataProvider():Object;
 
@@ -63,7 +63,7 @@ package birdeye.vis.interfaces
 		function set itemRenderer(val:Class):void;
 		function get itemRenderer():Class;
 
-		/** Set the cursor used by the series. It can either derive from the series own 
+		/** Set the cursor used by the Element. It can either derive from the Element own 
 		 * dataProvider or from the chart dataProvider.*/
 		function set cursor(val:IViewCursor):void;
 		function get cursor():IViewCursor;

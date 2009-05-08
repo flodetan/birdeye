@@ -41,6 +41,10 @@
 		function set totalPositiveValue(val:Number):void
 		function get totalPositiveValue():Number
 
+		/** Set-get the sum of all values that are feeding the axis.*/
+/* 		function set sum(val:Number):void
+		function get sum():Number */
+
 		/** Set the base at zero. */
 		function set baseAtZero(val:Boolean):void
 	}
