@@ -135,10 +135,13 @@ package org.un.cava.birdeye.geovis.controls.viewers.toolbars
 
 			map = Map(event.target);
 			
-			// calculate the this.width and this.height based on a scale of the original map size 
-			width = map.width / scale;
-			height = map.height / scale;
-			drawAll();
+			if (!_target || _target == map.parent)
+			{
+				// calculate the this.width and this.height based on a scale of the original map size 
+				width = map.width / scale;
+				height = map.height / scale;
+				drawAll();
+			}
 		}
 	
 		/**
