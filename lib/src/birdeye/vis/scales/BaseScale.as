@@ -350,11 +350,12 @@ package birdeye.vis.scales
 			return _showAxis;
 		}
 
-		private var _range:Array;
+		protected var _range:Array; /* of numerals */
  		/** Define the range values for the scale (for ex. type [minColor, maxColor] or [minRadius, maxRadius]).*/
 		public function set range(val:Array):void
 		{
 			_range = val;
+			_range.sort(Array.NUMERIC);
 		}
 		public function get range():Array
 		{

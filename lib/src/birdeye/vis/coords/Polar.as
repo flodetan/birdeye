@@ -132,15 +132,15 @@ package birdeye.vis.coords
 			invalidateDisplayList();
 		}
 
-		protected var _radarAxis:RadarAxis;
-		public function set radarAxis(val:RadarAxis):void
+		protected var _radarAxis:MutliScale;
+		public function set radarAxis(val:MutliScale):void
 		{
 			_radarAxis = val;
 			_radarAxis.polarChart = this;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get radarAxis():RadarAxis
+		public function get radarAxis():MutliScale
 		{
 			return _radarAxis;
 		}
@@ -672,15 +672,15 @@ package birdeye.vis.coords
 		 * select a specific default setup.*/
 		protected function createAngleAxis():void
 		{
-			angleAxis = new PercentAngleAxis();
+			angleAxis = new PercentAngle();
 
 			// and/or to be overridden
 		}
 		/** @Private */
 		protected function createRadiusAxis():void
 		{
-			radiusAxis = new NumericAxis();
-			NumericAxis(radiusAxis).showAxis = false;
+			radiusAxis = new Numeric();
+			Numeric(radiusAxis).showAxis = false;
 
 			// and/or to be overridden
 		}

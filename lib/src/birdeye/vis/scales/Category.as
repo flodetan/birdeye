@@ -27,6 +27,8 @@
  
  package birdeye.vis.scales
 {
+	import birdeye.vis.interfaces.IEnumerableScale;
+	
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
@@ -34,11 +36,8 @@
 	
 	import flash.text.TextFieldAutoSize;
 	
-	import birdeye.vis.scales.*;
-	import birdeye.vis.interfaces.IEnumerableScale;
-	
 	[Exclude(name="scaleType", kind="property")]
-	public class Category extends XYZAxis implements IEnumerableScale
+	public class Category extends XYZ implements IEnumerableScale
 	{
 		/** @Private
 		 * The scale type cannot be changed, since it's already "category".*/
@@ -73,7 +72,14 @@
 		{
 			return _categoryField;
 		}
-		 
+		
+		private var _initialOffset:Number = .5;
+		public function set initialOffset(val:Number):void
+		{
+			_initialOffset = val;
+			invalidateDisplayList();
+		} 
+		
 		// UIComponent flow
 		
 		public function Category()
@@ -224,14 +230,14 @@
 			{
 				case BOTTOM:
 				case TOP:
-					pos = ((dataProvider.indexOf(dataValue)+.5) / dataProvider.length) * size;
+					pos = ((dataProvider.indexOf(dataValue)+_initialOffset) / dataProvider.length) * size;
 					break;
 				case LEFT:
 				case RIGHT:
-					pos = size - ((dataProvider.indexOf(dataValue)+.5) / dataProvider.length) * size;
+					pos = size - ((dataProvider.indexOf(dataValue)+_initialOffset) / dataProvider.length) * size;
 					break;
 				case DIAGONAL:
-					pos = ((dataProvider.indexOf(dataValue)+.5) / dataProvider.length) * size;
+					pos = ((dataProvider.indexOf(dataValue)+_initialOffset) / dataProvider.length) * size;
 					break;
 			}
 				

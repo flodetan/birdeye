@@ -36,7 +36,7 @@ package birdeye.vis.scales
 	
 	import flash.events.Event;
 	
-	public class XYZAxis extends BaseScale 
+	public class XYZ extends BaseScale 
 	{
 		protected var readyForLayout:Boolean = false;
 
@@ -87,7 +87,7 @@ package birdeye.vis.scales
 		}
 
 		// UIComponent flow
-		public function XYZAxis()
+		public function XYZ()
 		{
 			super();
 		}

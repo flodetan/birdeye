@@ -444,7 +444,7 @@ package birdeye.vis.coords
 			var tmpSize:Number = 0;
 			for (var i:Number = 0; i<leftContainer.numChildren; i++)
 			{
-				tmpSize += XYZAxis(leftContainer.getChildAt(i)).maxLblSize;
+				tmpSize += XYZ(leftContainer.getChildAt(i)).maxLblSize;
 				IScale(leftContainer.getChildAt(i)).size = leftContainer.height;
 			}
 			
@@ -453,7 +453,7 @@ package birdeye.vis.coords
 
 			for (i = 0; i<rightContainer.numChildren; i++)
 			{
-				tmpSize += XYZAxis(rightContainer.getChildAt(i)).maxLblSize;
+				tmpSize += XYZ(rightContainer.getChildAt(i)).maxLblSize;
 				IScale(rightContainer.getChildAt(i)).size = rightContainer.height;				
 			}
 			
@@ -462,7 +462,7 @@ package birdeye.vis.coords
 
 			for (i = 0; i<bottomContainer.numChildren; i++)
 			{
-				tmpSize += XYZAxis(bottomContainer.getChildAt(i)).maxLblSize;
+				tmpSize += XYZ(bottomContainer.getChildAt(i)).maxLblSize;
 				IScale(bottomContainer.getChildAt(i)).size = bottomContainer.width;
 			}
 			
@@ -471,7 +471,7 @@ package birdeye.vis.coords
 
 			for (i = 0; i<topContainer.numChildren; i++)
 			{
-				tmpSize += XYZAxis(topContainer.getChildAt(i)).maxLblSize;
+				tmpSize += XYZ(topContainer.getChildAt(i)).maxLblSize;
 				IScale(topContainer.getChildAt(i)).size = topContainer.width;
 			}
 			
@@ -927,13 +927,13 @@ package birdeye.vis.coords
 		 * axis's positions. */
 		protected function createYAxis():void
 		{
-				yAxis = new ConstantAxis();
+				yAxis = new Constant();
 				yAxis.placement = BaseScale.LEFT;
 		}
 		/** @Private */
 		protected function createXAxis():void
 		{
-			xAxis = new ConstantAxis();
+			xAxis = new Constant();
 			xAxis.placement = BaseScale.BOTTOM;
 		}
 

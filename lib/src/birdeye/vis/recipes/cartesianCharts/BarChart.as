@@ -179,7 +179,7 @@ package birdeye.vis.recipes.cartesianCharts
 		/** @Private */
 		override protected function createXAxis():void
 		{
-			xAxis = new LinearAxis();
+			xAxis = new Linear();
 			xAxis.placement = BaseScale.BOTTOM;
 		}
 	}

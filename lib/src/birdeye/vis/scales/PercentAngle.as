@@ -30,7 +30,7 @@ package birdeye.vis.scales
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.scales.BaseScale;
 	
-	public class PercentAxis extends NumericAxis
+	public class PercentAngle extends Percent
 	{
 		/** Set the scale type, LINEAR by default. */
 		override public function set scaleType(val:String):void
@@ -48,15 +48,17 @@ package birdeye.vis.scales
 			_max = NaN;
 		}
 		
-		public function PercentAxis():void
+		public function PercentAngle():void
 		{
-			showAxis = false;
+			super();
+			_scaleType = BaseScale.PERCENT;
+			_size = 359.99;
 		}
 
 		override public function getPosition(dataValue:*):*
 		{
-			if (isNaN(_size))
-				size = 100;
+			if (isNaN(_size) || _size == 360)
+				size = 359.99;
 			return size * Number(dataValue) / _totalPositiveValue;
 		} 
 	}

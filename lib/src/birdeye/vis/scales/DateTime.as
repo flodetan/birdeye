@@ -27,39 +27,12 @@
  
 package birdeye.vis.scales
 {
-	import birdeye.vis.interfaces.INumerableScale;
-	import birdeye.vis.scales.BaseScale;
-	
-	public class PercentAngleAxis extends PercentAxis
+	public class DateTime extends XYZ 
 	{
-		/** Set the scale type, LINEAR by default. */
-		override public function set scaleType(val:String):void
-		{
-			_scaleType = BaseScale.PERCENT;
-		}
-		
-		override public function set min(val:Number):void
-		{
-			_min = NaN;
-		}
-
-		override public function set max(val:Number):void
-		{
-			_max = NaN;
-		}
-		
-		public function PercentAngleAxis():void
+		public function DateTime()
 		{
 			super();
-			_scaleType = BaseScale.PERCENT;
-			_size = 359.99;
 		}
-
-		override public function getPosition(dataValue:*):*
-		{
-			if (isNaN(_size) || _size == 360)
-				size = 359.99;
-			return size * Number(dataValue) / _totalPositiveValue;
-		} 
+		
 	}
 }

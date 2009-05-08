@@ -120,17 +120,17 @@ package birdeye.vis.elements.collision
 			{
 				if (! isListening[OWN_VERTICAL_INTERVAL_CHANGES])
 				{
-					XYZAxis(yAxis).addEventListener("IntervalChanged", update);
+					XYZ(yAxis).addEventListener("IntervalChanged", update);
 					isListening[OWN_VERTICAL_INTERVAL_CHANGES] = true;
 				}
 				if (isListening[CHART_VERTICAL_INTERVAL_CHANGES])
 				{
-					XYZAxis(chart.yAxis).removeEventListener("IntervalChanged", update);
+					XYZ(chart.yAxis).removeEventListener("IntervalChanged", update);
 				}
 			} else if (chart && chart.yAxis) {
 				if (! isListening[CHART_VERTICAL_INTERVAL_CHANGES])
 				{
-					XYZAxis(chart.yAxis).addEventListener("IntervalChanged", update);
+					XYZ(chart.yAxis).addEventListener("IntervalChanged", update);
 					isListening[CHART_VERTICAL_INTERVAL_CHANGES] = true;
 				}
 			}
@@ -139,17 +139,17 @@ package birdeye.vis.elements.collision
 			{
 				if (! isListening[OWN_HORIZONTAL_INTERVAL_CHANGES])
 				{
-					XYZAxis(xAxis).addEventListener("IntervalChanged", update);
+					XYZ(xAxis).addEventListener("IntervalChanged", update);
 					isListening[OWN_HORIZONTAL_INTERVAL_CHANGES] = true;
 				}
 				if (isListening[CHART_HORIZONTAL_INTERVAL_CHANGES])
 				{
-					XYZAxis(chart.xAxis).removeEventListener("IntervalChanged", update);
+					XYZ(chart.xAxis).removeEventListener("IntervalChanged", update);
 				}
 			} else if (chart && chart.xAxis) {
 				if (! isListening[CHART_HORIZONTAL_INTERVAL_CHANGES])
 				{
-					XYZAxis(chart.xAxis).addEventListener("IntervalChanged", update);
+					XYZ(chart.xAxis).addEventListener("IntervalChanged", update);
 					isListening[CHART_HORIZONTAL_INTERVAL_CHANGES] = true;
 				}
 			}

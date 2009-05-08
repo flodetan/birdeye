@@ -39,7 +39,7 @@ package birdeye.vis.scales
 	import birdeye.vis.interfaces.IScaleUI;
 	import birdeye.vis.interfaces.INumerableScale;
 
-	public class NumericAxis extends XYZAxis implements INumerableScale, IScaleUI
+	public class Numeric extends XYZ implements INumerableScale, IScaleUI
 	{
 	
 		/** @Private
@@ -113,7 +113,7 @@ package birdeye.vis.scales
 		
 		// UIComponent flow
 		
-		public function NumericAxis()
+		public function Numeric()
 		{
 			super();
 			scaleType = BaseScale.LINEAR;
