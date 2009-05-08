@@ -52,23 +52,23 @@ package birdeye.vis.recipes.cartesianCharts
 		{
 			super.commitProperties();
 			
-			// when series are loaded, set their stack type to the 
+			// when elements are loaded, set their stack type to the 
 			// current "type" value. if the type is STACKED100
 			// calculate the maxStacked100 value, and load the baseValues
 			// arrays for each Bar. The baseValues arrays will be used to know
-			// the x0 starting point for each series values, which corresponds to 
-			// the understair series highest x value;
+			// the x0 starting point for each element values, which corresponds to 
+			// the understair element highest x value;
 
-			if (_series && nCursors == _series.length)
+			if (_elements && nCursors == _elements.length)
 			{
 				var _Bar:Array = [];
 			
-				for (var i:Number = 0; i<_series.length; i++)
+				for (var i:Number = 0; i<_elements.length; i++)
 				{
-					if (_series[i] is BarElement)
+					if (_elements[i] is BarElement)
 					{
-						BarElement(_series[i]).stackType = _type;
-						_Bar.push(_series[i])
+						BarElement(_elements[i]).stackType = _type;
+						_Bar.push(_elements[i])
 					}
 				}
 				
@@ -77,13 +77,13 @@ package birdeye.vis.recipes.cartesianCharts
 				if (_type==StackElement.STACKED100)
 				{
 					// {indexSeries: i, baseValues: Array_for_each_series}
-					var allSeriesBaseValues:Array = []; 
+					var allElementsBaseValues:Array = []; 
 					for (i=0;i<_Bar.length;i++)
-						allSeriesBaseValues[i] = {indexSeries: i, baseValues: []};
+						allElementsBaseValues[i] = {indexElements: i, baseValues: []};
 					
-					// keep index of last series been processed 
+					// keep index of last element been processed 
 					// with the same xField data value
-					// k[xFieldDataValue] = last series processed
+					// k[xFieldDataValue] = last element processed
 					var k:Array = [];
 					
 					var j:Object;
@@ -100,19 +100,19 @@ package birdeye.vis.recipes.cartesianCharts
 							{
 								j = sCursor.current[BarElement(_Bar[s]).yField];
 								if (s>0 && k[j]>=0)
-									allSeriesBaseValues[s].baseValues[j] = 
-										allSeriesBaseValues[k[j]].baseValues[j] + 
+									allElementsBaseValues[s].baseValues[j] = 
+										allElementsBaseValues[k[j]].baseValues[j] + 
 										Math.max(0,sCursor.current[BarElement(_Bar[k[j]]).xField]);
 								else 
-									allSeriesBaseValues[s].baseValues[j] = 0;
+									allElementsBaseValues[s].baseValues[j] = 0;
 
 								if (isNaN(_maxStacked100))
 									_maxStacked100 = 
-										allSeriesBaseValues[s].baseValues[j] + 
+										allElementsBaseValues[s].baseValues[j] + 
 										Math.max(0,sCursor.current[BarElement(_Bar[s]).xField]);
 								else
 									_maxStacked100 = Math.max(_maxStacked100,
-										allSeriesBaseValues[s].baseValues[j] + 
+										allElementsBaseValues[s].baseValues[j] + 
 										Math.max(0,sCursor.current[BarElement(_Bar[s]).xField]));
 
 								sCursor.moveNext();
@@ -126,7 +126,7 @@ package birdeye.vis.recipes.cartesianCharts
 						cursor.seek(CursorBookmark.FIRST);
 						while (!cursor.afterLast)
 						{
-							// index of last series without own cursor with the same xField data value 
+							// index of last Elements without own cursor with the same xField data value 
 							// (because they've already been processed in the previous loop)
 							var t:Array = [];
 							for (s = 0; s<_Bar.length; s++)
@@ -137,19 +137,19 @@ package birdeye.vis.recipes.cartesianCharts
 									j = cursor.current[BarElement(_Bar[s]).yField];
 	
 									if (t[j]>=0)
-										allSeriesBaseValues[s].baseValues[j] = 
-											allSeriesBaseValues[t[j]].baseValues[j] + 
+										allElementsBaseValues[s].baseValues[j] = 
+											allElementsBaseValues[t[j]].baseValues[j] + 
 											Math.max(0,cursor.current[BarElement(_Bar[t[j]]).xField]);
 									else 
-										allSeriesBaseValues[s].baseValues[j] = 0;
+										allElementsBaseValues[s].baseValues[j] = 0;
 									
 									if (isNaN(_maxStacked100))
 										_maxStacked100 = 
-											allSeriesBaseValues[s].baseValues[j] + 
+											allElementsBaseValues[s].baseValues[j] + 
 											Math.max(0,cursor.current[BarElement(_Bar[s]).xField]);
 									else
 										_maxStacked100 = Math.max(_maxStacked100,
-											allSeriesBaseValues[s].baseValues[j] + 
+											allElementsBaseValues[s].baseValues[j] + 
 											Math.max(0,cursor.current[BarElement(_Bar[s]).xField]));
 	
 									t[j] = s;
@@ -161,10 +161,10 @@ package birdeye.vis.recipes.cartesianCharts
 					
 					// set the baseValues array for each Bar
 					// The baseValues array will be used to know
-					// the x0 starting point for each series values, 
-					// which corresponds to the understair series highest x value;
+					// the x0 starting point for each element values, 
+					// which corresponds to the understair element highest x value;
 					for (s = 0; s<_Bar.length; s++)
-						BarElement(_Bar[s]).baseValues = allSeriesBaseValues[s].baseValues;
+						BarElement(_Bar[s]).baseValues = allElementsBaseValues[s].baseValues;
 				}
 			}
 		}
