@@ -62,11 +62,11 @@
 			 	<coords:xAxis>
 			 			<scales:CategoryAxis categoryField="index" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 			 </coords:xAxis>
-			 <coords:series>
+			 <coords:elements>
 			 	<elements:PointElement xField="index" yField="bronze" source="{rasterImage}" strokeAlpha="0" displayName="A" plotRadius="13"/>
 			 	<elements:PointElement xField="index" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="solid1" yField="gold" displayName="C" />
 			 	<elements:LabelElement extendMouseEvents="true" labelField="R4" labelSize="15" labelFont="verdana" labelColor="#00FF00" xField="index" yField="silver" displayName="B"/>
-			 </coords:series>
+			 </coords:elements>
 		</coords:Cartesian>
 		<guides:Legend dataProvider="{pc3}" direction="horizontal"/>	
 	</mx:VBox>

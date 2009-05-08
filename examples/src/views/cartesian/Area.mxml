@@ -55,7 +55,7 @@
  		<coords:yAxis>
  			<scales:LinearAxis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
  		</coords:yAxis>
-		 <coords:series>
+		 <coords:elements>
 		 	<elements:LineElement showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" xField="subject" yField="R1"  styleName="solid1" />
 		 	<elements:LineElement showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" xField="subject" yField="R2"  styleName="solid2" />
 		 	<elements:LineElement showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" xField="subject" yField="R3"  styleName="solid3" />
@@ -65,7 +65,7 @@
     		<elements:AreaElement xField="subject" yField="R2" styleName="grad2" strokeAlpha="0" displayName="R2"/>
     		<elements:AreaElement xField="subject" yField="R3" styleName="grad3" strokeAlpha="0" displayName="R3"/>
     		<elements:AreaElement xField="subject" yField="R4" styleName="grad4" strokeAlpha="0" displayName="R4"/>
-		 </coords:series>
+		 </coords:elements>
 	</coords:Cartesian>
     <guides:Legend dataProvider="{ac3}" direction="horizontal"/>
 	</mx:VBox>
