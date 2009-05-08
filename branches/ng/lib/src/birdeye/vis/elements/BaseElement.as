@@ -28,8 +28,8 @@
 package birdeye.vis.elements
 {
 	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.INumerableAxis;
-	import birdeye.vis.interfaces.ISeries;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
@@ -75,7 +75,7 @@ package birdeye.vis.elements
 	[Exclude(name="chart", kind="property")]
 	[Exclude(name="cursor", kind="property")]
 	
-	public class BaseElement extends Surface implements ISeries
+	public class BaseElement extends Surface implements IElement
 	{
 		protected var _showItemRenderer:Boolean = false;
 		[Inspectable(enumeration="true,false")]
