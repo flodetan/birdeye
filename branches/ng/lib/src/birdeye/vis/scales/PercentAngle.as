@@ -38,16 +38,6 @@ package birdeye.vis.scales
 			_scaleType = BaseScale.PERCENT;
 		}
 		
-		override public function set min(val:Number):void
-		{
-			_min = NaN;
-		}
-
-		override public function set max(val:Number):void
-		{
-			_max = NaN;
-		}
-		
 		public function PercentAngle():void
 		{
 			super();

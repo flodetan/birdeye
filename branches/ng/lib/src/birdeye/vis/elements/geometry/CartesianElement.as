@@ -129,7 +129,7 @@ package birdeye.vis.elements.geometry
 		}
 		
 		private var _xAxis:IScaleUI;
-		public function set xAxis(val:IScaleUI):void
+		public function set xScale(val:IScaleUI):void
 		{
 			_xAxis = val;
 			if (_xAxis.placement != BaseScale.BOTTOM && _xAxis.placement != BaseScale.TOP)
@@ -138,13 +138,13 @@ package birdeye.vis.elements.geometry
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get xAxis():IScaleUI
+		public function get xScale():IScaleUI
 		{
 			return _xAxis;
 		}
 		
 		private var _yAxis:IScaleUI;
-		public function set yAxis(val:IScaleUI):void
+		public function set yScale(val:IScaleUI):void
 		{
 			_yAxis = val;
 			if (_yAxis.placement != BaseScale.LEFT && _yAxis.placement != BaseScale.RIGHT)
@@ -153,13 +153,13 @@ package birdeye.vis.elements.geometry
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get yAxis():IScaleUI
+		public function get yScale():IScaleUI
 		{
 			return _yAxis;
 		}
 		
 		private var _zAxis:IScaleUI;
-		public function set zAxis(val:IScaleUI):void
+		public function set zScale(val:IScaleUI):void
 		{
 			_zAxis = val;
 			if (_zAxis.placement != BaseScale.DIAGONAL)
@@ -168,7 +168,7 @@ package birdeye.vis.elements.geometry
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get zAxis():IScaleUI
+		public function get zScale():IScaleUI
 		{
 			return _zAxis;
 		}
@@ -176,7 +176,7 @@ package birdeye.vis.elements.geometry
 		protected var _maxYValue:Number = NaN;
 		public function get maxYValue():Number
 		{
-			if (! (yAxis is IEnumerableScale))
+			if (! (yScale is IEnumerableScale))
 				_maxYValue = getMaxValue(yField);
 			return _maxYValue;
 		}
@@ -184,7 +184,7 @@ package birdeye.vis.elements.geometry
 		protected var _maxXValue:Number = NaN;
 		public function get maxXValue():Number
 		{
-			if (! (xAxis is IEnumerableScale))
+			if (! (xScale is IEnumerableScale))
 				_maxXValue = getMaxValue(xField);
 			return _maxXValue;
 		}
@@ -192,7 +192,7 @@ package birdeye.vis.elements.geometry
 		private var _minYValue:Number = NaN;
 		public function get minYValue():Number
 		{
-			if (! (yAxis is IEnumerableScale))
+			if (! (yScale is IEnumerableScale))
 				_minYValue = getMinValue(yField);
 			return _minYValue;
 		}
@@ -200,7 +200,7 @@ package birdeye.vis.elements.geometry
 		private var _minXValue:Number = NaN;
 		public function get minXValue():Number
 		{
-			if (! (xAxis is IEnumerableScale))
+			if (! (xScale is IEnumerableScale))
 				_minXValue = getMinValue(xField);
 			return _minXValue;
 		}
@@ -208,7 +208,7 @@ package birdeye.vis.elements.geometry
 		protected var _maxZValue:Number = NaN;
 		public function get maxZValue():Number
 		{
-			if (! (zAxis is IEnumerableScale))
+			if (! (zScale is IEnumerableScale))
 				_maxZValue = getMaxValue(zField);
 			return _maxZValue;
 		}
@@ -216,7 +216,7 @@ package birdeye.vis.elements.geometry
 		private var _minZValue:Number = NaN;
 		public function get minZValue():Number
 		{
-			if (! (zAxis is IEnumerableScale))
+			if (! (zScale is IEnumerableScale))
 				_minZValue = getMinValue(zField);
 			return _minZValue;
 		}
@@ -286,25 +286,25 @@ package birdeye.vis.elements.geometry
 			// cannot be positioned yet in the axis.
 			var axesCheck:Boolean = true;
 			
-			if (yAxis)
+			if (yScale)
 			{
-				if (yAxis is IEnumerableScale)
-					axesCheck = Boolean(IEnumerableScale(yAxis).dataProvider);
-			} else if (chart && chart.yAxis)
+				if (yScale is IEnumerableScale)
+					axesCheck = Boolean(IEnumerableScale(yScale).dataProvider);
+			} else if (chart && chart.yScale)
 			{
-				if (chart.yAxis is IEnumerableScale)
-					axesCheck = Boolean(IEnumerableScale(chart.yAxis).dataProvider);
+				if (chart.yScale is IEnumerableScale)
+					axesCheck = Boolean(IEnumerableScale(chart.yScale).dataProvider);
 			} else
 				axesCheck = false;
 
-			if (xAxis)
+			if (xScale)
 			{
-				if (xAxis is IEnumerableScale)
-					axesCheck = axesCheck && Boolean(IEnumerableScale(xAxis).dataProvider);
-			} else if (chart && chart.xAxis)
+				if (xScale is IEnumerableScale)
+					axesCheck = axesCheck && Boolean(IEnumerableScale(xScale).dataProvider);
+			} else if (chart && chart.xScale)
 			{
-				if (chart.xAxis is IEnumerableScale)
-					axesCheck = axesCheck && Boolean(IEnumerableScale(chart.xAxis).dataProvider);
+				if (chart.xScale is IEnumerableScale)
+					axesCheck = axesCheck && Boolean(IEnumerableScale(chart.xScale).dataProvider);
 			} else
 				axesCheck = false;
 
@@ -341,28 +341,28 @@ package birdeye.vis.elements.geometry
 
 			var pos:Point = localToGlobal(new Point(extGG.posX, extGG.posY));
 	
-			if (yAxis && yAxis.pointer)
+			if (yScale && yScale.pointer)
 			{
-				yAxis.pointerY = extGG.posY;
-				yAxis.pointer.visible = true;
-			} else if (chart.yAxis && chart.yAxis.pointer) {
-				chart.yAxis.pointerY = extGG.posY;
-				chart.yAxis.pointer.visible = true;
+				yScale.pointerY = extGG.posY;
+				yScale.pointer.visible = true;
+			} else if (chart.yScale && chart.yScale.pointer) {
+				chart.yScale.pointerY = extGG.posY;
+				chart.yScale.pointer.visible = true;
 			} 
 
-			if (xAxis && xAxis.pointer)
+			if (xScale && xScale.pointer)
 			{
-				xAxis.pointerX = extGG.posX;
-				xAxis.pointer.visible = true;
-			} else if (chart.xAxis && chart.xAxis.pointer) {
-				chart.xAxis.pointerX = extGG.posX;
-				chart.xAxis.pointer.visible = true;
+				xScale.pointerX = extGG.posX;
+				xScale.pointer.visible = true;
+			} else if (chart.xScale && chart.xScale.pointer) {
+				chart.xScale.pointerX = extGG.posX;
+				chart.xScale.pointer.visible = true;
 			} 
 
-			if (zAxis && zAxis.pointer)
+			if (zScale && zScale.pointer)
 			{
-				zAxis.pointerY = extGG.posZ;
-				zAxis.pointer.visible = true;
+				zScale.pointerY = extGG.posZ;
+				zScale.pointer.visible = true;
 			} else if (chart.zAxis && chart.zAxis.pointer) {
 				chart.zAxis.pointerY = extGG.posZ;
 				chart.zAxis.pointer.visible = true;
@@ -386,18 +386,18 @@ package birdeye.vis.elements.geometry
 				toolTip = null;
 			}
 
-			if (xAxis && xAxis.pointer)
-				xAxis.pointer.visible = false;
-			else if (chart.xAxis && chart.xAxis.pointer) 
-				chart.xAxis.pointer.visible = false;
+			if (xScale && xScale.pointer)
+				xScale.pointer.visible = false;
+			else if (chart.xScale && chart.xScale.pointer) 
+				chart.xScale.pointer.visible = false;
 
-			if (yAxis && yAxis.pointer)
-				yAxis.pointer.visible = false;
-			else if (chart.yAxis && chart.yAxis.pointer) 
-				chart.yAxis.pointer.visible = false;
+			if (yScale && yScale.pointer)
+				yScale.pointer.visible = false;
+			else if (chart.yScale && chart.yScale.pointer) 
+				chart.yScale.pointer.visible = false;
 
-			if (zAxis && zAxis.pointer)
-				zAxis.pointer.visible = false;
+			if (zScale && zScale.pointer)
+				zScale.pointer.visible = false;
 			else if (chart.zAxis && chart.zAxis.pointer) 
 				chart.zAxis.pointer.visible = false;
 		}

@@ -87,13 +87,13 @@ package birdeye.vis.elements.geometry
 			// to axes interval changes 
 			if (stackType == STACKED100 && cursor)
 			{
-				if (yAxis)
+				if (yScale)
 				{
-					if (yAxis is INumerableScale)
-						INumerableScale(yAxis).max = maxYValue;
+					if (yScale is INumerableScale)
+						INumerableScale(yScale).max = maxYValue;
 				} else {
-					if (chart && chart.yAxis && chart.yAxis is INumerableScale)
-						INumerableScale(chart.yAxis).max = maxYValue;
+					if (chart && chart.yScale && chart.yScale is INumerableScale)
+						INumerableScale(chart.yScale).max = maxYValue;
 				}
 			}
 		}
@@ -134,38 +134,38 @@ package birdeye.vis.elements.geometry
 			{
 				// if the Element has its own x axis, than get the x coordinate
 				// position of the data value filtered by xField
-				if (xAxis)
-					xPos = xAxis.getPosition(cursor.current[xField]);
-				else if (chart.xAxis) 
+				if (xScale)
+					xPos = xScale.getPosition(cursor.current[xField]);
+				else if (chart.xScale) 
 					// otherwise use the parent chart x axis to do that
-					xPos = chart.xAxis.getPosition(cursor.current[xField]);
+					xPos = chart.xScale.getPosition(cursor.current[xField]);
 				
 				j = cursor.current[xField];
 				// if the Element has its own y axis, than get the y coordinate
 				// position of the data value filtered by yField
-				if (yAxis)
+				if (yScale)
 				{
 					// if the stackType is stacked100, than the y0 coordinate of 
 					// the current baseValue is added to the y coordinate of the current
 					// data value filtered by yField
 					if (_stackType == STACKED100)
 					{
-						y0 = yAxis.getPosition(baseValues[j]);
-						yPos = yAxis.getPosition(
+						y0 = yScale.getPosition(baseValues[j]);
+						yPos = yScale.getPosition(
 							baseValues[j] + Math.max(0,cursor.current[yField]));
 					} else 
 						// if not stacked, than the y coordinate is given by the own y axis
-						yPos = yAxis.getPosition(cursor.current[yField]);
-				} else if (chart.yAxis) {
+						yPos = yScale.getPosition(cursor.current[yField]);
+				} else if (chart.yScale) {
 					// if no own y axis than use the parent chart y axis to achive the same
 					// as above
 					if (_stackType == STACKED100)
 					{
-						y0 = chart.yAxis.getPosition(baseValues[j]);
-						yPos = chart.yAxis.getPosition(
+						y0 = chart.yScale.getPosition(baseValues[j]);
+						yPos = chart.yScale.getPosition(
 							baseValues[j] + Math.max(0,cursor.current[yField]));
 					} else {
-						yPos = chart.yAxis.getPosition(cursor.current[yField]);
+						yPos = chart.yScale.getPosition(cursor.current[yField]);
 					}
 				}
 				
@@ -183,10 +183,10 @@ package birdeye.vis.elements.geometry
 				
 				var yAxisRelativeValue:Number = NaN;
 
-				if (zAxis)
+				if (zScale)
 				{
-					zPos = zAxis.getPosition(cursor.current[zField]);
-					yAxisRelativeValue = XYZ(zAxis).height - zPos;
+					zPos = zScale.getPosition(cursor.current[zField]);
+					yAxisRelativeValue = XYZ(zScale).height - zPos;
 				} else if (chart.zAxis) {
 					zPos = chart.zAxis.getPosition(cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 
@@ -249,13 +249,13 @@ package birdeye.vis.elements.geometry
 		{
 			var xPos:Number;
 			
-			if (xAxis)
+			if (xScale)
 			{
-				if (xAxis is INumerableScale)
-					xPos = xAxis.getPosition(minXValue);
+				if (xScale is INumerableScale)
+					xPos = xScale.getPosition(minXValue);
 			} else {
-				if (chart.xAxis is INumerableScale)
-					xPos = chart.xAxis.getPosition(minXValue);
+				if (chart.xScale is INumerableScale)
+					xPos = chart.xScale.getPosition(minXValue);
 			}
 			
 			return xPos;
@@ -266,19 +266,19 @@ package birdeye.vis.elements.geometry
 		private function getYMinPosition():Number
 		{
 			var yPos:Number;
-			if (yAxis && yAxis is INumerableScale)
+			if (yScale && yScale is INumerableScale)
 			{
 				if (_baseAtZero)
-					yPos = yAxis.getPosition(0);
+					yPos = yScale.getPosition(0);
 				else
-					yPos = yAxis.getPosition(minYValue);
+					yPos = yScale.getPosition(minYValue);
 			} else {
-				if (chart.yAxis is INumerableScale)
+				if (chart.yScale is INumerableScale)
 				{
 					if (_baseAtZero)
-						yPos = chart.yAxis.getPosition(0);
+						yPos = chart.yScale.getPosition(0);
 					else
-						yPos = chart.yAxis.getPosition(minYValue);
+						yPos = chart.yScale.getPosition(minYValue);
 				}
 			}
 			return yPos;
