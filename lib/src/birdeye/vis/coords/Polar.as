@@ -79,14 +79,14 @@ package birdeye.vis.coords
 				// it's necessary to create a default angle axis inside the
 				// polar chart. This axis will be shared by all elements that
 				// have no own angle axis
-				if (! IPolarElement(_elements[i]).angleAxis)
+				if (! IPolarElement(_elements[i]).angleScale)
 					needDefaultAngleAxis = true;
 
 				// if the elements doesn't have an own radius axis, than
 				// it's necessary to create a default radius axis inside the
 				// polar chart. This axis will be shared by all elements that
 				// have no own radius axis
-				if (! IPolarElement(_elements[i]).radiusAxis)
+				if (! IPolarElement(_elements[i]).radiusScale)
 					needDefaultRadiusAxis = true;
 					
 				// set the chart target inside the elements to 'this'
@@ -147,36 +147,36 @@ package birdeye.vis.coords
 		
 		protected var needDefaultAngleAxis:Boolean;
 		protected var needDefaultRadiusAxis:Boolean;
-		protected var _angleAxis:IScale;
+		protected var _angleScale:IScale;
 		/** Set the angle axis. Set its placement to NONE*/ 
-		public function set angleAxis(val:IScale):void
+		public function set angleScale(val:IScale):void
 		{
-			_angleAxis = val;
+			_angleScale = val;
 
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get angleAxis():IScale
+		public function get angleScale():IScale
 		{
-			return _angleAxis;
+			return _angleScale;
 		}
 
-		protected var _radiusAxis:IScale;
+		protected var _radiusScale:IScale;
 		/** Define the radius axis. If it has not defined its placement, than set it to 
 		 * horizontal-center*/ 
-		public function set radiusAxis(val:IScale):void
+		public function set radiusScale(val:IScale):void
 		{
-			_radiusAxis = val;
-			if (val is IScaleUI 	&& IScaleUI(_radiusAxis).placement != BaseScale.HORIZONTAL_CENTER 
-								&& IScaleUI(_radiusAxis).placement != BaseScale.VERTICAL_CENTER)
-				IScaleUI(_radiusAxis).placement = BaseScale.HORIZONTAL_CENTER;
+			_radiusScale = val;
+			if (val is IScaleUI 	&& IScaleUI(_radiusScale).placement != BaseScale.HORIZONTAL_CENTER 
+								&& IScaleUI(_radiusScale).placement != BaseScale.VERTICAL_CENTER)
+				IScaleUI(_radiusScale).placement = BaseScale.HORIZONTAL_CENTER;
 
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get radiusAxis():IScale
+		public function get radiusScale():IScale
 		{
-			return _radiusAxis;
+			return _radiusScale;
 		}
 		
 		private var _origin:Point;
@@ -247,12 +247,12 @@ package birdeye.vis.coords
 						nCursors += 1;
 
 					addChild(DisplayObject(elements[i]));
-					if (IPolarElement(elements[i]).radiusAxis)
-						addChild(DisplayObject(IPolarElement(elements[i]).radiusAxis));
+					if (IPolarElement(elements[i]).radiusScale)
+						addChild(DisplayObject(IPolarElement(elements[i]).radiusScale));
 					else 
 						needDefaultRadiusAxis = true;
 
-					if (! IPolarElement(elements[i]).angleAxis)
+					if (! IPolarElement(elements[i]).angleScale)
 						needDefaultAngleAxis = true;
 
 					if (_elements[i] is IStack)
@@ -273,18 +273,18 @@ package birdeye.vis.coords
 			// that will be used by all elements without a radius axis
 			if (needDefaultRadiusAxis && !_radarAxis)
 			{
-				if (!_radiusAxis)
+				if (!_radiusScale)
 					createRadiusAxis();
 
-				if (_radiusAxis is IScaleUI)
-					addChild(DisplayObject(_radiusAxis));
+				if (_radiusScale is IScaleUI)
+					addChild(DisplayObject(_radiusScale));
 			}
 
 			// if some elements have no own angle axis, than create a default one for the chart
 			// that will be used by all elements without a angle axis
 			if (needDefaultAngleAxis && !_radarAxis)
 			{
-				if (!_angleAxis)
+				if (!_angleScale)
 					createAngleAxis();
 			}
 			
@@ -309,24 +309,24 @@ package birdeye.vis.coords
 					= Math.min(unscaledWidth, unscaledHeight)/2;
 			} 
 			
-			if (radiusAxis)
+			if (radiusScale)
 			{
-				if (radiusAxis is IScale)
+				if (radiusScale is IScale)
 				{
-					radiusAxis.size = Math.min(unscaledWidth, unscaledHeight)/2;
+					radiusScale.size = Math.min(unscaledWidth, unscaledHeight)/2;
 				}
 				
-				if (radiusAxis is IScaleUI)
+				if (radiusScale is IScaleUI)
 				{
-					switch (IScaleUI(radiusAxis).placement)
+					switch (IScaleUI(radiusScale).placement)
 					{
 						case BaseScale.HORIZONTAL_CENTER:
-							DisplayObject(radiusAxis).x = _origin.x;
-							DisplayObject(radiusAxis).y = _origin.y;
+							DisplayObject(radiusScale).x = _origin.x;
+							DisplayObject(radiusScale).y = _origin.y;
 							break;
 						case BaseScale.VERTICAL_CENTER:
-							DisplayObject(radiusAxis).x = _origin.x;
-							DisplayObject(radiusAxis).y = _origin.y;
+							DisplayObject(radiusScale).x = _origin.x;
+							DisplayObject(radiusScale).y = _origin.y;
 							break;
 					}
 				}
@@ -364,9 +364,9 @@ package birdeye.vis.coords
 				var maxMin:Array;
 				
 				// check if a default y axis exists
-				if (angleAxis)
+				if (angleScale)
 				{
-					if (angleAxis is IEnumerableScale)
+					if (angleScale is IEnumerableScale)
 					{
 						for (i = 0; i<nCursors; i++)
 						{
@@ -376,16 +376,16 @@ package birdeye.vis.coords
 							// loaded by the chart data provider
 							if (currentElement.dataProvider 
 								&& currentElement.dataProvider != dataProvider
-								&& ! currentElement.angleAxis)
+								&& ! currentElement.angleScale)
 							{
 								currentElement.cursor.seek(CursorBookmark.FIRST);
 								while (!currentElement.cursor.afterLast)
 								{
 									if (catElements.indexOf(
-										currentElement.cursor.current[IEnumerableScale(angleAxis).categoryField]) 
+										currentElement.cursor.current[IEnumerableScale(angleScale).categoryField]) 
 										== -1)
 										catElements[j++] = 
-											currentElement.cursor.current[IEnumerableScale(angleAxis).categoryField];
+											currentElement.cursor.current[IEnumerableScale(angleScale).categoryField];
 									currentElement.cursor.moveNext();
 								}
 							}
@@ -397,24 +397,24 @@ package birdeye.vis.coords
 							while (!cursor.afterLast)
 							{
 								// if the category value already exists in the axis, than skip it
-								if (catElements.indexOf(cursor.current[IEnumerableScale(angleAxis).categoryField]) == -1)
+								if (catElements.indexOf(cursor.current[IEnumerableScale(angleScale).categoryField]) == -1)
 									catElements[j++] = 
-										cursor.current[IEnumerableScale(angleAxis).categoryField];
+										cursor.current[IEnumerableScale(angleScale).categoryField];
 								cursor.moveNext();
 							}
 						}
 
 						// set the elements property of the CategoryAxis
 						if (catElements.length > 0)
-							IEnumerableScale(angleAxis).dataProvider = catElements;
-					} else if (angleAxis is INumerableScale){
+							IEnumerableScale(angleScale).dataProvider = catElements;
+					} else if (angleScale is INumerableScale){
 						
-						if (INumerableScale(angleAxis).scaleType != BaseScale.PERCENT)
+						if (INumerableScale(angleScale).scaleType != BaseScale.PERCENT)
 						{
 							// if the default x axis is numeric, than calculate its min max values
 							maxMin = getMaxMinAngleValueFromSeriesWithoutAngleAxis();
-							INumerableScale(angleAxis).max = maxMin[0];
-							INumerableScale(angleAxis).min = maxMin[1];
+							INumerableScale(angleScale).max = maxMin[0];
+							INumerableScale(angleScale).min = maxMin[1];
 						} else {
 							setPositiveTotalAngleValueInSeries();
 						}
@@ -425,9 +425,9 @@ package birdeye.vis.coords
 				j = 0;
 
 				// check if a default y axis exists
-				if (radiusAxis)
+				if (radiusScale)
 				{
-					if (radiusAxis is IEnumerableScale)
+					if (radiusScale is IEnumerableScale)
 					{
 						for (i = 0; i<nCursors; i++)
 						{
@@ -437,16 +437,16 @@ package birdeye.vis.coords
 							// loaded by the chart data provider
 							if (currentElement.dataProvider 
 								&& currentElement.dataProvider != dataProvider
-								&& ! currentElement.radiusAxis)
+								&& ! currentElement.radiusScale)
 							{
 								currentElement.cursor.seek(CursorBookmark.FIRST);
 								while (!currentElement.cursor.afterLast)
 								{
 									if (catElements.indexOf(
-										currentElement.cursor.current[IEnumerableScale(radiusAxis).categoryField]) 
+										currentElement.cursor.current[IEnumerableScale(radiusScale).categoryField]) 
 										== -1)
 										catElements[j++] = 
-											currentElement.cursor.current[IEnumerableScale(radiusAxis).categoryField];
+											currentElement.cursor.current[IEnumerableScale(radiusScale).categoryField];
 									currentElement.cursor.moveNext();
 								}
 							}
@@ -457,28 +457,28 @@ package birdeye.vis.coords
 							while (!cursor.afterLast)
 							{
 								// if the category value already exists in the axis, than skip it
-								if (catElements.indexOf(cursor.current[IEnumerableScale(radiusAxis).categoryField]) == -1)
+								if (catElements.indexOf(cursor.current[IEnumerableScale(radiusScale).categoryField]) == -1)
 									catElements[j++] = 
-										cursor.current[IEnumerableScale(radiusAxis).categoryField];
+										cursor.current[IEnumerableScale(radiusScale).categoryField];
 								cursor.moveNext();
 							}
 						}
 						
 						// set the elements property of the CategoryAxis
 						if (catElements.length > 0)
-							IEnumerableScale(radiusAxis).dataProvider = catElements;
-					} else if (radiusAxis is INumerableScale){
+							IEnumerableScale(radiusScale).dataProvider = catElements;
+					} else if (radiusScale is INumerableScale){
 						
-						if (INumerableScale(radiusAxis).scaleType != BaseScale.CONSTANT)
+						if (INumerableScale(radiusScale).scaleType != BaseScale.CONSTANT)
 						{
 							// if the default x axis is numeric, than calculate its min max values
 							maxMin = getMaxMinRadiusValueFromSeriesWithoutRadiusAxis();
 						} else {
 							maxMin = [1,1];
-							INumerableScale(radiusAxis).size = Math.min(width, height)/2;
+							INumerableScale(radiusScale).size = Math.min(width, height)/2;
 						}
-						INumerableScale(radiusAxis).max = maxMin[0];
-						INumerableScale(radiusAxis).min = maxMin[1];
+						INumerableScale(radiusScale).max = maxMin[0];
+						INumerableScale(radiusScale).min = maxMin[1];
 					}
 				} 
 
@@ -513,11 +513,11 @@ package birdeye.vis.coords
 				currentElement = PolarElement(elements[i]);
 				// check if the elements has its own y axis and if its max value exists and 
 				// is higher than the current max
-				if (!currentElement.radiusAxis && (isNaN(max) || max < currentElement.maxRadiusValue))
+				if (!currentElement.radiusScale && (isNaN(max) || max < currentElement.maxRadiusValue))
 					max = currentElement.maxRadiusValue;
 				// check if the elements has its own y axis and if its min value exists and 
 				// is lower than the current min
-				if (!currentElement.radiusAxis && (isNaN(min) || min > currentElement.minRadiusValue))
+				if (!currentElement.radiusScale && (isNaN(min) || min > currentElement.minRadiusValue))
 					min = currentElement.minRadiusValue;
 			}
 					
@@ -535,11 +535,11 @@ package birdeye.vis.coords
 				currentElement = PolarElement(elements[i]);
 				// check if the elements has its own y axis and if its max value exists and 
 				// is higher than the current max
-				if (!currentElement.angleAxis && (isNaN(max) || max < currentElement.maxAngleValue))
+				if (!currentElement.angleScale && (isNaN(max) || max < currentElement.maxAngleValue))
 					max = currentElement.maxAngleValue;
 				// check if the elements has its own y axis and if its min value exists and 
 				// is lower than the current min
-				if (!currentElement.angleAxis && (isNaN(min) || min > currentElement.minAngleValue))
+				if (!currentElement.angleScale && (isNaN(min) || min > currentElement.minAngleValue))
 					min = currentElement.minAngleValue;
 			}
 					
@@ -550,7 +550,7 @@ package birdeye.vis.coords
 		 * Calculate the total of positive values to set in the percent axis and set it for each elements.*/
 		private function setPositiveTotalAngleValueInSeries():void
 		{
-			INumerableScale(angleAxis).totalPositiveValue = NaN;
+			INumerableScale(angleScale).totalPositiveValue = NaN;
 			var tot:Number = NaN;
 			for (var i:Number = 0; i<elements.length; i++)
 			{
@@ -559,11 +559,11 @@ package birdeye.vis.coords
 				// is higher than the current max
 				if (!isNaN(currentElement.totalAnglePositiveValue))
 				{
-					if (isNaN(INumerableScale(angleAxis).totalPositiveValue))
-						INumerableScale(angleAxis).totalPositiveValue = currentElement.totalAnglePositiveValue;
+					if (isNaN(INumerableScale(angleScale).totalPositiveValue))
+						INumerableScale(angleScale).totalPositiveValue = currentElement.totalAnglePositiveValue;
 					else
-						INumerableScale(angleAxis).totalPositiveValue = 
-							Math.max(INumerableScale(angleAxis).totalPositiveValue, 
+						INumerableScale(angleScale).totalPositiveValue = 
+							Math.max(INumerableScale(angleScale).totalPositiveValue, 
 									currentElement.totalAnglePositiveValue);
 				}
 			}
@@ -600,67 +600,81 @@ package birdeye.vis.coords
 		{
 			if (element.cursor)
 			{
-				var elements:Array = [];
-				var j:Number = 0;
+				var catElements:Array;
+				var j:Number;
 
 				element.cursor.seek(CursorBookmark.FIRST);
 				
-				if (element.angleAxis is IEnumerableScale)
+				if (element.angleScale is IEnumerableScale)
 				{
+					// if the scale dataProvider already exists than load it and update the index
+					// in fact the same scale might be shared among several elements 
+					if (IEnumerableScale(element.angleScale).dataProvider)
+					{
+						catElements = IEnumerableScale(element.angleScale).dataProvider;
+						j = catElements.length;
+					} else {
+						j = 0;
+						catElements = [];
+					}
+
 					while (!element.cursor.afterLast)
 					{
 						// if the category value already exists in the axis, than skip it
-						if (elements.indexOf(element.cursor.current[IEnumerableScale(element.angleAxis).categoryField]) == -1)
-							elements[j++] = 
-								element.cursor.current[IEnumerableScale(element.angleAxis).categoryField];
+						if (catElements.indexOf(element.cursor.current[IEnumerableScale(element.angleScale).categoryField]) == -1)
+							catElements[j++] = 
+								element.cursor.current[IEnumerableScale(element.angleScale).categoryField];
 						element.cursor.moveNext();
 					}
 					
 					// set the elements propery of the CategoryAxis owned by the current element
-					if (elements.length > 0)
-						IEnumerableScale(element.angleAxis).dataProvider = elements;
+					if (catElements.length > 0)
+						IEnumerableScale(element.angleScale).dataProvider = catElements;
 	
-				} else if (element.angleAxis is INumerableScale)
+				} else if (element.angleScale is INumerableScale)
 				{
-					if (INumerableScale(element.angleAxis).scaleType != BaseScale.PERCENT)
+					// if the angle axis is numeric than set its maximum and minimum values 
+					// if the max and min are not yet defined for the element, than they are calculated now
+					// since the same scale can be shared among several elements, the precedent min and max
+					// are also taken into account
+					if (INumerableScale(element.angleScale).scaleType != BaseScale.PERCENT)
 					{
 						// if the element angle axis is just numeric, than calculate get its min max data values
-						INumerableScale(element.angleAxis).max =
-							element.maxAngleValue;
-						INumerableScale(element.angleAxis).min =
-							element.minAngleValue;
+						if (isNaN(INumerableScale(element.angleScale).max))
+							INumerableScale(element.angleScale).max = element.maxAngleValue;
+						else 
+							INumerableScale(element.angleScale).min =
+								Math.min(INumerableScale(element.angleScale).min, element.minAngleValue);
 					} else {
 						// if the element angle axis is percent numeric, than get the sum
 						// of total positive data values from the element
 						if (!isNaN(element.totalAnglePositiveValue))
-							INumerableScale(element.angleAxis).totalPositiveValue = element.totalAnglePositiveValue;
+							INumerableScale(element.angleScale).totalPositiveValue = element.totalAnglePositiveValue;
 					}
 				}
 	
-				elements = [];
-				j = 0;
 				element.cursor.seek(CursorBookmark.FIRST);
 				
-				if (element.radiusAxis is IEnumerableScale)
+				if (element.radiusScale is IEnumerableScale)
 				{
 					while (!element.cursor.afterLast)
 					{
 						// if the category value already exists in the axis, than skip it
-						if (elements.indexOf(element.cursor.current[IEnumerableScale(element.radiusAxis).categoryField]) == -1)
-							elements[j++] = 
-								element.cursor.current[IEnumerableScale(element.radiusAxis).categoryField];
+						if (catElements.indexOf(element.cursor.current[IEnumerableScale(element.radiusScale).categoryField]) == -1)
+							catElements[j++] = 
+								element.cursor.current[IEnumerableScale(element.radiusScale).categoryField];
 						element.cursor.moveNext();
 					}
 							
 					// set the elements propery of the CategoryAxis owned by the current element
-					if (elements.length > 0)
-						IEnumerableScale(element.radiusAxis).dataProvider = elements;
+					if (catElements.length > 0)
+						IEnumerableScale(element.radiusScale).dataProvider = catElements;
 	
-				} else if (element.radiusAxis is INumerableScale)
+				} else if (element.radiusScale is INumerableScale)
 				{
-					INumerableScale(element.radiusAxis).max =
+					INumerableScale(element.radiusScale).max =
 						element.maxRadiusValue;
-					INumerableScale(element.radiusAxis).min =
+					INumerableScale(element.radiusScale).min =
 						element.minRadiusValue;
 				}
 	
@@ -672,15 +686,15 @@ package birdeye.vis.coords
 		 * select a specific default setup.*/
 		protected function createAngleAxis():void
 		{
-			angleAxis = new PercentAngle();
+			angleScale = new PercentAngle();
 
 			// and/or to be overridden
 		}
 		/** @Private */
 		protected function createRadiusAxis():void
 		{
-			radiusAxis = new Numeric();
-			Numeric(radiusAxis).showAxis = false;
+			radiusScale = new Numeric();
+			Numeric(radiusScale).showAxis = false;
 
 			// and/or to be overridden
 		}

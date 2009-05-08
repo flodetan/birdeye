@@ -81,21 +81,21 @@ package birdeye.vis.elements.geometry
 			cursor.seek(CursorBookmark.FIRST);
 			while (!cursor.afterLast)
 			{
-				if (angleAxis)
+				if (angleScale)
 				{
-					angle = angleAxis.getPosition(cursor.current[angleField]);
+					angle = angleScale.getPosition(cursor.current[angleField]);
 					dataFields[0] = angleField;
-				} else if (polarChart.angleAxis) {
-					angle = polarChart.angleAxis.getPosition(cursor.current[angleField]);
+				} else if (polarChart.angleScale) {
+					angle = polarChart.angleScale.getPosition(cursor.current[angleField]);
 					dataFields[0] = angleField;
 				}
 				
-				if (radiusAxis)
+				if (radiusScale)
 				{
-					radius = radiusAxis.getPosition(cursor.current[radiusField]);
+					radius = radiusScale.getPosition(cursor.current[radiusField]);
 					dataFields[1] = radiusField;
-				} else if (polarChart.radiusAxis) {
-					radius = polarChart.radiusAxis.getPosition(cursor.current[radiusField]);
+				} else if (polarChart.radiusScale) {
+					radius = polarChart.radiusScale.getPosition(cursor.current[radiusField]);
 					dataFields[1] = radiusField;
 				}
 

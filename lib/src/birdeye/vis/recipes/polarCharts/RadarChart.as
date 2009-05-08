@@ -99,7 +99,7 @@ package birdeye.vis.recipes.polarCharts
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
 			if ((radarAxis && radarAxis.angleAxis) ||
-				(angleAxis && angleAxis is CategoryAngle))
+				(angleScale && angleScale is CategoryAngle))
 				drawLabels()
 		}
 		
@@ -200,7 +200,7 @@ package birdeye.vis.recipes.polarCharts
 			if (radarAxis)
 				aAxis = radarAxis.angleAxis;
 			else
-				aAxis = CategoryAngle(angleAxis);
+				aAxis = CategoryAngle(angleScale);
 			
 			var catElements:Array = aAxis.dataProvider;
 			var interval:int = aAxis.interval;
@@ -288,14 +288,14 @@ package birdeye.vis.recipes.polarCharts
 
 		private function createRadarLayout2():void
 		{
-			var aAxis:CategoryAngle = CategoryAngle(angleAxis);
+			var aAxis:CategoryAngle = CategoryAngle(angleScale);
 			var catElements:Array = aAxis.dataProvider;
 			var interval:int = aAxis.interval;
 			var nEle:int = catElements.length;
 			
-			if (radiusAxis is Numeric && !isNaN(Numeric(radiusAxis).interval))
+			if (radiusScale is Numeric && !isNaN(Numeric(radiusScale).interval))
 			{
-				var rAxis:Numeric = Numeric(radiusAxis);
+				var rAxis:Numeric = Numeric(radiusScale);
 				var rMin:Number = rAxis.min;
 				var rMax:Number = rAxis.max;
 				
