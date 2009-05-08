@@ -128,14 +128,14 @@ package birdeye.vis.elements.geometry
 			return _radiusAxis;
 		}
 		
-		private var _radarAxis:RadarAxis;
-		public function set radarAxis(val:RadarAxis):void
+		private var _radarAxis:MutliScale;
+		public function set radarAxis(val:MutliScale):void
 		{
 			_radarAxis = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get radarAxis():RadarAxis
+		public function get radarAxis():MutliScale
 		{
 			return _radarAxis;
 		}

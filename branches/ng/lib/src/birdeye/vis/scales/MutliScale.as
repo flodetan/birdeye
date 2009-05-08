@@ -58,7 +58,7 @@ package birdeye.vis.scales
 	[Style(name="labelSize",type="uint",inherit="no")]
 	[Style(name="labelColor",type="uint",inherit="no")]
 
-	public class RadarAxis extends Surface
+	public class MutliScale extends Surface
 	{
 		/** Set the axis line color.*/
 		protected var stroke:IGraphicsStroke;
@@ -256,7 +256,7 @@ package birdeye.vis.scales
 		// UIComponent methods
 		
 		private var gg:GeometryGroup;
-		public function RadarAxis()
+		public function MutliScale()
 		{
 			super();
 			gg = new GeometryGroup();
@@ -315,7 +315,7 @@ package birdeye.vis.scales
 		initializeStyles();
 		public static function initializeStyles():void
 		{
-			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("RadarAxis");
+			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("MutliScale");
 			if(!selector)
 			{
 				selector = new CSSStyleDeclaration();
@@ -342,7 +342,7 @@ package birdeye.vis.scales
 
 				this.stylesChanged = true;
 			} 
-			StyleManager.setStyleDeclaration("RadarAxis", selector, true);
+			StyleManager.setStyleDeclaration("MutliScale", selector, true);
 		}
 		
  		public function feedRadiusAxes(elementsMinMax:Array):void
@@ -352,19 +352,19 @@ package birdeye.vis.scales
 				radiusAxes = [];
 				for each (var category:String in angleAxis.dataProvider)
 				{
-					radiusAxes[category] = new NumericAxis();
-					NumericAxis(radiusAxes[category]).showAxis = false;
+					radiusAxes[category] = new Numeric();
+					Numeric(radiusAxes[category]).showAxis = false;
 					
 					if (_function != null)
-						NumericAxis(radiusAxes[category]).f = _function;
+						Numeric(radiusAxes[category]).f = _function;
 					
 					// if all values are positive, than we fix the base at zero, otherwise
 					// the columns with minium values won't show up in the chart
-					NumericAxis(radiusAxes[category]).min = Math.min(0, elementsMinMax[category].min);
-					NumericAxis(radiusAxes[category]).max = elementsMinMax[category].max;
-					NumericAxis(radiusAxes[category]).size = radiusSize;
-					NumericAxis(radiusAxes[category]).interval = (NumericAxis(radiusAxes[category]).max 
-																- NumericAxis(radiusAxes[category]).min)/5;
+					Numeric(radiusAxes[category]).min = Math.min(0, elementsMinMax[category].min);
+					Numeric(radiusAxes[category]).max = elementsMinMax[category].max;
+					Numeric(radiusAxes[category]).size = radiusSize;
+					Numeric(radiusAxes[category]).interval = (Numeric(radiusAxes[category]).max 
+																- Numeric(radiusAxes[category]).min)/5;
 				}
 			}
 		} 
@@ -382,7 +382,7 @@ package birdeye.vis.scales
 
 			for (var i:int = 0; i<nEle; i++)
 			{
-				NumericAxis(radiusAxes[catElements[i]]).size = radiusSize;
+				Numeric(radiusAxes[catElements[i]]).size = radiusSize;
 				var angle:int = angleAxis.getPosition(catElements[i]);
 				var endPosition:Point = PolarCoordinateTransform.getXY(angle,radiusSize,_polarChart.origin);
 				
@@ -390,7 +390,7 @@ package birdeye.vis.scales
 				line.stroke = stroke;
 				gg.geometryCollection.addItem(line);
 
- 				var radiusAxis:NumericAxis = NumericAxis(radiusAxes[catElements[i]]);
+ 				var radiusAxis:Numeric = Numeric(radiusAxes[catElements[i]]);
  				var rad:Number;
  				
  				for (var snap:int = radiusAxis.min; snap<radiusAxis.max; snap += radiusAxis.interval)

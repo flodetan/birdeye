@@ -255,7 +255,7 @@ package birdeye.vis.recipes.polarCharts
 		{
 			var aAxis:CategoryAngle = radarAxis.angleAxis;
 			var catElements:Array = aAxis.dataProvider;
-			var rAxis:NumericAxis = radarAxis.radiusAxes[catElements[0]];
+			var rAxis:Numeric = radarAxis.radiusAxes[catElements[0]];
 			
 			if (aAxis && rAxis && !isNaN(rAxis.interval))
 			{
@@ -293,9 +293,9 @@ package birdeye.vis.recipes.polarCharts
 			var interval:int = aAxis.interval;
 			var nEle:int = catElements.length;
 			
-			if (radiusAxis is NumericAxis && !isNaN(NumericAxis(radiusAxis).interval))
+			if (radiusAxis is Numeric && !isNaN(Numeric(radiusAxis).interval))
 			{
-				var rAxis:NumericAxis = NumericAxis(radiusAxis);
+				var rAxis:Numeric = Numeric(radiusAxis);
 				var rMin:Number = rAxis.min;
 				var rMax:Number = rAxis.max;
 				

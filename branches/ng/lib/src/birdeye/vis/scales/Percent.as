@@ -25,60 +25,39 @@
  * THE SOFTWARE.
  */
  
- package birdeye.vis.scales
+package birdeye.vis.scales
 {
-	import com.degrafa.geometry.RegularRectangle;
+	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.scales.BaseScale;
 	
-	[Exclude(name="scaleType", kind="property")]
-	public class LinearAxis extends NumericAxis
+	public class Percent extends Numeric
 	{
-		/** @Private
-		 * the scaleType cannot be changed, since it's inherently "linear".*/
+		/** Set the scale type, LINEAR by default. */
 		override public function set scaleType(val:String):void
-		{}
-		 
-		// UIComponent flow
-		
-		public function LinearAxis()
 		{
-			super();
-			_scaleType = BaseScale.LINEAR;
+			_scaleType = BaseScale.PERCENT;
 		}
 		
-		override protected function commitProperties():void
+		override public function set min(val:Number):void
 		{
-			super.commitProperties();
+			_min = NaN;
 		}
-		
-		override protected function updateDisplayList(w:Number, h:Number):void
-		{
-			super.updateDisplayList(w,h);
-		}
-		
-		// other methods
 
-		/** @Private
-		 * Override the XYZAxis getPostion method based on the linear scaling.*/
+		override public function set max(val:Number):void
+		{
+			_max = NaN;
+		}
+		
+		public function Percent():void
+		{
+			showAxis = false;
+		}
+
 		override public function getPosition(dataValue:*):*
 		{
-			var pos:Number = NaN;
-			if (! (isNaN(max) || isNaN(min)))
-				switch (placement)
-				{
-					case BOTTOM:
-					case TOP:
-					case HORIZONTAL_CENTER:
-						pos = size * (Number(dataValue) - min)/(max - min);
-						break;
-					case LEFT:
-					case RIGHT:
-					case VERTICAL_CENTER:
-						pos = size * (1 - (Number(dataValue) - min)/(max - min));
-						break;
-				}
-				
-			return pos;
-		}
+			if (isNaN(_size))
+				size = 100;
+			return size * Number(dataValue) / _totalPositiveValue;
+		} 
 	}
 }

@@ -144,7 +144,7 @@ package birdeye.vis.elements.geometry
 						radius = radiusAxis.getPosition(cursor.current[radiusField]);
 
 					dataFields[1] = radiusField;
-				} else {
+				} else if (polarChart.radiusAxis) {
 					// if no own y axis than use the parent chart y axis to achive the same
 					// as above
 					if (_stackType == STACKED100)

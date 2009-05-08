@@ -29,59 +29,73 @@
 {
 	import com.degrafa.geometry.RegularRectangle;
 	
+	import birdeye.vis.scales.BaseScale;
+	
 	[Exclude(name="scaleType", kind="property")]
-	public class ColorAxis extends LinearAxis
+	public class Constant extends Numeric 
 	{
-		public var minColor:Number = 0x000000;
-		public var maxColor:Number = 0xffffff;
+		/** @Private
+		 * the scaleType cannot be changed, since it's inherently "constant".*/
+		override public function set scaleType(val:String):void
+		{}
 		
-		public function ColorAxis():void
+		private var _constant:Number = NaN;
+		public function set constant(val:Number):void
 		{
-			showAxis = false;
+			_constant = val;
+		}
+		 
+		// UIComponent flow
+		
+		public function Constant()
+		{
+			super();
+			_scaleType = BaseScale.CONSTANT;
+			showLabels = false;
+			maxLblSize = 0;
+		}
+		
+		override protected function commitProperties():void
+		{
+			super.commitProperties();
 		}
 		
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
-			// no need to draw
+			super.updateDisplayList(w,h);
 		}
 		
 		// other methods
 
 		/** @Private
-		 * Override the XYZAxis getPostion method based on the linear scaling.*/
+		 * Override the XYZAxis getPostion method based on the constant scaling. If a constant
+		 * value is given, than it's returned no matter the input given to the function, 
+		 * otherwise the mid size value is returned, since the constant axis 
+		 * might simply the default chart axis, meaning that the chart has 1 axis only.
+		 * The constant value is a position on the axis and not a constant data value.*/
 		override public function getPosition(dataValue:*):*
 		{
-			// max-min colors might be confused, therefore 
-			// we must insure that the calc
-			size = Math.abs(maxColor-minColor);
-			
-			var color:Number = NaN;
-			if (! (isNaN(max) || isNaN(min)))
-				color = size * (Number(dataValue) - min)/(max - min);
-				
-			return isNaN(color) ? color: decimalToHex(Math.min(maxColor, minColor) + color);
-		}
-
-		private function decimalToHex(value:uint):String
-		{
-			var hexDigits:String = "0123456789ABCDEF";
-			var hex:String = '';
-			
-			while (value > 0)
+			var pos:Number = NaN;
+			if (!isNaN(_constant))
 			{
-				//get the next hex digit by masking everything except the last 4 bits (a single hex digit)
-				var next:uint = value & 0xF;
-				//shift number by 4 bits (the value in 'next')
-				value >>= 4;
-				//add the hex value of 'next' to the string
-				hex = hexDigits.charAt(next) + hex;
-			}
-			//ensure there's at least one digit
-			if (hex.length == 0)
-				hex = '0'
-			
-			//add the hexadecimal prefix
-			return '0x'+hex;
+				if (! (isNaN(max) || isNaN(min)))
+					switch (placement)
+					{
+						case BOTTOM:
+						case TOP:
+						case HORIZONTAL_CENTER:
+							pos = _constant;
+							break;
+						case LEFT:
+						case RIGHT:
+						case VERTICAL_CENTER:
+							pos = size - _constant;
+							break;
+					}
+			} else 
+				pos = size * .5;
+				
+			return pos;
 		}
 	}
 }

@@ -130,7 +130,7 @@ package birdeye.vis.elements.geometry
 				if (zAxis)
 				{
 					zPos = zAxis.getPosition(cursor.current[zField]);
-					yAxisRelativeValue = XYZAxis(zAxis).height - zPos;
+					yAxisRelativeValue = XYZ(zAxis).height - zPos;
 				} else if (chart.zAxis) {
 					zPos = chart.zAxis.getPosition(cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 
@@ -140,7 +140,7 @@ package birdeye.vis.elements.geometry
 					// up side down. this trick allows to visualize the y axis as
 					// if it would be a z. when there will be a 3d line class, it will 
 					// be replaced
-					yAxisRelativeValue = XYZAxis(chart.zAxis).height - zPos;
+					yAxisRelativeValue = XYZ(chart.zAxis).height - zPos;
 				}
 
 				// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly

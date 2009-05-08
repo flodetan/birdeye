@@ -31,47 +31,22 @@
 	
 	public class CategoryAngle extends Category
 	{
-		private var _angle:Number;
-		
-		private var _minAngle:Number = 0;
-		/** Minimum angle for the angle axis.*/
-		public function set minAngle(val:Number):void
-		{
-			_minAngle = val;
-			if (dataProvider && dataProvider.length>0)
-				_interval = (_maxAngle - _minAngle) / dataProvider.length;
-		}
-
-		private var _maxAngle:Number = 360;
-		/** Maximum angle for the angle axis.*/
-		public function set maxAngle(val:Number):void
-		{
-			_maxAngle = val;
-			if (dataProvider && dataProvider.length>0)
-				_interval = (_maxAngle - _minAngle) / dataProvider.length;
-		}
-
-		/** Elements defining the category angle axis.*/
-		override public function set dataProvider(val:Array):void
-		{
-			super.dataProvider = val;
-			if (dataProvider && dataProvider.length>0)
-				interval = (_maxAngle - _minAngle) / dataProvider.length;
-		}
-		
 		public function CategoryAngle():void
 		{
 			showAxis = false;
+			_range = [0,360];
 		}
 
 		override public function getPosition(dataValue:*):*
 		{
-			if (! isNaN(_interval) && dataProvider && dataProvider.indexOf(dataValue) != -1)
+			if (_range && dataProvider && dataProvider.indexOf(dataValue) != -1)
 			{
+				_interval = (_range[1] - _range[0]) / dataProvider.length;
+
 				if (_function == null)
 					return dataProvider.indexOf(dataValue) * _interval;
 				else 
-					return  _function(dataValue, _minAngle, _maxAngle, interval);
+					return  _function(dataValue, _range[0], _range[1], interval);
 			}
 		}
 	}
