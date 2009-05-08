@@ -179,8 +179,8 @@ package birdeye.vis.recipes.cartesianCharts
 		/** @Private */
 		override protected function createXAxis():void
 		{
-			xAxis = new Linear();
-			xAxis.placement = BaseScale.BOTTOM;
+			xScale = new Linear();
+			xScale.placement = BaseScale.BOTTOM;
 		}
 	}
 }

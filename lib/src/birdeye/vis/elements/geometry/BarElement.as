@@ -83,13 +83,13 @@ package birdeye.vis.elements.geometry
 
 			if (stackType == STACKED100 && cursor)
 			{
-				if (xAxis)
+				if (xScale)
 				{
-					if (xAxis is INumerableScale)
-						INumerableScale(xAxis).max = maxXValue;
+					if (xScale is INumerableScale)
+						INumerableScale(xScale).max = maxXValue;
 				} else {
-					if (chart && chart.xAxis && chart.xAxis is INumerableScale)
-						INumerableScale(chart.xAxis).max = maxXValue;
+					if (chart && chart.xScale && chart.xScale is INumerableScale)
+						INumerableScale(chart.xScale).max = maxXValue;
 				}
 			}
 		}
@@ -124,39 +124,39 @@ package birdeye.vis.elements.geometry
 
 			while (!cursor.afterLast)
 			{
-				if (yAxis)
+				if (yScale)
 				{
-					yPos = yAxis.getPosition(cursor.current[yField]);
+					yPos = yScale.getPosition(cursor.current[yField]);
 
 					if (isNaN(size))
- 						size = yAxis.interval*deltaSize;
-				} else if (chart.yAxis) {
-					yPos = chart.yAxis.getPosition(cursor.current[yField]);
+ 						size = yScale.interval*deltaSize;
+				} else if (chart.yScale) {
+					yPos = chart.yScale.getPosition(cursor.current[yField]);
 
 					if (isNaN(size))
-						size = chart.yAxis.interval*deltaSize;
+						size = chart.yScale.interval*deltaSize;
 				}
 				
 				j = cursor.current[yField];
-				if (xAxis)
+				if (xScale)
 				{
 					if (_stackType == STACKED100)
 					{
-						x0 = xAxis.getPosition(baseValues[j]);
-						xPos = xAxis.getPosition(
+						x0 = xScale.getPosition(baseValues[j]);
+						xPos = xScale.getPosition(
 							baseValues[j] + Math.max(0,cursor.current[xField]));
 					} else {
-						xPos = xAxis.getPosition(cursor.current[xField]);
+						xPos = xScale.getPosition(cursor.current[xField]);
 					}
 					dataFields[1] = xField;
-				} else if (chart.xAxis) {
+				} else if (chart.xScale) {
 					if (_stackType == STACKED100)
 					{
-						x0 = chart.xAxis.getPosition(baseValues[j]);
-						xPos = chart.xAxis.getPosition(
+						x0 = chart.xScale.getPosition(baseValues[j]);
+						xPos = chart.xScale.getPosition(
 							baseValues[j] + Math.max(0,cursor.current[xField]));
 					} else 
-						xPos = chart.xAxis.getPosition(cursor.current[xField]);
+						xPos = chart.xScale.getPosition(cursor.current[xField]);
 				}
 				
 				switch (_stackType)
@@ -186,10 +186,10 @@ package birdeye.vis.elements.geometry
 				var yAxisRelativeValue:Number = NaN;
 
 				// TODO: fix stacked100 on 3D
-				if (zAxis)
+				if (zScale)
 				{
-					zPos = zAxis.getPosition(cursor.current[zField]);
-					yAxisRelativeValue = XYZ(zAxis).height - zPos;
+					zPos = zScale.getPosition(cursor.current[zField]);
+					yAxisRelativeValue = XYZ(zScale).height - zPos;
 				} else if (chart.zAxis) {
 					zPos = chart.zAxis.getPosition(cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 
@@ -247,19 +247,19 @@ package birdeye.vis.elements.geometry
 		private function getXMinPosition():Number
 		{
 			var xPos:Number;
-			if (xAxis && xAxis is INumerableScale)
+			if (xScale && xScale is INumerableScale)
 			{
 				if (_baseAtZero)
-					xPos = xAxis.getPosition(0);
+					xPos = xScale.getPosition(0);
 				else
-					xPos = xAxis.getPosition(INumerableScale(xAxis).min);
+					xPos = xScale.getPosition(INumerableScale(xScale).min);
 			} else {
-				if (chart.xAxis is INumerableScale)
+				if (chart.xScale is INumerableScale)
 				{
 					if (_baseAtZero)
-						xPos = chart.xAxis.getPosition(0);
+						xPos = chart.xScale.getPosition(0);
 					else
-						xPos = chart.xAxis.getPosition(INumerableScale(chart.xAxis).min);
+						xPos = chart.xScale.getPosition(INumerableScale(chart.xScale).min);
 				}
 			}
 			return xPos;

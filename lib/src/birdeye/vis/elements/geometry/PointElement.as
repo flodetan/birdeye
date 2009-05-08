@@ -85,26 +85,26 @@ package birdeye.vis.elements.geometry
 			cursor.seek(CursorBookmark.FIRST);
 			while (!cursor.afterLast)
 			{
-				if (xAxis)
+				if (xScale)
 				{
-					xPos = xAxis.getPosition(cursor.current[xField]);
-				} else if (chart.xAxis) {
-					xPos = chart.xAxis.getPosition(cursor.current[xField]);
+					xPos = xScale.getPosition(cursor.current[xField]);
+				} else if (chart.xScale) {
+					xPos = chart.xScale.getPosition(cursor.current[xField]);
 				}
 				
-				if (yAxis)
+				if (yAxisRelativeValue)
 				{
-					yPos = yAxis.getPosition(cursor.current[yField]);
-				} else if (chart.yAxis) {
-					yPos = chart.yAxis.getPosition(cursor.current[yField]);
+					yPos = yScale.getPosition(cursor.current[yField]);
+				} else if (chart.yScale) {
+					yPos = chart.yScale.getPosition(cursor.current[yField]);
 				}
 
 				var yAxisRelativeValue:Number = NaN;
 
-				if (zAxis)
+				if (zScale)
 				{
-					zPos = zAxis.getPosition(cursor.current[zField]);
-					yAxisRelativeValue = XYZ(zAxis).height - zPos;
+					zPos = zScale.getPosition(cursor.current[zField]);
+					yAxisRelativeValue = XYZ(zScale).height - zPos;
 				} else if (chart.zAxis) {
 					zPos = chart.zAxis.getPosition(cursor.current[zField]);
 					// since there is no method yet to draw a real z axis 

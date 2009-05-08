@@ -43,19 +43,19 @@ package birdeye.vis.interfaces
 		function set xField(val:String):void;
 
 		/** Set the x axis.*/
-		function set xAxis(val:IScaleUI):void;
+		function set xScale(val:IScaleUI):void;
 
 		/** Set the y axis.*/
-		function set yAxis(val:IScaleUI):void;
+		function set yScale(val:IScaleUI):void;
 
 		/** Set the z axis.*/
-		function set zAxis(val:IScaleUI):void;
+		function set zScale(val:IScaleUI):void;
 
 		function get yField():String;
 		function get xField():String;
-		function get xAxis():IScaleUI;
-		function get yAxis():IScaleUI;
-		function get zAxis():IScaleUI;
+		function get xScale():IScaleUI;
+		function get yScale():IScaleUI;
+		function get zScale():IScaleUI;
 
 		function get maxZValue():Number;
 		function get minZValue():Number;
