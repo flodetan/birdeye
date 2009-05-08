@@ -40,7 +40,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.scales.*;
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.interfaces.INumerableAxis;
+	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.RectangleRenderer;
 
@@ -86,11 +86,11 @@ package birdeye.vis.elements.geometry
 			{
 				if (yAxis)
 				{
-					if (yAxis is INumerableAxis)
-						INumerableAxis(yAxis).max = maxYValue;
+					if (yAxis is INumerableScale)
+						INumerableScale(yAxis).max = maxYValue;
 				} else {
-					if (chart && chart.yAxis && chart.yAxis is INumerableAxis)
-						INumerableAxis(chart.yAxis).max = maxYValue;
+					if (chart && chart.yAxis && chart.yAxis is INumerableScale)
+						INumerableScale(chart.yAxis).max = maxYValue;
 				}
 			}
 		}
@@ -272,19 +272,19 @@ package birdeye.vis.elements.geometry
 		private function getYMinPosition():Number
 		{
 			var yPos:Number;
-			if (yAxis && yAxis is INumerableAxis)
+			if (yAxis && yAxis is INumerableScale)
 			{
 				if (_baseAtZero)
 					yPos = yAxis.getPosition(0);
 				else
-					yPos = yAxis.getPosition(INumerableAxis(yAxis).min);
+					yPos = yAxis.getPosition(INumerableScale(yAxis).min);
 			} else {
-				if (chart.yAxis is INumerableAxis)
+				if (chart.yAxis is INumerableScale)
 				{
 					if (_baseAtZero)
 						yPos = chart.yAxis.getPosition(0);
 					else
-						yPos = chart.yAxis.getPosition(INumerableAxis(chart.yAxis).min);
+						yPos = chart.yAxis.getPosition(INumerableScale(chart.yAxis).min);
 				}
 			}
 			return yPos;

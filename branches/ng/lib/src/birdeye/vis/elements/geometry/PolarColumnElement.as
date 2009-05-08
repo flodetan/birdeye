@@ -31,7 +31,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.ArcPath;
 	import birdeye.vis.guides.renderers.UpTriangleRenderer;
-	import birdeye.vis.interfaces.INumerableAxis;
+	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.recipes.polarCharts.CoxComb;
 	import birdeye.vis.scales.*;
 	
@@ -70,10 +70,10 @@ package birdeye.vis.elements.geometry
 			{
 				if (radiusAxis)
 				{
-					if (radiusAxis is INumerableAxis)
-						INumerableAxis(radiusAxis).max = maxRadiusValue;
-				} else if (polarChart && polarChart.radiusAxis && polarChart.radiusAxis is INumerableAxis){
-						INumerableAxis(polarChart.radiusAxis).max = maxRadiusValue;
+					if (radiusAxis is INumerableScale)
+						INumerableScale(radiusAxis).max = maxRadiusValue;
+				} else if (polarChart && polarChart.radiusAxis && polarChart.radiusAxis is INumerableScale){
+						INumerableScale(polarChart.radiusAxis).max = maxRadiusValue;
 				} 
 			}
 		}
@@ -162,14 +162,14 @@ package birdeye.vis.elements.geometry
 				if (radarAxis)
 				{
 					angle = radarAxis.angleAxis.getPosition(cursor.current[angleField]);
-					radius = INumerableAxis(radarAxis.radiusAxes[
+					radius = INumerableScale(radarAxis.radiusAxes[
 										cursor.current[radarAxis.angleCategory]
 										]).getPosition(cursor.current[radiusField]);
 					dataFields[0] = angleField;
 					dataFields[1] = radiusField;
 				} else if (polarChart.radarAxis) {
 					angle = polarChart.radarAxis.angleAxis.getPosition(cursor.current[angleField]);
-					radius = INumerableAxis(polarChart.radarAxis.radiusAxes[
+					radius = INumerableScale(polarChart.radarAxis.radiusAxes[
 										cursor.current[polarChart.radarAxis.angleCategory]
 										]).getPosition(cursor.current[radiusField]);
 					dataFields[0] = angleField;

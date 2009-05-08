@@ -27,6 +27,9 @@
  
  package birdeye.vis
 {
+	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.interfaces.INumerableScale;
+	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.RegularRectangle;
@@ -40,22 +43,30 @@
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
 	import mx.core.IInvalidating;
-	
-	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.interfaces.IAxis;
-	import birdeye.vis.interfaces.INumerableAxis;
 
 	[DefaultProperty("dataProvider")]
 	public class VisScene extends Surface
 	{
-		private var _colorAxis:INumerableAxis;
+		private var _scales:Array; /* of IScale */
+		/** Array of scales, each element will take a scale target from this scale list.*/
+        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IScale")]
+        [ArrayElementType("birdeye.vis.interfaces.IScale")]
+		public function set scales(val:Array):void
+		{
+			_scales = val;
+
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		
+		private var _colorAxis:INumerableScale;
 		/** Define an axis to set the colorField for data items.*/
-		public function set colorAxis(val:INumerableAxis):void
+		public function set colorAxis(val:INumerableScale):void
 		{
 			_colorAxis = val;
 			invalidateDisplayList();
 		}
-		public function get colorAxis():INumerableAxis
+		public function get colorAxis():INumerableScale
 		{
 			return _colorAxis;
 		}

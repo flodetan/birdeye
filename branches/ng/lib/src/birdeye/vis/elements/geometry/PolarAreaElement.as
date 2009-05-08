@@ -29,7 +29,7 @@ package birdeye.vis.elements.geometry
 {
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.guides.renderers.DiamondRenderer;
-	import birdeye.vis.interfaces.INumerableAxis;
+	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
@@ -102,14 +102,14 @@ package birdeye.vis.elements.geometry
 				if (radarAxis)
 				{
 					angle = radarAxis.angleAxis.getPosition(cursor.current[angleField]);
-					radius = INumerableAxis(radarAxis.radiusAxes[
+					radius = INumerableScale(radarAxis.radiusAxes[
 										cursor.current[radarAxis.angleCategory]
 										]).getPosition(cursor.current[radiusField]);
 					dataFields[0] = angleField;
 					dataFields[1] = radiusField;
 				} else if (polarChart.radarAxis) {
 					angle = polarChart.radarAxis.angleAxis.getPosition(cursor.current[angleField]);
-					radius = INumerableAxis(polarChart.radarAxis.radiusAxes[
+					radius = INumerableScale(polarChart.radarAxis.radiusAxes[
 										cursor.current[polarChart.radarAxis.angleCategory]
 										]).getPosition(cursor.current[radiusField]);
 					dataFields[0] = angleField;

@@ -25,27 +25,41 @@
  * THE SOFTWARE.
  */
  
- package birdeye.vis.interfaces
+package birdeye.vis.interfaces
 {
-	public interface INumerableAxis extends IAxis
+	import flash.geom.Point;
+	
+	public interface IScale
 	{
-		/** Set-get the minimum value.*/
-		function set min(val:Number):void
-		function get min():Number
+		/** Calculates and returns the coordinate of a data value in the axis (depends on 
+		 * scale type). */
+		function getPosition(dataValue:*):*
+
+		/** Set the interval between axis labels.*/
+		function set interval(val:Number):void
+		function get interval():Number
+
+		/** Set-get the size of this axis.*/
+		function set size(val:Number):void
+		function get size():Number
+
+		/** Set the function used by getPosition to calculate the position of the data value over the axis.*/
+		function set f(val:Function):void
+
+		/** Define the scale type (category, linear, log, date...)*/
+		function set scaleType(val:String):void
+		function get scaleType():String
 		
-		/** Set-get the maximum value.*/
-		function set max(val:Number):void
-		function get max():Number
+ 		/** Define the range values for the scale (for ex. type [minColor, maxColor] or [minRadius, maxRadius])*/
+		function set range(val:Array):void
+		function get range():Array
 
-		/** Set-get the total sum of positive values that are feeding the axis.*/
-		function set totalPositiveValue(val:Number):void
-		function get totalPositiveValue():Number
-
-		/** Set-get the sum of all values that are feeding the axis.*/
-/* 		function set sum(val:Number):void
-		function get sum():Number */
-
-		/** Set the base at zero. */
-		function set baseAtZero(val:Boolean):void
-	}
+/*		/** Set the origin point of the scale.
+		function set origin(val:Point):void
+		function get origin():Point
+		
+		/** Set the angle of the scale.
+		function set angle(val:Number):void
+		function get angle():Number
+ */	}
 }

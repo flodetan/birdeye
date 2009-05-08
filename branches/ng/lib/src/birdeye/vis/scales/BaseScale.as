@@ -27,21 +27,18 @@
  
 package birdeye.vis.scales
 {
+	import birdeye.vis.interfaces.IScaleUI;
+	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
 	import com.degrafa.geometry.Line;
-	import com.degrafa.paint.GradientStop;
-	import com.degrafa.paint.LinearGradientFill;
-	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	import mx.core.UIComponent;
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
-	
-	import birdeye.vis.interfaces.IAxisUI;
 	
 	[Style(name="gradientColors",type="Array",inherit="no")]
 	[Style(name="gradientAlphas",type="Array",inherit="no")]
@@ -61,7 +58,7 @@ package birdeye.vis.scales
 	[Style(name="pointerSize",type="uint",inherit="no")]
 	[Style(name="pointerWeight",type="uint",inherit="no")]
 
-	public class BaseScale extends UIComponent implements IAxisUI
+	public class BaseScale extends UIComponent implements IScaleUI
 	{
 		protected var surf:Surface;
 		protected var gg:GeometryGroup;
@@ -353,11 +350,18 @@ package birdeye.vis.scales
 			return _showAxis;
 		}
 
-/* 		/** Define the range values for the scale (for ex. type [minColor, maxColor] or [minRadius, maxRadius])*
+		private var _range:Array;
+ 		/** Define the range values for the scale (for ex. type [minColor, maxColor] or [minRadius, maxRadius]).*/
 		public function set range(val:Array):void
+		{
+			_range = val;
+		}
 		public function get range():Array
+		{
+			return _range;
+		}
 
-		/** Set the origin point of the scale.*
+/*		/** Set the origin point of the scale.*
 		public function set origin(val:Point):void
 		public function get origin():Point
 		

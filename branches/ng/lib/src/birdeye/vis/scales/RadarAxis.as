@@ -89,7 +89,7 @@ package birdeye.vis.scales
 		public function set angleCategory(val:String):void
 		{
 			_angleCategory = val;
-			var tmpAngleAxis:CategoryAngleAxis = new CategoryAngleAxis();
+			var tmpAngleAxis:CategoryAngle = new CategoryAngle();
 			tmpAngleAxis.categoryField = val;
 			angleAxis = tmpAngleAxis;
 		}
@@ -109,14 +109,14 @@ package birdeye.vis.scales
 			return _radiusSize;
 		}
 		
-		private var _angleAxis:CategoryAngleAxis;
-		public function set angleAxis(val:CategoryAngleAxis):void
+		private var _angleAxis:CategoryAngle;
+		public function set angleAxis(val:CategoryAngle):void
 		{
 			_angleAxis = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get angleAxis():CategoryAngleAxis
+		public function get angleAxis():CategoryAngle
 		{
 			return _angleAxis;
 		}

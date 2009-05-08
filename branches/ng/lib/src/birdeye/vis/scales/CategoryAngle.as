@@ -27,9 +27,9 @@
  
  package birdeye.vis.scales
 {
-	import birdeye.vis.interfaces.IEnumerableAxis;
+	import birdeye.vis.interfaces.IEnumerableScale;
 	
-	public class CategoryAngleAxis extends CategoryAxis
+	public class CategoryAngle extends Category
 	{
 		private var _angle:Number;
 		
@@ -59,7 +59,7 @@
 				interval = (_maxAngle - _minAngle) / dataProvider.length;
 		}
 		
-		public function CategoryAngleAxis():void
+		public function CategoryAngle():void
 		{
 			showAxis = false;
 		}

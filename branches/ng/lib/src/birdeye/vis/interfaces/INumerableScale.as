@@ -24,28 +24,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package birdeye.vis.interfaces
+ 
+ package birdeye.vis.interfaces
 {
-	import com.degrafa.geometry.Line;
-	
-	public interface IAxisUI extends IAxis
+	public interface INumerableScale extends IScale
 	{
-		/** Position the axis pointer on the specific Y coordinate value. */ 
-		function set pointerY(val:Number):void;
-
-		/** Position the axis pointer on the specific X coordinate value. */ 
-		function set pointerX(val:Number):void;
+		/** Set-get the minimum value.*/
+		function set min(val:Number):void
+		function get min():Number
 		
-		/** Get the axis pointer. Can be used to change colors, stroke, visibility...*/
-		function get pointer():Line;
+		/** Set-get the maximum value.*/
+		function set max(val:Number):void
+		function get max():Number
 
-		/** Set the axis placement.*/
-		function set placement(val:String):void
-		function get placement():String
+		/** Set-get the total sum of positive values that are feeding the axis.*/
+		function set totalPositiveValue(val:Number):void
+		function get totalPositiveValue():Number
 
-		/** The axis must provide the removal all elements when refreshed, thus insuring
-		 * both display refresh and memory clearing.*/
-		function removeAllElements():void
+		/** Set-get the sum of all values that are feeding the axis.*/
+/* 		function set sum(val:Number):void
+		function get sum():Number */
+
+		/** Set the base at zero. */
+		function set baseAtZero(val:Boolean):void
 	}
 }

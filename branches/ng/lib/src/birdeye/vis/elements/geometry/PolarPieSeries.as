@@ -31,7 +31,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.ArcPath;
 	import birdeye.vis.guides.renderers.CircleRenderer;
-	import birdeye.vis.interfaces.IAxis;
+	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
@@ -135,7 +135,7 @@ package birdeye.vis.elements.geometry
 			var wSize:Number, hSize:Number;
 			wSize = hSize = radius*2;
 
-			var aAxis:IAxis;
+			var aAxis:IScale;
 			if (angleAxis)
 				aAxis = angleAxis;
 			else if (polarChart.angleAxis)

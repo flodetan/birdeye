@@ -40,9 +40,9 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.scales.BaseScale;
 	import birdeye.vis.coords.Cartesian;
 	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.interfaces.IAxisUI;
+	import birdeye.vis.interfaces.IScaleUI;
 	import birdeye.vis.interfaces.ICartesianElement;
-	import birdeye.vis.interfaces.IEnumerableAxis;
+	import birdeye.vis.interfaces.IEnumerableScale;
 	import birdeye.vis.interfaces.ISizableItem;
 
 	[Exclude(name="index", kind="property")]
@@ -128,8 +128,8 @@ package birdeye.vis.elements.geometry
 			return _index;
 		}
 		
-		private var _xAxis:IAxisUI;
-		public function set xAxis(val:IAxisUI):void
+		private var _xAxis:IScaleUI;
+		public function set xAxis(val:IScaleUI):void
 		{
 			_xAxis = val;
 			if (_xAxis.placement != BaseScale.BOTTOM && _xAxis.placement != BaseScale.TOP)
@@ -138,13 +138,13 @@ package birdeye.vis.elements.geometry
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get xAxis():IAxisUI
+		public function get xAxis():IScaleUI
 		{
 			return _xAxis;
 		}
 		
-		private var _yAxis:IAxisUI;
-		public function set yAxis(val:IAxisUI):void
+		private var _yAxis:IScaleUI;
+		public function set yAxis(val:IScaleUI):void
 		{
 			_yAxis = val;
 			if (_yAxis.placement != BaseScale.LEFT && _yAxis.placement != BaseScale.RIGHT)
@@ -153,13 +153,13 @@ package birdeye.vis.elements.geometry
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get yAxis():IAxisUI
+		public function get yAxis():IScaleUI
 		{
 			return _yAxis;
 		}
 		
-		private var _zAxis:IAxisUI;
-		public function set zAxis(val:IAxisUI):void
+		private var _zAxis:IScaleUI;
+		public function set zAxis(val:IScaleUI):void
 		{
 			_zAxis = val;
 			if (_zAxis.placement != BaseScale.DIAGONAL)
@@ -168,7 +168,7 @@ package birdeye.vis.elements.geometry
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get zAxis():IAxisUI
+		public function get zAxis():IScaleUI
 		{
 			return _zAxis;
 		}
@@ -176,7 +176,7 @@ package birdeye.vis.elements.geometry
 		protected var _maxYValue:Number = NaN;
 		public function get maxYValue():Number
 		{
-			if (! (yAxis is IEnumerableAxis))
+			if (! (yAxis is IEnumerableScale))
 				_maxYValue = getMaxValue(yField);
 			return _maxYValue;
 		}
@@ -184,7 +184,7 @@ package birdeye.vis.elements.geometry
 		protected var _maxXValue:Number = NaN;
 		public function get maxXValue():Number
 		{
-			if (! (xAxis is IEnumerableAxis))
+			if (! (xAxis is IEnumerableScale))
 				_maxXValue = getMaxValue(xField);
 			return _maxXValue;
 		}
@@ -192,7 +192,7 @@ package birdeye.vis.elements.geometry
 		private var _minYValue:Number = NaN;
 		public function get minYValue():Number
 		{
-			if (! (yAxis is IEnumerableAxis))
+			if (! (yAxis is IEnumerableScale))
 				_minYValue = getMinValue(yField);
 			return _minYValue;
 		}
@@ -200,7 +200,7 @@ package birdeye.vis.elements.geometry
 		private var _minXValue:Number = NaN;
 		public function get minXValue():Number
 		{
-			if (! (xAxis is IEnumerableAxis))
+			if (! (xAxis is IEnumerableScale))
 				_minXValue = getMinValue(xField);
 			return _minXValue;
 		}
@@ -208,7 +208,7 @@ package birdeye.vis.elements.geometry
 		protected var _maxZValue:Number = NaN;
 		public function get maxZValue():Number
 		{
-			if (! (zAxis is IEnumerableAxis))
+			if (! (zAxis is IEnumerableScale))
 				_maxZValue = getMaxValue(zField);
 			return _maxZValue;
 		}
@@ -216,7 +216,7 @@ package birdeye.vis.elements.geometry
 		private var _minZValue:Number = NaN;
 		public function get minZValue():Number
 		{
-			if (! (zAxis is IEnumerableAxis))
+			if (! (zAxis is IEnumerableScale))
 				_minZValue = getMinValue(zField);
 			return _minZValue;
 		}
@@ -288,23 +288,23 @@ package birdeye.vis.elements.geometry
 			
 			if (yAxis)
 			{
-				if (yAxis is IEnumerableAxis)
-					axesCheck = Boolean(IEnumerableAxis(yAxis).dataProvider);
+				if (yAxis is IEnumerableScale)
+					axesCheck = Boolean(IEnumerableScale(yAxis).dataProvider);
 			} else if (chart && chart.yAxis)
 			{
-				if (chart.yAxis is IEnumerableAxis)
-					axesCheck = Boolean(IEnumerableAxis(chart.yAxis).dataProvider);
+				if (chart.yAxis is IEnumerableScale)
+					axesCheck = Boolean(IEnumerableScale(chart.yAxis).dataProvider);
 			} else
 				axesCheck = false;
 
 			if (xAxis)
 			{
-				if (xAxis is IEnumerableAxis)
-					axesCheck = axesCheck && Boolean(IEnumerableAxis(xAxis).dataProvider);
+				if (xAxis is IEnumerableScale)
+					axesCheck = axesCheck && Boolean(IEnumerableScale(xAxis).dataProvider);
 			} else if (chart && chart.xAxis)
 			{
-				if (chart.xAxis is IEnumerableAxis)
-					axesCheck = axesCheck && Boolean(IEnumerableAxis(chart.xAxis).dataProvider);
+				if (chart.xAxis is IEnumerableScale)
+					axesCheck = axesCheck && Boolean(IEnumerableScale(chart.xAxis).dataProvider);
 			} else
 				axesCheck = false;
 
