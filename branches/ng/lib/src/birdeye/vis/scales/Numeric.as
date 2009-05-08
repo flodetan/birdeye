@@ -27,17 +27,15 @@
  
 package birdeye.vis.scales
 {
+	import birdeye.vis.interfaces.INumerableScale;
+	import birdeye.vis.interfaces.IScaleUI;
+	
 	import com.degrafa.geometry.Line;
-	import com.degrafa.geometry.RasterText;
 	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.text.TextFieldAutoSize;
-	
-	import birdeye.vis.scales.BaseScale;
-	import birdeye.vis.interfaces.IScaleUI;
-	import birdeye.vis.interfaces.INumerableScale;
 
 	public class Numeric extends XYZ implements INumerableScale, IScaleUI
 	{
@@ -313,5 +311,11 @@ package birdeye.vis.scales
 			else 
 				return _function(dataValue, min, max, _baseAtZero, _size);
 		}
+		
+		override public function resetValues():void
+		{
+			super.resetValues();
+			totalPositiveValue = NaN;
+		} 
 	}
 }

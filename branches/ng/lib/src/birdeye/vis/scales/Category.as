@@ -243,5 +243,11 @@
 				
 			return pos;
 		}
+		
+		override public function resetValues():void
+		{
+			super.resetValues();
+			_dataProvider = [];
+		}
 	}
 }
