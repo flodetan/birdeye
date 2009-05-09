@@ -2,7 +2,7 @@
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:charts="birdeye.vis.recipes.cartesianCharts.*"
 	xmlns:series="birdeye.vis.elements.geometry.*"
-	xmlns:axis="birdeye.vis.scales.*"
+	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
 	backgroundColor="#ffffff" 
 	creationComplete="createDT()"
@@ -46,12 +46,12 @@
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
 	<mx:Button label="Generate" click="createDT()"/>
 	<charts:ScatterPlot maxRadius="30" id="sp" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
- 	<charts:xAxis>
- 		<axis:Category categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
- 	</charts:xAxis>
- 	<charts:yAxis>
-	 	<axis:LinearAxis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
-	 </charts:yAxis>
+ 	<charts:xScale>
+ 		<scales:Category categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
+ 	</charts:xScale>
+ 	<charts:yScale>
+	 	<scales:Linear placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
+	 </charts:yScale>
 		 <charts:elements>
 		 	<series:ScatterElement extendMouseEvents="true" xField="subject" radiusField="total" yField="R1" itemRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" styleName="grad1" displayName="R1">
 		 	</series:ScatterElement>

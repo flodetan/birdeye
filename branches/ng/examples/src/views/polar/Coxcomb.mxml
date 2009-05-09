@@ -49,15 +49,20 @@
 	<mx:Button label="Generate" click="createDT()"/>
 	<coxcomb:CoxComb type="stacked100" columnWidthRate="1" id="pc1" dataProvider="{dt}" 
 		showDataTips="true" width="500" height="500">
-		<coxcomb:angleAxis>
+<!--		<coxcomb:angleScale>
 			<axis:CategoryAngle categoryField="subject" />
-		</coxcomb:angleAxis>
-		<coxcomb:radiusAxis>
-			<axis:LinearAxis showAxis="false"/>
-		</coxcomb:radiusAxis>
+		</coxcomb:angleScale>
+		<coxcomb:radiusScale>
+			<axis:Linear showAxis="false"/>
+		</coxcomb:radiusScale>
+-->		<coxcomb:scales>
+			<axis:CategoryAngle id="c" categoryField="subject"/>
+			<axis:Linear id="l1" placement="horizontal_center" sizeLabel="11"/>
+			<axis:Linear id="l2" placement="vertical_center" sizeLabel="12"/>
+		</coxcomb:scales>
 		<coxcomb:elements>
-			<pseries:PolarColumnElement extendMouseEvents="true" styleName="grad1" angleField="subject" radiusField="R1" displayName="R1"/>
-			<pseries:PolarColumnElement extendMouseEvents="true" styleName="grad2" angleField="subject" radiusField="R2" displayName="R2"/>
+			<pseries:PolarColumnElement angleScale="{c}" radiusScale="{l1}" extendMouseEvents="true" styleName="grad1" angleField="subject" radiusField="R1" displayName="R1"/>
+			<pseries:PolarColumnElement angleScale="{c}" radiusScale="{l1}" extendMouseEvents="true" styleName="grad2" angleField="subject" radiusField="R2" displayName="R2"/>
 			<pseries:PolarColumnElement extendMouseEvents="true" styleName="grad3" angleField="subject" radiusField="R3" displayName="R3"/>
 			<pseries:PolarColumnElement extendMouseEvents="true" styleName="grad4" angleField="subject" radiusField="R4" displayName="R4"/>
 			<pseries:PolarColumnElement extendMouseEvents="true" styleName="grad5" angleField="subject" radiusField="R5" displayName="R5"/>

@@ -56,12 +56,12 @@
 	<mx:Button label="Generate" click="createDT()"/>
 	<mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
 		<coords:Cartesian id="pc3" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
-			 <coords:yAxis>
-			 			<scales:LinearAxis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
-			 	</coords:yAxis>
-			 	<coords:xAxis>
+			 <coords:yScale>
+			 			<scales:Linear placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
+			 	</coords:yScale>
+			 	<coords:xScale>
 			 			<scales:Category categoryField="index" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
-			 </coords:xAxis>
+			 </coords:xScale>
 			 <coords:elements>
 			 	<elements:PointElement xField="index" yField="bronze" source="{rasterImage}" strokeAlpha="0" displayName="A" plotRadius="13"/>
 			 	<elements:PointElement xField="index" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="solid1" yField="gold" displayName="C" />
