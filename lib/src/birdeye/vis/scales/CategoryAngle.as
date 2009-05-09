@@ -31,6 +31,14 @@
 	
 	public class CategoryAngle extends Category
 	{
+		override public function get interval():Number
+		{
+			if (isNaN(_interval))
+				_interval = (_range[1] - _range[0]) / dataProvider.length
+			
+			return _interval;
+		}
+		
 		public function CategoryAngle():void
 		{
 			showAxis = false;

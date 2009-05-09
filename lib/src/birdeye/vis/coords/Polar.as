@@ -333,8 +333,33 @@ package birdeye.vis.coords
 					}
 				}
 			} 
+
+			for (var i:Number = 0; i<_elements.length; i++)
+			{
+				if (IPolarElement(_elements[i]).radiusScale)
+				{
+					IPolarElement(_elements[i]).radiusScale.size = Math.min(unscaledWidth, unscaledHeight)/2;
+				
+					if (IPolarElement(_elements[i]).radiusScale is IScaleUI)
+					{
+						switch (IScaleUI(IPolarElement(_elements[i]).radiusScale).placement)
+						{
+							case BaseScale.HORIZONTAL_CENTER:
+								DisplayObject(IPolarElement(_elements[i]).radiusScale).x = _origin.x;
+								DisplayObject(IPolarElement(_elements[i]).radiusScale).y = _origin.y;
+								break;
+							case BaseScale.VERTICAL_CENTER:
+								DisplayObject(IPolarElement(_elements[i]).radiusScale).x = 
+									_origin.x - DisplayObject(IPolarElement(_elements[i]).radiusScale).width;
+								DisplayObject(IPolarElement(_elements[i]).radiusScale).y = 
+									_origin.y - IPolarElement(_elements[i]).radiusScale.size;
+								break;
+						}
+					}
+				}
+			}
 			
-			for (var i:int = 0; i<_elements.length; i++)
+			for (i = 0; i<_elements.length; i++)
 			{
 				DisplayObject(_elements[i]).width = unscaledWidth;
 				DisplayObject(_elements[i]).height = unscaledHeight;
@@ -497,7 +522,7 @@ package birdeye.vis.coords
 				// since these are children of each elements, they are 
 				// for sure ready for feeding and it won't affect the axesFeeded status
 				for (var i:Number = 0; i<elements.length; i++)
-					initSeriesAxes(elements[i]);
+					initElementsAxes(elements[i]);
 					
 				axesFeeded = true;
 			}
@@ -598,7 +623,7 @@ package birdeye.vis.coords
 
 		/** @Private
 		 * Init the axes owned by the element passed to this method.*/
-		private function initSeriesAxes(element:IPolarElement):void
+		private function initElementsAxes(element:IPolarElement):void
 		{
 			if (element.cursor)
 			{
@@ -645,6 +670,12 @@ package birdeye.vis.coords
 						if (isNaN(INumerableScale(element.angleScale).max))
 							INumerableScale(element.angleScale).max = element.maxAngleValue;
 						else 
+							INumerableScale(element.angleScale).max =
+								Math.max(INumerableScale(element.angleScale).max, element.maxAngleValue);
+
+						if (isNaN(INumerableScale(element.angleScale).min))
+							INumerableScale(element.angleScale).min = element.minAngleValue;
+						else 
 							INumerableScale(element.angleScale).min =
 								Math.min(INumerableScale(element.angleScale).min, element.minAngleValue);
 					} else {
@@ -676,10 +707,18 @@ package birdeye.vis.coords
 	
 				} else if (element.radiusScale is INumerableScale)
 				{
-					INumerableScale(element.radiusScale).max =
-						element.maxRadiusValue;
-					INumerableScale(element.radiusScale).min =
-						element.minRadiusValue;
+					// if the element angle axis is just numeric, than calculate get its min max data values
+					if (isNaN(INumerableScale(element.radiusScale).max))
+						INumerableScale(element.radiusScale).max = element.maxRadiusValue;
+					else 
+						INumerableScale(element.radiusScale).max =
+							Math.max(INumerableScale(element.radiusScale).max, element.maxRadiusValue);
+
+					if (isNaN(INumerableScale(element.radiusScale).min))
+						INumerableScale(element.radiusScale).min = element.minRadiusValue;
+					else 
+						INumerableScale(element.radiusScale).min =
+							Math.min(INumerableScale(element.radiusScale).min, element.minRadiusValue);
 				}
 	
 			}
