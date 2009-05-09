@@ -42,7 +42,7 @@ package birdeye.vis.elements.geometry
 	
 	import mx.collections.CursorBookmark;
 
-	public class PolarPieSeries extends PolarStackElement
+	public class PolarPieElements extends PolarStackElement
 	{
 		private var _innerRadius:Number;
 		public function set innerRadius(val:Number):void
@@ -71,7 +71,7 @@ package birdeye.vis.elements.geometry
 			super.stackType = val;
 		}
 		
-		public function PolarPieSeries()
+		public function PolarPieElements()
 		{
 			super();
 		}

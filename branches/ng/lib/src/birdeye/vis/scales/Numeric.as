@@ -315,7 +315,7 @@ package birdeye.vis.scales
 		override public function resetValues():void
 		{
 			super.resetValues();
-			totalPositiveValue = NaN;
+			min = max = totalPositiveValue = NaN;
 		} 
 	}
 }
