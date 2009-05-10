@@ -34,9 +34,38 @@ package birdeye.vis.trans.projections
 		public function GoodeSinusoidalTransformation()
 		{
 			super();
-			this.scalefactor = 138.6;
 			this.xoffset = 2.98;
 			this.yoffset = 1.32;
+			this.worldUnscaledSizeX=6.12;
+			this.worldUnscaledSizeY=2.8;
 		}
-	}
+		
+/*		protected override function calcUnscaledSizeX(minLat:Number, maxLat:Number, minLong:Number, maxLong:Number):Number
+		{
+			const limit:Number = convertDegToRad(40.73333403); //Limit between Sinusoidal and Mollweide part of the Goode projection 
+			if (minLat >= limit) //The Sinusoidal part is outside the frame
+			{
+				return Number.NaN;
+			}
+			if (maxLat > limit) //Only consider points in the Sinusoidal part of the globe
+			{
+				maxLat = limit;
+			}
+			return super.calcUnscaledSizeX(minLat, maxLat, minLong, maxLong);
+		}
+
+		protected override function calcUnscaledSizeY(minLat:Number, maxLat:Number, minLong:Number, maxLong:Number):Number
+		{
+			const limit:Number = convertDegToRad(40.73333403); //Limit between Sinusoidal and Mollweide part of the Goode projection 
+			if (minLat >= limit) //The Sinusoidal part is outside the frame
+			{
+				return Number.NaN;
+			}
+			if (maxLat > limit) //Only consider points in the Sinusoidal part of the globe
+			{
+				maxLat = limit;
+			}
+			return super.calcUnscaledSizeY(minLat, maxLat, minLong, maxLong);
+		}
+*/	}
 }

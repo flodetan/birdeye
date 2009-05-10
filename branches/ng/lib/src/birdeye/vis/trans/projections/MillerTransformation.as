@@ -36,25 +36,28 @@ package birdeye.vis.trans.projections
 		public function MillerTransformation()
 		{
 			super();
-			this.scalefactor=133.8;
-			this.xoffset=3.14;
-			this.yoffset=1.98; 
+			this.xoffset=Math.PI;
+			this.yoffset=2.303412543376390918432;
+			this.worldUnscaledSizeX=Math.PI*2;
+			this.worldUnscaledSizeY=4.606825086752782;
 		}
 
-		public override function calcXY(latDeg:Number, longDeg:Number, zoom:Number):Point
+		public override function calcX(latDeg:Number, longDeg:Number):Number
 		{
-			var latRad:Number=convertDegToRad(latDeg);
 			var longRad:Number=convertDegToRad(longDeg);
 			var xCentered:Number;
-			var yCentered:Number;
 			
 			//x = long
-			xCentered = longRad;
-			//y = 1.25 ln( tan(pi/4 + 0.4 lat) ) 
-			yCentered = 1.25*Math.log( Math.tan(Math.PI/4 + 0.4*latRad) );
-						
-			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
+			return longRad;			
 		}
-		
+
+		public override function calcY(latDeg:Number, longDeg:Number):Number
+		{
+			var latRad:Number=convertDegToRad(latDeg);
+			
+			//y = 1.25 ln( tan(pi/4 + 0.4 lat) ) 
+			return 1.25*Math.log( Math.tan(Math.PI/4 + 0.4*latRad) );
+		}
+
 	}
 }

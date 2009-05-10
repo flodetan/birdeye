@@ -31,7 +31,7 @@ package birdeye.vis.trans.projections
 	/**
 	* Class for geographic location referencing via latitude and longitude
 	**/	 
-	public class USGeographicTransformation extends Transformation
+	public class USGeographicTransformation extends WorldGeographicTransformation
 	{
 		//--------------------------------------------------------------------------
     	//
@@ -41,22 +41,10 @@ package birdeye.vis.trans.projections
 		public function USGeographicTransformation(lat:Number,long:Number)
 		{
 			super();
-			this.scalefactor=740;
 			this.xoffset=2.19;
 			this.yoffset=0.858
-		}
-
-		public override function calcXY(lat:Number, long:Number, zoom:Number):Point
-		{
-			var latRad:Number=convertDegToRad(lat);
-			var longRad:Number=convertDegToRad(long);
-			var xCentered:Number;
-			var yCentered:Number;
-			
-			xCentered = longRad;
-			yCentered = latRad;
-									
-			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
+			this.worldUnscaledSizeX=1.4; //to be verified
+			this.worldUnscaledSizeY=3; //to be verified
 		}
 		
 	}

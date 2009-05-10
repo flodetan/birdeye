@@ -27,7 +27,10 @@
 
 package birdeye.vis.data.dictionaries
 {
-	public class WorldCountries
+	import birdeye.vis.elements.geometry.CartesianElement;
+	import birdeye.vis.elements.BaseElement;
+	
+	public class WorldCountries extends BaseElement //SASN extends BaseElement
 	{
 		import flash.utils.Dictionary;
 		import mx.controls.Alert;

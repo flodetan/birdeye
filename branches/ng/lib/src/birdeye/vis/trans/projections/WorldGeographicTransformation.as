@@ -35,23 +35,22 @@ package birdeye.vis.trans.projections
 		public function WorldGeographicTransformation()
 		{
 			super();
-			this.scalefactor=133.9;
-			this.xoffset=3.145;
-			this.yoffset=1.455;
+			this.xoffset=Math.PI;
+			this.yoffset=Math.PI/2;
+			this.worldUnscaledSizeX=Math.PI*2;
+			this.worldUnscaledSizeY=Math.PI;
 		}
 		
-		public override function calcXY(lat:Number, long:Number, zoom:Number):Point
+		public override function calcX(latDeg:Number, longDeg:Number):Number
 		{
-			var latRad:Number=convertDegToRad(lat);
-			var longRad:Number=convertDegToRad(long);
-			var xCentered:Number;
-			var yCentered:Number;
-			
-			xCentered = longRad;
-			yCentered = latRad;
-									
-			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
+			var longRad:Number=convertDegToRad(longDeg);
+			return longRad;
 		}
 		
+		public override function calcY(latDeg:Number, longDeg:Number):Number
+		{
+			var latRad:Number=convertDegToRad(latDeg);
+			return latRad;
+		}
 	}
 }

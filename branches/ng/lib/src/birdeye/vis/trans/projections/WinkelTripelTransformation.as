@@ -35,14 +35,15 @@ package birdeye.vis.trans.projections
 		public function WinkelTripelTransformation()
 		{
 			super();
-			this.scalefactor=68;
-			this.xoffset=6.13;
-			this.yoffset=2.88;
+			this.xoffset=6.283185307;
+			this.yoffset=3.141592654;
+			this.worldUnscaledSizeX=12;
+			this.worldUnscaledSizeY=6;
 		}
 
-		private function calcSincAlpha(la:Number,lo:Number):Number
+		private function calcSincAlpha(lat:Number,long:Number):Number
 		{
-			var alpha:Number = Math.acos(Math.cos(la)*Math.cos(lo/2));
+			var alpha:Number = Math.acos(Math.cos(lat)*Math.cos(long/2));
 			if (alpha==0) {
 				return 1;
 			}else{
@@ -50,7 +51,7 @@ package birdeye.vis.trans.projections
 			}
 		}
 
-		public override function calcXY(lat:Number, long:Number, zoom:Number):Point
+/*		public override function calcXY(lat:Number, long:Number, sizeX:Number, sizeY:Number):Point
 		{
 			const cosEquirect:Number = 1;
 			var latRad:Number=convertDegToRad(lat);
@@ -67,7 +68,32 @@ package birdeye.vis.trans.projections
 			//y = lat + sin(lat)/sincAlpha
 			yCentered = latRad + Math.sin(latRad)/sincAlpha;
 									
-			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
+			return createTranslatedXYPoint(xCentered, yCentered);
+		}
+*/
+
+		public override function calcX(latDeg:Number, longDeg:Number):Number
+		{
+			const cosEquirect:Number = 1;
+			var latRad:Number=convertDegToRad(latDeg);
+			var longRad:Number=convertDegToRad(longDeg);
+			var sincAlpha:Number;
+	
+			sincAlpha=calcSincAlpha(latRad,longRad);
+			//x = long*cosEquirect + 2cos(lat)*sin(long/2)/sincAlpha
+			return longRad*cosEquirect + 2*Math.cos(latRad)*Math.sin(longRad/2)/sincAlpha;
+		}
+		
+		public override function calcY(latDeg:Number, longDeg:Number):Number
+		{
+			const cosEquirect:Number = 1;
+			var latRad:Number=convertDegToRad(latDeg);
+			var longRad:Number=convertDegToRad(longDeg);
+			var sincAlpha:Number;
+			
+			sincAlpha=calcSincAlpha(latRad,longRad);
+			//y = lat + sin(lat)/sincAlpha
+			return latRad + Math.sin(latRad)/sincAlpha;
 		}
 
 	}
