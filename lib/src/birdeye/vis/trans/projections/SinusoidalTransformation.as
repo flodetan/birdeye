@@ -37,19 +37,20 @@ package birdeye.vis.trans.projections
 			super();
 		}
 
-		public override function calcXY(latDeg:Number, longDeg:Number, zoom:Number):Point
+		public override function calcX(latDeg:Number, longDeg:Number):Number
 		{
 			var latRad:Number=convertDegToRad(latDeg);
 			var longRad:Number=convertDegToRad(longDeg);
-			var xCentered:Number;
-			var yCentered:Number;
 			
 			//x = (long-lstart)*cos(lat)  //lstart=0
-			xCentered=(longRad)*Math.cos(latRad);
-			yCentered = latRad;
-			
-			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
+			return (longRad)*Math.cos(latRad);
 		}
 
+		public override function calcY(latDeg:Number, longDeg:Number):Number
+		{
+			var latRad:Number=convertDegToRad(latDeg);
+			
+			return latRad;
+		}
 	}
 }

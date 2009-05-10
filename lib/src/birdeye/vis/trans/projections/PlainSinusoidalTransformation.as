@@ -34,9 +34,10 @@ package birdeye.vis.trans.projections
 		public function PlainSinusoidalTransformation()
 		{
 			super();
-			this.scalefactor=139;
-			this.xoffset=2.97;
-			this.yoffset=1.45;
+			this.xoffset=Math.PI;
+			this.yoffset=Math.PI/2;
+			this.worldUnscaledSizeX=Math.PI*2;
+			this.worldUnscaledSizeY=Math.PI;
 		}
 	}
 }

@@ -57,9 +57,10 @@ package birdeye.vis.trans.projections
 		public function RobinsonTransformation()
 		{
 			super();
-			this.scalefactor=1729;
-			this.xoffset=0.239;
-			this.yoffset=0.1224;
+			this.xoffset=0.25;
+			this.yoffset=0.127;
+			this.worldUnscaledSizeX=0.5;
+			this.worldUnscaledSizeY=0.254;
 		}
 
 		private function roundUpToFive(inVal:Number):int{
@@ -88,28 +89,31 @@ package birdeye.vis.trans.projections
 			}
 		}
 		
-		public override function calcXY(lat:Number, long:Number, zoom:Number):Point
+		public override function calcX(lat:Number, long:Number):Number
 		{
-			var xCentered:Number;
-			var yCentered:Number;
 			var lowLat:int = roundDownToFive(lat);
 			var highLat:int = roundUpToFive(lat);
  			var ratio:Number = calc_ratio(lat-lowLat, Math.abs(highLat-lowLat));
 
 			var lowX:Number = arrProjDef[Math.abs(lowLat)].PLEN*long/4/180;//Math.PI;
 			var highX:Number = arrProjDef[Math.abs(highLat)].PLEN*long/4/180;//Math.PI;
+			
+//			xCentered = interpolate(ratio, lowX, highX);
+			return lowX+ratio*(highX-lowX);
+		}
+
+		public override function calcY(lat:Number, long:Number):Number
+		{
+			var lowLat:int = roundDownToFive(lat);
+			var highLat:int = roundUpToFive(lat);
+ 			var ratio:Number = calc_ratio(lat-lowLat, Math.abs(highLat-lowLat));
+
 			var sign:int = sign(lat)
 			var lowY:Number = sign*arrProjDef[Math.abs(lowLat)].PDFE;
 			var highY:Number = sign*arrProjDef[Math.abs(highLat)].PDFE;
 			
-//			xCentered = interpolate(ratio, lowX, highX);
-			xCentered = lowX+ratio*(highX-lowX);
-
 //			yCentered = interpolate(ratio, lowY, highY);
-			yCentered = lowY+ratio*(highY-lowY);
-									
-			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
+			return lowY+ratio*(highY-lowY);
 		}
-
 	}
 }

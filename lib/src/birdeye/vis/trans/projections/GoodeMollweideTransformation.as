@@ -31,13 +31,16 @@ package birdeye.vis.trans.projections
 
 	public class GoodeMollweideTransformation extends MollweideTransformation
 	{
+		
 		public function GoodeMollweideTransformation()
 		{
 			super();
-			this.xscaler = 1.05;
-			this.scalefactor = 131;
+			this.xscaler = 1.06;
 			this.xoffset = 3.15;
 			this.yoffset = 1.39;
+			this.worldUnscaledSizeX=6.12*this.xscaler;
+			this.worldUnscaledSizeY=2.8;
 		}
+	
 	}
 }

@@ -60,25 +60,31 @@ package birdeye.vis.trans.projections
 			return thetaPrim/2;
 		}
 
-		public override function calcXY(latDeg:Number, longDeg:Number, zoom:Number):Point
+		public override function calcX(latDeg:Number, longDeg:Number):Number
 		{
 			const c:Number = 2*Math.sqrt(2)/Math.PI;
 			var latRad:Number=convertDegToRad(latDeg);
 			var longRad:Number=convertDegToRad(longDeg);
 			var theta:Number=1;
 			var xCentered:Number;
+			
+			theta = approx_theta(latRad);
+			xCentered = c * longRad * Math.cos(theta);				
+			return xCentered *_xscaler;						
+		}
+
+		public override function calcY(latDeg:Number, longDeg:Number):Number
+		{
+			const c:Number = 2*Math.sqrt(2)/Math.PI;
+			var latRad:Number=convertDegToRad(latDeg);
+			var longRad:Number=convertDegToRad(longDeg);
+			var theta:Number=1;
 			var yCentered:Number;
 			
 			theta = approx_theta(latRad);
-			
-			xCentered = c * longRad * Math.cos(theta);
-			xCentered = xCentered *_xscaler;
-			
-			yCentered = Math.sqrt(2) * Math.sin(theta);
-									
-			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
+			return Math.sqrt(2) * Math.sin(theta);
 		}
-		
+
 		//--------------------------------------------------------------------------
 	    //
 	    //  Setters and Getters

@@ -35,9 +35,10 @@ package birdeye.vis.trans.projections
 		public function EckertIVTransformation()
 		{
 			super();
-			this.scalefactor=163.6;
-			this.xoffset=2.524;
-			this.yoffset=1.31;
+			this.xoffset=2.65300085635400504;
+			this.yoffset=1.326500428177001814;
+			this.worldUnscaledSizeX=5.30600171270801;
+			this.worldUnscaledSizeY=2.6530008563540037;
 		}
 
 		private function approxNotGoodEnough(tP:Number, la:Number):Boolean {
@@ -64,7 +65,7 @@ package birdeye.vis.trans.projections
 			return _thetaPrim;
 		}
 
-		public override function calcXY(latDeg:Number, longDeg:Number, zoom:Number):Point
+		public override function calcX(latDeg:Number, longDeg:Number):Number
 		{
 			const lstart:Number = 0;
 			const c:Number = 2/Math.sqrt(4+Math.PI);
@@ -72,18 +73,24 @@ package birdeye.vis.trans.projections
 			var latRad:Number=convertDegToRad(latDeg);
 			var longRad:Number=convertDegToRad(longDeg);
 			var theta:Number;
-			var xCentered:Number;
-			var yCentered:Number;
 			
 			theta = approx_theta(latRad);
 			//x = 2/sqrt(pi*(4+pi)) * (long-lstart)*( 1+cos(theta) )
-			xCentered = c/sqrtPi *(longRad-lstart)*(1+Math.cos(theta));
+			return c/sqrtPi *(longRad-lstart)*(1+Math.cos(theta));
+		}
+
+		public override function calcY(latDeg:Number, longDeg:Number):Number
+		{
+			const lstart:Number = 0;
+			const c:Number = 2/Math.sqrt(4+Math.PI);
+			const sqrtPi:Number = Math.sqrt(Math.PI);
+			var latRad:Number=convertDegToRad(latDeg);
+			var longRad:Number=convertDegToRad(longDeg);
+			var theta:Number;
+			
+			theta = approx_theta(latRad);
 			//y = 2*sqrt(pi/(4+pi)) * sin(theta)
-			yCentered = c*sqrtPi * Math.sin(theta);
-						
-			var xval:Number=translateX(xCentered)*zoom;
-			var yval:Number=translateY(yCentered)*zoom;
-			return new Point(xval,yval);
+			return c*sqrtPi * Math.sin(theta);
 		}
 
 	}

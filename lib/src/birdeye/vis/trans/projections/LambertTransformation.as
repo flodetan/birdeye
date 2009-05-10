@@ -31,15 +31,16 @@ package birdeye.vis.trans.projections
 
 	public class LambertTransformation extends Transformation
 	{
-		private const _lstart:Number=0;		
-		private const _stdLat:Number=0;
+		private const _lstart:Number=0.5;		
+		private const _stdLat:Number=0.5;
 		
 		public function LambertTransformation()
 		{
 			super();
-			this.scalefactor=152.2;
 			this.xoffset=1.98;
 			this.yoffset=1.94;
+			this.worldUnscaledSizeX=3;//SASN TODO
+			this.worldUnscaledSizeY=5;//SASN TODO
 		}
 
 		private function calc_kayPrim(la:Number, lo:Number):Number
@@ -49,7 +50,7 @@ package birdeye.vis.trans.projections
 			return Math.sqrt(2/denominator);
 		}
 		
-		public override function calcXY(latDeg:Number, longDeg:Number, zoom:Number):Point
+/*		public override function calcXY(latDeg:Number, longDeg:Number, sizeX:Number, sizeY:Number):Point
 		{
 			var latRad:Number=convertDegToRad(latDeg);
 			var longRad:Number=convertDegToRad(longDeg);
@@ -63,8 +64,27 @@ package birdeye.vis.trans.projections
 			//y	= k'[cos(stdLat)sin(lat)-sin(_stdLat)cos(lat)cos(long-_lstart)]
 			yCentered = kayPrim * (Math.cos(_stdLat)*Math.sin(latRad)-Math.sin(_stdLat)*Math.cos(latRad)*Math.cos(longRad-_lstart));
 						
-			return createTranslatedXYPoint(xCentered, yCentered, zoom);						
+			return createTranslatedXYPoint(xCentered, yCentered);
+		}
+*/		
+		public override function calcX(latDeg:Number, longDeg:Number):Number
+		{
+			var latRad:Number=convertDegToRad(latDeg);
+			var longRad:Number=convertDegToRad(longDeg);
+			var kayPrim:Number = calc_kayPrim(latRad,longRad);
+			
+			//x	= k'*cos(lat)*sin(long-_lstart)
+			return kayPrim * Math.cos(latRad)*Math.sin(longRad-_lstart);
 		}
 
+		public override function calcY(latDeg:Number, longDeg:Number):Number
+		{
+			var latRad:Number=convertDegToRad(latDeg);
+			var longRad:Number=convertDegToRad(longDeg);
+			var kayPrim:Number = calc_kayPrim(latRad,longRad);
+			
+			//y	= k'[cos(stdLat)sin(lat)-sin(_stdLat)cos(lat)cos(long-_lstart)]
+			return kayPrim * (Math.cos(_stdLat)*Math.sin(latRad)-Math.sin(_stdLat)*Math.cos(latRad)*Math.cos(longRad-_lstart));						
+		}
 	}
 }

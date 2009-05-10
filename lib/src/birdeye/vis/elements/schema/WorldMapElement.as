@@ -26,9 +26,15 @@
  */
  package birdeye.vis.elements.schema
 {
-	import flash.utils.Dictionary;
-	import birdeye.vis.data.dictionaries.WorldCountries;
+	import birdeye.vis.data.dictionaries.*;
+	import birdeye.vis.trans.projections.Projection;
 	
+	import com.degrafa.GeometryGroup;
+	import com.degrafa.geometry.Polygon;
+	import com.degrafa.paint.*;
+	import flash.utils.Dictionary;
+	import mx.utils.ObjectUtil;
+						
 	[Exclude(name="translateX", kind="property")]
 	[Exclude(name="translateY", kind="property")]
 	[Exclude(name="scaleX", kind="property")]
@@ -36,15 +42,19 @@
 	[ExcludeClass]
 	
 	//This class contains boundary definitions for the countries of the world, expressed as latitude and longitude 
-	public class WorldMapElement extends WorldCountries
+	public class WorldMapElement extends WorldCountries//SASN implements ICartesianElement
 	{
 		private var longLatPolygons:Dictionary= new Dictionary();
 		private var longLatBaryCenters:Dictionary= new Dictionary();
 		public var translateX:Number=0;
 		public var translateY:Number=19482180;
-		public var scaleX:Number=1;
-		public var scaleY:Number=-1;
-		
+//SASN		public var scaleX:Number=1;
+//SASN		public var scaleY:Number=-1;
+//SASN		public var targetLatScale:XYZAxis;
+//SASN		public var targetLongScale:XYZAxis;
+		private var _targetLongProjection:Projection;
+		private var _targetLatProjection:Projection;
+				
 		public function WorldMapElement()
 		{
 			super();
@@ -52,6 +62,19 @@
 			setBaryCenter();
 		}
 		
+		public function set targetLatProjection(val:Projection):void {
+			_targetLatProjection = val;
+		}
+		public function get targetLatProjection():Projection {
+			return _targetLatProjection;
+		}
+		public function set targetLongProjection(val:Projection):void {
+			_targetLongProjection = val;
+		}
+		public function get targetLongProjection():Projection {
+			return _targetLongProjection;
+		}
+
 		private function setCoordinates():void
 		{
 			// Polygon coordinates expressed as a collection of [longitude,latitude] points.
@@ -531,7 +554,6 @@
 			longLatBaryCenters["SLV"]=[-88.822732,13.726028];
 			longLatBaryCenters["BIH"]=[17.883773,44.133901];
 			longLatBaryCenters["PAK"]=[68.682852,29.656567];
-
 		}
 		
 		public function getCoordinates(countryKey:String):Array {
@@ -541,5 +563,41 @@
     	public function getBarryCenter(countryKey:String):Array {
       		return longLatBaryCenters[countryKey];
     	}
+    	    	
+		override protected function commitProperties():void
+		{
+			super.commitProperties();
+			var countryGeom:GeometryGroup;
+			var listOfCountry:Array=this.getCountriesListByRegion(WorldRegionTypes.REGION_WORLD);
+			var countryCoordinates:Array;
+			var polygonCoordinates:Array; //a country may have several polygons
+			var poly:Polygon;
+			var _color:SolidFill=new SolidFill(0x22AA44);
+			var _stroke:SolidStroke=new SolidStroke(0xFF3333,1,1);
+			for each (var country:String in listOfCountry)
+			{
+				countryCoordinates = this.getCoordinates(country);
+				if(countryCoordinates!=null)
+				{
+					countryGeom = new GeometryGroup();
+//					countryGeom.scaleY = countryGeom.scaleX = this.zoom;
+					countryGeom.name = country;
+					countryGeom.target=this;						
+					this.graphicsCollection.addItem(countryGeom);
+					for each (var polygonLongLatArray:Array in countryCoordinates) //a country may have several polygons
+					{
+						polygonCoordinates = polygonLongLatArray.slice(); //clone polygonLongLatArray in order not to destroy the data in the original longLatPolygons
+						_targetLongProjection.projectArrayXs(polygonCoordinates); //replace all longitude values in polygonCoordinates with their corresponding x values
+						_targetLatProjection.projectArrayYs(polygonCoordinates); //replace all latitude values in polygonCoordinates with their corresponding y values
+						
+						poly = new Polygon();
+						poly.data = polygonCoordinates.join(" "); //transform the array to a comma and space separated string on the format "-90,30 -45,60 0,90"
+						poly.stroke=_stroke;
+						poly.fill=_color;
+						countryGeom.geometryCollection.addItem(poly);
+					} // end loop over polygons
+				} // end if getCoordinates returned data
+			} // end loop over countries
+		}
 	}
 }
