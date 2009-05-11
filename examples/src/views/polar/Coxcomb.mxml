@@ -26,11 +26,11 @@
 				{
 					ac.addItem({
 						subject: subject[i],
-						R1: Math.round(Math.random() * i*10* 1000),
-						R2: Math.round(Math.random() * i*10* 1000),
-						R3: Math.round(Math.random() * i*10* 1000),
-						R4: Math.round(Math.random() * i*10* 1000),
-						R5: Math.round(Math.random() * i*10* 1000)
+						R1: Math.round(Math.random() * i*2* 10),
+						R2: Math.round(Math.random() * i*2* 10),
+						R3: Math.round(Math.random() * i*2* 10),
+						R4: Math.round(Math.random() * i*2* 10),
+						R5: Math.round(Math.random() * i*2* 10)
 					});
 				}
 				dt = ac;
@@ -63,9 +63,9 @@
 		<coxcomb:elements>
 			<pseries:PolarColumnElement angleScale="{c}" radiusScale="{l1}" extendMouseEvents="true" styleName="grad1" angleField="subject" radiusField="R1" displayName="R1"/>
 			<pseries:PolarColumnElement angleScale="{c}" radiusScale="{l1}" extendMouseEvents="true" styleName="grad2" angleField="subject" radiusField="R2" displayName="R2"/>
-			<pseries:PolarColumnElement extendMouseEvents="true" styleName="grad3" angleField="subject" radiusField="R3" displayName="R3"/>
-			<pseries:PolarColumnElement extendMouseEvents="true" styleName="grad4" angleField="subject" radiusField="R4" displayName="R4"/>
-			<pseries:PolarColumnElement extendMouseEvents="true" styleName="grad5" angleField="subject" radiusField="R5" displayName="R5"/>
+			<pseries:PolarColumnElement angleScale="{c}" radiusScale="{l1}" extendMouseEvents="true" styleName="grad3" angleField="subject" radiusField="R3" displayName="R3"/>
+			<pseries:PolarColumnElement angleScale="{c}" radiusScale="{l1}" extendMouseEvents="true" styleName="grad4" angleField="subject" radiusField="R4" displayName="R4"/>
+			<pseries:PolarColumnElement angleScale="{c}" radiusScale="{l1}" extendMouseEvents="true" styleName="grad5" angleField="subject" radiusField="R5" displayName="R5"/>
 		</coxcomb:elements>
 	</coxcomb:CoxComb>
 	<legend:Legend dataProvider="{pc1}" direction="horizontal" backgroundColor="0xffffff"/>

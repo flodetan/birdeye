@@ -46,17 +46,17 @@
 	<mx:Button label="Generate" click="createDT()"/>
 	<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
 	<recipes:BarChart id="bc2" width="90%" height="90%" dataProvider="{dt}" showDataTips="true" type="stacked100">
-    	<recipes:yScale>
+    	<recipes:scale2>
     		<scales:Category categoryField="subject" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
-    	</recipes:yScale>
-    	<recipes:xScale>
+    	</recipes:scale2>
+    	<recipes:scale1>
     		<scales:Linear placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
-    	</recipes:xScale>
+    	</recipes:scale1>
     	 <recipes:elements>
-		 	<elements:BarElement extendMouseEvents="true" xField="R1" styleName="grad1" yField="subject" displayName="R1" />
-		 	<elements:BarElement extendMouseEvents="true" xField="R2" styleName="grad2" yField="subject" displayName="R2" />
-		 	<elements:BarElement extendMouseEvents="true" xField="R3" styleName="grad3" yField="subject" displayName="R3" />
-		 	<elements:BarElement extendMouseEvents="true" xField="R4" styleName="grad4" yField="subject" displayName="R4" />
+		 	<elements:BarElement extendMouseEvents="true" dim1="R1" styleName="grad1" dim2="subject" displayName="R1" />
+		 	<elements:BarElement extendMouseEvents="true" dim1="R2" styleName="grad2" dim2="subject" displayName="R2" />
+		 	<elements:BarElement extendMouseEvents="true" dim1="R3" styleName="grad3" dim2="subject" displayName="R3" />
+		 	<elements:BarElement extendMouseEvents="true" dim1="R4" styleName="grad4" dim2="subject" displayName="R4" />
 		 </recipes:elements>
 	</recipes:BarChart>
 	<guides:Legend dataProvider="{bc2}" direction="horizontal" backgroundColor="0xffffff"/>	
