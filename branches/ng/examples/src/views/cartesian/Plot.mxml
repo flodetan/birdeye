@@ -56,16 +56,16 @@
 	<mx:Button label="Generate" click="createDT()"/>
 	<mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
 		<coords:Cartesian id="pc3" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
-			 <coords:yScale>
+			 <coords:scale2>
 			 			<scales:Linear placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
-			 	</coords:yScale>
-			 	<coords:xScale>
+			 	</coords:scale2>
+			 	<coords:scale1>
 			 			<scales:Category categoryField="index" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
-			 </coords:xScale>
+			 </coords:scale1>
 			 <coords:elements>
-			 	<elements:PointElement xField="index" yField="bronze" source="{rasterImage}" strokeAlpha="0" displayName="A" plotRadius="13"/>
-			 	<elements:PointElement xField="index" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="solid1" yField="gold" displayName="C" />
-			 	<elements:LabelElement extendMouseEvents="true" labelField="R4" labelSize="15" labelFont="verdana" labelColor="#00FF00" xField="index" yField="silver" displayName="B"/>
+			 	<elements:PointElement dim1="index" dim2="bronze" source="{rasterImage}" strokeAlpha="0" displayName="A" plotRadius="13"/>
+			 	<elements:PointElement dim1="index" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="solid1" dim2="gold" displayName="C" />
+			 	<elements:LabelElement extendMouseEvents="true" labelField="R4" labelSize="15" labelFont="verdana" labelColor="#00FF00" dim1="index" dim2="silver" displayName="B"/>
 			 </coords:elements>
 		</coords:Cartesian>
 		<guides:Legend dataProvider="{pc3}" direction="horizontal"/>	

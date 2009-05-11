@@ -47,18 +47,18 @@
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
 	<mx:Button label="Generate" click="createDT()"/>
 	<recipes:BubbleChart maxRadius="30" id="bb" width="90%" height="90%" dataProvider="{dt}" showDataTips="true">
- 	<recipes:xScale>
+ 	<recipes:scale1>
  		<scales:Category categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
- 	</recipes:xScale>
- 	<recipes:yScale>
+ 	</recipes:scale1>
+ 	<recipes:scale2>
 	 	<scales:Linear placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
-	 </recipes:yScale>
+	 </recipes:scale2>
 		 <recipes:elements>
-		 	<elements:BubbleElement extendMouseEvents="true" xField="subject" radiusField="R1" styleName="grad1" yField="R1" displayName="R1">
+		 	<elements:BubbleElement extendMouseEvents="true" dim1="subject" radiusField="R1" styleName="grad1" dim2="R1" displayName="R1">
 		 	</elements:BubbleElement>
-		 	<elements:BubbleElement extendMouseEvents="true" xField="subject" radiusField="R2" styleName="grad3" yField="R2" displayName="R2">
+		 	<elements:BubbleElement extendMouseEvents="true" dim1="subject" radiusField="R2" styleName="grad3" dim2="R2" displayName="R2">
 		 	</elements:BubbleElement>
-		 	<elements:BubbleElement extendMouseEvents="true" xField="subject" radiusField="R3" styleName="grad5" yField="R3" displayName="R3">
+		 	<elements:BubbleElement extendMouseEvents="true" dim1="subject" radiusField="R3" styleName="grad5" dim2="R3" displayName="R3">
 		 	</elements:BubbleElement>
 		 </recipes:elements>
 	</recipes:BubbleChart>
