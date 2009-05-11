@@ -35,11 +35,11 @@ package birdeye.vis.recipes.polarCharts
 		public function PieChart()
 		{
 			super();
-			angleScale = new PercentAngle();
-			angleScale.size = 360;
-			radiusScale = new Numeric();
-			Numeric(radiusScale).showAxis = false;
-			radiusScale.scaleType = BaseScale.CONSTANT;
+			scale1 = new PercentAngle();
+			scale1.size = 360;
+			scale2 = new Numeric();
+			Numeric(scale2).showAxis = false;
+			scale2.scaleType = BaseScale.CONSTANT;
 		}
 	}
 }

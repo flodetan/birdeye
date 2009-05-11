@@ -99,7 +99,7 @@ package birdeye.vis.recipes.polarCharts
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
 			if ((radarAxis && radarAxis.angleAxis) ||
-				(angleScale && angleScale is CategoryAngle))
+				(scale1 && scale1 is CategoryAngle))
 				drawLabels()
 		}
 		
@@ -139,11 +139,11 @@ package birdeye.vis.recipes.polarCharts
 								} 
 								elementsMinMax[category].min = 
 									Math.min(elementsMinMax[category].min, 
-										currentElement.cursor.current[currentElement.radiusField]);
+										currentElement.cursor.current[currentElement.dim2]);
 
 								elementsMinMax[category].max = 
 									Math.max(elementsMinMax[category].max, 
-										currentElement.cursor.current[currentElement.radiusField]);
+										currentElement.cursor.current[currentElement.dim2]);
 								
 								currentElement.cursor.moveNext();
 							}
@@ -170,11 +170,11 @@ package birdeye.vis.recipes.polarCharts
 										} 
 										elementsMinMax[category].min = 
 											Math.min(elementsMinMax[category].min, 
-												cursor.current[currentElement.radiusField]);
+												cursor.current[currentElement.dim2]);
 	
 										elementsMinMax[category].max = 
 											Math.max(elementsMinMax[category].max, 
-												cursor.current[currentElement.radiusField]);
+												cursor.current[currentElement.dim2]);
 									}
 								}
 								cursor.moveNext();
@@ -200,7 +200,7 @@ package birdeye.vis.recipes.polarCharts
 			if (radarAxis)
 				aAxis = radarAxis.angleAxis;
 			else
-				aAxis = CategoryAngle(angleScale);
+				aAxis = CategoryAngle(scale1);
 			
 			var catElements:Array = aAxis.dataProvider;
 			var interval:int = aAxis.interval;
@@ -288,14 +288,14 @@ package birdeye.vis.recipes.polarCharts
 
 		private function createRadarLayout2():void
 		{
-			var aAxis:CategoryAngle = CategoryAngle(angleScale);
+			var aAxis:CategoryAngle = CategoryAngle(scale1);
 			var catElements:Array = aAxis.dataProvider;
 			var interval:int = aAxis.interval;
 			var nEle:int = catElements.length;
 			
-			if (radiusScale is Numeric && !isNaN(Numeric(radiusScale).interval))
+			if (scale2 is Numeric && !isNaN(Numeric(scale2).interval))
 			{
-				var rAxis:Numeric = Numeric(radiusScale);
+				var rAxis:Numeric = Numeric(scale2);
 				var rMin:Number = rAxis.min;
 				var rMax:Number = rAxis.max;
 				

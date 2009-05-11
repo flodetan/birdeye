@@ -68,12 +68,12 @@ package birdeye.vis.elements.geometry
 
 			if (stackType == STACKED100 && cursor)
 			{
-				if (radiusScale)
+				if (scale2)
 				{
-					if (radiusScale is INumerableScale)
-						INumerableScale(radiusScale).max = maxRadiusValue;
-				} else if (polarChart && polarChart.radiusScale && polarChart.radiusScale is INumerableScale){
-						INumerableScale(polarChart.radiusScale).max = maxRadiusValue;
+					if (scale2 is INumerableScale)
+						INumerableScale(scale2).max = maxDim2Value;
+				} else if (polarChart && polarChart.scale2 && polarChart.scale2 is INumerableScale){
+						INumerableScale(polarChart.scale2).max = maxDim2Value;
 				} 
 			}
 		}
@@ -90,10 +90,10 @@ package birdeye.vis.elements.geometry
 			var arcSize:Number = NaN;
 			
 			var angleInterval:Number;
-			if (angleScale) 
-				angleInterval = angleScale.interval * polarChart.columnWidthRate;
-			else if (polarChart.angleScale)
-				angleInterval = polarChart.angleScale.interval * polarChart.columnWidthRate;
+			if (scale1) 
+				angleInterval = scale1.interval * polarChart.columnWidthRate;
+			else if (polarChart.scale1)
+				angleInterval = polarChart.scale1.interval * polarChart.columnWidthRate;
 			else if (radarAxis)
 				angleInterval = radarAxis.angleAxis.interval * polarChart.columnWidthRate;
 			else if (polarChart.radarAxis)
@@ -117,63 +117,63 @@ package birdeye.vis.elements.geometry
 			cursor.seek(CursorBookmark.FIRST);
 			while (!cursor.afterLast)
 			{
-				if (angleScale)
+				if (scale1)
 				{
-					angle = angleScale.getPosition(cursor.current[angleField]);
-					dataFields[0] = angleField;
-				} else if (polarChart.angleScale) {
-					angle = polarChart.angleScale.getPosition(cursor.current[angleField]);
-					dataFields[0] = angleField;
+					angle = scale1.getPosition(cursor.current[dim1]);
+					dataFields[0] = dim1;
+				} else if (polarChart.scale1) {
+					angle = polarChart.scale1.getPosition(cursor.current[dim1]);
+					dataFields[0] = dim1;
 				}
 				
-				j = cursor.current[angleField];
+				j = cursor.current[dim1];
 				// if the series has its own radius axis, than get the radius coordinate
-				// position of the data value filtered by radiusField
-				if (radiusScale)
+				// position of the data value filtered by dim2
+				if (scale2)
 				{
 					// if the stackType is stacked100, than the radius0 coordinate of 
 					// the current baseValue is added to the radius coordinate of the current
-					// data value filtered by radiusField
+					// data value filtered by dim2
 					if (_stackType == STACKED100)
 					{
-						radius0 = radiusScale.getPosition(baseValues[j]);
-						radius = radiusScale.getPosition(
-							baseValues[j] + Math.max(0,cursor.current[radiusField]));
+						radius0 = scale2.getPosition(baseValues[j]);
+						radius = scale2.getPosition(
+							baseValues[j] + Math.max(0,cursor.current[dim2]));
 					} else 
 						// if not stacked, than the y coordinate is given by the own y axis
-						radius = radiusScale.getPosition(cursor.current[radiusField]);
+						radius = scale2.getPosition(cursor.current[dim2]);
 
-					dataFields[1] = radiusField;
-				} else if (polarChart.radiusScale) {
+					dataFields[1] = dim2;
+				} else if (polarChart.scale2) {
 					// if no own y axis than use the parent chart y axis to achive the same
 					// as above
 					if (_stackType == STACKED100)
 					{
-						radius0 = polarChart.radiusScale.getPosition(baseValues[j]);
-						radius = polarChart.radiusScale.getPosition(
-							baseValues[j] + Math.max(0,cursor.current[radiusField]));
+						radius0 = polarChart.scale2.getPosition(baseValues[j]);
+						radius = polarChart.scale2.getPosition(
+							baseValues[j] + Math.max(0,cursor.current[dim2]));
 					} else {
-						radius = polarChart.radiusScale.getPosition(cursor.current[radiusField]);
+						radius = polarChart.scale2.getPosition(cursor.current[dim2]);
 					}
 
-					dataFields[1] = radiusField;
+					dataFields[1] = dim2;
 				}
 				
 				if (radarAxis)
 				{
-					angle = radarAxis.angleAxis.getPosition(cursor.current[angleField]);
+					angle = radarAxis.angleAxis.getPosition(cursor.current[dim1]);
 					radius = INumerableScale(radarAxis.radiusAxes[
 										cursor.current[radarAxis.angleCategory]
-										]).getPosition(cursor.current[radiusField]);
-					dataFields[0] = angleField;
-					dataFields[1] = radiusField;
+										]).getPosition(cursor.current[dim2]);
+					dataFields[0] = dim1;
+					dataFields[1] = dim2;
 				} else if (polarChart.radarAxis) {
-					angle = polarChart.radarAxis.angleAxis.getPosition(cursor.current[angleField]);
+					angle = polarChart.radarAxis.angleAxis.getPosition(cursor.current[dim1]);
 					radius = INumerableScale(polarChart.radarAxis.radiusAxes[
 										cursor.current[polarChart.radarAxis.angleCategory]
-										]).getPosition(cursor.current[radiusField]);
-					dataFields[0] = angleField;
-					dataFields[1] = radiusField;
+										]).getPosition(cursor.current[dim2]);
+					dataFields[0] = dim1;
+					dataFields[1] = dim2;
 				}
 
 				var arcCenterX:Number = polarChart.origin.x - radius;
