@@ -97,23 +97,23 @@ package birdeye.vis.recipes.cartesianCharts
 							sCursor.seek(CursorBookmark.FIRST);
 							while (!sCursor.afterLast)
 							{
-								j = sCursor.current[AreaElement(_Area[s]).xField];
+								j = sCursor.current[AreaElement(_Area[s]).dim1];
 
 								if (s>0 && k[j]>=0)
 									allElementsBaseValues[s].baseValues[j] = 
 										allElementsBaseValues[k[j]].baseValues[j] + 
-										Math.max(0,sCursor.current[AreaElement(_Area[k[j]]).yField]);
+										Math.max(0,sCursor.current[AreaElement(_Area[k[j]]).dim2]);
 								else 
 									allElementsBaseValues[s].baseValues[j] = 0;
 
 								if (isNaN(_maxStacked100))
 									_maxStacked100 = 
 										allElementsBaseValues[s].baseValues[j] + 
-										Math.max(0,sCursor.current[AreaElement(_Area[s]).yField]);
+										Math.max(0,sCursor.current[AreaElement(_Area[s]).dim2]);
 								else
 									_maxStacked100 = Math.max(_maxStacked100,
 										allElementsBaseValues[s].baseValues[j] + 
-										Math.max(0,sCursor.current[AreaElement(_Area[s]).yField]));
+										Math.max(0,sCursor.current[AreaElement(_Area[s]).dim2]));
 
 								sCursor.moveNext();
 								k[j] = s;
@@ -135,23 +135,23 @@ package birdeye.vis.recipes.cartesianCharts
 								if (! (AreaElement(_Area[s]).cursor &&
 									AreaElement(_Area[s]).cursor != cursor))
 								{
-									j = cursor.current[AreaElement(_Area[s]).xField];
+									j = cursor.current[AreaElement(_Area[s]).dim1];
 							
 									if (t[j]>=0)
 										allElementsBaseValues[s].baseValues[j] = 
 											allElementsBaseValues[t[j]].baseValues[j] + 
-											Math.max(0,cursor.current[AreaElement(_Area[t[j]]).yField]);
+											Math.max(0,cursor.current[AreaElement(_Area[t[j]]).dim2]);
 									else 
 										allElementsBaseValues[s].baseValues[j] = 0;
 									
 									if (isNaN(_maxStacked100))
 										_maxStacked100 = 
 											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,cursor.current[AreaElement(_Area[s]).yField]);
+											Math.max(0,cursor.current[AreaElement(_Area[s]).dim2]);
 									else
 										_maxStacked100 = Math.max(_maxStacked100,
 											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,cursor.current[AreaElement(_Area[s]).yField]));
+											Math.max(0,cursor.current[AreaElement(_Area[s]).dim2]));
 
 									t[j] = s;
 								}
