@@ -98,22 +98,22 @@ package birdeye.vis.recipes.cartesianCharts
 							sCursor.seek(CursorBookmark.FIRST);
 							while (!sCursor.afterLast)
 							{
-								j = sCursor.current[BarElement(_Bar[s]).yField];
+								j = sCursor.current[BarElement(_Bar[s]).dim2];
 								if (s>0 && k[j]>=0)
 									allElementsBaseValues[s].baseValues[j] = 
 										allElementsBaseValues[k[j]].baseValues[j] + 
-										Math.max(0,sCursor.current[BarElement(_Bar[k[j]]).xField]);
+										Math.max(0,sCursor.current[BarElement(_Bar[k[j]]).dim1]);
 								else 
 									allElementsBaseValues[s].baseValues[j] = 0;
 
 								if (isNaN(_maxStacked100))
 									_maxStacked100 = 
 										allElementsBaseValues[s].baseValues[j] + 
-										Math.max(0,sCursor.current[BarElement(_Bar[s]).xField]);
+										Math.max(0,sCursor.current[BarElement(_Bar[s]).dim1]);
 								else
 									_maxStacked100 = Math.max(_maxStacked100,
 										allElementsBaseValues[s].baseValues[j] + 
-										Math.max(0,sCursor.current[BarElement(_Bar[s]).xField]));
+										Math.max(0,sCursor.current[BarElement(_Bar[s]).dim1]));
 
 								sCursor.moveNext();
 								k[j] = s;
@@ -134,23 +134,23 @@ package birdeye.vis.recipes.cartesianCharts
 								if (! (BarElement(_Bar[s]).cursor &&
 									BarElement(_Bar[s]).cursor != cursor))
 								{
-									j = cursor.current[BarElement(_Bar[s]).yField];
+									j = cursor.current[BarElement(_Bar[s]).dim2];
 	
 									if (t[j]>=0)
 										allElementsBaseValues[s].baseValues[j] = 
 											allElementsBaseValues[t[j]].baseValues[j] + 
-											Math.max(0,cursor.current[BarElement(_Bar[t[j]]).xField]);
+											Math.max(0,cursor.current[BarElement(_Bar[t[j]]).dim1]);
 									else 
 										allElementsBaseValues[s].baseValues[j] = 0;
 									
 									if (isNaN(_maxStacked100))
 										_maxStacked100 = 
 											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,cursor.current[BarElement(_Bar[s]).xField]);
+											Math.max(0,cursor.current[BarElement(_Bar[s]).dim1]);
 									else
 										_maxStacked100 = Math.max(_maxStacked100,
 											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,cursor.current[BarElement(_Bar[s]).xField]));
+											Math.max(0,cursor.current[BarElement(_Bar[s]).dim1]));
 	
 									t[j] = s;
 								}
@@ -170,17 +170,17 @@ package birdeye.vis.recipes.cartesianCharts
 		}
 		
 		/** @Private */
-		override protected function createYAxis():void
+		override protected function createScale2():void
 		{
 			// must be defined by the user since it's probably a category axis
 			// and need the category field to be defined
 			throw new Error("No yAxis defined for the Bar char. Please make sure that an yAxis is created in the chart declaration.");
 		}
 		/** @Private */
-		override protected function createXAxis():void
+		override protected function createScale1():void
 		{
-			xScale = new Linear();
-			xScale.placement = BaseScale.BOTTOM;
+			scale1 = new Linear();
+			scale1.placement = BaseScale.BOTTOM;
 		}
 	}
 }

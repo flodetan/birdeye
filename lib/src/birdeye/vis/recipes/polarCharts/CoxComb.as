@@ -321,7 +321,7 @@ package birdeye.vis.recipes.polarCharts
 			var catElements:Array = aAxis.dataProvider;
 			var interval:int = aAxis.interval;
 			var nEle:int = catElements.length;
-			var radius:int = Math.min(unscaledWidth, unscaledHeight)/2;
+			var radius:int = Math.min(unscaledWidth, unscaledHeight);
 
 			if (aAxis && radius>0 && catElements && nEle>0 && !isNaN(interval))
 			{

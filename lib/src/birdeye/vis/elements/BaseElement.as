@@ -121,6 +121,42 @@ package birdeye.vis.elements
 			return _colorAxis;
 		}
 
+		private var _dim1:String;
+		public function set dim1(val:String):void
+		{
+			_dim1= val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		public function get dim1():String
+		{
+			return _dim1;
+		}
+		
+		private var _dim2:String;
+		public function set dim2(val:String):void
+		{
+			_dim2= val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		public function get dim2():String
+		{
+			return _dim2;
+		}
+
+		private var _dim3:String;
+		public function set dim3(val:String):void
+		{
+			_dim3= val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		public function get dim3():String
+		{
+			return _dim3;
+		}
+
 		protected var _maxColorValue:Number = NaN;
 		public function get maxColorValue():Number
 		{
@@ -699,7 +735,7 @@ package birdeye.vis.elements
 		 * Override the creation of ttGeom. This should be unified among polar and cartesian series.
 		 * In order to improve performances in case the showdatatips is false
 		 * the ttGG creation will not be called and there will be only 1 gg, unless
-		 * interactivity is required or zField is not null and gg must be placed in the 3D space.*/ 
+		 * interactivity is required or dim3 is not null and gg must be placed in the 3D space.*/ 
 		protected function createTTGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
 									zPos:Number, radius:Number, shapes:Array = null /* of IGeometry */, 
 									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void

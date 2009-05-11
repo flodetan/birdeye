@@ -90,11 +90,11 @@ package birdeye.vis.elements.geometry
 			var dataFields:Array = [];
 			// prepare data for a standard tooltip message in case the user
 			// has not set a dataTipFunction
-			dataFields[0] = xField;
-			dataFields[1] = yField;
+			dataFields[0] = dim1;
+			dataFields[1] = dim2;
 			dataFields[2] = radiusField;
-			if (zField) 
-				dataFields[3] = zField;
+			if (dim3) 
+				dataFields[3] = dim3;
 
 			var xPos:Number, yPos:Number, zPos:Number = NaN;
 			var dataValue:Number;
@@ -107,32 +107,32 @@ package birdeye.vis.elements.geometry
 			cursor.seek(CursorBookmark.FIRST);
 			while (!cursor.afterLast)
 			{
-				if (xScale)
+				if (scale1)
 				{
-					xPos = xScale.getPosition(cursor.current[xField]);
-				} else if (chart.xScale) {
-					xPos = chart.xScale.getPosition(cursor.current[xField]);
+					xPos = scale1.getPosition(cursor.current[dim1]);
+				} else if (chart.scale1) {
+					xPos = chart.scale1.getPosition(cursor.current[dim1]);
 				}
 				
-				if (yScale)
+				if (scale2)
 				{
-					yPos = yScale.getPosition(cursor.current[yField]);
-				} else if (chart.yScale) {
-					yPos = chart.yScale.getPosition(cursor.current[yField]);
+					yPos = scale2.getPosition(cursor.current[dim2]);
+				} else if (chart.scale2) {
+					yPos = chart.scale2.getPosition(cursor.current[dim2]);
 				}
 
 				dataValue = cursor.current[radiusField];
 				radius = getRadius(dataValue);
  				var bounds:Rectangle = new Rectangle(xPos - radius, yPos - radius, radius * 2, radius * 2);
 
-				var yAxisRelativeValue:Number = NaN;
+				var scale2RelativeValue:Number = NaN;
 
-				if (zScale)
+				if (scale3)
 				{
-					zPos = zScale.getPosition(cursor.current[zField]);
-					yAxisRelativeValue = XYZ(zScale).height - zPos;
-				} else if (chart.zAxis) {
-					zPos = chart.zAxis.getPosition(cursor.current[zField]);
+					zPos = scale3.getPosition(cursor.current[dim3]);
+					scale2RelativeValue = XYZ(scale3).height - zPos;
+				} else if (chart.scale3) {
+					zPos = chart.scale3.getPosition(cursor.current[dim3]);
 					// since there is no method yet to draw a real z axis 
 					// we create an y axis and rotate it to properly visualize 
 					// a 'fake' z axis. however zPos over this y axis corresponds to 
@@ -140,14 +140,14 @@ package birdeye.vis.elements.geometry
 					// up side down. this trick allows to visualize the y axis as
 					// if it would be a z. when there will be a 3d line class, it will 
 					// be replaced
-					yAxisRelativeValue = XYZ(chart.zAxis).height - zPos;
+					scale2RelativeValue = XYZ(chart.scale3).height - zPos;
 				}
 
-				// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
+				// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 				// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-				createTTGG(cursor.current, dataFields, xPos, yPos, yAxisRelativeValue, 3);
+				createTTGG(cursor.current, dataFields, xPos, yPos, scale2RelativeValue, 3);
 
-				if (zField)
+				if (dim3)
 				{
 					if (!isNaN(zPos))
 					{
@@ -170,7 +170,7 @@ package birdeye.vis.elements.geometry
 				scatter.fill = fill;
 				scatter.stroke = stroke;
 				gg.geometryCollection.addItemAt(scatter,0);
-				if (zField)
+				if (dim3)
 				{
 					gg.z = zPos;
 					if (isNaN(zPos))
@@ -179,7 +179,7 @@ package birdeye.vis.elements.geometry
 				cursor.moveNext();
 			}
 
-			if (zField)
+			if (dim3)
 				zSort();
 		}
 		

@@ -94,23 +94,23 @@ package birdeye.vis.recipes.cartesianCharts
 							
 							while (!sCursor.afterLast)
 							{
-								j = sCursor.current[ColumnElement(_Column[s]).xField];
+								j = sCursor.current[ColumnElement(_Column[s]).dim1];
 
 								if (s>0 && k[j]>=0)
 									allElementsBaseValues[s].baseValues[j] = 
 										allElementsBaseValues[k[j]].baseValues[j] + 
-										Math.max(0,sCursor.current[ColumnElement(_Column[k[j]]).yField]);
+										Math.max(0,sCursor.current[ColumnElement(_Column[k[j]]).dim2]);
 								else 
 									allElementsBaseValues[s].baseValues[j] = 0;
 
 								if (isNaN(_maxStacked100))
 									_maxStacked100 = 
 										allElementsBaseValues[s].baseValues[j] + 
-										Math.max(0,sCursor.current[ColumnElement(_Column[s]).yField]);
+										Math.max(0,sCursor.current[ColumnElement(_Column[s]).dim2]);
 								else
 									_maxStacked100 = Math.max(_maxStacked100,
 										allElementsBaseValues[s].baseValues[j] + 
-										Math.max(0,sCursor.current[ColumnElement(_Column[s]).yField]));
+										Math.max(0,sCursor.current[ColumnElement(_Column[s]).dim2]));
 
 								sCursor.moveNext();
 								k[j] = s;
@@ -131,23 +131,23 @@ package birdeye.vis.recipes.cartesianCharts
 								if (! (ColumnElement(_Column[s]).cursor &&
 									ColumnElement(_Column[s]).cursor != cursor))
 								{
-									j = cursor.current[ColumnElement(_Column[s]).xField];
+									j = cursor.current[ColumnElement(_Column[s]).dim1];
 							
 									if (t[j]>=0)
 										allElementsBaseValues[s].baseValues[j] = 
 											allElementsBaseValues[t[j]].baseValues[j] + 
-											Math.max(0,cursor.current[ColumnElement(_Column[t[j]]).yField]);
+											Math.max(0,cursor.current[ColumnElement(_Column[t[j]]).dim2]);
 									else 
 										allElementsBaseValues[s].baseValues[j] = 0;
 									
 									if (isNaN(_maxStacked100))
 										_maxStacked100 = 
 											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,cursor.current[ColumnElement(_Column[s]).yField]);
+											Math.max(0,cursor.current[ColumnElement(_Column[s]).dim2]);
 									else
 										_maxStacked100 = Math.max(_maxStacked100,
 											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,cursor.current[ColumnElement(_Column[s]).yField]));
+											Math.max(0,cursor.current[ColumnElement(_Column[s]).dim2]));
 	
 									t[j] = s;
 								}

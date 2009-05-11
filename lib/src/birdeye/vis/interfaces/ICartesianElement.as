@@ -36,34 +36,37 @@ package birdeye.vis.interfaces
 		function set chart(val:Cartesian):void;
 		function get chart():Cartesian;
 		
-		/** Set the yField to filter vertical data values.*/
-		function set yField(val:String):void;
+		/** Set the dim1 to filter horizontal data values.*/
+		function set dim1(val:String):void;
+		function get dim1():String;
 
-		/** Set the xField to filter horizontal data values.*/
-		function set xField(val:String):void;
+		/** Set the dim2 to filter vertical data values.*/
+		function set dim2(val:String):void;
+		function get dim2():String;
 
-		/** Set the x axis.*/
-		function set xScale(val:IScaleUI):void;
+		/** Set the dim3 to filter vertical data values.*/
+		function set dim3(val:String):void;
+		function get dim3():String;
 
-		/** Set the y axis.*/
-		function set yScale(val:IScaleUI):void;
+		/** Set the scale for dim1.*/
+		function set scale1(val:IScaleUI):void;
+		function get scale1():IScaleUI;
 
-		/** Set the z axis.*/
-		function set zScale(val:IScaleUI):void;
+		/** Set the scale for dim2.*/
+		function set scale2(val:IScaleUI):void;
+		function get scale2():IScaleUI;
 
-		function get yField():String;
-		function get xField():String;
-		function get xScale():IScaleUI;
-		function get yScale():IScaleUI;
-		function get zScale():IScaleUI;
+		/** Set the scale for dim3.*/
+		function set scale3(val:IScaleUI):void;
+		function get scale3():IScaleUI;
 
-		function get maxZValue():Number;
-		function get minZValue():Number;
+		function get maxDim1Value():Number;
+		function get minDim1Value():Number;
 
-		function get maxYValue():Number;
-		function get minYValue():Number;
+		function get maxDim2Value():Number;
+		function get minDim2Value():Number;
 
-		function get maxXValue():Number;
-		function get minXValue():Number;
+		function get maxDim3Value():Number;
+		function get minDim3Value():Number;
 	}
 }

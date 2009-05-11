@@ -81,42 +81,6 @@ package birdeye.vis.elements.geometry
 	  		}
 		}
 
-		private var _xField:String;
-		public function set xField(val:String):void
-		{
-			_xField= val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get xField():String
-		{
-			return _xField;
-		}
-		
-		private var _yField:String;
-		public function set yField(val:String):void
-		{
-			_yField= val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get yField():String
-		{
-			return _yField;
-		}
-
-		private var _zField:String;
-		public function set zField(val:String):void
-		{
-			_zField= val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get zField():String
-		{
-			return _zField;
-		}
-
 		private var _index:Number;
 		public function set index(val:Number):void
 		{
@@ -128,97 +92,97 @@ package birdeye.vis.elements.geometry
 			return _index;
 		}
 		
-		private var _xScale:IScaleUI;
-		public function set xScale(val:IScaleUI):void
+		private var _scale1:IScaleUI;
+		public function set scale1(val:IScaleUI):void
 		{
-			_xScale = val;
-			if (_xScale.placement != BaseScale.BOTTOM && _xScale.placement != BaseScale.TOP)
-				_xScale.placement = BaseScale.BOTTOM;
+			_scale1 = val;
+			if (_scale1.placement != BaseScale.BOTTOM && _scale1.placement != BaseScale.TOP)
+				_scale1.placement = BaseScale.BOTTOM;
 
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get xScale():IScaleUI
+		public function get scale1():IScaleUI
 		{
-			return _xScale;
+			return _scale1;
 		}
 		
-		private var _yScale:IScaleUI;
-		public function set yScale(val:IScaleUI):void
+		private var _scale2:IScaleUI;
+		public function set scale2(val:IScaleUI):void
 		{
-			_yScale = val;
-			if (_yScale.placement != BaseScale.LEFT && _yScale.placement != BaseScale.RIGHT)
-				_yScale.placement = BaseScale.LEFT;
+			_scale2 = val;
+			if (_scale2.placement != BaseScale.LEFT && _scale2.placement != BaseScale.RIGHT)
+				_scale2.placement = BaseScale.LEFT;
 
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get yScale():IScaleUI
+		public function get scale2():IScaleUI
 		{
-			return _yScale;
+			return _scale2;
 		}
 		
-		private var _zScale:IScaleUI;
-		public function set zScale(val:IScaleUI):void
+		private var _scale3:IScaleUI;
+		public function set scale3(val:IScaleUI):void
 		{
-			_zScale = val;
-			if (_zScale.placement != BaseScale.DIAGONAL)
-				_zScale.placement = BaseScale.DIAGONAL;
+			_scale3 = val;
+			if (_scale3.placement != BaseScale.DIAGONAL)
+				_scale3.placement = BaseScale.DIAGONAL;
 
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get zScale():IScaleUI
+		public function get scale3():IScaleUI
 		{
-			return _zScale;
+			return _scale3;
 		}
 		
-		protected var _maxYValue:Number = NaN;
-		public function get maxYValue():Number
+		protected var _maxDim1Value:Number = NaN;
+		public function get maxDim1Value():Number
 		{
-			if (! (yScale is IEnumerableScale))
-				_maxYValue = getMaxValue(yField);
-			return _maxYValue;
+			if (! (scale1 is IEnumerableScale))
+				_maxDim1Value = getMaxValue(dim1);
+			return _maxDim1Value;
 		}
 
-		protected var _maxXValue:Number = NaN;
-		public function get maxXValue():Number
+		protected var _maxDim2Value:Number = NaN;
+		public function get maxDim2Value():Number
 		{
-			if (! (xScale is IEnumerableScale))
-				_maxXValue = getMaxValue(xField);
-			return _maxXValue;
+			if (! (scale2 is IEnumerableScale))
+				_maxDim2Value = getMaxValue(dim2);
+			return _maxDim2Value;
 		}
 
-		private var _minYValue:Number = NaN;
-		public function get minYValue():Number
+		private var _minDim1Value:Number = NaN;
+		public function get minDim1Value():Number
 		{
-			if (! (yScale is IEnumerableScale))
-				_minYValue = getMinValue(yField);
-			return _minYValue;
+			if (! (scale1 is IEnumerableScale))
+				_minDim1Value = getMinValue(dim1);
+			return _minDim1Value;
 		}
 
-		private var _minXValue:Number = NaN;
-		public function get minXValue():Number
+		private var _minDim2Value:Number = NaN;
+		public function get minDim2Value():Number
 		{
-			if (! (xScale is IEnumerableScale))
-				_minXValue = getMinValue(xField);
-			return _minXValue;
+			if (! (scale2 is IEnumerableScale))
+				_minDim2Value = getMinValue(dim2);
+			return _minDim2Value;
 		}
 
-		protected var _maxZValue:Number = NaN;
-		public function get maxZValue():Number
+		protected var _maxDim3Value:Number = NaN;
+		public function get maxDim3Value():Number
 		{
-			if (! (zScale is IEnumerableScale))
-				_maxZValue = getMaxValue(zField);
-			return _maxZValue;
+			if (! (scale3 is IEnumerableScale))
+				_maxDim3Value = getMaxValue(dim3);
+			return _maxDim3Value;
 		}
 
-		private var _minZValue:Number = NaN;
-		public function get minZValue():Number
+		private var _minDim3Value:Number = NaN;
+		public function get minDim3Value():Number
 		{
-			if (! (zScale is IEnumerableScale))
-				_minZValue = getMinValue(zField);
-			return _minZValue;
+			if (! (scale3 is IEnumerableScale))
+				_minDim3Value = getMinValue(dim3);
+			return _minDim3Value;
 		}
 
 		// UIComponent flow
@@ -286,25 +250,25 @@ package birdeye.vis.elements.geometry
 			// cannot be positioned yet in the axis.
 			var axesCheck:Boolean = true;
 			
-			if (yScale)
+			if (scale2)
 			{
-				if (yScale is IEnumerableScale)
-					axesCheck = Boolean(IEnumerableScale(yScale).dataProvider);
-			} else if (chart && chart.yScale)
+				if (scale2 is IEnumerableScale)
+					axesCheck = Boolean(IEnumerableScale(scale2).dataProvider);
+			} else if (chart && chart.scale2)
 			{
-				if (chart.yScale is IEnumerableScale)
-					axesCheck = Boolean(IEnumerableScale(chart.yScale).dataProvider);
+				if (chart.scale2 is IEnumerableScale)
+					axesCheck = Boolean(IEnumerableScale(chart.scale2).dataProvider);
 			} else
 				axesCheck = false;
 
-			if (xScale)
+			if (scale1)
 			{
-				if (xScale is IEnumerableScale)
-					axesCheck = axesCheck && Boolean(IEnumerableScale(xScale).dataProvider);
-			} else if (chart && chart.xScale)
+				if (scale1 is IEnumerableScale)
+					axesCheck = axesCheck && Boolean(IEnumerableScale(scale1).dataProvider);
+			} else if (chart && chart.scale1)
 			{
-				if (chart.xScale is IEnumerableScale)
-					axesCheck = axesCheck && Boolean(IEnumerableScale(chart.xScale).dataProvider);
+				if (chart.scale1 is IEnumerableScale)
+					axesCheck = axesCheck && Boolean(IEnumerableScale(chart.scale1).dataProvider);
 			} else
 				axesCheck = false;
 
@@ -312,10 +276,10 @@ package birdeye.vis.elements.geometry
 				(fill || stroke);
 
 			var globalCheck:Boolean = 
-				   (!isNaN(_minXValue) || !isNaN(_minYValue))
-				&& (!isNaN(_maxXValue) || !isNaN(_maxYValue))
+				   (!isNaN(_minDim1Value) || !isNaN(_minDim2Value))
+				&& (!isNaN(_maxDim1Value) || !isNaN(_maxDim2Value))
 				&& width>0 && height>0
-				&& chart && (xField || yField)
+				&& chart && (dim1 || dim2)
 				&& cursor;
 			
 			return globalCheck && axesCheck && colorsCheck;
@@ -341,31 +305,31 @@ package birdeye.vis.elements.geometry
 
 			var pos:Point = localToGlobal(new Point(extGG.posX, extGG.posY));
 	
-			if (yScale && yScale.pointer)
+			if (scale2 && scale2.pointer)
 			{
-				yScale.pointerY = extGG.posY;
-				yScale.pointer.visible = true;
-			} else if (chart.yScale && chart.yScale.pointer) {
-				chart.yScale.pointerY = extGG.posY;
-				chart.yScale.pointer.visible = true;
+				scale2.pointerY = extGG.posY;
+				scale2.pointer.visible = true;
+			} else if (chart.scale2 && chart.scale2.pointer) {
+				chart.scale2.pointerY = extGG.posY;
+				chart.scale2.pointer.visible = true;
 			} 
 
-			if (xScale && xScale.pointer)
+			if (scale1 && scale1.pointer)
 			{
-				xScale.pointerX = extGG.posX;
-				xScale.pointer.visible = true;
-			} else if (chart.xScale && chart.xScale.pointer) {
-				chart.xScale.pointerX = extGG.posX;
-				chart.xScale.pointer.visible = true;
+				scale1.pointerX = extGG.posX;
+				scale1.pointer.visible = true;
+			} else if (chart.scale1 && chart.scale1.pointer) {
+				chart.scale1.pointerX = extGG.posX;
+				chart.scale1.pointer.visible = true;
 			} 
 
-			if (zScale && zScale.pointer)
+			if (scale3 && scale3.pointer)
 			{
-				zScale.pointerY = extGG.posZ;
-				zScale.pointer.visible = true;
-			} else if (chart.zAxis && chart.zAxis.pointer) {
-				chart.zAxis.pointerY = extGG.posZ;
-				chart.zAxis.pointer.visible = true;
+				scale3.pointerY = extGG.posZ;
+				scale3.pointer.visible = true;
+			} else if (chart.scale3 && chart.scale3.pointer) {
+				chart.scale3.pointerY = extGG.posZ;
+				chart.scale3.pointer.visible = true;
 			} 
 		}
 
@@ -386,20 +350,20 @@ package birdeye.vis.elements.geometry
 				toolTip = null;
 			}
 
-			if (xScale && xScale.pointer)
-				xScale.pointer.visible = false;
-			else if (chart.xScale && chart.xScale.pointer) 
-				chart.xScale.pointer.visible = false;
+			if (scale1 && scale1.pointer)
+				scale1.pointer.visible = false;
+			else if (chart.scale1 && chart.scale1.pointer) 
+				chart.scale1.pointer.visible = false;
 
-			if (yScale && yScale.pointer)
-				yScale.pointer.visible = false;
-			else if (chart.yScale && chart.yScale.pointer) 
-				chart.yScale.pointer.visible = false;
+			if (scale2 && scale2.pointer)
+				scale2.pointer.visible = false;
+			else if (chart.scale2 && chart.scale2.pointer) 
+				chart.scale2.pointer.visible = false;
 
-			if (zScale && zScale.pointer)
-				zScale.pointer.visible = false;
-			else if (chart.zAxis && chart.zAxis.pointer) 
-				chart.zAxis.pointer.visible = false;
+			if (scale3 && scale3.pointer)
+				scale3.pointer.visible = false;
+			else if (chart.scale3 && chart.scale3.pointer) 
+				chart.scale3.pointer.visible = false;
 		}
 
 		/** @Private
