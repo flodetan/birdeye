@@ -58,11 +58,11 @@
 			<axis:Linear id="l2" placement="vertical_center" sizeLabel="12"/>
 		</polar:scales>
 		<polar:elements>
-			<pseries:PolarColumnElement angleScale="{c}" radiusScale="{l1}" extendMouseEvents="true" styleName="grad1" angleField="subject" radiusField="R1" displayName="R1"/>
-			<pseries:PolarColumnElement angleScale="{c}" radiusScale="{l2}" extendMouseEvents="true" styleName="grad2" angleField="subject" radiusField="R2" displayName="R2"/>
-			<pseries:PolarColumnElement angleScale="{c}" radiusScale="{l2}" extendMouseEvents="true" styleName="grad3" angleField="subject" radiusField="R3" displayName="R3"/>
-			<pseries:PolarColumnElement angleScale="{c}" radiusScale="{l2}" extendMouseEvents="true" styleName="grad4" angleField="subject" radiusField="R4" displayName="R4"/>
-			<pseries:PolarColumnElement angleScale="{c}" radiusScale="{l2}" extendMouseEvents="true" styleName="grad5" angleField="subject" radiusField="R5" displayName="R5"/>
+			<pseries:PolarColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad1" dim1="subject" dim2="R1" displayName="R1"/>
+			<pseries:PolarColumnElement scale1="{c}" scale2="{l2}" extendMouseEvents="true" styleName="grad2" dim1="subject" dim2="R2" displayName="R2"/>
+			<pseries:PolarColumnElement scale1="{c}" scale2="{l2}" extendMouseEvents="true" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
+			<pseries:PolarColumnElement scale1="{c}" scale2="{l2}" extendMouseEvents="true" styleName="grad4" dim1="subject" dim2="R4" displayName="R4"/>
+			<pseries:PolarColumnElement scale1="{c}" scale2="{l2}" extendMouseEvents="true" styleName="grad5" dim1="subject" dim2="R5" displayName="R5"/>
 		</polar:elements>
 	</polar:RadarChart>
 	<legend:Legend dataProvider="{rd}" direction="horizontal"/>
