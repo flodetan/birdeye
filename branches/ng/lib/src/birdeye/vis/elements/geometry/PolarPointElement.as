@@ -83,39 +83,39 @@ package birdeye.vis.elements.geometry
 			cursor.seek(CursorBookmark.FIRST);
 			while (!cursor.afterLast)
 			{
-				if (angleScale)
+				if (scale1)
 				{
-					angle = angleScale.getPosition(cursor.current[angleField]);
-					dataFields[0] = angleField;
-				} else if (polarChart.angleScale) {
-					angle = polarChart.angleScale.getPosition(cursor.current[angleField]);
-					dataFields[0] = angleField;
+					angle = scale1.getPosition(cursor.current[dim1]);
+					dataFields[0] = dim1;
+				} else if (polarChart.scale1) {
+					angle = polarChart.scale1.getPosition(cursor.current[dim1]);
+					dataFields[0] = dim1;
 				}
 				
-				if (radiusScale)
+				if (scale2)
 				{
-					radius = radiusScale.getPosition(cursor.current[radiusField]);
-					dataFields[1] = radiusField;
-				} else if (polarChart.radiusScale) {
-					radius = polarChart.radiusScale.getPosition(cursor.current[radiusField]);
-					dataFields[1] = radiusField;
+					radius = scale2.getPosition(cursor.current[dim2]);
+					dataFields[1] = dim2;
+				} else if (polarChart.scale2) {
+					radius = polarChart.scale2.getPosition(cursor.current[dim2]);
+					dataFields[1] = dim2;
 				}
 
 				if (radarAxis)
 				{
-					angle = radarAxis.angleAxis.getPosition(cursor.current[angleField]);
+					angle = radarAxis.angleAxis.getPosition(cursor.current[dim1]);
 					radius = INumerableScale(radarAxis.radiusAxes[
 										cursor.current[radarAxis.angleCategory]
-										]).getPosition(cursor.current[radiusField]);
-					dataFields[0] = angleField;
-					dataFields[1] = radiusField;
+										]).getPosition(cursor.current[dim2]);
+					dataFields[0] = dim1;
+					dataFields[1] = dim2;
 				} else if (polarChart.radarAxis) {
-					angle = polarChart.radarAxis.angleAxis.getPosition(cursor.current[angleField]);
+					angle = polarChart.radarAxis.angleAxis.getPosition(cursor.current[dim1]);
 					radius = INumerableScale(polarChart.radarAxis.radiusAxes[
 										cursor.current[polarChart.radarAxis.angleCategory]
-										]).getPosition(cursor.current[radiusField]);
-					dataFields[0] = angleField;
-					dataFields[1] = radiusField;
+										]).getPosition(cursor.current[dim2]);
+					dataFields[0] = dim1;
+					dataFields[1] = dim2;
 				}
 
 				var xPos:Number = PolarCoordinateTransform.getX(angle, radius, polarChart.origin);

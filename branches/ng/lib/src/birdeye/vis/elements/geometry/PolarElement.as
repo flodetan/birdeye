@@ -75,57 +75,34 @@ package birdeye.vis.elements.geometry
 				invalidateDisplayList();
 	  		}
 		}
-		private var _angleField:String;
-		public function set angleField(val:String):void
+
+		private var _scale1:IScale;
+		public function set scale1(val:IScale):void
 		{
-			_angleField = val;
+			_scale1 = val;
+
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get angleField():String
+		public function get scale1():IScale
 		{
-			return _angleField;
+			return _scale1;
 		}
 		
-		private var _radiusField:String;
-		public function set radiusField(val:String):void
+		private var _scale2:IScale;
+		public function set scale2(val:IScale):void
 		{
-			_radiusField= val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get radiusField():String
-		{
-			return _radiusField;
-		}
-
-		private var _angleAxis:IScale;
-		public function set angleScale(val:IScale):void
-		{
-			_angleAxis = val;
+			_scale2 = val;
+			if (val is IScaleUI && IScaleUI(_scale2).placement != BaseScale.HORIZONTAL_CENTER 
+								&& IScaleUI(_scale2).placement != BaseScale.VERTICAL_CENTER)
+				IScaleUI(_scale2).placement = BaseScale.HORIZONTAL_CENTER;
 
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get angleScale():IScale
+		public function get scale2():IScale
 		{
-			return _angleAxis;
-		}
-		
-		private var _radiusAxis:IScale;
-		public function set radiusScale(val:IScale):void
-		{
-			_radiusAxis = val;
-			if (val is IScaleUI && IScaleUI(_radiusAxis).placement != BaseScale.HORIZONTAL_CENTER 
-								&& IScaleUI(_radiusAxis).placement != BaseScale.VERTICAL_CENTER)
-				IScaleUI(_radiusAxis).placement = BaseScale.HORIZONTAL_CENTER;
-
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get radiusScale():IScale
-		{
-			return _radiusAxis;
+			return _scale2;
 		}
 		
 		private var _radarAxis:MutliScale;
@@ -140,43 +117,43 @@ package birdeye.vis.elements.geometry
 			return _radarAxis;
 		}
 
-		protected var _maxAngleValue:Number = 360;
-		public function get maxAngleValue():Number
+		protected var _maxDim1Value:Number = 360;
+		public function get maxDim1Value():Number
 		{
-			if (! (_angleAxis is IEnumerableScale))
-				_maxAngleValue = getMaxValue(angleField);
-			return _maxAngleValue;
+			if (! (_scale1 is IEnumerableScale))
+				_maxDim1Value = getMaxValue(dim1);
+			return _maxDim1Value;
 		}
 
-		protected var _maxRadiusValue:Number = NaN;
-		public function get maxRadiusValue():Number
+		protected var _maxDim2Value:Number = NaN;
+		public function get maxDim2Value():Number
 		{
-			if (! (_radiusAxis is IEnumerableScale))
-				_maxRadiusValue = getMaxValue(radiusField);
-			return _maxRadiusValue;
+			if (! (_scale2 is IEnumerableScale))
+				_maxDim2Value = getMaxValue(dim2);
+			return _maxDim2Value;
 		}
 
-		private var _minAngleValue:Number = 0;
-		public function get minAngleValue():Number
+		private var _minDim1Value:Number = 0;
+		public function get minDim1Value():Number
 		{
-			if (! (_angleAxis is IEnumerableScale))
-				_minAngleValue = getMinValue(angleField);
-			return _minAngleValue;
+			if (! (_scale1 is IEnumerableScale))
+				_minDim1Value = getMinValue(dim1);
+			return _minDim1Value;
 		}
 
-		private var _minRadiusValue:Number = NaN;
-		public function get minRadiusValue():Number
+		private var _minDim2Value:Number = NaN;
+		public function get minDim2Value():Number
 		{
-			if (! (_radiusAxis is IEnumerableScale))
-				_minRadiusValue = getMinValue(radiusField);
-			return _minRadiusValue;
+			if (! (_scale2 is IEnumerableScale))
+				_minDim2Value = getMinValue(dim2);
+			return _minDim2Value;
 		}
 
-		private var _totalAnglePositiveValue:Number = NaN;
-		public function get totalAnglePositiveValue():Number
+		private var _totalDim1PositiveValue:Number = NaN;
+		public function get totalDim1PositiveValue():Number
 		{
-			_totalAnglePositiveValue = getTotalPositiveValue(angleField);
-			return _totalAnglePositiveValue;
+			_totalDim1PositiveValue = getTotalPositiveValue(dim1);
+			return _totalDim1PositiveValue;
 		}
 		
 		// UIComponent flow
@@ -236,39 +213,39 @@ package birdeye.vis.elements.geometry
 			// cannot be positioned yet in the axis.
 			var axesCheck:Boolean = true;
 
-			if (angleScale)
+			if (scale1)
 			{
-				if (angleScale is INumerableScale)
-					axesCheck = !isNaN(INumerableScale(angleScale).min) || !isNaN(INumerableScale(angleScale).max)
-								|| !isNaN(INumerableScale(angleScale).totalPositiveValue);
-				else if (angleScale is IEnumerableScale)
-					axesCheck = Boolean(IEnumerableScale(angleScale).dataProvider);
-			} else if (polarChart && polarChart.angleScale)
+				if (scale1 is INumerableScale)
+					axesCheck = !isNaN(INumerableScale(scale1).min) || !isNaN(INumerableScale(scale1).max)
+								|| !isNaN(INumerableScale(scale1).totalPositiveValue);
+				else if (scale1 is IEnumerableScale)
+					axesCheck = Boolean(IEnumerableScale(scale1).dataProvider);
+			} else if (polarChart && polarChart.scale1)
 			{
-				if (polarChart.angleScale is INumerableScale)
-					axesCheck = !isNaN(INumerableScale(polarChart.angleScale).min) || !isNaN(INumerableScale(polarChart.angleScale).max)
-								|| !isNaN(INumerableScale(polarChart.angleScale).totalPositiveValue);
-				else if (polarChart.angleScale is IEnumerableScale)
-					axesCheck = Boolean(IEnumerableScale(polarChart.angleScale ).dataProvider);
+				if (polarChart.scale1 is INumerableScale)
+					axesCheck = !isNaN(INumerableScale(polarChart.scale1).min) || !isNaN(INumerableScale(polarChart.scale1).max)
+								|| !isNaN(INumerableScale(polarChart.scale1).totalPositiveValue);
+				else if (polarChart.scale1 is IEnumerableScale)
+					axesCheck = Boolean(IEnumerableScale(polarChart.scale1 ).dataProvider);
 			} else
 				axesCheck = false;
 
-			if (radiusScale)
+			if (scale2)
 			{
-				if (radiusScale is INumerableScale)
-					axesCheck = axesCheck && (!isNaN(INumerableScale(radiusScale).min) 
-												|| !isNaN(INumerableScale(radiusScale).max)
-												|| !isNaN(INumerableScale(radiusScale).totalPositiveValue));
-				else if (radiusScale is IEnumerableScale)
-					axesCheck = axesCheck && IEnumerableScale(radiusScale).dataProvider;
-			} else if (polarChart && polarChart.radiusScale)
+				if (scale2 is INumerableScale)
+					axesCheck = axesCheck && (!isNaN(INumerableScale(scale2).min) 
+												|| !isNaN(INumerableScale(scale2).max)
+												|| !isNaN(INumerableScale(scale2).totalPositiveValue));
+				else if (scale2 is IEnumerableScale)
+					axesCheck = axesCheck && IEnumerableScale(scale2).dataProvider;
+			} else if (polarChart && polarChart.scale2)
 			{
-				if (polarChart.radiusScale is INumerableScale)
-					axesCheck = axesCheck && (!isNaN(INumerableScale(polarChart.radiusScale).min)
-												|| !isNaN(INumerableScale(polarChart.radiusScale).max)
-												|| !isNaN(INumerableScale(polarChart.radiusScale).totalPositiveValue))
-				else if (polarChart.radiusScale is IEnumerableScale)
-					axesCheck = axesCheck && IEnumerableScale(polarChart.radiusScale).dataProvider;
+				if (polarChart.scale2 is INumerableScale)
+					axesCheck = axesCheck && (!isNaN(INumerableScale(polarChart.scale2).min)
+												|| !isNaN(INumerableScale(polarChart.scale2).max)
+												|| !isNaN(INumerableScale(polarChart.scale2).totalPositiveValue))
+				else if (polarChart.scale2 is IEnumerableScale)
+					axesCheck = axesCheck && IEnumerableScale(polarChart.scale2).dataProvider;
 			} else
 				axesCheck = false;
 				
@@ -279,10 +256,10 @@ package birdeye.vis.elements.geometry
 				(fill || stroke || isNaN(colorFill) || isNaN(colorStroke));
 
 			var globalCheck:Boolean = 
-/* 				   (!isNaN(_minAngleValue) || !isNaN(_minRadiusValue))
-				&& (!isNaN(_maxAngleValue) || !isNaN(_maxRadiusValue)) */
+/* 				   (!isNaN(_minDim1Value) || !isNaN(_minDim2Value))
+				&& (!isNaN(_maxDim1Value) || !isNaN(_maxDim1Value)) */
 				width>0 && height>0
-				&& polarChart && (angleField || radiusField)
+				&& polarChart && (dim1 || dim1)
 				&& (polarChart.origin)
 				&& cursor;
 			

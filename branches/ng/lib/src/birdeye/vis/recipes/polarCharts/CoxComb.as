@@ -140,23 +140,23 @@ package birdeye.vis.recipes.polarCharts
 							sCursor.seek(CursorBookmark.FIRST);
 							while (!sCursor.afterLast)
 							{
-								j = sCursor.current[PolarColumnElement(_columnElements[s]).angleField];
+								j = sCursor.current[PolarColumnElement(_columnElements[s]).dim1];
 
 								if (s>0 && k[j]>=0)
 									allElementsBaseValues[s].baseValues[j] = 
 										allElementsBaseValues[k[j]].baseValues[j] + 
-										Math.max(0,sCursor.current[PolarColumnElement(_columnElements[k[j]]).radiusField]);
+										Math.max(0,sCursor.current[PolarColumnElement(_columnElements[k[j]]).dim2]);
 								else 
 									allElementsBaseValues[s].baseValues[j] = 0;
 
 								if (isNaN(_maxStacked100))
 									_maxStacked100 = 
 										allElementsBaseValues[s].baseValues[j] + 
-										Math.max(0,sCursor.current[PolarColumnElement(_columnElements[s]).radiusField]);
+										Math.max(0,sCursor.current[PolarColumnElement(_columnElements[s]).dim2]);
 								else
 									_maxStacked100 = Math.max(_maxStacked100,
 										allElementsBaseValues[s].baseValues[j] + 
-										Math.max(0,sCursor.current[PolarColumnElement(_columnElements[s]).radiusField]));
+										Math.max(0,sCursor.current[PolarColumnElement(_columnElements[s]).dim2]));
 
 								sCursor.moveNext();
 								k[j] = s;
@@ -178,23 +178,23 @@ package birdeye.vis.recipes.polarCharts
 								if (! (PolarColumnElement(_columnElements[s]).cursor &&
 									PolarColumnElement(_columnElements[s]).cursor != cursor))
 								{
-									j = cursor.current[PolarColumnElement(_columnElements[s]).angleField];
+									j = cursor.current[PolarColumnElement(_columnElements[s]).dim1];
 							
 									if (t[j]>=0)
 										allElementsBaseValues[s].baseValues[j] = 
 											allElementsBaseValues[t[j]].baseValues[j] + 
-											Math.max(0,cursor.current[PolarColumnElement(_columnElements[t[j]]).radiusField]);
+											Math.max(0,cursor.current[PolarColumnElement(_columnElements[t[j]]).dim2]);
 									else 
 										allElementsBaseValues[s].baseValues[j] = 0;
 									
 									if (isNaN(_maxStacked100))
 										_maxStacked100 = 
 											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,cursor.current[PolarColumnElement(_columnElements[s]).radiusField]);
+											Math.max(0,cursor.current[PolarColumnElement(_columnElements[s]).dim2]);
 									else
 										_maxStacked100 = Math.max(_maxStacked100,
 											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,cursor.current[PolarColumnElement(_columnElements[s]).radiusField]));
+											Math.max(0,cursor.current[PolarColumnElement(_columnElements[s]).dim2]));
 
 									t[j] = s;
 								}
@@ -217,7 +217,7 @@ package birdeye.vis.recipes.polarCharts
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
- 			if ((angleScale && angleScale is CategoryAngle))
+ 			if ((scale1 && scale1 is CategoryAngle))
 				drawLabels()
  		}
 		
@@ -257,11 +257,11 @@ package birdeye.vis.recipes.polarCharts
 								} 
 								elementsMinMax[category].min = 
 									Math.min(elementsMinMax[category].min, 
-										currentElement.cursor.current[currentElement.radiusField]);
+										currentElement.cursor.current[currentElement.dim2]);
 
 								elementsMinMax[category].max = 
 									Math.max(elementsMinMax[category].max, 
-										currentElement.cursor.current[currentElement.radiusField]);
+										currentElement.cursor.current[currentElement.dim2]);
 								
 								currentElement.cursor.moveNext();
 							}
@@ -287,11 +287,11 @@ package birdeye.vis.recipes.polarCharts
 									} 
 									elementsMinMax[category].min = 
 										Math.min(elementsMinMax[category].min, 
-											cursor.current[currentElement.radiusField]);
+											cursor.current[currentElement.dim2]);
 
 									elementsMinMax[category].max = 
 										Math.max(elementsMinMax[category].max, 
-											cursor.current[currentElement.radiusField]);
+											cursor.current[currentElement.dim2]);
 								}
 								cursor.moveNext();
 							}
@@ -316,7 +316,7 @@ package birdeye.vis.recipes.polarCharts
 			if (radarAxis)
 				aAxis = radarAxis.angleAxis;
 			else
-				aAxis = CategoryAngle(angleScale);
+				aAxis = CategoryAngle(scale1);
 			
 			var catElements:Array = aAxis.dataProvider;
 			var interval:int = aAxis.interval;
