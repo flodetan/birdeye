@@ -28,14 +28,18 @@
  package birdeye.vis
 {
 	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.interfaces.IScale;
+	import birdeye.vis.scales.BaseScale;
+	import birdeye.vis.scales.MultiScale;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
 	
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.xml.XMLNode;
 	
@@ -46,7 +50,7 @@
 	import mx.core.IInvalidating;
 
 	[DefaultProperty("dataProvider")]
-	public class VisScene extends Surface
+	public class VisScene extends Surface implements ICoordinates
 	{
 		private var _scales:Array; /* of IScale */
 		/** Array of scales, each element will take a scale target from this scale list.*/
@@ -59,6 +63,86 @@
 			invalidateDisplayList();
 		}
 		
+		protected var _multiScale:MultiScale;
+		public function set multiScale(val:MultiScale):void
+		{
+			_multiScale = val;
+			_multiScale.polarChart = this;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		public function get multiScale():MultiScale
+		{
+			return _multiScale;
+		}
+		
+		protected var _origin:Point;
+		public function set origin(val:Point):void
+		{
+			_origin = val;
+			invalidateDisplayList();
+		}
+		public function get origin():Point
+		{
+			return _origin;
+		}
+
+		protected var needDefaultScale1:Boolean;
+		protected var needDefaultScale2:Boolean;
+		protected var _scale1:IScale;
+		/** Define the x axis. If it has not defined its placement, than set it to BOTTOM.
+		 * Set the angle axis. Set its placement to NONE*/ 
+		public function set scale1(val:IScale):void
+		{
+			_scale1 = val;
+/* 			if (_scale1.placement != BaseScale.BOTTOM && _scale1.placement != BaseScale.TOP)
+				_scale1.placement = BaseScale.BOTTOM;
+ */
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		public function get scale1():IScale
+		{
+			return _scale1;
+		}
+
+		protected var _scale2:IScale;
+		/** Define the y axis. If it has not defined its placement, than set it to TOP
+		 * 	Define the radius axis. If it has not defined its placement, than set it to 
+		 * horizontal-center*/ 
+ 		public function set scale2(val:IScale):void
+		{
+			_scale2 = val;
+/* 			if (val is IScaleUI 	&& IScaleUI(_scale2).placement != BaseScale.HORIZONTAL_CENTER 
+								&& IScaleUI(_scale2).placement != BaseScale.VERTICAL_CENTER)
+				IScaleUI(_scale2).placement = BaseScale.HORIZONTAL_CENTER;
+			if (_scale2.placement != BaseScale.LEFT && _scale2.placement != BaseScale.RIGHT)
+				_scale2.placement = BaseScale.LEFT;
+ */
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		public function get scale2():IScale
+		{
+			return _scale2;
+		}
+
+ 		protected var _scale3:IScale;
+		/** Define the z axis. If it has not defined its placement, than set it to DIAGONAL*/ 
+		public function set scale3(val:IScale):void
+		{
+			_scale3 = val;
+			if (_scale3.placement != BaseScale.DIAGONAL)
+				_scale3.placement = BaseScale.DIAGONAL;
+
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		public function get scale3():IScale
+		{
+			return _scale3;
+		}
+
 		private var _colorAxis:INumerableScale;
 		/** Define an axis to set the colorField for data items.*/
 		public function set colorAxis(val:INumerableScale):void
@@ -69,6 +153,18 @@
 		public function get colorAxis():INumerableScale
 		{
 			return _colorAxis;
+		}
+
+		private var _sizeScale:INumerableScale;
+		/** Define a scale to set the sizeDim for data items.*/
+		public function set sizeScale(val:INumerableScale):void
+		{
+			_sizeScale = val;
+			invalidateDisplayList();
+		}
+		public function get sizeScale():INumerableScale
+		{
+			return _sizeScale;
 		}
 
 		private var _showGrid:Boolean = true;

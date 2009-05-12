@@ -57,6 +57,11 @@ package birdeye.vis.interfaces
 		function set range(val:Array):void
 		function get range():Array
 
+		/** Set the axis placement.*/
+		function set placement(val:String):void
+		function get placement():String
+
+
 /*		/** Set the origin point of the scale.
 		function set origin(val:Point):void
 		function get origin():Point

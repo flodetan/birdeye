@@ -27,6 +27,8 @@
  
 package birdeye.vis.scales
 {
+	import birdeye.vis.interfaces.ICoordinates;
+	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	import com.degrafa.core.IGraphicsFill;
@@ -41,8 +43,6 @@ package birdeye.vis.scales
 	
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
-	
-	import birdeye.vis.coords.Polar;
 
 	[Style(name="gradientColors",type="Array",inherit="no")]
 	[Style(name="gradientAlphas",type="Array",inherit="no")]
@@ -58,7 +58,7 @@ package birdeye.vis.scales
 	[Style(name="labelSize",type="uint",inherit="no")]
 	[Style(name="labelColor",type="uint",inherit="no")]
 
-	public class MutliScale extends Surface
+	public class MultiScale extends Surface
 	{
 		/** Set the axis line color.*/
 		protected var stroke:IGraphicsStroke;
@@ -77,10 +77,10 @@ package birdeye.vis.scales
 			invalidateDisplayList();
 		}
 		
-		private var _polarChart:Polar;
-		public function set polarChart(val:Polar):void
+		private var chart:ICoordinates;
+		public function set polarChart(val:ICoordinates):void
 		{
-			_polarChart = val;
+			chart = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -256,7 +256,7 @@ package birdeye.vis.scales
 		// UIComponent methods
 		
 		private var gg:GeometryGroup;
-		public function MutliScale()
+		public function MultiScale()
 		{
 			super();
 			gg = new GeometryGroup();
@@ -315,7 +315,7 @@ package birdeye.vis.scales
 		initializeStyles();
 		public static function initializeStyles():void
 		{
-			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("MutliScale");
+			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("MultiScale");
 			if(!selector)
 			{
 				selector = new CSSStyleDeclaration();
@@ -342,7 +342,7 @@ package birdeye.vis.scales
 
 				this.stylesChanged = true;
 			} 
-			StyleManager.setStyleDeclaration("MutliScale", selector, true);
+			StyleManager.setStyleDeclaration("MultiScale", selector, true);
 		}
 		
  		public function feedRadiusAxes(elementsMinMax:Array):void
@@ -384,9 +384,9 @@ package birdeye.vis.scales
 			{
 				Numeric(radiusAxes[catElements[i]]).size = radiusSize;
 				var angle:int = angleAxis.getPosition(catElements[i]);
-				var endPosition:Point = PolarCoordinateTransform.getXY(angle,radiusSize,_polarChart.origin);
+				var endPosition:Point = PolarCoordinateTransform.getXY(angle,radiusSize,chart.origin);
 				
- 				line = new Line(_polarChart.origin.x, _polarChart.origin.y, endPosition.x, endPosition.y);
+ 				line = new Line(chart.origin.x, chart.origin.y, endPosition.x, endPosition.y);
 				line.stroke = stroke;
 				gg.geometryCollection.addItem(line);
 
@@ -396,7 +396,7 @@ package birdeye.vis.scales
  				for (var snap:int = radiusAxis.min; snap<radiusAxis.max; snap += radiusAxis.interval)
  				{
  					rad = radiusAxis.getPosition(snap);
-	 				var labelPosition:Point = PolarCoordinateTransform.getXY(angle,rad,_polarChart.origin);
+	 				var labelPosition:Point = PolarCoordinateTransform.getXY(angle,rad,chart.origin);
 					var label:RasterTextPlus = new RasterTextPlus();
 					label.text = String(snap);
 	 				label.fontFamily = fontLabel;

@@ -143,56 +143,6 @@ package birdeye.vis.coords
 			return _is3D;
 		}
 
-		protected var needDefaultScale1:Boolean;
-		protected var needDefaultScale2:Boolean;
-		protected var _scale1:IScaleUI;
-		/** Define the x axis. If it has not defined its placement, than set it to BOTTOM*/ 
-		public function set scale1(val:IScaleUI):void
-		{
-			_scale1 = val;
-			if (_scale1.placement != BaseScale.BOTTOM && _scale1.placement != BaseScale.TOP)
-				_scale1.placement = BaseScale.BOTTOM;
-
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get scale1():IScaleUI
-		{
-			return _scale1;
-		}
-
-		protected var _scale2:IScaleUI;
-		/** Define the y axis. If it has not defined its placement, than set it to TOP*/ 
-		public function set scale2(val:IScaleUI):void
-		{
-			_scale2 = val;
-			if (_scale2.placement != BaseScale.LEFT && _scale2.placement != BaseScale.RIGHT)
-				_scale2.placement = BaseScale.LEFT;
-
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get scale2():IScaleUI
-		{
-			return _scale2;
-		}
-
- 		protected var _scale3:IScaleUI;
-		/** Define the z axis. If it has not defined its placement, than set it to DIAGONAL*/ 
-		public function set scale3(val:IScaleUI):void
-		{
-			_scale3 = val;
-			if (_scale3.placement != BaseScale.DIAGONAL)
-				_scale3.placement = BaseScale.DIAGONAL;
-
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get scale3():IScaleUI
-		{
-			return _scale3;
-		}
-
 		// UIComponent flow
 
 		public function Cartesian() 
@@ -275,7 +225,7 @@ package birdeye.vis.coords
 						nCursors += 1;
 
 					_elementsContainer.addChild(DisplayObject(elements[i]));
-					var scale1:IScaleUI = ICartesianElement(elements[i]).scale1;
+					var scale1:IScale = ICartesianElement(elements[i]).scale1;
 					if (scale1)
 					{
 						switch (scale1.placement)
@@ -290,7 +240,7 @@ package birdeye.vis.coords
 					} else 
 						needDefaultScale1 = true;
 						
-					var scale2:IScaleUI = ICartesianElement(elements[i]).scale2;
+					var scale2:IScale = ICartesianElement(elements[i]).scale2;
 					if (scale2)
 					{
 						switch (scale2.placement)
@@ -305,8 +255,8 @@ package birdeye.vis.coords
 					} else 
 						needDefaultScale2 = true;
 
-					var tmpScale3:IScaleUI = ICartesianElement(elements[i]).scale3;
-					if (tmpScale3)
+					var tmpScale3:IScale = ICartesianElement(elements[i]).scale3;
+					if (tmpScale3 && tmpScale3 is IScaleUI)
 					{
 						zContainer.addChild(DisplayObject(tmpScale3));
 						
@@ -324,7 +274,7 @@ package birdeye.vis.coords
 				}
 			}
 
-			if (_scale3)
+			if (_scale3 && _scale3 is IScaleUI)
 			{
 				_is3D = true;
 				zContainer.addChild(DisplayObject(_scale3));
