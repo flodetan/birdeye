@@ -76,86 +76,18 @@ package birdeye.vis.elements.geometry
 	  		}
 		}
 
-		private var _scale1:IScale;
-		public function set scale1(val:IScale):void
-		{
-			_scale1 = val;
-
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get scale1():IScale
-		{
-			return _scale1;
-		}
-		
-		private var _scale2:IScale;
-		public function set scale2(val:IScale):void
-		{
-			_scale2 = val;
-			if (val is IScaleUI && IScaleUI(_scale2).placement != BaseScale.HORIZONTAL_CENTER 
-								&& IScaleUI(_scale2).placement != BaseScale.VERTICAL_CENTER)
-				IScaleUI(_scale2).placement = BaseScale.HORIZONTAL_CENTER;
-
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get scale2():IScale
-		{
-			return _scale2;
-		}
-		
-		private var _radarAxis:MutliScale;
-		public function set radarAxis(val:MutliScale):void
+		private var _radarAxis:MultiScale;
+		public function set radarAxis(val:MultiScale):void
 		{
 			_radarAxis = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get radarAxis():MutliScale
+		public function get radarAxis():MultiScale
 		{
 			return _radarAxis;
 		}
 
-		protected var _maxDim1Value:Number = 360;
-		public function get maxDim1Value():Number
-		{
-			if (! (_scale1 is IEnumerableScale))
-				_maxDim1Value = getMaxValue(dim1);
-			return _maxDim1Value;
-		}
-
-		protected var _maxDim2Value:Number = NaN;
-		public function get maxDim2Value():Number
-		{
-			if (! (_scale2 is IEnumerableScale))
-				_maxDim2Value = getMaxValue(dim2);
-			return _maxDim2Value;
-		}
-
-		private var _minDim1Value:Number = 0;
-		public function get minDim1Value():Number
-		{
-			if (! (_scale1 is IEnumerableScale))
-				_minDim1Value = getMinValue(dim1);
-			return _minDim1Value;
-		}
-
-		private var _minDim2Value:Number = NaN;
-		public function get minDim2Value():Number
-		{
-			if (! (_scale2 is IEnumerableScale))
-				_minDim2Value = getMinValue(dim2);
-			return _minDim2Value;
-		}
-
-		private var _totalDim1PositiveValue:Number = NaN;
-		public function get totalDim1PositiveValue():Number
-		{
-			_totalDim1PositiveValue = getTotalPositiveValue(dim1);
-			return _totalDim1PositiveValue;
-		}
-		
 		// UIComponent flow
 		
 		public function PolarElement():void
@@ -249,7 +181,7 @@ package birdeye.vis.elements.geometry
 			} else
 				axesCheck = false;
 				
-			if ((radarAxis && radarAxis.radiusAxes) || (polarChart.radarAxis && polarChart.radarAxis.radiusAxes))
+			if ((radarAxis && radarAxis.radiusAxes) || (polarChart.multiScale && polarChart.multiScale.radiusAxes))
 				axesCheck = true;
 
 			var colorsCheck:Boolean = 

@@ -35,29 +35,5 @@ package birdeye.vis.interfaces
 		 * of the chart among several elements.*/
 		function set polarChart(val:Polar):void;
 		function get polarChart():Polar
-		
-		/** Set the dim1 (angle) to filter data values.*/
-		function set dim1(val:String):void;
-		function get dim1():String;
-
-		/** Set the dim2 (radius) to filter data values.*/
-		function set dim2(val:String):void;
-		function get dim2():String;
-
-		/** Set the scale1 (angle).*/
-		function set scale1(val:IScale):void;
-		function get scale1():IScale;
-
-		/** Set the scale2 (radius).*/
-		function set scale2(val:IScale):void;
-		function get scale2():IScale;
-
-		function get maxDim1Value():Number;
-		function get minDim1Value():Number;
-
-		function get maxDim2Value():Number;
-		function get minDim2Value():Number;
-
-		function get totalDim1PositiveValue():Number;
 	}
 }

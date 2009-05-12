@@ -53,6 +53,41 @@ package birdeye.vis.interfaces
 		function set dataProvider(val:Object):void;
 		function get dataProvider():Object;
 
+		/** Set the dim1 to filter horizontal data values.*/
+		function set dim1(val:String):void;
+		function get dim1():String;
+
+		/** Set the dim2 to filter vertical data values.*/
+		function set dim2(val:String):void;
+		function get dim2():String;
+
+		/** Set the dim3 to filter vertical data values.*/
+		function set dim3(val:String):void;
+		function get dim3():String;
+
+		/** Set the scale for dim1.*/
+		function set scale1(val:IScale):void;
+		function get scale1():IScale;
+
+		/** Set the scale for dim2.*/
+		function set scale2(val:IScale):void;
+		function get scale2():IScale;
+
+		/** Set the scale for dim3.*/
+		function set scale3(val:IScale):void;
+		function get scale3():IScale;
+
+		function get maxDim1Value():Number;
+		function get minDim1Value():Number;
+
+		function get maxDim2Value():Number;
+		function get minDim2Value():Number;
+
+		function get maxDim3Value():Number;
+		function get minDim3Value():Number;
+
+		function get totalDim1PositiveValue():Number;
+
 		/** Set the fill color.*/
 		function getFill():IGraphicsFill;
 

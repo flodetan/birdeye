@@ -27,6 +27,13 @@
  
 package birdeye.vis.elements.geometry
 {
+	import birdeye.vis.coords.Cartesian;
+	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.elements.BaseElement;
+	import birdeye.vis.interfaces.ICartesianElement;
+	import birdeye.vis.interfaces.IEnumerableScale;
+	import birdeye.vis.interfaces.IScaleUI;
+	
 	import com.degrafa.geometry.Circle;
 	import com.degrafa.paint.SolidFill;
 	
@@ -35,15 +42,6 @@ package birdeye.vis.elements.geometry
 	
 	import mx.collections.ICollectionView;
 	import mx.events.ToolTipEvent;
-	
-	import birdeye.vis.elements.BaseElement;
-	import birdeye.vis.scales.BaseScale;
-	import birdeye.vis.coords.Cartesian;
-	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.interfaces.IScaleUI;
-	import birdeye.vis.interfaces.ICartesianElement;
-	import birdeye.vis.interfaces.IEnumerableScale;
-	import birdeye.vis.interfaces.ISizableItem;
 
 	[Exclude(name="index", kind="property")]
 	public class CartesianElement extends BaseElement implements ICartesianElement
@@ -92,99 +90,6 @@ package birdeye.vis.elements.geometry
 			return _index;
 		}
 		
-		private var _scale1:IScaleUI;
-		public function set scale1(val:IScaleUI):void
-		{
-			_scale1 = val;
-			if (_scale1.placement != BaseScale.BOTTOM && _scale1.placement != BaseScale.TOP)
-				_scale1.placement = BaseScale.BOTTOM;
-
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get scale1():IScaleUI
-		{
-			return _scale1;
-		}
-		
-		private var _scale2:IScaleUI;
-		public function set scale2(val:IScaleUI):void
-		{
-			_scale2 = val;
-			if (_scale2.placement != BaseScale.LEFT && _scale2.placement != BaseScale.RIGHT)
-				_scale2.placement = BaseScale.LEFT;
-
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get scale2():IScaleUI
-		{
-			return _scale2;
-		}
-		
-		private var _scale3:IScaleUI;
-		public function set scale3(val:IScaleUI):void
-		{
-			_scale3 = val;
-			if (_scale3.placement != BaseScale.DIAGONAL)
-				_scale3.placement = BaseScale.DIAGONAL;
-
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get scale3():IScaleUI
-		{
-			return _scale3;
-		}
-		
-		protected var _maxDim1Value:Number = NaN;
-		public function get maxDim1Value():Number
-		{
-			if (! (scale1 is IEnumerableScale))
-				_maxDim1Value = getMaxValue(dim1);
-			return _maxDim1Value;
-		}
-
-		protected var _maxDim2Value:Number = NaN;
-		public function get maxDim2Value():Number
-		{
-			if (! (scale2 is IEnumerableScale))
-				_maxDim2Value = getMaxValue(dim2);
-			return _maxDim2Value;
-		}
-
-		private var _minDim1Value:Number = NaN;
-		public function get minDim1Value():Number
-		{
-			if (! (scale1 is IEnumerableScale))
-				_minDim1Value = getMinValue(dim1);
-			return _minDim1Value;
-		}
-
-		private var _minDim2Value:Number = NaN;
-		public function get minDim2Value():Number
-		{
-			if (! (scale2 is IEnumerableScale))
-				_minDim2Value = getMinValue(dim2);
-			return _minDim2Value;
-		}
-
-		protected var _maxDim3Value:Number = NaN;
-		public function get maxDim3Value():Number
-		{
-			if (! (scale3 is IEnumerableScale))
-				_maxDim3Value = getMaxValue(dim3);
-			return _maxDim3Value;
-		}
-
-		private var _minDim3Value:Number = NaN;
-		public function get minDim3Value():Number
-		{
-			if (! (scale3 is IEnumerableScale))
-				_minDim3Value = getMinValue(dim3);
-			return _minDim3Value;
-		}
-
 		// UIComponent flow
 
 		public function CartesianElement():void
@@ -305,31 +210,31 @@ package birdeye.vis.elements.geometry
 
 			var pos:Point = localToGlobal(new Point(extGG.posX, extGG.posY));
 	
-			if (scale2 && scale2.pointer)
+			if (scale2 && scale2 is IScaleUI && IScaleUI(scale2).pointer)
 			{
-				scale2.pointerY = extGG.posY;
-				scale2.pointer.visible = true;
-			} else if (chart.scale2 && chart.scale2.pointer) {
-				chart.scale2.pointerY = extGG.posY;
-				chart.scale2.pointer.visible = true;
+				IScaleUI(scale2).pointerY = extGG.posY;
+				IScaleUI(scale2).pointer.visible = true;
+			} else if (chart.scale2 && chart.scale2 is IScaleUI && IScaleUI(chart.scale2).pointer) {
+				IScaleUI(chart.scale2).pointerY = extGG.posY;
+				IScaleUI(chart.scale2).pointer.visible = true;
 			} 
 
-			if (scale1 && scale1.pointer)
+			if (scale1 && scale1 is IScaleUI && IScaleUI(scale1).pointer)
 			{
-				scale1.pointerX = extGG.posX;
-				scale1.pointer.visible = true;
-			} else if (chart.scale1 && chart.scale1.pointer) {
-				chart.scale1.pointerX = extGG.posX;
-				chart.scale1.pointer.visible = true;
+				IScaleUI(scale1).pointerX = extGG.posX;
+				IScaleUI(scale1).pointer.visible = true;
+			} else if (chart.scale1 && chart.scale1 is IScaleUI && IScaleUI(chart.scale1).pointer) {
+				IScaleUI(chart.scale1).pointerX = extGG.posX;
+				IScaleUI(chart.scale1).pointer.visible = true;
 			} 
 
-			if (scale3 && scale3.pointer)
+			if (scale3 && scale3 is IScaleUI && IScaleUI(scale3).pointer)
 			{
-				scale3.pointerY = extGG.posZ;
-				scale3.pointer.visible = true;
-			} else if (chart.scale3 && chart.scale3.pointer) {
-				chart.scale3.pointerY = extGG.posZ;
-				chart.scale3.pointer.visible = true;
+				IScaleUI(scale3).pointerY = extGG.posZ;
+				IScaleUI(scale3).pointer.visible = true;
+			} else if (chart.scale3 && chart.scale3 is IScaleUI && IScaleUI(chart.scale3).pointer) {
+				IScaleUI(chart.scale3).pointerY = extGG.posZ;
+				IScaleUI(chart.scale3).pointer.visible = true;
 			} 
 		}
 
@@ -350,20 +255,20 @@ package birdeye.vis.elements.geometry
 				toolTip = null;
 			}
 
-			if (scale1 && scale1.pointer)
-				scale1.pointer.visible = false;
-			else if (chart.scale1 && chart.scale1.pointer) 
-				chart.scale1.pointer.visible = false;
+			if (scale1 && scale1 is IScaleUI && IScaleUI(scale1).pointer)
+				IScaleUI(scale1).pointer.visible = false;
+			else if (chart.scale1 && chart.scale1 is IScaleUI && IScaleUI(chart.scale1).pointer) 
+				IScaleUI(chart.scale1).pointer.visible = false;
 
-			if (scale2 && scale2.pointer)
-				scale2.pointer.visible = false;
-			else if (chart.scale2 && chart.scale2.pointer) 
-				chart.scale2.pointer.visible = false;
+			if (scale2 && scale2 is IScaleUI && IScaleUI(scale2).pointer)
+				IScaleUI(scale2).pointer.visible = false;
+			else if (chart.scale2 && chart.scale2 is IScaleUI && IScaleUI(chart.scale2).pointer) 
+				IScaleUI(chart.scale2).pointer.visible = false;
 
-			if (scale3 && scale3.pointer)
-				scale3.pointer.visible = false;
-			else if (chart.scale3 && chart.scale3.pointer) 
-				chart.scale3.pointer.visible = false;
+			if (scale3 && scale3 is IScaleUI && IScaleUI(scale3).pointer)
+				IScaleUI(scale3).pointer.visible = false;
+			else if (chart.scale3 && chart.scale3 is IScaleUI && IScaleUI(chart.scale3).pointer) 
+				IScaleUI(chart.scale3).pointer.visible = false;
 		}
 
 		/** @Private

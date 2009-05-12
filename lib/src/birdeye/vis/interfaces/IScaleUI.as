@@ -40,10 +40,6 @@ package birdeye.vis.interfaces
 		/** Get the axis pointer. Can be used to change colors, stroke, visibility...*/
 		function get pointer():Line;
 
-		/** Set the axis placement.*/
-		function set placement(val:String):void
-		function get placement():String
-
 		/** The axis must provide the removal all elements when refreshed, thus insuring
 		 * both display refresh and memory clearing.*/
 		function removeAllElements():void

@@ -107,10 +107,10 @@ package birdeye.vis.elements.geometry
 										]).getPosition(cursor.current[dim2]);
 					dataFields[0] = dim1;
 					dataFields[1] = dim2;
-				} else if (polarChart.radarAxis) {
-					angle = polarChart.radarAxis.angleAxis.getPosition(cursor.current[dim1]);
-					radius = INumerableScale(polarChart.radarAxis.radiusAxes[
-										cursor.current[polarChart.radarAxis.angleCategory]
+				} else if (polarChart.multiScale) {
+					angle = polarChart.multiScale.angleAxis.getPosition(cursor.current[dim1]);
+					radius = INumerableScale(polarChart.multiScale.radiusAxes[
+										cursor.current[polarChart.multiScale.angleCategory]
 										]).getPosition(cursor.current[dim2]);
 					dataFields[0] = dim1;
 					dataFields[1] = dim2;

@@ -131,64 +131,6 @@ package birdeye.vis.coords
 			invalidateDisplayList();
 		}
 
-		protected var _radarAxis:MutliScale;
-		public function set radarAxis(val:MutliScale):void
-		{
-			_radarAxis = val;
-			_radarAxis.polarChart = this;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get radarAxis():MutliScale
-		{
-			return _radarAxis;
-		}
-		
-		protected var needDefaultScale1:Boolean;
-		protected var needDefaultScale2:Boolean;
-		protected var _scale1:IScale;
-		/** Set the angle axis. Set its placement to NONE*/ 
-		public function set scale1(val:IScale):void
-		{
-			_scale1 = val;
-
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get scale1():IScale
-		{
-			return _scale1;
-		}
-
-		protected var _scale2:IScale;
-		/** Define the radius axis. If it has not defined its placement, than set it to 
-		 * horizontal-center*/ 
-		public function set scale2(val:IScale):void
-		{
-			_scale2 = val;
-			if (val is IScaleUI 	&& IScaleUI(_scale2).placement != BaseScale.HORIZONTAL_CENTER 
-								&& IScaleUI(_scale2).placement != BaseScale.VERTICAL_CENTER)
-				IScaleUI(_scale2).placement = BaseScale.HORIZONTAL_CENTER;
-
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get scale2():IScale
-		{
-			return _scale2;
-		}
-		
-		private var _origin:Point;
-		public function set origin(val:Point):void
-		{
-			_origin = val;
-			invalidateDisplayList();
-		}
-		public function get origin():Point
-		{
-			return _origin;
-		}
-
 		private var _columnWidthRate:Number = 3/5;
 		public function set columnWidthRate(val:Number):void
 		{
@@ -270,7 +212,7 @@ package birdeye.vis.coords
 
 			// if some elements have no own radius axis, than create a default one for the chart
 			// that will be used by all elements without a radius axis
-			if (needDefaultScale2 && !_radarAxis)
+			if (needDefaultScale2 && !_multiScale)
 			{
 				if (!_scale2)
 					createScale2();
@@ -281,7 +223,7 @@ package birdeye.vis.coords
 
 			// if some elements have no own angle axis, than create a default one for the chart
 			// that will be used by all elements without a angle axis
-			if (needDefaultScale1 && !_radarAxis)
+			if (needDefaultScale1 && !_multiScale)
 			{
 				if (!_scale1)
 					createScale1();
@@ -305,9 +247,9 @@ package birdeye.vis.coords
 			
 			_origin = new Point(unscaledWidth/2, unscaledHeight/2);
 			
-			if (radarAxis)
+			if (multiScale)
 			{
-				radarAxis.radiusSize = DisplayObject(radarAxis).width  
+				multiScale.radiusSize = DisplayObject(multiScale).width  
 					= Math.min(unscaledWidth, unscaledHeight)/2;
 			} 
 			
