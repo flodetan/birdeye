@@ -98,6 +98,23 @@ package birdeye.vis.elements
 			return _chart;
 		}
 
+		public static const HORIZONTAL:String = "horizontal";
+		public static const VERTICAL:String = "vertical";
+		private var _collisionScale:String;
+		/** Set the scale that defines the 'direction' of the stack. For ex. BarElements are stacked horizontally with 
+		 * stack100 and vertically with normal stack. Columns (for both polar and cartesians)
+		 * are stacked vertically with stack100, and horizontally for normal stack.*/
+		public function set collisionScale(val:String):void
+		{
+			_collisionScale = val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		public function get collisionScale():String
+		{
+			return _collisionScale;
+		}
+
 		protected var _showItemRenderer:Boolean = false;
 		[Inspectable(enumeration="true,false")]
 		public function set showItemRenderer(val:Boolean):void
@@ -661,6 +678,7 @@ package birdeye.vis.elements
 		public function BaseElement()
 		{
 			super();
+			collisionScale = VERTICAL;
 		}
 
 		override protected function createChildren():void

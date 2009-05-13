@@ -27,11 +27,11 @@
  
 package birdeye.vis.elements.collision
 {
+	import birdeye.vis.VisScene;
 	import birdeye.vis.coords.Cartesian;
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.geometry.*;
 	import birdeye.vis.interfaces.IStack;
-	import birdeye.vis.recipes.cartesianCharts.StackableChart;
 	import birdeye.vis.scales.*;
 	
 	import flash.events.Event;
@@ -169,8 +169,8 @@ package birdeye.vis.elements.collision
 		override protected function getMaxValue(field:String):Number
 		{
 			var max:Number = super.getMaxValue(field);
-			if (chart && chart is StackableChart && stackType == STACKED100) 
-				max = Math.max(max, StackableChart(chart).maxStacked100);
+			if (chart && chart.coordType == VisScene.CARTESIAN && stackType == STACKED100) 
+				max = Math.max(max, Cartesian(chart).maxStacked100);
 				
 			return max;
 		}

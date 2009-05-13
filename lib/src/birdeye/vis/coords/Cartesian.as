@@ -28,8 +28,13 @@
 package birdeye.vis.coords
 {	
 	import birdeye.vis.VisScene;
+	import birdeye.vis.elements.BaseElement;
+	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.interfaces.*;
 	import birdeye.vis.scales.*;
+	import birdeye.vis.elements.collision.StackElement;
+	import birdeye.vis.interfaces.IElement;
+	import birdeye.vis.interfaces.IStack;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
@@ -44,6 +49,7 @@ package birdeye.vis.coords
 	import mx.containers.HBox;
 	import mx.containers.VBox;
 	import mx.core.Container;
+	import mx.collections.IViewCursor;
 	
 	/** A CartesianChart can be used to create any 2D or 3D cartesian charts available in the library
 	 * apart from those who might have specific features, like stackable element or data-sizable items.
@@ -70,8 +76,58 @@ package birdeye.vis.coords
 	 * */ 
 	[DefaultProperty("dataProvider")]
 	[Exclude(name="elementsContainer", kind="property")]
-	public class Cartesian extends VisScene implements ICoordinates
+	public class Cartesian extends VisScene implements ICoordinates, ISizableItem
 	{
+		protected var _type:String = StackElement.OVERLAID;
+		/** Set the type of stack, overlaid if the series are shown on top of the other, 
+		 * or stacked if they appear staked one after the other (horizontally), or 
+		 * stacked100 if the columns are stacked one after the other (vertically).*/
+		[Inspectable(enumeration="overlaid,stacked,stacked100")]
+		public function set type(val:String):void
+		{
+			_type = val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		
+		protected var _maxStacked100:Number = NaN;
+		/** @Private
+		 * The maximum value among all series stacked according to stacked100 type.
+		 * This is needed to "enlarge" the related axis to include all the stacked values
+		 * so that all stacked100 series fit into the chart.*/
+		public function get maxStacked100():Number
+		{
+			return _maxStacked100;
+		}
+
+		private var _maxRadius:Number = 10;
+		/** @Private
+		 * Set the maximum radius value for the scatter plot.*/
+		public function set maxRadius(val:Number):void
+		{
+			_maxRadius = val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		public function get maxRadius():Number
+		{
+			return _maxRadius;
+		}
+
+		private var _minRadius:Number = 10;
+		/** @Private
+		 * Set the minimum radius value for the scatter plot.*/
+		public function set minRadius(val:Number):void
+		{
+			_minRadius = val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		public function get minRadius():Number
+		{
+			return _minRadius;
+		}
+
 		/** Array of elements, mandatory for any cartesian chart.
 		 * Each element must implement the IElement interface which defines 
 		 * methods that allow to set fields, basic styles, axes, dataproviders, renderers,
@@ -218,7 +274,7 @@ package birdeye.vis.coords
 			
 			if (elements)
 			{
- 				for (var i:int = 0; i<elements.length; i++)
+ 				for (i = 0; i<elements.length; i++)
 				{
 					// if element dataprovider doesn' exist or it refers to the
 					// chart dataProvider, than set its cursor to this chart cursor (this.cursor)
@@ -320,6 +376,230 @@ package birdeye.vis.coords
 					bottomContainer.addChild(DisplayObject(_scale1));
 			}
 			
+			// when elements are loaded, set their stack type to the 
+			// current "type" value. if the type is STACKED100
+			// calculate the maxStacked100 value, and load the baseValues
+			// arrays for each Column. The baseValues arrays will be used to know
+			// the y0 starting point for each element values, which corresponds to 
+			// the understair element highest y value;
+
+			if (_elements && nCursors == _elements.length)
+			{
+				var _stackElements:Array = [];
+			
+				for (i = 0; i<_elements.length; i++)
+				{
+					if (_elements[i] is IStack)
+					{
+						IStack(_elements[i]).stackType = _type;
+						_stackElements.push(_elements[i])
+					}
+				}
+				
+				_maxStacked100 = NaN;
+
+				if (_type==StackElement.STACKED100)
+				{
+					// {indexSeries: i, baseValues: Array_for_each_element}
+					var allElementsBaseValues:Array = []; 
+					for (i=0;i<_stackElements.length;i++)
+						allElementsBaseValues[i] = {indexElements: i, baseValues: []};
+					
+					// keep index of last element been processed 
+					// with the same xField data value
+					// k[xFieldDataValue] = last Elements processed
+					var k:Array = [];
+					
+					var j:Object;
+					for (var s:Number = 0; s<_stackElements.length; s++)
+					{
+						var sCursor:IViewCursor;
+						
+						if (IElement(_stackElements[s]).cursor &&
+							IElement(_stackElements[s]).cursor != cursor)
+						{
+							sCursor = IElement(_stackElements[s]).cursor;
+							sCursor.seek(CursorBookmark.FIRST);
+							
+							while (!sCursor.afterLast)
+							{
+								if (IStack(_stackElements[s]).collisionScale == BaseElement.VERTICAL)
+								{
+									j = sCursor.current[IElement(_stackElements[s]).dim1];
+	
+									if (s>0 && k[j]>=0)
+										allElementsBaseValues[s].baseValues[j] = 
+											allElementsBaseValues[k[j]].baseValues[j] + 
+											Math.max(0,sCursor.current[IElement(_stackElements[k[j]]).dim2]);
+									else 
+										allElementsBaseValues[s].baseValues[j] = 0;
+	
+									if (isNaN(_maxStacked100))
+										_maxStacked100 = 
+											allElementsBaseValues[s].baseValues[j] + 
+											Math.max(0,sCursor.current[IElement(_stackElements[s]).dim2]);
+									else
+										_maxStacked100 = Math.max(_maxStacked100,
+											allElementsBaseValues[s].baseValues[j] + 
+											Math.max(0,sCursor.current[IElement(_stackElements[s]).dim2]));
+								} else if (IStack(_stackElements[s]).collisionScale == BaseElement.HORIZONTAL)
+								{
+									j = sCursor.current[IElement(_stackElements[s]).dim2];
+									if (s>0 && k[j]>=0)
+										allElementsBaseValues[s].baseValues[j] = 
+											allElementsBaseValues[k[j]].baseValues[j] + 
+											Math.max(0,sCursor.current[IElement(_stackElements[k[j]]).dim1]);
+									else 
+										allElementsBaseValues[s].baseValues[j] = 0;
+	
+									if (isNaN(_maxStacked100))
+										_maxStacked100 = 
+											allElementsBaseValues[s].baseValues[j] + 
+											Math.max(0,sCursor.current[IElement(_stackElements[s]).dim1]);
+									else
+										_maxStacked100 = Math.max(_maxStacked100,
+											allElementsBaseValues[s].baseValues[j] + 
+											Math.max(0,sCursor.current[IElement(_stackElements[s]).dim1]));
+								}
+
+								sCursor.moveNext();
+								k[j] = s;
+							}
+						}
+					}
+					
+					if (cursor)
+					{
+						cursor.seek(CursorBookmark.FIRST);
+						while (!cursor.afterLast)
+						{
+							// index of last Elements without own cursor with the same xField data value 
+							// (because they've already been processed in the previous loop)
+							var t:Array = [];
+							for (s = 0; s<_stackElements.length; s++)
+							{
+								if (! (IElement(_stackElements[s]).cursor &&
+									IElement(_stackElements[s]).cursor != cursor))
+								{
+									if (IStack(_stackElements[s]).collisionScale == BaseElement.VERTICAL)
+									{
+										j = cursor.current[IElement(_stackElements[s]).dim1];
+								
+										if (t[j]>=0)
+											allElementsBaseValues[s].baseValues[j] = 
+												allElementsBaseValues[t[j]].baseValues[j] + 
+												Math.max(0,cursor.current[IElement(_stackElements[t[j]]).dim2]);
+										else 
+											allElementsBaseValues[s].baseValues[j] = 0;
+										
+										if (isNaN(_maxStacked100))
+											_maxStacked100 = 
+												allElementsBaseValues[s].baseValues[j] + 
+												Math.max(0,cursor.current[IElement(_stackElements[s]).dim2]);
+										else
+											_maxStacked100 = Math.max(_maxStacked100,
+												allElementsBaseValues[s].baseValues[j] + 
+												Math.max(0,cursor.current[IElement(_stackElements[s]).dim2]));
+									} else if (IStack(_stackElements[s]).collisionScale == BaseElement.HORIZONTAL)
+									{
+										j = cursor.current[IElement(_stackElements[s]).dim2];
+										if (s>0 && t[j]>=0)
+											allElementsBaseValues[s].baseValues[j] = 
+												allElementsBaseValues[t[j]].baseValues[j] + 
+												Math.max(0,cursor.current[IElement(_stackElements[t[j]]).dim1]);
+										else 
+											allElementsBaseValues[s].baseValues[j] = 0;
+		
+										if (isNaN(_maxStacked100))
+											_maxStacked100 = 
+												allElementsBaseValues[s].baseValues[j] + 
+												Math.max(0,cursor.current[IElement(_stackElements[s]).dim1]);
+										else
+											_maxStacked100 = Math.max(_maxStacked100,
+												allElementsBaseValues[s].baseValues[j] + 
+												Math.max(0,cursor.current[IElement(_stackElements[s]).dim1]));
+									}
+	
+									t[j] = s;
+								}
+							}
+							cursor.moveNext();
+						}
+					}
+					
+					// set the baseValues array for each Column
+					// The baseValues array will be used to know
+					// the y0 starting point for each element values, 
+					// which corresponds to the understair element highest y value;
+					for (s = 0; s<_stackElements.length; s++)
+						IStack(_stackElements[s]).baseValues = allElementsBaseValues[s].baseValues;
+				}
+			}
+
+			var scatterElements:Array = [];
+			// load all scatter Elements (there might be Elements that are not IScatter 
+			// in the ScatterPlot chart)
+			for (var i:Number = 0; i<_elements.length; i++)
+				if (_elements[i] is IScatter)
+					scatterElements.push(_elements[i]);
+			
+			if (scatterElements.length > 0)
+			{
+				var maxRadiusValues:Array = [];
+				var minRadiusValues:Array = [];
+				
+				for (i = 0; i<scatterElements.length; i++)
+				{
+					if (IElement(scatterElements[i]).cursor)
+					{
+						IElement(scatterElements[i]).cursor.seek(CursorBookmark.FIRST);
+						while (! IElement(scatterElements[i]).cursor.afterLast)
+						{
+							if (maxRadiusValues[i] == null)
+								maxRadiusValues[i] = IElement(scatterElements[i]).cursor.current[IScatter(scatterElements[i]).radiusField];
+							else
+								maxRadiusValues[i] = Math.max(maxRadiusValues[i],
+															IElement(scatterElements[i]).cursor.current[IScatter(scatterElements[i]).radiusField]);
+							if (minRadiusValues[i] == null)
+								minRadiusValues[i] = IElement(scatterElements[i]).cursor.current[IScatter(scatterElements[i]).radiusField];
+							else
+								minRadiusValues[i] = Math.min(minRadiusValues[i],
+															IElement(scatterElements[i]).cursor.current[IScatter(scatterElements[i]).radiusField]);
+						
+							IElement(scatterElements[i]).cursor.moveNext();
+						}						
+					} else if (cursor) {
+						cursor.seek(CursorBookmark.FIRST);
+						
+						// calculate the min and max radius values for each scatter Elements
+						while (! cursor.afterLast)
+						{
+							if (maxRadiusValues[i] == null)
+								maxRadiusValues[i] = cursor.current[IScatter(scatterElements[i]).radiusField];
+							else
+								maxRadiusValues[i] = Math.max(maxRadiusValues[i],
+															cursor.current[IScatter(scatterElements[i]).radiusField]);
+							if (minRadiusValues[i] == null)
+								minRadiusValues[i] = cursor.current[IScatter(scatterElements[i]).radiusField];
+							else
+								minRadiusValues[i] = Math.min(minRadiusValues[i],
+															cursor.current[IScatter(scatterElements[i]).radiusField]);
+
+							cursor.moveNext();
+						}
+					}
+				}
+				
+				// set the min and max radius values for each scatter Elements
+				// this will needed by the scatter Elements when calculating the
+				// sizes for each data value
+				for (i = 0; i<scatterElements.length; i++)
+				{
+					IScatter(scatterElements[i]).maxRadiusValue = maxRadiusValues[i];
+					IScatter(scatterElements[i]).minRadiusValue = minRadiusValues[i];
+				}
+			}
+
 			// init all axes, default and elements owned 
 			if (! axesFeeded)
 				feedAxes();
@@ -626,28 +906,6 @@ package birdeye.vis.coords
 		}
 		
 		/** @Private
-		 * Calculate the min max values for the default vertical (y) axis. Return an array of 2 values, the 1st (0) 
-		 * for the max value, and the 2nd for the min value.*/
-		private function getMaxMinYValueFromElementsWithoutScale2():Array
-		{
-			var max:Number = NaN, min:Number = NaN;
-			for (var i:Number = 0; i<elements.length; i++)
-			{
-				currentElement = IElement(elements[i]);
-				// check if the elements has its own y axis and if its max value exists and 
-				// is higher than the current max
-				if (!currentElement.scale2 && (isNaN(max) || max < currentElement.maxDim2Value))
-					max = currentElement.maxDim2Value;
-				// check if the Element has its own y axis and if its min value exists and 
-				// is lower than the current min
-				if (!currentElement.scale2 && (isNaN(min) || min > currentElement.minDim2Value))
-					min = currentElement.minDim2Value;
-			}
-					
-			return [max,min];
-		}
-
-		/** @Private
 		 * Calculate the min max values for the default x (x) axis. Return an array of 2 values, the 1st (0) 
 		 * for the max value, and the 2nd for the min value.*/
 		private function getMaxMinXValueFromElementsWithoutScale1():Array
@@ -671,6 +929,28 @@ package birdeye.vis.coords
 		}
 		
 		
+		/** @Private
+		 * Calculate the min max values for the default vertical (y) axis. Return an array of 2 values, the 1st (0) 
+		 * for the max value, and the 2nd for the min value.*/
+		private function getMaxMinYValueFromElementsWithoutScale2():Array
+		{
+			var max:Number = NaN, min:Number = NaN;
+			for (var i:Number = 0; i<elements.length; i++)
+			{
+				currentElement = IElement(elements[i]);
+				// check if the elements has its own y axis and if its max value exists and 
+				// is higher than the current max
+				if (!currentElement.scale2 && (isNaN(max) || max < currentElement.maxDim2Value))
+					max = currentElement.maxDim2Value;
+				// check if the Element has its own y axis and if its min value exists and 
+				// is lower than the current min
+				if (!currentElement.scale2 && (isNaN(min) || min > currentElement.minDim2Value))
+					min = currentElement.minDim2Value;
+			}
+					
+			return [max,min];
+		}
+
 		/** @Private
 		 * Calculate the min max values for the default z axis. Return an array of 2 values, the 1st (0) 
 		 * for the max value, and the 2nd for the min value.*/
