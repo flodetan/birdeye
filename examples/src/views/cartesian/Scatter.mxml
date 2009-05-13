@@ -6,7 +6,7 @@
 	xmlns:legend="birdeye.vis.guides.legend.*"
 	backgroundColor="#ffffff" 
 	creationComplete="createDT()"
-	width="100%" height="100%" horizontalAlign="center">
+	width="100%" height="100%" horizontalAlign="center" xmlns:coords="birdeye.vis.coords.*">
 
 <mx:Script>
 		<![CDATA[
@@ -45,22 +45,22 @@
 	</mx:Script>
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
 	<mx:Button label="Generate" click="createDT()"/>
-	<charts:ScatterPlot maxRadius="30" id="sp" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
- 	<charts:scale1>
+	<coords:Cartesian maxRadius="30" id="sp" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
+ 	<coords:scale1>
  		<scales:Category categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
- 	</charts:scale1>
- 	<charts:scale2>
+ 	</coords:scale1>
+ 	<coords:scale2>
 	 	<scales:Linear placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
-	 </charts:scale2>
-		 <charts:elements>
+	 </coords:scale2>
+		 <coords:elements>
 		 	<series:ScatterElement extendMouseEvents="true" dim1="subject" radiusField="total" dim2="R1" itemRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" styleName="grad1" displayName="R1">
 		 	</series:ScatterElement>
 		 	<series:ScatterElement extendMouseEvents="true" dim1="subject" radiusField="total" dim2="R2" itemRenderer="birdeye.vis.guides.renderers.ButterflyRenderer" styleName="grad3" displayName="R2">
 		 	</series:ScatterElement>
 		 	<series:ScatterElement extendMouseEvents="true" dim1="subject" radiusField="total" dim2="R3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="grad5" displayName="R3">
 		 	</series:ScatterElement>
-		 </charts:elements>
-	</charts:ScatterPlot>
+		 </coords:elements>
+	</coords:Cartesian>
 	<legend:Legend dataProvider="{sp}" direction="horizontal"/>
 	</mx:VBox>
 </mx:VBox>
