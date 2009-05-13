@@ -48,7 +48,7 @@
 	<mx:Button label="Generate" click="createDT()"/>
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
 	       	<recipes:ColumnChart id="cc4" width="90%" height="90%" dataTipFunction="dtFunc" showDataTips="true" dataProvider="{dt}" 
-	       		type="stacked100">
+	       		type="stacked">
 		 		<recipes:scale1>
  					<scales:Category categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
  				</recipes:scale1>
