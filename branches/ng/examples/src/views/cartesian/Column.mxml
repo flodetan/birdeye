@@ -62,6 +62,8 @@
         		 	</elements:ColumnElement>
         		 	<elements:ColumnElement extendMouseEvents="true" dim1="subject" dim2="R3" baseAtZero="true" styleName="grad5" displayName="R3">
         		 	</elements:ColumnElement>
+        		 	<elements:AreaElement extendMouseEvents="true" dim1="subject" dim2="R1" baseAtZero="true" styleName="grad1" displayName="R1">
+        		 	</elements:AreaElement>
         		 	<elements:ColumnElement extendMouseEvents="true" dim1="subject" dim2="R4" baseAtZero="true" styleName="grad2" displayName="R4">
         		 	</elements:ColumnElement>
         		 	<elements:ColumnElement extendMouseEvents="true" dim1="subject" dim2="R5" baseAtZero="true" styleName="grad4" displayName="R5">
