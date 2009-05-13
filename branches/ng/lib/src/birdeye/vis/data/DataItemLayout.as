@@ -98,7 +98,7 @@ package birdeye.vis.data
 			return _xTTOffset;
 		}
 
-		private var _yTTOffset:Number = 20;
+		private var _yTTOffset:Number = -50;
 		/** Set the y offset from the tooltip to the hit area position.*/
 		public function get yTTOffset():Number
 		{
