@@ -171,7 +171,7 @@ package birdeye.vis.elements.geometry
 						yPos = yPos - size/2;
 						ttShapes = [];
 						ttXoffset = -30;
-						ttYoffset = 20;
+						ttYoffset = -20;
 						var line:Line = new Line(xPos, yPos + barWidth/2, xPos + ttXoffset/3, yPos + barWidth/2 + ttYoffset);
 						line.stroke = stroke;
 		 				ttShapes[0] = line;
