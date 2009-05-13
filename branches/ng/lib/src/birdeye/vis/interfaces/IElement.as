@@ -36,6 +36,11 @@ package birdeye.vis.interfaces
 	
 	public interface IElement extends IRasterRenderer
 	{
+		/** Set the chart target. This allows to share axes and other properties
+		 * of the chart among several elements.*/
+		function set chart(val:ICoordinates):void;
+		function get chart():ICoordinates;
+
 		/** Set the colorField to filter horizontal data values.*/
 		function set colorField(val:String):void;
 		function get colorField():String;

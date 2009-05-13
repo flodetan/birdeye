@@ -30,6 +30,7 @@ package birdeye.vis.recipes.polarCharts
 	import birdeye.vis.coords.Polar;
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.elements.geometry.*;
+	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.GeometryGroup;
@@ -97,7 +98,7 @@ package birdeye.vis.recipes.polarCharts
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
-			if ((multiScale && multiScale.angleAxis) ||
+			if ((multiScale && multiScale.scale1) ||
 				(scale1 && scale1 is CategoryAngle))
 				drawLabels()
 		}
@@ -112,12 +113,12 @@ package birdeye.vis.recipes.polarCharts
 			if (nCursors == elements.length)
 			{
 				// check if a default y axis exists
-				if (_multiScale && _multiScale.angleCategory && _multiScale.angleAxis)
+				if (_multiScale && _multiScale.dim1 && _multiScale.scale1)
 				{
-					var angleCategory:String = multiScale.angleCategory;
+					var angleCategory:String = multiScale.dim1;
 					for (var i:int = 0; i<nCursors; i++)
 					{
-						currentElement = PolarElement(_elements[i]);
+						currentElement = IElement(_elements[i]);
 						// if the element has its own data provider but has not its own
 						// angleAxis, than load their elements and add them to the elements
 						// loaded by the chart data provider
@@ -158,7 +159,7 @@ package birdeye.vis.recipes.polarCharts
 								
 								for (var t:int = 0; t<elements.length; t++)
 								{
-									currentElement = PolarElement(_elements[t]);
+									currentElement = IElement(_elements[t]);
 									if (!(currentElement.dataProvider 
 										&& currentElement.dataProvider != dataProvider))
 									{
@@ -182,7 +183,7 @@ package birdeye.vis.recipes.polarCharts
 	
 						// set the elements property of the CategoryAxis
 						if (catElements.length > 0)
-							_multiScale.angleAxis.dataProvider = catElements;
+							_multiScale.scale1.dataProvider = catElements;
 					} 
 					
 					_multiScale.feedRadiusAxes(elementsMinMax);
@@ -197,7 +198,7 @@ package birdeye.vis.recipes.polarCharts
 		{
 			var aAxis:CategoryAngle;
 			if (multiScale)
-				aAxis = multiScale.angleAxis;
+				aAxis = multiScale.scale1;
 			else
 				aAxis = CategoryAngle(scale1);
 			
@@ -252,9 +253,9 @@ package birdeye.vis.recipes.polarCharts
 		
 		private function createRadarLayout1():void
 		{
-			var aAxis:CategoryAngle = multiScale.angleAxis;
+			var aAxis:CategoryAngle = multiScale.scale1;
 			var catElements:Array = aAxis.dataProvider;
-			var rAxis:Numeric = multiScale.radiusAxes[catElements[0]];
+			var rAxis:Numeric = multiScale.scales[catElements[0]];
 			
 			if (aAxis && rAxis && !isNaN(rAxis.interval))
 			{

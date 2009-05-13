@@ -27,17 +27,22 @@
  
 package birdeye.vis.elements
 {
+	import birdeye.vis.coords.Cartesian;
 	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.IEnumerableScale;
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.interfaces.IScale;
+	import birdeye.vis.interfaces.IScaleUI;
 	import birdeye.vis.scales.BaseScale;
+	import birdeye.vis.scales.MultiScale;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
+	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.GradientStop;
 	import com.degrafa.paint.LinearGradientFill;
@@ -45,6 +50,7 @@ package birdeye.vis.elements
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
@@ -80,6 +86,18 @@ package birdeye.vis.elements
 	
 	public class BaseElement extends Surface implements IElement
 	{
+		private var _chart:ICoordinates;
+		public function set chart(val:ICoordinates):void
+		{
+			_chart = val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		public function get chart():ICoordinates
+		{
+			return _chart;
+		}
+
 		protected var _showItemRenderer:Boolean = false;
 		[Inspectable(enumeration="true,false")]
 		public function set showItemRenderer(val:Boolean):void
@@ -303,6 +321,18 @@ package birdeye.vis.elements
 			return _labelField;
 		}
 
+		private var _multiScale:MultiScale;
+		public function set multiScale(val:MultiScale):void
+		{
+			_multiScale = val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		public function get multiScale():MultiScale
+		{
+			return _multiScale;
+		}
+
 		protected var gg:DataItemLayout;
 		protected var dataItems:Array = [];
 		protected var fill:IGraphicsFill = new SolidFill(0x888888,0);
@@ -357,6 +387,25 @@ package birdeye.vis.elements
 	  		{
 	  			this._dataProvider = new ArrayCollection();
 	  		}
+	  		if (ICollectionView(_dataProvider).length > 0)
+	  		{
+		  		_cursor = ICollectionView(_dataProvider).createCursor();
+		  		
+		  		// we must invalidate also the chart properties and display list
+		  		// to let the chart update with the element data provider change. in fact
+		  		// the element dataprovider modifies the chart data and axes properties
+		  		// therefore it modifies the chart properties and displaying
+		  		if (chart is Cartesian)
+		  		{
+			  		Cartesian(chart).axesFeeded = false;
+			  		Cartesian(chart).invalidateProperties();
+			  		Cartesian(chart).invalidateDisplayList();
+		  		}
+
+		  		invalidateSize();
+		  		invalidateProperties();
+				invalidateDisplayList();
+	  		}
 		}		
 		/**
 		* Set the dataProvider to feed the chart. 
@@ -376,6 +425,13 @@ package birdeye.vis.elements
 		public function get cursor():IViewCursor
 		{
 			return _cursor;
+		}
+		
+		protected var _plotRadius:Number = 5;
+		public function set plotRadius(val:Number):void
+		{
+			_plotRadius = val;
+			invalidateDisplayList();
 		}
 		
 		private var _randomColors:Boolean = false;
@@ -589,8 +645,19 @@ package birdeye.vis.elements
 			return _source;
 		}
 		
-		// UIComponent flow
+		private var _index:Number;
+		public function set index(val:Number):void
+		{
+			_index = val;
+		}
+
+		public function get index():Number
+		{
+			return _index;
+		}
 		
+		// UIComponent flow
+
 		public function BaseElement()
 		{
 			super();
@@ -611,6 +678,29 @@ package birdeye.vis.elements
 			gg = new DataItemLayout();
 			gg.target = this;
 			graphicsCollection.addItem(gg);
+		}
+
+		override protected function commitProperties():void
+		{
+			super.commitProperties();
+			
+			// since we use Degrafa, the background is needed in the element
+			// to allow events for tooltips all over the element.
+			// tooltips are triggered by ttGG objects. 
+			// if showdatatips is true all interactivity events are triggered and
+			// managed through ttGG.
+			
+			// if showDataTips is false than it's still possible to manage 
+			// interactivity events thourgh gg, but in this case we must 
+			// remove the background to allow these interactivities, since gg is at the element
+			// level and not the chart one. if we don't remove the background, gg
+			// belonging to other element could be covered by the background and 
+			// interactivity becomes impossible
+			// therefore background is created only if showDataTips is true
+			if (chart && chart.customTooltTipFunction!=null && chart.showDataTips && !tooltipCreationListening)
+			{
+				initCustomTip();
+			}
 		}
 		
 		// Override updateDisplayList() to update the component
@@ -660,9 +750,236 @@ package birdeye.vis.elements
 				fill = new SolidFill(colorFill, alphaFill);
 			
 			stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
+
+			removeAllElements();
+			
+			if (ggBackGround)
+			{
+				ggBackGround.target = this;
+				rectBackGround.width = unscaledWidth;
+				rectBackGround.height = unscaledHeight;
+			}
+
+ 			if (isReadyForLayout())
+ 				drawElement()
 		}
 
 		// other methods
+
+		private function onTTCreate(e:ToolTipEvent):void
+		{
+			e.toolTip = myTT;
+		}
+
+		protected function drawElement():void
+		{
+			// to be overridden by each element implementation
+		}
+		
+		private function isReadyForLayout():Boolean
+		{
+			// verify than all element axes (or chart's if none owned by the element)
+			// are ready. If they aren't the element can't be drawn, since data values
+			// cannot be positioned yet in the axis.
+			var axesCheck:Boolean = true;
+			
+			if (scale2)
+			{
+				if (scale2 is IEnumerableScale)
+					axesCheck = Boolean(IEnumerableScale(scale2).dataProvider);
+			} else if (chart && chart.scale2)
+			{
+				if (chart.scale2 is IEnumerableScale)
+					axesCheck = Boolean(IEnumerableScale(chart.scale2).dataProvider);
+			} else
+				axesCheck = false;
+
+			if (scale1)
+			{
+				if (scale1 is IEnumerableScale)
+					axesCheck = axesCheck && Boolean(IEnumerableScale(scale1).dataProvider);
+			} else if (chart && chart.scale1)
+			{
+				if (chart.scale1 is IEnumerableScale)
+					axesCheck = axesCheck && Boolean(IEnumerableScale(chart.scale1).dataProvider);
+			} else
+				axesCheck = false;
+
+			if ((multiScale && multiScale.scales) || (chart.multiScale && chart.multiScale.scales))
+				axesCheck = true;
+
+			var colorsCheck:Boolean = 
+				(fill || stroke);
+
+			var globalCheck:Boolean = 
+/* 				   (!isNaN(_minDim1Value) || !isNaN(_minDim2Value))
+				&& (!isNaN(_maxDim1Value) || !isNaN(_maxDim2Value))
+				&&  */width>0 && height>0
+				&& chart && (dim1 || dim2)
+				&& cursor;
+			
+			return globalCheck && axesCheck && colorsCheck;
+		}
+
+		/**
+		* @private 
+		 * Show and position tooltip
+		 * 
+		*/
+		protected function handleRollOver(e:MouseEvent):void 
+		{
+			var extGG:DataItemLayout = DataItemLayout(e.target);
+
+			if (chart.showDataTips) {
+				if (chart.customTooltTipFunction != null)
+				{
+					myTT = chart.customTooltTipFunction(extGG);
+		 			toolTip = myTT.text;
+				} else 
+					extGG.showToolTip();
+			}
+
+			var pos:Point = localToGlobal(new Point(extGG.posX, extGG.posY));
+	
+			if (scale2 && scale2 is IScaleUI && IScaleUI(scale2).pointer)
+			{
+				IScaleUI(scale2).pointerY = extGG.posY;
+				IScaleUI(scale2).pointer.visible = true;
+			} else if (chart.scale2 && chart.scale2 is IScaleUI && IScaleUI(chart.scale2).pointer) {
+				IScaleUI(chart.scale2).pointerY = extGG.posY;
+				IScaleUI(chart.scale2).pointer.visible = true;
+			} 
+
+			if (scale1 && scale1 is IScaleUI && IScaleUI(scale1).pointer)
+			{
+				IScaleUI(scale1).pointerX = extGG.posX;
+				IScaleUI(scale1).pointer.visible = true;
+			} else if (chart.scale1 && chart.scale1 is IScaleUI && IScaleUI(chart.scale1).pointer) {
+				IScaleUI(chart.scale1).pointerX = extGG.posX;
+				IScaleUI(chart.scale1).pointer.visible = true;
+			} 
+
+			if (scale3 && scale3 is IScaleUI && IScaleUI(scale3).pointer)
+			{
+				IScaleUI(scale3).pointerY = extGG.posZ;
+				IScaleUI(scale3).pointer.visible = true;
+			} else if (chart.scale3 && chart.scale3 is IScaleUI && IScaleUI(chart.scale3).pointer) {
+				IScaleUI(chart.scale3).pointerY = extGG.posZ;
+				IScaleUI(chart.scale3).pointer.visible = true;
+			} 
+		}
+
+		/**
+		* @private 
+		 * Destroy/hide tooltip 
+		 * 
+		*/
+		protected function handleRollOut(e:MouseEvent):void
+		{ 
+			var extGG:DataItemLayout = 	DataItemLayout(e.target);
+			if (chart.showDataTips)
+			{
+				extGG.hideToolTip();
+				if (!_showAllDataItems)
+					extGG.hideToolTipGeometry();
+				myTT = null;
+				toolTip = null;
+			}
+
+			if (scale1 && scale1 is IScaleUI && IScaleUI(scale1).pointer)
+				IScaleUI(scale1).pointer.visible = false;
+			else if (chart.scale1 && chart.scale1 is IScaleUI && IScaleUI(chart.scale1).pointer) 
+				IScaleUI(chart.scale1).pointer.visible = false;
+
+			if (scale2 && scale2 is IScaleUI && IScaleUI(scale2).pointer)
+				IScaleUI(scale2).pointer.visible = false;
+			else if (chart.scale2 && chart.scale2 is IScaleUI && IScaleUI(chart.scale2).pointer) 
+				IScaleUI(chart.scale2).pointer.visible = false;
+
+			if (scale3 && scale3 is IScaleUI && IScaleUI(scale3).pointer)
+				IScaleUI(scale3).pointer.visible = false;
+			else if (chart.scale3 && chart.scale3 is IScaleUI && IScaleUI(chart.scale3).pointer) 
+				IScaleUI(chart.scale3).pointer.visible = false;
+		}
+
+		/** @Private
+		 * Sort the surface elements according their z position.*/ 
+		protected function zSort():void
+		{
+			var sortLayers:Array = new Array();
+			var nChildren:int = numChildren;
+			for(var i:int = 0; i < nChildren; i++) 
+			{
+				var child:* = getChildAt(0); 
+				var zPos:uint = DataItemLayout(child).z;
+				sortLayers.push([zPos, child]);
+				removeChildAt(0);
+			}
+			// sort them and add them back
+			sortLayers.sortOn("0", Array.NUMERIC);
+			for (i = 0; i < nChildren; i++) 
+				addChild(sortLayers[i][1]);
+		}
+
+		/** @Private
+		 * Override the creation of ttGeom in order to avoid the usage of gg also in case
+		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
+		 * AreaElement, thus improving performances.*/ 
+		protected function createTTGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
+									zPos:Number, radius:Number, shapes:Array = null /* of IGeometry */, 
+									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
+		{
+			ttGG = new DataItemLayout();
+			ttGG.target = chart.elementsContainer;
+			graphicsCollection.addItem(ttGG);
+			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
+			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
+
+			var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
+			hitMouseArea.fill = new SolidFill(0x000000, 0);
+			ttGG.geometryCollection.addItem(hitMouseArea);
+
+ 			if (chart.showDataTips || chart.showAllDataTips)
+			{ 
+				initGGToolTip();
+				ttGG.create(cursor.current, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset);
+			} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null)
+			{
+				// if no tips but interactivity is required than add roll over events and pass
+				// data and positioning information about the current data item 
+				ttGG.create(cursor.current, dataFields, xPos, yPos, zPos, NaN, null, NaN, NaN, false);
+			} else {
+				// if no tips and no interactivity than just add location info needed for pointers
+				ttGG.create(null, null, xPos, yPos, zPos, NaN, null, NaN, NaN, false);
+			}
+
+			if (chart.showAllDataTips)
+			{
+				ttGG.showToolTip();
+				ttGG.showToolTipGeometry();
+			} else if (_showAllDataItems)
+				ttGG.showToolTipGeometry();
+
+			if (mouseClickFunction != null)
+				ttGG.addEventListener(MouseEvent.CLICK, onMouseClick);
+
+			if (mouseDoubleClickFunction != null)
+				ttGG.addEventListener(MouseEvent.DOUBLE_CLICK, onMouseDoubleClick);
+		}
+		
+		/** @Private
+		 * Override the init initGGToolTip in order to avoid the usage of gg also in case
+		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
+		 * element, thus improving performances.*/ 
+		protected function initGGToolTip():void
+		{
+			ttGG.toolTipFill = fill;
+			ttGG.toolTipStroke = stroke;
+ 			if (chart.dataTipFunction != null)
+				ttGG.dataTipFunction = chart.dataTipFunction;
+			if (chart.dataTipPrefix!= null)
+				ttGG.dataTipPrefix = chart.dataTipPrefix;
+		}
 
 		private var stylesChanged:Boolean = true;
 		initializeStyles();
@@ -846,20 +1163,20 @@ package birdeye.vis.elements
 		 * In order to improve performances in case the showdatatips is false
 		 * the ttGG creation will not be called and there will be only 1 gg, unless
 		 * interactivity is required or dim3 is not null and gg must be placed in the 3D space.*/ 
-		protected function createTTGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
-									zPos:Number, radius:Number, shapes:Array = null /* of IGeometry */, 
+/* 		protected function createTTGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
+									zPos:Number, radius:Number, shapes:Array = null /* of IGeometry , 
 									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
 		{
 			// override
 		}
-		
+ */		
 		/** @Private
 		 * Init the ttGG after its creation.*/ 
-		protected function initGGToolTip():void
+/* 		protected function initGGToolTip():void
 		{
 			// override
 		}
-		
+ */		
 		/** Implement function to manage mouse click events.*/
 		public function onMouseClick(e:MouseEvent):void
 		{
@@ -890,18 +1207,18 @@ package birdeye.vis.elements
 		/**
 		* @private 
 		 * Show and position tooltip.*/
-		protected function handleRollOver(e:MouseEvent):void 
+/* 		protected function handleRollOver(e:MouseEvent):void 
 		{
 			// override
 			// depends on chart type (polar, cartesian,..)
 		}
-
+ */
 		/**
 		* @private 
 		 * Destroy/hide tooltip 
 		 * 
 		*/
-		protected function handleRollOut(e:MouseEvent):void
+/* 		protected function handleRollOut(e:MouseEvent):void
 		{ 
 			var extGG:DataItemLayout = 	DataItemLayout(e.target);
 			extGG.hideToolTip();
@@ -909,20 +1226,20 @@ package birdeye.vis.elements
 				extGG.hideToolTipGeometry();
 			myTT = null;
 			toolTip = null;
-/* 			if (ToolTipManager.currentToolTip)
+ 			if (ToolTipManager.currentToolTip)
 				ToolTipManager.currentToolTip = null;
- */		}
-
+ 		}
+ */
 		/**
 		* @Private 
 		 * Triggered when a value is assigned to the UIComponent tooltip (String), 
 		 * and the event target is the tooltip created during the assignement.
 		 * Here you we can change the created tooltip with a custom one.*/
-		private function onTTCreate(e:ToolTipEvent):void
+/* 		private function onTTCreate(e:ToolTipEvent):void
 		{
 			e.toolTip = myTT;
 		}
-		
+ */		
 		public function getFill():IGraphicsFill
 		{
 			return fill;

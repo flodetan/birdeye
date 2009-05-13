@@ -27,6 +27,7 @@
  
 package birdeye.vis.elements.geometry
 {
+	import birdeye.vis.VisScene;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.UpTriangleRenderer;
@@ -98,13 +99,13 @@ package birdeye.vis.elements.geometry
 			}
 		}
 
-		private var poly:Polygon;
+		protected var poly:Polygon;
 		/** @Private 
 		 * Called by super.updateDisplayList when the element is ready for layout.*/
 		override protected function drawElement():void
 		{
 			var xPrev:Number, yPrev:Number;
-			var xPos:Number, yPos:Number, zPos:Number;
+			var pos1:Number, pos2:Number, zPos:Number;
 			var j:Object;
 			var t:Number = 0;
 			
@@ -123,6 +124,9 @@ package birdeye.vis.elements.geometry
 			// tooltip distance from the hitarea position
 			var ttXoffset:Number = NaN, ttYoffset:Number = NaN;
 			
+			poly = new Polygon();
+			poly.data = "";
+
 			gg = new DataItemLayout();
 			gg.target = this;
 			graphicsCollection.addItem(gg);
@@ -135,10 +139,10 @@ package birdeye.vis.elements.geometry
 				// if the Element has its own x axis, than get the x coordinate
 				// position of the data value filtered by xField
 				if (scale1)
-					xPos = scale1.getPosition(cursor.current[dim1]);
+					pos1 = scale1.getPosition(cursor.current[dim1]);
 				else if (chart.scale1) 
 					// otherwise use the parent chart x axis to do that
-					xPos = chart.scale1.getPosition(cursor.current[dim1]);
+					pos1 = chart.scale1.getPosition(cursor.current[dim1]);
 				
 				j = cursor.current[dim1];
 				// if the Element has its own y axis, than get the y coordinate
@@ -151,21 +155,21 @@ package birdeye.vis.elements.geometry
 					if (_stackType == STACKED100)
 					{
 						y0 = scale2.getPosition(baseValues[j]);
-						yPos = scale2.getPosition(
+						pos2 = scale2.getPosition(
 							baseValues[j] + Math.max(0,cursor.current[dim2]));
 					} else 
 						// if not stacked, than the y coordinate is given by the own y axis
-						yPos = scale2.getPosition(cursor.current[dim2]);
+						pos2 = scale2.getPosition(cursor.current[dim2]);
 				} else if (chart.scale2) {
 					// if no own y axis than use the parent chart y axis to achive the same
 					// as above
 					if (_stackType == STACKED100)
 					{
 						y0 = chart.scale2.getPosition(baseValues[j]);
-						yPos = chart.scale2.getPosition(
+						pos2 = chart.scale2.getPosition(
 							baseValues[j] + Math.max(0,cursor.current[dim2]));
 					} else {
-						yPos = chart.scale2.getPosition(cursor.current[dim2]);
+						pos2 = chart.scale2.getPosition(cursor.current[dim2]);
 					}
 				}
 				
@@ -176,7 +180,7 @@ package birdeye.vis.elements.geometry
 						ttShapes = [];
 						ttXoffset = -30;
 						ttYoffset = 20;
-						var line:Line = new Line(xPos, yPos, xPos + + ttXoffset/3, yPos + ttYoffset);
+						var line:Line = new Line(pos1, pos2, pos1 + + ttXoffset/3, pos2 + ttYoffset);
 						line.stroke = stroke;
 		 				ttShapes[0] = line;
 				}
@@ -199,26 +203,49 @@ package birdeye.vis.elements.geometry
 					scale2RelativeValue = XYZ(chart.scale3).height - zPos;
 				}
 
+				if (multiScale)
+				{
+					pos1 = multiScale.scale1.getPosition(cursor.current[dim1]);
+					pos2 = INumerableScale(multiScale.scales[
+										cursor.current[multiScale.dim1]
+										]).getPosition(cursor.current[dim2]);
+				} else if (chart.multiScale) {
+					pos1 = chart.multiScale.scale1.getPosition(cursor.current[dim1]);
+					pos2 = INumerableScale(chart.multiScale.scales[
+										cursor.current[chart.multiScale.dim1]
+										]).getPosition(cursor.current[dim2]);
+				}
+
+				if (chart.coordType == VisScene.POLAR)
+				{
+ 					var xPos:Number = PolarCoordinateTransform.getX(pos1, pos2, chart.origin);
+					var yPos:Number = PolarCoordinateTransform.getY(pos1, pos2, chart.origin);
+ 					pos1 = xPos;
+					pos2 = yPos; 
+					poly.data += String(xPos) + "," + String(yPos) + " ";
+				}
+
 				// create a separate GeometryGroup to manage interactivity and tooltips 
-				createTTGG(cursor.current, dataFields, xPos, yPos, scale2RelativeValue, 3);
+				createTTGG(cursor.current, dataFields, pos1, pos2, scale2RelativeValue, 3);
 				
 				// create the polygon only if there is more than 1 data value
 				// there cannot be an area with only the first data value 
-				if (t++ > 0) 
-				{
-					poly = new Polygon()
-					poly.data =  String(xPrev) + "," + String(y0Prev) + " " +
-								String(xPrev) + "," + String(yPrev) + " " +
-								String(xPos) + "," + String(yPos) + " " +
-								String(xPos) + "," + String(y0);
-					poly.fill = fill;
-					poly.stroke = stroke;
-					gg.geometryCollection.addItemAt(poly,0);
-				}
+				if (chart.coordType == VisScene.CARTESIAN)
+					if (t++ > 0) 
+					{
+						poly = new Polygon()
+						poly.data =  String(xPrev) + "," + String(y0Prev) + " " +
+									String(xPrev) + "," + String(yPrev) + " " +
+									String(pos1) + "," + String(pos2) + " " +
+									String(pos1) + "," + String(y0);
+						poly.fill = fill;
+						poly.stroke = stroke;
+						gg.geometryCollection.addItemAt(poly,0);
+					}
 				
 				if (_showItemRenderer)
 				{
-	 				var bounds:Rectangle = new Rectangle(xPos - _rendererSize/2, yPos - _rendererSize/2, _rendererSize, _rendererSize);
+	 				var bounds:Rectangle = new Rectangle(pos1 - _rendererSize/2, pos2 - _rendererSize/2, _rendererSize, _rendererSize);
 					var shape:IGeometry = new itemRenderer(bounds);
 					shape.fill = fill;
 					shape.stroke = stroke;
@@ -228,7 +255,7 @@ package birdeye.vis.elements.geometry
 				// store previous data values coordinates, to rely them 
 				// to the next data value coordinates
 				y0Prev = y0;
-				xPrev = xPos; yPrev = yPos;
+				xPrev = pos1; yPrev = pos2;
 				
 				if (dim3)
 				{
@@ -238,6 +265,13 @@ package birdeye.vis.elements.geometry
 				}
 				cursor.moveNext();
 			}
+			if (chart.coordType == VisScene.POLAR && poly.data)
+			{
+				poly.fill = fill;
+				poly.stroke = stroke;
+				gg.geometryCollection.addItem(poly);
+			}
+
 			if (dim3)
 				zSort();
 		}

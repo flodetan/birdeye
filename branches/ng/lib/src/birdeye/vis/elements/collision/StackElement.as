@@ -27,20 +27,21 @@
  
 package birdeye.vis.elements.collision
 {
-	import flash.events.Event;
-	
-	import birdeye.vis.scales.*;
-	import birdeye.vis.elements.collision.*;
+	import birdeye.vis.coords.Cartesian;
+	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.geometry.*;
-	import birdeye.vis.recipes.cartesianCharts.StackableChart;
 	import birdeye.vis.interfaces.IStack;
+	import birdeye.vis.recipes.cartesianCharts.StackableChart;
+	import birdeye.vis.scales.*;
+	
+	import flash.events.Event;
 	
 	[Exclude(name="stackType", kind="property")] 
 	[Exclude(name="total", kind="property")] 
 	[Exclude(name="stackPosition", kind="property")] 
 	[Exclude(name="elementType", kind="property")] 
 
-	public class StackElement extends CartesianElement implements IStack
+	public class StackElement extends BaseElement implements IStack
 	{
 		private const OWN_VERTICAL_INTERVAL_CHANGES:String = "is_own_vertical_listening_interval_changes"; 
 		private const CHART_VERTICAL_INTERVAL_CHANGES:String = "is_chart_vertical_listening_interval_changes"; 
@@ -154,7 +155,7 @@ package birdeye.vis.elements.collision
 				}
 			}
 			
-			if (chart.is3D)
+			if (chart is Cartesian && Cartesian(chart).is3D)
 				deltaSize = 1/5;
 			else 
 				deltaSize = 3/5;

@@ -41,13 +41,6 @@ package birdeye.vis.elements.geometry
 
 	public class LabelElement extends CartesianElement
 	{
-		private var _plotRadius:Number = 5;
-		public function set plotRadius(val:Number):void
-		{
-			_plotRadius = val;
-			invalidateDisplayList();
-		}
-		
 		public function LabelElement()
 		{
 			super();

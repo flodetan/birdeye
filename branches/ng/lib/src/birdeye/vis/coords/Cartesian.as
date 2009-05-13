@@ -28,11 +28,11 @@
 package birdeye.vis.coords
 {	
 	import birdeye.vis.VisScene;
-	import birdeye.vis.elements.geometry.CartesianElement;
 	import birdeye.vis.interfaces.*;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.GeometryGroup;
+	import com.degrafa.Surface;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.paint.SolidStroke;
 	
@@ -70,19 +70,19 @@ package birdeye.vis.coords
 	 * */ 
 	[DefaultProperty("dataProvider")]
 	[Exclude(name="elementsContainer", kind="property")]
-	public class Cartesian extends VisScene
+	public class Cartesian extends VisScene implements ICoordinates
 	{
 		/** Array of elements, mandatory for any cartesian chart.
-		 * Each element must implement the ICartesianElement interface which defines 
+		 * Each element must implement the IElement interface which defines 
 		 * methods that allow to set fields, basic styles, axes, dataproviders, renderers,
-		 * max and min values, etc. Look at the ICartesianElement for more details.
+		 * max and min values, etc. Look at the IElement for more details.
 		 * Each element can define its own axes, which will have higher priority over the axes
 		 * that are provided by the dataProvider (a cartesian chart). In case no axes are 
 		 * defined for the element, than those of the data provider are used. 
 		 * The data provider (cartesian chart) axes values (min, max, etc) are calculated 
 		 * based on the group of element that share them.*/
-        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.ICartesianElement")]
-        [ArrayElementType("birdeye.vis.interfaces.ICartesianElement")]
+        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IElement")]
+        [ArrayElementType("birdeye.vis.interfaces.IElement")]
 		override public function set elements(val:Array):void
 		{
 			_elements = val;
@@ -93,20 +93,20 @@ package birdeye.vis.coords
 				// it's necessary to create a default x axis inside the
 				// cartesian chart. This axis will be shared by all elements that
 				// have no own x axis
-				if (! ICartesianElement(_elements[i]).scale1)
+				if (! IElement(_elements[i]).scale1)
 					needDefaultScale1 = true;
 
 				// if the element doesn't have an own y axis, than
 				// it's necessary to create a default y axis inside the
 				// cartesian chart. This axis will be shared by all elements that
 				// have no own y axis
-				if (! ICartesianElement(_elements[i]).scale2)
+				if (! IElement(_elements[i]).scale2)
 					needDefaultScale2 = true;
 					
 				// set the chart target inside the element to 'this'
 				// in the future the element target could be an external chart 
-				if (! ICartesianElement(_elements[i]).chart)
-					ICartesianElement(_elements[i]).chart = this;
+				if (! IElement(_elements[i]).chart)
+					IElement(_elements[i]).chart = this;
 					
 				// count all stackable elements according their type (overlaid, stacked100...)
 				// and store its position. This allows to have a general CartesianChart 
@@ -137,6 +137,12 @@ package birdeye.vis.coords
 			invalidateDisplayList();
 		}
 
+		override public function set multiScale(val:MultiScale):void
+		{
+			_multiScale.chart = this;
+			super.multiScale = val;
+		}
+
 		private var _is3D:Boolean = false;
 		public function get is3D():Boolean
 		{
@@ -148,6 +154,7 @@ package birdeye.vis.coords
 		public function Cartesian() 
 		{
 			super();
+			coordType = VisScene.CARTESIAN;
 		}
 		
 		private var leftContainer:Container, rightContainer:Container;
@@ -225,7 +232,7 @@ package birdeye.vis.coords
 						nCursors += 1;
 
 					_elementsContainer.addChild(DisplayObject(elements[i]));
-					var scale1:IScale = ICartesianElement(elements[i]).scale1;
+					var scale1:IScale = IElement(elements[i]).scale1;
 					if (scale1)
 					{
 						switch (scale1.placement)
@@ -240,7 +247,7 @@ package birdeye.vis.coords
 					} else 
 						needDefaultScale1 = true;
 						
-					var scale2:IScale = ICartesianElement(elements[i]).scale2;
+					var scale2:IScale = IElement(elements[i]).scale2;
 					if (scale2)
 					{
 						switch (scale2.placement)
@@ -255,7 +262,7 @@ package birdeye.vis.coords
 					} else 
 						needDefaultScale2 = true;
 
-					var tmpScale3:IScale = ICartesianElement(elements[i]).scale3;
+					var tmpScale3:IScale = IElement(elements[i]).scale3;
 					if (tmpScale3 && tmpScale3 is IScaleUI)
 					{
 						zContainer.addChild(DisplayObject(tmpScale3));
@@ -370,8 +377,8 @@ package birdeye.vis.coords
 				_elementsContainer.height = chartBounds.height;
     			for (var i:int = 0; i<_elements.length; i++)
 				{
-					CartesianElement(_elements[i]).width = chartBounds.width;
-					CartesianElement(_elements[i]).height = chartBounds.height;
+					Surface(_elements[i]).width = chartBounds.width;
+					Surface(_elements[i]).height = chartBounds.height;
 				}
  	
 				// listeners like legends will listen to this event
@@ -427,7 +434,7 @@ package birdeye.vis.coords
 			topContainer.height = tmpSize;
 		}
 		
-		private var currentElement:ICartesianElement;
+		private var currentElement:IElement;
 		/** @Private
 		 * Feed the axes with either elements (for ex. CategorScale2) or max and min (for numeric axis).*/
 		private function feedAxes():void
@@ -446,7 +453,7 @@ package birdeye.vis.coords
 					{
 						for (i = 0; i<nCursors; i++)
 						{
-							currentElement = ICartesianElement(_elements[i]);
+							currentElement = IElement(_elements[i]);
 							// if the elements have their own data provider but have not their own
 							// Scale2, than load their elements and add them to the elements
 							// loaded by the chart data provider
@@ -501,7 +508,7 @@ package birdeye.vis.coords
 					{
 						for (i = 0; i<nCursors; i++)
 						{
-							currentElement = ICartesianElement(_elements[i]);
+							currentElement = IElement(_elements[i]);
 							// if the elements have their own data provider but have not their own
 							// Scale1, than load their elements and add them to the elements
 							// loaded by the chart data provider
@@ -555,7 +562,7 @@ package birdeye.vis.coords
 					{
 						for (i = 0; i<nCursors; i++)
 						{
-							currentElement = ICartesianElement(_elements[i]);
+							currentElement = IElement(_elements[i]);
 							// if the elements have their own data provider but have not their own
 							// scale3, than load their elements and add them to the elements
 							// loaded by the chart data provider
@@ -626,7 +633,7 @@ package birdeye.vis.coords
 			var max:Number = NaN, min:Number = NaN;
 			for (var i:Number = 0; i<elements.length; i++)
 			{
-				currentElement = ICartesianElement(elements[i]);
+				currentElement = IElement(elements[i]);
 				// check if the elements has its own y axis and if its max value exists and 
 				// is higher than the current max
 				if (!currentElement.scale2 && (isNaN(max) || max < currentElement.maxDim2Value))
@@ -649,7 +656,7 @@ package birdeye.vis.coords
 
 			for (var i:Number = 0; i<elements.length; i++)
 			{
-				currentElement = ICartesianElement(elements[i]);
+				currentElement = IElement(elements[i]);
 				// check if the elements has its own x axis and if its max value exists and 
 				// is higher than the current max
 				if (!currentElement.scale1 && (isNaN(max) || max < currentElement.maxDim1Value))
@@ -672,7 +679,7 @@ package birdeye.vis.coords
 			var max:Number = NaN, min:Number = NaN;
 			for (var i:Number = 0; i<elements.length; i++)
 			{
-				currentElement = ICartesianElement(elements[i]);
+				currentElement = IElement(elements[i]);
 				// check if the Element has its own z axis and if its max value exists and 
 				// is higher than the current max
 				if (!currentElement.scale3 && (isNaN(max) || max < currentElement.maxDim3Value))
@@ -714,7 +721,7 @@ package birdeye.vis.coords
 		
 		/** @Private
 		 * Init the axes owned by the Element passed to this method.*/
-		private function initElementsAxes(element:ICartesianElement):void
+		private function initElementsAxes(element:IElement):void
 		{
 			if (element.cursor)
 			{

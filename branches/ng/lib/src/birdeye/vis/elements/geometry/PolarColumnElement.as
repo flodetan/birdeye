@@ -44,13 +44,6 @@ package birdeye.vis.elements.geometry
 
 	public class PolarColumnElement extends PolarStackElement
 	{
-		private var _plotRadius:Number = 5;
-		public function set plotRadius(val:Number):void
-		{
-			_plotRadius = val;
-			invalidateDisplayList();
-		}
-		
 		public function PolarColumnElement()
 		{
 			super();
@@ -72,8 +65,8 @@ package birdeye.vis.elements.geometry
 				{
 					if (scale2 is INumerableScale)
 						INumerableScale(scale2).max = maxDim2Value;
-				} else if (polarChart && polarChart.scale2 && polarChart.scale2 is INumerableScale){
-						INumerableScale(polarChart.scale2).max = maxDim2Value;
+				} else if (chart && chart.scale2 && chart.scale2 is INumerableScale){
+						INumerableScale(chart.scale2).max = maxDim2Value;
 				} 
 			}
 		}
@@ -91,13 +84,13 @@ package birdeye.vis.elements.geometry
 			
 			var angleInterval:Number;
 			if (scale1) 
-				angleInterval = scale1.interval * polarChart.columnWidthRate;
-			else if (polarChart.scale1)
-				angleInterval = polarChart.scale1.interval * polarChart.columnWidthRate;
-			else if (radarAxis)
-				angleInterval = radarAxis.angleAxis.interval * polarChart.columnWidthRate;
-			else if (polarChart.multiScale)
-				angleInterval = polarChart.multiScale.angleAxis.interval * polarChart.columnWidthRate;
+				angleInterval = scale1.interval * chart.columnWidthRate;
+			else if (chart.scale1)
+				angleInterval = chart.scale1.interval * chart.columnWidthRate;
+			else if (multiScale)
+				angleInterval = multiScale.scale1.interval * chart.columnWidthRate;
+			else if (chart.multiScale)
+				angleInterval = chart.multiScale.scale1.interval * chart.columnWidthRate;
 				
 			switch (_stackType)
 			{
@@ -121,8 +114,8 @@ package birdeye.vis.elements.geometry
 				{
 					angle = scale1.getPosition(cursor.current[dim1]);
 					dataFields[0] = dim1;
-				} else if (polarChart.scale1) {
-					angle = polarChart.scale1.getPosition(cursor.current[dim1]);
+				} else if (chart.scale1) {
+					angle = chart.scale1.getPosition(cursor.current[dim1]);
 					dataFields[0] = dim1;
 				}
 				
@@ -144,40 +137,40 @@ package birdeye.vis.elements.geometry
 						radius = scale2.getPosition(cursor.current[dim2]);
 
 					dataFields[1] = dim2;
-				} else if (polarChart.scale2) {
+				} else if (chart.scale2) {
 					// if no own y axis than use the parent chart y axis to achive the same
 					// as above
 					if (_stackType == STACKED100)
 					{
-						radius0 = polarChart.scale2.getPosition(baseValues[j]);
-						radius = polarChart.scale2.getPosition(
+						radius0 = chart.scale2.getPosition(baseValues[j]);
+						radius = chart.scale2.getPosition(
 							baseValues[j] + Math.max(0,cursor.current[dim2]));
 					} else {
-						radius = polarChart.scale2.getPosition(cursor.current[dim2]);
+						radius = chart.scale2.getPosition(cursor.current[dim2]);
 					}
 
 					dataFields[1] = dim2;
 				}
 				
-				if (radarAxis)
+				if (multiScale)
 				{
-					angle = radarAxis.angleAxis.getPosition(cursor.current[dim1]);
-					radius = INumerableScale(radarAxis.radiusAxes[
-										cursor.current[radarAxis.angleCategory]
+					angle = multiScale.scale1.getPosition(cursor.current[dim1]);
+					radius = INumerableScale(multiScale.scales[
+										cursor.current[multiScale.dim1]
 										]).getPosition(cursor.current[dim2]);
 					dataFields[0] = dim1;
 					dataFields[1] = dim2;
-				} else if (polarChart.multiScale) {
-					angle = polarChart.multiScale.angleAxis.getPosition(cursor.current[dim1]);
-					radius = INumerableScale(polarChart.multiScale.radiusAxes[
-										cursor.current[polarChart.multiScale.angleCategory]
+				} else if (chart.multiScale) {
+					angle = chart.multiScale.scale1.getPosition(cursor.current[dim1]);
+					radius = INumerableScale(chart.multiScale.scales[
+										cursor.current[chart.multiScale.dim1]
 										]).getPosition(cursor.current[dim2]);
 					dataFields[0] = dim1;
 					dataFields[1] = dim2;
 				}
 
-				var arcCenterX:Number = polarChart.origin.x - radius;
-				var arcCenterY:Number = polarChart.origin.y - radius;
+				var arcCenterX:Number = chart.origin.x - radius;
+				var arcCenterY:Number = chart.origin.y - radius;
 				var startAngle:Number; 
 				switch (_stackType) 
 				{
@@ -192,8 +185,8 @@ package birdeye.vis.elements.geometry
 				var wSize:Number, hSize:Number;
 				wSize = hSize = radius*2;
 
-				var xPos:Number = PolarCoordinateTransform.getX(startAngle+arcSize/2, radius, polarChart.origin);
-				var yPos:Number = PolarCoordinateTransform.getY(startAngle+arcSize/2, radius, polarChart.origin); 
+				var xPos:Number = PolarCoordinateTransform.getX(startAngle+arcSize/2, radius, chart.origin);
+				var yPos:Number = PolarCoordinateTransform.getY(startAngle+arcSize/2, radius, chart.origin); 
 
 				createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
 				
@@ -204,7 +197,7 @@ package birdeye.vis.elements.geometry
 				
 				if (stackType == STACKED100)
 					arc = 
-						new ArcPath(Math.max(0, radius0), radius, startAngle, arcSize, polarChart.origin);
+						new ArcPath(Math.max(0, radius0), radius, startAngle, arcSize, chart.origin);
 				else
 					arc = 
 						new EllipticalArc(arcCenterX, arcCenterY, wSize, hSize, startAngle, arcSize, "pie");
@@ -228,8 +221,8 @@ package birdeye.vis.elements.geometry
 		override protected function getMaxValue(field:String):Number
 		{
 			var max:Number = super.getMaxValue(field);
-			if (polarChart && polarChart is CoxComb && stackType == STACKED100) 
-				max = Math.max(max, CoxComb(polarChart).maxStacked100);
+			if (chart && chart is CoxComb && stackType == STACKED100) 
+				max = Math.max(max, CoxComb(chart).maxStacked100);
 				
 			return max;
 		}

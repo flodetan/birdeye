@@ -58,13 +58,6 @@ package birdeye.vis.elements.geometry
 			invalidateDisplayList();
 		}		
 
-		private var _plotRadius:Number = 10;
-		public function set plotRadius(val:Number):void
-		{
-			_plotRadius = val;
-			invalidateDisplayList();
-		}
-		
 		[Inspectable(enumeration="overlaid,stacked100")]
 		override public function set stackType(val:String):void
 		{
@@ -117,8 +110,8 @@ package birdeye.vis.elements.geometry
 			{
 				radius = scale2.size;
 				dataFields[1] = dim2;
-			} else if (polarChart.scale2) {
-				radius = polarChart.scale2.size;
+			} else if (chart.scale2) {
+				radius = chart.scale2.size;
 				dataFields[1] = dim2;
 			}
 			
@@ -126,11 +119,11 @@ package birdeye.vis.elements.geometry
 			if (_total>0)
 			{
 				_innerRadius = radius/_total * _stackPosition; 
-				tmpRadius = _innerRadius + radius/_total * polarChart.columnWidthRate;
+				tmpRadius = _innerRadius + radius/_total * chart.columnWidthRate;
 			}
 
-			var arcCenterX:Number = polarChart.origin.x - radius;
-			var arcCenterY:Number = polarChart.origin.y - radius;
+			var arcCenterX:Number = chart.origin.x - radius;
+			var arcCenterY:Number = chart.origin.y - radius;
 
 			var wSize:Number, hSize:Number;
 			wSize = hSize = radius*2;
@@ -138,8 +131,8 @@ package birdeye.vis.elements.geometry
 			var aAxis:IScale;
 			if (scale1)
 				aAxis = scale1;
-			else if (polarChart.scale1)
-				aAxis = polarChart.scale1;
+			else if (chart.scale1)
+				aAxis = chart.scale1;
 
 			dataFields[0] = dim1;
 
@@ -148,8 +141,8 @@ package birdeye.vis.elements.geometry
 			{
 				angle = aAxis.getPosition(cursor.current[dim1]);
 				
-				var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius, polarChart.origin);
-				var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius, polarChart.origin); 
+				var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius, chart.origin);
+				var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius, chart.origin); 
 
 				createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
 				
@@ -161,7 +154,7 @@ package birdeye.vis.elements.geometry
 				if (_innerRadius > tmpRadius)
 					_innerRadius = tmpRadius;
 
-				arc = new ArcPath(Math.max(0, _innerRadius), tmpRadius, startAngle, angle, polarChart.origin);
+				arc = new ArcPath(Math.max(0, _innerRadius), tmpRadius, startAngle, angle, chart.origin);
 	
 				var tempColor:int;
 				
@@ -171,8 +164,8 @@ package birdeye.vis.elements.geometry
 					{
 						colorFill = colorAxis.getPosition(cursor.current[colorField]);
 						fill = new SolidFill(colorFill);
-					} else if (polarChart.colorAxis) {
-						colorFill = polarChart.colorAxis.getPosition(cursor.current[colorField]);
+					} else if (chart.colorAxis) {
+						colorFill = chart.colorAxis.getPosition(cursor.current[colorField]);
 						fill = new SolidFill(colorFill);
 					}
 				} else if (_colors)
@@ -203,8 +196,8 @@ package birdeye.vis.elements.geometry
 					var xLlb:Number = xPos, yLlb:Number = yPos;
 					if (!isNaN(_radiusLabelOffset))
 					{
-						xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, polarChart.origin);
-						yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, polarChart.origin);
+						xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
+						yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
 					}
 					var label:RasterTextPlus = new RasterTextPlus();
 					label.text = cursor.current[labelField];
@@ -230,8 +223,8 @@ package birdeye.vis.elements.geometry
 				label.fontWeight = "bold";
 				label.autoSize = TextFieldAutoSize.LEFT;
 				label.fill = new SolidFill(0x000000);
-				label.x = PolarCoordinateTransform.getX(0, _innerRadius, polarChart.origin);
-				label.y = PolarCoordinateTransform.getY(0, _innerRadius, polarChart.origin);
+				label.x = PolarCoordinateTransform.getX(0, _innerRadius, chart.origin);
+				label.y = PolarCoordinateTransform.getY(0, _innerRadius, chart.origin);
 				gg.geometryCollection.addItem(label); 
 			}
 		}

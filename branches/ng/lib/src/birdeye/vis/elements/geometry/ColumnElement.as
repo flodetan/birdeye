@@ -27,22 +27,24 @@
  
 package birdeye.vis.elements.geometry
 {
-	import adobe.utils.CustomActions;
+	import birdeye.vis.VisScene;
+	import birdeye.vis.coords.Polar;
+	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.elements.collision.*;
+	import birdeye.vis.guides.renderers.ArcPath;
+	import birdeye.vis.guides.renderers.RasterRenderer;
+	import birdeye.vis.guides.renderers.RectangleRenderer;
+	import birdeye.vis.interfaces.INumerableScale;
+	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
+	import com.degrafa.geometry.EllipticalArc;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.geom.Rectangle;
 	
 	import mx.collections.CursorBookmark;
-	
-	import birdeye.vis.scales.*;
-	import birdeye.vis.elements.collision.*;
-	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.interfaces.INumerableScale;
-	import birdeye.vis.guides.renderers.RasterRenderer;
-	import birdeye.vis.guides.renderers.RectangleRenderer;
 
 	public class ColumnElement extends StackElement 
 	{
@@ -110,31 +112,56 @@ package birdeye.vis.elements.geometry
 			if (dim3) 
 				dataFields[2] = dim3;
 
-			var xPos:Number, yPos:Number, zPos:Number = NaN;
+			var pos1:Number, pos2:Number, zPos:Number = NaN;
 			var j:Object;
 			
 			var ttShapes:Array;
 			var ttXoffset:Number = NaN, ttYoffset:Number = NaN;
 			
-			var y0:Number = getYMinPosition();
+			var baseScale2:Number = getDim2MinPosition();
 			var size:Number = NaN, colWidth:Number = 0; 
 
 			gg = new DataItemLayout();
 			gg.target = this;
 			graphicsCollection.addItem(gg);
 
+			if (chart.coordType == VisScene.POLAR)
+			{
+				var arcSize:Number = NaN;
+		
+				var angleInterval:Number;
+				if (scale1) 
+					angleInterval = scale1.interval * chart.columnWidthRate;
+				else if (chart.scale1)
+					angleInterval = chart.scale1.interval * chart.columnWidthRate;
+				else if (multiScale)
+					angleInterval = multiScale.scale1.interval * chart.columnWidthRate;
+				else if (chart.multiScale)
+					angleInterval = chart.multiScale.scale1.interval * chart.columnWidthRate;
+					
+				switch (_stackType)
+				{
+					case STACKED:
+						arcSize = angleInterval/_total;
+						break;
+					case OVERLAID:
+					case STACKED100:
+						arcSize = angleInterval;
+						break;
+				}
+			}
 			cursor.seek(CursorBookmark.FIRST);
 
 			while (!cursor.afterLast)
 			{
 				if (scale1)
 				{
-					xPos = scale1.getPosition(cursor.current[dim1]);
+					pos1 = scale1.getPosition(cursor.current[dim1]);
 
 					if (isNaN(size))
 						size = scale1.interval*deltaSize;
 				} else if (chart.scale1) {
-					xPos = chart.scale1.getPosition(cursor.current[dim1]);
+					pos1 = chart.scale1.getPosition(cursor.current[dim1]);
 
 					if (isNaN(size))
 						size = chart.scale1.interval*deltaSize;
@@ -146,45 +173,20 @@ package birdeye.vis.elements.geometry
 					
 					if (_stackType == STACKED100)
 					{
-						y0 = scale2.getPosition(baseValues[j]);
-						yPos = scale2.getPosition(
+						baseScale2 = scale2.getPosition(baseValues[j]);
+						pos2 = scale2.getPosition(
 							baseValues[j] + Math.max(0,cursor.current[dim2]));
 					} else {
-						yPos = scale2.getPosition(cursor.current[dim2]);
+						pos2 = scale2.getPosition(cursor.current[dim2]);
 					}
 				} else if (chart.scale2) {
 					if (_stackType == STACKED100)
 					{
-						y0 = chart.scale2.getPosition(baseValues[j]);
-						yPos = chart.scale2.getPosition(
+						baseScale2 = chart.scale2.getPosition(baseValues[j]);
+						pos2 = chart.scale2.getPosition(
 							baseValues[j] + Math.max(0,cursor.current[dim2]));
 					} else 
-						yPos = chart.scale2.getPosition(cursor.current[dim2]);
-				}
-				
-				switch (_stackType)
-				{
-					case OVERLAID:
-						colWidth = size;
-						xPos = xPos - size/2;
-						break;
-					case STACKED100:
-						colWidth = size;
-						xPos = xPos - size/2;
-						ttShapes = [];
-						ttXoffset = -30;
-						ttYoffset = 20;
-						if (chart.customTooltTipFunction == null)
-						{
-							var line:Line = new Line(xPos+ colWidth/2, yPos, xPos + colWidth/2 + ttXoffset/3, yPos + ttYoffset);
-							line.stroke = new SolidStroke(0xaaaaaa,1,2);
-			 				ttShapes[0] = line;
-						}
-						break;
-					case STACKED:
-						xPos = xPos + size/2 - size/_total * _stackPosition;
-						colWidth = size/_total;
-						break;
+						pos2 = chart.scale2.getPosition(cursor.current[dim2]);
 				}
 				
 				var scale2RelativeValue:Number = NaN;
@@ -206,37 +208,116 @@ package birdeye.vis.elements.geometry
 					scale2RelativeValue = XYZ(chart.scale3).height - zPos;
 				}
 
- 				var bounds:Rectangle = new Rectangle(xPos, yPos, colWidth, y0 - yPos);
-
-				// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
-				// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-				createTTGG(cursor.current, dataFields, xPos + colWidth/2, yPos, scale2RelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
-
-				if (dim3)
+				if (multiScale)
 				{
-					if (!isNaN(zPos))
-					{
-						gg = new DataItemLayout();
-						gg.target = this;
-						graphicsCollection.addItem(gg);
-						ttGG.posZ = ttGG.z = gg.posZ = gg.z = zPos;
-					} else
-						zPos = 0;
+					pos1 = multiScale.scale1.getPosition(cursor.current[dim1]);
+					pos2 = INumerableScale(multiScale.scales[
+										cursor.current[multiScale.dim1]
+										]).getPosition(cursor.current[dim2]);
+				} else if (chart.multiScale) {
+					pos1 = chart.multiScale.scale1.getPosition(cursor.current[dim1]);
+					pos2 = INumerableScale(chart.multiScale.scales[
+										cursor.current[chart.multiScale.dim1]
+										]).getPosition(cursor.current[dim2]);
 				}
 
-				if (ttGG && _extendMouseEvents)
-					gg = ttGG;
-				
-//				poly = renderer.getGeometry(bounds);
-
- 				if (_source)
-					poly = new RasterRenderer(bounds, _source);
- 				else 
-					poly = new itemRenderer(bounds);
-
-				poly.fill = fill;
-				poly.stroke = stroke;
-				gg.geometryCollection.addItemAt(poly,0);
+				if (chart.coordType == VisScene.CARTESIAN)
+				{
+					switch (_stackType)
+					{
+						case OVERLAID:
+							colWidth = size;
+							pos1 = pos1 - size/2;
+							break;
+						case STACKED100:
+							colWidth = size;
+							pos1 = pos1 - size/2;
+							ttShapes = [];
+							ttXoffset = -30;
+							ttYoffset = 20;
+							if (chart.customTooltTipFunction == null)
+							{
+								var line:Line = new Line(pos1+ colWidth/2, pos2, pos1 + colWidth/2 + ttXoffset/3, pos2 + ttYoffset);
+								line.stroke = new SolidStroke(0xaaaaaa,1,2);
+				 				ttShapes[0] = line;
+							}
+							break;
+						case STACKED:
+							pos1 = pos1 + size/2 - size/_total * _stackPosition;
+							colWidth = size/_total;
+							break;
+					}
+					
+	 				var bounds:Rectangle = new Rectangle(pos1, pos2, colWidth, baseScale2 - pos2);
+	
+					// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
+					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
+					createTTGG(cursor.current, dataFields, pos1 + colWidth/2, pos2, scale2RelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
+	
+					if (dim3)
+					{
+						if (!isNaN(zPos))
+						{
+							gg = new DataItemLayout();
+							gg.target = this;
+							graphicsCollection.addItem(gg);
+							ttGG.posZ = ttGG.z = gg.posZ = gg.z = zPos;
+						} else
+							zPos = 0;
+					}
+	
+					if (ttGG && _extendMouseEvents)
+						gg = ttGG;
+					
+	//				poly = renderer.getGeometry(bounds);
+	
+	 				if (_source)
+						poly = new RasterRenderer(bounds, _source);
+	 				else 
+						poly = new itemRenderer(bounds);
+	
+					poly.fill = fill;
+					poly.stroke = stroke;
+					gg.geometryCollection.addItemAt(poly,0);
+				} else if (chart.coordType == VisScene.POLAR)
+				{
+					var arcCenterX:Number = chart.origin.x - pos2;
+					var arcCenterY:Number = chart.origin.y - pos2;
+					var startAngle:Number; 
+					switch (_stackType) 
+					{
+						case STACKED:
+							startAngle = pos1 - angleInterval/2 +arcSize*_stackPosition;
+							break;
+						case OVERLAID:
+						case STACKED100:
+							startAngle = pos1 - angleInterval/2;
+							break;
+					}
+					var wSize:Number, hSize:Number;
+					wSize = hSize = pos2*2;
+	
+					var xPos:Number = PolarCoordinateTransform.getX(startAngle+arcSize/2, pos2, chart.origin);
+					var yPos:Number = PolarCoordinateTransform.getY(startAngle+arcSize/2, pos2, chart.origin); 
+ 	
+					createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
+					
+					if (ttGG && _extendMouseEvents)
+						gg = ttGG;
+						
+					var arc:IGeometry;
+					
+					if (stackType == STACKED100)
+						arc = 
+							new ArcPath(Math.max(0, baseScale2), pos2, startAngle, arcSize, chart.origin);
+					else
+						arc = 
+							new EllipticalArc(arcCenterX, arcCenterY, wSize, hSize, startAngle, arcSize, "pie");
+	
+					arc.fill = fill;
+					arc.stroke = stroke;
+					gg.geometryCollection.addItemAt(arc,0); 
+				}
 
 				if (_showItemRenderer)
 				{
@@ -269,25 +350,34 @@ package birdeye.vis.elements.geometry
 			return xPos;
 		}
  */		
-		private function getYMinPosition():Number
+		private function getDim2MinPosition():Number
 		{
-			var yPos:Number;
+			var pos2:Number;
 			if (scale2 && scale2 is INumerableScale)
 			{
 				if (_baseAtZero)
-					yPos = scale2.getPosition(0);
+					pos2 = scale2.getPosition(0);
 				else
-					yPos = scale2.getPosition(INumerableScale(scale2).min);
+					pos2 = scale2.getPosition(INumerableScale(scale2).min);
 			} else {
-				if (chart.scale2 is INumerableScale)
+				if (chart.scale2 && chart.scale2 is INumerableScale)
 				{
 					if (_baseAtZero)
-						yPos = chart.scale2.getPosition(0);
+						pos2 = chart.scale2.getPosition(0);
 					else
-						yPos = chart.scale2.getPosition(INumerableScale(chart.scale2).min);
+						pos2 = chart.scale2.getPosition(INumerableScale(chart.scale2).min);
 				}
 			}
-			return yPos;
+			return pos2;
+		}
+
+		override protected function getMaxValue(field:String):Number
+		{
+			var max:Number = super.getMaxValue(field);
+			if (chart && chart.coordType == VisScene.POLAR && stackType == STACKED100) 
+				max = Math.max(max, Polar(chart).maxStacked100);
+				
+			return max;
 		}
 	}
 }

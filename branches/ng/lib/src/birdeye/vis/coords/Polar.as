@@ -31,10 +31,10 @@ package birdeye.vis.coords
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.collision.PolarStackElement;
 	import birdeye.vis.elements.geometry.PolarElement;
+	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.IEnumerableScale;
 	import birdeye.vis.interfaces.INumerableScale;
-	import birdeye.vis.interfaces.IPolarElement;
 	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.interfaces.IScaleUI;
 	import birdeye.vis.interfaces.IStack;
@@ -63,10 +63,20 @@ package birdeye.vis.coords
 	 * multiple dataProvider(s).
 	 * */ 
 	[DefaultProperty("dataProvider")]
-	public class Polar extends VisScene
+	public class Polar extends VisScene implements ICoordinates
 	{
-        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IPolarElement")]
-        [ArrayElementType("birdeye.vis.interfaces.IPolarElement")]
+		protected var _maxStacked100:Number = NaN;
+		/** @Private
+		 * The maximum value among all elements stacked according to stacked100 type.
+		 * This is needed to "enlarge" the related axis to include all the stacked values
+		 * so that all stacked100 elements fit into the chart.*/
+		public function get maxStacked100():Number
+		{
+			return _maxStacked100;
+		}
+		
+        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IElement")]
+        [ArrayElementType("birdeye.vis.interfaces.IElement")]
 		override public function set elements(val:Array):void
 		{
 			_elements = val;
@@ -78,20 +88,20 @@ package birdeye.vis.coords
 				// it's necessary to create a default angle axis inside the
 				// polar chart. This axis will be shared by all elements that
 				// have no own angle axis
-				if (! IPolarElement(_elements[i]).scale1)
+				if (! IElement(_elements[i]).scale1)
 					needDefaultScale1 = true;
 
 				// if the elements doesn't have an own radius axis, than
 				// it's necessary to create a default radius axis inside the
 				// polar chart. This axis will be shared by all elements that
 				// have no own radius axis
-				if (! IPolarElement(_elements[i]).scale2)
+				if (! IElement(_elements[i]).scale2)
 					needDefaultScale2 = true;
 					
 				// set the chart target inside the elements to 'this'
 				// in the future the elements target could be an external chart 
-				if (! IPolarElement(_elements[i]).polarChart)
-					IPolarElement(_elements[i]).polarChart = this;
+				if (! IElement(_elements[i]).chart)
+					IElement(_elements[i]).chart = this;
 				
 				// count all stackable elements according their type (overlaid, stacked100...)
 				// and store their position. This allows to have a general PolarChart 
@@ -119,6 +129,12 @@ package birdeye.vis.coords
 					IStack(_elements[i]).total = stackableElements[IStack(_elements[i]).elementType]; 
 		}
 
+		override public function set multiScale(val:MultiScale):void
+		{
+			super.multiScale = val;
+			_multiScale.chart = this;
+		}
+
 		protected var _type:String = PolarStackElement.STACKED100;
 		/** Set the type of stack, overlaid if the element are shown on top of the other, 
 		 * or stacked if they appear staked one after the other (horizontally), or 
@@ -131,17 +147,6 @@ package birdeye.vis.coords
 			invalidateDisplayList();
 		}
 
-		private var _columnWidthRate:Number = 3/5;
-		public function set columnWidthRate(val:Number):void
-		{
-			_columnWidthRate = val;
-			invalidateDisplayList();
-		}
-		public function get columnWidthRate():Number
-		{
-			return _columnWidthRate;
-		}
-		
 		protected var _fontSize:Number = 10;
 		public function set fontSize(val:Number):void
 		{
@@ -152,6 +157,8 @@ package birdeye.vis.coords
 		public function Polar()
 		{
 			super();
+			coordType = VisScene.POLAR;
+			_elementsContainer = this;
 		}
 
 		protected var nCursors:Number;
@@ -188,12 +195,12 @@ package birdeye.vis.coords
 						nCursors += 1;
 
 					addChild(DisplayObject(elements[i]));
-					if (IPolarElement(elements[i]).scale2)
-						addChild(DisplayObject(IPolarElement(elements[i]).scale2));
+					if (IElement(elements[i]).scale2)
+						addChild(DisplayObject(IElement(elements[i]).scale2));
 					else 
 						needDefaultScale2 = true;
 
-					if (! IPolarElement(elements[i]).scale1)
+					if (! IElement(elements[i]).scale1)
 						needDefaultScale1 = true;
 
 					if (_elements[i] is IStack)
@@ -249,7 +256,7 @@ package birdeye.vis.coords
 			
 			if (multiScale)
 			{
-				multiScale.radiusSize = DisplayObject(multiScale).width  
+				multiScale.scalesSize = DisplayObject(multiScale).width  
 					= Math.min(unscaledWidth, unscaledHeight)/2;
 			} 
 			
@@ -278,23 +285,23 @@ package birdeye.vis.coords
 
 			for (var i:Number = 0; i<_elements.length; i++)
 			{
-				if (IPolarElement(_elements[i]).scale2)
+				if (IElement(_elements[i]).scale2)
 				{
-					IPolarElement(_elements[i]).scale2.size = Math.min(unscaledWidth, unscaledHeight)/2;
+					IElement(_elements[i]).scale2.size = Math.min(unscaledWidth, unscaledHeight)/2;
 				
-					if (IPolarElement(_elements[i]).scale2 is IScaleUI)
+					if (IElement(_elements[i]).scale2 is IScaleUI)
 					{
-						switch (IScaleUI(IPolarElement(_elements[i]).scale2).placement)
+						switch (IScaleUI(IElement(_elements[i]).scale2).placement)
 						{
 							case BaseScale.HORIZONTAL_CENTER:
-								DisplayObject(IPolarElement(_elements[i]).scale2).x = _origin.x;
-								DisplayObject(IPolarElement(_elements[i]).scale2).y = _origin.y;
+								DisplayObject(IElement(_elements[i]).scale2).x = _origin.x;
+								DisplayObject(IElement(_elements[i]).scale2).y = _origin.y;
 								break;
 							case BaseScale.VERTICAL_CENTER:
-								DisplayObject(IPolarElement(_elements[i]).scale2).x = 
-									_origin.x - DisplayObject(IPolarElement(_elements[i]).scale2).width;
-								DisplayObject(IPolarElement(_elements[i]).scale2).y = 
-									_origin.y - IPolarElement(_elements[i]).scale2.size;
+								DisplayObject(IElement(_elements[i]).scale2).x = 
+									_origin.x - DisplayObject(IElement(_elements[i]).scale2).width;
+								DisplayObject(IElement(_elements[i]).scale2).y = 
+									_origin.y - IElement(_elements[i]).scale2.size;
 								break;
 						}
 					}
@@ -320,7 +327,7 @@ package birdeye.vis.coords
 			dispatchEvent(new Event("ProviderReady"));
 		}
 
-		protected var currentElement:IPolarElement;
+		protected var currentElement:IElement;
 		/** @Private
 		 * Feed the axes with either elements (for ex. CategoryAxis) or max and min (for numeric axis).*/
 		protected function feedAxes():void
@@ -400,7 +407,7 @@ package birdeye.vis.coords
 					{
 						for (i = 0; i<nCursors; i++)
 						{
-							currentElement = IPolarElement(_elements[i]);
+							currentElement = IElement(_elements[i]);
 							// if the elements have their own data provider but have not their own
 							// xAxis, than load their elements and add them to the elements
 							// loaded by the chart data provider
@@ -565,7 +572,7 @@ package birdeye.vis.coords
 
 		/** @Private
 		 * Init the axes owned by the element passed to this method.*/
-		private function initElementsAxes(element:IPolarElement):void
+		private function initElementsAxes(element:IElement):void
 		{
 			if (element.cursor)
 			{
@@ -714,12 +721,12 @@ package birdeye.vis.coords
 				scale2.resetValues();
 			
 			for (var i:Number = 0; i<elements.length; i++)
-				if (IPolarElement(elements[i]).scale1)
-					IScale(IPolarElement(elements[i]).scale1).resetValues();
+				if (IElement(elements[i]).scale1)
+					IScale(IElement(elements[i]).scale1).resetValues();
 
 			for (i = 0; i<elements.length; i++)
-				if (IPolarElement(elements[i]).scale2)
-					IScale(IPolarElement(elements[i]).scale2).resetValues();
+				if (IElement(elements[i]).scale2)
+					IScale(IElement(elements[i]).scale2).resetValues();
 		}
 	}
 }
