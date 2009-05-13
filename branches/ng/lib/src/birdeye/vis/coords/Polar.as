@@ -29,8 +29,8 @@ package birdeye.vis.coords
 {
 	import birdeye.vis.VisScene;
 	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.elements.collision.PolarStackElement;
-	import birdeye.vis.elements.geometry.PolarElement;
+	import birdeye.vis.elements.collision.*;
+	import birdeye.vis.elements.geometry.*;
 	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.IEnumerableScale;
@@ -40,11 +40,21 @@ package birdeye.vis.coords
 	import birdeye.vis.interfaces.IStack;
 	import birdeye.vis.scales.*;
 	
+	import com.degrafa.GeometryGroup;
+	import com.degrafa.Surface;
+	import com.degrafa.geometry.Circle;
+	import com.degrafa.geometry.Polygon;
+	import com.degrafa.geometry.RasterTextPlus;
+	import com.degrafa.paint.SolidFill;
+	import com.degrafa.paint.SolidStroke;
+	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.geom.Point;
+	import flash.text.TextFieldAutoSize;
 	
 	import mx.collections.CursorBookmark;
+	import mx.collections.IViewCursor;
 	
 	/** 
 	 * The PolarChart is the base chart that is extended by all charts that are
@@ -65,6 +75,17 @@ package birdeye.vis.coords
 	[DefaultProperty("dataProvider")]
 	public class Polar extends VisScene implements ICoordinates
 	{
+		protected const COLUMN:String = "column";
+		protected const RADAR:String = "radar";
+				
+		protected var _layout:String;
+		[Inspectable(enumeration="column,radar")]
+		public function set layout(val:String):void
+		{
+			_layout = val;
+			invalidateDisplayList();
+		}
+		
 		protected var _maxStacked100:Number = NaN;
 		/** @Private
 		 * The maximum value among all elements stacked according to stacked100 type.
@@ -154,11 +175,18 @@ package birdeye.vis.coords
 			invalidateDisplayList();
 		}
 		
+		protected var labels:Surface;
+		protected var gg:GeometryGroup;
 		public function Polar()
 		{
 			super();
 			coordType = VisScene.POLAR;
 			_elementsContainer = this;
+			addChild(labels = new Surface());
+
+			gg = new GeometryGroup();
+			gg.target = labels;
+			labels.addChild(gg);
 		}
 
 		protected var nCursors:Number;
@@ -242,6 +270,162 @@ package birdeye.vis.coords
 				resetAxes();
 				feedAxes();
 			}
+
+			if (!contains(labels))
+				addChild(labels);
+
+			if (_elements)
+			{
+				var _stackElements:Array = [];
+			
+				for (i = 0; i<_elements.length; i++)
+				{
+					if (_elements[i] is IStack)
+					{
+						IStack(_elements[i]).stackType = _type;
+						_stackElements.push(_elements[i])
+					}
+				}
+			}
+
+			// when elements are loaded, set their stack type to the 
+			// current "type" value. if the type is STACKED100
+			// calculate the maxStacked100 value, and load the baseValues
+			// arrays for each üolarColumnElements. The baseValues arrays will be used to know
+			// the radius0 starting point for each elements values, which corresponds to 
+			// the understair elements outer radius;
+			if (_elements && nCursors == _elements.length)
+			{
+				_stackElements = [];
+			
+				for (i = 0; i<_elements.length; i++)
+				{
+					if (_elements[i] is IStack)
+					{
+						IStack(_elements[i]).stackType = _type;
+						_stackElements.push(_elements[i])
+					}
+				}
+				
+				_maxStacked100 = NaN;
+
+				if (_type==PolarStackElement.STACKED100)
+				{
+					// {indexElements: i, baseValues: Array_for_each_Elements}
+					var allElementsBaseValues:Array = []; 
+					for (i=0;i < _stackElements.length;i++)
+						allElementsBaseValues[i] = {indexElements: i, baseValues: []};
+					
+					// keep index of last element been processed 
+					// with the same angle field data value
+					// k[xFieldDataValue] = last element processed
+					var k:Array = [];
+					
+					// the baseValues are indexed with the angle field objects
+					var j:Object;
+					
+					for (var s:Number = 0; s<_stackElements.length; s++)
+					{
+						var sCursor:IViewCursor;
+						
+						if (IElement(_stackElements[s]).cursor &&
+							IElement(_stackElements[s]).cursor != cursor)
+						{
+							sCursor = IElement(_stackElements[s]).cursor;
+							sCursor.seek(CursorBookmark.FIRST);
+							while (!sCursor.afterLast)
+							{
+								j = sCursor.current[IElement(_stackElements[s]).dim1];
+
+								if (s>0 && k[j]>=0)
+									allElementsBaseValues[s].baseValues[j] = 
+										allElementsBaseValues[k[j]].baseValues[j] + 
+										Math.max(0,sCursor.current[IElement(_stackElements[k[j]]).dim2]);
+								else 
+									allElementsBaseValues[s].baseValues[j] = 0;
+
+								if (isNaN(_maxStacked100))
+									_maxStacked100 = 
+										allElementsBaseValues[s].baseValues[j] + 
+										Math.max(0,sCursor.current[IElement(_stackElements[s]).dim2]);
+								else
+									_maxStacked100 = Math.max(_maxStacked100,
+										allElementsBaseValues[s].baseValues[j] + 
+										Math.max(0,sCursor.current[IElement(_stackElements[s]).dim2]));
+
+								sCursor.moveNext();
+								k[j] = s;
+							}
+						}
+					}
+					
+					if (cursor)
+					
+					{
+						cursor.seek(CursorBookmark.FIRST);
+						while (!cursor.afterLast)
+						{
+							// index of last element without own cursor with the same xField data value 
+							// (because they've already been processed in the previous loop)
+							var t:Array = [];
+							for (s = 0; s<_stackElements.length; s++)
+							{
+								if (! (IElement(_stackElements[s]).cursor &&
+									IElement(_stackElements[s]).cursor != cursor))
+								{
+									j = cursor.current[IElement(_stackElements[s]).dim1];
+							
+									if (t[j]>=0)
+										allElementsBaseValues[s].baseValues[j] = 
+											allElementsBaseValues[t[j]].baseValues[j] + 
+											Math.max(0,cursor.current[IElement(_stackElements[t[j]]).dim2]);
+									else 
+										allElementsBaseValues[s].baseValues[j] = 0;
+									
+									if (isNaN(_maxStacked100))
+										_maxStacked100 = 
+											allElementsBaseValues[s].baseValues[j] + 
+											Math.max(0,cursor.current[IElement(_stackElements[s]).dim2]);
+									else
+										_maxStacked100 = Math.max(_maxStacked100,
+											allElementsBaseValues[s].baseValues[j] + 
+											Math.max(0,cursor.current[IElement(_stackElements[s]).dim2]));
+
+									t[j] = s;
+								}
+							}
+							cursor.moveNext();
+						}
+					}
+					
+					// set the baseValues array for each AreaElement
+					// The baseValues array will be used to know
+					// the y0 starting point for each element values, 
+					// which corresponds to the understair element highest y value;
+					for (s = 0; s<_stackElements.length; s++)
+						IStack(_stackElements[s]).baseValues = allElementsBaseValues[s].baseValues;
+				}
+			}
+
+			if (multiScale && !contains(multiScale))
+				addChild(multiScale);
+				
+			if (!contains(labels))
+				addChild(labels);
+
+			if (_elements)
+			{
+				var _columnElements:Array = [];
+			
+				for (i = 0; i<_elements.length; i++)
+				{
+					if (_elements[i] is IStack)
+					{
+						IStack(_elements[i]).stackType = _type;
+						_columnElements.push(_elements[i])
+					}
+				}
+			}
 		}
 		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
@@ -323,19 +507,107 @@ package birdeye.vis.coords
 				}
 			}
 
+			
+			if ((multiScale && multiScale.scale1) ||
+				(scale1 && scale1 is CategoryAngle))
+				drawLabels()
+
 			// listeners like legends will listen to this event
 			dispatchEvent(new Event("ProviderReady"));
 		}
 
 		protected var currentElement:IElement;
+		private var elementsMinMax:Array;
 		/** @Private
 		 * Feed the axes with either elements (for ex. CategoryAxis) or max and min (for numeric axis).*/
 		protected function feedAxes():void
 		{
+			var catElements:Array = [];
+			var j:Number = 0;
+			elementsMinMax = [];
+			
 			if (nCursors == elements.length)
 			{
-				var catElements:Array = [];
-				var j:Number = 0;
+				// check if a default y axis exists
+				if (_multiScale && _multiScale.dim1 && _multiScale.scale1)
+				{
+					var angleCategory:String = multiScale.dim1;
+					for (var i:int = 0; i<nCursors; i++)
+					{
+						currentElement = IElement(_elements[i]);
+						// if the element has its own data provider but has not its own
+						// angleAxis, than load their elements and add them to the elements
+						// loaded by the chart data provider
+						if (currentElement.dataProvider 
+							&& currentElement.dataProvider != dataProvider)
+						{
+							currentElement.cursor.seek(CursorBookmark.FIRST);
+							while (!currentElement.cursor.afterLast)
+							{
+								var category:String = currentElement.cursor.current[angleCategory];
+								if (catElements.indexOf(category) == -1)
+									catElements[j++] = category;
+								
+								if (!elementsMinMax[category])
+								{
+									elementsMinMax[category] = {min: int.MAX_VALUE,
+																	 max: int.MIN_VALUE};
+								} 
+								elementsMinMax[category].min = 
+									Math.min(elementsMinMax[category].min, 
+										currentElement.cursor.current[currentElement.dim2]);
+
+								elementsMinMax[category].max = 
+									Math.max(elementsMinMax[category].max, 
+										currentElement.cursor.current[currentElement.dim2]);
+								
+								currentElement.cursor.moveNext();
+							}
+						}
+						
+						if (cursor)
+						{
+							cursor.seek(CursorBookmark.FIRST);
+							while (!cursor.afterLast)
+							{
+								category = cursor.current[angleCategory]
+								// if the category value already exists in the axis, than skip it
+								if (catElements.indexOf(category) == -1)
+									catElements[j++] = category;
+								
+								for (var t:int = 0; t<elements.length; t++)
+								{
+									currentElement = IElement(_elements[t]);
+									if (!elementsMinMax[category])
+									{
+										elementsMinMax[category] = {min: int.MAX_VALUE,
+																		 max: int.MIN_VALUE};
+									} 
+									elementsMinMax[category].min = 
+										Math.min(elementsMinMax[category].min, 
+											cursor.current[currentElement.dim2]);
+
+									elementsMinMax[category].max = 
+										Math.max(elementsMinMax[category].max, 
+											cursor.current[currentElement.dim2]);
+								}
+								cursor.moveNext();
+							}
+						}
+	
+						// set the elements property of the CategoryAxis
+						if (catElements.length > 0)
+							_multiScale.scale1.dataProvider = catElements;
+					} 
+					
+					_multiScale.feedRadiusAxes(elementsMinMax);
+				}
+			}
+
+			if (nCursors == elements.length)
+			{
+				catElements = [];
+				j = 0;
 				
 				var maxMin:Array;
 				
@@ -346,7 +618,7 @@ package birdeye.vis.coords
 					{
 						for (i = 0; i<nCursors; i++)
 						{
-							currentElement = PolarElement(_elements[i]);
+							currentElement = IElement(_elements[i]);
 							// if the series has its own data provider but has not its own
 							// Scale1, than load their elements and add them to the elements
 							// loaded by the chart data provider
@@ -470,13 +742,142 @@ package birdeye.vis.coords
 				// init axes of all elements that have their own axes
 				// since these are children of each elements, they are 
 				// for sure ready for feeding and it won't affect the axesFeeded status
-				for (var i:Number = 0; i<elements.length; i++)
+				for (i = 0; i<elements.length; i++)
 					initElementsAxes(elements[i]);
 					
 				axesFeeded = true;
 			}
 		}
 
+		protected function drawLabels():void
+		{
+			var aAxis:CategoryAngle;
+			if (multiScale)
+				aAxis = multiScale.scale1;
+			else
+				aAxis = CategoryAngle(scale1);
+			
+			var catElements:Array = aAxis.dataProvider;
+			var interval:int = aAxis.interval;
+			var nEle:int = catElements.length;
+			var radius:int = Math.min(unscaledWidth, unscaledHeight)/2;
+
+			if (aAxis && radius>0 && catElements && nEle>0 && !isNaN(interval))
+			{
+				removeAllLabels();
+				for (var i:int = 0; i<nEle; i++)
+				{
+					var angle:int = aAxis.getPosition(catElements[i]);
+					var position:Point = PolarCoordinateTransform.getXY(angle,radius,origin);
+					
+					var label:RasterTextPlus = new RasterTextPlus();
+					label.text = String(catElements[i]);
+ 					label.fontFamily = "verdana";
+ 					label.fontSize = _fontSize;
+ 					label.visible = true;
+					label.autoSize = TextFieldAutoSize.LEFT;
+					label.autoSizeField = true;
+					label.fill = new SolidFill(0x000000);
+
+					label.x = position.x - label.displayObject.width/2;
+					label.y = position.y - label.displayObject.height/2;
+					
+					gg.geometryCollection.addItem(label);
+				}
+
+				switch (_layout)
+				{
+					case RADAR: 
+						if (multiScale)
+							createRadarLayout1();
+						else
+							createRadarLayout2();
+						break;
+					case COLUMN:
+						createColumnLayout()
+						break;
+				}
+			}
+		}
+		
+		private function createRadarLayout1():void
+		{
+			var aAxis:CategoryAngle = multiScale.scale1;
+			var catElements:Array = aAxis.dataProvider;
+			var rAxis:Numeric = multiScale.scales[catElements[0]];
+			
+			if (aAxis && rAxis && !isNaN(rAxis.interval))
+			{
+				var interval:int = aAxis.interval;
+				var nEle:int = catElements.length;
+	
+				var rMin:Number = rAxis.min;
+				var rMax:Number = rAxis.max;
+				
+				var angle:int;
+				var radius:int;
+				var position:Point;
+	
+				for (radius = rMin + rAxis.interval; radius<rMax; radius += rAxis.interval)
+				{
+					var poly:Polygon = new Polygon();
+					poly.data = "";
+	
+					for (var j:int = 0; j<nEle; j++)
+					{
+						angle = aAxis.getPosition(catElements[j]);
+						position = PolarCoordinateTransform.getXY(angle, rAxis.getPosition(radius), origin)
+						poly.data += String(position.x) + "," + String(position.y) + " ";
+					}
+					poly.stroke = new SolidStroke(0x000000,.15);
+					gg.geometryCollection.addItem(poly);
+				}
+			}
+		}
+
+		private function createRadarLayout2():void
+		{
+			var aAxis:CategoryAngle = CategoryAngle(scale1);
+			var catElements:Array = aAxis.dataProvider;
+			var interval:int = aAxis.interval;
+			var nEle:int = catElements.length;
+			
+			if (scale2 is Numeric && !isNaN(Numeric(scale2).interval))
+			{
+				var rAxis:Numeric = Numeric(scale2);
+				var rMin:Number = rAxis.min;
+				var rMax:Number = rAxis.max;
+				
+				var angle:int;
+				var radius:int;
+				var position:Point = PolarCoordinateTransform.getXY(angle,radius-10,origin);
+
+				for (radius = rMin + rAxis.interval; radius<rMax; radius += rAxis.interval)
+				{
+					var poly:Polygon = new Polygon();
+					poly.data = "";
+
+					for (var j:int = 0; j<nEle; j++)
+					{
+						angle = aAxis.getPosition(catElements[j]);
+						position = PolarCoordinateTransform.getXY(angle, rAxis.getPosition(radius), origin)
+						poly.data += String(position.x) + "," + String(position.y) + " ";
+					}
+					poly.stroke = new SolidStroke(0x000000,.15);
+					gg.geometryCollection.addItem(poly);
+				}
+			}
+			
+		}
+		
+		private function createColumnLayout():void
+		{
+			var rad:int = Math.min(unscaledWidth, unscaledHeight)/2;
+			var circle:Circle = new Circle(origin.x, origin.y, rad-20);
+			circle.stroke = new SolidStroke(0x000000);
+
+			gg.geometryCollection.addItem(circle);
+		}
 		
 		/** @Private
 		 * Calculate the min max values for the default vertical (y) axis. Return an array of 2 values, the 1st (0) 
@@ -486,7 +887,7 @@ package birdeye.vis.coords
 			var max:Number = NaN, min:Number = NaN;
 			for (var i:Number = 0; i<elements.length; i++)
 			{
-				currentElement = PolarElement(elements[i]);
+				currentElement = IElement(elements[i]);
 				// check if the elements has its own y axis and if its max value exists and 
 				// is higher than the current max
 				if (!currentElement.scale2 && (isNaN(max) || max < currentElement.maxDim2Value))
@@ -508,7 +909,7 @@ package birdeye.vis.coords
 			var max:Number = NaN, min:Number = NaN;
 			for (var i:Number = 0; i<elements.length; i++)
 			{
-				currentElement = PolarElement(elements[i]);
+				currentElement = IElement(elements[i]);
 				// check if the elements has its own y axis and if its max value exists and 
 				// is higher than the current max
 				if (!currentElement.scale1 && (isNaN(max) || max < currentElement.maxDim1Value))
@@ -530,7 +931,7 @@ package birdeye.vis.coords
 			var tot:Number = NaN;
 			for (var i:Number = 0; i<elements.length; i++)
 			{
-				currentElement = PolarElement(elements[i]);
+				currentElement = IElement(elements[i]);
 				// check if the elements has its own y axis and if its max value exists and 
 				// is higher than the current max
 				if (!isNaN(currentElement.totalDim1PositiveValue))
@@ -712,6 +1113,12 @@ package birdeye.vis.coords
 			}
 		}
 		
+		private function removeAllLabels():void
+		{
+			if (gg)
+				gg.geometryCollection.items = [];
+		}
+
 		override protected function resetAxes():void
 		{
 			super.resetAxes();
