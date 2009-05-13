@@ -27,27 +27,21 @@
  
 package birdeye.vis.elements.geometry
 {
+	import birdeye.vis.VisScene;
+	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.guides.renderers.CircleRenderer;
+	import birdeye.vis.guides.renderers.RasterRenderer;
+	import birdeye.vis.scales.*;
+	
 	import com.degrafa.IGeometry;
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
 	
 	import mx.collections.CursorBookmark;
-	
-	import birdeye.vis.scales.*;
-	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.guides.renderers.CircleRenderer;
-	import birdeye.vis.guides.renderers.RasterRenderer;
 
 	public class PointElement extends CartesianElement
 	{
-		private var _plotRadius:Number = 5;
-		public function set plotRadius(val:Number):void
-		{
-			_plotRadius = val;
-			invalidateDisplayList();
-		}
-		
 		public function PointElement()
 		{
 			super();
@@ -73,7 +67,7 @@ package birdeye.vis.elements.geometry
 			if (dim3) 
 				dataFields[2] = dim3;
 
-			var xPos:Number, yPos:Number, zPos:Number = NaN;
+			var pos1:Number, pos2:Number, pos3:Number = NaN;
 			
 			if (!itemRenderer)
 				itemRenderer = CircleRenderer;
@@ -87,26 +81,26 @@ package birdeye.vis.elements.geometry
 			{
 				if (scale1)
 				{
-					xPos = scale1.getPosition(cursor.current[dim1]);
+					pos1 = scale1.getPosition(cursor.current[dim1]);
 				} else if (chart.scale1) {
-					xPos = chart.scale1.getPosition(cursor.current[dim1]);
+					pos1= chart.scale1.getPosition(cursor.current[dim1]);
 				}
 				
-				if (scale2RelativeValue)
+				if (scale2)
 				{
-					yPos = scale2.getPosition(cursor.current[dim2]);
+					pos2 = scale2.getPosition(cursor.current[dim2]);
 				} else if (chart.scale2) {
-					yPos = chart.scale2.getPosition(cursor.current[dim2]);
+					pos2 = chart.scale2.getPosition(cursor.current[dim2]);
 				}
 
 				var scale2RelativeValue:Number = NaN;
 
 				if (scale3)
 				{
-					zPos = scale3.getPosition(cursor.current[dim3]);
-					scale2RelativeValue = XYZ(scale3).height - zPos;
+					pos3 = scale3.getPosition(cursor.current[dim3]);
+					scale2RelativeValue = XYZ(scale3).height - pos3;
 				} else if (chart.scale3) {
-					zPos = chart.scale3.getPosition(cursor.current[dim3]);
+					pos3 = chart.scale3.getPosition(cursor.current[dim3]);
 					// since there is no method yet to draw a real z axis 
 					// we create an y axis and rotate it to properly visualize 
 					// a 'fake' z axis. however zPos over this y axis corresponds to 
@@ -114,7 +108,7 @@ package birdeye.vis.elements.geometry
 					// up side down. this trick allows to visualize the y axis as
 					// if it would be a z. when there will be a 3d line class, it will 
 					// be replaced
-					scale2RelativeValue = XYZ(chart.scale3).height - zPos;
+					scale2RelativeValue = XYZ(chart.scale3).height - pos3;
 				}
 
 				if (colorAxis)
@@ -126,23 +120,31 @@ package birdeye.vis.elements.geometry
 					fill = new SolidFill(colorFill);
 				}
 
+				if (chart.coordType == VisScene.POLAR)
+				{
+					var xPos:Number = PolarCoordinateTransform.getX(pos1, pos2, chart.origin);
+					var yPos:Number = PolarCoordinateTransform.getY(pos1, pos2, chart.origin);
+					pos1 = xPos;
+					pos2 = yPos; 
+				}
+
 				// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 				// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-				createTTGG(cursor.current, dataFields, xPos, yPos, scale2RelativeValue, _plotRadius);
+				createTTGG(cursor.current, dataFields, pos1, pos2, scale2RelativeValue, _plotRadius);
 
 				if (dim3)
 				{
-					if (!isNaN(zPos))
+					if (!isNaN(pos3))
 					{
 						gg = new DataItemLayout();
 						gg.target = this;
 						graphicsCollection.addItem(gg);
-						ttGG.z = gg.z = zPos;
+						ttGG.z = gg.z = pos3;
 					} else
-						zPos = 0;
+						pos3 = 0;
 				}
 				
- 				var bounds:Rectangle = new Rectangle(xPos - _plotRadius, yPos - _plotRadius, _plotRadius * 2, _plotRadius * 2);
+ 				var bounds:Rectangle = new Rectangle(pos1 - _plotRadius, pos2 - _plotRadius, _plotRadius * 2, _plotRadius * 2);
 
  				if (_source)
 					plot = new RasterRenderer(bounds, _source);
@@ -154,9 +156,9 @@ package birdeye.vis.elements.geometry
 				gg.geometryCollection.addItemAt(plot,0); 
 				if (dim3)
 				{
-					gg.z = zPos;
-					if (isNaN(zPos))
-						zPos = 0;
+					gg.z = pos3;
+					if (isNaN(pos3))
+						pos3 = 0;
 				}
  				cursor.moveNext();
 			}

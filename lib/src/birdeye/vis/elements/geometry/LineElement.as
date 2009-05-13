@@ -27,6 +27,7 @@
  
 package birdeye.vis.elements.geometry
 {
+	import birdeye.vis.VisScene;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.guides.renderers.LineRenderer;
 	import birdeye.vis.scales.*;
@@ -63,7 +64,7 @@ package birdeye.vis.elements.geometry
 		override protected function drawElement():void
 		{
 			var xPrev:Number, yPrev:Number;
-			var xPos:Number, yPos:Number, zPos:Number;
+			var pos1:Number, pos2:Number, zPos:Number;
 			var j:Number = 0;
 
 			var dataFields:Array = [];
@@ -84,17 +85,17 @@ package birdeye.vis.elements.geometry
 			{
 				if (scale1)
 				{
-					xPos = scale1.getPosition(cursor.current[dim1]);
+					pos1 = scale1.getPosition(cursor.current[dim1]);
 				} else if (chart.scale1) {
-					xPos = chart.scale1.getPosition(cursor.current[dim1]);
+					pos1 = chart.scale1.getPosition(cursor.current[dim1]);
 				}
 				
 				if (scale2)
 				{
-					yPos = scale2.getPosition(cursor.current[dim2]);
+					pos2 = scale2.getPosition(cursor.current[dim2]);
 					dataFields[1] = dim2;
 				} else if (chart.scale2) {
-					yPos = chart.scale2.getPosition(cursor.current[dim2]);
+					pos2 = chart.scale2.getPosition(cursor.current[dim2]);
 				}
 				
 				var scale2RelativeValue:Number = NaN;
@@ -115,9 +116,21 @@ package birdeye.vis.elements.geometry
 					scale2RelativeValue = XYZ(chart.scale3).height - zPos;
 				}
 
+				if (chart.coordType == VisScene.POLAR)
+				{
+ 					var xPos:Number = PolarCoordinateTransform.getX(pos1, pos2, chart.origin);
+					var yPos:Number = PolarCoordinateTransform.getY(pos1, pos2, chart.origin);
+ 					pos1 = xPos;
+					pos2 = yPos; 
+					if (j == 0)
+					{
+						var firstX:Number = pos1, firstY:Number = pos2;
+					}
+				}
+
 				// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 				// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-				createTTGG(cursor.current, dataFields, xPos, yPos, scale2RelativeValue, 3);
+				createTTGG(cursor.current, dataFields, pos1, pos2, scale2RelativeValue, 3);
 
 				if (dim3)
 				{
@@ -133,7 +146,7 @@ package birdeye.vis.elements.geometry
 				
 				if (j++ > 0)
 				{
-					var line:Line = new Line(xPrev,yPrev,xPos,yPos);
+					var line:Line = new Line(xPrev,yPrev,pos1,pos2);
 					line.fill = fill;
 					line.stroke = stroke;
 					gg.geometryCollection.addItemAt(line,0);
@@ -142,14 +155,14 @@ package birdeye.vis.elements.geometry
 
 				if (_showItemRenderer)
 				{
-	 				var bounds:Rectangle = new Rectangle(xPos - _rendererSize/2, yPos - _rendererSize/2, _rendererSize, _rendererSize);
+	 				var bounds:Rectangle = new Rectangle(pos1 - _rendererSize/2, pos2 - _rendererSize/2, _rendererSize, _rendererSize);
 					var shape:IGeometry = new itemRenderer(bounds);
 					shape.fill = fill;
 					shape.stroke = stroke;
 					gg.geometryCollection.addItem(shape);
 				}
 
-				xPrev = xPos; yPrev = yPos;
+				xPrev = pos1; yPrev = pos2;
 				if (dim3)
 				{
 					gg.z = zPos;
@@ -157,6 +170,15 @@ package birdeye.vis.elements.geometry
 						zPos = 0;
 				}
 				cursor.moveNext();
+			}
+			
+			if (chart.coordType == VisScene.POLAR && !isNaN(firstX) && !isNaN(firstY))
+			{
+					line = new Line(pos1,pos2, firstX, firstY);
+					line.fill = fill;
+					line.stroke = stroke;
+					gg.geometryCollection.addItemAt(line,0);
+					line = null;
 			}
 
 			if (dim3)

@@ -27,13 +27,17 @@
 
 package birdeye.vis.recipes.polarCharts
 {
+	import birdeye.vis.coords.Polar;
+	import birdeye.vis.elements.collision.*;
+	import birdeye.vis.elements.geometry.*;
+	import birdeye.vis.interfaces.IElement;
+	import birdeye.vis.interfaces.IStack;
+	import birdeye.vis.scales.*;
+	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
-	import com.degrafa.geometry.Circle;
-	import com.degrafa.geometry.Polygon;
 	import com.degrafa.geometry.RasterText;
 	import com.degrafa.paint.SolidFill;
-	import com.degrafa.paint.SolidStroke;
 	
 	import flash.geom.Point;
 	import flash.text.TextFieldAutoSize;
@@ -41,26 +45,11 @@ package birdeye.vis.recipes.polarCharts
 	import mx.collections.CursorBookmark;
 	import mx.collections.IViewCursor;
 	
-	import birdeye.vis.coords.Polar;
-	import birdeye.vis.scales.*;
-	import birdeye.vis.elements.geometry.*;
-	import birdeye.vis.elements.collision.*;
-	
 	
 	public class CoxComb extends Polar
 	{
 		private const COLUMN:String = "column";
 		private const RADAR:String = "radar";
-		
-		protected var _maxStacked100:Number = NaN;
-		/** @Private
-		 * The maximum value among all elements stacked according to stacked100 type.
-		 * This is needed to "enlarge" the related axis to include all the stacked values
-		 * so that all stacked100 elements fit into the chart.*/
-		public function get maxStacked100():Number
-		{
-			return _maxStacked100;
-		}
 		
 		public function CoxComb()
 		{
@@ -81,14 +70,14 @@ package birdeye.vis.recipes.polarCharts
 
 			if (_elements)
 			{
-				var _columnElements:Array = [];
+				var _stackElements:Array = [];
 			
 				for (var i:Number = 0; i<_elements.length; i++)
 				{
-					if (_elements[i] is PolarColumnElement)
+					if (_elements[i] is IStack)
 					{
-						PolarColumnElement(_elements[i]).stackType = _type;
-						_columnElements.push(_elements[i])
+						IStack(_elements[i]).stackType = _type;
+						_stackElements.push(_elements[i])
 					}
 				}
 			}
@@ -101,14 +90,14 @@ package birdeye.vis.recipes.polarCharts
 			// the understair elements outer radius;
 			if (_elements && nCursors == _elements.length)
 			{
-				_columnElements = [];
+				_stackElements = [];
 			
 				for (i = 0; i<_elements.length; i++)
 				{
-					if (_elements[i] is PolarColumnElement)
+					if (_elements[i] is IStack)
 					{
-						PolarColumnElement(_elements[i]).stackType = _type;
-						_columnElements.push(_elements[i])
+						IStack(_elements[i]).stackType = _type;
+						_stackElements.push(_elements[i])
 					}
 				}
 				
@@ -118,7 +107,7 @@ package birdeye.vis.recipes.polarCharts
 				{
 					// {indexElements: i, baseValues: Array_for_each_Elements}
 					var allElementsBaseValues:Array = []; 
-					for (i=0;i < _columnElements.length;i++)
+					for (i=0;i < _stackElements.length;i++)
 						allElementsBaseValues[i] = {indexElements: i, baseValues: []};
 					
 					// keep index of last element been processed 
@@ -129,34 +118,34 @@ package birdeye.vis.recipes.polarCharts
 					// the baseValues are indexed with the angle field objects
 					var j:Object;
 					
-					for (var s:Number = 0; s<_columnElements.length; s++)
+					for (var s:Number = 0; s<_stackElements.length; s++)
 					{
 						var sCursor:IViewCursor;
 						
-						if (PolarColumnElement(_columnElements[s]).cursor &&
-							PolarColumnElement(_columnElements[s]).cursor != cursor)
+						if (IElement(_stackElements[s]).cursor &&
+							IElement(_stackElements[s]).cursor != cursor)
 						{
-							sCursor = PolarColumnElement(_columnElements[s]).cursor;
+							sCursor = IElement(_stackElements[s]).cursor;
 							sCursor.seek(CursorBookmark.FIRST);
 							while (!sCursor.afterLast)
 							{
-								j = sCursor.current[PolarColumnElement(_columnElements[s]).dim1];
+								j = sCursor.current[IElement(_stackElements[s]).dim1];
 
 								if (s>0 && k[j]>=0)
 									allElementsBaseValues[s].baseValues[j] = 
 										allElementsBaseValues[k[j]].baseValues[j] + 
-										Math.max(0,sCursor.current[PolarColumnElement(_columnElements[k[j]]).dim2]);
+										Math.max(0,sCursor.current[IElement(_stackElements[k[j]]).dim2]);
 								else 
 									allElementsBaseValues[s].baseValues[j] = 0;
 
 								if (isNaN(_maxStacked100))
 									_maxStacked100 = 
 										allElementsBaseValues[s].baseValues[j] + 
-										Math.max(0,sCursor.current[PolarColumnElement(_columnElements[s]).dim2]);
+										Math.max(0,sCursor.current[IElement(_stackElements[s]).dim2]);
 								else
 									_maxStacked100 = Math.max(_maxStacked100,
 										allElementsBaseValues[s].baseValues[j] + 
-										Math.max(0,sCursor.current[PolarColumnElement(_columnElements[s]).dim2]));
+										Math.max(0,sCursor.current[IElement(_stackElements[s]).dim2]));
 
 								sCursor.moveNext();
 								k[j] = s;
@@ -173,28 +162,28 @@ package birdeye.vis.recipes.polarCharts
 							// index of last element without own cursor with the same xField data value 
 							// (because they've already been processed in the previous loop)
 							var t:Array = [];
-							for (s = 0; s<_columnElements.length; s++)
+							for (s = 0; s<_stackElements.length; s++)
 							{
-								if (! (PolarColumnElement(_columnElements[s]).cursor &&
-									PolarColumnElement(_columnElements[s]).cursor != cursor))
+								if (! (IElement(_stackElements[s]).cursor &&
+									IElement(_stackElements[s]).cursor != cursor))
 								{
-									j = cursor.current[PolarColumnElement(_columnElements[s]).dim1];
+									j = cursor.current[IElement(_stackElements[s]).dim1];
 							
 									if (t[j]>=0)
 										allElementsBaseValues[s].baseValues[j] = 
 											allElementsBaseValues[t[j]].baseValues[j] + 
-											Math.max(0,cursor.current[PolarColumnElement(_columnElements[t[j]]).dim2]);
+											Math.max(0,cursor.current[IElement(_stackElements[t[j]]).dim2]);
 									else 
 										allElementsBaseValues[s].baseValues[j] = 0;
 									
 									if (isNaN(_maxStacked100))
 										_maxStacked100 = 
 											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,cursor.current[PolarColumnElement(_columnElements[s]).dim2]);
+											Math.max(0,cursor.current[IElement(_stackElements[s]).dim2]);
 									else
 										_maxStacked100 = Math.max(_maxStacked100,
 											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,cursor.current[PolarColumnElement(_columnElements[s]).dim2]));
+											Math.max(0,cursor.current[IElement(_stackElements[s]).dim2]));
 
 									t[j] = s;
 								}
@@ -207,8 +196,8 @@ package birdeye.vis.recipes.polarCharts
 					// The baseValues array will be used to know
 					// the y0 starting point for each element values, 
 					// which corresponds to the understair element highest y value;
-					for (s = 0; s<_columnElements.length; s++)
-						PolarColumnElement(_columnElements[s]).baseValues = allElementsBaseValues[s].baseValues;
+					for (s = 0; s<_stackElements.length; s++)
+						IStack(_stackElements[s]).baseValues = allElementsBaseValues[s].baseValues;
 				}
 			}
 		}
@@ -231,9 +220,9 @@ package birdeye.vis.recipes.polarCharts
 			if (nCursors == elements.length)
 			{
 				// check if a default y axis exists
-				if (_multiScale && _multiScale.angleCategory && _multiScale.angleAxis)
+				if (_multiScale && _multiScale.dim1 && _multiScale.scale1)
 				{
-					var angleCategory:String = multiScale.angleCategory;
+					var angleCategory:String = multiScale.dim1;
 					for (var i:int = 0; i<nCursors; i++)
 					{
 						currentElement = PolarElement(_elements[i]);
@@ -299,7 +288,7 @@ package birdeye.vis.recipes.polarCharts
 	
 						// set the elements property of the CategoryAxis
 						if (catElements.length > 0)
-							_multiScale.angleAxis.dataProvider = catElements;
+							_multiScale.scale1.dataProvider = catElements;
 					} 
 					
 					_multiScale.feedRadiusAxes(elementsMinMax);
@@ -314,7 +303,7 @@ package birdeye.vis.recipes.polarCharts
 		{
 			var aAxis:CategoryAngle;
 			if (multiScale)
-				aAxis = multiScale.angleAxis;
+				aAxis = multiScale.scale1;
 			else
 				aAxis = CategoryAngle(scale1);
 			

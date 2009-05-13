@@ -41,5 +41,9 @@ package birdeye.vis.interfaces
 		/** Set/Get the stack type (overlaid, stacked, stacked100).*/
 		function set stackType(val:String):void;
 		function get stackType():String;
+
+		/** Set the baseValues for stacked 100 collisions (columns, area, bars).*/
+		function set baseValues(val:Array):void;
+		function get baseValues():Array;
 	}
 }

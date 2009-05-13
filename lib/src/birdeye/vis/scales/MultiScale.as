@@ -77,60 +77,60 @@ package birdeye.vis.scales
 			invalidateDisplayList();
 		}
 		
-		private var chart:ICoordinates;
-		public function set polarChart(val:ICoordinates):void
+		private var _chart:ICoordinates;
+		public function set chart(val:ICoordinates):void
 		{
-			chart = val;
+			_chart = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
 
-		private var _angleCategory:String;
-		public function set angleCategory(val:String):void
+		private var _dim1:String;
+		public function set dim1(val:String):void
 		{
-			_angleCategory = val;
-			var tmpAngleAxis:CategoryAngle = new CategoryAngle();
-			tmpAngleAxis.categoryField = val;
-			angleAxis = tmpAngleAxis;
+			_dim1 = val;
+			var tmpScale1:CategoryAngle = new CategoryAngle();
+			tmpScale1.categoryField = val;
+			scale1 = tmpScale1;
 		}
-		public function get angleCategory():String
+		public function get dim1():String
 		{
-			return _angleCategory;
+			return _dim1;
 		}
 		
-		private var _radiusSize:Number;
-		public function set radiusSize(val:Number):void
+		private var _scalesSize:Number;
+		public function set scalesSize(val:Number):void
 		{
-			_radiusSize = val;
+			_scalesSize = val;
 			invalidateDisplayList();
 		}
-		public function get radiusSize():Number
+		public function get scalesSize():Number
 		{
-			return _radiusSize;
+			return _scalesSize;
 		}
 		
-		private var _angleAxis:CategoryAngle;
-		public function set angleAxis(val:CategoryAngle):void
+		private var _scale1:CategoryAngle;
+		public function set scale1(val:CategoryAngle):void
 		{
-			_angleAxis = val;
+			_scale1 = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get angleAxis():CategoryAngle
+		public function get scale1():CategoryAngle
 		{
-			return _angleAxis;
+			return _scale1;
 		}
 		
-		private var _radiusAxes:Array;
-		public function set radiusAxes(val:Array):void
+		private var _scales:Array;
+		public function set scales(val:Array):void
 		{
-			_radiusAxes = val;
+			_scales = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get radiusAxes():Array
+		public function get scales():Array
 		{
-			return _radiusAxes;
+			return _scales;
 		}
 
 		private var _alphaFill:Number;
@@ -305,7 +305,7 @@ package birdeye.vis.scales
 			stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 			fill = new SolidFill(colorFill, alphaFill);
 
- 			if (angleAxis && radiusAxes && _radiusSize)
+ 			if (scale1 && scales && _scalesSize)
 				drawAxes();
 		}
 		
@@ -347,24 +347,24 @@ package birdeye.vis.scales
 		
  		public function feedRadiusAxes(elementsMinMax:Array):void
 		{
-			if (_angleCategory && _angleAxis && _angleAxis.dataProvider)
+			if (_dim1 && _scale1 && _scale1.dataProvider)
 			{
-				radiusAxes = [];
-				for each (var category:String in angleAxis.dataProvider)
+				scales = [];
+				for each (var category:String in scale1.dataProvider)
 				{
-					radiusAxes[category] = new Numeric();
-					Numeric(radiusAxes[category]).showAxis = false;
+					scales[category] = new Numeric();
+					Numeric(scales[category]).showAxis = false;
 					
 					if (_function != null)
-						Numeric(radiusAxes[category]).f = _function;
+						Numeric(scales[category]).f = _function;
 					
 					// if all values are positive, than we fix the base at zero, otherwise
 					// the columns with minium values won't show up in the chart
-					Numeric(radiusAxes[category]).min = Math.min(0, elementsMinMax[category].min);
-					Numeric(radiusAxes[category]).max = elementsMinMax[category].max;
-					Numeric(radiusAxes[category]).size = radiusSize;
-					Numeric(radiusAxes[category]).interval = (Numeric(radiusAxes[category]).max 
-																- Numeric(radiusAxes[category]).min)/5;
+					Numeric(scales[category]).min = Math.min(0, elementsMinMax[category].min);
+					Numeric(scales[category]).max = elementsMinMax[category].max;
+					Numeric(scales[category]).size = scalesSize;
+					Numeric(scales[category]).interval = (Numeric(scales[category]).max 
+																- Numeric(scales[category]).min)/5;
 				}
 			}
 		} 
@@ -376,27 +376,27 @@ package birdeye.vis.scales
 			
 			var line:Line;
 			
-			var catElements:Array = angleAxis.dataProvider;
-			var interval:int = angleAxis.interval;
-			var nEle:int = angleAxis.dataProvider.length;
+			var catElements:Array = scale1.dataProvider;
+			var interval:int = scale1.interval;
+			var nEle:int = scale1.dataProvider.length;
 
 			for (var i:int = 0; i<nEle; i++)
 			{
-				Numeric(radiusAxes[catElements[i]]).size = radiusSize;
-				var angle:int = angleAxis.getPosition(catElements[i]);
-				var endPosition:Point = PolarCoordinateTransform.getXY(angle,radiusSize,chart.origin);
+				Numeric(scales[catElements[i]]).size = scalesSize;
+				var angle:int = scale1.getPosition(catElements[i]);
+				var endPosition:Point = PolarCoordinateTransform.getXY(angle,scalesSize,_chart.origin);
 				
- 				line = new Line(chart.origin.x, chart.origin.y, endPosition.x, endPosition.y);
+ 				line = new Line(_chart.origin.x, _chart.origin.y, endPosition.x, endPosition.y);
 				line.stroke = stroke;
 				gg.geometryCollection.addItem(line);
 
- 				var radiusAxis:Numeric = Numeric(radiusAxes[catElements[i]]);
+ 				var radiusAxis:Numeric = Numeric(scales[catElements[i]]);
  				var rad:Number;
  				
  				for (var snap:int = radiusAxis.min; snap<radiusAxis.max; snap += radiusAxis.interval)
  				{
  					rad = radiusAxis.getPosition(snap);
-	 				var labelPosition:Point = PolarCoordinateTransform.getXY(angle,rad,chart.origin);
+	 				var labelPosition:Point = PolarCoordinateTransform.getXY(angle,rad,_chart.origin);
 					var label:RasterTextPlus = new RasterTextPlus();
 					label.text = String(snap);
 	 				label.fontFamily = fontLabel;

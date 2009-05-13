@@ -30,7 +30,8 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.coords.Cartesian;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.BaseElement;
-	import birdeye.vis.interfaces.ICartesianElement;
+	import birdeye.vis.interfaces.ICoordinates;
+	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.IEnumerableScale;
 	import birdeye.vis.interfaces.IScaleUI;
 	
@@ -44,20 +45,8 @@ package birdeye.vis.elements.geometry
 	import mx.events.ToolTipEvent;
 
 	[Exclude(name="index", kind="property")]
-	public class CartesianElement extends BaseElement implements ICartesianElement
+	public class CartesianElement extends BaseElement implements IElement
 	{
-		private var _chart:Cartesian;
-		public function set chart(val:Cartesian):void
-		{
-			_chart = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get chart():Cartesian
-		{
-			return _chart;
-		}
-
 		override public function set dataProvider(value:Object):void
 		{
 			super.dataProvider = value;
@@ -69,9 +58,12 @@ package birdeye.vis.elements.geometry
 		  		// to let the chart update with the element data provider change. in fact
 		  		// the element dataprovider modifies the chart data and axes properties
 		  		// therefore it modifies the chart properties and displaying
-		  		chart.axesFeeded = false;
-		  		chart.invalidateProperties();
-		  		chart.invalidateDisplayList();
+		  		if (chart is Cartesian)
+		  		{
+			  		Cartesian(chart).axesFeeded = false;
+			  		Cartesian(chart).invalidateProperties();
+			  		Cartesian(chart).invalidateDisplayList();
+		  		}
 
 		  		invalidateSize();
 		  		invalidateProperties();
@@ -79,17 +71,6 @@ package birdeye.vis.elements.geometry
 	  		}
 		}
 
-		private var _index:Number;
-		public function set index(val:Number):void
-		{
-			_index = val;
-		}
-
-		public function get index():Number
-		{
-			return _index;
-		}
-		
 		// UIComponent flow
 
 		public function CartesianElement():void
@@ -143,11 +124,6 @@ package birdeye.vis.elements.geometry
 		}
 
 
-		protected function drawElement():void
-		{
-			// to be overridden by each element implementation
-		}
-		
 		private function isReadyForLayout():Boolean
 		{
 			// verify than all element axes (or chart's if none owned by the element)
@@ -176,6 +152,9 @@ package birdeye.vis.elements.geometry
 					axesCheck = axesCheck && Boolean(IEnumerableScale(chart.scale1).dataProvider);
 			} else
 				axesCheck = false;
+
+			if ((multiScale && multiScale.scales) || (chart.multiScale && chart.multiScale.scales))
+				axesCheck = true;
 
 			var colorsCheck:Boolean = 
 				(fill || stroke);
@@ -269,25 +248,6 @@ package birdeye.vis.elements.geometry
 				IScaleUI(scale3).pointer.visible = false;
 			else if (chart.scale3 && chart.scale3 is IScaleUI && IScaleUI(chart.scale3).pointer) 
 				IScaleUI(chart.scale3).pointer.visible = false;
-		}
-
-		/** @Private
-		 * Sort the surface elements according their z position.*/ 
-		protected function zSort():void
-		{
-			var sortLayers:Array = new Array();
-			var nChildren:int = numChildren;
-			for(var i:int = 0; i < nChildren; i++) 
-			{
-				var child:* = getChildAt(0); 
-				var zPos:uint = DataItemLayout(child).z;
-				sortLayers.push([zPos, child]);
-				removeChildAt(0);
-			}
-			// sort them and add them back
-			sortLayers.sortOn("0", Array.NUMERIC);
-			for (i = 0; i < nChildren; i++) 
-				addChild(sortLayers[i][1]);
 		}
 
 		/** @Private

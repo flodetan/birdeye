@@ -41,13 +41,6 @@ package birdeye.vis.elements.geometry
 
 	public class PolarPointElement extends PolarElement
 	{
-		private var _plotRadius:Number = 5;
-		public function set plotRadius(val:Number):void
-		{
-			_plotRadius = val;
-			invalidateDisplayList();
-		}
-		
 		public function PolarPointElement()
 		{
 			super();
@@ -87,8 +80,8 @@ package birdeye.vis.elements.geometry
 				{
 					angle = scale1.getPosition(cursor.current[dim1]);
 					dataFields[0] = dim1;
-				} else if (polarChart.scale1) {
-					angle = polarChart.scale1.getPosition(cursor.current[dim1]);
+				} else if (chart.scale1) {
+					angle = chart.scale1.getPosition(cursor.current[dim1]);
 					dataFields[0] = dim1;
 				}
 				
@@ -96,30 +89,30 @@ package birdeye.vis.elements.geometry
 				{
 					radius = scale2.getPosition(cursor.current[dim2]);
 					dataFields[1] = dim2;
-				} else if (polarChart.scale2) {
-					radius = polarChart.scale2.getPosition(cursor.current[dim2]);
+				} else if (chart.scale2) {
+					radius = chart.scale2.getPosition(cursor.current[dim2]);
 					dataFields[1] = dim2;
 				}
 
-				if (radarAxis)
+				if (multiScale)
 				{
-					angle = radarAxis.angleAxis.getPosition(cursor.current[dim1]);
-					radius = INumerableScale(radarAxis.radiusAxes[
-										cursor.current[radarAxis.angleCategory]
+					angle = multiScale.scale1.getPosition(cursor.current[dim1]);
+					radius = INumerableScale(multiScale.scales[
+										cursor.current[multiScale.dim1]
 										]).getPosition(cursor.current[dim2]);
 					dataFields[0] = dim1;
 					dataFields[1] = dim2;
-				} else if (polarChart.multiScale) {
-					angle = polarChart.multiScale.angleAxis.getPosition(cursor.current[dim1]);
-					radius = INumerableScale(polarChart.multiScale.radiusAxes[
-										cursor.current[polarChart.multiScale.angleCategory]
+				} else if (chart.multiScale) {
+					angle = chart.multiScale.scale1.getPosition(cursor.current[dim1]);
+					radius = INumerableScale(chart.multiScale.scales[
+										cursor.current[chart.multiScale.dim1]
 										]).getPosition(cursor.current[dim2]);
 					dataFields[0] = dim1;
 					dataFields[1] = dim2;
 				}
 
-				var xPos:Number = PolarCoordinateTransform.getX(angle, radius, polarChart.origin);
-				var yPos:Number = PolarCoordinateTransform.getY(angle, radius, polarChart.origin); 
+				var xPos:Number = PolarCoordinateTransform.getX(angle, radius, chart.origin);
+				var yPos:Number = PolarCoordinateTransform.getY(angle, radius, chart.origin); 
 
 				createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
 				

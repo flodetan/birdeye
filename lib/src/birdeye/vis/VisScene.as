@@ -28,7 +28,6 @@
  package birdeye.vis
 {
 	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.scales.BaseScale;
@@ -50,8 +49,22 @@
 	import mx.core.IInvalidating;
 
 	[DefaultProperty("dataProvider")]
-	public class VisScene extends Surface implements ICoordinates
+	public class VisScene extends Surface
 	{
+		public static const CARTESIAN:String="cartesian";
+		public static const POLAR:String="polar";
+		
+		private var _coordType:String;
+		public function set coordType(val:String):void
+		{
+			_coordType = val;
+			invalidateDisplayList();
+		}
+		public function get coordType():String
+		{
+			return _coordType;
+		}
+		
 		private var _scales:Array; /* of IScale */
 		/** Array of scales, each element will take a scale target from this scale list.*/
         [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IScale")]
@@ -67,7 +80,6 @@
 		public function set multiScale(val:MultiScale):void
 		{
 			_multiScale = val;
-			_multiScale.polarChart = this;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -202,6 +214,17 @@
 		{
 			_gridAlpha = val;
 			invalidateDisplayList();
+		}
+		
+		private var _columnWidthRate:Number = 3/5;
+		public function set columnWidthRate(val:Number):void
+		{
+			_columnWidthRate = val;
+			invalidateDisplayList();
+		}
+		public function get columnWidthRate():Number
+		{
+			return _columnWidthRate;
 		}
 		
 		private var _customTooltTipFunction:Function;

@@ -27,13 +27,16 @@
  
 package birdeye.vis.interfaces
 {
-	import birdeye.vis.coords.Polar;
+	import com.degrafa.Surface;
 	
-	public interface IPolarElement extends IElement
+	public interface IInteractive
 	{
-		/** Set the chart target. This allows to share axes and other properties
-		 * of the chart among several elements.*/
-		function set polarChart(val:Polar):void;
-		function get polarChart():Polar
+		function get customTooltTipFunction():Function;
+		function get showDataTips():Boolean;
+		function get showAllDataTips():Boolean;
+		function get dataTipFunction():Function;
+		function get dataTipPrefix():String;
+
+		function get elementsContainer():Surface;
 	}
 }

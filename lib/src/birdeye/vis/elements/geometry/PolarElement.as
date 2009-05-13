@@ -27,34 +27,21 @@
  
 package birdeye.vis.elements.geometry
 {
+	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.elements.BaseElement;
+	import birdeye.vis.interfaces.*;
+	import birdeye.vis.scales.*;
+	
+	import com.degrafa.Surface;
 	import com.degrafa.geometry.Circle;
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.events.MouseEvent;
 	
-	import mx.collections.CursorBookmark;
 	import mx.collections.ICollectionView;
-	
-	import birdeye.vis.elements.BaseElement;
-	import birdeye.vis.scales.*;
-	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.interfaces.*;
-	import birdeye.vis.coords.Polar;
 
-	public class PolarElement extends BaseElement implements IPolarElement
+	public class PolarElement extends BaseElement implements IElement
 	{
-		private var _polarChart:Polar;
-		public function set polarChart(val:Polar):void
-		{
-			_polarChart = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get polarChart():Polar
-		{
-			return _polarChart;
-		}
-
 		override public function set dataProvider(value:Object):void
 		{
 			super.dataProvider = value;
@@ -66,26 +53,14 @@ package birdeye.vis.elements.geometry
 		  		// to let the chart update with the series data provider change. in fact
 		  		// the series dataprovider modifies the chart data and axes properties
 		  		// therefore it modifies the chart properties and displaying
-		  		polarChart.axesFeeded = false;
-		  		polarChart.invalidateProperties();
-		  		polarChart.invalidateDisplayList();
-
+		  		/* chart.axesFeeded = false;
+		  		chart.invalidateProperties();
+		  		chart.invalidateDisplayList();
+ */
 		  		invalidateSize();
 		  		invalidateProperties();
 				invalidateDisplayList();
 	  		}
-		}
-
-		private var _radarAxis:MultiScale;
-		public function set radarAxis(val:MultiScale):void
-		{
-			_radarAxis = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get radarAxis():MultiScale
-		{
-			return _radarAxis;
 		}
 
 		// UIComponent flow
@@ -110,7 +85,7 @@ package birdeye.vis.elements.geometry
 			// interactivity events thourgh ttGG but it's not necessary to 
 			// have a background for these other events
 
-			if (polarChart && polarChart.customTooltTipFunction!=null && polarChart.showDataTips && !tooltipCreationListening)
+			if (chart && chart.customTooltTipFunction!=null && chart.showDataTips && !tooltipCreationListening)
 			{
 				initCustomTip();
 			}
@@ -133,11 +108,6 @@ package birdeye.vis.elements.geometry
  				drawElement()
 		}
 		
-		protected function drawElement():void
-		{
-			// to be overridden by each series implementation
-		}
-		
 		private function isReadyForLayout():Boolean
 		{
 			// verify that all series axes (or chart's if none owned by the series)
@@ -152,13 +122,13 @@ package birdeye.vis.elements.geometry
 								|| !isNaN(INumerableScale(scale1).totalPositiveValue);
 				else if (scale1 is IEnumerableScale)
 					axesCheck = Boolean(IEnumerableScale(scale1).dataProvider);
-			} else if (polarChart && polarChart.scale1)
+			} else if (chart && chart.scale1)
 			{
-				if (polarChart.scale1 is INumerableScale)
-					axesCheck = !isNaN(INumerableScale(polarChart.scale1).min) || !isNaN(INumerableScale(polarChart.scale1).max)
-								|| !isNaN(INumerableScale(polarChart.scale1).totalPositiveValue);
-				else if (polarChart.scale1 is IEnumerableScale)
-					axesCheck = Boolean(IEnumerableScale(polarChart.scale1 ).dataProvider);
+				if (chart.scale1 is INumerableScale)
+					axesCheck = !isNaN(INumerableScale(chart.scale1).min) || !isNaN(INumerableScale(chart.scale1).max)
+								|| !isNaN(INumerableScale(chart.scale1).totalPositiveValue);
+				else if (chart.scale1 is IEnumerableScale)
+					axesCheck = Boolean(IEnumerableScale(chart.scale1 ).dataProvider);
 			} else
 				axesCheck = false;
 
@@ -170,18 +140,18 @@ package birdeye.vis.elements.geometry
 												|| !isNaN(INumerableScale(scale2).totalPositiveValue));
 				else if (scale2 is IEnumerableScale)
 					axesCheck = axesCheck && IEnumerableScale(scale2).dataProvider;
-			} else if (polarChart && polarChart.scale2)
+			} else if (chart && chart.scale2)
 			{
-				if (polarChart.scale2 is INumerableScale)
-					axesCheck = axesCheck && (!isNaN(INumerableScale(polarChart.scale2).min)
-												|| !isNaN(INumerableScale(polarChart.scale2).max)
-												|| !isNaN(INumerableScale(polarChart.scale2).totalPositiveValue))
-				else if (polarChart.scale2 is IEnumerableScale)
-					axesCheck = axesCheck && IEnumerableScale(polarChart.scale2).dataProvider;
+				if (chart.scale2 is INumerableScale)
+					axesCheck = axesCheck && (!isNaN(INumerableScale(chart.scale2).min)
+												|| !isNaN(INumerableScale(chart.scale2).max)
+												|| !isNaN(INumerableScale(chart.scale2).totalPositiveValue))
+				else if (chart.scale2 is IEnumerableScale)
+					axesCheck = axesCheck && IEnumerableScale(chart.scale2).dataProvider;
 			} else
 				axesCheck = false;
 				
-			if ((radarAxis && radarAxis.radiusAxes) || (polarChart.multiScale && polarChart.multiScale.radiusAxes))
+			if ((multiScale && multiScale.scales) || (chart.multiScale && chart.multiScale.scales))
 				axesCheck = true;
 
 			var colorsCheck:Boolean = 
@@ -191,8 +161,8 @@ package birdeye.vis.elements.geometry
 /* 				   (!isNaN(_minDim1Value) || !isNaN(_minDim2Value))
 				&& (!isNaN(_maxDim1Value) || !isNaN(_maxDim1Value)) */
 				width>0 && height>0
-				&& polarChart && (dim1 || dim1)
-				&& (polarChart.origin)
+				&& chart && (dim1 || dim1)
+				&& (chart.origin)
 				&& cursor;
 			
 			return globalCheck && axesCheck && colorsCheck;
@@ -202,9 +172,9 @@ package birdeye.vis.elements.geometry
 		{
 			var extGG:DataItemLayout = DataItemLayout(e.target);
 
-			if (polarChart.customTooltTipFunction != null)
+			if (chart.customTooltTipFunction != null)
 			{
-				myTT = polarChart.customTooltTipFunction(extGG);
+				myTT = chart.customTooltTipFunction(extGG);
 	 			toolTip = myTT.text;
 			} else {
 				extGG.showToolTip();
@@ -217,18 +187,18 @@ package birdeye.vis.elements.geometry
 		{
 			// no need to create a ttGG for a polar chart unless interactivity
 			// or tooltips are requested 
- 			if (polarChart.showDataTips || polarChart.showAllDataTips 
+ 			if (chart.showDataTips || chart.showAllDataTips 
  				|| mouseClickFunction!=null || mouseDoubleClickFunction!=null)
  			{
 				ttGG = new DataItemLayout();
-				ttGG.target = polarChart;
+				ttGG.target = Surface(chart.elementsContainer);
 				graphicsCollection.addItem(ttGG);
 	
 				var hitMouseArea:Circle = new Circle(xPos, yPos, radius); 
 				hitMouseArea.fill = new SolidFill(0x000000, 0);
 				ttGG.geometryCollection.addItem(hitMouseArea);
 	
-	 			if (polarChart.showDataTips || polarChart.showAllDataTips)
+	 			if (chart.showDataTips || chart.showAllDataTips)
 				{
 					initGGToolTip();
 					ttGG.create(cursor.current, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset);
@@ -241,7 +211,7 @@ package birdeye.vis.elements.geometry
 					ttGG.create(cursor.current, dataFields, xPos, yPos, zPos, NaN, null, NaN, NaN, false);
 				} 
 				
-				if (polarChart.showAllDataTips)
+				if (chart.showAllDataTips)
 				{
 					ttGG.showToolTip();
 					ttGG.showToolTipGeometry();
@@ -264,10 +234,10 @@ package birdeye.vis.elements.geometry
 		{
 			ttGG.toolTipFill = fill;
 			ttGG.toolTipStroke = stroke;
- 			if (polarChart.dataTipFunction != null)
-				ttGG.dataTipFunction = polarChart.dataTipFunction;
-			if (polarChart.dataTipPrefix!= null)
-				ttGG.dataTipPrefix = polarChart.dataTipPrefix;
+ 			if (chart.dataTipFunction != null)
+				ttGG.dataTipFunction = chart.dataTipFunction;
+			if (chart.dataTipPrefix!= null)
+				ttGG.dataTipPrefix = chart.dataTipPrefix;
 		}
 	}
 }

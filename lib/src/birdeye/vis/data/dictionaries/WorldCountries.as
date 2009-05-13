@@ -27,13 +27,13 @@
 
 package birdeye.vis.data.dictionaries
 {
-	import birdeye.vis.elements.geometry.CartesianElement;
-	import birdeye.vis.elements.BaseElement;
+	import com.degrafa.Surface;
 	
-	public class WorldCountries extends BaseElement //SASN extends BaseElement
+	public class WorldCountries extends Surface //BaseElement //SASN extends BaseElement
 	{
 		import flash.utils.Dictionary;
 		import mx.controls.Alert;
+		import com.degrafa.Surface;
 		
 		private var arrRegion:Array=[WorldRegionTypes.REGION_AFRICA, WorldRegionTypes.REGION_NORTH_AMERICA, WorldRegionTypes.REGION_SOUTH_AMERICA, WorldRegionTypes.REGION_ASIA, WorldRegionTypes.REGION_EUROPE, WorldRegionTypes.REGION_OCEANIA, WorldRegionTypes.REGION_WORLD, WorldRegionTypes.REGION_CIS];
 		private var arrSubRegion:Array=[WorldRegionTypes.SUBREGION_NORTHAFRICA, WorldRegionTypes.SUBREGION_SUBSAHARA, WorldRegionTypes.SUBREGION_EASTERNASIA, WorldRegionTypes.SUBREGION_SOUTHERNASIA, WorldRegionTypes.SUBREGION_SOUTHEASTERNASIA, WorldRegionTypes.SUBREGION_WESTERNASIA];//"Antartica", 
