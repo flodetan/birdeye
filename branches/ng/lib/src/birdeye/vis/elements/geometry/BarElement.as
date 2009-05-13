@@ -72,6 +72,7 @@ package birdeye.vis.elements.geometry
 		public function BarElement()
 		{
 			super();
+			collisionScale = HORIZONTAL;
 		}
 	
 		override protected function commitProperties():void
