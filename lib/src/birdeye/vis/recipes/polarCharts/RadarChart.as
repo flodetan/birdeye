@@ -31,6 +31,7 @@ package birdeye.vis.recipes.polarCharts
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.elements.geometry.*;
 	import birdeye.vis.interfaces.IElement;
+	import birdeye.vis.interfaces.IStack;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.GeometryGroup;
@@ -85,9 +86,9 @@ package birdeye.vis.recipes.polarCharts
 			
 				for (var i:Number = 0; i<_elements.length; i++)
 				{
-					if (_elements[i] is PolarColumnElement)
+					if (_elements[i] is IStack)
 					{
-						PolarColumnElement(_elements[i]).stackType = _type;
+						IStack(_elements[i]).stackType = _type;
 						_columnElements.push(_elements[i])
 					}
 				}
