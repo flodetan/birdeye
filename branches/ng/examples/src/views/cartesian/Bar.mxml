@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:recipes="birdeye.vis.recipes.cartesianCharts.*"
+	xmlns:coords="birdeye.vis.coords.*"
 	xmlns:elements="birdeye.vis.elements.geometry.*"
 	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:guides="birdeye.vis.guides.legend.*"
@@ -45,20 +45,20 @@
 	</mx:Script>
 	<mx:Button label="Generate" click="createDT()"/>
 	<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
-	<recipes:BarChart id="bc2" width="90%" height="90%" dataProvider="{dt}" showDataTips="true" type="stacked100">
-    	<recipes:scale2>
+	<coords:Cartesian id="bc2" width="90%" height="90%" dataProvider="{dt}" showDataTips="true" type="stacked100">
+    	<coords:scale2>
     		<scales:Category categoryField="subject" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
-    	</recipes:scale2>
-    	<recipes:scale1>
+    	</coords:scale2>
+    	<coords:scale1>
     		<scales:Linear placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
-    	</recipes:scale1>
-    	 <recipes:elements>
+    	</coords:scale1>
+    	 <coords:elements>
 		 	<elements:BarElement extendMouseEvents="true" dim1="R1" styleName="grad1" dim2="subject" displayName="R1" />
 		 	<elements:BarElement extendMouseEvents="true" dim1="R2" styleName="grad2" dim2="subject" displayName="R2" />
 		 	<elements:BarElement extendMouseEvents="true" dim1="R3" styleName="grad3" dim2="subject" displayName="R3" />
 		 	<elements:BarElement extendMouseEvents="true" dim1="R4" styleName="grad4" dim2="subject" displayName="R4" />
-		 </recipes:elements>
-	</recipes:BarChart>
+		 </coords:elements>
+	</coords:Cartesian>
 	<guides:Legend dataProvider="{bc2}" direction="horizontal" backgroundColor="0xffffff"/>	
 	</mx:VBox>
 	
