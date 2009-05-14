@@ -42,7 +42,7 @@ package birdeye.vis.elements.geometry
 	
 	import mx.collections.CursorBookmark;
 
-	public class PolarPieElements extends PolarStackElement
+	public class PolarPieElements extends StackElement
 	{
 		private var _innerRadius:Number;
 		public function set innerRadius(val:Number):void
@@ -58,12 +58,6 @@ package birdeye.vis.elements.geometry
 			invalidateDisplayList();
 		}		
 
-		[Inspectable(enumeration="overlaid,stacked100")]
-		override public function set stackType(val:String):void
-		{
-			super.stackType = val;
-		}
-		
 		public function PolarPieElements()
 		{
 			super();
@@ -82,150 +76,160 @@ package birdeye.vis.elements.geometry
 
 		/** @Private 
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
-		override protected function drawElement():void
+		override public function drawElement():void
 		{
-			var c:uint = 0;
-			
-			var dataFields:Array = [];
-
-			var angle:Number, radius:Number = NaN;
-			
-			var startAngle:Number = 0; 
-			
-			var arcSize:Number = NaN;
-			
-			switch (_stackType)
+			if (isReadyForLayout())
 			{
-				case STACKED100:
-					break;
-				case OVERLAID:
-					break;
-			}
+				removeAllElements();
+				var c:uint = 0;
 				
-			gg = new DataItemLayout();
-			gg.target = this;
-			graphicsCollection.addItem(gg);
-
-			if (scale2)
-			{
-				radius = scale2.size;
-				dataFields[1] = dim2;
-			} else if (chart.scale2) {
-				radius = chart.scale2.size;
-				dataFields[1] = dim2;
-			}
-			
-			var tmpRadius:Number = radius;
-			if (_total>0)
-			{
-				_innerRadius = radius/_total * _stackPosition; 
-				tmpRadius = _innerRadius + radius/_total * chart.columnWidthRate;
-			}
-
-			var arcCenterX:Number = chart.origin.x - radius;
-			var arcCenterY:Number = chart.origin.y - radius;
-
-			var wSize:Number, hSize:Number;
-			wSize = hSize = radius*2;
-
-			var aAxis:IScale;
-			if (scale1)
-				aAxis = scale1;
-			else if (chart.scale1)
-				aAxis = chart.scale1;
-
-			dataFields[0] = dim1;
-
-			cursor.seek(CursorBookmark.FIRST);
-			while (!cursor.afterLast)
-			{
-				angle = aAxis.getPosition(cursor.current[dim1]);
-				
-				var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius, chart.origin);
-				var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius, chart.origin); 
-
-				createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
-				
- 				if (ttGG && _extendMouseEvents)
-					gg = ttGG;
- 				
-				var arc:IGeometry;
-				
-				if (_innerRadius > tmpRadius)
-					_innerRadius = tmpRadius;
-
-				arc = new ArcPath(Math.max(0, _innerRadius), tmpRadius, startAngle, angle, chart.origin);
+				var dataFields:Array = [];
 	
-				var tempColor:int;
+				var angle:Number, radius:Number = NaN;
 				
-				if (colorField)
+				var startAngle:Number = 0; 
+				
+				var arcSize:Number = NaN;
+				
+				switch (_stackType)
 				{
-					if (colorAxis)
-					{
-						colorFill = colorAxis.getPosition(cursor.current[colorField]);
-						fill = new SolidFill(colorFill);
-					} else if (chart.colorAxis) {
-						colorFill = chart.colorAxis.getPosition(cursor.current[colorField]);
-						fill = new SolidFill(colorFill);
-					}
-				} else if (_colors)
-				{
-					if (c < _colors.length)
-						fill = new SolidFill(_colors[c]);
-					else
-						fill = new SolidFill(_colors[_colors.length]);
+					case STACKED100:
+						break;
+					case OVERLAID:
+						break;
+				}
 					
-					c++;
-				} else if (randomColors)
+				if (ggElements && ggElements.length>0)
+					gg = ggElements[0];
+				else
 				{
-					tempColor = Math.random() * 255 * 255 * 255;
-					arc.fill = new SolidFill(tempColor);
+					gg = new DataItemLayout();
+					gg.target = this;
+					graphicsCollection.addItem(gg);
+				}
+				ggIndex = 1;
+	
+				if (scale2)
+				{
+					radius = scale2.size;
+					dataFields[1] = dim2;
+				} else if (chart.scale2) {
+					radius = chart.scale2.size;
+					dataFields[1] = dim2;
 				}
 				
-				if (fill)
+				var tmpRadius:Number = radius;
+				if (_total>0)
 				{
-					arc.fill = fill;
+					_innerRadius = radius/_total * _stackPosition; 
+					tmpRadius = _innerRadius + radius/_total * chart.columnWidthRate;
 				}
-
-				arc.stroke = stroke;
-
-				gg.geometryCollection.addItemAt(arc,0); 
-				
-				if (labelField)
+	
+				var arcCenterX:Number = chart.origin.x - radius;
+				var arcCenterY:Number = chart.origin.y - radius;
+	
+				var wSize:Number, hSize:Number;
+				wSize = hSize = radius*2;
+	
+				var aAxis:IScale;
+				if (scale1)
+					aAxis = scale1;
+				else if (chart.scale1)
+					aAxis = chart.scale1;
+	
+				dataFields[0] = dim1;
+	
+				cursor.seek(CursorBookmark.FIRST);
+				while (!cursor.afterLast)
 				{
-					var xLlb:Number = xPos, yLlb:Number = yPos;
-					if (!isNaN(_radiusLabelOffset))
+					angle = aAxis.getPosition(cursor.current[dim1]);
+					
+					var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius, chart.origin);
+					var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius, chart.origin); 
+	
+					createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
+					
+	 				if (ttGG && _extendMouseEvents)
+						gg = ttGG;
+	 				
+					var arc:IGeometry;
+					
+					if (_innerRadius > tmpRadius)
+						_innerRadius = tmpRadius;
+	
+					arc = new ArcPath(Math.max(0, _innerRadius), tmpRadius, startAngle, angle, chart.origin);
+		
+					var tempColor:int;
+					
+					if (colorField)
 					{
-						xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
-						yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
+						if (colorAxis)
+						{
+							colorFill = colorAxis.getPosition(cursor.current[colorField]);
+							fill = new SolidFill(colorFill);
+						} else if (chart.colorAxis) {
+							colorFill = chart.colorAxis.getPosition(cursor.current[colorField]);
+							fill = new SolidFill(colorFill);
+						}
+					} else if (_colors)
+					{
+						if (c < _colors.length)
+							fill = new SolidFill(_colors[c]);
+						else
+							fill = new SolidFill(_colors[_colors.length]);
+						
+						c++;
+					} else if (randomColors)
+					{
+						tempColor = Math.random() * 255 * 255 * 255;
+						arc.fill = new SolidFill(tempColor);
 					}
-					var label:RasterTextPlus = new RasterTextPlus();
-					label.text = cursor.current[labelField];
+					
+					if (fill)
+					{
+						arc.fill = fill;
+					}
+	
+					arc.stroke = stroke;
+	
+					gg.geometryCollection.addItemAt(arc,0); 
+					
+					if (labelField)
+					{
+						var xLlb:Number = xPos, yLlb:Number = yPos;
+						if (!isNaN(_radiusLabelOffset))
+						{
+							xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
+							yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
+						}
+						var label:RasterTextPlus = new RasterTextPlus();
+						label.text = cursor.current[labelField];
+						label.fontFamily = "verdana";
+						label.fontWeight = "bold";
+						label.autoSize = TextFieldAutoSize.LEFT;
+						label.fill = new SolidFill(0x000000);
+						label.x = xLlb- label.displayObject.width/2;
+						label.y = yLlb - label.displayObject.height/2;
+						gg.geometryCollection.addItem(label); 
+					}
+	
+					startAngle += angle;
+	
+	 				cursor.moveNext();
+				}
+				
+				if (displayName && aAxis && aAxis.size < 360)
+				{
+					label = new RasterTextPlus();
+					label.text = displayName;
 					label.fontFamily = "verdana";
 					label.fontWeight = "bold";
 					label.autoSize = TextFieldAutoSize.LEFT;
 					label.fill = new SolidFill(0x000000);
-					label.x = xLlb- label.displayObject.width/2;
-					label.y = yLlb - label.displayObject.height/2;
+					label.x = PolarCoordinateTransform.getX(0, _innerRadius, chart.origin);
+					label.y = PolarCoordinateTransform.getY(0, _innerRadius, chart.origin);
 					gg.geometryCollection.addItem(label); 
 				}
-
-				startAngle += angle;
-
- 				cursor.moveNext();
-			}
-			
-			if (displayName && aAxis && aAxis.size < 360)
-			{
-				label = new RasterTextPlus();
-				label.text = displayName;
-				label.fontFamily = "verdana";
-				label.fontWeight = "bold";
-				label.autoSize = TextFieldAutoSize.LEFT;
-				label.fill = new SolidFill(0x000000);
-				label.x = PolarCoordinateTransform.getX(0, _innerRadius, chart.origin);
-				label.y = PolarCoordinateTransform.getY(0, _innerRadius, chart.origin);
-				gg.geometryCollection.addItem(label); 
 			}
 		}
 	}

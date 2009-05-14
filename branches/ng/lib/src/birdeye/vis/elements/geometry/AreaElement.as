@@ -102,178 +102,188 @@ package birdeye.vis.elements.geometry
 		protected var poly:Polygon;
 		/** @Private 
 		 * Called by super.updateDisplayList when the element is ready for layout.*/
-		override protected function drawElement():void
+		override public function drawElement():void
 		{
-			var xPrev:Number, yPrev:Number;
-			var pos1:Number, pos2:Number, zPos:Number;
-			var j:Object;
-			var t:Number = 0;
-			
-			var y0:Number = getYMinPosition();
-			var y0Prev:Number;
-			var dataFields:Array = [];
-			// prepare data for a standard tooltip message in case the user
-			// has not set a dataTipFunction
-			dataFields[0] = dim1;
-			dataFields[1] = dim2;
-			if (dim3) 
-				dataFields[2] = dim3;
-
-			// shapes array defining the tooltip geometries
-			var ttShapes:Array;
-			// tooltip distance from the hitarea position
-			var ttXoffset:Number = NaN, ttYoffset:Number = NaN;
-			
-			poly = new Polygon();
-			poly.data = "";
-
-			gg = new DataItemLayout();
-			gg.target = this;
-			graphicsCollection.addItem(gg);
-			
-			// move data provider cursor at the beginning
-			cursor.seek(CursorBookmark.FIRST);
-
-			while (!cursor.afterLast)
+			if (isReadyForLayout())
 			{
-				// if the Element has its own x axis, than get the x coordinate
-				// position of the data value filtered by xField
-				if (scale1)
-					pos1 = scale1.getPosition(cursor.current[dim1]);
-				else if (chart.scale1) 
-					// otherwise use the parent chart x axis to do that
-					pos1 = chart.scale1.getPosition(cursor.current[dim1]);
+				removeAllElements();
+				var xPrev:Number, yPrev:Number;
+				var pos1:Number, pos2:Number, zPos:Number;
+				var j:Object;
+				var t:Number = 0;
 				
-				j = cursor.current[dim1];
-				// if the Element has its own y axis, than get the y coordinate
-				// position of the data value filtered by yField
-				if (scale2)
+				var y0:Number = getYMinPosition();
+				var y0Prev:Number;
+				var dataFields:Array = [];
+				// prepare data for a standard tooltip message in case the user
+				// has not set a dataTipFunction
+				dataFields[0] = dim1;
+				dataFields[1] = dim2;
+				if (dim3) 
+					dataFields[2] = dim3;
+	
+				// shapes array defining the tooltip geometries
+				var ttShapes:Array;
+				// tooltip distance from the hitarea position
+				var ttXoffset:Number = NaN, ttYoffset:Number = NaN;
+				
+				poly = new Polygon();
+				poly.data = "";
+	
+				if (ggElements && ggElements.length>0)
+					gg = ggElements[0];
+				else
 				{
-					// if the stackType is stacked100, than the y0 coordinate of 
-					// the current baseValue is added to the y coordinate of the current
-					// data value filtered by yField
+					gg = new DataItemLayout();
+					gg.target = this;
+					graphicsCollection.addItem(gg);
+				}
+				ggIndex = 1;
+				
+				// move data provider cursor at the beginning
+				cursor.seek(CursorBookmark.FIRST);
+	
+				while (!cursor.afterLast)
+				{
+					// if the Element has its own x axis, than get the x coordinate
+					// position of the data value filtered by xField
+					if (scale1)
+						pos1 = scale1.getPosition(cursor.current[dim1]);
+					else if (chart.scale1) 
+						// otherwise use the parent chart x axis to do that
+						pos1 = chart.scale1.getPosition(cursor.current[dim1]);
+					
+					j = cursor.current[dim1];
+					// if the Element has its own y axis, than get the y coordinate
+					// position of the data value filtered by yField
+					if (scale2)
+					{
+						// if the stackType is stacked100, than the y0 coordinate of 
+						// the current baseValue is added to the y coordinate of the current
+						// data value filtered by yField
+						if (_stackType == STACKED100)
+						{
+							y0 = scale2.getPosition(baseValues[j]);
+							pos2 = scale2.getPosition(
+								baseValues[j] + Math.max(0,cursor.current[dim2]));
+						} else 
+							// if not stacked, than the y coordinate is given by the own y axis
+							pos2 = scale2.getPosition(cursor.current[dim2]);
+					} else if (chart.scale2) {
+						// if no own y axis than use the parent chart y axis to achive the same
+						// as above
+						if (_stackType == STACKED100)
+						{
+							y0 = chart.scale2.getPosition(baseValues[j]);
+							pos2 = chart.scale2.getPosition(
+								baseValues[j] + Math.max(0,cursor.current[dim2]));
+						} else {
+							pos2 = chart.scale2.getPosition(cursor.current[dim2]);
+						}
+					}
+					
+					// if stacked 100 than change the default tooltip shape to a line
+					// that won't be covered by the children layering
 					if (_stackType == STACKED100)
 					{
-						y0 = scale2.getPosition(baseValues[j]);
-						pos2 = scale2.getPosition(
-							baseValues[j] + Math.max(0,cursor.current[dim2]));
-					} else 
-						// if not stacked, than the y coordinate is given by the own y axis
-						pos2 = scale2.getPosition(cursor.current[dim2]);
-				} else if (chart.scale2) {
-					// if no own y axis than use the parent chart y axis to achive the same
-					// as above
-					if (_stackType == STACKED100)
-					{
-						y0 = chart.scale2.getPosition(baseValues[j]);
-						pos2 = chart.scale2.getPosition(
-							baseValues[j] + Math.max(0,cursor.current[dim2]));
-					} else {
-						pos2 = chart.scale2.getPosition(cursor.current[dim2]);
+							ttShapes = [];
+							ttXoffset = -30;
+							ttYoffset = 20;
+							var line:Line = new Line(pos1, pos2, pos1 + + ttXoffset/3, pos2 + ttYoffset);
+							line.stroke = stroke;
+			 				ttShapes[0] = line;
 					}
-				}
-				
-				// if stacked 100 than change the default tooltip shape to a line
-				// that won't be covered by the children layering
-				if (_stackType == STACKED100)
-				{
-						ttShapes = [];
-						ttXoffset = -30;
-						ttYoffset = 20;
-						var line:Line = new Line(pos1, pos2, pos1 + + ttXoffset/3, pos2 + ttYoffset);
-						line.stroke = stroke;
-		 				ttShapes[0] = line;
-				}
-				
-				var scale2RelativeValue:Number = NaN;
-
-				if (scale3)
-				{
-					zPos = scale3.getPosition(cursor.current[dim3]);
-					scale2RelativeValue = XYZ(scale3).height - zPos;
-				} else if (chart.scale3) {
-					zPos = chart.scale3.getPosition(cursor.current[dim3]);
-					// since there is no method yet to draw a real z axis 
-					// we create an y axis and rotate it to properly visualize 
-					// a 'fake' z axis. however zPos over this y axis corresponds to 
-					// the axis height - zPos, because the y axis in Flex is 
-					// up side down. this trick allows to visualize the y axis as
-					// if it would be a z. when there will be a 3d line class, it will 
-					// be replaced
-					scale2RelativeValue = XYZ(chart.scale3).height - zPos;
-				}
-
-				if (multiScale)
-				{
-					pos1 = multiScale.scale1.getPosition(cursor.current[dim1]);
-					pos2 = INumerableScale(multiScale.scales[
-										cursor.current[multiScale.dim1]
-										]).getPosition(cursor.current[dim2]);
-				} else if (chart.multiScale) {
-					pos1 = chart.multiScale.scale1.getPosition(cursor.current[dim1]);
-					pos2 = INumerableScale(chart.multiScale.scales[
-										cursor.current[chart.multiScale.dim1]
-										]).getPosition(cursor.current[dim2]);
-				}
-
-				if (chart.coordType == VisScene.POLAR)
-				{
- 					var xPos:Number = PolarCoordinateTransform.getX(pos1, pos2, chart.origin);
-					var yPos:Number = PolarCoordinateTransform.getY(pos1, pos2, chart.origin);
- 					pos1 = xPos;
-					pos2 = yPos; 
-					poly.data += String(xPos) + "," + String(yPos) + " ";
-				}
-
-				// create a separate GeometryGroup to manage interactivity and tooltips 
-				createTTGG(cursor.current, dataFields, pos1, pos2, scale2RelativeValue, 3);
-				
-				// create the polygon only if there is more than 1 data value
-				// there cannot be an area with only the first data value 
-				if (chart.coordType == VisScene.CARTESIAN)
-					if (t++ > 0) 
+					
+					var scale2RelativeValue:Number = NaN;
+	
+					if (scale3)
 					{
-						poly = new Polygon()
-						poly.data =  String(xPrev) + "," + String(y0Prev) + " " +
-									String(xPrev) + "," + String(yPrev) + " " +
-									String(pos1) + "," + String(pos2) + " " +
-									String(pos1) + "," + String(y0);
-						poly.fill = fill;
-						poly.stroke = stroke;
-						gg.geometryCollection.addItemAt(poly,0);
+						zPos = scale3.getPosition(cursor.current[dim3]);
+						scale2RelativeValue = XYZ(scale3).height - zPos;
+					} else if (chart.scale3) {
+						zPos = chart.scale3.getPosition(cursor.current[dim3]);
+						// since there is no method yet to draw a real z axis 
+						// we create an y axis and rotate it to properly visualize 
+						// a 'fake' z axis. however zPos over this y axis corresponds to 
+						// the axis height - zPos, because the y axis in Flex is 
+						// up side down. this trick allows to visualize the y axis as
+						// if it would be a z. when there will be a 3d line class, it will 
+						// be replaced
+						scale2RelativeValue = XYZ(chart.scale3).height - zPos;
 					}
-				
-				if (_showItemRenderer)
-				{
-	 				var bounds:Rectangle = new Rectangle(pos1 - _rendererSize/2, pos2 - _rendererSize/2, _rendererSize, _rendererSize);
-					var shape:IGeometry = new itemRenderer(bounds);
-					shape.fill = fill;
-					shape.stroke = stroke;
-					gg.geometryCollection.addItem(shape);
+	
+					if (multiScale)
+					{
+						pos1 = multiScale.scale1.getPosition(cursor.current[dim1]);
+						pos2 = INumerableScale(multiScale.scales[
+											cursor.current[multiScale.dim1]
+											]).getPosition(cursor.current[dim2]);
+					} else if (chart.multiScale) {
+						pos1 = chart.multiScale.scale1.getPosition(cursor.current[dim1]);
+						pos2 = INumerableScale(chart.multiScale.scales[
+											cursor.current[chart.multiScale.dim1]
+											]).getPosition(cursor.current[dim2]);
+					}
+	
+					if (chart.coordType == VisScene.POLAR)
+					{
+	 					var xPos:Number = PolarCoordinateTransform.getX(pos1, pos2, chart.origin);
+						var yPos:Number = PolarCoordinateTransform.getY(pos1, pos2, chart.origin);
+	 					pos1 = xPos;
+						pos2 = yPos; 
+						poly.data += String(xPos) + "," + String(yPos) + " ";
+					}
+	
+					// create a separate GeometryGroup to manage interactivity and tooltips 
+					createTTGG(cursor.current, dataFields, pos1, pos2, scale2RelativeValue, 3);
+					
+					// create the polygon only if there is more than 1 data value
+					// there cannot be an area with only the first data value 
+					if (chart.coordType == VisScene.CARTESIAN)
+						if (t++ > 0) 
+						{
+							poly = new Polygon()
+							poly.data =  String(xPrev) + "," + String(y0Prev) + " " +
+										String(xPrev) + "," + String(yPrev) + " " +
+										String(pos1) + "," + String(pos2) + " " +
+										String(pos1) + "," + String(y0);
+							poly.fill = fill;
+							poly.stroke = stroke;
+							gg.geometryCollection.addItemAt(poly,0);
+						}
+					
+					if (_showItemRenderer)
+					{
+		 				var bounds:Rectangle = new Rectangle(pos1 - _rendererSize/2, pos2 - _rendererSize/2, _rendererSize, _rendererSize);
+						var shape:IGeometry = new itemRenderer(bounds);
+						shape.fill = fill;
+						shape.stroke = stroke;
+						gg.geometryCollection.addItem(shape);
+					}
+	
+					// store previous data values coordinates, to rely them 
+					// to the next data value coordinates
+					y0Prev = y0;
+					xPrev = pos1; yPrev = pos2;
+					
+					if (dim3)
+					{
+						gg.z = zPos;
+						if (isNaN(zPos))
+							zPos = 0;
+					}
+					cursor.moveNext();
 				}
-
-				// store previous data values coordinates, to rely them 
-				// to the next data value coordinates
-				y0Prev = y0;
-				xPrev = pos1; yPrev = pos2;
-				
+				if (chart.coordType == VisScene.POLAR && poly.data)
+				{
+					poly.fill = fill;
+					poly.stroke = stroke;
+					gg.geometryCollection.addItem(poly);
+				}
+	
 				if (dim3)
-				{
-					gg.z = zPos;
-					if (isNaN(zPos))
-						zPos = 0;
-				}
-				cursor.moveNext();
+					zSort();
 			}
-			if (chart.coordType == VisScene.POLAR && poly.data)
-			{
-				poly.fill = fill;
-				poly.stroke = stroke;
-				gg.geometryCollection.addItem(poly);
-			}
-
-			if (dim3)
-				zSort();
 		}
 		
 		/** @Private 

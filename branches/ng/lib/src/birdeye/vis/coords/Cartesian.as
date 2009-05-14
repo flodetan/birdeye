@@ -32,9 +32,6 @@ package birdeye.vis.coords
 	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.interfaces.*;
 	import birdeye.vis.scales.*;
-	import birdeye.vis.elements.collision.StackElement;
-	import birdeye.vis.interfaces.IElement;
-	import birdeye.vis.interfaces.IStack;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
@@ -46,10 +43,10 @@ package birdeye.vis.coords
 	import flash.geom.Rectangle;
 	
 	import mx.collections.CursorBookmark;
+	import mx.collections.IViewCursor;
 	import mx.containers.HBox;
 	import mx.containers.VBox;
 	import mx.core.Container;
-	import mx.collections.IViewCursor;
 	
 	/** A CartesianChart can be used to create any 2D or 3D cartesian charts available in the library
 	 * apart from those who might have specific features, like stackable element or data-sizable items.
@@ -653,13 +650,8 @@ package birdeye.vis.coords
 			{
 				_elementsContainer.x = chartBounds.x;
 				_elementsContainer.y = chartBounds.y;
- 				_elementsContainer.width = chartBounds.width;
+  				_elementsContainer.width = chartBounds.width;
 				_elementsContainer.height = chartBounds.height;
-    			for (var i:int = 0; i<_elements.length; i++)
-				{
-					Surface(_elements[i]).width = chartBounds.width;
-					Surface(_elements[i]).height = chartBounds.height;
-				}
  	
 				// listeners like legends will listen to this event
 				dispatchEvent(new Event("ProviderReady"));
@@ -669,6 +661,12 @@ package birdeye.vis.coords
 				else
 					transform.matrix3D = null;
  			}
+ 			for (var i:int = 0; i<_elements.length; i++)
+			{
+				Surface(_elements[i]).width = chartBounds.width;
+				Surface(_elements[i]).height = chartBounds.height;
+				IElement(_elements[i]).drawElement();
+			}
 		}
 		
 		// other methods

@@ -769,17 +769,12 @@ package birdeye.vis.elements
 			
 			stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 
-			removeAllElements();
-			
 			if (ggBackGround)
 			{
 				ggBackGround.target = this;
 				rectBackGround.width = unscaledWidth;
 				rectBackGround.height = unscaledHeight;
 			}
-
- 			if (isReadyForLayout())
- 				drawElement()
 		}
 
 		// other methods
@@ -789,12 +784,12 @@ package birdeye.vis.elements
 			e.toolTip = myTT;
 		}
 
-		protected function drawElement():void
+		public function drawElement():void
 		{
 			// to be overridden by each element implementation
 		}
 		
-		private function isReadyForLayout():Boolean
+		protected function isReadyForLayout():Boolean
 		{
 			// verify than all element axes (or chart's if none owned by the element)
 			// are ready. If they aren't the element can't be drawn, since data values
@@ -939,6 +934,8 @@ package birdeye.vis.elements
 				addChild(sortLayers[i][1]);
 		}
 
+		protected var ggElements:Array = graphicsCollection.items;
+		protected var ggIndex:Number;
 		/** @Private
 		 * Override the creation of ttGeom in order to avoid the usage of gg also in case
 		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
@@ -947,9 +944,13 @@ package birdeye.vis.elements
 									zPos:Number, radius:Number, shapes:Array = null /* of IGeometry */, 
 									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
 		{
-			ttGG = new DataItemLayout();
-			ttGG.target = chart.elementsContainer;
-			graphicsCollection.addItem(ttGG);
+			if (ggElements && ggElements.length > ggIndex)
+				ttGG = ggElements[ggIndex];
+			else {
+				ttGG = new DataItemLayout();
+				ttGG.target = chart.elementsContainer;
+				graphicsCollection.addItem(ttGG);
+			}
 			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 

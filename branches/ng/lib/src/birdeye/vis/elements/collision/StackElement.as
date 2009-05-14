@@ -43,13 +43,6 @@ package birdeye.vis.elements.collision
 
 	public class StackElement extends BaseElement implements IStack
 	{
-		private const OWN_VERTICAL_INTERVAL_CHANGES:String = "is_own_vertical_listening_interval_changes"; 
-		private const CHART_VERTICAL_INTERVAL_CHANGES:String = "is_chart_vertical_listening_interval_changes"; 
-		private const OWN_HORIZONTAL_INTERVAL_CHANGES:String = "is_own_horizontal_listening_interval_changes"; 
-		private const CHART_HORIZONTAL_INTERVAL_CHANGES:String = "is_chart_horizontal_listening_interval_changes"; 
-		
-		private var isListening:Array = [];
-		
 		protected var deltaSize:Number;
 		
 		public static const OVERLAID:String = "overlaid";
@@ -106,66 +99,18 @@ package birdeye.vis.elements.collision
 		public function StackElement()
 		{
 			super();
-			
-			isListening [OWN_VERTICAL_INTERVAL_CHANGES] = false;
-			isListening [OWN_HORIZONTAL_INTERVAL_CHANGES] = false;
-			isListening [CHART_VERTICAL_INTERVAL_CHANGES] = false;
-			isListening [CHART_HORIZONTAL_INTERVAL_CHANGES] = false;
 		}
 		
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
 
-			if (scale2)
-			{
-				if (! isListening[OWN_VERTICAL_INTERVAL_CHANGES])
-				{
-					XYZ(scale2).addEventListener("IntervalChanged", update);
-					isListening[OWN_VERTICAL_INTERVAL_CHANGES] = true;
-				}
-				if (isListening[CHART_VERTICAL_INTERVAL_CHANGES])
-				{
-					XYZ(chart.scale2).removeEventListener("IntervalChanged", update);
-				}
-			} else if (chart && chart.scale2) {
-				if (! isListening[CHART_VERTICAL_INTERVAL_CHANGES])
-				{
-					XYZ(chart.scale2).addEventListener("IntervalChanged", update);
-					isListening[CHART_VERTICAL_INTERVAL_CHANGES] = true;
-				}
-			}
-
-			if (scale1)
-			{
-				if (! isListening[OWN_HORIZONTAL_INTERVAL_CHANGES])
-				{
-					XYZ(scale1).addEventListener("IntervalChanged", update);
-					isListening[OWN_HORIZONTAL_INTERVAL_CHANGES] = true;
-				}
-				if (isListening[CHART_HORIZONTAL_INTERVAL_CHANGES])
-				{
-					XYZ(chart.scale1).removeEventListener("IntervalChanged", update);
-				}
-			} else if (chart && chart.scale1) {
-				if (! isListening[CHART_HORIZONTAL_INTERVAL_CHANGES])
-				{
-					XYZ(chart.scale1).addEventListener("IntervalChanged", update);
-					isListening[CHART_HORIZONTAL_INTERVAL_CHANGES] = true;
-				}
-			}
-			
 			if (chart is Cartesian && Cartesian(chart).is3D)
 				deltaSize = 1/5;
 			else 
 				deltaSize = 3/5;
 		}
 		
-		private function update(e:Event):void
-		{
-			invalidateDisplayList();
-		}
-
 		override protected function getMaxValue(field:String):Number
 		{
 			var max:Number = super.getMaxValue(field);

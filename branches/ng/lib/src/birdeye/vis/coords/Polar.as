@@ -156,7 +156,7 @@ package birdeye.vis.coords
 			_multiScale.chart = this;
 		}
 
-		protected var _type:String = PolarStackElement.STACKED100;
+		protected var _type:String = StackElement.STACKED100;
 		/** Set the type of stack, overlaid if the element are shown on top of the other, 
 		 * or stacked if they appear staked one after the other (horizontally), or 
 		 * stacked100 if the columns are stacked one after the other (vertically).*/
@@ -309,7 +309,7 @@ package birdeye.vis.coords
 				
 				_maxStacked100 = NaN;
 
-				if (_type==PolarStackElement.STACKED100)
+				if (_type==StackElement.STACKED100)
 				{
 					// {indexElements: i, baseValues: Array_for_each_Elements}
 					var allElementsBaseValues:Array = []; 
@@ -492,12 +492,6 @@ package birdeye.vis.coords
 				}
 			}
 			
-			for (i = 0; i<_elements.length; i++)
-			{
-				DisplayObject(_elements[i]).width = unscaledWidth;
-				DisplayObject(_elements[i]).height = unscaledHeight;
-			}
-			
 			if (_showAllDataTips)
 			{
 				for (i = 0; i<numChildren; i++)
@@ -512,6 +506,13 @@ package birdeye.vis.coords
 				(scale1 && scale1 is CategoryAngle))
 				drawLabels()
 
+			for (i = 0; i<_elements.length; i++)
+			{
+				DisplayObject(_elements[i]).width = unscaledWidth;
+				DisplayObject(_elements[i]).height = unscaledHeight;
+				IElement(_elements[i]).drawElement();
+			}
+			
 			// listeners like legends will listen to this event
 			dispatchEvent(new Event("ProviderReady"));
 		}
