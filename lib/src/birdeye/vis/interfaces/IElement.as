@@ -125,5 +125,8 @@ package birdeye.vis.interfaces
 
 		/** Implement function to manage mouse double click events.*/
 		function onMouseDoubleClick(e:MouseEvent):void;
+
+		/** Implement drawElement.*/
+		function drawElement():void;
 	}
 }

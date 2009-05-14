@@ -29,6 +29,7 @@ package birdeye.vis.elements.geometry
 {
 	import birdeye.vis.VisScene;
 	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.guides.renderers.LineRenderer;
 	import birdeye.vis.scales.*;
 	
@@ -39,7 +40,7 @@ package birdeye.vis.elements.geometry
 	
 	import mx.collections.CursorBookmark;
 
-	public class LineElement extends CartesianElement
+	public class LineElement extends BaseElement
 	{
 		private var _form:String;
 		public function set form(val:String):void
@@ -61,128 +62,138 @@ package birdeye.vis.elements.geometry
 
 		/** @Private 
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
-		override protected function drawElement():void
+		override public function drawElement():void
 		{
-			var xPrev:Number, yPrev:Number;
-			var pos1:Number, pos2:Number, zPos:Number;
-			var j:Number = 0;
-
-			var dataFields:Array = [];
-			// prepare data for a standard tooltip message in case the user
-			// has not set a dataTipFunction
-			dataFields[0] = dim1;
-			dataFields[1] = dim2;
-			if (dim3) 
-				dataFields[2] = dim3;
-
-			gg = new DataItemLayout();
-			gg.target = this;
-			addChild(gg);
-
-			cursor.seek(CursorBookmark.FIRST);
-			
-			while (!cursor.afterLast)
+			if (isReadyForLayout())
 			{
-				if (scale1)
+				removeAllElements();
+				var xPrev:Number, yPrev:Number;
+				var pos1:Number, pos2:Number, zPos:Number;
+				var j:Number = 0;
+	
+				var dataFields:Array = [];
+				// prepare data for a standard tooltip message in case the user
+				// has not set a dataTipFunction
+				dataFields[0] = dim1;
+				dataFields[1] = dim2;
+				if (dim3) 
+					dataFields[2] = dim3;
+	
+				if (ggElements && ggElements.length>0)
+					gg = ggElements[0];
+				else
 				{
-					pos1 = scale1.getPosition(cursor.current[dim1]);
-				} else if (chart.scale1) {
-					pos1 = chart.scale1.getPosition(cursor.current[dim1]);
+					gg = new DataItemLayout();
+					gg.target = this;
+					graphicsCollection.addItem(gg);
 				}
+				ggIndex = 1;
+	
+				cursor.seek(CursorBookmark.FIRST);
 				
-				if (scale2)
+				while (!cursor.afterLast)
 				{
-					pos2 = scale2.getPosition(cursor.current[dim2]);
-					dataFields[1] = dim2;
-				} else if (chart.scale2) {
-					pos2 = chart.scale2.getPosition(cursor.current[dim2]);
-				}
-				
-				var scale2RelativeValue:Number = NaN;
-
-				if (scale3)
-				{
-					zPos = scale3.getPosition(cursor.current[dim3]);
-					scale2RelativeValue = XYZ(scale3).height - zPos;
-				} else if (chart.scale3) {
-					zPos = chart.scale3.getPosition(cursor.current[dim3]);
-					// since there is no method yet to draw a real z axis 
-					// we create an y axis and rotate it to properly visualize 
-					// a 'fake' z axis. however zPos over this y axis corresponds to 
-					// the axis height - zPos, because the y axis in Flex is 
-					// up side down. this trick allows to visualize the y axis as
-					// if it would be a z. when there will be a 3d line class, it will 
-					// be replaced
-					scale2RelativeValue = XYZ(chart.scale3).height - zPos;
-				}
-
-				if (chart.coordType == VisScene.POLAR)
-				{
- 					var xPos:Number = PolarCoordinateTransform.getX(pos1, pos2, chart.origin);
-					var yPos:Number = PolarCoordinateTransform.getY(pos1, pos2, chart.origin);
- 					pos1 = xPos;
-					pos2 = yPos; 
-					if (j == 0)
+					if (scale1)
 					{
-						var firstX:Number = pos1, firstY:Number = pos2;
+						pos1 = scale1.getPosition(cursor.current[dim1]);
+					} else if (chart.scale1) {
+						pos1 = chart.scale1.getPosition(cursor.current[dim1]);
 					}
-				}
-
-				// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
-				// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-				createTTGG(cursor.current, dataFields, pos1, pos2, scale2RelativeValue, 3);
-
-				if (dim3)
-				{
-					if (!isNaN(zPos))
+					
+					if (scale2)
 					{
-						gg = new DataItemLayout();
-						gg.target = this;
-						graphicsCollection.addItem(gg);
-						ttGG.z = gg.z = zPos;
-					} else
-						zPos = 0;
+						pos2 = scale2.getPosition(cursor.current[dim2]);
+						dataFields[1] = dim2;
+					} else if (chart.scale2) {
+						pos2 = chart.scale2.getPosition(cursor.current[dim2]);
+					}
+					
+					var scale2RelativeValue:Number = NaN;
+	
+					if (scale3)
+					{
+						zPos = scale3.getPosition(cursor.current[dim3]);
+						scale2RelativeValue = XYZ(scale3).height - zPos;
+					} else if (chart.scale3) {
+						zPos = chart.scale3.getPosition(cursor.current[dim3]);
+						// since there is no method yet to draw a real z axis 
+						// we create an y axis and rotate it to properly visualize 
+						// a 'fake' z axis. however zPos over this y axis corresponds to 
+						// the axis height - zPos, because the y axis in Flex is 
+						// up side down. this trick allows to visualize the y axis as
+						// if it would be a z. when there will be a 3d line class, it will 
+						// be replaced
+						scale2RelativeValue = XYZ(chart.scale3).height - zPos;
+					}
+	
+					if (chart.coordType == VisScene.POLAR)
+					{
+	 					var xPos:Number = PolarCoordinateTransform.getX(pos1, pos2, chart.origin);
+						var yPos:Number = PolarCoordinateTransform.getY(pos1, pos2, chart.origin);
+	 					pos1 = xPos;
+						pos2 = yPos; 
+						if (j == 0)
+						{
+							var firstX:Number = pos1, firstY:Number = pos2;
+						}
+					}
+	
+					// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
+					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
+					createTTGG(cursor.current, dataFields, pos1, pos2, scale2RelativeValue, 3);
+	
+					if (dim3)
+					{
+						if (!isNaN(zPos))
+						{
+							gg = new DataItemLayout();
+							gg.target = this;
+							graphicsCollection.addItem(gg);
+							ttGG.z = gg.z = zPos;
+						} else
+							zPos = 0;
+					}
+					
+					if (j++ > 0)
+					{
+						var line:Line = new Line(xPrev,yPrev,pos1,pos2);
+						line.fill = fill;
+						line.stroke = stroke;
+						gg.geometryCollection.addItemAt(line,0);
+						line = null;
+					}
+	
+					if (_showItemRenderer)
+					{
+		 				var bounds:Rectangle = new Rectangle(pos1 - _rendererSize/2, pos2 - _rendererSize/2, _rendererSize, _rendererSize);
+						var shape:IGeometry = new itemRenderer(bounds);
+						shape.fill = fill;
+						shape.stroke = stroke;
+						gg.geometryCollection.addItem(shape);
+					}
+	
+					xPrev = pos1; yPrev = pos2;
+					if (dim3)
+					{
+						gg.z = zPos;
+						if (isNaN(zPos))
+							zPos = 0;
+					}
+					cursor.moveNext();
 				}
 				
-				if (j++ > 0)
+				if (chart.coordType == VisScene.POLAR && !isNaN(firstX) && !isNaN(firstY))
 				{
-					var line:Line = new Line(xPrev,yPrev,pos1,pos2);
-					line.fill = fill;
-					line.stroke = stroke;
-					gg.geometryCollection.addItemAt(line,0);
-					line = null;
+						line = new Line(pos1,pos2, firstX, firstY);
+						line.fill = fill;
+						line.stroke = stroke;
+						gg.geometryCollection.addItemAt(line,0);
+						line = null;
 				}
-
-				if (_showItemRenderer)
-				{
-	 				var bounds:Rectangle = new Rectangle(pos1 - _rendererSize/2, pos2 - _rendererSize/2, _rendererSize, _rendererSize);
-					var shape:IGeometry = new itemRenderer(bounds);
-					shape.fill = fill;
-					shape.stroke = stroke;
-					gg.geometryCollection.addItem(shape);
-				}
-
-				xPrev = pos1; yPrev = pos2;
+	
 				if (dim3)
-				{
-					gg.z = zPos;
-					if (isNaN(zPos))
-						zPos = 0;
-				}
-				cursor.moveNext();
+					zSort();
 			}
-			
-			if (chart.coordType == VisScene.POLAR && !isNaN(firstX) && !isNaN(firstY))
-			{
-					line = new Line(pos1,pos2, firstX, firstY);
-					line.fill = fill;
-					line.stroke = stroke;
-					gg.geometryCollection.addItemAt(line,0);
-					line = null;
-			}
-
-			if (dim3)
-				zSort();
 		}
  	}
 }

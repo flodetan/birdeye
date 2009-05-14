@@ -51,8 +51,6 @@ package birdeye.vis.scales
 		{
 			_interval = val;
 			isGivenInterval = true;
-			if (scaleType == CATEGORY)
-				dispatchEvent(new Event("IntervalChanged"));
 			invalidateProperties();
 			invalidateDisplayList();
 		}
