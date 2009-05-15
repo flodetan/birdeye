@@ -291,10 +291,12 @@ package birdeye.vis.coords
 						switch (scale1.placement)
 						{
 							case BaseScale.TOP:
-								topContainer.addChild(DisplayObject(scale1));
+								if (!topContainer.contains(DisplayObject(scale1)))
+									topContainer.addChild(DisplayObject(scale1));
 								break; 
 							case BaseScale.BOTTOM:
-								bottomContainer.addChild(DisplayObject(scale1));
+								if (!bottomContainer.contains(DisplayObject(scale1)))
+									bottomContainer.addChild(DisplayObject(scale1));
 								break;
 						}
 					} else 
@@ -306,10 +308,12 @@ package birdeye.vis.coords
 						switch (scale2.placement)
 						{
 							case BaseScale.LEFT:
-								leftContainer.addChild(DisplayObject(scale2));
+								if (!leftContainer.contains(DisplayObject(scale2)))
+									leftContainer.addChild(DisplayObject(scale2));
 								break;
 							case BaseScale.RIGHT:
-								rightContainer.addChild(DisplayObject(scale2));
+								if (!rightContainer.contains(DisplayObject(scale2)))
+									rightContainer.addChild(DisplayObject(scale2));
 								break;
 						}
 					} else 
@@ -318,7 +322,8 @@ package birdeye.vis.coords
 					var tmpScale3:IScale = IElement(elements[i]).scale3;
 					if (tmpScale3 && tmpScale3 is IScaleUI)
 					{
-						zContainer.addChild(DisplayObject(tmpScale3));
+						if (!zContainer.contains(DisplayObject(tmpScale3)))
+							zContainer.addChild(DisplayObject(tmpScale3));
 						
 						// this will be replaced by a depth property 
  						IScale(tmpScale3).size = width; 
@@ -337,7 +342,8 @@ package birdeye.vis.coords
 			if (_scale3 && _scale3 is IScaleUI)
 			{
 				_is3D = true;
-				zContainer.addChild(DisplayObject(_scale3));
+				if (!zContainer.contains(DisplayObject(_scale3)))
+					zContainer.addChild(DisplayObject(_scale3));
 				// this will be replaced by a depth property 
  				IScale(_scale3).size = width; 
  				// the scale3 is in reality an Scale2 which is rotated of 90 degrees
@@ -356,9 +362,13 @@ package birdeye.vis.coords
 					createScale2();
 					
 				if (_scale2.placement == BaseScale.RIGHT)
-					rightContainer.addChild(DisplayObject(_scale2));
-				else
-					leftContainer.addChild(DisplayObject(_scale2));
+				{
+					if (!rightContainer.contains(DisplayObject(_scale2)))
+						rightContainer.addChild(DisplayObject(_scale2));
+				} else {
+					if (!leftContainer.contains(DisplayObject(_scale2)))
+						leftContainer.addChild(DisplayObject(_scale2));
+				}
 			}
  			// if some elements have no own x axis, than create a default one for the chart
 			// that will be used by all elements without a x axis
@@ -368,9 +378,13 @@ package birdeye.vis.coords
 					createScale1();
 
 				if (_scale1.placement == BaseScale.TOP)
-					topContainer.addChild(DisplayObject(_scale1));
-				else
-					bottomContainer.addChild(DisplayObject(_scale1));
+				{
+					if (!topContainer.contains(DisplayObject(_scale1)))
+						topContainer.addChild(DisplayObject(_scale1));
+				} else {
+					if (!bottomContainer.contains(DisplayObject(_scale1)))
+						bottomContainer.addChild(DisplayObject(_scale1));
+				}
 			}
 			
 			// when elements are loaded, set their stack type to the 

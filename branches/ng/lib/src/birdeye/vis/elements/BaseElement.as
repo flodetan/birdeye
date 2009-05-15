@@ -408,7 +408,8 @@ package birdeye.vis.elements
 	  		{
 		  		_cursor = ICollectionView(_dataProvider).createCursor();
 		  		
-		  		// we must invalidate also the chart properties and display list
+		  		// in case the chart is cartesian, we must invalidate 
+		  		// also the chart properties and display list
 		  		// to let the chart update with the element data provider change. in fact
 		  		// the element dataprovider modifies the chart data and axes properties
 		  		// therefore it modifies the chart properties and displaying
