@@ -934,7 +934,6 @@ package birdeye.vis.elements
 				addChild(sortLayers[i][1]);
 		}
 
-		protected var ggElements:Array = graphicsCollection.items;
 		protected var ggIndex:Number;
 		/** @Private
 		 * Override the creation of ttGeom in order to avoid the usage of gg also in case
@@ -944,13 +943,14 @@ package birdeye.vis.elements
 									zPos:Number, radius:Number, shapes:Array = null /* of IGeometry */, 
 									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
 		{
-			if (ggElements && ggElements.length > ggIndex)
-				ttGG = ggElements[ggIndex];
+			if (graphicsCollection.items && graphicsCollection.items.length > ggIndex)
+				ttGG = graphicsCollection.items[ggIndex];
 			else {
 				ttGG = new DataItemLayout();
-				ttGG.target = chart.elementsContainer;
 				graphicsCollection.addItem(ttGG);
 			}
+			ggIndex++;
+			ttGG.target = chart.elementsContainer;
 			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 
@@ -1138,7 +1138,7 @@ package birdeye.vis.elements
 				}
 			} 
 
-			for (i = numChildren - 1; i>=0; i--)
+/* 			for (i = numChildren - 1; i>=0; i--)
 			{
 				if (getChildAt(i) is DataItemLayout)
 				{
@@ -1151,7 +1151,7 @@ package birdeye.vis.elements
 				removeChildAt(i);
 			}
 			graphicsCollection.items = [];
-		}
+ */		}
 		
 		protected var rectBackGround:RegularRectangle;
 		protected var ggBackGround:GeometryGroup;
