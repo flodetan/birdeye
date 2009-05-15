@@ -74,14 +74,14 @@ package birdeye.vis.elements.geometry
 	
 				var xPos:Number, yPos:Number, zPos:Number = NaN;
 
-				if (ggElements && ggElements.length>0)
-					gg = ggElements[0];
+				if (graphicsCollection.items && graphicsCollection.items.length>0)
+					gg = graphicsCollection.items[0];
 				else
 				{
 					gg = new DataItemLayout();
-					gg.target = this;
 					graphicsCollection.addItem(gg);
 				}
+				gg.target = this;
 				ggIndex = 1;
 	
 				cursor.seek(CursorBookmark.FIRST);
