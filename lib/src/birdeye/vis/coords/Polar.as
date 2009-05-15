@@ -222,10 +222,14 @@ package birdeye.vis.coords
 					if (cursor || IElement(_elements[i]).cursor)
 						nCursors += 1;
 
-					addChild(DisplayObject(elements[i]));
+					if (!contains(DisplayObject(elements[i])))
+						addChild(DisplayObject(elements[i]));
+
 					if (IElement(elements[i]).scale2)
-						addChild(DisplayObject(IElement(elements[i]).scale2));
-					else 
+					{
+						if (!contains(DisplayObject(IElement(elements[i]).scale2)))
+							addChild(DisplayObject(IElement(elements[i]).scale2));
+					} else 
 						needDefaultScale2 = true;
 
 					if (! IElement(elements[i]).scale1)
@@ -253,7 +257,8 @@ package birdeye.vis.coords
 					createScale2();
 
 				if (_scale2 is IScaleUI)
-					addChild(DisplayObject(_scale2));
+					if (!contains(DisplayObject(_scale2)))
+						addChild(DisplayObject(_scale2));
 			}
 
 			// if some elements have no own angle axis, than create a default one for the chart
