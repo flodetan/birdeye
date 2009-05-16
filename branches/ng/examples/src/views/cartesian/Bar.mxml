@@ -59,7 +59,7 @@
 		 	<elements:BarElement extendMouseEvents="true" dim1="R4" styleName="grad4" dim2="subject" displayName="R4" />
 		 </coords:elements>
 	</coords:Cartesian>
-	<guides:Legend dataProvider="{bc2}" direction="horizontal" backgroundColor="0xffffff"/>	
+	<guides:Legend dataProvider="{bc2}" direction="horizontal" />	
 	</mx:VBox>
 	
 </mx:VBox>

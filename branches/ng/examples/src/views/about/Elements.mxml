@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" paddingLeft="150" paddingRight="150" paddingTop="50"  width="100%" height="100%">
+	
+	<mx:Label text="Elements 101" fontSize="14" />
+	<mx:TextArea editable="false" text="Temp" wordWrap="true" width="100%" />	
+
+	<mx:Label text="How to use..." fontSize="14" />
+	<mx:TextArea editable="false" text="Temp" wordWrap="true" width="100%" />
+
+	
+	
+</mx:VBox>

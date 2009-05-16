@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" paddingLeft="150" paddingRight="150" paddingTop="50" width="100%" height="100%">
+	
+	<mx:Label text="What is BirdEye?" fontSize="14" />
+	<mx:TextArea editable="false" text="BirdEye is a community project to advance the design and development of a comprehensive open source information visualization and visual analytics library for Adobe Flex. The actionscript-based library enables users to create multi-dimensional data visualization interfaces for the analysis and presentation of information." wordWrap="true" height="75" width="100%" />	
+
+	<mx:Label text="What is a Declarative Visual Analytics Language?" fontSize="14" />
+	<mx:TextArea editable="false" text="DVAL is a XML-based syntax language for specifying visual representations. The approach is based on the concepts of Leland Wilkinson's book The Grammar of Graphics. This book was written for statisticians, computer scientists, geographers, researchers, and others interested in visualizing data. In this book he describes a foundation for producing a comprehensive information visualization language." height="75" wordWrap="true" width="100%" />
+	
+	<mx:Label text="How does it work?" fontSize="14" />
+	<mx:TextArea editable="false" text="The advantage of the DVAL is that all visuals are created using the same structure and logic.  Learn the basics and virtually any representation can be designed. The structure is based on the following seven concepts:" wordWrap="true" width="100%" />
+	<mx:HBox >
+		<mx:Spacer width="50" />
+		<mx:VBox >
+			<mx:Label text="Source: defines the data sources used for the visualization" color="#999999" />
+			<mx:Label text="Data: defines the data variables" color="#999999" />
+			<mx:Label text="Coordinates: defines the coordinate system" color="#999999" />
+			<mx:Label text="Scales: defines the logic of the coordinate system" color="#999999" />
+			<mx:Label text="Elements: defines primitive and complex drawing methods" color="#999999" />
+			<mx:Label text="Guides: provides styles, aesthetics, and surrounds such as axes, grids, and legends" color="#999999" />
+			<mx:Label text="Transforms: provides specialized computation modifiers for graph layouts, geographics projections, etc." color="#999999" />
+		</mx:VBox>
+	</mx:HBox>
 	
 </mx:VBox>

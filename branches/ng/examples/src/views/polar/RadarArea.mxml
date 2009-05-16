@@ -64,7 +64,7 @@
 			
 		</polar:elements>
 	</polar:Polar>
-	<legend:Legend dataProvider="{rd}" direction="horizontal" backgroundColor="0xffffff"/>
+	<legend:Legend dataProvider="{rd}" direction="horizontal" />
 	
 </mx:VBox>
 </mx:VBox>
