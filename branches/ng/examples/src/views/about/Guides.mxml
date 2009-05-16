@@ -2,10 +2,10 @@
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" paddingLeft="150" paddingRight="150" paddingTop="50"  width="100%" height="100%">
 
 	<mx:Label text="Guides 101" fontSize="14" />
-	<mx:TextArea editable="false" text="Temp" wordWrap="true" width="100%" />	
+	<mx:TextArea editable="false" text="The guide tag provides aesthetics and surrounds such as axes, grids, and legend." wordWrap="true" width="100%" />	
 
 	<mx:Label text="How to use..." fontSize="14" />
-	<mx:TextArea editable="false" text="Temp" wordWrap="true" width="100%" />
+	<mx:TextArea editable="false" text="Under construction..." wordWrap="true" width="100%" />
 
 	
 </mx:VBox>

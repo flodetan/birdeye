@@ -2,10 +2,23 @@
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" paddingLeft="150" paddingRight="150" paddingTop="50"  width="100%" height="100%">
 
 	<mx:Label text="Scales 101" fontSize="14" />
-	<mx:TextArea editable="false" text="Temp" wordWrap="true" width="100%" />	
+	<mx:TextArea editable="false" text="The Scale tag specifies the type of scale for the dimensions and the range for the scale. A scale may be placed and rotated to the users specifications. A visual can have numerous scales." wordWrap="true" width="100%" />	
 
 	<mx:Label text="How to use..." fontSize="14" />
-	<mx:TextArea editable="false" text="Temp" wordWrap="true" width="100%" />
-
+	<mx:TextArea editable="false" text="To specify a scale, use the following:" wordWrap="true" width="100%" />
+	
+	<mx:Text width="100%" color="yellow" >
+        <mx:htmlText>
+            <![CDATA[
+                <p>&lt; scales:Scales &gt;<br>
+                          &lt; scales:Category id= &quot; myX &quot; categoryField=&quot;subject&quot; placement=&quot; bottom &quot; &gt;<br>
+                          &lt; scales:Linear id= &quot; myY &quot; placement=&quot; right &quot; &gt;<br>
+                &lt; /scales:Scales &gt;
+                </p>
+            ]]>
+        </mx:htmlText>
+    </mx:Text>
+	
+	<mx:TextArea editable="false" text="Virtually all conventional scale types are available such as Category, Numeric, Linear, Log, etc..." wordWrap="true" width="100%" />
 	
 </mx:VBox>
