@@ -4,9 +4,13 @@
 	xmlns:cartesian="views.cartesian.*" 
 	xmlns:polar="views.polar.*"
 	xmlns:geo="views.geo.*"
+	xmlns:graphs="views.graphs.*"
+	xmlns:recipes="views.recipes.*"
+	xmlns:about="views.about.*"
+	backgroundGradientColors="[#222222, #222222]"
 	>
 
-	<mx:Style source="styles/main.css" />
+	<mx:Style source="styles/darkroom.css" />
 	
 	<mx:Box width="100%" height="100%" 
 	horizontalAlign="center" verticalAlign="top" 
@@ -27,8 +31,11 @@
 		<mx:TabNavigator width="100%" height="100%" paddingLeft="5" paddingRight="5" paddingBottom="5" creationPolicy="auto">
 			<cartesian:Cartesian label="Cartesian" width="100%" height="100%"/>
 			<polar:Polar label="Polar" width="100%" height="100%"/>
-<!--			<geo:World label="Polar" width="100%" height="100%"/>
--->		</mx:TabNavigator>
+			<geo:Maps label="Maps" width="100%" height="100%"/>
+			<graphs:Graphs label="Graphs" width="100%" height="100%"/>
+			<recipes:Recipes label="Recipes" width="100%" height="100%"/>
+			<about:About label="About..." width="100%" height="100%"/>
+		</mx:TabNavigator>
 	
 	</mx:VBox>
 	</mx:Box>

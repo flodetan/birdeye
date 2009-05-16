@@ -5,7 +5,7 @@
 	xmlns:elements="birdeye.vis.elements.geometry.*"
 	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
-	backgroundColor="#ffffff" 
+	backgroundColor="#3f3f3f" 
 	creationComplete="createDT()" >
 
 <mx:Script>
