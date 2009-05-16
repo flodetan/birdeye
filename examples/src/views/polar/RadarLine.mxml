@@ -68,7 +68,7 @@
 			<pseries:PointElement scale1="{c}" scale2="{l2}" styleName="grad5" dim1="subject" dim2="R5" displayName="R5"/>
 		</polar:elements>
 	</polar:Polar>
-	<legend:Legend dataProvider="{rd}" direction="horizontal" backgroundColor="0xffffff"/>
+	<legend:Legend dataProvider="{rd}" direction="horizontal" />
 	
 </mx:VBox>
 </mx:VBox>

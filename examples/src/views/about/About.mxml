@@ -8,7 +8,11 @@
 
 	<mx:TabNavigator id="nav" height="100%" width="100%" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" creationPolicy="auto">
 		<about:Overview label="Overview" width="100%" height="100%"/>
-		
-		
+		<about:Coordinates label="Coordinates" width="100%" height="100%"/>
+		<about:Scales label="Scales" width="100%" height="100%"/>
+		<about:Elements label="Elements" width="100%" height="100%"/>
+		<about:Guides label="Guides" width="100%" height="100%"/>
+		<about:Transforms label="Transforms" width="100%" height="100%"/>
+		<about:Recipe label="Recipe" width="100%" height="100%"/>
 	</mx:TabNavigator>
 </mx:VBox>

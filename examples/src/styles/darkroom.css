@@ -1278,8 +1278,11 @@ TextInput
 */
 TextArea
 {
-	color: #000000;
+	color: #999999;
 	fontFamily:"Myriad Pro";
+	fontSize: 12;
+	backgroundColor: #3f3f3f;
+	borderStyle: none;
 }		
 
 /*
@@ -1289,7 +1292,7 @@ TextArea
 */
 ToolTip
 {
-	background-image: 		Embed("/assets/botones/toolTip.png", scaleGridTop="4", scaleGridBottom="5", scaleGridLeft="7", scaleGridRight="16");
+	background-image: 		Embed("/assets/skins/toolTip.png", scaleGridTop="4", scaleGridBottom="5", scaleGridLeft="7", scaleGridRight="16");
 	color:					#333333;
 	border-style:			none;
 	border-color:			none;

@@ -67,7 +67,7 @@
 			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad5" dim1="subject" dim2="R5" displayName="R5"/>
 		</polar:elements>
 	</polar:Polar>
-	<legend:Legend dataProvider="{pc1}" direction="horizontal" backgroundColor="0xffffff"/>
+	<legend:Legend dataProvider="{pc1}" direction="horizontal" />
 	
 </mx:VBox>
 
