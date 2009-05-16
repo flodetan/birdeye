@@ -62,7 +62,7 @@
 			<scales:Numeric scaleType="constant" showAxis="false"/>
 		</polar:scale2>
 		<polar:colorAxis>
-			<scales:Color range="{[0x9900ff,0x990016]}"/>
+			<scales:Color range="{[0xE8990A,0x123FFF]}"/>
 		</polar:colorAxis>
 		<polar:scales>
 			<scales:PercentAngle id="a" size="270"/>
