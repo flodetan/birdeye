@@ -2,11 +2,30 @@
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" paddingLeft="150" paddingRight="150" paddingTop="50"  width="100%" height="100%">
 	
 	<mx:Label text="Elements 101" fontSize="14" />
-	<mx:TextArea editable="false" text="Temp" wordWrap="true" width="100%" />	
+	<mx:TextArea editable="false" text="The Element tag specifies the drawing logic used to represent a visual. Primitive elements include points, bars, lines, etc.; Schema elements are used for complex structures such as maps. Multiple elements can be combined to produce a complex multi-dimensional graphic." wordWrap="true" width="100%" />	
 
 	<mx:Label text="How to use..." fontSize="14" />
-	<mx:TextArea editable="false" text="Temp" wordWrap="true" width="100%" />
+	<mx:TextArea editable="false" text="Elements serve as a data drawing palette.  There are primitive geometric types such as Line, and complex such as Map.  Elements have location fields such as X, Y, and Z, as well as property fields such as radius, color, and shape." wordWrap="true" width="100%" />
 
+	<mx:Text width="100%" color="yellow" >
+        <mx:htmlText>
+            <![CDATA[
+                <p>&lt; elements:Elements &gt;<br>
+                          &lt; elements:PointElement id= &quot; myPoint &quot; dim1=&quot; subject &quot; dim2=&quot; value1 &quot; / &gt;<br>
+                          &lt; elements:BarElement id= &quot; myBar &quot; dim1=&quot; subject &quot; dim2=&quot; value2 &quot; / &gt;<br>
+                          &lt; elements:ColumnElement id= &quot; myColumn &quot; dim1=&quot; subject &quot; dim2=&quot; value3 &quot; / &gt;<br>
+                          &lt; elements:LineElement id= &quot; myLine &quot; dim1=&quot; subject &quot; dim2=&quot; value4 &quot; / &gt;<br>
+                          &lt; elements:PolygonElement id= &quot; myPolygon &quot; dim1=&quot; subject &quot; dim2=&quot; value5 &quot; / &gt;<br>
+                          &lt; elements:PathElement id= &quot; myPath &quot; dim1=&quot; subject &quot; dim2=&quot; value1 &quot; / &gt;<br>
+                          &lt; elements:WorldMapElement id= &quot; myMap &quot; / &gt;<br>
+                &lt; /elements:Elements &gt;
+                </p>
+            ]]>
+        </mx:htmlText>
+    </mx:Text>
+	
+	<mx:TextArea editable="false" text="Elements can be stacked, formed, shaped, styled, and handle events for interaction." wordWrap="true" width="100%" />
+	
 	
 	
 </mx:VBox>

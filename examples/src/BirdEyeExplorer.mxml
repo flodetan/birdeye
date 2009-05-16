@@ -18,14 +18,19 @@
 	<mx:Spacer height="5" />	
 	
 	<mx:VBox width="1000" height="744"
-		horizontalGap="5" 
+		horizontalGap="0" 
 		paddingTop="5" paddingLeft="5" paddingRight="5" paddingBottom="5" 
 		horizontalScrollPolicy="off" verticalScrollPolicy="off" >
 	
-		<mx:HBox width="100%" height="20" 
+		<mx:HBox width="100%" height="55" 
 		horizontalAlign="left" verticalAlign="middle" 
 		horizontalScrollPolicy="off" verticalScrollPolicy="off" >
-		<mx:Label text="BIRDEYE the Declarative Visual Analytics Library" fontSize="12" />
+		<mx:Image id="bdLogo" source="@Embed('assets/icons/logo.png')"/>
+		<mx:Label text="BIRDEYE the Declarative Visual Analytics Library" fontSize="14" />
+		<mx:Spacer width="100%" />
+		
+		
+
 		</mx:HBox>
 	
 		<mx:TabNavigator width="100%" height="100%" paddingLeft="5" paddingRight="5" paddingBottom="5" creationPolicy="auto">
@@ -36,6 +41,8 @@
 			<recipes:Recipes label="Recipes" width="100%" height="100%"/>
 			<about:About label="About..." width="100%" height="100%"/>
 		</mx:TabNavigator>
+		
+		<mx:Label text="Last Update: 15 May 09" fontSize="10" color="#999999" />
 	
 	</mx:VBox>
 	</mx:Box>
