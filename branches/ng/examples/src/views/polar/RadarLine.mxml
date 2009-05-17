@@ -50,22 +50,12 @@
 		<polar:multiScale>
 			<axis:MultiScale dim1="subject"/>
 		</polar:multiScale>
-
-		<polar:scales>
-			<axis:CategoryAngle id="c" categoryField="subject"/>
-			<axis:Linear id="l2" placement="vertical_center" sizeLabel="12"/>
-		</polar:scales>
 		<polar:elements>
-			<pseries:LineElement styleName="solid1" scale1="{c}" scale2="{l2}" dim1="subject" dim2="R1" displayName="R1"/>
-			<pseries:LineElement styleName="solid2" scale1="{c}" scale2="{l2}" dim1="subject" dim2="R2" displayName="R2"/>
-			<pseries:LineElement styleName="solid3" scale1="{c}" scale2="{l2}" dim1="subject" dim2="R3" displayName="R3"/>
-			<pseries:LineElement styleName="solid4" scale1="{c}" scale2="{l2}" dim1="subject" dim2="R4" displayName="R4"/>
-			<pseries:LineElement styleName="solid5" scale1="{c}" scale2="{l2}" dim1="subject" dim2="R5" displayName="R5"/>
-			<pseries:PointElement scale1="{c}" scale2="{l2}" styleName="grad1" dim1="subject" dim2="R1" displayName="R1"/>
-			<pseries:PointElement scale1="{c}" scale2="{l2}" styleName="grad2" dim1="subject" dim2="R2" displayName="R2"/>
-			<pseries:PointElement scale1="{c}" scale2="{l2}" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
-			<pseries:PointElement scale1="{c}" scale2="{l2}" styleName="grad4" dim1="subject" dim2="R4" displayName="R4"/>
-			<pseries:PointElement scale1="{c}" scale2="{l2}" styleName="grad5" dim1="subject" dim2="R5" displayName="R5"/>
+			<pseries:LineElement styleName="solid1" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R1" displayName="R1"/>
+			<pseries:LineElement styleName="solid2" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R2" displayName="R2"/>
+			<pseries:LineElement styleName="solid3" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R3" displayName="R3"/>
+			<pseries:LineElement styleName="solid4" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R4" displayName="R4"/>
+			<pseries:LineElement styleName="solid5" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R5" displayName="R5"/>
 		</polar:elements>
 	</polar:Polar>
 	<legend:Legend dataProvider="{rd}" direction="horizontal" />
