@@ -350,16 +350,16 @@ package birdeye.vis.scales
 			return _showAxis;
 		}
 
-		protected var _range:Array; /* of numerals */
- 		/** Define the range values for the scale (for ex. type [minColor, maxColor] or [minRadius, maxRadius]).*/
-		public function set range(val:Array):void
+		protected var _values:Array; /* of numerals  for numeric scales and strings for category scales*/
+ 		/** Define the min max values for numeric scales ([minColor, maxColor] or [minRadius, maxRadius])
+ 		 * and category strings for category scales.*/
+		public function set values(val:Array):void
 		{
-			_range = val;
-			_range.sort(Array.NUMERIC);
+			// to be overridden
 		}
-		public function get range():Array
+		public function get values():Array
 		{
-			return _range;
+			return _values;
 		}
 
 /*		/** Set the origin point of the scale.*

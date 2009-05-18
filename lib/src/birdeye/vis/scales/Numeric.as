@@ -39,7 +39,15 @@ package birdeye.vis.scales
 
 	public class Numeric extends XYZ implements INumerableScale, IScaleUI
 	{
-	
+ 		/** Define the min max values for numeric scales ([minColor, maxColor] or [minRadius, maxRadius]).*/
+		override public function set values(val:Array):void
+		{
+			_values = val;
+			_values.sort(Array.NUMERIC);
+			min = values[0];
+			max = values[1];
+		}
+
 		/** @Private
 		 * The minimum data value of the axis, after that the min is formatted 
 		 * by the formatMin methods.*/
