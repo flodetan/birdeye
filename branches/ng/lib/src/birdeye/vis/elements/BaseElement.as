@@ -86,6 +86,8 @@ package birdeye.vis.elements
 	
 	public class BaseElement extends Surface implements IElement
 	{
+		protected var _isProcessed:Boolean = false;
+
 		private var _chart:ICoordinates;
 		public function set chart(val:ICoordinates):void
 		{
@@ -146,17 +148,17 @@ package birdeye.vis.elements
 			invalidateDisplayList();
 		}
 
-		private var _colorAxis:INumerableScale;
+		private var _colorScale:INumerableScale;
 		/** Define an axis to set the colorField for data items.*/
-		public function set colorAxis(val:INumerableScale):void
+		public function set colorScale(val:INumerableScale):void
 		{
-			_colorAxis = val;
+			_colorScale = val;
 
 			invalidateDisplayList();
 		}
-		public function get colorAxis():INumerableScale
+		public function get colorScale():INumerableScale
 		{
-			return _colorAxis;
+			return _colorScale;
 		}
 
 		private var _dim1:String;
@@ -250,7 +252,7 @@ package birdeye.vis.elements
 		protected var _maxDim1Value:Number = NaN;
 		public function get maxDim1Value():Number
 		{
-			if (! (scale1 is IEnumerableScale))
+			if (! (scale1 is IEnumerableScale) && isNaN(_maxDim1Value))
 				_maxDim1Value = getMaxValue(dim1);
 			return _maxDim1Value;
 		}
@@ -258,7 +260,7 @@ package birdeye.vis.elements
 		protected var _maxDim2Value:Number = NaN;
 		public function get maxDim2Value():Number
 		{
-			if (! (scale2 is IEnumerableScale))
+			if (! (scale2 is IEnumerableScale) && isNaN(_maxDim2Value))
 				_maxDim2Value = getMaxValue(dim2);
 			return _maxDim2Value;
 		}
@@ -266,7 +268,7 @@ package birdeye.vis.elements
 		protected var _minDim1Value:Number = NaN;
 		public function get minDim1Value():Number
 		{
-			if (! (scale1 is IEnumerableScale))
+			if (! (scale1 is IEnumerableScale) && isNaN(_minDim1Value))
 				_minDim1Value = getMinValue(dim1);
 			return _minDim1Value;
 		}
@@ -274,7 +276,7 @@ package birdeye.vis.elements
 		protected var _minDim2Value:Number = NaN;
 		public function get minDim2Value():Number
 		{
-			if (! (scale2 is IEnumerableScale))
+			if (! (scale2 is IEnumerableScale) && isNaN(_minDim2Value))
 				_minDim2Value = getMinValue(dim2);
 			return _minDim2Value;
 		}
@@ -282,7 +284,7 @@ package birdeye.vis.elements
 		protected var _maxDim3Value:Number = NaN;
 		public function get maxDim3Value():Number
 		{
-			if (! (scale3 is IEnumerableScale))
+			if (! (scale3 is IEnumerableScale) && isNaN(_maxDim3Value))
 				_maxDim3Value = getMaxValue(dim3);
 			return _maxDim3Value;
 		}
@@ -290,7 +292,7 @@ package birdeye.vis.elements
 		private var _minDim3Value:Number = NaN;
 		public function get minDim3Value():Number
 		{
-			if (! (scale3 is IEnumerableScale))
+			if (! (scale3 is IEnumerableScale) && isNaN(_minDim3Value))
 				_minDim3Value = getMinValue(dim3);
 			return _minDim3Value;
 		}
@@ -298,7 +300,8 @@ package birdeye.vis.elements
 		private var _totalDim1PositiveValue:Number = NaN;
 		public function get totalDim1PositiveValue():Number
 		{
-			_totalDim1PositiveValue = getTotalPositiveValue(dim1);
+			if (! (scale1 is IEnumerableScale) && isNaN(_totalDim1PositiveValue))
+				_totalDim1PositiveValue = getTotalPositiveValue(dim1);
 			return _totalDim1PositiveValue;
 		}
 		
@@ -437,6 +440,9 @@ package birdeye.vis.elements
 		public function set cursor(val:IViewCursor):void
 		{
 			_cursor = val;
+			_maxDim1Value = _maxDim2Value = _maxDim3Value = _totalDim1PositiveValue = NaN;
+			_minDim1Value = _minDim2Value = _minDim3Value = NaN;
+			_isProcessed = false;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -801,21 +807,13 @@ package birdeye.vis.elements
 			{
 				if (scale2 is IEnumerableScale)
 					axesCheck = Boolean(IEnumerableScale(scale2).dataProvider);
-			} else if (chart && chart.scale2)
-			{
-				if (chart.scale2 is IEnumerableScale)
-					axesCheck = Boolean(IEnumerableScale(chart.scale2).dataProvider);
-			} else
+			} else 
 				axesCheck = false;
 
 			if (scale1)
 			{
 				if (scale1 is IEnumerableScale)
 					axesCheck = axesCheck && Boolean(IEnumerableScale(scale1).dataProvider);
-			} else if (chart && chart.scale1)
-			{
-				if (chart.scale1 is IEnumerableScale)
-					axesCheck = axesCheck && Boolean(IEnumerableScale(chart.scale1).dataProvider);
 			} else
 				axesCheck = false;
 
@@ -859,27 +857,18 @@ package birdeye.vis.elements
 			{
 				IScaleUI(scale2).pointerY = extGG.posY;
 				IScaleUI(scale2).pointer.visible = true;
-			} else if (chart.scale2 && chart.scale2 is IScaleUI && IScaleUI(chart.scale2).pointer) {
-				IScaleUI(chart.scale2).pointerY = extGG.posY;
-				IScaleUI(chart.scale2).pointer.visible = true;
 			} 
 
 			if (scale1 && scale1 is IScaleUI && IScaleUI(scale1).pointer)
 			{
 				IScaleUI(scale1).pointerX = extGG.posX;
 				IScaleUI(scale1).pointer.visible = true;
-			} else if (chart.scale1 && chart.scale1 is IScaleUI && IScaleUI(chart.scale1).pointer) {
-				IScaleUI(chart.scale1).pointerX = extGG.posX;
-				IScaleUI(chart.scale1).pointer.visible = true;
-			} 
-
+			}
+			
 			if (scale3 && scale3 is IScaleUI && IScaleUI(scale3).pointer)
 			{
 				IScaleUI(scale3).pointerY = extGG.posZ;
 				IScaleUI(scale3).pointer.visible = true;
-			} else if (chart.scale3 && chart.scale3 is IScaleUI && IScaleUI(chart.scale3).pointer) {
-				IScaleUI(chart.scale3).pointerY = extGG.posZ;
-				IScaleUI(chart.scale3).pointer.visible = true;
 			} 
 		}
 
@@ -902,18 +891,12 @@ package birdeye.vis.elements
 
 			if (scale1 && scale1 is IScaleUI && IScaleUI(scale1).pointer)
 				IScaleUI(scale1).pointer.visible = false;
-			else if (chart.scale1 && chart.scale1 is IScaleUI && IScaleUI(chart.scale1).pointer) 
-				IScaleUI(chart.scale1).pointer.visible = false;
 
 			if (scale2 && scale2 is IScaleUI && IScaleUI(scale2).pointer)
 				IScaleUI(scale2).pointer.visible = false;
-			else if (chart.scale2 && chart.scale2 is IScaleUI && IScaleUI(chart.scale2).pointer) 
-				IScaleUI(chart.scale2).pointer.visible = false;
 
 			if (scale3 && scale3 is IScaleUI && IScaleUI(scale3).pointer)
 				IScaleUI(scale3).pointer.visible = false;
-			else if (chart.scale3 && chart.scale3 is IScaleUI && IScaleUI(chart.scale3).pointer) 
-				IScaleUI(chart.scale3).pointer.visible = false;
 		}
 
 		/** @Private
@@ -1124,7 +1107,7 @@ package birdeye.vis.elements
 				gg.removeAllElements();
 			
 			var nElements:int = graphicsCollection.items.length;
-			if (nElements > 1)
+			if (nElements > 0)
 			{
 				for (var i:int = 0; i<nElements; i++)
 				{
@@ -1135,11 +1118,13 @@ package birdeye.vis.elements
 						DataItemLayout(graphicsCollection.items[i]).removeEventListener(MouseEvent.DOUBLE_CLICK, onMouseDoubleClick);
 						DataItemLayout(graphicsCollection.items[i]).removeEventListener(MouseEvent.CLICK, onMouseClick);
 						DataItemLayout(graphicsCollection.items[i]).removeAllElements();
-					}
+					} else if (graphicsCollection.items[i] is GeometryGroup)
+						GeometryGroup(graphicsCollection.items[i]).geometry = []; 
+						GeometryGroup(graphicsCollection.items[i]).geometryCollection.items = [];
 				}
 			} 
-
-/* 			for (i = numChildren - 1; i>=0; i--)
+/* 
+ 			for (i = numChildren - 1; i>=0; i--)
 			{
 				if (getChildAt(i) is DataItemLayout)
 				{
@@ -1151,8 +1136,8 @@ package birdeye.vis.elements
 				}
 				removeChildAt(i);
 			}
-			graphicsCollection.items = [];
- */		}
+ 			graphicsCollection.items = [];
+ */  		}
 		
 		protected var rectBackGround:RegularRectangle;
 		protected var ggBackGround:GeometryGroup;

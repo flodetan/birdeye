@@ -90,25 +90,18 @@ package birdeye.vis.elements.geometry
 					if (scale1)
 					{
 						xPos = scale1.getPosition(cursor.current[dim1]);
-					} else if (chart.scale1) {
-						xPos = chart.scale1.getPosition(cursor.current[dim1]);
-					}
+					} 
 					
 					if (scale2)
 					{
 						yPos = scale2.getPosition(cursor.current[dim2]);
-					} else if (chart.scale2) {
-						yPos = chart.scale2.getPosition(cursor.current[dim2]);
 					}
-	
+					
 					var scale2RelativeValue:Number = NaN;
 	
 					if (scale3)
 					{
 						zPos = scale3.getPosition(cursor.current[dim3]);
-						scale2RelativeValue = XYZ(scale3).height - zPos;
-					} else if (chart.scale3) {
-						zPos = chart.scale3.getPosition(cursor.current[dim3]);
 						// since there is no method yet to draw a real z axis 
 						// we create an y axis and rotate it to properly visualize 
 						// a 'fake' z axis. however zPos over this y axis corresponds to 
@@ -116,17 +109,14 @@ package birdeye.vis.elements.geometry
 						// up side down. this trick allows to visualize the y axis as
 						// if it would be a z. when there will be a 3d line class, it will 
 						// be replaced
-						scale2RelativeValue = XYZ(chart.scale3).height - zPos;
-					}
+						scale2RelativeValue = XYZ(scale3).height - zPos;
+					} 
 	
-					if (colorAxis)
+					if (colorScale)
 					{
-						colorFill = colorAxis.getPosition(cursor.current[colorField]);
+						colorFill = colorScale.getPosition(cursor.current[colorField]);
 						fill = new SolidFill(colorFill);
-					} else if (chart.colorAxis) {
-						colorFill = chart.colorAxis.getPosition(cursor.current[colorField]);
-						fill = new SolidFill(colorFill);
-					}
+					} 
 	
 					// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees

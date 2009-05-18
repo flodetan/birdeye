@@ -199,13 +199,13 @@ package birdeye.vis.data
 		 * Remove all elements from the component*/
 		public function removeAllElements():void
 		{
-  			for (var i:Number = 0; i<numChildren; i++)
+/*   			for (var i:Number = 0; i<numChildren; i++)
 				removeChildAt(0);
 			
 			for (i = 0; i<geometryCollection.items.length; i++)
 				geometryCollection.removeItemAt(0);
   				
-			geometry = geometryCollection.items = [];
+ */			geometry = geometryCollection.items = [];
 		}
 		
 		/**

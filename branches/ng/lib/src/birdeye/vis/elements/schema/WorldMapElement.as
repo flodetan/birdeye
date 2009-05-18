@@ -32,8 +32,8 @@
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.Polygon;
 	import com.degrafa.paint.*;
+	
 	import flash.utils.Dictionary;
-	import mx.utils.ObjectUtil;
 						
 	[Exclude(name="translateX", kind="property")]
 	[Exclude(name="translateY", kind="property")]
@@ -44,8 +44,8 @@
 	//This class contains boundary definitions for the countries of the world, expressed as latitude and longitude 
 	public class WorldMapElement extends WorldCountries//SASN implements ICartesianElement
 	{
-		private var longLatPolygons:Dictionary= new Dictionary();
-		private var longLatBaryCenters:Dictionary= new Dictionary();
+		private var longLatPolygons:Array= new Array();
+		private var longLatBaryCenters:Array= new Array();
 		public var translateX:Number=0;
 		public var translateY:Number=19482180;
 //SASN		public var scaleX:Number=1;
@@ -564,40 +564,57 @@
       		return longLatBaryCenters[countryKey];
     	}
     	    	
-		override protected function commitProperties():void
+    	private var procHeight:Number, procWidth:Number;
+		override public function drawElement():void
 		{
-			super.commitProperties();
-			var countryGeom:GeometryGroup;
-			var listOfCountry:Array=this.getCountriesListByRegion(WorldRegionTypes.REGION_WORLD);
-			var countryCoordinates:Array;
-			var polygonCoordinates:Array; //a country may have several polygons
-			var poly:Polygon;
-			var _color:SolidFill=new SolidFill(0x22AA44);
-			var _stroke:SolidStroke=new SolidStroke(0xFF3333,1,1);
-			for each (var country:String in listOfCountry)
+			if ((!_isProcessed || (_isProcessed && width != procWidth) || (_isProcessed && height != procHeight))
+				&& !isNaN(width) && !isNaN(height))
 			{
-				countryCoordinates = this.getCoordinates(country);
-				if(countryCoordinates!=null)
+				_isProcessed  = true;
+				procWidth = width;
+				procHeight = height;
+				removeAllElements();
+				graphicsCollection.items = [];
+				for(var i:int=numChildren-1; i>=0; i--){
+						if(getChildAt(i) is GeometryGroup){
+							removeChildAt(i);
+						}
+					}
+
+				var countryGeom:GeometryGroup;
+				var listOfCountry:Array=this.getCountriesListByRegion(WorldRegionTypes.REGION_WORLD);
+				var countryCoordinates:Array;
+				var polygonCoordinates:Array; //a country may have several polygons
+				var poly:Polygon;
+				var _color:SolidFill=new SolidFill(0x22AA44);
+				var _stroke:SolidStroke=new SolidStroke(0xFF3333,1,1);
+				var latLongClone:Array = longLatPolygons.slice();
+				for each (var country:String in listOfCountry)
 				{
-					countryGeom = new GeometryGroup();
-//					countryGeom.scaleY = countryGeom.scaleX = this.zoom;
-					countryGeom.name = country;
-					countryGeom.target=this;						
-					this.graphicsCollection.addItem(countryGeom);
-					for each (var polygonLongLatArray:Array in countryCoordinates) //a country may have several polygons
+					countryCoordinates = latLongClone[country];
+					if(countryCoordinates!=null)
 					{
-						polygonCoordinates = polygonLongLatArray.slice(); //clone polygonLongLatArray in order not to destroy the data in the original longLatPolygons
-						_targetLongProjection.projectArrayXs(polygonCoordinates); //replace all longitude values in polygonCoordinates with their corresponding x values
-						_targetLatProjection.projectArrayYs(polygonCoordinates); //replace all latitude values in polygonCoordinates with their corresponding y values
-						
-						poly = new Polygon();
-						poly.data = polygonCoordinates.join(" "); //transform the array to a comma and space separated string on the format "-90,30 -45,60 0,90"
-						poly.stroke=_stroke;
-						poly.fill=_color;
-						countryGeom.geometryCollection.addItem(poly);
-					} // end loop over polygons
-				} // end if getCoordinates returned data
-			} // end loop over countries
+						countryGeom = new GeometryGroup();
+						countryGeom.name = country;
+						countryGeom.target=this;						
+						graphicsCollection.addItem(countryGeom);
+						for each (var polygonLongLatArray:Array in countryCoordinates) //a country may have several polygons
+						{
+							// BUG: it works the first time, but second time polygonLongLatArray
+							// instead of having lat/long ccords has pixel coords
+							polygonCoordinates = polygonLongLatArray.slice(); //clone polygonLongLatArray in order not to destroy the data in the original longLatPolygons
+							_targetLongProjection.projectArrayXs(polygonCoordinates, width); //replace all longitude values in polygonCoordinates with their corresponding x values
+							_targetLatProjection.projectArrayYs(polygonCoordinates, height); //replace all latitude values in polygonCoordinates with their corresponding y values
+							
+							poly = new Polygon();
+							poly.data = polygonCoordinates.join(" "); //transform the array to a comma and space separated string on the format "-90,30 -45,60 0,90"
+ 							poly.stroke=_stroke;
+//	 						poly.fill=_color;
+	 						countryGeom.geometryCollection.addItem(poly);
+						} // end loop over polygons
+					} // end if getCoordinates returned data
+				} // end loop over countries
+			}
 		}
 	}
 }

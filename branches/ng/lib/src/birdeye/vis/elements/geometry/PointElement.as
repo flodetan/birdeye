@@ -92,16 +92,12 @@ package birdeye.vis.elements.geometry
 					if (scale1)
 					{
 						pos1 = scale1.getPosition(cursor.current[dim1]);
-					} else if (chart.scale1) {
-						pos1= chart.scale1.getPosition(cursor.current[dim1]);
-					}
+					} 
 					
 					if (scale2)
 					{
 						pos2 = scale2.getPosition(cursor.current[dim2]);
-					} else if (chart.scale2) {
-						pos2 = chart.scale2.getPosition(cursor.current[dim2]);
-					}
+					} 
 	
 					var scale2RelativeValue:Number = NaN;
 	
@@ -109,26 +105,13 @@ package birdeye.vis.elements.geometry
 					{
 						pos3 = scale3.getPosition(cursor.current[dim3]);
 						scale2RelativeValue = XYZ(scale3).height - pos3;
-					} else if (chart.scale3) {
-						pos3 = chart.scale3.getPosition(cursor.current[dim3]);
-						// since there is no method yet to draw a real z axis 
-						// we create an y axis and rotate it to properly visualize 
-						// a 'fake' z axis. however zPos over this y axis corresponds to 
-						// the axis height - zPos, because the y axis in Flex is 
-						// up side down. this trick allows to visualize the y axis as
-						// if it would be a z. when there will be a 3d line class, it will 
-						// be replaced
-						scale2RelativeValue = XYZ(chart.scale3).height - pos3;
-					}
+					} 
 	
-					if (colorAxis)
+					if (colorScale)
 					{
-						colorFill = colorAxis.getPosition(cursor.current[colorField]);
+						colorFill = colorScale.getPosition(cursor.current[colorField]);
 						fill = new SolidFill(colorFill);
-					} else if (chart.colorAxis) {
-						colorFill = chart.colorAxis.getPosition(cursor.current[colorField]);
-						fill = new SolidFill(colorFill);
-					}
+					} 
 	
 					if (chart.coordType == VisScene.POLAR)
 					{

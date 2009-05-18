@@ -31,6 +31,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.guides.renderers.LineRenderer;
+	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
@@ -96,16 +97,12 @@ package birdeye.vis.elements.geometry
 					if (scale1)
 					{
 						pos1 = scale1.getPosition(cursor.current[dim1]);
-					} else if (chart.scale1) {
-						pos1 = chart.scale1.getPosition(cursor.current[dim1]);
 					}
 					
 					if (scale2)
 					{
 						pos2 = scale2.getPosition(cursor.current[dim2]);
 						dataFields[1] = dim2;
-					} else if (chart.scale2) {
-						pos2 = chart.scale2.getPosition(cursor.current[dim2]);
 					}
 					
 					var scale2RelativeValue:Number = NaN;
@@ -114,16 +111,19 @@ package birdeye.vis.elements.geometry
 					{
 						zPos = scale3.getPosition(cursor.current[dim3]);
 						scale2RelativeValue = XYZ(scale3).height - zPos;
-					} else if (chart.scale3) {
-						zPos = chart.scale3.getPosition(cursor.current[dim3]);
-						// since there is no method yet to draw a real z axis 
-						// we create an y axis and rotate it to properly visualize 
-						// a 'fake' z axis. however zPos over this y axis corresponds to 
-						// the axis height - zPos, because the y axis in Flex is 
-						// up side down. this trick allows to visualize the y axis as
-						// if it would be a z. when there will be a 3d line class, it will 
-						// be replaced
-						scale2RelativeValue = XYZ(chart.scale3).height - zPos;
+					}
+
+					if (multiScale)
+					{
+						pos1 = multiScale.scale1.getPosition(cursor.current[dim1]);
+						pos2 = INumerableScale(multiScale.scales[
+											cursor.current[multiScale.dim1]
+											]).getPosition(cursor.current[dim2]);
+					} else if (chart.multiScale) {
+						pos1 = chart.multiScale.scale1.getPosition(cursor.current[dim1]);
+						pos2 = INumerableScale(chart.multiScale.scales[
+											cursor.current[chart.multiScale.dim1]
+											]).getPosition(cursor.current[dim2]);
 					}
 	
 					if (chart.coordType == VisScene.POLAR)
