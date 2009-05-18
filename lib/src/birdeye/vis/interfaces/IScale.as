@@ -53,9 +53,13 @@ package birdeye.vis.interfaces
 		/** Reset the scale.*/
 		function resetValues():void;
 		
- 		/** Define the range values for the scale (for ex. type [minColor, maxColor] or [minRadius, maxRadius])*/
-		function set range(val:Array):void
-		function get range():Array
+ 		/** Define the range values for the scale. If the scale is numeric than it represents the min, max values
+ 		 * of the scale, for example [minColor, maxColor] or [minRadius, maxRadius])
+ 		 * or [minLat, maxLat] or [minLong, maxLong]...
+ 		 * If the scale is categorical, than it represents the category strings that are passed directly to the 
+ 		 * scale. The range has higher priority over the min, max and dataProvider properties.*/
+		function set values(val:Array):void
+		function get values():Array
 
 		/** Set the axis placement.*/
 		function set placement(val:String):void
