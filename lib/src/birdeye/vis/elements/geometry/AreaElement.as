@@ -86,13 +86,10 @@ package birdeye.vis.elements.geometry
 
 			// doesn't need to call super.commitProperties(), since it doesn't need to listen
 			// to axes interval changes 
-			if (stackType == STACKED100 && cursor)
+			if (stackType == STACKED100 && chart)
 			{
-				if (scale2)
-				{
-					if (scale2 is INumerableScale)
-						INumerableScale(scale2).max = maxDim2Value;
-				}
+				if (scale2 is INumerableScale)
+					INumerableScale(scale2).max = chart.maxStacked100;
 			}
 		}
 

@@ -85,13 +85,10 @@ package birdeye.vis.elements.geometry
 			if (!itemRenderer)
 				itemRenderer = RectangleRenderer;
 
-			if (stackType == STACKED100 && cursor)
+			if (stackType == STACKED100 && chart)
 			{
-				if (scale2)
-				{
-					if (scale2 is INumerableScale)
-						INumerableScale(scale2).max = maxDim2Value;
-				}
+				if (scale2 && scale2 is INumerableScale)
+					INumerableScale(scale2).max = chart.maxStacked100;
 			}
 		}
 
@@ -349,15 +346,6 @@ package birdeye.vis.elements.geometry
 					pos2 = scale2.getPosition(INumerableScale(scale2).min);
 			}
 			return pos2;
-		}
-
-		override protected function getMaxValue(field:String):Number
-		{
-			var max:Number = super.getMaxValue(field);
-			if (chart && chart.coordType == VisScene.POLAR && stackType == STACKED100) 
-				max = Math.max(max, Polar(chart).maxStacked100);
-				
-			return max;
 		}
 	}
 }

@@ -86,16 +86,6 @@ package birdeye.vis.coords
 			invalidateDisplayList();
 		}
 		
-		protected var _maxStacked100:Number = NaN;
-		/** @Private
-		 * The maximum value among all elements stacked according to stacked100 type.
-		 * This is needed to "enlarge" the related axis to include all the stacked values
-		 * so that all stacked100 elements fit into the chart.*/
-		public function get maxStacked100():Number
-		{
-			return _maxStacked100;
-		}
-		
         [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IElement")]
         [ArrayElementType("birdeye.vis.interfaces.IElement")]
 		override public function set elements(val:Array):void
@@ -331,7 +321,7 @@ package birdeye.vis.coords
 						cursor.seek(CursorBookmark.FIRST);
 						while (!cursor.afterLast)
 						{
-							// index of last element without own cursor with the same xField data value 
+							// index of last element without own cursor with the same radius (dim2) data value 
 							// (because they've already been processed in the previous loop)
 							var t:Array = [];
 							for (s = 0; s<_stackElements.length; s++)
@@ -444,7 +434,6 @@ package birdeye.vis.coords
 				}
 			}
 
-			
 			if (multiScale && multiScale.scale1)
 				drawLabels()
 
@@ -549,16 +538,6 @@ package birdeye.vis.coords
 
 			if (nCursors == elements.length)
 			{
-				var maxMin:Array;
-				// check if a default color axis exists
-				if (colorAxis)
-				{
-						// if the default color axis is numeric, than calculate its min max values
-						maxMin = getMaxMinColorValueFromSeriesWithoutColorAxis();
-						colorAxis.max = maxMin[0];
-						colorAxis.min = maxMin[1];
-				} 
-				
 				// init axes of all elements that have their own axes
 				// since these are children of each elements, they are 
 				// for sure ready for feeding and it won't affect the axesFeeded status
@@ -607,7 +586,7 @@ package birdeye.vis.coords
 				{
 					case RADAR: 
 						if (multiScale)
-							createRadarLayout1();
+							createRadarLayout();
 						break;
 					case COLUMN:
 						createColumnLayout()
@@ -616,7 +595,7 @@ package birdeye.vis.coords
 			}
 		}
 		
-		private function createRadarLayout1():void
+		private function createRadarLayout():void
 		{
 			var aAxis:CategoryAngle = multiScale.scale1;
 			var catElements:Array = aAxis.dataProvider;
@@ -659,50 +638,6 @@ package birdeye.vis.coords
 
 			gg.geometryCollection.addItem(circle);
 		}
-		
-		/** @Private
-		 * Calculate the min max values for the default vertical (y) axis. Return an array of 2 values, the 1st (0) 
-		 * for the max value, and the 2nd for the min value.*/
-		private function getMaxMinRadiusValueFromSeriesWithoutScale2():Array
-		{
-			var max:Number = NaN, min:Number = NaN;
-			for (var i:Number = 0; i<elements.length; i++)
-			{
-				currentElement = IElement(elements[i]);
-				// check if the elements has its own y axis and if its max value exists and 
-				// is higher than the current max
-				if (!currentElement.scale2 && (isNaN(max) || max < currentElement.maxDim2Value))
-					max = currentElement.maxDim2Value;
-				// check if the elements has its own y axis and if its min value exists and 
-				// is lower than the current min
-				if (!currentElement.scale2 && (isNaN(min) || min > currentElement.minDim2Value))
-					min = currentElement.minDim2Value;
-			}
-					
-			return [max,min];
-		}
-
-		/** @Private
-		 * Calculate the min max values for the default vertical (y) axis. Return an array of 2 values, the 1st (0) 
-		 * for the max value, and the 2nd for the min value.*/
-		private function getMaxMinAngleValueFromSeriesWithoutScale1():Array
-		{
-			var max:Number = NaN, min:Number = NaN;
-			for (var i:Number = 0; i<elements.length; i++)
-			{
-				currentElement = IElement(elements[i]);
-				// check if the elements has its own y axis and if its max value exists and 
-				// is higher than the current max
-				if (!currentElement.scale1 && (isNaN(max) || max < currentElement.maxDim1Value))
-					max = currentElement.maxDim1Value;
-				// check if the elements has its own y axis and if its min value exists and 
-				// is lower than the current min
-				if (!currentElement.scale1 && (isNaN(min) || min > currentElement.minDim1Value))
-					min = currentElement.minDim1Value;
-			}
-					
-			return [max,min];
-		}
 
 		/** @Private
 		 * Calculate the total of positive values to set in the percent axis and set it for each elements.*/
@@ -727,30 +662,6 @@ package birdeye.vis.coords
 			}
 		}
  */
-		/** @Private
-		 * Calculate the min max values for the default color axis. Return an array of 2 values, the 1st (0) 
-		 * for the max value, and the 2nd for the min value.*/
-		private function getMaxMinColorValueFromSeriesWithoutColorAxis():Array
-		{
-			var max:Number = NaN, min:Number = NaN;
-			for (var i:Number = 0; i<elements.length; i++)
-			{
-				currentElement = elements[i];
-				if (currentElement.colorField)
-				{
-					// check if the elements has its own color axis and if its max value exists and 
-					// is higher than the current max
-					if (!currentElement.colorScale && (isNaN(max) || max < currentElement.maxColorValue))
-						max = currentElement.maxColorValue;
-					// check if the element has its own color axis and if its min value exists and 
-					// is lower than the current min
-					if (!currentElement.colorScale && (isNaN(min) || min > currentElement.minColorValue))
-						min = currentElement.minColorValue;
-				}
-			}
-					
-			return [max,min];
-		}
 
 		/** @Private
 		 * Init the axes owned by the element passed to this method.*/

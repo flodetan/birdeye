@@ -42,6 +42,12 @@ package birdeye.vis.interfaces
 		function set multiScale(val:MultiScale):void;
 		function get multiScale():MultiScale;
 
-		function get columnWidthRate():Number
+		/** @Private
+		 * The maximum value among all elements stacked according to stacked100 type.
+		 * This is needed to "enlarge" the related axis to include all the stacked values
+		 * so that all stacked100 elements fit into the chart.*/
+		function get maxStacked100():Number;
+		
+		function get columnWidthRate():Number;
 	}
 }
