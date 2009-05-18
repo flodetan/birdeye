@@ -807,21 +807,23 @@ package birdeye.vis.elements
 			{
 				if (scale2 is IEnumerableScale)
 					axesCheck = Boolean(IEnumerableScale(scale2).dataProvider);
-			} else 
-				axesCheck = false;
+				
+				axesCheck = axesCheck && (scale2.size>0);
+			} 
 
 			if (scale1)
 			{
 				if (scale1 is IEnumerableScale)
 					axesCheck = axesCheck && Boolean(IEnumerableScale(scale1).dataProvider);
-			} else
-				axesCheck = false;
+
+				axesCheck = axesCheck && (scale1.size>0);
+			} 
 
 			if ((multiScale && multiScale.scales) || (chart.multiScale && chart.multiScale.scales))
 				axesCheck = true;
 
 			var colorsCheck:Boolean = 
-				(fill || stroke);
+				(fill || stroke || colorScale);
 
 			var globalCheck:Boolean = 
 /* 				   (!isNaN(_minDim1Value) || !isNaN(_minDim2Value))
