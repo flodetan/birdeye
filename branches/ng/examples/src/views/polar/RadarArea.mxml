@@ -53,11 +53,11 @@
 			<axis:Linear id="l1" placement="horizontal_center" sizeLabel="12"/>
 		</polar:scales>
 		<polar:elements>
-			<pseries:AreaElement itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" showItemRenderer="true" styleName="grad1" scale1="{c}" scale2="{l2}" dim1="subject" dim2="R1" displayName="R1"/>
-			<pseries:AreaElement itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" showItemRenderer="true" styleName="grad2" scale1="{c}" scale2="{l2}" dim1="subject" dim2="R2" displayName="R2"/>
-			<pseries:AreaElement itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" showItemRenderer="true" styleName="grad3" scale1="{c}" scale2="{l2}" dim1="subject" dim2="R3" displayName="R3"/>
-			<pseries:AreaElement itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" showItemRenderer="true" styleName="grad4" scale1="{c}" scale2="{l1}" dim1="subject" dim2="R4" displayName="R4"/>
-			<pseries:AreaElement itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" showItemRenderer="true" styleName="grad5" scale1="{c}" scale2="{l1}" dim1="subject" dim2="R5" displayName="R5"/>
+			<pseries:AreaElement styleName="grad1" scale1="{c}" scale2="{l2}" dim1="subject" dim2="R1" displayName="R1"/>
+			<pseries:AreaElement styleName="grad2" scale1="{c}" scale2="{l2}" dim1="subject" dim2="R2" displayName="R2"/>
+			<pseries:AreaElement styleName="grad3" scale1="{c}" scale2="{l2}" dim1="subject" dim2="R3" displayName="R3"/>
+			<pseries:AreaElement styleName="grad4" scale1="{c}" scale2="{l1}" dim1="subject" dim2="R4" displayName="R4"/>
+			<pseries:AreaElement styleName="grad5" scale1="{c}" scale2="{l1}" dim1="subject" dim2="R5" displayName="R5"/>
 			
 		</polar:elements>
 	</polar:Polar>

@@ -47,14 +47,12 @@
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
 	<mx:Button label="Generate" click="createDT()"/>
 	<coords:Cartesian id="mix" width="90%" height="90%" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true">
- 		<coords:scale1>
- 			<scales:Category categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
- 		</coords:scale1>
- 		<coords:scale2>
- 			<scales:Linear placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
- 		</coords:scale2>
+		<coords:scales>
+ 			<scales:Category id="c" categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+ 			<scales:Linear id="l" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+		</coords:scales>
 		 <coords:elements>
-		 	<elements:LineElement showAllDataItems="true" dim2="R3" dim1="subject" styleName="solid1" displayName="R3">
+		 	<elements:LineElement scale1="{c}" scale2="{l}" showAllDataItems="true" dim2="R3" dim1="subject" styleName="solid1" displayName="R3">
 		 	</elements:LineElement>
 		 	<elements:BarElement extendMouseEvents="true" dim2="subject" dim1="R2" styleName="grad1" displayName="R2">
 		 		<elements:scale1>
@@ -64,8 +62,7 @@
 		 			<scales:Category categoryField="subject" placement="right" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 		 		</elements:scale2>
 		 	</elements:BarElement>
-		 	<elements:AreaElement dim2="R3" dim1="subject" styleName="grad3" displayName="R3">
-		 	</elements:AreaElement>
+		 	<elements:AreaElement scale1="{c}" scale2="{l}" dim2="R3" dim1="subject" styleName="grad3" displayName="R3"/>
 		 </coords:elements>
 	</coords:Cartesian>
 	<guides:Legend dataProvider="{mix}" direction="horizontal"/>
