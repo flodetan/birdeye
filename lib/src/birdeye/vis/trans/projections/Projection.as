@@ -60,26 +60,26 @@ package birdeye.vis.trans.projections
 		private static var _sinusoidal:PlainSinusoidalTransformation = null; //Singleton PlainSinusoidalTransformation
 		private static var _robinson:RobinsonTransformation = null; //Singleton RobinsonTransformation
 
-		public function projectArrayXs(coordArray:Array):void
+		public function projectArrayXs(coordArray:Array, sizeX:Number):void
 		{
 			var long:Number;
 			var lat:Number;
 			var xval:Number;
 			for each (var coord:Array in coordArray) //a polygon has several points
 			{
-				xval = projectX(coord[1],coord[0],700,Number.NaN,Number.NaN,Number.NaN,Number.NaN);//-90,90,-180,180);//
+				xval = projectX(coord[1],coord[0],sizeX,Number.NaN,Number.NaN,Number.NaN,Number.NaN);//-90,90,-180,180);//
 				coord[0] = xval;
 			} // end for each point
 		}
 
-		public function projectArrayYs(coordArray:Array):void
+		public function projectArrayYs(coordArray:Array, sizeY:Number):void
 		{
 			var long:Number;
 			var lat:Number;
 			var yval:Number;
 			for each (var coord:Array in coordArray) //a polygon has several points
 			{
-				yval = projectY(coord[1],coord[0],500,Number.NaN,Number.NaN,Number.NaN,Number.NaN);//-90,90,-180,180);//
+				yval = projectY(coord[1],coord[0],sizeY,Number.NaN,Number.NaN,Number.NaN,Number.NaN);//-90,90,-180,180);//
 				coord[1] = yval;
 			} // end for each point
 		}
