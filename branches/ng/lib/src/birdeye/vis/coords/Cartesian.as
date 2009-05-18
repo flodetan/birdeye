@@ -84,16 +84,6 @@ package birdeye.vis.coords
 			invalidateDisplayList();
 		}
 		
-		protected var _maxStacked100:Number = NaN;
-		/** @Private
-		 * The maximum value among all series stacked according to stacked100 type.
-		 * This is needed to "enlarge" the related axis to include all the stacked values
-		 * so that all stacked100 series fit into the chart.*/
-		public function get maxStacked100():Number
-		{
-			return _maxStacked100;
-		}
-
 		private var _maxRadius:Number = 10;
 		/** @Private
 		 * Set the maximum radius value for the scatter plot.*/

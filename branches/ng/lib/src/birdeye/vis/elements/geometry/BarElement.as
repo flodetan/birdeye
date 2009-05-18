@@ -81,13 +81,10 @@ package birdeye.vis.elements.geometry
 			if (!itemRenderer)
 				itemRenderer = RectangleRenderer;
 
-			if (stackType == STACKED100 && cursor)
+			if (stackType == STACKED100 && chart)
 			{
-				if (scale1)
-				{
-					if (scale1 is INumerableScale)
-						INumerableScale(scale1).max = maxDim1Value;
-				}
+				if (scale1 && scale1 is INumerableScale)
+					INumerableScale(scale1).max = chart.maxStacked100;
 			}
 		}
 

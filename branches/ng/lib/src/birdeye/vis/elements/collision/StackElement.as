@@ -114,8 +114,8 @@ package birdeye.vis.elements.collision
 		override protected function getMaxValue(field:String):Number
 		{
 			var max:Number = super.getMaxValue(field);
-			if (chart && chart.coordType == VisScene.CARTESIAN && stackType == STACKED100) 
-				max = Math.max(max, Cartesian(chart).maxStacked100);
+			if (chart && stackType == STACKED100) 
+				max = Math.max(max, chart.maxStacked100);
 				
 			return max;
 		}

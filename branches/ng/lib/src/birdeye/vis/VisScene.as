@@ -65,6 +65,16 @@
 			return _coordType;
 		}
 		
+		protected var _maxStacked100:Number = NaN;
+		/** @Private
+		 * The maximum value among all elements stacked according to stacked100 type.
+		 * This is needed to "enlarge" the related axis to include all the stacked values
+		 * so that all stacked100 elements fit into the chart.*/
+		public function get maxStacked100():Number
+		{
+			return _maxStacked100;
+		}
+		
 		private var _scales:Array; /* of IScale */
 		/** Array of scales, each element will take a scale target from this scale list.*/
         [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IScale")]
