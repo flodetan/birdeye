@@ -91,9 +91,6 @@ package birdeye.vis.elements.geometry
 				{
 					if (scale2 is INumerableScale)
 						INumerableScale(scale2).max = maxDim2Value;
-				} else {
-					if (chart && chart.scale2 && chart.scale2 is INumerableScale)
-						INumerableScale(chart.scale2).max = maxDim2Value;
 				}
 			}
 		}
@@ -131,13 +128,6 @@ package birdeye.vis.elements.geometry
 					else if (scale1 is IEnumerableScale)
 						size = scale1.size / 
 								(INumerableScale(scale1).max - INumerableScale(scale1).min) * deltaSize;
-				} else if (chart.scale1)
-				{
-					if (chart.scale1 is IEnumerableScale)
-						size = chart.scale1.size/IEnumerableScale(chart.scale1).dataProvider.length * deltaSize;
-					else if (chart.scale1 is IEnumerableScale)
-						size = chart.scale1.size / 
-								(INumerableScale(chart.scale1).max - INumerableScale(chart.scale1).min) * deltaSize;
 				}
 	
 				if (graphicsCollection.items && graphicsCollection.items.length>0)
@@ -157,8 +147,6 @@ package birdeye.vis.elements.geometry
 					var angleInterval:Number;
 					if (scale1) 
 						angleInterval = scale1.interval * chart.columnWidthRate;
-					else if (chart.scale1)
-						angleInterval = chart.scale1.interval * chart.columnWidthRate;
 					else if (multiScale)
 						angleInterval = multiScale.scale1.interval * chart.columnWidthRate;
 					else if (chart.multiScale)
@@ -182,10 +170,6 @@ package birdeye.vis.elements.geometry
 					if (scale1)
 					{
 						pos1 = scale1.getPosition(cursor.current[dim1]);
-	
-					} else if (chart.scale1) {
-						pos1 = chart.scale1.getPosition(cursor.current[dim1]);
-	
 					}
 					
 					j = cursor.current[dim1];
@@ -200,14 +184,6 @@ package birdeye.vis.elements.geometry
 						} else {
 							pos2 = scale2.getPosition(cursor.current[dim2]);
 						}
-					} else if (chart.scale2) {
-						if (_stackType == STACKED100)
-						{
-							baseScale2 = chart.scale2.getPosition(baseValues[j]);
-							pos2 = chart.scale2.getPosition(
-								baseValues[j] + Math.max(0,cursor.current[dim2]));
-						} else 
-							pos2 = chart.scale2.getPosition(cursor.current[dim2]);
 					}
 					
 					var scale2RelativeValue:Number = NaN;
@@ -217,16 +193,6 @@ package birdeye.vis.elements.geometry
 					{
 						zPos = scale3.getPosition(cursor.current[dim3]);
 						scale2RelativeValue = XYZ(scale3).height - zPos;
-					} else if (chart.scale3) {
-						zPos = chart.scale3.getPosition(cursor.current[dim3]);
-						// since there is no method yet to draw a real z axis 
-						// we create an y axis and rotate it to properly visualize 
-						// a 'fake' z axis. however zPos over this y axis corresponds to 
-						// the axis height - zPos, because the y axis in Flex is 
-						// up side down. this trick allows to visualize the y axis as
-						// if it would be a z. when there will be a 3d line class, it will 
-						// be replaced
-						scale2RelativeValue = XYZ(chart.scale3).height - zPos;
 					}
 	
 					if (multiScale)
@@ -381,14 +347,6 @@ package birdeye.vis.elements.geometry
 					pos2 = scale2.getPosition(0);
 				else
 					pos2 = scale2.getPosition(INumerableScale(scale2).min);
-			} else {
-				if (chart.scale2 && chart.scale2 is INumerableScale)
-				{
-					if (_baseAtZero)
-						pos2 = chart.scale2.getPosition(0);
-					else
-						pos2 = chart.scale2.getPosition(INumerableScale(chart.scale2).min);
-				}
 			}
 			return pos2;
 		}

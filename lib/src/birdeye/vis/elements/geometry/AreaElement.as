@@ -92,9 +92,6 @@ package birdeye.vis.elements.geometry
 				{
 					if (scale2 is INumerableScale)
 						INumerableScale(scale2).max = maxDim2Value;
-				} else {
-					if (chart && chart.scale2 && chart.scale2 is INumerableScale)
-						INumerableScale(chart.scale2).max = maxDim2Value;
 				}
 			}
 		}
@@ -149,9 +146,6 @@ package birdeye.vis.elements.geometry
 					// position of the data value filtered by xField
 					if (scale1)
 						pos1 = scale1.getPosition(cursor.current[dim1]);
-					else if (chart.scale1) 
-						// otherwise use the parent chart x axis to do that
-						pos1 = chart.scale1.getPosition(cursor.current[dim1]);
 					
 					j = cursor.current[dim1];
 					// if the Element has its own y axis, than get the y coordinate
@@ -169,17 +163,6 @@ package birdeye.vis.elements.geometry
 						} else 
 							// if not stacked, than the y coordinate is given by the own y axis
 							pos2 = scale2.getPosition(cursor.current[dim2]);
-					} else if (chart.scale2) {
-						// if no own y axis than use the parent chart y axis to achive the same
-						// as above
-						if (_stackType == STACKED100)
-						{
-							y0 = chart.scale2.getPosition(baseValues[j]);
-							pos2 = chart.scale2.getPosition(
-								baseValues[j] + Math.max(0,cursor.current[dim2]));
-						} else {
-							pos2 = chart.scale2.getPosition(cursor.current[dim2]);
-						}
 					}
 					
 					// if stacked 100 than change the default tooltip shape to a line
@@ -199,9 +182,6 @@ package birdeye.vis.elements.geometry
 					if (scale3)
 					{
 						zPos = scale3.getPosition(cursor.current[dim3]);
-						scale2RelativeValue = XYZ(scale3).height - zPos;
-					} else if (chart.scale3) {
-						zPos = chart.scale3.getPosition(cursor.current[dim3]);
 						// since there is no method yet to draw a real z axis 
 						// we create an y axis and rotate it to properly visualize 
 						// a 'fake' z axis. however zPos over this y axis corresponds to 
@@ -209,7 +189,7 @@ package birdeye.vis.elements.geometry
 						// up side down. this trick allows to visualize the y axis as
 						// if it would be a z. when there will be a 3d line class, it will 
 						// be replaced
-						scale2RelativeValue = XYZ(chart.scale3).height - zPos;
+						scale2RelativeValue = XYZ(scale3).height - zPos;
 					}
 	
 					if (multiScale)
@@ -297,9 +277,6 @@ package birdeye.vis.elements.geometry
 			{
 				if (scale1 is INumerableScale)
 					xPos = scale1.getPosition(minDim1Value);
-			} else {
-				if (chart.scale1 is INumerableScale)
-					xPos = chart.scale1.getPosition(minDim1Value);
 			}
 			
 			return xPos;
@@ -316,14 +293,6 @@ package birdeye.vis.elements.geometry
 					yPos = scale2.getPosition(0);
 				else
 					yPos = scale2.getPosition(minDim2Value);
-			} else {
-				if (chart.scale2 is INumerableScale)
-				{
-					if (_baseAtZero)
-						yPos = chart.scale2.getPosition(0);
-					else
-						yPos = chart.scale2.getPosition(minDim2Value);
-				}
 			}
 			return yPos;
 		}

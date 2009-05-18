@@ -36,6 +36,8 @@ package birdeye.vis.elements.geometry
 	
 	import com.degrafa.IGeometry;
 	import com.degrafa.geometry.RasterTextPlus;
+	import com.degrafa.paint.GradientStop;
+	import com.degrafa.paint.LinearGradientFill;
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.text.TextFieldAutoSize;
@@ -55,6 +57,20 @@ package birdeye.vis.elements.geometry
 		public function set radiusLabelOffset(val:Number):void
 		{
 			_radiusLabelOffset = val;
+			invalidateDisplayList();
+		}		
+
+		protected var _colorsStart:Array;
+		public function set colorsStart(val:Array):void
+		{
+			_colorsStart = val;
+			invalidateDisplayList();
+		}		
+
+		protected var _colorsStop:Array;
+		public function set colorsStop(val:Array):void
+		{
+			_colorsStop = val;
 			invalidateDisplayList();
 		}		
 
@@ -113,9 +129,6 @@ package birdeye.vis.elements.geometry
 				{
 					radius = scale2.size;
 					dataFields[1] = dim2;
-				} else if (chart.scale2) {
-					radius = chart.scale2.size;
-					dataFields[1] = dim2;
 				}
 				
 				var tmpRadius:Number = radius;
@@ -134,8 +147,6 @@ package birdeye.vis.elements.geometry
 				var aAxis:IScale;
 				if (scale1)
 					aAxis = scale1;
-				else if (chart.scale1)
-					aAxis = chart.scale1;
 	
 				dataFields[0] = dim1;
 	
@@ -163,15 +174,29 @@ package birdeye.vis.elements.geometry
 					
 					if (colorField)
 					{
-						if (colorAxis)
+						if (colorScale)
 						{
-							colorFill = colorAxis.getPosition(cursor.current[colorField]);
-							fill = new SolidFill(colorFill);
-						} else if (chart.colorAxis) {
-							colorFill = chart.colorAxis.getPosition(cursor.current[colorField]);
+							colorFill = colorScale.getPosition(cursor.current[colorField]);
 							fill = new SolidFill(colorFill);
 						}
-					} else if (_colors)
+					} if (_colorsStart && _colorsStop)
+					{
+						if (c < _colorsStart.length)
+						{
+							fill = new LinearGradientFill();
+							var grStop:GradientStop = new GradientStop(_colorsStart[c])
+							grStop.alpha = alpha;
+							var g:Array = new Array();
+							g.push(grStop);
+			
+							grStop = new GradientStop(_colorsStop[c]);
+							grStop.alpha = alpha;
+							g.push(grStop);
+			
+							LinearGradientFill(fill).gradientStops = g;
+							c++
+						}
+					}  else if (_colors)
 					{
 						if (c < _colors.length)
 							fill = new SolidFill(_colors[c]);

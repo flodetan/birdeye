@@ -35,8 +35,6 @@ package birdeye.vis.coords
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
-	import com.degrafa.geometry.Line;
-	import com.degrafa.paint.SolidStroke;
 	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
@@ -71,7 +69,6 @@ package birdeye.vis.coords
 	 * real 3D graphics (moveTo, drawRect, drawLine etc don't include the z coordinate), the AreaChart 
 	 * and LineChart are not 3D yet. 
 	 * */ 
-	[DefaultProperty("dataProvider")]
 	[Exclude(name="elementsContainer", kind="property")]
 	public class Cartesian extends VisScene implements ICoordinates, ISizableItem
 	{
@@ -142,20 +139,6 @@ package birdeye.vis.coords
 			var stackableElements:Array = [];
 			for (var i:Number = 0, j:Number = 0, t:Number = 0; i<_elements.length; i++)
 			{
-				// if the element doesn't have an own x axis, than
-				// it's necessary to create a default x axis inside the
-				// cartesian chart. This axis will be shared by all elements that
-				// have no own x axis
-				if (! IElement(_elements[i]).scale1)
-					needDefaultScale1 = true;
-
-				// if the element doesn't have an own y axis, than
-				// it's necessary to create a default y axis inside the
-				// cartesian chart. This axis will be shared by all elements that
-				// have no own y axis
-				if (! IElement(_elements[i]).scale2)
-					needDefaultScale2 = true;
-					
 				// set the chart target inside the element to 'this'
 				// in the future the element target could be an external chart 
 				if (! IElement(_elements[i]).chart)
@@ -263,7 +246,6 @@ package birdeye.vis.coords
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
-			needDefaultScale1 = needDefaultScale2 = false;
 			
 			removeAllElements();
 			
@@ -299,9 +281,8 @@ package birdeye.vis.coords
 									bottomContainer.addChild(DisplayObject(scale1));
 								break;
 						}
-					} else 
-						needDefaultScale1 = true;
-						
+					} 
+
 					var scale2:IScale = IElement(elements[i]).scale2;
 					if (scale2)
 					{
@@ -316,8 +297,7 @@ package birdeye.vis.coords
 									rightContainer.addChild(DisplayObject(scale2));
 								break;
 						}
-					} else 
-						needDefaultScale2 = true;
+					} 
 
 					var tmpScale3:IScale = IElement(elements[i]).scale3;
 					if (tmpScale3 && tmpScale3 is IScaleUI)
@@ -339,54 +319,6 @@ package birdeye.vis.coords
 				}
 			}
 
-			if (_scale3 && _scale3 is IScaleUI)
-			{
-				_is3D = true;
-				if (!zContainer.contains(DisplayObject(_scale3)))
-					zContainer.addChild(DisplayObject(_scale3));
-				// this will be replaced by a depth property 
- 				IScale(_scale3).size = width; 
- 				// the scale3 is in reality an Scale2 which is rotated of 90 degrees
- 				// on its X coordinate. This will be replaced by a real z axis, when 
- 				// FP will provide methods to draw real 3d lines
-				zContainer.rotationX = -90;
-				// this adjusts the positioning of the axis after the rotation
-				zContainer.z = width;
-			}
-			
-			// if some elements have no own y axis, than create a default one for the chart
-			// that will be used by all elements without a y axis
- 			if (needDefaultScale2)
-			{
-				if (!_scale2)
-					createScale2();
-					
-				if (_scale2.placement == BaseScale.RIGHT)
-				{
-					if (!rightContainer.contains(DisplayObject(_scale2)))
-						rightContainer.addChild(DisplayObject(_scale2));
-				} else {
-					if (!leftContainer.contains(DisplayObject(_scale2)))
-						leftContainer.addChild(DisplayObject(_scale2));
-				}
-			}
- 			// if some elements have no own x axis, than create a default one for the chart
-			// that will be used by all elements without a x axis
-			if (needDefaultScale1)
-			{
-				if (!_scale1)
-					createScale1();
-
-				if (_scale1.placement == BaseScale.TOP)
-				{
-					if (!topContainer.contains(DisplayObject(_scale1)))
-						topContainer.addChild(DisplayObject(_scale1));
-				} else {
-					if (!bottomContainer.contains(DisplayObject(_scale1)))
-						bottomContainer.addChild(DisplayObject(_scale1));
-				}
-			}
-			
 			// when elements are loaded, set their stack type to the 
 			// current "type" value. if the type is STACKED100
 			// calculate the maxStacked100 value, and load the baseValues
@@ -733,176 +665,11 @@ package birdeye.vis.coords
 		{
 			if (nCursors == elements.length)
 			{
-				var catElements:Array = [];
-				var j:Number = 0;
-				
-				var maxMin:Array;
-				
-				// check if a default y axis exists
-				if (scale2)
-				{
-					if (scale2 is IEnumerableScale)
-					{
-						for (i = 0; i<nCursors; i++)
-						{
-							currentElement = IElement(_elements[i]);
-							// if the elements have their own data provider but have not their own
-							// Scale2, than load their elements and add them to the elements
-							// loaded by the chart data provider
-							if (currentElement.dataProvider 
-								&& currentElement.dataProvider != dataProvider
-								&& ! currentElement.scale2)
-							{
-								currentElement.cursor.seek(CursorBookmark.FIRST);
-								while (!currentElement.cursor.afterLast)
-								{
-									if (catElements.indexOf(
-										currentElement.cursor.current[IEnumerableScale(scale2).categoryField]) 
-										== -1)
-										catElements[j++] = 
-											currentElement.cursor.current[IEnumerableScale(scale2).categoryField];
-									currentElement.cursor.moveNext();
-								}
-							}
-						}
-						
-						if (cursor)
-						{
-							cursor.seek(CursorBookmark.FIRST);
-							while (!cursor.afterLast)
-							{
-								// if the category value already exists in the axis, than skip it
-								if (catElements.indexOf(cursor.current[IEnumerableScale(scale2).categoryField]) == -1)
-									catElements[j++] = 
-										cursor.current[IEnumerableScale(scale2).categoryField];
-								cursor.moveNext();
-							}
-						}
-
-						// set the elements property of the CategorScale2
-						if (catElements.length > 0)
-							IEnumerableScale(scale2).dataProvider = catElements;
-					} else {
-						// if the default y axis is numeric, than calculate its min max values
-						maxMin = getMaxMinYValueFromElementsWithoutScale2();
-						INumerableScale(scale2).max = maxMin[0];
-						INumerableScale(scale2).min = maxMin[1];
-					}
-				} 
-				
-				catElements = [];
-				j = 0;
-
-				// check if a default y axis exists
-				if (scale1)
-				{
-					if (scale1 is IEnumerableScale)
-					{
-						for (i = 0; i<nCursors; i++)
-						{
-							currentElement = IElement(_elements[i]);
-							// if the elements have their own data provider but have not their own
-							// Scale1, than load their elements and add them to the elements
-							// loaded by the chart data provider
-							if (currentElement.dataProvider 
-								&& currentElement.dataProvider != dataProvider
-								&& ! currentElement.scale1)
-							{
-								currentElement.cursor.seek(CursorBookmark.FIRST);
-								while (!currentElement.cursor.afterLast)
-								{
-									if (catElements.indexOf(
-										currentElement.cursor.current[IEnumerableScale(scale1).categoryField]) 
-										== -1)
-										catElements[j++] = 
-											currentElement.cursor.current[IEnumerableScale(scale1).categoryField];
-									currentElement.cursor.moveNext();
-								}
-							}
-						}
-						if (cursor)
-						{
-							cursor.seek(CursorBookmark.FIRST);
-							while (!cursor.afterLast)
-							{
-								// if the category value already exists in the axis, than skip it
-								if (catElements.indexOf(cursor.current[IEnumerableScale(scale1).categoryField]) == -1)
-									catElements[j++] = 
-										cursor.current[IEnumerableScale(scale1).categoryField];
-								cursor.moveNext();
-							}
-						}
-						
-						// set the elements property of the CategorScale2
-						if (catElements.length > 0)
-							IEnumerableScale(scale1).dataProvider = catElements;
-					} else {
-						// if the default x axis is numeric, than calculate its min max values
-						maxMin = getMaxMinXValueFromElementsWithoutScale1();
-						INumerableScale(scale1).max = maxMin[0];
-						INumerableScale(scale1).min = maxMin[1];
-					}
-				} 
-				
-				catElements = [];
-				j = 0;
-
-				// check if a default z axis exists
-				if (scale3)
-				{
-					if (scale3 is IEnumerableScale)
-					{
-						for (i = 0; i<nCursors; i++)
-						{
-							currentElement = IElement(_elements[i]);
-							// if the elements have their own data provider but have not their own
-							// scale3, than load their elements and add them to the elements
-							// loaded by the chart data provider
-							if (currentElement.dataProvider 
-								&& currentElement.dataProvider != dataProvider
-								&& ! currentElement.scale3)
-							{
-								currentElement.cursor.seek(CursorBookmark.FIRST);
-								while (!currentElement.cursor.afterLast)
-								{
-									if (catElements.indexOf(
-										currentElement.cursor.current[IEnumerableScale(scale3).categoryField]) 
-										== -1)
-										catElements[j++] = 
-											currentElement.cursor.current[IEnumerableScale(scale3).categoryField];
-									currentElement.cursor.moveNext();
-								}
-							}
-						}
-						if (cursor)
-						{
-							cursor.seek(CursorBookmark.FIRST);
-							while (!cursor.afterLast)
-							{
-								// if the category value already exists in the axis, than skip it
-								if (catElements.indexOf(cursor.current[IEnumerableScale(scale3).categoryField]) == -1)
-									catElements[j++] = 
-										cursor.current[IEnumerableScale(scale3).categoryField];
-								cursor.moveNext();
-							}
-						}
-						
-						// set the elements property of the CategorScale2
-						if (catElements.length > 0)
-							IEnumerableScale(scale3).dataProvider = catElements;
-					} else {
-						// if the default x axis is numeric, than calculate its min max values
-						maxMin = getMaxMinZValueFromElementsWithoutScale3();
-						INumerableScale(scale3).max = maxMin[0];
-						INumerableScale(scale3).min = maxMin[1];
-					}
-				} 
-
 				// check if a default color axis exists
 				if (colorAxis)
 				{
 						// if the default color axis is numeric, than calculate its min max values
-						maxMin = getMaxMinColorValueFromElementsWithoutColorAxis();
+						var maxMin:Array = getMaxMinColorValueFromElementsWithoutColorAxis();
 						colorAxis.max = maxMin[0];
 						colorAxis.min = maxMin[1];
 				} 
@@ -998,11 +765,11 @@ package birdeye.vis.coords
 				{
 					// check if the Element has its own color axis and if its max value exists and 
 					// is higher than the current max
-					if (!currentElement.colorAxis && (isNaN(max) || max < currentElement.maxColorValue))
+					if (!currentElement.colorScale && (isNaN(max) || max < currentElement.maxColorValue))
 						max = currentElement.maxColorValue;
 					// check if the Element has its own color axis and if its min value exists and 
 					// is lower than the current min
-					if (!currentElement.colorAxis && (isNaN(min) || min > currentElement.minColorValue))
+					if (!currentElement.colorScale && (isNaN(min) || min > currentElement.minColorValue))
 						min = currentElement.minColorValue;
 				}
 			}
@@ -1155,13 +922,13 @@ package birdeye.vis.coords
 							Math.min(INumerableScale(element.scale3).min, element.minDim3Value);
 				}
 
-				if (element.colorAxis)
+				if (element.colorScale)
 				{
 					// if the axis is numeric than set its maximum and minimum values 
 					// if the max and min are not yet defined for the element, than they are calculated now
-					element.colorAxis.max =
+					element.colorScale.max =
 						element.maxColorValue;
-					element.colorAxis.min =
+					element.colorScale.min =
 						element.minColorValue;
 				}
 			}
@@ -1170,7 +937,7 @@ package birdeye.vis.coords
 		private var gridGG:GeometryGroup;
 		protected function drawGrid():void
 		{
-			if (scale1 && scale2 && _elementsContainer.width>0 && _elementsContainer.height>0)
+/* 			if (scale1 && scale2 && _elementsContainer.width>0 && _elementsContainer.height>0)
 			{
 				if (!gridGG)
 				{
@@ -1212,29 +979,8 @@ package birdeye.vis.coords
 					_elementsContainer.graphicsCollection.addItem(gridGG);
 				}
 			}
-		}
+ */		}
 		
-		/** @Private
-		 * The creation of default axes can be overrided so that it's possible to 
-		 * select a specific default setup. For example, for the bar chart the default 
-		 * y axis is a category axis and the x one is linear.
-		 * However if CartesianChart is used to build the chart, than a constant axis is used, 
-		 * since the user might want to have a single axis only for the chart. 
-		 * In this case the constant axis, returning a constant value for any input data,
-		 * allows to have all shapes (plots, scatters, etc) aligned on the other remaining 
-		 * axis's positions. */
-		protected function createScale2():void
-		{
-				scale2 = new Constant();
-				scale2.placement = BaseScale.LEFT;
-		}
-		/** @Private */
-		protected function createScale1():void
-		{
-			scale1 = new Constant();
-			scale1.placement = BaseScale.BOTTOM;
-		}
-
 		private function removeAllElements():void
 		{
 			var i:int; 

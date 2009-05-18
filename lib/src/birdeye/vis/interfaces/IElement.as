@@ -46,8 +46,8 @@ package birdeye.vis.interfaces
 		function get colorField():String;
 
 		/** Set the color axis.*/
-		function set colorAxis(val:INumerableScale):void;
-		function get colorAxis():INumerableScale;
+		function set colorScale(val:INumerableScale):void;
+		function get colorScale():INumerableScale;
 		function get maxColorValue():Number;
 		function get minColorValue():Number;
 
