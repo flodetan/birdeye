@@ -39,17 +39,30 @@
 			return _interval;
 		}
 		
+		override public function set values(val:Array):void
+		{
+			_values = val;
+			_values.sort(Array.NUMERIC);
+			size = _values[1] - _values[0];
+		}
+
+		override public function set size(val:Number):void
+		{
+			_size = val;
+		}
+
 		public function CategoryAngle():void
 		{
 			showAxis = false;
 			_values = [0,360];
+			size = _values[1] - _values[0];
 		}
 
 		override public function getPosition(dataValue:*):*
 		{
 			if (_values && dataProvider && dataProvider.indexOf(dataValue) != -1)
 			{
-				_interval = (_values[1] - _values[0]) / dataProvider.length;
+				_interval = _size/ dataProvider.length;
 
 				if (_function == null)
 					return dataProvider.indexOf(dataValue) * _interval;
