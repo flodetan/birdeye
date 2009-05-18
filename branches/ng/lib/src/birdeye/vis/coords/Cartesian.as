@@ -162,7 +162,7 @@ package birdeye.vis.coords
 				} 
 			}
 			
-			// if a element is stackable, than its total property 
+			// if an element is stackable, than its total property 
 			// represents the number of all stackable elements with the same type inside the
 			// same chart. This allows having multiple elements type inside the same chart (TODO) 
 			for (j = 0; j<_elements.length; j++)
@@ -325,7 +325,6 @@ package birdeye.vis.coords
 			// arrays for each Column. The baseValues arrays will be used to know
 			// the y0 starting point for each element values, which corresponds to 
 			// the understair element highest y value;
-
 			if (_elements && nCursors == _elements.length)
 			{
 				var _stackElements:Array = [];
@@ -337,6 +336,18 @@ package birdeye.vis.coords
 						IStack(_elements[i]).stackType = _type;
 						_stackElements.push(_elements[i])
 					}
+					
+					if (IElement(_elements[i]).scale1)
+						axesFeeded = axesFeeded && Boolean(IElement(_elements[i]).scale1.values)
+
+					if (IElement(_elements[i]).scale2)
+						axesFeeded = axesFeeded && Boolean(IElement(_elements[i]).scale2.values)
+
+					if (IElement(_elements[i]).scale3)
+						axesFeeded = axesFeeded && Boolean(IElement(_elements[i]).scale3.values)
+
+					if (IElement(_elements[i]).colorScale)
+						axesFeeded = axesFeeded && Boolean(IElement(_elements[i]).colorScale.values)
 				}
 				
 				_maxStacked100 = NaN;
@@ -542,7 +553,7 @@ package birdeye.vis.coords
 					IScatter(scatterElements[i]).minRadiusValue = minRadiusValues[i];
 				}
 			}
-
+			
 			// init all axes, default and elements owned 
 			if (! axesFeeded)
 				feedAxes();
@@ -665,15 +676,6 @@ package birdeye.vis.coords
 		{
 			if (nCursors == elements.length)
 			{
-				// check if a default color axis exists
-				if (colorAxis)
-				{
-						// if the default color axis is numeric, than calculate its min max values
-						var maxMin:Array = getMaxMinColorValueFromElementsWithoutColorAxis();
-						colorAxis.max = maxMin[0];
-						colorAxis.min = maxMin[1];
-				} 
-				
 				// init axes of all elements that have their own axes
 				// since these are children of each elements, they are 
 				// for sure ready for feeding and it won't affect the axesFeeded status
@@ -797,10 +799,7 @@ package birdeye.vis.coords
 					{
 						catElements = IEnumerableScale(element.scale1).dataProvider;
 						j = catElements.length;
-					} else {
-						j = 0;
-						catElements = [];
-					}
+					} 
 						
 					while (!element.cursor.afterLast)
 					{
