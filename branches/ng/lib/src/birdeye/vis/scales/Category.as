@@ -39,6 +39,14 @@
 	[Exclude(name="scaleType", kind="property")]
 	public class Category extends XYZ implements IEnumerableScale
 	{
+ 		/** Define the category strings for category scales.*/
+		override public function set values(val:Array):void
+		{
+			_values = val;
+			_values.sort(Array.CASEINSENSITIVE);
+			dataProvider = values;
+		}
+
 		/** @Private
 		 * The scale type cannot be changed, since it's already "category".*/
 		override public function set scaleType(val:String):void

@@ -34,7 +34,7 @@
 		override public function get interval():Number
 		{
 			if (isNaN(_interval))
-				_interval = (_range[1] - _range[0]) / dataProvider.length
+				_interval = (_values[1] - _values[0]) / dataProvider.length
 			
 			return _interval;
 		}
@@ -42,19 +42,19 @@
 		public function CategoryAngle():void
 		{
 			showAxis = false;
-			_range = [0,360];
+			_values = [0,360];
 		}
 
 		override public function getPosition(dataValue:*):*
 		{
-			if (_range && dataProvider && dataProvider.indexOf(dataValue) != -1)
+			if (_values && dataProvider && dataProvider.indexOf(dataValue) != -1)
 			{
-				_interval = (_range[1] - _range[0]) / dataProvider.length;
+				_interval = (_values[1] - _values[0]) / dataProvider.length;
 
 				if (_function == null)
 					return dataProvider.indexOf(dataValue) * _interval;
 				else 
-					return  _function(dataValue, _range[0], _range[1], interval);
+					return  _function(dataValue, _values[0], _values[1], interval);
 			}
 		}
 	}
