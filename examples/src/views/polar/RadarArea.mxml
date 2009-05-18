@@ -25,11 +25,11 @@
 				{
 					ac.addItem({
 						subject: subject[i],
-						R1: Math.round(Math.random() * i*10* 1000),
-						R2: Math.round(Math.random() * i*10* 1000),
-						R3: Math.round(Math.random() * i*10* 1000),
-						R4: Math.round(Math.random() * i*10* 1000),
-						R5: Math.round(Math.random() * i*10* 1000)
+						R1: Math.round(Math.random() * 1000),
+						R2: Math.round(Math.random() * 1000),
+						R3: Math.round(Math.random() * 1000),
+						R4: Math.round(Math.random() * 1000),
+						R5: Math.round(Math.random() * 1000)
 					});
 				}
 				dt = ac;
