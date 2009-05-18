@@ -46,19 +46,14 @@
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
 	<mx:Button label="Generate" click="createDT()"/>
 	<coords:Cartesian maxRadius="30" id="sp" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
- 	<coords:scale1>
- 		<scales:Category categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
- 	</coords:scale1>
- 	<coords:scale2>
-	 	<scales:Linear placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
-	 </coords:scale2>
+		<coords:scales>
+		 	<scales:Category id="c" categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
+		 	<scales:Linear id="l" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
+		</coords:scales>
 		 <coords:elements>
-		 	<series:ScatterElement extendMouseEvents="true" dim1="subject" radiusField="total" dim2="R1" itemRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" styleName="grad1" displayName="R1">
-		 	</series:ScatterElement>
-		 	<series:ScatterElement extendMouseEvents="true" dim1="subject" radiusField="total" dim2="R2" itemRenderer="birdeye.vis.guides.renderers.ButterflyRenderer" styleName="grad3" displayName="R2">
-		 	</series:ScatterElement>
-		 	<series:ScatterElement extendMouseEvents="true" dim1="subject" radiusField="total" dim2="R3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="grad5" displayName="R3">
-		 	</series:ScatterElement>
+		 	<series:ScatterElement scale1="{c}" scale2="{l}" extendMouseEvents="true" dim1="subject" radiusField="total" dim2="R1" itemRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" styleName="grad1" displayName="R1"/>
+		 	<series:ScatterElement scale1="{c}" scale2="{l}" extendMouseEvents="true" dim1="subject" radiusField="total" dim2="R2" itemRenderer="birdeye.vis.guides.renderers.ButterflyRenderer" styleName="grad3" displayName="R2"/>
+		 	<series:ScatterElement scale1="{c}" scale2="{l}" extendMouseEvents="true" dim1="subject" radiusField="total" dim2="R3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="grad5" displayName="R3"/>
 		 </coords:elements>
 	</coords:Cartesian>
 	<legend:Legend dataProvider="{sp}" direction="horizontal"/>
