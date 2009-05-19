@@ -30,8 +30,8 @@
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.interfaces.IScale;
-	import birdeye.vis.scales.BaseScale;
 	import birdeye.vis.scales.MultiScale;
+	import birdeye.vis.trans.projections.Projection;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
@@ -63,6 +63,12 @@
 		public function get coordType():String
 		{
 			return _coordType;
+		}
+		
+		private var _projection:Projection;
+		public function set projection(val:Projection):void
+		{
+			_projection = val;
 		}
 		
 		protected var _maxStacked100:Number = NaN;

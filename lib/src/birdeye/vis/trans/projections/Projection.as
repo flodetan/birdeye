@@ -27,21 +27,7 @@
  
 package birdeye.vis.trans.projections
 {
-	import flash.geom.Point;
-	
-	import birdeye.vis.trans.projections.Transformation;
-
-	import birdeye.vis.trans.projections.WorldGeographicTransformation;
-	import birdeye.vis.trans.projections.LambertTransformation;
-	import birdeye.vis.trans.projections.PlainMollweideTransformation;
-	import birdeye.vis.trans.projections.WinkelTripelTransformation;
-	import birdeye.vis.trans.projections.MillerTransformation;
-	import birdeye.vis.trans.projections.EckertIVTransformation;
-	import birdeye.vis.trans.projections.EckertVITransformation;
-	import birdeye.vis.trans.projections.GoodeMollweideTransformation;
-	import birdeye.vis.trans.projections.GoodeSinusoidalTransformation;
-	import birdeye.vis.trans.projections.PlainSinusoidalTransformation;
-	import birdeye.vis.trans.projections.RobinsonTransformation;
+	import birdeye.vis.interfaces.IScale;
 
 	//This class calculates latitude & longitude from x & y. And vice versa
 	public class Projection
@@ -59,6 +45,52 @@ package birdeye.vis.trans.projections
 		private static var _goodeSinusoidal:GoodeSinusoidalTransformation = null; //Singleton GoodeSinusoidalTransformation
 		private static var _sinusoidal:PlainSinusoidalTransformation = null; //Singleton PlainSinusoidalTransformation
 		private static var _robinson:RobinsonTransformation = null; //Singleton RobinsonTransformation
+
+		private var _minLat:Number = NaN;
+		public function set minLat(val:Number):void
+		{
+			_minLat = val;
+		}
+		
+		private var _maxLat:Number = NaN;
+		public function set maxLat(val:Number):void
+		{
+			_maxLat = val;
+		}
+
+		private var _minLong:Number = NaN;
+		public function set minLong(val:Number):void
+		{
+			_minLong = val;
+		}
+
+		private var _maxLong:Number = NaN;
+		public function set maxLong(val:Number):void
+		{
+			_maxLong = val;
+		}
+		
+		private var _latScale:IScale;
+		public function set latScale(val:IScale):void
+		{
+			_latScale = val;
+			if (_latScale.values)
+			{
+				minLat = _latScale.values[0];
+				maxLat = _latScale.values[1];
+			}
+		}
+
+		private var _longScale:IScale;
+		public function set longScale(val:IScale):void
+		{
+			_longScale = val;
+			if (_longScale.values)
+			{
+				minLong = _longScale.values[0];
+				maxLong = _longScale.values[1];
+			}
+		}
 
 		public function projectArrayXs(coordArray:Array, sizeX:Number):void
 		{
@@ -86,7 +118,7 @@ package birdeye.vis.trans.projections
 
 		public function projX(latLon:Array, minLong:Number, maxLong:Number, sizeX:Number):Number
 		{
-			return projectX(latLon[1], latLon[0], sizeX, NaN, NaN, minLong, maxLong);
+			return projectX(latLon[1], latLon[0], sizeX, _minLat, _maxLat, minLong, maxLong);
 		}
 
 		public function projectX(lat:Number, long:Number, sizeX:Number, minLat:Number, maxLat:Number, minLong:Number, maxLong:Number):Number
@@ -98,7 +130,7 @@ package birdeye.vis.trans.projections
 
 		public function projY(latLon:Array, minLat:Number, maxLat:Number, sizeY:Number):Number
 		{
-			return projectY(latLon[1], latLon[0], sizeY, minLat, maxLat, NaN, NaN);
+			return projectY(latLon[1], latLon[0], sizeY, minLat, maxLat, _minLong, _maxLong);
 		}
 
 		public function projectY(lat:Number, long:Number, sizeY:Number, minLat:Number, maxLat:Number, minLong:Number, maxLong:Number):Number
