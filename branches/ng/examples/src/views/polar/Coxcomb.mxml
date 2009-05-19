@@ -20,7 +20,6 @@
 			{
 				subject = ["A", "B", "C", "D", "E", "F"];
 				var ac:ArrayCollection = new ArrayCollection();
-				var ac1:ArrayCollection = new ArrayCollection();
 				for (var i:Number = 1; i<subject.length; i++)
 				{
 					ac.addItem({
@@ -47,7 +46,7 @@
 <mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
 	<mx:Button label="Generate" click="createDT()"/>
 	<polar:Polar type="stacked100" columnWidthRate="1" id="pc1" dataProvider="{dt}" 
-		showDataTips="true" width="500" height="500">
+		showDataTips="true" width="100%" height="100%">
 <!--		<coxcomb:angleScale>
 			<axis:CategoryAngle categoryField="subject" />
 		</coxcomb:angleScale>
@@ -57,7 +56,6 @@
 -->		<polar:scales>
 			<axis:CategoryAngle id="c" categoryField="subject"/>
 			<axis:Linear id="l1" placement="horizontal_center" sizeLabel="11"/>
-			<axis:Linear id="l2" placement="vertical_center" sizeLabel="12"/>
 		</polar:scales>
 		<polar:elements>
 			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad1" dim1="subject" dim2="R1" displayName="R1"/>
