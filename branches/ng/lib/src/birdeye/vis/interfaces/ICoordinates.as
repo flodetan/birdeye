@@ -28,6 +28,7 @@
 package birdeye.vis.interfaces
 {
 	import birdeye.vis.scales.MultiScale;
+	import birdeye.vis.trans.projections.Projection;
 	
 	import flash.geom.Point;
 	
@@ -41,6 +42,8 @@ package birdeye.vis.interfaces
 
 		function set multiScale(val:MultiScale):void;
 		function get multiScale():MultiScale;
+
+		function set projection(val:Projection):void;
 
 		/** @Private
 		 * The maximum value among all elements stacked according to stacked100 type.
