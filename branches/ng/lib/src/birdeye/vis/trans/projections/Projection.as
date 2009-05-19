@@ -84,11 +84,21 @@ package birdeye.vis.trans.projections
 			} // end for each point
 		}
 
+		public function projX(latLon:Array, minLong:Number, maxLong:Number, sizeX:Number):Number
+		{
+			return projectX(latLon[1], latLon[0], sizeX, NaN, NaN, minLong, maxLong);
+		}
+
 		public function projectX(lat:Number, long:Number, sizeX:Number, minLat:Number, maxLat:Number, minLong:Number, maxLong:Number):Number
 		{
 			var transformation: Transformation = selectTransformation(lat, long, _proj);
 			var x:Number = transformation.projectX(lat, long, sizeX, minLat, maxLat, minLong, maxLong);
 			return x;
+		}
+
+		public function projY(latLon:Array, minLat:Number, maxLat:Number, sizeY:Number):Number
+		{
+			return projectY(latLon[1], latLon[0], sizeY, minLat, maxLat, NaN, NaN);
 		}
 
 		public function projectY(lat:Number, long:Number, sizeY:Number, minLat:Number, maxLat:Number, minLong:Number, maxLong:Number):Number

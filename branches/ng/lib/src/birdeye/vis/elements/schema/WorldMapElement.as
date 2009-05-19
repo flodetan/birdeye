@@ -42,16 +42,10 @@
 	[ExcludeClass]
 	
 	//This class contains boundary definitions for the countries of the world, expressed as latitude and longitude 
-	public class WorldMapElement extends WorldCountries//SASN implements ICartesianElement
+	public class WorldMapElement extends WorldCountries 
 	{
 		private var longLatPolygons:Array= new Array();
 		private var longLatBaryCenters:Array= new Array();
-		public var translateX:Number=0;
-		public var translateY:Number=19482180;
-//SASN		public var scaleX:Number=1;
-//SASN		public var scaleY:Number=-1;
-//SASN		public var targetLatScale:XYZAxis;
-//SASN		public var targetLongScale:XYZAxis;
 		private var _targetLongProjection:Projection;
 		private var _targetLatProjection:Projection;
 				
@@ -588,10 +582,9 @@
 				var poly:Polygon;
 				var _color:SolidFill=new SolidFill(0x22AA44);
 				var _stroke:SolidStroke=new SolidStroke(0xFF3333,1,1);
-				var latLongClone:Array = longLatPolygons.slice();
 				for each (var country:String in listOfCountry)
 				{
-					countryCoordinates = latLongClone[country];
+					countryCoordinates = longLatPolygons[country];
 					if(countryCoordinates!=null)
 					{
 						countryGeom = new GeometryGroup();
