@@ -211,8 +211,9 @@ package birdeye.vis.scales
 				{
 					for (snap = min; snap<max; snap += interval)
 					{
+						var pos:Number = _size * (snap - min)/(max - min);
 						// create thick line
-			 			thick = new Line(xMin + thickWidth * sign, getPosition(snap), xMax, getPosition(snap));
+			 			thick = new Line(xMin + thickWidth * sign, pos, xMax, pos);
 						thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 						gg.geometryCollection.addItem(thick);
 			
@@ -224,7 +225,7 @@ package birdeye.vis.scales
 	 					label.visible = true;
 						label.autoSize = TextFieldAutoSize.LEFT;
 						label.autoSizeField = true;
-						label.y = getPosition(snap)-label.displayObject.height/2;
+						label.y =  pos - label.displayObject.height/2;
 						label.x = thickWidth * sign; 
 						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
@@ -232,8 +233,9 @@ package birdeye.vis.scales
 				} else {
 					for (snap = min; snap<max; snap += interval)
 					{
+						var pos:Number = _size * (snap - min)/(max - min);
 						// create thick line
-			 			thick = new Line(getPosition(snap), yMin + thickWidth * sign, getPosition(snap), yMax);
+			 			thick = new Line(pos, yMin + thickWidth * sign, pos, yMax);
 						thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 						gg.geometryCollection.addItem(thick);
 	
@@ -246,7 +248,7 @@ package birdeye.vis.scales
 						label.autoSize = TextFieldAutoSize.LEFT;
 						label.autoSizeField = true;
 						label.y = thickWidth;
-						label.x = getPosition(snap)-label.displayObject.width/2; 
+						label.x = pos - label.displayObject.width/2; 
 						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
 					}
@@ -317,7 +319,7 @@ package birdeye.vis.scales
 					return _size * (Number(dataValue) - min)/(max - min);
 			}
 			else 
-				return _function(dataValue, min, max, _baseAtZero, _size);
+				return _function(dataValue, min, max, _size);
 		}
 		
 		override public function resetValues():void

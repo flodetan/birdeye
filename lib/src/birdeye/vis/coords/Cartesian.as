@@ -319,6 +319,7 @@ package birdeye.vis.coords
 			{
 				var _stackElements:Array = [];
 			
+				axesFeeded = true;
 				for (i = 0; i<_elements.length; i++)
 				{
 					if (_elements[i] is IStack)
