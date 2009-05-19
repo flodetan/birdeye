@@ -35,10 +35,6 @@ package birdeye.vis.trans.projections
 		{
 			super();
 			this.xscaler=1;
-			this.xoffset=2.828427124745319;
-			this.yoffset=1.414213562345374;
-			this.worldUnscaledSizeX=5.6568542494915;
-			this.worldUnscaledSizeY=2.828427124690748;
 		}
 	}
 }

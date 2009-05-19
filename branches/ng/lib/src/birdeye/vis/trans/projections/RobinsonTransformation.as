@@ -57,10 +57,6 @@ package birdeye.vis.trans.projections
 		public function RobinsonTransformation()
 		{
 			super();
-			this.xoffset=0.25;
-			this.yoffset=0.127;
-			this.worldUnscaledSizeX=0.5;
-			this.worldUnscaledSizeY=0.254;
 		}
 
 		private function roundUpToFive(inVal:Number):int{

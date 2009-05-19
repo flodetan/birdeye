@@ -36,10 +36,6 @@ package birdeye.vis.trans.projections
 		public function MillerTransformation()
 		{
 			super();
-			this.xoffset=Math.PI;
-			this.yoffset=2.303412543376390918432;
-			this.worldUnscaledSizeX=Math.PI*2;
-			this.worldUnscaledSizeY=4.606825086752782;
 		}
 
 		public override function calcX(latDeg:Number, longDeg:Number):Number

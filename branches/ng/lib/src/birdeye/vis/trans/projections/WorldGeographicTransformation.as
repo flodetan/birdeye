@@ -35,10 +35,6 @@ package birdeye.vis.trans.projections
 		public function WorldGeographicTransformation()
 		{
 			super();
-			this.xoffset=Math.PI;
-			this.yoffset=Math.PI/2;
-			this.worldUnscaledSizeX=Math.PI*2;
-			this.worldUnscaledSizeY=Math.PI;
 		}
 		
 		public override function calcX(latDeg:Number, longDeg:Number):Number

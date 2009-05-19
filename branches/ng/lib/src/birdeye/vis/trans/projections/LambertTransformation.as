@@ -37,10 +37,6 @@ package birdeye.vis.trans.projections
 		public function LambertTransformation()
 		{
 			super();
-			this.xoffset=1.98;
-			this.yoffset=1.94;
-			this.worldUnscaledSizeX=3;//SASN TODO
-			this.worldUnscaledSizeY=5;//SASN TODO
 		}
 
 		private function calc_kayPrim(la:Number, lo:Number):Number

@@ -46,25 +46,25 @@ package birdeye.vis.trans.projections
 		private static var _sinusoidal:PlainSinusoidalTransformation = null; //Singleton PlainSinusoidalTransformation
 		private static var _robinson:RobinsonTransformation = null; //Singleton RobinsonTransformation
 
-		private var _minLat:Number = NaN;
+		private var _minLat:Number;
 		public function set minLat(val:Number):void
 		{
 			_minLat = val;
 		}
 		
-		private var _maxLat:Number = NaN;
+		private var _maxLat:Number;
 		public function set maxLat(val:Number):void
 		{
 			_maxLat = val;
 		}
 
-		private var _minLong:Number = NaN;
+		private var _minLong:Number;
 		public function set minLong(val:Number):void
 		{
 			_minLong = val;
 		}
 
-		private var _maxLong:Number = NaN;
+		private var _maxLong:Number;
 		public function set maxLong(val:Number):void
 		{
 			_maxLong = val;
@@ -99,7 +99,7 @@ package birdeye.vis.trans.projections
 			var xval:Number;
 			for each (var coord:Array in coordArray) //a polygon has several points
 			{
-				xval = projectX(coord[1],coord[0],sizeX,Number.NaN,Number.NaN,Number.NaN,Number.NaN);//-90,90,-180,180);//
+				xval = projectX(coord[1],coord[0],sizeX);//-90,90,-180,180);//
 				coord[0] = xval;
 			} // end for each point
 		}
@@ -111,7 +111,7 @@ package birdeye.vis.trans.projections
 			var yval:Number;
 			for each (var coord:Array in coordArray) //a polygon has several points
 			{
-				yval = projectY(coord[1],coord[0],sizeY,Number.NaN,Number.NaN,Number.NaN,Number.NaN);//-90,90,-180,180);//
+				yval = projectY(coord[1],coord[0],sizeY);//-90,90,-180,180);//
 				coord[1] = yval;
 			} // end for each point
 		}
@@ -121,7 +121,7 @@ package birdeye.vis.trans.projections
 			return projectX(latLon[1], latLon[0], sizeX, _minLat, _maxLat, minLong, maxLong);
 		}
 
-		public function projectX(lat:Number, long:Number, sizeX:Number, minLat:Number, maxLat:Number, minLong:Number, maxLong:Number):Number
+		public function projectX(lat:Number, long:Number, sizeX:Number, minLat:Number=-90, maxLat:Number=90, minLong:Number=-180, maxLong:Number=180):Number
 		{
 			var transformation: Transformation = selectTransformation(lat, long, _proj);
 			var x:Number = transformation.projectX(lat, long, sizeX, minLat, maxLat, minLong, maxLong);
@@ -131,9 +131,10 @@ package birdeye.vis.trans.projections
 		public function projY(latLon:Array, minLat:Number, maxLat:Number, sizeY:Number):Number
 		{
 			return projectY(latLon[1], latLon[0], sizeY, minLat, maxLat, _minLong, _maxLong);
+			
 		}
 
-		public function projectY(lat:Number, long:Number, sizeY:Number, minLat:Number, maxLat:Number, minLong:Number, maxLong:Number):Number
+		public function projectY(lat:Number, long:Number, sizeY:Number, minLat:Number=-90, maxLat:Number=90, minLong:Number=-180, maxLong:Number=180):Number
 		{
 			var transformation: Transformation = selectTransformation(lat, long, _proj);
 			var y:Number = transformation.projectY(lat, long, sizeY, minLat, maxLat, minLong, maxLong);
