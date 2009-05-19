@@ -41,10 +41,6 @@ package birdeye.vis.trans.projections
 		public function USGeographicTransformation(lat:Number,long:Number)
 		{
 			super();
-			this.xoffset=2.19;
-			this.yoffset=0.858
-			this.worldUnscaledSizeX=1.4; //to be verified
-			this.worldUnscaledSizeY=3; //to be verified
 		}
 		
 	}

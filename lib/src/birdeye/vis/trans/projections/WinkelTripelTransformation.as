@@ -35,10 +35,6 @@ package birdeye.vis.trans.projections
 		public function WinkelTripelTransformation()
 		{
 			super();
-			this.xoffset=6.283185307;
-			this.yoffset=3.141592654;
-			this.worldUnscaledSizeX=12;
-			this.worldUnscaledSizeY=6;
 		}
 
 		private function calcSincAlpha(lat:Number,long:Number):Number

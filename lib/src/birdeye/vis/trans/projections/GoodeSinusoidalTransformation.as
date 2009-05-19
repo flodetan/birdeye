@@ -34,10 +34,6 @@ package birdeye.vis.trans.projections
 		public function GoodeSinusoidalTransformation()
 		{
 			super();
-			this.xoffset = 2.98;
-			this.yoffset = 1.32;
-			this.worldUnscaledSizeX=6.12;
-			this.worldUnscaledSizeY=2.8;
 		}
 		
 /*		protected override function calcUnscaledSizeX(minLat:Number, maxLat:Number, minLong:Number, maxLong:Number):Number

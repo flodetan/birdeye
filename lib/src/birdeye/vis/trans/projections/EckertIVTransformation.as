@@ -35,10 +35,6 @@ package birdeye.vis.trans.projections
 		public function EckertIVTransformation()
 		{
 			super();
-			this.xoffset=2.65300085635400504;
-			this.yoffset=1.326500428177001814;
-			this.worldUnscaledSizeX=5.30600171270801;
-			this.worldUnscaledSizeY=2.6530008563540037;
 		}
 
 		private function approxNotGoodEnough(tP:Number, la:Number):Boolean {

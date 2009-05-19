@@ -37,10 +37,8 @@ package birdeye.vis.trans.projections
 	public class Transformation
 	{
 		//These variables are supposed to be overridden
-		protected var _xoffset:Number; //Projection-specific x-wise translation so that x=0 becomes the left border of the map
-		protected var _yoffset:Number; //Projection-specific y-wise translation so that y=0 becomes the top of the map
-		protected var _worldUnscaledSizeX:Number; //Projection-specific length of x-axis [long=-180, long=180], before any scaling 
-		protected var _worldUnscaledSizeY:Number; //Projection-specific length of y-axis [lat=-90, lat=90], before any scaling
+		protected var _minX:Number; //X value corresponding to minLong in the given latitude range
+		protected var _maxY:Number; //Y value corresponding to maxLat in the given longitude range
 		
 		public function Transformation()
 		{
@@ -58,126 +56,69 @@ package birdeye.vis.trans.projections
 			return 0;
 		}
 		
-		public function projectX(lat:Number, long:Number, sizeX:Number,minLat:Number,maxLat:Number,minLong:Number,maxLong:Number):Number
+		public function projectX(lat:Number, long:Number, sizeX:Number, minLat:Number=-90, maxLat:Number=90, minLong:Number=-180, maxLong:Number=180):Number
 		{
 			var xCentered:Number = calcX(lat, long);
 			var unscaledSizeX:Number = calcUnscaledSizeX(minLat, maxLat, minLong, maxLong);
 			return translateX(xCentered, sizeX, unscaledSizeX);
 		}
 
-		public function projectY(lat:Number, long:Number, sizeY:Number, minLat:Number,maxLat:Number,minLong:Number,maxLong:Number):Number
+		public function projectY(lat:Number, long:Number, sizeY:Number, minLat:Number=-90, maxLat:Number=90, minLong:Number=-180, maxLong:Number=180):Number
 		{
 			var yCentered:Number = calcY(lat, long);
 			var unscaledSizeY:Number = calcUnscaledSizeY(minLat, maxLat, minLong, maxLong);
 			return translateY(yCentered, sizeY, unscaledSizeY);
 		}
 
-		protected function calcUnscaledSizeX(minLat:Number, maxLat:Number, minLong:Number, maxLong:Number):Number
+		protected function calcUnscaledSizeX(minLat:Number=-90, maxLat:Number=90, minLong:Number=-180, maxLong:Number=180):Number
 		{
-			if (isNaN(minLat) || isNaN(maxLat) || isNaN(minLong) || isNaN(maxLong))
-			{
-				return _worldUnscaledSizeX;
-			}
 			const numberOfSteps:int = 4;
 			var stepSize:Number = (maxLat - minLat)/numberOfSteps;
-			var minX:Number = calcX(minLat, minLong);
+			_minX = calcX(minLat, minLong);
 			var maxX:Number = calcX(maxLat, minLong);
 			var lat:Number;
 			var i:int;
 			for (i = 1; i <= numberOfSteps; i++)
 			{
 				lat = minLat + i*stepSize;
-				minX = Math.min(minX, calcX(lat,minLong));
+				_minX = Math.min(_minX, calcX(lat,minLong));
 				maxX = Math.max(maxX, calcX(lat,maxLong));
 			}
-			return maxX-minX;
+			return maxX-_minX;
 		}
 
-		protected function calcUnscaledSizeY(minLat:Number, maxLat:Number, minLong:Number, maxLong:Number):Number
+		protected function calcUnscaledSizeY(minLat:Number=-90, maxLat:Number=90, minLong:Number=-180, maxLong:Number=180):Number
 		{
-			if (isNaN(minLat) || isNaN(maxLat) || isNaN(minLong) || isNaN(maxLong))
-			{
-				return _worldUnscaledSizeY;
-			}
 			const numberOfSteps:int = 4;
 			var stepSize:Number = (maxLong - minLong)/numberOfSteps;
 			var minY:Number = calcY(minLat, minLong);
-			var maxY:Number = calcY(maxLat, minLong);
+			_maxY = calcY(maxLat, minLong);
 			var long:Number;
 			var i:int;
 			for (i = 1; i <= numberOfSteps; i++)
 			{
 				long = minLong + i*stepSize;
 				minY = Math.min(minY, calcY(minLat,long));
-				maxY = Math.max(maxY, calcY(maxLat,long));
+				_maxY = Math.max(_maxY, calcY(maxLat,long));
 			}
-			return maxY-minY;
+			return _maxY-minY;
 		}
 
-		//obsolete
-/*		protected function createTranslatedXYPoint(xCentered:Number,yCentered:Number):Point
-		{
-			var xval:Number=translateX(xCentered);
-			var yval:Number=translateY(yCentered);
-			return new Point(xval,yval);
-		}
-		public function translateX(xCentered:Number):Number
-		{
-			return (_xoffset+xCentered);
-		}
-		public function translateY(yCentered:Number):Number
-		{
-			return (_yoffset-yCentered);
-		}*/
-		
 		protected function translateX(xCentered:Number, sizeX:Number, unscaledSizeX:Number):Number
 		{
 			var scalefactor:Number = sizeX/unscaledSizeX; //factor for zooming to match the size specified by minLat,maxLat,minLong and maxLong 
-			return (_xoffset+xCentered)*scalefactor;
+			return (xCentered-_minX)*scalefactor;
 		}
 
 		protected function translateY(yCentered:Number, sizeY:Number, unscaledSizeY:Number):Number
 		{
 			var scalefactor:Number = sizeY/unscaledSizeY;
-			return (_yoffset-yCentered)*scalefactor;
+			return (_maxY-yCentered)*scalefactor;
 		}
 		
 		public static function convertDegToRad(deg:Number):Number {
 			return deg * Math.PI / 180 ;
 		}
 
-		//--------------------------------------------------------------------------
-	    //
-	    //  Setters and Getters
-	    //
-	    //--------------------------------------------------------------------------
-		
-		public function set xoffset(value:Number):void{
-			_xoffset=value;
-		}		
-		public function get xoffset():Number{
-			return _xoffset;
-		}
-
-		public function set yoffset(value:Number):void{
-			_yoffset=value;
-		}
-		public function get yoffset():Number{
-			return _yoffset;
-		}
-
-		public function set worldUnscaledSizeX(value:Number):void{
-			_worldUnscaledSizeX=value;
-		}
-		public function get worldUnscaledSizeX():Number{
-			return _worldUnscaledSizeX;
-		}
-		
-		public function set worldUnscaledSizeY(value:Number):void{
-			_worldUnscaledSizeY=value;
-		}
-		public function get worldUnscaledSizeY():Number{
-			return _worldUnscaledSizeY;
-		}
 	}
 }
