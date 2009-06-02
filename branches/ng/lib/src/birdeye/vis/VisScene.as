@@ -37,6 +37,7 @@
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
+	import com.degrafa.transform.ITransform;
 	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -65,10 +66,12 @@
 			return _coordType;
 		}
 		
-		private var _projection:Projection;
-		public function set projection(val:Projection):void
+		private var _transforms:Array;
+        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.ITransform")]
+        [ArrayElementType("birdeye.vis.interfaces.ITransform")]
+		public function set transforms(val:Array):void
 		{
-			_projection = val;
+			_transforms = val;
 		}
 		
 		protected var _maxStacked100:Number = NaN;
