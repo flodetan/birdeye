@@ -86,8 +86,6 @@ package birdeye.vis.elements
 	
 	public class BaseElement extends Surface implements IElement
 	{
-		protected var _isProcessed:Boolean = false;
-
 		private var _chart:ICoordinates;
 		public function set chart(val:ICoordinates):void
 		{
@@ -153,6 +151,7 @@ package birdeye.vis.elements
 		public function set colorScale(val:INumerableScale):void
 		{
 			_colorScale = val;
+			_colorScale.format = false;
 
 			invalidateDisplayList();
 		}
@@ -160,6 +159,21 @@ package birdeye.vis.elements
 		{
 			return _colorScale;
 		}
+
+		private var _sizeScale:INumerableScale;
+		/** Define a scale to set the sizeField for data items.*/
+		public function set sizeScale(val:INumerableScale):void
+		{
+			_sizeScale = val;
+			_sizeScale.format = false;
+
+			invalidateDisplayList();
+		}
+		public function get sizeScale():INumerableScale
+		{
+			return _sizeScale;
+		}
+
 
 		private var _dim1:String;
 		public function set dim1(val:String):void
@@ -330,6 +344,31 @@ package birdeye.vis.elements
 			return _colorField;
 		}
 
+		protected var _maxSizeValue:Number = NaN;
+		public function get maxSizeValue():Number
+		{
+			_maxSizeValue = getMaxValue(_sizeField);
+			return _maxSizeValue;
+		}
+
+		private var _minSizeValue:Number = NaN;
+		public function get minSizeValue():Number
+		{
+			_minSizeValue = getMinValue(_sizeField);
+			return _minSizeValue;
+		}
+
+		private var _sizeField:String;
+		public function set sizeField(val:String):void
+		{
+			_sizeField = val;
+			invalidateDisplayList();
+		}
+		public function get sizeField():String
+		{
+			return _sizeField;
+		}
+
 		private var _labelField:String;
 		public function set labelField(val:String):void
 		{
@@ -442,7 +481,7 @@ package birdeye.vis.elements
 			_cursor = val;
 			_maxDim1Value = _maxDim2Value = _maxDim3Value = _totalDim1PositiveValue = NaN;
 			_minDim1Value = _minDim2Value = _minDim3Value = NaN;
-			_isProcessed = false;
+			_minColorValue = _maxColorValue = _minSizeValue = _maxSizeValue = NaN;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -451,10 +490,10 @@ package birdeye.vis.elements
 			return _cursor;
 		}
 		
-		protected var _plotRadius:Number = 5;
-		public function set plotRadius(val:Number):void
+		protected var _size:Number = 5;
+		public function set size(val:Number):void
 		{
-			_plotRadius = val;
+			_size = val;
 			invalidateDisplayList();
 		}
 		
@@ -829,7 +868,7 @@ package birdeye.vis.elements
 /* 				   (!isNaN(_minDim1Value) || !isNaN(_minDim2Value))
 				&& (!isNaN(_maxDim1Value) || !isNaN(_maxDim2Value))
 				&&  */width>0 && height>0
-				&& chart && (dim1 || dim2)
+				&& chart
 				&& cursor;
 			
 			return globalCheck && axesCheck && colorsCheck;
@@ -853,8 +892,6 @@ package birdeye.vis.elements
 					extGG.showToolTip();
 			}
 
-			var pos:Point = localToGlobal(new Point(extGG.posX, extGG.posY));
-	
 			if (scale2 && scale2 is IScaleUI && IScaleUI(scale2).pointer)
 			{
 				IScaleUI(scale2).pointerY = extGG.posY;
@@ -927,7 +964,7 @@ package birdeye.vis.elements
 		 * AreaElement, thus improving performances.*/ 
 		protected function createTTGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
 									zPos:Number, radius:Number, shapes:Array = null /* of IGeometry */, 
-									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
+									ttXoffset:Number = NaN, ttYoffset:Number = NaN, showGeometry:Boolean = true):void
 		{
 			if (graphicsCollection.items && graphicsCollection.items.length > ggIndex)
 				ttGG = graphicsCollection.items[ggIndex];
@@ -947,7 +984,7 @@ package birdeye.vis.elements
  			if (chart.showDataTips || chart.showAllDataTips)
 			{ 
 				initGGToolTip();
-				ttGG.create(cursor.current, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset);
+				ttGG.create(cursor.current, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset, true, showGeometry);
 			} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null)
 			{
 				// if no tips but interactivity is required than add roll over events and pass
@@ -990,7 +1027,7 @@ package birdeye.vis.elements
 		initializeStyles();
 		public static function initializeStyles():void
 		{
-			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("BaseSeries");
+			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("BaseElement");
 			if(!selector)
 			{
 				selector = new CSSStyleDeclaration();
@@ -1015,7 +1052,7 @@ package birdeye.vis.elements
 
 				this.stylesChanged = true;
 			} 
-			StyleManager.setStyleDeclaration("BaseSeries", selector, true);
+			StyleManager.setStyleDeclaration("BaseElement", selector, true);
 		}
 		
 		// Override the styleChanged() method to detect changes in your new style.
