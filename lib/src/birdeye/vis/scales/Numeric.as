@@ -39,13 +39,22 @@ package birdeye.vis.scales
 
 	public class Numeric extends XYZ implements INumerableScale, IScaleUI
 	{
- 		/** Define the min max values for numeric scales ([minColor, maxColor] or [minRadius, maxRadius]).*/
+ 		/** Define the min max data values for numeric scales [100, 200] where the values refer to data values, number of
+ 		 * inhabitants, rain falls, etc.*/
 		override public function set values(val:Array):void
 		{
 			_values = val;
 			_values.sort(Array.NUMERIC);
 			_min = values[0];
 			_max = values[1];
+		}
+		
+		/** @Private
+		 * Decide whether to format or not, the min and max values of the scale.*/
+		private var _format:Boolean = true;
+		public function set format(val:Boolean):void
+		{
+			_format = val;
 		}
 
 		/** @Private
@@ -70,7 +79,7 @@ package birdeye.vis.scales
 		public function set min(val:Number):void
 		{
 			_min = val;
-			minFormatted = false;
+			minFormatted = !_format;
 			formatMin();
 			invalidateSize();
 			invalidateProperties();
@@ -92,7 +101,7 @@ package birdeye.vis.scales
 		public function set max(val:Number):void
 		{
 			_max = val;
-			maxFormatted = false;
+			maxFormatted = !_format;
 			formatMax();
 			invalidateSize();
 			invalidateProperties();
@@ -209,7 +218,7 @@ package birdeye.vis.scales
 			{	
 				if (xMin == xMax)
 				{
-					for (snap = min; snap<max; snap += interval)
+					for (snap = min; snap<=max; snap += interval)
 					{
 						// create thick line
 			 			thick = new Line(xMin + thickWidth * sign, getPosition(snap), xMax, getPosition(snap));
@@ -230,7 +239,7 @@ package birdeye.vis.scales
 						gg.geometryCollection.addItem(label);
 					}
 				} else {
-					for (snap = min; snap<max; snap += interval)
+					for (snap = min; snap<=max; snap += interval)
 					{
 						// create thick line
 			 			thick = new Line(getPosition(snap), yMin + thickWidth * sign, getPosition(snap), yMax);
