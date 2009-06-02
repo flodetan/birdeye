@@ -54,19 +54,6 @@ package birdeye.vis.elements.geometry
 			return "column";
 		}
 
-		private var _baseAtZero:Boolean = true;
-		[Inspectable(enumeration="true,false")]
-		public function set baseAtZero(val:Boolean):void
-		{
-			_baseAtZero = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get baseAtZero():Boolean
-		{
-			return _baseAtZero;
-		}
-		
 		private var _form:String;
 		public function set form(val:String):void
 		{
@@ -284,7 +271,7 @@ package birdeye.vis.elements.geometry
 						var xPos:Number = PolarCoordinateTransform.getX(startAngle+arcSize/2, pos2, chart.origin);
 						var yPos:Number = PolarCoordinateTransform.getY(startAngle+arcSize/2, pos2, chart.origin); 
 	 	
-						createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
+						createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _size);
 						
 						if (ttGG && _extendMouseEvents)
 							gg = ttGG;
