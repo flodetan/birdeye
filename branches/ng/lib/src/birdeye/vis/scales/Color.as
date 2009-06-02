@@ -35,7 +35,7 @@
 		public function Color():void
 		{
 			showAxis = false;
-			_values = [0x000000,0xffffff];
+			_scaleValues = [0x000000,0xffffff];
 		}
 		
 		override protected function updateDisplayList(w:Number, h:Number):void
@@ -49,13 +49,13 @@
 		 * Override the XYZAxis getPostion method based on the linear scaling.*/
 		override public function getPosition(dataValue:*):*
 		{
-			size = Math.abs(_values[1]-_values[0]);
+			size = Math.abs(_scaleValues[1]-_scaleValues[0]);
 			
 			var color:Number = NaN;
 			if (! (isNaN(max) || isNaN(min)))
 				color = size * (Number(dataValue) - min)/(max - min);
 				
-			return isNaN(color) ? color: decimalToHex(Math.min(_values[1], _values[0]) + color);
+			return isNaN(color) ? color: decimalToHex(Math.min(_scaleValues[1], _scaleValues[0]) + color);
 		}
 
 		private function decimalToHex(value:uint):String
