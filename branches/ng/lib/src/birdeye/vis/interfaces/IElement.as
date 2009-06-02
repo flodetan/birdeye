@@ -51,6 +51,16 @@ package birdeye.vis.interfaces
 		function get maxColorValue():Number;
 		function get minColorValue():Number;
 
+		/** Set the sizeField to filter horizontal data values.*/
+		function set sizeField(val:String):void;
+		function get sizeField():String;
+
+		/** Set the size axis.*/
+		function set sizeScale(val:INumerableScale):void;
+		function get sizeScale():INumerableScale;
+		function get maxSizeValue():Number;
+		function get minSizeValue():Number;
+
 		/** Remove all elements from the Element (Surface component).*/
 		function removeAllElements():void;
 		
