@@ -53,17 +53,6 @@ package birdeye.vis.elements.geometry
 			return "area";
 		}
 
-		private var _baseAtZero:Boolean = true;
-		/** If true, if min and max values of a element are positive (negative), 
-		 * than the base of the AreaElement will be 0, instead of the min (max) value.*/
-		[Inspectable(enumeration="true,false")]
-		public function set baseAtZero(val:Boolean):void
-		{
-			_baseAtZero = val;
-			invalidateProperties();
-			invalidateDisplayList()
-		}
-		
 		private var _form:String;
 		/** The form defines the shape type of the element, ("curve", "line").*/
 		public function set form(val:String):void

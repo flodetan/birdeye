@@ -49,19 +49,6 @@ package birdeye.vis.elements.geometry
 			return "bar";
 		}
 
-		private var _baseAtZero:Boolean = true;
-		[Inspectable(enumeration="true,false")]
-		public function set baseAtZero(val:Boolean):void
-		{
-			_baseAtZero = val;
-			invalidateProperties();
-			invalidateDisplayList()
-		}
-		public function get baseAtZero():Boolean
-		{
-			return _baseAtZero;
-		}
-		
 		private var _form:String;
 		public function set form(val:String):void
 		{
