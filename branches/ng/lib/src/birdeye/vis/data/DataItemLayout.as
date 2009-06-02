@@ -98,7 +98,7 @@ package birdeye.vis.data
 			return _xTTOffset;
 		}
 
-		private var _yTTOffset:Number = -50;
+		private var _yTTOffset:Number = 50;
 		/** Set the y offset from the tooltip to the hit area position.*/
 		public function get yTTOffset():Number
 		{
@@ -144,7 +144,7 @@ package birdeye.vis.data
 		public function create(item:Object, dataFields:Array /* of String */, 
 								posX:Number, posY:Number, posZ:Number, radius:Number, 
 								ttShapes:Array = null/* of IGeometry */, xOffSet:Number = NaN, yOffset:Number = NaN,
-								isTooltip:Boolean = true):void
+								isTooltip:Boolean = true, showGeometry:Boolean = true):void
 		{
 			this.posX = posX;
 			this.posY = posY;
@@ -155,16 +155,19 @@ package birdeye.vis.data
 			
 			if (isTooltip)
 			{
-							// if no custom shapes than create the default one
-				if (! ttShapes)
+				if (showGeometry)
 				{
-					shapes[0] = new Circle(posX,posY,4);
-					shapes[0].fill = new SolidFill(0xffffff);
-					shapes[0].stroke = (toolTipStroke) ? toolTipStroke : new SolidStroke(0x999999,1);
-					shapes[1] = new Circle(posX,posY,2);
-					shapes[1].fill = (toolTipFill) ? toolTipFill : new SolidFill(0xffffff,1);
-				} else 
-					shapes = ttShapes;
+								// if no custom shapes than create the default one
+					if (! ttShapes)
+					{
+						shapes[0] = new Circle(posX,posY,4);
+						shapes[0].fill = new SolidFill(0xffffff);
+						shapes[0].stroke = (toolTipStroke) ? toolTipStroke : new SolidStroke(0x999999,1);
+						shapes[1] = new Circle(posX,posY,2);
+						shapes[1].fill = (toolTipFill) ? toolTipFill : new SolidFill(0xffffff,1);
+					} else 
+						shapes = ttShapes;
+				}
 				
 				// if tip function is set, use it, otherwise use a default one
 				if (_dataTipFunction != null)
@@ -188,10 +191,13 @@ package birdeye.vis.data
 						}
 				}
 				
-				// hide tip geometry, they will show up only when mouse is over the hit area
-				for (var i:Number = 0; i<shapes.length; i++)
-					geometryCollection.addItem(IGeometry(shapes[i]));
-				hideToolTipGeometry();
+				if (showGeometry)
+				{
+					// hide tip geometry, they will show up only when mouse is over the hit area
+					for (var i:Number = 0; i<shapes.length; i++)
+						geometryCollection.addItem(IGeometry(shapes[i]));
+					hideToolTipGeometry();
+				}
 			}
 		} 
 		
