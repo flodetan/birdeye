@@ -204,8 +204,8 @@ package birdeye.vis.elements.geometry
 								colWidth = size;
 								pos1 = pos1 - size/2;
 								ttShapes = [];
-								ttXoffset = -30;
-								ttYoffset = -20;
+								ttXoffset = -20;
+								ttYoffset = 55;
 								if (chart.customTooltTipFunction == null)
 								{
 									var line:Line = new Line(pos1+ colWidth/2, pos2, pos1 + colWidth/2 + ttXoffset/3, pos2 + ttYoffset);
