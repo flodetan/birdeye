@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
-	paddingLeft="150" paddingTop="50" width="100%" height="100%"
+	width="100%" height="100%"
+	horizontalAlign="center" verticalAlign="middle"
 	xmlns:coords="birdeye.vis.coords.*"
 	xmlns:schema="birdeye.vis.elements.schema.*"
 	xmlns:elements="birdeye.vis.elements.geometry.*"
@@ -50,7 +51,7 @@
 	
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
     	<mx:Button label="Generate" click="init()"/>
-    	<coords:Cartesian id="myMap" width="100%" height="100%" dataProvider="{dt}" showDataTips="true" dataTipFunction="dtFunc">
+    	<coords:Cartesian id="myMap" width="90%" height="90%" dataProvider="{dt}" showDataTips="true" dataTipFunction="dtFunc">
     		<coords:transforms>
     			<trans:Projection id="myProj" proj="Geographic">
     				<trans:latScale>
