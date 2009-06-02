@@ -43,7 +43,7 @@ package birdeye.vis.interfaces
 		function set multiScale(val:MultiScale):void;
 		function get multiScale():MultiScale;
 
-		function set projection(val:Projection):void;
+		function set transforms(val:Array):void;
 
 		/** @Private
 		 * The maximum value among all elements stacked according to stacked100 type.
