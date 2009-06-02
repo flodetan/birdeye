@@ -61,6 +61,21 @@ package birdeye.vis.elements.collision
 			return _stackType;
 		}
 		
+		protected var _baseAtZero:Boolean = true;
+		/** If true, if min and max values of an element are positive (negative), 
+		 * than the base of the StackElement will be 0, instead of the min (max) value.*/
+		[Inspectable(enumeration="true,false")]
+		public function set baseAtZero(val:Boolean):void
+		{
+			_baseAtZero = val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		public function get baseAtZero():Boolean
+		{
+			return _baseAtZero;
+		}
+		
 		public var _baseValues:Array;
 		public function set baseValues(val:Array):void
 		{
