@@ -158,7 +158,7 @@ package birdeye.vis.elements.geometry
 					var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius, chart.origin);
 					var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius, chart.origin); 
 	
-					createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _plotRadius);
+					createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _size);
 					
 	 				if (ttGG && _extendMouseEvents)
 						gg = ttGG;
