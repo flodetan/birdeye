@@ -32,12 +32,14 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
+	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
+	import flash.text.TextFieldAutoSize;
 	
 	import mx.collections.CursorBookmark;
 
@@ -55,6 +57,7 @@ package birdeye.vis.elements.geometry
 				itemRenderer = CircleRenderer;
 		}
 
+		private var label:TextRenderer;
 		private var plot:IGeometry;
 		/** @Private 
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
@@ -68,8 +71,9 @@ package birdeye.vis.elements.geometry
 				// has not set a dataTipFunction
 				dataFields[0] = dim1;
 				dataFields[1] = dim2;
+				dataFields[2] = sizeField;
 				if (dim3) 
-					dataFields[2] = dim3;
+					dataFields[3] = dim3;
 	
 				var pos1:Number, pos2:Number, pos3:Number = NaN;
 				
@@ -120,10 +124,15 @@ package birdeye.vis.elements.geometry
 						pos1 = xPos;
 						pos2 = yPos; 
 					}
-	
+
+					if (sizeScale)
+					{
+						_size = sizeScale.getPosition(cursor.current[sizeField]);
+					}
+
 					// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createTTGG(cursor.current, dataFields, pos1, pos2, scale2RelativeValue, _plotRadius);
+					createTTGG(cursor.current, dataFields, pos1, pos2, scale2RelativeValue, _size);
 	
 					if (dim3)
 					{
@@ -137,16 +146,41 @@ package birdeye.vis.elements.geometry
 							pos3 = 0;
 					}
 					
-	 				var bounds:Rectangle = new Rectangle(pos1 - _plotRadius, pos2 - _plotRadius, _plotRadius * 2, _plotRadius * 2);
+	 				var bounds:Rectangle = new Rectangle(pos1 - _size, pos2 - _size, _size * 2, _size * 2);
 	
-	 				if (_source)
-						plot = new RasterRenderer(bounds, _source);
-	 				else 
-						plot = new itemRenderer(bounds);
-	  				
-					plot.fill = fill;
-					plot.stroke = stroke;
-					gg.geometryCollection.addItemAt(plot,0); 
+					if (_extendMouseEvents)
+						gg = ttGG;
+
+					if (_size > 0)
+					{
+		 				if (_source)
+							plot = new RasterRenderer(bounds, _source);
+		 				else 
+							plot = new itemRenderer(bounds);
+		  				
+						plot.fill = fill;
+						plot.stroke = stroke;
+						gg.geometryCollection.addItemAt(plot,0); 
+					}
+
+					if (labelField)
+					{
+						label = new TextRenderer(null);
+						if (cursor.current[labelField])
+							label.text = cursor.current[labelField];
+						else
+							label.text = labelField;
+							
+						label.fill = fill;
+						label.fontSize = sizeLabel;
+						label.fontFamily = fontLabel;
+						label.autoSize = TextFieldAutoSize.LEFT;
+						label.autoSizeField = true;
+						label.x = pos1 - label.displayObject.width/2;
+						label.y = pos2 - label.displayObject.height/2;
+						ttGG.geometryCollection.addItemAt(label,0); 
+					}
+
 					if (dim3)
 					{
 						gg.z = pos3;
