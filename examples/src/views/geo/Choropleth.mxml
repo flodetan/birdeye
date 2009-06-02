@@ -1,6 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" paddingLeft="150" paddingTop="50" width="100%" height="100%">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	paddingLeft="150" paddingTop="50" width="100%" height="100%"
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:schema="birdeye.vis.elements.schema.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:trans="birdeye.vis.trans.projections.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:guides="birdeye.vis.guides.legend.*">
+<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import birdeye.vis.data.DataItemLayout;
+			import birdeye.vis.data.dictionaries.WorldCountries;
+			import birdeye.vis.trans.projections.Projection;
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var dt:ArrayCollection = new ArrayCollection();
+			public var ac:ArrayCollection = new ArrayCollection();
+			public function init():void
+			{
+				ac = new ArrayCollection();
+				var wc:WorldCountries = new WorldCountries();
+				
+				var countries:Array = wc.getCountriesPrefix();
+				
+				for (var i:Number = 0; i<countries.length; i++)
+				{
+					ac.addItem({
+						country: wc.getCountriesName(countries[i]),
+						poly: wc.getCountryPolygon(countries[i]),
+						center: wc.getCountryCenter(countries[i]),
+						random: Math.random() * 100000
+					});
+				}
+				dt = ac;
+			}
+			
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String =  currDatatip.country;
+				tt += "\n Center: " + currDatatip.center;
+				tt += "\n Random data: " + currDatatip.random;
+				return  tt;
+			}
+
+			private function clickF(item:DataItemLayout):void
+			{
+				var tt:String =  item.currentItem.country;
+				tt += "\n Center: " + item.currentItem.center;
+				tt += "\n Random data: " + item.currentItem.random;
+				Alert.show(tt);
+			}
+
+			private function colorFunction(dataValue:*, min:Number, max:Number, _size:Number):Number
+			{
+				var val:Number = Number(dataValue);
+				var result:Number;
+				if (val < 30000)
+				 	result = 0xffff00;
+				else if (val < 60000)
+				 	result = 65280;
+				else 
+					result = 255
+
+			 return result;
+			}
+		]]>
+	</mx:Script>
 	
-	<mx:Label text="Coming soon..." fontSize="14" />
+	
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+    	<mx:Button label="Generate" click="init()"/>
+    	<coords:Cartesian id="myMap" width="100%" height="100%" dataProvider="{dt}" showDataTips="true" dataTipFunction="dtFunc">
+    		<coords:transforms>
+    			<trans:Projection id="myProj" proj="Miller cylindrical">
+    				<trans:latScale>
+			 			<scales:Numeric id="lat" values="{[-90,90]}" interval="20" placement="right" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb"/>
+    				</trans:latScale>
+    				<trans:longScale>
+			 			<scales:Numeric id="long" values="{[-180,180]}" interval="20" placement="top" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb"/>
+    				</trans:longScale>
+    			</trans:Projection> 
+    		</coords:transforms>
+    		<coords:scales>
+    			<scales:Numeric id="col" f="colorFunction"/>
+    		</coords:scales>
+    		 <coords:elements>
+    		 	<elements:PolygonElement mouseClickFunction="clickF" extendMouseEvents="true" scale1="{long}" scale2="{lat}" polyDim="poly" colorScale="{col}" colorField="random"/>
+			 </coords:elements>
+    	</coords:Cartesian>
+    </mx:VBox>
 	
 </mx:VBox>
