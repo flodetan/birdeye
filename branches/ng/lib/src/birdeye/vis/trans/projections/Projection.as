@@ -27,10 +27,13 @@
  
 package birdeye.vis.trans.projections
 {
-	import birdeye.vis.interfaces.IScale;
-
+	import birdeye.vis.interfaces.IScaleUI;
+	import birdeye.vis.interfaces.ITransform;
+	import birdeye.vis.scales.BaseScale;
+	import birdeye.vis.scales.Numeric;
+	
 	//This class calculates latitude & longitude from x & y. And vice versa
-	public class Projection
+	public class Projection implements ITransform
 	{
 
 		private var _proj:String;
@@ -70,8 +73,8 @@ package birdeye.vis.trans.projections
 			_maxLong = val;
 		}
 		
-		private var _latScale:IScale;
-		public function set latScale(val:IScale):void
+		private var _latScale:IScaleUI;
+		public function set latScale(val:IScaleUI):void
 		{
 			_latScale = val;
 			if (_latScale.values)
@@ -79,10 +82,11 @@ package birdeye.vis.trans.projections
 				minLat = _latScale.values[0];
 				maxLat = _latScale.values[1];
 			}
+			_latScale.f = funcDim2;
 		}
 
-		private var _longScale:IScale;
-		public function set longScale(val:IScale):void
+		private var _longScale:IScaleUI;
+		public function set longScale(val:IScaleUI):void
 		{
 			_longScale = val;
 			if (_longScale.values)
@@ -90,7 +94,35 @@ package birdeye.vis.trans.projections
 				minLong = _longScale.values[0];
 				maxLong = _longScale.values[1];
 			}
+			_longScale.f = funcDim1;
 		}
+		
+		public function Projection():void
+		{
+
+		}
+
+		public function funcDim1(latLon:*, minLong:Number, maxLong:Number, sizeX:Number):Number
+		{
+			var geoCoords:Array;
+			if (latLon is Number)
+				geoCoords = [latLon, _minLat]
+			else 
+				geoCoords = latLon as Array;
+			return projectX(geoCoords[1], geoCoords[0], sizeX, _minLat, _maxLat, minLong, maxLong);
+		}
+
+		public function funcDim2(latLon:*, minLat:Number, maxLat:Number, sizeY:Number):Number
+		{
+			var geoCoords:Array;
+			if (latLon is Number)
+				geoCoords = [_minLong, latLon]
+			else
+				geoCoords = latLon as Array;
+			return projectY(geoCoords[1], geoCoords[0], sizeY, minLat, maxLat, _minLong, _maxLong);
+		}
+
+		public function funcDim3(dataValue:*, min3:Number, max3:Number, size3:Number):Number {return NaN}
 
 		public function projectArrayXs(coordArray:Array, sizeX:Number):void
 		{
@@ -114,11 +146,6 @@ package birdeye.vis.trans.projections
 				yval = projectY(coord[1],coord[0],sizeY);//-90,90,-180,180);//
 				coord[1] = yval;
 			} // end for each point
-		}
-
-		public function projX(latLon:Array, minLong:Number, maxLong:Number, sizeX:Number):Number
-		{
-			return projectX(latLon[1], latLon[0], sizeX, _minLat, _maxLat, minLong, maxLong);
 		}
 
 		public function projectX(lat:Number, long:Number, sizeX:Number, minLat:Number=-90, maxLat:Number=90, minLong:Number=-180, maxLong:Number=180):Number
@@ -185,6 +212,7 @@ package birdeye.vis.trans.projections
 		public function get proj():String{
 			return _proj;
 		}	
+		[Inspectable(enumeration="Geographic,Lambert equal area,Mollweide,WinkelTripel,Miller cylindrical,EckertIV,EckertVI,Goode,Sinsoidal,Robinson")]
 		public function set proj(ref:String):void{
 			_proj=ref;
 		}
