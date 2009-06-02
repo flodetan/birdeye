@@ -115,6 +115,22 @@ package birdeye.vis.scales
 			return _size;
 		}
 		
+		protected var _scaleValues:Array; /* of numerals  for numeric scales and strings for category scales*/
+ 		/** Define the min max values for numeric scales ([minColor, maxColor] or [minRadius, maxRadius])
+ 		 * and category strings for category scales.*/
+ 		/** Define the min max scale values for numeric scales ([minColor, maxColor] or [minRadius, maxRadius]). Here values
+ 		 * refer to scale values, depending on the scale they can be pixels, colors ranges, size ranges, etc.*/
+		public function set scaleValues(val:Array):void
+		{
+			_scaleValues = val;
+			_scaleValues.sort(Array.NUMERIC);
+			size = _scaleValues[1] - _scaleValues[0];
+		}
+		public function get scaleValues():Array
+		{
+			return _scaleValues;
+		}
+
 		private var _alphaFill:Number;
 		/** Set the fill alpha.*/
 		public function set alphaFill(val:Number):void
@@ -139,38 +155,38 @@ package birdeye.vis.scales
 			return _alphaStroke;
 		}
 
-		private var _colorFill:uint;
+		private var _colorFill:Number = NaN;
 		/** Set the fill color to be used for the axis.*/
-		public function set colorFill(val:uint):void
+		public function set colorFill(val:Number):void
 		{
 			_colorFill = val;
 			invalidateDisplayList();
 		}
-		public function get colorFill():uint
+		public function get colorFill():Number
 		{
 			return _colorFill;
 		}
 
-		protected var _colorStroke:uint;
+		protected var _colorStroke:Number = NaN;
 		/** Set the stroke color to be used for the axis.*/
-		public function set colorStroke(val:uint):void
+		public function set colorStroke(val:Number):void
 		{
 			_colorStroke = val;
 			invalidateDisplayList();
 		}
-		public function get colorStroke():uint
+		public function get colorStroke():Number
 		{
 			return _colorStroke;
 		}
 		
-		protected var _weightStroke:uint;
+		protected var _weightStroke:Number = NaN;
 		/** Set the stroke weigth  to be used for the axis.*/
-		public function set weightStroke(val:uint):void
+		public function set weightStroke(val:Number):void
 		{
 			_weightStroke = val;
 			invalidateDisplayList();
 		}
-		public function get weightStroke():uint
+		public function get weightStroke():Number
 		{
 			return _weightStroke;
 		}
@@ -211,26 +227,26 @@ package birdeye.vis.scales
 			return _fontLabel;
 		}
 
-		protected var _sizeLabel:uint;
+		protected var _sizeLabel:Number = NaN;
 		/** Set the font size of the label to be used for the axis.*/
-		public function set sizeLabel(val:uint):void
+		public function set sizeLabel(val:Number):void
 		{
 			_sizeLabel = val;
 			invalidateDisplayList();
 		}
-		public function get sizeLabel():uint
+		public function get sizeLabel():Number
 		{
 			return _sizeLabel;
 		}
 
-		protected var _colorLabel:uint;
+		protected var _colorLabel:Number = NaN;
 		/** Set the label color to be used for the axis.*/
-		public function set colorLabel(val:uint):void
+		public function set colorLabel(val:Number):void
 		{
 			_colorLabel = val;
 			invalidateDisplayList();
 		}
-		public function get colorLabel():uint
+		public function get colorLabel():Number
 		{
 			return _colorLabel;
 		}
@@ -247,26 +263,26 @@ package birdeye.vis.scales
 			return _colorPointer;
 		}
 		
-		protected var _sizePointer:uint;
+		protected var _sizePointer:Number = NaN;
 		/** Set the pointer size used in the axis.*/
-		public function set sizePointer(val:uint):void
+		public function set sizePointer(val:Number):void
 		{
 			_sizePointer = val;
 			invalidateDisplayList();
 		}
-		public function get sizePointer():uint
+		public function get sizePointer():Number
 		{
 			return _sizePointer;
 		}
 
-		protected var _weightPointer:uint;
+		protected var _weightPointer:Number = NaN;
 		/** Set the pointer weight used in the axis.*/
-		public function set weightPointer(val:uint):void
+		public function set weightPointer(val:Number):void
 		{
 			_weightPointer = val;
 			invalidateDisplayList();
 		}
-		public function get weightPointer():uint
+		public function get weightPointer():Number
 		{
 			return _weightPointer;
 		}
@@ -420,33 +436,54 @@ package birdeye.vis.scales
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
-			if (stylesChanged)
-			{
-				// Redraw gradient fill only if style changed.
-				colorGradients = getStyle("gradientColors");
+			// Redraw gradient fill only if style changed.
+			if (!colorGradients)
+				colorGradients = getStyle("gradientColors")
+
+			if (!alphaGradients) 
 				alphaGradients = getStyle("gradientAlphas");
-				
+			
+			if (isNaN(colorFill))
 				colorFill = getStyle("fillColor");
+			
+			if (isNaN(alphaFill))
 				alphaFill = getStyle("fillAlpha");
-				
+			
+			if (isNaN(colorStroke))
 				colorStroke = getStyle("strokeColor");
+			
+			if (isNaN(alphaStroke))
 				alphaStroke = getStyle("strokeAlpha");
+	
+			if (isNaN(weightStroke))
 				weightStroke = getStyle("strokeWeight");
 
+			if (!fontLabel)
 				fontLabel = getStyle("labelFont");
+			
+			if (isNaN(colorLabel))
 				colorLabel = getStyle("labelColor");
+
+			if (isNaN(sizeLabel))
 				sizeLabel = getStyle("labelSize");
 
+			if (!fontLabel)
 				fontLabel = getStyle("labelFont");
+
+			if (isNaN(colorLabel))
 				colorLabel = getStyle("labelColor");
+
+			if (isNaN(sizeLabel))
 				sizeLabel = getStyle("labelSize");
 
+			if (isNaN(colorPointer))
 				colorPointer = getStyle("pointerColor");
+				
+			if (isNaN(sizePointer))
 				sizePointer = getStyle("pointerSize");
-				weightPointer = getStyle("pointerWeight");
 
-				stylesChanged = false;
-			}
+			if (isNaN(weightPointer))
+				weightPointer = getStyle("pointerWeight");
 
 			if (colorStroke)
 				stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
@@ -479,7 +516,7 @@ package birdeye.vis.scales
 				this.labelSize = 8;
 				this.labelColor = 0x000000;
 
-				this.pointerColor = 0x0000FF;
+				this.pointerColor = 0xff0000;
 				this.pointerSize = 10;
 				this.pointerWeight = 3;
 
