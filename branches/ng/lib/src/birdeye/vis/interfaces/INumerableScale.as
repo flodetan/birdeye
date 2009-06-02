@@ -47,5 +47,8 @@
 
 		/** Set the base at zero. */
 		function set baseAtZero(val:Boolean):void
+
+		/** Decide to format or not min and max data values.*/
+		function set format(val:Boolean):void
 	}
 }
