@@ -70,7 +70,7 @@ package birdeye.vis.coords
 	 * and LineChart are not 3D yet. 
 	 * */ 
 	[Exclude(name="elementsContainer", kind="property")]
-	public class Cartesian extends VisScene implements ICoordinates, ISizableItem
+	public class Cartesian extends VisScene implements ICoordinates
 	{
 		protected var _type:String = StackElement.OVERLAID;
 		/** Set the type of stack, overlaid if the series are shown on top of the other, 
@@ -84,34 +84,6 @@ package birdeye.vis.coords
 			invalidateDisplayList();
 		}
 		
-		private var _maxRadius:Number = 10;
-		/** @Private
-		 * Set the maximum radius value for the scatter plot.*/
-		public function set maxRadius(val:Number):void
-		{
-			_maxRadius = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get maxRadius():Number
-		{
-			return _maxRadius;
-		}
-
-		private var _minRadius:Number = 10;
-		/** @Private
-		 * Set the minimum radius value for the scatter plot.*/
-		public function set minRadius(val:Number):void
-		{
-			_minRadius = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get minRadius():Number
-		{
-			return _minRadius;
-		}
-
 		/** Array of elements, mandatory for any cartesian chart.
 		 * Each element must implement the IElement interface which defines 
 		 * methods that allow to set fields, basic styles, axes, dataproviders, renderers,
@@ -243,7 +215,7 @@ package birdeye.vis.coords
 			
 			if (elements)
 			{
- 				for (i = 0; i<elements.length; i++)
+ 				for (var i:Number = 0; i<elements.length; i++)
 				{
 					// if element dataprovider doesn' exist or it refers to the
 					// chart dataProvider, than set its cursor to this chart cursor (this.cursor)
@@ -319,28 +291,13 @@ package birdeye.vis.coords
 			{
 				var _stackElements:Array = [];
 			
-				axesFeeded = true;
 				for (i = 0; i<_elements.length; i++)
-				{
 					if (_elements[i] is IStack)
 					{
 						IStack(_elements[i]).stackType = _type;
 						_stackElements.push(_elements[i])
 					}
-					
-					if (IElement(_elements[i]).scale1)
-						axesFeeded = axesFeeded && Boolean(IElement(_elements[i]).scale1.values)
 
-					if (IElement(_elements[i]).scale2)
-						axesFeeded = axesFeeded && Boolean(IElement(_elements[i]).scale2.values)
-
-					if (IElement(_elements[i]).scale3)
-						axesFeeded = axesFeeded && Boolean(IElement(_elements[i]).scale3.values)
-
-					if (IElement(_elements[i]).colorScale)
-						axesFeeded = axesFeeded && Boolean(IElement(_elements[i]).colorScale.values)
-				}
-				
 				_maxStacked100 = NaN;
 
 				if (_type==StackElement.STACKED100)
@@ -481,70 +438,6 @@ package birdeye.vis.coords
 				}
 			}
 
-			var scatterElements:Array = [];
-			// load all scatter Elements (there might be Elements that are not IScatter 
-			// in the ScatterPlot chart)
-			for (var i:Number = 0; i<_elements.length; i++)
-				if (_elements[i] is IScatter)
-					scatterElements.push(_elements[i]);
-			
-			if (scatterElements.length > 0)
-			{
-				var maxRadiusValues:Array = [];
-				var minRadiusValues:Array = [];
-				
-				for (i = 0; i<scatterElements.length; i++)
-				{
-					if (IElement(scatterElements[i]).cursor)
-					{
-						IElement(scatterElements[i]).cursor.seek(CursorBookmark.FIRST);
-						while (! IElement(scatterElements[i]).cursor.afterLast)
-						{
-							if (maxRadiusValues[i] == null)
-								maxRadiusValues[i] = IElement(scatterElements[i]).cursor.current[IScatter(scatterElements[i]).radiusField];
-							else
-								maxRadiusValues[i] = Math.max(maxRadiusValues[i],
-															IElement(scatterElements[i]).cursor.current[IScatter(scatterElements[i]).radiusField]);
-							if (minRadiusValues[i] == null)
-								minRadiusValues[i] = IElement(scatterElements[i]).cursor.current[IScatter(scatterElements[i]).radiusField];
-							else
-								minRadiusValues[i] = Math.min(minRadiusValues[i],
-															IElement(scatterElements[i]).cursor.current[IScatter(scatterElements[i]).radiusField]);
-						
-							IElement(scatterElements[i]).cursor.moveNext();
-						}						
-					} else if (cursor) {
-						cursor.seek(CursorBookmark.FIRST);
-						
-						// calculate the min and max radius values for each scatter Elements
-						while (! cursor.afterLast)
-						{
-							if (maxRadiusValues[i] == null)
-								maxRadiusValues[i] = cursor.current[IScatter(scatterElements[i]).radiusField];
-							else
-								maxRadiusValues[i] = Math.max(maxRadiusValues[i],
-															cursor.current[IScatter(scatterElements[i]).radiusField]);
-							if (minRadiusValues[i] == null)
-								minRadiusValues[i] = cursor.current[IScatter(scatterElements[i]).radiusField];
-							else
-								minRadiusValues[i] = Math.min(minRadiusValues[i],
-															cursor.current[IScatter(scatterElements[i]).radiusField]);
-
-							cursor.moveNext();
-						}
-					}
-				}
-				
-				// set the min and max radius values for each scatter Elements
-				// this will needed by the scatter Elements when calculating the
-				// sizes for each data value
-				for (i = 0; i<scatterElements.length; i++)
-				{
-					IScatter(scatterElements[i]).maxRadiusValue = maxRadiusValues[i];
-					IScatter(scatterElements[i]).minRadiusValue = minRadiusValues[i];
-				}
-			}
-			
 			// init all axes, default and elements owned 
 			if (! axesFeeded)
 				feedAxes();
@@ -667,6 +560,7 @@ package birdeye.vis.coords
 		{
 			if (nCursors == elements.length)
 			{
+				resetAxes();
 				// init axes of all elements that have their own axes
 				// since these are children of each elements, they are 
 				// for sure ready for feeding and it won't affect the axesFeeded status
@@ -782,144 +676,179 @@ package birdeye.vis.coords
 
 				element.cursor.seek(CursorBookmark.FIRST);
 				
-				if (element.scale1 is IEnumerableScale)
+				if (element.scale1 && !element.scale1.values)
 				{
-					// if the scale dataProvider already exists than load it and update the index
-					// in fact the same scale might be shared among several elements 
-					if (IEnumerableScale(element.scale1).dataProvider)
+					if (element.scale1 is IEnumerableScale)
 					{
-						catElements = IEnumerableScale(element.scale1).dataProvider;
-						j = catElements.length;
-					} 
+						// if the scale dataProvider already exists than load it and update the index
+						// in fact the same scale might be shared among several elements 
+						if (IEnumerableScale(element.scale1).dataProvider)
+						{
+							catElements = IEnumerableScale(element.scale1).dataProvider;
+							j = catElements.length;
+						} 
+							
+						while (!element.cursor.afterLast)
+						{
+							// if the category value already exists in the axis, than skip it
+							if (catElements.indexOf(element.cursor.current[IEnumerableScale(element.scale1).categoryField]) == -1)
+								catElements[j++] = 
+									element.cursor.current[IEnumerableScale(element.scale1).categoryField];
+							element.cursor.moveNext();
+						}
 						
-					while (!element.cursor.afterLast)
+						// set the elements propery of the CategoryAxis owned by the current element
+						if (catElements.length > 0)
+							IEnumerableScale(element.scale1).dataProvider = catElements;
+		
+					} else if (element.scale1 is INumerableScale)
 					{
-						// if the category value already exists in the axis, than skip it
-						if (catElements.indexOf(element.cursor.current[IEnumerableScale(element.scale1).categoryField]) == -1)
-							catElements[j++] = 
-								element.cursor.current[IEnumerableScale(element.scale1).categoryField];
-						element.cursor.moveNext();
+						// if the x axis is numeric than set its maximum and minimum values 
+						// if the max and min are not yet defined for the element, than they are calculated now
+						if (isNaN(INumerableScale(element.scale1).max))
+							INumerableScale(element.scale1).max = element.maxDim1Value;
+						else 
+							INumerableScale(element.scale1).max =
+								Math.max(INumerableScale(element.scale1).max, element.maxDim1Value);
+						
+						if (isNaN(INumerableScale(element.scale1).min))
+							INumerableScale(element.scale1).min = element.minDim1Value;
+						else 
+							INumerableScale(element.scale1).min =
+								Math.min(INumerableScale(element.scale1).min, element.minDim1Value);
 					}
-					
-					// set the elements propery of the CategoryAxis owned by the current element
-					if (catElements.length > 0)
-						IEnumerableScale(element.scale1).dataProvider = catElements;
-	
-				} else if (element.scale1 is INumerableScale)
-				{
-					// if the x axis is numeric than set its maximum and minimum values 
-					// if the max and min are not yet defined for the element, than they are calculated now
-					if (isNaN(INumerableScale(element.scale1).max))
-						INumerableScale(element.scale1).max = element.maxDim1Value;
-					else 
-						INumerableScale(element.scale1).max =
-							Math.max(INumerableScale(element.scale1).max, element.maxDim1Value);
-					
-					if (isNaN(INumerableScale(element.scale1).min))
-						INumerableScale(element.scale1).min = element.minDim1Value;
-					else 
-						INumerableScale(element.scale1).min =
-							Math.min(INumerableScale(element.scale1).min, element.minDim1Value);
 				}
 	
 				element.cursor.seek(CursorBookmark.FIRST);
 				
-				if (element.scale2 is IEnumerableScale)
+				if (element.scale2 && !element.scale2.values)
 				{
-					if (IEnumerableScale(element.scale2).dataProvider)
+					if (element.scale2 is IEnumerableScale)
 					{
-						catElements = IEnumerableScale(element.scale2).dataProvider;
-						j = catElements.length;
-					} else {
-						j = 0;
-						catElements = [];
-					}
-						
-					while (!element.cursor.afterLast)
-					{
-						// if the category value already exists in the axis, than skip it
-						if (catElements.indexOf(element.cursor.current[IEnumerableScale(element.scale2).categoryField]) == -1)
-							catElements[j++] = 
-								element.cursor.current[IEnumerableScale(element.scale2).categoryField];
-						element.cursor.moveNext();
-					}
+						if (IEnumerableScale(element.scale2).dataProvider)
+						{
+							catElements = IEnumerableScale(element.scale2).dataProvider;
+							j = catElements.length;
+						} else {
+							j = 0;
+							catElements = [];
+						}
 							
-					// set the elements propery of the CategoryAxis owned by the current element
-					if (catElements.length > 0)
-						IEnumerableScale(element.scale2).dataProvider = catElements;
-	
-				} else if (element.scale2 is INumerableScale)
-				{
-					// if the y axis is numeric than set its maximum and minimum values 
-					// if the max and min are not yet defined for the element, than they are calculated now
-					// since the same scale can be shared among several elements, the precedent min and max
-					// are also taken into account
-					if (isNaN(INumerableScale(element.scale2).max))
-						INumerableScale(element.scale2).max = element.maxDim2Value;
-					else 
-						INumerableScale(element.scale2).max =
-							Math.max(INumerableScale(element.scale2).max, element.maxDim2Value);
-					
-					if (isNaN(INumerableScale(element.scale2).min))
-						INumerableScale(element.scale2).min = element.minDim2Value;
-					else 
-						INumerableScale(element.scale2).min =
-							Math.min(INumerableScale(element.scale2).min, element.minDim2Value);
+						while (!element.cursor.afterLast)
+						{
+							// if the category value already exists in the axis, than skip it
+							if (catElements.indexOf(element.cursor.current[IEnumerableScale(element.scale2).categoryField]) == -1)
+								catElements[j++] = 
+									element.cursor.current[IEnumerableScale(element.scale2).categoryField];
+							element.cursor.moveNext();
+						}
+								
+						// set the elements propery of the CategoryAxis owned by the current element
+						if (catElements.length > 0)
+							IEnumerableScale(element.scale2).dataProvider = catElements;
+		
+					} else if (element.scale2 is INumerableScale)
+					{
+						// if the y axis is numeric than set its maximum and minimum values 
+						// if the max and min are not yet defined for the element, than they are calculated now
+						// since the same scale can be shared among several elements, the precedent min and max
+						// are also taken into account
+						if (isNaN(INumerableScale(element.scale2).max))
+							INumerableScale(element.scale2).max = element.maxDim2Value;
+						else 
+							INumerableScale(element.scale2).max =
+								Math.max(INumerableScale(element.scale2).max, element.maxDim2Value);
+						
+						if (isNaN(INumerableScale(element.scale2).min))
+							INumerableScale(element.scale2).min = element.minDim2Value;
+						else 
+							INumerableScale(element.scale2).min =
+								Math.min(INumerableScale(element.scale2).min, element.minDim2Value);
+					}
 				}
 	
 				element.cursor.seek(CursorBookmark.FIRST);
 				
-				if (element.scale3 is IEnumerableScale)
-				{	
-					// if the scale dataProvider already exists than load it and update the index
-					// in fact the same scale might be shared among several elements 
-					if (IEnumerableScale(element.scale3).dataProvider)
-					{
-						catElements = IEnumerableScale(element.scale3).dataProvider;
-						j = catElements.length;
-					} else {
-						j = 0;
-						catElements = [];
-					}
-
-					while (!element.cursor.afterLast)
-					{
-						// if the category value already exists in the axis, than skip it
-						if (catElements.indexOf(element.cursor.current[IEnumerableScale(element.scale3).categoryField]) == -1)
-							catElements[j++] = 
-								element.cursor.current[IEnumerableScale(element.scale3).categoryField];
-						element.cursor.moveNext();
-					}
-							
-					// set the elements propery of the CategoryAxis owned by the current element
-					if (catElements.length > 0)
-						IEnumerableScale(element.scale3).dataProvider = catElements;
-	
-				} else if (element.scale3 is INumerableScale)
+				if (element.scale3 && !element.scale3.values)
 				{
-					// since the same scale can be shared among several elements, the precedent min and max
-					// are also taken into account
-					if (isNaN(INumerableScale(element.scale3).max))
-						INumerableScale(element.scale3).max = element.maxDim3Value;
-					else 
-						INumerableScale(element.scale3).max =
-							Math.max(INumerableScale(element.scale2).max, element.maxDim3Value);
-					
-					if (isNaN(INumerableScale(element.scale3).min))
-						INumerableScale(element.scale3).min = element.minDim3Value;
-					else 
-						INumerableScale(element.scale3).min =
-							Math.min(INumerableScale(element.scale3).min, element.minDim3Value);
+					if (element.scale3 is IEnumerableScale)
+					{	
+						// if the scale dataProvider already exists than load it and update the index
+						// in fact the same scale might be shared among several elements 
+						if (IEnumerableScale(element.scale3).dataProvider)
+						{
+							catElements = IEnumerableScale(element.scale3).dataProvider;
+							j = catElements.length;
+						} else {
+							j = 0;
+							catElements = [];
+						}
+	
+						while (!element.cursor.afterLast)
+						{
+							// if the category value already exists in the axis, than skip it
+							if (catElements.indexOf(element.cursor.current[IEnumerableScale(element.scale3).categoryField]) == -1)
+								catElements[j++] = 
+									element.cursor.current[IEnumerableScale(element.scale3).categoryField];
+							element.cursor.moveNext();
+						}
+								
+						// set the elements propery of the CategoryAxis owned by the current element
+						if (catElements.length > 0)
+							IEnumerableScale(element.scale3).dataProvider = catElements;
+		
+					} else if (element.scale3 is INumerableScale)
+					{
+						// since the same scale can be shared among several elements, the precedent min and max
+						// are also taken into account
+						if (isNaN(INumerableScale(element.scale3).max))
+							INumerableScale(element.scale3).max = element.maxDim3Value;
+						else 
+							INumerableScale(element.scale3).max =
+								Math.max(INumerableScale(element.scale2).max, element.maxDim3Value);
+						
+						if (isNaN(INumerableScale(element.scale3).min))
+							INumerableScale(element.scale3).min = element.minDim3Value;
+						else 
+							INumerableScale(element.scale3).min =
+								Math.min(INumerableScale(element.scale3).min, element.minDim3Value);
+					}
 				}
 
-				if (element.colorScale)
+				if (element.colorScale && !element.colorScale.values)
 				{
-					// if the axis is numeric than set its maximum and minimum values 
-					// if the max and min are not yet defined for the element, than they are calculated now
-					element.colorScale.max =
-						element.maxColorValue;
-					element.colorScale.min =
-						element.minColorValue;
+						// since the same scale can be shared among several elements, the precedent min and max
+						// are also taken into account
+						if (isNaN(element.colorScale.max))
+							element.colorScale.max =
+								element.maxColorValue;
+						else 
+							element.colorScale.max =
+								Math.max(element.colorScale.max, element.maxColorValue);
+						
+						if (isNaN(element.colorScale.min))
+							element.colorScale.min =
+								element.minColorValue;
+						else 
+							element.colorScale.min =
+								Math.min(element.colorScale.min, element.minColorValue);
+				}
+
+				if (element.sizeScale && !element.sizeScale.values)
+				{
+					if (isNaN(element.sizeScale.max))
+						element.sizeScale.max =
+							element.maxSizeValue;
+					else 
+						element.sizeScale.max =
+							Math.max(element.sizeScale.max, element.maxSizeValue);
+					
+					if (isNaN(element.sizeScale.min))
+						element.sizeScale.min =
+							element.minSizeValue;
+					else 
+						element.sizeScale.min =
+							Math.min(element.sizeScale.min, element.minSizeValue);
 				}
 			}
 		}
