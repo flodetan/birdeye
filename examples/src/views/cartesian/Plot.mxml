@@ -61,9 +61,9 @@
 	 			<scales:Category id="c" categoryField="index" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 			</coords:scales>
 			 <coords:elements>
-			 	<elements:PointElement scale1="{c}" scale2="{l}" dim1="index" dim2="bronze" source="{rasterImage}" strokeAlpha="0" displayName="A" plotRadius="13"/>
+			 	<elements:PointElement scale1="{c}" scale2="{l}" dim1="index" dim2="bronze" source="{rasterImage}" strokeAlpha="0" displayName="A" size="13"/>
 			 	<elements:PointElement scale1="{c}" scale2="{l}" dim1="index" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="solid1" dim2="gold" displayName="C" />
-			 	<elements:LabelElement scale1="{c}" scale2="{l}" extendMouseEvents="true" labelField="R4" labelSize="15" labelFont="verdana" labelColor="#FF0000" dim1="index" dim2="silver" displayName="B"/>
+			 	<elements:PointElement size="0" scale1="{c}" scale2="{l}" extendMouseEvents="true" labelField="R4" labelSize="15" labelFont="verdana" labelColor="#FF0000" dim1="index" dim2="silver" itemRenderer="birdeye.vis.guides.renderers.TextRenderer" displayName="B"/>
 			 </coords:elements>
 		</coords:Cartesian>
 		<guides:Legend dataProvider="{pc3}" direction="horizontal"/>	
