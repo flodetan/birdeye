@@ -160,6 +160,8 @@ package birdeye.vis.coords
 			_elementsContainer = this;
 			addChild(labels = new Surface());
 
+	  		_elementsContainer.addChildAt(_maskShape,0);
+
 			gg = new GeometryGroup();
 			gg.target = labels;
 			labels.addChild(gg);
@@ -444,6 +446,17 @@ package birdeye.vis.coords
 				IElement(_elements[i]).drawElement();
 			}
 			
+			if (_maskShape)
+			{
+				if (!elementsContainer.contains(_maskShape))
+					elementsContainer.addChild(_maskShape);
+				maskShape.graphics.beginFill(0xffffff, 1);
+				maskShape.graphics.drawRect(0,0,_elementsContainer.width, _elementsContainer.height);
+				maskShape.graphics.endFill();
+	  			elementsContainer.setChildIndex(_maskShape, 0);
+				elementsContainer.mask = maskShape;
+			}
+
 			// listeners like legends will listen to this event
 			dispatchEvent(new Event("ProviderReady"));
 		}

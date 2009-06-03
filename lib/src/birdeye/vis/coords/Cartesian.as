@@ -153,6 +153,8 @@ package birdeye.vis.coords
 		{
 			super();
 			coordType = VisScene.CARTESIAN;
+
+	  		_elementsContainer.addChildAt(_maskShape,0);
 		}
 		
 		private var leftContainer:Container, rightContainer:Container;
@@ -507,6 +509,16 @@ package birdeye.vis.coords
 				Surface(_elements[i]).width = chartBounds.width;
 				Surface(_elements[i]).height = chartBounds.height;
 				IElement(_elements[i]).drawElement();
+			}
+			if (_maskShape && !isNaN(_elementsContainer.width) && !isNaN(_elementsContainer.height))
+			{
+				if (!elementsContainer.contains(_maskShape))
+					elementsContainer.addChild(_maskShape);
+				maskShape.graphics.beginFill(0xffffff, 1);
+				maskShape.graphics.drawRect(0,0,_elementsContainer.width, _elementsContainer.height);
+				maskShape.graphics.endFill();
+	  			elementsContainer.setChildIndex(_maskShape, 0);
+				elementsContainer.mask = maskShape;
 			}
 		}
 		
