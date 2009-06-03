@@ -564,7 +564,6 @@ package birdeye.vis.scales
 		
 		public function resetValues():void
 		{
-			_interval = NaN
 			// override
 		}
 	}
