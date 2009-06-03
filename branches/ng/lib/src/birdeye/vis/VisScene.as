@@ -31,14 +31,13 @@
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.scales.MultiScale;
-	import birdeye.vis.trans.projections.Projection;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
-	import com.degrafa.transform.ITransform;
 	
+	import flash.display.Shape;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.xml.XMLNode;
@@ -436,12 +435,22 @@
 			invalidateDisplayList();
 		}
 		
+		/**
+		 * Return the mask needed to hide elements that draws outside the elementContainer boundaries.*/
+		public function get maskShape():Shape
+		{
+			return _maskShape;
+		}
+		
 		// UIComponent flow
 		
+		protected var _maskShape:Shape; 
 		public function VisScene():void
 		{
 			super();
 			doubleClickEnabled = true;
+
+	  		_maskShape = new Shape();
 		}
 		
 		protected var rectBackGround:RegularRectangle;
