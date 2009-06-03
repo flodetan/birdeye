@@ -28,7 +28,6 @@
 package birdeye.vis.elements.geometry
 {
 	import birdeye.vis.VisScene;
-	import birdeye.vis.coords.Polar;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.ArcPath;
@@ -39,8 +38,10 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
+	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.EllipticalArc;
 	import com.degrafa.geometry.Line;
+	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.geom.Rectangle;
@@ -219,6 +220,15 @@ package birdeye.vis.elements.geometry
 								break;
 						}
 						
+						if (colorScale)
+						{
+							var col:* = colorScale.getPosition(cursor.current[colorField]);
+							if (col is Number)
+								fill = new SolidFill(col);
+							else if (col is IGraphicsFill)
+								fill = col;
+						} 
+	
 		 				var bounds:Rectangle = new Rectangle(pos1, pos2, colWidth, baseScale2 - pos2);
 		
 						// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
