@@ -138,6 +138,11 @@ package birdeye.vis.scales
 		{
 			super.commitProperties();
 
+			if (isNaN(_min) && _values)
+				_min = _values[0];
+			if (isNaN(_max) && _values) 
+				_max = _values[1];
+
 			// if no interval is specified by the user, than divide the axis in 5 parts
 			if (!isNaN(max) && !isNaN(min) && !isGivenInterval)
 			{
