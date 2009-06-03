@@ -35,6 +35,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.scales.*;
 	import birdeye.vis.trans.projections.Projection;
 	
+	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.Polygon;
 	import com.degrafa.paint.SolidFill;
 	
@@ -113,10 +114,13 @@ package birdeye.vis.elements.geometry
 
 					if (colorScale)
 					{
-						colorFill = colorScale.getPosition(cursor.current[colorField]);
-						fill = new SolidFill(colorFill);
+						var col:* = colorScale.getPosition(cursor.current[colorField]);
+						if (col is Number)
+							fill = new SolidFill(col);
+						else if (col is IGraphicsFill)
+							fill = col;
 					} 
-
+	
 					createTTGG(cursor.current, [_polyDim], NaN, NaN, NaN, NaN, null, NaN, NaN, false);
 
 					if (fullPoly && fullPoly.length > 0)

@@ -35,8 +35,10 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
+	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.Polygon;
+	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
 	
@@ -190,6 +192,15 @@ package birdeye.vis.elements.geometry
 											cursor.current[chart.multiScale.dim1]
 											]).getPosition(cursor.current[dim2]);
 					}
+	
+					if (colorScale)
+					{
+						var col:* = colorScale.getPosition(cursor.current[colorField]);
+						if (col is Number)
+							fill = new SolidFill(col);
+						else if (col is IGraphicsFill)
+							fill = col;
+					} 
 	
 					if (chart.coordType == VisScene.POLAR)
 					{

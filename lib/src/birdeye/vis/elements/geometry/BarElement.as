@@ -36,7 +36,9 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
+	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.Line;
+	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
 	
@@ -176,6 +178,15 @@ package birdeye.vis.elements.geometry
 						zPos = scale3.getPosition(cursor.current[dim3]);
 						scale2RelativeValue = XYZ(scale3).height - zPos;
 					}
+	
+					if (colorScale)
+					{
+						var col:* = colorScale.getPosition(cursor.current[colorField]);
+						if (col is Number)
+							fill = new SolidFill(col);
+						else if (col is IGraphicsFill)
+							fill = col;
+					} 
 	
 					// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees

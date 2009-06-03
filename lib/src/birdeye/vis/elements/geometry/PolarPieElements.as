@@ -35,6 +35,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
+	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.GradientStop;
 	import com.degrafa.paint.LinearGradientFill;
@@ -176,9 +177,12 @@ package birdeye.vis.elements.geometry
 					{
 						if (colorScale)
 						{
-							colorFill = colorScale.getPosition(cursor.current[colorField]);
-							fill = new SolidFill(colorFill);
-						}
+							var col:* = colorScale.getPosition(cursor.current[colorField]);
+							if (col is Number)
+								fill = new SolidFill(col);
+							else if (col is IGraphicsFill)
+								fill = col;
+						} 
 					} if (_colorsStart && _colorsStop)
 					{
 						if (c < _colorsStart.length)
