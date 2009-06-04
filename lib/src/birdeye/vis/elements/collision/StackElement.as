@@ -27,14 +27,11 @@
  
 package birdeye.vis.elements.collision
 {
-	import birdeye.vis.VisScene;
 	import birdeye.vis.coords.Cartesian;
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.geometry.*;
 	import birdeye.vis.interfaces.IStack;
 	import birdeye.vis.scales.*;
-	
-	import flash.events.Event;
 	
 	[Exclude(name="stackType", kind="property")] 
 	[Exclude(name="total", kind="property")] 
@@ -61,19 +58,18 @@ package birdeye.vis.elements.collision
 			return _stackType;
 		}
 		
-		protected var _baseAtZero:Boolean = true;
-		/** If true, if min and max values of an element are positive (negative), 
-		 * than the base of the StackElement will be 0, instead of the min (max) value.*/
-		[Inspectable(enumeration="true,false")]
-		public function set baseAtZero(val:Boolean):void
+		protected var _baseAt:Number = 0;
+		/** If not set to NaN and min and max values of an element are positive (negative), 
+		 * than the base of the StackElement will be the one set, instead of the min (max) value.*/
+		public function set baseAt(val:Number):void
 		{
-			_baseAtZero = val;
+			_baseAt = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get baseAtZero():Boolean
+		public function get baseAt():Number
 		{
-			return _baseAtZero;
+			return _baseAt;
 		}
 		
 		public var _baseValues:Array;
