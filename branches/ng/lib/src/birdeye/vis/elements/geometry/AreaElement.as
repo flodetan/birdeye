@@ -286,8 +286,8 @@ package birdeye.vis.elements.geometry
 			var yPos:Number;
 			if (scale2 && scale2 is INumerableScale)
 			{
-				if (_baseAtZero)
-					yPos = scale2.getPosition(0);
+				if (!isNaN(_baseAt))
+					yPos = scale2.getPosition(_baseAt);
 				else
 					yPos = scale2.getPosition(minDim2Value);
 			}

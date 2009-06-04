@@ -262,8 +262,9 @@ package birdeye.vis.elements.geometry
 						gg.geometryCollection.addItemAt(poly,0);
 					} else if (chart.coordType == VisScene.POLAR)
 					{
-						var arcCenterX:Number = chart.origin.x - pos2;
+/* 						var arcCenterX:Number = chart.origin.x - pos2;
 						var arcCenterY:Number = chart.origin.y - pos2;
+ */
 						var startAngle:Number; 
 						switch (_stackType) 
 						{
@@ -293,7 +294,8 @@ package birdeye.vis.elements.geometry
 								new ArcPath(Math.max(0, baseScale2), pos2, startAngle, arcSize, chart.origin);
 						else
 							arc = 
-								new EllipticalArc(arcCenterX, arcCenterY, wSize, hSize, startAngle, arcSize, "pie");
+								new ArcPath(Math.max(0, baseScale2), pos2, startAngle, arcSize, chart.origin);
+//								new EllipticalArc(arcCenterX, arcCenterY, wSize, hSize, startAngle, arcSize, "pie");
 		
 						arc.fill = fill;
 						arc.stroke = stroke;
@@ -337,8 +339,8 @@ package birdeye.vis.elements.geometry
 			var pos2:Number;
 			if (scale2 && scale2 is INumerableScale)
 			{
-				if (_baseAtZero)
-					pos2 = scale2.getPosition(0);
+				if (!isNaN(_baseAt))
+					pos2 = scale2.getPosition(_baseAt);
 				else
 					pos2 = scale2.getPosition(INumerableScale(scale2).min);
 			}
