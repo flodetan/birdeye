@@ -289,12 +289,9 @@ package birdeye.vis.elements.geometry
 							
 						var arc:IGeometry;
 						
-						if (stackType == STACKED100)
-							arc = 
-								new ArcPath(Math.max(0, baseScale2), pos2, startAngle, arcSize, chart.origin);
-						else
-							arc = 
-								new ArcPath(Math.max(0, baseScale2), pos2, startAngle, arcSize, chart.origin);
+						arc = 
+							new ArcPath(!(baseScale2>0)? 0: baseScale2, pos2, startAngle, arcSize, chart.origin);
+
 //								new EllipticalArc(arcCenterX, arcCenterY, wSize, hSize, startAngle, arcSize, "pie");
 		
 						arc.fill = fill;
