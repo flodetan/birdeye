@@ -7,14 +7,18 @@
 	xmlns:elements="birdeye.vis.elements.geometry.*"
 	xmlns:trans="birdeye.vis.trans.projections.*"
 	xmlns:scales="birdeye.vis.scales.*"
-	xmlns:guides="birdeye.vis.guides.legend.*">
+	xmlns:guides="birdeye.vis.guides.legend.*" creationComplete="init()">
 <mx:Script>
 		<![CDATA[
 			import mx.controls.Alert;
 			import birdeye.vis.data.DataItemLayout;
+			import birdeye.vis.data.dictionaries.WorldRegionTypes;
 			import birdeye.vis.data.dictionaries.WorldCountries;
 			import birdeye.vis.trans.projections.Projection;
 			import mx.collections.ArrayCollection;
+			import com.degrafa.core.IGraphicsFill;
+			import com.degrafa.paint.RadialGradientFill;
+			import com.degrafa.paint.GradientStop;
 			
 			[Bindable]
 			public var dt:ArrayCollection = new ArrayCollection();
@@ -24,12 +28,12 @@
 				ac = new ArrayCollection();
 				var wc:WorldCountries = new WorldCountries();
 				
-				var countries:Array = ["USA","MEX", "CAN"];
+				var countries:Array = wc.getCountriesListByRegion("Africa");
 				
 				for (var i:Number = 0; i<countries.length; i++)
 				{
 					ac.addItem({
-						country: wc.getCountriesName(countries[i]),
+						country: wc.getCountriesListByRegion(countries[i]),
 						poly: wc.getCountryPolygon(countries[i]),
 						center: wc.getCountryCenter(countries[i]),
 						random: Math.random() * 100000
@@ -45,25 +49,41 @@
 				tt += "\n Random data: " + currDatatip.random;
 				return  tt;
 			}
+			
+			private function colorFunction(dataValue:*, min:Number, max:Number, _size:Number):*
+			{
+				var fillGradients:Array;
+				var alphaGradients:Array;
+				var fill:com.degrafa.core.IGraphicsFill = new RadialGradientFill();
+
+				var grStop:GradientStop = new GradientStop(0x005AFF)
+				grStop.alpha = .7;
+				var g:Array = new Array();
+				g.push(grStop);
+
+				grStop = new GradientStop(0x005AFF);
+				grStop.alpha = .3;
+				g.push(grStop);
+
+				RadialGradientFill(fill).gradientStops = g;
+			 	return fill;
+			}
 		]]>
 	</mx:Script>
 	
 	
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
-    	<mx:Button label="Generate" click="init()"/>
     	<coords:Cartesian id="myMap" width="90%" height="90%" dataProvider="{dt}" showDataTips="true" dataTipFunction="dtFunc">
     		<coords:transforms>
-    			<trans:Projection id="myProj" proj="Geographic">
-    				<trans:latScale>
-			 			<scales:Numeric id="lat" values="{[10,90]}" interval="20" placement="left" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb"/>
-    				</trans:latScale>
-    				<trans:longScale>
-			 			<scales:Numeric id="long" values="{[-180,-40]}" interval="20" placement="bottom" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb"/>
-    				</trans:longScale>
-    			</trans:Projection> 
-    		</coords:transforms>
+					<trans:Projection id="myProj" proj="Miller cylindrical" latScale="{lat}" longScale="{long}"/>
+			</coords:transforms>
+			<coords:scales>
+ 				<scales:Numeric id="lat" values="{[45,-45]}" interval="20" placement="right" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb"/>
+ 				<scales:Numeric id="long" values="{[-80,80]}" interval="20" placement="top" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb" />
+ 				<scales:Numeric id="col" f="colorFunction"/>
+			</coords:scales>
     		 <coords:elements>
-    		 	<elements:PolygonElement scale1="{long}" scale2="{lat}" polyDim="poly" styleName="grad3"/>
+    		 	<elements:PolygonElement scale1="{long}" scale2="{lat}" polyDim="poly" colorScale="{col}" />
 			 </coords:elements>
     	</coords:Cartesian>
     </mx:VBox>
