@@ -27,6 +27,10 @@
  
 package birdeye.vis.guides.legend
 {
+	import birdeye.vis.VisScene;
+	import birdeye.vis.guides.renderers.RasterRenderer;
+	import birdeye.vis.interfaces.IElement;
+	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.Geometry;
@@ -40,10 +44,6 @@ package birdeye.vis.guides.legend
 	
 	import mx.containers.Box;
 	import mx.core.Application;
-	
-	import birdeye.vis.VisScene;
-	import birdeye.vis.interfaces.IElement;
-	import birdeye.vis.guides.renderers.RasterRenderer;
 	
 	public class Legend extends Box
 	{
@@ -72,6 +72,17 @@ package birdeye.vis.guides.legend
 			invalidateSize();
 			invalidateDisplayList();
 		}
+
+		private var _items:Array; /* of LegendItem */
+		/** Array of legend items, that can be added manually.*/
+        [Inspectable(category="General", arrayType="birdeye.vis.guides.legend.LegendItem")]
+        [ArrayElementType("birdeye.vis.guides.legend.LegendItem")]
+		public function set items(val:Array):void
+		{
+			_items = val;
+			for (var i:uint = 0; i<_items.length; i++)
+				addChild(_items[i]);
+		}
 		
 		public function Legend()
 		{
@@ -90,10 +101,13 @@ package birdeye.vis.guides.legend
 				var nC:Number = numChildren;
 				for (var i:Number = 0; i<nC; i++)
 				{
-					if (getChildAt(0) is Surface)
-						for (var j:int = 0; j<Surface(getChildAt(0)).numChildren; j++)
-							Surface(getChildAt(0)).removeChildAt(0);
- 					removeChildAt(0);
+					var child:Object = getChildAt(0);
+					if (child is Surface && !(child is LegendItem))
+					{
+						for (var j:int = 0; j<Surface(child).numChildren; j++)
+							Surface(child).removeChildAt(0);
+	 					removeChildAt(0);
+					}
 				}
 
 				for (i = 0; i<_dataProvider.elements.length; i++)
