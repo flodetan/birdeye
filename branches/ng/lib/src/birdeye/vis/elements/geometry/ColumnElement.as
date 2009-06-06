@@ -35,11 +35,11 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.RectangleRenderer;
 	import birdeye.vis.interfaces.IEnumerableScale;
 	import birdeye.vis.interfaces.INumerableScale;
+	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
 	import com.degrafa.core.IGraphicsFill;
-	import com.degrafa.geometry.EllipticalArc;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
@@ -104,7 +104,7 @@ package birdeye.vis.elements.geometry
 				var ttShapes:Array;
 				var ttXoffset:Number = NaN, ttYoffset:Number = NaN;
 				
-				var baseScale2:Number = getDim2MinPosition();
+				var baseScale2:Number = getDim2MinPosition(scale2);
 				var size:Number, colWidth:Number = 0; 
 				if (scale1)
 				{
@@ -187,6 +187,9 @@ package birdeye.vis.elements.geometry
 											cursor.current[multiScale.dim1]
 											]).getPosition(cursor.current[dim2]);
 					} else if (chart.multiScale) {
+						baseScale2 = getDim2MinPosition(INumerableScale(chart.multiScale.scales[
+											cursor.current[chart.multiScale.dim1]
+											]));
 						pos1 = chart.multiScale.scale1.getPosition(cursor.current[dim1]);
 						pos2 = INumerableScale(chart.multiScale.scales[
 											cursor.current[chart.multiScale.dim1]
@@ -290,8 +293,7 @@ package birdeye.vis.elements.geometry
 						var arc:IGeometry;
 						
 						arc = 
-							new ArcPath(!(baseScale2>0)? 0: baseScale2, pos2, startAngle, arcSize, chart.origin);
-
+							new ArcPath(baseScale2, pos2, startAngle, arcSize, chart.origin);
 //								new EllipticalArc(arcCenterX, arcCenterY, wSize, hSize, startAngle, arcSize, "pie");
 		
 						arc.fill = fill;
@@ -331,15 +333,15 @@ package birdeye.vis.elements.geometry
 			return xPos;
 		}
  */		
-		private function getDim2MinPosition():Number
+		private function getDim2MinPosition(s2:IScale):Number
 		{
 			var pos2:Number;
-			if (scale2 && scale2 is INumerableScale)
+			if (s2 && s2 is INumerableScale)
 			{
 				if (!isNaN(_baseAt))
-					pos2 = scale2.getPosition(_baseAt);
+					pos2 = s2.getPosition(_baseAt);
 				else
-					pos2 = scale2.getPosition(INumerableScale(scale2).min);
+					pos2 = s2.getPosition(INumerableScale(s2).min);
 			}
 			return pos2;
 		}
