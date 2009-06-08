@@ -3,10 +3,212 @@
 	width="100%" height="100%" 
 	backgroundColor="#3f3f3f"
 	xmlns:micro="views.micro.*" horizontalAlign="center" verticalAlign="middle"
-	 >
-	
+	xmlns:recipe="birdeye.vis.recipes.cartesianCharts.*"
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:guides="birdeye.vis.guides.legend.*"
+	creationComplete="createDT();">
+<mx:Script>
+		<![CDATA[
+			import com.degrafa.paint.SolidFill;
+			import birdeye.vis.scales.Linear;
+			import birdeye.vis.scales.Category;
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
 
-	<mx:Label text="Coming soon..." fontSize="14" />
+			private var subject:Array;
+			
+			private function createDT():void
+			{
+				var ac:ArrayCollection = new ArrayCollection();
+				subject = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "L", "M", "N"];
+				for (var i:Number = 0; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: Math.round(Math.random() *100 -50),
+						R2: Math.round(Math.random() *100),
+						R3: Math.round(Math.random() *100)
+					});
+				}
+				dt = ac;
+			}
+			
+			private function colWL(dataValue:*, min:Number, max:Number, size:Number):*
+			{
+				var fill:Number = 0xff0000;
+				if (Number(dataValue) < 0)
+					fill = 0x00ff00;
+				
+				return new SolidFill(fill);
+			}
+
+			private function valWL(dataValue:*, min:Number, max:Number, size:Number):*
+			{
+				if (Number(dataValue) == -2)
+					return size/2;
+				else if (Number(dataValue) < 0)
+					return size;
+				else
+					return 0;
+			}
+		]]>
+	</mx:Script>
 	
 	
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="top" >
+    	<mx:Button label="Generate" click="createDT()"/>
+		<mx:HBox width="100%" height="60%" horizontalAlign="center" verticalAlign="middle" >
+	    	<coords:Cartesian width="50" height="20" dataProvider="{dt}" showDataTips="true" isMasked="false">
+	    		<coords:scales>
+	    			<scales:Category id="cat1" showAxis="false" placement="bottom" categoryField="subject"/>
+	    			<scales:Linear id="lin1" showAxis="false" placement="left"/>
+	    		</coords:scales>
+				 <coords:elements>
+				 	<elements:LineElement scale1="{cat1}" dim1="subject" scale2="{lin1}" dim2="R1" styleName="solid1" weightStroke="1"/>
+				 </coords:elements>
+			</coords:Cartesian>
+	
+	    	<coords:Cartesian width="50" height="20" dataProvider="{dt}" showDataTips="true">
+	    		<coords:scales>
+	    			<scales:Category id="cat2" showAxis="false" placement="bottom" categoryField="subject"/>
+	    			<scales:Linear id="lin2" showAxis="false" placement="left"/>
+	    		</coords:scales>
+				 <coords:elements>
+				 	<elements:AreaElement scale1="{cat2}" dim1="subject" scale2="{lin2}" dim2="R1" alphaStroke="0" styleName="grad1"/>
+				 </coords:elements>
+			</coords:Cartesian>
+	
+	    	<coords:Cartesian width="50" height="20" dataProvider="{dt}" showDataTips="true">
+	    		<coords:scales>
+	    			<scales:Category id="cat3" showAxis="false" placement="bottom" categoryField="subject"/>
+	    			<scales:Linear id="lin3" showAxis="false" placement="left"/>
+	    		</coords:scales>
+				 <coords:elements>
+				 	<elements:ColumnElement scale1="{cat3}" dim1="subject" scale2="{lin3}" dim2="R1" styleName="solid2"/>
+				 </coords:elements>
+			</coords:Cartesian>
+	
+	    	<coords:Cartesian width="50" height="20" dataProvider="{dt}" showDataTips="true">
+	    		<coords:scales>
+	    			<scales:Category id="cat4" showAxis="false" placement="bottom" categoryField="subject"/>
+	    			<scales:Linear id="lin4" showAxis="false" placement="left"/>
+	    		</coords:scales>
+				 <coords:elements>
+				 	<elements:PointElement scale1="{cat4}" dim1="subject" scale2="{lin4}" size=".5" dim2="R1" styleName="solid1"/>
+				 </coords:elements>
+			</coords:Cartesian>
+	
+	    	<coords:Cartesian width="50" height="20" dataProvider="{dt}" showDataTips="true">
+	    		<coords:scales>
+	    			<scales:Category id="cat5" showAxis="false" placement="bottom" categoryField="subject"/>
+		 			<scales:Numeric id="wl" f="valWL" placement="right" values="[-1,1]" showAxis="false"/>
+		 			<scales:Numeric id="col" f="colWL"/>
+	    		</coords:scales>
+				 <coords:elements>
+				 	<elements:ColumnElement scale1="{cat5}" baseAt="-2" dim1="subject" scale2="{wl}" dim2="R1" alphaStroke="0" colorScale="{col}" colorField="R1"/>
+				 </coords:elements>
+			</coords:Cartesian>
+	
+	    	<coords:Cartesian width="50" height="40" dataProvider="{dt}" showDataTips="true">
+	    		<coords:scales>
+		 			<scales:Category id="cat6" categoryField="subject" placement="right" showAxis="false"/>
+		 			<scales:Linear id="bar" placement="bottom" showAxis="false"/>
+	    		</coords:scales>
+				 <coords:elements>
+				 	<elements:BarElement scale1="{bar}" dim1="R1" scale2="{cat6}" dim2="subject" alphaStroke="0" styleName="grad2"/>
+				 </coords:elements>
+			</coords:Cartesian>
+		</mx:HBox>
+		<mx:HBox width="100%" height="60%" horizontalAlign="center" verticalAlign="middle" >
+			<coords:Polar dataProvider="{dt}" showDataTips="true" width="70" height="70" type="overlaid">
+				<coords:scales>
+					<scales:CategoryAngle id="c1" categoryField="subject" showAxis="false"/>
+					<scales:Linear id="l1" placement="horizontal_center" showAxis="false"/>
+				</coords:scales>
+				<coords:elements>
+					<elements:ColumnElement scale1="{c1}" scale2="{l1}" baseAt="0" extendMouseEvents="true" styleName="grad1" dim1="subject" dim2="R1"/>
+				</coords:elements>
+			</coords:Polar>
+
+			<coords:Polar dataProvider="{dt}" showDataTips="true" width="70" height="70" type="overlaid">
+				<coords:scales>
+					<scales:CategoryAngle id="c2" categoryField="subject" showAxis="false"/>
+					<scales:Linear id="l2" placement="horizontal_center" showAxis="false"/>
+				</coords:scales>
+				<coords:elements>
+					<elements:ColumnElement scale1="{c1}" scale2="{l2}" baseAt="NaN" extendMouseEvents="true" styleName="grad2" dim1="subject" dim2="R1"/>
+				</coords:elements>
+			</coords:Polar>
+
+			<coords:Polar dataProvider="{dt}" showDataTips="true" width="70" height="70" type="overlaid">
+				<coords:scales>
+					<scales:CategoryAngle id="c3" categoryField="subject" showAxis="false"/>
+					<scales:Linear id="l3" placement="horizontal_center" showAxis="false"/>
+				</coords:scales>
+				<coords:elements>
+					<elements:AreaElement scale1="{c3}" scale2="{l3}" extendMouseEvents="true" styleName="grad3" dim1="subject" dim2="R1"/>
+				</coords:elements>
+			</coords:Polar>
+
+			<coords:Polar dataProvider="{dt}" showDataTips="true" width="70" height="70" type="overlaid">
+				<coords:scales>
+					<scales:CategoryAngle id="c4" categoryField="subject" showAxis="false"/>
+					<scales:Linear id="l4" placement="horizontal_center" showAxis="false"/>
+				</coords:scales>
+				<coords:elements>
+					<elements:LineElement scale1="{c4}" scale2="{l4}" extendMouseEvents="true" styleName="solid2" dim1="subject" dim2="R1"/>
+				</coords:elements>
+			</coords:Polar>
+		</mx:HBox>
+
+		<mx:HBox width="100%" height="60%" horizontalAlign="center" verticalAlign="middle" >
+			<coords:Polar dataProvider="{dt}" showDataTips="true" width="70" height="70" type="overlaid">
+				<coords:scales>
+					<scales:CategoryAngle id="c7" categoryField="subject" showAxis="false"/>
+					<scales:Linear id="l7" placement="horizontal_center" showAxis="false"/>
+				</coords:scales>
+				<coords:elements>
+					<elements:PointElement scale1="{c7}" scale2="{l7}" size=".5" styleName="solid1" dim1="subject" dim2="R3"/>
+				</coords:elements>
+			</coords:Polar>
+
+			<coords:Polar dataProvider="{dt}" showDataTips="true" width="70" height="70" type="stacked">
+				<coords:scales>
+					<scales:CategoryAngle id="c5" categoryField="subject" showAxis="false"/>
+					<scales:Linear id="l5" placement="horizontal_center" showAxis="false"/>
+				</coords:scales>
+				<coords:elements>
+					<elements:ColumnElement scale1="{c5}" scale2="{l5}" extendMouseEvents="true" styleName="grad4" dim1="subject" dim2="R1"/>
+					<elements:ColumnElement scale1="{c5}" scale2="{l5}" extendMouseEvents="true" styleName="grad1" dim1="subject" dim2="R2"/>
+				</coords:elements>
+			</coords:Polar>
+
+			<coords:Polar dataProvider="{dt}" showDataTips="true" width="70" height="70" type="stacked100">
+				<coords:scales>
+					<scales:CategoryAngle id="c6" categoryField="subject" showAxis="false"/>
+					<scales:Linear id="l6" placement="horizontal_center" showAxis="false"/>
+				</coords:scales>
+				<coords:elements>
+					<elements:ColumnElement scale1="{c6}" scale2="{l6}" baseAt="{NaN}" extendMouseEvents="true" styleName="grad4" dim1="subject" dim2="R1"/>
+					<elements:ColumnElement scale1="{c6}" scale2="{l6}" baseAt="{NaN}" extendMouseEvents="true" styleName="grad1" dim1="subject" dim2="R2"/>
+				</coords:elements>
+			</coords:Polar>
+
+			<coords:Polar dataProvider="{dt}" width="70" height="70" columnWidthRate=".8" type="stacked" isMasked="false">
+				<coords:scales>
+					<scales:Numeric id="l" scaleType="constant" showAxis="false"/>
+					<scales:PercentAngle id="a" size="360"/>
+					<scales:PercentAngle id="b" size="360"/>
+				</coords:scales>
+				<coords:elements>
+					<elements:PolarPieElements scale1="{a}" scale2="{l}" alpha=".6" radiusLabelOffset="5" styleName="grad4" extendMouseEvents="true" dim1="R3"/>
+					<elements:PolarPieElements scale1="{b}" scale2="{l}" alpha=".7" radiusLabelOffset="10" styleName="grad3" extendMouseEvents="true" dim1="R2"/>
+				</coords:elements>
+			</coords:Polar>
+		</mx:HBox>
+	</mx:VBox>
 </mx:VBox>
