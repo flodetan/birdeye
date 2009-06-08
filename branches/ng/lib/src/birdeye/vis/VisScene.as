@@ -54,6 +54,13 @@
 		public static const CARTESIAN:String="cartesian";
 		public static const POLAR:String="polar";
 		
+		protected var _isMasked:Boolean = false;
+		public function set isMasked(val:Boolean):void
+		{
+			_isMasked = val;
+			invalidateDisplayList();
+		}
+		
 		private var _coordType:String;
 		public function set coordType(val:String):void
 		{
