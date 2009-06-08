@@ -116,6 +116,15 @@
     		 	<elements:PolygonElement mouseClickFunction="clickF" extendMouseEvents="true" scale1="{long}" scale2="{lat}" polyDim="poly" colorScale="{col}" colorField="random" />
 			 </coords:elements>
     	</coords:Cartesian>
+    	<guides:Legend dataProvider="{myMap}" direction="horizontal">
+    		<guides:items>
+				<guides:LegendItem text="0 to 30K" gradientColors="{[0xE8480A, 0xE8800A]}" alphaGradients="{[.7, .5]}" sizeRenderer="15" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
+				<guides:LegendItem text="30K to 50K" gradientColors="{[0xFF940D, 0xFFEB0D]}" alphaGradients="{[.7, .5]}" sizeRenderer="15" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
+				<guides:LegendItem text="50K to 70K" gradientColors="{[0xFF0000, 0xFF2300]}" alphaGradients="{[.7, .5]}" sizeRenderer="15" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
+				<guides:LegendItem text="70K to 90K" gradientColors="{[0xE80CDE, 0xE80CDE]}" alphaGradients="{[.7, .3]}" sizeRenderer="15" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
+				<guides:LegendItem text=" > 90K" gradientColors="{[0x005AFF, 0x005AFF]}" alphaGradients="{[.7, .3]}" sizeRenderer="15" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
+    		</guides:items>
+    	</guides:Legend>
     </mx:VBox>
 	
 </mx:VBox>
