@@ -183,7 +183,7 @@ package birdeye.vis.elements.geometry
 							else if (col is IGraphicsFill)
 								fill = col;
 						} 
-					} if (_colorsStart && _colorsStop)
+					} else if (_colorsStart && _colorsStop)
 					{
 						if (c < _colorsStart.length)
 						{
@@ -211,7 +211,7 @@ package birdeye.vis.elements.geometry
 					} else if (randomColors)
 					{
 						tempColor = Math.random() * 255 * 255 * 255;
-						arc.fill = new SolidFill(tempColor);
+						fill = new SolidFill(tempColor);
 					}
 					
 					if (fill)
