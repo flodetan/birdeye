@@ -74,12 +74,16 @@ package birdeye.vis.scales
 		 **/
 		protected function maxLabelSize():void
 		{
+			if (!showAxis)
+				maxLblSize = 0;
 			// must be overridden 
 		}
 
 		/** @Private */
 		protected function calculateMaxLabelStyled():void
 		{
+			if (!showAxis)
+				maxLblSize = 0;
 			// calculate according font size and style
 			// consider auto-size and thick size too
 		}
