@@ -50,7 +50,6 @@ package birdeye.vis.elements
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.events.MouseEvent;
-	import flash.geom.Point;
 	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
@@ -509,7 +508,7 @@ package birdeye.vis.elements
 			return _randomColors;
 		}
 		
-		private var _alphaFill:Number = 1;
+		private var _alphaFill:Number;
 		/** Set the fill alpha.*/
 		public function set alphaFill(val:Number):void
 		{
@@ -521,7 +520,7 @@ package birdeye.vis.elements
 			return _alphaFill;
 		}
 		
-		private var _alphaStroke:Number = 1;
+		private var _alphaStroke:Number;
 		/** Set the stroke alpha.*/
 		public function set alphaStroke(val:Number):void
 		{
@@ -533,38 +532,38 @@ package birdeye.vis.elements
 			return _alphaStroke;
 		}
 
-		private var _colorFill:uint;
+		private var _colorFill:Number;
 		/** Set the fill color to be used for data items.*/
-		public function set colorFill(val:uint):void
+		public function set colorFill(val:Number):void
 		{
 			_colorFill = val;
 			invalidateDisplayList();
 		}
-		public function get colorFill():uint
+		public function get colorFill():Number
 		{
 			return _colorFill;
 		}
 
-		protected var _colorStroke:uint;
+		protected var _colorStroke:Number;
 		/** Set the stroke color to be used for the data items.*/
-		public function set colorStroke(val:uint):void
+		public function set colorStroke(val:Number):void
 		{
 			_colorStroke = val;
 			invalidateDisplayList();
 		}
-		public function get colorStroke():uint
+		public function get colorStroke():Number
 		{
 			return _colorStroke;
 		}
 		
-		protected var _weightStroke:uint;
+		protected var _weightStroke:Number;
 		/** Set the stroke color to be used for the data items.*/
-		public function set weightStroke(val:uint):void
+		public function set weightStroke(val:Number):void
 		{
 			_weightStroke = val;
 			invalidateDisplayList();
 		}
-		public function get weightStroke():uint
+		public function get weightStroke():Number
 		{
 			return _weightStroke;
 		}
@@ -607,26 +606,26 @@ package birdeye.vis.elements
 			return _fontLabel;
 		}
 
-		protected var _sizeLabel:uint;
+		protected var _sizeLabel:Number;
 		/** Set the gradientAlphas to be used for the data items.*/
-		public function set sizeLabel(val:uint):void
+		public function set sizeLabel(val:Number):void
 		{
 			_sizeLabel = val;
 			invalidateDisplayList();
 		}
-		public function get sizeLabel():uint
+		public function get sizeLabel():Number
 		{
 			return _sizeLabel;
 		}
 
-		protected var _colorLabel:uint;
+		protected var _colorLabel:Number;
 		/** Set the gradientAlphas to be used for the data items.*/
-		public function set colorLabel(val:uint):void
+		public function set colorLabel(val:Number):void
 		{
 			_colorLabel = val;
 			invalidateDisplayList();
 		}
-		public function get colorLabel():uint
+		public function get colorLabel():Number
 		{
 			return _colorLabel;
 		}
@@ -776,23 +775,39 @@ package birdeye.vis.elements
 			if (stylesChanged)
 			{
 				// Redraw gradient fill only if style changed.
-				_colors = getStyle("colors");
+				if (!_colors)
+					_colors = getStyle("colors");
 
-				_colorGradients = getStyle("gradientColors");
-				_alphaGradients = getStyle("gradientAlphas");
+				if (!_colorGradients)
+					_colorGradients = getStyle("gradientColors");
+				if (!_alphaGradients)
+					_alphaGradients = getStyle("gradientAlphas");
 				
-				_colorFill = getStyle("fillColor");
-				_alphaFill = getStyle("fillAlpha");
+				if (!isNaN(_colorFill))
+					_colorFill = getStyle("fillColor");
+				if (!_alphaFill)
+					_alphaFill = getStyle("fillAlpha");
 				
-				_colorStroke = getStyle("strokeColor");
-				_alphaStroke = getStyle("strokeAlpha");
-				_weightStroke = getStyle("strokeWeight");
+				if (isNaN(_colorStroke))
+					_colorStroke = getStyle("strokeColor");
+				
+				if (isNaN(_alphaStroke))
+					_alphaStroke = getStyle("strokeAlpha");
+				
+				if (isNaN(_weightStroke))
+					_weightStroke = getStyle("strokeWeight");
 
-				_fontLabel = getStyle("labelFont");
-				_colorLabel = getStyle("labelColor");
-				_sizeLabel = getStyle("labelSize");
+				if (!_fontLabel)
+					_fontLabel = getStyle("labelFont");
 
-				_sizeRenderer = getStyle("rendererSize");
+				if (isNaN(_colorLabel))
+					_colorLabel = getStyle("labelColor");
+
+				if (isNaN(_sizeLabel))
+					_sizeLabel = getStyle("labelSize");
+
+				if (isNaN(_sizeRenderer))
+					_sizeRenderer = getStyle("rendererSize");
 
  				stylesChanged = false;
 			}
