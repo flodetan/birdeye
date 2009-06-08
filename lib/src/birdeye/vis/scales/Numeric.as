@@ -184,27 +184,30 @@ package birdeye.vis.scales
 		 * width (for y axes) or height (for x axes) of the CategoryAxis.*/
 		override protected function maxLabelSize():void
 		{
-			var text:String = String(String(min).length < String(max).length ?
-									max : min);
-
-			switch (placement)
+			if (showAxis)
 			{
-				case TOP:
-				case BOTTOM:
-				case HORIZONTAL_CENTER:
-					maxLblSize = sizeLabel /* pixels for 1 char height */ + thickWidth + 10;
-					height = maxLblSize;
-					break;
-				case LEFT:
-				case RIGHT:
-				case VERTICAL_CENTER:
-					maxLblSize = text.length * sizeLabel/2 /* pixels for 1 char width */ + thickWidth + 10;
-					width = maxLblSize;
-			}
-			
-			// calculate the maximum label size according to the 
-			// styles defined for the axis 
-			super.calculateMaxLabelStyled();
+				var text:String = String(String(min).length < String(max).length ?
+										max : min);
+	
+				switch (placement)
+				{
+					case TOP:
+					case BOTTOM:
+					case HORIZONTAL_CENTER:
+						maxLblSize = sizeLabel /* pixels for 1 char height */ + thickWidth + 10;
+						height = maxLblSize;
+						break;
+					case LEFT:
+					case RIGHT:
+					case VERTICAL_CENTER:
+						maxLblSize = text.length * sizeLabel/2 /* pixels for 1 char width */ + thickWidth + 10;
+						width = maxLblSize;
+				}
+				// calculate the maximum label size according to the 
+				// styles defined for the axis 
+				super.calculateMaxLabelStyled();
+			} else
+				maxLblSize = 0;
 		}
 
 		/** @Private
