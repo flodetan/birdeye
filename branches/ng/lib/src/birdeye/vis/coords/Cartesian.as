@@ -510,7 +510,7 @@ package birdeye.vis.coords
 				Surface(_elements[i]).height = chartBounds.height;
 				IElement(_elements[i]).drawElement();
 			}
-			if (_maskShape && !isNaN(_elementsContainer.width) && !isNaN(_elementsContainer.height))
+			if (_isMasked && _maskShape && !isNaN(_elementsContainer.width) && !isNaN(_elementsContainer.height))
 			{
 				if (!elementsContainer.contains(_maskShape))
 					elementsContainer.addChild(_maskShape);

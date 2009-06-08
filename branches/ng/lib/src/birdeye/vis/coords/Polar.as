@@ -446,7 +446,7 @@ package birdeye.vis.coords
 				IElement(_elements[i]).drawElement();
 			}
 			
-			if (_maskShape)
+			if (_isMasked && _maskShape)
 			{
 				if (!elementsContainer.contains(_maskShape))
 					elementsContainer.addChild(_maskShape);
