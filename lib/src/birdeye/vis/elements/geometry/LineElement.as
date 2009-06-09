@@ -34,9 +34,11 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.scales.*;
 	
+	import com.degrafa.GraphicPoint;
 	import com.degrafa.IGeometry;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.Line;
+	import com.degrafa.geometry.splines.BezierSpline;
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
@@ -45,7 +47,10 @@ package birdeye.vis.elements.geometry
 
 	public class LineElement extends BaseElement
 	{
+		private const CURVE:String = "curve";
+		
 		private var _form:String;
+		[Inspectable(enumeration="curve,line")]
 		public function set form(val:String):void
 		{
 			_form = val;
@@ -93,6 +98,8 @@ package birdeye.vis.elements.geometry
 				ggIndex = 1;
 	
 				cursor.seek(CursorBookmark.FIRST);
+				
+				var points:Array = [];
 				
 				while (!cursor.afterLast)
 				{
@@ -165,7 +172,12 @@ package birdeye.vis.elements.geometry
 							zPos = 0;
 					}
 					
-					if (j++ > 0)
+					if (_form == CURVE)
+					{
+						points.push(new GraphicPoint(pos1,pos2));
+						if (isNaN(xPrev) && isNaN(yPrev) && chart.coordType != VisScene.POLAR)
+							points.push(new GraphicPoint(pos1,pos2));
+					} else if (j++ > 0)
 					{
 						var line:Line = new Line(xPrev,yPrev,pos1,pos2);
 						line.fill = fill;
@@ -191,6 +203,18 @@ package birdeye.vis.elements.geometry
 							zPos = 0;
 					}
 					cursor.moveNext();
+				}
+				
+				if (_form == CURVE)
+				{
+					points.push(new GraphicPoint(pos1+.0000001,pos2));
+						
+					var bzSplines:BezierSpline = new BezierSpline(points);
+ 					bzSplines.tension = 3;
+					bzSplines.stroke = stroke;
+					bzSplines.graphicsTarget = [this];
+					if (chart.coordType == VisScene.POLAR)
+						bzSplines.autoClose = true;
 				}
 				
 				if (chart.coordType == VisScene.POLAR && !isNaN(firstX) && !isNaN(firstY))
