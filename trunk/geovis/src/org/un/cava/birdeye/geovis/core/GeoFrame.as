@@ -29,7 +29,6 @@ package org.un.cava.birdeye.geovis.core
 {	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
-	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.Polygon;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.*;
@@ -232,6 +231,12 @@ package org.un.cava.birdeye.geovis.core
      	*  @private
      	*/
     	private var isScaleYChanged:Boolean=false;
+    	
+    	/**
+     	*  @private
+     	*/
+    	private var _showAntartica:Boolean=true;
+    	
     	//--------------------------------------------------------------------------
 	    //
 	    //  Properties
@@ -271,6 +276,17 @@ package org.un.cava.birdeye.geovis.core
 		public function set autosize(val:String):void
 		{
 			_autosize = val;
+		}
+		
+		 /**
+     	 *  Define if the Antartica is shown or not.
+     	 *  Valid values are <code>true</code> or <code>false</code>.
+     	 * @default true
+	     */
+	    [Inspectable(enumeration="true,false")]
+		public function set showAntartica(value:Boolean):void
+		{
+			_showAntartica = value;
 		}
 		
     	/**
@@ -487,8 +503,15 @@ trace (getStyle("stroke"));
 									}
 								}
 							}
-							countryGeom.geometryCollection.addItem(myCoo);
-						} // end if getCoordinates contained data
+							if(country=="ATA"){
+								if(_showAntartica){
+									countryGeom.geometryCollection.addItem(myCoo);
+								}	
+							}else{
+								countryGeom.geometryCollection.addItem(myCoo);
+							} 
+						}
+						// end if getCoordinates contained data
 					} // end polygon loop for country
 				}
 			}
