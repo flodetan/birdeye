@@ -222,11 +222,18 @@ package birdeye.vis.elements.geometry
 						pos2 = yPos; 
 					}
 
+					// in case the form is curve, it's used the BezeirSpline class to build the
+					// element shape. the shape is not attached to the gg, the gg is only used to 
+					// draw and manage the data items.
 					if (_form == CURVE)
 					{
 						if (isNaN(xPrev) && isNaN(yPrev) && chart.coordType == VisScene.CARTESIAN)
 						{
+							// to bypass some limitation of the BezierSpline it's necessary
+							// to create a double initial point. this allows the bezier line
+							// to be drawn without risks of having a large initial curve
 							points.push(new GraphicPoint(0, baseScale2));
+							// the basescale2 is used to have a closure between points at the same height
 							points.push(new GraphicPoint(0, baseScale2));
 						}
 						points.push(new GraphicPoint(pos1,pos2));
@@ -280,11 +287,16 @@ package birdeye.vis.elements.geometry
 					bzSplines.stroke = stroke;
 					bzSplines.fill = fill;
 					bzSplines.graphicsTarget = [this];
+					// if the coords are polar it's possible to autoclose the bezier shape
 					if (chart.coordType == VisScene.POLAR)
 						bzSplines.autoClose = true;
+
+					// if the coords are cartesian we add a point with height resulted by baseScale2, in order 
+					// to insure a proper closure with the 1st point inserted
 					if (chart.coordType == VisScene.CARTESIAN)
 					{
 						points.push(new GraphicPoint(width, baseScale2));
+						// the double point prevent from drawing a large final bezier curve
 						points.push(new GraphicPoint(width, baseScale2-.0000000001));
 					}
 				} else if (chart.coordType == VisScene.POLAR && poly.data)
