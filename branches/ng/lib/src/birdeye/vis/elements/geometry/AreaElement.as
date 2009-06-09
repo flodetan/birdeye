@@ -67,6 +67,15 @@ package birdeye.vis.elements.geometry
 			_form = val;
 			invalidateDisplayList();
 		}
+
+		private var _tension:Number = 4;
+		/** Set the tension of the curve form (values from 1 to 5). The higher, the closer to a line form. 
+		 * The lower, the more curved the final shape. */
+		public function set tension(val:Number):void
+		{
+			_tension = 4;
+			invalidateDisplayList();
+		}
 		
 		public function AreaElement()
 		{
@@ -283,7 +292,7 @@ package birdeye.vis.elements.geometry
 				if (_form == CURVE)
 				{
 					var bzSplines:BezierSpline = new BezierSpline(points);
- 					bzSplines.tension = 3;
+ 					bzSplines.tension = _tension;
 					bzSplines.stroke = stroke;
 					bzSplines.fill = fill;
 					bzSplines.graphicsTarget = [this];
