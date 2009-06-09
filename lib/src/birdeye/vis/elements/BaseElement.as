@@ -393,7 +393,7 @@ package birdeye.vis.elements
 
 		protected var gg:DataItemLayout;
 		protected var dataItems:Array = [];
-		protected var fill:IGraphicsFill = new SolidFill(0x888888,0);
+		protected var fill:IGraphicsFill;
 		protected var stroke:IGraphicsStroke = new SolidStroke(0x888888,1,1);
 		
 		protected var _dataProvider:Object=null;
