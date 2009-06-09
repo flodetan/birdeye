@@ -34,10 +34,12 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.scales.*;
 	
+	import com.degrafa.GraphicPoint;
 	import com.degrafa.IGeometry;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.Polygon;
+	import com.degrafa.geometry.splines.BezierSpline;
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
@@ -55,8 +57,11 @@ package birdeye.vis.elements.geometry
 			return "area";
 		}
 
+		private const CURVE:String = "curve";
+
 		private var _form:String;
 		/** The form defines the shape type of the element, ("curve", "line").*/
+		[Inspectable(enumeration="curve,line")]
 		public function set form(val:String):void
 		{
 			_form = val;
@@ -115,6 +120,8 @@ package birdeye.vis.elements.geometry
 				poly = new Polygon();
 				poly.data = "";
 	
+				var baseScale2:Number = getYMinPosition();
+
 				if (graphicsCollection.items && graphicsCollection.items.length>0)
 					gg = graphicsCollection.items[0];
 				else
@@ -128,6 +135,8 @@ package birdeye.vis.elements.geometry
 				// move data provider cursor at the beginning
 				cursor.seek(CursorBookmark.FIRST);
 	
+				var points:Array = [];
+
 				while (!cursor.afterLast)
 				{
 					// if the Element has its own x axis, than get the x coordinate
@@ -202,33 +211,45 @@ package birdeye.vis.elements.geometry
 							fill = col;
 					} 
 	
+					// create a separate GeometryGroup to manage interactivity and tooltips 
+					createTTGG(cursor.current, dataFields, pos1, pos2, scale2RelativeValue, 3);
+
 					if (chart.coordType == VisScene.POLAR)
 					{
 	 					var xPos:Number = PolarCoordinateTransform.getX(pos1, pos2, chart.origin);
 						var yPos:Number = PolarCoordinateTransform.getY(pos1, pos2, chart.origin);
 	 					pos1 = xPos;
 						pos2 = yPos; 
-						poly.data += String(xPos) + "," + String(yPos) + " ";
 					}
-	
-					// create a separate GeometryGroup to manage interactivity and tooltips 
-					createTTGG(cursor.current, dataFields, pos1, pos2, scale2RelativeValue, 3);
-					
-					// create the polygon only if there is more than 1 data value
-					// there cannot be an area with only the first data value 
-					if (chart.coordType == VisScene.CARTESIAN)
-						if (t++ > 0) 
+
+					if (_form == CURVE)
+					{
+						if (isNaN(xPrev) && isNaN(yPrev) && chart.coordType == VisScene.CARTESIAN)
 						{
-							poly = new Polygon()
-							poly.data =  String(xPrev) + "," + String(y0Prev) + " " +
-										String(xPrev) + "," + String(yPrev) + " " +
-										String(pos1) + "," + String(pos2) + " " +
-										String(pos1) + "," + String(y0);
-							poly.fill = fill;
-							poly.stroke = stroke;
-							gg.geometryCollection.addItemAt(poly,0);
+							points.push(new GraphicPoint(0, baseScale2));
+							points.push(new GraphicPoint(0, baseScale2));
 						}
-					
+						points.push(new GraphicPoint(pos1,pos2));
+					} else {
+						if (chart.coordType == VisScene.POLAR)
+							poly.data += String(xPos) + "," + String(yPos) + " ";
+		
+						// create the polygon only if there is more than 1 data value
+						// there cannot be an area with only the first data value 
+						if (chart.coordType == VisScene.CARTESIAN)
+							if (t++ > 0) 
+							{
+								poly = new Polygon()
+								poly.data =  String(xPrev) + "," + String(y0Prev) + " " +
+											String(xPrev) + "," + String(yPrev) + " " +
+											String(pos1) + "," + String(pos2) + " " +
+											String(pos1) + "," + String(y0);
+								poly.fill = fill;
+								poly.stroke = stroke;
+								gg.geometryCollection.addItemAt(poly,0);
+							}
+					}
+						
 					if (_showItemRenderer)
 					{
 		 				var bounds:Rectangle = new Rectangle(pos1 - _rendererSize/2, pos2 - _rendererSize/2, _rendererSize, _rendererSize);
@@ -251,7 +272,22 @@ package birdeye.vis.elements.geometry
 					}
 					cursor.moveNext();
 				}
-				if (chart.coordType == VisScene.POLAR && poly.data)
+
+				if (_form == CURVE)
+				{
+					var bzSplines:BezierSpline = new BezierSpline(points);
+ 					bzSplines.tension = 3;
+					bzSplines.stroke = stroke;
+					bzSplines.fill = fill;
+					bzSplines.graphicsTarget = [this];
+					if (chart.coordType == VisScene.POLAR)
+						bzSplines.autoClose = true;
+					if (chart.coordType == VisScene.CARTESIAN)
+					{
+						points.push(new GraphicPoint(width, baseScale2));
+						points.push(new GraphicPoint(width, baseScale2-.0000000001));
+					}
+				} else if (chart.coordType == VisScene.POLAR && poly.data)
 				{
 					poly.fill = fill;
 					poly.stroke = stroke;
