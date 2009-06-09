@@ -210,9 +210,6 @@ package birdeye.vis.elements.geometry
 						else if (col is IGraphicsFill)
 							fill = col;
 					} 
-	
-					// create a separate GeometryGroup to manage interactivity and tooltips 
-					createTTGG(cursor.current, dataFields, pos1, pos2, scale2RelativeValue, 3);
 
 					if (chart.coordType == VisScene.POLAR)
 					{
@@ -221,6 +218,9 @@ package birdeye.vis.elements.geometry
 	 					pos1 = xPos;
 						pos2 = yPos; 
 					}
+
+					// create a separate GeometryGroup to manage interactivity and tooltips 
+					createTTGG(cursor.current, dataFields, pos1, pos2, scale2RelativeValue, 3);
 
 					// in case the form is curve, it's used the BezeirSpline class to build the
 					// element shape. the shape is not attached to the gg, the gg is only used to 
