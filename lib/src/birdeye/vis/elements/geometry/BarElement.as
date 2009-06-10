@@ -51,12 +51,6 @@ package birdeye.vis.elements.geometry
 			return "bar";
 		}
 
-		private var _form:String;
-		public function set form(val:String):void
-		{
-			_form = val;
-		}
-		
 		public function BarElement()
 		{
 			super();
@@ -228,6 +222,7 @@ package birdeye.vis.elements.geometry
 	
 				if (dim3)
 					zSort();
+				_invalidatedDisplay = false;
 			}
 		}
 		

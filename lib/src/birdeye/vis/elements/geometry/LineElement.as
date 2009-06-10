@@ -54,6 +54,11 @@ package birdeye.vis.elements.geometry
 		public function set form(val:String):void
 		{
 			_form = val;
+			invalidatingDisplay();
+		}
+		public function get form():String
+		{
+			return _form;
 		}
 		
 		private var _tension:Number = 4;
@@ -62,7 +67,7 @@ package birdeye.vis.elements.geometry
 		public function set tension(val:Number):void
 		{
 			_tension = 4;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		
 		public function LineElement()
@@ -77,6 +82,7 @@ package birdeye.vis.elements.geometry
 				itemRenderer = LineRenderer;
 		}
 
+		private var bzSplines:BezierSpline;
 		/** @Private 
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
 		override public function drawElement():void
@@ -84,6 +90,8 @@ package birdeye.vis.elements.geometry
 			if (isReadyForLayout())
 			{
 				removeAllElements();
+				if (bzSplines)
+					bzSplines.clearGraphicsTargets();
 				var xPrev:Number, yPrev:Number;
 				var pos1:Number, pos2:Number, zPos:Number;
 				var j:Number = 0;
@@ -218,7 +226,7 @@ package birdeye.vis.elements.geometry
 				{
 					points.push(new GraphicPoint(pos1+.0000001,pos2));
 						
-					var bzSplines:BezierSpline = new BezierSpline(points);
+					bzSplines = new BezierSpline(points);
  					bzSplines.tension = _tension;
 					bzSplines.stroke = stroke;
 					bzSplines.graphicsTarget = [this];
@@ -237,6 +245,8 @@ package birdeye.vis.elements.geometry
 	
 				if (dim3)
 					zSort();
+
+				_invalidatedDisplay = false;
 			}
 		}
  	}

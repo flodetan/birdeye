@@ -196,6 +196,8 @@ package birdeye.vis.elements.geometry
 				
 				if (dim3)
 					zSort();
+
+				_invalidatedDisplay = false;
 			}
 		}
 	}

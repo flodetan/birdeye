@@ -27,6 +27,7 @@
  
 package birdeye.vis.elements
 {
+	import birdeye.vis.VisScene;
 	import birdeye.vis.coords.Cartesian;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.interfaces.ICoordinates;
@@ -85,12 +86,13 @@ package birdeye.vis.elements
 	
 	public class BaseElement extends Surface implements IElement
 	{
+		protected var _invalidatedDisplay:Boolean = false;
+		
 		private var _chart:ICoordinates;
 		public function set chart(val:ICoordinates):void
 		{
 			_chart = val;
 			invalidateProperties();
-			invalidateDisplayList();
 		}
 		public function get chart():ICoordinates
 		{
@@ -119,14 +121,14 @@ package birdeye.vis.elements
 		public function set showItemRenderer(val:Boolean):void
 		{
 			_showItemRenderer = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 
 		protected var _rendererSize:Number = 10;
 		public function set rendererSize(val:Number):void
 		{
 			_rendererSize = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 
 		protected var _extendMouseEvents:Boolean = false;
@@ -134,7 +136,7 @@ package birdeye.vis.elements
 		public function set extendMouseEvents(val:Boolean):void
 		{
 			_extendMouseEvents = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		
 		protected var _showAllDataItems:Boolean = false;
@@ -142,7 +144,7 @@ package birdeye.vis.elements
 		public function set showAllDataItems(val:Boolean):void
 		{
 			_showAllDataItems = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 
 		private var _colorScale:INumerableScale;
@@ -152,7 +154,7 @@ package birdeye.vis.elements
 			_colorScale = val;
 			_colorScale.format = false;
 
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get colorScale():INumerableScale
 		{
@@ -166,7 +168,7 @@ package birdeye.vis.elements
 			_sizeScale = val;
 			_sizeScale.format = false;
 
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get sizeScale():INumerableScale
 		{
@@ -179,7 +181,7 @@ package birdeye.vis.elements
 		{
 			_dim1= val;
 			invalidateProperties();
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get dim1():String
 		{
@@ -191,7 +193,7 @@ package birdeye.vis.elements
 		{
 			_dim2= val;
 			invalidateProperties();
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get dim2():String
 		{
@@ -203,7 +205,7 @@ package birdeye.vis.elements
 		{
 			_dim3= val;
 			invalidateProperties();
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get dim3():String
 		{
@@ -218,7 +220,7 @@ package birdeye.vis.elements
 				_scale1.placement = BaseScale.BOTTOM;
 
 			invalidateProperties();
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get scale1():IScale
 		{
@@ -240,7 +242,7 @@ package birdeye.vis.elements
  */			
 
 			invalidateProperties();
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get scale2():IScale
 		{
@@ -255,7 +257,7 @@ package birdeye.vis.elements
 				_scale3.placement = BaseScale.DIAGONAL;
 
 			invalidateProperties();
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get scale3():IScale
 		{
@@ -336,7 +338,7 @@ package birdeye.vis.elements
 		public function set colorField(val:String):void
 		{
 			_colorField = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get colorField():String
 		{
@@ -361,7 +363,7 @@ package birdeye.vis.elements
 		public function set sizeField(val:String):void
 		{
 			_sizeField = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get sizeField():String
 		{
@@ -372,7 +374,7 @@ package birdeye.vis.elements
 		public function set labelField(val:String):void
 		{
 			_labelField = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get labelField():String
 		{
@@ -384,7 +386,7 @@ package birdeye.vis.elements
 		{
 			_multiScale = val;
 			invalidateProperties();
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get multiScale():MultiScale
 		{
@@ -463,7 +465,7 @@ package birdeye.vis.elements
 
 		  		invalidateSize();
 		  		invalidateProperties();
-				invalidateDisplayList();
+				invalidatingDisplay();
 	  		}
 		}		
 		/**
@@ -482,7 +484,7 @@ package birdeye.vis.elements
 			_minDim1Value = _minDim2Value = _minDim3Value = NaN;
 			_minColorValue = _maxColorValue = _minSizeValue = _maxSizeValue = NaN;
 			invalidateProperties();
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get cursor():IViewCursor
 		{
@@ -493,7 +495,7 @@ package birdeye.vis.elements
 		public function set size(val:Number):void
 		{
 			_size = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		
 		private var _randomColors:Boolean = false;
@@ -501,7 +503,7 @@ package birdeye.vis.elements
 		public function set randomColors(val:Boolean):void
 		{
 			_randomColors = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get randomColors():Boolean
 		{
@@ -513,7 +515,7 @@ package birdeye.vis.elements
 		public function set alphaFill(val:Number):void
 		{
 			_alphaFill = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get alphaFill():Number
 		{
@@ -525,7 +527,7 @@ package birdeye.vis.elements
 		public function set alphaStroke(val:Number):void
 		{
 			_alphaStroke = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get alphaStroke():Number
 		{
@@ -537,7 +539,7 @@ package birdeye.vis.elements
 		public function set colorFill(val:Number):void
 		{
 			_colorFill = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get colorFill():Number
 		{
@@ -549,7 +551,7 @@ package birdeye.vis.elements
 		public function set colorStroke(val:Number):void
 		{
 			_colorStroke = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get colorStroke():Number
 		{
@@ -561,7 +563,7 @@ package birdeye.vis.elements
 		public function set weightStroke(val:Number):void
 		{
 			_weightStroke = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get weightStroke():Number
 		{
@@ -575,7 +577,7 @@ package birdeye.vis.elements
 		public function set colorGradients(val:Array):void
 		{
 			_colorGradients = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get colorGradients():Array
 		{
@@ -587,7 +589,7 @@ package birdeye.vis.elements
 		public function set alphaGradients(val:Array):void
 		{
 			_alphaGradients = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get alphaGradients():Array
 		{
@@ -599,7 +601,7 @@ package birdeye.vis.elements
 		public function set fontLabel(val:String):void
 		{
 			_fontLabel = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get fontLabel():String
 		{
@@ -611,7 +613,7 @@ package birdeye.vis.elements
 		public function set sizeLabel(val:Number):void
 		{
 			_sizeLabel = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get sizeLabel():Number
 		{
@@ -623,7 +625,7 @@ package birdeye.vis.elements
 		public function set colorLabel(val:Number):void
 		{
 			_colorLabel = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get colorLabel():Number
 		{
@@ -635,7 +637,7 @@ package birdeye.vis.elements
 		public function set sizeRenderer(val:uint):void
 		{
 			_sizeRenderer = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get sizeRenderer():uint
 		{
@@ -689,7 +691,7 @@ package birdeye.vis.elements
 		{
 			_itemRenderer = val;
 			invalidateProperties();
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get itemRenderer():Class
 		{
@@ -700,7 +702,7 @@ package birdeye.vis.elements
 		public function set source(val:Object):void
 		{
 			_source = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get source():Object
 		{
@@ -836,6 +838,9 @@ package birdeye.vis.elements
 				rectBackGround.width = unscaledWidth;
 				rectBackGround.height = unscaledHeight;
 			}
+			
+			if (_invalidatedDisplay)
+				drawElement();
 		}
 
 		// other methods
@@ -843,6 +848,12 @@ package birdeye.vis.elements
 		private function onTTCreate(e:ToolTipEvent):void
 		{
 			e.toolTip = myTT;
+		}
+		
+		protected function invalidatingDisplay():void
+		{
+			_invalidatedDisplay = true;
+			invalidateDisplayList();
 		}
 
 		public function drawElement():void
@@ -907,19 +918,19 @@ package birdeye.vis.elements
 					extGG.showToolTip();
 			}
 
-			if (scale2 && scale2 is IScaleUI && IScaleUI(scale2).pointer)
+			if (scale2 && scale2 is IScaleUI && IScaleUI(scale2).pointer && chart.coordType == VisScene.CARTESIAN)
 			{
 				IScaleUI(scale2).pointerY = extGG.posY;
 				IScaleUI(scale2).pointer.visible = true;
 			} 
 
-			if (scale1 && scale1 is IScaleUI && IScaleUI(scale1).pointer)
+			if (scale1 && scale1 is IScaleUI && IScaleUI(scale1).pointer && chart.coordType == VisScene.CARTESIAN)
 			{
 				IScaleUI(scale1).pointerX = extGG.posX;
 				IScaleUI(scale1).pointer.visible = true;
 			}
 			
-			if (scale3 && scale3 is IScaleUI && IScaleUI(scale3).pointer)
+			if (scale3 && scale3 is IScaleUI && IScaleUI(scale3).pointer && chart.coordType == VisScene.CARTESIAN)
 			{
 				IScaleUI(scale3).pointerY = extGG.posZ;
 				IScaleUI(scale3).pointer.visible = true;
@@ -1172,9 +1183,10 @@ package birdeye.vis.elements
 						DataItemLayout(graphicsCollection.items[i]).removeEventListener(MouseEvent.DOUBLE_CLICK, onMouseDoubleClick);
 						DataItemLayout(graphicsCollection.items[i]).removeEventListener(MouseEvent.CLICK, onMouseClick);
 						DataItemLayout(graphicsCollection.items[i]).removeAllElements();
-					} else if (graphicsCollection.items[i] is GeometryGroup)
+					} else if (graphicsCollection.items[i] is GeometryGroup) {
 						GeometryGroup(graphicsCollection.items[i]).geometry = []; 
 						GeometryGroup(graphicsCollection.items[i]).geometryCollection.items = [];
+					}
 				}
 			} 
 /* 
