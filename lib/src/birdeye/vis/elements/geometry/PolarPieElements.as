@@ -97,6 +97,7 @@ package birdeye.vis.elements.geometry
 		{
 			if (isReadyForLayout())
 			{
+				super.drawElement();
 				removeAllElements();
 				var c:uint = 0;
 				
@@ -233,10 +234,11 @@ package birdeye.vis.elements.geometry
 						}
 						var label:RasterTextPlus = new RasterTextPlus();
 						label.text = cursor.current[labelField];
-						label.fontFamily = "verdana";
+						label.fontFamily = fontLabel;
 						label.fontWeight = "bold";
+						label.fontSize = sizeLabel;
 						label.autoSize = TextFieldAutoSize.LEFT;
-						label.fill = new SolidFill(0x000000);
+						label.fill = new SolidFill(colorLabel);
 						label.x = xLlb- label.displayObject.width/2;
 						label.y = yLlb - label.displayObject.height/2;
 						gg.geometryCollection.addItem(label); 

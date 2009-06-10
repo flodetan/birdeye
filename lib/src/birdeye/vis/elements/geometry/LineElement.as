@@ -61,12 +61,12 @@ package birdeye.vis.elements.geometry
 			return _form;
 		}
 		
-		private var _tension:Number = 4;
+		private var _tension:Number = 2;
 		/** Set the tension of the curve form (values from 1 to 5). The higher, the closer to a line form. 
 		 * The lower, the more curved the final shape. */
 		public function set tension(val:Number):void
 		{
-			_tension = 4;
+			_tension = val;
 			invalidatingDisplay();
 		}
 		
@@ -89,6 +89,7 @@ package birdeye.vis.elements.geometry
 		{
 			if (isReadyForLayout())
 			{
+				super.drawElement();
 				removeAllElements();
 				if (bzSplines)
 					bzSplines.clearGraphicsTargets();

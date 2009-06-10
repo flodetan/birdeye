@@ -77,7 +77,7 @@ package birdeye.vis.elements.geometry
 		 * The lower, the more curved the final shape. */
 		public function set tension(val:Number):void
 		{
-			_tension = 4;
+			_tension = val;
 			invalidatingDisplay();
 		}
 		
@@ -110,6 +110,7 @@ package birdeye.vis.elements.geometry
 		{
 			if (isReadyForLayout())
 			{
+				super.drawElement();
 				removeAllElements();
 				if (bzSplines)
 					bzSplines.clearGraphicsTargets();

@@ -100,6 +100,7 @@ package birdeye.vis.elements.geometry
 		{
 			if (isReadyForLayout())
 			{
+				super.drawElement();
 				removeAllElements();
 				var xPrev:Number, yPrev:Number;
 				var pos1:Number, pos2:Number;

@@ -66,6 +66,7 @@ package birdeye.vis.elements.geometry
 		{
 			if (isReadyForLayout())
 			{
+				super.drawElement();
 				removeAllElements();
 				var dataFields:Array = [];
 				// prepare data for a standard tooltip message in case the user
