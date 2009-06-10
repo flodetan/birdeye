@@ -141,18 +141,14 @@ package birdeye.vis.guides.legend
  						} else {
  							geom = new renderer(bounds);
  						}
-						Geometry(geom).fill = IElement(_dataProvider.elements[i]).getFill() != null ? 
-								IElement(_dataProvider.elements[i]).getFill()
-								 : new SolidFill(0xdddddd);
-						geom.stroke = IElement(_dataProvider.elements[i]).getStroke() != null ?
-								IElement(_dataProvider.elements[i]).getStroke() 
-								 : new SolidStroke(0x999999);
+						geom.fill = IElement(_dataProvider.elements[i]).getFill();
+						geom.stroke = IElement(_dataProvider.elements[i]).getStroke();
 						gg.geometryCollection.addItem(geom);
 
 						if (label.text && getQualifiedClassName(renderer) == 
 								"birdeye.vis.guides.renderers::TextRenderer")
 						{
-							label.fill = Geometry(geom).fill;
+							label.fill = geom.fill;
 						}
 					}
 
