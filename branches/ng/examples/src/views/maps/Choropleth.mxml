@@ -108,8 +108,8 @@
 					<trans:Projection id="myProj" proj="Miller cylindrical" latScale="{lat}" longScale="{long}"/>
 			</coords:transforms> 
 			<coords:scales>
- 				<scales:Numeric id="lat" values="{[-90,90]}" interval="20" placement="right" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb"/>
- 				<scales:Numeric id="long" values="{[-180,180]}" interval="20" placement="top" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb" />
+ 				<scales:Numeric id="lat" dataValues="{[-90,90]}" interval="20" placement="right" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb"/>
+ 				<scales:Numeric id="long" dataValues="{[-180,180]}" interval="20" placement="top" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb" />
  				<scales:Numeric id="col" f="colorFunction"/>
 			</coords:scales>
 			<coords:elements>
