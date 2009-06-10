@@ -143,6 +143,10 @@ package birdeye.vis.coords
 			invalidateProperties();
 			invalidateDisplayList();
 		}
+		public function get type():String
+		{
+			return _type;
+		}
 
 		protected var _fontSize:Number = 10;
 		public function set fontSize(val:Number):void
@@ -563,21 +567,21 @@ package birdeye.vis.coords
 
 		protected function drawLabels():void
 		{
-			var aAxis:CategoryAngle;
+			var angleScale:CategoryAngle;
 			if (multiScale)
-				aAxis = multiScale.scale1;
+				angleScale = multiScale.scale1;
 			
-			var catElements:Array = aAxis.dataProvider;
-			var interval:int = aAxis.interval;
+			var catElements:Array = angleScale.dataProvider;
+			var interval:int = angleScale.interval;
 			var nEle:int = catElements.length;
 			var radius:int = Math.min(unscaledWidth, unscaledHeight)/2;
 
-			if (aAxis && radius>0 && catElements && nEle>0 && !isNaN(interval))
+			if (angleScale && radius>0 && catElements && nEle>0 && !isNaN(interval))
 			{
 				removeAllLabels();
 				for (var i:int = 0; i<nEle; i++)
 				{
-					var angle:int = aAxis.getPosition(catElements[i]);
+					var angle:int = angleScale.getPosition(catElements[i]);
 					var position:Point = PolarCoordinateTransform.getXY(angle,radius,origin);
 					
 					var label:RasterTextPlus = new RasterTextPlus();
@@ -610,31 +614,31 @@ package birdeye.vis.coords
 		
 		private function createRadarLayout():void
 		{
-			var aAxis:CategoryAngle = multiScale.scale1;
-			var catElements:Array = aAxis.dataProvider;
-			var rAxis:Numeric = multiScale.scales[catElements[0]];
+			var angleScale:CategoryAngle = multiScale.scale1;
+			var catElements:Array = angleScale.dataProvider;
+			var radiusScale:Numeric = multiScale.scales[catElements[0]];
 			
-			if (aAxis && rAxis && !isNaN(rAxis.interval))
+			if (angleScale && radiusScale && !isNaN(radiusScale.interval))
 			{
-				var interval:int = aAxis.interval;
+				var interval:int = angleScale.interval;
 				var nEle:int = catElements.length;
 	
-				var rMin:Number = rAxis.min;
-				var rMax:Number = rAxis.max;
+				var rMin:Number = radiusScale.min;
+				var rMax:Number = radiusScale.max;
 				
 				var angle:int;
 				var radius:int;
 				var position:Point;
 	
-				for (radius = rMin + rAxis.interval; radius<rMax; radius += rAxis.interval)
+				for (radius = rMin + radiusScale.interval; radius<rMax; radius += radiusScale.interval)
 				{
 					var poly:Polygon = new Polygon();
 					poly.data = "";
 	
 					for (var j:int = 0; j<nEle; j++)
 					{
-						angle = aAxis.getPosition(catElements[j]);
-						position = PolarCoordinateTransform.getXY(angle, rAxis.getPosition(radius), origin)
+						angle = angleScale.getPosition(catElements[j]);
+						position = PolarCoordinateTransform.getXY(angle, radiusScale.getPosition(radius), origin)
 						poly.data += String(position.x) + "," + String(position.y) + " ";
 					}
 					poly.stroke = new SolidStroke(0x000000,.15);
