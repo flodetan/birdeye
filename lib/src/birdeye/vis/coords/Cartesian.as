@@ -496,9 +496,6 @@ package birdeye.vis.coords
   				_elementsContainer.width = chartBounds.width;
 				_elementsContainer.height = chartBounds.height;
  	
-				// listeners like legends will listen to this event
-				dispatchEvent(new Event("ProviderReady"));
-				
 				if (_is3D)
 					rotationY = 42;
 				else
@@ -510,6 +507,9 @@ package birdeye.vis.coords
 				Surface(_elements[i]).height = chartBounds.height;
 				IElement(_elements[i]).drawElement();
 			}
+			// listeners like legends will listen to this event
+			dispatchEvent(new Event("ProviderReady"));
+
 			if (_isMasked && _maskShape && !isNaN(_elementsContainer.width) && !isNaN(_elementsContainer.height))
 			{
 				if (!elementsContainer.contains(_maskShape))
@@ -594,7 +594,7 @@ package birdeye.vis.coords
 
 				element.cursor.seek(CursorBookmark.FIRST);
 				
-				if (element.scale1 && !element.scale1.values)
+				if (element.scale1 && !element.scale1.dataValues)
 				{
 					if (element.scale1 is IEnumerableScale)
 					{
@@ -639,7 +639,7 @@ package birdeye.vis.coords
 	
 				element.cursor.seek(CursorBookmark.FIRST);
 				
-				if (element.scale2 && !element.scale2.values)
+				if (element.scale2 && !element.scale2.dataValues)
 				{
 					if (element.scale2 is IEnumerableScale)
 					{
@@ -687,7 +687,7 @@ package birdeye.vis.coords
 	
 				element.cursor.seek(CursorBookmark.FIRST);
 				
-				if (element.scale3 && !element.scale3.values)
+				if (element.scale3 && !element.scale3.dataValues)
 				{
 					if (element.scale3 is IEnumerableScale)
 					{	
@@ -733,7 +733,7 @@ package birdeye.vis.coords
 					}
 				}
 
-				if (element.colorScale && !element.colorScale.values)
+				if (element.colorScale && !element.colorScale.dataValues)
 				{
 						// since the same scale can be shared among several elements, the precedent min and max
 						// are also taken into account
@@ -752,7 +752,7 @@ package birdeye.vis.coords
 								Math.min(element.colorScale.min, element.minColorValue);
 				}
 
-				if (element.sizeScale && !element.sizeScale.values)
+				if (element.sizeScale && !element.sizeScale.dataValues)
 				{
 					if (isNaN(element.sizeScale.max))
 						element.sizeScale.max =
