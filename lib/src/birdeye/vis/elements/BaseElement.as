@@ -774,6 +774,25 @@ package birdeye.vis.elements
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 
+			if (_invalidatedDisplay)
+				drawElement();
+		}
+
+		// other methods
+
+		private function onTTCreate(e:ToolTipEvent):void
+		{
+			e.toolTip = myTT;
+		}
+		
+		protected function invalidatingDisplay():void
+		{
+			_invalidatedDisplay = true;
+			invalidateDisplayList();
+		}
+
+		public function drawElement():void
+		{
 			if (stylesChanged)
 			{
 				// Redraw gradient fill only if style changed.
@@ -839,25 +858,6 @@ package birdeye.vis.elements
 				rectBackGround.height = unscaledHeight;
 			}
 			
-			if (_invalidatedDisplay)
-				drawElement();
-		}
-
-		// other methods
-
-		private function onTTCreate(e:ToolTipEvent):void
-		{
-			e.toolTip = myTT;
-		}
-		
-		protected function invalidatingDisplay():void
-		{
-			_invalidatedDisplay = true;
-			invalidateDisplayList();
-		}
-
-		public function drawElement():void
-		{
 			// to be overridden by each element implementation
 		}
 		
