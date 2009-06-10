@@ -77,10 +77,10 @@ package birdeye.vis.trans.projections
 		public function set latScale(val:IScaleUI):void
 		{
 			_latScale = val;
-			if (_latScale.values)
+			if (_latScale.dataValues)
 			{
-				minLat = _latScale.values[0];
-				maxLat = _latScale.values[1];
+				minLat = _latScale.dataValues[0];
+				maxLat = _latScale.dataValues[1];
 			}
 			_latScale.f = funcDim2;
 		}
@@ -89,10 +89,10 @@ package birdeye.vis.trans.projections
 		public function set longScale(val:IScaleUI):void
 		{
 			_longScale = val;
-			if (_longScale.values)
+			if (_longScale.dataValues)
 			{
-				minLong = _longScale.values[0];
-				maxLong = _longScale.values[1];
+				minLong = _longScale.dataValues[0];
+				maxLong = _longScale.dataValues[1];
 			}
 			_longScale.f = funcDim1;
 		}
