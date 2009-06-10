@@ -41,24 +41,35 @@
 				tt += '\n' + dataFields[1] + ": " + currDatatip[dataFields[1]];
 				return  tt;
 			}
+
+			private function changeForm(a:Array):void
+			{
+				for (var i:Number = 0; i<a.length; i++)
+					if (a[i].form == "curve")
+						a[i].form = "line";
+					else 
+						a[i].form = "curve";
+			}
 		]]>
 	</mx:Script>
 <mx:Fade id="fadeIn" alphaFrom="0" alphaTo="1" duration="1000"/>
 <mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
 	<mx:Button label="Generate" click="createDT()"/>
-	<polar:Polar id="rd" type="stacked" showDataTips="true" dataProvider="{dt}" width="100%" height="100%" layout="radar">
-		<polar:multiScale>
-			<axis:MultiScale dim1="subject" colorStroke="0xbbbbbb" colorLabel="0xbbbbbb"/>
-		</polar:multiScale>
-		<polar:elements>
-			<pseries:LineElement styleName="solid1" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R1" displayName="R1"/>
-			<pseries:LineElement styleName="solid2" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R2" displayName="R2"/>
-			<pseries:LineElement styleName="solid3" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R3" displayName="R3"/>
-			<pseries:LineElement styleName="solid4" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R4" displayName="R4"/>
-			<pseries:LineElement styleName="solid5" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R5" displayName="R5"/>
-		</polar:elements>
-	</polar:Polar>
+	<mx:HBox width="100%" height="100%">
+		<polar:Polar id="rd" type="stacked" showDataTips="true" dataProvider="{dt}" width="100%" height="100%" layout="radar">
+			<polar:multiScale>
+				<axis:MultiScale dim1="subject" colorStroke="0xbbbbbb" colorLabel="0xbbbbbb"/>
+			</polar:multiScale>
+			<polar:elements>
+				<pseries:LineElement id="a1" styleName="solid1" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R1" displayName="R1"/>
+				<pseries:LineElement id="a2" styleName="solid2" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R2" displayName="R2"/>
+				<pseries:LineElement id="a3" styleName="solid3" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R3" displayName="R3"/>
+				<pseries:LineElement id="a4" styleName="solid4" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R4" displayName="R4"/>
+				<pseries:LineElement id="a5" styleName="solid5" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R5" displayName="R5"/>
+			</polar:elements>
+		</polar:Polar>
+		<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4])"/>
+	</mx:HBox>
 	<legend:Legend dataProvider="{rd}" direction="horizontal" />
-	
 </mx:VBox>
 </mx:VBox>
