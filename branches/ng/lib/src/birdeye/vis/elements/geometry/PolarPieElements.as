@@ -51,28 +51,28 @@ package birdeye.vis.elements.geometry
 		public function set innerRadius(val:Number):void
 		{
 			_innerRadius = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		
 		private var _radiusLabelOffset:Number;
 		public function set radiusLabelOffset(val:Number):void
 		{
 			_radiusLabelOffset = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}		
 
 		protected var _colorsStart:Array;
 		public function set colorsStart(val:Array):void
 		{
 			_colorsStart = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}		
 
 		protected var _colorsStop:Array;
 		public function set colorsStop(val:Array):void
 		{
 			_colorsStop = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}		
 
 		public function PolarPieElements()
@@ -260,6 +260,7 @@ package birdeye.vis.elements.geometry
 					gg.geometryCollection.addItem(label); 
 				}
 			}
+			_invalidatedDisplay = false;
 		}
 	}
 }

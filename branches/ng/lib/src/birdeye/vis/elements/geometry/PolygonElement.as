@@ -50,22 +50,27 @@ package birdeye.vis.elements.geometry
 		public function set polyDim(val:String):void
 		{
 			_polyDim = val;
+			invalidatingDisplay();
 		}
 
 		private var _targetLatProjection:Projection;
 		public function set targetLatProjection(val:Projection):void {
 			_targetLatProjection = val;
+			invalidatingDisplay();
 		}
 		public function get targetLatProjection():Projection {
 			return _targetLatProjection;
+			invalidatingDisplay();
 		}
 
 		private var _targetLongProjection:Projection;
 		public function set targetLongProjection(val:Projection):void {
 			_targetLongProjection = val;
+			invalidatingDisplay();
 		}
 		public function get targetLongProjection():Projection {
 			return _targetLongProjection;
+			invalidatingDisplay();
 		}
 
 		public function PolygonElement()
@@ -174,6 +179,7 @@ package birdeye.vis.elements.geometry
 					}
 					cursor.moveNext();
 				}
+				_invalidatedDisplay = false;
 			}
 		}
 

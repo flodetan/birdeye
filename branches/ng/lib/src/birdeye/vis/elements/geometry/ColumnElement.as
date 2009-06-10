@@ -55,13 +55,6 @@ package birdeye.vis.elements.geometry
 			return "column";
 		}
 
-		private var _form:String;
-		public function set form(val:String):void
-		{
-			_form = val;
-			invalidateDisplayList();
-		}
-
 		public function ColumnElement()
 		{
 			super();
@@ -314,6 +307,8 @@ package birdeye.vis.elements.geometry
 	
 				if (dim3)
 					zSort();
+
+				_invalidatedDisplay = false;
 			}
 		}
 		
