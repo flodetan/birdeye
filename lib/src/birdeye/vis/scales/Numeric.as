@@ -41,17 +41,18 @@ package birdeye.vis.scales
 	{
  		/** Define the min max data values for numeric scales [100, 200] where the values refer to data values, number of
  		 * inhabitants, rain falls, etc.*/
-		override public function set values(val:Array):void
+		override public function set dataValues(val:Array):void
 		{
-			_values = val;
-			_values.sort(Array.NUMERIC);
-			_min = values[0];
-			_max = values[1];
+			_dataValues = val;
+			_dataValues.sort(Array.NUMERIC);
+			_min = dataValues[0];
+			_max = dataValues[1];
 		}
 		
 		/** @Private
 		 * Decide whether to format or not, the min and max values of the scale.*/
 		private var _format:Boolean = true;
+		[Inspectable(enumeration="true,false")]
 		public function set format(val:Boolean):void
 		{
 			_format = val;
@@ -138,10 +139,10 @@ package birdeye.vis.scales
 		{
 			super.commitProperties();
 
-			if (isNaN(_min) && _values)
-				_min = _values[0];
-			if (isNaN(_max) && _values) 
-				_max = _values[1];
+			if (isNaN(_min) && _dataValues)
+				_min = _dataValues[0];
+			if (isNaN(_max) && _dataValues) 
+				_max = _dataValues[1];
 
 			// if no interval is specified by the user, than divide the axis in 5 parts
 			if (!isNaN(max) && !isNaN(min) && !isGivenInterval)

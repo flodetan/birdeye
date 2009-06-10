@@ -37,14 +37,15 @@
 	import flash.text.TextFieldAutoSize;
 	
 	[Exclude(name="scaleType", kind="property")]
+	[Exclude(name="dataProvider", kind="property")]
 	public class Category extends XYZ implements IEnumerableScale
 	{
  		/** Define the category strings for category scales.*/
-		override public function set values(val:Array):void
+		override public function set dataValues(val:Array):void
 		{
-			_values = val;
-			_values.sort(Array.CASEINSENSITIVE);
-			dataProvider = values;
+			_dataValues = val;
+			_dataValues.sort(Array.CASEINSENSITIVE);
+			dataProvider = dataValues;
 		}
 
 		/** @Private
