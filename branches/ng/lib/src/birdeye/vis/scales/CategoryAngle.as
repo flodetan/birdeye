@@ -34,16 +34,16 @@
 		override public function get interval():Number
 		{
 			if (isNaN(_interval))
-				_interval = (_values[1] - _values[0]) / dataProvider.length
+				_interval = (_dataValues[1] - _dataValues[0]) / dataProvider.length
 			
 			return _interval;
 		}
 		
-		override public function set values(val:Array):void
+		override public function set dataValues(val:Array):void
 		{
-			_values = val;
-			_values.sort(Array.NUMERIC);
-			size = _values[1] - _values[0];
+			_dataValues = val;
+			_dataValues.sort(Array.NUMERIC);
+			size = _dataValues[1] - _dataValues[0];
 		}
 
 		override public function set size(val:Number):void
@@ -54,20 +54,20 @@
 		public function CategoryAngle():void
 		{
 			showAxis = false;
-			_values = [0,360];
-			size = _values[1] - _values[0];
+			_dataValues = [0,360];
+			size = _dataValues[1] - _dataValues[0];
 		}
 
 		override public function getPosition(dataValue:*):*
 		{
-			if (_values && dataProvider && dataProvider.indexOf(dataValue) != -1)
+			if (_dataValues && dataProvider && dataProvider.indexOf(dataValue) != -1)
 			{
 				_interval = _size/ dataProvider.length;
 
 				if (_function == null)
 					return dataProvider.indexOf(dataValue) * _interval;
 				else 
-					return  _function(dataValue, _values[0], _values[1], interval);
+					return  _function(dataValue, _dataValues[0], _dataValues[1], interval);
 			}
 		}
 	}

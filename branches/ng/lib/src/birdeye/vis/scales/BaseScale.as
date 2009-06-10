@@ -366,16 +366,18 @@ package birdeye.vis.scales
 			return _showAxis;
 		}
 
-		protected var _values:Array; /* of numerals  for numeric scales and strings for category scales*/
- 		/** Define the min max values for numeric scales ([minColor, maxColor] or [minRadius, maxRadius])
- 		 * and category strings for category scales.*/
-		public function set values(val:Array):void
+		protected var _dataValues:Array; /* of numerals  for numeric scales and strings for category scales*/
+ 		/** Define the min and max data values for numeric scales ([minLat, maxLong], [minAreaDensity, maxAreaDensity])
+ 		 * and category strings for category scales. The data values property has higher priority compared to min, max and 
+ 		 * dataProvider. It also avoids the algorithmic calculation of min, max for Numeric scales and dataProvider for 
+ 		 * Category scales.*/
+		public function set dataValues(val:Array):void
 		{
 			// to be overridden
 		}
-		public function get values():Array
+		public function get dataValues():Array
 		{
-			return _values;
+			return _dataValues;
 		}
 
 /*		/** Set the origin point of the scale.*
