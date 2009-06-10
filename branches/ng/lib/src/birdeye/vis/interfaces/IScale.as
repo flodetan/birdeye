@@ -57,7 +57,7 @@ package birdeye.vis.interfaces
  		 * of the scale, for example [minColor, maxColor] or [minRadius, maxRadius])
  		 * or [minLat, maxLat] or [minLong, maxLong]...
  		 * If the scale is categorical, than it represents the category strings that are passed directly to the 
- 		 * scale. The range has higher priority over the min, max and dataProvider properties.*/
+ 		 * scale. The values array has higher priority over the min, max and dataProvider properties.*/
 		function set values(val:Array):void
 		function get values():Array
 
