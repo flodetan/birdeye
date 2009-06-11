@@ -115,6 +115,17 @@ package birdeye.vis.elements
 		{
 			return _collisionScale;
 		}
+		
+		protected var _showFieldName:Boolean = false;
+		public function set showFieldName(val:Boolean):void
+		{
+			_showFieldName = val;
+			invalidateDisplayList();
+		}
+		public function get showFieldName():Boolean
+		{
+			return _showFieldName;
+		}
 
 		protected var _showItemRenderer:Boolean = false;
 		[Inspectable(enumeration="true,false")]
@@ -176,14 +187,14 @@ package birdeye.vis.elements
 		}
 
 
-		private var _dim1:String;
-		public function set dim1(val:String):void
+		private var _dim1:Object;
+		public function set dim1(val:Object):void
 		{
 			_dim1= val;
 			invalidateProperties();
 			invalidatingDisplay();
 		}
-		public function get dim1():String
+		public function get dim1():Object
 		{
 			return _dim1;
 		}
@@ -1104,7 +1115,7 @@ package birdeye.vis.elements
 		}
 		
 		private var currentValue:Number;
-		protected function getTotalPositiveValue(field:String):Number
+		protected function getTotalPositiveValue(field:Object):Number
 		{
 			var tot:Number = NaN;
 			if (cursor && field)
@@ -1112,22 +1123,26 @@ package birdeye.vis.elements
 				cursor.seek(CursorBookmark.FIRST);
 				while (!cursor.afterLast)
 				{
-					currentValue = cursor.current[field];
-					if (currentValue > 0)
+					var tmpArray:Array = (dim1 is Array) ? dim1 as Array : [String(dim1)];
+					
+					for (var i:Number = 0; i<tmpArray.length; i++)
 					{
-						if (isNaN(tot))
-							tot = currentValue;
-						else
-							tot += currentValue;
+						currentValue = cursor.current[tmpArray[i]];
+						if (currentValue > 0)
+						{
+							if (isNaN(tot))
+								tot = currentValue;
+							else
+								tot += currentValue;
+						}
 					}
-
 					_cursor.moveNext();
 				}
 			}
 			return tot;
 		}
 
-		protected function getMinValue(field:String):Number
+		protected function getMinValue(field:Object):Number
 		{
 			var min:Number = NaN;
 
@@ -1146,7 +1161,7 @@ package birdeye.vis.elements
 			return min;
 		}
 
-		protected function getMaxValue(field:String):Number
+		protected function getMaxValue(field:Object):Number
 		{
 			var max:Number = NaN;
 
