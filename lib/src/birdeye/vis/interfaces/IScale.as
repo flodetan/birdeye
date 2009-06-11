@@ -35,9 +35,13 @@ package birdeye.vis.interfaces
 		 * scale type). */
 		function getPosition(dataValue:*):*
 
-		/** Set the interval between axis labels.*/
-		function set interval(val:Number):void
-		function get interval():Number
+		/** Set the data interval between scale data values (density, area, mortality...).*/
+		function set dataInterval(val:Number):void
+		function get dataInterval():Number
+
+		/** Set the scale interval between scale values (pixels, colors, sizes...).*/
+		function set scaleInterval(val:Number):void
+		function get scaleInterval():Number
 
 		/** Set-get the size of this axis.*/
 		function set size(val:Number):void
