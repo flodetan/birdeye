@@ -21,7 +21,7 @@
 
 			private var subject:Array;
 			
-			private var regions:Array = ["R1", "R2", "R3", "R4"];
+			private var regions:Array = ["C1", "C2", "C3", "C4"];
 			private function createDT():void
 			{
 				var ac:ArrayCollection = new ArrayCollection();
@@ -65,7 +65,7 @@
 			<scales:PercentAngle id="a" size="270"/>
 		</polar:scales>
 		<polar:elements>
-			<pseries:PolarPieElements scale1="{t}" scale2="{l}" styleName="grad1" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" radiusLabelOffset="-25" labelField="region" dim1="total" displayName="Country"/>
+			<pseries:PolarPieElements scale1="{t}" scale2="{l}" styleName="grad1" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" radiusLabelOffset="-25" labelField="region" dim1="total" displayName="Countries"/>
 			<pseries:PolarPieElements scale1="{a}" scale2="{l}" styleName="grad2" showFieldName="true" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" radiusLabelOffset="-15" sizeLabel="9" dim1="{['GDP','Area','Density']}"/>
 		</polar:elements>
 	</polar:Polar>
