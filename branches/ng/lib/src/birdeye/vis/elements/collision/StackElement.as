@@ -122,7 +122,7 @@ package birdeye.vis.elements.collision
 				deltaSize = 3/5;
 		}
 		
-		override protected function getMaxValue(field:String):Number
+		override protected function getMaxValue(field:Object):Number
 		{
 			var max:Number = super.getMaxValue(field);
 			if (chart && stackType == STACKED100) 
