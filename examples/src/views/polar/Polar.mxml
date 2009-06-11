@@ -11,7 +11,7 @@
 		<polar:RadarArea label="Radar Area" width="100%" height="100%" />
 		<polar:RadarLine label="Radar Line" width="100%" height="100%" />
 		<polar:Pie label="Pie" width="100%" height="100%" />
-		<polar:StackedWedge label="Stacked Wedge" width="100%" height="100%" />
+		<polar:Sunburst label="Sunburst" width="100%" height="100%" />
 		<polar:Coxcomb label="Coxcomb" width="100%" height="100%" />
 	
 	</mx:TabNavigator>

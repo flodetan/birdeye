@@ -54,8 +54,11 @@
 	</mx:Script>
 <mx:Fade id="fadeIn" alphaFrom="0" alphaTo="1" duration="1000"/>
 <mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
-	<mx:Button label="Generate" click="createDT()"/>
-	<mx:HBox width="100%" height="100%">
+	<mx:HBox>
+    		<mx:Button label="Generate" click="createDT()"/>
+			<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4,a5])"/>
+	</mx:HBox>
+		
 		<polar:Polar id="rd" type="stacked" showDataTips="true" dataProvider="{dt}" width="100%" height="100%" layout="radar">
 			<polar:multiScale>
 				<axis:MultiScale dim1="subject" colorStroke="0xbbbbbb" colorLabel="0xbbbbbb"/>
@@ -68,8 +71,7 @@
 				<pseries:LineElement id="a5" styleName="solid5" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R5" displayName="R5"/>
 			</polar:elements>
 		</polar:Polar>
-		<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4])"/>
-	</mx:HBox>
+		
 	<legend:Legend dataProvider="{rd}" direction="horizontal" />
 </mx:VBox>
 </mx:VBox>

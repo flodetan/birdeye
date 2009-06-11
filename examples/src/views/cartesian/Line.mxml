@@ -56,8 +56,12 @@
 	
 	
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
-    	<mx:Button label="Generate" click="createDT()"/>
-		<mx:HBox width="100%" height="100%">
+    	
+    	<mx:HBox>
+    		<mx:Button label="Generate" click="createDT()"/>
+			<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4,a5])"/>
+		</mx:HBox>
+		
 	    	<coords:Cartesian id="lc3" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
 				<coords:scales>
 		 			<scales:Category id="c" categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
@@ -71,8 +75,7 @@
 				 	<elements:LineElement id="a5" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="subject" dim2="R5" styleName="solid5" displayName="R5" />
 				 </coords:elements>
 	    	</coords:Cartesian>
-			<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4,a5])"/>
-		</mx:HBox>
+		
 		<legend:Legend dataProvider="{lc3}" direction="horizontal"/>	
     </mx:VBox>
 </mx:VBox>

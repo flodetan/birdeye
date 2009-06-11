@@ -54,8 +54,10 @@
 	</mx:Script>
 <mx:Fade id="fadeIn" alphaFrom="0" alphaTo="1" duration="1000"/>
 <mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
-	<mx:Button label="Generate" click="createDT()"/>
-	<mx:HBox width="100%" height="100%">
+	<mx:HBox>
+    		<mx:Button label="Generate" click="createDT()"/>
+			<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4])"/>
+	</mx:HBox>
 		<polar:Polar id="rd" type="stacked" showDataTips="true" dataProvider="{dt}" width="100%" height="100%" layout="radar">
 			<polar:scales>
 				<axis:CategoryAngle id="c" categoryField="subject"/>
@@ -63,14 +65,13 @@
 				<axis:Linear id="l1" placement="horizontal_center" sizeLabel="12"/>
 			</polar:scales>
 			<polar:elements>
-				<pseries:AreaElement id="a1" styleName="grad1" scale1="{c}" scale2="{l2}" dim1="subject" dim2="R1" itemRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" showItemRenderer="true" strokeColor="0xfff000" strokeAlpha="1" strokeWeight="3" displayName="R1"/>
-				<pseries:AreaElement id="a2" styleName="grad2" scale1="{c}" scale2="{l2}" dim1="subject" dim2="R2" itemRenderer="birdeye.vis.guides.renderers.UpTriangleRenderer" showItemRenderer="true" strokeColor="0xffff00" strokeAlpha="1" strokeWeight="3" displayName="R2"/>
-				<pseries:AreaElement id="a3" styleName="grad3" scale1="{c}" scale2="{l2}" dim1="subject" dim2="R3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" showItemRenderer="true" strokeColor="0xff0000" strokeAlpha="1" strokeWeight="3" displayName="R3"/>
-				<pseries:AreaElement id="a4" styleName="grad4" scale1="{c}" scale2="{l1}" dim1="subject" dim2="R4" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" strokeColor="0xE80CDE" strokeAlpha="1" strokeWeight="3" displayName="R4"/>
+				<pseries:AreaElement id="a1" styleName="grad1" scale1="{c}" scale2="{l2}" dim1="subject" dim2="R1" itemRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" showItemRenderer="true" strokeColor="0xfff000" strokeAlpha="1" strokeWeight="1" displayName="R1"/>
+				<pseries:AreaElement id="a2" styleName="grad2" scale1="{c}" scale2="{l2}" dim1="subject" dim2="R2" itemRenderer="birdeye.vis.guides.renderers.UpTriangleRenderer" showItemRenderer="true" strokeColor="0xffff00" strokeAlpha="1" strokeWeight="1" displayName="R2"/>
+				<pseries:AreaElement id="a3" styleName="grad3" scale1="{c}" scale2="{l2}" dim1="subject" dim2="R3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" showItemRenderer="true" strokeColor="0xff0000" strokeAlpha="1" strokeWeight="1" displayName="R3"/>
+				<pseries:AreaElement id="a4" styleName="grad4" scale1="{c}" scale2="{l1}" dim1="subject" dim2="R4" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" strokeColor="0xE80CDE" strokeAlpha="1" strokeWeight="1" displayName="R4"/>
 			</polar:elements>
 		</polar:Polar>
-		<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4])"/>
-	</mx:HBox>
+		
 	<legend:Legend dataProvider="{rd}" direction="horizontal" />
 </mx:VBox>
 </mx:VBox>
