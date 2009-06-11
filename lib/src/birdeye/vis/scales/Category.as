@@ -33,6 +33,7 @@
 	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
+	import com.degrafa.transform.RotateTransform;
 	
 	import flash.text.TextFieldAutoSize;
 	
@@ -196,6 +197,24 @@
 	 					label.visible = true;
 						label.autoSize = TextFieldAutoSize.LEFT;
 						label.autoSizeField = true;
+						if (!isNaN(_rotateLabels) || _rotateLabels != 0)
+						{
+							var rot:RotateTransform = new RotateTransform();
+							rot = new RotateTransform();
+							switch (placement)
+							{
+								case RIGHT:
+									_rotateLabelsOn = "centerLeft";
+									break;
+								case LEFT:
+									_rotateLabelsOn = "centerRight";
+									break;
+							}
+							rot.registrationPoint = _rotateLabelsOn;
+							rot.angle = _rotateLabels;
+							label.transform = rot;
+						}
+						
 						label.y = snap-label.displayObject.height/2;
 						label.x = thickWidth; 
 						label.fill = new SolidFill(colorLabel);
@@ -220,8 +239,26 @@
 	 					label.visible = true;
 						label.autoSize = TextFieldAutoSize.LEFT;
 						label.autoSizeField = true;
+						if (!isNaN(_rotateLabels) && _rotateLabels != 0)
+						{
+							rot = new RotateTransform();
+							switch (placement)
+							{
+								case TOP:
+									_rotateLabelsOn = "centerLeft";
+									label.x = snap; 
+									break;
+								case BOTTOM:
+									_rotateLabelsOn = "centerRight";
+									label.x = snap-label.displayObject.width; 
+									break;
+							}
+							rot.registrationPoint = _rotateLabelsOn;
+							rot.angle = _rotateLabels;
+							label.transform = rot;
+						} else
+							label.x = snap-label.displayObject.width/2; 
 						label.y = thickWidth;
-						label.x = snap-label.displayObject.width/2; 
 						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
 					}

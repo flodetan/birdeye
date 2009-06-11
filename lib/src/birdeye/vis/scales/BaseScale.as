@@ -115,6 +115,23 @@ package birdeye.vis.scales
 			return _size;
 		}
 		
+		protected var _rotateLabels:Number = NaN;
+		/** Set the angle rotation of labels.*/
+		public function set rotateLabels(val:Number):void
+		{
+			_rotateLabels = val;
+			invalidateDisplayList();
+		}
+
+		protected var _rotateLabelsOn:String = "center";
+		/** Set the angle rotation point of labels.*/
+		[Inspectable(enumeration="topLeft,centerLeft,bottomLeft,centerTop,center,centerBottom,topRight,centerRight,bottomRight")]
+		protected function set rotateLabelsOn(val:String):void
+		{
+			_rotateLabelsOn = val;
+			invalidateDisplayList();
+		}
+		
 		protected var _scaleValues:Array; /* of numerals  for numeric scales and strings for category scales*/
  		/** Define the min max values for numeric scales ([minColor, maxColor] or [minRadius, maxRadius])
  		 * and category strings for category scales.*/
