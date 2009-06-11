@@ -124,7 +124,7 @@ package birdeye.vis.elements.geometry
 						yPos = scale2.getPosition(cursor.current[dim2]);
 	
 						if (isNaN(size))
-	 						size = scale2.interval*deltaSize;
+	 						size = scale2.dataInterval*deltaSize;
 					} 
 					
 					j = cursor.current[dim2];
