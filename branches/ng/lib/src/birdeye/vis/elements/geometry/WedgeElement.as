@@ -45,7 +45,7 @@ package birdeye.vis.elements.geometry
 	
 	import mx.collections.CursorBookmark;
 
-	public class PolarPieElements extends StackElement
+	public class WedgeElement extends StackElement
 	{
 		private var _innerRadius:Number;
 		public function set innerRadius(val:Number):void
@@ -75,7 +75,7 @@ package birdeye.vis.elements.geometry
 			invalidatingDisplay();
 		}		
 
-		public function PolarPieElements()
+		public function WedgeElement()
 		{
 			super();
 		}
