@@ -12,8 +12,8 @@
 			<scales:PercentAngle id="b" size="360"/>
 		</coords:scales>
 		<coords:elements>
-			<elements:PolarPieElements scale1="{a}" scale2="{l}" alpha=".6" styleName="grad4" extendMouseEvents="true" dim1="R3"/>
-			<elements:PolarPieElements scale1="{b}" scale2="{l}" alpha=".7" labelField="subject" sizeLabel="8" colorLabel="0xbbbbbb" radiusLabelOffset="2" styleName="grad3" extendMouseEvents="true" dim1="R2"/>
+			<elements:WedgeElement scale1="{a}" scale2="{l}" alpha=".6" styleName="grad4" extendMouseEvents="true" dim1="R3"/>
+			<elements:WedgeElement scale1="{b}" scale2="{l}" alpha=".7" labelField="subject" sizeLabel="8" colorLabel="0xbbbbbb" radiusLabelOffset="2" styleName="grad3" extendMouseEvents="true" dim1="R2"/>
 		</coords:elements>
 	</coords:Polar>
 </mx:HBox>

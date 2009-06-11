@@ -74,7 +74,7 @@
 	            <mx:DataGridColumn dataField="Area" itemRenderer="views.micro.renderers.MicroArea"/>
 	            <mx:DataGridColumn dataField="Line" itemRenderer="views.micro.renderers.MicroLine"/>
 	            <mx:DataGridColumn dataField="Column" itemRenderer="views.micro.renderers.MicroColumn"/>
-	            <mx:DataGridColumn dataField="WinLoose" itemRenderer="views.micro.renderers.MicroWinLoose"/>
+	            <mx:DataGridColumn dataField="WinLose" itemRenderer="views.micro.renderers.MicroWinLoose"/>
 	            <mx:DataGridColumn dataField="Plot" itemRenderer="views.micro.renderers.MicroPlot"/>
 	            <mx:DataGridColumn dataField="Bar" itemRenderer="views.micro.renderers.MicroBar"/>
 	       </mx:columns>
