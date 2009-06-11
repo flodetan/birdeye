@@ -150,8 +150,6 @@ package birdeye.vis.elements.geometry
 				if (scale1)
 					aAxis = scale1;
 	
-				dataFields[0] = dim1;
-	
 				cursor.seek(CursorBookmark.FIRST);
 				var i:Number = 0;
 				var tmpDim1:String;
@@ -167,6 +165,8 @@ package birdeye.vis.elements.geometry
 						var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius, chart.origin);
 						var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius, chart.origin); 
 		
+						dataFields[0] = tmpDim1;
+
 						createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _size);
 						
 		 				if (ttGG && _extendMouseEvents)
