@@ -61,7 +61,7 @@
 	    	<coords:Cartesian id="lc3" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
 				<coords:scales>
 		 			<scales:Category id="c" categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
-		 			<scales:Linear id="l" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
+		 			<scales:Linear id="l" placement="right" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 				</coords:scales>
 	    		 <coords:elements>
 	    		 	<elements:LineElement id="a1" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="subject" dim2="R1" styleName="solid1" displayName="R1" />
