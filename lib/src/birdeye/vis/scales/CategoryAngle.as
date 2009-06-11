@@ -31,12 +31,12 @@
 	
 	public class CategoryAngle extends Category
 	{
-		override public function get interval():Number
+		override public function get dataInterval():Number
 		{
-			if (isNaN(_interval))
-				_interval = (_dataValues[1] - _dataValues[0]) / dataProvider.length
+			if (isNaN(_dataInterval))
+				_dataInterval = (_dataValues[1] - _dataValues[0]) / dataProvider.length
 			
-			return _interval;
+			return _dataInterval;
 		}
 		
 		override public function set dataValues(val:Array):void
@@ -56,18 +56,19 @@
 			showAxis = false;
 			_dataValues = [0,360];
 			size = _dataValues[1] - _dataValues[0];
+			_dataInterval = NaN;
 		}
 
 		override public function getPosition(dataValue:*):*
 		{
 			if (_dataValues && dataProvider && dataProvider.indexOf(dataValue) != -1)
 			{
-				_interval = _size/ dataProvider.length;
+				_dataInterval = _size/ dataProvider.length;
 
 				if (_function == null)
-					return dataProvider.indexOf(dataValue) * _interval;
+					return dataProvider.indexOf(dataValue) * _dataInterval;
 				else 
-					return  _function(dataValue, _dataValues[0], _dataValues[1], interval);
+					return  _function(dataValue, _dataValues[0], _dataValues[1], dataInterval);
 			}
 		}
 	}

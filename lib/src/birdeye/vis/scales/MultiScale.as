@@ -363,7 +363,7 @@ package birdeye.vis.scales
 					Numeric(scales[category]).min = Math.min(0, elementsMinMax[category].min);
 					Numeric(scales[category]).max = elementsMinMax[category].max;
 					Numeric(scales[category]).size = scalesSize;
-					Numeric(scales[category]).interval = (Numeric(scales[category]).max 
+					Numeric(scales[category]).dataInterval = (Numeric(scales[category]).max 
 																- Numeric(scales[category]).min)/5;
 				}
 			}
@@ -377,7 +377,7 @@ package birdeye.vis.scales
 			var line:Line;
 			
 			var catElements:Array = scale1.dataProvider;
-			var interval:int = scale1.interval;
+			var interval:int = scale1.dataInterval;
 			var nEle:int = scale1.dataProvider.length;
 
 			for (var i:int = 0; i<nEle; i++)
@@ -393,7 +393,7 @@ package birdeye.vis.scales
  				var radiusAxis:Numeric = Numeric(scales[catElements[i]]);
  				var rad:Number;
  				
- 				for (var snap:int = radiusAxis.min; snap<radiusAxis.max; snap += radiusAxis.interval)
+ 				for (var snap:int = radiusAxis.min; snap<radiusAxis.max; snap += radiusAxis.dataInterval)
  				{
  					rad = radiusAxis.getPosition(snap);
 	 				var labelPosition:Point = PolarCoordinateTransform.getXY(angle,rad,_chart.origin);

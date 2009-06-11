@@ -356,18 +356,32 @@ package birdeye.vis.scales
 			return _scaleType;
 		}
 		
-		protected var _interval:Number = NaN;
-		/** Set the interval between axis values. */
-		public function set interval(val:Number):void
+		protected var _dataInterval:Number = NaN;
+		/** Set the data interval between scale data values. */
+		public function set dataInterval(val:Number):void
 		{
-			_interval = val;
+			_dataInterval = val;
 
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get interval():Number
+		public function get dataInterval():Number
 		{
-			return _interval;
+			return _dataInterval;
+		}
+		
+		protected var _scaleInterval:Number = NaN;
+		/** Set the scale interval between scale values (pixels, colors..). */
+		public function set scaleInterval(val:Number):void
+		{
+			_scaleInterval = val;
+
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		public function get scaleInterval():Number
+		{
+			return _scaleInterval;
 		}
 		
 		protected var _showAxis:Boolean = true;

@@ -96,6 +96,7 @@
 		{
 			super();
 			_scaleType = BaseScale.CATEGORY;
+			_dataInterval = 1;
 		}
 		
 		override protected function commitProperties():void
@@ -107,15 +108,15 @@
 			if (dataProvider && dataProvider.length >0)
 			{
 				var recIsGivenInterval:Boolean = isGivenInterval;
-				if (_interval != size/dataProvider.length)
-					interval = size/dataProvider.length;
+				if (_scaleInterval != size/dataProvider.length)
+					scaleInterval = size/dataProvider.length;
 					
 				isGivenInterval = recIsGivenInterval;
 			}
 			
 			// if placement is set, elements are loaded and interval calculated
 			// than the axis is ready to be drawn
-			if (placement && dataProvider && interval && _categoryField)
+			if (placement && dataProvider && dataInterval && _categoryField)
 				readyForLayout = true;
 			else 
 				readyForLayout = false;
@@ -166,23 +167,21 @@
 		override protected function drawAxes(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
 		{
 			if (dataProvider && dataProvider.length>0)
-			{
-				interval = size/dataProvider.length;
-			}
+				scaleInterval = size/dataProvider.length;
 			else 
-				_interval = NaN;
+				_scaleInterval = NaN;
 
 			var snap:Number, dataProviderIndex:Number=0;
 
 			if (isNaN(maxLblSize) && dataProvider && dataProvider.length>0 && placement)
 				maxLabelSize();
 
-			if (_interval > 0)
+			if (_scaleInterval > 0)
 			{
 				// vertical orientation
 				if (xMin == xMax)
 				{
-					for (snap = yMax - interval/2; snap>yMin; snap -= interval)
+					for (snap = yMax - _scaleInterval/2; snap>yMin; snap -= _scaleInterval*_dataInterval)
 					{
 						// create thick line
 			 			thick = new Line(xMin + thickWidth * sign, snap, xMax, snap);
@@ -191,7 +190,8 @@
 			
 						// create label 
 	 					label = new RasterTextPlus();
-						label.text = String(dataProvider[dataProviderIndex++]);
+						label.text = String(dataProvider[dataProviderIndex]);
+						dataProviderIndex += _dataInterval;
 	 					label.fontFamily = "verdana";
 	 					label.fontSize = sizeLabel;
 	 					label.visible = true;
@@ -224,7 +224,7 @@
 				else 
 				// horizontal orientation
 				{
-					for (snap = xMin + interval/2; snap<xMax; snap += interval)
+					for (snap = xMin + _scaleInterval/2; snap<xMax; snap += _scaleInterval*_dataInterval)
 					{
 						// create thick line
 			 			thick = new Line(snap, yMin + thickWidth * sign, snap, yMax);
@@ -233,7 +233,8 @@
 	
 						// create label 
 	 					label = new RasterTextPlus();
-						label.text = String(dataProvider[dataProviderIndex++]);
+						label.text = String(dataProvider[dataProviderIndex]);
+						dataProviderIndex += _dataInterval;
 	 					label.fontFamily = "verdana";
 	 					label.fontSize = sizeLabel;
 	 					label.visible = true;
