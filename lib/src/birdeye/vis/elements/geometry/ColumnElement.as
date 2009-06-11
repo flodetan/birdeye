@@ -125,11 +125,11 @@ package birdeye.vis.elements.geometry
 			
 					var angleInterval:Number;
 					if (scale1) 
-						angleInterval = scale1.interval * chart.columnWidthRate;
+						angleInterval = scale1.dataInterval * chart.columnWidthRate;
 					else if (multiScale)
-						angleInterval = multiScale.scale1.interval * chart.columnWidthRate;
+						angleInterval = multiScale.scale1.dataInterval * chart.columnWidthRate;
 					else if (chart.multiScale)
-						angleInterval = chart.multiScale.scale1.interval * chart.columnWidthRate;
+						angleInterval = chart.multiScale.scale1.dataInterval * chart.columnWidthRate;
 						
 					switch (_stackType)
 					{
