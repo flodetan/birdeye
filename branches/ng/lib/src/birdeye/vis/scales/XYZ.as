@@ -47,9 +47,9 @@ package birdeye.vis.scales
 		protected var isGivenInterval:Boolean = false;
 
 		/** Set the interval between axis values. */
-		override public function set interval(val:Number):void
+		override public function set dataInterval(val:Number):void
 		{
-			_interval = val;
+			_dataInterval = val;
 			isGivenInterval = true;
 			invalidateProperties();
 			invalidateDisplayList();

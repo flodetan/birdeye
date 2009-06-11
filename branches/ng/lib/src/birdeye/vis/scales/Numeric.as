@@ -151,18 +151,18 @@ package birdeye.vis.scales
 				if (baseAtZero)
 				{
 					if (max > 0)
-						_interval = max / 5;
+						_dataInterval = max / 5;
 					else
-						_interval = -min / 5;
+						_dataInterval = -min / 5;
 				} else {
-					interval = Math.abs((max - min) / 5)
+					dataInterval = Math.abs((max - min) / 5)
 					isGivenInterval = false;
 				}
 			}
 			
 			// if the placement is set, and max, min and interval calculated
 			// than the axis is ready to be drawn
-			if (placement && !isNaN(max) && !isNaN(min) && !isNaN(interval))
+			if (placement && !isNaN(max) && !isNaN(min) && !isNaN(dataInterval))
 			{
 				if (showAxis)
 					readyForLayout = true;
@@ -224,12 +224,12 @@ package birdeye.vis.scales
 			if (isNaN(maxLblSize) && !isNaN(min) && !isNaN(max) && placement)
 				maxLabelSize();
 
-			if (size > 0 && !isNaN(interval) && showLabels)
+			if (size > 0 && !isNaN(dataInterval) && showLabels)
 			{	
 				// vertical orientation
 				if (xMin == xMax)
 				{
-					for (snap = min; snap<=max; snap += interval)
+					for (snap = min; snap<=max; snap += dataInterval)
 					{
 						// create thick line
 			 			thick = new Line(xMin + thickWidth * sign, getPosition(snap), xMax, getPosition(snap));
@@ -269,7 +269,7 @@ package birdeye.vis.scales
 					}
 				} else {
 				// horizontal orientation
-					for (snap = min; snap<=max; snap += interval)
+					for (snap = min; snap<=max; snap += dataInterval)
 					{
 						// create thick line
 			 			thick = new Line(getPosition(snap), yMin + thickWidth * sign, getPosition(snap), yMax);

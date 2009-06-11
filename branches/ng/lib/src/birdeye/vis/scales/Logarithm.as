@@ -61,7 +61,7 @@
 			if (isNaN(maxLblSize) && !isNaN(min) && !isNaN(max) && placement)
 				maxLabelSize();
 
-			if (size > 0 && !isNaN(interval))
+			if (size > 0 && !isNaN(dataInterval))
 			{	
 				if (xMin == xMax)
 				{
@@ -69,7 +69,7 @@
 					{
 						for (snap = Math.pow(10,tmpInterval); 
 							snap<max && snap<Math.pow(10,tmpInterval+1); 
-							snap += Math.pow(10, tmpInterval) * ((isGivenInterval)? interval:1))
+							snap += Math.pow(10, tmpInterval) * ((isGivenInterval)? dataInterval:1))
 						{
 							// create thick line
 				 			thick = new Line(xMin + thickWidth * sign, getPosition(snap), xMax, getPosition(snap));
@@ -91,7 +91,7 @@
 						}
 					}
 				} else {
-					for (snap = min; snap<max; snap += interval)
+					for (snap = min; snap<max; snap += dataInterval)
 					{
 						// create thick line
 			 			thick = new Line(getPosition(snap), yMin + thickWidth * sign, getPosition(snap), yMax);
