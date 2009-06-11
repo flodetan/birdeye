@@ -20,7 +20,7 @@
 			
 			private function createDT():void
 			{
-				subject = ["A", "B", "C", "D", "E", "F"];
+				subject = ["A", "B", "C", "D", "E", "F", "G"];
 				var ac:ArrayCollection = new ArrayCollection();
 				var ac1:ArrayCollection = new ArrayCollection();
 				for (var i:Number = 0; i<subject.length; i++)
@@ -29,8 +29,8 @@
 						subject1: subject[i] + "1",
 						subject2: subject[i] + "2",
 						R1: Math.round(Math.random() * 1000),
-						R2: Math.round(Math.random() * 100),
-						R3: Math.round(Math.random() * 100),
+						R2: Math.round(Math.random() * 50),
+						R3: Math.round(Math.random() * 50),
 						R4: Math.round(Math.random() * 1000)
 					});
 				}
@@ -59,21 +59,21 @@
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
     	<mx:Button label="Generate" click="createDT()"/>
 		<mx:HBox width="100%" height="100%">
+			<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4])"/>
 	    	<coords:Cartesian id="ac3" width="90%" height="90%" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true">
 	 		<coords:scales>
 	 			<scales:Category categoryField="subject2" id="c2" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" colorStroke="0xbbbbbb" colorLabel="0xbbbbbb" weightStroke="3"/>
 	 			<scales:Category categoryField="subject1" id="c1" placement="bottom" colorPointer="0x00ff00" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" colorStroke="0xbbbbbb" colorLabel="0xbbbbbb" weightStroke="3"/>
-	 			<scales:Linear placement="right" id="l2" colorPointer="0xFF0000" fontLabel="verdana" weightPointer="5" sizeLabel="10" colorStroke="0xbbbbbb" colorLabel="0xbbbbbb" sizePointer="15"/>
-	 			<scales:Linear placement="right" id="l1" fontLabel="verdana" weightPointer="5" sizeLabel="10" colorPointer="0x00ff00" colorStroke="0xbbbbbb" colorLabel="0xbbbbbb" sizePointer="15"/>
+	 			<scales:Linear rotateLabels="40" placement="right" id="l2" colorPointer="0xFF0000" fontLabel="verdana" weightPointer="5" sizeLabel="10" colorStroke="0xbbbbbb" colorLabel="0xbbbbbb" sizePointer="15"/>
+	 			<scales:Linear rotateLabels="40" placement="right" id="l1" fontLabel="verdana" weightPointer="5" sizeLabel="10" colorPointer="0x00ff00" colorStroke="0xbbbbbb" colorLabel="0xbbbbbb" sizePointer="15"/>
 	 		</coords:scales>
 			 <coords:elements>
 			 	<elements:AreaElement id="a1" scale2="{l2}" scale1="{c2}" dim1="subject2" dim2="R1" styleName="grad1" strokeColor="0xE8480A" strokeAlpha="1" strokeWeight="3" itemRenderer="birdeye.vis.guides.renderers.UpTriangleRenderer" showItemRenderer="true" displayName="R1"/>
-	    		<elements:AreaElement id="a2" scale2="{l1}" scale1="{c1}" dim1="subject1" dim2="R2" styleName="grad2" strokeColor="0xFF940D" strokeAlpha="1" strokeWeight="3" itemRenderer="birdeye.vis.guides.renderers.CrossRenderer" showItemRenderer="true" displayName="R2"/>
+	    		<elements:AreaElement id="a2" scale2="{l1}" scale1="{c1}" dim1="subject1" dim2="R2" styleName="grad2" strokeColor="0xFF940D" strokeAlpha="1" strokeWeight="3" itemRenderer="birdeye.vis.guides.renderers.RectangleRenderer" showItemRenderer="true" displayName="R2"/>
 	    		<elements:AreaElement id="a3" scale2="{l1}" scale1="{c1}" dim1="subject1" dim2="R3" styleName="grad3" strokeColor="0xFF0000" strokeAlpha="1" strokeWeight="3" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" displayName="R3"/>
 	    		<elements:AreaElement id="a4" scale2="{l2}" scale1="{c2}" dim1="subject2" dim2="R4" styleName="grad4" strokeColor="0xE80CDE" strokeAlpha="1" strokeWeight="3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" showItemRenderer="true" displayName="R4"/>
 			 </coords:elements>
 			</coords:Cartesian>
-			<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4])"/>
 		</mx:HBox>
     <guides:Legend dataProvider="{ac3}" direction="horizontal"/>
 	</mx:VBox>
