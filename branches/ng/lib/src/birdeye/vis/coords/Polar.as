@@ -572,7 +572,7 @@ package birdeye.vis.coords
 				angleScale = multiScale.scale1;
 			
 			var catElements:Array = angleScale.dataProvider;
-			var interval:int = angleScale.interval;
+			var interval:int = angleScale.dataInterval;
 			var nEle:int = catElements.length;
 			var radius:int = Math.min(unscaledWidth, unscaledHeight)/2;
 
@@ -618,9 +618,9 @@ package birdeye.vis.coords
 			var catElements:Array = angleScale.dataProvider;
 			var radiusScale:Numeric = multiScale.scales[catElements[0]];
 			
-			if (angleScale && radiusScale && !isNaN(radiusScale.interval))
+			if (angleScale && radiusScale && !isNaN(radiusScale.dataInterval))
 			{
-				var interval:int = angleScale.interval;
+				var interval:int = angleScale.dataInterval;
 				var nEle:int = catElements.length;
 	
 				var rMin:Number = radiusScale.min;
@@ -630,7 +630,7 @@ package birdeye.vis.coords
 				var radius:int;
 				var position:Point;
 	
-				for (radius = rMin + radiusScale.interval; radius<rMax; radius += radiusScale.interval)
+				for (radius = rMin + radiusScale.dataInterval; radius<rMax; radius += radiusScale.dataInterval)
 				{
 					var poly:Polygon = new Polygon();
 					poly.data = "";
