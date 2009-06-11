@@ -153,99 +153,123 @@ package birdeye.vis.elements.geometry
 				dataFields[0] = dim1;
 	
 				cursor.seek(CursorBookmark.FIRST);
+				var i:Number = 0;
+				var tmpDim1:String;
 				while (!cursor.afterLast)
 				{
-					angle = aAxis.getPosition(cursor.current[dim1]);
+					var tmpArray:Array = (dim1 is Array) ? dim1 as Array : [String(dim1)];
 					
-					var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius, chart.origin);
-					var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius, chart.origin); 
-	
-					createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _size);
-					
-	 				if (ttGG && _extendMouseEvents)
-						gg = ttGG;
-	 				
-					var arc:IGeometry;
-					
-					if (_innerRadius > tmpRadius)
-						_innerRadius = tmpRadius;
-	
-					arc = new ArcPath(Math.max(0, _innerRadius), tmpRadius, startAngle, angle, chart.origin);
-		
-					var tempColor:int;
-					
-					if (colorField)
+					for (i = 0; i<tmpArray.length; i++)
 					{
-						if (colorScale)
-						{
-							var col:* = colorScale.getPosition(cursor.current[colorField]);
-							if (col is Number)
-								fill = new SolidFill(col);
-							else if (col is IGraphicsFill)
-								fill = col;
-						} 
-					} else if (_colorsStart && _colorsStop)
-					{
-						if (c < _colorsStart.length)
-						{
-							fill = new LinearGradientFill();
-							var grStop:GradientStop = new GradientStop(_colorsStart[c])
-							grStop.alpha = alpha;
-							var g:Array = new Array();
-							g.push(grStop);
-			
-							grStop = new GradientStop(_colorsStop[c]);
-							grStop.alpha = alpha;
-							g.push(grStop);
-			
-							LinearGradientFill(fill).gradientStops = g;
-							c++
-						}
-					}  else if (_colors)
-					{
-						if (c < _colors.length)
-							fill = new SolidFill(_colors[c]);
-						else
-							fill = new SolidFill(_colors[_colors.length]);
+						tmpDim1 = tmpArray[i];
+						angle = aAxis.getPosition(cursor.current[tmpDim1]);
 						
-						c++;
-					} else if (randomColors)
-					{
-						tempColor = Math.random() * 255 * 255 * 255;
-						fill = new SolidFill(tempColor);
-					}
-					
-					if (fill)
-					{
-						arc.fill = fill;
-					}
-	
-					arc.stroke = stroke;
-	
-					gg.geometryCollection.addItemAt(arc,0); 
-					
-					if (labelField)
-					{
-						var xLlb:Number = xPos, yLlb:Number = yPos;
-						if (!isNaN(_radiusLabelOffset))
+						var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius, chart.origin);
+						var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius, chart.origin); 
+		
+						createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _size);
+						
+		 				if (ttGG && _extendMouseEvents)
+							gg = ttGG;
+		 				
+						var arc:IGeometry;
+						
+						if (_innerRadius > tmpRadius)
+							_innerRadius = tmpRadius;
+		
+						arc = new ArcPath(Math.max(0, _innerRadius), tmpRadius, startAngle, angle, chart.origin);
+			
+						var tempColor:int;
+						
+						if (colorField)
 						{
-							xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
-							yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
+							if (colorScale)
+							{
+								var col:* = colorScale.getPosition(cursor.current[colorField]);
+								if (col is Number)
+									fill = new SolidFill(col);
+								else if (col is IGraphicsFill)
+									fill = col;
+							} 
+						} else if (_colorsStart && _colorsStop)
+						{
+							if (c < _colorsStart.length)
+							{
+								fill = new LinearGradientFill();
+								var grStop:GradientStop = new GradientStop(_colorsStart[c])
+								grStop.alpha = alpha;
+								var g:Array = new Array();
+								g.push(grStop);
+				
+								grStop = new GradientStop(_colorsStop[c]);
+								grStop.alpha = alpha;
+								g.push(grStop);
+				
+								LinearGradientFill(fill).gradientStops = g;
+							}
+						}  else if (_colors)
+						{
+							if (c < _colors.length)
+								fill = new SolidFill(_colors[c]);
+							else
+								fill = new SolidFill(_colors[_colors.length]);
+						} else if (randomColors)
+						{
+							tempColor = Math.random() * 255 * 255 * 255;
+							fill = new SolidFill(tempColor);
 						}
-						var label:RasterTextPlus = new RasterTextPlus();
-						label.text = cursor.current[labelField];
-						label.fontFamily = fontLabel;
-						label.fontWeight = "bold";
-						label.fontSize = sizeLabel;
-						label.autoSize = TextFieldAutoSize.LEFT;
-						label.fill = new SolidFill(colorLabel);
-						label.x = xLlb- label.displayObject.width/2;
-						label.y = yLlb - label.displayObject.height/2;
-						gg.geometryCollection.addItem(label); 
+						
+						if (fill)
+						{
+							arc.fill = fill;
+						}
+		
+						arc.stroke = stroke;
+		
+						gg.geometryCollection.addItemAt(arc,0); 
+						
+						if (labelField)
+						{
+							var xLlb:Number = xPos, yLlb:Number = yPos;
+							if (!isNaN(_radiusLabelOffset))
+							{
+								xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
+								yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
+							}
+							var label:RasterTextPlus = new RasterTextPlus();
+							label.text = cursor.current[labelField];
+							label.fontFamily = fontLabel;
+							label.fontWeight = "bold";
+							label.fontSize = sizeLabel;
+							label.autoSize = TextFieldAutoSize.LEFT;
+							label.fill = new SolidFill(colorLabel);
+							label.x = xLlb- label.displayObject.width/2;
+							label.y = yLlb - label.displayObject.height/2;
+							gg.geometryCollection.addItem(label); 
+						} else if (_showFieldName)
+						{
+							var xLlb:Number = xPos, yLlb:Number = yPos;
+							if (!isNaN(_radiusLabelOffset))
+							{
+								xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
+								yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
+							}
+							var label:RasterTextPlus = new RasterTextPlus();
+							label.text = tmpDim1;
+							label.fontFamily = fontLabel;
+							label.fontWeight = "bold";
+							label.fontSize = sizeLabel;
+							label.autoSize = TextFieldAutoSize.LEFT;
+							label.fill = new SolidFill(colorLabel);
+							label.x = xLlb- label.displayObject.width/2;
+							label.y = yLlb - label.displayObject.height/2;
+							gg.geometryCollection.addItem(label); 
+						}
+		
+						startAngle += angle;
 					}
-	
-					startAngle += angle;
-	
+					c++;
+					
 	 				cursor.moveNext();
 				}
 				
