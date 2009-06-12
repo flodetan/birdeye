@@ -125,11 +125,11 @@ package birdeye.vis.elements.geometry
 			
 					var angleInterval:Number;
 					if (scale1) 
-						angleInterval = scale1.dataInterval * chart.columnWidthRate;
+						angleInterval = scale1.scaleInterval * chart.columnWidthRate;
 					else if (multiScale)
-						angleInterval = multiScale.scale1.dataInterval * chart.columnWidthRate;
+						angleInterval = multiScale.scale1.scaleInterval * chart.columnWidthRate;
 					else if (chart.multiScale)
-						angleInterval = chart.multiScale.scale1.dataInterval * chart.columnWidthRate;
+						angleInterval = chart.multiScale.scale1.scaleInterval * chart.columnWidthRate;
 						
 					switch (_stackType)
 					{
@@ -143,164 +143,171 @@ package birdeye.vis.elements.geometry
 					}
 				}
 				cursor.seek(CursorBookmark.FIRST);
-	
+				var tmpDim2:String;
 				while (!cursor.afterLast)
 				{
-					if (scale1)
-					{
-						pos1 = scale1.getPosition(cursor.current[dim1]);
-					}
+					var tmpArray:Array = (dim2 is Array) ? dim2 as Array : [String(dim2)];
 					
-					j = cursor.current[dim1];
-					if (scale2)
+					for (var i:Number = 0; i<tmpArray.length; i++)
 					{
+						tmpDim2 = tmpArray[i];
 						
-						if (_stackType == STACKED100)
+						if (scale1)
 						{
-							baseScale2 = scale2.getPosition(baseValues[j]);
-							pos2 = scale2.getPosition(
-								baseValues[j] + Math.max(0,cursor.current[dim2]));
-						} else {
-							pos2 = scale2.getPosition(cursor.current[dim2]);
-						}
-					}
-					
-					var scale2RelativeValue:Number = NaN;
-	
-					// TODO: fix stacked100 on 3D
-					if (scale3)
-					{
-						zPos = scale3.getPosition(cursor.current[dim3]);
-						scale2RelativeValue = XYZ(scale3).height - zPos;
-					}
-	
-					if (multiScale)
-					{
-						pos1 = multiScale.scale1.getPosition(cursor.current[dim1]);
-						pos2 = INumerableScale(multiScale.scales[
-											cursor.current[multiScale.dim1]
-											]).getPosition(cursor.current[dim2]);
-					} else if (chart.multiScale) {
-						baseScale2 = getDim2MinPosition(INumerableScale(chart.multiScale.scales[
-											cursor.current[chart.multiScale.dim1]
-											]));
-						pos1 = chart.multiScale.scale1.getPosition(cursor.current[dim1]);
-						pos2 = INumerableScale(chart.multiScale.scales[
-											cursor.current[chart.multiScale.dim1]
-											]).getPosition(cursor.current[dim2]);
-					}
-	
-					if (chart.coordType == VisScene.CARTESIAN)
-					{
-						switch (_stackType)
-						{
-							case OVERLAID:
-								colWidth = size;
-								pos1 = pos1 - size/2;
-								break;
-							case STACKED100:
-								colWidth = size;
-								pos1 = pos1 - size/2;
-								ttShapes = [];
-								ttXoffset = -20;
-								ttYoffset = 55;
-								if (chart.customTooltTipFunction == null)
-								{
-									var line:Line = new Line(pos1+ colWidth/2, pos2, pos1 + colWidth/2 + ttXoffset/3, pos2 + ttYoffset);
-									line.stroke = new SolidStroke(0xaaaaaa,1,2);
-					 				ttShapes[0] = line;
-								}
-								break;
-							case STACKED:
-								pos1 = pos1 + size/2 - size/_total * _stackPosition;
-								colWidth = size/_total;
-								break;
+							pos1 = scale1.getPosition(cursor.current[dim1]);
 						}
 						
-						if (colorScale)
+						j = cursor.current[dim1];
+						if (scale2)
 						{
-							var col:* = colorScale.getPosition(cursor.current[colorField]);
-							if (col is Number)
-								fill = new SolidFill(col);
-							else if (col is IGraphicsFill)
-								fill = col;
-						} 
-	
-		 				var bounds:Rectangle = new Rectangle(pos1, pos2, colWidth, baseScale2 - pos2);
-		
-						// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
-						// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-						createTTGG(cursor.current, dataFields, pos1 + colWidth/2, pos2, scale2RelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
-		
-						if (dim3)
-						{
-							if (!isNaN(zPos))
-							{
-								gg = new DataItemLayout();
-								gg.target = this;
-								graphicsCollection.addItem(gg);
-								ttGG.posZ = ttGG.z = gg.posZ = gg.z = zPos;
-							} else
-								zPos = 0;
-						}
-		
-						if (ttGG && _extendMouseEvents)
-							gg = ttGG;
-						
-		//				poly = renderer.getGeometry(bounds);
-		
-		 				if (_source)
-							poly = new RasterRenderer(bounds, _source);
-		 				else 
-							poly = new itemRenderer(bounds);
-		
-						poly.fill = fill;
-						poly.stroke = stroke;
-						gg.geometryCollection.addItemAt(poly,0);
-					} else if (chart.coordType == VisScene.POLAR)
-					{
-/* 						var arcCenterX:Number = chart.origin.x - pos2;
-						var arcCenterY:Number = chart.origin.y - pos2;
- */
-						var startAngle:Number; 
-						switch (_stackType) 
-						{
-							case STACKED:
-								startAngle = pos1 - angleInterval/2 +arcSize*_stackPosition;
-								break;
-							case OVERLAID:
-							case STACKED100:
-								startAngle = pos1 - angleInterval/2;
-								break;
-						}
-						var wSize:Number, hSize:Number;
-						wSize = hSize = pos2*2;
-		
-						var xPos:Number = PolarCoordinateTransform.getX(startAngle+arcSize/2, pos2, chart.origin);
-						var yPos:Number = PolarCoordinateTransform.getY(startAngle+arcSize/2, pos2, chart.origin); 
-	 	
-						createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _size);
-						
-						if (ttGG && _extendMouseEvents)
-							gg = ttGG;
 							
-						var arc:IGeometry;
+							if (_stackType == STACKED100)
+							{
+								baseScale2 = scale2.getPosition(baseValues[j]);
+								pos2 = scale2.getPosition(
+									baseValues[j] + Math.max(0,cursor.current[tmpDim2]));
+							} else {
+								pos2 = scale2.getPosition(cursor.current[tmpDim2]);
+							}
+						}
 						
-						arc = 
-							new ArcPath(baseScale2, pos2, startAngle, arcSize, chart.origin);
-//								new EllipticalArc(arcCenterX, arcCenterY, wSize, hSize, startAngle, arcSize, "pie");
+						var scale2RelativeValue:Number = NaN;
 		
-						arc.fill = fill;
-						arc.stroke = stroke;
-						gg.geometryCollection.addItemAt(arc,0); 
-					}
-	
-					if (_showItemRenderer)
-					{
-						var shape:IGeometry = new itemRenderer(bounds);
-						shape.fill = fill;
-						shape.stroke = stroke;
-						gg.geometryCollection.addItem(shape);
+						// TODO: fix stacked100 on 3D
+						if (scale3)
+						{
+							zPos = scale3.getPosition(cursor.current[dim3]);
+							scale2RelativeValue = XYZ(scale3).height - zPos;
+						}
+		
+						if (multiScale)
+						{
+							pos1 = multiScale.scale1.getPosition(cursor.current[dim1]);
+							pos2 = INumerableScale(multiScale.scales[
+												cursor.current[multiScale.dim1]
+												]).getPosition(cursor.current[tmpDim2]);
+						} else if (chart.multiScale) {
+							baseScale2 = getDim2MinPosition(INumerableScale(chart.multiScale.scales[
+												cursor.current[chart.multiScale.dim1]
+												]));
+							pos1 = chart.multiScale.scale1.getPosition(cursor.current[dim1]);
+							pos2 = INumerableScale(chart.multiScale.scales[
+												cursor.current[chart.multiScale.dim1]
+												]).getPosition(cursor.current[tmpDim2]);
+						}
+		
+						if (chart.coordType == VisScene.CARTESIAN)
+						{
+							switch (_stackType)
+							{
+								case OVERLAID:
+									colWidth = size;
+									pos1 = pos1 - size/2;
+									break;
+								case STACKED100:
+									colWidth = size;
+									pos1 = pos1 - size/2;
+									ttShapes = [];
+									ttXoffset = -20;
+									ttYoffset = 55;
+									if (chart.customTooltTipFunction == null)
+									{
+										var line:Line = new Line(pos1+ colWidth/2, pos2, pos1 + colWidth/2 + ttXoffset/3, pos2 + ttYoffset);
+										line.stroke = new SolidStroke(0xaaaaaa,1,2);
+						 				ttShapes[0] = line;
+									}
+									break;
+								case STACKED:
+									pos1 = pos1 + size/2 - size/_total * _stackPosition;
+									colWidth = size/_total;
+									break;
+							}
+							
+							if (colorScale)
+							{
+								var col:* = colorScale.getPosition(cursor.current[colorField]);
+								if (col is Number)
+									fill = new SolidFill(col);
+								else if (col is IGraphicsFill)
+									fill = col;
+							} 
+		
+			 				var bounds:Rectangle = new Rectangle(pos1, pos2, colWidth, baseScale2 - pos2);
+			
+							// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
+							// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
+							createTTGG(cursor.current, dataFields, pos1 + colWidth/2, pos2, scale2RelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
+			
+							if (dim3)
+							{
+								if (!isNaN(zPos))
+								{
+									gg = new DataItemLayout();
+									gg.target = this;
+									graphicsCollection.addItem(gg);
+									ttGG.posZ = ttGG.z = gg.posZ = gg.z = zPos;
+								} else
+									zPos = 0;
+							}
+			
+							if (ttGG && _extendMouseEvents)
+								gg = ttGG;
+							
+			//				poly = renderer.getGeometry(bounds);
+			
+			 				if (_source)
+								poly = new RasterRenderer(bounds, _source);
+			 				else 
+								poly = new itemRenderer(bounds);
+			
+							poly.fill = fill;
+							poly.stroke = stroke;
+							gg.geometryCollection.addItemAt(poly,0);
+						} else if (chart.coordType == VisScene.POLAR)
+						{
+	/* 						var arcCenterX:Number = chart.origin.x - pos2;
+							var arcCenterY:Number = chart.origin.y - pos2;
+	 */
+							var startAngle:Number; 
+							switch (_stackType) 
+							{
+								case STACKED:
+									startAngle = pos1 - angleInterval/2 +arcSize*_stackPosition;
+									break;
+								case OVERLAID:
+								case STACKED100:
+									startAngle = pos1 - angleInterval/2;
+									break;
+							}
+							var wSize:Number, hSize:Number;
+							wSize = hSize = pos2*2;
+			
+							var xPos:Number = PolarCoordinateTransform.getX(startAngle+arcSize/2, pos2, chart.origin);
+							var yPos:Number = PolarCoordinateTransform.getY(startAngle+arcSize/2, pos2, chart.origin); 
+		 	
+							createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _size);
+							
+							if (ttGG && _extendMouseEvents)
+								gg = ttGG;
+								
+							var arc:IGeometry;
+							
+							arc = 
+								new ArcPath(baseScale2, pos2, startAngle, arcSize, chart.origin);
+	//								new EllipticalArc(arcCenterX, arcCenterY, wSize, hSize, startAngle, arcSize, "pie");
+			
+							arc.fill = fill;
+							arc.stroke = stroke;
+							gg.geometryCollection.addItemAt(arc,0); 
+						}
+		
+						if (_showItemRenderer)
+						{
+							var shape:IGeometry = new itemRenderer(bounds);
+							shape.fill = fill;
+							shape.stroke = stroke;
+							gg.geometryCollection.addItem(shape);
+						}
 					}
 	
 					cursor.moveNext();
