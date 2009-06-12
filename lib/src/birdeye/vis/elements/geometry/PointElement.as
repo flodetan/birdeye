@@ -33,6 +33,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
+	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
@@ -113,6 +114,19 @@ package birdeye.vis.elements.geometry
 						scale2RelativeValue = XYZ(scale3).height - pos3;
 					} 
 	
+					if (multiScale)
+					{
+						pos1 = multiScale.scale1.getPosition(cursor.current[dim1]);
+						pos2 = INumerableScale(multiScale.scales[
+											cursor.current[multiScale.dim1]
+											]).getPosition(cursor.current[dim2]);
+					} else if (chart.multiScale) {
+						pos1 = chart.multiScale.scale1.getPosition(cursor.current[dim1]);
+						pos2 = INumerableScale(chart.multiScale.scales[
+											cursor.current[chart.multiScale.dim1]
+											]).getPosition(cursor.current[dim2]);
+					}
+
 					if (colorScale)
 					{
 						var col:* = colorScale.getPosition(cursor.current[colorField]);
