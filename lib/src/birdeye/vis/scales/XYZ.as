@@ -121,7 +121,7 @@ package birdeye.vis.scales
 		/** @Private */
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
-			if (showAxis)
+			if (showAxis && invalidated)
 			{
 				super.updateDisplayList(w,h);
 				setActualSize(w,h);

@@ -224,8 +224,9 @@ package birdeye.vis.scales
 			if (isNaN(maxLblSize) && !isNaN(min) && !isNaN(max) && placement)
 				maxLabelSize();
 
-			if (size > 0 && !isNaN(dataInterval) && showLabels)
+			if (size > 0 && !isNaN(dataInterval) && showLabels && invalidated)
 			{	
+				invalidated = false;
 				// vertical orientation
 				if (xMin == xMax)
 				{
@@ -381,6 +382,7 @@ package birdeye.vis.scales
 		{
 			super.resetValues();
 			min = max = totalPositiveValue = NaN;
+			invalidated = true;
 		} 
 	}
 }

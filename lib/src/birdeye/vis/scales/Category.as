@@ -176,8 +176,10 @@
 			if (isNaN(maxLblSize) && dataProvider && dataProvider.length>0 && placement)
 				maxLabelSize();
 
-			if (_scaleInterval > 0)
+			if (_scaleInterval > 0 && invalidated)
 			{
+				invalidated = false;
+				
 				// vertical orientation
 				if (xMin == xMax)
 				{
@@ -294,6 +296,8 @@
 		override public function resetValues():void
 		{
 			super.resetValues();
+			invalidated = true;
+				
 			_dataProvider = [];
 		}
 	}
