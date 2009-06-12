@@ -62,6 +62,8 @@ package birdeye.vis.scales
 	{
 		protected var surf:Surface;
 		protected var gg:GeometryGroup;
+		
+		protected var invalidated:Boolean = false;
 
 		/** Set the axis line color.*/
 		protected var stroke:IGraphicsStroke;
@@ -575,6 +577,7 @@ package birdeye.vis.scales
 				gg.geometry = [];
 				gg.geometryCollection.items = [];
 			}
+			invalidated = true;
 		}
 
 		private function refreshSize():void
