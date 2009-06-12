@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:polar="birdeye.vis.coords.*"
-	xmlns:cartesian="birdeye.vis.recipes.cartesianCharts.*"
-	xmlns:pseries="birdeye.vis.elements.geometry.*"
-	xmlns:cseries="birdeye.vis.elements.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
 	xmlns:scales="birdeye.vis.scales.*"
-	xmlns:legend="birdeye.vis.guides.legend.*"
 	creationComplete="createDT()"
 	width="100%" height="100%" horizontalAlign="center">
 	
@@ -65,9 +62,9 @@
 			<scales:PercentAngle id="c" size="270"/>
 		</polar:scales>
 		<polar:elements>
-			<pseries:WedgeElement scale1="{a}" scale2="{l}" alpha=".6" radiusLabelOffset="5" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" extendMouseEvents="true" dim1="GDP" displayName="A"/>
-			<pseries:WedgeElement scale1="{b}" scale2="{l}" alpha=".7" radiusLabelOffset="10" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" labelField="region" extendMouseEvents="true" dim1="Density" displayName="B"/>
-			<pseries:WedgeElement scale1="{c}" scale2="{l}" alpha=".8" labelField="region" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" radiusLabelOffset="10" extendMouseEvents="true" dim1="Area" displayName="C"/>
+			<elements:WedgeElement scale1="{a}" scale2="{l}" alpha=".6" radiusLabelOffset="5" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" extendMouseEvents="true" dim1="GDP" displayName="A"/>
+			<elements:WedgeElement scale1="{b}" scale2="{l}" alpha=".7" radiusLabelOffset="10" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" labelField="region" extendMouseEvents="true" dim1="Density" displayName="B"/>
+			<elements:WedgeElement scale1="{c}" scale2="{l}" alpha=".8" labelField="region" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" radiusLabelOffset="10" extendMouseEvents="true" dim1="Area" displayName="C"/>
 		</polar:elements>
 	</polar:Polar>
 	
