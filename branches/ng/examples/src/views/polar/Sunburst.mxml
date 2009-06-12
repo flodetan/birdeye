@@ -53,8 +53,8 @@
 			<scales:PercentAngle id="a" size="360"/>
 		</polar:scales>
 		<polar:elements>
-			<elements:WedgeElement extendMouseEvents="true" scale1="{t}" scale2="{l}" styleName="grad1" showFieldName="false" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" radiusLabelOffset="-25" labelField="region" dim1="total" />
-			<elements:WedgeElement extendMouseEvents="true" scale1="{a}" scale2="{l}" styleName="grad2" showFieldName="false" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" dim1="{['GDP','Area','Density']}"/>
+			<elements:WedgeElement extendMouseEvents="true" scale1="{t}" scale2="{l}" styleName="grad1" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" radiusLabelOffset="-25" labelField="region" dim1="total" />
+			<elements:WedgeElement extendMouseEvents="true" scale1="{a}" scale2="{l}" styleName="grad2" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" dim1="{['GDP','Area','Density']}"/>
 		</polar:elements>
 	</polar:Polar>
 	
