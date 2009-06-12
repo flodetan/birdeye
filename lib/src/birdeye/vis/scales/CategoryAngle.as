@@ -31,21 +31,14 @@
 	
 	public class CategoryAngle extends Category
 	{
-		override public function get dataInterval():Number
+		override public function get scaleInterval():Number
 		{
-			if (isNaN(_dataInterval))
-				_dataInterval = (_dataValues[1] - _dataValues[0]) / dataProvider.length
+			if (isNaN(_scaleInterval))
+				_scaleInterval = (_scaleValues[1] - _scaleValues[0]) / dataProvider.length
 			
-			return _dataInterval;
+			return _scaleInterval;
 		}
 		
-		override public function set dataValues(val:Array):void
-		{
-			_dataValues = val;
-			_dataValues.sort(Array.NUMERIC);
-			size = _dataValues[1] - _dataValues[0];
-		}
-
 		override public function set size(val:Number):void
 		{
 			_size = val;
@@ -54,21 +47,20 @@
 		public function CategoryAngle():void
 		{
 			showAxis = false;
-			_dataValues = [0,360];
-			size = _dataValues[1] - _dataValues[0];
-			_dataInterval = NaN;
+			scaleValues = [0,360];
+			_scaleInterval = NaN;
 		}
 
 		override public function getPosition(dataValue:*):*
 		{
-			if (_dataValues && dataProvider && dataProvider.indexOf(dataValue) != -1)
+			if (_scaleValues && dataProvider && dataProvider.indexOf(dataValue) != -1)
 			{
-				_dataInterval = _size/ dataProvider.length;
+				_scaleInterval = _size/ dataProvider.length;
 
 				if (_function == null)
-					return dataProvider.indexOf(dataValue) * _dataInterval;
+					return dataProvider.indexOf(dataValue) * _scaleInterval;
 				else 
-					return  _function(dataValue, _dataValues[0], _dataValues[1], dataInterval);
+					return  _function(dataValue, _scaleValues[0], _scaleValues[1], _scaleInterval);
 			}
 		}
 	}
