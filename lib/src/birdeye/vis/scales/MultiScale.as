@@ -60,6 +60,8 @@ package birdeye.vis.scales
 
 	public class MultiScale extends Surface
 	{
+		protected var invalidated:Boolean = true;
+
 		/** Set the axis line color.*/
 		protected var stroke:IGraphicsStroke;
 
@@ -371,47 +373,55 @@ package birdeye.vis.scales
 		
 		private function drawAxes():void
 		{
+			if (invalidated)
+			{
+				invalidated = false;
+				var line:Line;
+				
+				var catElements:Array = scale1.dataProvider;
+				var interval:int = scale1.dataInterval;
+				var nEle:int = scale1.dataProvider.length;
+	
+				for (var i:int = 0; i<nEle; i++)
+				{
+					Numeric(scales[catElements[i]]).size = scalesSize;
+					var angle:int = scale1.getPosition(catElements[i]);
+					var endPosition:Point = PolarCoordinateTransform.getXY(angle,scalesSize,_chart.origin);
+					
+	 				line = new Line(_chart.origin.x, _chart.origin.y, endPosition.x, endPosition.y);
+					line.stroke = stroke;
+					gg.geometryCollection.addItem(line);
+	
+	 				var radiusAxis:Numeric = Numeric(scales[catElements[i]]);
+	 				var rad:Number;
+	 				
+	 				for (var snap:int = radiusAxis.min; snap<radiusAxis.max; snap += radiusAxis.dataInterval)
+	 				{
+	 					rad = radiusAxis.getPosition(snap);
+		 				var labelPosition:Point = PolarCoordinateTransform.getXY(angle,rad,_chart.origin);
+						var label:RasterTextPlus = new RasterTextPlus();
+						label.text = String(snap);
+		 				label.fontFamily = fontLabel;
+		 				label.fontSize = sizeLabel;
+		 				label.visible = true;
+						label.autoSize = TextFieldAutoSize.LEFT;
+						label.autoSizeField = true;
+						label.fill = fill;
+		
+						label.x = labelPosition.x - label.displayObject.width/2;
+						label.y = labelPosition.y;
+	
+						gg.geometryCollection.addItem(label);
+	 				} 
+				}
+			}
+		}
+		
+		public function removeAllElements():void
+		{
 			gg.geometryCollection.items = [];
 			gg.geometry = [];
-			
-			var line:Line;
-			
-			var catElements:Array = scale1.dataProvider;
-			var interval:int = scale1.dataInterval;
-			var nEle:int = scale1.dataProvider.length;
-
-			for (var i:int = 0; i<nEle; i++)
-			{
-				Numeric(scales[catElements[i]]).size = scalesSize;
-				var angle:int = scale1.getPosition(catElements[i]);
-				var endPosition:Point = PolarCoordinateTransform.getXY(angle,scalesSize,_chart.origin);
-				
- 				line = new Line(_chart.origin.x, _chart.origin.y, endPosition.x, endPosition.y);
-				line.stroke = stroke;
-				gg.geometryCollection.addItem(line);
-
- 				var radiusAxis:Numeric = Numeric(scales[catElements[i]]);
- 				var rad:Number;
- 				
- 				for (var snap:int = radiusAxis.min; snap<radiusAxis.max; snap += radiusAxis.dataInterval)
- 				{
- 					rad = radiusAxis.getPosition(snap);
-	 				var labelPosition:Point = PolarCoordinateTransform.getXY(angle,rad,_chart.origin);
-					var label:RasterTextPlus = new RasterTextPlus();
-					label.text = String(snap);
-	 				label.fontFamily = fontLabel;
-	 				label.fontSize = sizeLabel;
-	 				label.visible = true;
-					label.autoSize = TextFieldAutoSize.LEFT;
-					label.autoSizeField = true;
-					label.fill = fill;
-	
-					label.x = labelPosition.x - label.displayObject.width/2;
-					label.y = labelPosition.y;
-
-					gg.geometryCollection.addItem(label);
- 				} 
-			}
+			invalidated = true;
 		}
 	}
 }
