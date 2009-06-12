@@ -98,6 +98,24 @@ package birdeye.vis.elements
 		{
 			return _chart;
 		}
+		
+		private var _filter1:*;
+		/** Implement filtering for data values on dim1. The filter can be a String an Array or a 
+		 * function.*/
+		public function set filter1(val:Array):void
+		{
+			_filter1 = val;
+			invalidateDisplayList();
+		}
+
+		private var _filter2:*;
+		/** Implement filtering for data values on dim2. The filter can be a String an Array or a 
+		 * function.*/
+		public function set filter2(val:Array):void
+		{
+			_filter2 = val;
+			invalidateDisplayList();
+		}
 
 		public static const HORIZONTAL:String = "horizontal";
 		public static const VERTICAL:String = "vertical";
@@ -199,14 +217,14 @@ package birdeye.vis.elements
 			return _dim1;
 		}
 		
-		private var _dim2:String;
-		public function set dim2(val:String):void
+		private var _dim2:Object;
+		public function set dim2(val:Object):void
 		{
 			_dim2= val;
 			invalidateProperties();
 			invalidatingDisplay();
 		}
-		public function get dim2():String
+		public function get dim2():Object
 		{
 			return _dim2;
 		}
