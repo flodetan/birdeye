@@ -44,7 +44,7 @@ package birdeye.vis.trans.modifiers
 			var recResults1:Array;
 			var recResults2:Array;
 			
-			epsilon = epsilon*0.78; //Normalize epsilon, so that it ranges from 0(max simplification) to 100 (no simplification)
+			epsilon = Math.pow(1.045,epsilon)-1; //Normalize epsilon, so that it ranges from 0(max simplification) to 100 (no simplification)
 			
 			//Find the point with maximum distance
 			for (var i:int=1; i<polygon.length-2; i++) { 
