@@ -808,6 +808,9 @@ package birdeye.vis.coords
 					DataItemLayout(child).geometryCollection.items = [];
 					DataItemLayout(child).geometry = [];
 				}
+				
+				if (child is MultiScale)
+					MultiScale(child).removeAllElements();
 
 				removeChildAt(0);
 			}
