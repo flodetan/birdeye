@@ -733,7 +733,9 @@
 			surface.toolTip=null;
 			_arrDataTips.filterFunction=filterGeom;
 			_arrDataTips.refresh();
-			surface.toolTip=_arrDataTips.getItemAt(0).dataTips.toString();
+			if(_arrDataTips.getItemAt(0).dataTips!=null){
+				surface.toolTip=_arrDataTips.getItemAt(0).dataTips.toString();
+			}
 			if(_highlighted==true){
 				var glowColor:uint=0xFFFFFF;
 				var glowGradFill:Array;
