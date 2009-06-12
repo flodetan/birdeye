@@ -656,7 +656,7 @@
 					{
 						var key:String=cursor.current[_foidField];
 						var val:Number=Number(cursor.current[_colorField]);
-						if(key!=""){
+						if(key!="" && key !=null){
 							var geom:GeometryGroup=GeometryGroup(Surface((this.parent as DisplayObjectContainer).getChildByName("Surface")).getChildByName(key)); 
 							if(geom!=null){
 								geom.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
