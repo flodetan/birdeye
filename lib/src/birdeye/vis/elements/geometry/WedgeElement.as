@@ -248,13 +248,13 @@ package birdeye.vis.elements.geometry
 							gg.geometryCollection.addItem(label); 
 						} else if (_showFieldName)
 						{
-							var xLlb:Number = xPos, yLlb:Number = yPos;
+							xLlb = xPos, yLlb = yPos;
 							if (!isNaN(_radiusLabelOffset))
 							{
 								xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
 								yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
 							}
-							var label:RasterTextPlus = new RasterTextPlus();
+							label 	= new RasterTextPlus();
 							label.text = tmpDim1;
 							label.fontFamily = fontLabel;
 							label.fontWeight = "bold";
