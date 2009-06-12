@@ -73,8 +73,8 @@ package birdeye.vis.interfaces
 		function get dim1():Object;
 
 		/** Set the dim2 to filter vertical data values.*/
-		function set dim2(val:String):void;
-		function get dim2():String;
+		function set dim2(val:Object):void;
+		function get dim2():Object;
 
 		/** Set the dim3 to filter vertical data values.*/
 		function set dim3(val:String):void;
