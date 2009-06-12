@@ -379,7 +379,7 @@ package birdeye.vis.scales
 				var line:Line;
 				
 				var catElements:Array = scale1.dataProvider;
-				var interval:int = scale1.dataInterval;
+				var interval:int = scale1.scaleInterval;
 				var nEle:int = scale1.dataProvider.length;
 	
 				for (var i:int = 0; i<nEle; i++)
