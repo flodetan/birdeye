@@ -27,7 +27,6 @@
  
  package birdeye.vis
 {
-	import birdeye.utils.ValidationUtils;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.interfaces.IGraphLayout;
 	import birdeye.vis.interfaces.INumerableScale;
@@ -89,7 +88,7 @@
 			for (var i:Number = 0; i<_transforms.length; i++)
 				if (_transforms[i] is IProjection)
 					_projections[p++] = _transforms[i];
-				else 
+				else if (_transforms[i] is IGraphLayout)
 					_graphLayouts[l++] = _transforms[i];
 		}
 
@@ -528,7 +527,7 @@
 		
 		protected function applyGraphLayouts():void
 		{
-			if (_graphLayouts) {
+			if (_graphLayouts && _graphLayouts.length>0) {
 				for each (var t:IGraphLayout in _graphLayouts) t.apply();
 			}
 		}
