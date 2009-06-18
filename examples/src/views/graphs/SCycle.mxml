@@ -1,6 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" paddingLeft="150" paddingTop="50" width="100%" height="100%">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:trans="birdeye.vis.trans.*"
+	backgroundColor="#3f3f3f"
+	creationComplete="generateData()">
+
+<mx:Script>
+		<![CDATA[
+
+			[Bindable]
+			public var nodes:ArrayCollection;
+			[Bindable]
+			public var edges:ArrayCollection;
+
+			import mx.collections.ArrayCollection;
+
+			private function generateData():void {
+				const nodeSet:ArrayCollection = new ArrayCollection();
+				const numNodes:int = int(Math.random() * 10 + 10); 
+				for (var i:int = 0; i < numNodes; i++) {
+					nodeSet.addItem({
+						id: i + 1,
+						name: randomName()
+					});
+				}
+
+				const edgeSet:ArrayCollection = new ArrayCollection();
+				const numEdges:int = int(Math.random() * 80 + 20);
+				for (var i:int = 0; i < numEdges; i++) {
+					edgeSet.addItem({
+						start: int(Math.random() * numNodes) + 1,
+						end: int(Math.random() * numNodes) + 1
+					});
+				}
+				
+				edges = edgeSet;
+				nodes = nodeSet;
+			}
+
+			private function randomName():String {
+				var name = "";
+				for (var i:int = 0; i < 5; i++) {
+					name += String.fromCharCode('A'.charCodeAt(0) + int(Math.random() * 26)); 
+				}
+				return name;
+			}
+		]]>
+	</mx:Script>
 	
-	<mx:Label text="Coming soon..." fontSize="14" />
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
 	
+		<mx:Button label="Generate" click="generateData()"/>
+
+    	<coords:Cartesian id="graph" width="100%" height="100%">
+			<!-- 
+			<coords:scales>
+	 			<scales:Linear id="X" showAxis="false" placement="bottom" />
+	 			<scales:Linear id="Y" showAxis="false" placement="left" />
+			</coords:scales>
+			-->
+			<coords:elements>
+				<!-- <elements:NodeElement scale1="{X}" scale2="{Y}" dim1="x" dim2="y" /> -->
+				
+				<elements:EdgeElement id="edge" dimStart="start" dimEnd="end" node="{node}" dataProvider="{edges}"
+									  colorFill="0xFF0000" colorStroke="0x999999" />
+									  
+				<elements:NodeElement id="node" dimId="id" dimName="name" dataProvider="{nodes}"
+									  colorFill="0x0000FF" alphaFill="1.0" strokeColor="0xFFFFFF" size="7" />
+
+			</coords:elements>
+			<coords:transforms>
+				<trans:GraphLayout id="SC" applyToNode="{node}" applyToEdge="{edge}" type="single-cycle"
+								   viewportWidth="300" viewportHeight="200"/>
+			</coords:transforms>
+    	</coords:Cartesian>
+    </mx:VBox>
 </mx:VBox>

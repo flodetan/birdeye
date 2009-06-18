@@ -138,5 +138,12 @@ package birdeye.vis.interfaces
 
 		/** Implement drawElement.*/
 		function drawElement():void;
+		
+		function getDataItem(index:int):Object;
+
+		function getDataItems():Vector.<Object>;
+		
+		function getDataItemsCount():int;
+
 	}
 }

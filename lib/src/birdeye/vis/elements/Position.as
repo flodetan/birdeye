@@ -24,16 +24,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
-package birdeye.vis.interfaces
+package birdeye.vis.elements
 {
-	import birdeye.vis.elements.Position;
-	import birdeye.vis.elements.geometry.EdgeElement;
-	
-	public interface IGraphLayout extends ITransform
-	{
-		function apply():void;
+	public class Position {
 
-		function getNodeItemPosition(itemIndex:int):Position;
+		private var _pos1:Number;
+		private var _pos2:Number;
+		private var _pos3:Number;
+
+		public function Position(pos1:Number, pos2:Number, pos3:Number) {
+			_pos1 = pos1;
+			_pos2 = pos2;
+			_pos3 = pos3;
+		}
+
+		public function get pos1():Number {
+			return _pos1;
+		}
+
+		public function get pos2():Number {
+			return _pos2;
+		}
+
+		public function get pos3():Number {
+			return _pos3;
+		}
+
 	}
 }
