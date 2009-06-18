@@ -27,10 +27,13 @@
  
  package birdeye.vis
 {
+	import birdeye.utils.ValidationUtils;
 	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.interfaces.IGraphLayout;
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.interfaces.IProjection;
 	import birdeye.vis.interfaces.IScale;
+	import birdeye.vis.interfaces.ITransform;
 	import birdeye.vis.scales.MultiScale;
 	
 	import com.degrafa.GeometryGroup;
@@ -90,7 +93,8 @@
 					_graphLayouts[l++] = _transforms[i];
 		}
 
-		private var _projections:Array
+		private var _projections:Array;
+
         [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IProjection")]
         [ArrayElementType("birdeye.vis.interfaces.IProjection")]
 		public function set projections(val:Array):void
@@ -99,13 +103,14 @@
 		}
 
 		private var _graphLayouts:Array
+
         [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IGraphLayout")]
         [ArrayElementType("birdeye.vis.interfaces.IGraphLayout")]
 		public function set graphLayouts(val:Array):void
 		{
 			_graphLayouts = val;
 		}
-		
+
 		protected var _maxStacked100:Number = NaN;
 		/** @Private
 		 * The maximum value among all elements stacked according to stacked100 type.
@@ -516,6 +521,15 @@
 
 				if (!contains(ggBackGround))
 					addChildAt(ggBackGround, 0);
+			}
+
+ 			applyGraphLayouts();
+		}
+		
+		protected function applyGraphLayouts():void
+		{
+			if (_graphLayouts) {
+				for each (var t:IGraphLayout in _graphLayouts) t.apply();
 			}
 		}
 

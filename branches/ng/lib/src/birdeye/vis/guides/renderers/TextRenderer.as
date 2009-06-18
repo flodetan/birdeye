@@ -27,14 +27,36 @@
  
 package birdeye.vis.guides.renderers
 {
+	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.RasterTextPlus;
 	
 	import flash.geom.Rectangle;
+	import flash.text.TextFieldAutoSize;
 
 	public class TextRenderer extends RasterTextPlus
 	{
 		public function TextRenderer (bounds:Rectangle = null)
 		{
 		}
+		
+		public static function createTextLabel(xPos:Number, yPos:Number, text:String, fill:IGraphicsFill,
+											   centerHorizontally:Boolean = true, centerVertically:Boolean = true):TextRenderer {
+			const label:TextRenderer = new TextRenderer();
+			label.text = text;
+			label.fill = fill;
+			label.alpha = 1.0;
+			label.autoSize = TextFieldAutoSize.LEFT;
+			label.autoSizeField = true;
+			if (centerHorizontally)
+				label.x = xPos - label.displayObject.width/2;
+			else
+				label.x = xPos;
+			if (centerVertically)
+				label.y = yPos - label.displayObject.height/2;
+			else
+				label.y = yPos;
+			return label;
+		}
+		
 	}
 }

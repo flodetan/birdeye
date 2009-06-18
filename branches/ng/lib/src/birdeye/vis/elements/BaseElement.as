@@ -43,6 +43,7 @@ package birdeye.vis.elements
 	import com.degrafa.Surface;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
+	import com.degrafa.core.collections.GeometryCollection;
 	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.GradientStop;
@@ -423,7 +424,7 @@ package birdeye.vis.elements
 		}
 
 		protected var gg:DataItemLayout;
-		protected var dataItems:Array = [];
+//		protected var dataItems:Array = [];
 		protected var fill:IGraphicsFill;
 		protected var stroke:IGraphicsStroke = new SolidStroke(0x888888,1,1);
 		
@@ -833,7 +834,7 @@ package birdeye.vis.elements
 				if (!_alphaGradients)
 					_alphaGradients = getStyle("gradientAlphas");
 				
-				if (!isNaN(_colorFill))
+				if (isNaN(_colorFill))
 					_colorFill = getStyle("fillColor");
 				if (!_alphaFill)
 					_alphaFill = getStyle("fillAlpha");
@@ -1012,6 +1013,12 @@ package birdeye.vis.elements
 				addChild(sortLayers[i][1]);
 		}
 
+		protected function createMouseHitArea(xPos:Number, yPos:Number, size:Number) {
+			var geom:Circle = new Circle(xPos, yPos, size); 
+			geom.fill = new SolidFill(0x000000, 0);
+			return geom;
+		}
+		
 		protected var ggIndex:Number;
 		/** @Private
 		 * Override the creation of ttGeom in order to avoid the usage of gg also in case
@@ -1032,10 +1039,8 @@ package birdeye.vis.elements
 			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 
-			var hitMouseArea:Circle = new Circle(xPos, yPos, 5); 
-			hitMouseArea.fill = new SolidFill(0x000000, 0);
-			ttGG.geometryCollection.addItem(hitMouseArea);
-
+			ttGG.geometryCollection.addItem(createMouseHitArea(xPos, yPos, _size));
+			
  			if (chart.showDataTips || chart.showAllDataTips)
 			{ 
 				initGGToolTip();
@@ -1352,6 +1357,82 @@ package birdeye.vis.elements
 		public function getStroke():IGraphicsStroke
 		{
 			return stroke;
+		}
+
+
+		protected function getGeometryCollection():GeometryCollection {
+			return gg.geometryCollection;
+		}
+		
+		protected function prepareGraphicsGroupForDrawing():void {
+			removeAllElements();
+
+			if (graphicsCollection.items  &&  graphicsCollection.items.length > 0) {
+				gg = graphicsCollection.items[0];
+			} else {
+				gg = new DataItemLayout();
+				graphicsCollection.addItem(gg);
+			}
+			gg.target = this;
+			ggIndex = 1;
+		}
+
+		public function getDataItemsCount():int {
+			if (!_cursor) return undefined;
+			var count:int = 0;
+			_cursor.seek(CursorBookmark.FIRST);
+			while (!_cursor.afterLast) {
+				count++;
+				_cursor.moveNext();
+			}
+			return count;
+		}
+		
+		public function getDataItem(index:int):Object {
+			if (!_cursor) return undefined;
+			_cursor.seek(CursorBookmark.FIRST, index);
+			return _cursor.current;
+		}
+		
+		public function getDataItems():Vector.<Object> {
+			if (!_cursor) return undefined;
+			var data:Vector.<Object> = new Vector.<Object>();
+			_cursor.seek(CursorBookmark.FIRST);
+			while (!_cursor.afterLast) {
+				data.push(_cursor.current);
+				_cursor.moveNext();
+			}
+			return data;
+		}
+		
+		public function forEachDataItem(callback:Function):void {
+			if (!_cursor) return;
+			_cursor.seek(CursorBookmark.FIRST);
+			var itemIndex:int = 0;
+			while (!_cursor.afterLast) {
+				callback(_cursor.current, itemIndex++);
+				_cursor.moveNext();
+			}
+		}
+		
+		/**
+		 * Calls the given callback function for each dataItem
+		 * until it returns a value which is !== undefined.
+		 * Then stops iteration and returns this value. 
+		 **/
+		public function findDataItem(callback:Function):Object {
+			if (!_cursor) return undefined;
+			_cursor.seek(CursorBookmark.FIRST);
+			var itemIndex:int = 0;
+			var retVal;
+			while (!_cursor.afterLast) {
+				retVal = callback(_cursor.current, itemIndex++);
+				if (retVal !== undefined) {
+					return retVal;
+				}
+				_cursor.moveNext();
+			}
+			return undefined;
 		}
 	}
 }
