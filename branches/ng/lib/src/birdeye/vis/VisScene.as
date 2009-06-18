@@ -50,6 +50,7 @@
 	import mx.core.IInvalidating;
 
 	[Exclude(name="projections", kind="property")]
+	[Exclude(name="graphLayouts", kind="property")]
 
 	[DefaultProperty("dataProvider")]
 	public class VisScene extends Surface
@@ -75,19 +76,18 @@
 			return _coordType;
 		}
 		
-		private var _transforms:Array;
         [Inspectable(category="General", arrayType="birdeye.vis.interfaces.ITransform")]
         [ArrayElementType("birdeye.vis.interfaces.ITransform")]
 		public function set transforms(val:Array):void
 		{
-			_transforms = val;
-			_projections = _layouts = [];
+			var _transforms:Array = val;
+			_projections = graphLayouts = [];
 			var p:uint = 0, l:uint = 0;
 			for (var i:Number = 0; i<_transforms.length; i++)
 				if (_transforms[i] is IProjection)
 					_projections[p++] = _transforms[i];
 				else 
-					_layouts[l++] = _transforms[i];
+					_graphLayouts[l++] = _transforms[i];
 		}
 
 		private var _projections:Array
@@ -98,12 +98,12 @@
 			_projections = val;
 		}
 
-		private var _layouts:Array
+		private var _graphLayouts:Array
         [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IGraphLayout")]
         [ArrayElementType("birdeye.vis.interfaces.IGraphLayout")]
-		public function set layouts(val:Array):void
+		public function set graphLayouts(val:Array):void
 		{
-			_layouts = val;
+			_graphLayouts = val;
 		}
 		
 		protected var _maxStacked100:Number = NaN;
