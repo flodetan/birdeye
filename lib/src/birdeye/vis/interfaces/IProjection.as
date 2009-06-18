@@ -27,8 +27,10 @@
  
 package birdeye.vis.interfaces
 {
-	public interface ITransform
+	public interface IProjection extends ITransform
 	{
-		// must be extended by specific interfaces (eg. IProjection, ILayout...) 
+		function funcDim1(dataValue:*, min1:Number, max1:Number, size1:Number):Number;
+		function funcDim2(dataValue:*, min2:Number, max2:Number, size2:Number):Number;
+		function funcDim3(dataValue:*, min3:Number, max3:Number, size3:Number):Number;		
 	}
 }
