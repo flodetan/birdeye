@@ -29,6 +29,7 @@
 {
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.interfaces.INumerableScale;
+	import birdeye.vis.interfaces.IProjection;
 	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.scales.MultiScale;
 	
@@ -47,6 +48,8 @@
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
 	import mx.core.IInvalidating;
+
+	[Exclude(name="projections", kind="property")]
 
 	[DefaultProperty("dataProvider")]
 	public class VisScene extends Surface
@@ -78,6 +81,29 @@
 		public function set transforms(val:Array):void
 		{
 			_transforms = val;
+			_projections = _layouts = [];
+			var p:uint = 0, l:uint = 0;
+			for (var i:Number = 0; i<_transforms.length; i++)
+				if (_transforms[i] is IProjection)
+					_projections[p++] = _transforms[i];
+				else 
+					_layouts[l++] = _transforms[i];
+		}
+
+		private var _projections:Array
+        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IProjection")]
+        [ArrayElementType("birdeye.vis.interfaces.IProjection")]
+		public function set projections(val:Array):void
+		{
+			_projections = val;
+		}
+
+		private var _layouts:Array
+        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IGraphLayout")]
+        [ArrayElementType("birdeye.vis.interfaces.IGraphLayout")]
+		public function set layouts(val:Array):void
+		{
+			_layouts = val;
 		}
 		
 		protected var _maxStacked100:Number = NaN;
