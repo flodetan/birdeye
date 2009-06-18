@@ -27,8 +27,10 @@
  
 package birdeye.vis.interfaces
 {
-	public interface ITransform
+	public interface IGraphLayout extends ITransform
 	{
-		// must be extended by specific interfaces (eg. IProjection, ILayout...) 
-	}
+/*        
+       function applyTo(node:IGraphLayoutableElement, edge:EdgeElem):void;
+        function getNodeItemPosition(itemIndex:int):Position;
+ */	}
 }
