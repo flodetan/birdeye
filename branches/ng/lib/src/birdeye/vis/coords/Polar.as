@@ -226,16 +226,6 @@ package birdeye.vis.coords
 				}
 			}
 
-			// init all axes, default and elements owned 
-			if (! axesFeeded)
-			{
-				resetAxes();
-				feedAxes();
-			}
-
-			if (!contains(labels))
-				addChild(labels);
-
 			if (_elements)
 			{
 				var _stackElements:Array = [];
@@ -300,20 +290,24 @@ package birdeye.vis.coords
 								j = sCursor.current[IElement(_stackElements[s]).dim1];
 
 								if (s>0 && k[j]>=0)
+								{
+									var maxCurrentD2:Number = getDimMaxValue(cursor.current, IElement(_stackElements[k[j]]).dim2);
 									allElementsBaseValues[s].baseValues[j] = 
 										allElementsBaseValues[k[j]].baseValues[j] + 
-										Math.max(0,sCursor.current[IElement(_stackElements[k[j]]).dim2]);
-								else 
+										Math.max(0,maxCurrentD2);
+								} else 
 									allElementsBaseValues[s].baseValues[j] = 0;
 
+								maxCurrentD2 = getDimMaxValue(cursor.current, IElement(_stackElements[s]).dim2);
+								
 								if (isNaN(_maxStacked100))
 									_maxStacked100 = 
 										allElementsBaseValues[s].baseValues[j] + 
-										Math.max(0,sCursor.current[IElement(_stackElements[s]).dim2]);
+										Math.max(0,maxCurrentD2);
 								else
 									_maxStacked100 = Math.max(_maxStacked100,
 										allElementsBaseValues[s].baseValues[j] + 
-										Math.max(0,sCursor.current[IElement(_stackElements[s]).dim2]));
+										Math.max(0,maxCurrentD2));
 
 								sCursor.moveNext();
 								k[j] = s;
@@ -338,20 +332,26 @@ package birdeye.vis.coords
 									j = cursor.current[IElement(_stackElements[s]).dim1];
 							
 									if (t[j]>=0)
+									{
+										maxCurrentD2 = getDimMaxValue(cursor.current, IElement(_stackElements[t[j]]).dim2, 
+																	IElement(_stackElements[t[j]]).collisionType == StackElement.STACKED100);
 										allElementsBaseValues[s].baseValues[j] = 
 											allElementsBaseValues[t[j]].baseValues[j] + 
-											Math.max(0,cursor.current[IElement(_stackElements[t[j]]).dim2]);
-									else 
+											Math.max(0,maxCurrentD2);
+									} else 
 										allElementsBaseValues[s].baseValues[j] = 0;
 									
+									maxCurrentD2 = getDimMaxValue(cursor.current, IElement(_stackElements[s]).dim2, 
+																IElement(_stackElements[s]).collisionType == StackElement.STACKED100);
+
 									if (isNaN(_maxStacked100))
 										_maxStacked100 = 
 											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,cursor.current[IElement(_stackElements[s]).dim2]);
+											Math.max(0,maxCurrentD2);
 									else
 										_maxStacked100 = Math.max(_maxStacked100,
 											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,cursor.current[IElement(_stackElements[s]).dim2]));
+											Math.max(0,maxCurrentD2));
 
 									t[j] = s;
 								}
@@ -388,6 +388,15 @@ package birdeye.vis.coords
 					}
 				}
 			}
+			// init all axes, default and elements owned 
+			if (! axesFeeded)
+			{
+				resetAxes();
+				feedAxes();
+			}
+
+			if (!contains(labels))
+				addChild(labels);
 		}
 		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
@@ -502,13 +511,15 @@ package birdeye.vis.coords
 									elementsMinMax[category] = {min: int.MAX_VALUE,
 																	 max: int.MIN_VALUE};
 								} 
+
+								var maxDim2:Number = getDimMaxValue(currentElement.cursor.current, currentElement.dim2, currentElement.collisionType == StackElement.STACKED100);
+								var minDim2:Number = getDimMinValue(currentElement.cursor.current, currentElement.dim2);
+									
 								elementsMinMax[category].min = 
-									Math.min(elementsMinMax[category].min, 
-										currentElement.cursor.current[currentElement.dim2]);
+									Math.min(elementsMinMax[category].min, minDim2);
 
 								elementsMinMax[category].max = 
-									Math.max(elementsMinMax[category].max, 
-										currentElement.cursor.current[currentElement.dim2]);
+									Math.max(elementsMinMax[category].max, maxDim2);
 								
 								currentElement.cursor.moveNext();
 							}
@@ -532,13 +543,15 @@ package birdeye.vis.coords
 										elementsMinMax[category] = {min: int.MAX_VALUE,
 																		 max: int.MIN_VALUE};
 									} 
+									
+									maxDim2 = getDimMaxValue(cursor.current, currentElement.dim2, currentElement.collisionType == StackElement.STACKED100);
+									minDim2 = getDimMinValue(cursor.current, currentElement.dim2);
+									
 									elementsMinMax[category].min = 
-										Math.min(elementsMinMax[category].min, 
-											cursor.current[currentElement.dim2]);
+										Math.min(elementsMinMax[category].min, minDim2);
 
 									elementsMinMax[category].max = 
-										Math.max(elementsMinMax[category].max, 
-											cursor.current[currentElement.dim2]);
+										Math.max(elementsMinMax[category].max, maxDim2);
 								}
 								cursor.moveNext();
 							}
@@ -788,6 +801,23 @@ package birdeye.vis.coords
 						element.maxColorValue;
 					element.colorScale.min =
 						element.minColorValue;
+				}
+
+				if (element.sizeScale && !element.sizeScale.dataValues)
+				{
+					if (isNaN(element.sizeScale.max))
+						element.sizeScale.max =
+							element.maxSizeValue;
+					else 
+						element.sizeScale.max =
+							Math.max(element.sizeScale.max, element.maxSizeValue);
+					
+					if (isNaN(element.sizeScale.min))
+						element.sizeScale.min =
+							element.minSizeValue;
+					else 
+						element.sizeScale.min =
+							Math.min(element.sizeScale.min, element.minSizeValue);
 				}
 			}
 		}

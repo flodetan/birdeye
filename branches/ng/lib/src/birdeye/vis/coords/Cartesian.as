@@ -329,41 +329,56 @@ package birdeye.vis.coords
 							{
 								if (IStack(_stackElements[s]).collisionScale == BaseElement.VERTICAL)
 								{
+									// TODO: if dim1 is an Array, than iterate through it
 									j = sCursor.current[IElement(_stackElements[s]).dim1];
 	
 									if (s>0 && k[j]>=0)
+									{
+										var maxCurrentD2:Number = getDimMaxValue(cursor.current, IElement(_stackElements[k[j]]).dim2,
+																			IElement(_stackElements[k[j]]).collisionType == StackElement.STACKED100);
 										allElementsBaseValues[s].baseValues[j] = 
 											allElementsBaseValues[k[j]].baseValues[j] + 
-											Math.max(0,sCursor.current[IElement(_stackElements[k[j]]).dim2]);
-									else 
+											Math.max(0,maxCurrentD2);
+									} else 
 										allElementsBaseValues[s].baseValues[j] = 0;
 	
+									maxCurrentD2 = getDimMaxValue(cursor.current, IElement(_stackElements[s]).dim2,
+																			IElement(_stackElements[s]).collisionType == StackElement.STACKED100);
+
 									if (isNaN(_maxStacked100))
 										_maxStacked100 = 
 											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,sCursor.current[IElement(_stackElements[s]).dim2]);
+											Math.max(0,maxCurrentD2);
 									else
 										_maxStacked100 = Math.max(_maxStacked100,
 											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,sCursor.current[IElement(_stackElements[s]).dim2]));
+											Math.max(0,maxCurrentD2));
 								} else if (IStack(_stackElements[s]).collisionScale == BaseElement.HORIZONTAL)
 								{
+									// TODO: if dim2 is an Array, than iterate through it
 									j = sCursor.current[IElement(_stackElements[s]).dim2];
 									if (s>0 && k[j]>=0)
+									{
+										var maxCurrentD1:Number = getDimMaxValue(cursor.current, IElement(_stackElements[k[j]]).dim1,
+																			IElement(_stackElements[k[j]]).collisionType == StackElement.STACKED100);
+
 										allElementsBaseValues[s].baseValues[j] = 
 											allElementsBaseValues[k[j]].baseValues[j] + 
 											Math.max(0,sCursor.current[IElement(_stackElements[k[j]]).dim1]);
-									else 
+									} else 
 										allElementsBaseValues[s].baseValues[j] = 0;
 	
+									maxCurrentD1 = getDimMaxValue(cursor.current, IElement(_stackElements[s]).dim1,
+													IElement(_stackElements[s]).collisionType == StackElement.STACKED100);
+
 									if (isNaN(_maxStacked100))
 										_maxStacked100 = 
 											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,sCursor.current[IElement(_stackElements[s]).dim1]);
+											Math.max(0,maxCurrentD1);
 									else
 										_maxStacked100 = Math.max(_maxStacked100,
 											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,sCursor.current[IElement(_stackElements[s]).dim1]));
+											Math.max(0,maxCurrentD1));
 								}
 
 								sCursor.moveNext();
@@ -387,41 +402,55 @@ package birdeye.vis.coords
 								{
 									if (IStack(_stackElements[s]).collisionScale == BaseElement.VERTICAL)
 									{
+										// TODO: if dim1 is an Array, than iterate through it
 										j = cursor.current[IElement(_stackElements[s]).dim1];
-								
+										
 										if (t[j]>=0)
+										{
+											maxCurrentD2 = getDimMaxValue(cursor.current, IElement(_stackElements[t[j]]).dim2,
+																	IElement(_stackElements[t[j]]).collisionType == StackElement.STACKED100);
 											allElementsBaseValues[s].baseValues[j] = 
 												allElementsBaseValues[t[j]].baseValues[j] + 
-												Math.max(0,cursor.current[IElement(_stackElements[t[j]]).dim2]);
-										else 
+												Math.max(0, maxCurrentD2);
+										} else 
 											allElementsBaseValues[s].baseValues[j] = 0;
 										
+										maxCurrentD2 = getDimMaxValue(cursor.current, IElement(_stackElements[s]).dim2,
+																	IElement(_stackElements[s]).collisionType == StackElement.STACKED100);
+
 										if (isNaN(_maxStacked100))
 											_maxStacked100 = 
 												allElementsBaseValues[s].baseValues[j] + 
-												Math.max(0,cursor.current[IElement(_stackElements[s]).dim2]);
+												Math.max(0, maxCurrentD2);
 										else
 											_maxStacked100 = Math.max(_maxStacked100,
 												allElementsBaseValues[s].baseValues[j] + 
-												Math.max(0,cursor.current[IElement(_stackElements[s]).dim2]));
+												Math.max(0, maxCurrentD2));
 									} else if (IStack(_stackElements[s]).collisionScale == BaseElement.HORIZONTAL)
 									{
+										// TODO: if dim2 is an Array, than iterate through it
 										j = cursor.current[IElement(_stackElements[s]).dim2];
 										if (s>0 && t[j]>=0)
+										{
+											maxCurrentD1 = getDimMaxValue(cursor.current, IElement(_stackElements[t[j]]).dim1,
+																		IElement(_stackElements[t[j]]).collisionType == StackElement.STACKED100);
 											allElementsBaseValues[s].baseValues[j] = 
 												allElementsBaseValues[t[j]].baseValues[j] + 
-												Math.max(0,cursor.current[IElement(_stackElements[t[j]]).dim1]);
-										else 
+												Math.max(0,maxCurrentD1);
+										} else 
 											allElementsBaseValues[s].baseValues[j] = 0;
+											
+										maxCurrentD1 = getDimMaxValue(cursor.current, IElement(_stackElements[s]).dim1,
+																	IElement(_stackElements[s]).collisionType == StackElement.STACKED100);
 		
 										if (isNaN(_maxStacked100))
 											_maxStacked100 = 
 												allElementsBaseValues[s].baseValues[j] + 
-												Math.max(0,cursor.current[IElement(_stackElements[s]).dim1]);
+												Math.max(0,maxCurrentD1);
 										else
 											_maxStacked100 = Math.max(_maxStacked100,
 												allElementsBaseValues[s].baseValues[j] + 
-												Math.max(0,cursor.current[IElement(_stackElements[s]).dim1]));
+												Math.max(0,maxCurrentD1));
 									}
 	
 									t[j] = s;
