@@ -54,7 +54,7 @@ package birdeye.vis.elements.geometry
 		{
 			return "column";
 		}
-
+		
 		public function ColumnElement()
 		{
 			super();
@@ -99,14 +99,16 @@ package birdeye.vis.elements.geometry
 				var ttXoffset:Number = NaN, ttYoffset:Number = NaN;
 				
 				var baseScale2:Number = getDim2MinPosition(scale2);
-				var size:Number, colWidth:Number = 0; 
+				var tmpSize:Number, colWidth:Number = 0; 
 				if (scale1)
 				{
 					if (scale1 is IEnumerableScale)
-						size = scale1.size/IEnumerableScale(scale1).dataProvider.length * deltaSize;
-					else if (scale1 is IEnumerableScale)
-						size = scale1.size / 
+						tmpSize = scale1.size/IEnumerableScale(scale1).dataProvider.length * deltaSize;
+					else if (scale1 is INumerableScale)
+						tmpSize = scale1.size / 
 								(INumerableScale(scale1).max - INumerableScale(scale1).min) * deltaSize;
+
+					var constTmpSize:Number = tmpSize;
 				}
 	
 				if (graphicsCollection.items && graphicsCollection.items.length>0)
@@ -141,13 +143,18 @@ package birdeye.vis.elements.geometry
 							arcSize = angleInterval;
 							break;
 					}
+					constTmpSize = arcSize;
 				}
 				cursor.seek(CursorBookmark.FIRST);
 				var tmpDim2:String;
+				var innerBase2:Number;
 				while (!cursor.afterLast)
 				{
 					var tmpArray:Array = (dim2 is Array) ? dim2 as Array : [String(dim2)];
 					
+					innerBase2 = 0;
+					j = cursor.current[dim1];
+
 					for (var i:Number = 0; i<tmpArray.length; i++)
 					{
 						tmpDim2 = tmpArray[i];
@@ -157,17 +164,16 @@ package birdeye.vis.elements.geometry
 							pos1 = scale1.getPosition(cursor.current[dim1]);
 						}
 						
-						j = cursor.current[dim1];
 						if (scale2)
 						{
 							
 							if (_stackType == STACKED100)
 							{
-								baseScale2 = scale2.getPosition(baseValues[j]);
+								baseScale2 = scale2.getPosition(baseValues[j] + innerBase2);
 								pos2 = scale2.getPosition(
-									baseValues[j] + Math.max(0,cursor.current[tmpDim2]));
+									baseValues[j] + Math.max(0,cursor.current[tmpDim2] + innerBase2));
 							} else {
-								pos2 = scale2.getPosition(cursor.current[tmpDim2]);
+								pos2 = scale2.getPosition(cursor.current[tmpDim2] + innerBase2);
 							}
 						}
 						
@@ -193,20 +199,38 @@ package birdeye.vis.elements.geometry
 							pos1 = chart.multiScale.scale1.getPosition(cursor.current[dim1]);
 							pos2 = INumerableScale(chart.multiScale.scales[
 												cursor.current[chart.multiScale.dim1]
-												]).getPosition(cursor.current[tmpDim2]);
+												]).getPosition(cursor.current[tmpDim2] + innerBase2);
 						}
 		
+						if (colorScale)
+						{
+							var col:* = colorScale.getPosition(cursor.current[colorField]);
+							if (col is Number)
+								fill = new SolidFill(col);
+							else if (col is IGraphicsFill)
+								fill = col;
+						} 
+		
+						if (sizeScale)
+						{
+							_size = sizeScale.getPosition(cursor.current[sizeField]);
+							if (chart.coordType == VisScene.CARTESIAN)
+								tmpSize = constTmpSize * _size;
+							else
+								arcSize = constTmpSize * _size;
+						}
+
 						if (chart.coordType == VisScene.CARTESIAN)
 						{
 							switch (_stackType)
 							{
 								case OVERLAID:
-									colWidth = size;
-									pos1 = pos1 - size/2;
+									colWidth = tmpSize;
+									pos1 = pos1 - tmpSize/2;
 									break;
 								case STACKED100:
-									colWidth = size;
-									pos1 = pos1 - size/2;
+									colWidth = tmpSize;
+									pos1 = pos1 - tmpSize/2;
 									ttShapes = [];
 									ttXoffset = -20;
 									ttYoffset = 55;
@@ -218,25 +242,38 @@ package birdeye.vis.elements.geometry
 									}
 									break;
 								case STACKED:
-									pos1 = pos1 + size/2 - size/_total * _stackPosition;
-									colWidth = size/_total;
+									pos1 = pos1 + tmpSize/2 - tmpSize/_total * _stackPosition;
+									colWidth = tmpSize/_total;
 									break;
 							}
 							
-							if (colorScale)
+							var innerColWidth:Number;
+							switch (_collisionType)
 							{
-								var col:* = colorScale.getPosition(cursor.current[colorField]);
-								if (col is Number)
-									fill = new SolidFill(col);
-								else if (col is IGraphicsFill)
-									fill = col;
-							} 
-		
-			 				var bounds:Rectangle = new Rectangle(pos1, pos2, colWidth, baseScale2 - pos2);
+								case OVERLAID:
+									innerColWidth = colWidth;
+									break;
+								case STACKED100:
+									innerColWidth = colWidth;
+									baseScale2 = scale2.getPosition(innerBase2);
+									innerBase2 += cursor.current[tmpDim2];
+									break;
+								case STACKED:
+									innerColWidth = colWidth/tmpArray.length;
+									pos1 = pos1 + innerColWidth * i;
+									if (ttShapes && ttShapes[0] is Line)
+									{
+						 				Line(ttShapes[0]).x = pos1 + innerColWidth/2;
+						 				Line(ttShapes[0]).x1 = pos1 + innerColWidth/2 + ttXoffset/3;
+									}
+									break;
+							}
+							
+			 				var bounds:Rectangle = new Rectangle(pos1, pos2, innerColWidth, baseScale2 - pos2);
 			
 							// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 							// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-							createTTGG(cursor.current, dataFields, pos1 + colWidth/2, pos2, scale2RelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
+							createTTGG(cursor.current, dataFields, pos1 + innerColWidth/2, pos2, scale2RelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
 			
 							if (dim3)
 							{
@@ -272,20 +309,51 @@ package birdeye.vis.elements.geometry
 							switch (_stackType) 
 							{
 								case STACKED:
-									startAngle = pos1 - angleInterval/2 +arcSize*_stackPosition;
+									startAngle = pos1 - angleInterval/2 + constTmpSize *_stackPosition;
 									break;
 								case OVERLAID:
 								case STACKED100:
 									startAngle = pos1 - angleInterval/2;
 									break;
 							}
+							
+							var innerAngleSize:Number;
+
+							switch (_collisionType)
+							{
+								case OVERLAID:
+									innerAngleSize = arcSize;
+									startAngle = startAngle;
+									break;
+								case STACKED100:
+									innerAngleSize = arcSize;
+									if (chart.multiScale)
+										baseScale2 = INumerableScale(chart.multiScale.scales[
+													cursor.current[chart.multiScale.dim1]
+													]).getPosition(innerBase2);
+									else if (scale2)
+										baseScale2 = scale2.getPosition(innerBase2);
+
+									innerBase2 += cursor.current[tmpDim2];
+									break;
+								case STACKED:
+									innerAngleSize = arcSize/tmpArray.length;
+									startAngle = startAngle + innerAngleSize * i;
+									if (ttShapes && ttShapes[0] is Line)
+									{
+						 				Line(ttShapes[0]).x = pos1 + innerAngleSize/2;
+						 				Line(ttShapes[0]).x1 = pos1 + innerAngleSize/2 + ttXoffset/3;
+									}
+									break;
+							}
+							
 							var wSize:Number, hSize:Number;
 							wSize = hSize = pos2*2;
 			
-							var xPos:Number = PolarCoordinateTransform.getX(startAngle+arcSize/2, pos2, chart.origin);
-							var yPos:Number = PolarCoordinateTransform.getY(startAngle+arcSize/2, pos2, chart.origin); 
+							var xPos:Number = PolarCoordinateTransform.getX(startAngle+innerAngleSize/2, pos2, chart.origin);
+							var yPos:Number = PolarCoordinateTransform.getY(startAngle+innerAngleSize/2, pos2, chart.origin); 
 		 	
-							createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _size);
+							createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _rendererSize);
 							
 							if (ttGG && _extendMouseEvents)
 								gg = ttGG;
@@ -293,7 +361,7 @@ package birdeye.vis.elements.geometry
 							var arc:IGeometry;
 							
 							arc = 
-								new ArcPath(baseScale2, pos2, startAngle, arcSize, chart.origin);
+								new ArcPath(baseScale2, pos2, startAngle, innerAngleSize, chart.origin);
 	//								new EllipticalArc(arcCenterX, arcCenterY, wSize, hSize, startAngle, arcSize, "pie");
 			
 							arc.fill = fill;

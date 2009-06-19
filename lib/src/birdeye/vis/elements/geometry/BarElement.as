@@ -116,114 +116,145 @@ package birdeye.vis.elements.geometry
 				ggIndex = 1;
 	
 				cursor.seek(CursorBookmark.FIRST);
-	
+				var tmpDim1:String;
+				var innerBase1:Number;
 				while (!cursor.afterLast)
 				{
-					if (scale2)
-					{
-						yPos = scale2.getPosition(cursor.current[dim2]);
-	
-						if (isNaN(size))
-	 						size = scale2.dataInterval*deltaSize;
-					} 
+					var tmpArray:Array = (dim1 is Array) ? dim1 as Array : [String(dim1)];
 					
+					innerBase1 = 0;
 					j = cursor.current[dim2];
-					if (scale1)
+
+					for (var i:Number = 0; i<tmpArray.length; i++)
 					{
-						if (_stackType == STACKED100)
+						tmpDim1 = tmpArray[i];
+						if (scale2)
 						{
-							x0 = scale1.getPosition(baseValues[j]);
-							xPos = scale1.getPosition(
-								baseValues[j] + Math.max(0,cursor.current[dim1]));
-						} else {
-							xPos = scale1.getPosition(cursor.current[dim1]);
+							yPos = scale2.getPosition(cursor.current[dim2]);
+		
+							if (isNaN(size))
+		 						size = scale2.dataInterval*deltaSize;
+						} 
+						
+						if (scale1)
+						{
+							if (_stackType == STACKED100)
+							{
+								x0 = scale1.getPosition(baseValues[j] + innerBase1);
+								xPos = scale1.getPosition(
+									baseValues[j] + Math.max(0,cursor.current[tmpDim1] + innerBase1));
+							} else {
+								xPos = scale1.getPosition(cursor.current[tmpDim1] + innerBase1);
+							}
+							dataFields[1] = dim1;
 						}
-						dataFields[1] = dim1;
-					}
-					
-					switch (_stackType)
-					{
-						case OVERLAID:
-							barWidth = size;
-							yPos = yPos - size/2;
-							break;
-						case STACKED100:
-							barWidth  = size;
-							yPos = yPos - size/2;
-							ttShapes = [];
-							ttXoffset = -20;
-							ttYoffset = 50;
-							var line:Line = new Line(xPos, yPos + barWidth/2, xPos + ttXoffset/3, yPos + barWidth/2 + ttYoffset);
-							line.stroke = stroke;
-			 				ttShapes[0] = line;
-							break;
-						case STACKED:
-							yPos = yPos + size/2 - size/_total * _stackPosition;
-							barWidth  = size/_total;
-							break;
-					}
-					
-					var bounds:Rectangle = new Rectangle(x0, yPos, xPos -x0, barWidth);
-	
-					var scale2RelativeValue:Number = NaN;
-	
-					// TODO: fix stacked100 on 3D
-					if (scale3)
-					{
-						zPos = scale3.getPosition(cursor.current[dim3]);
-						scale2RelativeValue = XYZ(scale3).height - zPos;
-					}
-	
-					if (colorScale)
-					{
-						var col:* = colorScale.getPosition(cursor.current[colorField]);
-						if (col is Number)
-							fill = new SolidFill(col);
-						else if (col is IGraphicsFill)
-							fill = col;
-					} 
-	
-					// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
-					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createTTGG(cursor.current, dataFields, xPos, yPos+barWidth/2, scale2RelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
-	
-					if (dim3)
-					{
-						if (!isNaN(zPos))
+						
+						switch (_stackType)
 						{
-							gg = new DataItemLayout();
-							gg.target = this;
-							graphicsCollection.addItem(gg);
-							ttGG.z = gg.z = zPos;
-						} else
-							zPos = 0;
+							case OVERLAID:
+								barWidth = size;
+								yPos = yPos - size/2;
+								break;
+							case STACKED100:
+								barWidth  = size;
+								yPos = yPos - size/2;
+								ttShapes = [];
+								ttXoffset = -20;
+								ttYoffset = 50;
+								var line:Line = new Line(xPos, yPos + barWidth/2, xPos + ttXoffset/3, yPos + barWidth/2 + ttYoffset);
+								line.stroke = stroke;
+				 				ttShapes[0] = line;
+								break;
+							case STACKED:
+								yPos = yPos + size/2 - size/_total * _stackPosition;
+								barWidth  = size/_total;
+								break;
+						}
+						
+						var innerBarWidth:Number;
+						switch (_collisionType)
+						{
+							case OVERLAID:
+								innerBarWidth = barWidth;
+								break;
+							case STACKED100:
+								innerBarWidth = barWidth;
+								x0 = scale2.getPosition(innerBase1);
+								innerBase1 += cursor.current[tmpDim1];
+								break;
+							case STACKED:
+								innerBarWidth = barWidth/tmpArray.length;
+								yPos = yPos + innerBarWidth * i;
+								if (ttShapes && ttShapes[0] is Line)
+								{
+/* 					 				Line(ttShapes[0]).x = pos1 + innerBarWidth/2;
+					 				Line(ttShapes[0]).x1 = pos1 + innerColWidth/2 + ttXoffset/3;
+ */								}
+								break;
+						}
+							
+						var bounds:Rectangle = new Rectangle(x0, yPos, xPos -x0, innerBarWidth);
+		
+						var scale2RelativeValue:Number = NaN;
+		
+						// TODO: fix stacked100 on 3D
+						if (scale3)
+						{
+							zPos = scale3.getPosition(cursor.current[dim3]);
+							scale2RelativeValue = XYZ(scale3).height - zPos;
+						}
+		
+						if (colorScale)
+						{
+							var col:* = colorScale.getPosition(cursor.current[colorField]);
+							if (col is Number)
+								fill = new SolidFill(col);
+							else if (col is IGraphicsFill)
+								fill = col;
+						} 
+		
+						// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
+						// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
+						createTTGG(cursor.current, dataFields, xPos, yPos+innerBarWidth/2, scale2RelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
+		
+						if (dim3)
+						{
+							if (!isNaN(zPos))
+							{
+								gg = new DataItemLayout();
+								gg.target = this;
+								graphicsCollection.addItem(gg);
+								ttGG.z = gg.z = zPos;
+							} else
+								zPos = 0;
+						}
+						
+						if (_extendMouseEvents)
+							gg = ttGG;
+		
+		 				if (_source)
+							poly = new RasterRenderer(bounds, _source);
+		 				else 
+							poly = new itemRenderer(bounds);
+		
+						if (_showItemRenderer)
+						{
+							var shape:IGeometry = new itemRenderer(bounds);
+							shape.fill = fill;
+							shape.stroke = stroke;
+							gg.geometryCollection.addItem(shape);
+						}
+		
+						poly.fill = fill;
+						poly.stroke = stroke;
+						gg.geometryCollection.addItemAt(poly,0);
+						cursor.moveNext();
 					}
-					
-					if (_extendMouseEvents)
-						gg = ttGG;
-	
-	 				if (_source)
-						poly = new RasterRenderer(bounds, _source);
-	 				else 
-						poly = new itemRenderer(bounds);
-	
-					if (_showItemRenderer)
-					{
-						var shape:IGeometry = new itemRenderer(bounds);
-						shape.fill = fill;
-						shape.stroke = stroke;
-						gg.geometryCollection.addItem(shape);
-					}
-	
-					poly.fill = fill;
-					poly.stroke = stroke;
-					gg.geometryCollection.addItemAt(poly,0);
-					cursor.moveNext();
+		
+					if (dim3)
+						zSort();
+					_invalidatedDisplay = false;
 				}
-	
-				if (dim3)
-					zSort();
-				_invalidatedDisplay = false;
 			}
 		}
 		

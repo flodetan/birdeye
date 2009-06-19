@@ -162,6 +162,15 @@ package birdeye.vis.elements.geometry
 						tmpDim1 = tmpArray[i];
 						angle = aAxis.getPosition(cursor.current[tmpDim1]);
 						
+						if (sizeScale)
+						{
+							if (sizeField is Array)
+								_size = sizeScale.getPosition(cursor.current[sizeField[i]]);
+							else
+								_size = sizeScale.getPosition(cursor.current[sizeField]);
+							tmpRadius = _innerRadius + radius/_total * chart.columnWidthRate * _size;
+						}
+
 						var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius, chart.origin);
 						var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius, chart.origin); 
 		
