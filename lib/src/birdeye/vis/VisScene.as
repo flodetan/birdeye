@@ -532,6 +532,51 @@
 			}
 		}
 
+		
+		protected function getDimMaxValue(item:Object, dims:Object, stacked:Boolean = false):Number
+		{
+			if (dims is String)
+				return item[dims];
+			else if (dims is Array)
+			{
+				var dimsA:Array = dims as Array;
+				var max:Number = NaN;
+				for (var i:Number = 0; i<dimsA.length; i++)
+				{ 
+					if (isNaN(max))
+						max = item[dimsA[i]];
+					else {
+						if (stacked)
+							max += item[dimsA[i]];
+						else
+							max = Math.max(max, item[dimsA[i]]);
+					}
+				}
+				return max;
+			}
+			return NaN;
+		}
+
+		protected function getDimMinValue(item:Object, dims:Object):Number
+		{
+			if (dims is String)
+				return item[dims];
+			else if (dims is Array)
+			{
+				var dimsA:Array = dims as Array;
+				var min:Number = NaN;
+				for (var i:Number = 0; i<dimsA.length; i++)
+				{ 
+					if (isNaN(min))
+						min = item[dimsA[i]];
+					else 
+						min = Math.min(min, item[dimsA[i]]);
+				}
+				return min;
+			}
+			return NaN;
+		}
+		
 		protected function removeDataItems():void
 		{
 			var i:int; 
