@@ -125,9 +125,15 @@ package birdeye.vis.elements.collision
 		override protected function getMaxValue(field:Object):Number
 		{
 			var max:Number = super.getMaxValue(field);
-			if (chart && stackType == STACKED100) 
-				max = Math.max(max, chart.maxStacked100);
 				
+			if (chart && stackType == STACKED100) 
+			{
+				if (collisionType == STACKED100)
+					max += Math.max(max, chart.maxStacked100);
+				else
+					max = Math.max(max, chart.maxStacked100);
+			}
+					
 			return max;
 		}
 	}
