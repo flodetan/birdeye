@@ -1070,7 +1070,7 @@ package birdeye.vis.elements
 				addChild(sortLayers[i][1]);
 		}
 
-		protected function createMouseHitArea(xPos:Number, yPos:Number, size:Number) {
+		protected function createMouseHitArea(xPos:Number, yPos:Number, size:Number):Circle {
 			var geom:Circle = new Circle(xPos, yPos, size); 
 			geom.fill = new SolidFill(0x000000, 0);
 			return geom;
