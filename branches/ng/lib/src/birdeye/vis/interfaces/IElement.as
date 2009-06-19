@@ -52,8 +52,12 @@ package birdeye.vis.interfaces
 		function get minColorValue():Number;
 
 		/** Set the sizeField to filter horizontal data values.*/
-		function set sizeField(val:String):void;
-		function get sizeField():String;
+		function set sizeField(val:Object):void;
+		function get sizeField():Object;
+
+		/** Set/get the collision type if the element includes several dimN.*/
+		function set collisionType(val:String):void;
+		function get collisionType():String;
 
 		/** Set the size axis.*/
 		function set sizeScale(val:INumerableScale):void;
@@ -61,9 +65,6 @@ package birdeye.vis.interfaces
 		function get maxSizeValue():Number;
 		function get minSizeValue():Number;
 
-		/** Remove all elements from the Element (Surface component).*/
-		function removeAllElements():void;
-		
 		/** Set the data provider of a cartesian Element, which must be a CartesianChart.*/
 		function set dataProvider(val:Object):void;
 		function get dataProvider():Object;
@@ -138,12 +139,14 @@ package birdeye.vis.interfaces
 
 		/** Implement drawElement.*/
 		function drawElement():void;
+
+		/** Remove all elements from the Element (Surface component).*/
+		function removeAllElements():void;
 		
 		function getDataItem(index:int):Object;
 
 		function getDataItems():Vector.<Object>;
 		
 		function getDataItemsCount():int;
-
 	}
 }
