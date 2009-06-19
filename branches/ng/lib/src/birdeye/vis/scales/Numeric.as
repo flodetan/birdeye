@@ -224,7 +224,7 @@ package birdeye.vis.scales
 			if (isNaN(maxLblSize) && !isNaN(min) && !isNaN(max) && placement)
 				maxLabelSize();
 
-			if (size > 0 && !isNaN(dataInterval) && showLabels && invalidated)
+			if (size > 0 && dataInterval>0 && showLabels && invalidated)
 			{	
 				invalidated = false;
 				// vertical orientation
