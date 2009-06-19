@@ -30,6 +30,7 @@ package birdeye.vis.elements
 	import birdeye.vis.VisScene;
 	import birdeye.vis.coords.Cartesian;
 	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.IEnumerableScale;
@@ -103,7 +104,7 @@ package birdeye.vis.elements
 		private var _filter1:*;
 		/** Implement filtering for data values on dim1. The filter can be a String an Array or a 
 		 * function.*/
-		public function set filter1(val:Array):void
+		public function set filter1(val:*):void
 		{
 			_filter1 = val;
 			invalidateDisplayList();
@@ -112,7 +113,7 @@ package birdeye.vis.elements
 		private var _filter2:*;
 		/** Implement filtering for data values on dim2. The filter can be a String an Array or a 
 		 * function.*/
-		public function set filter2(val:Array):void
+		public function set filter2(val:*):void
 		{
 			_filter2 = val;
 			invalidateDisplayList();
@@ -154,7 +155,7 @@ package birdeye.vis.elements
 			invalidatingDisplay();
 		}
 
-		protected var _rendererSize:Number = 10;
+		protected var _rendererSize:Number = 5;
 		public function set rendererSize(val:Number):void
 		{
 			_rendererSize = val;
@@ -389,13 +390,13 @@ package birdeye.vis.elements
 			return _minSizeValue;
 		}
 
-		private var _sizeField:String;
-		public function set sizeField(val:String):void
+		private var _sizeField:Object;
+		public function set sizeField(val:Object):void
 		{
 			_sizeField = val;
 			invalidatingDisplay();
 		}
-		public function get sizeField():String
+		public function get sizeField():Object
 		{
 			return _sizeField;
 		}
@@ -421,6 +422,19 @@ package birdeye.vis.elements
 		public function get multiScale():MultiScale
 		{
 			return _multiScale;
+		}
+
+		protected var _collisionType:String = StackElement.OVERLAID;
+		/** Define the type of collisions in case the dimN involves more than one data.*/
+		[Inspectable(enumeration="overlaid,stacked,stacked100")]
+		public function set collisionType(val:String):void
+		{
+			_collisionType = val;
+			invalidateDisplayList();
+		}
+		public function get collisionType():String
+		{
+			return _collisionType;
 		}
 
 		protected var gg:DataItemLayout;
@@ -704,6 +718,36 @@ package birdeye.vis.elements
 			return _mouseClickFunction;
 		}
 		
+		private var _mouseOverFunction:Function;
+		/** Set the function that should be used when a mouse over event is triggered.
+		 * This function must accept an DataItemLayout as input value.
+		 * The DataItemLayout object contains all information about the data value
+		 * that has been clicked, particularly, its x-y-z coordinates, its data item, 
+		 * it's positioning over the axes, its fills and strokes....*/
+		public function set mouseOverFunction(val:Function):void
+		{
+			_mouseOverFunction = val;
+		}
+		public function get mouseOverFunction():Function
+		{
+			return _mouseOverFunction ;
+		}
+		
+		private var _mouseOutFunction:Function;
+		/** Set the function that should be used when a roll out event is triggered.
+		 * This function must accept an DataItemLayout as input value.
+		 * The DataItemLayout object contains all information about the data value
+		 * that has been clicked, particularly, its x-y-z coordinates, its data item, 
+		 * it's positioning over the axes, its fills and strokes....*/
+		public function set mouseOutFunction(val:Function):void
+		{
+			_mouseOutFunction = val;
+		}
+		public function get mouseOutFunction():Function
+		{
+			return _mouseOutFunction ;
+		}
+
 		private var _displayName:String;
 		/** Set the display name to be used for the legend.*/
 		public function set displayName(val:String):void
@@ -964,7 +1008,10 @@ package birdeye.vis.elements
 			{
 				IScaleUI(scale3).pointerY = extGG.posZ;
 				IScaleUI(scale3).pointer.visible = true;
-			} 
+			}
+			
+			if (_mouseOverFunction != null)
+				_mouseOverFunction(extGG);
 		}
 
 		/**
@@ -992,6 +1039,9 @@ package birdeye.vis.elements
 
 			if (scale3 && scale3 is IScaleUI && IScaleUI(scale3).pointer)
 				IScaleUI(scale3).pointer.visible = false;
+
+			if (_mouseOutFunction != null)
+				_mouseOutFunction(extGG);
 		}
 
 		/** @Private
@@ -1169,6 +1219,69 @@ package birdeye.vis.elements
 		{
 			var min:Number = NaN;
 
+			if (field is Array)
+			{
+				var dims:Array = field as Array
+				for (var i:Number = 0; i< dims.length; i++)
+				{
+					var tmpMin:Number = getMinV(dims[i]);
+					if (isNaN(min))
+						min = tmpMin;
+					else 
+						min = Math.min(min, tmpMin);
+				}
+			} else 
+				min = getMinV(String(field));
+
+			return min;
+		}
+
+		protected function getMaxValue(field:Object):Number
+		{
+			var max:Number = NaN;
+			if (field is Array)
+			{
+				var dims:Array = field as Array
+				for (var i:Number = 0; i< dims.length; i++)
+				{
+					var tmpMax:Number = getMaxV(dims[i]);
+					if (isNaN(max))
+						max = tmpMax;
+					else {
+						if (collisionType == StackElement.STACKED100)
+							max += Math.max(0,tmpMax);
+						else 
+							max = Math.max(max, tmpMax);
+					}
+				}
+			} else 
+				max = getMaxV(String(field));
+
+			return max;
+		}
+		
+		private function getMaxV(field:String):Number
+		{
+			var max:Number = NaN;
+			if (cursor && field)
+			{
+				_cursor.seek(CursorBookmark.FIRST);
+				while (!_cursor.afterLast)
+				{
+					currentValue = _cursor.current[field];
+					if (isNaN(max) || max < currentValue)
+						max = currentValue;
+					
+					_cursor.moveNext();
+				}
+			}
+			return max
+		}
+
+		private function getMinV(field:String):Number
+		{
+			var min:Number = NaN;
+
 			if (cursor && field)
 			{
 				_cursor.seek(CursorBookmark.FIRST);
@@ -1182,25 +1295,6 @@ package birdeye.vis.elements
 				}
 			}
 			return min;
-		}
-
-		protected function getMaxValue(field:Object):Number
-		{
-			var max:Number = NaN;
-
-			if (cursor && field)
-			{
-				_cursor.seek(CursorBookmark.FIRST);
-				while (!_cursor.afterLast)
-				{
-					currentValue = _cursor.current[field];
-					if (isNaN(max) || max < currentValue)
-						max = currentValue;
-					
-					_cursor.moveNext();
-				}
-			}
-			return max;
 		}
 
 		/** Remove all graphic elements of the series.*/
