@@ -83,13 +83,20 @@
 		public function set transforms(val:Array):void
 		{
 			var _transforms:Array = val;
-			_projections = graphLayouts = [];
 			var p:uint = 0, l:uint = 0;
 			for (var i:Number = 0; i<_transforms.length; i++)
+			{
 				if (_transforms[i] is IProjection)
+				{
+					if (!_projections)
+						_projections = [];
 					_projections[p++] = _transforms[i];
-				else if (_transforms[i] is IGraphLayout)
+				} else if (_transforms[i] is IGraphLayout) {
+					if (!_graphLayouts)
+						_graphLayouts = [];
 					_graphLayouts[l++] = _transforms[i];
+				}
+			}
 		}
 
 		private var _projections:Array;
