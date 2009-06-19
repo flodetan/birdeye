@@ -541,6 +541,13 @@ package birdeye.vis.elements
 			_size = val;
 			invalidatingDisplay();
 		}
+
+		protected var _hitAreaSize:Number = 5;
+		public function set hitAreaSize(val:Number):void
+		{
+			_hitAreaSize = val;
+			invalidatingDisplay();
+		}
 		
 		private var _randomColors:Boolean = false;
 		[Inspectable(enumeration="true,false")]
@@ -1089,7 +1096,7 @@ package birdeye.vis.elements
 			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 
-			ttGG.geometryCollection.addItem(createMouseHitArea(xPos, yPos, _size));
+			ttGG.geometryCollection.addItem(createMouseHitArea(xPos, yPos, _hitAreaSize));
 			
  			if (chart.showDataTips || chart.showAllDataTips)
 			{ 
