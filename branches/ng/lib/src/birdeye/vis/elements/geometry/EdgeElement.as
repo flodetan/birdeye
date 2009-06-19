@@ -111,7 +111,7 @@
 			var itemIndex:int = 0;
 			var collItemIndex:int = 0;
 						
-			forEachDataItem(function(data:Object, itemIndex:int) {
+			forEachDataItem(function(data:Object, itemIndex:int):void {
 				var pos1:Number = NaN, pos2:Number = NaN, pos3:Number = NaN;
 
 				const start:Position = _layout.getNodeItemPosition(_node.getItemIndexById(data[_dimStart]));
