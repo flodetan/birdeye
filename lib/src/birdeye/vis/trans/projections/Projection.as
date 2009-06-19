@@ -27,13 +27,11 @@
  
 package birdeye.vis.trans.projections
 {
+	import birdeye.vis.interfaces.IProjection;
 	import birdeye.vis.interfaces.IScaleUI;
-	import birdeye.vis.interfaces.ITransform;
-	import birdeye.vis.scales.BaseScale;
-	import birdeye.vis.scales.Numeric;
 	
 	//This class calculates latitude & longitude from x & y. And vice versa
-	public class Projection implements ITransform
+	public class Projection implements IProjection
 	{
 
 		private var _proj:String;
