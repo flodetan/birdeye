@@ -179,7 +179,7 @@ package birdeye.vis.elements.geometry
 								break;
 							case STACKED100:
 								innerBarWidth = barWidth;
-								x0 = scale2.getPosition(innerBase1);
+								x0 = scale1.getPosition(innerBase1);
 								innerBase1 += cursor.current[tmpDim1];
 								break;
 							case STACKED:
@@ -187,9 +187,9 @@ package birdeye.vis.elements.geometry
 								yPos = yPos + innerBarWidth * i;
 								if (ttShapes && ttShapes[0] is Line)
 								{
-/* 					 				Line(ttShapes[0]).x = pos1 + innerBarWidth/2;
-					 				Line(ttShapes[0]).x1 = pos1 + innerColWidth/2 + ttXoffset/3;
- */								}
+ 					 				Line(ttShapes[0]).y = yPos + innerBarWidth/2;
+					 				Line(ttShapes[0]).y1 = yPos + innerBarWidth/2 + ttYoffset;
+ 								}
 								break;
 						}
 							
