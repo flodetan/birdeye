@@ -248,9 +248,10 @@ package birdeye.vis.elements.geometry
 						poly.fill = fill;
 						poly.stroke = stroke;
 						gg.geometryCollection.addItemAt(poly,0);
-						cursor.moveNext();
 					}
 		
+					cursor.moveNext();
+
 					if (dim3)
 						zSort();
 					_invalidatedDisplay = false;
