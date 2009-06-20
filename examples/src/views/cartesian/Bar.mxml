@@ -45,7 +45,7 @@
 	</mx:Script>
 	<mx:Button label="Generate" click="createDT()"/>
 	<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
-	<coords:Cartesian id="bc2" width="90%" height="90%" dataProvider="{dt}" showDataTips="true" type="stacked100">
+	<coords:Cartesian id="bc2" width="90%" height="90%" dataProvider="{dt}" showDataTips="true" type="stacked">
 		<coords:scales>
 	    		<scales:Category id="c" categoryField="subject" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 	    		<scales:Linear id="l" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
@@ -55,6 +55,7 @@
 		 	<elements:BarElement scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="R2" styleName="grad2" dim2="subject" displayName="R2" />
 		 	<elements:BarElement scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="R3" styleName="grad3" dim2="subject" displayName="R3" />
 		 	<elements:BarElement scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="R4" styleName="grad4" dim2="subject" displayName="R4" />
+		 	<elements:BarElement scale1="{l}" scale2="{c}" extendMouseEvents="true" collisionType="stacked100" dim1="['R1','R4','R2']" styleName="grad5" dim2="subject" displayName="R4" />
 		 </coords:elements>
 	</coords:Cartesian>
 	<guides:Legend dataProvider="{bc2}" direction="horizontal" />	
