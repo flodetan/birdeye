@@ -92,6 +92,10 @@ package birdeye.vis.elements.geometry
 			}));
 		}
 
+		public function getItemPosition(id:Object):Position {
+			return _layout.getNodeItemPosition(getItemIndexById(id));
+		}
+		
 		protected function createItemRenderer(bounds:Rectangle):IGeometry {
 			var renderer:IGeometry;
  			if (_source)

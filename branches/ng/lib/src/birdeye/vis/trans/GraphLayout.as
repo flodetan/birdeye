@@ -59,7 +59,6 @@ package birdeye.vis.trans
 		protected var _edge:EdgeElement;
 		public function set applyToEdge(val:EdgeElement):void {
 			_edge = val;
-			_edge.graphLayout = this;
 		}
 
 		private var nodeItemPositions:Array = [];
