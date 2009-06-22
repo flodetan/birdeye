@@ -25,6 +25,7 @@
  * THE SOFTWARE.
  */
  package birdeye.vis.interfaces {
+ 	import birdeye.vis.elements.Position;
 
 	public interface IGraphLayoutableElement extends IElement {
 		
@@ -32,7 +33,7 @@
 
 		function get graphLayout():IGraphLayout;
 		
-		function getItemIndexById(id:Object):int;
+		function getItemPosition(id:Object):Position;
 
 	}
 }

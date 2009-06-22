@@ -43,16 +43,6 @@
 			super();
 		}
 
-		private var _layout:IGraphLayout;
-
-		public function set graphLayout(val:IGraphLayout):void {
-			_layout = val;
-		}
-
-		public function get graphLayout():IGraphLayout {
-			return _layout;
-		}
-
 		private var _dimStart:String;
 		
 		public function set dimStart(val:String):void
@@ -114,8 +104,8 @@
 			forEachDataItem(function(data:Object, itemIndex:int):void {
 				var pos1:Number = NaN, pos2:Number = NaN, pos3:Number = NaN;
 
-				const start:Position = _layout.getNodeItemPosition(_node.getItemIndexById(data[_dimStart]));
-				const end:Position = _layout.getNodeItemPosition(_node.getItemIndexById(data[_dimEnd]));
+				const start:Position = _node.getItemPosition(data[_dimStart]);
+				const end:Position = _node.getItemPosition(data[_dimEnd]);
 				
 				if (start  &&  end) {
 					getGeometryCollection().addItemAt(
