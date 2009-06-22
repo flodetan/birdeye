@@ -29,8 +29,7 @@
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.guides.renderers.LineRenderer;
-	import birdeye.vis.interfaces.IGraphLayout;
-	import birdeye.vis.interfaces.IGraphLayoutableElement;
+	import birdeye.vis.interfaces.IPositionableElement;
 	
 	import com.degrafa.IGeometry;
 	
@@ -71,8 +70,9 @@
 			return _dimEnd;
 		}
 
-		private var _node:IGraphLayoutableElement;
-		public function set node(val:IGraphLayoutableElement):void {
+		private var _node:IPositionableElement;
+
+		public function set node(val:IPositionableElement):void {
 			_node = val;
 			invalidateProperties();
 			invalidateDisplayList();
