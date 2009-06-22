@@ -1447,7 +1447,7 @@ package birdeye.vis.elements
 		}
 
 		public function getDataItemsCount():int {
-			if (!_cursor) return undefined;
+			if (!_cursor) return null;
 			var count:int = 0;
 			_cursor.seek(CursorBookmark.FIRST);
 			while (!_cursor.afterLast) {
@@ -1458,13 +1458,13 @@ package birdeye.vis.elements
 		}
 		
 		public function getDataItem(index:int):Object {
-			if (!_cursor) return undefined;
+			if (!_cursor) return null;
 			_cursor.seek(CursorBookmark.FIRST, index);
 			return _cursor.current;
 		}
 		
 		public function getDataItems():Vector.<Object> {
-			if (!_cursor) return undefined;
+			if (!_cursor) return null;
 			var data:Vector.<Object> = new Vector.<Object>();
 			_cursor.seek(CursorBookmark.FIRST);
 			while (!_cursor.afterLast) {
@@ -1490,7 +1490,7 @@ package birdeye.vis.elements
 		 * Then stops iteration and returns this value. 
 		 **/
 		public function findDataItem(callback:Function):Object {
-			if (!_cursor) return undefined;
+			if (!_cursor) return null;
 			_cursor.seek(CursorBookmark.FIRST);
 			var itemIndex:int = 0;
 			var retVal;
@@ -1501,7 +1501,7 @@ package birdeye.vis.elements
 				}
 				_cursor.moveNext();
 			}
-			return undefined;
+			return null;
 		}
 	}
 }
