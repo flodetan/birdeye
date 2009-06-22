@@ -24,14 +24,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- package birdeye.vis.interfaces {
- 	import birdeye.vis.elements.Position;
-
-	public interface IGraphLayoutableElement extends IPositionableElement {
+package birdeye.vis.interfaces
+{
+	import birdeye.vis.elements.Position;
+	
+	public interface IPositionableElement extends IElement {
 		
-		function set graphLayout(layout:IGraphLayout):void;
-
-		function get graphLayout():IGraphLayout;
-
+		function getItemPosition(id:Object):Position;
+		
 	}
 }
