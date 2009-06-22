@@ -861,6 +861,11 @@ package birdeye.vis.elements
 
 		// other methods
 
+		/**
+		* @Private 
+		 * Triggered when a value is assigned to the UIComponent tooltip (String), 
+		 * and the event target is the tooltip created during the assignement.
+		 * Here we can change the created tooltip with a custom one.*/
 		private function onTTCreate(e:ToolTipEvent):void
 		{
 			e.toolTip = myTT;
@@ -981,11 +986,13 @@ package birdeye.vis.elements
 			return globalCheck && axesCheck && colorsCheck;
 		}
 
+
+		/** @Private 
+		 * Custom tooltip variable.*/
+		protected var myTT:IToolTip;
 		/**
 		* @private 
-		 * Show and position tooltip
-		 * 
-		*/
+		 * Show/position tooltip and handle custom mouse over function.*/
 		protected function handleRollOver(e:MouseEvent):void 
 		{
 			var extGG:DataItemLayout = DataItemLayout(e.target);
@@ -1411,45 +1418,6 @@ package birdeye.vis.elements
 			}
 		}
 
-		/** @Private 
-		 * Custom tooltip variable.*/
-		protected var myTT:IToolTip;
-		/**
-		* @private 
-		 * Show and position tooltip.*/
-/* 		protected function handleRollOver(e:MouseEvent):void 
-		{
-			// override
-			// depends on chart type (polar, cartesian,..)
-		}
- */
-		/**
-		* @private 
-		 * Destroy/hide tooltip 
-		 * 
-		*/
-/* 		protected function handleRollOut(e:MouseEvent):void
-		{ 
-			var extGG:DataItemLayout = 	DataItemLayout(e.target);
-			extGG.hideToolTip();
-			if (!_showAllDataItems)
-				extGG.hideToolTipGeometry();
-			myTT = null;
-			toolTip = null;
- 			if (ToolTipManager.currentToolTip)
-				ToolTipManager.currentToolTip = null;
- 		}
- */
-		/**
-		* @Private 
-		 * Triggered when a value is assigned to the UIComponent tooltip (String), 
-		 * and the event target is the tooltip created during the assignement.
-		 * Here you we can change the created tooltip with a custom one.*/
-/* 		private function onTTCreate(e:ToolTipEvent):void
-		{
-			e.toolTip = myTT;
-		}
- */		
 		public function getFill():IGraphicsFill
 		{
 			return fill;
