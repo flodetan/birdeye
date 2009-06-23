@@ -65,7 +65,7 @@ package birdeye.vis.elements.geometry
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
 		override public function drawElement():void
 		{
-			if (isReadyForLayout())
+			if (isReadyForLayout() && _invalidatedDisplay)
 			{
 				super.drawElement();
 				removeAllElements();
