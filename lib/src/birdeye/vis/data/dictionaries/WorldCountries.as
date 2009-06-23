@@ -56,7 +56,7 @@ package birdeye.vis.data.dictionaries
 		private var arrSouthEasternAsia:Array=["MMR","THA","LAO","KHM","VNM","MYS","IDN","PHL"];
 		private var arrWesternAsia:Array=["TUR","IRQ","SYR","LBN","ISR","JOR","SAU","OMN","YEM","ARE","QAT","KWT","CYP"];
 		
-		private var dicCountriesNames:Dictionary= new Dictionary();
+		private var dicCountriesNames:Array = new Array();
 		private var longLatPolygons:Array= new Array();
 		private var longLatBaryCenters:Array= new Array();
 		
@@ -1056,6 +1056,14 @@ package birdeye.vis.data.dictionaries
       		return longLatPolygons[countryKey];
     	}
 
+		public function getCountryPolygonByName(countryName:String):Array {
+			var countryPrefix:String = getCountryPrefixFromName(countryName);
+			
+			if (countryPrefix)
+				return longLatPolygons[countryPrefix];
+			return null;
+    	}
+
 		public function getCountryCenter(countryKey:String):Array {
       		return longLatBaryCenters[countryKey];
     	}
@@ -1104,6 +1112,15 @@ package birdeye.vis.data.dictionaries
       		return arrRet;
     	}
     	
-    	
+    	public function getCountryPrefixFromName(name:String):String
+    	{
+    		for (var i:Number = 0; i<arrWorld.length; i++)
+    		{
+    			if (dicCountriesNames[arrWorld[i]] == name)
+    				 return arrWorld[i];
+    		}
+    			
+    		return null;
+    	} 
 	}
 }
