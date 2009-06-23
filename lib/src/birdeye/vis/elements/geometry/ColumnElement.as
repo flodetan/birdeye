@@ -80,7 +80,7 @@ package birdeye.vis.elements.geometry
 		{
 //			var renderer:ISeriesDataRenderer = new itemRenderer();
 			
-			if (isReadyForLayout())
+			if (isReadyForLayout() && _invalidatedDisplay)
 			{
 				super.drawElement();
 				removeAllElements();

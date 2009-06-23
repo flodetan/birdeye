@@ -879,6 +879,8 @@ package birdeye.vis.elements
 
 		public function drawElement():void
 		{
+			_invalidatedDisplay = false;
+			
 			if (stylesChanged)
 			{
 				// Redraw gradient fill only if style changed.

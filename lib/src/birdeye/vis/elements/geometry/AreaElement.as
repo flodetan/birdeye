@@ -43,6 +43,7 @@ package birdeye.vis.elements.geometry
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
+	import flash.utils.getTimer;
 	
 	import mx.collections.CursorBookmark;
 
@@ -108,8 +109,9 @@ package birdeye.vis.elements.geometry
 		 * Called by super.updateDisplayList when the element is ready for layout.*/
 		override public function drawElement():void
 		{
-			if (isReadyForLayout())
+			if (isReadyForLayout() && _invalidatedDisplay)
 			{
+var start:Number = getTimer();
 				super.drawElement();
 				removeAllElements();
 				if (bzSplines)
@@ -326,6 +328,9 @@ package birdeye.vis.elements.geometry
 				if (dim3)
 					zSort();
 				_invalidatedDisplay = false;
+				
+var end:Number = getTimer();
+trace (start, end, end-start)
 			}
 		}
 		
