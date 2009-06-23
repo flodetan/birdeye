@@ -104,8 +104,8 @@ package birdeye.vis.scales
 					height = _size;
 					break;
 			}
-			invalidated = true;
-			invalidateDisplayList();
+
+			invalidateisplayList();
 
 		}
 		/** @Private
