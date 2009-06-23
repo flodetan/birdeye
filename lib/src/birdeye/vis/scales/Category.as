@@ -136,24 +136,32 @@
 		 * width (for y axes) or height (for x axes) of the CategoryAxis.*/
 		override protected function maxLabelSize():void
 		{
+			var tmp:RasterTextPlus = new RasterTextPlus();
+ 			tmp.fontFamily = "verdana";
+ 			tmp.fontSize = sizeLabel;
+			tmp.autoSize = TextFieldAutoSize.LEFT;
+			tmp.autoSizeField = true;
+
+			maxLblSize = 0;
+			for (var i:Number = 0; i<_dataProvider.length; i++)
+			{
+				tmp.text = String(_dataProvider[i]);
+				maxLblSize = Math.max(maxLblSize, tmp.displayObject.width); 
+			}
+
 			switch (placement)
 			{
 				case TOP:
 				case BOTTOM:
 				case HORIZONTAL_CENTER:
-					maxLblSize = 10 /* pixels for 1 char height */  + thickWidth + 10;
-					height = maxLblSize;
+					height = Math.max(5, maxLblSize * Math.sin(-_rotateLabels));
 					break;
 				case LEFT:
 				case RIGHT:
 				case DIAGONAL:
 				case VERTICAL_CENTER:
-					maxLblSize = String(_dataProvider[0]).length;
-					for (var i:Number = 0; i<_dataProvider.length; i++)
-						maxLblSize = Math.max(maxLblSize, String(_dataProvider[i]).length); 
 
-					maxLblSize = maxLblSize * 5 /* pixels for 1 char width */ + thickWidth + 10;
-					width = maxLblSize;
+					width = Math.max(5, maxLblSize * Math.cos(_rotateLabels));
 					break;
 			}
 			
