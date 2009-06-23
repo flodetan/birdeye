@@ -105,7 +105,7 @@ package birdeye.vis.scales
 					break;
 			}
 
-			invalidateisplayList();
+			invalidateDisplayList();
 
 		}
 		/** @Private
