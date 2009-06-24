@@ -55,12 +55,13 @@
 		<mx:Button label="Generate" click="generateData()"/>
 
     	<coords:Cartesian id="graph" width="100%" height="100%">
-			<!-- 
+			<!--
 			<coords:scales>
 	 			<scales:Linear id="X" showAxis="false" placement="bottom" />
 	 			<scales:Linear id="Y" showAxis="false" placement="left" />
 			</coords:scales>
 			-->
+			
 			<coords:elements>
 				<!-- <elements:NodeElement scale1="{X}" scale2="{Y}" dim1="x" dim2="y" /> -->
 				
@@ -72,7 +73,7 @@
 
 			</coords:elements>
 			<coords:transforms>
-				<trans:GraphLayout id="SC" applyToNode="{node}" applyToEdge="{edge}" type="single-cycle"
+				<trans:SingleCycleGraphLayout id="SC" applyToNode="{node}" applyToEdge="{edge}"
 								   viewportWidth="300" viewportHeight="200"/>
 			</coords:transforms>
     	</coords:Cartesian>

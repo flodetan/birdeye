@@ -32,21 +32,12 @@ package birdeye.vis.trans
 	import birdeye.vis.interfaces.IGraphLayout;
 	import birdeye.vis.interfaces.IGraphLayoutableElement;
 	
-	public class GraphLayout implements IGraphLayout {
+	/**
+	 * This is an abstract class which mustn't be instantiated.
+	 **/
+	public class BaseGraphLayout implements IGraphLayout {
 
-		public static const SINGLE_CYCLE:String = "single-cycle";
-		public static const CONCENTRIC:String = "concentric";
-		public static const FORCE:String = "force";
-		public static const HYPERBOLIC:String = "hyperbolic";
-		
-		protected var _type:String;
-
-		[Inspectable(defaultValue = "single-cycle", enumeration = "single-cycle,concentric,force,hyperbolic")]
-		public function set type(val:String):void {
-			_type = val;
-		}
-
-		public function GraphLayout() {
+		public function BaseGraphLayout() {
 			
 		}
 		
@@ -93,25 +84,9 @@ package birdeye.vis.trans
 			_viewportHeight = height;
 		}
 		
-		public function apply():void {
-
-		    const numItems = _node.getDataItemsCount();
-		
-			switch (_type) {
-				case SINGLE_CYCLE:
-					const mx:Number = Math.min(viewportWidth, viewportHeight), my:int = 200, r:int = 140;
-					for (var i:int = 0; i < numItems; i++) {
-						setItemPosition(i, 
-							mx + Math.cos(2 * Math.PI * i / numItems) * r, 
-							my - Math.sin(2 * Math.PI * i / numItems) * r, NaN);
-					}
-				break;
-				
-				case CONCENTRIC:
-				
-				break;
-			}
-		}
-
+		/**
+		 * This is an abstract method which must be implemented by subclasses.
+		 **/
+		public function apply():void { }
 	}
 }
