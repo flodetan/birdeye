@@ -76,7 +76,7 @@ package birdeye.vis.elements.geometry
 		 * Called by super.updateDisplayList when the element is ready for layout.*/
 		override public function drawElement():void
 		{
-			if (isReadyForLayout() && _invalidatedDisplay)
+			if (isReadyForLayout() && _invalidatedElementGraphic)
 			{
 				super.drawElement();
 				removeAllElements();
@@ -105,32 +105,36 @@ package birdeye.vis.elements.geometry
 								(INumerableScale(scale1).max - INumerableScale(scale2).min) * deltaSize;
 				} 
 	
-				if (graphicsCollection.items && graphicsCollection.items.length>0)
-					gg = graphicsCollection.items[0];
-				else
-				{
-					gg = new DataItemLayout();
-					graphicsCollection.addItem(gg);
-				}
-				gg.target = this;
-				ggIndex = 1;
+				ggIndex = 0;
 	
-				cursor.seek(CursorBookmark.FIRST);
 				var tmpDim1:String;
 				var innerBase1:Number;
-				while (!cursor.afterLast)
+
+				for (var cursorIndex:uint = 0; cursorIndex<_cursorVector.length; cursorIndex++)
 				{
+	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
+						gg = graphicsCollection.items[ggIndex];
+					else
+					{
+						gg = new DataItemLayout();
+						graphicsCollection.addItem(gg);
+					}
+					gg.target = this;
+					ggIndex++;
+
+					var currentItem:Object = _cursorVector[cursorIndex];
+					
 					var tmpArray:Array = (dim1 is Array) ? dim1 as Array : [String(dim1)];
 					
 					innerBase1 = 0;
-					j = cursor.current[dim2];
+					j = currentItem[dim2];
 
 					for (var i:Number = 0; i<tmpArray.length; i++)
 					{
 						tmpDim1 = tmpArray[i];
 						if (scale2)
 						{
-							yPos = scale2.getPosition(cursor.current[dim2]);
+							yPos = scale2.getPosition(currentItem[dim2]);
 		
 							if (isNaN(size))
 		 						size = scale2.dataInterval*deltaSize;
@@ -142,9 +146,9 @@ package birdeye.vis.elements.geometry
 							{
 								x0 = scale1.getPosition(baseValues[j] + innerBase1);
 								xPos = scale1.getPosition(
-									baseValues[j] + Math.max(0,cursor.current[tmpDim1] + innerBase1));
+									baseValues[j] + Math.max(0,currentItem[tmpDim1] + innerBase1));
 							} else {
-								xPos = scale1.getPosition(cursor.current[tmpDim1] + innerBase1);
+								xPos = scale1.getPosition(currentItem[tmpDim1] + innerBase1);
 							}
 							dataFields[1] = dim1;
 						}
@@ -180,7 +184,7 @@ package birdeye.vis.elements.geometry
 							case STACKED100:
 								innerBarWidth = barWidth;
 								x0 = scale1.getPosition(innerBase1);
-								innerBase1 += cursor.current[tmpDim1];
+								innerBase1 += currentItem[tmpDim1];
 								break;
 							case STACKED:
 								innerBarWidth = barWidth/tmpArray.length;
@@ -200,13 +204,13 @@ package birdeye.vis.elements.geometry
 						// TODO: fix stacked100 on 3D
 						if (scale3)
 						{
-							zPos = scale3.getPosition(cursor.current[dim3]);
+							zPos = scale3.getPosition(currentItem[dim3]);
 							scale2RelativeValue = XYZ(scale3).height - zPos;
 						}
 		
 						if (colorScale)
 						{
-							var col:* = colorScale.getPosition(cursor.current[colorField]);
+							var col:* = colorScale.getPosition(currentItem[colorField]);
 							if (col is Number)
 								fill = new SolidFill(col);
 							else if (col is IGraphicsFill)
@@ -215,7 +219,7 @@ package birdeye.vis.elements.geometry
 		
 						// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
 						// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-						createTTGG(cursor.current, dataFields, xPos, yPos+innerBarWidth/2, scale2RelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
+						createTTGG(currentItem, dataFields, xPos, yPos+innerBarWidth/2, scale2RelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
 		
 						if (dim3)
 						{
@@ -250,11 +254,9 @@ package birdeye.vis.elements.geometry
 						gg.geometryCollection.addItemAt(poly,0);
 					}
 		
-					cursor.moveNext();
-
 					if (dim3)
 						zSort();
-					_invalidatedDisplay = false;
+					_invalidatedElementGraphic = false;
 				}
 			}
 		}

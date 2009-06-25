@@ -123,7 +123,7 @@ package birdeye.vis.guides.legend
 					if (IElement(_dataProvider.elements[i]).displayName)
 					{
 						label.text = IElement(_dataProvider.elements[i]).displayName;
-						label.fill = new SolidFill(0x000000);
+						label.fill = new SolidFill(0xffffff);
 					}
 
 					var bounds:Rectangle = new Rectangle(0,0, 10,10);

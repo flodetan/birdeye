@@ -109,9 +109,9 @@ package birdeye.vis.elements.geometry
 		 * Called by super.updateDisplayList when the element is ready for layout.*/
 		override public function drawElement():void
 		{
-			if (isReadyForLayout() && _invalidatedDisplay)
+			if (isReadyForLayout() && _invalidatedElementGraphic)
 			{
-var start:Number = getTimer();
+trace (getTimer(), "area ele");
 				super.drawElement();
 				removeAllElements();
 				if (bzSplines)
@@ -141,29 +141,30 @@ var start:Number = getTimer();
 	
 				var baseScale2:Number = getYMinPosition();
 
-				if (graphicsCollection.items && graphicsCollection.items.length>0)
-					gg = graphicsCollection.items[0];
-				else
-				{
-					gg = new DataItemLayout();
-					graphicsCollection.addItem(gg);
-				}
-				gg.target = this;
-				ggIndex = 1;
+				ggIndex = 0;
 				
-				// move data provider cursor at the beginning
-				cursor.seek(CursorBookmark.FIRST);
-	
 				var points:Array = [];
-
-				while (!cursor.afterLast)
+				
+				for (var cursorIndex:uint = 0; cursorIndex<_cursorVector.length; cursorIndex++)
 				{
+	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
+						gg = graphicsCollection.items[ggIndex];
+					else
+					{
+						gg = new DataItemLayout();
+						graphicsCollection.addItem(gg);
+					}
+					gg.target = this;
+					ggIndex++;
+
+					var currentItem:Object = _cursorVector[cursorIndex];
+					
 					// if the Element has its own x axis, than get the x coordinate
 					// position of the data value filtered by xField
 					if (scale1)
-						pos1 = scale1.getPosition(cursor.current[dim1]);
+						pos1 = scale1.getPosition(currentItem[dim1]);
 					
-					j = cursor.current[dim1];
+					j = currentItem[dim1];
 					// if the Element has its own y axis, than get the y coordinate
 					// position of the data value filtered by yField
 					if (scale2)
@@ -175,10 +176,10 @@ var start:Number = getTimer();
 						{
 							y0 = scale2.getPosition(baseValues[j]);
 							pos2 = scale2.getPosition(
-								baseValues[j] + Math.max(0,cursor.current[dim2]));
+								baseValues[j] + Math.max(0,currentItem[dim2]));
 						} else 
 							// if not stacked, than the y coordinate is given by the own y axis
-							pos2 = scale2.getPosition(cursor.current[dim2]);
+							pos2 = scale2.getPosition(currentItem[dim2]);
 					}
 					
 					// if stacked 100 than change the default tooltip shape to a line
@@ -197,7 +198,7 @@ var start:Number = getTimer();
 	
 					if (scale3)
 					{
-						zPos = scale3.getPosition(cursor.current[dim3]);
+						zPos = scale3.getPosition(currentItem[dim3]);
 						// since there is no method yet to draw a real z axis 
 						// we create an y axis and rotate it to properly visualize 
 						// a 'fake' z axis. however zPos over this y axis corresponds to 
@@ -210,20 +211,20 @@ var start:Number = getTimer();
 	
 					if (multiScale)
 					{
-						pos1 = multiScale.scale1.getPosition(cursor.current[dim1]);
+						pos1 = multiScale.scale1.getPosition(currentItem[dim1]);
 						pos2 = INumerableScale(multiScale.scales[
-											cursor.current[multiScale.dim1]
-											]).getPosition(cursor.current[dim2]);
+											currentItem[multiScale.dim1]
+											]).getPosition(currentItem[dim2]);
 					} else if (chart.multiScale) {
-						pos1 = chart.multiScale.scale1.getPosition(cursor.current[dim1]);
+						pos1 = chart.multiScale.scale1.getPosition(currentItem[dim1]);
 						pos2 = INumerableScale(chart.multiScale.scales[
-											cursor.current[chart.multiScale.dim1]
-											]).getPosition(cursor.current[dim2]);
+											currentItem[chart.multiScale.dim1]
+											]).getPosition(currentItem[dim2]);
 					}
 	
 					if (colorScale)
 					{
-						var col:* = colorScale.getPosition(cursor.current[colorField]);
+						var col:* = colorScale.getPosition(currentItem[colorField]);
 						if (col is Number)
 							fill = new SolidFill(col);
 						else if (col is IGraphicsFill)
@@ -239,7 +240,7 @@ var start:Number = getTimer();
 					}
 
 					// create a separate GeometryGroup to manage interactivity and tooltips 
-					createTTGG(cursor.current, dataFields, pos1, pos2, scale2RelativeValue, 3);
+					createTTGG(currentItem, dataFields, pos1, pos2, scale2RelativeValue, 3);
 
 					// in case the form is curve, it's used the BezeirSpline class to build the
 					// element shape. the shape is not attached to the gg, the gg is only used to 
@@ -296,7 +297,6 @@ var start:Number = getTimer();
 						if (isNaN(zPos))
 							zPos = 0;
 					}
-					cursor.moveNext();
 				}
 
 				if (_form == CURVE)
@@ -327,10 +327,9 @@ var start:Number = getTimer();
 	
 				if (dim3)
 					zSort();
-				_invalidatedDisplay = false;
+				_invalidatedElementGraphic = false;
 				
-var end:Number = getTimer();
-trace (start, end, end-start)
+trace (getTimer(), "area ele");
 			}
 		}
 		

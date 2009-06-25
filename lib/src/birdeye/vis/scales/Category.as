@@ -29,6 +29,7 @@
 {
 	import birdeye.vis.interfaces.IEnumerableScale;
 	
+	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
@@ -36,6 +37,7 @@
 	import com.degrafa.transform.RotateTransform;
 	
 	import flash.text.TextFieldAutoSize;
+	import flash.utils.getTimer;
 	
 	[Exclude(name="scaleType", kind="property")]
 	[Exclude(name="dataProvider", kind="property")]
@@ -186,13 +188,26 @@
 
 			if (_scaleInterval > 0 && invalidated)
 			{
+trace(getTimer(), "drawing category scale");
 				invalidated = false;
+				
+				var ggIndex:uint = 0;
 				
 				// vertical orientation
 				if (xMin == xMax)
 				{
 					for (snap = yMax - _scaleInterval/2; snap>yMin; snap -= _scaleInterval*_dataInterval)
 					{
+		 				if (surf.graphicsCollection.items && surf.graphicsCollection.items.length>ggIndex)
+							gg = surf.graphicsCollection.items[ggIndex];
+						else
+						{
+							gg = new GeometryGroup();
+							surf.graphicsCollection.addItem(gg);
+						}
+						gg.target = surf;
+						ggIndex++;
+
 						// create thick line
 			 			thick = new Line(xMin + thickWidth * sign, snap, xMax, snap);
 						thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
@@ -236,6 +251,16 @@
 				{
 					for (snap = xMin + _scaleInterval/2; snap<xMax; snap += _scaleInterval*_dataInterval)
 					{
+		 				if (surf.graphicsCollection.items && surf.graphicsCollection.items.length>ggIndex)
+							gg = surf.graphicsCollection.items[ggIndex];
+						else
+						{
+							gg = new GeometryGroup();
+							surf.graphicsCollection.addItem(gg);
+						}
+						gg.target = surf;
+						ggIndex++;
+						
 						// create thick line
 			 			thick = new Line(snap, yMin + thickWidth * sign, snap, yMax);
 						thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
@@ -274,6 +299,7 @@
 						gg.geometryCollection.addItem(label);
 					}
 				}
+trace(getTimer(), "drawing category scale");
 			}
 		}
 		

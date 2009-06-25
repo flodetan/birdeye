@@ -27,6 +27,8 @@
  
  package birdeye.vis
 {
+	import __AS3__.vec.Vector;
+	
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.interfaces.IGraphLayout;
 	import birdeye.vis.interfaces.INumerableScale;
@@ -46,6 +48,7 @@
 	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
+	import mx.collections.CursorBookmark;
 	import mx.collections.ICollectionView;
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
@@ -248,10 +251,6 @@
 		protected var defaultTipFunction:Function;
 
 		private var _cursor:IViewCursor = null;
-		public function get cursor():IViewCursor
-		{
-			return _cursor;
-		}
 		
 		protected var chartBounds:Rectangle;
 
@@ -341,63 +340,77 @@
 			return _percentWidth;
 		}
 		
+		private var _cursorVector:Vector.<Object>;
+		public function get cursorVector():Vector.<Object>
+		{
+			return _cursorVector;
+		}
+		
+		protected var invalidatedData:Boolean = false;
 		public var axesFeeded:Boolean = true;
 		protected var _dataProvider:Object=null;
 		public function set dataProvider(value:Object):void
 		{
-			//_dataProvider = value;
-			if(typeof(value) == "string")
-	    	{
-	    		//string becomes XML
-	        	value = new XML(value);
-	     	}
-	        else if(value is XMLNode)
-	        {
-	        	//AS2-style XMLNodes become AS3 XML
-				value = new XML(XMLNode(value).toString());
-	        }
-			else if(value is XMLList)
+			if (value is Vector.<Object>)
 			{
-				if(XMLList(value).children().length()>0){
-					value = new XMLListCollection(value.children() as XMLList);
-				}else{
-					value = new XMLListCollection(value as XMLList);
+	  			_cursorVector = Vector.<Object>(value);
+
+			} else {
+				//_dataProvider = value;
+				if(typeof(value) == "string")
+		    	{
+		    		//string becomes XML
+		        	value = new XML(value);
+		     	}
+		        else if(value is XMLNode)
+		        {
+		        	//AS2-style XMLNodes become AS3 XML
+					value = new XML(XMLNode(value).toString());
+		        }
+				else if(value is XMLList)
+				{
+					if(XMLList(value).children().length()>0){
+						value = new XMLListCollection(value.children() as XMLList);
+					}else{
+						value = new XMLListCollection(value as XMLList);
+					}
 				}
+				else if(value is Array)
+				{
+					value = new ArrayCollection(value as Array);
+				}
+				
+				if(value is XML)
+				{
+					var list:XMLList = new XMLList();
+					list += value;
+					this._dataProvider = new XMLListCollection(list.children());
+				}
+				//if already a collection dont make new one
+		        else if(value is ICollectionView)
+		        {
+		            this._dataProvider = ICollectionView(value);
+		        }else if(value is Object)
+				{
+					// convert to an array containing this one item
+					this._dataProvider = new ArrayCollection( [value] );
+		  		}
+		  		else
+		  		{
+		  			this._dataProvider = new ArrayCollection();
+		  		}
+		  		
+		  		if (ICollectionView(_dataProvider).length > 0)
+		  		{
+		  			_cursor = ICollectionView(_dataProvider).createCursor();
+		  		}
 			}
-			else if(value is Array)
-			{
-				value = new ArrayCollection(value as Array);
-			}
-			
-			if(value is XML)
-			{
-				var list:XMLList = new XMLList();
-				list += value;
-				this._dataProvider = new XMLListCollection(list.children());
-			}
-			//if already a collection dont make new one
-	        else if(value is ICollectionView)
-	        {
-	            this._dataProvider = ICollectionView(value);
-	        }else if(value is Object)
-			{
-				// convert to an array containing this one item
-				this._dataProvider = new ArrayCollection( [value] );
-	  		}
-	  		else
-	  		{
-	  			this._dataProvider = new ArrayCollection();
-	  		}
-	  		
-	  		if (ICollectionView(_dataProvider).length > 0)
-	  		{
-	  			_cursor = ICollectionView(_dataProvider).createCursor();
-	  		
-		  		axesFeeded = false;
-		  		invalidateSize();
-		  		invalidateProperties();
-				invalidateDisplayList();
-	  		}
+	  			
+  			axesFeeded = false;
+  			invalidatedData = true;
+	  		invalidateSize();
+	  		invalidateProperties();
+			invalidateDisplayList();
 		}		
 		/**
 		* Set the dataProvider to feed the chart. 
@@ -514,6 +527,8 @@
 		{
 			super.commitProperties();
 			
+			if (elements && invalidatedData && _cursor)
+				loadElementsValues();
 		}
 
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
@@ -530,6 +545,19 @@
 			}
 
  			applyGraphLayouts();
+		}
+		
+		private function loadElementsValues():void
+		{
+			_cursor.seek(CursorBookmark.FIRST);
+			_cursorVector = new Vector.<Object>;
+			var j:uint = 0;
+			while (!_cursor.afterLast)
+			{
+				_cursorVector[j++] = (_cursor.current);
+				_cursor.moveNext();
+			}
+			
 		}
 		
 		protected function applyGraphLayouts():void

@@ -114,10 +114,10 @@ package birdeye.vis.interfaces
 		function set itemRenderer(val:Class):void;
 		function get itemRenderer():Class;
 
-		/** Set the cursor used by the Element. It can either derive from the Element own 
+		/** Set the cursor vector used by the Element. It can either derive from the Element own 
 		 * dataProvider or from the chart dataProvider.*/
-		function set cursor(val:IViewCursor):void;
-		function get cursor():IViewCursor;
+		function set cursorVector(val:Vector.<Object>):void;
+		function get cursorVector():Vector.<Object>;
 
 		/** Set the name to display (legends..).*/
 		function set displayName(val:String):void;

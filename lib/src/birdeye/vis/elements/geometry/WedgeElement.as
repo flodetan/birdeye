@@ -95,7 +95,7 @@ package birdeye.vis.elements.geometry
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
 		override public function drawElement():void
 		{
-			if (isReadyForLayout() && _invalidatedDisplay)
+			if (isReadyForLayout() && _invalidatedElementGraphic)
 			{
 				super.drawElement();
 				removeAllElements();
@@ -150,24 +150,38 @@ package birdeye.vis.elements.geometry
 				if (scale1)
 					aAxis = scale1;
 	
-				cursor.seek(CursorBookmark.FIRST);
 				var i:Number = 0;
 				var tmpDim1:String;
-				while (!cursor.afterLast)
+				
+				ggIndex = 0;
+
+				for (var cursorIndex:uint = 0; cursorIndex<_cursorVector.length; cursorIndex++)
 				{
+	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
+						gg = graphicsCollection.items[ggIndex];
+					else
+					{
+						gg = new DataItemLayout();
+						graphicsCollection.addItem(gg);
+					}
+					gg.target = this;
+					ggIndex++;
+
+					var currentItem:Object = _cursorVector[cursorIndex];
+
 					var tmpArray:Array = (dim1 is Array) ? dim1 as Array : [String(dim1)];
 					
 					for (i = 0; i<tmpArray.length; i++)
 					{
 						tmpDim1 = tmpArray[i];
-						angle = aAxis.getPosition(cursor.current[tmpDim1]);
+						angle = aAxis.getPosition(currentItem[tmpDim1]);
 						
 						if (sizeScale)
 						{
 							if (sizeField is Array)
-								_size = sizeScale.getPosition(cursor.current[sizeField[i]]);
+								_size = sizeScale.getPosition(currentItem[sizeField[i]]);
 							else
-								_size = sizeScale.getPosition(cursor.current[sizeField]);
+								_size = sizeScale.getPosition(currentItem[sizeField]);
 							tmpRadius = _innerRadius + radius/_total * chart.columnWidthRate * _size;
 						}
 
@@ -176,7 +190,7 @@ package birdeye.vis.elements.geometry
 		
 						dataFields[0] = tmpDim1;
 
-						createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _size);
+						createTTGG(currentItem, dataFields, xPos, yPos, NaN, _size);
 						
 		 				if (ttGG && _extendMouseEvents)
 							gg = ttGG;
@@ -194,7 +208,7 @@ package birdeye.vis.elements.geometry
 						{
 							if (colorScale)
 							{
-								var col:* = colorScale.getPosition(cursor.current[colorField]);
+								var col:* = colorScale.getPosition(currentItem[colorField]);
 								if (col is Number)
 									fill = new SolidFill(col);
 								else if (col is IGraphicsFill)
@@ -246,7 +260,7 @@ package birdeye.vis.elements.geometry
 								yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
 							}
 							var label:RasterTextPlus = new RasterTextPlus();
-							label.text = cursor.current[labelField];
+							label.text = currentItem[labelField];
 							label.fontFamily = fontLabel;
 							label.fontWeight = "bold";
 							label.fontSize = sizeLabel;
@@ -278,8 +292,6 @@ package birdeye.vis.elements.geometry
 						startAngle += angle;
 					}
 					c++;
-					
-	 				cursor.moveNext();
 				}
 				
 				if (displayName && aAxis && aAxis.size < 360)
@@ -295,7 +307,7 @@ package birdeye.vis.elements.geometry
 					gg.geometryCollection.addItem(label); 
 				}
 			}
-			_invalidatedDisplay = false;
+			_invalidatedElementGraphic = false;
 		}
 	}
 }

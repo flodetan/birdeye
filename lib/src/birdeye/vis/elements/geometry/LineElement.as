@@ -42,8 +42,7 @@ package birdeye.vis.elements.geometry
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
-	
-	import mx.collections.CursorBookmark;
+	import flash.utils.getTimer;
 
 	public class LineElement extends BaseElement
 	{
@@ -87,8 +86,9 @@ package birdeye.vis.elements.geometry
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
 		override public function drawElement():void
 		{
-			if (isReadyForLayout() && _invalidatedDisplay)
+			if (isReadyForLayout() && _invalidatedElementGraphic)
 			{
+trace (getTimer(), "drawing line ele");
 				super.drawElement();
 				removeAllElements();
 				if (bzSplines)
@@ -105,30 +105,32 @@ package birdeye.vis.elements.geometry
 				if (dim3) 
 					dataFields[2] = dim3;
 	
-				if (graphicsCollection.items && graphicsCollection.items.length>0)
-					gg = graphicsCollection.items[0];
-				else
-				{
-					gg = new DataItemLayout();
-					graphicsCollection.addItem(gg);
-				}
-				gg.target = this;
-				ggIndex = 1;
+				ggIndex = 0;
 	
-				cursor.seek(CursorBookmark.FIRST);
-				
 				var points:Array = [];
 				
-				while (!cursor.afterLast)
+				for (var cursorIndex:uint = 0; cursorIndex<_cursorVector.length; cursorIndex++)
 				{
+	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
+						gg = graphicsCollection.items[ggIndex];
+					else
+					{
+						gg = new DataItemLayout();
+						graphicsCollection.addItem(gg);
+					}
+					gg.target = this;
+					ggIndex++;
+
+					var currentItem:Object = _cursorVector[cursorIndex];
+					
 					if (scale1)
 					{
-						pos1 = scale1.getPosition(cursor.current[dim1]);
+						pos1 = scale1.getPosition(currentItem[dim1]);
 					}
 					
 					if (scale2)
 					{
-						pos2 = scale2.getPosition(cursor.current[dim2]);
+						pos2 = scale2.getPosition(currentItem[dim2]);
 						dataFields[1] = dim2;
 					}
 					
@@ -136,21 +138,21 @@ package birdeye.vis.elements.geometry
 	
 					if (scale3)
 					{
-						zPos = scale3.getPosition(cursor.current[dim3]);
+						zPos = scale3.getPosition(currentItem[dim3]);
 						scale2RelativeValue = XYZ(scale3).height - zPos;
 					}
 
 					if (multiScale)
 					{
-						pos1 = multiScale.scale1.getPosition(cursor.current[dim1]);
+						pos1 = multiScale.scale1.getPosition(currentItem[dim1]);
 						pos2 = INumerableScale(multiScale.scales[
-											cursor.current[multiScale.dim1]
-											]).getPosition(cursor.current[dim2]);
+											currentItem[multiScale.dim1]
+											]).getPosition(currentItem[dim2]);
 					} else if (chart.multiScale) {
-						pos1 = chart.multiScale.scale1.getPosition(cursor.current[dim1]);
+						pos1 = chart.multiScale.scale1.getPosition(currentItem[dim1]);
 						pos2 = INumerableScale(chart.multiScale.scales[
-											cursor.current[chart.multiScale.dim1]
-											]).getPosition(cursor.current[dim2]);
+											currentItem[chart.multiScale.dim1]
+											]).getPosition(currentItem[dim2]);
 					}
 	
 					if (chart.coordType == VisScene.POLAR)
@@ -167,7 +169,7 @@ package birdeye.vis.elements.geometry
 	
 					if (colorScale)
 					{
-						var col:* = colorScale.getPosition(cursor.current[colorField]);
+						var col:* = colorScale.getPosition(currentItem[colorField]);
 						if (col is Number)
 							fill = new SolidFill(col);
 						else if (col is IGraphicsFill)
@@ -176,8 +178,8 @@ package birdeye.vis.elements.geometry
 	
 					// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createTTGG(cursor.current, dataFields, pos1, pos2, scale2RelativeValue, 3);
-	
+    					createTTGG(currentItem, dataFields, pos1, pos2, scale2RelativeValue, 3);
+   	 
 					if (dim3)
 					{
 						if (!isNaN(zPos))
@@ -197,11 +199,11 @@ package birdeye.vis.elements.geometry
 							points.push(new GraphicPoint(pos1,pos2));
 					} else if (j++ > 0)
 					{
-						var line:Line = new Line(xPrev,yPrev,pos1,pos2);
+ 						var line:Line     = new Line(xPrev,yPrev,pos1,pos2);
 						line.fill = fill;
 						line.stroke = stroke;
 						gg.geometryCollection.addItemAt(line,0);
-						line = null;
+						line = null;     
 					}
 	
 					if (_showItemRenderer)
@@ -220,7 +222,6 @@ package birdeye.vis.elements.geometry
 						if (isNaN(zPos))
 							zPos = 0;
 					}
-					cursor.moveNext();
 				}
 				
 				if (_form == CURVE)
@@ -247,7 +248,8 @@ package birdeye.vis.elements.geometry
 				if (dim3)
 					zSort();
 
-				_invalidatedDisplay = false;
+				_invalidatedElementGraphic = false;
+trace (getTimer(), "drawing line ele");
 			}
 		}
  	}

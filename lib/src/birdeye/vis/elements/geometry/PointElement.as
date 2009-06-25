@@ -42,8 +42,7 @@ package birdeye.vis.elements.geometry
 	
 	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
-	
-	import mx.collections.CursorBookmark;
+	import flash.utils.getTimer;
 
 	public class PointElement extends BaseElement
 	{
@@ -65,8 +64,9 @@ package birdeye.vis.elements.geometry
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
 		override public function drawElement():void
 		{
-			if (isReadyForLayout() && _invalidatedDisplay)
+			if (isReadyForLayout() && _invalidatedElementGraphic)
 			{
+trace (getTimer(), "drawing point ele");
 				super.drawElement();
 				removeAllElements();
 				var dataFields:Array = [];
@@ -83,53 +83,56 @@ package birdeye.vis.elements.geometry
 				if (!itemRenderer)
 					itemRenderer = CircleRenderer;
 				
-				if (graphicsCollection.items && graphicsCollection.items.length>0)
-					gg = graphicsCollection.items[0];
-				else
-				{
-					gg = new DataItemLayout();
-					graphicsCollection.addItem(gg);
-				}
-				gg.target = this;
-				ggIndex = 1;
+				ggIndex = 0;
 	
-				cursor.seek(CursorBookmark.FIRST);
-				while (!cursor.afterLast)
+				for (var cursorIndex:uint = 0; cursorIndex<_cursorVector.length; cursorIndex++)
 				{
+	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
+						gg = graphicsCollection.items[ggIndex];
+					else
+					{
+						gg = new DataItemLayout();
+						graphicsCollection.addItem(gg);
+					}
+					gg.target = this;
+					ggIndex++;
+					
+					var currentItem:Object = _cursorVector[cursorIndex];
+
 					if (scale1)
 					{
-						pos1 = scale1.getPosition(cursor.current[dim1]);
+						pos1 = scale1.getPosition(currentItem[dim1]);
 					} 
 					
 					if (scale2)
 					{
-						pos2 = scale2.getPosition(cursor.current[dim2]);
+						pos2 = scale2.getPosition(currentItem[dim2]);
 					} 
 	
 					var scale2RelativeValue:Number = NaN;
 	
 					if (scale3)
 					{
-						pos3 = scale3.getPosition(cursor.current[dim3]);
+						pos3 = scale3.getPosition(currentItem[dim3]);
 						scale2RelativeValue = XYZ(scale3).height - pos3;
 					} 
 	
 					if (multiScale)
 					{
-						pos1 = multiScale.scale1.getPosition(cursor.current[dim1]);
+						pos1 = multiScale.scale1.getPosition(currentItem[dim1]);
 						pos2 = INumerableScale(multiScale.scales[
-											cursor.current[multiScale.dim1]
-											]).getPosition(cursor.current[dim2]);
+											currentItem[multiScale.dim1]
+											]).getPosition(currentItem[dim2]);
 					} else if (chart.multiScale) {
-						pos1 = chart.multiScale.scale1.getPosition(cursor.current[dim1]);
+						pos1 = chart.multiScale.scale1.getPosition(currentItem[dim1]);
 						pos2 = INumerableScale(chart.multiScale.scales[
-											cursor.current[chart.multiScale.dim1]
-											]).getPosition(cursor.current[dim2]);
+											currentItem[chart.multiScale.dim1]
+											]).getPosition(currentItem[dim2]);
 					}
 
 					if (colorScale)
 					{
-						var col:* = colorScale.getPosition(cursor.current[colorField]);
+						var col:* = colorScale.getPosition(currentItem[colorField]);
 						if (col is Number)
 							fill = new SolidFill(col);
 						else if (col is IGraphicsFill)
@@ -146,12 +149,12 @@ package birdeye.vis.elements.geometry
 
 					if (sizeScale)
 					{
-						_size = sizeScale.getPosition(cursor.current[sizeField]);
+						_size = sizeScale.getPosition(currentItem[sizeField]);
 					}
 
 					// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createTTGG(cursor.current, dataFields, pos1, pos2, scale2RelativeValue, _size);
+					createTTGG(currentItem, dataFields, pos1, pos2, scale2RelativeValue, _size);
 	
 					if (dim3)
 					{
@@ -185,8 +188,8 @@ package birdeye.vis.elements.geometry
 					if (labelField)
 					{
 						label = new TextRenderer(null);
-						if (cursor.current[labelField])
-							label.text = cursor.current[labelField];
+						if (currentItem[labelField])
+							label.text = currentItem[labelField];
 						else
 							label.text = labelField;
 							
@@ -206,13 +209,13 @@ package birdeye.vis.elements.geometry
 						if (isNaN(pos3))
 							pos3 = 0;
 					}
-	 				cursor.moveNext();
 				}
 				
 				if (dim3)
 					zSort();
 
-				_invalidatedDisplay = false;
+				_invalidatedElementGraphic = false;
+trace (getTimer(), "drawing point ele");
 			}
 		}
 	}
