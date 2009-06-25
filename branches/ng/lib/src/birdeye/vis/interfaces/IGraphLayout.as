@@ -32,7 +32,7 @@ package birdeye.vis.interfaces
 	
 	public interface IGraphLayout extends ITransform
 	{
-		function apply():void;
+		function apply(width:int, height:int):void;
 
 		function getNodeItemPosition(itemIndex:int):Position;
 	}

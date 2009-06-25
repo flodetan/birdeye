@@ -36,6 +36,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.interfaces.IGraphLayoutableElement;
 	import birdeye.vis.scales.*;
 	
+	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
 	import com.degrafa.paint.SolidFill;
 	
@@ -87,13 +88,20 @@ package birdeye.vis.elements.geometry
 		}
 
 		public function getItemIndexById(id:Object):int {
-			return int(findDataItem(function(data:Object, itemIndex:int) {
-				if (data[_dimId] == id) return itemIndex; 
-			}));
+			if (!_cursorVector) return -1;
+			for (var i:int = 0; i < _cursorVector.length; i++) {
+				if (_cursorVector[i][_dimId] == id) return i;
+			}
+			return -1;
 		}
 
 		public function getItemPosition(id:Object):Position {
-			return _layout.getNodeItemPosition(getItemIndexById(id));
+			var index:int = getItemIndexById(id);
+			if (index >= 0)	{
+				return _layout.getNodeItemPosition(index);
+			} else {
+				return null;
+			}
 		}
 		
 		protected function createItemRenderer(bounds:Rectangle):IGeometry {
@@ -135,14 +143,14 @@ package birdeye.vis.elements.geometry
 
 			const dataFieldNames:Array = [dimId, dimName];
 			var itemIndex:int = 0;
-			var collItemIndex:int = 0;
 				
 			const thisNode:NodeElement = this;
 			
-			forEachDataItem(function(data:Object, itemIndex:int) {
+			if (_cursorVector)
+			_cursorVector.forEach(function(item:Object, index:int, items:Vector.<Object>) {
 				var pos1:Number = NaN, pos2:Number = NaN, pos3:Number = NaN;
 
-				const position:Position = _layout.getNodeItemPosition(itemIndex);
+				const position:Position = _layout.getNodeItemPosition(index);
 
 				// We cannot use scale.getPosition here, because
 				// scales work in an inherently different way, than
@@ -158,48 +166,33 @@ package birdeye.vis.elements.geometry
 //					pos2 = scale2.getPosition(position.pos2);
 //				}
 
-					// TODO: what if there are no scales?
-
 				if (position != null) {
 					pos1 = position.pos1;
 					pos2 = position.pos2;
 		
-					createTTGG(data, dataFieldNames, pos1, pos2, 1.0, _size * 2);
-/*
-					const group:GeometryGroup = new GeometryGroup();
-					group.target = thisNode;
+					createTTGG(item, dataFieldNames, pos1, pos2, 1.0, _size * 2);
+					
+					var group:GeometryGroup = createItemGeometryGroup();
 					group.geometry = [
 						createItemRenderer(bounds(pos1, pos2)),
 						TextRenderer.createTextLabel(
-								   pos1, pos2 + _size,
-								   data[dimName], 
-								   new SolidFill(0xffffff),  // TODO: add textFill property
-								   true, false
-						)
-					];
-
-					getGeometryCollection().addItemAt(group, collItemIndex++);
-					*/
-					
-					getGeometryCollection().addItemAt(createItemRenderer(bounds(pos1, pos2)), collItemIndex++);
-					getGeometryCollection().addItemAt(TextRenderer.createTextLabel(
 							   pos1, pos2 + _size,
-							   data[dimName], 
+							   item[dimName], 
 							   new SolidFill(0xffffff),  // TODO: add textFill property
 							   true, false
-					), collItemIndex++);
+						)
+					];
 				}
 			});
 		}
 		
+		/*
 		protected function addMoveEventListeneres() : void {
 			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			addEventListener(MouseEvent.MOUSE_UP, onMouseUp);		
 			addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-			/*
 			addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);			
 			addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-			*/
 		}
 		
 		private var isMoving:Boolean;
@@ -224,6 +217,7 @@ package birdeye.vis.elements.geometry
 				y = dest.y;
 			}
 		} 
+		*/
 
 	}
 }

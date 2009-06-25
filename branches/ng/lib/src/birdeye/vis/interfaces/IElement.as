@@ -143,10 +143,5 @@ package birdeye.vis.interfaces
 		/** Remove all elements from the Element (Surface component).*/
 		function removeAllElements():void;
 		
-		function getDataItem(index:int):Object;
-
-		function getDataItems():Vector.<Object>;
-		
-		function getDataItemsCount():int;
 	}
 }
