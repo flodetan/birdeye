@@ -37,6 +37,7 @@ package birdeye.vis.scales
 	import com.degrafa.transform.RotateTransform;
 	
 	import flash.text.TextFieldAutoSize;
+	import flash.utils.getTimer;
 
 	public class Numeric extends XYZ implements INumerableScale, IScaleUI
 	{
@@ -226,6 +227,7 @@ package birdeye.vis.scales
 
 			if (size > 0 && dataInterval>0 && showLabels && invalidated)
 			{	
+trace(getTimer(), "drawing numeric scale");
 				invalidated = false;
 				// vertical orientation
 				if (xMin == xMax)
@@ -309,6 +311,7 @@ package birdeye.vis.scales
 						gg.geometryCollection.addItem(label);
 					}
 				}
+trace(getTimer(), "drawing numeric scale");
 			}
 		}
 		

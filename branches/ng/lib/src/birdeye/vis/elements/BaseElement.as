@@ -56,7 +56,6 @@ package birdeye.vis.elements
 	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
-	import mx.collections.CursorBookmark;
 	import mx.collections.ICollectionView;
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
@@ -88,7 +87,7 @@ package birdeye.vis.elements
 	
 	public class BaseElement extends Surface implements IElement
 	{
-		protected var _invalidatedDisplay:Boolean = false;
+		protected var _invalidatedElementGraphic:Boolean = false;
 		
 		private var _chart:ICoordinates;
 		public function set chart(val:ICoordinates):void
@@ -437,11 +436,12 @@ package birdeye.vis.elements
 			return _collisionType;
 		}
 
-		protected var gg:DataItemLayout;
+		protected var gg:GeometryGroup;
 //		protected var dataItems:Array = [];
 		protected var fill:IGraphicsFill;
 		protected var stroke:IGraphicsStroke = new SolidStroke(0x888888,1,1);
 		
+		private var _cursor:IViewCursor;
 		protected var _dataProvider:Object=null;
 		/** Set the data provider for the series, if the series doesn't have its own dataProvider
 		 * than it will automatically take the chart data provider. It's not necessary
@@ -520,19 +520,19 @@ package birdeye.vis.elements
 			return _dataProvider;
 		}
 		
-		protected var _cursor:IViewCursor;
-		public function set cursor(val:IViewCursor):void
+		protected var _cursorVector:Vector.<Object>;
+		public function set cursorVector(val:Vector.<Object>):void
 		{
-			_cursor = val;
+			_cursorVector = val;
 			_maxDim1Value = _maxDim2Value = _maxDim3Value = _totalDim1PositiveValue = NaN;
 			_minDim1Value = _minDim2Value = _minDim3Value = NaN;
 			_minColorValue = _maxColorValue = _minSizeValue = _maxSizeValue = NaN;
 			invalidateProperties();
 			invalidatingDisplay();
 		}
-		public function get cursor():IViewCursor
+		public function get cursorVector():Vector.<Object>
 		{
-			return _cursor;
+			return _cursorVector;
 		}
 		
 		protected var _size:Number = 5;
@@ -855,7 +855,7 @@ package birdeye.vis.elements
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 
-			if (_invalidatedDisplay)
+			if (_invalidatedElementGraphic)
 				drawElement();
 		}
 
@@ -873,13 +873,13 @@ package birdeye.vis.elements
 		
 		protected function invalidatingDisplay():void
 		{
-			_invalidatedDisplay = true;
+			_invalidatedElementGraphic = true;
 			invalidateDisplayList();
 		}
 
 		public function drawElement():void
 		{
-			_invalidatedDisplay = false;
+			_invalidatedElementGraphic = false;
 			
 			if (stylesChanged)
 			{
@@ -983,7 +983,7 @@ package birdeye.vis.elements
 				&& (!isNaN(_maxDim1Value) || !isNaN(_maxDim2Value))
 				&&  */width>0 && height>0
 				&& chart
-				&& cursor;
+				&& cursorVector;
 			
 			return globalCheck && axesCheck && colorsCheck;
 		}
@@ -1110,12 +1110,12 @@ package birdeye.vis.elements
  			if (chart.showDataTips || chart.showAllDataTips)
 			{ 
 				initGGToolTip();
-				ttGG.create(cursor.current, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset, true, showGeometry);
+				ttGG.create(item, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset, true, showGeometry);
 			} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null)
 			{
 				// if no tips but interactivity is required than add roll over events and pass
 				// data and positioning information about the current data item 
-				ttGG.create(cursor.current, dataFields, xPos, yPos, zPos, NaN, null, NaN, NaN, false);
+				ttGG.create(item, dataFields, xPos, yPos, zPos, NaN, null, NaN, NaN, false);
 			} else {
 				// if no tips and no interactivity than just add location info needed for pointers
 				ttGG.create(null, null, xPos, yPos, zPos, NaN, null, NaN, NaN, false);
@@ -1207,16 +1207,18 @@ package birdeye.vis.elements
 		protected function getTotalPositiveValue(field:Object):Number
 		{
 			var tot:Number = NaN;
-			if (cursor && field)
+			if (cursorVector && field)
 			{
-				cursor.seek(CursorBookmark.FIRST);
-				while (!cursor.afterLast)
+				var currentItem:Object;
+			
+				for (var cursIndex:uint = 0; cursIndex<cursorVector.length; cursIndex++)
 				{
+					currentItem = cursorVector[cursIndex];
 					var tmpArray:Array = (dim1 is Array) ? dim1 as Array : [String(dim1)];
 					
 					for (var i:Number = 0; i<tmpArray.length; i++)
 					{
-						currentValue = cursor.current[tmpArray[i]];
+						currentValue = currentItem[tmpArray[i]];
 						if (currentValue > 0)
 						{
 							if (isNaN(tot))
@@ -1225,7 +1227,6 @@ package birdeye.vis.elements
 								tot += currentValue;
 						}
 					}
-					_cursor.moveNext();
 				}
 			}
 			return tot;
@@ -1279,16 +1280,17 @@ package birdeye.vis.elements
 		private function getMaxV(field:String):Number
 		{
 			var max:Number = NaN;
-			if (cursor && field)
+			if (cursorVector && field)
 			{
-				_cursor.seek(CursorBookmark.FIRST);
-				while (!_cursor.afterLast)
+				var currentItem:Object;
+			
+				for (var cursIndex:uint = 0; cursIndex<cursorVector.length; cursIndex++)
 				{
-					currentValue = _cursor.current[field];
+					currentItem = cursorVector[cursIndex];
+
+					currentValue = currentItem[field];
 					if (isNaN(max) || max < currentValue)
 						max = currentValue;
-					
-					_cursor.moveNext();
 				}
 			}
 			return max
@@ -1298,16 +1300,17 @@ package birdeye.vis.elements
 		{
 			var min:Number = NaN;
 
-			if (cursor && field)
+			if (cursorVector && field)
 			{
-				_cursor.seek(CursorBookmark.FIRST);
-				while (!_cursor.afterLast)
+				var currentItem:Object;
+			
+				for (var cursIndex:uint = 0; cursIndex<cursorVector.length; cursIndex++)
 				{
-					currentValue = _cursor.current[field];
+					currentItem = cursorVector[cursIndex];
+
+					currentValue = currentItem[field];
 					if (isNaN(min) || min > currentValue)
 						min = currentValue;
-					
-					_cursor.moveNext();
 				}
 			}
 			return min;
@@ -1316,9 +1319,9 @@ package birdeye.vis.elements
 		/** Remove all graphic elements of the series.*/
 		public function removeAllElements():void
 		{
-			if (gg) 
+/* 			if (gg) 
 				gg.removeAllElements();
-			
+ */			
 			var nElements:int = graphicsCollection.items.length;
 			if (nElements > 0)
 			{
@@ -1449,41 +1452,30 @@ package birdeye.vis.elements
 		}
 
 		public function getDataItemsCount():int {
-			if (!_cursor) return null;
-			var count:int = 0;
-			_cursor.seek(CursorBookmark.FIRST);
-			while (!_cursor.afterLast) {
-				count++;
-				_cursor.moveNext();
-			}
-			return count;
+			if (_cursorVector) 
+				return _cursorVector.length;
+			return null;
 		}
 		
 		public function getDataItem(index:int):Object {
-			if (!_cursor) return null;
-			_cursor.seek(CursorBookmark.FIRST, index);
-			return _cursor.current;
+			if (_cursorVector) 
+				_cursorVector[index];
+			return null;
 		}
 		
 		public function getDataItems():Vector.<Object> {
-			if (!_cursor) return null;
-			var data:Vector.<Object> = new Vector.<Object>();
-			_cursor.seek(CursorBookmark.FIRST);
-			while (!_cursor.afterLast) {
-				data.push(_cursor.current);
-				_cursor.moveNext();
-			}
-			return data;
+			if (_cursorVector)
+				return _cursorVector;
+			return null;
 		}
 		
 		public function forEachDataItem(callback:Function):void {
-			if (!_cursor) return;
-			_cursor.seek(CursorBookmark.FIRST);
-			var itemIndex:int = 0;
-			while (!_cursor.afterLast) {
-				callback(_cursor.current, itemIndex++);
-				_cursor.moveNext();
-			}
+			if (_cursorVector) 
+				for (var i:uint = 0; i < _cursorVector.length; i++)
+				{
+					callback(_cursorVector[i], i);
+				}
+			return;
 		}
 		
 		/**
@@ -1492,16 +1484,16 @@ package birdeye.vis.elements
 		 * Then stops iteration and returns this value. 
 		 **/
 		public function findDataItem(callback:Function):Object {
-			if (!_cursor) return null;
-			_cursor.seek(CursorBookmark.FIRST);
-			var itemIndex:int = 0;
-			var retVal;
-			while (!_cursor.afterLast) {
-				retVal = callback(_cursor.current, itemIndex++);
-				if (retVal !== undefined) {
-					return retVal;
+			if (_cursorVector) 
+			{
+				var retVal;
+				for (var i:uint = 0; i < _cursorVector.length; i++)
+				{
+					retVal = callback(_cursorVector, i);
+					if (retVal !== undefined) {
+						return retVal;
+					}
 				}
-				_cursor.moveNext();
 			}
 			return null;
 		}

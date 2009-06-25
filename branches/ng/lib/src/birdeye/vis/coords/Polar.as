@@ -27,6 +27,8 @@
  
 package birdeye.vis.coords
 {
+	import __AS3__.vec.Vector;
+	
 	import birdeye.vis.VisScene;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.collision.*;
@@ -54,7 +56,6 @@ package birdeye.vis.coords
 	import flash.text.TextFieldAutoSize;
 	
 	import mx.collections.CursorBookmark;
-	import mx.collections.IViewCursor;
 	
 	/** 
 	 * The PolarChart is the base chart that is extended by all charts that are
@@ -194,13 +195,13 @@ package birdeye.vis.coords
 				{
 					// if elements dataprovider doesn' exist or it refers to the
 					// chart dataProvider, than set its cursor to this chart cursor (this.cursor)
-					if (cursor && (! IElement(_elements[i]).dataProvider 
+					if (cursorVector && (! IElement(_elements[i]).dataProvider 
 									|| IElement(_elements[i]).dataProvider == this.dataProvider))
-						IElement(_elements[i]).cursor = cursor;
+						IElement(_elements[i]).cursorVector = cursorVector;
 
 					// nCursors is used in feedAxes to check that all elements cursors are ready
 					// and therefore check that axes can be properly feeded
-					if (cursor || IElement(_elements[i]).cursor)
+					if (cursorVector || IElement(_elements[i]).cursorVector)
 						nCursors += 1;
 
 					if (!contains(DisplayObject(elements[i])))
@@ -276,29 +277,33 @@ package birdeye.vis.coords
 					// the baseValues are indexed with the angle field objects
 					var j:Object;
 					
+					var cursIndex:uint = 0;
+					var currentItem:Object;
+				
 					for (var s:Number = 0; s<_stackElements.length; s++)
 					{
-						var sCursor:IViewCursor;
+						var sCursor:Vector.<Object>;
 						
-						if (IElement(_stackElements[s]).cursor &&
-							IElement(_stackElements[s]).cursor != cursor)
+						if (IElement(_stackElements[s]).cursorVector &&
+							IElement(_stackElements[s]).cursorVector != cursorVector)
 						{
-							sCursor = IElement(_stackElements[s]).cursor;
-							sCursor.seek(CursorBookmark.FIRST);
-							while (!sCursor.afterLast)
+							sCursor = IElement(_stackElements[s]).cursorVector;
+							
+							for (cursIndex = 0; cursIndex < sCursor.length; cursIndex++)
 							{
-								j = sCursor.current[IElement(_stackElements[s]).dim1];
+								currentItem = sCursor[cursIndex];
+								j = currentItem[IElement(_stackElements[s]).dim1];
 
 								if (s>0 && k[j]>=0)
 								{
-									var maxCurrentD2:Number = getDimMaxValue(cursor.current, IElement(_stackElements[k[j]]).dim2);
+									var maxCurrentD2:Number = getDimMaxValue(currentItem, IElement(_stackElements[k[j]]).dim2);
 									allElementsBaseValues[s].baseValues[j] = 
 										allElementsBaseValues[k[j]].baseValues[j] + 
 										Math.max(0,maxCurrentD2);
 								} else 
 									allElementsBaseValues[s].baseValues[j] = 0;
 
-								maxCurrentD2 = getDimMaxValue(cursor.current, IElement(_stackElements[s]).dim2);
+								maxCurrentD2 = getDimMaxValue(currentItem, IElement(_stackElements[s]).dim2);
 								
 								if (isNaN(_maxStacked100))
 									_maxStacked100 = 
@@ -309,31 +314,30 @@ package birdeye.vis.coords
 										allElementsBaseValues[s].baseValues[j] + 
 										Math.max(0,maxCurrentD2));
 
-								sCursor.moveNext();
 								k[j] = s;
 							}
 						}
 					}
 					
-					if (cursor)
-					
+					if (cursorVector)
 					{
-						cursor.seek(CursorBookmark.FIRST);
-						while (!cursor.afterLast)
+						for (cursIndex = 0; cursIndex < cursorVector.length; cursIndex++)
 						{
+							currentItem = cursorVector[cursIndex];
+
 							// index of last element without own cursor with the same radius (dim2) data value 
 							// (because they've already been processed in the previous loop)
 							var t:Array = [];
 							for (s = 0; s<_stackElements.length; s++)
 							{
-								if (! (IElement(_stackElements[s]).cursor &&
-									IElement(_stackElements[s]).cursor != cursor))
+								if (! (IElement(_stackElements[s]).cursorVector &&
+									IElement(_stackElements[s]).cursorVector != cursorVector))
 								{
-									j = cursor.current[IElement(_stackElements[s]).dim1];
+									j = currentItem[IElement(_stackElements[s]).dim1];
 							
 									if (t[j]>=0)
 									{
-										maxCurrentD2 = getDimMaxValue(cursor.current, IElement(_stackElements[t[j]]).dim2, 
+										maxCurrentD2 = getDimMaxValue(currentItem, IElement(_stackElements[t[j]]).dim2, 
 																	IElement(_stackElements[t[j]]).collisionType == StackElement.STACKED100);
 										allElementsBaseValues[s].baseValues[j] = 
 											allElementsBaseValues[t[j]].baseValues[j] + 
@@ -341,7 +345,7 @@ package birdeye.vis.coords
 									} else 
 										allElementsBaseValues[s].baseValues[j] = 0;
 									
-									maxCurrentD2 = getDimMaxValue(cursor.current, IElement(_stackElements[s]).dim2, 
+									maxCurrentD2 = getDimMaxValue(currentItem, IElement(_stackElements[s]).dim2, 
 																IElement(_stackElements[s]).collisionType == StackElement.STACKED100);
 
 									if (isNaN(_maxStacked100))
@@ -356,7 +360,6 @@ package birdeye.vis.coords
 									t[j] = s;
 								}
 							}
-							cursor.moveNext();
 						}
 					}
 					
@@ -486,6 +489,9 @@ package birdeye.vis.coords
 			
 			if (nCursors == elements.length)
 			{
+				var cursIndex:uint = 0;
+				var currentItem:Object;
+				
 				// check if a default y axis exists
 				if (_multiScale && _multiScale.dim1 && _multiScale.scale1)
 				{
@@ -499,10 +505,10 @@ package birdeye.vis.coords
 						if (currentElement.dataProvider 
 							&& currentElement.dataProvider != dataProvider)
 						{
-							currentElement.cursor.seek(CursorBookmark.FIRST);
-							while (!currentElement.cursor.afterLast)
+							for (cursIndex = 0; cursIndex<currentElement.cursorVector.length; cursIndex++)
 							{
-								var category:String = currentElement.cursor.current[angleCategory];
+								currentItem = currentElement.cursorVector[cursIndex];
+								var category:String = currentItem[angleCategory];
 								if (catElements.indexOf(category) == -1)
 									catElements[j++] = category;
 								
@@ -512,25 +518,24 @@ package birdeye.vis.coords
 																	 max: int.MIN_VALUE};
 								} 
 
-								var maxDim2:Number = getDimMaxValue(currentElement.cursor.current, currentElement.dim2, currentElement.collisionType == StackElement.STACKED100);
-								var minDim2:Number = getDimMinValue(currentElement.cursor.current, currentElement.dim2);
+								var maxDim2:Number = getDimMaxValue(currentItem, currentElement.dim2, currentElement.collisionType == StackElement.STACKED100);
+								var minDim2:Number = getDimMinValue(currentItem, currentElement.dim2);
 									
 								elementsMinMax[category].min = 
 									Math.min(elementsMinMax[category].min, minDim2);
 
 								elementsMinMax[category].max = 
 									Math.max(elementsMinMax[category].max, maxDim2);
-								
-								currentElement.cursor.moveNext();
 							}
 						}
 						
-						if (cursor)
+						if (cursorVector)
 						{
-							cursor.seek(CursorBookmark.FIRST);
-							while (!cursor.afterLast)
+							for (cursIndex = 0; cursIndex<currentElement.cursorVector.length; cursIndex++)
 							{
-								category = cursor.current[angleCategory]
+								currentItem = currentElement.cursorVector[cursIndex];
+
+								category = currentItem[angleCategory]
 								// if the category value already exists in the axis, than skip it
 								if (catElements.indexOf(category) == -1)
 									catElements[j++] = category;
@@ -544,8 +549,8 @@ package birdeye.vis.coords
 																		 max: int.MIN_VALUE};
 									} 
 									
-									maxDim2 = getDimMaxValue(cursor.current, currentElement.dim2, currentElement.collisionType == StackElement.STACKED100);
-									minDim2 = getDimMinValue(cursor.current, currentElement.dim2);
+									maxDim2 = getDimMaxValue(currentItem, currentElement.dim2, currentElement.collisionType == StackElement.STACKED100);
+									minDim2 = getDimMinValue(currentItem, currentElement.dim2);
 									
 									elementsMinMax[category].min = 
 										Math.min(elementsMinMax[category].min, minDim2);
@@ -553,7 +558,6 @@ package birdeye.vis.coords
 									elementsMinMax[category].max = 
 										Math.max(elementsMinMax[category].max, maxDim2);
 								}
-								cursor.moveNext();
 							}
 						}
 	
@@ -697,12 +701,13 @@ package birdeye.vis.coords
 		 * Init the axes owned by the element passed to this method.*/
 		private function initElementsAxes(element:IElement):void
 		{
-			if (element.cursor)
+			if (element.cursorVector)
 			{
 				var catElements:Array;
 				var j:Number;
 
-				element.cursor.seek(CursorBookmark.FIRST);
+				var cursIndex:uint = 0;
+				var currentItem:Object;
 				
 				if (element.scale1 is IEnumerableScale)
 				{
@@ -717,13 +722,13 @@ package birdeye.vis.coords
 						catElements = [];
 					}
 
-					while (!element.cursor.afterLast)
+					for (cursIndex = 0; cursIndex<element.cursorVector.length; cursIndex++)
 					{
+						currentItem = element.cursorVector[cursIndex];
 						// if the category value already exists in the axis, than skip it
-						if (catElements.indexOf(element.cursor.current[IEnumerableScale(element.scale1).categoryField]) == -1)
+						if (catElements.indexOf(currentItem[IEnumerableScale(element.scale1).categoryField]) == -1)
 							catElements[j++] = 
-								element.cursor.current[IEnumerableScale(element.scale1).categoryField];
-						element.cursor.moveNext();
+								currentItem[IEnumerableScale(element.scale1).categoryField];
 					}
 					
 					// set the elements propery of the CategoryAxis owned by the current element
@@ -760,17 +765,15 @@ package birdeye.vis.coords
 					}
 				}
 	
-				element.cursor.seek(CursorBookmark.FIRST);
-				
 				if (element.scale2 is IEnumerableScale)
 				{
-					while (!element.cursor.afterLast)
+					for (cursIndex = 0; cursIndex<element.cursorVector.length; cursIndex++)
 					{
+						currentItem = element.cursorVector[cursIndex];
 						// if the category value already exists in the axis, than skip it
-						if (catElements.indexOf(element.cursor.current[IEnumerableScale(element.scale2).categoryField]) == -1)
+						if (catElements.indexOf(currentItem[IEnumerableScale(element.scale2).categoryField]) == -1)
 							catElements[j++] = 
-								element.cursor.current[IEnumerableScale(element.scale2).categoryField];
-						element.cursor.moveNext();
+								currentItem[IEnumerableScale(element.scale2).categoryField];
 					}
 							
 					// set the elements propery of the CategoryAxis owned by the current element

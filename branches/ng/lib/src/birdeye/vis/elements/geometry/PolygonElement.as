@@ -41,8 +41,7 @@ package birdeye.vis.elements.geometry
 	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	
-	import mx.collections.CursorBookmark;
+	import flash.utils.getTimer;
 
 	public class PolygonElement extends BaseElement
 	{
@@ -98,36 +97,37 @@ package birdeye.vis.elements.geometry
 		 * Called by super.updateDisplayList when the element is ready for layout.*/
 		override public function drawElement():void
 		{
-			if (isReadyForLayout() && _invalidatedDisplay)
+			if (isReadyForLayout() && _invalidatedElementGraphic)
 			{
+trace(getTimer(), "drawing polygon ele");
 				super.drawElement();
 				removeAllElements();
 				var xPrev:Number, yPrev:Number;
 				var pos1:Number, pos2:Number;
 				var t:uint = 0;
 				
-				// move data provider cursor at the beginning
-				cursor.seek(CursorBookmark.FIRST);
 				var fullPoly:Array;
 				var initiated:Boolean = false;
 				
 				poly = new Polygon();
 				poly.data = " ";
 
-				while (!cursor.afterLast)
+				for (var cursorIndex:uint = 0; cursorIndex<_cursorVector.length; cursorIndex++)
 				{
-					fullPoly = cursor.current[_polyDim] as Array;
+					var currentItem:Object = _cursorVector[cursorIndex];
+
+					fullPoly = currentItem[_polyDim] as Array;
 
 					if (colorScale)
 					{
-						var col:* = colorScale.getPosition(cursor.current[colorField]);
+						var col:* = colorScale.getPosition(currentItem[colorField]);
 						if (col is Number)
 							fill = new SolidFill(col);
 						else if (col is IGraphicsFill)
 							fill = col;
 					} 
 	
-					createTTGG(cursor.current, [_polyDim], NaN, NaN, NaN, NaN, null, NaN, NaN, false);
+					createTTGG(currentItem, [_polyDim], NaN, NaN, NaN, NaN, null, NaN, NaN, false);
 
 					if (fullPoly && fullPoly.length > 0)
 					{
@@ -173,14 +173,14 @@ package birdeye.vis.elements.geometry
 									poly.data += String(pos1) + "," + String(pos2) + " ";
 								}
 								poly.fill = fill;
-								poly.stroke = stroke;
-								ttGG.geometryCollection.addItemAt(poly,0);
+								poly.stroke = stroke; 
+								ttGG.geometryCollection.addItemAt(poly,0); 
 							}
 						}
 					}
-					cursor.moveNext();
 				}
-				_invalidatedDisplay = false;
+				_invalidatedElementGraphic = false;
+trace(getTimer(), "drawing polygon ele");
 			}
 		}
 

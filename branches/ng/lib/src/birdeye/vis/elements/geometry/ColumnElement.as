@@ -45,11 +45,12 @@ package birdeye.vis.elements.geometry
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.geom.Rectangle;
-	
-	import mx.collections.CursorBookmark;
+	import flash.utils.getTimer;
 
 	public class ColumnElement extends StackElement 
 	{
+		private var _ggArray:Array;
+		
 		override public function get elementType():String
 		{
 			return "column";
@@ -80,8 +81,10 @@ package birdeye.vis.elements.geometry
 		{
 //			var renderer:ISeriesDataRenderer = new itemRenderer();
 			
-			if (isReadyForLayout() && _invalidatedDisplay)
+			if (isReadyForLayout() && _invalidatedElementGraphic)
 			{
+trace (getTimer(), "drawing column ele");
+
 				super.drawElement();
 				removeAllElements();
 				var dataFields:Array = [];
@@ -111,16 +114,8 @@ package birdeye.vis.elements.geometry
 					var constTmpSize:Number = tmpSize;
 				}
 	
-				if (graphicsCollection.items && graphicsCollection.items.length>0)
-					gg = graphicsCollection.items[0];
-				else
-				{
-					gg = new DataItemLayout();
-					graphicsCollection.addItem(gg);
-				}
-				gg.target = this;
-				ggIndex = 1;
-	
+				ggIndex = 0;
+ 	
 				if (chart.coordType == VisScene.POLAR)
 				{
 					var arcSize:Number = NaN;
@@ -145,15 +140,27 @@ package birdeye.vis.elements.geometry
 					}
 					constTmpSize = arcSize;
 				}
-				cursor.seek(CursorBookmark.FIRST);
+				
 				var tmpDim2:String;
 				var innerBase2:Number;
-				while (!cursor.afterLast)
+				for (var cursorIndex:uint = 0; cursorIndex<_cursorVector.length; cursorIndex++)
 				{
+	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
+						gg = graphicsCollection.items[ggIndex];
+					else
+					{
+						gg = new DataItemLayout();
+						graphicsCollection.addItem(gg);
+					}
+					gg.target = this;
+					ggIndex++;
+
+					var currentItem:Object = _cursorVector[cursorIndex];
+					
 					var tmpArray:Array = (dim2 is Array) ? dim2 as Array : [String(dim2)];
 					
 					innerBase2 = 0;
-					j = cursor.current[dim1];
+					j = currentItem[dim1];
 
 					for (var i:Number = 0; i<tmpArray.length; i++)
 					{
@@ -161,7 +168,7 @@ package birdeye.vis.elements.geometry
 						
 						if (scale1)
 						{
-							pos1 = scale1.getPosition(cursor.current[dim1]);
+							pos1 = scale1.getPosition(currentItem[dim1]);
 						}
 						
 						if (scale2)
@@ -171,9 +178,9 @@ package birdeye.vis.elements.geometry
 							{
 								baseScale2 = scale2.getPosition(baseValues[j] + innerBase2);
 								pos2 = scale2.getPosition(
-									baseValues[j] + Math.max(0,cursor.current[tmpDim2] + innerBase2));
+									baseValues[j] + Math.max(0,currentItem[tmpDim2] + innerBase2));
 							} else {
-								pos2 = scale2.getPosition(cursor.current[tmpDim2] + innerBase2);
+								pos2 = scale2.getPosition(currentItem[tmpDim2] + innerBase2);
 							}
 						}
 						
@@ -182,29 +189,29 @@ package birdeye.vis.elements.geometry
 						// TODO: fix stacked100 on 3D
 						if (scale3)
 						{
-							zPos = scale3.getPosition(cursor.current[dim3]);
+							zPos = scale3.getPosition(currentItem[dim3]);
 							scale2RelativeValue = XYZ(scale3).height - zPos;
 						}
 		
 						if (multiScale)
 						{
-							pos1 = multiScale.scale1.getPosition(cursor.current[dim1]);
+							pos1 = multiScale.scale1.getPosition(currentItem[dim1]);
 							pos2 = INumerableScale(multiScale.scales[
-												cursor.current[multiScale.dim1]
-												]).getPosition(cursor.current[tmpDim2]);
+												currentItem[multiScale.dim1]
+												]).getPosition(currentItem[tmpDim2]);
 						} else if (chart.multiScale) {
 							baseScale2 = getDim2MinPosition(INumerableScale(chart.multiScale.scales[
-												cursor.current[chart.multiScale.dim1]
+												currentItem[chart.multiScale.dim1]
 												]));
-							pos1 = chart.multiScale.scale1.getPosition(cursor.current[dim1]);
+							pos1 = chart.multiScale.scale1.getPosition(currentItem[dim1]);
 							pos2 = INumerableScale(chart.multiScale.scales[
-												cursor.current[chart.multiScale.dim1]
-												]).getPosition(cursor.current[tmpDim2] + innerBase2);
+												currentItem[chart.multiScale.dim1]
+												]).getPosition(currentItem[tmpDim2] + innerBase2);
 						}
 		
 						if (colorScale)
 						{
-							var col:* = colorScale.getPosition(cursor.current[colorField]);
+							var col:* = colorScale.getPosition(currentItem[colorField]);
 							if (col is Number)
 								fill = new SolidFill(col);
 							else if (col is IGraphicsFill)
@@ -213,7 +220,7 @@ package birdeye.vis.elements.geometry
 		
 						if (sizeScale)
 						{
-							_size = sizeScale.getPosition(cursor.current[sizeField]);
+							_size = sizeScale.getPosition(currentItem[sizeField]);
 							if (chart.coordType == VisScene.CARTESIAN)
 								tmpSize = constTmpSize * _size;
 							else
@@ -256,7 +263,7 @@ package birdeye.vis.elements.geometry
 								case STACKED100:
 									innerColWidth = colWidth;
 									baseScale2 = scale2.getPosition(innerBase2);
-									innerBase2 += cursor.current[tmpDim2];
+									innerBase2 += currentItem[tmpDim2];
 									break;
 								case STACKED:
 									innerColWidth = colWidth/tmpArray.length;
@@ -273,8 +280,8 @@ package birdeye.vis.elements.geometry
 			
 							// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 							// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-							createTTGG(cursor.current, dataFields, pos1 + innerColWidth/2, pos2, scale2RelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
-			
+  							createTTGG(currentItem, dataFields, pos1 + innerColWidth/2, pos2, scale2RelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
+ 			 
 							if (dim3)
 							{
 								if (!isNaN(zPos))
@@ -282,8 +289,8 @@ package birdeye.vis.elements.geometry
 									gg = new DataItemLayout();
 									gg.target = this;
 									graphicsCollection.addItem(gg);
-									ttGG.posZ = ttGG.z = gg.posZ = gg.z = zPos;
-								} else
+/* 									ttGG.posZ = ttGG.z = gg.posZ = gg.z = zPos;
+ */								} else
 									zPos = 0;
 							}
 			
@@ -292,14 +299,14 @@ package birdeye.vis.elements.geometry
 							
 			//				poly = renderer.getGeometry(bounds);
 			
-			 				if (_source)
+ 			 				if (_source)
 								poly = new RasterRenderer(bounds, _source);
 			 				else 
 								poly = new itemRenderer(bounds);
 			
 							poly.fill = fill;
-							poly.stroke = stroke;
-							gg.geometryCollection.addItemAt(poly,0);
+							poly.stroke = stroke; 
+							gg.geometryCollection.addItemAt(poly,0);  
 						} else if (chart.coordType == VisScene.POLAR)
 						{
 	/* 						var arcCenterX:Number = chart.origin.x - pos2;
@@ -329,12 +336,12 @@ package birdeye.vis.elements.geometry
 									innerAngleSize = arcSize;
 									if (chart.multiScale)
 										baseScale2 = INumerableScale(chart.multiScale.scales[
-													cursor.current[chart.multiScale.dim1]
+													currentItem[chart.multiScale.dim1]
 													]).getPosition(innerBase2);
 									else if (scale2)
 										baseScale2 = scale2.getPosition(innerBase2);
 
-									innerBase2 += cursor.current[tmpDim2];
+									innerBase2 += currentItem[tmpDim2];
 									break;
 								case STACKED:
 									innerAngleSize = arcSize/tmpArray.length;
@@ -353,8 +360,8 @@ package birdeye.vis.elements.geometry
 							var xPos:Number = PolarCoordinateTransform.getX(startAngle+innerAngleSize/2, pos2, chart.origin);
 							var yPos:Number = PolarCoordinateTransform.getY(startAngle+innerAngleSize/2, pos2, chart.origin); 
 		 	
-							createTTGG(cursor.current, dataFields, xPos, yPos, NaN, _rendererSize);
-							
+ 							createTTGG(currentItem, dataFields, xPos, yPos, NaN, _rendererSize);
+ 							
 							if (ttGG && _extendMouseEvents)
 								gg = ttGG;
 								
@@ -377,14 +384,13 @@ package birdeye.vis.elements.geometry
 							gg.geometryCollection.addItem(shape);
 						}
 					}
-	
-					cursor.moveNext();
 				}
 	
 				if (dim3)
 					zSort();
 
-				_invalidatedDisplay = false;
+				_invalidatedElementGraphic = false;
+trace (getTimer(), "drawing column ele");
 			}
 		}
 		
