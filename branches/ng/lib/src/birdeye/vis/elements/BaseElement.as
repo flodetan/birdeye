@@ -56,6 +56,7 @@ package birdeye.vis.elements
 	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
+	import mx.collections.CursorBookmark;
 	import mx.collections.ICollectionView;
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
@@ -441,6 +442,7 @@ package birdeye.vis.elements
 		protected var fill:IGraphicsFill;
 		protected var stroke:IGraphicsStroke = new SolidStroke(0x888888,1,1);
 		
+		protected var invalidatedData:Boolean = false;
 		private var _cursor:IViewCursor;
 		protected var _dataProvider:Object=null;
 		/** Set the data provider for the series, if the series doesn't have its own dataProvider
@@ -507,6 +509,7 @@ package birdeye.vis.elements
 			  		Cartesian(chart).invalidateDisplayList();
 		  		}
 
+	  			invalidatedData = true;
 		  		invalidateSize();
 		  		invalidateProperties();
 				invalidatingDisplay();
@@ -829,6 +832,9 @@ package birdeye.vis.elements
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
+
+			if (invalidatedData && _cursor)
+				loadElementsValues();
 			
 			// since we use Degrafa, the background is needed in the element
 			// to allow events for tooltips all over the element.
@@ -860,6 +866,19 @@ package birdeye.vis.elements
 		}
 
 		// other methods
+
+		private function loadElementsValues():void
+		{
+			_cursor.seek(CursorBookmark.FIRST);
+			_cursorVector = new Vector.<Object>;
+			var j:uint = 0;
+			while (!_cursor.afterLast)
+			{
+				_cursorVector[j++] = _cursor.current;
+				_cursor.moveNext();
+			}
+			
+		}
 
 		/**
 		* @Private 
