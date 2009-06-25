@@ -139,53 +139,54 @@ package birdeye.vis.elements.geometry
 		{
 			super.drawElement();
 				
-			prepareGraphicsGroupForDrawing();
+			prepareForItemGeometriesCreation();
 
 			const dataFieldNames:Array = [dimId, dimName];
-			var itemIndex:int = 0;
+			const dataItems = cursorVector;
 				
 			const thisNode:NodeElement = this;
 			
-			if (_cursorVector)
-			_cursorVector.forEach(function(item:Object, index:int, items:Vector.<Object>) {
-				var pos1:Number = NaN, pos2:Number = NaN, pos3:Number = NaN;
-
-				const position:Position = _layout.getNodeItemPosition(index);
-
-				// We cannot use scale.getPosition here, because
-				// scales work in an inherently different way, than
-				// what we need: they calc min/max of the input data
-				// values. In case of Node/Edge we don't have these
-				// values (positions), so the scales think we have no data
-				// and create a zero-size viewport.
-
-//				if (scale1) {
-//					pos1 = scale1.getPosition(position.pos1);
-//				}
-//				if (scale2) {
-//					pos2 = scale2.getPosition(position.pos2);
-//				}
-
-				if (position != null) {
-					pos1 = position.pos1;
-					pos2 = position.pos2;
-		
-					createTTGG(item, dataFieldNames, pos1, pos2, 1.0, _size * 2);
-					
-					var group:GeometryGroup = createItemGeometryGroup();
-					group.geometry = [
-						createItemRenderer(bounds(pos1, pos2)),
-						TextRenderer.createTextLabel(
-							   pos1, pos2 + _size,
-							   item[dimName], 
-							   new SolidFill(0xffffff),  // TODO: add textFill property
-							   true, false
-						)
-					];
-				}
-			});
+			if (dataItems) {
+				dataItems.forEach(function(item:Object, index:int, items:Vector.<Object>) {
+					var pos1:Number = NaN, pos2:Number = NaN, pos3:Number = NaN;
+	
+					const position:Position = _layout.getNodeItemPosition(index);
+	
+					// We cannot use scale.getPosition here, because
+					// scales work in an inherently different way, than
+					// what we need: they calc min/max of the input data
+					// values. In case of Node/Edge we don't have these
+					// values (positions), so the scales think we have no data
+					// and create a zero-size viewport.
+	
+	//				if (scale1) {
+	//					pos1 = scale1.getPosition(position.pos1);
+	//				}
+	//				if (scale2) {
+	//					pos2 = scale2.getPosition(position.pos2);
+	//				}
+	
+					if (position != null) {
+						pos1 = position.pos1;
+						pos2 = position.pos2;
+			
+						createTTGG(item, dataFieldNames, pos1, pos2, 1.0, _size * 2);
+						
+						var group:GeometryGroup = createItemGeometryGroup();
+						group.geometry = [
+							createItemRenderer(bounds(pos1, pos2)),
+							TextRenderer.createTextLabel(
+								   pos1, pos2 + _size,
+								   item[dimName], 
+								   new SolidFill(0xffffff),  // TODO: add textFill property
+								   true, false
+							)
+						];
+					}
+				});
+			}
 		}
-		
+
 		/*
 		protected function addMoveEventListeneres() : void {
 			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);

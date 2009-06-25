@@ -17,18 +17,22 @@
 
 			import mx.collections.ArrayCollection;
 
+			var generation:int = 0;
+			
 			private function generateData():void {
+				generation++;
+				
 				const nodeSet:ArrayCollection = new ArrayCollection();
 				const numNodes:int = int(Math.random() * 10 + 10); 
 				for (var i:int = 0; i < numNodes; i++) {
 					nodeSet.addItem({
 						id: i + 1,
-						name: randomName()
+						name: (i + 1) + ". " + randomName() + " "
 					});
 				}
 
 				const edgeSet:ArrayCollection = new ArrayCollection();
-				const numEdges:int = int(Math.random() * 50 + 20);
+				const numEdges:int = int(Math.random() * 40 + 10);
 				for (var i:int = 0; i < numEdges; i++) {
 					edgeSet.addItem({
 						start: int(Math.random() * numNodes) + 1,

@@ -44,9 +44,7 @@ package birdeye.vis.elements
 	import com.degrafa.Surface;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
-	import com.degrafa.core.collections.GeometryCollection;
 	import com.degrafa.geometry.Circle;
-	import com.degrafa.geometry.Geometry;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.GradientStop;
 	import com.degrafa.paint.LinearGradientFill;
@@ -54,6 +52,7 @@ package birdeye.vis.elements
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.events.MouseEvent;
+	import flash.utils.getQualifiedClassName;
 	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
@@ -1452,6 +1451,11 @@ package birdeye.vis.elements
 		{
 			return stroke;
 		}
+		
+		protected function prepareForItemGeometriesCreation():void {
+			removeAllElements();
+			ggIndex = 0;
+		}
 
 		public function createItemGeometryGroup():GeometryGroup {
 	        if (graphicsCollection.items && graphicsCollection.items.length > ggIndex) {
@@ -1464,13 +1468,6 @@ package birdeye.vis.elements
 	        ggIndex++;
 	        
 	        return gg;
-		}
-		
-		protected function prepareGraphicsGroupForDrawing():void {
-			removeAllElements();
-
-			ggIndex = 0;
-//			createItemGeometryGroup();
 		}
 	}
 }
