@@ -544,7 +544,7 @@
 					addChildAt(ggBackGround, 0);
 			}
 
- 			applyGraphLayouts();
+ 			applyGraphLayouts(unscaledWidth, unscaledHeight);
 		}
 		
 		private function loadElementsValues():void
@@ -559,11 +559,11 @@
 			}
 			
 		}
-		
-		protected function applyGraphLayouts():void
+
+		protected function applyGraphLayouts(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			if (_graphLayouts && _graphLayouts.length>0) {
-				for each (var t:IGraphLayout in _graphLayouts) t.apply();
+				for each (var t:IGraphLayout in _graphLayouts) t.apply(unscaledWidth, unscaledHeight);
 			}
 		}
 

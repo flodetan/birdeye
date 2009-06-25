@@ -47,11 +47,6 @@ package birdeye.vis.trans
 			_node.graphLayout = this;
 		}
 		
-		protected var _edge:EdgeElement;
-		public function set applyToEdge(val:EdgeElement):void {
-			_edge = val;
-		}
-
 		private var nodeItemPositions:Array = [];
 
 		protected function setItemPosition(itemIndex:int, pos1:Number, pos2:Number, pos3:Number):void {
@@ -62,31 +57,9 @@ package birdeye.vis.trans
 			return nodeItemPositions[itemIndex];
 		}
 
-
-		private var _viewportWidth:Number;
-		
-		public function get viewportWidth():Number {
-			return _viewportWidth;
-		}
-		
-		public function set viewportWidth(width:Number):void {
-			_viewportWidth = width;
-		}
-		
-
-		private var _viewportHeight:Number;
-		
-		public function get viewportHeight():Number {
-			return _viewportHeight;
-		}
-		
-		public function set viewportHeight(height:Number):void {
-			_viewportHeight = height;
-		}
-		
 		/**
 		 * This is an abstract method which must be implemented by subclasses.
 		 **/
-		public function apply():void { }
+		public function apply(width:int, height:int):void { }
 	}
 }

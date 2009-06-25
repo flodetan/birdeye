@@ -28,7 +28,7 @@
 				}
 
 				const edgeSet:ArrayCollection = new ArrayCollection();
-				const numEdges:int = int(Math.random() * 80 + 20);
+				const numEdges:int = int(Math.random() * 50 + 20);
 				for (var i:int = 0; i < numEdges; i++) {
 					edgeSet.addItem({
 						start: int(Math.random() * numNodes) + 1,
@@ -61,20 +61,17 @@
 	 			<scales:Linear id="Y" showAxis="false" placement="left" />
 			</coords:scales>
 			-->
-			
 			<coords:elements>
 				<!-- <elements:NodeElement scale1="{X}" scale2="{Y}" dim1="x" dim2="y" /> -->
 				
 				<elements:EdgeElement id="edge" dimStart="start" dimEnd="end" node="{node}" dataProvider="{edges}"
-									  colorFill="0xFF0000" colorStroke="0x999999" />
+									  colorFill="0xFF0000" colorStroke="0x999999" strokeWeight="2" />
 									  
 				<elements:NodeElement id="node" dimId="id" dimName="name" dataProvider="{nodes}"
 									  colorFill="0x0000FF" alphaFill="1.0" strokeColor="0xFFFFFF" size="7" />
-
 			</coords:elements>
 			<coords:transforms>
-				<trans:SingleCycleGraphLayout id="SC" applyToNode="{node}" applyToEdge="{edge}"
-								   viewportWidth="300" viewportHeight="200"/>
+				<trans:SingleCycleGraphLayout applyToNode="{node}" />
 			</coords:transforms>
     	</coords:Cartesian>
     </mx:VBox>

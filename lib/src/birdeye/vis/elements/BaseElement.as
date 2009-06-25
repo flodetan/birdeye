@@ -46,6 +46,7 @@ package birdeye.vis.elements
 	import com.degrafa.core.IGraphicsStroke;
 	import com.degrafa.core.collections.GeometryCollection;
 	import com.degrafa.geometry.Circle;
+	import com.degrafa.geometry.Geometry;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.GradientStop;
 	import com.degrafa.paint.LinearGradientFill;
@@ -1452,69 +1453,24 @@ package birdeye.vis.elements
 			return stroke;
 		}
 
-
-		protected function getGeometryCollection():GeometryCollection {
-			return gg.geometryCollection;
+		public function createItemGeometryGroup():GeometryGroup {
+	        if (graphicsCollection.items && graphicsCollection.items.length > ggIndex) {
+	        	gg = graphicsCollection.items[ggIndex];
+	 		} else {
+	        	gg = new DataItemLayout();
+	        	graphicsCollection.addItem(gg);
+	        }
+	        gg.target = this;
+	        ggIndex++;
+	        
+	        return gg;
 		}
 		
 		protected function prepareGraphicsGroupForDrawing():void {
 			removeAllElements();
 
-			if (graphicsCollection.items  &&  graphicsCollection.items.length > 0) {
-				gg = graphicsCollection.items[0];
-			} else {
-				gg = new DataItemLayout();
-				graphicsCollection.addItem(gg);
-			}
-			gg.target = this;
-			ggIndex = 1;
-		}
-
-		public function getDataItemsCount():int {
-			if (_cursorVector) 
-				return _cursorVector.length;
-			return null;
-		}
-		
-		public function getDataItem(index:int):Object {
-			if (_cursorVector) 
-				_cursorVector[index];
-			return null;
-		}
-		
-		public function getDataItems():Vector.<Object> {
-			if (_cursorVector)
-				return _cursorVector;
-			return null;
-		}
-		
-		public function forEachDataItem(callback:Function):void {
-			if (_cursorVector) 
-				for (var i:uint = 0; i < _cursorVector.length; i++)
-				{
-					callback(_cursorVector[i], i);
-				}
-			return;
-		}
-		
-		/**
-		 * Calls the given callback function for each dataItem
-		 * until it returns a value which is !== undefined.
-		 * Then stops iteration and returns this value. 
-		 **/
-		public function findDataItem(callback:Function):Object {
-			if (_cursorVector) 
-			{
-				var retVal;
-				for (var i:uint = 0; i < _cursorVector.length; i++)
-				{
-					retVal = callback(_cursorVector, i);
-					if (retVal !== undefined) {
-						return retVal;
-					}
-				}
-			}
-			return null;
+			ggIndex = 0;
+//			createItemGeometryGroup();
 		}
 	}
 }

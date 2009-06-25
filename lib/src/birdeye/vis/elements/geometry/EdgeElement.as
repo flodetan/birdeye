@@ -31,6 +31,7 @@
 	import birdeye.vis.guides.renderers.LineRenderer;
 	import birdeye.vis.interfaces.IPositionableElement;
 	
+	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
 	
 	import flash.geom.Rectangle;
@@ -100,19 +101,22 @@
 
 			var itemIndex:int = 0;
 			var collItemIndex:int = 0;
-						
-			forEachDataItem(function(data:Object, itemIndex:int):void {
-				var pos1:Number = NaN, pos2:Number = NaN, pos3:Number = NaN;
-
-				const start:Position = _node.getItemPosition(data[_dimStart]);
-				const end:Position = _node.getItemPosition(data[_dimEnd]);
-				
-				if (start  &&  end) {
-					getGeometryCollection().addItemAt(
-						createItemRenderer(bounds(start.pos1, start.pos2, end.pos1, end.pos2)),
-						collItemIndex++);
-				}
-			});
+			
+			if (_cursorVector){
+				_cursorVector.forEach(function(item:Object, itemIndex:int, items:Vector.<Object>):void {
+					var pos1:Number = NaN, pos2:Number = NaN, pos3:Number = NaN;
+	
+					const start:Position = _node.getItemPosition(item[_dimStart]);
+					const end:Position = _node.getItemPosition(item[_dimEnd]);
+					
+					if (start  &&  end) {
+						var group:GeometryGroup = createItemGeometryGroup();
+						group.geometry = [
+							createItemRenderer(bounds(start.pos1, start.pos2, end.pos1, end.pos2))
+						];
+					}
+				});
+			}
 		}
 		
 	}
