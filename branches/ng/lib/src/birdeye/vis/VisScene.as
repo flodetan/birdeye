@@ -130,7 +130,7 @@
 			return _maxStacked100;
 		}
 		
-		private var _scales:Array; /* of IScale */
+		protected var _scales:Array; /* of IScale */
 		/** Array of scales, each element will take a scale target from this scale list.*/
         [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IScale")]
         [ArrayElementType("birdeye.vis.interfaces.IScale")]
@@ -547,6 +547,8 @@
  			applyGraphLayouts(unscaledWidth, unscaledHeight);
 		}
 		
+		// Other methods
+
 		private function loadElementsValues():void
 		{
 			_cursor.seek(CursorBookmark.FIRST);
