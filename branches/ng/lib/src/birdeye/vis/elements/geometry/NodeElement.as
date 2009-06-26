@@ -88,9 +88,9 @@ package birdeye.vis.elements.geometry
 		}
 
 		public function getItemIndexById(id:Object):int {
-			if (!_cursorVector) return -1;
-			for (var i:int = 0; i < _cursorVector.length; i++) {
-				if (_cursorVector[i][_dimId] == id) return i;
+			if (!_dataItems) return -1;
+			for (var i:int = 0; i < _dataItems.length; i++) {
+				if (_dataItems[i][_dimId] == id) return i;
 			}
 			return -1;
 		}
@@ -142,7 +142,7 @@ package birdeye.vis.elements.geometry
 			prepareForItemGeometriesCreation();
 
 			const dataFieldNames:Array = [dimId, dimName];
-			const dataItems = cursorVector;
+			const dataItems = dataItems;
 				
 			const thisNode:NodeElement = this;
 			

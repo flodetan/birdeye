@@ -110,7 +110,7 @@ package birdeye.vis.elements.geometry
 				var tmpDim1:String;
 				var innerBase1:Number;
 
-				for (var cursorIndex:uint = 0; cursorIndex<_cursorVector.length; cursorIndex++)
+				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
 				{
 	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
 						gg = graphicsCollection.items[ggIndex];
@@ -122,7 +122,7 @@ package birdeye.vis.elements.geometry
 					gg.target = this;
 					ggIndex++;
 
-					var currentItem:Object = _cursorVector[cursorIndex];
+					var currentItem:Object = _dataItems[cursorIndex];
 					
 					var tmpArray:Array = (dim1 is Array) ? dim1 as Array : [String(dim1)];
 					

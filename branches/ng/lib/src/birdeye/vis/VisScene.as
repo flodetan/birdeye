@@ -340,10 +340,10 @@
 			return _percentWidth;
 		}
 		
-		private var _cursorVector:Vector.<Object>;
-		public function get cursorVector():Vector.<Object>
+		private var _dataItems:Vector.<Object>;
+		public function get dataItems():Vector.<Object>
 		{
-			return _cursorVector;
+			return _dataItems;
 		}
 		
 		protected var invalidatedData:Boolean = false;
@@ -353,7 +353,7 @@
 		{
 			if (value is Vector.<Object>)
 			{
-	  			_cursorVector = Vector.<Object>(value);
+	  			_dataItems = Vector.<Object>(value);
 
 			} else {
 				//_dataProvider = value;
@@ -552,11 +552,11 @@
 		private function loadElementsValues():void
 		{
 			_cursor.seek(CursorBookmark.FIRST);
-			_cursorVector = new Vector.<Object>;
+			_dataItems = new Vector.<Object>;
 			var j:uint = 0;
 			while (!_cursor.afterLast)
 			{
-				_cursorVector[j++] = (_cursor.current);
+				_dataItems[j++] = (_cursor.current);
 				_cursor.moveNext();
 			}
 			

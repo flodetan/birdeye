@@ -143,7 +143,7 @@ trace (getTimer(), "drawing column ele");
 				
 				var tmpDim2:String;
 				var innerBase2:Number;
-				for (var cursorIndex:uint = 0; cursorIndex<_cursorVector.length; cursorIndex++)
+				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
 				{
 	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
 						gg = graphicsCollection.items[ggIndex];
@@ -155,7 +155,7 @@ trace (getTimer(), "drawing column ele");
 					gg.target = this;
 					ggIndex++;
 
-					var currentItem:Object = _cursorVector[cursorIndex];
+					var currentItem:Object = _dataItems[cursorIndex];
 					
 					var tmpArray:Array = (dim2 is Array) ? dim2 as Array : [String(dim2)];
 					

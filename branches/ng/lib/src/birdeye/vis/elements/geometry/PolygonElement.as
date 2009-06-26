@@ -112,9 +112,9 @@ trace(getTimer(), "drawing polygon ele");
 				poly = new Polygon();
 				poly.data = " ";
 
-				for (var cursorIndex:uint = 0; cursorIndex<_cursorVector.length; cursorIndex++)
+				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
 				{
-					var currentItem:Object = _cursorVector[cursorIndex];
+					var currentItem:Object = _dataItems[cursorIndex];
 
 					fullPoly = currentItem[_polyDim] as Array;
 

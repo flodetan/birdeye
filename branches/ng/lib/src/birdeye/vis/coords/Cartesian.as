@@ -221,13 +221,13 @@ package birdeye.vis.coords
 				{
 					// if element dataprovider doesn' exist or it refers to the
 					// chart dataProvider, than set its cursor to this chart cursor (this.cursor)
-					if (cursorVector && (! IElement(_elements[i]).dataProvider 
+					if (dataItems && (! IElement(_elements[i]).dataProvider 
 									|| IElement(_elements[i]).dataProvider == this.dataProvider))
-						IElement(_elements[i]).cursorVector = cursorVector;
+						IElement(_elements[i]).dataItems = dataItems;
 
 					// nCursors is used in feedAxes to check that all elements cursors are ready
 					// and therefore check that axes can be properly feeded
-					if (cursorVector || IElement(_elements[i]).cursorVector)
+					if (dataItems || IElement(_elements[i]).dataItems)
 						nCursors += 1;
 
 					_elementsContainer.addChild(DisplayObject(elements[i]));
@@ -321,10 +321,10 @@ package birdeye.vis.coords
 						var cursIndex:uint = 0;
 						var currentItem:Object;
 				
-						if (IElement(_stackElements[s]).cursorVector &&
-							IElement(_stackElements[s]).cursorVector != cursorVector)
+						if (IElement(_stackElements[s]).dataItems &&
+							IElement(_stackElements[s]).dataItems != dataItems)
 						{
-							sCursor = IElement(_stackElements[s]).cursorVector;
+							sCursor = IElement(_stackElements[s]).dataItems;
 
 							for (cursIndex = 0; cursIndex < sCursor.length; cursIndex++)
 							{
@@ -388,19 +388,19 @@ package birdeye.vis.coords
 						}
 					}
 					
-					if (cursorVector)
+					if (dataItems)
 					{
-						for (cursIndex = 0; cursIndex < cursorVector.length; cursIndex++)
+						for (cursIndex = 0; cursIndex < dataItems.length; cursIndex++)
 						{
-							currentItem = cursorVector[cursIndex];
+							currentItem = dataItems[cursIndex];
 							// index of last Elements without own cursor with the same xField data value 
 							// (because they've already been processed in the previous loop)
 
 							var t:Array = [];
 							for (s = 0; s<_stackElements.length; s++)
 							{
-								if (! (IElement(_stackElements[s]).cursorVector &&
-									IElement(_stackElements[s]).cursorVector != cursorVector))
+								if (! (IElement(_stackElements[s]).dataItems &&
+									IElement(_stackElements[s]).dataItems != dataItems))
 								{
 									if (IStack(_stackElements[s]).collisionScale == BaseElement.VERTICAL)
 									{
@@ -533,19 +533,22 @@ package birdeye.vis.coords
 					transform.matrix3D = null;
  			}
 
- 			for (var i:int = 0; i<_scales.length; i++)
+			if (_scales)
 			{
-				switch (IScaleUI(_scales[i]).placement)
+	 			for (var i:int = 0; i<_scales.length; i++)
 				{
-					case BaseScale.BOTTOM:
-					case BaseScale.TOP:
-						IScaleUI(_scales[i]).size = chartBounds.width;
-						break;
-					case BaseScale.LEFT:
-					case BaseScale.RIGHT:
-						IScaleUI(_scales[i]).size= chartBounds.height;
+					switch (IScaleUI(_scales[i]).placement)
+					{
+						case BaseScale.BOTTOM:
+						case BaseScale.TOP:
+							IScaleUI(_scales[i]).size = chartBounds.width;
+							break;
+						case BaseScale.LEFT:
+						case BaseScale.RIGHT:
+							IScaleUI(_scales[i]).size= chartBounds.height;
+					}
+					IScaleUI(_scales[i]).draw();
 				}
-				IScaleUI(_scales[i]).draw();
 			}
 
  			for (i = 0; i<_elements.length; i++)
@@ -630,7 +633,7 @@ package birdeye.vis.coords
 		 * Init the axes owned by the Element passed to this method.*/
 		private function initElementsAxes(element:IElement):void
 		{
-			if (element.cursorVector)
+			if (element.dataItems)
 			{
 				var catElements:Array;
 				var j:Number;
@@ -650,9 +653,9 @@ package birdeye.vis.coords
 							j = catElements.length;
 						} 
 							
-						for (cursIndex = 0; cursIndex<element.cursorVector.length; cursIndex++)
+						for (cursIndex = 0; cursIndex<element.dataItems.length; cursIndex++)
 						{
-							currentItem = element.cursorVector[cursIndex];
+							currentItem = element.dataItems[cursIndex];
 							// if the category value already exists in the axis, than skip it
 							if (catElements.indexOf(currentItem[IEnumerableScale(element.scale1).categoryField]) == -1)
 								catElements[j++] = 
@@ -694,9 +697,9 @@ package birdeye.vis.coords
 							catElements = [];
 						}
 							
-						for (cursIndex = 0; cursIndex<element.cursorVector.length; cursIndex++)
+						for (cursIndex = 0; cursIndex<element.dataItems.length; cursIndex++)
 						{
-							currentItem = element.cursorVector[cursIndex];
+							currentItem = element.dataItems[cursIndex];
 
 							// if the category value already exists in the axis, than skip it
 							if (catElements.indexOf(currentItem[IEnumerableScale(element.scale2).categoryField]) == -1)
@@ -743,9 +746,9 @@ package birdeye.vis.coords
 							catElements = [];
 						}
 	
-						for (cursIndex = 0; cursIndex<element.cursorVector.length; cursIndex++)
+						for (cursIndex = 0; cursIndex<element.dataItems.length; cursIndex++)
 						{
-							currentItem = element.cursorVector[cursIndex];
+							currentItem = element.dataItems[cursIndex];
 
 							// if the category value already exists in the axis, than skip it
 							if (catElements.indexOf(currentItem[IEnumerableScale(element.scale3).categoryField]) == -1)

@@ -114,8 +114,8 @@ package birdeye.vis.interfaces
 
 		/** Set the cursor vector used by the Element. It can either derive from the Element own 
 		 * dataProvider or from the chart dataProvider.*/
-		function set cursorVector(val:Vector.<Object>):void;
-		function get cursorVector():Vector.<Object>;
+		function set dataItems(val:Vector.<Object>):void;
+		function get dataItems():Vector.<Object>;
 
 		/** Set the name to display (legends..).*/
 		function set displayName(val:String):void;
