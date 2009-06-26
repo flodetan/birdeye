@@ -55,8 +55,6 @@ package birdeye.vis.coords
 	import flash.geom.Point;
 	import flash.text.TextFieldAutoSize;
 	
-	import mx.collections.CursorBookmark;
-	
 	/** 
 	 * The PolarChart is the base chart that is extended by all charts that are
 	 * based on polar coordinates (PieChart, RadarChart, CoxCombo, etc). 
@@ -414,8 +412,9 @@ package birdeye.vis.coords
 			
 			if (multiScale)
 			{
-				multiScale.scalesSize = DisplayObject(multiScale).width  
+				multiScale.scalesSize = DisplayObject(multiScale).width = DisplayObject(multiScale).height 
 					= Math.min(unscaledWidth, unscaledHeight)/2;
+				multiScale.draw();
 			} 
 			
 			for (var i:Number = 0; i<_elements.length; i++)
@@ -439,6 +438,7 @@ package birdeye.vis.coords
 									_origin.y - IElement(_elements[i]).scale2.size;
 								break;
 						}
+						IScaleUI(IElement(_elements[i]).scale2).draw();
 					}
 				}
 			}
@@ -454,12 +454,12 @@ package birdeye.vis.coords
 
 			if (multiScale && multiScale.scale1)
 				drawLabels()
-
+			
 			for (i = 0; i<_elements.length; i++)
 			{
 				DisplayObject(_elements[i]).width = unscaledWidth;
 				DisplayObject(_elements[i]).height = unscaledHeight;
-				IElement(_elements[i]).drawElement();
+				IElement(_elements[i]).draw();
 			}
 			
 			if (_isMasked && _maskShape)
