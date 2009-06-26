@@ -32,8 +32,6 @@ package birdeye.vis.interfaces
 	
 	import flash.events.MouseEvent;
 	
-	import mx.collections.IViewCursor;
-	
 	public interface IElement extends IRasterRenderer
 	{
 		/** Set the chart target. This allows to share axes and other properties
@@ -138,7 +136,7 @@ package birdeye.vis.interfaces
 		function onMouseDoubleClick(e:MouseEvent):void;
 
 		/** Implement drawElement.*/
-		function drawElement():void;
+		function draw():void;
 
 		/** Remove all elements from the Element (Surface component).*/
 		function removeAllElements():void;
