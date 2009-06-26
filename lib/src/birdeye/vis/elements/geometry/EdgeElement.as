@@ -99,7 +99,7 @@
 			
 			prepareForItemGeometriesCreation();
 			
-			const dataItems = cursorVector;
+			const dataItems = dataItems;
 			
 			if (dataItems){
 				dataItems.forEach(function(item:Object, itemIndex:int, items:Vector.<Object>):void {

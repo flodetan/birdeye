@@ -109,7 +109,7 @@ trace (getTimer(), "drawing line ele");
 	
 				var points:Array = [];
 				
-				for (var cursorIndex:uint = 0; cursorIndex<_cursorVector.length; cursorIndex++)
+				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
 				{
 	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
 						gg = graphicsCollection.items[ggIndex];
@@ -121,7 +121,7 @@ trace (getTimer(), "drawing line ele");
 					gg.target = this;
 					ggIndex++;
 
-					var currentItem:Object = _cursorVector[cursorIndex];
+					var currentItem:Object = _dataItems[cursorIndex];
 					
 					if (scale1)
 					{

@@ -34,7 +34,7 @@ package birdeye.vis.trans
 		}
 		
 		public override function apply(width:int, height:int):void {
-			const dataItems:Vector.<Object> = _node.cursorVector;
+			const dataItems:Vector.<Object> = _node.dataItems;
 			if (dataItems) {
 			    const numItems = dataItems.length;
 				const mx:Number = width/2, my:int = height/2, r:int = Math.min(width, height)/2 * .8;

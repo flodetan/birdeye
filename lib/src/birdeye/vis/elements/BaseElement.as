@@ -523,19 +523,19 @@ package birdeye.vis.elements
 			return _dataProvider;
 		}
 		
-		protected var _cursorVector:Vector.<Object>;
-		public function set cursorVector(val:Vector.<Object>):void
+		protected var _dataItems:Vector.<Object>;
+		public function set dataItems(val:Vector.<Object>):void
 		{
-			_cursorVector = val;
+			_dataItems = val;
 			_maxDim1Value = _maxDim2Value = _maxDim3Value = _totalDim1PositiveValue = NaN;
 			_minDim1Value = _minDim2Value = _minDim3Value = NaN;
 			_minColorValue = _maxColorValue = _minSizeValue = _maxSizeValue = NaN;
 			invalidateProperties();
 			invalidatingDisplay();
 		}
-		public function get cursorVector():Vector.<Object>
+		public function get dataItems():Vector.<Object>
 		{
-			return _cursorVector;
+			return _dataItems;
 		}
 		
 		protected var _size:Number = 5;
@@ -871,11 +871,11 @@ package birdeye.vis.elements
 		private function loadElementsValues():void
 		{
 			_cursor.seek(CursorBookmark.FIRST);
-			_cursorVector = new Vector.<Object>;
+			_dataItems = new Vector.<Object>;
 			var j:uint = 0;
 			while (!_cursor.afterLast)
 			{
-				_cursorVector[j++] = _cursor.current;
+				_dataItems[j++] = _cursor.current;
 				_cursor.moveNext();
 			}
 			
@@ -1016,7 +1016,7 @@ package birdeye.vis.elements
 				&& (!isNaN(_maxDim1Value) || !isNaN(_maxDim2Value))
 				&&  */width>0 && height>0
 				&& chart
-				&& cursorVector;
+				&& dataItems;
 			
 			return globalCheck && axesCheck && colorsCheck;
 		}
@@ -1240,13 +1240,13 @@ package birdeye.vis.elements
 		protected function getTotalPositiveValue(field:Object):Number
 		{
 			var tot:Number = NaN;
-			if (cursorVector && field)
+			if (dataItems && field)
 			{
 				var currentItem:Object;
 			
-				for (var cursIndex:uint = 0; cursIndex<cursorVector.length; cursIndex++)
+				for (var cursIndex:uint = 0; cursIndex<dataItems.length; cursIndex++)
 				{
-					currentItem = cursorVector[cursIndex];
+					currentItem = dataItems[cursIndex];
 					var tmpArray:Array = (dim1 is Array) ? dim1 as Array : [String(dim1)];
 					
 					for (var i:Number = 0; i<tmpArray.length; i++)
@@ -1313,13 +1313,13 @@ package birdeye.vis.elements
 		private function getMaxV(field:String):Number
 		{
 			var max:Number = NaN;
-			if (cursorVector && field)
+			if (dataItems && field)
 			{
 				var currentItem:Object;
 			
-				for (var cursIndex:uint = 0; cursIndex<cursorVector.length; cursIndex++)
+				for (var cursIndex:uint = 0; cursIndex<dataItems.length; cursIndex++)
 				{
-					currentItem = cursorVector[cursIndex];
+					currentItem = dataItems[cursIndex];
 
 					currentValue = currentItem[field];
 					if (isNaN(max) || max < currentValue)
@@ -1333,13 +1333,13 @@ package birdeye.vis.elements
 		{
 			var min:Number = NaN;
 
-			if (cursorVector && field)
+			if (dataItems && field)
 			{
 				var currentItem:Object;
 			
-				for (var cursIndex:uint = 0; cursIndex<cursorVector.length; cursIndex++)
+				for (var cursIndex:uint = 0; cursIndex<dataItems.length; cursIndex++)
 				{
-					currentItem = cursorVector[cursIndex];
+					currentItem = dataItems[cursIndex];
 
 					currentValue = currentItem[field];
 					if (isNaN(min) || min > currentValue)
