@@ -241,7 +241,7 @@ trace(getTimer(), "drawing category scale");
 						}
 						
 						label.y = snap-label.displayObject.height/2;
-						label.x = thickWidth; 
+						label.x = Math.min(thickWidth, (label.displayObject.width + thickWidth) * sign);
 						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
 					}

@@ -27,14 +27,10 @@
  
 package birdeye.vis.scales
 {
+	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RasterTextPlus;
-	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
-	
-	import birdeye.vis.scales.BaseScale;
-	
-	import flash.events.Event;
 	
 	public class XYZ extends BaseScale 
 	{
@@ -113,7 +109,8 @@ package birdeye.vis.scales
 		}
 		
 		private var xMin:Number = NaN, yMin:Number = NaN, xMax:Number = NaN, yMax:Number = NaN;
-		private var sign:Number = NaN
+		private var sign:Number = NaN;
+		private var ggLine:GeometryGroup;
 		protected var line:Line; // draw the axis line
 		protected var thick:Line; 
 		protected var thickWidth:Number = 5;
@@ -121,13 +118,24 @@ package birdeye.vis.scales
 		/** @Private */
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
+			super.updateDisplayList(w,h);
+			setActualSize(w,h);
+		}
+		
+		private var prevWidth:Number = NaN, prevHeight:Number = NaN;
+		override public function draw():void
+		{
+			var w:Number = unscaledWidth, h:Number = unscaledHeight;
+			if (prevWidth != w || prevHeight != h)
+			{
+				prevWidth = w;
+				prevHeight = h;
+				invalidated = true;
+			}
+
 			if (showAxis && invalidated)
 			{
-				super.updateDisplayList(w,h);
-				setActualSize(w,h);
-				
 				removeAllElements();
-				
 				drawAxisLine(w,h)
 	
 				if (readyForLayout)
@@ -165,7 +173,13 @@ package birdeye.vis.scales
 					drawAxes(xMin, xMax, yMin, yMax, sign);
 					_pointer.stroke = new SolidStroke(colorPointer, 1, weightPointer);
 					_pointer.visible = false;
-					gg.geometryCollection.addItem(_pointer);
+					if (!ggLine)
+					{
+						ggLine = new GeometryGroup();
+						ggLine.target = surf;
+						surf.graphicsCollection.addItem(ggLine);
+					}
+					ggLine.geometryCollection.addItem(_pointer);
 				}
 			}
 		}
@@ -205,7 +219,14 @@ package birdeye.vis.scales
 
 			line = new Line(x0,y0,x1,y1);
 			line.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
-			gg.geometryCollection.addItem(line);
+
+			if (!ggLine)
+			{
+				ggLine = new GeometryGroup();
+				ggLine.target = surf;
+				surf.graphicsCollection.addItem(ggLine);
+			}
+			ggLine.geometryCollection.addItem(line);
 
 		}
 		

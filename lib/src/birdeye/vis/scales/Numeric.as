@@ -30,6 +30,7 @@ package birdeye.vis.scales
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.interfaces.IScaleUI;
 	
+	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
@@ -229,11 +230,24 @@ package birdeye.vis.scales
 			{	
 trace(getTimer(), "drawing numeric scale");
 				invalidated = false;
+				
+				var ggIndex:uint = 0;
+				
 				// vertical orientation
 				if (xMin == xMax)
 				{
 					for (snap = min; snap<=max; snap += dataInterval)
 					{
+		 				if (surf.graphicsCollection.items && surf.graphicsCollection.items.length>ggIndex)
+							gg = surf.graphicsCollection.items[ggIndex];
+						else
+						{
+							gg = new GeometryGroup();
+							surf.graphicsCollection.addItem(gg);
+						}
+						gg.target = surf;
+						ggIndex++;
+						
 						// create thick line
 			 			thick = new Line(xMin + thickWidth * sign, getPosition(snap), xMax, getPosition(snap));
 						thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
@@ -274,6 +288,16 @@ trace(getTimer(), "drawing numeric scale");
 				// horizontal orientation
 					for (snap = min; snap<=max; snap += dataInterval)
 					{
+		 				if (surf.graphicsCollection.items && surf.graphicsCollection.items.length>ggIndex)
+							gg = surf.graphicsCollection.items[ggIndex];
+						else
+						{
+							gg = new GeometryGroup();
+							surf.graphicsCollection.addItem(gg);
+						}
+						gg.target = surf;
+						ggIndex++;
+
 						// create thick line
 			 			thick = new Line(getPosition(snap), yMin + thickWidth * sign, getPosition(snap), yMax);
 						thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
