@@ -43,6 +43,9 @@ package birdeye.vis.interfaces
 		/** If true, create and show the axis.*/
 		function set showAxis(val:Boolean):void;
 
+		/** Draw the scale.*/
+		function draw():void
+
 		/** The axis must provide the removal all elements when refreshed, thus insuring
 		 * both display refresh and memory clearing.*/
 		function removeAllElements():void
