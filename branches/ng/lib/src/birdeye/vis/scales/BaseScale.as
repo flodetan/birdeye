@@ -36,6 +36,7 @@ package birdeye.vis.scales
 	import com.degrafa.geometry.Line;
 	import com.degrafa.paint.SolidStroke;
 	
+	import mx.core.IInvalidating;
 	import mx.core.UIComponent;
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
@@ -527,6 +528,11 @@ package birdeye.vis.scales
 		
 		// other methods
 		
+		public function draw():void
+		{
+			// override this
+		}
+		
 		private var stylesChanged:Boolean = false;
 		initializeStyles();
 		public static function initializeStyles():void
@@ -578,6 +584,23 @@ package birdeye.vis.scales
 				gg.geometry = [];
 				gg.geometryCollection.items = [];
 			}
+			
+			if (surf && surf.graphicsCollection.items)
+			{
+				var nElements:int = surf.graphicsCollection.items.length;
+				if (nElements > 0)
+				{
+					for (var i:int = 0; i<nElements; i++)
+					{
+						if (surf.graphicsCollection.items[i] is GeometryGroup)
+						{
+							GeometryGroup(surf.graphicsCollection.items[i]).geometry = []; 
+							GeometryGroup(surf.graphicsCollection.items[i]).geometryCollection.items = [];
+						}
+					}
+				} 
+			}
+
 			invalidated = true;
 		}
 

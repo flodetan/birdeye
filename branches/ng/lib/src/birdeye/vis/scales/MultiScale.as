@@ -306,12 +306,24 @@ package birdeye.vis.scales
 
 			stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 			fill = new SolidFill(colorFill, alphaFill);
-
- 			if (scale1 && scales && _scalesSize)
-				drawAxes();
 		}
 		
 		// other methods
+		
+		private var prevWidth:Number = NaN, prevHeight:Number = NaN;
+		public function draw():void
+		{
+			var w:Number = unscaledWidth, h:Number = unscaledHeight;
+			if (prevWidth != w || prevHeight != h)
+			{
+				prevWidth = w;
+				prevHeight = h;
+				invalidated = true;
+			}
+			
+ 			if (scale1 && scales && _scalesSize)
+				drawAxes();
+		}
 		
 		private var stylesChanged:Boolean = true;
 		initializeStyles();
@@ -371,19 +383,33 @@ package birdeye.vis.scales
 			}
 		} 
 		
+		private var ggIndex:uint;
 		private function drawAxes():void
 		{
 			if (invalidated)
 			{
+				removeAllElements();
+				
 				invalidated = false;
 				var line:Line;
 				
 				var catElements:Array = scale1.dataProvider;
 				var interval:int = scale1.scaleInterval;
 				var nEle:int = scale1.dataProvider.length;
-	
+				ggIndex = 0;
+				
 				for (var i:int = 0; i<nEle; i++)
 				{
+	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
+						gg = graphicsCollection.items[ggIndex];
+					else
+					{
+						gg = new GeometryGroup();
+						graphicsCollection.addItem(gg);
+					}
+					gg.target = this;
+					ggIndex++;
+
 					Numeric(scales[catElements[i]]).size = scalesSize;
 					var angle:int = scale1.getPosition(catElements[i]);
 					var endPosition:Point = PolarCoordinateTransform.getXY(angle,scalesSize,_chart.origin);
@@ -397,6 +423,16 @@ package birdeye.vis.scales
 	 				
 	 				for (var snap:int = radiusAxis.min; snap<radiusAxis.max; snap += radiusAxis.dataInterval)
 	 				{
+		 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
+							gg = graphicsCollection.items[ggIndex];
+						else
+						{
+							gg = new GeometryGroup();
+							graphicsCollection.addItem(gg);
+						}
+						gg.target = this;
+						ggIndex++;
+
 	 					rad = radiusAxis.getPosition(snap);
 		 				var labelPosition:Point = PolarCoordinateTransform.getXY(angle,rad,_chart.origin);
 						var label:RasterTextPlus = new RasterTextPlus();
@@ -419,8 +455,28 @@ package birdeye.vis.scales
 		
 		public function removeAllElements():void
 		{
-			gg.geometryCollection.items = [];
-			gg.geometry = [];
+			if (gg)
+			{
+				gg.geometry = [];
+				gg.geometryCollection.items = [];
+			}
+			
+			if (graphicsCollection.items)
+			{
+				var nElements:int = graphicsCollection.items.length;
+				if (nElements > 0)
+				{
+					for (var i:int = 0; i<nElements; i++)
+					{
+						if (graphicsCollection.items[i] is GeometryGroup)
+						{
+							GeometryGroup(graphicsCollection.items[i]).geometry = []; 
+							GeometryGroup(graphicsCollection.items[i]).geometryCollection.items = [];
+						}
+					}
+				} 
+			}
+
 			invalidated = true;
 		}
 	}
