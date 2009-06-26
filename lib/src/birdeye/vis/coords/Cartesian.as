@@ -42,7 +42,6 @@ package birdeye.vis.coords
 	import flash.events.Event;
 	import flash.geom.Rectangle;
 	
-	import mx.collections.CursorBookmark;
 	import mx.containers.HBox;
 	import mx.containers.VBox;
 	import mx.core.Container;
@@ -491,8 +490,9 @@ package birdeye.vis.coords
 		{
 			super.updateDisplayList(w,h);
 			setActualSize(w,h);
-			
+
 			validateBounds();
+
 			leftContainer.y = rightContainer.y = topContainer.height;
 			bottomContainer.x = topContainer.x = leftContainer.width;
 			leftContainer.x = 0;
@@ -532,11 +532,27 @@ package birdeye.vis.coords
 				else
 					transform.matrix3D = null;
  			}
- 			for (var i:int = 0; i<_elements.length; i++)
+
+ 			for (var i:int = 0; i<_scales.length; i++)
+			{
+				switch (IScaleUI(_scales[i]).placement)
+				{
+					case BaseScale.BOTTOM:
+					case BaseScale.TOP:
+						IScaleUI(_scales[i]).size = chartBounds.width;
+						break;
+					case BaseScale.LEFT:
+					case BaseScale.RIGHT:
+						IScaleUI(_scales[i]).size= chartBounds.height;
+				}
+				IScaleUI(_scales[i]).draw();
+			}
+
+ 			for (i = 0; i<_elements.length; i++)
 			{
 				Surface(_elements[i]).width = chartBounds.width;
 				Surface(_elements[i]).height = chartBounds.height;
-				IElement(_elements[i]).drawElement();
+				IElement(_elements[i]).draw();
 			}
 			// listeners like legends will listen to this event
 			dispatchEvent(new Event("ProviderReady"));
@@ -563,7 +579,6 @@ package birdeye.vis.coords
 			for (var i:Number = 0; i<leftContainer.numChildren; i++)
 			{
 				tmpSize += XYZ(leftContainer.getChildAt(i)).maxLblSize;
-				IScale(leftContainer.getChildAt(i)).size = leftContainer.height;
 			}
 			
 			leftContainer.width = tmpSize;
@@ -572,7 +587,6 @@ package birdeye.vis.coords
 			for (i = 0; i<rightContainer.numChildren; i++)
 			{
 				tmpSize += XYZ(rightContainer.getChildAt(i)).maxLblSize;
-				IScale(rightContainer.getChildAt(i)).size = rightContainer.height;				
 			}
 			
 			rightContainer.width = tmpSize;
@@ -581,7 +595,6 @@ package birdeye.vis.coords
 			for (i = 0; i<bottomContainer.numChildren; i++)
 			{
 				tmpSize += XYZ(bottomContainer.getChildAt(i)).maxLblSize;
-				IScale(bottomContainer.getChildAt(i)).size = bottomContainer.width;
 			}
 			
 			bottomContainer.height = tmpSize;
@@ -590,7 +603,6 @@ package birdeye.vis.coords
 			for (i = 0; i<topContainer.numChildren; i++)
 			{
 				tmpSize += XYZ(topContainer.getChildAt(i)).maxLblSize;
-				IScale(topContainer.getChildAt(i)).size = topContainer.width;
 			}
 			
 			topContainer.height = tmpSize;
