@@ -855,6 +855,7 @@ package birdeye.vis.elements
 			}
 		}
 		
+		private var prevWidth:Number = NaN, prevHeight:Number = NaN;
 		// Override updateDisplayList() to update the component
 		// based on the style setting.
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void 
@@ -894,6 +895,19 @@ package birdeye.vis.elements
 		{
 			_invalidatedElementGraphic = true;
 			invalidateDisplayList();
+		}
+		
+		public function draw():void
+		{
+			if (prevWidth != unscaledWidth || prevHeight != unscaledHeight)
+			{
+				prevWidth = unscaledWidth;
+				prevHeight = unscaledHeight;
+				_invalidatedElementGraphic = true;
+			}
+			
+			if (_invalidatedElementGraphic)
+				drawElement();
 		}
 
 		public function drawElement():void
@@ -1441,7 +1455,7 @@ package birdeye.vis.elements
 				_mouseDoubleClickFunction(target);
 			}
 		}
-
+			
 		public function getFill():IGraphicsFill
 		{
 			return fill;
