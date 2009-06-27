@@ -331,6 +331,7 @@ trace(getTimer(), "drawing category scale");
 		{
 			super.resetValues();
 			invalidated = true;
+			maxLblSize = NaN;
 				
 			_dataProvider = [];
 		}

@@ -409,6 +409,7 @@ trace(getTimer(), "drawing numeric scale");
 		{
 			super.resetValues();
 			min = max = totalPositiveValue = NaN;
+			maxLblSize = NaN;
 			invalidated = true;
 		} 
 	}
