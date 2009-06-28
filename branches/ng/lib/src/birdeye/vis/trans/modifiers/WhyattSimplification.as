@@ -40,8 +40,8 @@ package birdeye.vis.trans.modifiers
 			var prevObj:Object;
 			var currObj:Object;
 			var nextObj:Object;
-			var minSize:Number = 0.35*Math.pow(1.1,(100-epsilon)); //Normalize epsilon, so that it ranges from 0(max simplification) to 100 (no simplification) 
-			
+			var minSize:Number = 0.35*(Math.pow(1.1,(100-epsilon))-1); //Normalize epsilon, so that it ranges from 0(max simplification) to 100 (no simplification)
+						
 
 			//Create linked lists of Objects, which specify the effective area size for each polygon corner.
 			//The Objects are linked four ways:
