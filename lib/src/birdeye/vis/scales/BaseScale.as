@@ -119,7 +119,7 @@ package birdeye.vis.scales
 			return _size;
 		}
 		
-		protected var _rotateLabels:Number = NaN;
+		protected var _rotateLabels:Number = 0;
 		/** Set the angle rotation of labels.*/
 		public function set rotateLabels(val:Number):void
 		{
