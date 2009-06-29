@@ -99,10 +99,10 @@ package birdeye.vis.elements.geometry
 				if (scale2)
 				{
 					if (scale2 is IEnumerableScale)
-						size = scale2.size/IEnumerableScale(scale2).dataProvider.length * deltaSize;
+						size = scale2.size/IEnumerableScale(scale2).dataProvider.length * chart.columnWidthRate;
 					else if (scale2 is IEnumerableScale)
 						size = scale2.size / 
-								(INumerableScale(scale1).max - INumerableScale(scale2).min) * deltaSize;
+								(INumerableScale(scale1).max - INumerableScale(scale2).min) * chart.columnWidthRate;
 				} 
 	
 				ggIndex = 0;
@@ -137,7 +137,7 @@ package birdeye.vis.elements.geometry
 							yPos = scale2.getPosition(currentItem[dim2]);
 		
 							if (isNaN(size))
-		 						size = scale2.dataInterval*deltaSize;
+		 						size = scale2.dataInterval * chart.columnWidthRate;
 						} 
 						
 						if (scale1)

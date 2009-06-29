@@ -106,10 +106,10 @@ trace (getTimer(), "drawing column ele");
 				if (scale1)
 				{
 					if (scale1 is IEnumerableScale)
-						tmpSize = scale1.size/IEnumerableScale(scale1).dataProvider.length * deltaSize;
+						tmpSize = scale1.size/IEnumerableScale(scale1).dataProvider.length * chart.columnWidthRate;
 					else if (scale1 is INumerableScale)
 						tmpSize = scale1.size / 
-								(INumerableScale(scale1).max - INumerableScale(scale1).min) * deltaSize;
+								(INumerableScale(scale1).max - INumerableScale(scale1).min) * chart.columnWidthRate;
 
 					var constTmpSize:Number = tmpSize;
 				}
