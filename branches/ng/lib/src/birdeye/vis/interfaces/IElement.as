@@ -135,8 +135,11 @@ package birdeye.vis.interfaces
 		/** Implement function to manage mouse double click events.*/
 		function onMouseDoubleClick(e:MouseEvent):void;
 
-		/** Implement drawElement.*/
+		/** Implement the element drawing in the creation phase.*/
 		function draw():void;
+
+		/** Update the data items status.*/
+		function refresh():void;
 
 		/** Remove all elements from the Element (Surface component).*/
 		function removeAllElements():void;
