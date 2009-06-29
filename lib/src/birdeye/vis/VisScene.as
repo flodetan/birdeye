@@ -30,6 +30,7 @@
 	import __AS3__.vec.Vector;
 	
 	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.IGraphLayout;
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.interfaces.IProjection;
@@ -648,6 +649,12 @@
 			if (_scales)
 				for (var i:Number = 0; i<_scales.length; i++)
 					IScale(_scales[i]).resetValues();
+		}
+		
+		public function refresh():void
+		{
+			for (var i:Number = 0; i<elements.length; i++)
+				IElement(elements[i]).refresh();
 		}
 	}
 }
