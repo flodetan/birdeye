@@ -118,7 +118,8 @@
 			
 			// if placement is set, elements are loaded and interval calculated
 			// than the axis is ready to be drawn
-			if (placement && dataProvider && dataInterval && _categoryField)
+			if (placement && dataProvider && dataInterval && _categoryField 
+				&& !isNaN(size))
 				readyForLayout = true;
 			else 
 				readyForLayout = false;
@@ -286,7 +287,9 @@ trace(getTimer(), "drawing category scale");
 									break;
 								case BOTTOM:
 									_rotateLabelsOn = "centerRight";
-									label.x = snap-label.displayObject.width; 
+									// for unknown reason the more the label lenght, the more the label shifts to right
+									// we have to adjust its position proportionally to the lenght (1/10 of the lenght)
+									label.x = snap-label.displayObject.width * (1.1); 
 									break;
 							}
 							rot.registrationPoint = _rotateLabelsOn;
@@ -294,7 +297,8 @@ trace(getTimer(), "drawing category scale");
 							label.transform = rot;
 						} else
 							label.x = snap-label.displayObject.width/2; 
-						label.y = thickWidth;
+							
+						label.y = thickWidth - ((sign<0) ? label.displayObject.height : 0);
 						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
 					}
