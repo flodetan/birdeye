@@ -282,6 +282,9 @@ package birdeye.vis.coords
  					}
 				}
 			}
+			
+			if (_elements && nCursors == _elements.length)
+				invalidatedData = true;
 
 			// when elements are loaded, set their stack type to the 
 			// current "type" value. if the type is STACKED100
@@ -289,7 +292,7 @@ package birdeye.vis.coords
 			// arrays for each Column. The baseValues arrays will be used to know
 			// the y0 starting point for each element values, which corresponds to 
 			// the understair element highest y value;
-			if (_elements && nCursors == _elements.length)
+			if (invalidatedData)
 			{
 				var _stackElements:Array = [];
 			
@@ -468,11 +471,12 @@ package birdeye.vis.coords
 					for (s = 0; s<_stackElements.length; s++)
 						IStack(_stackElements[s]).baseValues = allElementsBaseValues[s].baseValues;
 				}
-			}
+
 
 			// init all axes, default and elements owned 
 			if (! axesFeeded)
 				feedAxes();
+			}
 		}
 		
 		override protected function measure():void
@@ -491,84 +495,88 @@ package birdeye.vis.coords
 			super.updateDisplayList(w,h);
 			setActualSize(w,h);
 
-			validateBounds();
-
-			leftContainer.y = rightContainer.y = topContainer.height;
-			bottomContainer.x = topContainer.x = leftContainer.width;
-			leftContainer.x = 0;
-			topContainer.y = 0; 
-			bottomContainer.y = h - bottomContainer.height;
-			rightContainer.x = w - rightContainer.width;
-
-			chartBounds = new Rectangle(leftContainer.x + leftContainer.width, 
-										topContainer.y + topContainer.height,
-										w - (leftContainer.width + rightContainer.width),
-										h - (topContainer.height + bottomContainer.height));
-										
-			topContainer.width = bottomContainer.width 
-				= chartBounds.width;
-			leftContainer.height = rightContainer.height 
-				= chartBounds.height;
-			
-			// the z container is placed at the right of the chart
-  			zContainer.x = int(chartBounds.width + leftContainer.width);
-			zContainer.y = int(chartBounds.height);
-
-			if (showGrid)
-				drawGrid();
+			if (invalidatedData)
+			{
+				validateBounds();
+	
+				leftContainer.y = rightContainer.y = topContainer.height;
+				bottomContainer.x = topContainer.x = leftContainer.width;
+				leftContainer.x = 0;
+				topContainer.y = 0; 
+				bottomContainer.y = h - bottomContainer.height;
+				rightContainer.x = w - rightContainer.width;
+	
+				chartBounds = new Rectangle(leftContainer.x + leftContainer.width, 
+											topContainer.y + topContainer.height,
+											w - (leftContainer.width + rightContainer.width),
+											h - (topContainer.height + bottomContainer.height));
+											
+				topContainer.width = bottomContainer.width 
+					= chartBounds.width;
+				leftContainer.height = rightContainer.height 
+					= chartBounds.height;
 				
-			if (axesFeeded && (_elementsContainer.x != chartBounds.x ||
-				_elementsContainer.y != chartBounds.y ||
-				_elementsContainer.width != chartBounds.width ||
-				_elementsContainer.height != chartBounds.height))
-			{
-				_elementsContainer.x = chartBounds.x;
-				_elementsContainer.y = chartBounds.y;
-  				_elementsContainer.width = chartBounds.width;
-				_elementsContainer.height = chartBounds.height;
- 	
-				if (_is3D)
-					rotationY = 42;
-				else
-					transform.matrix3D = null;
- 			}
-
-			if (_scales)
-			{
-	 			for (var i:int = 0; i<_scales.length; i++)
+				// the z container is placed at the right of the chart
+	  			zContainer.x = int(chartBounds.width + leftContainer.width);
+				zContainer.y = int(chartBounds.height);
+	
+				if (showGrid)
+					drawGrid();
+					
+				if (axesFeeded && 
+					(_elementsContainer.x != chartBounds.x ||
+					_elementsContainer.y != chartBounds.y ||
+					_elementsContainer.width != chartBounds.width ||
+					_elementsContainer.height != chartBounds.height))
 				{
-					switch (IScaleUI(_scales[i]).placement)
+					_elementsContainer.x = chartBounds.x;
+					_elementsContainer.y = chartBounds.y;
+	  				_elementsContainer.width = chartBounds.width;
+					_elementsContainer.height = chartBounds.height;
+	 	
+					if (_is3D)
+						rotationY = 42;
+					else
+						transform.matrix3D = null;
+	 			}
+	
+				if (_scales)
+				{
+		 			for (var i:int = 0; i<_scales.length; i++)
 					{
-						case BaseScale.BOTTOM:
-						case BaseScale.TOP:
-							IScaleUI(_scales[i]).size = chartBounds.width;
-							break;
-						case BaseScale.LEFT:
-						case BaseScale.RIGHT:
-							IScaleUI(_scales[i]).size= chartBounds.height;
+						switch (IScaleUI(_scales[i]).placement)
+						{
+							case BaseScale.BOTTOM:
+							case BaseScale.TOP:
+								IScaleUI(_scales[i]).size = chartBounds.width;
+								break;
+							case BaseScale.LEFT:
+							case BaseScale.RIGHT:
+								IScaleUI(_scales[i]).size= chartBounds.height;
+						}
+						IScaleUI(_scales[i]).draw();
 					}
-					IScaleUI(_scales[i]).draw();
 				}
-			}
-
- 			for (i = 0; i<_elements.length; i++)
-			{
-				Surface(_elements[i]).width = chartBounds.width;
-				Surface(_elements[i]).height = chartBounds.height;
-				IElement(_elements[i]).draw();
-			}
-			// listeners like legends will listen to this event
-			dispatchEvent(new Event("ProviderReady"));
-
-			if (_isMasked && _maskShape && !isNaN(_elementsContainer.width) && !isNaN(_elementsContainer.height))
-			{
-				if (!elementsContainer.contains(_maskShape))
-					elementsContainer.addChild(_maskShape);
-				maskShape.graphics.beginFill(0xffffff, 1);
-				maskShape.graphics.drawRect(0,0,_elementsContainer.width, _elementsContainer.height);
-				maskShape.graphics.endFill();
-	  			elementsContainer.setChildIndex(_maskShape, 0);
-				elementsContainer.mask = maskShape;
+	
+	 			for (i = 0; i<_elements.length; i++)
+				{
+					Surface(_elements[i]).width = chartBounds.width;
+					Surface(_elements[i]).height = chartBounds.height;
+					IElement(_elements[i]).draw();
+				}
+				// listeners like legends will listen to this event
+				dispatchEvent(new Event("ProviderReady"));
+	
+				if (_isMasked && _maskShape && !isNaN(_elementsContainer.width) && !isNaN(_elementsContainer.height))
+				{
+					if (!elementsContainer.contains(_maskShape))
+						elementsContainer.addChild(_maskShape);
+					maskShape.graphics.beginFill(0xffffff, 1);
+					maskShape.graphics.drawRect(0,0,_elementsContainer.width, _elementsContainer.height);
+					maskShape.graphics.endFill();
+		  			elementsContainer.setChildIndex(_maskShape, 0);
+					elementsContainer.mask = maskShape;
+				}
 			}
 		}
 		
