@@ -153,11 +153,18 @@ package birdeye.vis.scales
 				if (baseAtZero)
 				{
 					if (max > 0)
-						_dataInterval = max / 5;
-					else
+					{
+						if (max < 5)
+							_dataInterval = max;
+						else
+							_dataInterval = max / 5;
+					} else
 						_dataInterval = -min / 5;
 				} else {
-					dataInterval = Math.abs((max - min) / 5)
+					if (Math.abs(max - min) < 5)
+						dataInterval = Math.abs(max - min);
+					else 
+						dataInterval = Math.abs((max - min) / 5)
 					isGivenInterval = false;
 				}
 			}
