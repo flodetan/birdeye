@@ -40,8 +40,6 @@ package birdeye.vis.elements.collision
 
 	public class StackElement extends BaseElement implements IStack
 	{
-		protected var deltaSize:Number;
-		
 		public static const OVERLAID:String = "overlaid";
 		public static const STACKED:String = "stacked";
 		public static const STACKED100:String = "stacked100";
@@ -115,11 +113,6 @@ package birdeye.vis.elements.collision
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
-
-			if (chart is Cartesian && Cartesian(chart).is3D)
-				deltaSize = 1/5;
-			else 
-				deltaSize = 3/5;
 		}
 		
 		override protected function getMaxValue(field:Object):Number
