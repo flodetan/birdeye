@@ -1486,33 +1486,7 @@ package birdeye.vis.elements
 		
 		public function refresh():void
 		{
-			// in the future this will reflect a more proper dataItems structure
-			var nGG:Number = (graphicsCollection.items) ? graphicsCollection.items.length : 0;
-			var tmpGG:DataItemLayout;
-			var tmpColor:Object;
-			var dataValue:Object;
-			var tmpGeometry:IGeometry;
-			
-			for (var i:Number = 0; i<nGG; i++)
-			{
-				if ((tmpGG = graphicsCollection.items[i]) is DataItemLayout && tmpGG.currentItem)
-				{
-					if (colorScale && colorField)
-					{
-						dataValue = tmpGG.currentItem[colorField];
-						tmpColor = colorScale.getPosition(dataValue); 
-
-						for (var j:uint = 0; j<tmpGG.geometryCollection.items.length; j++)
-						{
-							tmpGeometry = tmpGG.geometryCollection.items[j];
-							if (tmpColor is Number)
-								tmpGeometry.fill = new SolidFill(tmpColor);
-							else if (tmpColor is IGraphicsFill)
-								tmpGeometry.fill = IGraphicsFill(tmpColor);
-						}
-					}
-				}
-			}
+			// for the moment only overridden by PolygonElement
 		}
 	}
 }
