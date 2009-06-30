@@ -86,7 +86,7 @@
 							label.autoSizeField = true;
 							label.y = getPosition(snap)-label.displayObject.height/2;
 							label.x = thickWidth * sign; 
-							label.fill = new SolidFill(0x000000);
+							label.fill = new SolidFill(colorLabel);
 							gg.geometryCollection.addItem(label);
 						}
 					}
@@ -108,7 +108,7 @@
 						label.autoSizeField = true;
 						label.y = thickWidth;
 						label.x = getPosition(snap)-label.displayObject.width/2; 
-						label.fill = new SolidFill(0x000000);
+						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
 					}
 				}
