@@ -31,6 +31,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.UpTriangleRenderer;
+	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.scales.*;
 	
@@ -45,7 +46,7 @@ package birdeye.vis.elements.geometry
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
 	
-	import mx.collections.CursorBookmark;
+	import mx.core.ClassFactory;
 
 	public class AreaElement extends StackElement
 	{
@@ -92,7 +93,7 @@ package birdeye.vis.elements.geometry
 			super.commitProperties();
 			// select the item renderer (must be an IGeomentry)
 			if (! itemRenderer)
-				itemRenderer = UpTriangleRenderer;
+				itemRenderer = new ClassFactory(UpTriangleRenderer);
 
 			// doesn't need to call super.commitProperties(), since it doesn't need to listen
 			// to axes interval changes 
@@ -280,7 +281,10 @@ trace (getTimer(), "area ele");
 					if (_showItemRenderer)
 					{
 		 				var bounds:Rectangle = new Rectangle(pos1 - _rendererSize/2, pos2 - _rendererSize/2, _rendererSize, _rendererSize);
-						var shape:IGeometry = new itemRenderer(bounds);
+		 				
+						var shape:IGeometry = itemRenderer.newInstance();
+						if (shape is IBoundedRenderer) (shape as IBoundedRenderer).bounds = bounds; 
+
 						shape.fill = fill;
 						shape.stroke = stroke;
 						gg.geometryCollection.addItem(shape);

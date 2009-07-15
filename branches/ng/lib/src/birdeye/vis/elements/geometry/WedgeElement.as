@@ -43,7 +43,7 @@ package birdeye.vis.elements.geometry
 	
 	import flash.text.TextFieldAutoSize;
 	
-	import mx.collections.CursorBookmark;
+	import mx.core.ClassFactory;
 
 	public class WedgeElement extends StackElement
 	{
@@ -88,7 +88,7 @@ package birdeye.vis.elements.geometry
 				_stackType = STACKED100;
 
 			if (! itemRenderer)
-				itemRenderer = CircleRenderer;
+				itemRenderer = new ClassFactory(CircleRenderer);
 		}
 
 		/** @Private 

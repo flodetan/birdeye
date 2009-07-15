@@ -29,6 +29,7 @@
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.guides.renderers.LineRenderer;
+	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.IPositionableElement;
 	
 	import com.degrafa.GeometryGroup;
@@ -82,9 +83,14 @@
 		protected function createItemRenderer(bounds:Rectangle):IGeometry {
 			var renderer:IGeometry;
  			if (itemRenderer)
-				renderer = new itemRenderer(bounds);
-			else
+ 			{
+				renderer = itemRenderer.newInstance();
+				if (renderer is IBoundedRenderer) (renderer as IBoundedRenderer).bounds = bounds;
+ 			}
+ 			else
+			{
 				renderer = new LineRenderer(bounds);
+			}	
 			renderer.fill = fill;
 			renderer.stroke = stroke;
 			return renderer;

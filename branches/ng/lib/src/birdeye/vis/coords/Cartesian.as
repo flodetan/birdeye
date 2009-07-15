@@ -37,6 +37,8 @@ package birdeye.vis.coords
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
+	import com.degrafa.geometry.Line;
+	import com.degrafa.paint.SolidStroke;
 	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
@@ -45,6 +47,7 @@ package birdeye.vis.coords
 	import mx.containers.HBox;
 	import mx.containers.VBox;
 	import mx.core.Container;
+	import mx.core.IFactory;
 	
 	/** A CartesianChart can be used to create any 2D or 3D cartesian charts available in the library
 	 * apart from those who might have specific features, like stackable element or data-sizable items.
@@ -214,7 +217,7 @@ package birdeye.vis.coords
 			removeAllElements();
 			
 			nCursors = 0;
-			
+
 			if (elements)
 			{
  				for (var i:Number = 0; i<elements.length; i++)
@@ -478,6 +481,7 @@ package birdeye.vis.coords
 				feedAxes();
 			}
 		}
+		
 		
 		override protected function measure():void
 		{
@@ -827,7 +831,10 @@ package birdeye.vis.coords
 		private var gridGG:GeometryGroup;
 		protected function drawGrid():void
 		{
-/* 			if (scale1 && scale2 && _elementsContainer.width>0 && _elementsContainer.height>0)
+/*			var scale1:Object = _scales[0]
+			var scale2:Object = _scales[1];
+			
+ 			if (scale1 && scale2 && _elementsContainer.width>0 && _elementsContainer.height>0)
 			{
 				if (!gridGG)
 				{
@@ -840,7 +847,7 @@ package birdeye.vis.coords
 					var maxY:Number = scale2.size;
 					
 					// since the yAxis is up side down, the y interval is given by:
-					var interval:Number = scale2.getPosition(INumerableScale(scale2).max - scale2.interval);
+					var interval:Number = scale2.getPosition(INumerableScale(scale2).max - INumerableScale(scale2).dataInterval);
 					var i:Number = 0;
 					
 					for (var yValue:Number = minY; yValue < maxY; yValue += interval)

@@ -41,7 +41,6 @@ package birdeye.vis.elements
 	import birdeye.vis.scales.MultiScale;
 	
 	import com.degrafa.GeometryGroup;
-	import com.degrafa.IGeometry;
 	import com.degrafa.Surface;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
@@ -60,6 +59,7 @@ package birdeye.vis.elements
 	import mx.collections.ICollectionView;
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
+	import mx.core.IFactory;
 	import mx.core.IToolTip;
 	import mx.events.ToolTipEvent;
 	import mx.styles.CSSStyleDeclaration;
@@ -769,15 +769,15 @@ package birdeye.vis.elements
 			return _displayName;
 		}
 		
-		private var _itemRenderer:Class;
+		private var _itemRenderer:IFactory;
 		/** Set the item renderer to be used for both data items layout and related legend item.*/
-		public function set itemRenderer(val:Class):void
+		public function set itemRenderer(val:IFactory):void
 		{
 			_itemRenderer = val;
 			invalidateProperties();
 			invalidatingDisplay();
 		}
-		public function get itemRenderer():Class
+		public function get itemRenderer():IFactory
 		{
 			return _itemRenderer;
 		}

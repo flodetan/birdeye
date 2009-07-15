@@ -32,6 +32,8 @@ package birdeye.vis.interfaces
 	
 	import flash.events.MouseEvent;
 	
+	import mx.core.IFactory;
+	
 	public interface IElement extends IRasterRenderer
 	{
 		/** Set the chart target. This allows to share axes and other properties
@@ -109,8 +111,8 @@ package birdeye.vis.interfaces
 		function getStroke():IGraphicsStroke;
 
 		/** Set the itemRenderer used for the layout of data values.*/
-		function set itemRenderer(val:Class):void;
-		function get itemRenderer():Class;
+		function set itemRenderer(val:IFactory):void;
+		function get itemRenderer():IFactory;
 
 		/** Set the cursor vector used by the Element. It can either derive from the Element own 
 		 * dataProvider or from the chart dataProvider.*/

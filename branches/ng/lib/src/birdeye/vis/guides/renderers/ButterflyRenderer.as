@@ -1,4 +1,4 @@
-/*  
+  /*  
  * The MIT License
  *
  * Copyright (c) 2008
@@ -27,13 +27,20 @@
  
 package birdeye.vis.guides.renderers
 {
+	import birdeye.vis.interfaces.IBoundedRenderer;
+	
 	import com.degrafa.geometry.Polygon;
 	
 	import flash.geom.Rectangle;
 
-	public class ButterflyRenderer extends Polygon
+	public class ButterflyRenderer extends Polygon implements IBoundedRenderer
 	{
-		public function ButterflyRenderer (bounds:Rectangle)
+		public function ButterflyRenderer (bounds:Rectangle=null)
+		{
+			if(bounds) this.bounds = bounds;
+		}
+		
+		public function set bounds(bounds:Rectangle):void
 		{
 			data =  String(bounds.x) + "," + String(bounds.y + bounds.height/2) + " " +
 					String(bounds.x + bounds.width/2) + "," + String(bounds.y) + " " +

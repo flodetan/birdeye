@@ -33,6 +33,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
+	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.scales.*;
 	
@@ -40,9 +41,12 @@ package birdeye.vis.elements.geometry
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.paint.SolidFill;
 	
+	import flash.display.DisplayObject;
 	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
 	import flash.utils.getTimer;
+	
+	import mx.core.ClassFactory;
 
 	public class PointElement extends BaseElement
 	{
@@ -55,7 +59,7 @@ package birdeye.vis.elements.geometry
 		{
 			super.commitProperties();
 			if (! itemRenderer)
-				itemRenderer = CircleRenderer;
+				itemRenderer = new ClassFactory(CircleRenderer);
 		}
 
 		private var label:TextRenderer;
@@ -81,7 +85,7 @@ trace (getTimer(), "drawing point ele");
 				var pos1:Number, pos2:Number, pos3:Number = NaN;
 				
 				if (!itemRenderer)
-					itemRenderer = CircleRenderer;
+					itemRenderer = new ClassFactory(CircleRenderer);
 				
 				ggIndex = 0;
 	
@@ -176,13 +180,18 @@ trace (getTimer(), "drawing point ele");
 					if (_size > 0)
 					{
 		 				if (_source)
+		 				{
 							plot = new RasterRenderer(bounds, _source);
-		 				else 
-							plot = new itemRenderer(bounds);
-		  				
+						}
+						else
+						{
+	 						plot = itemRenderer.newInstance();
+	 						if (plot is IBoundedRenderer) (plot as IBoundedRenderer).bounds = bounds;
+		 				} 
+						
 						plot.fill = fill;
 						plot.stroke = stroke;
-						gg.geometryCollection.addItemAt(plot,0); 
+							gg.geometryCollection.addItemAt(plot,0); 
 					}
 
 					if (labelField)

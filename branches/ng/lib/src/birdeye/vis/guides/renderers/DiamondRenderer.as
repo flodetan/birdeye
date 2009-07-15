@@ -27,13 +27,22 @@
 
 package birdeye.vis.guides.renderers
 {
+	import birdeye.vis.interfaces.IBoundedRenderer;
+	
 	import com.degrafa.geometry.Polygon;
 	
 	import flash.geom.Rectangle;
 
-	public class DiamondRenderer extends Polygon
+	public class DiamondRenderer extends Polygon implements IBoundedRenderer
 	{
-		public function DiamondRenderer(bounds:Rectangle)
+		public function DiamondRenderer(bounds:Rectangle=null)
+		{
+			super();
+			if (bounds) this.bounds = bounds;
+
+		}
+		
+		public function set bounds(bounds:Rectangle):void
 		{
 			data =  String(bounds.x) + "," + String(bounds.y + bounds.height/2) + " " +
 					String(bounds.x + bounds.width/2) + "," + String(bounds.y) + " " +

@@ -27,15 +27,26 @@
  
 package birdeye.vis.guides.renderers
 {
+	import birdeye.vis.interfaces.IBoundedRenderer;
+	
 	import com.degrafa.geometry.Line;
 	
 	import flash.geom.Rectangle;
 
-	public class LineRenderer extends Line
+	public class LineRenderer extends Line implements IBoundedRenderer
 	{
-		public function LineRenderer(bounds:Rectangle)
+		public function LineRenderer(bounds:Rectangle=null)
 		{
-			super(bounds.x, bounds.y, bounds.width, bounds.height);
+			super();
+			if (bounds) this.bounds = bounds;
+		}
+		
+		public function set bounds(bounds:Rectangle):void
+		{
+			this.x = bounds.x;
+			this.y = bounds.y;
+			this.x1 = bounds.width;
+			this.y1 = bounds.height;	
 		}
 	}
 }

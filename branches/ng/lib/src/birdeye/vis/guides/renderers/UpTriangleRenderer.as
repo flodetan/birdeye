@@ -27,13 +27,21 @@
  
 package birdeye.vis.guides.renderers
 {
+	import birdeye.vis.interfaces.IBoundedRenderer;
+	
 	import com.degrafa.geometry.Polygon;
 	
 	import flash.geom.Rectangle;
 
-	public class UpTriangleRenderer extends Polygon
+	public class UpTriangleRenderer extends Polygon implements IBoundedRenderer
 	{
-		public function UpTriangleRenderer (bounds:Rectangle)
+		public function UpTriangleRenderer (bounds:Rectangle=null)
+		{
+			super();
+			if (bounds) this.bounds = bounds;
+		}
+		
+		public function set bounds(bounds:Rectangle):void
 		{
 			data =  String(bounds.x) + "," + String(bounds.y + bounds.height) + " " +
 					String(bounds.x + bounds.width/2) + "," + String(bounds.y) + " " +

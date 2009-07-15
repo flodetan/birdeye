@@ -31,6 +31,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.guides.renderers.LineRenderer;
+	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.scales.*;
 	
@@ -43,6 +44,8 @@ package birdeye.vis.elements.geometry
 	
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
+	
+	import mx.core.ClassFactory;
 
 	public class LineElement extends BaseElement
 	{
@@ -78,7 +81,7 @@ package birdeye.vis.elements.geometry
 		{
 			super.commitProperties();
 			if (! itemRenderer)
-				itemRenderer = LineRenderer;
+				itemRenderer = new ClassFactory(LineRenderer);
 		}
 
 		private var bzSplines:BezierSpline;
@@ -209,7 +212,9 @@ trace (getTimer(), "drawing line ele");
 					if (_showItemRenderer)
 					{
 		 				var bounds:Rectangle = new Rectangle(pos1 - _rendererSize/2, pos2 - _rendererSize/2, _rendererSize, _rendererSize);
-						var shape:IGeometry = new itemRenderer(bounds);
+						
+						var shape:IGeometry = itemRenderer.newInstance();
+						if (shape is IBoundedRenderer) (shape as IBoundedRenderer).bounds = bounds;
 						shape.fill = fill;
 						shape.stroke = stroke;
 						gg.geometryCollection.addItem(shape);
