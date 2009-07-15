@@ -27,13 +27,21 @@
  
 package birdeye.vis.guides.renderers
 {
+	import birdeye.vis.interfaces.IBoundedRenderer;
+	
 	import com.degrafa.geometry.Polygon;
 	
 	import flash.geom.Rectangle;
 
-	public class CrossRenderer extends Polygon
+	public class CrossRenderer extends Polygon implements IBoundedRenderer
 	{
-		public function CrossRenderer(bounds:Rectangle)
+		public function CrossRenderer(bounds:Rectangle=null)
+		{
+			super();
+			if (bounds) this.bounds = bounds;
+		}
+		
+		public function set bounds(bounds:Rectangle):void
 		{
 			data =  String(bounds.x) + "," + String(bounds.y + bounds.height/2) + " " +
 					String(bounds.x + bounds.width/2) + "," + String(bounds.y + bounds.height/2) + " " +
@@ -43,7 +51,7 @@ package birdeye.vis.guides.renderers
 					String(bounds.x + bounds.width/2) + "," + String(bounds.y + bounds.height/2) + " " +
 					String(bounds.x + bounds.width/2) + "," + String(bounds.y + bounds.height) + " " +
 					String(bounds.x + bounds.width/2) + "," + String(bounds.y + bounds.height/2) + " " +
-					String(bounds.x) + "," + String(bounds.y + bounds.height/2) + " ";
+					String(bounds.x) + "," + String(bounds.y + bounds.height/2) + " ";		
 		}
 	}
 }

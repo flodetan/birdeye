@@ -43,6 +43,8 @@ package birdeye.vis.elements.geometry
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.utils.getTimer;
+	
+	import mx.core.ClassFactory;
 
 	public class PolygonElement extends BaseElement
 	{
@@ -84,7 +86,7 @@ package birdeye.vis.elements.geometry
 			super.commitProperties();
 			// select the item renderer (must be an IGeomentry)
 			if (! itemRenderer)
-				itemRenderer = UpTriangleRenderer;
+				itemRenderer = new ClassFactory(UpTriangleRenderer);
 
 			if (!isListeningMouseMove)
 			{

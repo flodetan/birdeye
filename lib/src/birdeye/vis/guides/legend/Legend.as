@@ -29,6 +29,7 @@ package birdeye.vis.guides.legend
 {
 	import birdeye.vis.VisScene;
 	import birdeye.vis.guides.renderers.RasterRenderer;
+	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.IElement;
 	
 	import com.degrafa.GeometryGroup;
@@ -36,7 +37,6 @@ package birdeye.vis.guides.legend
 	import com.degrafa.geometry.Geometry;
 	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
-	import com.degrafa.paint.SolidStroke;
 	
 	import flash.events.Event;
 	import flash.geom.Rectangle;
@@ -44,6 +44,7 @@ package birdeye.vis.guides.legend
 	
 	import mx.containers.Box;
 	import mx.core.Application;
+	import mx.core.IFactory;
 	
 	public class Legend extends Box
 	{
@@ -132,14 +133,17 @@ package birdeye.vis.guides.legend
 /* 						var rendererClass:Class = IElement(_dataProvider.series[i]).itemRenderer;
 						var renderer:IElementDataRenderer = new rendererClass();
  */
-						var renderer:Class = IElement(_dataProvider.elements[i]).itemRenderer;
+						var renderer:IFactory = IElement(_dataProvider.elements[i]).itemRenderer;
 
  						var geom:Geometry;
  						if (IElement(_dataProvider.elements[i]).source)
  						{
  							geom = new RasterRenderer(bounds, IElement(_dataProvider.elements[i]).source);
  						} else {
- 							geom = new renderer(bounds);
+ 							
+ 							geom = renderer.newInstance();
+ 							
+ 							if (geom is IBoundedRenderer) (geom as IBoundedRenderer).bounds = bounds;
  						}
 						geom.fill = IElement(_dataProvider.elements[i]).getFill();
 						geom.stroke = IElement(_dataProvider.elements[i]).getStroke();

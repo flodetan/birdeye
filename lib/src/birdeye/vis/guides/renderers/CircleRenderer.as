@@ -27,18 +27,30 @@
  
 package birdeye.vis.guides.renderers
 {
+	import birdeye.vis.interfaces.IBoundedRenderer;
+	
 	import com.degrafa.geometry.Circle;
 	
 	import flash.geom.Rectangle;
 
-	public class CircleRenderer extends Circle
+	public class CircleRenderer extends Circle implements IBoundedRenderer
 	{
-		public function CircleRenderer(bounds:Rectangle)
+		public function CircleRenderer(bounds:Rectangle=null)
+		{
+			super();
+			
+			if (bounds)	this.bounds = bounds;
+		}
+	
+		public function set bounds(bounds:Rectangle):void
 		{
 			var xCenter:Number = bounds.x + bounds.width/2
 			var yCenter:Number = bounds.y + bounds.height/2;
 			var radius:Number = (bounds.width + bounds.height)/4;  
-			super(xCenter, yCenter, radius);
+	
+			this.centerX = xCenter;
+			this.centerY = yCenter;
+			this.radius = radius;
 		}
 	}
 }

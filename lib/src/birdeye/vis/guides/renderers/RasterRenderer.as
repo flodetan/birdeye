@@ -27,13 +27,14 @@
  
 package birdeye.vis.guides.renderers
 {
+	import birdeye.vis.interfaces.IBoundedRenderer;
+	import birdeye.vis.interfaces.IRasterRenderer;
+	
 	import com.degrafa.geometry.RasterImage;
 	
 	import flash.geom.Rectangle;
 	
-	import birdeye.vis.interfaces.IRasterRenderer;
-	
-	public class RasterRenderer extends RasterImage implements IRasterRenderer
+	public class RasterRenderer extends RasterImage implements IRasterRenderer, IBoundedRenderer
 	{
 		private var _s:Object;
 		public function get source():Object
@@ -41,16 +42,22 @@ package birdeye.vis.guides.renderers
 			return _s;
 		}
 		
-		public function RasterRenderer(bounds:Rectangle, _source:Object = null)
+		public function RasterRenderer(bounds:Rectangle=null, _source:Object = null)
 		{
 			super();
+			
+			if (bounds) this.bounds = bounds;
+			
+			if (_source)
+				source = _source;
+		}
+		
+		public function set bounds(bounds:Rectangle):void
+		{
 			width = bounds.width;
 			height = bounds.height;
 			x = bounds.x;
 			y = bounds.y;
-			
-			if (_source)
-				source = _source;
 		}
 	}
 }

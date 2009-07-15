@@ -32,6 +32,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
+	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.IGraphLayout;
 	import birdeye.vis.interfaces.IGraphLayoutableElement;
 	import birdeye.vis.scales.*;
@@ -40,8 +41,6 @@ package birdeye.vis.elements.geometry
 	import com.degrafa.IGeometry;
 	import com.degrafa.paint.SolidFill;
 	
-	import flash.events.MouseEvent;
-	import flash.geom.Point;
 	import flash.geom.Rectangle;
 
 	[Event(name="objectMovedEvent", type="com.roguedevelopment.objecthandles.ObjectHandleEvent")]
@@ -110,9 +109,14 @@ package birdeye.vis.elements.geometry
 				renderer = new RasterRenderer(bounds, _source);
  			else {
  				if (itemRenderer)
-					renderer = new itemRenderer(bounds);
+ 				{
+ 					renderer = itemRenderer.newInstance();
+ 					if (renderer is IBoundedRenderer) (renderer as IBoundedRenderer).bounds = bounds;
+ 				}
 				else
+				{
 					renderer = new CircleRenderer(bounds);
+				}
 			}
 			renderer.fill = fill;
 			renderer.stroke = stroke;

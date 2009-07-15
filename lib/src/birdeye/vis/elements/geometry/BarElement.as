@@ -31,6 +31,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.RectangleRenderer;
+	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.IEnumerableScale;
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.scales.*;
@@ -42,7 +43,7 @@ package birdeye.vis.elements.geometry
 	
 	import flash.geom.Rectangle;
 	
-	import mx.collections.CursorBookmark;
+	import mx.core.ClassFactory;
 
 	public class BarElement extends StackElement 
 	{
@@ -62,7 +63,7 @@ package birdeye.vis.elements.geometry
 			super.commitProperties();
 
 			if (!itemRenderer)
-				itemRenderer = RectangleRenderer;
+				itemRenderer = new ClassFactory(RectangleRenderer);
 
 			if (stackType == STACKED100 && chart)
 			{
@@ -237,13 +238,21 @@ package birdeye.vis.elements.geometry
 							gg = ttGG;
 		
 		 				if (_source)
+		 				{
 							poly = new RasterRenderer(bounds, _source);
+		 				}
 		 				else 
-							poly = new itemRenderer(bounds);
+						{							
+							poly = itemRenderer.newInstance();
+							if (poly is IBoundedRenderer) (poly as IBoundedRenderer).bounds = bounds;
 		
+						}
+							
 						if (_showItemRenderer)
 						{
-							var shape:IGeometry = new itemRenderer(bounds);
+
+							var shape:IGeometry = itemRenderer.newInstance();
+							if (shape is IBoundedRenderer) (shape as IBoundedRenderer).bounds = bounds;
 							shape.fill = fill;
 							shape.stroke = stroke;
 							gg.geometryCollection.addItem(shape);

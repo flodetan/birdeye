@@ -33,6 +33,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.ArcPath;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.RectangleRenderer;
+	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.IEnumerableScale;
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.interfaces.IScale;
@@ -46,6 +47,8 @@ package birdeye.vis.elements.geometry
 	
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
+	
+	import mx.core.ClassFactory;
 
 	public class ColumnElement extends StackElement 
 	{
@@ -65,7 +68,7 @@ package birdeye.vis.elements.geometry
 		{
 			super.commitProperties();
 			if (!itemRenderer)
-				itemRenderer = RectangleRenderer;
+				itemRenderer = new ClassFactory(RectangleRenderer);
 
 			if (stackType == STACKED100 && chart)
 			{
@@ -302,8 +305,9 @@ trace (getTimer(), "drawing column ele");
  			 				if (_source)
 								poly = new RasterRenderer(bounds, _source);
 			 				else 
-								poly = new itemRenderer(bounds);
+								poly = itemRenderer.newInstance();
 			
+							if (poly is IBoundedRenderer) (poly as IBoundedRenderer).bounds = bounds;
 							poly.fill = fill;
 							poly.stroke = stroke; 
 							gg.geometryCollection.addItemAt(poly,0);  
@@ -378,7 +382,8 @@ trace (getTimer(), "drawing column ele");
 		
 						if (_showItemRenderer)
 						{
-							var shape:IGeometry = new itemRenderer(bounds);
+							var shape:IGeometry = itemRenderer.newInstance();
+							if (shape is IBoundedRenderer) (shape as IBoundedRenderer).bounds = bounds;
 							shape.fill = fill;
 							shape.stroke = stroke;
 							gg.geometryCollection.addItem(shape);
