@@ -1,10 +1,8 @@
-/*  
+/* 
  * The MIT License
  *
- * Copyright (c) 2008
- * United Nations Office at Geneva
- * Center for Advanced Visual Analytics
- * http://cava.unog.ch
+ * Copyright (c) 2007 The SixDegrees Project Team
+ * (Jason Bellone, Juan Rodriguez, Segolene de Basquiat, Daniel Lang).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,15 +22,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package birdeye.vis.interfaces
+package birdeye.vis.trans.graphs.layout
 {
-	import birdeye.vis.elements.Position;
-	
-	public interface IPositionableElement extends IElement {
+	/**
+	 * An angular layouter uses an angle as a main
+	 * parameter.
+	 * */
+	public interface IAngularLayouter extends ILayoutAlgorithm {
 		
-		function getItemPosition(itemId:Object):Position;
+		/**
+		 * Access to a value that controls an angle in degrees
+		 * for the layouter. It is up to the
+		 * layouter what to do with it, and some may ignore
+		 * this value under certain circumstances (like autoFit).
+		 * The interface requires the value to be between -360 and 360;
+		 * @default 160
+		 * @param p The value to set.
+		 * */
+		function set phi(p:Number):void;
 		
-		function isItemVisible(itemId:Object):Boolean;
-		
+		/**
+		 * @private
+		 * */
+		function get phi():Number;
+
 	}
 }

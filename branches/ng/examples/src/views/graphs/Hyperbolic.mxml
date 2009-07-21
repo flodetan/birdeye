@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" paddingLeft="150" paddingTop="50" width="100%" height="100%">
+<gv:BaseGraphView
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:gv="views.graphs.*" 
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:trans="birdeye.vis.trans.*"
+	creationComplete="generateTree()">
+
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
 	
-	<mx:Label text="Coming soon..." fontSize="14" />
-	
-</mx:VBox>
+		<mx:Button label="Generate" click="generateTree()"/>
+
+    	<coords:Cartesian id="graph" width="100%" height="100%">
+			<coords:elements>
+				<elements:EdgeElement id="edge" dimStart="start" dimEnd="end" node="{node}" dataProvider="{edges}"
+									  colorFill="0xFF0000" colorStroke="0x999999" strokeWeight="2" />
+									  
+				<elements:NodeElement id="node" dimId="id" dimName="name" dataProvider="{nodes}"
+									  colorFill="0x0000FF" alphaFill="1.0" strokeColor="0xFFFFFF" size="7" />
+			</coords:elements>
+			<coords:transforms>
+				<trans:GraphLayout graphId="graph1" applyToNode="{node}" applyToEdge="{edge}" type="hyperbolic" 
+					startNodeId="1" />
+			</coords:transforms>
+    	</coords:Cartesian>
+    </mx:VBox>
+</gv:BaseGraphView>

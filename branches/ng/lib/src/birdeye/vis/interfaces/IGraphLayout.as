@@ -28,12 +28,15 @@
 package birdeye.vis.interfaces
 {
 	import birdeye.vis.elements.Position;
-	import birdeye.vis.elements.geometry.EdgeElement;
 	
 	public interface IGraphLayout extends ITransform
 	{
-		function apply(width:int, height:int):void;
+		function get graphId():String;
 
-		function getNodeItemPosition(itemIndex:int):Position;
+		function apply(width:Number, height:Number):void;
+		
+		function isNodeItemVisible(itemId:Object):Boolean;
+
+		function getNodeItemPosition(itemId:Object):Position;
 	}
 }

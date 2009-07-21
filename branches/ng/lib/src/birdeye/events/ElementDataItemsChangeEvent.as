@@ -24,15 +24,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package birdeye.vis.interfaces
+
+package birdeye.events
 {
-	import birdeye.vis.elements.Position;
-	
-	public interface IPositionableElement extends IElement {
+	import birdeye.vis.interfaces.IElement;
+
+	public class ElementDataItemsChangeEvent extends ElementEvent
+	{
+		public static const TYPE:String = "dataItemsChanged";
+
+		private var _oldDataItems:Vector.<Object>;
+		private var _newDataItems:Vector.<Object>;
 		
-		function getItemPosition(itemId:Object):Position;
+		public function ElementDataItemsChangeEvent(
+			element:IElement, oldDataItems:Vector.<Object>, newDataItems:Vector.<Object>)
+		{
+			super(TYPE, element);
+			_oldDataItems = oldDataItems;
+			_newDataItems = newDataItems;
+		}
 		
-		function isItemVisible(itemId:Object):Boolean;
+		public function get oldDataItems():Vector.<Object> {
+			return _oldDataItems;
+		}
+		
+		public function get newDataItems():Vector.<Object> {
+			return _newDataItems;
+		}
 		
 	}
 }

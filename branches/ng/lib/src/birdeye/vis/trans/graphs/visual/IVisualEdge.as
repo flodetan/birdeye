@@ -1,4 +1,4 @@
-/* 
+/*  
  * The MIT License
  *
  * Copyright (c) 2008
@@ -25,41 +25,16 @@
  * THE SOFTWARE.
  */
 
-package birdeye.vis.trans
+package birdeye.vis.trans.graphs.visual
 {
-	import birdeye.vis.elements.Position;
-	import birdeye.vis.elements.geometry.EdgeElement;
-	import birdeye.vis.interfaces.IGraphLayout;
-	import birdeye.vis.interfaces.IGraphLayoutableElement;
+	import birdeye.vis.trans.graphs.model.IEdge;
 	
-	/**
-	 * This is an abstract class which mustn't be instantiated.
-	 **/
-	public class BaseGraphLayout implements IGraphLayout {
-
-		public function BaseGraphLayout() {
-			
-		}
-		
-		protected var _node:IGraphLayoutableElement;
-		public function set applyToNode(val:IGraphLayoutableElement):void {
-			_node = val;
-			_node.graphLayout = this;
-		}
-		
-		private var nodeItemPositions:Array = [];
-
-		protected function setItemPosition(itemIndex:int, pos1:Number, pos2:Number, pos3:Number):void {
-			nodeItemPositions[itemIndex] = new Position(pos1, pos2, pos3);
-		}
-
-		public function getNodeItemPosition(itemIndex:int):Position {
-			return nodeItemPositions[itemIndex];
-		}
-
+	public interface IVisualEdge extends IVisualItem
+	{
 		/**
-		 * This is an abstract method which must be implemented by subclasses.
-		 **/
-		public function apply(width:int, height:int):void { }
+		 * Access to the associated graph Edge.
+		 * */ 
+		function get edge():IEdge;
+
 	}
 }

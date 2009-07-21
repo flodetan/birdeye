@@ -24,15 +24,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package birdeye.vis.interfaces
+
+package birdeye.vis.trans.graphs.visual
 {
-	import birdeye.vis.elements.Position;
+	import birdeye.vis.trans.graphs.model.IEdge;
 	
-	public interface IPositionableElement extends IElement {
+	public class VisualEdge implements IVisualEdge
+	{
+		private var _edge:IEdge;
+		private var _visible:Boolean;
+
+		public function VisualEdge(edge:IEdge)
+		{
+			_edge = edge;
+		}
+
+		public function get visible():Boolean
+		{
+			return _visible;
+		}
 		
-		function getItemPosition(itemId:Object):Position;
-		
-		function isItemVisible(itemId:Object):Boolean;
-		
+		public function set visible(visible:Boolean)
+		{
+			_visible = visible;
+		}
+
+		public function get edge():IEdge {
+			return _edge;
+		}
 	}
 }

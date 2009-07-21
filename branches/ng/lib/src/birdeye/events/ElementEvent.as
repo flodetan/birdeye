@@ -1,4 +1,4 @@
-/* 
+/*  
  * The MIT License
  *
  * Copyright (c) 2008
@@ -25,25 +25,23 @@
  * THE SOFTWARE.
  */
 
-package birdeye.vis.trans
+package birdeye.events
 {
-	public class SingleCycleGraphLayout extends BaseGraphLayout
+	import birdeye.vis.interfaces.IElement;
+	
+	import flash.events.Event;
+	
+	public class ElementEvent extends Event
 	{
-		public function SingleCycleGraphLayout() {
-			super();
+		private var _element:IElement;
+		
+		public function ElementEvent(type:String, element:IElement) {
+			super(type);
+			_element = element;
 		}
 		
-		public override function apply(width:int, height:int):void {
-			const dataItems:Vector.<Object> = _node.dataItems;
-			if (dataItems) {
-			    const numItems = dataItems.length;
-				const mx:Number = width/2, my:int = height/2, r:int = Math.min(width, height)/2 * .8;
-				for (var i:int = 0; i < numItems; i++) {
-					setItemPosition(i, 
-						mx + Math.cos(2 * Math.PI * i / numItems) * r, 
-						my - Math.sin(2 * Math.PI * i / numItems) * r, NaN);
-				}
-			}
+		public function get element():IElement {
+			return _element;
 		}
 	}
 }

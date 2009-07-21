@@ -26,18 +26,20 @@
  */
  package birdeye.vis.elements.geometry
 {
+	import __AS3__.vec.Vector;
+	
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.guides.renderers.LineRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
+	import birdeye.vis.interfaces.IEdgeElement;
 	import birdeye.vis.interfaces.IPositionableElement;
 	
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
 	
 	import flash.geom.Rectangle;
 	
-	public class EdgeElement extends BaseElement
+	public class EdgeElement extends BaseElement implements IEdgeElement
 	{
 		public function EdgeElement()
 		{
@@ -79,6 +81,10 @@
 			invalidateProperties();
 			invalidateDisplayList();
 		}
+		
+		public function get node():IPositionableElement {
+			return _node;
+		}
 
 		protected function createItemRenderer(bounds:Rectangle):IGeometry {
 			var renderer:IGeometry;
@@ -100,25 +106,34 @@
 			return new Rectangle(x1, y1, x2, y2);
 		}
 
+		public function edgeItemId(item:Object):String {
+			return item[_dimStart] + "-" + item[_dimEnd];
+		}
+		
 		override public function drawElement():void {
 			super.drawElement();
 			
 			prepareForItemGeometriesCreation();
 			
-			const dataItems = dataItems;
+			const items:Vector.<Object> = dataItems;
 			
-			if (dataItems){
-				dataItems.forEach(function(item:Object, itemIndex:int, items:Vector.<Object>):void {
+			if (items){
+				items.forEach(function(item:Object, itemIndex:int, items:Vector.<Object>):void {
 					var pos1:Number = NaN, pos2:Number = NaN, pos3:Number = NaN;
 	
-					const start:Position = _node.getItemPosition(item[_dimStart]);
-					const end:Position = _node.getItemPosition(item[_dimEnd]);
+					const startItemId:Object = item[_dimStart];
+					const endItemId:Object = item[_dimEnd];
 
-					if (start  &&  end) {
-						var group:GeometryGroup = createItemGeometryGroup();
-						group.geometry = [
-							createItemRenderer(bounds(start.pos1, start.pos2, end.pos1, end.pos2))
-						];
+					if (_node.isItemVisible(startItemId)  &&  _node.isItemVisible(endItemId)) {
+						const start:Position = _node.getItemPosition(startItemId);
+						const end:Position = _node.getItemPosition(endItemId);
+	
+						if (start  &&  end) {
+							createItemGraphics(
+								edgeItemId(item),
+								[ createItemRenderer(bounds(start.pos1, start.pos2, end.pos1, end.pos2)) ]
+							);
+						}
 					}
 				});
 			}

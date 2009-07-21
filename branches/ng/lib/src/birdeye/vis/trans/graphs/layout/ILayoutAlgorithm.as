@@ -1,10 +1,8 @@
-/*  
+/* 
  * The MIT License
  *
- * Copyright (c) 2008
- * United Nations Office at Geneva
- * Center for Advanced Visual Analytics
- * http://cava.unog.ch
+ * Copyright (c) 2007 The SixDegrees Project Team
+ * (Jason Bellone, Juan Rodriguez, Segolene de Basquiat, Daniel Lang).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,15 +22,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package birdeye.vis.interfaces
+ 
+package birdeye.vis.trans.graphs.layout
 {
-	import birdeye.vis.elements.Position;
-	
-	public interface IPositionableElement extends IElement {
+	public interface ILayoutAlgorithm
+	{
+		/**
+		 * This is the main method of the layouter, that actually
+		 * implements the calculation of the layout. It will be called
+		 * by the VisualGraph on any significant change that will
+		 * require a layout to be recomputed.
+		 * @return true if something was done successfully, false otherwise.
+		 * */
+		function layoutPass():Boolean;
 		
-		function getItemPosition(itemId:Object):Position;
+		/**
+		 * This should reset all parameters of the layouter,
+		 * which might not be needed for all layouters, and it is
+		 * up to each layouter to do something with it.
+		 * It would also stop any existing layouting loops/timers.
+		 * */
+		function resetAll():void;
 		
-		function isItemVisible(itemId:Object):Boolean;
-		
+		function set disableAnimation(value:Boolean):void;
+
+		function get disableAnimation():Boolean;
+
 	}
 }
