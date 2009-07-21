@@ -24,15 +24,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package birdeye.vis.interfaces
+
+package birdeye.vis.trans.graphs.data
 {
-	import birdeye.vis.elements.Position;
-	
-	public interface IPositionableElement extends IElement {
+	public interface IGraphDataProvider {
 		
-		function getItemPosition(itemId:Object):Position;
+		function get numberOfNodes():int;
+
+		function get numberOfEdges():int;
+
+		function getNodeId(index:int):String;
+
+		function getNodeTag(index:int):Object;
+
+		function getEdgeFromNodeId(index:int):String;
+
+		function getEdgeToNodeId(index:int):String;
 		
-		function isItemVisible(itemId:Object):Boolean;
-		
+		function getEdgeTag(index:int):Object;
+
 	}
 }

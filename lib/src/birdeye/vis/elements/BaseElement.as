@@ -27,6 +27,7 @@
  
 package birdeye.vis.elements
 {
+	import birdeye.events.ElementDataItemsChangeEvent;
 	import birdeye.vis.VisScene;
 	import birdeye.vis.coords.Cartesian;
 	import birdeye.vis.data.DataItemLayout;
@@ -41,6 +42,7 @@ package birdeye.vis.elements
 	import birdeye.vis.scales.MultiScale;
 	
 	import com.degrafa.GeometryGroup;
+	import com.degrafa.IGraphic;
 	import com.degrafa.Surface;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
@@ -52,6 +54,7 @@ package birdeye.vis.elements
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.events.MouseEvent;
+	import flash.utils.Dictionary;
 	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
@@ -493,6 +496,7 @@ package birdeye.vis.elements
 	  		{
 	  			this._dataProvider = new ArrayCollection();
 	  		}
+
 	  		if (ICollectionView(_dataProvider).length > 0)
 	  		{
 		  		_cursor = ICollectionView(_dataProvider).createCursor();
@@ -524,15 +528,21 @@ package birdeye.vis.elements
 		}
 		
 		protected var _dataItems:Vector.<Object>;
-		public function set dataItems(val:Vector.<Object>):void
+
+		public function set dataItems(items:Vector.<Object>):void
 		{
-			_dataItems = val;
-			_maxDim1Value = _maxDim2Value = _maxDim3Value = _totalDim1PositiveValue = NaN;
-			_minDim1Value = _minDim2Value = _minDim3Value = NaN;
-			_minColorValue = _maxColorValue = _minSizeValue = _maxSizeValue = NaN;
-			invalidateProperties();
-			invalidatingDisplay();
+			const oldVal:Vector.<Object> = _dataItems;
+			if (items !== oldVal) {
+				_dataItems = items;
+				_maxDim1Value = _maxDim2Value = _maxDim3Value = _totalDim1PositiveValue = NaN;
+				_minDim1Value = _minDim2Value = _minDim3Value = NaN;
+				_minColorValue = _maxColorValue = _minSizeValue = _maxSizeValue = NaN;
+				dispatchEvent(new ElementDataItemsChangeEvent(this, oldVal, items));
+				invalidateProperties();
+				invalidatingDisplay();
+			}
 		}
+
 		public function get dataItems():Vector.<Object>
 		{
 			return _dataItems;
@@ -871,14 +881,14 @@ package birdeye.vis.elements
 		private function loadElementsValues():void
 		{
 			_cursor.seek(CursorBookmark.FIRST);
-			_dataItems = new Vector.<Object>;
+			const items:Vector.<Object> = new Vector.<Object>;
 			var j:uint = 0;
 			while (!_cursor.afterLast)
 			{
-				_dataItems[j++] = _cursor.current;
+				items[j++] = _cursor.current;
 				_cursor.moveNext();
 			}
-			
+			dataItems = items;
 		}
 
 		/**
@@ -1468,22 +1478,28 @@ package birdeye.vis.elements
 		
 		protected function prepareForItemGeometriesCreation():void {
 			removeAllElements();
-			ggIndex = 0;
+			_itemGraphics = new Dictionary();
 		}
 
-		public function createItemGeometryGroup():GeometryGroup {
-	        if (graphicsCollection.items && graphicsCollection.items.length > ggIndex) {
-	        	gg = graphicsCollection.items[ggIndex];
-	 		} else {
-	        	gg = new DataItemLayout();
-	        	graphicsCollection.addItem(gg);
-	        }
-	        gg.target = this;
-	        ggIndex++;
-	        
-	        return gg;
+		private var _itemGraphics:Dictionary;
+
+		public function getItemGraphics(itemId:Object):IGraphic {
+			return _itemGraphics[itemId];
 		}
-		
+
+		/**
+		 * @param itemId
+		 * @param geometries Array of IGeometry objects 
+		 **/
+		protected function createItemGraphics(itemId:Object, geometries:Array):IGraphic {
+			var graphics:GeometryGroup = new DataItemLayout();
+        	graphicsCollection.addItem(graphics);
+	        graphics.target = this;
+	        graphics.geometry = geometries;
+	        _itemGraphics[itemId] = graphics;
+			return graphics;
+		}
+
 		public function refresh():void
 		{
 			// for the moment only overridden by PolygonElement

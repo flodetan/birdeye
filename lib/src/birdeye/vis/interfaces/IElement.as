@@ -27,14 +27,16 @@
  
 package birdeye.vis.interfaces
 {
+	import com.degrafa.IGraphic;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
 	
+	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	
 	import mx.core.IFactory;
-	
-	public interface IElement extends IRasterRenderer
+
+	public interface IElement extends IRasterRenderer, IEventDispatcher
 	{
 		/** Set the chart target. This allows to share axes and other properties
 		 * of the chart among several elements.*/
@@ -118,6 +120,8 @@ package birdeye.vis.interfaces
 		 * dataProvider or from the chart dataProvider.*/
 		function set dataItems(val:Vector.<Object>):void;
 		function get dataItems():Vector.<Object>;
+		
+		function getItemGraphics(itemId:Object):IGraphic;
 
 		/** Set the name to display (legends..).*/
 		function set displayName(val:String):void;

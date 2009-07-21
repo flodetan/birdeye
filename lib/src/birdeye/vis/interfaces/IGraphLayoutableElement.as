@@ -25,10 +25,11 @@
  * THE SOFTWARE.
  */
  package birdeye.vis.interfaces {
- 	import birdeye.vis.elements.Position;
 
 	public interface IGraphLayoutableElement extends IPositionableElement {
 		
+		function get dimId():String;
+
 		function set graphLayout(layout:IGraphLayout):void;
 
 		function get graphLayout():IGraphLayout;

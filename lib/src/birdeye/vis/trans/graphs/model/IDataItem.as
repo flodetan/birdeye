@@ -24,15 +24,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package birdeye.vis.interfaces
-{
-	import birdeye.vis.elements.Position;
+
+
+package birdeye.vis.trans.graphs.model {
+	import flash.events.IEventDispatcher;
 	
-	public interface IPositionableElement extends IElement {
+	
+	/** 
+	 * This is the base interface
+	 * of our data items, like nodes (vertices)
+	 * and edges, it specifies ID and data properties.
+	 */
+	public interface IDataItem extends IEventDispatcher {
 		
-		function getItemPosition(itemId:Object):Position;
+		/**
+		 * Access to the id property of any item.
+		 * */
+		function get id():String;
 		
-		function isItemVisible(itemId:Object):Boolean;
+
+		/**
+		 * Access to the data object associated with
+		 * any item.
+		 * @param o The data object to be associated.
+		 * */
+		function set data(o:Object): void;
+		/**
+		 * @private
+		 * */
+		function get data(): Object;
 		
+		/**
+		 * @internal
+		 * Decided not to allow setting the id
+		 * in a regular method, it will be constructor only.
+		 * */
 	}
 }

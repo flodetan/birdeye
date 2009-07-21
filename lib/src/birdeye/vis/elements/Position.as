@@ -32,7 +32,7 @@ package birdeye.vis.elements
 		private var _pos2:Number;
 		private var _pos3:Number;
 
-		public function Position(pos1:Number, pos2:Number, pos3:Number) {
+		public function Position(pos1:Number, pos2:Number, pos3:Number = NaN) {
 			_pos1 = pos1;
 			_pos2 = pos2;
 			_pos3 = pos3;

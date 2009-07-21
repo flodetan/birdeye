@@ -24,15 +24,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package birdeye.vis.interfaces
+ 
+package birdeye.util
 {
-	import birdeye.vis.elements.Position;
-	
-	public interface IPositionableElement extends IElement {
-		
-		function getItemPosition(itemId:Object):Position;
-		
-		function isItemVisible(itemId:Object):Boolean;
-		
-	}
+	import flash.utils.getTimer;
+
+	/**
+	 * This is a simple class to provide a timer function.
+	 * 
+	 * @author Nitin Lamba
+	 * */
+	public class StopWatch {
+
+		protected var prevTime:uint;
+
+		public function startTimer():void {
+			prevTime = getTimer();
+		}
+			
+		/**
+		 * Stops the timer and returns the 
+		 * time elapsed since last start timer call.
+		 * @return elapsed time
+		 */
+		public function stopTimer():uint {
+			var curTime:uint = getTimer();
+			return curTime - prevTime;
+		}
+  	}
+  
 }
+

@@ -50,14 +50,14 @@ package birdeye.vis.elements.geometry
 			super();
 		}
 		
-		private var _layout:IGraphLayout;
+		private var _graphLayout:IGraphLayout;
 
-		public function set graphLayout(val:IGraphLayout):void {
-			_layout = val;
+		public function set graphLayout(layout:IGraphLayout):void {
+			_graphLayout = layout;
 		}
 
 		public function get graphLayout():IGraphLayout {
-			return _layout;
+			return _graphLayout;
 		}
 
 		private var _dimId:String;
@@ -68,6 +68,7 @@ package birdeye.vis.elements.geometry
 			invalidateProperties();
 			invalidateDisplayList();
 		}
+
 		public function get dimId():String
 		{
 			return _dimId;
@@ -87,20 +88,20 @@ package birdeye.vis.elements.geometry
 		}
 
 		public function getItemIndexById(id:Object):int {
-			if (!_dataItems) return -1;
-			for (var i:int = 0; i < _dataItems.length; i++) {
-				if (_dataItems[i][_dimId] == id) return i;
+			const items = dataItems;
+			if (!items) return -1;
+			for (var i:int = 0; i < items.length; i++) {
+				if (items[i][_dimId] == id) return i;
 			}
 			return -1;
 		}
 
-		public function getItemPosition(id:Object):Position {
-			var index:int = getItemIndexById(id);
-			if (index >= 0)	{
-				return _layout.getNodeItemPosition(index);
-			} else {
-				return null;
-			}
+		public function isItemVisible(itemId:Object):Boolean {
+			return _graphLayout.isNodeItemVisible(itemId);
+		}
+
+		public function getItemPosition(itemId:Object):Position {
+			return _graphLayout.getNodeItemPosition(itemId);
 		}
 		
 		protected function createItemRenderer(bounds:Rectangle):IGeometry {
@@ -108,13 +109,10 @@ package birdeye.vis.elements.geometry
  			if (_source)
 				renderer = new RasterRenderer(bounds, _source);
  			else {
- 				if (itemRenderer)
- 				{
+ 				if (itemRenderer) {
  					renderer = itemRenderer.newInstance();
  					if (renderer is IBoundedRenderer) (renderer as IBoundedRenderer).bounds = bounds;
- 				}
-				else
-				{
+ 				} else {
 					renderer = new CircleRenderer(bounds);
 				}
 			}
@@ -151,45 +149,50 @@ package birdeye.vis.elements.geometry
 			const thisNode:NodeElement = this;
 			
 			if (dataItems) {
-				dataItems.forEach(function(item:Object, index:int, items:Vector.<Object>) {
+				dataItems.forEach(function(item:Object, index:int, items:Vector.<Object>):void {
 					var pos1:Number = NaN, pos2:Number = NaN, pos3:Number = NaN;
 	
-					const position:Position = _layout.getNodeItemPosition(index);
-	
-					// We cannot use scale.getPosition here, because
-					// scales work in an inherently different way, than
-					// what we need: they calc min/max of the input data
-					// values. In case of Node/Edge we don't have these
-					// values (positions), so the scales think we have no data
-					// and create a zero-size viewport.
-	
-	//				if (scale1) {
-	//					pos1 = scale1.getPosition(position.pos1);
-	//				}
-	//				if (scale2) {
-	//					pos2 = scale2.getPosition(position.pos2);
-	//				}
-	
-					if (position != null) {
-						pos1 = position.pos1;
-						pos2 = position.pos2;
-			
-						createTTGG(item, dataFieldNames, pos1, pos2, 1.0, _size * 2);
-						
-						var group:GeometryGroup = createItemGeometryGroup();
-						group.geometry = [
-							createItemRenderer(bounds(pos1, pos2)),
-							TextRenderer.createTextLabel(
-								   pos1, pos2 + _size,
-								   item[dimName], 
-								   new SolidFill(0xffffff),  // TODO: add textFill property
-								   true, false
-							)
-						];
+					const itemId:Object = item[dimId];
+					if (isItemVisible(itemId)) {
+						const position:Position = getItemPosition(itemId);
+		
+						// We cannot use scale.getPosition here, because
+						// scales work in an inherently different way, than
+						// what we need: they calc min/max of the input data
+						// values. In case of Node/Edge we don't have these
+						// values (positions), so the scales think we have no data
+						// and create a zero-size viewport.
+		
+		//				if (scale1) {
+		//					pos1 = scale1.getPosition(position.pos1);
+		//				}
+		//				if (scale2) {
+		//					pos2 = scale2.getPosition(position.pos2);
+		//				}
+		
+						if (position != null) {
+							pos1 = position.pos1;
+							pos2 = position.pos2;
+				
+							createTTGG(item, dataFieldNames, pos1, pos2, 1.0, _size * 2);
+							createItemGraphics(
+								itemId,
+								[
+									createItemRenderer(bounds(pos1, pos2)),
+									TextRenderer.createTextLabel(
+										   pos1, pos2 + _size,
+										   item[dimName],
+										   new SolidFill(0xffffff),  // TODO: add textFill property
+										   true, false
+									)
+								]
+							);
+						}
 					}
 				});
 			}
 		}
+		
 
 		/*
 		protected function addMoveEventListeneres() : void {

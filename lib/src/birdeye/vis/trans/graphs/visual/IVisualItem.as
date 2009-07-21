@@ -24,15 +24,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package birdeye.vis.interfaces
+
+package birdeye.vis.trans.graphs.visual
 {
-	import birdeye.vis.elements.Position;
-	
-	public interface IPositionableElement extends IElement {
+	public interface IVisualItem
+	{
+
+		function get visible():Boolean;
 		
-		function getItemPosition(itemId:Object):Position;
-		
-		function isItemVisible(itemId:Object):Boolean;
-		
+		function set visible(value:Boolean);
+
 	}
 }
