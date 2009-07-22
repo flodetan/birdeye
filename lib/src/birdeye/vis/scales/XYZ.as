@@ -188,6 +188,9 @@ package birdeye.vis.scales
 		 */
 		protected function drawAxisLine(w:Number, h:Number):void
 		{
+			if (!surf) {
+				return;
+			}
 			var x0:Number, x1:Number, y0:Number, y1:Number;
 			
 			switch (placement)
