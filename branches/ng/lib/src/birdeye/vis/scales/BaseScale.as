@@ -60,9 +60,9 @@ package birdeye.vis.scales
 
 	public class BaseScale extends UIComponent implements IScaleUI
 	{
-		public var surf:Surface;
-		public var _targets:Array = new Array();
-		public var gg:GeometryComposition;
+		protected var surf:Surface;
+		protected var _targets:Array = new Array();
+		protected var gg:GeometryComposition;
 		
 		protected var invalidated:Boolean = false;
 
