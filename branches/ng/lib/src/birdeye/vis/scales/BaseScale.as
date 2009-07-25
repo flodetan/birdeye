@@ -29,14 +29,13 @@ package birdeye.vis.scales
 {
 	import birdeye.vis.interfaces.IScaleUI;
 	
-	import com.degrafa.GeometryGroup;
+	import com.degrafa.GeometryComposition;
 	import com.degrafa.Surface;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.paint.SolidStroke;
 	
-	import mx.core.IInvalidating;
 	import mx.core.UIComponent;
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
@@ -61,8 +60,9 @@ package birdeye.vis.scales
 
 	public class BaseScale extends UIComponent implements IScaleUI
 	{
-		protected var surf:Surface;
-		protected var gg:GeometryGroup;
+		public var surf:Surface;
+		public var _targets:Array = new Array();
+		public var gg:GeometryComposition;
 		
 		protected var invalidated:Boolean = false;
 
@@ -400,6 +400,11 @@ package birdeye.vis.scales
 		{
 			return _showAxis;
 		}
+		
+		public function get targets():Array
+		{
+			return _targets;
+		}
 
 		protected var _dataValues:Array; /* of numerals  for numeric scales and strings for category scales*/
  		/** Define the min and max data values for numeric scales ([minLat, maxLong], [minAreaDensity, maxAreaDensity])
@@ -462,9 +467,9 @@ package birdeye.vis.scales
 			{
 				super.createChildren();
 				surf = new Surface();
-				gg = new GeometryGroup();
-				gg.target = surf;
-				surf.graphicsCollection.addItem(gg);
+				gg = new GeometryComposition();
+				targets.push(surf);
+				gg.graphicsTarget = targets;
 				addChild(surf);
 			}
 		}
@@ -592,10 +597,10 @@ package birdeye.vis.scales
 				{
 					for (var i:int = 0; i<nElements; i++)
 					{
-						if (surf.graphicsCollection.items[i] is GeometryGroup)
+						if (surf.graphicsCollection.items[i] is GeometryComposition)
 						{
-							GeometryGroup(surf.graphicsCollection.items[i]).geometry = []; 
-							GeometryGroup(surf.graphicsCollection.items[i]).geometryCollection.items = [];
+							GeometryComposition(surf.graphicsCollection.items[i]).geometry = []; 
+							GeometryComposition(surf.graphicsCollection.items[i]).geometryCollection.items = [];
 						}
 					}
 				} 

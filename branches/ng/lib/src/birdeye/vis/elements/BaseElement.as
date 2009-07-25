@@ -55,6 +55,7 @@ package birdeye.vis.elements
 	
 	import flash.events.MouseEvent;
 	import flash.utils.Dictionary;
+	import flash.utils.describeType;
 	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
@@ -1383,21 +1384,28 @@ package birdeye.vis.elements
 					}
 				}
 			} 
-/* 
+ 
  			for (i = numChildren - 1; i>=0; i--)
 			{
-				if (getChildAt(i) is DataItemLayout)
+				/*if (getChildAt(i) is DataItemLayout)
 				{
 					DataItemLayout(getChildAt(i)).removeEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 					DataItemLayout(getChildAt(i)).removeEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 					DataItemLayout(getChildAt(i)).removeEventListener(MouseEvent.DOUBLE_CLICK, onMouseDoubleClick);
 					DataItemLayout(getChildAt(i)).removeEventListener(MouseEvent.CLICK, onMouseClick);
 					DataItemLayout(getChildAt(i)).removeAllElements();
+				}*/
+				
+				// this is a terrible way, reusing like real repeaters is better
+				// TODO improve this
+				if (getChildAt(i) is ICoordinates)
+				{
+					removeChildAt(i);
 				}
-				removeChildAt(i);
+				//removeChildAt(i);
 			}
  			graphicsCollection.items = [];
- */  		}
+ 		}
 		
 		protected var rectBackGround:RegularRectangle;
 		protected var ggBackGround:GeometryGroup;
@@ -1503,6 +1511,31 @@ package birdeye.vis.elements
 		public function refresh():void
 		{
 			// for the moment only overridden by PolygonElement
+		}
+		
+		public function clone():*
+		{
+            var c:Class = this['constructor'] as Class; 
+            var instance:Object = new c(); 
+            
+            var classInfo:XML = describeType(this); 
+            // List the object's variables, their values, and their types. 
+            for each ( var v:XML in classInfo..variable ) { 
+            	if (this[v.@name])
+                	instance[v.@name] = this[v.@name]; 
+            } 
+
+            // List accessors as properties. 
+            for each ( var a:XML in classInfo..accessor ) { 
+                // Do not user the property if it can't be read or written 
+                if( a.@access == 'readwrite' || a.@access == 'write') { 
+                    if (this[a.@name])
+                    	instance[ a.@name ] = this[a.@name]; 
+                } 
+
+            } 
+
+            return instance; 
 		}
 	}
 }

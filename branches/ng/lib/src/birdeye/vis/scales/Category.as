@@ -29,7 +29,7 @@
 {
 	import birdeye.vis.interfaces.IEnumerableScale;
 	
-	import com.degrafa.GeometryGroup;
+	import com.degrafa.GeometryComposition;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
@@ -199,15 +199,6 @@ trace(getTimer(), "drawing category scale");
 				{
 					for (snap = yMax - _scaleInterval/2; snap>yMin; snap -= _scaleInterval*_dataInterval)
 					{
-		 				if (surf.graphicsCollection.items && surf.graphicsCollection.items.length>ggIndex)
-							gg = surf.graphicsCollection.items[ggIndex];
-						else
-						{
-							gg = new GeometryGroup();
-							surf.graphicsCollection.addItem(gg);
-						}
-						gg.target = surf;
-						ggIndex++;
 
 						// create thick line
 			 			thick = new Line(xMin + thickWidth * sign, snap, xMax, snap);
@@ -252,15 +243,6 @@ trace(getTimer(), "drawing category scale");
 				{
 					for (snap = xMin + _scaleInterval/2; snap<xMax; snap += _scaleInterval*_dataInterval)
 					{
-		 				if (surf.graphicsCollection.items && surf.graphicsCollection.items.length>ggIndex)
-							gg = surf.graphicsCollection.items[ggIndex];
-						else
-						{
-							gg = new GeometryGroup();
-							surf.graphicsCollection.addItem(gg);
-						}
-						gg.target = surf;
-						ggIndex++;
 						
 						// create thick line
 			 			thick = new Line(snap, yMin + thickWidth * sign, snap, yMax);

@@ -30,6 +30,7 @@ package birdeye.vis.scales
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.interfaces.IScaleUI;
 	
+	import com.degrafa.GeometryComposition;
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RasterTextPlus;
@@ -245,15 +246,6 @@ trace(getTimer(), "drawing numeric scale");
 				{
 					for (snap = min; snap<=max; snap += dataInterval)
 					{
-		 				if (surf.graphicsCollection.items && surf.graphicsCollection.items.length>ggIndex)
-							gg = surf.graphicsCollection.items[ggIndex];
-						else
-						{
-							gg = new GeometryGroup();
-							surf.graphicsCollection.addItem(gg);
-						}
-						gg.target = surf;
-						ggIndex++;
 						
 						// create thick line
 			 			thick = new Line(xMin + thickWidth * sign, getPosition(snap), xMax, getPosition(snap));
@@ -295,15 +287,6 @@ trace(getTimer(), "drawing numeric scale");
 				// horizontal orientation
 					for (snap = min; snap<=max; snap += dataInterval)
 					{
-		 				if (surf.graphicsCollection.items && surf.graphicsCollection.items.length>ggIndex)
-							gg = surf.graphicsCollection.items[ggIndex];
-						else
-						{
-							gg = new GeometryGroup();
-							surf.graphicsCollection.addItem(gg);
-						}
-						gg.target = surf;
-						ggIndex++;
 
 						// create thick line
 			 			thick = new Line(getPosition(snap), yMin + thickWidth * sign, getPosition(snap), yMax);

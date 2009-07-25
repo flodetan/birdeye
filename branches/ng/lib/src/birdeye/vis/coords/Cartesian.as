@@ -37,8 +37,6 @@ package birdeye.vis.coords
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
-	import com.degrafa.geometry.Line;
-	import com.degrafa.paint.SolidStroke;
 	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
@@ -47,7 +45,6 @@ package birdeye.vis.coords
 	import mx.containers.HBox;
 	import mx.containers.VBox;
 	import mx.core.Container;
-	import mx.core.IFactory;
 	
 	/** A CartesianChart can be used to create any 2D or 3D cartesian charts available in the library
 	 * apart from those who might have specific features, like stackable element or data-sizable items.
@@ -234,43 +231,88 @@ package birdeye.vis.coords
 						nCursors += 1;
 
 					_elementsContainer.addChild(DisplayObject(elements[i]));
-					var scale1:IScale = IElement(elements[i]).scale1;
+					var scale1:IScaleUI = IElement(elements[i]).scale1 as IScaleUI;
 					if (scale1)
 					{
 						switch (scale1.placement)
 						{
 							case BaseScale.TOP:
 								if (!topContainer.contains(DisplayObject(scale1)))
-									topContainer.addChild(DisplayObject(scale1));
+								{
+									if (!DisplayObject(scale1).parent)
+									{
+										topContainer.addChild(DisplayObject(scale1));
+									}
+									else
+									{
+										scale1.targets.push(topContainer);
+									}
+								}
 								break; 
 							case BaseScale.BOTTOM:
 								if (!bottomContainer.contains(DisplayObject(scale1)))
-									bottomContainer.addChild(DisplayObject(scale1));
+								{
+									if (!DisplayObject(scale1).parent)
+									{
+										bottomContainer.addChild(DisplayObject(scale1));
+									}
+									else
+									{
+										scale1.targets.push(bottomContainer);
+									}
+								}
 								break;
 						}
 					} 
 
-					var scale2:IScale = IElement(elements[i]).scale2;
+					var scale2:IScaleUI = IElement(elements[i]).scale2 as IScaleUI;
 					if (scale2)
 					{
 						switch (scale2.placement)
 						{
 							case BaseScale.LEFT:
 								if (!leftContainer.contains(DisplayObject(scale2)))
-									leftContainer.addChild(DisplayObject(scale2));
+								{
+									if (!DisplayObject(scale2).parent)
+									{
+										leftContainer.addChild(DisplayObject(scale2));
+									}
+									else
+									{
+										scale2.targets.push(leftContainer);
+									}
+								}
 								break;
 							case BaseScale.RIGHT:
 								if (!rightContainer.contains(DisplayObject(scale2)))
-									rightContainer.addChild(DisplayObject(scale2));
+								{
+									if (!DisplayObject(scale2).parent)
+									{
+										rightContainer.addChild(DisplayObject(scale2));
+									}
+									else
+									{
+										scale2.targets.push(rightContainer);
+									}
+								}
 								break;
 						}
 					} 
 
-					var tmpScale3:IScale = IElement(elements[i]).scale3;
-					if (tmpScale3 && tmpScale3 is IScaleUI)
+					var tmpScale3:IScaleUI = IElement(elements[i]).scale3 as IScaleUI;
+					if (tmpScale3)
 					{
 						if (!zContainer.contains(DisplayObject(tmpScale3)))
-							zContainer.addChild(DisplayObject(tmpScale3));
+						{
+							if (!DisplayObject(tmpScale3).parent)
+							{
+								zContainer.addChild(DisplayObject(tmpScale3));
+							}
+							else
+							{
+								tmpScale3.targets.push(zContainer);
+							}
+						}
 						
 						// this will be replaced by a depth property 
  						IScale(tmpScale3).size = width; 
@@ -590,37 +632,71 @@ package birdeye.vis.coords
 		 * Validate border containers sizes, that depend on the axes sizes that they contain.*/
 		private function validateBounds():void
 		{
-			var tmpSize:Number = 0;
-			for (var i:Number = 0; i<leftContainer.numChildren; i++)
+			// validate bounds logic has changed as axes are not always added to containers
+			// they can draw to containers, without being added to them
+			// so this logic is reformed to loop axes and not containers containing them
+			var leftSize:Number = 0;
+			var rightSize:Number = 0;
+			var topSize:Number = 0;
+			var bottomSize:Number = 0;
+			
+			var usedScales:Array = new Array();
+			
+			// loop all elements and their scales
+			for (var i:Number = 0; i<elements.length; i++)
 			{
-				tmpSize += XYZ(leftContainer.getChildAt(i)).maxLblSize;
+				var el:IElement = elements[i] as IElement;
+				var s1:IScale = el.scale1;
+				var s2:IScale = el.scale2;
+				
+				if (s1 && usedScales.lastIndexOf(s1) == -1)
+				{
+					switch (s1.placement)
+					{
+						case BaseScale.BOTTOM:
+							bottomSize += XYZ(s1).maxLblSize;
+							break;
+						case BaseScale.TOP:
+							topSize += XYZ(s1).maxLblSize;
+							break;
+						case BaseScale.RIGHT:
+							rightSize += XYZ(s1).maxLblSize;
+							break;
+						case BaseScale.LEFT:
+							leftSize += XYZ(s1).maxLblSize;
+							break;
+					}
+					
+					usedScales.push(s1);
+				}
+				
+				if (s2 && usedScales.lastIndexOf(s2) == -1)
+				{
+					switch (s2.placement)
+					{
+						case BaseScale.BOTTOM:
+							bottomSize += XYZ(s2).maxLblSize;
+							break;
+						case BaseScale.TOP:
+							topSize += XYZ(s2).maxLblSize;
+							break;
+						case BaseScale.RIGHT:
+							rightSize += XYZ(s2).maxLblSize;
+							break;
+						case BaseScale.LEFT:
+							leftSize += XYZ(s2).maxLblSize;
+							break;
+					}
+					
+					usedScales.push(s2);
+				}
+				
 			}
 			
-			leftContainer.width = tmpSize;
-			tmpSize = 0;
-
-			for (i = 0; i<rightContainer.numChildren; i++)
-			{
-				tmpSize += XYZ(rightContainer.getChildAt(i)).maxLblSize;
-			}
-			
-			rightContainer.width = tmpSize;
-			tmpSize = 0;
-
-			for (i = 0; i<bottomContainer.numChildren; i++)
-			{
-				tmpSize += XYZ(bottomContainer.getChildAt(i)).maxLblSize;
-			}
-			
-			bottomContainer.height = tmpSize;
-			tmpSize = 0;
-
-			for (i = 0; i<topContainer.numChildren; i++)
-			{
-				tmpSize += XYZ(topContainer.getChildAt(i)).maxLblSize;
-			}
-			
-			topContainer.height = tmpSize;
+			leftContainer.width = leftSize;
+			rightContainer.height = rightSize;
+			bottomContainer.height = bottomSize;
+			topContainer.height = topSize;
 		}
 		
 		private var currentElement:IElement;
@@ -831,8 +907,10 @@ package birdeye.vis.coords
 		private var gridGG:GeometryGroup;
 		protected function drawGrid():void
 		{
-/*			var scale1:Object = _scales[0]
+			/*var scale1:Object = _scales[0]
 			var scale2:Object = _scales[1];
+			
+			var j:Number = 0;
 			
  			if (scale1 && scale2 && _elementsContainer.width>0 && _elementsContainer.height>0)
 			{
@@ -852,7 +930,7 @@ package birdeye.vis.coords
 					
 					for (var yValue:Number = minY; yValue < maxY; yValue += interval)
 					{
-						var item:Line = Line(gridGG.geometryCollection.getItemAt(i));
+						var item:Line = Line(gridGG.geometryCollection.getItemAt(j++));
 						if (item)
 						{
 							item.x = 0;
@@ -864,19 +942,74 @@ package birdeye.vis.coords
 							item.stroke = new SolidStroke(_gridColor, _gridAlpha, _gridWeight)
 							gridGG.geometryCollection.addItem(item);
 						}
-						i++;
 					}
 					
-					var n:Number = gridGG.geometryCollection.items.length;
-					if (i<n)
-						for (var j:Number = n; j>=i; j--)
-							gridGG.geometryCollection.removeItemAt(j);
-
-					gridGG.target = _elementsContainer;
-					_elementsContainer.graphicsCollection.addItem(gridGG);
+					//var n:Number = gridGG.geometryCollection.items.length;
+					//if (i<n)
+					//	for (var j:Number = n; j>=i; j--)
+					//		gridGG.geometryCollection.removeItemAt(j);
 				}
-			}
- */		}
+				else if (scale2 is IEnumerableScale)
+				{
+					minY = 0;
+					maxY = scale2.size;
+					
+					var enumScale:IEnumerableScale = scale2 as IEnumerableScale;
+					
+					var perElementSize:Number = enumScale.size/enumScale.dataProvider.length;
+					
+					for (i=0;i<enumScale.dataProvider.length;i++)
+					{
+						yValue = enumScale.getPosition(enumScale.dataProvider[i]) + perElementSize / 2;
+											
+						var item:Line = Line(gridGG.geometryCollection.getItemAt(j++));
+						if (item)
+						{
+							item.x = 0;
+							item.y = yValue;
+							item.x1 = _elementsContainer.width;
+							item.y1 = yValue;
+						} else {
+							item = new Line(0, yValue, _elementsContainer.width, yValue);
+							item.stroke = new SolidStroke(_gridColor, _gridAlpha, _gridWeight)
+							gridGG.geometryCollection.addItem(item);
+						}
+					}
+
+				}
+				
+				if (scale1 is IEnumerableScale)
+				{
+					minY = 0;
+					maxY = scale2.size;
+					
+					var enumScale:IEnumerableScale = scale1 as IEnumerableScale;
+					
+					var perElementSize:Number = enumScale.size/enumScale.dataProvider.length;
+					
+					for (i=0;i<enumScale.dataProvider.length;i++)
+					{
+						yValue = enumScale.getPosition(enumScale.dataProvider[i]) - perElementSize / 2;
+											
+						var item:Line = Line(gridGG.geometryCollection.getItemAt(j++));
+						if (item)
+						{
+							item.x = yValue;
+							item.y = 0;
+							item.x1 = yValue;
+							item.y1 = _elementsContainer.height;
+						} else {
+							item = new Line(yValue,0, yValue, _elementsContainer.height);
+							item.stroke = new SolidStroke(_gridColor, _gridAlpha, _gridWeight)
+							gridGG.geometryCollection.addItem(item);
+						}
+					}
+				}
+				
+				gridGG.target = _elementsContainer;
+				_elementsContainer.graphicsCollection.addItem(gridGG);	
+			}*/
+ 		}
 		
 		private function removeAllElements():void
 		{
@@ -949,6 +1082,26 @@ package birdeye.vis.coords
 					_elementsContainer.removeChildAt(0);
 				}
 			}
+		}
+		
+		override public function clone(cloneObj:Object=null):*
+		{
+			if (cloneObj && cloneObj is Cartesian)
+			{
+				var cartClone:Cartesian = cloneObj as Cartesian;
+				
+				cartClone.type = _type;
+				
+				return cartClone;
+			}
+			else if (!cloneObj)
+			{
+				cloneObj = new Cartesian();
+				cloneObj = super(cloneObj);
+				return clone(cloneObj);
+			}
+			
+			return null;
 		}
 	}
 }
