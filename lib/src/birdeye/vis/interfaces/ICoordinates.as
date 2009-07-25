@@ -52,5 +52,12 @@ package birdeye.vis.interfaces
 		function get maxStacked100():Number;
 		
 		function get columnWidthRate():Number;
+		
+		/**
+		 * Clones the current class, or modifies the given object with the current instance's properties.</br>
+		 * It does not clone data, scales or elements.</br>
+		 * It does clone other specific properties.</br>
+		 */
+		function clone(cloneObj:Object=null):*;
 	}
 }

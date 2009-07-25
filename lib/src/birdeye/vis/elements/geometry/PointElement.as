@@ -27,13 +27,17 @@
  
 package birdeye.vis.elements.geometry
 {
+	import __AS3__.vec.Vector;
+	
 	import birdeye.vis.VisScene;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.BaseElement;
+	import birdeye.vis.facets.FacetContainer;
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
+	import birdeye.vis.interfaces.IEnumerableScale;
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.scales.*;
 	
@@ -81,151 +85,272 @@ trace (getTimer(), "drawing point ele");
 				dataFields[2] = sizeField;
 				if (dim3) 
 					dataFields[3] = dim3;
-	
-				var pos1:Number, pos2:Number, pos3:Number = NaN;
 				
 				if (!itemRenderer)
 					itemRenderer = new ClassFactory(CircleRenderer);
 				
 				ggIndex = 0;
-	
-				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
+				
+				if (scale1 is IEnumerableScale && scale2 is IEnumerableScale)
 				{
-	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
-						gg = graphicsCollection.items[ggIndex];
-					else
-					{
-						gg = new DataItemLayout();
-						graphicsCollection.addItem(gg);
-					}
-					gg.target = this;
-					ggIndex++;
+					// ok two categories, we need to loop categories
+					// to avoid the issue where there are more subdata
+					var enumScale1:IEnumerableScale = scale1 as IEnumerableScale;
+					var enumScale2:IEnumerableScale = scale2 as IEnumerableScale;
 					
-					var currentItem:Object = _dataItems[cursorIndex];
-
-					if (scale1)
-					{
-						pos1 = scale1.getPosition(currentItem[dim1]);
-					} 
+					var enumLength1:Number = enumScale1.dataProvider.length;
+					var enumLength2:Number = enumScale2.dataProvider.length;
 					
-					if (scale2)
+					for (var i:uint=0;i<enumLength1;i++)
 					{
-						pos2 = scale2.getPosition(currentItem[dim2]);
-					} 
-	
-					var scale2RelativeValue:Number = NaN;
-	
-					if (scale3)
-					{
-						pos3 = scale3.getPosition(currentItem[dim3]);
-						scale2RelativeValue = XYZ(scale3).height - pos3;
-					} 
-	
-					if (multiScale)
-					{
-						pos1 = multiScale.scale1.getPosition(currentItem[dim1]);
-						pos2 = INumerableScale(multiScale.scales[
-											currentItem[multiScale.dim1]
-											]).getPosition(currentItem[dim2]);
-					} else if (chart.multiScale) {
-						pos1 = chart.multiScale.scale1.getPosition(currentItem[dim1]);
-						pos2 = INumerableScale(chart.multiScale.scales[
-											currentItem[chart.multiScale.dim1]
-											]).getPosition(currentItem[dim2]);
-					}
-
-					if (colorScale)
-					{
-						var col:* = colorScale.getPosition(currentItem[colorField]);
-						if (col is Number)
-							fill = new SolidFill(col);
-						else if (col is IGraphicsFill)
-							fill = col;
-					} 
-	
-					if (chart.coordType == VisScene.POLAR)
-					{
-						var xPos:Number = PolarCoordinateTransform.getX(pos1, pos2, chart.origin);
-						var yPos:Number = PolarCoordinateTransform.getY(pos1, pos2, chart.origin);
-						pos1 = xPos;
-						pos2 = yPos; 
-					}
-
-					if (sizeScale)
-					{
-						_size = sizeScale.getPosition(currentItem[sizeField]);
-					}
-
-					// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
-					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createTTGG(currentItem, dataFields, pos1, pos2, scale2RelativeValue, _size);
-	
-					if (dim3)
-					{
-						if (!isNaN(pos3))
+						for (var j:uint=0;j<enumLength2;j++)
 						{
-							gg = new DataItemLayout();
-							gg.target = this;
-							graphicsCollection.addItem(gg);
-							ttGG.z = gg.z = pos3;
-						} else
-							pos3 = 0;
-					}
-					
-	 				var bounds:Rectangle = new Rectangle(pos1 - _size, pos2 - _size, _size * 2, _size * 2);
-	
-					if (_extendMouseEvents)
-						gg = ttGG;
-
-					if (_size > 0)
-					{
-		 				if (_source)
-		 				{
-							plot = new RasterRenderer(bounds, _source);
-						}
-						else
-						{
-	 						plot = itemRenderer.newInstance();
-	 						if (plot is IBoundedRenderer) (plot as IBoundedRenderer).bounds = bounds;
-		 				} 
-						
-						plot.fill = fill;
-						plot.stroke = stroke;
-							gg.geometryCollection.addItemAt(plot,0); 
-					}
-
-					if (labelField)
-					{
-						label = new TextRenderer(null);
-						if (currentItem[labelField])
-							label.text = currentItem[labelField];
-						else
-							label.text = labelField;
+							var filteredData:Object = filterData(enumScale1.dataProvider[i], enumScale2.dataProvider[j], enumScale1.categoryField, enumScale2.categoryField);
 							
-						label.fill = fill;
-						label.fontSize = sizeLabel;
-						label.fontFamily = fontLabel;
-						label.autoSize = TextFieldAutoSize.LEFT;
-						label.autoSizeField = true;
-						label.x = pos1 - label.displayObject.width/2;
-						label.y = pos2 - label.displayObject.height/2;
-						ttGG.geometryCollection.addItemAt(label,0); 
-					}
+							var currentItem:Object = _dataItems[cursorIndex];
+						
+							var scaleResults:Object = determinePositions(enumScale1.dataProvider[i], enumScale2.dataProvider[j], null, null, null, null);
+																							
+							var bounds:Rectangle = new Rectangle(scaleResults["pos1"] - enumScale1.size/2/enumLength1 + 5, scaleResults["pos2"] - enumScale2.size/2/enumLength2 + 5, enumScale1.size/enumLength1 - 10, enumScale2.size/enumLength2 - 10);
 
-					if (dim3)
+
+							
+							var tmp:Object = itemRenderer.newInstance();
+ 						
+		 					if (tmp is FacetContainer)	
+		 					{
+		 						var subco:FacetContainer = tmp as FacetContainer;
+		 						
+		 						var coord:Object = subco.coord.clone();
+		 						
+		 						
+		 						coord.scales = subco.scales;
+		 						
+		 						var el:Array = new Array();
+		 						for each (var baseEl:BaseElement in subco.elements)
+		 						{
+		 							el.push(baseEl.clone());
+		 						}
+		 						coord.elements = el;
+		 						
+		 						coord.width = bounds.width;
+		 						coord.height = bounds.height;
+		 						coord.x = bounds.x;
+		 						coord.y = bounds.y;
+		 						coord.dataProvider = filteredData;
+
+								this.addChild(coord as DisplayObject);
+		 					}
+						}
+					}
+				}
+				else
+				{		
+					for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
 					{
-						gg.z = pos3;
-						if (isNaN(pos3))
-							pos3 = 0;
+			 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
+								gg = graphicsCollection.items[ggIndex];
+							else
+							{
+								gg = new DataItemLayout();
+								graphicsCollection.addItem(gg);
+							}
+							gg.target = this;
+							ggIndex++;
+							
+							var currentItem:Object = _dataItems[cursorIndex];
+							
+							var scaleResults:Object = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
+																	currentItem[colorField], currentItem[sizeField], currentItem);
+		
+							// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
+							// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
+							createTTGG(currentItem, dataFields, scaleResults["pos1"], scaleResults["pos2"], scaleResults["pos3Relative"], scaleResults["size"]);
+			
+							if (dim3)
+							{
+								if (!isNaN(scaleResults["pos3"]))
+								{
+									// why is this created again???
+									// is just setting the z value not enough?
+									gg = new DataItemLayout();
+									gg.target = this;
+									graphicsCollection.addItem(gg);
+									ttGG.z = gg.z = scaleResults["pos3"];
+								} else
+									scaleResults["pos3"] = 0;
+							}
+							
+							if (_extendMouseEvents)
+								gg = ttGG;
+		
+		
+							createPlotItems(currentItem, scaleResults);
+		
+							if (dim3)
+							{
+								gg.z = scaleResults["pos3"];
+								if (isNaN(scaleResults["pos3"]))
+									scaleResults["pos3"] = 0;
+							}
 					}
 				}
 				
+				
 				if (dim3)
 					zSort();
-
-				_invalidatedElementGraphic = false;
+	
+					_invalidatedElementGraphic = false;
 trace (getTimer(), "drawing point ele");
+	
 			}
 		}
+		
+		private function determinePositions(dim1:Object, dim2:Object, dim3:Object=null,color:Object=null, size:Object=null, currentItem:Object=null):Object
+		{
+			var scaleResults:Object = new Object();
+			
+			scaleResults["size"] = _size;
+			scaleResults["color"] = fill;
+			
+			if (scale1)
+			{
+				scaleResults["pos1"] = scale1.getPosition(dim1);
+			} 
+			
+			if (scale2)
+			{
+				scaleResults["pos2"] = scale2.getPosition(dim2);
+			} 
+
+			var scale2RelativeValue:Number = NaN;
+
+			if (scale3)
+			{
+				scaleResults["pos3"] = scale3.getPosition(dim3);
+				scaleResults["pos3Relative"] = XYZ(scale3).height - scaleResults["pos3"];
+			} 
+			
+			if (currentItem)
+			{
+				if (multiScale)
+				{
+					scaleResults["pos1"] = multiScale.scale1.getPosition(dim1);
+					scaleResults["pos2"] = INumerableScale(multiScale.scales[
+										currentItem[multiScale.dim1]
+										]).getPosition(dim2);
+				} else if (chart.multiScale) {
+					scaleResults["pos1"] = chart.multiScale.scale1.getPosition(dim1);
+					scaleResults["pos2"] = INumerableScale(chart.multiScale.scales[
+										currentItem[chart.multiScale.dim1]
+										]).getPosition(dim2);
+				}
+			}
+			
+			if (colorScale)
+			{
+				var col:* = colorScale.getPosition(color);
+				if (col is Number)
+					scaleResults["color"] = new SolidFill(col);
+				else if (col is IGraphicsFill)
+					scaleResults["color"] = col;
+			} 
+
+			if (chart.coordType == VisScene.POLAR)
+			{
+				var xPos:Number = PolarCoordinateTransform.getX(scaleResults[0], scaleResults[1], chart.origin);
+				var yPos:Number = PolarCoordinateTransform.getY(scaleResults[0], scaleResults[1], chart.origin);
+				scaleResults["pos1"] = xPos;
+				scaleResults["pos2"] = yPos; 
+			}
+
+			if (sizeScale)
+			{
+				scaleResults["size"] = sizeScale.getPosition(size);
+			}
+			
+			return scaleResults;
+		}
+		
+		private function createPlotItems(currentItem:Object, scaleResults:Object):void
+		{
+			var bounds:Rectangle = new Rectangle(scaleResults["pos1"] - scaleResults["size"], scaleResults["pos2"] - scaleResults["size"], scaleResults["size"] * 2, scaleResults["size"] * 2);
+	
+			if (scaleResults["size"] > 0)
+			{
+ 				if (_source)
+ 				{
+					plot = new RasterRenderer(bounds, _source);
+				}
+				else
+				{					
+ 					var tmp:Object = itemRenderer.newInstance();
+ 						
+ 					if (tmp is DisplayObject)	
+ 					{
+ 						tmp.width = bounds.width;
+ 						tmp.height = bounds.height;
+ 						tmp.x = bounds.x;
+ 						tmp.y = bounds.y;
+ 						trace("ADDING CHILD ON x:" + bounds.x + " y:"+ bounds.y + " and w:"+bounds.width + " and h:"+bounds.height); 
+ 						this.addChild(tmp as DisplayObject);
+ 					}
+ 					else
+ 					{
+ 						plot = tmp as IGeometry;
+ 						if (plot is IBoundedRenderer) (plot as IBoundedRenderer).bounds = bounds;
+ 					}
+ 				} 
+				
+				if(plot)
+				{
+					plot.fill = scaleResults["color"];
+					plot.stroke = stroke;
+					gg.geometryCollection.addItemAt(plot,0); 
+				}
+			}
+			
+			if (labelField)
+			{
+				label = new TextRenderer(null);
+				if (currentItem[labelField])
+					label.text = currentItem[labelField];
+				else
+					label.text = labelField;
+					
+				label.fill = scaleResults["color"];
+				label.fontSize = sizeLabel;
+				label.fontFamily = fontLabel;
+				label.autoSize = TextFieldAutoSize.LEFT;
+				label.autoSizeField = true;
+				label.x = scaleResults["pos1"] - label.displayObject.width/2;
+				label.y = scaleResults["pos2"] - label.displayObject.height/2;
+				ttGG.geometryCollection.addItemAt(label,0); 
+			}
+		}
+		
+		private function filterData(scale1Value:Object, scale2Value:Object, scale1CategoryField:Object, scale2CategoryField:Object):Vector.<Object>
+		{
+			var filteredDataItems:Vector.<Object> = new Vector.<Object>();
+			for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
+			{
+				var currentItem:Object = _dataItems[cursorIndex];
+				
+				if (currentItem[scale1CategoryField] == scale1Value && currentItem[scale2CategoryField] == scale2Value)
+				{
+					filteredDataItems.push(currentItem);
+				}
+			}
+			
+			return filteredDataItems;
+		}
+		
+		private var _testje:Array;
+		public function set testje(t:Array):void
+		{
+			_testje = t;	
+		}
+		
+		 
 	}
 }

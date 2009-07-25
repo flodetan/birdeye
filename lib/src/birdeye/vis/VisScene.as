@@ -46,6 +46,7 @@
 	import flash.display.Shape;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.describeType;
 	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
@@ -140,6 +141,11 @@
 			_scales = val;
 			invalidateProperties();
 			invalidateDisplayList();
+		}
+		
+		public function get scales():Array
+		{
+			return _scales;
 		}
 		
 		protected var _multiScale:MultiScale;
@@ -656,5 +662,39 @@
 			for (var i:Number = 0; i<elements.length; i++)
 				IElement(elements[i]).refresh();
 		}
-	}
+		
+		public function clone(cloneObj:Object=null):*
+		{
+			if (cloneObj && cloneObj is VisScene)
+			{
+				var visClone:VisScene = cloneObj as VisScene;
+				
+				visClone.colorAxis = colorAxis;
+				visClone.columnWidthRate = columnWidthRate;
+				visClone.coordType = coordType;
+				visClone.customTooltTipFunction = customTooltTipFunction;
+				visClone.dataTipFunction = dataTipFunction;
+				visClone.dataTipPrefix = dataTipPrefix;
+				visClone.fillAlpha = _fillAlpha;
+				visClone.fillColor = _fillColor;
+				visClone.graphLayouts = _graphLayouts;
+				visClone.isMasked = _isMasked;
+				visClone.lineAlpha = _lineAlpha;
+				visClone.lineColor = _lineColor;
+				visClone.lineWidth = _lineWidth;
+				visClone.origin = origin;
+				visClone.percentHeight = percentHeight;
+				visClone.percentWidth = percentWidth;
+				visClone.projections = _projections;
+				visClone.showAllDataTips = showAllDataTips;
+				visClone.showDataTips = showDataTips;
+				visClone.tipDelay = _tipDelay;
+			
+				return visClone;
+			}
+			
+			return null;
+			
+		}
+	}  
 }

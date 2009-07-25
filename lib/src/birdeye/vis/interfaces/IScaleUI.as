@@ -49,5 +49,10 @@ package birdeye.vis.interfaces
 		/** The axis must provide the removal all elements when refreshed, thus insuring
 		 * both display refresh and memory clearing.*/
 		function removeAllElements():void
+		
+		/**
+		 * The targets where the axis is drawn.
+		 */
+		function get targets():Array;
 	}
 }

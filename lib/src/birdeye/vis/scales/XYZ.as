@@ -173,13 +173,8 @@ package birdeye.vis.scales
 					drawAxes(xMin, xMax, yMin, yMax, sign);
 					_pointer.stroke = new SolidStroke(colorPointer, 1, weightPointer);
 					_pointer.visible = false;
-					if (!ggLine)
-					{
-						ggLine = new GeometryGroup();
-						ggLine.target = surf;
-						surf.graphicsCollection.addItem(ggLine);
-					}
-					ggLine.geometryCollection.addItem(_pointer);
+
+					gg.geometryCollection.addItem(_pointer);
 				}
 			}
 		}
@@ -223,13 +218,7 @@ package birdeye.vis.scales
 			line = new Line(x0,y0,x1,y1);
 			line.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 
-			if (!ggLine)
-			{
-				ggLine = new GeometryGroup();
-				ggLine.target = surf;
-				surf.graphicsCollection.addItem(ggLine);
-			}
-			ggLine.geometryCollection.addItem(line);
+			gg.geometryCollection.addItem(line);
 
 		}
 		

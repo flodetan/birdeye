@@ -703,7 +703,7 @@ package birdeye.vis.coords
 		{
 			if (element.dataItems)
 			{
-				var catElements:Array;
+				var catElements:Array = new Array();
 				var j:Number;
 
 				var cursIndex:uint = 0;
@@ -867,5 +867,28 @@ package birdeye.vis.coords
 				if (IElement(elements[i]).scale2)
 					IScale(IElement(elements[i]).scale2).resetValues();
 		}
+		
+		override public function clone(cloneObj:Object=null):*
+		{
+			if (cloneObj && cloneObj is Polar)
+			{
+				var polClone:Polar = cloneObj as Polar;
+				
+				polClone.layout = _layout;
+				polClone.type = _type;
+				polClone.fontSize = _fontSize;
+				
+				return polClone;
+			}
+			else if (!cloneObj)
+			{
+				cloneObj = new Polar();
+				cloneObj = super(cloneObj);
+				return clone(cloneObj);
+			}
+			
+			return null;
+		}
 	}
+	
 }
