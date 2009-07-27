@@ -164,7 +164,7 @@
 		 * @return The resulting edge.
 		 * @throws Errors if any node is null.
 		 * */
-		function link(node1:INode, node2:INode, o:Object = null):IEdge;
+		function link(edgeId:String, node1:INode, node2:INode, o:Object = null):IEdge;
 		
 		/**
 		 * Unlink two nodes, effectively removing the edge between
@@ -173,15 +173,15 @@
 		 * @param node2 The second node to be unlinked.
 		 * @throws An error if the nodes were not linked before.
 		 * */
-		function unlink(node1:INode, node2:INode):void;
+		function unlink(edgeId:String, node1:INode, node2:INode):void;
 		
 		/**
 		 * Find an edge between two nodes.
 		 * @param n1 The first node of the edge.
 		 * @param n2 The second node of the edge.
 		 * @return The resulting edge or null if the nodes were not linked.
-		 * */		
-		function getEdge(n1:INode, n2:INode):IEdge;
+		 * */	
+		function getEdge(edgeId:String, n1:INode, n2:INode):IEdge;
 		
 		/**
 		 * Removes an edge between two nodes.

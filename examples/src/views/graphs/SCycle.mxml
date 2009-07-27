@@ -1,35 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<gv:BaseGraphView xmlns:mx="http://www.adobe.com/2006/mxml" 
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:gv="views.graphs.*" 
-	xmlns:coords="birdeye.vis.coords.*"
-	xmlns:elements="birdeye.vis.elements.geometry.*"
-	xmlns:scales="birdeye.vis.scales.*"
-	xmlns:trans="birdeye.vis.trans.*"
-	creationComplete="generateGraph()">
+	xmlns:layouter="birdeye.vis.trans.graphs.layout.*"
+	creationComplete="graphView.generateGraph()">
 
-	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
-	
-		<mx:Button label="Generate" click="generateGraph()"/>
+	<gv:BasicGraphView id="graphView" width="100%" height="100%">
+		<gv:layouter>
+			<layouter:CircularLayouter />
+		</gv:layouter>	
+	</gv:BasicGraphView>
 
-    	<coords:Cartesian id="graph" width="100%" height="100%">
-			<!--
-			<coords:scales>
-	 			<scales:Linear id="X" showAxis="false" placement="bottom" />
-	 			<scales:Linear id="Y" showAxis="false" placement="left" />
-			</coords:scales>
-			-->
-			<coords:elements>
-				<!-- <elements:NodeElement scale1="{X}" scale2="{Y}" dim1="x" dim2="y" /> -->
-				
-				<elements:EdgeElement id="edge" dimStart="start" dimEnd="end" node="{node}" dataProvider="{edges}"
-									  colorFill="0xFF0000" colorStroke="0x999999" strokeWeight="2" />
-									  
-				<elements:NodeElement id="node" dimId="id" dimName="name" dataProvider="{nodes}"
-									  colorFill="0x0000FF" alphaFill="1.0" strokeColor="0xFFFFFF" size="7" />
-			</coords:elements>
-			<coords:transforms>
-				<trans:GraphLayout graphId="myGraph" applyToNode="{node}" applyToEdge="{edge}" type="single-cycle"/>
-			</coords:transforms>
-    	</coords:Cartesian>
-    </mx:VBox>
-</gv:BaseGraphView>
+</mx:VBox>

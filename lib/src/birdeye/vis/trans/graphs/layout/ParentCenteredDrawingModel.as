@@ -39,6 +39,7 @@ package birdeye.vis.trans.graphs.layout
 	 * with a Parent-Centered Radial Layout
 	 * i.e. it represents a calculated drawing of the layout.
 	 * */
+	[ExcludeClass]
 	public class ParentCenteredDrawingModel	extends BaseLayoutDrawing {
 
 		private static const _LOG:String = "graphLayout.layout.ParentCenteredDrawingModel";

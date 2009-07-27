@@ -37,6 +37,7 @@
 	 * with a Concentric Radial Layout and corresponding access methods
 	 * It actually represents a calculated layout.
 	 * */
+	[ExcludeClass]
 	public class ConcentricRadialLayoutDrawing extends BaseLayoutDrawing {
 
 

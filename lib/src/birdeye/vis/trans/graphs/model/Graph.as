@@ -284,7 +284,7 @@ package birdeye.vis.trans.graphs.model {
 					LogUtil.warn(_LOG, "Node id: "+_dataProvider.getEdgeToNodeId(i)+" not found, link not done");
 					continue;
 				}
-				link(fromNode, toNode, _dataProvider.getEdgeTag(i));
+				link(_dataProvider.getEdgeId(i), fromNode, toNode, _dataProvider.getEdgeTag(i));
 			}
 		}
 
@@ -373,7 +373,7 @@ package birdeye.vis.trans.graphs.model {
 		/**
 		 * @inheritDoc
 		 * */
-		public function link(node1:INode, node2:INode, o:Object = null):IEdge {
+		public function link(edgeId:String, node1:INode, node2:INode, o:Object = null):IEdge {
 			
 			var retEdge:IEdge;
 			
@@ -410,12 +410,10 @@ package birdeye.vis.trans.graphs.model {
 					throw Error("We did not find the edge although it should be there");
 				}
 			} else {
-				// link does not exist, so we can create it
-				var newEid:int = ++_currentEdgeId;
 				/* not sure where we will be able to set the visual edge
 				 * as it must exist first, for now we pass null 
 				 * since the attribute has also a setter */
-				var newEdge:Edge = new Edge(this, null, String(newEid), node1, node2, o);
+				var newEdge:Edge = new Edge(this, null, edgeId, node1, node2, o);
 				_edges.unshift(newEdge);
 				++_numberOfEdges;
 				
@@ -447,12 +445,12 @@ package birdeye.vis.trans.graphs.model {
 		/**
 		 * @inheritDoc
 		 * */
-		public function unlink(node1:INode, node2:INode):void {
+		public function unlink(edgeId:String, node1:INode, node2:INode):void {
 
 			/* find the corresponding edge first */
 			var e:IEdge;
 			
-			e = getEdge(node1,node2);
+			e = getEdge(edgeId,node1,node2);
 			
 			if(e == null) {
 				throw Error("Could not find edge, Nodes: "+node1.id+" and "
@@ -465,11 +463,11 @@ package birdeye.vis.trans.graphs.model {
 		/**
 		 * @inheritDoc
 		 * */
-		public function getEdge(n1:INode, n2:INode):IEdge {
+		public function getEdge(edgeId:String, n1:INode, n2:INode):IEdge {
 			var outedges:Array = n1.outEdges;
 			var e:IEdge = null;
 			for each (var edge:Edge in outedges) {
-				if(edge.othernode(n1) == n2) {
+				if (edge.othernode(n1) == n2  &&  edge.id == edgeId) {
 					e = edge;
 					return e;
 				}

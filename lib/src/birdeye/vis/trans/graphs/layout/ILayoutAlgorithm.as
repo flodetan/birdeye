@@ -25,6 +25,10 @@
  
 package birdeye.vis.trans.graphs.layout
 {
+	import birdeye.vis.trans.graphs.visual.IVisualGraph;
+	
+	[Exclude(name="disableAnimation", kind="property")]
+
 	public interface ILayoutAlgorithm
 	{
 		/**
@@ -43,6 +47,8 @@ package birdeye.vis.trans.graphs.layout
 		 * It would also stop any existing layouting loops/timers.
 		 * */
 		function resetAll():void;
+		
+		function set vgraph(vg:IVisualGraph):void;
 		
 		function set disableAnimation(value:Boolean):void;
 

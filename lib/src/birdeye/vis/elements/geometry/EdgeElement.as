@@ -26,18 +26,15 @@
  */
  package birdeye.vis.elements.geometry
 {
-	import __AS3__.vec.Vector;
-	
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.Position;
+	import birdeye.vis.guides.renderers.IEdgeRenderer;
 	import birdeye.vis.guides.renderers.LineRenderer;
-	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.IEdgeElement;
 	import birdeye.vis.interfaces.IPositionableElement;
 	
-	import com.degrafa.IGeometry;
-	
 	import flash.geom.Rectangle;
+	import flash.utils.Dictionary;
 	
 	public class EdgeElement extends BaseElement implements IEdgeElement
 	{
@@ -86,30 +83,49 @@
 			return _node;
 		}
 
-		protected function createItemRenderer(bounds:Rectangle):IGeometry {
-			var renderer:IGeometry;
- 			if (itemRenderer)
- 			{
-				renderer = itemRenderer.newInstance();
-				if (renderer is IBoundedRenderer) (renderer as IBoundedRenderer).bounds = bounds;
- 			}
- 			else
-			{
-				renderer = new LineRenderer(bounds);
+		protected function createItemRenderer(edgeItemId:String, x1:Number, y1:Number, x2:Number, y2:Number):IEdgeRenderer {
+			var edgeRenderer:IEdgeRenderer;
+ 			if (itemRenderer) {
+				edgeRenderer = itemRenderer.newInstance();
+				if (!(edgeRenderer is IEdgeRenderer)) {
+					throw new Error("EdgeElement renderer factory produced not an IEdgeRenderer");
+				}
+				edgeRenderer.startX = x1;
+				edgeRenderer.startY = y1;
+				edgeRenderer.endX = x2;
+				edgeRenderer.endY = y2;
+ 			} else {
+				edgeRenderer = new LineRenderer(new Rectangle(x1, y1, x2, y2));
 			}	
-			renderer.fill = fill;
-			renderer.stroke = stroke;
-			return renderer;
-		}
-
-		private function bounds(x1:int, y1:int, x2:int, y2:int):Rectangle {
-			return new Rectangle(x1, y1, x2, y2);
+			edgeRenderer.fill = fill;
+			edgeRenderer.stroke = stroke;
+			_edgeRenderers[edgeItemId] = edgeRenderer;
+			return edgeRenderer;
 		}
 
 		public function edgeItemId(item:Object):String {
 			return item[_dimStart] + "-" + item[_dimEnd];
 		}
 		
+		private var _edgeRenderers:Dictionary;
+		
+		public function setEdgePosition(edgeItemId:String, x1:Number, y1:Number, x2:Number, y2:Number):void {
+			var edgeRenderer:IEdgeRenderer = _edgeRenderers[edgeItemId];
+			if (edgeRenderer != null) {
+				edgeRenderer.startX = x1;
+				edgeRenderer.startY = y1;
+				edgeRenderer.endX = x2;
+				edgeRenderer.endY = y2;
+			}
+		}
+
+		override protected function prepareForItemGeometriesCreation():void {
+			super.prepareForItemGeometriesCreation();
+			_edgeRenderers = new Dictionary();
+		}
+
+		private const ZERO_POSITION:Position = new Position(0, 0);
+
 		override public function drawElement():void {
 			super.drawElement();
 			
@@ -125,13 +141,17 @@
 					const endItemId:Object = item[_dimEnd];
 
 					if (_node.isItemVisible(startItemId)  &&  _node.isItemVisible(endItemId)) {
-						const start:Position = _node.getItemPosition(startItemId);
-						const end:Position = _node.getItemPosition(endItemId);
-	
-						if (start  &&  end) {
-							createItemGraphics(
-								edgeItemId(item),
-								[ createItemRenderer(bounds(start.pos1, start.pos2, end.pos1, end.pos2)) ]
+						var start:Position = _node.getItemPosition(startItemId);
+						var end:Position = _node.getItemPosition(endItemId);
+
+						if (start && end) {
+							const itemId:String = edgeItemId(item);
+							// The display object is always positioned at (0, 0) and
+							// the edge renderers are passed in the start/end coordinates
+							// and position and draw the edges accordingly.   
+							createItemDisplayObject(
+								ZERO_POSITION, itemId,
+								[ createItemRenderer(itemId, start.pos1, start.pos2, end.pos1, end.pos2) ]
 							);
 						}
 					}

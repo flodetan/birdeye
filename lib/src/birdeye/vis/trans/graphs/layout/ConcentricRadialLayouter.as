@@ -90,9 +90,8 @@ package birdeye.vis.trans.graphs.layout
 		 * already a VisualGraph object, but this can also be set later.
 		 * @param vg The VisualGraph object on which this layouter should work on.
 		 * */
-		public function ConcentricRadialLayouter(vg:IVisualGraph = null):void {
-		
-			super(vg);
+		public function ConcentricRadialLayouter():void {
+			super();
 			
 			/* this is inherited */
 			animationType = ANIM_RADIAL;
@@ -107,16 +106,16 @@ package birdeye.vis.trans.graphs.layout
 			
 			_maxviewwidth = MINIMUM_NODE_WIDTH;
 			_maxviewheight = MINIMUM_NODE_HEIGHT;
-			
-			initDrawing();
 		}
-
+		
 		/**
 		 * @internal
 		 * create a new layout model object, which is required
 		 * on any root change (and possibly during other occasions)
 		 * */
-		private function initDrawing():void {			
+		protected override function initDrawing():void {			
+			super.initDrawing();
+
 			_currentDrawing = new ConcentricRadialLayoutDrawing();
 			
 			/* don't forget to set the object also in the 
@@ -132,8 +131,8 @@ package birdeye.vis.trans.graphs.layout
 		/**
 		 * @inheritDoc
 		 * */
-		public override function resetAll():void {
-			super.resetAll();
+		protected override function cleanup():void {
+			super.cleanup();
 			_stree = null;
 			_graph.purgeTrees();
 		}

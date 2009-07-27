@@ -13,7 +13,5 @@
 		<graphs:Force label="Force Directed" width="100%" height="100%"/>
 		<graphs:Hyperbolic label="Hyperbolic" width="100%" height="100%"/>
 		<graphs:Tree label="Tree" width="100%" height="100%"/>
-		
-		
 	</mx:TabNavigator>
 </mx:VBox>

@@ -24,23 +24,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package birdeye.vis.interfaces
+ 
+package birdeye.vis.guides.renderers
 {
-	import birdeye.vis.elements.Position;
-	
-	public interface IEdgeElement extends IElement
-	{
+	import com.degrafa.IGeometry;
 
-		function get node():IPositionableElement;
+	public interface IEdgeRenderer extends IGeometry {
 		
-		function set node(val:IPositionableElement):void;
+		function set startX(value:Number):void;
+
+		function get startX():Number;
 		
-		function get dimStart():String;
+		function set endX(value:Number);
+
+		function get endX():Number;
 		
-		function get dimEnd():String;
+		function set startY(value:Number):void;
+
+		function get startY():Number;
 		
-		function setEdgePosition(edgeId:String, x1:Number, y1:Number, x2:Number, y2:Number):void;
+		function set endY(value:Number);
+
+		function get endY():Number;
 
 	}
 }

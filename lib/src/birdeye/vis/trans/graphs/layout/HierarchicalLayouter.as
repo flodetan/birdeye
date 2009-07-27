@@ -110,10 +110,9 @@ package birdeye.vis.trans.graphs.layout
 		 * The constructor only initialises some data structures.
 		 * @inheritDoc
 		 * */
-		public function HierarchicalLayouter(vg:IVisualGraph = null):void {
-			super(vg);
+		public function HierarchicalLayouter():void {
+			super();
 			animationType = ANIM_STRAIGHT; // inherited
-			initModel();
 			
 			_defaultNodeDistance = 10;
 			_layerDistance = 10;
@@ -128,15 +127,14 @@ package birdeye.vis.trans.graphs.layout
 		/**
 		 * @inheritDoc
 		 * */
-		override public function resetAll():void {			
-			
-			super.resetAll();
+		override protected function cleanup():void {			
+			super.cleanup();
 			
 			/* invalidate all trees in the graph */
 			_stree = null;
 			_graph.purgeTrees();
 			
-			initModel();
+			initDrawing();
 		}
 
 		/**
@@ -199,7 +197,7 @@ package birdeye.vis.trans.graphs.layout
 			 * list of situation how to deal with hab
 			 * if the layout was changed (or any parameter)
 			 * we have to reinit the model */
-			initModel();
+			initDrawing();
 
 			/* this is complicated. */
 			if(_autoFitEnabled) {
@@ -696,7 +694,9 @@ package birdeye.vis.trans.graphs.layout
 		 * on any root change (and possibly during other occasions)
 		 * and intialise various parameters of the drawing.
 		 * */
-		private function initModel():void {		
+		protected override function initDrawing():void {
+			super.initDrawing();
+					
 			_currentDrawing = null;
 			_currentDrawing = new HierarchicalLayoutDrawing;
 			

@@ -40,11 +40,20 @@ package birdeye.vis.trans.graphs.layout
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
+	[Exclude(name="disableAnimation", kind="property")]
+	[Exclude(name="graph", kind="property")]
+	[Exclude(name="vgraph", kind="property")]
+	[Exclude(name="phi", kind="property")]
+	[Exclude(name="layoutChanged", kind="method")]
+	[Exclude(name="activate", kind="event")]
+	[Exclude(name="deactivate", kind="event")]
+	
 	/**
 	 * This is an base class to various layout implementations
 	 * it does not really do any layouting but implements
 	 * everything required by the Interface.
 	 * */
+	[ExcludeClass]
 	public class BaseLayouter extends EventDispatcher implements ILayoutAlgorithm {
 		
 		private static const _LOG:String = "graphLayout.layout.BaseLayouter";
@@ -112,45 +121,40 @@ package birdeye.vis.trans.graphs.layout
 		 * */
 		private var _currentDrawing:BaseLayoutDrawing;
 
-		/**
-		 * The constructor initializes the layouter and may assign
-		 * already a VisualGraph object, but this can also be set later.
-		 * @param vg The VisualGraph object on which this layouter should work on.
-		 * */
-		public function BaseLayouter(vg:IVisualGraph = null):void {
-			
-			_vgraph = vg;
-			_graph = _vgraph.graph;
-//			if(vg) {
-//				_graph = _vgraph.graph;
-//			} else {
-//				_graph = new Graph("dummyID");
-//			}
-			
-			/* this is required to smooth the animation */
-//			_vgraph.addEventListener("forceRedrawEvent",forceRedraw);
+		public function BaseLayouter():void {
 		}
 
 		/**
 		 * @inheritDoc
-		 * */
-		public function resetAll():void {
-			_layoutChanged = true;
-		}
-
-		/**
-		 * @inheritDoc
-		 * @throws An error if the vgraph was already set.
 		 * */
 		public function set vgraph(vg:IVisualGraph):void {
-			if(_vgraph == null) {
-				_vgraph = vg;
-				_graph = _vgraph.graph;
-			} else {
-				LogUtil.warn(_LOG, "vgraph was already set in layouter");
-			}
+			_vgraph = vg;
+			_graph = _vgraph.graph;
+			resetAll();
+		}
+
+
+		/**
+		 * Intended for override to create a new layout
+		 **/ 
+		protected function cleanup():void {
+		}
+
+		/**
+		 * Intended for override to create a new layout 
+		 * drawing object, which is required
+		 * on any root change (and possibly during other occasions)
+		 * and intialise various parameters of the drawing.
+		 * */
+		protected function initDrawing():void {
 		}
 		
+		public function resetAll():void {
+			cleanup();			
+			_layoutChanged = true;
+			initDrawing();
+		}
+
 		/**
 		 * @inheritDoc
 		 * */

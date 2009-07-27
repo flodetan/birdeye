@@ -37,6 +37,8 @@ package birdeye.vis.trans.graphs.data
 
 		function getNodeTag(index:int):Object;
 
+		function getEdgeId(index:int):String;
+
 		function getEdgeFromNodeId(index:int):String;
 
 		function getEdgeToNodeId(index:int):String;

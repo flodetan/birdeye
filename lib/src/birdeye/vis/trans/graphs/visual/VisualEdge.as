@@ -29,13 +29,17 @@ package birdeye.vis.trans.graphs.visual
 {
 	import birdeye.vis.trans.graphs.model.IEdge;
 	
+	import flash.display.DisplayObject;
+	
 	public class VisualEdge implements IVisualEdge
 	{
 		private var _edge:IEdge;
 		private var _visible:Boolean;
+		private var _visualGraph:IVisualGraph;
 
-		public function VisualEdge(edge:IEdge)
+		public function VisualEdge(visualGraph:IVisualGraph, edge:IEdge)
 		{
+			_visualGraph = visualGraph;
 			_edge = edge;
 		}
 
@@ -44,13 +48,17 @@ package birdeye.vis.trans.graphs.visual
 			return _visible;
 		}
 		
-		public function set visible(visible:Boolean)
+		public function set visible(visible:Boolean):void
 		{
 			_visible = visible;
 		}
 
 		public function get edge():IEdge {
 			return _edge;
+		}
+		
+		public function get view():DisplayObject {
+			return _visualGraph.getEdgeDisplayObject(_edge.id);
 		}
 	}
 }

@@ -38,6 +38,7 @@ package birdeye.vis.trans.graphs.layout
 	 * cartesian versions of those coordinates and an origin offset.
 	 * So it can already represent a drawing.
 	 * */
+	[ExcludeClass]
 	public class BaseLayoutDrawing	{
 
 		/* we create a virtual origin, that is used as an offset

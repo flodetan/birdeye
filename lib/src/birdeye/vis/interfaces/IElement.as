@@ -27,10 +27,10 @@
  
 package birdeye.vis.interfaces
 {
-	import com.degrafa.IGraphic;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
 	
+	import flash.display.DisplayObject;
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	
@@ -121,7 +121,7 @@ package birdeye.vis.interfaces
 		function set dataItems(val:Vector.<Object>):void;
 		function get dataItems():Vector.<Object>;
 		
-		function getItemGraphics(itemId:Object):IGraphic;
+		function getItemDisplayObject(itemId:Object):DisplayObject;
 
 		/** Set the name to display (legends..).*/
 		function set displayName(val:String):void;

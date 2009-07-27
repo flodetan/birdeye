@@ -52,6 +52,7 @@ package birdeye.vis.trans.graphs.layout
 	 * 
 	 * @author Nitin Lamba
 	 **/
+	[ExcludeClass]
 	public class IterativeBaseLayouter extends BaseLayouter implements ILayoutAlgorithm {
 		
 		private static const _LOG:String = "graphLayout.layout.IterativeBaseLayouter";
@@ -82,8 +83,8 @@ package birdeye.vis.trans.graphs.layout
 		 * The constructor only initialises the data structures and presets
 		 * some parameters.
 		 * */
-		public function IterativeBaseLayouter(vg:IVisualGraph = null):void {
-			super(vg);
+		public function IterativeBaseLayouter():void {
+			super();
 		}
 
 		/**
@@ -92,8 +93,8 @@ package birdeye.vis.trans.graphs.layout
 		 * This is particularily important in this layouter,
 		 * as it constantly updates the layout (using the timer).
 		 * */
-		override public function resetAll():void {
-			super.resetAll();
+		override protected function cleanup():void {
+			super.cleanup();
 			
 			/* reset timer */
 			if(_timer != null) {

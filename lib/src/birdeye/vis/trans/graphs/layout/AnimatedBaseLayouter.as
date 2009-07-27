@@ -40,10 +40,14 @@ package birdeye.vis.trans.graphs.layout
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 	
+	[Exclude(name="ANIM_RADIAL", kind="property")]
+	[Exclude(name="ANIM_STRAIGHT", kind="property")]
+	
 	/**
 	 * This subclass to the BaseLayouter encapsulates the methods
 	 * for animation, since they are typically common in layouters.
 	 * */
+	[ExcludeClass]
 	public class AnimatedBaseLayouter extends BaseLayouter implements ILayoutAlgorithm {
 
 		private static const _LOG:String = "graphLayout.layout.AnimatedBaseLayouter";
@@ -111,16 +115,11 @@ package birdeye.vis.trans.graphs.layout
 		 * */
 		private var _currentDrawing:BaseLayoutDrawing;
 		
-		/**
-		 * The constructor initializes the layouter and may assign
-		 * already a VisualGraph object, but this can also be set later.
-		 * @param vg The VisualGraph object on which this layouter should work on.
-		 * */
-		public function AnimatedBaseLayouter(vg:IVisualGraph = null):void {
-			
-			super(vg);
+		public function AnimatedBaseLayouter():void {
+			super();
 			_animInProgress = false;
 		}
+
 
 		/**
 		 * @inheritDoc
@@ -132,8 +131,8 @@ package birdeye.vis.trans.graphs.layout
 		/**
 		 * @inheritDoc
 		 * */
-		override public function resetAll():void {
-			super.resetAll();
+		override protected function cleanup():void {
+			super.cleanup();
 			killTimer();
 		}
 

@@ -42,6 +42,7 @@ package birdeye.vis.elements
 	import birdeye.vis.scales.MultiScale;
 	
 	import com.degrafa.GeometryGroup;
+	import com.degrafa.IGeometry;
 	import com.degrafa.IGraphic;
 	import com.degrafa.Surface;
 	import com.degrafa.core.IGraphicsFill;
@@ -53,6 +54,7 @@ package birdeye.vis.elements
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
+	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	import flash.utils.Dictionary;
 	import flash.utils.describeType;
@@ -1366,24 +1368,27 @@ package birdeye.vis.elements
 /* 			if (gg) 
 				gg.removeAllElements();
  */			
-			var nElements:int = graphicsCollection.items.length;
-			if (nElements > 0)
-			{
-				for (var i:int = 0; i<nElements; i++)
-				{
-					if (graphicsCollection.items[i] is DataItemLayout)
-					{
-						DataItemLayout(graphicsCollection.items[i]).removeEventListener(MouseEvent.ROLL_OVER, handleRollOver);
-						DataItemLayout(graphicsCollection.items[i]).removeEventListener(MouseEvent.ROLL_OUT, handleRollOut);
-						DataItemLayout(graphicsCollection.items[i]).removeEventListener(MouseEvent.DOUBLE_CLICK, onMouseDoubleClick);
-						DataItemLayout(graphicsCollection.items[i]).removeEventListener(MouseEvent.CLICK, onMouseClick);
-						DataItemLayout(graphicsCollection.items[i]).removeAllElements();
-					} else if (graphicsCollection.items[i] is GeometryGroup) {
-						GeometryGroup(graphicsCollection.items[i]).geometry = []; 
-						GeometryGroup(graphicsCollection.items[i]).geometryCollection.items = [];
-					}
+ 			// Iterating backwards here is essential, because during the 
+ 			// iteration we are modifying the collection we are iterating over.
+			for (var i:int = graphicsCollection.items.length - 1; i >= 0; i--) {
+				const item:IGraphic = graphicsCollection.items[i];
+
+				if (item is DataItemLayout) {
+					item.removeEventListener(MouseEvent.ROLL_OVER, handleRollOver);
+					item.removeEventListener(MouseEvent.ROLL_OUT, handleRollOut);
+					item.removeEventListener(MouseEvent.DOUBLE_CLICK, onMouseDoubleClick);
+					item.removeEventListener(MouseEvent.CLICK, onMouseClick);
+					(item as DataItemLayout).removeAllElements();
+				} else if (item is GeometryGroup) {
+					(item as GeometryGroup).geometry = []; 
 				}
-			} 
+
+				if (item is DisplayObject  &&  contains(item as DisplayObject)) {
+					removeChild(item as DisplayObject);
+				}
+				graphicsCollection.removeItem(item);
+			}
+
  
  			for (i = numChildren - 1; i>=0; i--)
 			{
@@ -1486,26 +1491,36 @@ package birdeye.vis.elements
 		
 		protected function prepareForItemGeometriesCreation():void {
 			removeAllElements();
-			_itemGraphics = new Dictionary();
+		
+			if (_itemDisplayObjects) {
+				for (var itemId:Object in _itemDisplayObjects) {
+					_itemDisplayObjects[itemId] = null;
+				}
+			} else {
+				_itemDisplayObjects = new Dictionary();
+			}
 		}
 
-		private var _itemGraphics:Dictionary;
+		[ArrayElementType("com.degrafa.IGeometry")]
+		private var _itemDisplayObjects:Dictionary;
 
-		public function getItemGraphics(itemId:Object):IGraphic {
-			return _itemGraphics[itemId];
+		public function getItemDisplayObject(itemId:Object):DisplayObject {
+			return _itemDisplayObjects[itemId];
 		}
 
 		/**
 		 * @param itemId
 		 * @param geometries Array of IGeometry objects 
 		 **/
-		protected function createItemGraphics(itemId:Object, geometries:Array):IGraphic {
-			var graphics:GeometryGroup = new DataItemLayout();
-        	graphicsCollection.addItem(graphics);
-	        graphics.target = this;
-	        graphics.geometry = geometries;
-	        _itemGraphics[itemId] = graphics;
-			return graphics;
+		protected function createItemDisplayObject(pos:Position, itemId:Object, geometries:Array):DisplayObject {
+			var group:GeometryGroup = new GeometryGroup();
+	        group.target = this;
+	        group.geometry = geometries;
+	        group.x = pos.pos1; 
+	        group.y = pos.pos2; 
+        	graphicsCollection.addItem(group);
+	        _itemDisplayObjects[itemId] = group;
+			return group;
 		}
 
 		public function refresh():void
