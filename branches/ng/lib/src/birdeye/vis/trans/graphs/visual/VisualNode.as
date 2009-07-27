@@ -25,9 +25,13 @@
 
 package birdeye.vis.trans.graphs.visual
 {
+	import __AS3__.vec.Vector;
+	
+	import birdeye.events.VGraphEvent;
 	import birdeye.vis.trans.graphs.model.INode;
 	
-	import com.degrafa.IGraphic;
+	import flash.display.DisplayObject;
+	import flash.geom.Point;
 
 	public class VisualNode implements IVisualNode
 	{
@@ -35,8 +39,8 @@ package birdeye.vis.trans.graphs.visual
 		private var _moveable:Boolean;
 		private var _visible:Boolean;
 		private var _visualGraph:IVisualGraph;
-		private var _x:Number = 0;
-		private var _y:Number = 0;
+		private var _x:Number = NaN;
+		private var _y:Number = NaN;
 		
 		public function VisualNode(visualGraph:IVisualGraph, node:INode, moveable:Boolean)
 		{
@@ -55,7 +59,7 @@ package birdeye.vis.trans.graphs.visual
 			return _visible;
 		}
 		
-		public function set visible(visible:Boolean)
+		public function set visible(visible:Boolean):void
 		{
 			_visible = visible;
 		}
@@ -96,46 +100,76 @@ package birdeye.vis.trans.graphs.visual
 			//TODO: implement function
 		}
 		
-		public function commit():void
-		{
-			//TODO: implement function
+		public function commit():void {
+			const v:DisplayObject = view;
+			if (v) {
+				v.x = _x;
+				v.y = _y;
+				v.dispatchEvent(new VGraphEvent(VGraphEvent.VNODE_UPDATED));
+			}
 		}
 		
 		public function refresh():void
 		{
-			//TODO: implement function
+			const v:DisplayObject = view;
+			if (v) {
+				_x = v.x;
+				_y = v.y;
+			}
 		}
 
-		public function get view():IGraphic {
-			return _visualGraph.getNodeGraphic(node.id);
+		private function get view():DisplayObject {
+			return _visualGraph.getNodeDisplayObject(node.id);
 		}
 		
 		public function get width():Number {
-			const v:IGraphic = view;
-			if (!v) return 0;
-			return v.width;
+			const v:DisplayObject = view;
+			if (!v) {
+				return 0;
+			} else {
+				return view.width;
+			}
 		}
 
 		public function get height():Number {
-			const v:IGraphic = view;
-			if (!v) return 0;
-			return view.height;
+			const v:DisplayObject = view;
+			if (!v) {
+				return 0;
+			} else {
+				return view.height;
+			}
 		}
 
 		public function get viewScaleX():Number {
-			// TODO: implement VisualNode.viewScaleX
-			return 1.0;
+			const v:DisplayObject = view;
+			if (!v) {
+				return 1.0;	
+			} else {
+				return v.scaleX;
+			}
 		}
 
 		public function set viewScaleX(scaleX:Number):void {
+			const v:DisplayObject = view;
+			if (v) {
+				v.scaleX = scaleX;
+			}
 		}
 
 		public function get viewScaleY():Number {
-			// TODO: implement VisualNode.viewScaleY
-			return 1.0;
+			const v:DisplayObject = view;
+			if (!v) {
+				return 1.0;	
+			} else {
+				return v.scaleY;
+			}
 		}
 
 		public function set viewScaleY(scaleY:Number):void {
+			const v:DisplayObject = view;
+			if (v) {
+				v.scaleY = scaleY;
+			}
 		}
 
 	}

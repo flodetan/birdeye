@@ -66,23 +66,20 @@ package birdeye.vis.trans.graphs.layout
 		 * The constructor only initialises some data structures.
 		 * @inheritDoc
 		 * */
-		public function ParentCenteredRadialLayouter(vg:IVisualGraph = null):void {
-			super(vg);
+		public function ParentCenteredRadialLayouter():void {
+			super();
 			animationType = ANIM_RADIAL; // inherited
-			initModel();
 		}
 
 		/**
 		 * @inheritDoc
 		 * */
-		override public function resetAll():void {			
-			
-			super.resetAll();
+		override protected function cleanup():void {			
+			super.cleanup();
 			
 			_nodequeue = null;
 			_stree = null;
 			_graph.purgeTrees();
-			initModel();
 		}
 
 		/**
@@ -145,7 +142,7 @@ package birdeye.vis.trans.graphs.layout
 			 * if the layout was changed (or any parameter)
 			 * we have to reinit the model */
 			if(_layoutChanged) {
-				initModel();
+				initDrawing();
 			}
 
 			/* this is complicated. */
@@ -159,7 +156,7 @@ package birdeye.vis.trans.graphs.layout
 				
 				/* then we reinit the model to have a clean
 				 * one with new rootR */
-				initModel();
+				initDrawing();
 				 
 				/* then outside of this clause we do the real
 				 * calculation */
@@ -214,7 +211,9 @@ package birdeye.vis.trans.graphs.layout
 		 * on any root change (and possibly during other occasions)
 		 * and intialise various parameters of the drawing.
 		 * */
-		private function initModel():void {		
+		protected override function initDrawing():void {		
+			super.initDrawing();
+			
 			_currentDrawing = null;
 			_currentDrawing = new ParentCenteredDrawingModel();
 			

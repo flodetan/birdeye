@@ -200,9 +200,8 @@ package birdeye.vis.trans.graphs.layout
 		 * The constructor only initialises the data structures and presets
 		 * some parameters.
 		 * */
-		public function ForceDirectedLayouter(vg:IVisualGraph = null):void {
-			super(vg);
-			resetAll();
+		public function ForceDirectedLayouter():void {
+			super();
 			
 			// Initialize Parameters
 			_motionLimit = 0.01;
@@ -210,15 +209,15 @@ package birdeye.vis.trans.graphs.layout
 			_rigidity = _RIGIDITY_CONSTANT;
 			_newRigidity = _RIGIDITY_CONSTANT;
 		}
-
+		
 		/**
 		 * Reset all layouting parameters, which may be
 		 * required during a significant layout change.
 		 * This is particularily important in this layouter,
 		 * as it constantly updates the layout (using the timer).
 		 * */
-		override public function resetAll():void {
-			super.resetAll(); // calls refreshInit()
+		override protected function cleanup():void {
+			super.cleanup(); // calls refreshInit()
 			_deltaPositions = new Dictionary;
 		}
 

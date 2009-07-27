@@ -30,7 +30,7 @@ package birdeye.vis.trans.graphs.visual
 	import birdeye.util.geom.IVisualObjectWithDimensions;
 	import birdeye.vis.trans.graphs.model.INode;
 	
-	import com.degrafa.IGraphic;
+	import flash.display.DisplayObject;
 	
 	public interface IVisualNode extends IVisualItem, IVisualObjectWithDimensions
 	{
@@ -44,7 +44,7 @@ package birdeye.vis.trans.graphs.visual
 		function get x():Number;
 
 		function set x(n:Number):void;
-		
+
 		function get moveable():Boolean;
 		
 		/**
@@ -56,8 +56,6 @@ package birdeye.vis.trans.graphs.visual
 		function get y():Number;	
 
 		function set y(n:Number):void;
-		
-		function get view():IGraphic;
 		
 		/**
 		 * Property for access to the associated graph node

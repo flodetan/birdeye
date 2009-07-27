@@ -38,8 +38,7 @@ package birdeye.vis.trans.graphs.visual
 	import birdeye.vis.trans.graphs.model.IGraph;
 	import birdeye.vis.trans.graphs.model.INode;
 	
-	import com.degrafa.IGraphic;
-	
+	import flash.display.DisplayObject;
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -204,7 +203,7 @@ package birdeye.vis.trans.graphs.visual
 			}
 		}
 		
-		public function set maxVisibleDistance(maxDist:int) {
+		public function set maxVisibleDistance(maxDist:int):void {
 			/* check if there was a change */
 			if(_maxVisibleDistance != maxDist) {
 				/* if yes, apply the change */
@@ -443,7 +442,7 @@ package birdeye.vis.trans.graphs.visual
 			return _width;
 		}
 		
-		public function set width(val:Number) {
+		public function set width(val:Number):void {
 			_width = val;
 			_center = null;
 		}
@@ -471,6 +470,15 @@ package birdeye.vis.trans.graphs.visual
 		}
 		
 		public function redrawEdges():void {
+			for each(var vedge:IVisualEdge in _visualEdges) {
+				if (vedge.visible) {
+					const edge:IEdge = vedge.edge;
+					const startVnode:IVisualNode = edge.node1.vnode;
+					const endVnode:IVisualNode = edge.node2.vnode;
+					_edgeElement.setEdgePosition(edge.id, startVnode.x, startVnode.y, endVnode.x, endVnode.y);
+				}
+			}
+//			EdgeElement(_edgeElement).drawElement();
 		}
 		
 		/**
@@ -503,7 +511,7 @@ package birdeye.vis.trans.graphs.visual
 			var n1:INode;
 			var n2:INode;
 		
-			vedge = new VisualEdge(e);
+			vedge = new VisualEdge(this, e);
 			
 			/* set the VisualEdge reference in the graph edge */
 			e.vedge = vedge;
@@ -538,8 +546,12 @@ package birdeye.vis.trans.graphs.visual
 			return new Position(vnode.x, vnode.y);
 		}
 
-		public function getNodeGraphic(nodeId:String):IGraphic {
-			return _nodeElement.getItemGraphics(nodeId);
+		public function getNodeDisplayObject(nodeId:String):DisplayObject {
+			return _nodeElement.getItemDisplayObject(nodeId);
+		}
+
+		public function getEdgeDisplayObject(edgeId:String):DisplayObject {
+			return _edgeElement.getItemDisplayObject(edgeId);
 		}
 
 		/**

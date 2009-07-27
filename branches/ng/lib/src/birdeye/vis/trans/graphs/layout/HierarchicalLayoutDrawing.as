@@ -37,6 +37,7 @@ package birdeye.vis.trans.graphs.layout
 	 * for a drawing representation of a graph drawing
 	 * with a Hierarchical Layout according to 
 	 * */
+	[ExcludeClass]
 	public class HierarchicalLayoutDrawing extends BaseLayoutDrawing {
 
 		/* to hold the modifiers */

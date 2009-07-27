@@ -62,27 +62,10 @@ package birdeye.vis.trans.graphs.layout
 		 * The constructor only initialises some data structures.
 		 * @inheritDoc
 		 * */
-		public function CircularLayouter(vg:IVisualGraph = null):void {
-			super(vg);
+		public function CircularLayouter():void {
+			super();
 			animationType = ANIM_RADIAL; // inherited
 			_currentDrawing = null;
-			
-			/* Reset the origin */
-//			(vg as VisualGraph).origin.x = 0;
-//			(vg as VisualGraph).origin.y = 0;
-			vg.origin.x = 0;
-			vg.origin.y = 0;
-			
-			initDrawing();
-		}
-
-		/**
-		 * @inheritDoc
-		 * */
-		override public function resetAll():void {
-			super.resetAll();
-			initDrawing();
-			_layoutChanged = true;			
 		}
 
 		/**
@@ -172,7 +155,9 @@ package birdeye.vis.trans.graphs.layout
 		 * on any root change (and possibly during other occasions)
 		 * and intialise various parameters of the drawing.
 		 * */
-		private function initDrawing():void {
+		protected override function initDrawing():void {
+			super.initDrawing();
+
 			_currentDrawing = new BaseLayoutDrawing();
 			
 			/* Also set the object also in the BaseLayouter */
@@ -181,6 +166,9 @@ package birdeye.vis.trans.graphs.layout
 			_currentDrawing.originOffset = _vgraph.origin;
 			_currentDrawing.centerOffset = _vgraph.center;
 			_currentDrawing.centeredLayout = true;
+
+//			_vgraph.origin.x = 0;
+//			_vgraph.origin.y = 0;
 		}
 		
 		/**

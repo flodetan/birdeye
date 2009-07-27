@@ -31,8 +31,7 @@ package birdeye.vis.trans.graphs.visual
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.trans.graphs.model.IGraph;
 	
-	import com.degrafa.IGraphic;
-	
+	import flash.display.DisplayObject;
 	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -69,7 +68,9 @@ package birdeye.vis.trans.graphs.visual
 
 		function getNodePosition(nodeId:String):Position;
 
-		function getNodeGraphic(nodeId:String):IGraphic;
+		function getNodeDisplayObject(nodeId:String):DisplayObject;
+
+		function getEdgeDisplayObject(edgeId:String):DisplayObject;
 		
 		function get currentRootVNode():IVisualNode;
 		

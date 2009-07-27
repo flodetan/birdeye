@@ -27,12 +27,16 @@
 
 package birdeye.vis.trans.graphs.visual
 {
+	import flash.display.DisplayObject;
+	
 	public interface IVisualItem
 	{
 
 		function get visible():Boolean;
 		
-		function set visible(value:Boolean);
+		function set visible(value:Boolean):void;
+		
+//		function get view():DisplayObject;
 
 	}
 }

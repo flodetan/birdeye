@@ -31,9 +31,10 @@ package birdeye.vis.guides.renderers
 	
 	import com.degrafa.geometry.Line;
 	
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 
-	public class LineRenderer extends Line implements IBoundedRenderer
+	public class LineRenderer extends Line implements IBoundedRenderer, IEdgeRenderer
 	{
 		public function LineRenderer(bounds:Rectangle=null)
 		{
@@ -48,5 +49,38 @@ package birdeye.vis.guides.renderers
 			this.x1 = bounds.width;
 			this.y1 = bounds.height;	
 		}
+
+		public function set startX(value:Number):void {
+			x = value;
+		}
+
+		public function get startX():Number {
+			return x;
+		}
+		
+		public function set endX(value:Number) {
+			x1 = value;
+		}
+
+		public function get endX():Number {
+			return x1;
+		}
+
+		public function set startY(value:Number):void {
+			y = value;
+		}
+
+		public function get startY():Number {
+			return y;
+		}
+		
+		public function set endY(value:Number) {
+			y1 = value;
+		}
+
+		public function get endY():Number {
+			return y1;
+		}
+
 	}
 }

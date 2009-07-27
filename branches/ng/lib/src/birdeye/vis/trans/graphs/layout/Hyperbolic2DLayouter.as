@@ -135,9 +135,8 @@
 		/*********************************************
 		* Initialization - Constructors, resets
 		* ********************************************/
-		public function Hyperbolic2DLayouter(vg:IVisualGraph = null):void {
-			super(vg);
-			resetAll();
+		public function Hyperbolic2DLayouter():void {
+			super();
 			
 			_model = new PoincareModel();
 			_projector = new PoincareProjector(_model);
@@ -152,8 +151,8 @@
 		/**
 		 * @inheritDoc
 		 * */
-		override public function resetAll():void {
-			super.resetAll(); // calls refreshInit()
+		override protected function cleanup():void {
+			super.cleanup(); // calls refreshInit()
 			
 			// reset all data caches
 			_nodeIndex = null;

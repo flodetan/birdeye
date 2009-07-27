@@ -25,7 +25,7 @@
  * THE SOFTWARE.
  */
  
-package birdeye.vis.trans
+package birdeye.vis.trans.graphs
 {
 	import birdeye.events.ElementDataItemsChangeEvent;
 	import birdeye.vis.elements.Position;
@@ -33,33 +33,18 @@ package birdeye.vis.trans
 	import birdeye.vis.interfaces.IGraphLayout;
 	import birdeye.vis.interfaces.IGraphLayoutableElement;
 	import birdeye.vis.trans.graphs.data.DataItemsGraphDataProvider;
-	import birdeye.vis.trans.graphs.layout.CircularLayouter;
-	import birdeye.vis.trans.graphs.layout.ConcentricRadialLayouter;
-	import birdeye.vis.trans.graphs.layout.ForceDirectedLayouter;
-	import birdeye.vis.trans.graphs.layout.HierarchicalLayouter;
-	import birdeye.vis.trans.graphs.layout.Hyperbolic2DLayouter;
 	import birdeye.vis.trans.graphs.layout.ILayoutAlgorithm;
-	import birdeye.vis.trans.graphs.layout.ParentCenteredRadialLayouter;
 	import birdeye.vis.trans.graphs.visual.VisualGraph;
-	
-	import flash.utils.Dictionary;
 	
 	public class GraphLayout implements IGraphLayout
 	{
-		public static const SINGLE_CYCLE:String = "single-cycle";
-		public static const CONCENTRIC:String = "concentric";
-		public static const PARENT_CENTERED:String = "parent-centered";
-		public static const FORCE:String = "force";
-		public static const HYPERBOLIC:String = "hyperbolic";
-		public static const TREE:String = "tree";
-
 		private var _startNodeId:String;
 		private var _graphId:String;
 		private var _layouter:ILayoutAlgorithm;
 		private var _visualGraph:VisualGraph;
-		private var _type:String;
 		private var _nodeElement:IGraphLayoutableElement;
 		private var _edgeElement:IEdgeElement;
+		private var _animate:Boolean = true;
 
 		public function GraphLayout() {
 		}
@@ -79,63 +64,28 @@ package birdeye.vis.trans
 		public function set graphId(id:String):void {
 			_graphId = id;
 		}
-
-		[Inspectable(defaultValue = "single-cycle",
-					 enumeration = "single-cycle,concentric,parent-centered,force,hyperbolic,tree")]
-		public function set type(val:String):void {
-			_type = val;
-			_layouter = null;
+		
+		public function get animate():Boolean {
+			return _animate;
 		}
 
-		public function get type():String {
-			return _type;
+		[Bindable]
+		public function set animate(value:Boolean):void {
+			_animate = value;
+			if (_layouter) _layouter.disableAnimation = !_animate;
 		}
-		 
+
 		protected function get visualGraph():VisualGraph {
 			return _visualGraph;
 		}
 		 
-		protected function get layouter():ILayoutAlgorithm {
-			if (!_layouter)
-				_layouter = createLayouter();
+		public function get layouter():ILayoutAlgorithm {
 			return _layouter;
 		}
 
-		protected function createLayouter():ILayoutAlgorithm {
-			var layouter:ILayoutAlgorithm = null;
-			switch (_type) {
-				case SINGLE_CYCLE: layouter = new CircularLayouter(visualGraph); break;				 
-				case CONCENTRIC:
-					const cl:ConcentricRadialLayouter = new ConcentricRadialLayouter(visualGraph);
-					cl.linkLength = 75;
-					layouter = cl;
-					break;				 
-				case FORCE:
-					const fl:ForceDirectedLayouter = new ForceDirectedLayouter(visualGraph);
-//					fl.autoFitEnabled = true;
-//					fl.dampingActive = false;
-//					fl.linkLength = 75;
-					layouter = fl;
-					break;				 
-				case PARENT_CENTERED:
-					const pl: ParentCenteredRadialLayouter = new ParentCenteredRadialLayouter(visualGraph);
-					pl.linkLength = 15;
-					layouter = pl;
-					break;				 
-				case HYPERBOLIC: layouter = new Hyperbolic2DLayouter(visualGraph); break;				 
-				case TREE:
-					const hl: HierarchicalLayouter = new HierarchicalLayouter(visualGraph);
-//					hl.enableSiblingSpread = false;
-					hl.autoFitEnabled = true;
-//					hl.breadth = 40;
-//					hl.layerMargin = 40;
-//					hl.honorNodeSize = true;
-//					hl.siblingSpreadDistance = 100;
-					layouter = hl;
-					break;
-			}
-			layouter.disableAnimation = true;
-			return layouter;
+		public function set layouter(layout:ILayoutAlgorithm):void {
+			_layouter = layout;
+			if (_layouter) _layouter.disableAnimation = !_animate;
 		}
 
 		public function set applyToNode(node:IGraphLayoutableElement):void {
@@ -153,16 +103,14 @@ package birdeye.vis.trans
 		
 		private function nodeDataItemsChanged(event:ElementDataItemsChangeEvent):void {
 			_visualGraph = null;
-			_layouter = null;
 		}
 		
 		private function edgeDataItemsChanged(event:ElementDataItemsChangeEvent):void {
 			_visualGraph = null;
-			_layouter = null;
 		}
 
 		public function isNodeItemVisible(itemId:Object):Boolean {
-			if (!_visualGraph) return null;
+			if (!_visualGraph) return false;
 			return _visualGraph.isNodeVisible(String(itemId));
 		}
 		
@@ -173,7 +121,7 @@ package birdeye.vis.trans
 
 		protected function createVisualGraph(width:Number, height:Number):VisualGraph {
 			var vg:VisualGraph;
-			if (_graphId != null  &&  _nodeElement.dataItems   &&  _edgeElement.dataItems) {
+			if (/*_graphId != null  && */ _nodeElement.dataItems   &&  _edgeElement.dataItems) {
 				vg = new VisualGraph(
 					_graphId,
 					_nodeElement, _edgeElement,
@@ -196,6 +144,7 @@ package birdeye.vis.trans
 				_visualGraph.layouter = layouter;
 				_visualGraph.width = width;
 				_visualGraph.height = height;
+				layouter.vgraph = _visualGraph;
 				layouter.layoutPass();
 			}
 		}

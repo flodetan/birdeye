@@ -35,6 +35,6 @@ package birdeye.vis.trans.graphs.visual
 		 * Access to the associated graph Edge.
 		 * */ 
 		function get edge():IEdge;
-
+		
 	}
 }

@@ -27,6 +27,8 @@
  
 package birdeye.vis.elements.geometry
 {
+	import __AS3__.vec.Vector;
+	
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.guides.renderers.CircleRenderer;
@@ -37,10 +39,10 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.interfaces.IGraphLayoutableElement;
 	import birdeye.vis.scales.*;
 	
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
 	import com.degrafa.paint.SolidFill;
 	
+	import flash.display.DisplayObject;
 	import flash.geom.Rectangle;
 
 	[Event(name="objectMovedEvent", type="com.roguedevelopment.objecthandles.ObjectHandleEvent")]
@@ -99,12 +101,13 @@ package birdeye.vis.elements.geometry
 		public function isItemVisible(itemId:Object):Boolean {
 			return _graphLayout.isNodeItemVisible(itemId);
 		}
-
+		
 		public function getItemPosition(itemId:Object):Position {
 			return _graphLayout.getNodeItemPosition(itemId);
 		}
 		
-		protected function createItemRenderer(bounds:Rectangle):IGeometry {
+		protected function createItemRenderer():IGeometry {
+			const bounds:Rectangle = new Rectangle(0 - _size, 0 - _size, _size * 2, _size * 2);
 			var renderer:IGeometry;
  			if (_source)
 				renderer = new RasterRenderer(bounds, _source);
@@ -130,10 +133,6 @@ package birdeye.vis.elements.geometry
 			return renderer;
 		}
 		*/
-
-		private function bounds(x:int, y:int):Rectangle {
-			return new Rectangle(x - _size, y - _size, _size * 2, _size * 2);
-		}
 		
 		/** @Private 
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
@@ -144,7 +143,7 @@ package birdeye.vis.elements.geometry
 			prepareForItemGeometriesCreation();
 
 			const dataFieldNames:Array = [dimId, dimName];
-			const dataItems = dataItems;
+			const dataItems:Vector.<Object> = dataItems;
 				
 			const thisNode:NodeElement = this;
 			
@@ -154,8 +153,6 @@ package birdeye.vis.elements.geometry
 	
 					const itemId:Object = item[dimId];
 					if (isItemVisible(itemId)) {
-						const position:Position = getItemPosition(itemId);
-		
 						// We cannot use scale.getPosition here, because
 						// scales work in an inherently different way, than
 						// what we need: they calc min/max of the input data
@@ -170,17 +167,16 @@ package birdeye.vis.elements.geometry
 		//					pos2 = scale2.getPosition(position.pos2);
 		//				}
 		
+						const position:Position = getItemPosition(itemId);
 						if (position != null) {
-							pos1 = position.pos1;
-							pos2 = position.pos2;
-				
-							createTTGG(item, dataFieldNames, pos1, pos2, 1.0, _size * 2);
-							createItemGraphics(
+//							createTTGG(item, dataFieldNames, pos1, pos2, 1.0, _size * 2);
+							createItemDisplayObject(
+								getItemPosition(itemId),
 								itemId,
 								[
-									createItemRenderer(bounds(pos1, pos2)),
+									createItemRenderer(),
 									TextRenderer.createTextLabel(
-										   pos1, pos2 + _size,
+										   0, 0 + _size,
 										   item[dimName],
 										   new SolidFill(0xffffff),  // TODO: add textFill property
 										   true, false
@@ -192,7 +188,7 @@ package birdeye.vis.elements.geometry
 				});
 			}
 		}
-		
+
 
 		/*
 		protected function addMoveEventListeneres() : void {
