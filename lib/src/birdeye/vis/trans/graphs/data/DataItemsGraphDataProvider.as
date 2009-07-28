@@ -57,8 +57,9 @@ package birdeye.vis.trans.graphs.data
 		}
 
 		public function getEdgeId(index:int):String {
-			return edgeElement.dataItems[index][edgeElement.dimStart] + "-" +
-				   edgeElement.dataItems[index][edgeElement.dimEnd];
+			return String(index);
+//				   edgeElement.dataItems[index][edgeElement.dimStart] + "-" +
+//				   edgeElement.dataItems[index][edgeElement.dimEnd];
 		}
 
 		public function getNodeTag(index:int):Object {
