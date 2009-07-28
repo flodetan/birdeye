@@ -206,23 +206,14 @@ package birdeye.vis.data
 		 * Remove all elements from the component*/
 		public function removeAllElements():void
 		{
-/*   			for (var i:Number = 0; i<numChildren; i++)
-				removeChildAt(0);
-			
-			for (i = 0; i<geometryCollection.items.length; i++)
-				geometryCollection.removeItemAt(0);
-  				
- 			geometry = geometryCollection.items = [];
- 			*/
-
  			// Iterating backwards here is essential, because during the 
  			// iteration we are modifying the collection we are iterating over.
-			for (var i:int = geometryCollection.items.length - 1; i >= 0; i--) {
-				const item:IGeometry = geometryCollection.items[i];
-				if (item is DisplayObject  &&  contains(item as DisplayObject)) {
-					removeChild(item as DisplayObject);
-				}
-				geometryCollection.removeItem(item);
+ 			var i:int;
+			for (i = geometryCollection.items.length - 1; i >= 0; i--) {
+				geometryCollection.removeItemAt(i);
+			}
+			for (i = numChildren - 1; i >= 0; i--) {
+				removeChildAt(i);
 			}
 		}
 

@@ -1368,53 +1368,25 @@ package birdeye.vis.elements
 		/** Remove all graphic elements of the series.*/
 		public function removeAllElements():void
 		{
-/* 			if (gg) 
-				gg.removeAllElements();
- */			
  			// Iterating backwards here is essential, because during the 
  			// iteration we are modifying the collection we are iterating over.
-			for (var i:int = graphicsCollection.items.length - 1; i >= 0; i--) {
+ 			var i:int;
+			for (i = graphicsCollection.items.length - 1; i >= 0; i--) {
 				const item:IGraphic = graphicsCollection.items[i];
-
 				if (item is DataItemLayout) {
 					item.removeEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 					item.removeEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 					item.removeEventListener(MouseEvent.DOUBLE_CLICK, onMouseDoubleClick);
 					item.removeEventListener(MouseEvent.CLICK, onMouseClick);
 					(item as DataItemLayout).removeAllElements();
-				} else if (item is GeometryGroup) {
-					(item as GeometryGroup).geometry = []; 
 				}
-
-				if (item is DisplayObject  &&  contains(item as DisplayObject)) {
-					removeChild(item as DisplayObject);
-				}
-				graphicsCollection.removeItem(item);
+				graphicsCollection.removeItemAt(i);
 			}
-
- 
- 			for (i = numChildren - 1; i>=0; i--)
-			{
-				/*if (getChildAt(i) is DataItemLayout)
-				{
-					DataItemLayout(getChildAt(i)).removeEventListener(MouseEvent.ROLL_OVER, handleRollOver);
-					DataItemLayout(getChildAt(i)).removeEventListener(MouseEvent.ROLL_OUT, handleRollOut);
-					DataItemLayout(getChildAt(i)).removeEventListener(MouseEvent.DOUBLE_CLICK, onMouseDoubleClick);
-					DataItemLayout(getChildAt(i)).removeEventListener(MouseEvent.CLICK, onMouseClick);
-					DataItemLayout(getChildAt(i)).removeAllElements();
-				}*/
-				
-				// this is a terrible way, reusing like real repeaters is better
-				// TODO improve this
-				if (getChildAt(i) is ICoordinates)
-				{
-					removeChildAt(i);
-				}
-				//removeChildAt(i);
+			for (i = numChildren - 1; i >= 0; i--) {
+				removeChildAt(i);
 			}
- 			graphicsCollection.items = [];
  		}
-		
+
 		protected var rectBackGround:RegularRectangle;
 		protected var ggBackGround:GeometryGroup;
 		protected var tooltipCreationListening:Boolean = false;

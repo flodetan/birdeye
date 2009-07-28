@@ -27,8 +27,6 @@
  
 package birdeye.vis.elements.geometry
 {
-	import __AS3__.vec.Vector;
-	
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.guides.renderers.CircleRenderer;
