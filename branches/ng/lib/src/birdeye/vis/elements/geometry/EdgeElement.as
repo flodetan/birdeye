@@ -70,6 +70,10 @@
 		{
 			return _dimEnd;
 		}
+		
+		override protected function createGlobalGeometryGroup():void {
+			// do nothing: no need to create the global group 
+	    }
 
 		private var _node:IPositionableElement;
 
@@ -119,8 +123,8 @@
 			}
 		}
 
-		override protected function prepareForItemGeometriesCreation():void {
-			super.prepareForItemGeometriesCreation();
+		override protected function prepareForItemDisplayObjectsCreation():void {
+			super.prepareForItemDisplayObjectsCreation();
 			_edgeRenderers = new Dictionary();
 		}
 
@@ -129,7 +133,7 @@
 		override public function drawElement():void {
 			super.drawElement();
 			
-			prepareForItemGeometriesCreation();
+			prepareForItemDisplayObjectsCreation();
 			
 			const items:Vector.<Object> = dataItems;
 			

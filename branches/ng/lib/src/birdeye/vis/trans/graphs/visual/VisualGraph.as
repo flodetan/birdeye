@@ -92,18 +92,26 @@ package birdeye.vis.trans.graphs.visual
 		 * The application will be brought to its knees if thousands of nodes
 		 * should be displayed. 
 		 * */
-		protected var _visibilityLimitActive:Boolean = true;
+		private var _visibilityLimitActive:Boolean = true;
+
+		private var _useIntegerPositions:Boolean;
 
 		public function VisualGraph(id:String, node:IGraphLayoutableElement, edge:IEdgeElement,
 									graphDataProvider:IGraphDataProvider,
-									width:Number, height:Number) {
+									width:Number, height:Number,
+									useIntegerPositions:Boolean) {
 			_nodeElement = node;
 			_edgeElement = edge;
 			_origin = new Point(0,0);
 			_graph = new Graph(id, graphDataProvider, false);
 			_width = width;
 			_height = height;
+			_useIntegerPositions = useIntegerPositions;
 			initFromGraph();
+		}
+
+		public function get useIntegerPositions():Boolean {
+			return _useIntegerPositions;
 		}
 
 		/**
@@ -543,7 +551,11 @@ package birdeye.vis.trans.graphs.visual
 			if (!vnode) {
 				return null;
 			}
-			return new Position(vnode.x, vnode.y);
+			if (useIntegerPositions) {
+				return new Position(Math.round(vnode.x), Math.round(vnode.y));
+			} else {
+				return new Position(vnode.x, vnode.y);
+			}
 		}
 
 		public function getNodeDisplayObject(nodeId:String):DisplayObject {

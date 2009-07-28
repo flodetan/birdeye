@@ -45,6 +45,7 @@ package birdeye.vis.trans.graphs
 		private var _nodeElement:IGraphLayoutableElement;
 		private var _edgeElement:IEdgeElement;
 		private var _animate:Boolean = true;
+		private var _useIntegerPositions:Boolean;
 
 		public function GraphLayout() {
 		}
@@ -67,6 +68,18 @@ package birdeye.vis.trans.graphs
 		
 		public function get animate():Boolean {
 			return _animate;
+		}
+
+		public function get useIntegerPositions():Boolean {
+			return _useIntegerPositions;
+		}
+		
+		/**
+		 * If set to true the node positions will be rounded, so that
+		 * the nodes and especially the lables don't get blurred. 
+		 **/
+		public function set useIntegerPositions(value:Boolean):void {
+			_useIntegerPositions = value;
 		}
 
 		[Bindable]
@@ -126,7 +139,8 @@ package birdeye.vis.trans.graphs
 					_graphId,
 					_nodeElement, _edgeElement,
 					new DataItemsGraphDataProvider(_nodeElement, _edgeElement),
-					width, height
+					width, height,
+					_useIntegerPositions
 				);
 				if (_startNodeId !== null) {
  					vg.currentRootVNode = vg.getVisualNodeById(_startNodeId);

@@ -828,7 +828,10 @@ package birdeye.vis.elements
 		override protected function createChildren():void
 		{
 			super.createChildren();
-
+			createGlobalGeometryGroup();
+		}
+		
+		protected function createGlobalGeometryGroup():void {
 			// gg will be the GeometryGroup that will store the global series geometries
 			// All hit area will be put in ttGeom
 			// this increases performances in case the user doesn't set
@@ -1489,7 +1492,7 @@ package birdeye.vis.elements
 			return stroke;
 		}
 		
-		protected function prepareForItemGeometriesCreation():void {
+		protected function prepareForItemDisplayObjectsCreation():void {
 			removeAllElements();
 		
 			if (_itemDisplayObjects) {
@@ -1501,7 +1504,6 @@ package birdeye.vis.elements
 			}
 		}
 
-		[ArrayElementType("com.degrafa.IGeometry")]
 		private var _itemDisplayObjects:Dictionary;
 
 		public function getItemDisplayObject(itemId:Object):DisplayObject {

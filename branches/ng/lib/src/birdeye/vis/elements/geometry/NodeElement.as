@@ -42,7 +42,6 @@ package birdeye.vis.elements.geometry
 	import com.degrafa.IGeometry;
 	import com.degrafa.paint.SolidFill;
 	
-	import flash.display.DisplayObject;
 	import flash.geom.Rectangle;
 
 	[Event(name="objectMovedEvent", type="com.roguedevelopment.objecthandles.ObjectHandleEvent")]
@@ -88,9 +87,13 @@ package birdeye.vis.elements.geometry
 		{
 			return _dimName;
 		}
+		
+		override protected function createGlobalGeometryGroup():void {
+			// do nothing: no need to create the global group 
+	    }
 
 		public function getItemIndexById(id:Object):int {
-			const items = dataItems;
+			const items:Vector.<Object> = dataItems;
 			if (!items) return -1;
 			for (var i:int = 0; i < items.length; i++) {
 				if (items[i][_dimId] == id) return i;
@@ -140,7 +143,7 @@ package birdeye.vis.elements.geometry
 		{
 			super.drawElement();
 				
-			prepareForItemGeometriesCreation();
+			prepareForItemDisplayObjectsCreation();
 
 			const dataFieldNames:Array = [dimId, dimName];
 			const dataItems:Vector.<Object> = dataItems;
