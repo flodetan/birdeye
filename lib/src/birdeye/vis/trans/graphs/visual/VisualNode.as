@@ -103,8 +103,13 @@ package birdeye.vis.trans.graphs.visual
 		public function commit():void {
 			const v:DisplayObject = view;
 			if (v) {
-				v.x = _x;
-				v.y = _y;
+				if (_visualGraph.useIntegerPositions) {
+					v.x = Math.round(_x);
+					v.y = Math.round(_y);
+				} else {
+					v.x = _x;
+					v.y = _y;
+				}
 				v.dispatchEvent(new VGraphEvent(VGraphEvent.VNODE_UPDATED));
 			}
 		}

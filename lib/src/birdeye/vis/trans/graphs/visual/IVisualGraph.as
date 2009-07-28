@@ -76,6 +76,8 @@ package birdeye.vis.trans.graphs.visual
 		
 		function get maxVisibleDistance():int;
 
+		function get useIntegerPositions():Boolean;
+
 		/**
 		 * Calculate and return the current bounding box of all visible nodes.
 		 * This is required by some layouters.

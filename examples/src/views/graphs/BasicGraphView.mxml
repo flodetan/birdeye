@@ -30,7 +30,9 @@
 						id="graphLayout"
 						layouter="{layouter}"
 						applyToNode="{node}" applyToEdge="{edge}"
-						animate="{animate.selected}"/>
+						animate="{animate.selected}"
+						useIntegerPositions="true"
+					/>
 			</coords:transforms>
 		</coords:Cartesian>
 	</mx:VBox>
