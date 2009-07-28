@@ -384,32 +384,33 @@ package birdeye.vis.trans.graphs.model {
 				throw Error("link: node2 was null");
 			}
 			
-			/* check if a link already exists */
-			if(node1.successors.indexOf(node2) != -1) {
-				/* we should give an error message, but
-				 * there is no need to abort the script
-				 * we should just do nothing */
-				LogUtil.warn(_LOG, "Link between nodes:"+node1.id+" and "+
-				node2.id+" already exists, returning existing edge");
-				
-				/* oh in fact, we should return the edge that was found 
-				 * this was more complicated than I thought and I am
-				 * not tooo happy with this way...
-				 * also it might not always find the edge if graph is non-directional
-				 * as most graphs are. The edge found could be the other way round.
-				 * Have to use the "othernode()" method here.
-				 */
-				var outedges:Array = node1.outEdges;
-				for each (var edge:Edge in outedges) {
-					if(edge.othernode(node1) == node2) {
-						retEdge = edge;
-						break;
-					}
-				}
-				if(retEdge == null) {
-					throw Error("We did not find the edge although it should be there");
-				}
-			} else {
+//			/* check if a link already exists */
+//			if(node1.successors.indexOf(node2) != -1) {
+//				/* we should give an error message, but
+//				 * there is no need to abort the script
+//				 * we should just do nothing */
+//				LogUtil.warn(_LOG, "Link between nodes:"+node1.id+" and "+
+//				node2.id+" already exists, returning existing edge");
+//				
+//				/* oh in fact, we should return the edge that was found 
+//				 * this was more complicated than I thought and I am
+//				 * not tooo happy with this way...
+//				 * also it might not always find the edge if graph is non-directional
+//				 * as most graphs are. The edge found could be the other way round.
+//				 * Have to use the "othernode()" method here.
+//				 */
+//				var outedges:Array = node1.outEdges;
+//				for each (var edge:Edge in outedges) {
+//					if(edge.othernode(node1) == node2) {
+//						retEdge = edge;
+//						break;
+//					}
+//				}
+//				if(retEdge == null) {
+//					throw Error("We did not find the edge although it should be there");
+//				}
+//			} else
+			{
 				/* not sure where we will be able to set the visual edge
 				 * as it must exist first, for now we pass null 
 				 * since the attribute has also a setter */

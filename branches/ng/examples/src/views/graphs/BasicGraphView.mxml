@@ -63,11 +63,20 @@
 	
 			const edgeSet:ArrayCollection = new ArrayCollection();
 			const numEdges:int = int(Math.random() * 40 + 10);
+			const edgesByStartEnd:Object = {};
 			for (i = 0; i < numEdges; i++) {
+				var start:int, end:int;
+				var key:String;
+				do {
+					start = int(Math.random() * numNodes) + 1;
+					end = int(Math.random() * numNodes) + 1;
+					key = String(start) + "-" + String(end);
+				} while (edgesByStartEnd[key]);
 				edgeSet.addItem({
-					start: int(Math.random() * numNodes) + 1,
-					end: int(Math.random() * numNodes) + 1
+					start: start,
+					end: end
 				});
+				edgesByStartEnd[key] = true;
 			}
 			
 			edges = edgeSet;

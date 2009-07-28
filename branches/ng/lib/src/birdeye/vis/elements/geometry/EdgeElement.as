@@ -30,8 +30,11 @@
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.guides.renderers.IEdgeRenderer;
 	import birdeye.vis.guides.renderers.LineRenderer;
+	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.IEdgeElement;
 	import birdeye.vis.interfaces.IPositionableElement;
+	
+	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
@@ -107,8 +110,9 @@
 			return edgeRenderer;
 		}
 
-		public function edgeItemId(item:Object):String {
-			return item[_dimStart] + "-" + item[_dimEnd];
+		public function edgeItemId(itemIndex:int, item:Object):String {
+			return String(itemIndex);
+//			return item[_dimStart] + "-" + item[_dimEnd];
 		}
 		
 		private var _edgeRenderers:Dictionary;
@@ -149,13 +153,18 @@
 						var end:Position = _node.getItemPosition(endItemId);
 
 						if (start && end) {
-							const itemId:String = edgeItemId(item);
+							const itemId:String = edgeItemId(itemIndex, item);
 							// The display object is always positioned at (0, 0) and
 							// the edge renderers are passed in the start/end coordinates
 							// and position and draw the edges accordingly.   
 							createItemDisplayObject(
 								ZERO_POSITION, itemId,
-								[ createItemRenderer(itemId, start.pos1, start.pos2, end.pos1, end.pos2) ]
+								[ createItemRenderer(itemId, start.pos1, start.pos2, end.pos1, end.pos2)
+//								  TextRenderer.createTextLabel(
+//								  (start.pos1 + end.pos1)/2, (start.pos2 + end.pos2)/2,
+//								  itemId + ": " + startItemId + "-" + endItemId, new SolidFill(0xffffff), 
+//								  true, true)
+								 ]
 							);
 						}
 					}
