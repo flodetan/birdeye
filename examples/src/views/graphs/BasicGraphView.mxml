@@ -11,7 +11,7 @@
 	
 	<mx:HBox horizontalAlign="center" width="100%">
 		<mx:Button label="Generate tree" click="generateTree()"/>
-		<mx:Button label="Generate graph" click="generateGraph()"/>
+		<mx:Button label="Generate graph" click="generateGraph()" id="generateGraphButton" enabled="false"/>
 		<mx:CheckBox id="animate" label="animate" selected="{graphLayout.animate}" />
 	</mx:HBox>
 	

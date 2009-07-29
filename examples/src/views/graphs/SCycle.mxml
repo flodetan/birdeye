@@ -3,12 +3,22 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:gv="views.graphs.*" 
 	xmlns:layouter="birdeye.vis.trans.graphs.layout.*"
-	creationComplete="graphView.generateGraph()">
+	creationComplete="graphView.generateGraph()"
+	initialize="init()"
+	>
 
 	<gv:BasicGraphView id="graphView" width="100%" height="100%">
 		<gv:layouter>
 			<layouter:CircularLayouter />
 		</gv:layouter>	
 	</gv:BasicGraphView>
+
+	<mx:Script>
+	<![CDATA[
+		private function init():void { 
+			graphView.generateGraphButton.enabled = true;
+		}
+	]]>
+	</mx:Script>
 
 </mx:VBox>
