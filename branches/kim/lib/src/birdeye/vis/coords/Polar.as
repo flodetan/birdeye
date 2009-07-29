@@ -33,13 +33,15 @@ package birdeye.vis.coords
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.elements.geometry.*;
+	import birdeye.vis.guides.axis.MultiAxis;
 	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.IEnumerableScale;
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.interfaces.IScale;
-	import birdeye.vis.interfaces.IScaleUI;
 	import birdeye.vis.interfaces.IStack;
+	import birdeye.vis.interfaces.guides.IAxis;
+	import birdeye.vis.interfaces.guides.IGuide;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.GeometryGroup;
@@ -53,6 +55,7 @@ package birdeye.vis.coords
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
 	
 	/** 
@@ -125,12 +128,6 @@ package birdeye.vis.coords
 					IStack(_elements[i]).total = stackableElements[IStack(_elements[i]).elementType]; 
 		}
 
-		override public function set multiScale(val:MultiScale):void
-		{
-			super.multiScale = val;
-			_multiScale.chart = this;
-		}
-
 		protected var _type:String = StackElement.STACKED100;
 		/** Set the type of stack, overlaid if the element are shown on top of the other, 
 		 * or stacked if they appear staked one after the other (horizontally), or 
@@ -185,6 +182,26 @@ package birdeye.vis.coords
 			
 			nCursors = 0;
 			
+			if (guides)
+			{
+				for each (var guide:IGuide in guides)
+				{
+					if (guide is MultiAxis)
+					{
+						(guide as MultiAxis).chart = this;
+					}
+					
+					if (guide.position == "elements")
+					{
+						
+						if (guide.targets.lastIndexOf(elementsContainer) == -1)
+						{
+							guide.targets.push(elementsContainer);
+						}
+					}
+				}
+			}
+			
 			if (elements)
 			{
 				var _stackedElements:Array = [];
@@ -204,12 +221,6 @@ package birdeye.vis.coords
 
 					if (!contains(DisplayObject(elements[i])))
 						addChild(DisplayObject(elements[i]));
-
-					if (IElement(elements[i]).scale2)
-					{
-						if (!contains(DisplayObject(IElement(elements[i]).scale2)))
-							addChild(DisplayObject(IElement(elements[i]).scale2));
-					} 
 
 					if (_elements[i] is IStack)
 					{
@@ -419,11 +430,12 @@ package birdeye.vis.coords
 			
 			for (var i:Number = 0; i<_elements.length; i++)
 			{
+				// TODO update this!
 				if (IElement(_elements[i]).scale2)
 				{
 					IElement(_elements[i]).scale2.size = Math.min(unscaledWidth, unscaledHeight)/2;
 				
-					if (IElement(_elements[i]).scale2 is IScaleUI)
+					/*if (IElement(_elements[i]).scale2 is IScaleUI)
 					{
 						switch (IScaleUI(IElement(_elements[i]).scale2).placement)
 						{
@@ -439,7 +451,7 @@ package birdeye.vis.coords
 								break;
 						}
 						IScaleUI(IElement(_elements[i]).scale2).draw();
-					}
+					}*/
 				}
 			}
 			
@@ -454,6 +466,18 @@ package birdeye.vis.coords
 
 			if (multiScale && multiScale.scale1)
 				drawLabels()
+			
+			if (guides)
+			{
+				for each (var guide:IGuide in guides)
+				{
+					if (guide is IAxis)
+					{
+						(guide as IAxis).size = Math.min(unscaledWidth, unscaledHeight)/2;
+					}
+					guide.drawGuide(new Rectangle(0, 0, unscaledWidth, unscaledHeight));	
+				}
+			}
 			
 			for (i = 0; i<_elements.length; i++)
 			{
@@ -577,6 +601,8 @@ package birdeye.vis.coords
 				// for sure ready for feeding and it won't affect the axesFeeded status
 				for (i = 0; i<elements.length; i++)
 					initElementsAxes(elements[i]);
+				
+				commitValidatingScales();
 					
 				axesFeeded = true;
 			}
@@ -833,8 +859,8 @@ package birdeye.vis.coords
 			for (i = 0; i<numChildren; i++)
 			{
 				child = getChildAt(0); 
-				if (child is IScaleUI)
-					IScaleUI(child).removeAllElements();
+				if (child is IAxis)
+					IAxis(child).removeAllElements();
 				if (child is DataItemLayout)
 				{
 					DataItemLayout(child).removeAllElements();

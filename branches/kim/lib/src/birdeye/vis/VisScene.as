@@ -36,17 +36,20 @@
 	import birdeye.vis.interfaces.IProjection;
 	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.interfaces.ITransform;
+	import birdeye.vis.interfaces.validation.IValidatingChild;
+	import birdeye.vis.interfaces.validation.IValidatingParent;
+	import birdeye.vis.interfaces.validation.IValidatingScale;
 	import birdeye.vis.scales.MultiScale;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
+	import com.degrafa.paint.SolidStroke;
 	
 	import flash.display.Shape;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.utils.describeType;
 	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
@@ -60,10 +63,39 @@
 	[Exclude(name="graphLayouts", kind="property")]
 
 	[DefaultProperty("dataProvider")]
-	public class VisScene extends Surface
+	public class VisScene extends Surface implements IValidatingParent
 	{
 		public static const CARTESIAN:String="cartesian";
 		public static const POLAR:String="polar";
+		
+		
+		
+		// IMPLEMENTATION OF IVALIDATINGPARENT
+		
+		private var invalidateChilds:Array = new Array();
+		private var invalidateScales:Array = new Array();
+		
+		public function invalidate(child:IValidatingChild):void
+		{
+			if (child is IValidatingScale)
+			{
+				if (invalidateScales.lastIndexOf(child) == -1)
+				{
+					invalidateScales.push(child);
+				}
+			}
+			else
+			{
+				if (invalidateChilds.lastIndexOf(child) == -1)
+				{
+					invalidateChilds.push(child);
+					invalidateProperties();
+				}	
+			}
+		}
+		
+		// END IMPLEMENTATION
+		
 		
 		protected var _isMasked:Boolean = false;
 		public function set isMasked(val:Boolean):void
@@ -139,6 +171,16 @@
 		public function set scales(val:Array):void
 		{
 			_scales = val;
+			
+			// Implementation of IValidatingParent!
+			for each (var valChild:IValidatingChild in _scales)
+			{
+				if (valChild)
+				{
+					valChild.parent = this;
+				}
+			}
+			
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -146,6 +188,23 @@
 		public function get scales():Array
 		{
 			return _scales;
+		}
+		
+		
+		protected var _guides:Array; /* of IGuide */
+		/** Array of guides. */
+		[Inspectable(category="General", arrayType="birdeye.vis.interfaces.IGuide")]
+		[ArrayElementType("birdeye.vis.interfaces.guides.IGuide")]
+		public function set guides(val:Array):void
+		{
+			_guides = val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+		
+		public function get guides():Array
+		{
+			return _guides;
 		}
 		
 		protected var _multiScale:MultiScale;
@@ -195,44 +254,9 @@
 			return _sizeScale;
 		}
 
-		private var _showGrid:Boolean = true;
-		/** Draw the grid lines of the chart (only default chart axes and not elements having own axes).*/
-		[Inspectable(enumeration="true,false")]
-		public function set showGrid(val:Boolean):void
-		{
-			_showGrid = val;
-			invalidateDisplayList();
-		}
-		public function get showGrid():Boolean
-		{
-			return _showGrid;
-		}
-		
-		protected var _gridColor:Number = 0x000000;
-		/** Set the grid color.*/
-		public function set gridColor(val:Number):void
-		{
-			_gridColor = val;
-			invalidateDisplayList();
-		}
 
-		protected var _gridWeight:Number = 1;
-		/** Set the line grid weight.*/
-		public function set gridWeight(val:Number):void
-		{
-			_gridWeight = val;
-			invalidateDisplayList();
-		}
-
-		protected var _gridAlpha:Number = .3;
-		/** Set the grid alpha.*/
-		public function set gridAlpha(val:Number):void
-		{
-			_gridAlpha = val;
-			invalidateDisplayList();
-		}
 		
-		private var _columnWidthRate:Number = 3/5;
+		private var _columnWidthRate:Number = 0.6;
 		public function set columnWidthRate(val:Number):void
 		{
 			_columnWidthRate = val;
@@ -515,6 +539,8 @@
 			doubleClickEnabled = true;
 
 	  		_maskShape = new Shape();
+	  		
+
 		}
 		
 		protected var rectBackGround:RegularRectangle;
@@ -534,8 +560,39 @@
 		{
 			super.commitProperties();
 			
+
+			
 			if (elements && invalidatedData && _cursor)
 				loadElementsValues();
+			
+			commitValidatingChilds();	
+
+		}
+		
+		protected function commitValidatingChilds():void
+		{
+			// IMPLEMENTATION IVALIDATINGPARENT
+			
+			if (invalidateChilds && invalidateChilds.length > 0)
+			{
+				while(invalidateChilds.length > 0)
+				{
+					(invalidateChilds.pop() as IValidatingChild).commit();
+				}
+			}
+			
+			// END IMPLEMENTATION
+		}
+		
+		protected function commitValidatingScales():void
+		{
+			if (invalidateScales && invalidateScales.length > 0)
+			{
+				while (invalidateScales.length > 0)
+				{
+					(invalidateScales.pop() as IValidatingScale).commit();
+				}
+			}
 		}
 
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void

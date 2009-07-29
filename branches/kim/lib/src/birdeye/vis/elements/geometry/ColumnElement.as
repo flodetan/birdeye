@@ -193,7 +193,7 @@ trace (getTimer(), "drawing column ele");
 						if (scale3)
 						{
 							zPos = scale3.getPosition(currentItem[dim3]);
-							scale2RelativeValue = XYZ(scale3).height - zPos;
+							scale2RelativeValue = scale3.size - zPos;
 						}
 		
 						if (multiScale)

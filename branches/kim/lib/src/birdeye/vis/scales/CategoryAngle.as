@@ -46,7 +46,6 @@
 
 		public function CategoryAngle():void
 		{
-			showAxis = false;
 			scaleValues = [0,360];
 			_scaleInterval = NaN;
 		}

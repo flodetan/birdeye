@@ -207,7 +207,7 @@ trace (getTimer(), "area ele");
 						// up side down. this trick allows to visualize the y axis as
 						// if it would be a z. when there will be a 3d line class, it will 
 						// be replaced
-						scale2RelativeValue = XYZ(scale3).height - zPos;
+						scale2RelativeValue = scale3.size - zPos;
 					}
 	
 					if (multiScale)

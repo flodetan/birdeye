@@ -28,10 +28,8 @@
 package birdeye.vis.scales
 {
 	import birdeye.vis.interfaces.INumerableScale;
-	import birdeye.vis.interfaces.IScaleUI;
+	import birdeye.vis.interfaces.guides.IAxis;
 	
-	import com.degrafa.GeometryComposition;
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
@@ -41,7 +39,7 @@ package birdeye.vis.scales
 	import flash.text.TextFieldAutoSize;
 	import flash.utils.getTimer;
 
-	public class Numeric extends XYZ implements INumerableScale, IScaleUI
+	public class Numeric extends BaseScale  implements INumerableScale
 	{
  		/** Define the min max data values for numeric scales [100, 200] where the values refer to data values, number of
  		 * inhabitants, rain falls, etc.*/
@@ -51,6 +49,24 @@ package birdeye.vis.scales
 			_dataValues.sort(Array.NUMERIC);
 			_min = dataValues[0];
 			_max = dataValues[1];
+			
+			invalidate();
+		}
+		
+		/**
+		 * Returns all the data values</br>
+		 * For a numeric scale this is min and max and everything in between.</br>
+		 * For a category scale this is identical to dataValues.</br>
+		 */
+		public function get completeDataValues():Array
+		{
+			var toReturn:Array = new Array();
+			for (var snap:Number = min; snap<=max; snap += dataInterval)
+			{
+				toReturn.push(snap);
+			}
+			
+			return toReturn;
 		}
 		
 		/** @Private
@@ -86,9 +102,8 @@ package birdeye.vis.scales
 			_min = val;
 			minFormatted = !_format;
 			formatMin();
-			invalidateSize();
-			invalidateProperties();
-			invalidateDisplayList();
+
+			invalidate();
 		}
 		public function get min():Number
 		{
@@ -108,9 +123,8 @@ package birdeye.vis.scales
 			_max = val;
 			maxFormatted = !_format;
 			formatMax();
-			invalidateSize();
-			invalidateProperties();
-			invalidateDisplayList();
+			
+			invalidate();
 		}
 		public function get max():Number
 		{
@@ -123,8 +137,7 @@ package birdeye.vis.scales
 		public function set baseAtZero(val:Boolean):void
 		{
 			_baseAtZero = val;
-			invalidateProperties()
-			invalidateDisplayList();
+			//invalidate();
 		}
 		public function get baseAtZero():Boolean
 		{
@@ -139,9 +152,10 @@ package birdeye.vis.scales
 			scaleType = BaseScale.LINEAR;
 		}
 		
-		override protected function commitProperties():void
+		override public function commit():void
 		{
-			super.commitProperties();
+			
+			super.commit();
 
 			if (isNaN(_min) && _dataValues)
 				_min = _dataValues[0];
@@ -172,163 +186,14 @@ package birdeye.vis.scales
 			
 			// if the placement is set, and max, min and interval calculated
 			// than the axis is ready to be drawn
-			if (placement && !isNaN(max) && !isNaN(min) && !isNaN(dataInterval))
+			/*if (dimension && !isNaN(max) && !isNaN(min) && !isNaN(dataInterval))
 			{
 				if (showAxis)
 					readyForLayout = true;
 			}
 			else 
-				readyForLayout = false;
+				readyForLayout = false;*/
 		}
-		
-		override protected function measure():void
-		{
-			super.measure();
- 
- 			if (!isNaN(min) && !isNaN(max) && placement)
-				maxLabelSize();
- 		}
-		
-		// other methods
-		
-		/** @Private
-		 * Calculate the maximum label size, necessary to define the needed 
-		 * width (for y axes) or height (for x axes) of the CategoryAxis.*/
-		override protected function maxLabelSize():void
-		{
-			if (showAxis)
-			{
-				var text:String = String(String(min).length < String(max).length ?
-										max : min);
-	
-				switch (placement)
-				{
-					case TOP:
-					case BOTTOM:
-					case HORIZONTAL_CENTER:
-						maxLblSize = sizeLabel /* pixels for 1 char height */ + thickWidth + 10;
-						height = maxLblSize;
-						break;
-					case LEFT:
-					case RIGHT:
-					case VERTICAL_CENTER:
-						maxLblSize = text.length * sizeLabel/2 /* pixels for 1 char width */ + thickWidth + 10;
-						width = maxLblSize;
-				}
-				// calculate the maximum label size according to the 
-				// styles defined for the axis 
-				super.calculateMaxLabelStyled();
-			} else
-				maxLblSize = 0;
-		}
-
-		/** @Private
-		 * Draw axes depending on their orientation:
-		 * xMin == xMax means that the orientation is vertical; 
-		 * yMin == yMax means that the orientation is horizontal.
-		 */
-		override protected function drawAxes(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
-		{
-			var snap:Number;
-			
-			if (isNaN(maxLblSize) && !isNaN(min) && !isNaN(max) && placement)
-				maxLabelSize();
-
-			if (size > 0 && dataInterval>0 && showLabels && invalidated)
-			{	
-trace(getTimer(), "drawing numeric scale");
-				invalidated = false;
-				
-				var ggIndex:uint = 0;
-				
-				// vertical orientation
-				if (xMin == xMax)
-				{
-					for (snap = min; snap<=max; snap += dataInterval)
-					{
-						
-						// create thick line
-			 			thick = new Line(xMin + thickWidth * sign, getPosition(snap), xMax, getPosition(snap));
-						thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
-						gg.geometryCollection.addItem(thick);
-			
-						// create label 
-	 					label = new RasterTextPlus();
-	 					label.fontFamily = fontLabel;
-	 					label.fontSize = sizeLabel;
-						label.text = String(Math.round(snap));
-	 					label.visible = true;
-						label.autoSize = TextFieldAutoSize.LEFT;
-						label.autoSizeField = true;
-						if (!isNaN(_rotateLabels) || _rotateLabels != 0)
-						{
-							var rot:RotateTransform = new RotateTransform();
-							rot = new RotateTransform();
-							switch (placement)
-							{
-								case RIGHT:
-									_rotateLabelsOn = "centerLeft";
-									break;
-								case LEFT:
-									_rotateLabelsOn = "centerRight";
-									break;
-							}
-							rot.registrationPoint = _rotateLabelsOn;
-							rot.angle = _rotateLabels;
-							label.transform = rot;
-						}
-						
-						label.y = getPosition(snap)-label.displayObject.height/2;
-						label.x = thickWidth * sign; 
-						label.fill = new SolidFill(colorLabel);
-						gg.geometryCollection.addItem(label);
-					}
-				} else {
-				// horizontal orientation
-					for (snap = min; snap<=max; snap += dataInterval)
-					{
-
-						// create thick line
-			 			thick = new Line(getPosition(snap), yMin + thickWidth * sign, getPosition(snap), yMax);
-						thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
-						gg.geometryCollection.addItem(thick);
-	
-						// create label 
-	 					label = new RasterTextPlus();
-						label.text = String(Math.round(snap));
-	 					label.fontFamily = fontLabel;
-	 					label.fontSize = sizeLabel;
-	 					label.visible = true;
-						label.autoSize = TextFieldAutoSize.LEFT;
-						label.autoSizeField = true;
-						label.y = thickWidth;
-						if (!isNaN(_rotateLabels) && _rotateLabels != 0)
-						{
-							rot = new RotateTransform();
-							switch (placement)
-							{
-								case TOP:
-									_rotateLabelsOn = "centerLeft";
-									label.x = getPosition(snap); 
-									break;
-								case BOTTOM:
-									_rotateLabelsOn = "centerRight";
-									label.x = getPosition(snap)-label.displayObject.width; 
-									break;
-							}
-							rot.registrationPoint = _rotateLabelsOn;
-							rot.angle = _rotateLabels;
-							label.transform = rot;
-						} else
-							label.x = getPosition(snap)-label.displayObject.width/2; 
-						label.fill = new SolidFill(colorLabel);
-						gg.geometryCollection.addItem(label);
-					}
-				}
-trace(getTimer(), "drawing numeric scale");
-			}
-		}
-		
 		/** @Private
 		 * Calculate the format of the axis values, in order to have 
 		 * the more rounded values possible.*/ 
@@ -399,8 +264,6 @@ trace(getTimer(), "drawing numeric scale");
 		{
 			super.resetValues();
 			min = max = totalPositiveValue = NaN;
-			maxLblSize = NaN;
-			invalidated = true;
 		} 
 	}
 }

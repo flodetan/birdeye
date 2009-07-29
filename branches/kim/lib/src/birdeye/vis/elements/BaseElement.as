@@ -37,12 +37,11 @@ package birdeye.vis.elements
 	import birdeye.vis.interfaces.IEnumerableScale;
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.interfaces.IScale;
-	import birdeye.vis.interfaces.IScaleUI;
+	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.scales.BaseScale;
 	import birdeye.vis.scales.MultiScale;
 	
 	import com.degrafa.GeometryGroup;
-	import com.degrafa.IGeometry;
 	import com.degrafa.IGraphic;
 	import com.degrafa.Surface;
 	import com.degrafa.core.IGraphicsFill;
@@ -252,9 +251,8 @@ package birdeye.vis.elements
 		private var _scale1:IScale;
 		public function set scale1(val:IScale):void
 		{
-			_scale1 = val;
-			if (_scale1.placement != BaseScale.BOTTOM && _scale1.placement != BaseScale.TOP)
-				_scale1.placement = BaseScale.BOTTOM;
+			_scale1 = val;				
+			_scale1.dimension = BaseScale.DIMENSION_1;
 
 			invalidateProperties();
 			invalidatingDisplay();
@@ -269,6 +267,7 @@ package birdeye.vis.elements
 		{
 			_scale2 = val;
 			
+			_scale2.dimension = BaseScale.DIMENSION_2;
 /* 			if POLAR
 			if (val is IScaleUI && IScaleUI(_scale2).placement != BaseScale.HORIZONTAL_CENTER 
 								&& IScaleUI(_scale2).placement != BaseScale.VERTICAL_CENTER)
@@ -290,8 +289,7 @@ package birdeye.vis.elements
 		public function set scale3(val:IScale):void
 		{
 			_scale3 = val;
-			if (_scale3.placement != BaseScale.DIAGONAL)
-				_scale3.placement = BaseScale.DIAGONAL;
+			_scale3.dimension = BaseScale.DIMENSION_3;
 
 			invalidateProperties();
 			invalidatingDisplay();
@@ -1057,23 +1055,23 @@ package birdeye.vis.elements
 					extGG.showToolTip();
 			}
 
-			if (scale2 && scale2 is IScaleUI && IScaleUI(scale2).pointer && chart.coordType == VisScene.CARTESIAN)
+			/*if (scale2 && scale2 is IAxis && IAxis(scale2).pointer && chart.coordType == VisScene.CARTESIAN)
 			{
-				IScaleUI(scale2).pointerY = extGG.posY;
-				IScaleUI(scale2).pointer.visible = true;
+				IAxis(scale2).pointerY = extGG.posY;
+				IAxis(scale2).pointer.visible = true;
 			} 
 
-			if (scale1 && scale1 is IScaleUI && IScaleUI(scale1).pointer && chart.coordType == VisScene.CARTESIAN)
+			if (scale1 && scale1 is IAxis && IAxis(scale1).pointer && chart.coordType == VisScene.CARTESIAN)
 			{
-				IScaleUI(scale1).pointerX = extGG.posX;
-				IScaleUI(scale1).pointer.visible = true;
+				IAxis(scale1).pointerX = extGG.posX;
+				IAxis(scale1).pointer.visible = true;
 			}
 			
-			if (scale3 && scale3 is IScaleUI && IScaleUI(scale3).pointer && chart.coordType == VisScene.CARTESIAN)
+			if (scale3 && scale3 is IAxis && IAxis(scale3).pointer && chart.coordType == VisScene.CARTESIAN)
 			{
-				IScaleUI(scale3).pointerY = extGG.posZ;
-				IScaleUI(scale3).pointer.visible = true;
-			}
+				IAxis(scale3).pointerY = extGG.posZ;
+				IAxis(scale3).pointer.visible = true;
+			}*/
 			
 			if (_mouseOverFunction != null)
 				_mouseOverFunction(extGG);
@@ -1096,14 +1094,14 @@ package birdeye.vis.elements
 				toolTip = null;
 			}
 
-			if (scale1 && scale1 is IScaleUI && IScaleUI(scale1).pointer)
-				IScaleUI(scale1).pointer.visible = false;
+			/*if (scale1 && scale1 is IAxis && IAxis(scale1).pointer)
+				IAxis(scale1).pointer.visible = false;
 
-			if (scale2 && scale2 is IScaleUI && IScaleUI(scale2).pointer)
-				IScaleUI(scale2).pointer.visible = false;
+			if (scale2 && scale2 is IAxis && IAxis(scale2).pointer)
+				IAxis(scale2).pointer.visible = false;
 
-			if (scale3 && scale3 is IScaleUI && IScaleUI(scale3).pointer)
-				IScaleUI(scale3).pointer.visible = false;
+			if (scale3 && scale3 is IAxis && IAxis(scale3).pointer)
+				IAxis(scale3).pointer.visible = false;*/
 
 			if (_mouseOutFunction != null)
 				_mouseOutFunction(extGG);

@@ -50,7 +50,6 @@ package birdeye.vis.scales
 		
 		public function Percent():void
 		{
-			showAxis = false;
 		}
 
 		override public function getPosition(dataValue:*):*

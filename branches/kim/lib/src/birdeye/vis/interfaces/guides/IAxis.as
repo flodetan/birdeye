@@ -25,34 +25,36 @@
  * THE SOFTWARE.
  */
 
-package birdeye.vis.interfaces
+package birdeye.vis.interfaces.guides
 {
+	import birdeye.vis.interfaces.guides.IGuide;
+	
 	import com.degrafa.geometry.Line;
 	
-	public interface IScaleUI extends IScale
+	public interface IAxis extends IGuide
 	{
 		/** Position the axis pointer on the specific Y coordinate value. */ 
-		function set pointerY(val:Number):void;
+		//function set pointerY(val:Number):void;
 
 		/** Position the axis pointer on the specific X coordinate value. */ 
-		function set pointerX(val:Number):void;
+		//function set pointerX(val:Number):void;
 		
 		/** Get the axis pointer. Can be used to change colors, stroke, visibility...*/
-		function get pointer():Line;
+		//function get pointer():Line;
+	
+		/** Set the axis placement.*/
+		function set placement(val:String):void
+		function get placement():String
 
-		/** If true, create and show the axis.*/
-		function set showAxis(val:Boolean):void;
 
-		/** Draw the scale.*/
-		function draw():void
-
+		function set size(val:Number):void
+		function get size():Number;
+		
+		function get maxLabelSize():Number;
+		
 		/** The axis must provide the removal all elements when refreshed, thus insuring
 		 * both display refresh and memory clearing.*/
 		function removeAllElements():void
-		
-		/**
-		 * The targets where the axis is drawn.
-		 */
-		function get targets():Array;
+
 	}
 }

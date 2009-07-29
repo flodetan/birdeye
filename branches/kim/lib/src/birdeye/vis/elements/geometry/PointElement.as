@@ -228,7 +228,7 @@ trace (getTimer(), "drawing point ele");
 			if (scale3)
 			{
 				scaleResults["pos3"] = scale3.getPosition(dim3);
-				scaleResults["pos3Relative"] = XYZ(scale3).height - scaleResults["pos3"];
+				scaleResults["pos3Relative"] = scale3.size - scaleResults["pos3"];
 			} 
 			
 			if (currentItem)
