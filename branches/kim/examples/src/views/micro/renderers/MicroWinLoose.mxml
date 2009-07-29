@@ -31,8 +31,8 @@
 	
 	<coords:Cartesian width="70%" height="100%" dataProvider="{data.dataProvider}" showDataTips="true" isMasked="false">
 		<coords:scales>
-			<scales:Category id="cat5" showAxis="false" placement="bottom" categoryField="subject"/>
- 			<scales:Numeric id="wl" f="valWL" placement="right" dataValues="[-1,1]" showAxis="false"/>
+			<scales:Category id="cat5" categoryField="subject"/>
+ 			<scales:Numeric id="wl" f="valWL"  dataValues="[-1,1]" />
  			<scales:Numeric id="col" f="colWL"/>
 		</coords:scales>
 		 <coords:elements>

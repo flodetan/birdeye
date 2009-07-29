@@ -7,8 +7,8 @@
 
 	<coords:Polar width="70%" height="100%" dataProvider="{data.dataProvider}" showDataTips="true" type="overlaid">
 		<coords:scales>
-			<scales:CategoryAngle id="c3" categoryField="subject" showAxis="false"/>
-			<scales:Linear id="l3" placement="horizontal_center" showAxis="false"/>
+			<scales:CategoryAngle id="c3" categoryField="subject" />
+			<scales:Linear id="l3" />
 		</coords:scales>
 		<coords:elements>
 			<elements:AreaElement scale1="{c3}" scale2="{l3}" extendMouseEvents="true" styleName="grad3" dim1="subject" dim2="R1"/>
