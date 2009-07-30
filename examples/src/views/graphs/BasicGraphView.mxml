@@ -11,7 +11,7 @@
 	
 	<mx:HBox horizontalAlign="center" width="100%">
 		<mx:Button label="Generate tree" click="generateTree()"/>
-		<mx:Button label="Generate graph" click="generateGraph()" id="generateGraphButton" enabled="false"/>
+		<mx:Button label="Generate graph" click="generateConnectedGraph()" id="generateGraphButton" enabled="true"/>
 		<mx:CheckBox id="animate" label="animate" selected="{graphLayout.animate}" />
 	</mx:HBox>
 	
@@ -52,6 +52,57 @@
 		import mx.collections.ArrayCollection;
 		
 		public function generateGraph():void {
+			const graph:Object = _generateGraph();
+			nodes = graph[nodes];
+			edges = graph[edges];
+		}
+
+		public function generateConnectedGraph():void {
+			const graph:Object = _generateGraph();
+
+			const _nodeSet:ArrayCollection = graph["nodes"];
+			const _edgeSet:ArrayCollection = graph["edges"];
+
+			const numNodes:int = _nodeSet.length;
+			const adjMatrix:Array = [];
+			
+			for (var i:int = 0; i < numNodes; i++) adjMatrix[i] = [];
+			
+			for each (var edge:Object in _edgeSet) {
+				adjMatrix[edge["start"] - 1][edge["end"] - 1] = true;
+			}
+			
+			const reachableNodes:Array = [];
+			traverse(0, adjMatrix, reachableNodes);
+			
+			const nodeSet:ArrayCollection = new ArrayCollection();
+			const edgeSet:ArrayCollection = new ArrayCollection();
+			
+			for (i = 0; i < numNodes; i++) {
+				if (reachableNodes[i]) nodeSet.addItem(_nodeSet[i]);
+			}
+			for (i = 0; i < _edgeSet.length; i++) {
+				if (reachableNodes[_edgeSet[i]["start"] - 1]) edgeSet.addItem(_edgeSet[i]);
+			}
+
+			nodes = nodeSet;
+			edges = edgeSet;
+		}
+
+		private function traverse(node:int, adjMatrix:Array, reachableNodes:Array):void {
+			reachableNodes[node] = true;
+			const numNodes:int = adjMatrix.length;
+			for (var i:int = 0; i < numNodes; i++) {
+				if (adjMatrix[node][i]  ||  adjMatrix[i][node]) {
+					if (!reachableNodes[i]) {
+						reachableNodes[i] = true;
+						traverse(i, adjMatrix, reachableNodes);
+					}
+				}
+			}
+		}
+
+		private function _generateGraph():Object {
 			const nodeSet:ArrayCollection = new ArrayCollection();
 			const numNodes:int = int(Math.random() * 10 + 10); 
 			for (var i:int = 0; i < numNodes; i++) {
@@ -79,16 +130,15 @@
 				edgesByStartEnd[key] = true;
 			}
 			
-			edges = edgeSet;
-			nodes = nodeSet;
+			return {nodes:nodeSet, edges:edgeSet};
 		}
+
+
 		
-		
-		
-		protected var maxLevel:int = 3;
-		protected var minChildren:int = 2;
-		protected var maxChildren:int = 3;
-		protected var maxId:int = 1000;
+		protected var tree_maxLevel:int = 3;
+		protected var tree_minChildren:int = 2;
+		protected var tree_maxChildren:int = 3;
+		protected var tree_maxId:int = 1000;
 	
 		public function generateTree():void {
 			lastId = 1;
@@ -100,18 +150,18 @@
 				id: lastId,
 				name: lastId + ". " + randomName() + " "
 			});
-			recurse(nodeSet, edgeSet, lastId, 1);
+			generateSubtree(nodeSet, edgeSet, lastId, 1);
 			
 			edges = edgeSet;
 			nodes = nodeSet;
 		}
 	
 		private var lastId:int;
-		private function recurse(nodeSet:ArrayCollection, edgeSet:ArrayCollection, parentId:int, level:int):void {
-			if (level > maxLevel) return;
-			if (lastId >= maxId) return;
+		private function generateSubtree(nodeSet:ArrayCollection, edgeSet:ArrayCollection, parentId:int, level:int):void {
+			if (level > tree_maxLevel) return;
+			if (lastId >= tree_maxId) return;
 	
-			const numNodes:int = Math.round(Math.random() * (maxChildren - minChildren)) + minChildren; 
+			const numNodes:int = Math.round(Math.random() * (tree_maxChildren - tree_minChildren)) + tree_minChildren; 
 			for (var i:int = 0; i < numNodes; i++) {
 				var id:int = ++lastId; 
 				nodeSet.addItem({
@@ -122,7 +172,7 @@
 					start: parentId,
 					end: id
 				});
-				recurse(nodeSet, edgeSet, id, level + 1);
+				generateSubtree(nodeSet, edgeSet, id, level + 1);
 			}
 		}
 	
