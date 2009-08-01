@@ -9,6 +9,7 @@ package birdeye.vis.guides.axis
 	
 	import com.degrafa.GeometryComposition;
 	import com.degrafa.geometry.Line;
+	import com.degrafa.geometry.Polyline;
 	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
@@ -194,6 +195,8 @@ package birdeye.vis.guides.axis
 				var categories:Array = _categoryScale.completeDataValues;
 				var nbrCategories:int = _categoryScale.completeDataValues.length;
 				
+				var web:Array = new Array();
+				
 				for (var i:int = 0; i<nbrCategories; i++)
 				{
 					var subSc:IScale = _subScalesArray[i % _subScalesArray.length]	
@@ -201,19 +204,25 @@ package birdeye.vis.guides.axis
 					var angle:int = _categoryScale.getPosition(categories[i]);
 					var endPosition:Point = PolarCoordinateTransform.getXY(angle,_size,_chart.origin);
 					
-	 				line = new Line(_chart.origin.x, _chart.origin.y, endPosition.x, endPosition.y);
-	 				trace("LINE", _chart.origin.x, _chart.origin.y, endPosition.x, endPosition.y);
+					var endLinePosition:Point = PolarCoordinateTransform.getXY(angle,_size-5,_chart.origin);
+	 				line = new Line(_chart.origin.x, _chart.origin.y, endLinePosition.x, endLinePosition.y);
 					line.stroke = new SolidStroke(0x000000, 1,1);
 					
 					this.geometryCollection.addItem(line);
-						
-					for each (var dataLabel:Object in subSc.completeDataValues)
+					// add 0,20,40,...,100
+					for (var j:int=0;j<(subSc.completeDataValues.length - 1);j++)
 					{
-						
+						var dataLabel:Object = subSc.completeDataValues[j];
 						var pos:Number = subSc.getPosition(dataLabel);
 		
 		 				var labelPosition:Point = PolarCoordinateTransform.getXY(angle,pos,_chart.origin);
 		 				
+		 				if (!web[j])
+		 				{
+		 					web[j] = "";
+		 				}
+		 				web[j] += String(labelPosition.x) + "," + String(labelPosition.y) + " ";
+
 						var label:RasterTextPlus = new RasterTextPlus();
 						if (dataLabel is Number)
 	 					{
@@ -237,7 +246,35 @@ package birdeye.vis.guides.axis
 						trace("LABEL", label.text, label.x, label.y);
 	
 						this.geometryCollection.addItem(label);
+						
 	 				} 
+	 				
+	 				// add axis' name					
+					var label:RasterTextPlus = new RasterTextPlus();
+					label.text = String(categories[i]);
+ 					label.fontFamily = fontLabel;
+ 					label.fontSize = sizeLabel;
+ 					label.visible = true;
+					label.autoSize = TextFieldAutoSize.LEFT;
+					label.autoSizeField = true;
+					label.fill = new SolidFill(colorLabel);
+
+					label.x = endPosition.x - label.displayObject.width/2;
+					label.y = endPosition.y - label.displayObject.height/2;
+					
+					this.geometryCollection.addItem(label);
+				}
+				
+				// draw lines between axes (the web)
+				var webStroke:SolidStroke = new SolidStroke(0x000000, .15);
+				for (i=0;i<web.length;i++)
+				{
+						var poly:Polyline = new Polyline();
+						poly.autoClose = true;
+						poly.data = web[i];
+						poly.stroke = webStroke;
+						poly.fill = new SolidFill(0x000000, 0);					
+						this.geometryCollection.addItem(poly);
 				}
 			//}
 			}
