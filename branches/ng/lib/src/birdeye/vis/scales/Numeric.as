@@ -88,7 +88,6 @@ package birdeye.vis.scales
 			formatMin();
 			invalidateSize();
 			invalidateProperties();
-			invalidateDisplayList();
 		}
 		public function get min():Number
 		{
@@ -110,7 +109,6 @@ package birdeye.vis.scales
 			formatMax();
 			invalidateSize();
 			invalidateProperties();
-			invalidateDisplayList();
 		}
 		public function get max():Number
 		{
@@ -124,7 +122,6 @@ package birdeye.vis.scales
 		{
 			_baseAtZero = val;
 			invalidateProperties()
-			invalidateDisplayList();
 		}
 		public function get baseAtZero():Boolean
 		{
@@ -169,16 +166,6 @@ package birdeye.vis.scales
 					isGivenInterval = false;
 				}
 			}
-			
-			// if the placement is set, and max, min and interval calculated
-			// than the axis is ready to be drawn
-			if (placement && !isNaN(max) && !isNaN(min) && !isNaN(dataInterval))
-			{
-				if (showAxis)
-					readyForLayout = true;
-			}
-			else 
-				readyForLayout = false;
 		}
 		
 		override protected function measure():void
@@ -377,6 +364,17 @@ trace(getTimer(), "drawing numeric scale");
 					maxFormatted = true;
 				} 
 			}
+		}
+		
+		override protected function isReadyForLayout():Boolean
+		{
+			var globalCheck:Boolean = super.isReadyForLayout();
+			
+			// if the placement is set, and max, min and interval calculated
+			// than the axis is ready to be drawn
+			
+			globalCheck = globalCheck && !isNaN(max) && !isNaN(min) && showAxis;
+			return globalCheck;
 		}
 
 		/** @Private
