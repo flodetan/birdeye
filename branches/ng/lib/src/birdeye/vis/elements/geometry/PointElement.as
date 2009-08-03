@@ -91,7 +91,7 @@ trace (getTimer(), "drawing point ele");
 				
 				ggIndex = 0;
 				
-				if (scale1 is IEnumerableScale && scale2 is IEnumerableScale)
+				if (itemRenderer is FacetContainer) 
 				{
 					// ok two categories, we need to loop categories
 					// to avoid the issue where there are more subdata
@@ -158,9 +158,9 @@ trace (getTimer(), "drawing point ele");
 							gg.target = this;
 							ggIndex++;
 							
-							var currentItem:Object = _dataItems[cursorIndex];
+							currentItem = _dataItems[cursorIndex];
 							
-							var scaleResults:Object = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
+							scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
 																	currentItem[colorField], currentItem[sizeField], currentItem);
 		
 							// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
@@ -200,7 +200,7 @@ trace (getTimer(), "drawing point ele");
 				if (dim3)
 					zSort();
 	
-					_invalidatedElementGraphic = false;
+				_invalidatedElementGraphic = false;
 trace (getTimer(), "drawing point ele");
 	
 			}
