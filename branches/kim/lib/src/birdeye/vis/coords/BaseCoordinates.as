@@ -17,6 +17,7 @@ package birdeye.vis.coords
 	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
+	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
 	
 	public class BaseCoordinates extends VisScene implements ICoordinates
@@ -537,7 +538,7 @@ trace(getTimer(), "END feeding scales");
 		
 		protected function updateAndDrawGuide(guide:IGuide, unscaledWidth:Number, unscaledHeight:Number):void
 		{
-			guide.drawGuide();	
+			guide.drawGuide(new Rectangle(0,0, unscaledWidth, unscaledHeight));	
 		}
 		
 		protected function setMask():void

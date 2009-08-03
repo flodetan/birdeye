@@ -307,6 +307,9 @@ package birdeye.vis.coords
 			}
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		override protected function updateAndDrawGuide(guide:IGuide, unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			if (guide is IAxis)
@@ -316,16 +319,28 @@ package birdeye.vis.coords
 				switch (axis.placement)
 				{
 					case Axis.BOTTOM:
+						axis.size = chartBounds.width;
+						axis.drawGuide(new Rectangle(0,0, bottomContainer.width, bottomContainer.height));
+						break;
 					case Axis.TOP:
 						axis.size = chartBounds.width;
+						axis.drawGuide(new Rectangle(0,0, topContainer.width, topContainer.height));
 						break;
 					case Axis.LEFT:
+						axis.size = chartBounds.height;
+						axis.drawGuide(new Rectangle(0,0, leftContainer.width, leftContainer.height));
+						break;
 					case Axis.RIGHT:
 						axis.size = chartBounds.height;
+						axis.drawGuide(new Rectangle(0,0, rightContainer.width, rightContainer.height));
 				}
+							
+			}
+			else
+			{
+				guide.drawGuide(chartBounds);
 			}
 			
-			super.updateAndDrawGuide(guide, unscaledWidth, unscaledHeight);
 		}
 		
 		/** @Private

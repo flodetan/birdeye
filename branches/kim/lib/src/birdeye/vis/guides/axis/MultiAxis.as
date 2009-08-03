@@ -1,6 +1,5 @@
 package birdeye.vis.guides.axis
 {
-	import birdeye.vis.coords.Polar;
 	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.interfaces.guides.IAxis;
@@ -16,6 +15,7 @@ package birdeye.vis.guides.axis
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
 	
 	import mx.styles.CSSStyleDeclaration;
@@ -178,7 +178,7 @@ package birdeye.vis.guides.axis
 		/**
 		 * @see birdeye.vis.interfaces.guides.IGuide#drawGuide
 		 */
-		public function drawGuide():void
+		public function drawGuide(bounds:Rectangle):void
 		{
 			//if (invalidated)
 			//{

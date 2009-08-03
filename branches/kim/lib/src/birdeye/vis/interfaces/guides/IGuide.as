@@ -7,11 +7,13 @@ package birdeye.vis.interfaces.guides
 	public interface IGuide
 	{
 		
-		/** Draw the guide.*/
-		function drawGuide():void
+		/** Draw the guide within the given bounds.
+		 * @param bounds the bounds wherein the guide can draw itself.
+		 */
+		function drawGuide(bounds:Rectangle):void
 						
 		/**
-		 * The targets where the guide is drawn.
+		 * The targets where the guide draws itself to.
 		 */
 		function get targets():Array; 
 		

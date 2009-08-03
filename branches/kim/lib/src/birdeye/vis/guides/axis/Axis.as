@@ -15,6 +15,7 @@ package birdeye.vis.guides.axis
 	import com.degrafa.paint.SolidStroke;
 	import com.degrafa.transform.RotateTransform;
 	
+	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
 	import flash.utils.getTimer;
 	
@@ -585,7 +586,7 @@ package birdeye.vis.guides.axis
 		
 		private var prevWidth:Number = NaN, prevHeight:Number = NaN;
 		private var xMin:Number = NaN, xMax:Number = NaN, yMin:Number = NaN, yMax:Number = NaN, sign:Number;
-		public function drawGuide():void
+		public function drawGuide(bounds:Rectangle):void
 		{
 			var w:Number = unscaledWidth, h:Number = unscaledHeight;
 			if (prevWidth != w || prevHeight != h)
