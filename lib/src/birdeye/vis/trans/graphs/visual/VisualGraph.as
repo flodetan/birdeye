@@ -543,7 +543,11 @@ package birdeye.vis.trans.graphs.visual
 
 
 		public function isNodeVisible(nodeId:String):Boolean {
-			return _visualIdsToNodes[nodeId].visible;
+			const vnode:VisualNode = _visualIdsToNodes[nodeId];
+			if (!vnode) {
+				return false;
+			}
+			return vnode.visible;
 		}
 
 		public function getNodePosition(nodeId:String):Position {

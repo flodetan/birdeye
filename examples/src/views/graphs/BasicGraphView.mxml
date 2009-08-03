@@ -53,8 +53,8 @@
 		
 		public function generateGraph():void {
 			const graph:Object = _generateGraph();
-			nodes = graph[nodes];
-			edges = graph[edges];
+			nodes = graph["nodes"];
+			edges = graph["edges"];
 		}
 
 		public function generateConnectedGraph():void {
@@ -68,8 +68,18 @@
 			
 			for (var i:int = 0; i < numNodes; i++) adjMatrix[i] = [];
 			
+			var zeroEdgesCnt:int = 0;
 			for each (var edge:Object in _edgeSet) {
-				adjMatrix[edge["start"] - 1][edge["end"] - 1] = true;
+				const start:int = edge["start"] - 1;
+				const end:int = edge["end"] - 1;
+				if (start == 0 || end == 0) zeroEdgesCnt++;
+				adjMatrix[start][end] = true;
+			}
+			if (zeroEdgesCnt == 0) {
+				// workaround to avoid an exception in ParentCentered
+				// TODO: fix the problem in ParentCentered
+				_edgeSet.addItem({start: 1,	end: 2});
+				adjMatrix[0][1] = true;
 			}
 			
 			const reachableNodes:Array = [];
@@ -85,8 +95,13 @@
 				if (reachableNodes[_edgeSet[i]["start"] - 1]) edgeSet.addItem(_edgeSet[i]);
 			}
 
-			nodes = nodeSet;
+			trace("{");
+			for each (var n in nodeSet) trace("node: " + n.id);
+			for each (var e in edgeSet) trace("edge: " + e.start + "->" + e.end);
+			trace("}");
+
 			edges = edgeSet;
+			nodes = nodeSet;
 		}
 
 		private function traverse(node:int, adjMatrix:Array, reachableNodes:Array):void {
@@ -95,16 +110,20 @@
 			for (var i:int = 0; i < numNodes; i++) {
 				if (adjMatrix[node][i]  ||  adjMatrix[i][node]) {
 					if (!reachableNodes[i]) {
-						reachableNodes[i] = true;
 						traverse(i, adjMatrix, reachableNodes);
 					}
 				}
 			}
 		}
 
+		private var graph_minNodes:int = 15;
+		private var graph_maxNodes:int = 30;
+		private var graph_minEdges:int = 20;
+		private var graph_maxEdges:int = 40;
+
 		private function _generateGraph():Object {
 			const nodeSet:ArrayCollection = new ArrayCollection();
-			const numNodes:int = int(Math.random() * 10 + 10); 
+			const numNodes:int = int(Math.random() * (graph_maxNodes - graph_minNodes) + graph_minNodes); 
 			for (var i:int = 0; i < numNodes; i++) {
 				nodeSet.addItem({
 					id: i + 1,
@@ -113,7 +132,7 @@
 			}
 	
 			const edgeSet:ArrayCollection = new ArrayCollection();
-			const numEdges:int = int(Math.random() * 40 + 10);
+			const numEdges:int = int(Math.random() * (graph_maxEdges - graph_minEdges) + graph_minEdges);
 			const edgesByStartEnd:Object = {};
 			for (i = 0; i < numEdges; i++) {
 				var start:int, end:int;
@@ -135,10 +154,10 @@
 
 
 		
-		protected var tree_maxLevel:int = 3;
-		protected var tree_minChildren:int = 2;
-		protected var tree_maxChildren:int = 3;
-		protected var tree_maxId:int = 1000;
+		private var tree_maxLevel:int = 3;
+		private var tree_minChildren:int = 2;
+		private var tree_maxChildren:int = 3;
+		private var tree_maxId:int = 1000;
 	
 		public function generateTree():void {
 			lastId = 1;
