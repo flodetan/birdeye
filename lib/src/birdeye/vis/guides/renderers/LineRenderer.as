@@ -58,7 +58,7 @@ package birdeye.vis.guides.renderers
 			return x;
 		}
 		
-		public function set endX(value:Number) {
+		public function set endX(value:Number):void {
 			x1 = value;
 		}
 
@@ -74,7 +74,7 @@ package birdeye.vis.guides.renderers
 			return y;
 		}
 		
-		public function set endY(value:Number) {
+		public function set endY(value:Number):void {
 			y1 = value;
 		}
 
