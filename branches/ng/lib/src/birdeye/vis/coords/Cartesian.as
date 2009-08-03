@@ -544,27 +544,25 @@ package birdeye.vis.coords
 			if (invalidatedData)
 			{
 				validateBounds();
-	
-				leftContainer.y = rightContainer.y = topContainer.height;
-				bottomContainer.x = topContainer.x = leftContainer.width;
-				leftContainer.x = 0;
-				topContainer.y = 0; 
-				bottomContainer.y = h - bottomContainer.height;
-				rightContainer.x = w - rightContainer.width;
+				
+				leftContainer.move(0, topContainer.height);
+				rightContainer.move(w - rightContainer.width, topContainer.height);
+
+				bottomContainer.move(leftContainer.width, h - bottomContainer.height);
+				topContainer.move(leftContainer.width, 0);
 	
 				chartBounds = new Rectangle(leftContainer.x + leftContainer.width, 
 											topContainer.y + topContainer.height,
 											w - (leftContainer.width + rightContainer.width),
 											h - (topContainer.height + bottomContainer.height));
 											
-				topContainer.width = bottomContainer.width 
-					= chartBounds.width;
-				leftContainer.height = rightContainer.height 
-					= chartBounds.height;
+				bottomContainer.setActualSize(chartBounds.width, bottomContainer.height);
+				topContainer.setActualSize(chartBounds.width, topContainer.height);
+				leftContainer.setActualSize(leftContainer.width, chartBounds.height);
+				rightContainer.setActualSize(rightContainer.width, chartBounds.height);
 				
 				// the z container is placed at the right of the chart
-	  			zContainer.x = int(chartBounds.width + leftContainer.width);
-				zContainer.y = int(chartBounds.height);
+	  			zContainer.move(int(chartBounds.width + leftContainer.width), int(chartBounds.height));
 	
 				if (showGrid)
 					drawGrid();
@@ -575,10 +573,8 @@ package birdeye.vis.coords
 					_elementsContainer.width != chartBounds.width ||
 					_elementsContainer.height != chartBounds.height))
 				{
-					_elementsContainer.x = chartBounds.x;
-					_elementsContainer.y = chartBounds.y;
-	  				_elementsContainer.width = chartBounds.width;
-					_elementsContainer.height = chartBounds.height;
+					_elementsContainer.move(chartBounds.x, chartBounds.y);
+	  				_elementsContainer.setActualSize(chartBounds.width, chartBounds.height);
 	 	
 					if (_is3D)
 						rotationY = 42;
@@ -694,7 +690,7 @@ package birdeye.vis.coords
 			}
 			
 			leftContainer.width = leftSize;
-			rightContainer.height = rightSize;
+			rightContainer.width = rightSize;
 			bottomContainer.height = bottomSize;
 			topContainer.height = topSize;
 		}
