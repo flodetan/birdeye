@@ -51,7 +51,7 @@
 		<coords:scales>
 	 		<scales:Category id="c" categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 		 	<scales:Linear id="l" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
-			<scales:Linear id="size" scaleValues="[5,30]"/>
+			<scales:Linear id="size" scaleValues="[5,30]" showAxis="false"/>
 		</coords:scales>
 		 <coords:elements>
 		 	<elements:PointElement scale1="{c}" scale2="{l}" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" styleName="grad1" dim2="R1" displayName="R1"/>

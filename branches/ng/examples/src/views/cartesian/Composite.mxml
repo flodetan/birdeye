@@ -50,18 +50,13 @@
 		<coords:scales>
  			<scales:Category id="c" categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
  			<scales:Linear id="l" placement="right" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+ 			<scales:Linear id="l2" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
+ 			<scales:Category id="c2" categoryField="subject" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 		</coords:scales>
 		 <coords:elements>
+		 	<elements:BarElement extendMouseEvents="true" scale2="{c2}" scale1="{l2}" dim2="subject" dim1="R2" styleName="grad1" displayName="R2"/>
 		 	<elements:LineElement scale1="{c}" scale2="{l}" showAllDataItems="true" dim2="R3" dim1="subject" styleName="solid1" displayName="R3">
 		 	</elements:LineElement>
-		 	<elements:BarElement extendMouseEvents="true" dim2="subject" dim1="R2" styleName="grad1" displayName="R2">
-		 		<elements:scale1>
-		 			<scales:Linear placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
-		 		</elements:scale1>
-		 		<elements:scale2>
-		 			<scales:Category categoryField="subject" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
-		 		</elements:scale2>
-		 	</elements:BarElement>
 		 	<elements:AreaElement scale1="{c}" scale2="{l}" dim2="R3" dim1="subject" styleName="grad3" displayName="R3"/>
 		 </coords:elements>
 	</coords:Cartesian>
