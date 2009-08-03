@@ -132,8 +132,6 @@
 			_edgeRenderers = new Dictionary();
 		}
 
-		private const ZERO_POSITION:Position = new Position(0, 0);
-
 		override public function drawElement():void {
 			super.drawElement();
 			
@@ -158,7 +156,7 @@
 							// the edge renderers are passed in the start/end coordinates
 							// and position and draw the edges accordingly.   
 							createItemDisplayObject(
-								ZERO_POSITION, itemId,
+								Position.ZERO, itemId,
 								[ createItemRenderer(itemId, start.pos1, start.pos2, end.pos1, end.pos2)
 //								  TextRenderer.createTextLabel(
 //								  (start.pos1 + end.pos1)/2, (start.pos2 + end.pos2)/2,

@@ -25,8 +25,6 @@
 
 package birdeye.vis.trans.graphs.visual
 {
-	import __AS3__.vec.Vector;
-	
 	import birdeye.events.VGraphEvent;
 	import birdeye.vis.trans.graphs.model.INode;
 	
