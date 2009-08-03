@@ -31,11 +31,8 @@ package birdeye.vis.data
 	import com.degrafa.IGeometry;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
-	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Geometry;
 	import com.degrafa.geometry.Line;
-	import com.degrafa.paint.SolidFill;
-	import com.degrafa.paint.SolidStroke;
 	
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
@@ -60,6 +57,17 @@ package birdeye.vis.data
 		private var _showDataTips:Boolean = false;
 		private var _dataTipFunction:Function;
 		private var _dataTipPrefix:String;
+		
+		private var _hitMouseArea:IGeometry;
+		public function set hitMouseArea(val:IGeometry):void
+		{
+			_hitMouseArea = val;
+			geometryCollection.addItem(_hitMouseArea);
+		}
+		public function get hitMouseArea():IGeometry
+		{
+			return _hitMouseArea;
+		}
 		
 		/**
 		* Indicate the prefix for the tooltip. 
@@ -99,7 +107,7 @@ package birdeye.vis.data
 			return _xTTOffset;
 		}
 
-		private var _yTTOffset:Number = 25;
+		private var _yTTOffset:Number = 40;
 		/** Set the y offset from the tooltip to the hit area position.*/
 		public function get yTTOffset():Number
 		{
@@ -118,6 +126,9 @@ package birdeye.vis.data
 		{
 			return _currentItem;
 		}
+		
+		// allows to define custom shapes for the tooltip geometry
+		public var shapes:Array;
 
 		private var _dataFields:Array;
 		/**
@@ -137,8 +148,6 @@ package birdeye.vis.data
 			super();
 		}
 		
-		// allows to define custom shapes for the tooltip geometry
-		private var shapes:Array = [];		
 		/**
 		* Create and position the tooltips for this ExtendedGeometryGroup. 
 		*/
@@ -154,22 +163,10 @@ package birdeye.vis.data
 			this.currentItem = item;
 			this.dataFields = dataFields;
 			
+			this.shapes = ttShapes;
+			
 			if (isTooltip)
 			{
-				if (showGeometry)
-				{
-								// if no custom shapes than create the default one
-					if (! ttShapes)
-					{
-						shapes[0] = new Circle(posX,posY,4);
-						shapes[0].fill = new SolidFill(0xffffff);
-						shapes[0].stroke = (toolTipStroke) ? toolTipStroke : new SolidStroke(0x999999,1);
-						shapes[1] = new Circle(posX,posY,2);
-						shapes[1].fill = (toolTipFill) ? toolTipFill : new SolidFill(0xffffff,1);
-					} else 
-						shapes = ttShapes;
-				}
-				
 				// if tip function is set, use it, otherwise use a default one
 				if (_dataTipFunction != null)
 					toolTip = ((_dataTipPrefix) ? _dataTipPrefix : "") 
@@ -178,7 +175,7 @@ package birdeye.vis.data
 				{
 					if (_dataTipPrefix) 
 						toolTip = _dataTipPrefix;
-					for (i = 0; i<dataFields.length; i++)
+					for (var i:uint = 0; i<dataFields.length; i++)
 						if (dataFields[i])
 						{
 							if (! _dataTipPrefix)
@@ -190,14 +187,6 @@ package birdeye.vis.data
 							} else 
 								toolTip += "\n" + ((dataFields[i]) ? item[dataFields[i]] : Number(item)); 
 						}
-				}
-				
-				if (showGeometry)
-				{
-					// hide tip geometry, they will show up only when mouse is over the hit area
-					for (var i:Number = 0; i<shapes.length; i++)
-						geometryCollection.addItem(IGeometry(shapes[i]));
-					hideToolTipGeometry();
 				}
 			}
 		} 
@@ -215,6 +204,8 @@ package birdeye.vis.data
 			for (i = numChildren - 1; i >= 0; i--) {
 				removeChildAt(i);
 			}
+
+			geometry = geometryCollection.items = [];
 		}
 
 		/**
@@ -244,9 +235,6 @@ package birdeye.vis.data
 			var pos:Point = localToGlobal(new Point(posX, posY));
 			tip = ToolTipManager.createToolTip(toolTip, 
 												pos.x + xTTOffset,	pos.y + yTTOffset) as ToolTip;
-
-			tip.alpha = 0.8;
-			showToolTipGeometry();
 		}
 		
 		/**

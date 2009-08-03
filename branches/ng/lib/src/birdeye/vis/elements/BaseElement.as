@@ -48,6 +48,7 @@ package birdeye.vis.elements
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
 	import com.degrafa.geometry.Circle;
+	import com.degrafa.geometry.Geometry;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.GradientStop;
 	import com.degrafa.paint.LinearGradientFill;
@@ -56,6 +57,7 @@ package birdeye.vis.elements
 	
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
+	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	import flash.utils.describeType;
 	import flash.xml.XMLNode;
@@ -113,7 +115,7 @@ package birdeye.vis.elements
 		public function set filter1(val:*):void
 		{
 			_filter1 = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 
 		private var _filter2:*;
@@ -122,7 +124,7 @@ package birdeye.vis.elements
 		public function set filter2(val:*):void
 		{
 			_filter2 = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 
 		public static const HORIZONTAL:String = "horizontal";
@@ -135,7 +137,7 @@ package birdeye.vis.elements
 		{
 			_collisionScale = val;
 			invalidateProperties();
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get collisionScale():String
 		{
@@ -146,7 +148,7 @@ package birdeye.vis.elements
 		public function set showFieldName(val:Boolean):void
 		{
 			_showFieldName = val;
-			invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get showFieldName():Boolean
 		{
@@ -181,6 +183,14 @@ package birdeye.vis.elements
 		public function set showAllDataItems(val:Boolean):void
 		{
 			_showAllDataItems = val;
+			invalidatingDisplay();
+		}
+
+		protected var _showTipGeometry:Boolean = true;
+		[Inspectable(enumeration="true,false")]
+		public function set showTipGeometry(val:Boolean):void
+		{
+			_showTipGeometry = val;
 			invalidatingDisplay();
 		}
 
@@ -877,10 +887,10 @@ package birdeye.vis.elements
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void 
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-
+ 
 			if (_invalidatedElementGraphic)
 				drawElement();
-		}
+ 		}
 
 		// other methods
 
@@ -1028,9 +1038,7 @@ package birdeye.vis.elements
 				(fill || stroke || colorScale);
 
 			var globalCheck:Boolean = 
-/* 				   (!isNaN(_minDim1Value) || !isNaN(_minDim2Value))
-				&& (!isNaN(_maxDim1Value) || !isNaN(_maxDim2Value))
-				&&  */width>0 && height>0
+				width>0 && height>0
 				&& chart
 				&& dataItems;
 			
@@ -1053,8 +1061,10 @@ package birdeye.vis.elements
 				{
 					myTT = chart.customTooltTipFunction(extGG);
 		 			toolTip = myTT.text;
-				} else 
+				} else {
 					extGG.showToolTip();
+					showGeometryTip(extGG);
+				}
 			}
 
 			if (scale2 && scale2 is IScaleUI && IScaleUI(scale2).pointer && chart.coordType == VisScene.CARTESIAN)
@@ -1090,8 +1100,8 @@ package birdeye.vis.elements
 			if (chart.showDataTips)
 			{
 				extGG.hideToolTip();
-				if (!_showAllDataItems)
-					extGG.hideToolTipGeometry();
+				hideGeometryTip(extGG);
+				
 				myTT = null;
 				toolTip = null;
 			}
@@ -1107,6 +1117,30 @@ package birdeye.vis.elements
 
 			if (_mouseOutFunction != null)
 				_mouseOutFunction(extGG);
+		}
+		
+		
+		/**
+		* Show the tooltip shape associated to this DataItemLayout. 
+		*/
+		private function showGeometryTip(extGG:DataItemLayout):void
+		{
+			if (_showTipGeometry && !_showAllDataItems)
+			{
+				Geometry(extGG.hitMouseArea).alpha = 1;
+
+			}		
+		}
+		
+		/**
+		* Hide the tooltip shape associated to this DataItemLayout. 
+		*/
+		private function hideGeometryTip(extGG:DataItemLayout):void
+		{
+			if (_showTipGeometry && !_showAllDataItems)
+			{
+				Geometry(extGG.hitMouseArea).alpha = 0;
+			}
 		}
 
 		/** @Private
@@ -1128,10 +1162,21 @@ package birdeye.vis.elements
 				addChild(sortLayers[i][1]);
 		}
 
-		protected function createMouseHitArea(xPos:Number, yPos:Number, size:Number):Circle {
-			var geom:Circle = new Circle(xPos, yPos, size); 
-			geom.fill = new SolidFill(0x000000, 0);
-			return geom;
+		public var hitAreaFunction:Function;
+		protected function createMouseHitArea(xPos:Number, yPos:Number, size:Number):IGeometry 
+		{
+			if (hitAreaFunction != null)
+				return hitAreaFunction(xPos, yPos, size);
+			else {
+				var geom:Circle = new Circle(xPos, yPos, size); 
+				geom.fill = fill;
+				geom.stroke = stroke;
+				
+				if (!_showAllDataItems)
+					geom.alpha = 0;
+
+				return geom;
+			}
 		}
 		
 		protected var ggIndex:Number;
@@ -1153,8 +1198,8 @@ package birdeye.vis.elements
 			ttGG.target = chart.elementsContainer;
 			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
-
-			ttGG.geometryCollection.addItem(createMouseHitArea(xPos, yPos, _hitAreaSize));
+			
+			ttGG.hitMouseArea = createMouseHitArea(xPos, yPos, _hitAreaSize);
 			
  			if (chart.showDataTips || chart.showAllDataTips)
 			{ 
@@ -1173,9 +1218,7 @@ package birdeye.vis.elements
 			if (chart.showAllDataTips)
 			{
 				ttGG.showToolTip();
-				ttGG.showToolTipGeometry();
-			} else if (_showAllDataItems)
-				ttGG.showToolTipGeometry();
+			} 
 
 			if (mouseClickFunction != null)
 				ttGG.addEventListener(MouseEvent.CLICK, onMouseClick);
