@@ -36,6 +36,7 @@ package birdeye.vis.coords
 	import birdeye.vis.interfaces.guides.IGuide;
 	import birdeye.vis.scales.*;
 	
+	import flash.display.DisplayObject;
 	import flash.geom.Point;
 	
 	/** 
@@ -88,6 +89,32 @@ package birdeye.vis.coords
 			_origin = new Point(unscaledWidth/2, unscaledHeight/2);	
 			
 			super.updateDisplayList(unscaledWidth, unscaledHeight);			
+		}
+		
+		override protected function placeGuide(guide:IGuide):void
+		{
+			if (guide is DisplayObject)
+			{
+			
+				if (!elementsContainer.contains(DisplayObject(guide)))
+				{
+					if (!DisplayObject(guide).parent)
+					{
+						elementsContainer.addChild(DisplayObject(guide));
+					}
+					else if (guide.targets.lastIndexOf(elementsContainer) == -1)
+					{
+						guide.targets.push(elementsContainer);
+					}
+				}
+			}
+			else
+			{
+				if (guide.targets.lastIndexOf(elementsContainer) == -1)
+				{
+					guide.targets.push(elementsContainer);
+				}
+			}	
 		}
 
 
