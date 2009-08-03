@@ -14,6 +14,5 @@
 		<polar:Sunburst label="Sunburst" width="100%" height="100%" />
 		<polar:Coxcomb label="Coxcomb" width="100%" height="100%" />
 		<polar:Custom label="Custom" width="100%" height="100%" />
-	
 	</mx:TabNavigator>
 </mx:VBox>
