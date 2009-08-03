@@ -96,18 +96,15 @@ package birdeye.vis.scales
 				case HORIZONTAL_CENTER:
 				case BOTTOM:
 				case TOP:
-					width = _size;
+					setActualSize(_size, unscaledHeight);
 					break;
 				case VERTICAL_CENTER:
 				case RIGHT:
 				case LEFT:
 				case DIAGONAL:
-					height = _size;
+					setActualSize(unscaledWidth, _size);
 					break;
 			}
-
-			invalidateDisplayList();
-
 		}
 		/** @Private
 		 * Get the size of the axis ,i.e. either its width or height depending on the placement selected.
@@ -124,7 +121,6 @@ package birdeye.vis.scales
 		public function set rotateLabels(val:Number):void
 		{
 			_rotateLabels = val;
-			invalidateDisplayList();
 		}
 
 		protected var _rotateLabelsOn:String = "center";
@@ -133,7 +129,6 @@ package birdeye.vis.scales
 		protected function set rotateLabelsOn(val:String):void
 		{
 			_rotateLabelsOn = val;
-			invalidateDisplayList();
 		}
 		
 		protected var _scaleValues:Array; /* of numerals  for numeric scales and strings for category scales*/
@@ -157,7 +152,6 @@ package birdeye.vis.scales
 		public function set alphaFill(val:Number):void
 		{
 			_alphaFill = val;
-			invalidateDisplayList();
 		}
 		public function get alphaFill():Number
 		{
@@ -169,7 +163,6 @@ package birdeye.vis.scales
 		public function set alphaStroke(val:Number):void
 		{
 			_alphaStroke = val;
-			invalidateDisplayList();
 		}
 		public function get alphaStroke():Number
 		{
@@ -181,7 +174,6 @@ package birdeye.vis.scales
 		public function set colorFill(val:Number):void
 		{
 			_colorFill = val;
-			invalidateDisplayList();
 		}
 		public function get colorFill():Number
 		{
@@ -193,7 +185,6 @@ package birdeye.vis.scales
 		public function set colorStroke(val:Number):void
 		{
 			_colorStroke = val;
-			invalidateDisplayList();
 		}
 		public function get colorStroke():Number
 		{
@@ -205,7 +196,6 @@ package birdeye.vis.scales
 		public function set weightStroke(val:Number):void
 		{
 			_weightStroke = val;
-			invalidateDisplayList();
 		}
 		public function get weightStroke():Number
 		{
@@ -217,7 +207,6 @@ package birdeye.vis.scales
 		public function set colorGradients(val:Array):void
 		{
 			_colorGradients = val;
-			invalidateDisplayList();
 		}
 		public function get colorGradients():Array
 		{
@@ -229,7 +218,6 @@ package birdeye.vis.scales
 		public function set alphaGradients(val:Array):void
 		{
 			_alphaGradients = val;
-			invalidateDisplayList();
 		}
 		public function get alphaGradients():Array
 		{
@@ -241,7 +229,6 @@ package birdeye.vis.scales
 		public function set fontLabel(val:String):void
 		{
 			_fontLabel = val;
-			invalidateDisplayList();
 		}
 		public function get fontLabel():String
 		{
@@ -253,7 +240,6 @@ package birdeye.vis.scales
 		public function set sizeLabel(val:Number):void
 		{
 			_sizeLabel = val;
-			invalidateDisplayList();
 		}
 		public function get sizeLabel():Number
 		{
@@ -265,7 +251,6 @@ package birdeye.vis.scales
 		public function set colorLabel(val:Number):void
 		{
 			_colorLabel = val;
-			invalidateDisplayList();
 		}
 		public function get colorLabel():Number
 		{
@@ -277,7 +262,6 @@ package birdeye.vis.scales
 		public function set colorPointer(val:uint):void
 		{
 			_colorPointer = val;
-			invalidateDisplayList();
 		}
 		public function get colorPointer():uint
 		{
@@ -289,7 +273,6 @@ package birdeye.vis.scales
 		public function set sizePointer(val:Number):void
 		{
 			_sizePointer = val;
-			invalidateDisplayList();
 		}
 		public function get sizePointer():Number
 		{
@@ -301,7 +284,6 @@ package birdeye.vis.scales
 		public function set weightPointer(val:Number):void
 		{
 			_weightPointer = val;
-			invalidateDisplayList();
 		}
 		public function get weightPointer():Number
 		{
@@ -316,7 +298,6 @@ package birdeye.vis.scales
 		{
 			_function = val;
 			invalidateProperties();
-			invalidateDisplayList();
 		}
 		
 		/** Position the pointer to the specified x position. Used by a cartesian series
@@ -353,7 +334,6 @@ package birdeye.vis.scales
 			_scaleType = val;
 			invalidateProperties()
 			invalidateSize();
-			invalidateDisplayList();
 		}
 		public function get scaleType():String
 		{
@@ -367,7 +347,6 @@ package birdeye.vis.scales
 			_dataInterval = val;
 
 			invalidateProperties();
-			invalidateDisplayList();
 		}
 		public function get dataInterval():Number
 		{
@@ -381,7 +360,6 @@ package birdeye.vis.scales
 			_scaleInterval = val;
 
 			invalidateProperties();
-			invalidateDisplayList();
 		}
 		public function get scaleInterval():Number
 		{
@@ -394,7 +372,6 @@ package birdeye.vis.scales
 		public function set showAxis(val:Boolean):void
 		{
 			_showAxis = val;
-			invalidateDisplayList();
 		}
 		public function get showAxis():Boolean
 		{
@@ -451,7 +428,6 @@ package birdeye.vis.scales
 			_placement = val;
 			invalidateProperties()
 			invalidateSize();
-			invalidateDisplayList();
 		}
 		public function get placement():String
 		{
@@ -625,6 +601,17 @@ package birdeye.vis.scales
 					_size = height;
 					break;
 			}
+		}
+		
+		protected function isReadyForLayout():Boolean
+		{
+			var check:Boolean = false;
+			// if placement is set, elements are loaded and interval calculated
+			// than the axis is ready to be drawn
+			if (placement && dataInterval && !isNaN(size))
+				check = true;
+			
+			return check;
 		}
 		
 		public function resetValues():void
