@@ -19,10 +19,10 @@ package birdeye.vis.coords
 	import flash.events.Event;
 	import flash.utils.getTimer;
 	
-	public class BaseCoordsScene extends VisScene implements ICoordinates
+	public class BaseCoordinates extends VisScene implements ICoordinates
 	{
 		
-		public function BaseCoordsScene()
+		public function BaseCoordinates()
 		{
 		}
 		

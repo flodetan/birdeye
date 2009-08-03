@@ -67,7 +67,7 @@ package birdeye.vis.coords
 	 * and LineChart are not 3D yet. 
 	 * */ 
 	[Exclude(name="elementsContainer", kind="property")]
-	public class Cartesian extends BaseCoordsScene implements ICoordinates
+	public class Cartesian extends BaseCoordinates implements ICoordinates
 	{
 
 		private var _is3D:Boolean = false;

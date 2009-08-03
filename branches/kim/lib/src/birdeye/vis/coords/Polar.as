@@ -55,7 +55,7 @@ package birdeye.vis.coords
 	 * multiple dataProvider(s).
 	 * */ 
 	[DefaultProperty("dataProvider")]
-	public class Polar extends BaseCoordsScene implements ICoordinates
+	public class Polar extends BaseCoordinates implements ICoordinates
 	{
 		protected const COLUMN:String = "column";
 		protected const RADAR:String = "radar";
