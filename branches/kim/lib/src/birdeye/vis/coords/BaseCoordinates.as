@@ -147,6 +147,7 @@ trace(getTimer(), "END feeding scales");
 		protected function placeElements(countStackableElements:Array):uint
 		{
 			var nCursors:uint = 0;
+			_stackedElements = [];
 			for each (var element:IElement in elements)
 			{
 				nCursors += initElement(element, countStackableElements);
