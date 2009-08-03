@@ -221,7 +221,15 @@ trace(getTimer(), "END feeding scales");
 		 */
 		protected function initStackElements(countStackableElements:Array):void
 		{
-			// only execute if the type is stacked100
+			for each (var stackElement:IStack in _stackedElements)
+			{
+				// if an element is stackable, than its total property 
+				// represents the number of all stackable elements with the same type inside the
+				// same chart. This allows having multiple elements type inside the same chart (TODO) 
+				stackElement.total = countStackableElements[stackElement.elementType];
+			}
+			
+			// only execute the rest if the type is stacked100
 			if (_type != StackElement.STACKED100) return;
 			
 			var allElementsBaseValues:Array = []; 
@@ -236,7 +244,7 @@ trace(getTimer(), "END feeding scales");
 			var position:uint = 0;
 			for each (var stackElement:IStack in _stackedElements)
 			{
-				initStackElement(stackElement, position++, countStackableElements, allElementsBaseValues, lastProcessedStackElements);
+				initStackElement(stackElement, position++, allElementsBaseValues, lastProcessedStackElements);
 			}
 			
 			// set the base values that we're calculated 
@@ -254,12 +262,9 @@ trace(getTimer(), "END feeding scales");
 		 * @param allElementsBaseValues Data structure to keep track of all the base values per element
 		 * @param lastProcessedStackElements Data structure to keep track of the last processed stack element per category or angle or...
 		 */
-		protected function initStackElement(stackElement:IStack, elementPosition:uint, countStackableElements:Array, allElementsBaseValues:Array, lastProcessedStackElements:Array):void
+		protected function initStackElement(stackElement:IStack, elementPosition:uint, allElementsBaseValues:Array, lastProcessedStackElements:Array):void
 		{
-			// if an element is stackable, than its total property 
-			// represents the number of all stackable elements with the same type inside the
-			// same chart. This allows having multiple elements type inside the same chart (TODO) 
-			stackElement.total = countStackableElements[stackElement.elementType]; 	
+			 	
 			
 			var usedDataItems:Vector.<Object> = dataItems;
 			
