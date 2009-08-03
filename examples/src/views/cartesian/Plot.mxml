@@ -25,7 +25,7 @@
 						silver:Number = Math.round(Math.random() * 1000),
 						bronze:Number = Math.round(Math.random() * 1000);
 					ac.addItem({
-						index: i,
+						index: "cat" + i,
 						year: 2000 + i,
 						region: regions[i],
 						gold: gold,

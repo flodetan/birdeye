@@ -67,12 +67,13 @@
  		<coords:scales>
  			<scales:Category categoryField="subject" id="c2" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
  			<scales:Linear placement="right" rotateLabels="40" id="l2" colorPointer="0xFF0000" fontLabel="verdana" weightPointer="5" sizeLabel="10" sizePointer="15"/>
+ 			<scales:Linear placement="right" id="l1" colorPointer="0x00FF00" fontLabel="verdana" colorLabel="0xffffff" weightPointer="5" sizeLabel="10" sizePointer="15"/>
  		</coords:scales>
 		 <coords:elements>
 		 	<elements:AreaElement id="a1" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l2}" scale1="{c2}" dim1="subject" dim2="R1" styleName="grad1" strokeAlpha=".5" displayName="R1"/>
     		<elements:AreaElement id="a2" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l2}" scale1="{c2}" dim1="subject" dim2="R2" styleName="grad2" strokeAlpha=".5" displayName="R2"/>
-    		<elements:AreaElement id="a3" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l2}" scale1="{c2}" dim1="subject" dim2="R3" styleName="grad3" strokeAlpha=".5" displayName="R3"/>
-    		<elements:AreaElement id="a4" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l2}" scale1="{c2}" dim1="subject" dim2="R4" styleName="grad4" strokeAlpha=".5" displayName="R4"/>
+    		<elements:AreaElement id="a3" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l1}" scale1="{c2}" dim1="subject" dim2="R3" styleName="grad3" strokeAlpha=".5" displayName="R3"/>
+    		<elements:AreaElement id="a4" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l1}" scale1="{c2}" dim1="subject" dim2="R4" styleName="grad4" strokeAlpha=".5" displayName="R4"/>
 		 </coords:elements>
 	</coords:Cartesian>
 
