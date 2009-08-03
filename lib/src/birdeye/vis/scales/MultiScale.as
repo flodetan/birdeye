@@ -40,6 +40,7 @@ package birdeye.vis.scales
 	
 	import flash.geom.Point;
 	import flash.text.TextFieldAutoSize;
+	import flash.utils.getTimer;
 	
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
@@ -388,6 +389,7 @@ package birdeye.vis.scales
 		{
 			if (invalidated)
 			{
+trace(getTimer(), "start multi scale");
 				removeAllElements();
 				
 				invalidated = false;
@@ -450,6 +452,7 @@ package birdeye.vis.scales
 						gg.geometryCollection.addItem(label);
 	 				} 
 				}
+trace(getTimer(), "end multi scale");
 			}
 		}
 		
