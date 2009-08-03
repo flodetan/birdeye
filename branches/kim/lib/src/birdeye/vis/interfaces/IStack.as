@@ -27,7 +27,7 @@
  
 package birdeye.vis.interfaces
 {
-	public interface IStack
+	public interface IStack extends IElement
 	{
 		/** Set the position of the current component (element) inside a stack.*/
 		function set stackPosition(val:Number):void;

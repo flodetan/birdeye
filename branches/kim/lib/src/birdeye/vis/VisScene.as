@@ -45,7 +45,6 @@
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
-	import com.degrafa.paint.SolidStroke;
 	
 	import flash.display.Shape;
 	import flash.geom.Point;
@@ -532,22 +531,24 @@
 		
 		// UIComponent flow
 		
-		protected var _maskShape:Shape; 
+		
 		public function VisScene():void
 		{
 			super();
 			doubleClickEnabled = true;
 
-	  		_maskShape = new Shape();
-	  		
-
 		}
 		
 		protected var rectBackGround:RegularRectangle;
 		protected var ggBackGround:GeometryGroup;
+		protected var _maskShape:Shape; 
 		override protected function createChildren():void
 		{
 			super.createChildren();
+			
+			_maskShape = new Shape();
+			_elementsContainer.addChildAt(_maskShape, 0);
+			
 			ggBackGround = new GeometryGroup();
 			addChildAt(ggBackGround, 0);
 			ggBackGround.target = this;
@@ -606,6 +607,16 @@
 
 				if (!contains(ggBackGround))
 					addChildAt(ggBackGround, 0);
+			}
+			
+			if (showAllDataTips)
+			{
+				removeDataItems();
+				for (var i:uint = 0; i<numChildren; i++)
+				{
+					if (getChildAt(i) is DataItemLayout)
+						DataItemLayout(getChildAt(i)).showToolTip();
+				}
 			}
 
  			applyGraphLayouts(unscaledWidth, unscaledHeight);
@@ -707,11 +718,28 @@
 			graphicsCollection.items = [];
 		}
 		
-		protected function resetAxes():void
+		protected function resetScales():void
 		{
 			if (_scales)
 				for (var i:Number = 0; i<_scales.length; i++)
 					IScale(_scales[i]).resetValues();
+					
+			if (_elements)
+			{
+				for (var i:Number = 0; i<_elements.length; i++)
+				{
+					resetScale(IElement(_elements[i]).scale1);
+					resetScale(IElement(_elements[i]).scale2);
+					resetScale(IElement(_elements[i]).scale3);
+					resetScale(IElement(_elements[i]).colorScale);
+					resetScale(IElement(_elements[i]).sizeScale);
+				}	
+			}
+		}
+		
+		private function resetScale(scale:IScale)
+		{
+			if (scale) scale.resetValues();
 		}
 		
 		public function refresh():void

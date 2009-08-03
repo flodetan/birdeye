@@ -1,5 +1,6 @@
 package birdeye.vis.guides.grid
 {
+	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IEnumerableScale;
 	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.interfaces.guides.IGuide;
@@ -9,7 +10,7 @@ package birdeye.vis.guides.grid
 	import com.degrafa.geometry.Line;
 	import com.degrafa.paint.SolidStroke;
 	
-	import flash.geom.Rectangle;
+	import flash.display.DisplayObject;
 	import flash.utils.getTimer;
 	
 	/**
@@ -66,6 +67,21 @@ package birdeye.vis.guides.grid
 		public function get scale3():IScale
 		{
 			return _scale3;	
+		}
+		
+		/**
+		 * @see birdeye.vis.interfaces.guides.IGuide#coordinates
+		 */
+		 private var _coordinates:ICoordinates;
+		 
+		public function set coordinates(val:ICoordinates):void
+		{
+			_coordinates = val;
+		}
+		
+		public function get coordinates():ICoordinates
+		{	
+			return _coordinates;
 		}
 		
 		public function get targets():Array
@@ -125,13 +141,13 @@ package birdeye.vis.guides.grid
 		}
 		
 		
-		public function drawGuide(chartBounds:Rectangle=null):void
+		public function drawGuide():void
 		{
 
 trace(getTimer(), "drawing grid");
 			
-			var nbrOfItems:Number = drawLinesBasedOnScale(scale1, chartBounds);
-			nbrOfItems = drawLinesBasedOnScale(scale2, chartBounds, nbrOfItems);
+			var nbrOfItems:Number = drawLinesBasedOnScale(scale1);
+			nbrOfItems = drawLinesBasedOnScale(scale2, nbrOfItems);
 			// scale3 not implemented yet, not sure about how it works
 			
 			clearExcessGeometries(nbrOfItems);
@@ -140,7 +156,7 @@ trace(getTimer(), "end drawing grid");
 
  		}
  		
- 		private function drawLinesBasedOnScale(scale:IScale, chartBounds:Rectangle, startIndex:Number=0):Number
+ 		private function drawLinesBasedOnScale(scale:IScale, startIndex:Number=0):Number
  		{
  			if (scale && scale.completeDataValues && scale.completeDataValues.length > 0)
  			{
@@ -169,14 +185,14 @@ trace(getTimer(), "end drawing grid");
 		 				item.y = position;
 						item.y1 = position;
 						item.x = 0;
-						item.x1 = chartBounds.width;
+						item.x1 = coordinates ? DisplayObject(coordinates).width : 0; // NOT GOOD
 					}
 					else if (scale.dimension == BaseScale.DIMENSION_1)
 					{
 						// vertical
 						item.x = position;
 						item.x1 = position;
-						item.y1 = chartBounds.height;
+						item.y1 = coordinates ? DisplayObject(coordinates).height : 0;
 						item.y = 0;
 					}	
 				}

@@ -1,17 +1,25 @@
 package birdeye.vis.interfaces.guides
 {
+	import birdeye.vis.interfaces.ICoordinates;
+	
 	import flash.geom.Rectangle;
 	
 	public interface IGuide
 	{
 		
 		/** Draw the guide.*/
-		function drawGuide(bounds:Rectangle=null):void
+		function drawGuide():void
 						
 		/**
 		 * The targets where the guide is drawn.
 		 */
 		function get targets():Array; 
+		
+		/**
+		 * Set the coordinates system where this guide belongs too.
+		 */
+		function set coordinates(val:ICoordinates):void;
+		function get coordinates():ICoordinates;
 		
 		/**
 		 * This function needs to be implemented to allow the ICoordinates</br>

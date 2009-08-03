@@ -1,5 +1,6 @@
 package birdeye.vis.guides.axis
 {
+	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.scales.Category;
@@ -14,7 +15,6 @@ package birdeye.vis.guides.axis
 	import com.degrafa.paint.SolidStroke;
 	import com.degrafa.transform.RotateTransform;
 	
-	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
 	import flash.utils.getTimer;
 	
@@ -388,6 +388,20 @@ package birdeye.vis.guides.axis
 			return _placement;
 		}
 		
+		/**
+		 * @see birdeye.vis.interfaces.guides.IGuide#coordinates
+		 */
+		private var _coordinates:ICoordinates;
+		public function set coordinates(val:ICoordinates):void
+		{
+			_coordinates = val;
+		}
+		
+		public function get coordinates():ICoordinates
+		{
+			return _coordinates;
+		}
+		
 				/** @Private */
 		override protected function createChildren():void
 		{
@@ -571,7 +585,7 @@ package birdeye.vis.guides.axis
 		
 		private var prevWidth:Number = NaN, prevHeight:Number = NaN;
 		private var xMin:Number = NaN, xMax:Number = NaN, yMin:Number = NaN, yMax:Number = NaN, sign:Number;
-		public function drawGuide(bounds:Rectangle=null):void
+		public function drawGuide():void
 		{
 			var w:Number = unscaledWidth, h:Number = unscaledHeight;
 			if (prevWidth != w || prevHeight != h)

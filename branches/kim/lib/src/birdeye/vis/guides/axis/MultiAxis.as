@@ -1,5 +1,6 @@
 package birdeye.vis.guides.axis
 {
+	import birdeye.vis.coords.Polar;
 	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.interfaces.guides.IAxis;
@@ -15,7 +16,6 @@ package birdeye.vis.guides.axis
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.geom.Point;
-	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
 	
 	import mx.styles.CSSStyleDeclaration;
@@ -164,21 +164,21 @@ package birdeye.vis.guides.axis
 			invalidated = true;
 		}
 		 
-		private var _chart:ICoordinates; 
-		public function set chart(val:ICoordinates):void
+		private var _coordinates:ICoordinates; 
+		public function set coordinates(val:ICoordinates):void
 		{
-			_chart = val;	
+			_coordinates = val;	
 		}
 		
-		public function get chart():ICoordinates
+		public function get coordinates():ICoordinates
 		{
-			return _chart;
+			return _coordinates;
 		}
 		
 		/**
 		 * @see birdeye.vis.interfaces.guides.IGuide#drawGuide
 		 */
-		public function drawGuide(chartBounds:Rectangle=null):void
+		public function drawGuide():void
 		{
 			//if (invalidated)
 			//{
@@ -200,12 +200,14 @@ package birdeye.vis.guides.axis
 				for (var i:int = 0; i<nbrCategories; i++)
 				{
 					var subSc:IScale = _subScalesArray[i % _subScalesArray.length]	
-					
+	
 					var angle:int = _categoryScale.getPosition(categories[i]);
-					var endPosition:Point = PolarCoordinateTransform.getXY(angle,_size,_chart.origin);
+					var endPosition:Point = PolarCoordinateTransform.getXY(angle,_size,coordinates.origin);
 					
-					var endLinePosition:Point = PolarCoordinateTransform.getXY(angle,_size-5,_chart.origin);
-	 				line = new Line(_chart.origin.x, _chart.origin.y, endLinePosition.x, endLinePosition.y);
+					// draw a line a bit shorter to allow the label of the axis to be seen
+					// TODO set the label a bit further instead of shortening the line?
+					var endLinePosition:Point = PolarCoordinateTransform.getXY(angle,_size-5,coordinates.origin);
+	 				line = new Line(coordinates.origin.x, coordinates.origin.y, endLinePosition.x, endLinePosition.y);
 					line.stroke = new SolidStroke(0x000000, 1,1);
 					
 					this.geometryCollection.addItem(line);
@@ -215,7 +217,7 @@ package birdeye.vis.guides.axis
 						var dataLabel:Object = subSc.completeDataValues[j];
 						var pos:Number = subSc.getPosition(dataLabel);
 		
-		 				var labelPosition:Point = PolarCoordinateTransform.getXY(angle,pos,_chart.origin);
+		 				var labelPosition:Point = PolarCoordinateTransform.getXY(angle,pos,coordinates.origin);
 		 				
 		 				if (!web[j])
 		 				{
@@ -243,7 +245,6 @@ package birdeye.vis.guides.axis
 		
 						label.x = labelPosition.x - label.displayObject.width/2;
 						label.y = labelPosition.y;
-						trace("LABEL", label.text, label.x, label.y);
 	
 						this.geometryCollection.addItem(label);
 						
