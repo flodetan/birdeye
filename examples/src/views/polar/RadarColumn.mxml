@@ -3,7 +3,7 @@
 	xmlns:polar="birdeye.vis.coords.*"
 	xmlns:pseries="birdeye.vis.elements.geometry.*"
 	xmlns:cseries="birdeye.vis.elements.*"
-	xmlns:axis="birdeye.vis.scales.*"
+	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
 	creationComplete="createDT()"
 	width="100%" height="100%" horizontalAlign="center">
@@ -41,6 +41,11 @@
 				tt += '\n' + dataFields[1] + ": " + currDatatip[dataFields[1]];
 				return  tt;
 			}
+
+			private function sizeFunc(dataValue:Object, min:Number, max:Number, size:Number):Number
+			{
+				return  Number(dataValue)/max * size;
+			}
 		]]>
 	</mx:Script>
  <mx:Fade id="fadeIn" alphaFrom="0" alphaTo="1" duration="1000"/>
@@ -48,14 +53,16 @@
 	<mx:Button label="Generate" click="createDT()"/>
 	<polar:Polar id="rd" type="stacked" showDataTips="true" columnWidthRate=".7" dataTipFunction="dtFunc" dataProvider="{dt}" layout="radar" width="100%" height="100%">
 		<polar:multiScale>
-			<axis:MultiScale dim1="subject" labelFont="verdana" labelSize="10" labelColor="0x000000"/>
+			<scales:MultiScale dim1="subject" labelFont="verdana" labelSize="10" labelColor="0x000000"/>
 		</polar:multiScale>
 		<polar:elements>
 			<pseries:ColumnElement extendMouseEvents="true" styleName="grad1" dim1="subject" dim2="R1" displayName="R1"/>
 			<pseries:ColumnElement extendMouseEvents="true" styleName="grad2" dim1="subject" dim2="R2" displayName="R2"/>
 			<pseries:ColumnElement extendMouseEvents="true" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
+			<pseries:ColumnElement styleName="solid2" dim1="subject" collisionType="stacked100" dim2="['R1','R3','R5']" displayName="Mix1"/>
 			<pseries:ColumnElement extendMouseEvents="true" styleName="grad4" dim1="subject" dim2="R4" displayName="R4"/>
 			<pseries:ColumnElement extendMouseEvents="true" styleName="grad5" dim1="subject" dim2="R5" displayName="R5"/>
+			<pseries:ColumnElement styleName="grad2" dim1="subject" collisionType="stacked100" dim2="['R1','R2']" displayName="Mix2"/>
 		</polar:elements>
 	</polar:Polar>
 	<legend:Legend dataProvider="{rd}" direction="horizontal"/>
