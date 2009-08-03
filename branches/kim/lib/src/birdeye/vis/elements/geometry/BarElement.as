@@ -42,6 +42,7 @@ package birdeye.vis.elements.geometry
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
+	import flash.utils.getTimer;
 	
 	import mx.core.ClassFactory;
 
@@ -79,6 +80,7 @@ package birdeye.vis.elements.geometry
 		{
 			if (isReadyForLayout() && _invalidatedElementGraphic)
 			{
+trace(getTimer(), "drawing bar");
 				super.drawElement();
 				removeAllElements();
 				var dataFields:Array = [];
@@ -268,6 +270,7 @@ package birdeye.vis.elements.geometry
 					_invalidatedElementGraphic = false;
 				}
 			}
+trace(getTimer(), "END drawing bar");
 		}
 		
 		private function getXMinPosition():Number
