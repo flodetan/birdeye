@@ -35,7 +35,7 @@ package birdeye.vis.guides.renderers
 
 		function get startX():Number;
 		
-		function set endX(value:Number);
+		function set endX(value:Number):void;
 
 		function get endX():Number;
 		
@@ -43,7 +43,7 @@ package birdeye.vis.guides.renderers
 
 		function get startY():Number;
 		
-		function set endY(value:Number);
+		function set endY(value:Number):void;
 
 		function get endY():Number;
 
