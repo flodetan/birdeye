@@ -61,9 +61,7 @@
 		public function set dataProvider(val:Array):void
 		{
 			_dataProvider = val;
-			invalidateSize();
 			invalidateProperties();
-			invalidateDisplayList();
 		}
 		public function get dataProvider():Array
 		{
@@ -76,9 +74,7 @@
 		public function set categoryField(val:String):void
 		{
 			_categoryField = val;
-			invalidateSize();
 			invalidateProperties();
-			invalidateDisplayList();
 		}
 		public function get categoryField():String
 		{
@@ -89,7 +85,6 @@
 		public function set initialOffset(val:Number):void
 		{
 			_initialOffset = val;
-			invalidateDisplayList();
 		} 
 		
 		// UIComponent flow
@@ -115,14 +110,6 @@
 					
 				isGivenInterval = recIsGivenInterval;
 			}
-			
-			// if placement is set, elements are loaded and interval calculated
-			// than the axis is ready to be drawn
-			if (placement && dataProvider && dataInterval && _categoryField 
-				&& !isNaN(size))
-				readyForLayout = true;
-			else 
-				readyForLayout = false;
 		}
 		
 		override protected function measure():void
@@ -157,14 +144,13 @@
 				case TOP:
 				case BOTTOM:
 				case HORIZONTAL_CENTER:
-					height = Math.max(5, maxLblSize * Math.sin(-_rotateLabels));
+					setActualSize(width, Math.max(5, maxLblSize * Math.sin(-_rotateLabels)));
 					break;
 				case LEFT:
 				case RIGHT:
 				case DIAGONAL:
 				case VERTICAL_CENTER:
-
-					width = Math.max(5, maxLblSize * Math.cos(_rotateLabels));
+					setActualSize(Math.max(5, maxLblSize * Math.cos(_rotateLabels)), height);
 					break;
 			}
 			
@@ -287,6 +273,16 @@ trace(getTimer(), "drawing category scale");
 				}
 trace(getTimer(), "drawing category scale");
 			}
+		}
+		
+		override protected function isReadyForLayout():Boolean
+		{
+			var globalCheck:Boolean = super.isReadyForLayout();
+			
+			// if placement is set, elements are loaded and interval calculated
+			// than the axis is ready to be drawn
+			globalCheck = globalCheck && (dataProvider && _categoryField);
+			return globalCheck;
 		}
 		
 		/** @Private
