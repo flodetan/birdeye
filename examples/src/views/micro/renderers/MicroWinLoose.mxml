@@ -33,7 +33,7 @@
 		<coords:scales>
 			<scales:Category id="cat5" showAxis="false" placement="bottom" categoryField="subject"/>
  			<scales:Numeric id="wl" f="valWL" placement="right" dataValues="[-1,1]" showAxis="false"/>
- 			<scales:Numeric id="col" f="colWL"/>
+ 			<scales:Numeric id="col" f="colWL" showAxis="false"/>
 		</coords:scales>
 		 <coords:elements>
 		 	<elements:ColumnElement scale1="{cat5}" baseAt="-2" dim1="subject" scale2="{wl}" dim2="R1" alphaStroke="0" colorScale="{col}" colorField="R1"/>
