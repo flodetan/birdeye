@@ -6,7 +6,7 @@
 	xmlns:axis="birdeye.vis.scales.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
 	creationComplete="createDT()"
-	width="100%" height="100%" horizontalAlign="center">
+	width="100%" height="100%" horizontalAlign="center" xmlns:axis1="birdeye.vis.guides.axis.*">
 	<mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
@@ -47,15 +47,19 @@
 <mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
 	<mx:Button label="Generate" click="createDT()"/>
 	<polar:Polar id="rd" type="stacked" showDataTips="true" columnWidthRate=".7" dataTipFunction="dtFunc" dataProvider="{dt}" layout="radar" width="100%" height="100%">
-		<polar:multiScale>
-			<axis:MultiScale dim1="subject" labelFont="verdana" labelSize="10" labelColor="0x000000"/>
-		</polar:multiScale>
+		<polar:scales>
+			<axis:Numeric id="l" />
+			<axis:CategoryAngle id="c" categoryField="subject" />
+		</polar:scales>
+		<polar:guides>
+			<axis1:MultiAxis categoryScale="{c}" subScale="{[l]}" colorStroke="0x000000" colorLabel="0x000000" fontLabel="tahoma" sizeLabel="9" />
+		</polar:guides>
 		<polar:elements>
-			<pseries:ColumnElement extendMouseEvents="true" styleName="grad1" dim1="subject" dim2="R1" displayName="R1"/>
-			<pseries:ColumnElement extendMouseEvents="true" styleName="grad2" dim1="subject" dim2="R2" displayName="R2"/>
-			<pseries:ColumnElement extendMouseEvents="true" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
-			<pseries:ColumnElement extendMouseEvents="true" styleName="grad4" dim1="subject" dim2="R4" displayName="R4"/>
-			<pseries:ColumnElement extendMouseEvents="true" styleName="grad5" dim1="subject" dim2="R5" displayName="R5"/>
+			<pseries:ColumnElement scale1="{c}" scale2="{l}" extendMouseEvents="true" styleName="grad1" dim1="subject" dim2="R1" displayName="R1"/>
+			<pseries:ColumnElement scale1="{c}" scale2="{l}" extendMouseEvents="true" styleName="grad2" dim1="subject" dim2="R2" displayName="R2"/>
+			<pseries:ColumnElement scale1="{c}" scale2="{l}" extendMouseEvents="true" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
+			<pseries:ColumnElement scale1="{c}" scale2="{l}" extendMouseEvents="true" styleName="grad4" dim1="subject" dim2="R4" displayName="R4"/>
+			<pseries:ColumnElement scale1="{c}" scale2="{l}" extendMouseEvents="true" styleName="grad5" dim1="subject" dim2="R5" displayName="R5"/>
 		</polar:elements>
 	</polar:Polar>
 	<legend:Legend dataProvider="{rd}" direction="horizontal"/>
