@@ -171,17 +171,19 @@ package birdeye.vis.elements.geometry
 						const position:Position = getItemPosition(itemId);
 						if (position != null) {
 //							createTTGG(item, dataFieldNames, pos1, pos2, 1.0, _size * 2);
+							const label:TextRenderer = TextRenderer.createTextLabel(
+								   0, 0 + _size,
+								   item[dimName],
+								   new SolidFill(0xffffff),  // TODO: add textFill property
+								   true, false
+							);
+							label.fontSize = 9;
+							label.fontFamily = "arial";
 							createItemDisplayObject(
 								getItemPosition(itemId),
 								itemId,
 								[
-									createItemRenderer(),
-									TextRenderer.createTextLabel(
-										   0, 0 + _size,
-										   item[dimName],
-										   new SolidFill(0xffffff),  // TODO: add textFill property
-										   true, false
-									)
+									createItemRenderer(), label
 								]
 							);
 						}

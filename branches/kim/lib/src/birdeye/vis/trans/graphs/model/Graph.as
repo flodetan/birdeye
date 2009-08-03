@@ -269,7 +269,7 @@ package birdeye.vis.trans.graphs.model {
 				createNode(_dataProvider.getNodeId(i), _dataProvider.getNodeTag(i));
 			}
 			
-			for (var i:int = 0; i < _dataProvider.numberOfEdges; i++) {
+			for (i = 0; i < _dataProvider.numberOfEdges; i++) {
 				const fromNode:INode = nodeByStringId(_dataProvider.getEdgeFromNodeId(i));
 				const toNode:INode = nodeByStringId(_dataProvider.getEdgeToNodeId(i));
 

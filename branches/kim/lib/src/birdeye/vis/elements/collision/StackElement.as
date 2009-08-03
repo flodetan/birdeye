@@ -49,7 +49,6 @@ package birdeye.vis.elements.collision
 		{
 			_stackType = val;
 			invalidateProperties();
-			invalidateDisplayList();
 		}
 		public function get stackType():String
 		{
@@ -63,7 +62,6 @@ package birdeye.vis.elements.collision
 		{
 			_baseAt = val;
 			invalidateProperties();
-			invalidateDisplayList();
 		}
 		public function get baseAt():Number
 		{
@@ -75,7 +73,6 @@ package birdeye.vis.elements.collision
 		{
 			_baseValues = val;
 			invalidateProperties();
-			invalidateDisplayList();
 		}
 		public function get baseValues():Array
 		{
@@ -87,7 +84,6 @@ package birdeye.vis.elements.collision
 		{
 			_total = val;
 			invalidateProperties();
-			invalidateDisplayList();
 		}
 
 		protected var _stackPosition:Number = NaN;
@@ -95,7 +91,6 @@ package birdeye.vis.elements.collision
 		{
 			_stackPosition = val;
 			invalidateProperties();
-			invalidateDisplayList();
 		}
 		
 		public function get elementType():String

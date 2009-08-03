@@ -28,6 +28,8 @@ package birdeye.vis.elements
 {
 	public class Position {
 
+		public static const ZERO:Position = new Position(0, 0, 0);
+
 		private var _pos1:Number;
 		private var _pos2:Number;
 		private var _pos3:Number;
