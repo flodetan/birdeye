@@ -34,8 +34,6 @@ package birdeye.vis.scales
 	
 	public class XYZ extends BaseScale 
 	{
-		protected var readyForLayout:Boolean = false;
-
 		/** @Private
 		 * Set to true if the user has specified an interval for the axis.
 		 * Otherwise, the interval will be calculated automatically.
@@ -48,7 +46,6 @@ package birdeye.vis.scales
 			_dataInterval = val;
 			isGivenInterval = true;
 			invalidateProperties();
-			invalidateDisplayList();
 		}
 
 		private var _showLabels:Boolean = true;
@@ -57,7 +54,6 @@ package birdeye.vis.scales
 		public function set showLabels(val:Boolean):void
 		{
 			_showLabels = val;
-			invalidateDisplayList();
 		}
 		public function get showLabels():Boolean
 		{
@@ -138,7 +134,7 @@ package birdeye.vis.scales
 				removeAllElements();
 				drawAxisLine(w,h)
 	
-				if (readyForLayout)
+				if (isReadyForLayout())
 				{
 					switch (placement)
 					{
