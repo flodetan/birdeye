@@ -40,6 +40,11 @@
 				tt += '\n' + dataFields[1] + ": " + currDatatip[dataFields[1]];
 				return  tt;
 			}
+
+			private function sizeFunc(dataValue:Object, min:Number, max:Number, size:Number):Number
+			{
+				return  Number(dataValue)/max * size;
+			}
 		]]>
 	</mx:Script>
 
@@ -56,13 +61,17 @@
 -->		<polar:scales>
 			<axis:CategoryAngle id="c" categoryField="subject"/>
 			<axis:Linear id="l1" placement="horizontal_center" sizeLabel="11"/>
+			<axis:Linear id="size" scaleValues="[0,1]"/>
 		</polar:scales>
 		<polar:elements>
+			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="solid2" dim1="subject" dim2="{['R1','R2','R3','R4','R5']}" collisionType="stacked" displayName="Mix"/>
 			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad1" dim1="subject" dim2="R1" displayName="R1"/>
 			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad2" dim1="subject" dim2="R2" displayName="R2"/>
 			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
+			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="solid1" dim1="subject" dim2="{['R1','R2','R3','R4','R5']}" collisionType="stacked" displayName="Mix"/>
 			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad4" dim1="subject" dim2="R4" displayName="R4"/>
 			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad5" dim1="subject" dim2="R5" displayName="R5"/>
+			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="solid3" dim1="subject" dim2="{['R1','R2','R3','R4','R5']}" collisionType="stacked" displayName="Mix"/>
 		</polar:elements>
 	</polar:Polar>
 	<legend:Legend dataProvider="{pc1}" direction="horizontal" />
@@ -70,3 +79,4 @@
 </mx:VBox>
 
 </mx:Box>
+	
