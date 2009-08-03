@@ -412,8 +412,8 @@ package birdeye.vis.coords
 			
 			if (multiScale)
 			{
-				multiScale.scalesSize = DisplayObject(multiScale).width = DisplayObject(multiScale).height 
-					= Math.min(unscaledWidth, unscaledHeight)/2;
+				multiScale.scalesSize = Math.min(unscaledWidth, unscaledHeight)/2;
+				MultiScale(multiScale).setActualSize(multiScale.scalesSize, multiScale.scalesSize);
 				multiScale.draw();
 			} 
 			
