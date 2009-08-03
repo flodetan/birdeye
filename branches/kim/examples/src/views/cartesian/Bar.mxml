@@ -46,22 +46,40 @@
 	</mx:Script>
 	<mx:Button label="Generate" click="createDT()"/>
 	<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
-	<coords:Cartesian id="bc2" width="90%" height="90%" dataProvider="{dt}" showDataTips="true" type="stacked">
+	<coords:Cartesian id="bc" width="90%" height="90%" dataProvider="{dt}" showDataTips="true" type="stacked">
 		<coords:scales>
-	    		<scales:Category id="c" categoryField="subject"  />
-	    		<scales:Linear id="l" />
+	    	<scales:Category id="c" categoryField="subject" />
+	    	<scales:Linear id="l" />
 		</coords:scales>
 		<coords:guides>
-			<axis:Axis scale="{c}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
-			<axis:Axis scale="{l}" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
-			<grid:Grid scale1="{c}" scale2="{l}" />
-		</coords:guides>
+			<axis:Axis scale="{c}" placement="right" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+			<axis:Axis scale="{l}" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+ 		</coords:guides>
     	 <coords:elements>
 		 	<elements:BarElement scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="R1" styleName="grad1" dim2="subject" displayName="R1" />
-		 	<elements:BarElement scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="R2" styleName="grad2" dim2="subject" displayName="R2" />
-		 	<elements:BarElement scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="R3" styleName="grad3" dim2="subject" displayName="R3" />
-		 	<elements:BarElement scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="R4" styleName="grad4" dim2="subject" displayName="R4" />
-		 	<elements:BarElement scale1="{l}" scale2="{c}" extendMouseEvents="true" collisionType="stacked100" dim1="['R1','R4','R2']" styleName="grad5" dim2="subject" displayName="R4" />
+		 	<elements:BarElement scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="['R1','R4','R3']" collisionType="stacked100" styleName="grad4" dim2="subject" displayName="Mix" />
+		 	<elements:BarElement scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="['R4','R2','R3']" collisionType="stacked" dim2="subject" displayName="Mix" />
+		 </coords:elements>
+	</coords:Cartesian>
+	<guides:Legend dataProvider="{bc2}" direction="horizontal" />	
+
+
+	<coords:Cartesian id="bc2" width="90%" height="90%" dataProvider="{dt}" showDataTips="true" type="stacked">
+		<coords:scales>
+	    		<scales:Category id="c1" categoryField="subject"  />
+	    		<scales:Linear id="l1" />
+		</coords:scales>
+		<coords:guides>
+			<axis:Axis scale="{c1}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+			<axis:Axis scale="{l1}" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
+			<grid:Grid scale1="{c1}" scale2="{l1}" />
+		</coords:guides>
+    	 <coords:elements>
+		 	<elements:BarElement scale1="{l1}" scale2="{c1}" extendMouseEvents="true" dim1="R1" styleName="grad1" dim2="subject" displayName="R1" />
+		 	<elements:BarElement scale1="{l1}" scale2="{c1}" extendMouseEvents="true" dim1="R2" styleName="grad2" dim2="subject" displayName="R2" />
+		 	<elements:BarElement scale1="{l1}" scale2="{c1}" extendMouseEvents="true" dim1="R3" styleName="grad3" dim2="subject" displayName="R3" />
+		 	<elements:BarElement scale1="{l1}" scale2="{c1}" extendMouseEvents="true" dim1="R4" styleName="grad4" dim2="subject" displayName="R4" />
+		 	<elements:BarElement scale1="{l1}" scale2="{c1}" extendMouseEvents="true" collisionType="stacked100" dim1="['R1','R4','R2']" styleName="grad5" dim2="subject" displayName="R4" />
 		 </coords:elements>
 	</coords:Cartesian>
 	<guides:Legend dataProvider="{bc2}" direction="horizontal" />	

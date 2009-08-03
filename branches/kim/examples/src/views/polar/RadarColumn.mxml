@@ -3,7 +3,7 @@
 	xmlns:polar="birdeye.vis.coords.*"
 	xmlns:pseries="birdeye.vis.elements.geometry.*"
 	xmlns:cseries="birdeye.vis.elements.*"
-	xmlns:axis="birdeye.vis.scales.*"
+	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
 	creationComplete="createDT()"
 	width="100%" height="100%" horizontalAlign="center" xmlns:axis1="birdeye.vis.guides.axis.*">
@@ -41,6 +41,11 @@
 				tt += '\n' + dataFields[1] + ": " + currDatatip[dataFields[1]];
 				return  tt;
 			}
+
+			private function sizeFunc(dataValue:Object, min:Number, max:Number, size:Number):Number
+			{
+				return  Number(dataValue)/max * size;
+			}
 		]]>
 	</mx:Script>
  <mx:Fade id="fadeIn" alphaFrom="0" alphaTo="1" duration="1000"/>
@@ -48,8 +53,8 @@
 	<mx:Button label="Generate" click="createDT()"/>
 	<polar:Polar id="rd" type="stacked" showDataTips="true" columnWidthRate=".7" dataTipFunction="dtFunc" dataProvider="{dt}" layout="radar" width="100%" height="100%">
 		<polar:scales>
-			<axis:Numeric id="l" />
-			<axis:CategoryAngle id="c" categoryField="subject" />
+			<scales:Numeric id="l" />
+			<scales:CategoryAngle id="c" categoryField="subject" />
 		</polar:scales>
 		<polar:guides>
 			<axis1:MultiAxis categoryScale="{c}" subScale="{[l]}" colorStroke="0x000000" colorLabel="0x000000" fontLabel="tahoma" sizeLabel="9" />
@@ -60,6 +65,7 @@
 			<pseries:ColumnElement scale1="{c}" scale2="{l}" extendMouseEvents="true" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
 			<pseries:ColumnElement scale1="{c}" scale2="{l}" extendMouseEvents="true" styleName="grad4" dim1="subject" dim2="R4" displayName="R4"/>
 			<pseries:ColumnElement scale1="{c}" scale2="{l}" extendMouseEvents="true" styleName="grad5" dim1="subject" dim2="R5" displayName="R5"/>
+			<pseries:ColumnElement styleName="grad2" dim1="subject" collisionType="stacked100" dim2="['R1','R2']" displayName="Mix2"/>
 		</polar:elements>
 	</polar:Polar>
 	<legend:Legend dataProvider="{rd}" direction="horizontal"/>

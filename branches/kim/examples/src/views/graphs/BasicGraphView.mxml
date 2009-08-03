@@ -11,7 +11,7 @@
 	
 	<mx:HBox horizontalAlign="center" width="100%">
 		<mx:Button label="Generate tree" click="generateTree()"/>
-		<mx:Button label="Generate graph" click="generateGraph()" id="generateGraphButton" enabled="false"/>
+		<mx:Button label="Generate graph" click="generateConnectedGraph()" id="generateGraphButton" enabled="true"/>
 		<mx:CheckBox id="animate" label="animate" selected="{graphLayout.animate}" />
 	</mx:HBox>
 	
@@ -52,8 +52,78 @@
 		import mx.collections.ArrayCollection;
 		
 		public function generateGraph():void {
+			const graph:Object = _generateGraph();
+			nodes = graph["nodes"];
+			edges = graph["edges"];
+		}
+
+		public function generateConnectedGraph():void {
+			const graph:Object = _generateGraph();
+
+			const _nodeSet:ArrayCollection = graph["nodes"];
+			const _edgeSet:ArrayCollection = graph["edges"];
+
+			const numNodes:int = _nodeSet.length;
+			const adjMatrix:Array = [];
+			
+			for (var i:int = 0; i < numNodes; i++) adjMatrix[i] = [];
+			
+			var zeroEdgesCnt:int = 0;
+			for each (var edge:Object in _edgeSet) {
+				const start:int = edge["start"] - 1;
+				const end:int = edge["end"] - 1;
+				if (start == 0 || end == 0) zeroEdgesCnt++;
+				adjMatrix[start][end] = true;
+			}
+			if (zeroEdgesCnt == 0) {
+				// workaround to avoid an exception in ParentCentered
+				// TODO: fix the problem in ParentCentered
+				_edgeSet.addItem({start: 1,	end: 2});
+				adjMatrix[0][1] = true;
+			}
+			
+			const reachableNodes:Array = [];
+			traverse(0, adjMatrix, reachableNodes);
+			
 			const nodeSet:ArrayCollection = new ArrayCollection();
-			const numNodes:int = int(Math.random() * 10 + 10); 
+			const edgeSet:ArrayCollection = new ArrayCollection();
+			
+			for (i = 0; i < numNodes; i++) {
+				if (reachableNodes[i]) nodeSet.addItem(_nodeSet[i]);
+			}
+			for (i = 0; i < _edgeSet.length; i++) {
+				if (reachableNodes[_edgeSet[i]["start"] - 1]) edgeSet.addItem(_edgeSet[i]);
+			}
+
+			trace("{");
+			for each (var n in nodeSet) trace("node: " + n.id);
+			for each (var e in edgeSet) trace("edge: " + e.start + "->" + e.end);
+			trace("}");
+
+			edges = edgeSet;
+			nodes = nodeSet;
+		}
+
+		private function traverse(node:int, adjMatrix:Array, reachableNodes:Array):void {
+			reachableNodes[node] = true;
+			const numNodes:int = adjMatrix.length;
+			for (var i:int = 0; i < numNodes; i++) {
+				if (adjMatrix[node][i]  ||  adjMatrix[i][node]) {
+					if (!reachableNodes[i]) {
+						traverse(i, adjMatrix, reachableNodes);
+					}
+				}
+			}
+		}
+
+		private var graph_minNodes:int = 15;
+		private var graph_maxNodes:int = 30;
+		private var graph_minEdges:int = 20;
+		private var graph_maxEdges:int = 40;
+
+		private function _generateGraph():Object {
+			const nodeSet:ArrayCollection = new ArrayCollection();
+			const numNodes:int = int(Math.random() * (graph_maxNodes - graph_minNodes) + graph_minNodes); 
 			for (var i:int = 0; i < numNodes; i++) {
 				nodeSet.addItem({
 					id: i + 1,
@@ -62,7 +132,7 @@
 			}
 	
 			const edgeSet:ArrayCollection = new ArrayCollection();
-			const numEdges:int = int(Math.random() * 40 + 10);
+			const numEdges:int = int(Math.random() * (graph_maxEdges - graph_minEdges) + graph_minEdges);
 			const edgesByStartEnd:Object = {};
 			for (i = 0; i < numEdges; i++) {
 				var start:int, end:int;
@@ -79,16 +149,15 @@
 				edgesByStartEnd[key] = true;
 			}
 			
-			edges = edgeSet;
-			nodes = nodeSet;
+			return {nodes:nodeSet, edges:edgeSet};
 		}
+
+
 		
-		
-		
-		protected var maxLevel:int = 3;
-		protected var minChildren:int = 2;
-		protected var maxChildren:int = 3;
-		protected var maxId:int = 1000;
+		private var tree_maxLevel:int = 3;
+		private var tree_minChildren:int = 2;
+		private var tree_maxChildren:int = 3;
+		private var tree_maxId:int = 1000;
 	
 		public function generateTree():void {
 			lastId = 1;
@@ -100,18 +169,18 @@
 				id: lastId,
 				name: lastId + ". " + randomName() + " "
 			});
-			recurse(nodeSet, edgeSet, lastId, 1);
+			generateSubtree(nodeSet, edgeSet, lastId, 1);
 			
 			edges = edgeSet;
 			nodes = nodeSet;
 		}
 	
 		private var lastId:int;
-		private function recurse(nodeSet:ArrayCollection, edgeSet:ArrayCollection, parentId:int, level:int):void {
-			if (level > maxLevel) return;
-			if (lastId >= maxId) return;
+		private function generateSubtree(nodeSet:ArrayCollection, edgeSet:ArrayCollection, parentId:int, level:int):void {
+			if (level > tree_maxLevel) return;
+			if (lastId >= tree_maxId) return;
 	
-			const numNodes:int = Math.round(Math.random() * (maxChildren - minChildren)) + minChildren; 
+			const numNodes:int = Math.round(Math.random() * (tree_maxChildren - tree_minChildren)) + tree_minChildren; 
 			for (var i:int = 0; i < numNodes; i++) {
 				var id:int = ++lastId; 
 				nodeSet.addItem({
@@ -122,7 +191,7 @@
 					start: parentId,
 					end: id
 				});
-				recurse(nodeSet, edgeSet, id, level + 1);
+				generateSubtree(nodeSet, edgeSet, id, level + 1);
 			}
 		}
 	
