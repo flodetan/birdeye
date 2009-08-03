@@ -436,7 +436,7 @@ package birdeye.vis.trans.graphs.visual
 			return _origin;
 		}
 		
-		private var _center;
+		private var _center:Point;
 		
 		public function get center():Point
 		{
