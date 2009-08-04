@@ -55,9 +55,8 @@
 		</coords:scales>
 		 <coords:elements>
 		 	<elements:BarElement extendMouseEvents="true" scale2="{c2}" scale1="{l2}" dim2="subject" dim1="R2" styleName="grad1" displayName="R2"/>
-		 	<elements:LineElement scale1="{c}" scale2="{l}" showAllDataItems="true" dim2="R3" dim1="subject" styleName="solid1" displayName="R3">
-		 	</elements:LineElement>
-		 	<elements:AreaElement scale1="{c}" scale2="{l}" dim2="R3" dim1="subject" styleName="grad3" displayName="R3"/>
+		 	<elements:LineElement scale1="{c}" scale2="{l}" showAllDataItems="true" dim2="R3" dim1="subject" styleName="solid1" displayName="R3"/>
+		 	<elements:AreaElement scale1="{c}" scale2="{l}" dim2="R3" dim1="subject" styleName="grad3" displayName="R1"/>
 		 </coords:elements>
 	</coords:Cartesian>
 	<guides:Legend dataProvider="{mix}" direction="horizontal"/>
