@@ -258,8 +258,8 @@ trace (getTimer(), "drawing point ele");
 
 			if (chart.coordType == VisScene.POLAR)
 			{
-				var xPos:Number = PolarCoordinateTransform.getX(scaleResults[0], scaleResults[1], chart.origin);
-				var yPos:Number = PolarCoordinateTransform.getY(scaleResults[0], scaleResults[1], chart.origin);
+				var xPos:Number = PolarCoordinateTransform.getX(scaleResults["pos1"], scaleResults["pos2"], chart.origin);
+				var yPos:Number = PolarCoordinateTransform.getY(scaleResults["pos1"], scaleResults["pos2"], chart.origin);
 				scaleResults["pos1"] = xPos;
 				scaleResults["pos2"] = yPos; 
 			}
