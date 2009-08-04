@@ -24,8 +24,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- package birdeye.vis.elements.geometry
-{
+package birdeye.vis.elements.geometry {
+
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.guides.renderers.IEdgeRenderer;
@@ -39,38 +39,33 @@
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
-	public class EdgeElement extends BaseElement implements IEdgeElement
-	{
-		public function EdgeElement()
-		{
+	public class EdgeElement extends BaseElement implements IEdgeElement {
+
+		public function EdgeElement() {
 			super();
 		}
 
 		private var _dimStart:String;
 		
-		public function set dimStart(val:String):void
-		{
+		public function set dimStart(val:String):void {
 			_dimStart = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
 		
-		public function get dimStart():String
-		{
+		public function get dimStart():String {
 			return _dimStart;
 		}
 
 		private var _dimEnd:String;
 		
-		public function set dimEnd(val:String):void
-		{
+		public function set dimEnd(val:String):void	{
 			_dimEnd = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
 		
-		public function get dimEnd():String
-		{
+		public function get dimEnd():String {
 			return _dimEnd;
 		}
 		
@@ -112,7 +107,6 @@
 
 		public function edgeItemId(itemIndex:int, item:Object):String {
 			return String(itemIndex);
-//			return item[_dimStart] + "-" + item[_dimEnd];
 		}
 		
 		private var _edgeRenderers:Dictionary;
