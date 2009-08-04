@@ -78,8 +78,8 @@
 				
 							// create label 
 		 					label = new RasterTextPlus();
-		 					label.fontFamily = "verdana";
-		 					label.fontSize = 9;
+		 					label.fontFamily = fontLabel;
+		 					label.fontSize = sizeLabel;
 							label.text = String(Math.round(snap));
 		 					label.visible = true;
 							label.autoSize = TextFieldAutoSize.LEFT;
@@ -101,8 +101,8 @@
 						// create label 
 	 					label = new RasterTextPlus();
 						label.text = String(Math.round(snap));
-	 					label.fontFamily = "verdana";
-	 					label.fontSize = 9;
+	 					label.fontFamily = fontLabel;
+	 					label.fontSize = sizeLabel;
 	 					label.visible = true;
 						label.autoSize = TextFieldAutoSize.LEFT;
 						label.autoSizeField = true;
