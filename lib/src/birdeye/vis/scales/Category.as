@@ -127,7 +127,7 @@
 		override protected function maxLabelSize():void
 		{
 			var tmp:RasterTextPlus = new RasterTextPlus();
- 			tmp.fontFamily = "verdana";
+ 			tmp.fontFamily = fontLabel;
  			tmp.fontSize = sizeLabel;
 			tmp.autoSize = TextFieldAutoSize.LEFT;
 			tmp.autoSizeField = true;
@@ -144,13 +144,13 @@
 				case TOP:
 				case BOTTOM:
 				case HORIZONTAL_CENTER:
-					setActualSize(width, Math.max(5, maxLblSize * Math.sin(-_rotateLabels)));
+					height = Math.max(5, maxLblSize * Math.sin(-_rotateLabels));
 					break;
 				case LEFT:
 				case RIGHT:
 				case DIAGONAL:
 				case VERTICAL_CENTER:
-					setActualSize(Math.max(5, maxLblSize * Math.cos(_rotateLabels)), height);
+					width = Math.max(5, maxLblSize * Math.cos(_rotateLabels));
 					break;
 			}
 			
@@ -195,7 +195,7 @@ trace(getTimer(), "drawing category scale");
 	 					label = new RasterTextPlus();
 						label.text = String(dataProvider[dataProviderIndex]);
 						dataProviderIndex += _dataInterval;
-	 					label.fontFamily = "verdana";
+	 					label.fontFamily = fontLabel;
 	 					label.fontSize = sizeLabel;
 	 					label.visible = true;
 						label.autoSize = TextFieldAutoSize.LEFT;
@@ -239,7 +239,7 @@ trace(getTimer(), "drawing category scale");
 	 					label = new RasterTextPlus();
 						label.text = String(dataProvider[dataProviderIndex]);
 						dataProviderIndex += _dataInterval;
-	 					label.fontFamily = "verdana";
+	 					label.fontFamily = fontLabel;
 	 					label.fontSize = sizeLabel;
 	 					label.visible = true;
 						label.autoSize = TextFieldAutoSize.LEFT;

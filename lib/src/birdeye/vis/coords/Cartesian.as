@@ -556,11 +556,10 @@ package birdeye.vis.coords
 											w - (leftContainer.width + rightContainer.width),
 											h - (topContainer.height + bottomContainer.height));
 											
-				bottomContainer.setActualSize(chartBounds.width, bottomContainer.height);
-				topContainer.setActualSize(chartBounds.width, topContainer.height);
+				topContainer.width = bottomContainer.width = chartBounds.width;				
 				leftContainer.setActualSize(leftContainer.width, chartBounds.height);
 				rightContainer.setActualSize(rightContainer.width, chartBounds.height);
-				
+
 				// the z container is placed at the right of the chart
 	  			zContainer.move(int(chartBounds.width + leftContainer.width), int(chartBounds.height));
 	
