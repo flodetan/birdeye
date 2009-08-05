@@ -51,12 +51,8 @@ package birdeye.vis.data
 		public var posX:Number;
 		public var posY:Number;
 		public var posZ:Number;
-
-		public var dim1Value:Number;
-		public var dim2Value:Number;
-		public var dim3Value:Number;
-		public var dim4Value:Number;
-		public var dim5Value:Number;
+		
+		public var collisionTypeIndex:Number = NaN;
 
 		private var line:Line;		 
 		private var _showDataTips:Boolean = false;
@@ -157,21 +153,16 @@ package birdeye.vis.data
 		* Create and position the tooltips for this ExtendedGeometryGroup. 
 		*/
 		public function create(item:Object, dataFields:Array /* of String */, 
-								posX:Number, posY:Number, posZ:Number, radius:Number, 
+								posX:Number, posY:Number, posZ:Number, radius:Number,
+								collisionIndex:Number = NaN, 
 								ttShapes:Array = null/* of IGeometry */, xOffSet:Number = NaN, yOffset:Number = NaN,
-								isTooltip:Boolean = true, showGeometry:Boolean = true,
-								dim1Value:Number = NaN, dim2Value:Number = NaN, dim3Value:Number = NaN,
-								dim4Value:Number = NaN, dim5Value:Number = NaN):void
+								isTooltip:Boolean = true, showGeometry:Boolean = true):void
 		{
 			this.posX = posX;
 			this.posY = posY;
 			this.posZ = posZ;
 			
-			this.dim1Value = dim1Value;
-			this.dim2Value = dim2Value;
-			this.dim3Value = dim3Value;
-			this.dim4Value = dim4Value;
-			this.dim5Value = dim5Value;
+			this.collisionTypeIndex = collisionIndex;
 			
 			this.currentItem = item;
 			this.dataFields = dataFields;

@@ -187,7 +187,7 @@ package birdeye.vis.elements.geometry
 		
 						dataFields["dim1"] = tmpDim1;
 
-						createTTGG(currentItem, dataFields, xPos, yPos, NaN, _size);
+						createTTGG(currentItem, dataFields, xPos, yPos, NaN, _size, i);
 						
 		 				if (ttGG && _extendMouseEvents)
 							gg = ttGG;

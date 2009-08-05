@@ -279,7 +279,8 @@ trace (getTimer(), "drawing column ele");
 			
 							// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 							// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-  							createTTGG(currentItem, dataFields, pos1 + innerColWidth/2, pos2, scale2RelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
+  							createTTGG(currentItem, dataFields, pos1 + innerColWidth/2, pos2, scale2RelativeValue, 
+  										3, i, ttShapes,ttXoffset,ttYoffset,true);
  			 
 							if (dim3)
 							{
@@ -360,7 +361,7 @@ trace (getTimer(), "drawing column ele");
 							var xPos:Number = PolarCoordinateTransform.getX(startAngle+innerAngleSize/2, pos2, chart.origin);
 							var yPos:Number = PolarCoordinateTransform.getY(startAngle+innerAngleSize/2, pos2, chart.origin); 
 		 	
- 							createTTGG(currentItem, dataFields, xPos, yPos, NaN, _rendererSize);
+ 							createTTGG(currentItem, dataFields, xPos, yPos, NaN, _rendererSize, i);
  							
 							if (ttGG && _extendMouseEvents)
 								gg = ttGG;
