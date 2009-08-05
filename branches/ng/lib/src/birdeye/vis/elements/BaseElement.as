@@ -57,7 +57,6 @@ package birdeye.vis.elements
 	
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
-	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	import flash.utils.describeType;
 	import flash.xml.XMLNode;
@@ -936,10 +935,20 @@ package birdeye.vis.elements
 				drawElement();
 		}
 
+		protected var dataFields:Array;
 		public function drawElement():void
 		{
 			_invalidatedElementGraphic = false;
 			
+			dataFields = [];
+			// prepare data for a standard tooltip message in case the user
+			// has not set a dataTipFunction
+			dataFields["dim1"] = dim1;
+			dataFields["dim2"] = dim2;
+			dataFields["dim3"] = dim3;
+			dataFields["colorField"] = colorField;
+			dataFields["sizeField"] = sizeField;
+	
 			if (stylesChanged)
 			{
 				// Redraw gradient fill only if style changed.
