@@ -49,6 +49,9 @@ package birdeye.vis.elements.geometry
 	public class PolygonElement extends BaseElement
 	{
 		private var _polyDim:String;
+		/** The polyDim is the dimension field that specify the coordinates 
+		 * to define the whole polygon. For the geo map, this is expected to be
+		 * an array (countries) of possible arrays (islands) of latitude-longitude coordinates.*/
 		public function set polyDim(val:String):void
 		{
 			_polyDim = val;
@@ -112,6 +115,8 @@ trace(getTimer(), "drawing polygon ele");
 				var fullPoly:Array;
 				var initiated:Boolean = false;
 				
+				dataFields["polyDim"] = _polyDim;
+				
 				poly = new Polygon();
 				poly.data = " ";
 
@@ -129,8 +134,8 @@ trace(getTimer(), "drawing polygon ele");
 						else if (col is IGraphicsFill)
 							fill = col;
 					} 
-	
-					createTTGG(currentItem, [_polyDim], NaN, NaN, NaN, NaN, null, NaN, NaN, false);
+
+					createTTGG(currentItem, dataFields, NaN, NaN, NaN, NaN, null, NaN, NaN, false);
 
 					if (fullPoly && fullPoly.length > 0)
 					{

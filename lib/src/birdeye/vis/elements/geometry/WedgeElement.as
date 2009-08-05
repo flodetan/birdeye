@@ -101,8 +101,6 @@ package birdeye.vis.elements.geometry
 				removeAllElements();
 				var c:uint = 0;
 				
-				var dataFields:Array = [];
-	
 				var angle:Number, radius:Number = NaN;
 				
 				var startAngle:Number = 0; 
@@ -128,10 +126,7 @@ package birdeye.vis.elements.geometry
 				ggIndex = 1;
 	
 				if (scale2)
-				{
 					radius = scale2.size;
-					dataFields[1] = dim2;
-				}
 				
 				var tmpRadius:Number = radius;
 				if (_total>0)
@@ -179,8 +174,10 @@ package birdeye.vis.elements.geometry
 						if (sizeScale)
 						{
 							if (sizeField is Array)
+							{
 								_size = sizeScale.getPosition(currentItem[sizeField[i]]);
-							else
+								dataFields["sizeField"] = sizeField[i];
+							} else
 								_size = sizeScale.getPosition(currentItem[sizeField]);
 							tmpRadius = _innerRadius + radius/_total * chart.columnWidthRate * _size;
 						}
@@ -188,7 +185,7 @@ package birdeye.vis.elements.geometry
 						var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius, chart.origin);
 						var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius, chart.origin); 
 		
-						dataFields[0] = tmpDim1;
+						dataFields["dim1"] = tmpDim1;
 
 						createTTGG(currentItem, dataFields, xPos, yPos, NaN, _size);
 						
