@@ -52,7 +52,7 @@
 			super();
 			_scaleType = BaseScale.CONSTANT;
 			showLabels = false;
-			maxLblSize = 0;
+			_maxLblSize = 0;
 		}
 		
 		override protected function commitProperties():void

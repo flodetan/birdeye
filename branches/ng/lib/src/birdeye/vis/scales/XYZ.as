@@ -46,14 +46,21 @@ package birdeye.vis.scales
 			return _showLabels;
 		}
 		
-		public var maxLblSize:Number = NaN;
+		protected var _maxLblSize:Number = NaN;
 		/** @Private 
 		 * Specifies the maximum label size needed to calculate the axis size
 		 **/
+		public function get maxLblSize():Number
+		{
+			if (isNaN(_maxLblSize))
+				maxLabelSize();
+			return _maxLblSize;
+		}
+		
 		protected function maxLabelSize():void
 		{
 			if (!showAxis)
-				maxLblSize = 0;
+				_maxLblSize = 0;
 			// must be overridden 
 		}
 
@@ -61,7 +68,7 @@ package birdeye.vis.scales
 		protected function calculateMaxLabelStyled():void
 		{
 			if (!showAxis)
-				maxLblSize = 0;
+				_maxLblSize = 0;
 			// calculate according font size and style
 			// consider auto-size and thick size too
 		}
@@ -213,6 +220,7 @@ package birdeye.vis.scales
 		protected function drawAxes(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
 		{
 			// to be overridden
+			throw new Error("abstract method that must be overridden");
 		}
  	}
 }
