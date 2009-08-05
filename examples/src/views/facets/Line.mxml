@@ -77,8 +77,8 @@
 		       	<coords:Cartesian id="cc4" width="90%" height="90%" dataTipFunction="dtFunc" showDataTips="true" dataProvider="{dt}" 
        		type="stacked100" showGrid="true">
 			<coords:scales>
- 				<scales:Category id="c3" categoryField="type" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
- 				<scales:Category id="c2" categoryField="subject" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+ 				<scales:Category id="c3" categoryField="type" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" showPointer="false" sizeLabel="12"/>
+ 				<scales:Category id="c2" categoryField="subject" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" showPointer="false" numberOfIntervals="1" sizeLabel="12"/>
 			</coords:scales>
     		 <coords:elements>
     		 	<elements:PointElement scale1="{c3}" scale2="{c2}" dim1="type" dim2="subject" styleName="solid1" displayName="R3">
@@ -88,8 +88,8 @@
         		 				<coords:Cartesian showDataTips="true" columnWidthRate="0.5" showGrid="false"/>
         		 			</facets:coord>
         		 			<facets:scales>
- 							 	<scales:Category id="c" categoryField="pressure" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" showAxis="true"/>
-							 	<scales:Linear id="l" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" showAxis="true" height="100"/>       		 				
+ 							 	<scales:Category id="c" categoryField="pressure" placement="bottom" fontLabel="tahoma" sizeLabel="9" showPointer="false" showAxis="true"/>
+							 	<scales:Linear id="l" placement="left" fontLabel="tahoma" sizeLabel="9" showAxis="true" numberOfIntervals="1" showPointer="false" height="100"/>       		 				
         		 			</facets:scales>
         		 			<facets:elements>
         		 				<elements:LineElement id="a1" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R1" styleName="solid1" displayName="R1" />
