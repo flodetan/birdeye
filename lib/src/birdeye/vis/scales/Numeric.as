@@ -30,8 +30,6 @@ package birdeye.vis.scales
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.interfaces.IScaleUI;
 	
-	import com.degrafa.GeometryComposition;
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
@@ -128,6 +126,13 @@ package birdeye.vis.scales
 			return _baseAtZero;
 		}
 		
+		override public function get maxLblSize():Number
+		{
+			if (isNaN(_maxLblSize) && !isNaN(max) && !isNaN(min))
+				maxLabelSize();
+			return _maxLblSize;
+		}
+
 		// UIComponent flow
 		
 		public function Numeric()
@@ -194,13 +199,13 @@ package birdeye.vis.scales
 					case BOTTOM:
 					case HORIZONTAL_CENTER:
 						_maxLblSize = sizeLabel /* pixels for 1 char height */ + thickWidth + 10;
-						height = maxLblSize;
+						height = _maxLblSize;
 						break;
 					case LEFT:
 					case RIGHT:
 					case VERTICAL_CENTER:
 						_maxLblSize = text.length * sizeLabel/2 /* pixels for 1 char width */ + thickWidth + 10;
-						width = maxLblSize;
+						width = _maxLblSize;
 				}
 				// calculate the maximum label size according to the 
 				// styles defined for the axis 
@@ -218,7 +223,7 @@ package birdeye.vis.scales
 		{
 			var snap:Number;
 			
-			if (isNaN(maxLblSize) && !isNaN(min) && !isNaN(max) && placement)
+			if (isNaN(_maxLblSize) && !isNaN(min) && !isNaN(max) && placement)
 				maxLabelSize();
 
 			if (size > 0 && dataInterval>0 && showLabels && invalidated)

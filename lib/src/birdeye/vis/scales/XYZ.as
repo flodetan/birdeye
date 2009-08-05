@@ -52,8 +52,7 @@ package birdeye.vis.scales
 		 **/
 		public function get maxLblSize():Number
 		{
-			if (isNaN(_maxLblSize))
-				maxLabelSize();
+			throw new Error("abstract method must be overridden");
 			return _maxLblSize;
 		}
 		
@@ -125,7 +124,6 @@ package birdeye.vis.scales
 			if (showAxis && invalidated)
 			{
 				removeAllElements();
-				drawAxisLine(w,h)
 	
 				if (isReadyForLayout())
 				{
@@ -160,6 +158,7 @@ package birdeye.vis.scales
 							break;
 					}
 					drawAxes(xMin, xMax, yMin, yMax, sign);
+					drawAxisLine(w,h);
 					if (showPointer)
 					{
 						_pointer.stroke = new SolidStroke(colorPointer, 1, weightPointer);

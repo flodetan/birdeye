@@ -86,7 +86,14 @@
 		{
 			_initialOffset = val;
 		} 
-		
+
+		override public function get maxLblSize():Number
+		{
+			if (isNaN(_maxLblSize) && dataProvider)
+				maxLabelSize();
+			return _maxLblSize;
+		}
+
 		// UIComponent flow
 		
 		public function Category()
@@ -136,7 +143,7 @@
 			for (var i:Number = 0; i<_dataProvider.length; i++)
 			{
 				tmp.text = String(_dataProvider[i]);
-				_maxLblSize = Math.max(maxLblSize, tmp.displayObject.width); 
+				_maxLblSize = Math.max(_maxLblSize, tmp.displayObject.width); 
 			}
 
 			switch (placement)
@@ -144,13 +151,13 @@
 				case TOP:
 				case BOTTOM:
 				case HORIZONTAL_CENTER:
-					height = Math.max(5, maxLblSize * Math.sin(-_rotateLabels));
+					height = Math.max(5, _maxLblSize * Math.sin(-_rotateLabels));
 					break;
 				case LEFT:
 				case RIGHT:
 				case DIAGONAL:
 				case VERTICAL_CENTER:
-					width = Math.max(5, maxLblSize * Math.cos(_rotateLabels));
+					width = Math.max(5, _maxLblSize * Math.cos(_rotateLabels));
 					break;
 			}
 			
@@ -170,7 +177,7 @@
 
 			var snap:Number, dataProviderIndex:Number=0;
 
-			if (isNaN(maxLblSize) && dataProvider && dataProvider.length>0 && placement)
+			if (isNaN(_maxLblSize) && dataProvider && dataProvider.length>0 && placement)
 				maxLabelSize();
 
 			if (_scaleInterval > 0 && invalidated)
