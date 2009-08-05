@@ -12,6 +12,7 @@
 <mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import birdeye.util.EffectsUtil;
 			
 			[Bindable]
 			public var dt:ArrayCollection;;
@@ -92,11 +93,11 @@
 							 	<scales:Linear id="l" placement="left" fontLabel="tahoma" sizeLabel="9" showAxis="true" numberOfIntervals="1" showPointer="false" height="100"/>       		 				
         		 			</facets:scales>
         		 			<facets:elements>
-        		 				<elements:LineElement id="a1" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R1" styleName="solid1" displayName="R1" />
-							 	<elements:LineElement id="a2" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R2" styleName="solid2" displayName="R2" />
-							 	<elements:LineElement id="a3" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R3" styleName="solid3" displayName="R3" />
-							 	<elements:LineElement id="a4" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R4" styleName="solid4" displayName="R4" />
-							 	<elements:LineElement id="a5" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R5" styleName="solid5" displayName="R5" />
+        		 				<elements:LineElement id="a1" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R1" styleName="solid1" displayName="R1" />
+							 	<elements:LineElement id="a2" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R2" styleName="solid2" displayName="R2" />
+							 	<elements:LineElement id="a3" scale1="{c}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R3" styleName="solid3" displayName="R3" />
+							 	<elements:LineElement id="a4" scale1="{c}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R4" styleName="solid4" displayName="R4" />
+							 	<elements:LineElement id="a5" scale1="{c}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R5" styleName="solid5" displayName="R5" />
         		 			</facets:elements>
         		 		</facets:FacetContainer>
         		 	</elements:itemRenderer>

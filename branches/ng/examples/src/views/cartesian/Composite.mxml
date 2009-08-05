@@ -11,6 +11,7 @@
 	<mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import birdeye.util.EffectsUtil;
 			
 			[Bindable]
 			public var dt:ArrayCollection;;
@@ -54,8 +55,8 @@
  			<scales:Category id="c2" categoryField="subject" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 		</coords:scales>
 		 <coords:elements>
-		 	<elements:BarElement extendMouseEvents="true" scale2="{c2}" scale1="{l2}" dim2="subject" dim1="R2" styleName="grad1" displayName="R2"/>
-		 	<elements:LineElement scale1="{c}" scale2="{l}" showAllDataItems="true" dim2="R3" dim1="subject" styleName="solid1" displayName="R3"/>
+		 	<elements:BarElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale2="{c2}" scale1="{l2}" dim2="subject" dim1="R2" styleName="grad1" displayName="R2"/>
+		 	<elements:LineElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" showAllDataItems="true" dim2="R3" dim1="subject" styleName="solid1" displayName="R3"/>
 		 	<elements:AreaElement scale1="{c}" scale2="{l}" dim2="R3" dim1="subject" styleName="grad3" displayName="R1"/>
 		 </coords:elements>
 	</coords:Cartesian>

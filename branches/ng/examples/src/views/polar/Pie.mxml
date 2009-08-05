@@ -9,6 +9,7 @@
 <mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import birdeye.util.EffectsUtil;
 			
 			[Bindable]
 			public var dt:ArrayCollection;;
@@ -62,9 +63,9 @@
 			<scales:PercentAngle id="c" size="270"/>
 		</polar:scales>
 		<polar:elements>
-			<elements:WedgeElement scale1="{a}" scale2="{l}" alpha=".6" radiusLabelOffset="5" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" extendMouseEvents="true" dim1="GDP" displayName="A"/>
-			<elements:WedgeElement scale1="{b}" scale2="{l}" alpha=".7" radiusLabelOffset="10" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" labelField="region" extendMouseEvents="true" dim1="Density" displayName="B"/>
-			<elements:WedgeElement scale1="{c}" scale2="{l}" alpha=".8" labelField="region" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" radiusLabelOffset="10" extendMouseEvents="true" dim1="Area" displayName="C"/>
+			<elements:WedgeElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{a}" scale2="{l}" alpha=".6" radiusLabelOffset="5" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" extendMouseEvents="true" dim1="GDP" displayName="A"/>
+			<elements:WedgeElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{b}" scale2="{l}" alpha=".7" radiusLabelOffset="10" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" labelField="region" extendMouseEvents="true" dim1="Density" displayName="B"/>
+			<elements:WedgeElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" alpha=".8" labelField="region" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" radiusLabelOffset="10" extendMouseEvents="true" dim1="Area" displayName="C"/>
 		</polar:elements>
 	</polar:Polar>
 	

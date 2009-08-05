@@ -12,6 +12,7 @@
 <mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import birdeye.util.EffectsUtil;
 			
 			[Bindable]
 			public var dt:ArrayCollection;;
@@ -78,7 +79,7 @@
 							 	<scales:Linear id="l" placement="left" fontLabel="tahoma" sizeLabel="9" showPointer="false" numberOfIntervals="1" height="100"/>       		 				
         		 			</facets:scales>
         		 			<facets:elements>
-        		 				<elements:ColumnElement id="a1" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R1" styleName="solid1" displayName="R1" />
+        		 				<elements:ColumnElement id="a1" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R1" styleName="solid1" displayName="R1" />
         		 			</facets:elements>
         		 		</facets:FacetContainer>
         		 	</elements:itemRenderer>

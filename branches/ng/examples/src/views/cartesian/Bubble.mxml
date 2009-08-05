@@ -11,6 +11,7 @@
 <mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import birdeye.util.EffectsUtil;
 			
 			[Bindable]
 			public var dt:ArrayCollection;;
@@ -56,10 +57,10 @@
 			<scales:Linear id="size" scaleValues="[5,30]" showAxis="false"/>
 		</coords:scales>
 		 <coords:elements>
-		 	<elements:PointElement scale1="{c}" scale2="{l}" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" styleName="grad1" dim2="R1" displayName="R1"/>
-		 	<elements:PointElement scale1="{c}" scale2="{l}" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" styleName="grad3" dim2="R2" displayName="R2"/>
-		 	<elements:PointElement scale1="{c}" scale2="{l}" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" styleName="grad5" dim2="R3" displayName="R3"/>
-		 	<elements:PointElement scale1="{c}" scale2="{l}" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" styleName="grad4" dim2="R4" displayName="R4"/>
+		 	<elements:PointElement scale1="{c}" scale2="{l}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" styleName="grad1" dim2="R1" displayName="R1"/>
+		 	<elements:PointElement scale1="{c}" scale2="{l}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" styleName="grad3" dim2="R2" displayName="R2"/>
+		 	<elements:PointElement scale1="{c}" scale2="{l}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" styleName="grad5" dim2="R3" displayName="R3"/>
+		 	<elements:PointElement scale1="{c}" scale2="{l}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" styleName="grad4" dim2="R4" displayName="R4"/>
 		 </coords:elements>
 	</coords:Cartesian>
 	<guides:Legend dataProvider="{bb}" direction="horizontal"/>
