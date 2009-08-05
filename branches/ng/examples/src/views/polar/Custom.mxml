@@ -34,13 +34,6 @@
 				dt = ac;
 			}
 
-			private function dtFunc(currDatatip:Object, dataFields:Array):String
-			{
-				var tt:String = "Info: " + currDatatip[dataFields[0]];
-				tt += '\n' + dataFields[1] + ": " + currDatatip[dataFields[1]];
-				return  tt;
-			}
-
 			private function sizeFunc(dataValue:Object, min:Number, max:Number, size:Number):Number
 			{
 				return  Number(dataValue)/max * size;

@@ -46,7 +46,7 @@
 
 			private function dtFunc(currDatatip:Object, dataFields:Array):String
 			{
-				var tt:String = currDatatip[dataFields[0]];
+				var tt:String = currDatatip[dataFields["dim1"]];
 				return  tt;
 			}
 		]]>
