@@ -34,20 +34,6 @@ package birdeye.vis.scales
 	
 	public class XYZ extends BaseScale 
 	{
-		/** @Private
-		 * Set to true if the user has specified an interval for the axis.
-		 * Otherwise, the interval will be calculated automatically.
-		 */
-		protected var isGivenInterval:Boolean = false;
-
-		/** Set the interval between axis values. */
-		override public function set dataInterval(val:Number):void
-		{
-			_dataInterval = val;
-			isGivenInterval = true;
-			invalidateProperties();
-		}
-
 		private var _showLabels:Boolean = true;
 		/** Show labels on the axis */
 		[Inspectable(enumeration="false,true")]
