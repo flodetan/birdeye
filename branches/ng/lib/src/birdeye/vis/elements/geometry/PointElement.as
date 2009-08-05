@@ -106,33 +106,26 @@ trace (getTimer(), "drawing point ele");
 							var bounds:Rectangle = new Rectangle(scaleResults["pos1"] - enumScale1.size/2/enumLength1 + 5, scaleResults["pos2"] - enumScale2.size/2/enumLength2 + 5, enumScale1.size/enumLength1 - 10, enumScale2.size/enumLength2 - 10);
 
 
-							
-							var tmp:Object = itemRenderer.newInstance();
- 						
-		 					if (tmp is FacetContainer)	
-		 					{
-		 						var subco:FacetContainer = tmp as FacetContainer;
-		 						
-		 						var coord:Object = subco.coord.clone();
-		 						
-		 						
-		 						coord.scales = subco.scales;
-		 						
-		 						var el:Array = new Array();
-		 						for each (var baseEl:BaseElement in subco.elements)
-		 						{
-		 							el.push(baseEl.clone());
-		 						}
-		 						coord.elements = el;
-		 						
-		 						coord.width = bounds.width;
-		 						coord.height = bounds.height;
-		 						coord.x = bounds.x;
-		 						coord.y = bounds.y;
-		 						coord.dataProvider = filteredData;
+	 						var subco:FacetContainer = itemRenderer.newInstance() as FacetContainer;
+	 						
+	 						var coord:Object = subco.coord.clone();
+	 						
+	 						coord.scales = subco.scales;
+	 						
+	 						var el:Array = new Array();
+	 						for each (var baseEl:BaseElement in subco.elements)
+	 						{
+	 							el.push(baseEl.clone());
+	 						}
+	 						coord.elements = el;
+	 						
+	 						coord.width = bounds.width;
+	 						coord.height = bounds.height;
+	 						coord.x = bounds.x;
+	 						coord.y = bounds.y;
+	 						coord.dataProvider = filteredData;
 
-								this.addChild(coord as DisplayObject);
-		 					}
+							this.addChild(coord as DisplayObject);
 						}
 					}
 				}
