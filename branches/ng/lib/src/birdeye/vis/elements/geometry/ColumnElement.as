@@ -90,14 +90,7 @@ trace (getTimer(), "drawing column ele");
 
 				super.drawElement();
 				removeAllElements();
-				var dataFields:Array = [];
-				// prepare data for a standard tooltip message in case the user
-				// has not set a dataTipFunction
-				dataFields[0] = dim1;
-				dataFields[1] = dim2;
-				if (dim3) 
-					dataFields[2] = dim3;
-	
+
 				var pos1:Number, pos2:Number, zPos:Number = NaN;
 				var j:Object;
 				
@@ -185,6 +178,7 @@ trace (getTimer(), "drawing column ele");
 							} else {
 								pos2 = scale2.getPosition(currentItem[tmpDim2] + innerBase2);
 							}
+							dataFields["dim2"] = tmpArray[i];
 						}
 						
 						var scale2RelativeValue:Number = NaN;
@@ -202,6 +196,7 @@ trace (getTimer(), "drawing column ele");
 							pos2 = INumerableScale(multiScale.scales[
 												currentItem[multiScale.dim1]
 												]).getPosition(currentItem[tmpDim2]);
+							dataFields["dim2"] = tmpArray[i];
 						} else if (chart.multiScale) {
 							baseScale2 = getDim2MinPosition(INumerableScale(chart.multiScale.scales[
 												currentItem[chart.multiScale.dim1]
@@ -210,6 +205,7 @@ trace (getTimer(), "drawing column ele");
 							pos2 = INumerableScale(chart.multiScale.scales[
 												currentItem[chart.multiScale.dim1]
 												]).getPosition(currentItem[tmpDim2] + innerBase2);
+							dataFields["dim2"] = tmpArray[i];
 						}
 		
 						if (colorScale)
@@ -399,22 +395,6 @@ trace (getTimer(), "drawing column ele");
 			}
 		}
 		
-/* 		private function getXMinPosition():Number
-		{
-			var xPos:Number;
-			
-			if (xAxis)
-			{
-				if (xAxis is NumericAxis)
-					xPos = xAxis.getPosition(minXValue);
-			} else {
-				if (chart.xAxis is NumericAxis)
-					xPos = chart.xAxis.getPosition(minXValue);
-			}
-			
-			return xPos;
-		}
- */		
 		private function getDim2MinPosition(s2:IScale):Number
 		{
 			var pos2:Number;

@@ -81,14 +81,7 @@ package birdeye.vis.elements.geometry
 			{
 				super.drawElement();
 				removeAllElements();
-				var dataFields:Array = [];
-				// prepare data for a standard tooltip message in case the user
-				// has not set a dataTipFunction
-				dataFields[0] = dim2;
-				dataFields[1] = dim1;
-				if (dim3) 
-					dataFields[2] = dim3;
-	
+
 				var xPos:Number, yPos:Number, zPos:Number = NaN;
 				var j:Object;
 	
@@ -151,7 +144,7 @@ package birdeye.vis.elements.geometry
 							} else {
 								xPos = scale1.getPosition(currentItem[tmpDim1] + innerBase1);
 							}
-							dataFields[1] = dim1;
+							dataFields["dim1"] = tmpArray[i];
 						}
 						
 						switch (_stackType)

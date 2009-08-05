@@ -100,14 +100,6 @@ trace (getTimer(), "drawing line ele");
 				var pos1:Number, pos2:Number, zPos:Number;
 				var j:Number = 0;
 	
-				var dataFields:Array = [];
-				// prepare data for a standard tooltip message in case the user
-				// has not set a dataTipFunction
-				dataFields[0] = dim1;
-				dataFields[1] = dim2;
-				if (dim3) 
-					dataFields[2] = dim3;
-	
 				ggIndex = 0;
 	
 				var points:Array = [];
@@ -134,7 +126,6 @@ trace (getTimer(), "drawing line ele");
 					if (scale2)
 					{
 						pos2 = scale2.getPosition(currentItem[dim2]);
-						dataFields[1] = dim2;
 					}
 					
 					var scale2RelativeValue:Number = NaN;

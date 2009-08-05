@@ -77,14 +77,6 @@ package birdeye.vis.elements.geometry
 trace (getTimer(), "drawing point ele");
 				super.drawElement();
 				removeAllElements();
-				var dataFields:Array = [];
-				// prepare data for a standard tooltip message in case the user
-				// has not set a dataTipFunction
-				dataFields[0] = dim1;
-				dataFields[1] = dim2;
-				dataFields[2] = sizeField;
-				if (dim3) 
-					dataFields[3] = dim3;
 				
 				if (!itemRenderer)
 					itemRenderer = new ClassFactory(CircleRenderer);
