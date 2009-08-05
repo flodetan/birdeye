@@ -39,15 +39,22 @@
 				dt = ac;
 			}
 
-			
-            
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = dataFields["dim1"] + ": " + currDatatip[dataFields["dim1"]];
+				tt += '\n' + dataFields["dim2"] + ": " + currDatatip[dataFields["dim2"]];
+				if (dataFields["sizeField"] != null)
+					tt += '\n' + dataFields["sizeField"] + ": " + currDatatip[dataFields["sizeField"]];
+				return  tt;
+			}
 		]]>
 	</mx:Script>
 	<mx:Button label="Generate" click="createDT()"/>
-	<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
-	<coords:Cartesian id="bc2" width="90%" height="90%" dataProvider="{dt}" showDataTips="true" type="stacked">
+	<mx:HBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
+	<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center">
+	<coords:Cartesian id="bc2" width="90%" height="90%" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true" type="stacked">
 		<coords:scales>
-	    		<scales:Category id="c" categoryField="subject" placement="right" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
+	    		<scales:Category id="c" categoryField="subject" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 	    		<scales:Linear id="l" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 		</coords:scales>
     	 <coords:elements>
@@ -57,10 +64,13 @@
 		 </coords:elements>
 	</coords:Cartesian>
 	<guides:Legend dataProvider="{bc2}" direction="horizontal" />	
+		
+	</mx:VBox>
 	
-	<coords:Cartesian id="bc3" width="90%" height="90%" dataProvider="{dt}" showDataTips="true" type="stacked100">
+	<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center">
+	<coords:Cartesian id="bc3" width="90%" height="90%" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true" type="stacked100">
 		<coords:scales>
-	    		<scales:Category id="c1" categoryField="subject" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
+	    		<scales:Category id="c1" categoryField="subject" placement="right" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 	    		<scales:Linear id="l1" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 		</coords:scales>
     	 <coords:elements>
@@ -73,5 +83,6 @@
 	</coords:Cartesian>
 	<guides:Legend dataProvider="{bc3}" direction="horizontal" />	
 	</mx:VBox>
+	</mx:HBox>
 	
 </mx:VBox>
