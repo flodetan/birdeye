@@ -10,6 +10,7 @@
 	<mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import birdeye.util.EffectsUtil;
 			
 			[Bindable]
 			public var dt:ArrayCollection;;
@@ -58,13 +59,13 @@
 			<scales:MultiScale dim1="subject" labelFont="verdana" labelSize="10" labelColor="0x000000"/>
 		</polar:multiScale>
 		<polar:elements>
-			<pseries:ColumnElement extendMouseEvents="true" styleName="grad1" dim1="subject" dim2="R1" displayName="R1"/>
-			<pseries:ColumnElement extendMouseEvents="true" styleName="grad2" dim1="subject" dim2="R2" displayName="R2"/>
-			<pseries:ColumnElement extendMouseEvents="true" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
-			<pseries:ColumnElement styleName="solid2" dim1="subject" collisionType="stacked100" dim2="['R1','R3','R5']" displayName="Mix1"/>
-			<pseries:ColumnElement extendMouseEvents="true" styleName="grad4" dim1="subject" dim2="R4" displayName="R4"/>
-			<pseries:ColumnElement extendMouseEvents="true" styleName="grad5" dim1="subject" dim2="R5" displayName="R5"/>
-			<pseries:ColumnElement styleName="grad2" dim1="subject" collisionType="stacked100" dim2="['R1','R2']" displayName="Mix2"/>
+			<pseries:ColumnElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad1" dim1="subject" dim2="R1" displayName="R1"/>
+			<pseries:ColumnElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad2" dim1="subject" dim2="R2" displayName="R2"/>
+			<pseries:ColumnElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
+			<pseries:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="solid2" dim1="subject" collisionType="stacked100" dim2="['R1','R3','R5']" displayName="Mix1"/>
+			<pseries:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" extendMouseEvents="true" styleName="grad4" dim1="subject" dim2="R4" displayName="R4"/>
+			<pseries:ColumnElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad5" dim1="subject" dim2="R5" displayName="R5"/>
+			<pseries:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad2" dim1="subject" collisionType="stacked100" dim2="['R1','R2']" displayName="Mix2"/>
 		</polar:elements>
 	</polar:Polar>
 	<legend:Legend dataProvider="{rd}" direction="horizontal"/>

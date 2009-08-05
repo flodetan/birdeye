@@ -12,6 +12,7 @@
 		<![CDATA[
 			import birdeye.vis.data.DataItemLayout;
 			import mx.collections.ArrayCollection;
+			import birdeye.util.EffectsUtil;
 			
 			[Bindable]
 			public var dt:ArrayCollection;;
@@ -81,11 +82,11 @@
 					<scales:Linear id="size" scaleValues="[0,1]" showAxis="false"/>
 				</coords:scales>
         		 <coords:elements>
-        		 	<elements:ColumnElement extendMouseEvents="true" mouseOverFunction="mouseOver" mouseOutFunction="mouseOut" scale1="{c}" scale2="{l}" sizeScale="{size}" sizeField="R2" dim1="subject" dim2="R1" styleName="grad1" displayName="R1"/>
-        		 	<elements:ColumnElement extendMouseEvents="true" mouseOverFunction="mouseOver" mouseOutFunction="mouseOut" scale1="{c}" scale2="{l}" sizeScale="{size}" sizeField="R1" dim1="subject" dim2="R2" styleName="grad3" displayName="R2"/>
-        		 	<elements:ColumnElement extendMouseEvents="true" mouseOverFunction="mouseOver" mouseOutFunction="mouseOut" scale1="{c}" scale2="{l}" sizeScale="{size}" sizeField="R4" dim1="subject" dim2="R3" styleName="grad5" displayName="R3"/>
-        		 	<elements:ColumnElement extendMouseEvents="true" mouseOverFunction="mouseOver" mouseOutFunction="mouseOut" scale1="{c}" scale2="{l}" sizeScale="{size}" sizeField="R5" dim1="subject" dim2="R4" styleName="grad2" displayName="R4"/>
-        		 	<elements:ColumnElement extendMouseEvents="true" mouseOverFunction="mouseOver" mouseOutFunction="mouseOut" scale1="{c}" scale2="{l}" sizeScale="{size}" sizeField="R3" dim1="subject" dim2="R5" styleName="grad4" displayName="R5"/>
+        		 	<elements:ColumnElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" sizeScale="{size}" sizeField="R2" dim1="subject" dim2="R1" styleName="grad1" displayName="R1"/>
+        		 	<elements:ColumnElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" sizeScale="{size}" sizeField="R1" dim1="subject" dim2="R2" styleName="grad3" displayName="R2"/>
+        		 	<elements:ColumnElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  scale1="{c}" scale2="{l}" sizeScale="{size}" sizeField="R4" dim1="subject" dim2="R3" styleName="grad5" displayName="R3"/>
+        		 	<elements:ColumnElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  scale1="{c}" scale2="{l}" sizeScale="{size}" sizeField="R5" dim1="subject" dim2="R4" styleName="grad2" displayName="R4"/>
+        		 	<elements:ColumnElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" sizeScale="{size}" sizeField="R3" dim1="subject" dim2="R5" styleName="grad4" displayName="R5"/>
         		 </coords:elements>
         	</coords:Cartesian>
 			<legend:Legend dataProvider="{cc4}" direction="horizontal"/>
@@ -96,13 +97,13 @@
 	 				<scales:Linear id="l1" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
 				</coords:scales>
         		 <coords:elements>
-        		 	<elements:ColumnElement extendMouseEvents="true" mouseOverFunction="mouseOver" mouseOutFunction="mouseOut" scale1="{c1}" scale2="{l1}" dim1="subject" dim2="R1" styleName="grad1" displayName="R1"/>
-        		 	<elements:ColumnElement scale1="{c1}" scale2="{l1}" dim1="subject" dim2="R2" styleName="grad3" displayName="R2"/>
-        		 	<elements:ColumnElement scale1="{c1}" scale2="{l1}" dim1="subject" dim2="R3" styleName="grad5" displayName="R3"/>
-        		 	<elements:ColumnElement scale1="{c1}" scale2="{l1}" dim1="subject" dim2="R4" styleName="grad2" displayName="R4"/>
-        		 	<elements:ColumnElement scale1="{c1}" scale2="{l1}" dim1="subject" dim2="R5" styleName="grad4" displayName="R5"/>
-        		 	<elements:ColumnElement scale1="{c1}" scale2="{l1}" dim1="subject" collisionType="stacked100" dim2="{['R1','R2','R3','R4','R5']}" styleName="solid1" displayName="R2"/>
-        		 	<elements:ColumnElement scale1="{c1}" scale2="{l1}" dim1="subject" collisionType="stacked100" dim2="{['R6','R7','R8']}" styleName="grad3" displayName="R2"/>
+        		 	<elements:ColumnElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c1}" scale2="{l1}" dim1="subject" dim2="R1" styleName="grad1" displayName="R1"/>
+        		 	<elements:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c1}" scale2="{l1}" dim1="subject" dim2="R2" styleName="grad3" displayName="R2"/>
+        		 	<elements:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c1}" scale2="{l1}" dim1="subject" dim2="R3" styleName="grad5" displayName="R3"/>
+        		 	<elements:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c1}" scale2="{l1}" dim1="subject" dim2="R4" styleName="grad2" displayName="R4"/>
+        		 	<elements:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c1}" scale2="{l1}" dim1="subject" dim2="R5" styleName="grad4" displayName="R5"/>
+        		 	<elements:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c1}" scale2="{l1}" dim1="subject" collisionType="stacked100" dim2="{['R1','R2','R3','R4','R5']}" styleName="solid1" displayName="R2"/>
+        		 	<elements:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c1}" scale2="{l1}" dim1="subject" collisionType="stacked100" dim2="{['R6','R7','R8']}" styleName="grad3" displayName="R2"/>
         		 </coords:elements>
         	</coords:Cartesian>
 	</mx:VBox>
