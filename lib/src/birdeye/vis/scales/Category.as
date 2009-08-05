@@ -132,11 +132,11 @@
 			tmp.autoSize = TextFieldAutoSize.LEFT;
 			tmp.autoSizeField = true;
 
-			maxLblSize = 0;
+			_maxLblSize = 0;
 			for (var i:Number = 0; i<_dataProvider.length; i++)
 			{
 				tmp.text = String(_dataProvider[i]);
-				maxLblSize = Math.max(maxLblSize, tmp.displayObject.width); 
+				_maxLblSize = Math.max(maxLblSize, tmp.displayObject.width); 
 			}
 
 			switch (placement)
@@ -313,7 +313,7 @@ trace(getTimer(), "drawing category scale");
 		{
 			super.resetValues();
 			invalidated = true;
-			maxLblSize = NaN;
+			_maxLblSize = NaN;
 				
 			_dataProvider = [];
 		}

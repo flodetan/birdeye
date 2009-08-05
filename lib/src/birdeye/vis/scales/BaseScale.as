@@ -587,7 +587,8 @@ package birdeye.vis.scales
 		 */
 		public function getPosition(dataValue:*):*
 		{
-			// to be overridden by implementing axis class (Category, Numeric, DateTime..)
+			// abstract method to be overridden by implementing class (Category, Numeric, DateTime..)
+			throw new Error("abstract method that must be overridden");
 			return null;
 		}
 		

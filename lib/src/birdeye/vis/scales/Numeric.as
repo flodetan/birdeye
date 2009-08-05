@@ -193,20 +193,20 @@ package birdeye.vis.scales
 					case TOP:
 					case BOTTOM:
 					case HORIZONTAL_CENTER:
-						maxLblSize = sizeLabel /* pixels for 1 char height */ + thickWidth + 10;
+						_maxLblSize = sizeLabel /* pixels for 1 char height */ + thickWidth + 10;
 						height = maxLblSize;
 						break;
 					case LEFT:
 					case RIGHT:
 					case VERTICAL_CENTER:
-						maxLblSize = text.length * sizeLabel/2 /* pixels for 1 char width */ + thickWidth + 10;
+						_maxLblSize = text.length * sizeLabel/2 /* pixels for 1 char width */ + thickWidth + 10;
 						width = maxLblSize;
 				}
 				// calculate the maximum label size according to the 
 				// styles defined for the axis 
 				super.calculateMaxLabelStyled();
 			} else
-				maxLblSize = 0;
+				_maxLblSize = 0;
 		}
 
 		/** @Private
@@ -397,7 +397,7 @@ trace(getTimer(), "drawing numeric scale");
 		{
 			super.resetValues();
 			min = max = totalPositiveValue = NaN;
-			maxLblSize = NaN;
+			_maxLblSize = NaN;
 			invalidated = true;
 		} 
 	}
