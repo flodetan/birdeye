@@ -1076,18 +1076,28 @@ package birdeye.vis.elements
 				}
 			}
 
-			if (scale2 && scale2 is IScaleUI && IScaleUI(scale2).pointer && chart.coordType == VisScene.CARTESIAN)
-			{
-				IScaleUI(scale2).pointerY = extGG.posY;
-				IScaleUI(scale2).pointer.visible = true;
-			} 
-
 			if (scale1 && scale1 is IScaleUI && IScaleUI(scale1).pointer && chart.coordType == VisScene.CARTESIAN)
 			{
-				IScaleUI(scale1).pointerX = extGG.posX;
+				var tmpDim1:String;
+				if (dim1 is Array)
+					tmpDim1 = dim1[extGG.collisionTypeIndex];
+				else 
+					tmpDim1 = String(dim1);
+				IScaleUI(scale1).pointerX = IScaleUI(scale1).getPosition(extGG.currentItem[tmpDim1]);
 				IScaleUI(scale1).pointer.visible = true;
 			}
 			
+			if (scale2 && scale2 is IScaleUI && IScaleUI(scale2).pointer && chart.coordType == VisScene.CARTESIAN)
+			{
+				var tmpDim2:String;
+				if (dim2 is Array)
+					tmpDim2 = dim2[extGG.collisionTypeIndex];
+				else 
+					tmpDim2 = String(dim2);
+				IScaleUI(scale2).pointerY = IScaleUI(scale2).getPosition(extGG.currentItem[tmpDim2]);
+				IScaleUI(scale2).pointer.visible = true;
+			} 
+
 			if (scale3 && scale3 is IScaleUI && IScaleUI(scale3).pointer && chart.coordType == VisScene.CARTESIAN)
 			{
 				IScaleUI(scale3).pointerY = extGG.posZ;
@@ -1194,7 +1204,7 @@ package birdeye.vis.elements
 		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
 		 * AreaElement, thus improving performances.*/ 
 		protected function createTTGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
-									zPos:Number, radius:Number, shapes:Array = null /* of IGeometry */, 
+									zPos:Number, radius:Number, collisionIndex:Number = NaN, shapes:Array = null /* of IGeometry */, 
 									ttXoffset:Number = NaN, ttYoffset:Number = NaN, showGeometry:Boolean = true):void
 		{
 			if (graphicsCollection.items && graphicsCollection.items.length > ggIndex)
@@ -1213,15 +1223,15 @@ package birdeye.vis.elements
  			if (chart.showDataTips || chart.showAllDataTips)
 			{ 
 				initGGToolTip();
-				ttGG.create(item, dataFields, xPos, yPos, zPos, radius, shapes, ttXoffset, ttYoffset, true, showGeometry);
+				ttGG.create(item, dataFields, xPos, yPos, zPos, radius, collisionIndex, shapes, ttXoffset, ttYoffset, true, showGeometry);
 			} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null)
 			{
 				// if no tips but interactivity is required than add roll over events and pass
 				// data and positioning information about the current data item 
-				ttGG.create(item, dataFields, xPos, yPos, zPos, NaN, null, NaN, NaN, false);
+				ttGG.create(item, dataFields, xPos, yPos, zPos, NaN, collisionIndex, null, NaN, NaN, false);
 			} else {
 				// if no tips and no interactivity than just add location info needed for pointers
-				ttGG.create(null, null, xPos, yPos, zPos, NaN, null, NaN, NaN, false);
+				ttGG.create(null, null, xPos, yPos, zPos, NaN, collisionIndex, null, NaN, NaN, false);
 			}
 
 			if (chart.showAllDataTips)

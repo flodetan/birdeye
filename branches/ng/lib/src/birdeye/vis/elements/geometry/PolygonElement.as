@@ -135,7 +135,7 @@ trace(getTimer(), "drawing polygon ele");
 							fill = col;
 					} 
 
-					createTTGG(currentItem, dataFields, NaN, NaN, NaN, NaN, null, NaN, NaN, false);
+					createTTGG(currentItem, dataFields, NaN, NaN, NaN, NaN, NaN, null, NaN, NaN, false);
 
 					if (fullPoly && fullPoly.length > 0)
 					{

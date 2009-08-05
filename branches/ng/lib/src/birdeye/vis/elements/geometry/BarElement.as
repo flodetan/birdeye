@@ -213,7 +213,7 @@ package birdeye.vis.elements.geometry
 		
 						// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
 						// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-						createTTGG(currentItem, dataFields, xPos, yPos+innerBarWidth/2, scale2RelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
+						createTTGG(currentItem, dataFields, xPos, yPos+innerBarWidth/2, scale2RelativeValue, 3, i, ttShapes,ttXoffset,ttYoffset);
 		
 						if (dim3)
 						{
