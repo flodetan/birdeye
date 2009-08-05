@@ -352,12 +352,18 @@ package birdeye.vis.scales
 			return _scaleType;
 		}
 		
+		/** @Private
+		 * Set to true if the user has specified an interval for the scale.
+		 * Otherwise, the interval will be calculated automatically.
+		 */
+		protected var isGivenInterval:Boolean = false;
+
 		protected var _dataInterval:Number = NaN;
 		/** Set the data interval between scale data values. */
 		public function set dataInterval(val:Number):void
 		{
 			_dataInterval = val;
-
+			isGivenInterval = true;
 			invalidateProperties();
 		}
 		public function get dataInterval():Number
@@ -370,12 +376,27 @@ package birdeye.vis.scales
 		public function set scaleInterval(val:Number):void
 		{
 			_scaleInterval = val;
-
+			isGivenInterval = true;
 			invalidateProperties();
 		}
 		public function get scaleInterval():Number
 		{
 			return _scaleInterval;
+		}
+		
+		protected var _numberOfIntervals:Number = 5;
+		/** Set the number of intervals in the scale. For ex. 5 intervals, will define
+		 * 5 labels and ticks on the scale. This can be used as alternative to scaleInterval and 
+		 * dataInterval. If dataInterval and scaleInterval are not defined than numberOfIntervals 
+		 * is used and by default is 5.*/
+		public function set numberOfIntervals(val:Number):void
+		{
+			_numberOfIntervals = val;
+			invalidateProperties();
+		}
+		public function get numberOfIntervals():Number
+		{
+			return _numberOfIntervals;
 		}
 		
 		protected var _showAxis:Boolean = true;
