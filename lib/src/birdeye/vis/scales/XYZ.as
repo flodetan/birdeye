@@ -143,34 +143,37 @@ package birdeye.vis.scales
 							xMin = 0; xMax = w;
 							yMin = 0; yMax = 0;
 							sign = 1;
-							_pointer = new Line(0,0, 0, sizePointer);
+							if (showPointer) _pointer = new Line(0,0, 0, sizePointer);
 							break;
 						case TOP:
 							xMin = 0; xMax = w;
 							yMin = h; yMax = h;
 							sign = -1;
-							_pointer = new Line(0,h-sizePointer, 0, h);
+							if (showPointer) _pointer = new Line(0,h-sizePointer, 0, h);
 							break;
 						case LEFT:
 						case VERTICAL_CENTER:
 							xMin = w; xMax = w;
 							yMin = 0; yMax = h;
 							sign = -1;
-							_pointer = new Line(w-sizePointer,h, w, h);
+							if (showPointer) _pointer = new Line(w-sizePointer,h, w, h);
 							break;
 						case RIGHT:
 						case DIAGONAL:
 							xMin = 0; xMax = 0;
 							yMin = 0; yMax = h;
 							sign = 1;
-							_pointer = new Line(0,h, +sizePointer, h);
+							if (showPointer) _pointer = new Line(0,h, +sizePointer, h);
 							break;
 					}
 					drawAxes(xMin, xMax, yMin, yMax, sign);
-					_pointer.stroke = new SolidStroke(colorPointer, 1, weightPointer);
-					_pointer.visible = false;
-
-					gg.geometryCollection.addItem(_pointer);
+					if (showPointer)
+					{
+						_pointer.stroke = new SolidStroke(colorPointer, 1, weightPointer);
+						_pointer.visible = false;
+	
+						gg.geometryCollection.addItem(_pointer);
+					}
 				}
 			}
 		}
