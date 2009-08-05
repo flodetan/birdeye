@@ -327,6 +327,18 @@ package birdeye.vis.scales
 			return _pointer;
 		}
 		
+		private var _showPointer:Boolean = true;
+		/** Show labels on the axis */
+		[Inspectable(enumeration="false,true")]
+		public function set showPointer(val:Boolean):void
+		{
+			_showPointer = val;
+		}
+		public function get showPointer():Boolean
+		{
+			return _showPointer;
+		}
+		
 		protected var _scaleType:String = LINEAR;
 		/** Set the scale type, LINEAR by default. */
 		public function set scaleType(val:String):void
