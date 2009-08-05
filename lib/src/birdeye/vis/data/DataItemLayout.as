@@ -34,7 +34,6 @@ package birdeye.vis.data
 	import com.degrafa.geometry.Geometry;
 	import com.degrafa.geometry.Line;
 	
-	import flash.display.DisplayObject;
 	import flash.geom.Point;
 	
 	import mx.controls.ToolTip;
@@ -52,6 +51,12 @@ package birdeye.vis.data
 		public var posX:Number;
 		public var posY:Number;
 		public var posZ:Number;
+
+		public var dim1Value:Number;
+		public var dim2Value:Number;
+		public var dim3Value:Number;
+		public var dim4Value:Number;
+		public var dim5Value:Number;
 
 		private var line:Line;		 
 		private var _showDataTips:Boolean = false;
@@ -154,11 +159,19 @@ package birdeye.vis.data
 		public function create(item:Object, dataFields:Array /* of String */, 
 								posX:Number, posY:Number, posZ:Number, radius:Number, 
 								ttShapes:Array = null/* of IGeometry */, xOffSet:Number = NaN, yOffset:Number = NaN,
-								isTooltip:Boolean = true, showGeometry:Boolean = true):void
+								isTooltip:Boolean = true, showGeometry:Boolean = true,
+								dim1Value:Number = NaN, dim2Value:Number = NaN, dim3Value:Number = NaN,
+								dim4Value:Number = NaN, dim5Value:Number = NaN):void
 		{
 			this.posX = posX;
 			this.posY = posY;
 			this.posZ = posZ;
+			
+			this.dim1Value = dim1Value;
+			this.dim2Value = dim2Value;
+			this.dim3Value = dim3Value;
+			this.dim4Value = dim4Value;
+			this.dim5Value = dim5Value;
 			
 			this.currentItem = item;
 			this.dataFields = dataFields;
@@ -172,24 +185,31 @@ package birdeye.vis.data
 					toolTip = ((_dataTipPrefix) ? _dataTipPrefix : "") 
 								+ _dataTipFunction(item, dataFields);
 				else 
-				{
-					if (_dataTipPrefix) 
-						toolTip = _dataTipPrefix;
-					for (var i:uint = 0; i<dataFields.length; i++)
-						if (dataFields[i])
-						{
-							if (! _dataTipPrefix)
-							{
-								if (i==0)
-									toolTip = String(((dataFields[i]) ? item[dataFields[i]] : Number(item)));
-								else
-									toolTip += "\n" + ((dataFields[i]) ? item[dataFields[i]] : Number(item)); 
-							} else 
-								toolTip += "\n" + ((dataFields[i]) ? item[dataFields[i]] : Number(item)); 
-						}
-				}
+					prepareDefaultTipString(_dataTipPrefix, dataFields, item)
 			}
 		} 
+		
+		private function prepareDefaultTipString(_dataTipPrefix:String, dataFields:Array, item:Object):void
+		{
+			if (_dataTipPrefix) 
+				toolTip = _dataTipPrefix;
+			
+			var dimNames:Array = ["dim1", "dim2", "dim3", "colorField", "sizeField"];
+			for each (var dim:String in dimNames)
+			{
+				if (dataFields[dim])
+				{
+					if (! _dataTipPrefix)
+					{
+						if (dim=="dim1")
+							toolTip = String(((dataFields[dim]) ? dataFields[dim] + ": " + item[dataFields[dim]] : Number(item)));
+						else
+							toolTip += "\n" + ((dataFields[dim]) ? dataFields[dim] + ": " + item[dataFields[dim]] : Number(item)); 
+					} else 
+						toolTip += "\n" + ((dataFields[dim]) ? dataFields[dim] + ": " + item[dataFields[dim]] : Number(item)); 
+				}
+			}
+		}
 		
 		/** @Private
 		 * Remove all elements from the component*/
