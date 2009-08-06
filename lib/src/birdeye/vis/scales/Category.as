@@ -185,8 +185,6 @@
 trace(getTimer(), "drawing category scale");
 				invalidated = false;
 				
-				var ggIndex:uint = 0;
-				
 				// vertical orientation
 				if (xMin == xMax)
 				{
