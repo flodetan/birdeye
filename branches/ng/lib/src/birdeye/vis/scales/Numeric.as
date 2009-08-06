@@ -230,9 +230,7 @@ package birdeye.vis.scales
 			{	
 trace(getTimer(), "drawing numeric scale");
 				invalidated = false;
-				
-				var ggIndex:uint = 0;
-				
+
 				// vertical orientation
 				if (xMin == xMax)
 				{
