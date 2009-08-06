@@ -261,10 +261,10 @@ trace(getTimer(), "drawing category scale");
 									label.x = snap; 
 									break;
 								case BOTTOM:
-									_rotateLabelsOn = "centerRight";
-									// for unknown reason the more the label lenght, the more the label shifts to right
-									// we have to adjust its position proportionally to the lenght (1/10 of the lenght)
-									label.x = snap-label.displayObject.width * (1.1); 
+									_rotateLabelsOn = "topRight";
+									// since the label rotates on his right end point we have to move it back
+									// of his total width lenght
+									label.x = snap-label.displayObject.width*.9; 
 									break;
 							}
 							rot.registrationPoint = _rotateLabelsOn;
