@@ -61,7 +61,6 @@ package birdeye.vis.scales
 	public class BaseScale extends UIComponent implements IScaleUI
 	{
 		protected var surf:Surface;
-		protected var _targets:Array = new Array();
 		protected var gg:GeometryComposition;
 		
 		protected var invalidated:Boolean = false;
@@ -411,6 +410,7 @@ package birdeye.vis.scales
 			return _showAxis;
 		}
 		
+		protected var _targets:Array = new Array();
 		public function get targets():Array
 		{
 			return _targets;
