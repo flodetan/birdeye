@@ -767,6 +767,9 @@ package birdeye.vis.guides.axis
 				maxLblSize = Math.max(maxLblSize, tmp.displayObject.width);
 			}
 			
+			// create a padding
+			maxLblSize += 5;
+			
 			
 			if (showAxis)
 			{
@@ -775,12 +778,12 @@ package birdeye.vis.guides.axis
 						case TOP:
 						case BOTTOM:
 						case HORIZONTAL_CENTER:
-							height = Math.max(5,maxLblSize * Math.sin(-_rotateLabels));
+							height = Math.max(5,maxLblSize * Math.sin(-_rotateLabels*Math.PI/180));
 							break;
 						case LEFT:
 						case RIGHT:
 						case VERTICAL_CENTER:				
-							width = Math.max(5, maxLblSize * Math.cos(_rotateLabels));
+							width = Math.max(5, maxLblSize * Math.cos(_rotateLabels*Math.PI/180));
 							break;
 					}
 					
