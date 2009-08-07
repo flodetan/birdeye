@@ -225,7 +225,7 @@ package birdeye.vis.guides.axis
 		 				}
 		 				web[j] += String(labelPosition.x) + "," + String(labelPosition.y) + " ";
 
-						var label:RasterTextPlus = new RasterTextPlus();
+						label = new RasterTextPlus();
 						if (dataLabel is Number)
 	 					{
 	 						label.text = String(Math.round(dataLabel as Number));

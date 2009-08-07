@@ -726,7 +726,7 @@
 					
 			if (_elements)
 			{
-				for (var i:Number = 0; i<_elements.length; i++)
+				for ( i = 0; i<_elements.length; i++)
 				{
 					resetScale(IElement(_elements[i]).scale1);
 					resetScale(IElement(_elements[i]).scale2);
@@ -737,7 +737,7 @@
 			}
 		}
 		
-		private function resetScale(scale:IScale)
+		private function resetScale(scale:IScale):void
 		{
 			if (scale) scale.resetValues();
 		}

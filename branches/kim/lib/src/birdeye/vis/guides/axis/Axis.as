@@ -877,7 +877,7 @@ trace(getTimer(), "drawing axis");
 					}
 				} else {
 				// horizontal orientation
-					for each (var dataLabel:Object in scale.completeDataValues)
+					for each (dataLabel in scale.completeDataValues)
 					{
 
 						// create thick line

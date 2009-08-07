@@ -243,7 +243,7 @@ trace(getTimer(), "END feeding scales");
 			// category or angle or ... 
 			var lastProcessedStackElements:Array = new Array();
 			var position:uint = 0;
-			for each (var stackElement:IStack in _stackedElements)
+			for each (stackElement in _stackedElements)
 			{
 				initStackElement(stackElement, position++, allElementsBaseValues, lastProcessedStackElements);
 			}
