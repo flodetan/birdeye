@@ -61,20 +61,6 @@ package birdeye.vis.elements.geometry
 			invalidatingDisplay();
 		}		
 
-		protected var _colorsStart:Array;
-		public function set colorsStart(val:Array):void
-		{
-			_colorsStart = val;
-			invalidatingDisplay();
-		}		
-
-		protected var _colorsStop:Array;
-		public function set colorsStop(val:Array):void
-		{
-			_colorsStop = val;
-			invalidatingDisplay();
-		}		
-
 		public function WedgeElement()
 		{
 			super();
