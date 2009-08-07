@@ -46,7 +46,6 @@
 	import flash.display.Shape;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.utils.describeType;
 	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
@@ -64,6 +63,24 @@
 	{
 		public static const CARTESIAN:String="cartesian";
 		public static const POLAR:String="polar";
+		
+		protected var _active:Boolean = true;
+		/** If set to false, the chart is removed and won't be drawn till active becomes true.*/
+		[Inspectable(enumeration="true,false")]
+		public function set active(val:Boolean):void
+		{
+			_active = val;
+			if (_active)
+			{
+				invalidateProperties();
+				invalidateDisplayList();
+			} else 
+				cleanAll();
+		}
+		public function get active():Boolean
+		{
+			return _active;
+		}
 		
 		protected var _isMasked:Boolean = false;
 		public function set isMasked(val:Boolean):void
@@ -655,6 +672,11 @@
 			if (_scales)
 				for (var i:Number = 0; i<_scales.length; i++)
 					IScale(_scales[i]).resetValues();
+		}
+		
+		protected function cleanAll():void
+		{
+			throw new Error("abstract method must be overridden");
 		}
 		
 		public function refresh():void
