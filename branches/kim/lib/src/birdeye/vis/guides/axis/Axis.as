@@ -58,6 +58,7 @@ package birdeye.vis.guides.axis
 		
 		public function Axis()
 		{
+			styleName = "Axis";
 		}
 		
 		public function get position():String
@@ -424,71 +425,125 @@ package birdeye.vis.guides.axis
 				gg = new GeometryComposition();
 				targets.push(this);
 				gg.graphicsTarget = targets;
+				invalidateDisplayList();
 			}
 		}
-		
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+
+		override public function styleChanged(styleProp:String):void
 		{
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
+			super.styleChanged(styleProp);
 			
-			// Redraw gradient fill only if style changed.
-			if (!colorGradients)
-				colorGradients = getStyle("gradientColors")
-
-			if (!alphaGradients) 
-				alphaGradients = getStyle("gradientAlphas");
+			if (styleProp == "gradientColors" || styleProp == null)
+			{
+				if (!colorGradients && getStyle("gradientColors") != this.colorGradients && getStyle("gradientColors") != undefined)
+				{
+					this.colorGradients = getStyle("gradientColors");
+				}
+			}
 			
-			if (isNaN(colorFill))
-				colorFill = getStyle("fillColor");
+			if (styleProp == "gradientAlphas" || styleProp == null)
+			{
+				if (!alphaGradients && getStyle("gradientAlphas") != this.alphaGradients && getStyle("gradientAlphas") != undefined)
+				{
+					this.alphaGradients = getStyle("gradientAlphas");
+				}
+			}
+
+			if (styleProp == "fillColor" || styleProp == null)
+			{
+				if (isNaN(colorFill) && getStyle("fillColor") != this.colorFill && getStyle("fillColor") != undefined)
+				{
+					this.colorFill = getStyle("fillColor");
+				}
+			}
 			
-			if (isNaN(alphaFill))
-				alphaFill = getStyle("fillAlpha");
+			if (styleProp == "fillAlpha" || styleProp == null)
+			{
+				if (isNaN(alphaFill) && getStyle("fillAlpha") != this.alphaFill && getStyle("fillAlpha") != undefined)
+				{
+					this.alphaFill = getStyle("fillAlpha");
+				}
+			}
 			
-			if (isNaN(colorStroke))
-				colorStroke = getStyle("strokeColor");
+			if (styleProp == "strokeColor" || styleProp == null)
+			{
+				if (isNaN(colorStroke) && getStyle("strokeColor") != this.colorStroke && getStyle("strokeColor") != undefined)
+				{
+					this.colorStroke = getStyle("strokeColor");
+				}
+			}
+
+			if (styleProp == "strokeAlpha" || styleProp == null)
+			{
+				if (isNaN(alphaStroke) && getStyle("strokeAlpha") != this.alphaStroke && getStyle("strokeAlpha") != undefined)
+				{
+					this.alphaStroke = getStyle("strokeAlpha");
+				}
+			}
+
+			if (styleProp == "strokeWeight" || styleProp == null)
+			{
+				if (isNaN(weightStroke) && getStyle("strokeWeight") != this.weightStroke && getStyle("strokeWeight") != undefined)
+				{
+					this.weightStroke = getStyle("strokeWeight");
+				}
+			}
 			
-			if (isNaN(alphaStroke))
-				alphaStroke = getStyle("strokeAlpha");
-	
-			if (isNaN(weightStroke))
-				weightStroke = getStyle("strokeWeight");
-
-			if (!fontLabel)
-				fontLabel = getStyle("labelFont");
+			if (styleProp == "labelFont" || styleProp == null)
+			{
+				if (!fontLabel && getStyle("labelFont") != this.fontLabel && getStyle("labelFont") != undefined)
+				{
+					this.fontLabel = getStyle("labelFont");
+				}
+			}
 			
-			if (isNaN(colorLabel))
-				colorLabel = getStyle("labelColor");
+			if (styleProp == "labelColor" || styleProp == null)
+			{
+				if (isNaN(colorLabel) && getStyle("labelColor") != this.colorLabel && getStyle("labelColor") != undefined)
+				{
+					this.colorLabel = getStyle("labelColor");
+				}
+			}
+			
+			if (styleProp == "labelSize" || styleProp == null)
+			{
+				if (isNaN(sizeLabel) && getStyle("labelSize") != this.sizeLabel && getStyle("labelSize") != undefined)
+				{
+					this.sizeLabel = getStyle("labelSize");
+				}
+			}
 
-			if (isNaN(sizeLabel))
-				sizeLabel = getStyle("labelSize");
+			if (styleProp == "pointerColor" || styleProp == null)
+			{
+				if (isNaN(colorPointer) && getStyle("pointerColor") != this.colorPointer && getStyle("pointerColor") != undefined)
+				{
+					this.colorPointer = getStyle("pointerColor");
+				}
+			}
+			
+			if (styleProp == "pointerSize" || styleProp == null)
+			{
+				if (isNaN(sizePointer) && getStyle("pointerSize") != this.sizePointer && getStyle("pointerSize") != undefined)
+				{
+					this.sizePointer = getStyle("pointerSize");
+				}
+			}
 
-			if (!fontLabel)
-				fontLabel = getStyle("labelFont");
+			if (styleProp == "pointerWeight" || styleProp == null)
+			{
+				if (isNaN(weightPointer) && getStyle("pointerWeight") != this.weightPointer && getStyle("pointerWeight") != undefined)
+				{
+					this.weightPointer = getStyle("pointerWeight");
+				}
+			}
 
-			if (isNaN(colorLabel))
-				colorLabel = getStyle("labelColor");
-
-			if (isNaN(sizeLabel))
-				sizeLabel = getStyle("labelSize");
-
-			if (isNaN(colorPointer))
-				colorPointer = getStyle("pointerColor");
-				
-			if (isNaN(sizePointer))
-				sizePointer = getStyle("pointerSize");
-
-			if (isNaN(weightPointer))
-				weightPointer = getStyle("pointerWeight");
-
-			if (colorStroke)
-				stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 		}
 		
 		private var stylesChanged:Boolean = false;
 		initializeStyles();
 		public static function initializeStyles():void
 		{
-			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("BaseScale");
+			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("Axis");
 			if(!selector)
 			{
 				selector = new CSSStyleDeclaration();
@@ -515,7 +570,7 @@ package birdeye.vis.guides.axis
 
 				this.stylesChanged = true;
 			} 
-			StyleManager.setStyleDeclaration("BaseScale", selector, true);
+			StyleManager.setStyleDeclaration("Axis", selector, true);
 		}
 		
 		public function removeAllElements():void
