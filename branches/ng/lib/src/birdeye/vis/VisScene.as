@@ -35,6 +35,7 @@
 	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.interfaces.IProjection;
 	import birdeye.vis.interfaces.IScale;
+	import birdeye.vis.interfaces.IScaleUI;
 	import birdeye.vis.interfaces.ITransform;
 	import birdeye.vis.scales.MultiScale;
 	
@@ -676,7 +677,13 @@
 		
 		protected function cleanAll():void
 		{
-			throw new Error("abstract method must be overridden");
+			if (elements && elements.length > 0)
+				for (var i:uint = 0; i<elements.length; i++)
+					IElement(elements[i]).removeAllElements();
+			if (scales && scales.length > 0)
+				for (i = 0; i<scales.length; i++)
+					if (scales[i] is IScaleUI)
+						IScaleUI(scales[i]).removeAllElements();
 		}
 		
 		public function refresh():void
