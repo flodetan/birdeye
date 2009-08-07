@@ -312,7 +312,8 @@ trace(getTimer(), "END feeding scales");
 
 
 				// determine the maximum of the current element
-				maxCurrentD2 = getDimMaxValue(currentItem, stackElement.dim2, stackElement.collisionType == StackElement.STACKED100);
+				maxCurrentD2 = getDimMaxValue(currentItem, stackElement[dims.valueDim], stackElement.collisionType == StackElement.STACKED100);
+
 				var localMax:Number = allElementsBaseValues[elementPosition].baseValues[indexValue] + Math.max(0,maxCurrentD2);
 				
 				// update maxStacked100 if necessary
