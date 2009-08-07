@@ -209,290 +209,221 @@ package birdeye.vis.coords
 		 * corresponding data.*/
 		override protected function commitProperties():void
 		{
-			super.commitProperties();
-			
-			removeAllElements();
-			
-			nCursors = 0;
-
-			if (elements)
+			if (active)
 			{
- 				for (var i:Number = 0; i<elements.length; i++)
-				{
-					// if element dataprovider doesn' exist or it refers to the
-					// chart dataProvider, than set its cursor to this chart cursor (this.cursor)
-					if (dataItems && (! IElement(_elements[i]).dataProvider 
-									|| IElement(_elements[i]).dataProvider == this.dataProvider))
-						IElement(_elements[i]).dataItems = dataItems;
-
-					// nCursors is used in feedAxes to check that all elements cursors are ready
-					// and therefore check that axes can be properly feeded
-					if (dataItems || IElement(_elements[i]).dataItems)
-						nCursors += 1;
-
-					_elementsContainer.addChild(DisplayObject(elements[i]));
-					var scale1:IScaleUI = IElement(elements[i]).scale1 as IScaleUI;
-					if (scale1)
-					{
-						switch (scale1.placement)
-						{
-							case BaseScale.TOP:
-								if (!topContainer.contains(DisplayObject(scale1)))
-								{
-									if (!DisplayObject(scale1).parent)
-									{
-										topContainer.addChild(DisplayObject(scale1));
-									}
-									else
-									{
-										scale1.targets.push(topContainer);
-									}
-								}
-								break; 
-							case BaseScale.BOTTOM:
-								if (!bottomContainer.contains(DisplayObject(scale1)))
-								{
-									if (!DisplayObject(scale1).parent)
-									{
-										bottomContainer.addChild(DisplayObject(scale1));
-									}
-									else
-									{
-										scale1.targets.push(bottomContainer);
-									}
-								}
-								break;
-						}
-					} 
-
-					var scale2:IScaleUI = IElement(elements[i]).scale2 as IScaleUI;
-					if (scale2)
-					{
-						switch (scale2.placement)
-						{
-							case BaseScale.LEFT:
-								if (!leftContainer.contains(DisplayObject(scale2)))
-								{
-									if (!DisplayObject(scale2).parent)
-									{
-										leftContainer.addChild(DisplayObject(scale2));
-									}
-									else
-									{
-										scale2.targets.push(leftContainer);
-									}
-								}
-								break;
-							case BaseScale.RIGHT:
-								if (!rightContainer.contains(DisplayObject(scale2)))
-								{
-									if (!DisplayObject(scale2).parent)
-									{
-										rightContainer.addChild(DisplayObject(scale2));
-									}
-									else
-									{
-										scale2.targets.push(rightContainer);
-									}
-								}
-								break;
-						}
-					} 
-
-					var tmpScale3:IScaleUI = IElement(elements[i]).scale3 as IScaleUI;
-					if (tmpScale3)
-					{
-						if (!zContainer.contains(DisplayObject(tmpScale3)))
-						{
-							if (!DisplayObject(tmpScale3).parent)
-							{
-								zContainer.addChild(DisplayObject(tmpScale3));
-							}
-							else
-							{
-								tmpScale3.targets.push(zContainer);
-							}
-						}
-						
-						// this will be replaced by a depth property 
- 						IScale(tmpScale3).size = width; 
- 						// the Scale3 is in reality an Scale2 which is rotated of 90 degrees
- 						// on its X coordinate. This will be replaced by a real z axis, when 
- 						// FP will provide methods to draw real 3d lines
-						zContainer.rotationX = -90;
-						
-						// this adjusts the positioning of the axis after the rotation
-						zContainer.z = width;
-						_is3D = true;
- 					}
-				}
-			}
-			
-			if (_elements && nCursors == _elements.length)
-				invalidatedData = true;
-
-			// when elements are loaded, set their stack type to the 
-			// current "type" value. if the type is STACKED100
-			// calculate the maxStacked100 value, and load the baseValues
-			// arrays for each Column. The baseValues arrays will be used to know
-			// the y0 starting point for each element values, which corresponds to 
-			// the understair element highest y value;
-			if (invalidatedData)
-			{
-				var _stackElements:Array = [];
-			
-				for (i = 0; i<_elements.length; i++)
-					if (_elements[i] is IStack)
-					{
-						IStack(_elements[i]).stackType = _type;
-						_stackElements.push(_elements[i])
-					}
-
-				_maxStacked100 = NaN;
-
-				if (_type==StackElement.STACKED100)
-				{
-					// {indexSeries: i, baseValues: Array_for_each_element}
-					var allElementsBaseValues:Array = []; 
-					for (i=0;i<_stackElements.length;i++)
-						allElementsBaseValues[i] = {indexElements: i, baseValues: []};
-					
-					// keep index of last element been processed 
-					// with the same xField data value
-					// k[xFieldDataValue] = last Elements processed
-					var k:Array = [];
-					
-					var j:Object;
-					for (var s:Number = 0; s<_stackElements.length; s++)
-					{
-						var sCursor:Vector.<Object>;
-						var cursIndex:uint = 0;
-						var currentItem:Object;
+				super.commitProperties();
 				
-						if (IElement(_stackElements[s]).dataItems &&
-							IElement(_stackElements[s]).dataItems != dataItems)
-						{
-							sCursor = IElement(_stackElements[s]).dataItems;
-
-							for (cursIndex = 0; cursIndex < sCursor.length; cursIndex++)
-							{
-								currentItem = sCursor[cursIndex];
-
-								if (IStack(_stackElements[s]).collisionScale == BaseElement.VERTICAL)
-								{
-									// TODO: if dim1 is an Array, than iterate through it
-									j = currentItem[IElement(_stackElements[s]).dim1];
+				removeAllElements();
+				
+				nCursors = 0;
 	
-									if (s>0 && k[j]>=0)
-									{
-										var maxCurrentD2:Number = getDimMaxValue(currentItem, IElement(_stackElements[k[j]]).dim2,
-																			IElement(_stackElements[k[j]]).collisionType == StackElement.STACKED100);
-										allElementsBaseValues[s].baseValues[j] = 
-											allElementsBaseValues[k[j]].baseValues[j] + 
-											Math.max(0,maxCurrentD2);
-									} else 
-										allElementsBaseValues[s].baseValues[j] = 0;
-	
-									maxCurrentD2 = getDimMaxValue(currentItem, IElement(_stackElements[s]).dim2,
-																			IElement(_stackElements[s]).collisionType == StackElement.STACKED100);
-
-									if (isNaN(_maxStacked100))
-										_maxStacked100 = 
-											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,maxCurrentD2);
-									else
-										_maxStacked100 = Math.max(_maxStacked100,
-											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,maxCurrentD2));
-								} else if (IStack(_stackElements[s]).collisionScale == BaseElement.HORIZONTAL)
-								{
-									// TODO: if dim2 is an Array, than iterate through it
-									j = currentItem[IElement(_stackElements[s]).dim2];
-									if (s>0 && k[j]>=0)
-									{
-										var maxCurrentD1:Number = getDimMaxValue(currentItem, IElement(_stackElements[k[j]]).dim1,
-																			IElement(_stackElements[k[j]]).collisionType == StackElement.STACKED100);
-
-										allElementsBaseValues[s].baseValues[j] = 
-											allElementsBaseValues[k[j]].baseValues[j] + 
-											Math.max(0,currentItem[IElement(_stackElements[k[j]]).dim1]);
-									} else 
-										allElementsBaseValues[s].baseValues[j] = 0;
-	
-									maxCurrentD1 = getDimMaxValue(currentItem, IElement(_stackElements[s]).dim1,
-													IElement(_stackElements[s]).collisionType == StackElement.STACKED100);
-
-									if (isNaN(_maxStacked100))
-										_maxStacked100 = 
-											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,maxCurrentD1);
-									else
-										_maxStacked100 = Math.max(_maxStacked100,
-											allElementsBaseValues[s].baseValues[j] + 
-											Math.max(0,maxCurrentD1));
-								}
-								k[j] = s;
-							}
-						}
-					}
-					
-					if (dataItems)
+				if (elements)
+				{
+	 				for (var i:Number = 0; i<elements.length; i++)
 					{
-						for (cursIndex = 0; cursIndex < dataItems.length; cursIndex++)
+						// if element dataprovider doesn' exist or it refers to the
+						// chart dataProvider, than set its cursor to this chart cursor (this.cursor)
+						if (dataItems && (! IElement(_elements[i]).dataProvider 
+										|| IElement(_elements[i]).dataProvider == this.dataProvider))
+							IElement(_elements[i]).dataItems = dataItems;
+	
+						// nCursors is used in feedAxes to check that all elements cursors are ready
+						// and therefore check that axes can be properly feeded
+						if (dataItems || IElement(_elements[i]).dataItems)
+							nCursors += 1;
+	
+						_elementsContainer.addChild(DisplayObject(elements[i]));
+						var scale1:IScaleUI = IElement(elements[i]).scale1 as IScaleUI;
+						if (scale1)
 						{
-							currentItem = dataItems[cursIndex];
-							// index of last Elements without own cursor with the same xField data value 
-							// (because they've already been processed in the previous loop)
-
-							var t:Array = [];
-							for (s = 0; s<_stackElements.length; s++)
+							switch (scale1.placement)
 							{
-								if (! (IElement(_stackElements[s]).dataItems &&
-									IElement(_stackElements[s]).dataItems != dataItems))
+								case BaseScale.TOP:
+									if (!topContainer.contains(DisplayObject(scale1)))
+									{
+										if (!DisplayObject(scale1).parent)
+										{
+											topContainer.addChild(DisplayObject(scale1));
+										}
+										else
+										{
+											scale1.targets.push(topContainer);
+										}
+									}
+									break; 
+								case BaseScale.BOTTOM:
+									if (!bottomContainer.contains(DisplayObject(scale1)))
+									{
+										if (!DisplayObject(scale1).parent)
+										{
+											bottomContainer.addChild(DisplayObject(scale1));
+										}
+										else
+										{
+											scale1.targets.push(bottomContainer);
+										}
+									}
+									break;
+							}
+						} 
+	
+						var scale2:IScaleUI = IElement(elements[i]).scale2 as IScaleUI;
+						if (scale2)
+						{
+							switch (scale2.placement)
+							{
+								case BaseScale.LEFT:
+									if (!leftContainer.contains(DisplayObject(scale2)))
+									{
+										if (!DisplayObject(scale2).parent)
+										{
+											leftContainer.addChild(DisplayObject(scale2));
+										}
+										else
+										{
+											scale2.targets.push(leftContainer);
+										}
+									}
+									break;
+								case BaseScale.RIGHT:
+									if (!rightContainer.contains(DisplayObject(scale2)))
+									{
+										if (!DisplayObject(scale2).parent)
+										{
+											rightContainer.addChild(DisplayObject(scale2));
+										}
+										else
+										{
+											scale2.targets.push(rightContainer);
+										}
+									}
+									break;
+							}
+						} 
+	
+						var tmpScale3:IScaleUI = IElement(elements[i]).scale3 as IScaleUI;
+						if (tmpScale3)
+						{
+							if (!zContainer.contains(DisplayObject(tmpScale3)))
+							{
+								if (!DisplayObject(tmpScale3).parent)
 								{
+									zContainer.addChild(DisplayObject(tmpScale3));
+								}
+								else
+								{
+									tmpScale3.targets.push(zContainer);
+								}
+							}
+							
+							// this will be replaced by a depth property 
+	 						IScale(tmpScale3).size = width; 
+	 						// the Scale3 is in reality an Scale2 which is rotated of 90 degrees
+	 						// on its X coordinate. This will be replaced by a real z axis, when 
+	 						// FP will provide methods to draw real 3d lines
+							zContainer.rotationX = -90;
+							
+							// this adjusts the positioning of the axis after the rotation
+							zContainer.z = width;
+							_is3D = true;
+	 					}
+					}
+				}
+				
+				if (_elements && nCursors == _elements.length)
+					invalidatedData = true;
+	
+				// when elements are loaded, set their stack type to the 
+				// current "type" value. if the type is STACKED100
+				// calculate the maxStacked100 value, and load the baseValues
+				// arrays for each Column. The baseValues arrays will be used to know
+				// the y0 starting point for each element values, which corresponds to 
+				// the understair element highest y value;
+				if (invalidatedData)
+				{
+					var _stackElements:Array = [];
+				
+					for (i = 0; i<_elements.length; i++)
+						if (_elements[i] is IStack)
+						{
+							IStack(_elements[i]).stackType = _type;
+							_stackElements.push(_elements[i])
+						}
+	
+					_maxStacked100 = NaN;
+	
+					if (_type==StackElement.STACKED100)
+					{
+						// {indexSeries: i, baseValues: Array_for_each_element}
+						var allElementsBaseValues:Array = []; 
+						for (i=0;i<_stackElements.length;i++)
+							allElementsBaseValues[i] = {indexElements: i, baseValues: []};
+						
+						// keep index of last element been processed 
+						// with the same xField data value
+						// k[xFieldDataValue] = last Elements processed
+						var k:Array = [];
+						
+						var j:Object;
+						for (var s:Number = 0; s<_stackElements.length; s++)
+						{
+							var sCursor:Vector.<Object>;
+							var cursIndex:uint = 0;
+							var currentItem:Object;
+					
+							if (IElement(_stackElements[s]).dataItems &&
+								IElement(_stackElements[s]).dataItems != dataItems)
+							{
+								sCursor = IElement(_stackElements[s]).dataItems;
+	
+								for (cursIndex = 0; cursIndex < sCursor.length; cursIndex++)
+								{
+									currentItem = sCursor[cursIndex];
+	
 									if (IStack(_stackElements[s]).collisionScale == BaseElement.VERTICAL)
 									{
 										// TODO: if dim1 is an Array, than iterate through it
 										j = currentItem[IElement(_stackElements[s]).dim1];
-										
-										if (t[j]>=0)
+		
+										if (s>0 && k[j]>=0)
 										{
-											maxCurrentD2 = getDimMaxValue(currentItem, IElement(_stackElements[t[j]]).dim2,
-																	IElement(_stackElements[t[j]]).collisionType == StackElement.STACKED100);
+											var maxCurrentD2:Number = getDimMaxValue(currentItem, IElement(_stackElements[k[j]]).dim2,
+																				IElement(_stackElements[k[j]]).collisionType == StackElement.STACKED100);
 											allElementsBaseValues[s].baseValues[j] = 
-												allElementsBaseValues[t[j]].baseValues[j] + 
-												Math.max(0, maxCurrentD2);
+												allElementsBaseValues[k[j]].baseValues[j] + 
+												Math.max(0,maxCurrentD2);
 										} else 
 											allElementsBaseValues[s].baseValues[j] = 0;
-										
+		
 										maxCurrentD2 = getDimMaxValue(currentItem, IElement(_stackElements[s]).dim2,
-																	IElement(_stackElements[s]).collisionType == StackElement.STACKED100);
-
+																				IElement(_stackElements[s]).collisionType == StackElement.STACKED100);
+	
 										if (isNaN(_maxStacked100))
 											_maxStacked100 = 
 												allElementsBaseValues[s].baseValues[j] + 
-												Math.max(0, maxCurrentD2);
+												Math.max(0,maxCurrentD2);
 										else
 											_maxStacked100 = Math.max(_maxStacked100,
 												allElementsBaseValues[s].baseValues[j] + 
-												Math.max(0, maxCurrentD2));
+												Math.max(0,maxCurrentD2));
 									} else if (IStack(_stackElements[s]).collisionScale == BaseElement.HORIZONTAL)
 									{
 										// TODO: if dim2 is an Array, than iterate through it
 										j = currentItem[IElement(_stackElements[s]).dim2];
-										if (s>0 && t[j]>=0)
+										if (s>0 && k[j]>=0)
 										{
-											maxCurrentD1 = getDimMaxValue(currentItem, IElement(_stackElements[t[j]]).dim1,
-																		IElement(_stackElements[t[j]]).collisionType == StackElement.STACKED100);
+											var maxCurrentD1:Number = getDimMaxValue(currentItem, IElement(_stackElements[k[j]]).dim1,
+																				IElement(_stackElements[k[j]]).collisionType == StackElement.STACKED100);
+	
 											allElementsBaseValues[s].baseValues[j] = 
-												allElementsBaseValues[t[j]].baseValues[j] + 
-												Math.max(0,maxCurrentD1);
+												allElementsBaseValues[k[j]].baseValues[j] + 
+												Math.max(0,currentItem[IElement(_stackElements[k[j]]).dim1]);
 										} else 
 											allElementsBaseValues[s].baseValues[j] = 0;
-											
-										maxCurrentD1 = getDimMaxValue(currentItem, IElement(_stackElements[s]).dim1,
-																	IElement(_stackElements[s]).collisionType == StackElement.STACKED100);
 		
+										maxCurrentD1 = getDimMaxValue(currentItem, IElement(_stackElements[s]).dim1,
+														IElement(_stackElements[s]).collisionType == StackElement.STACKED100);
+	
 										if (isNaN(_maxStacked100))
 											_maxStacked100 = 
 												allElementsBaseValues[s].baseValues[j] + 
@@ -502,25 +433,97 @@ package birdeye.vis.coords
 												allElementsBaseValues[s].baseValues[j] + 
 												Math.max(0,maxCurrentD1));
 									}
-	
-									t[j] = s;
+									k[j] = s;
 								}
 							}
 						}
+						
+						if (dataItems)
+						{
+							for (cursIndex = 0; cursIndex < dataItems.length; cursIndex++)
+							{
+								currentItem = dataItems[cursIndex];
+								// index of last Elements without own cursor with the same xField data value 
+								// (because they've already been processed in the previous loop)
+	
+								var t:Array = [];
+								for (s = 0; s<_stackElements.length; s++)
+								{
+									if (! (IElement(_stackElements[s]).dataItems &&
+										IElement(_stackElements[s]).dataItems != dataItems))
+									{
+										if (IStack(_stackElements[s]).collisionScale == BaseElement.VERTICAL)
+										{
+											// TODO: if dim1 is an Array, than iterate through it
+											j = currentItem[IElement(_stackElements[s]).dim1];
+											
+											if (t[j]>=0)
+											{
+												maxCurrentD2 = getDimMaxValue(currentItem, IElement(_stackElements[t[j]]).dim2,
+																		IElement(_stackElements[t[j]]).collisionType == StackElement.STACKED100);
+												allElementsBaseValues[s].baseValues[j] = 
+													allElementsBaseValues[t[j]].baseValues[j] + 
+													Math.max(0, maxCurrentD2);
+											} else 
+												allElementsBaseValues[s].baseValues[j] = 0;
+											
+											maxCurrentD2 = getDimMaxValue(currentItem, IElement(_stackElements[s]).dim2,
+																		IElement(_stackElements[s]).collisionType == StackElement.STACKED100);
+	
+											if (isNaN(_maxStacked100))
+												_maxStacked100 = 
+													allElementsBaseValues[s].baseValues[j] + 
+													Math.max(0, maxCurrentD2);
+											else
+												_maxStacked100 = Math.max(_maxStacked100,
+													allElementsBaseValues[s].baseValues[j] + 
+													Math.max(0, maxCurrentD2));
+										} else if (IStack(_stackElements[s]).collisionScale == BaseElement.HORIZONTAL)
+										{
+											// TODO: if dim2 is an Array, than iterate through it
+											j = currentItem[IElement(_stackElements[s]).dim2];
+											if (s>0 && t[j]>=0)
+											{
+												maxCurrentD1 = getDimMaxValue(currentItem, IElement(_stackElements[t[j]]).dim1,
+																			IElement(_stackElements[t[j]]).collisionType == StackElement.STACKED100);
+												allElementsBaseValues[s].baseValues[j] = 
+													allElementsBaseValues[t[j]].baseValues[j] + 
+													Math.max(0,maxCurrentD1);
+											} else 
+												allElementsBaseValues[s].baseValues[j] = 0;
+												
+											maxCurrentD1 = getDimMaxValue(currentItem, IElement(_stackElements[s]).dim1,
+																		IElement(_stackElements[s]).collisionType == StackElement.STACKED100);
+			
+											if (isNaN(_maxStacked100))
+												_maxStacked100 = 
+													allElementsBaseValues[s].baseValues[j] + 
+													Math.max(0,maxCurrentD1);
+											else
+												_maxStacked100 = Math.max(_maxStacked100,
+													allElementsBaseValues[s].baseValues[j] + 
+													Math.max(0,maxCurrentD1));
+										}
+		
+										t[j] = s;
+									}
+								}
+							}
+						}
+						
+						// set the baseValues array for each Column
+						// The baseValues array will be used to know
+						// the y0 starting point for each element values, 
+						// which corresponds to the understair element highest y value;
+						for (s = 0; s<_stackElements.length; s++)
+							IStack(_stackElements[s]).baseValues = allElementsBaseValues[s].baseValues;
 					}
-					
-					// set the baseValues array for each Column
-					// The baseValues array will be used to know
-					// the y0 starting point for each element values, 
-					// which corresponds to the understair element highest y value;
-					for (s = 0; s<_stackElements.length; s++)
-						IStack(_stackElements[s]).baseValues = allElementsBaseValues[s].baseValues;
+	
+	
+				// init all axes, default and elements owned 
+				if (! axesFeeded)
+					feedAxes();
 				}
-
-
-			// init all axes, default and elements owned 
-			if (! axesFeeded)
-				feedAxes();
 			}
 		}
 		
@@ -538,85 +541,88 @@ package birdeye.vis.coords
 		 * set the available size and position for the elementsContainer.*/
 		override protected function updateDisplayList(w:Number, h:Number):void
 		{
-			super.updateDisplayList(w,h);
-			setActualSize(w,h);
-
-			if (invalidatedData)
+			if (active)
 			{
-				validateBounds();
-				
-				leftContainer.move(0, topContainer.height);
-				rightContainer.move(w - rightContainer.width, topContainer.height);
-
-				bottomContainer.move(leftContainer.width, h - bottomContainer.height);
-				topContainer.move(leftContainer.width, 0);
+				super.updateDisplayList(w,h);
+				setActualSize(w,h);
 	
-				chartBounds = new Rectangle(leftContainer.x + leftContainer.width, 
-											topContainer.y + topContainer.height,
-											w - (leftContainer.width + rightContainer.width),
-											h - (topContainer.height + bottomContainer.height));
-											
-				topContainer.width = bottomContainer.width = chartBounds.width;				
-				leftContainer.setActualSize(leftContainer.width, chartBounds.height);
-				rightContainer.setActualSize(rightContainer.width, chartBounds.height);
-
-				// the z container is placed at the right of the chart
-	  			zContainer.move(int(chartBounds.width + leftContainer.width), int(chartBounds.height));
-	
-				if (showGrid)
-					drawGrid();
+				if (invalidatedData)
+				{
+					validateBounds();
 					
-				if (axesFeeded && 
-					(_elementsContainer.x != chartBounds.x ||
-					_elementsContainer.y != chartBounds.y ||
-					_elementsContainer.width != chartBounds.width ||
-					_elementsContainer.height != chartBounds.height))
-				{
-					_elementsContainer.move(chartBounds.x, chartBounds.y);
-	  				_elementsContainer.setActualSize(chartBounds.width, chartBounds.height);
-	 	
-					if (_is3D)
-						rotationY = 42;
-					else
-						transform.matrix3D = null;
-	 			}
+					leftContainer.move(0, topContainer.height);
+					rightContainer.move(w - rightContainer.width, topContainer.height);
 	
-				if (_scales)
-				{
-		 			for (var i:int = 0; i<_scales.length; i++)
+					bottomContainer.move(leftContainer.width, h - bottomContainer.height);
+					topContainer.move(leftContainer.width, 0);
+		
+					chartBounds = new Rectangle(leftContainer.x + leftContainer.width, 
+												topContainer.y + topContainer.height,
+												w - (leftContainer.width + rightContainer.width),
+												h - (topContainer.height + bottomContainer.height));
+												
+					topContainer.width = bottomContainer.width = chartBounds.width;				
+					leftContainer.setActualSize(leftContainer.width, chartBounds.height);
+					rightContainer.setActualSize(rightContainer.width, chartBounds.height);
+	
+					// the z container is placed at the right of the chart
+		  			zContainer.move(int(chartBounds.width + leftContainer.width), int(chartBounds.height));
+		
+					if (showGrid)
+						drawGrid();
+						
+					if (axesFeeded && 
+						(_elementsContainer.x != chartBounds.x ||
+						_elementsContainer.y != chartBounds.y ||
+						_elementsContainer.width != chartBounds.width ||
+						_elementsContainer.height != chartBounds.height))
 					{
-						switch (IScaleUI(_scales[i]).placement)
+						_elementsContainer.move(chartBounds.x, chartBounds.y);
+		  				_elementsContainer.setActualSize(chartBounds.width, chartBounds.height);
+		 	
+						if (_is3D)
+							rotationY = 42;
+						else
+							transform.matrix3D = null;
+		 			}
+		
+					if (_scales)
+					{
+			 			for (var i:int = 0; i<_scales.length; i++)
 						{
-							case BaseScale.BOTTOM:
-							case BaseScale.TOP:
-								IScaleUI(_scales[i]).size = chartBounds.width;
-								break;
-							case BaseScale.LEFT:
-							case BaseScale.RIGHT:
-								IScaleUI(_scales[i]).size= chartBounds.height;
+							switch (IScaleUI(_scales[i]).placement)
+							{
+								case BaseScale.BOTTOM:
+								case BaseScale.TOP:
+									IScaleUI(_scales[i]).size = chartBounds.width;
+									break;
+								case BaseScale.LEFT:
+								case BaseScale.RIGHT:
+									IScaleUI(_scales[i]).size= chartBounds.height;
+							}
+							IScaleUI(_scales[i]).draw();
 						}
-						IScaleUI(_scales[i]).draw();
 					}
-				}
-	
-	 			for (i = 0; i<_elements.length; i++)
-				{
-					Surface(_elements[i]).width = chartBounds.width;
-					Surface(_elements[i]).height = chartBounds.height;
-					IElement(_elements[i]).draw();
-				}
-				// listeners like legends will listen to this event
-				dispatchEvent(new Event("ProviderReady"));
-	
-				if (_isMasked && _maskShape && !isNaN(_elementsContainer.width) && !isNaN(_elementsContainer.height))
-				{
-					if (!elementsContainer.contains(_maskShape))
-						elementsContainer.addChild(_maskShape);
-					maskShape.graphics.beginFill(0xffffff, 1);
-					maskShape.graphics.drawRect(0,0,_elementsContainer.width, _elementsContainer.height);
-					maskShape.graphics.endFill();
-		  			elementsContainer.setChildIndex(_maskShape, 0);
-					elementsContainer.mask = maskShape;
+		
+		 			for (i = 0; i<_elements.length; i++)
+					{
+						Surface(_elements[i]).width = chartBounds.width;
+						Surface(_elements[i]).height = chartBounds.height;
+						IElement(_elements[i]).draw();
+					}
+					// listeners like legends will listen to this event
+					dispatchEvent(new Event("ProviderReady"));
+		
+					if (_isMasked && _maskShape && !isNaN(_elementsContainer.width) && !isNaN(_elementsContainer.height))
+					{
+						if (!elementsContainer.contains(_maskShape))
+							elementsContainer.addChild(_maskShape);
+						maskShape.graphics.beginFill(0xffffff, 1);
+						maskShape.graphics.drawRect(0,0,_elementsContainer.width, _elementsContainer.height);
+						maskShape.graphics.endFill();
+			  			elementsContainer.setChildIndex(_maskShape, 0);
+						elementsContainer.mask = maskShape;
+					}
 				}
 			}
 		}
