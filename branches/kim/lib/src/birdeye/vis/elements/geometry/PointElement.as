@@ -77,14 +77,6 @@ package birdeye.vis.elements.geometry
 trace (getTimer(), "drawing point ele");
 				super.drawElement();
 				removeAllElements();
-				var dataFields:Array = [];
-				// prepare data for a standard tooltip message in case the user
-				// has not set a dataTipFunction
-				dataFields[0] = dim1;
-				dataFields[1] = dim2;
-				dataFields[2] = sizeField;
-				if (dim3) 
-					dataFields[3] = dim3;
 				
 				if (!itemRenderer)
 					itemRenderer = new ClassFactory(CircleRenderer);
@@ -114,33 +106,26 @@ trace (getTimer(), "drawing point ele");
 							var bounds:Rectangle = new Rectangle(scaleResults["pos1"] - enumScale1.size/2/enumLength1 + 5, scaleResults["pos2"] - enumScale2.size/2/enumLength2 + 5, enumScale1.size/enumLength1 - 10, enumScale2.size/enumLength2 - 10);
 
 
-							
-							var tmp:Object = itemRenderer.newInstance();
- 						
-		 					if (tmp is FacetContainer)	
-		 					{
-		 						var subco:FacetContainer = tmp as FacetContainer;
-		 						
-		 						var coord:Object = subco.coord.clone();
-		 						
-		 						
-		 						coord.scales = subco.scales;
-		 						
-		 						var el:Array = new Array();
-		 						for each (var baseEl:BaseElement in subco.elements)
-		 						{
-		 							el.push(baseEl.clone());
-		 						}
-		 						coord.elements = el;
-		 						
-		 						coord.width = bounds.width;
-		 						coord.height = bounds.height;
-		 						coord.x = bounds.x;
-		 						coord.y = bounds.y;
-		 						coord.dataProvider = filteredData;
+	 						var subco:FacetContainer = itemRenderer.newInstance() as FacetContainer;
+	 						
+	 						var coord:Object = subco.coord.clone();
+	 						
+	 						coord.scales = subco.scales;
+	 						
+	 						var el:Array = new Array();
+	 						for each (var baseEl:BaseElement in subco.elements)
+	 						{
+	 							el.push(baseEl.clone());
+	 						}
+	 						coord.elements = el;
+	 						
+	 						coord.width = bounds.width;
+	 						coord.height = bounds.height;
+	 						coord.x = bounds.x;
+	 						coord.y = bounds.y;
+	 						coord.dataProvider = filteredData;
 
-								this.addChild(coord as DisplayObject);
-		 					}
+							this.addChild(coord as DisplayObject);
 						}
 					}
 				}
@@ -258,8 +243,8 @@ trace (getTimer(), "drawing point ele");
 
 			if (chart.coordType == VisScene.POLAR)
 			{
-				var xPos:Number = PolarCoordinateTransform.getX(scaleResults[0], scaleResults[1], chart.origin);
-				var yPos:Number = PolarCoordinateTransform.getY(scaleResults[0], scaleResults[1], chart.origin);
+				var xPos:Number = PolarCoordinateTransform.getX(scaleResults["pos1"], scaleResults["pos2"], chart.origin);
+				var yPos:Number = PolarCoordinateTransform.getY(scaleResults["pos1"], scaleResults["pos2"], chart.origin);
 				scaleResults["pos1"] = xPos;
 				scaleResults["pos2"] = yPos; 
 			}

@@ -169,13 +169,31 @@ package birdeye.vis.scales
 		public function set scaleInterval(val:Number):void
 		{
 			_scaleInterval = val;
-
+			isGivenInterval = true;
 			//invalidate();
 		}
 		public function get scaleInterval():Number
 		{
 			return _scaleInterval;
 		}
+		
+		
+		protected var _numberOfIntervals:Number = 5;
+		/** Set the number of intervals in the scale. For ex. 5 intervals, will define
+		 * 5 labels and ticks on the scale. This can be used as alternative to scaleInterval and
+		 * dataInterval. If dataInterval and scaleInterval are not defined than numberOfIntervals
+		 * is used and by default is 5.*/
+		public function set numberOfIntervals(val:Number):void
+		{
+			_numberOfIntervals = val;
+			
+			//invalidate();
+		}
+		public function get numberOfIntervals():Number
+		{
+			return _numberOfIntervals;
+		}
+		
 		protected var _dataValues:Array; /* of numerals  for numeric scales and strings for category scales*/
  		/** Define the min and max data values for numeric scales ([minLat, maxLong], [minAreaDensity, maxAreaDensity])
  		 * and category strings for category scales. The data values property has higher priority compared to min, max and 
@@ -243,7 +261,8 @@ package birdeye.vis.scales
 		 */
 		public function getPosition(dataValue:*):*
 		{
-			// to be overridden by implementing axis class (Category, Numeric, DateTime..)
+			// abstract method to be overridden by implementing class (Category, Numeric, DateTime..)
+			throw new Error("abstract method that must be overridden");
 			return null;
 		}
 		

@@ -83,14 +83,7 @@ package birdeye.vis.elements.geometry
 trace(getTimer(), "drawing bar");
 				super.drawElement();
 				removeAllElements();
-				var dataFields:Array = [];
-				// prepare data for a standard tooltip message in case the user
-				// has not set a dataTipFunction
-				dataFields[0] = dim2;
-				dataFields[1] = dim1;
-				if (dim3) 
-					dataFields[2] = dim3;
-	
+
 				var xPos:Number, yPos:Number, zPos:Number = NaN;
 				var j:Object;
 	
@@ -153,7 +146,7 @@ trace(getTimer(), "drawing bar");
 							} else {
 								xPos = scale1.getPosition(currentItem[tmpDim1] + innerBase1);
 							}
-							dataFields[1] = dim1;
+							dataFields["dim1"] = tmpArray[i];
 						}
 						
 						switch (_stackType)
@@ -222,7 +215,7 @@ trace(getTimer(), "drawing bar");
 		
 						// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
 						// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-						createTTGG(currentItem, dataFields, xPos, yPos+innerBarWidth/2, scale2RelativeValue, 3,ttShapes,ttXoffset,ttYoffset);
+						createTTGG(currentItem, dataFields, xPos, yPos+innerBarWidth/2, scale2RelativeValue, 3, i, ttShapes,ttXoffset,ttYoffset);
 		
 						if (dim3)
 						{

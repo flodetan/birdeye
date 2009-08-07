@@ -124,14 +124,7 @@ trace (getTimer(), "area ele");
 				
 				var y0:Number = getYMinPosition();
 				var y0Prev:Number;
-				var dataFields:Array = [];
-				// prepare data for a standard tooltip message in case the user
-				// has not set a dataTipFunction
-				dataFields[0] = dim1;
-				dataFields[1] = dim2;
-				if (dim3) 
-					dataFields[2] = dim3;
-	
+
 				// shapes array defining the tooltip geometries
 				var ttShapes:Array;
 				// tooltip distance from the hitarea position

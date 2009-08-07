@@ -259,8 +259,8 @@ package birdeye.vis.coords
 										unscaledWidth - (leftContainer.width + rightContainer.width),
 										unscaledHeight - (topContainer.height + bottomContainer.height));
 										
-			bottomContainer.setActualSize(chartBounds.width, bottomContainer.height);	
-			topContainer.setActualSize(chartBounds.width, topContainer.height);
+			topContainer.width = bottomContainer.width = chartBounds.width;
+
 			leftContainer.setActualSize(leftContainer.width, chartBounds.height);
 			rightContainer.setActualSize(rightContainer.width, chartBounds.height);			
 			

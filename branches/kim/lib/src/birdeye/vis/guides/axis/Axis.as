@@ -290,6 +290,18 @@ package birdeye.vis.guides.axis
 		{
 			return _weightPointer;
 		}
+		
+		private var _showPointer:Boolean = true;
+		/** Show labels on the axis */
+		[Inspectable(enumeration="false,true")]
+		public function set showPointer(val:Boolean):void
+		{
+			_showPointer = val;
+		}
+		public function get showPointer():Boolean
+		{
+			return _showPointer;
+		}
 
 		/** Position the pointer to the specified x position. Used by a cartesian series
 		 * if the current axis is x.*/
@@ -687,6 +699,20 @@ package birdeye.vis.guides.axis
 		 * width (for y axes) or height (for x axes) of the CategoryAxis.*/
 		protected function calculateMaxLabelSize():void
 		{
+			var tmp:RasterTextPlus = new RasterTextPlus();
+			tmp.fontFamily = fontLabel;
+			tmp.fontSize = sizeLabel;
+			tmp.autoSize = TextFieldAutoSize.LEFT;
+			tmp.autoSizeField = true;
+			
+			maxLblSize = 0;
+			for (var i:Number = 0;i<scale.completeDataValues.length;i++)
+			{
+				tmp.text = String(scale.completeDataValues[i]);
+				maxLblSize = Math.max(maxLblSize, tmp.displayObject.width);
+			}
+			
+			
 			if (showAxis)
 			{
 					switch (placement)
@@ -694,22 +720,13 @@ package birdeye.vis.guides.axis
 						case TOP:
 						case BOTTOM:
 						case HORIZONTAL_CENTER:
-							maxLblSize = Math.max(maxLblSize, sizeLabel /* pixels for 1 char height */ + thickWidth + 10);
-							height = Math.max(height,maxLblSize);
+							height = Math.max(5,maxLblSize * Math.sin(-_rotateLabels));
 							break;
 						case LEFT:
 						case RIGHT:
-						case VERTICAL_CENTER:
-							var tmpWidth:Number = 0;
-							for (var dataLabel:Object in scale.completeDataValues)
-							{
-								var text:String = dataLabel is Number ? String(Math.round(dataLabel as Number)) : String(dataLabel);
-	
-								maxLblSize = text.length * sizeLabel/2 /* pixels for 1 char width */ + thickWidth + 10;
-								tmpWidth = Math.max(maxLblSize, tmpWidth);
-							}
-							
-							width = tmpWidth;
+						case VERTICAL_CENTER:				
+							width = Math.max(5, maxLblSize * Math.cos(_rotateLabels));
+							break;
 					}
 					
 				// calculate the maximum label size according to the 
@@ -746,8 +763,7 @@ package birdeye.vis.guides.axis
 			{	
 trace(getTimer(), "drawing axis");
 				invalidated = false;
-				
-				var ggIndex:uint = 0;
+
 				var thick:Line;
 				var label:RasterTextPlus;
 				
@@ -836,8 +852,8 @@ trace(getTimer(), "drawing axis");
 									label.x = scale.getPosition(dataLabel); 
 									break;
 								case BOTTOM:
-									_rotateLabelsOn = "centerRight";
-									label.x = scale.getPosition(dataLabel)-label.displayObject.width; 
+									_rotateLabelsOn = "topRight";
+									label.x = scale.getPosition(dataLabel)-label.displayObject.width*.9; 
 									break;
 							}
 							rot.registrationPoint = _rotateLabelsOn;

@@ -25,8 +25,8 @@
  * THE SOFTWARE.
  */
  
-package birdeye.vis.elements.geometry
-{
+package birdeye.vis.elements.geometry {
+
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.guides.renderers.CircleRenderer;
@@ -42,9 +42,8 @@ package birdeye.vis.elements.geometry
 	
 	import flash.geom.Rectangle;
 
-	[Event(name="objectMovedEvent", type="com.roguedevelopment.objecthandles.ObjectHandleEvent")]
-	public class NodeElement extends BaseElement implements IGraphLayoutableElement
-	{
+	public class NodeElement extends BaseElement implements IGraphLayoutableElement {
+
 		public function NodeElement() {
 			super();
 		}
@@ -61,28 +60,25 @@ package birdeye.vis.elements.geometry
 
 		private var _dimId:String;
 		
-		public function set dimId(val:String):void
-		{
+		public function set dimId(val:String):void {
 			_dimId = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
 
-		public function get dimId():String
-		{
+		public function get dimId():String {
 			return _dimId;
 		}
 
 		private var _dimName:String;
 		
-		public function set dimName(val:String):void
-		{
+		public function set dimName(val:String):void {
 			_dimName = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get dimName():String
-		{
+
+		public function get dimName():String {
 			return _dimName;
 		}
 		
@@ -125,67 +121,33 @@ package birdeye.vis.elements.geometry
 			return renderer;
 		}
 		
-		/*
-		protected function createLabelRenderer(bounds:Rectangle, text:String):IGeometry {
-			var renderer:IGeometry;
-			renderer = new LabelRenderer(bounds);
-			renderer.fill = fill;
-			renderer.stroke = stroke;
-			return renderer;
+		protected function createLabelRenderer(text:String):IGeometry {
+			const label:TextRenderer = TextRenderer.createTextLabel(
+				   0, 0 + _size,
+				   text,
+				   new SolidFill(0xffffff),  // TODO: add textFill property
+				   true, false
+			);
+			label.fontSize = 9;
+			label.fontFamily = "arial";
+			return label;
 		}
-		*/
 		
-		/** @Private 
-		 * Called by super.updateDisplayList when the series is ready for layout.*/
-		override public function drawElement():void
-		{
+		override public function drawElement():void {
 			super.drawElement();
 				
 			prepareForItemDisplayObjectsCreation();
 
-			const dataFieldNames:Array = [dimId, dimName];
-			const dataItems:Vector.<Object> = dataItems;
-				
-			const thisNode:NodeElement = this;
-			
-			if (dataItems) {
-				dataItems.forEach(function(item:Object, index:int, items:Vector.<Object>):void {
-					var pos1:Number = NaN, pos2:Number = NaN, pos3:Number = NaN;
-	
+			const items:Vector.<Object> = dataItems;
+			if (items) {
+				items.forEach(function(item:Object, index:int, items:Vector.<Object>):void {
 					const itemId:Object = item[dimId];
 					if (isItemVisible(itemId)) {
-						// We cannot use scale.getPosition here, because
-						// scales work in an inherently different way, than
-						// what we need: they calc min/max of the input data
-						// values. In case of Node/Edge we don't have these
-						// values (positions), so the scales think we have no data
-						// and create a zero-size viewport.
-		
-		//				if (scale1) {
-		//					pos1 = scale1.getPosition(position.pos1);
-		//				}
-		//				if (scale2) {
-		//					pos2 = scale2.getPosition(position.pos2);
-		//				}
-		
 						const position:Position = getItemPosition(itemId);
 						if (position != null) {
-//							createTTGG(item, dataFieldNames, pos1, pos2, 1.0, _size * 2);
-							const label:TextRenderer = TextRenderer.createTextLabel(
-								   0, 0 + _size,
-								   item[dimName],
-								   new SolidFill(0xffffff),  // TODO: add textFill property
-								   true, false
-							);
-							label.fontSize = 9;
-							label.fontFamily = "arial";
 							createItemDisplayObject(
-								getItemPosition(itemId),
-								itemId,
-								[
-									createItemRenderer(), label
-								]
-							);
+								position, itemId,
+								[createItemRenderer(), createLabelRenderer(item[dimName])]);
 						}
 					}
 				});

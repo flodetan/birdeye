@@ -143,7 +143,7 @@ package birdeye.vis.scales
 		{
 			return _baseAtZero;
 		}
-		
+
 		// UIComponent flow
 		
 		public function Numeric()
@@ -169,31 +169,25 @@ package birdeye.vis.scales
 				{
 					if (max > 0)
 					{
-						if (max < 5)
+						if (max < numberOfIntervals)
 							_dataInterval = max;
 						else
-							_dataInterval = max / 5;
+							_dataInterval = max / numberOfIntervals;
 					} else
-						_dataInterval = -min / 5;
+						_dataInterval = -min / numberOfIntervals;
 				} else {
-					if (Math.abs(max - min) < 5)
+					if (Math.abs(max - min) < numberOfIntervals)
 						dataInterval = Math.abs(max - min);
 					else 
-						dataInterval = Math.abs((max - min) / 5)
+						dataInterval = Math.abs((max - min) / numberOfIntervals)
 					isGivenInterval = false;
 				}
 			}
-			
-			// if the placement is set, and max, min and interval calculated
-			// than the axis is ready to be drawn
-			/*if (dimension && !isNaN(max) && !isNaN(min) && !isNaN(dataInterval))
-			{
-				if (showAxis)
-					readyForLayout = true;
-			}
-			else 
-				readyForLayout = false;*/
 		}
+		
+		// other methods
+
+
 		/** @Private
 		 * Calculate the format of the axis values, in order to have 
 		 * the more rounded values possible.*/ 
@@ -264,6 +258,7 @@ package birdeye.vis.scales
 		{
 			super.resetValues();
 			min = max = totalPositiveValue = NaN;
+
 		} 
 	}
 }
