@@ -232,7 +232,7 @@
 			invalidateDisplayList();
 		}
 		
-		private var _columnWidthRate:Number = 3/5;
+		private var _columnWidthRate:Number = 0.6;
 		public function set columnWidthRate(val:Number):void
 		{
 			_columnWidthRate = val;
