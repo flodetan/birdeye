@@ -115,6 +115,15 @@ package birdeye.vis.scales
 			return _size;
 		}
 		
+		protected var _alternateLabels:Number = 0;
+		/** Alternate labels positions to prevent overlapping. This sets the pixels distance among labels.
+		 * If placement is bottom/top, than the distance is considered vertically, otherwise it will be 
+		 * considered horizontally.*/
+		public function set alternateLabels(val:Number):void
+		{
+			_alternateLabels = val;
+		}
+
 		protected var _rotateLabels:Number = 0;
 		/** Set the angle rotation of labels.*/
 		public function set rotateLabels(val:Number):void
