@@ -51,9 +51,9 @@
 	<coords:Cartesian id="mix" width="90%" height="90%" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true">
 		<coords:scales>
  			<scales:Category id="c" categoryField="subject"  />
+ 			<scales:Category id="c2" categoryField="subject"  />
  			<scales:Linear id="l" />
 			<scales:Linear id="l2" />
-			<scales:Category id="c2" categoryField="subject" />
 		</coords:scales>
 
 		<coords:guides>
@@ -66,7 +66,7 @@
 			<grid:Grid scale1="{c}" scale2="{l}" divideEnumerableScale="false" />
 		</coords:guides>
 		 <coords:elements>
-		 	<elements:BarElement extendMouseEvents="true" dim2="subject" dim1="R2" styleName="grad1" displayName="R2" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
+		 	<elements:BarElement scale2="{c2}" scale1="{l2}" extendMouseEvents="true" dim2="subject" dim1="R2" styleName="grad1" displayName="R2" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
 		 	<elements:LineElement scale1="{c}" scale2="{l}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" showAllDataItems="true" dim2="R3" dim1="subject" styleName="solid1" displayName="R3" />
 		 	<elements:AreaElement scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" dim2="R3" dim1="subject" styleName="grad3" displayName="R3" />
 		 </coords:elements>
