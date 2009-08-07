@@ -9,6 +9,7 @@
 	<mx:TabNavigator id="nav" height="100%" width="100%" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" creationPolicy="auto">
 		<polar:RadarColumn label="Radar Column" width="100%" height="100%" />
 		<polar:RadarArea label="Radar Area" width="100%" height="100%" />
+		<polar:Plot label="Plot" width="100%" height="100%" />
 		<polar:RadarLine label="Radar Line" width="100%" height="100%" />
 		<polar:Pie label="Pie" width="100%" height="100%" />
 		<polar:Sunburst label="Sunburst" width="100%" height="100%" />

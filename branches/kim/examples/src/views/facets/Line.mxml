@@ -81,8 +81,8 @@
  				<scales:Category id="c2" categoryField="subject"  />
 			</coords:scales>
 			<coords:guides>
-				<axis:Axis placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
-				<axis:Axis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="12" />
+				<axis:Axis placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="12" />
 			</coords:guides>
     		 <coords:elements>
     		 	<elements:PointElement scale1="{c3}" scale2="{c2}" dim1="type" dim2="subject" styleName="solid1" displayName="R3">
@@ -93,7 +93,7 @@
         		 			</facets:coord>
         		 			<facets:scales>
  							 	<scales:Category id="c" categoryField="pressure" />
-							 	<scales:Linear id="l" />       		 				
+							 	<scales:Linear id="l"  numberOfIntervals="1"/>       		 				
         		 			</facets:scales>
         		 			<facets:elements>
         		 				<elements:LineElement id="a1" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R1" styleName="solid1" displayName="R1" />

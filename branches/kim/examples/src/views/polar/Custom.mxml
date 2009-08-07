@@ -10,6 +10,7 @@
 	<mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import birdeye.util.EffectsUtil;
 			
 			[Bindable]
 			public var dt:ArrayCollection;;
@@ -32,13 +33,6 @@
 					});
 				}
 				dt = ac;
-			}
-
-			private function dtFunc(currDatatip:Object, dataFields:Array):String
-			{
-				var tt:String = "Info: " + currDatatip[dataFields[0]];
-				tt += '\n' + dataFields[1] + ": " + currDatatip[dataFields[1]];
-				return  tt;
 			}
 
 			private function sizeFunc(dataValue:Object, min:Number, max:Number, size:Number):Number
@@ -68,14 +62,14 @@
 			<axis1:Axis scale="{l1}" placement="horizontal_center" sizeLabel="11" />
 		</polar:guides>
 		<polar:elements>
-			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="solid2" dim1="subject" dim2="{['R1','R2','R3','R4','R5']}" collisionType="stacked" displayName="Mix"/>
-			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad1" dim1="subject" dim2="R1" displayName="R1"/>
-			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad2" dim1="subject" dim2="R2" displayName="R2"/>
-			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
-			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="solid1" dim1="subject" dim2="{['R1','R2','R3','R4','R5']}" collisionType="stacked" displayName="Mix1"/>
-			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad4" dim1="subject" dim2="R4" displayName="R4"/>
-			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad5" dim1="subject" dim2="R5" displayName="R5"/>
-			<pseries:ColumnElement scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="solid3" dim1="subject" dim2="{['R1','R2','R3','R4','R5']}" collisionType="stacked" displayName="Mix2"/>
+			<pseries:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="solid2" dim1="subject" dim2="{['R1','R2','R3','R4','R5']}" collisionType="stacked" displayName="Mix"/>
+			<pseries:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad1" dim1="subject" dim2="R1" displayName="R1"/>
+			<pseries:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad2" dim1="subject" dim2="R2" displayName="R2"/>
+			<pseries:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
+			<pseries:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="solid1" dim1="subject" dim2="{['R1','R2','R3','R4','R5']}" collisionType="stacked" displayName="Mix1"/>
+			<pseries:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad4" dim1="subject" dim2="R4" displayName="R4"/>
+			<pseries:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad5" dim1="subject" dim2="R5" displayName="R5"/>
+			<pseries:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="solid3" dim1="subject" dim2="{['R1','R2','R3','R4','R5']}" collisionType="stacked" displayName="Mix2"/>
 		</polar:elements>
 	</polar:Polar>
 	<legend:Legend dataProvider="{pc1}" direction="horizontal" />

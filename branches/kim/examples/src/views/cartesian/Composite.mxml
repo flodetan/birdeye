@@ -12,7 +12,8 @@
 	<mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
-			
+			import birdeye.util.EffectsUtil;
+
 			[Bindable]
 			public var dt:ArrayCollection;;
 
@@ -38,8 +39,8 @@
 
 			private function dtFunc(currDatatip:Object, dataFields:Array):String
 			{
-				var tt:String = "Info: " + currDatatip[dataFields[0]];
-				tt += '\n' + dataFields[1] + ": " + currDatatip[dataFields[1]];
+				var tt:String = dataFields["dim1"] + ": " + currDatatip[dataFields["dim1"]];
+				tt += '\n' + dataFields["dim2"] + ": " + currDatatip[dataFields["dim2"]];
 				return  tt;
 			}
 		]]>
@@ -65,9 +66,9 @@
 			<grid:Grid scale1="{c}" scale2="{l}" divideEnumerableScale="false" />
 		</coords:guides>
 		 <coords:elements>
-		 	<elements:BarElement extendMouseEvents="true" dim2="subject" dim1="R2" styleName="grad1" displayName="R2" />
-		 	<elements:LineElement scale1="{c}" scale2="{l}" showAllDataItems="true" dim2="R3" dim1="subject" styleName="solid1" displayName="R3" />
-		 	<elements:AreaElement scale1="{c}" scale2="{l}" dim2="R3" dim1="subject" styleName="grad3" displayName="R3" />
+		 	<elements:BarElement extendMouseEvents="true" dim2="subject" dim1="R2" styleName="grad1" displayName="R2" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
+		 	<elements:LineElement scale1="{c}" scale2="{l}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" showAllDataItems="true" dim2="R3" dim1="subject" styleName="solid1" displayName="R3" />
+		 	<elements:AreaElement scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" dim2="R3" dim1="subject" styleName="grad3" displayName="R3" />
 		 </coords:elements>
 	</coords:Cartesian>
 	<guides:Legend dataProvider="{mix}" direction="horizontal"/>
