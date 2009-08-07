@@ -30,6 +30,7 @@ package birdeye.vis.coords
 	import birdeye.vis.VisScene;
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.elements.geometry.*;
+	import birdeye.vis.guides.axis.Axis;
 	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.guides.IAxis;
@@ -122,8 +123,25 @@ package birdeye.vis.coords
 		{
 			if (guide is IAxis)
 			{
-					(guide as IAxis).size = Math.min(unscaledWidth, unscaledHeight)/2;
+				var axis:IAxis = guide as IAxis;
+				axis.size = Math.min(unscaledWidth, unscaledHeight)/2;
+				
+				if (axis is DisplayObject)
+				{
+					switch (axis.placement)
+					{
+						case Axis.HORIZONTAL_CENTER:
+							DisplayObject(axis).x = _origin.x;
+							DisplayObject(axis).y = _origin.y;
+							break;
+						case Axis.VERTICAL_CENTER:
+							DisplayObject(axis).x = _origin.x - DisplayObject(axis).width;
+							DisplayObject(axis).y = _origin.y - axis.size;
+							break;
+					}
+				}
 			}	
+			
 			
 			super.updateAndDrawGuide(guide, unscaledWidth, unscaledHeight);
 		}
