@@ -585,7 +585,20 @@ package birdeye.vis.elements
 		{
 			return _randomColors;
 		}
-		
+
+		protected var _colorsStart:Array;
+		public function set colorsStart(val:Array):void
+		{
+			_colorsStart = val;
+			invalidatingDisplay();
+		}		
+
+		protected var _colorsStop:Array;
+		public function set colorsStop(val:Array):void
+		{
+			_colorsStop = val;
+			invalidatingDisplay();
+		}			
 		private var _alphaFill:Number;
 		/** Set the fill alpha.*/
 		public function set alphaFill(val:Number):void
@@ -988,7 +1001,21 @@ package birdeye.vis.elements
 
  				stylesChanged = false;
 			}
+			
+			getFillStrokeColors();
 
+			if (ggBackGround)
+			{
+				ggBackGround.target = this;
+				rectBackGround.width = unscaledWidth;
+				rectBackGround.height = unscaledHeight;
+			}
+			
+			// to be overridden by each element implementation
+		}
+		
+		private function getFillStrokeColors():void
+		{
 			if (colorGradients)
 			{
 				fill = new LinearGradientFill();
@@ -1005,16 +1032,37 @@ package birdeye.vis.elements
 			} else if (!_colors)
 				fill = new SolidFill(colorFill, alphaFill);
 			
-			stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
-
-			if (ggBackGround)
+			var c:uint = 0;
+			var tempColor:int;
+			if (_colorsStart && _colorsStop)
 			{
-				ggBackGround.target = this;
-				rectBackGround.width = unscaledWidth;
-				rectBackGround.height = unscaledHeight;
+				if (c < _colorsStart.length)
+				{
+					fill = new LinearGradientFill();
+					grStop = new GradientStop(_colorsStart[c])
+					grStop.alpha = alpha;
+					g = new Array();
+					g.push(grStop);
+	
+					grStop = new GradientStop(_colorsStop[c]);
+					grStop.alpha = alpha;
+					g.push(grStop);
+	
+					LinearGradientFill(fill).gradientStops = g;
+				}
+			}  else if (_colors)
+			{
+				if (c < _colors.length)
+					fill = new SolidFill(_colors[c]);
+				else
+					fill = new SolidFill(_colors[_colors.length]);
+			} else if (randomColors)
+			{
+				tempColor = Math.random() * 255 * 255 * 255;
+				fill = new SolidFill(tempColor);
 			}
-			
-			// to be overridden by each element implementation
+
+			stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 		}
 		
 		protected function isReadyForLayout():Boolean
