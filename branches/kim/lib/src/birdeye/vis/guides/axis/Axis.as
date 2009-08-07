@@ -693,7 +693,7 @@ package birdeye.vis.guides.axis
 							_pointer = new Line(w-sizePointer,h, w, h);
 							break;
 						case RIGHT:
-						case DIAGONAL:
+						case DIAGONAL:							
 							xMin = 0; xMax = 0;
 							yMin = 0; yMax = h;
 							sign = 1;
@@ -778,8 +778,9 @@ package birdeye.vis.guides.axis
 						case TOP:
 						case BOTTOM:
 						case HORIZONTAL_CENTER:
-							height = Math.max(5,maxLblSize * Math.sin(-_rotateLabels*Math.PI/180));
-							break;
+							//height = Math.max(5,maxLblSize * Math.sin(-_rotateLabels*Math.PI/180));
+							height = sizeLabel + thickWidth + 10;
+							break;							
 						case LEFT:
 						case RIGHT:
 						case VERTICAL_CENTER:				
@@ -921,6 +922,8 @@ trace(getTimer(), "drawing axis");
 							label.x = scale.getPosition(dataLabel)-label.displayObject.width/2; 
 						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
+						
+						
 					}
 				}
 			}
