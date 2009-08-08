@@ -54,7 +54,7 @@
 	<mx:Button label="Generate" click="createDT()"/>
 	<polar:Polar id="rd" type="stacked" showDataTips="true" columnWidthRate=".7" dataTipFunction="dtFunc" dataProvider="{dt}" layout="radar" width="100%" height="100%">
 		<polar:scales>
-			<scales:Numeric id="l" />
+			<scales:Linear id="l" />
 			<scales:CategoryAngle id="c" categoryField="subject" />
 		</polar:scales>
 		<polar:guides>
