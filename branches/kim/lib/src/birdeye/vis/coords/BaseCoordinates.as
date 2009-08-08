@@ -446,23 +446,38 @@ trace(getTimer(), "END feeding scales");
 					// if the max and min are not yet defined for the element, than they are calculated now
 					// since the same scale can be shared among several elements, the precedent min and max
 					// are also taken into account
-					if (isNaN(INumerableScale(scale).max))
-					{
-						INumerableScale(scale).max = element["max"+dim+"Value"]; // TODO change this to a 'cleaner' technique?
-					}
-					else 
-					{
-						INumerableScale(scale).max = Math.max(INumerableScale(scale).max, element["max"+dim+"Value"]);
-					}
-					
-					if (isNaN(INumerableScale(scale).min))
-					{
-						INumerableScale(scale).min = element["min"+dim+"Value"];
-					}	
-					else
-					{ 
-						INumerableScale(scale).min = Math.min(INumerableScale(scale).min, element["min"+dim+"Value"]);
-					}
+					if (INumerableScale(scale).scaleType != BaseScale.PERCENT)
+                    {                    
+						if (isNaN(INumerableScale(scale).max))
+						{
+							INumerableScale(scale).max = element["max"+dim+"Value"]; // TODO change this to a 'cleaner' technique?
+						}
+						else 
+						{
+							INumerableScale(scale).max = Math.max(INumerableScale(scale).max, element["max"+dim+"Value"]);
+						}
+						
+						if (isNaN(INumerableScale(scale).min))
+						{
+							INumerableScale(scale).min = element["min"+dim+"Value"];
+						}	
+						else
+						{ 
+							INumerableScale(scale).min = Math.min(INumerableScale(scale).min, element["min"+dim+"Value"]);
+						}
+                    }
+                    else
+                    {
+                    	if (isNaN(INumerableScale(scale).totalPositiveValue))
+                    	{
+                            INumerableScale(scale).totalPositiveValue = element["total"+dim+"PositiveValue"];
+                    	}
+                        else
+                        {
+                            INumerableScale(scale).totalPositiveValue += element["total"+dim+"PositiveValue"];
+                        }
+ 
+                    }
 				}
 			}
 		}
