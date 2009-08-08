@@ -74,7 +74,7 @@
 						{
 							// create thick line
 				 			thick = new Line(xMin + thickWidth * sign, getPosition(snap), xMax, getPosition(snap));
-							thick.stroke = new SolidStroke(_lineColor,1,_lineWeight);
+							thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 							gg.geometryCollection.addItem(thick);
 				
 							// create label 
@@ -96,7 +96,7 @@
 					{
 						// create thick line
 			 			thick = new Line(getPosition(snap), yMin + thickWidth * sign, getPosition(snap), yMax);
-						thick.stroke = new SolidStroke(_lineColor,1,_lineWeight);
+						thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 						gg.geometryCollection.addItem(thick);
 	
 						// create label 
