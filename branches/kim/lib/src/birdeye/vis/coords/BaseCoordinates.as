@@ -192,7 +192,7 @@ trace(getTimer(), "END feeding scales");
 				else 
 					countStackableElements[IStack(element).elementType] += 1;
 					
-				IStack(element).stackPosition = countStackableElements[IStack(element).elementType]; 
+				IStack(element).stackPosition = countStackableElements[IStack(element).elementType] - 1; // position is current total - 1 
 			}
 			
 			// nCursors is used in feedAxes to check that all elements cursors are ready

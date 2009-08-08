@@ -123,6 +123,8 @@ package birdeye.vis.coords
 		{
 			super.updateScale(scale, element,dim);
 			
+			
+			// every scale it dimension 1 in polar
 			scale.dimension = BaseScale.DIMENSION_1;
 
 		}
