@@ -58,7 +58,6 @@
 			<axis:Linear id="size" scaleValues="[0,1]"/>
 		</polar:scales>
 		<polar:guides>
-			<axis1:Axis scale="{c}" placement="top" />
 			<axis1:Axis scale="{l1}" placement="horizontal_center" sizeLabel="11" />
 		</polar:guides>
 		<polar:elements>
