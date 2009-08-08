@@ -63,7 +63,8 @@
 						pos = size * (1 - (Number(dataValue) - min)/(max - min));
 						break;
 					default:
-						pos = _scaleValues[0] + size * (Number(dataValue) - min)/(max - min);
+						pos = size * (Number(dataValue) - min)/(max - min);
+						//pos = _scaleValues[0] + size * (Number(dataValue) - min)/(max - min);
 				}
 				
 			return pos;

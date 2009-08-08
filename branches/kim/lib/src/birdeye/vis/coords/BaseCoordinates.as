@@ -14,6 +14,7 @@ package birdeye.vis.coords
 	import birdeye.vis.interfaces.IStack;
 	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.interfaces.guides.IGuide;
+	import birdeye.vis.scales.BaseScale;
 	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
@@ -397,6 +398,18 @@ trace(getTimer(), "END feeding scales");
 
 			if (!scale.parent) scale.parent = this;
 			
+			if (dim == "Dim1")
+			{
+				scale.dimension = BaseScale.DIMENSION_1;
+			}
+			else if (dim == "Dim2")
+			{
+				scale.dimension = BaseScale.DIMENSION_2;	
+			}
+			else if (dim == "Dim3")
+			{
+				scale.dimension = BaseScale.DIMENSION_3;	
+			}
 				
 			if (!scale.dataValues)
 			{

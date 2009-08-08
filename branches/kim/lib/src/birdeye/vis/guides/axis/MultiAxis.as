@@ -4,6 +4,7 @@ package birdeye.vis.guides.axis
 	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.interfaces.guides.IGuide;
+	import birdeye.vis.scales.BaseScale;
 	import birdeye.vis.scales.CategoryAngle;
 	import birdeye.vis.scales.PolarCoordinateTransform;
 	
@@ -66,7 +67,6 @@ package birdeye.vis.guides.axis
 		public function set categoryScale(val:CategoryAngle):void
 		{
 			_categoryScale = val;
-			
 		}
 		
 		public function get categoryScale():CategoryAngle
@@ -91,11 +91,12 @@ package birdeye.vis.guides.axis
 			
 			if (val is IScale)	
 			{
-				_subScaleInterface = val as IScale;		
+				_subScaleInterface = val as IScale;	
 			}
 			else if (val is Array)
 			{
-				_subScalesArray = val as Array;			
+				_subScalesArray = val as Array;	
+	
 			}
 		}
 		

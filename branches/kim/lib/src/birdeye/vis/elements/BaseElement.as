@@ -260,7 +260,6 @@ package birdeye.vis.elements
 		public function set scale1(val:IScale):void
 		{
 			_scale1 = val;				
-			_scale1.dimension = BaseScale.DIMENSION_1;
 
 			invalidateProperties();
 			invalidatingDisplay();
@@ -275,7 +274,7 @@ package birdeye.vis.elements
 		{
 			_scale2 = val;
 			
-			_scale2.dimension = BaseScale.DIMENSION_2;
+
 /* 			if POLAR
 			if (val is IScaleUI && IScaleUI(_scale2).placement != BaseScale.HORIZONTAL_CENTER 
 								&& IScaleUI(_scale2).placement != BaseScale.VERTICAL_CENTER)
@@ -297,7 +296,6 @@ package birdeye.vis.elements
 		public function set scale3(val:IScale):void
 		{
 			_scale3 = val;
-			_scale3.dimension = BaseScale.DIMENSION_3;
 
 			invalidateProperties();
 			invalidatingDisplay();
