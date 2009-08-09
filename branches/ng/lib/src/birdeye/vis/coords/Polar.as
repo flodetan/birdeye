@@ -179,173 +179,132 @@ package birdeye.vis.coords
 		 * corresponding data.*/
 		override protected function commitProperties():void
 		{
-			super.commitProperties();
-			
-			removeAllElements();
-			
-			nCursors = 0;
-			
-			if (elements)
+			if (active)
 			{
-				var _stackedElements:Array = [];
-
- 				for (var i:int = 0; i<elements.length; i++)
-				{
-					// if elements dataprovider doesn' exist or it refers to the
-					// chart dataProvider, than set its cursor to this chart cursor (this.cursor)
-					if (dataItems && (! IElement(_elements[i]).dataProvider 
-									|| IElement(_elements[i]).dataProvider == this.dataProvider))
-						IElement(_elements[i]).dataItems = dataItems;
-
-					// nCursors is used in feedAxes to check that all elements cursors are ready
-					// and therefore check that axes can be properly feeded
-					if (dataItems || IElement(_elements[i]).dataItems)
-						nCursors += 1;
-
-					if (!contains(DisplayObject(elements[i])))
-						addChild(DisplayObject(elements[i]));
-
-					if (IElement(elements[i]).scale2)
-					{
-						if (!contains(DisplayObject(IElement(elements[i]).scale2)))
-							addChild(DisplayObject(IElement(elements[i]).scale2));
-					} 
-
-					if (_elements[i] is IStack)
-					{
-						IStack(_elements[i]).stackType = _type;
-						_stackedElements.push(_elements[i]);
-					}
-				}
-
-				for (i = 0; i<_stackedElements.length; i++)
-				{
-					IStack(_stackedElements[i]).stackPosition = i;
-					IStack(_stackedElements[i]).total = _stackedElements.length;
-				}
-			}
-
-			if (_elements)
-			{
-				var _stackElements:Array = [];
-			
-				for (i = 0; i<_elements.length; i++)
-				{
-					if (_elements[i] is IStack)
-					{
-						IStack(_elements[i]).stackType = _type;
-						_stackElements.push(_elements[i])
-					}
-				}
-			}
-
-			// when elements are loaded, set their stack type to the 
-			// current "type" value. if the type is STACKED100
-			// calculate the maxStacked100 value, and load the baseValues
-			// arrays for each üolarColumnElements. The baseValues arrays will be used to know
-			// the radius0 starting point for each elements values, which corresponds to 
-			// the understair elements outer radius;
-			if (_elements && nCursors == _elements.length)
-			{
-				_stackElements = [];
-			
-				for (i = 0; i<_elements.length; i++)
-				{
-					if (_elements[i] is IStack)
-					{
-						IStack(_elements[i]).stackType = _type;
-						_stackElements.push(_elements[i])
-					}
-				}
+				super.commitProperties();
 				
-				_maxStacked100 = NaN;
-
-				if (_type==StackElement.STACKED100)
-				{
-					// {indexElements: i, baseValues: Array_for_each_Elements}
-					var allElementsBaseValues:Array = []; 
-					for (i=0;i < _stackElements.length;i++)
-						allElementsBaseValues[i] = {indexElements: i, baseValues: []};
-					
-					// keep index of last element been processed 
-					// with the same angle field data value
-					// k[xFieldDataValue] = last element processed
-					var k:Array = [];
-					
-					// the baseValues are indexed with the angle field objects
-					var j:Object;
-					
-					var cursIndex:uint = 0;
-					var currentItem:Object;
+				removeAllElements();
 				
-					for (var s:Number = 0; s<_stackElements.length; s++)
+				nCursors = 0;
+				
+				if (elements)
+				{
+					var _stackedElements:Array = [];
+	
+	 				for (var i:int = 0; i<elements.length; i++)
 					{
-						var sCursor:Vector.<Object>;
-						
-						if (IElement(_stackElements[s]).dataItems &&
-							IElement(_stackElements[s]).dataItems != dataItems)
+						// if elements dataprovider doesn' exist or it refers to the
+						// chart dataProvider, than set its cursor to this chart cursor (this.cursor)
+						if (dataItems && (! IElement(_elements[i]).dataProvider 
+										|| IElement(_elements[i]).dataProvider == this.dataProvider))
+							IElement(_elements[i]).dataItems = dataItems;
+	
+						// nCursors is used in feedAxes to check that all elements cursors are ready
+						// and therefore check that axes can be properly feeded
+						if (dataItems || IElement(_elements[i]).dataItems)
+							nCursors += 1;
+	
+						if (!contains(DisplayObject(elements[i])))
+							addChild(DisplayObject(elements[i]));
+	
+						if (IElement(elements[i]).scale2)
 						{
-							sCursor = IElement(_stackElements[s]).dataItems;
-							
-							for (cursIndex = 0; cursIndex < sCursor.length; cursIndex++)
-							{
-								currentItem = sCursor[cursIndex];
-								j = currentItem[IElement(_stackElements[s]).dim1];
-
-								if (s>0 && k[j]>=0)
-								{
-									var maxCurrentD2:Number = getDimMaxValue(currentItem, IElement(_stackElements[k[j]]).dim2);
-									allElementsBaseValues[s].baseValues[j] = 
-										allElementsBaseValues[k[j]].baseValues[j] + 
-										Math.max(0,maxCurrentD2);
-								} else 
-									allElementsBaseValues[s].baseValues[j] = 0;
-
-								maxCurrentD2 = getDimMaxValue(currentItem, IElement(_stackElements[s]).dim2);
-								
-								if (isNaN(_maxStacked100))
-									_maxStacked100 = 
-										allElementsBaseValues[s].baseValues[j] + 
-										Math.max(0,maxCurrentD2);
-								else
-									_maxStacked100 = Math.max(_maxStacked100,
-										allElementsBaseValues[s].baseValues[j] + 
-										Math.max(0,maxCurrentD2));
-
-								k[j] = s;
-							}
+							if (!contains(DisplayObject(IElement(elements[i]).scale2)))
+								addChild(DisplayObject(IElement(elements[i]).scale2));
+						} 
+	
+						if (_elements[i] is IStack)
+						{
+							IStack(_elements[i]).stackType = _type;
+							_stackedElements.push(_elements[i]);
+						}
+					}
+	
+					for (i = 0; i<_stackedElements.length; i++)
+					{
+						IStack(_stackedElements[i]).stackPosition = i;
+						IStack(_stackedElements[i]).total = _stackedElements.length;
+					}
+				}
+	
+				if (_elements)
+				{
+					var _stackElements:Array = [];
+				
+					for (i = 0; i<_elements.length; i++)
+					{
+						if (_elements[i] is IStack)
+						{
+							IStack(_elements[i]).stackType = _type;
+							_stackElements.push(_elements[i])
+						}
+					}
+				}
+	
+				// when elements are loaded, set their stack type to the 
+				// current "type" value. if the type is STACKED100
+				// calculate the maxStacked100 value, and load the baseValues
+				// arrays for each üolarColumnElements. The baseValues arrays will be used to know
+				// the radius0 starting point for each elements values, which corresponds to 
+				// the understair elements outer radius;
+				if (_elements && nCursors == _elements.length)
+				{
+					_stackElements = [];
+				
+					for (i = 0; i<_elements.length; i++)
+					{
+						if (_elements[i] is IStack)
+						{
+							IStack(_elements[i]).stackType = _type;
+							_stackElements.push(_elements[i])
 						}
 					}
 					
-					if (dataItems)
+					_maxStacked100 = NaN;
+	
+					if (_type==StackElement.STACKED100)
 					{
-						for (cursIndex = 0; cursIndex < dataItems.length; cursIndex++)
+						// {indexElements: i, baseValues: Array_for_each_Elements}
+						var allElementsBaseValues:Array = []; 
+						for (i=0;i < _stackElements.length;i++)
+							allElementsBaseValues[i] = {indexElements: i, baseValues: []};
+						
+						// keep index of last element been processed 
+						// with the same angle field data value
+						// k[xFieldDataValue] = last element processed
+						var k:Array = [];
+						
+						// the baseValues are indexed with the angle field objects
+						var j:Object;
+						
+						var cursIndex:uint = 0;
+						var currentItem:Object;
+					
+						for (var s:Number = 0; s<_stackElements.length; s++)
 						{
-							currentItem = dataItems[cursIndex];
-
-							// index of last element without own cursor with the same radius (dim2) data value 
-							// (because they've already been processed in the previous loop)
-							var t:Array = [];
-							for (s = 0; s<_stackElements.length; s++)
-							{
-								if (! (IElement(_stackElements[s]).dataItems &&
-									IElement(_stackElements[s]).dataItems != dataItems))
-								{
-									j = currentItem[IElement(_stackElements[s]).dim1];
+							var sCursor:Vector.<Object>;
 							
-									if (t[j]>=0)
+							if (IElement(_stackElements[s]).dataItems &&
+								IElement(_stackElements[s]).dataItems != dataItems)
+							{
+								sCursor = IElement(_stackElements[s]).dataItems;
+								
+								for (cursIndex = 0; cursIndex < sCursor.length; cursIndex++)
+								{
+									currentItem = sCursor[cursIndex];
+									j = currentItem[IElement(_stackElements[s]).dim1];
+	
+									if (s>0 && k[j]>=0)
 									{
-										maxCurrentD2 = getDimMaxValue(currentItem, IElement(_stackElements[t[j]]).dim2, 
-																	IElement(_stackElements[t[j]]).collisionType == StackElement.STACKED100);
+										var maxCurrentD2:Number = getDimMaxValue(currentItem, IElement(_stackElements[k[j]]).dim2);
 										allElementsBaseValues[s].baseValues[j] = 
-											allElementsBaseValues[t[j]].baseValues[j] + 
+											allElementsBaseValues[k[j]].baseValues[j] + 
 											Math.max(0,maxCurrentD2);
 									} else 
 										allElementsBaseValues[s].baseValues[j] = 0;
+	
+									maxCurrentD2 = getDimMaxValue(currentItem, IElement(_stackElements[s]).dim2);
 									
-									maxCurrentD2 = getDimMaxValue(currentItem, IElement(_stackElements[s]).dim2, 
-																IElement(_stackElements[s]).collisionType == StackElement.STACKED100);
-
 									if (isNaN(_maxStacked100))
 										_maxStacked100 = 
 											allElementsBaseValues[s].baseValues[j] + 
@@ -354,127 +313,174 @@ package birdeye.vis.coords
 										_maxStacked100 = Math.max(_maxStacked100,
 											allElementsBaseValues[s].baseValues[j] + 
 											Math.max(0,maxCurrentD2));
-
-									t[j] = s;
+	
+									k[j] = s;
 								}
 							}
 						}
+						
+						if (dataItems)
+						{
+							for (cursIndex = 0; cursIndex < dataItems.length; cursIndex++)
+							{
+								currentItem = dataItems[cursIndex];
+	
+								// index of last element without own cursor with the same radius (dim2) data value 
+								// (because they've already been processed in the previous loop)
+								var t:Array = [];
+								for (s = 0; s<_stackElements.length; s++)
+								{
+									if (! (IElement(_stackElements[s]).dataItems &&
+										IElement(_stackElements[s]).dataItems != dataItems))
+									{
+										j = currentItem[IElement(_stackElements[s]).dim1];
+								
+										if (t[j]>=0)
+										{
+											maxCurrentD2 = getDimMaxValue(currentItem, IElement(_stackElements[t[j]]).dim2, 
+																		IElement(_stackElements[t[j]]).collisionType == StackElement.STACKED100);
+											allElementsBaseValues[s].baseValues[j] = 
+												allElementsBaseValues[t[j]].baseValues[j] + 
+												Math.max(0,maxCurrentD2);
+										} else 
+											allElementsBaseValues[s].baseValues[j] = 0;
+										
+										maxCurrentD2 = getDimMaxValue(currentItem, IElement(_stackElements[s]).dim2, 
+																	IElement(_stackElements[s]).collisionType == StackElement.STACKED100);
+	
+										if (isNaN(_maxStacked100))
+											_maxStacked100 = 
+												allElementsBaseValues[s].baseValues[j] + 
+												Math.max(0,maxCurrentD2);
+										else
+											_maxStacked100 = Math.max(_maxStacked100,
+												allElementsBaseValues[s].baseValues[j] + 
+												Math.max(0,maxCurrentD2));
+	
+										t[j] = s;
+									}
+								}
+							}
+						}
+						
+						// set the baseValues array for each AreaElement
+						// The baseValues array will be used to know
+						// the y0 starting point for each element values, 
+						// which corresponds to the understair element highest y value;
+						for (s = 0; s<_stackElements.length; s++)
+							IStack(_stackElements[s]).baseValues = allElementsBaseValues[s].baseValues;
 					}
+				}
+	
+				if (multiScale && !contains(multiScale))
+					addChild(multiScale);
 					
-					// set the baseValues array for each AreaElement
-					// The baseValues array will be used to know
-					// the y0 starting point for each element values, 
-					// which corresponds to the understair element highest y value;
-					for (s = 0; s<_stackElements.length; s++)
-						IStack(_stackElements[s]).baseValues = allElementsBaseValues[s].baseValues;
-				}
-			}
-
-			if (multiScale && !contains(multiScale))
-				addChild(multiScale);
-				
-			if (!contains(labels))
-				addChild(labels);
-
-			if (_elements)
-			{
-				var _columnElements:Array = [];
-			
-				for (i = 0; i<_elements.length; i++)
+				if (!contains(labels))
+					addChild(labels);
+	
+				if (_elements)
 				{
-					if (_elements[i] is IStack)
+					var _columnElements:Array = [];
+				
+					for (i = 0; i<_elements.length; i++)
 					{
-						IStack(_elements[i]).stackType = _type;
-						_columnElements.push(_elements[i])
+						if (_elements[i] is IStack)
+						{
+							IStack(_elements[i]).stackType = _type;
+							_columnElements.push(_elements[i])
+						}
 					}
 				}
+				// init all axes, default and elements owned 
+				if (! axesFeeded)
+				{
+					resetAxes();
+					feedAxes();
+				}
+	
+				if (!contains(labels))
+					addChild(labels);
 			}
-			// init all axes, default and elements owned 
-			if (! axesFeeded)
-			{
-				resetAxes();
-				feedAxes();
-			}
-
-			if (!contains(labels))
-				addChild(labels);
 		}
 		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			setActualSize(unscaledWidth, unscaledHeight);
-			
-			if (showAllDataTips)
-				removeDataItems();
-			
-			_origin = new Point(unscaledWidth/2, unscaledHeight/2);
-			
-			if (multiScale)
+			if (active)
 			{
-				multiScale.scalesSize = Math.min(unscaledWidth, unscaledHeight)/2;
-				MultiScale(multiScale).setActualSize(multiScale.scalesSize, multiScale.scalesSize);
-				multiScale.draw();
-			} 
-			
-			for (var i:Number = 0; i<_elements.length; i++)
-			{
-				if (IElement(_elements[i]).scale2)
-				{
-					IElement(_elements[i]).scale2.size = Math.min(unscaledWidth, unscaledHeight)/2;
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				setActualSize(unscaledWidth, unscaledHeight);
 				
-					if (IElement(_elements[i]).scale2 is IScaleUI)
+				if (showAllDataTips)
+					removeDataItems();
+				
+				_origin = new Point(unscaledWidth/2, unscaledHeight/2);
+				
+				if (multiScale)
+				{
+					multiScale.scalesSize = Math.min(unscaledWidth, unscaledHeight)/2;
+					MultiScale(multiScale).setActualSize(multiScale.scalesSize, multiScale.scalesSize);
+					multiScale.draw();
+				} 
+				
+				for (var i:Number = 0; i<_elements.length; i++)
+				{
+					if (IElement(_elements[i]).scale2)
 					{
-						switch (IScaleUI(IElement(_elements[i]).scale2).placement)
+						IElement(_elements[i]).scale2.size = Math.min(unscaledWidth, unscaledHeight)/2;
+					
+						if (IElement(_elements[i]).scale2 is IScaleUI)
 						{
-							case BaseScale.HORIZONTAL_CENTER:
-								DisplayObject(IElement(_elements[i]).scale2).x = _origin.x;
-								DisplayObject(IElement(_elements[i]).scale2).y = _origin.y;
-								break;
-							case BaseScale.VERTICAL_CENTER:
-								DisplayObject(IElement(_elements[i]).scale2).x = 
-									_origin.x - DisplayObject(IElement(_elements[i]).scale2).width;
-								DisplayObject(IElement(_elements[i]).scale2).y = 
-									_origin.y - IElement(_elements[i]).scale2.size;
-								break;
+							switch (IScaleUI(IElement(_elements[i]).scale2).placement)
+							{
+								case BaseScale.HORIZONTAL_CENTER:
+									DisplayObject(IElement(_elements[i]).scale2).x = _origin.x;
+									DisplayObject(IElement(_elements[i]).scale2).y = _origin.y;
+									break;
+								case BaseScale.VERTICAL_CENTER:
+									DisplayObject(IElement(_elements[i]).scale2).x = 
+										_origin.x - DisplayObject(IElement(_elements[i]).scale2).width;
+									DisplayObject(IElement(_elements[i]).scale2).y = 
+										_origin.y - IElement(_elements[i]).scale2.size;
+									break;
+							}
+							IScaleUI(IElement(_elements[i]).scale2).draw();
 						}
-						IScaleUI(IElement(_elements[i]).scale2).draw();
 					}
 				}
-			}
-			
-			if (_showAllDataTips)
-			{
-				for (i = 0; i<numChildren; i++)
+				
+				if (_showAllDataTips)
 				{
-					if (getChildAt(i) is DataItemLayout)
-						DataItemLayout(getChildAt(i)).showToolTip();
+					for (i = 0; i<numChildren; i++)
+					{
+						if (getChildAt(i) is DataItemLayout)
+							DataItemLayout(getChildAt(i)).showToolTip();
+					}
 				}
+	
+				if (multiScale && multiScale.scale1)
+					drawLabels()
+				
+				for (i = 0; i<_elements.length; i++)
+				{
+					DisplayObject(_elements[i]).width = unscaledWidth;
+					DisplayObject(_elements[i]).height = unscaledHeight;
+					IElement(_elements[i]).draw();
+				}
+				
+				if (_isMasked && _maskShape)
+				{
+					if (!elementsContainer.contains(_maskShape))
+						elementsContainer.addChild(_maskShape);
+					maskShape.graphics.beginFill(0xffffff, 1);
+					maskShape.graphics.drawRect(0,0,_elementsContainer.width, _elementsContainer.height);
+					maskShape.graphics.endFill();
+		  			elementsContainer.setChildIndex(_maskShape, 0);
+					elementsContainer.mask = maskShape;
+				}
+	
+				// listeners like legends will listen to this event
+				dispatchEvent(new Event("ProviderReady"));
 			}
-
-			if (multiScale && multiScale.scale1)
-				drawLabels()
-			
-			for (i = 0; i<_elements.length; i++)
-			{
-				DisplayObject(_elements[i]).width = unscaledWidth;
-				DisplayObject(_elements[i]).height = unscaledHeight;
-				IElement(_elements[i]).draw();
-			}
-			
-			if (_isMasked && _maskShape)
-			{
-				if (!elementsContainer.contains(_maskShape))
-					elementsContainer.addChild(_maskShape);
-				maskShape.graphics.beginFill(0xffffff, 1);
-				maskShape.graphics.drawRect(0,0,_elementsContainer.width, _elementsContainer.height);
-				maskShape.graphics.endFill();
-	  			elementsContainer.setChildIndex(_maskShape, 0);
-				elementsContainer.mask = maskShape;
-			}
-
-			// listeners like legends will listen to this event
-			dispatchEvent(new Event("ProviderReady"));
 		}
 
 		protected var currentElement:IElement;
