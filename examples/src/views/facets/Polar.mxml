@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:line="birdeye.vis.recipes.cartesianCharts.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	xmlns:facets="birdeye.vis.facets.*"
+	backgroundColor="#3f3f3f" 
+	creationComplete="createDT()" >
+
+<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import birdeye.util.EffectsUtil;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			private var subject:Array;
+			private var pressure:Array;
+			private var type:Array;
+			
+			private function createDT():void
+			{
+				subject = ["A", "B", "C", "D"];
+				pressure = ["low", "medium", "high"];
+				type = ["organic", "chemical", "industrial", "nature",];
+				var ac:ArrayCollection = new ArrayCollection();
+
+				for (var i:Number = 0; i<subject.length; i++)
+				{
+					for (var j:Number=0; j<pressure.length;j++)
+					{
+						for (var k:Number=0; k<type.length;k++)
+						{
+							ac.addItem({
+								subject: subject[i],
+								pressure: pressure[j],
+								type: type[k],
+								R1:Math.round(Math.random() * 1000),
+								R2: Math.round(Math.random() * 1000),
+								R3: Math.round(Math.random() * 1000),
+								R4: Math.round(Math.random() * 1000),
+								R5: Math.round(Math.random() * 1000)
+							});
+						}
+					}
+				}
+				dt = ac;
+			}
+
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = "Info: " + currDatatip[dataFields[0]];
+				tt += '\n' + dataFields[1] + ": " + currDatatip[dataFields[1]];
+				return  tt;
+			}
+
+			private function changeForm(a:Array):void
+			{
+				for (var i:Number = 0; i<a.length; i++)
+					if (a[i].form == "curve")
+						a[i].form = "line";
+					else 
+						a[i].form = "curve";
+			}
+		]]>
+	</mx:Script>
+	
+	
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+    	
+    	<mx:HBox>
+    		<mx:Button label="Generate" click="createDT()"/>
+			<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4,a5])"/>
+		</mx:HBox>
+		       	<coords:Cartesian id="cc4" width="90%" height="90%" dataTipFunction="dtFunc" showDataTips="true" dataProvider="{dt}" 
+       		type="stacked100" showGrid="true">
+			<coords:scales>
+ 				<scales:Category id="c3" categoryField="type" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" showPointer="false" sizeLabel="12"/>
+ 				<scales:Category id="c2" categoryField="subject" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" showPointer="false" numberOfIntervals="1" sizeLabel="12"/>
+			</coords:scales>
+    		 <coords:elements>
+    		 	<elements:PointElement scale1="{c3}" scale2="{c2}" dim1="type" dim2="subject" styleName="solid1" displayName="R3">
+    		 		<elements:itemRenderer>
+        		 		<facets:FacetContainer>
+        		 			<facets:coord>
+        		 				<coords:Polar id="p1" showDataTips="true" columnWidthRate="0.5" showGrid="false"/>
+        		 			</facets:coord>
+        		 			<facets:scales>
+ 							 	<scales:CategoryAngle id="c" categoryField="pressure" placement="horizontal_center" fontLabel="tahoma" sizeLabel="9" showPointer="false" showAxis="true"/>
+							 	<scales:Linear id="l" placement="left" fontLabel="tahoma" sizeLabel="9" showAxis="false" numberOfIntervals="1" showPointer="false" height="100"/>       		 				
+        		 			</facets:scales>
+        		 			<facets:elements>
+        		 				<elements:LineElement id="a1" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R1" styleName="solid1" displayName="R1" />
+							 	<elements:LineElement id="a2" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R2" styleName="solid2" displayName="R2" />
+							 	<elements:LineElement id="a3" scale1="{c}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R3" styleName="solid3" displayName="R3" />
+							 	<elements:LineElement id="a4" scale1="{c}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R4" styleName="solid4" displayName="R4" />
+							 	<elements:LineElement id="a5" scale1="{c}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R5" styleName="solid5" displayName="R5" />
+        		 			</facets:elements>
+        		 		</facets:FacetContainer>
+        		 	</elements:itemRenderer>
+        		 </elements:PointElement>
+        	</coords:elements>
+        </coords:Cartesian>	
+        <legend:Legend direction="horizontal">
+        	<legend:LegendItem text="R1" itemRenderer="birdeye.vis.guides.renderers.LineRenderer" styleName="solid1"/>
+        	<legend:LegendItem text="R2" itemRenderer="birdeye.vis.guides.renderers.LineRenderer" styleName="solid2"/>
+        	<legend:LegendItem text="R3" itemRenderer="birdeye.vis.guides.renderers.LineRenderer" styleName="solid3"/>
+        	<legend:LegendItem text="R4" itemRenderer="birdeye.vis.guides.renderers.LineRenderer" styleName="solid4"/>
+        	<legend:LegendItem text="R5" itemRenderer="birdeye.vis.guides.renderers.LineRenderer" styleName="solid5"/>
+        </legend:Legend>
+    </mx:VBox>
+</mx:VBox>
