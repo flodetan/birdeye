@@ -37,7 +37,7 @@
 		<util:FpsCounter id="fpsCounter" />
 	</mx:HBox>
 	
-	<mx:VBox width="1000" height="744"
+	<mx:VBox width="70%" height="95%"
 		horizontalGap="0" 
 		paddingTop="5" paddingLeft="5" paddingRight="5" paddingBottom="5" 
 		horizontalScrollPolicy="off" verticalScrollPolicy="off" >
@@ -61,7 +61,7 @@
 			<about:About label="About..." width="100%" height="100%"/>
 		</mx:TabNavigator>
 		
-		<mx:Label text="Last Update: 04 August 09" fontSize="10" color="#999999" />
+		<mx:Label text="Last Update: 09 August 09" fontSize="10" color="#999999" />
 	
 	</mx:VBox>
 	</mx:Box>
