@@ -77,13 +77,18 @@ package birdeye.vis.coords
 				}
 				
 				nCursors = 0;
-				
-				if (guides && !_guidesPlaced)
+				if (!_guidesPlaced)
 				{
-	trace(getTimer(), "placing guides");
-					placeGuides();
+					if (guides)
+					{
+		trace(getTimer(), "placing guides");
+						placeGuides();
+		trace(getTimer(), "END placing guides");
+					}	
+					
+					// guides are optional, so no guides still mean placed	
 					_guidesPlaced = true;
-	trace(getTimer(), "END placing guides");
+	
 				}
 				
 				
