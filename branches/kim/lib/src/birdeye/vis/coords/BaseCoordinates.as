@@ -64,70 +64,72 @@ package birdeye.vis.coords
 		
 		override protected function commitProperties():void
 		{
-			super.commitProperties();
-			
-			// replace elements AND guides if one of them is not placed
-			if (!_elementsPlaced || !_guidesPlaced)
+			if (active)
 			{
-				removeAllElements();
-				_elementsPlaced = false;
-				_guidesPlaced = false;
-			}
-			
-			nCursors = 0;
-			
-			if (guides && !_guidesPlaced)
-			{
-trace(getTimer(), "placing guides");
-				placeGuides();
-				_guidesPlaced = true;
-trace(getTimer(), "END placing guides");
-			}
-			
-			
-			// data structure to count different type of stackable elements		
-			var countStackableElements:Array = [];
-			
-			if (elements)
-			{
-	
-				if (!_elementsPlaced)
-				{
-trace(getTimer(), "placing elements");
-					placeElements();
-					_elementsPlaced = true;
-trace(getTimer(), "END placing elements");	
-				}
-
-							
-				var nCursors:uint = initElements(countStackableElements);
+				super.commitProperties();
 				
-				if (nCursors == elements.length)
+				// replace elements AND guides if one of them is not placed
+				if (!_elementsPlaced || !_guidesPlaced)
 				{
-					trace(getTimer(), "DATA INVALIDATED");
-					invalidatedData = true;
+					removeAllElements();
+					_elementsPlaced = false;
+					_guidesPlaced = false;
 				}
-				else
+				
+				nCursors = 0;
+				
+				if (guides && !_guidesPlaced)
 				{
-					invalidatedData = false;
+	trace(getTimer(), "placing guides");
+					placeGuides();
+					_guidesPlaced = true;
+	trace(getTimer(), "END placing guides");
+				}
+				
+				
+				// data structure to count different type of stackable elements		
+				var countStackableElements:Array = [];
+				
+				if (elements)
+				{
+		
+					if (!_elementsPlaced)
+					{
+	trace(getTimer(), "placing elements");
+						placeElements();
+						_elementsPlaced = true;
+	trace(getTimer(), "END placing elements");	
+					}
+	
+								
+					var nCursors:uint = initElements(countStackableElements);
+					
+					if (nCursors == elements.length)
+					{
+						trace(getTimer(), "DATA INVALIDATED");
+						invalidatedData = true;
+					}
+					else
+					{
+						invalidatedData = false;
+					}
+				}
+				
+				if (invalidatedData)
+				{
+	trace(getTimer(), "stack elements");
+					initStackElements(countStackableElements);
+	trace(getTimer(), "END stack elements");
+	
+				
+					if (!axesFeeded)
+					{
+	trace(getTimer(), "feeding scales");
+						feedScales();
+	trace(getTimer(), "END feeding scales");
+					}
 				}
 			}
-			
-			if (invalidatedData)
-			{
-trace(getTimer(), "stack elements");
-				initStackElements(countStackableElements);
-trace(getTimer(), "END stack elements");
-
-			
-				if (!axesFeeded)
-				{
-trace(getTimer(), "feeding scales");
-					feedScales();
-trace(getTimer(), "END feeding scales");
-				}
-			}
-
 			
 			
 		}
@@ -518,29 +520,31 @@ trace(getTimer(), "END feeding scales");
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			
-			
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			setActualSize(unscaledWidth, unscaledHeight);
-			
-			if (_elementsPlaced && _guidesPlaced && invalidatedData && dataItems)
-			{
-				trace("update display list", unscaledWidth, unscaledHeight, this);
+			if (active)
+			{			
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				setActualSize(unscaledWidth, unscaledHeight);
+	
+				if (_elementsPlaced && _guidesPlaced && invalidatedData && dataItems)
+				{
+					trace("update display list", unscaledWidth, unscaledHeight, this);
+						
+					validateBounds(unscaledWidth, unscaledHeight);
 					
-				validateBounds(unscaledWidth, unscaledHeight);
-				
-				setBounds(unscaledWidth, unscaledHeight);
-				
-				updateElements(unscaledWidth, unscaledHeight);
-				
-				updateAndDrawGuides(unscaledWidth, unscaledHeight);
-				
-				drawElements(unscaledWidth, unscaledHeight);
-				
-				// listeners like legends will listen to this event
-				dispatchEvent(new Event("ProviderReady"));
-				
-				setMask();
-				
+					setBounds(unscaledWidth, unscaledHeight);
+					
+					updateElements(unscaledWidth, unscaledHeight);
+					
+					updateAndDrawGuides(unscaledWidth, unscaledHeight);
+					
+					drawElements(unscaledWidth, unscaledHeight);
+					
+					// listeners like legends will listen to this event
+					dispatchEvent(new Event("ProviderReady"));
+					
+					setMask();
+					
+				}
 			}
 		}
 		
@@ -634,8 +638,8 @@ trace(getTimer(), "END feeding scales");
 					if (child is IElement)
 						IElement(child).removeAllElements();
 						
-					if (child is IAxis)
-						IAxis(child).removeAllElements();
+					if (child is IGuide)
+						IGuide(child).removeAllElements();
 						
 					if (child is DataItemLayout)
 					{

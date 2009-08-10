@@ -36,6 +36,7 @@
 	import birdeye.vis.interfaces.IProjection;
 	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.interfaces.ITransform;
+	import birdeye.vis.interfaces.guides.IGuide;
 	import birdeye.vis.interfaces.validation.IValidatingChild;
 	import birdeye.vis.interfaces.validation.IValidatingParent;
 	import birdeye.vis.interfaces.validation.IValidatingScale;
@@ -94,6 +95,23 @@
 		
 		// END IMPLEMENTATION
 		
+		protected var _active:Boolean = true;
+		/** If set to false, the chart is removed and won't be drawn till active becomes true.*/
+		[Inspectable(enumeration="true,false")]
+		public function set active(val:Boolean):void
+		{
+			_active = val;
+			if (_active)
+			{
+				invalidateProperties();
+				invalidateDisplayList();
+			} else 
+				clearAll();
+		}
+		public function get active():Boolean
+		{
+			return _active;
+		}
 		
 		protected var _isMasked:Boolean = false;
 		public function set isMasked(val:Boolean):void
@@ -629,7 +647,6 @@
 
 		protected function applyGraphLayouts(unscaledWidth:Number, unscaledHeight:Number):void
 		{
-			trace("APPLYING GRAPH LAYOUTS FOR", unscaledWidth, unscaledHeight);
 			if (_graphLayouts && _graphLayouts.length>0) {
 				for each (var t:IGraphLayout in _graphLayouts) t.apply(unscaledWidth, unscaledHeight);
 			}
@@ -738,6 +755,23 @@
 			for (var i:Number = 0; i<elements.length; i++)
 				IElement(elements[i]).refresh();
 		}
+		
+	    protected function clearAll():void
+	    {
+	            if (elements && elements.length > 0)
+	                    for (var i:uint = 0; i<elements.length; i++)
+	                            IElement(elements[i]).removeAllElements();
+	            if (guides && guides.length > 0)
+	            {
+	            	for (i=0;i<guides.length;i++)
+	            	{
+	            		if (guides[i] is IGuide)
+	            		{
+	            			(guides[i] as IGuide).removeAllElements();
+	            		}
+	            	}
+	            }
+	    }
 		
 		public function clone(cloneObj:Object=null):*
 		{

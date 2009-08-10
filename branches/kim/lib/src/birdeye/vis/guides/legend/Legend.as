@@ -29,6 +29,7 @@ package birdeye.vis.guides.legend
 {
 	import birdeye.vis.VisScene;
 	import birdeye.vis.guides.renderers.RasterRenderer;
+	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.IElement;
 	
@@ -40,7 +41,7 @@ package birdeye.vis.guides.legend
 	
 	import flash.events.Event;
 	import flash.geom.Rectangle;
-	import flash.utils.getQualifiedClassName;
+	import flash.utils.describeType;
 	
 	import mx.containers.Box;
 	import mx.core.Application;
@@ -149,8 +150,8 @@ package birdeye.vis.guides.legend
 						geom.stroke = IElement(_dataProvider.elements[i]).getStroke();
 						gg.geometryCollection.addItem(geom);
 
-						if (label.text && getQualifiedClassName(renderer) == 
-								"birdeye.vis.guides.renderers::TextRenderer")
+						var type:XML = describeType(geom);
+						if (label.text && type.@name == "birdeye.vis.guides.renderers::TextRenderer")
 						{
 							label.fill = geom.fill;
 						}

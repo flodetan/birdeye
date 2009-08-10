@@ -27,7 +27,7 @@ package birdeye.vis.guides.axis
 	 * For each category in the category scale the subscale will be used to draw an axis at the specified</br>
 	 * angle of the categoryScale.
 	 */
-	public class MultiAxis extends GeometryComposition implements IGuide, IAxis
+	public class MultiAxis extends GeometryComposition implements IAxis
 	{
 		
 		public function MultiAxis()

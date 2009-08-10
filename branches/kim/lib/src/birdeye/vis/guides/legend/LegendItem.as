@@ -209,7 +209,7 @@ package birdeye.vis.guides.legend
 			return _colorLabel;
 		}
 
-		protected var _sizeRenderer:uint = 0;
+		protected var _sizeRenderer:uint = 10;
 		/** Set the _sizeRenderer to be used for the data items.*/
 		public function set sizeRenderer(val:uint):void
 		{

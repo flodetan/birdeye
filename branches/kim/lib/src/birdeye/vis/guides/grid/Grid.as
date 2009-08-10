@@ -210,6 +210,14 @@ trace(getTimer(), "end drawing grid");
  				this.geometryCollection.removeItemAt(nbrOfItems++);
  			}
  		}
+ 		
+ 		public function removeAllElements():void
+ 		{
+			this.geometry = [];
+			this.geometryCollection.items = [];
+
+			invalidated = true;
+		}
 
 	}
 }

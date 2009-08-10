@@ -52,9 +52,7 @@ package birdeye.vis.interfaces.guides
 		
 		function get maxLabelSize():Number;
 		
-		/** The axis must provide the removal all elements when refreshed, thus insuring
-		 * both display refresh and memory clearing.*/
-		function removeAllElements():void
+
 
 	}
 }

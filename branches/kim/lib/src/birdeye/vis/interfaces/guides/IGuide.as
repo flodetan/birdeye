@@ -30,5 +30,10 @@ package birdeye.vis.interfaces.guides
 		 * <b>sides</b> : indicate that the guide will draw itself onto the side, subinterfaces will further determine the position
 		 */
 		function get position():String;	
+		
+		
+		/** The axis must provide the removal all elements when refreshed, thus insuring
+		 * both display refresh and memory clearing.*/
+		function removeAllElements():void
 	}
 }
