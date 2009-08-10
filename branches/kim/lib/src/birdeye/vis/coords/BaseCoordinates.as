@@ -90,13 +90,15 @@ trace(getTimer(), "END placing guides");
 			
 			if (elements)
 			{
-trace(getTimer(), "placing elements");	
+	
 				if (!_elementsPlaced)
 				{
+trace(getTimer(), "placing elements");
 					placeElements();
 					_elementsPlaced = true;
-				}
 trace(getTimer(), "END placing elements");	
+				}
+
 							
 				var nCursors:uint = initElements(countStackableElements);
 				
@@ -105,6 +107,10 @@ trace(getTimer(), "END placing elements");
 					trace(getTimer(), "DATA INVALIDATED");
 					invalidatedData = true;
 				}
+				else
+				{
+					invalidatedData = false;
+				}
 			}
 			
 			if (invalidatedData)
@@ -112,15 +118,17 @@ trace(getTimer(), "END placing elements");
 trace(getTimer(), "stack elements");
 				initStackElements(countStackableElements);
 trace(getTimer(), "END stack elements");
+
+			
+				if (!axesFeeded)
+				{
+trace(getTimer(), "feeding scales");
+					feedScales();
+trace(getTimer(), "END feeding scales");
+				}
 			}
 
 			
-			if (!axesFeeded)
-			{
-trace(getTimer(), "feeding scales");
-				feedScales();
-trace(getTimer(), "END feeding scales");
-			}			
 			
 		}
 		
@@ -510,13 +518,13 @@ trace(getTimer(), "END feeding scales");
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			
-			setActualSize(unscaledWidth, unscaledHeight);
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
-			trace("update display list", this);
+			super.updateDisplayList(unscaledWidth, unscaledHeight);
+			setActualSize(unscaledWidth, unscaledHeight);
 			
 			if (_elementsPlaced && _guidesPlaced && invalidatedData && dataItems)
 			{
+				trace("update display list", unscaledWidth, unscaledHeight, this);
 					
 				validateBounds(unscaledWidth, unscaledHeight);
 				
