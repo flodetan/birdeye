@@ -1,8 +1,8 @@
 package birdeye.vis.guides.axis
 {
 	import birdeye.vis.interfaces.ICoordinates;
-	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.interfaces.guides.IAxis;
+	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.Category;
 	
 	import com.degrafa.GeometryComposition;

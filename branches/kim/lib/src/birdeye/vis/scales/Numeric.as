@@ -27,17 +27,7 @@
  
 package birdeye.vis.scales
 {
-	import birdeye.vis.interfaces.INumerableScale;
-	import birdeye.vis.interfaces.guides.IAxis;
-	
-	import com.degrafa.geometry.Line;
-	import com.degrafa.geometry.RasterTextPlus;
-	import com.degrafa.paint.SolidFill;
-	import com.degrafa.paint.SolidStroke;
-	import com.degrafa.transform.RotateTransform;
-	
-	import flash.text.TextFieldAutoSize;
-	import flash.utils.getTimer;
+	import birdeye.vis.interfaces.scales.INumerableScale;
 
 	public class Numeric extends BaseScale  implements INumerableScale
 	{

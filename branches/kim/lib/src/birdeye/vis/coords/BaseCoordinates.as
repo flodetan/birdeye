@@ -8,12 +8,11 @@ package birdeye.vis.coords
 	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IElement;
-	import birdeye.vis.interfaces.IEnumerableScale;
-	import birdeye.vis.interfaces.INumerableScale;
-	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.interfaces.IStack;
-	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.interfaces.guides.IGuide;
+	import birdeye.vis.interfaces.scales.IEnumerableScale;
+	import birdeye.vis.interfaces.scales.INumerableScale;
+	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.BaseScale;
 	
 	import flash.display.DisplayObject;
@@ -429,6 +428,7 @@ package birdeye.vis.coords
 								
 			}
 		}
+		
 		
 		protected function updateScale(scale:IScale, element:IElement, dim:Object):void
 		{	

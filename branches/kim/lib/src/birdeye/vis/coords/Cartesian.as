@@ -32,6 +32,7 @@ package birdeye.vis.coords
 	import birdeye.vis.interfaces.*;
 	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.interfaces.guides.IGuide;
+	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.Surface;

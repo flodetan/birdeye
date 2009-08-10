@@ -32,9 +32,9 @@
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.IGraphLayout;
-	import birdeye.vis.interfaces.INumerableScale;
+	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.IProjection;
-	import birdeye.vis.interfaces.IScale;
+	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.interfaces.ITransform;
 	import birdeye.vis.interfaces.guides.IGuide;
 	import birdeye.vis.interfaces.validation.IValidatingChild;
@@ -183,7 +183,7 @@
 		protected var _scales:Array; /* of IScale */
 		/** Array of scales, each element will take a scale target from this scale list.*/
         [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IScale")]
-        [ArrayElementType("birdeye.vis.interfaces.IScale")]
+        [ArrayElementType("birdeye.vis.interfaces.scales.IScale")]
 		public function set scales(val:Array):void
 		{
 			_scales = val;

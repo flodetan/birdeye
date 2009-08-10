@@ -1,10 +1,8 @@
 package birdeye.vis.guides.axis
 {
 	import birdeye.vis.interfaces.ICoordinates;
-	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.interfaces.guides.IAxis;
-	import birdeye.vis.interfaces.guides.IGuide;
-	import birdeye.vis.scales.BaseScale;
+	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.CategoryAngle;
 	import birdeye.vis.scales.PolarCoordinateTransform;
 	

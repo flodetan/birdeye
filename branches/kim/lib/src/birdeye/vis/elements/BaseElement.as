@@ -33,9 +33,9 @@ package birdeye.vis.elements
 	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IElement;
-	import birdeye.vis.interfaces.IEnumerableScale;
-	import birdeye.vis.interfaces.INumerableScale;
-	import birdeye.vis.interfaces.IScale;
+	import birdeye.vis.interfaces.scales.IEnumerableScale;
+	import birdeye.vis.interfaces.scales.INumerableScale;
+	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.BaseScale;
 	import birdeye.vis.scales.MultiScale;
 	

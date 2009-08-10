@@ -25,7 +25,7 @@
  * THE SOFTWARE.
  */
  
-package birdeye.vis.interfaces
+package birdeye.vis.interfaces.scales
 {
 	import flash.geom.Point;
 	import birdeye.vis.interfaces.validation.IValidatingScale;

@@ -38,8 +38,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
-	import birdeye.vis.interfaces.IEnumerableScale;
-	import birdeye.vis.interfaces.INumerableScale;
+	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;

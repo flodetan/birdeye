@@ -1,16 +1,15 @@
 package birdeye.vis.guides.grid
 {
 	import birdeye.vis.interfaces.ICoordinates;
-	import birdeye.vis.interfaces.IEnumerableScale;
-	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.interfaces.guides.IGuide;
+	import birdeye.vis.interfaces.scales.IEnumerableScale;
+	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.BaseScale;
 	
 	import com.degrafa.GeometryComposition;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.paint.SolidStroke;
 	
-	import flash.display.DisplayObject;
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
 	

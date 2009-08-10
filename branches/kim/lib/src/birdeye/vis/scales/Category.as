@@ -27,17 +27,7 @@
  
  package birdeye.vis.scales
 {
-	import birdeye.vis.interfaces.IEnumerableScale;
-	
-	import com.degrafa.GeometryComposition;
-	import com.degrafa.geometry.Line;
-	import com.degrafa.geometry.RasterTextPlus;
-	import com.degrafa.paint.SolidFill;
-	import com.degrafa.paint.SolidStroke;
-	import com.degrafa.transform.RotateTransform;
-	
-	import flash.text.TextFieldAutoSize;
-	import flash.utils.getTimer;
+	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	
 	[Exclude(name="scaleType", kind="property")]
 	[Exclude(name="dataProvider", kind="property")]

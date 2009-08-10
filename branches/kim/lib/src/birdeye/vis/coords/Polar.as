@@ -33,9 +33,9 @@ package birdeye.vis.coords
 	import birdeye.vis.guides.axis.Axis;
 	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IElement;
-	import birdeye.vis.interfaces.IScale;
 	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.interfaces.guides.IGuide;
+	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.*;
 	
 	import flash.display.DisplayObject;

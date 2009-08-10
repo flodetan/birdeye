@@ -32,7 +32,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.UpTriangleRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
-	import birdeye.vis.interfaces.INumerableScale;
+	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.GraphicPoint;

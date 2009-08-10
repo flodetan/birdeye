@@ -27,7 +27,6 @@
  
  package birdeye.vis.scales
 {
-	import birdeye.vis.interfaces.IEnumerableScale;
 	
 	public class CategoryAngle extends Category
 	{

@@ -25,30 +25,16 @@
  * THE SOFTWARE.
  */
  
- package birdeye.vis.interfaces
+ package birdeye.vis.interfaces.scales
 {
-	public interface INumerableScale extends IScale
+	public interface IEnumerableScale extends IScale
 	{
-		/** Set-get the minimum value.*/
-		function set min(val:Number):void
-		function get min():Number
+		/** Set-get the dataProvider that have to be enumerable. */
+		function set dataProvider(val:Array):void
+		function get dataProvider():Array
 		
-		/** Set-get the maximum value.*/
-		function set max(val:Number):void
-		function get max():Number
-
-		/** Set-get the total sum of positive values that are feeding the axis.*/
-		function set totalPositiveValue(val:Number):void
-		function get totalPositiveValue():Number
-
-		/** Set-get the sum of all values that are feeding the axis.*/
-/* 		function set sum(val:Number):void
-		function get sum():Number */
-
-		/** Set the base at zero. */
-		function set baseAtZero(val:Boolean):void
-
-		/** Decide to format or not min and max data values.*/
-		function set format(val:Boolean):void
+		/** Category field that is used to filter elements.*/
+		function set categoryField(val:String):void
+		function get categoryField():String
 	}
 }
