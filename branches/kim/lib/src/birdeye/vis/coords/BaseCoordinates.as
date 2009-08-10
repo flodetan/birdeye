@@ -521,7 +521,8 @@ package birdeye.vis.coords
 		{
 			
 			if (active)
-			{			
+			{		
+		
 				super.updateDisplayList(unscaledWidth, unscaledHeight);
 				setActualSize(unscaledWidth, unscaledHeight);
 	

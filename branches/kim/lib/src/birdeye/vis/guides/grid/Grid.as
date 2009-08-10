@@ -24,9 +24,7 @@ package birdeye.vis.guides.grid
 
 		public function Grid()
 		{
-			// This enables two grids to be drawn
-			// Not sure about the consequences on resizing though...
-			autoClearGraphicsTarget = false;
+			//autoClearGraphicsTarget = false;
 			stroke = new SolidStroke(0x000000, .3, 1);
 		}
 		
@@ -145,7 +143,7 @@ package birdeye.vis.guides.grid
 		public function drawGuide(bounds:Rectangle):void
 		{
 
-trace(getTimer(), "drawing grid");
+trace(getTimer(), "drawing grid", this.id);
 			
 			var nbrOfItems:Number = drawLinesBasedOnScale(scale1, bounds);
 			nbrOfItems = drawLinesBasedOnScale(scale2, bounds, nbrOfItems);
@@ -153,7 +151,7 @@ trace(getTimer(), "drawing grid");
 			
 			clearExcessGeometries(nbrOfItems);
 			
-trace(getTimer(), "end drawing grid");
+trace(getTimer(), "end drawing grid", this.id);
 
  		}
  		
@@ -174,6 +172,7 @@ trace(getTimer(), "end drawing grid");
 					var position:Number = scale.getPosition(dataLabel) + offset;
 					if (!item)
 					{
+						trace("grid new item");
 						item = new Line();
 						item.stroke = stroke;
 						this.geometryCollection.addItem(item);
