@@ -33,6 +33,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.facets.FacetContainer;
+	import birdeye.vis.guides.axis.Axis;
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
@@ -118,6 +119,17 @@ trace (getTimer(), "drawing point ele");
 	 							el.push(baseEl.clone());
 	 						}
 	 						coord.elements = el;
+	 						
+	 						var gu:Array = new Array();
+	 						for each (var g:Object in subco.guides)
+	 						{
+	 							if (g is Axis)
+	 							{
+	 								gu.push((g as Axis).clone());
+	 							}
+	 						}
+	 						coord.guides = gu;
+	 						
 	 						
 	 						coord.width = bounds.width;
 	 						coord.height = bounds.height;

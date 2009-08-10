@@ -24,6 +24,8 @@ package birdeye.vis.coords
 	public class BaseCoordinates extends VisScene implements ICoordinates
 	{
 		
+		private var placed:Boolean = false;
+		
 		public function BaseCoordinates()
 		{
 		}
@@ -55,6 +57,7 @@ package birdeye.vis.coords
 		{
 			_elements = val;
 						
+			placed = false;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -91,6 +94,8 @@ trace(getTimer(), "END placing elements");
 					invalidatedData = true;
 				}
 			}
+			
+			placed = true;
 			
 			if (invalidatedData)
 			{
@@ -489,7 +494,9 @@ trace(getTimer(), "END feeding scales");
 			
 			setActualSize(unscaledWidth, unscaledHeight);
 			
-			if (invalidatedData && dataItems)
+			trace("update display list", this);
+			
+			if (placed && invalidatedData && dataItems)
 			{
 					
 				validateBounds(unscaledWidth, unscaledHeight);
