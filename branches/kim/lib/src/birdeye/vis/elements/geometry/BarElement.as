@@ -166,7 +166,8 @@ trace(getTimer(), "drawing bar");
 				 				ttShapes[0] = line;
 								break;
 							case STACKED:
-								yPos = yPos + size/2 - size/_total * _stackPosition;
+								trace("bar", yPos, size/2, size/_total, _stackPosition);
+								yPos = yPos + size/2 - size/_total * (_stackPosition + 1);
 								barWidth  = size/_total;
 								break;
 						}

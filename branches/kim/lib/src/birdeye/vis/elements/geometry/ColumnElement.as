@@ -226,7 +226,7 @@ trace (getTimer(), "drawing column ele");
 									}
 									break;
 								case STACKED:
-									pos1 = pos1 + tmpSize/2 - tmpSize/_total * _stackPosition;
+									pos1 = pos1 + tmpSize/2 - tmpSize/_total * (_stackPosition + 1);
 									colWidth = tmpSize/_total;
 									break;
 							}
