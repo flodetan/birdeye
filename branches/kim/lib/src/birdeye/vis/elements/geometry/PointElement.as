@@ -228,22 +228,6 @@ trace (getTimer(), "drawing point ele");
 				scaleResults["pos3Relative"] = scale3.size - scaleResults["pos3"];
 			} 
 			
-			if (currentItem)
-			{
-				if (multiScale)
-				{
-					scaleResults["pos1"] = multiScale.scale1.getPosition(dim1);
-					scaleResults["pos2"] = INumerableScale(multiScale.scales[
-										currentItem[multiScale.dim1]
-										]).getPosition(dim2);
-				} else if (chart.multiScale) {
-					scaleResults["pos1"] = chart.multiScale.scale1.getPosition(dim1);
-					scaleResults["pos2"] = INumerableScale(chart.multiScale.scales[
-										currentItem[chart.multiScale.dim1]
-										]).getPosition(dim2);
-				}
-			}
-			
 			if (colorScale)
 			{
 				var col:* = colorScale.getPosition(color);

@@ -40,9 +40,6 @@ package birdeye.vis.interfaces
 		function set origin(val:Point):void;
 		function get origin():Point;
 
-		function set multiScale(val:MultiScale):void;
-		function get multiScale():MultiScale;
-
 		function set transforms(val:Array):void;
 
 		/** @Private

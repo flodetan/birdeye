@@ -39,7 +39,6 @@
 	import birdeye.vis.interfaces.validation.IValidatingChild;
 	import birdeye.vis.interfaces.validation.IValidatingParent;
 	import birdeye.vis.interfaces.validation.IValidatingScale;
-	import birdeye.vis.scales.MultiScale;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
@@ -191,12 +190,14 @@
 		
 		
 		protected var _guides:Array; /* of IGuide */
+		protected var _guidesPlaced:Boolean = false;
 		/** Array of guides. */
 		[Inspectable(category="General", arrayType="birdeye.vis.interfaces.IGuide")]
 		[ArrayElementType("birdeye.vis.interfaces.guides.IGuide")]
 		public function set guides(val:Array):void
 		{
 			_guides = val;
+			_guidesPlaced = false;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -204,18 +205,6 @@
 		public function get guides():Array
 		{
 			return _guides;
-		}
-		
-		protected var _multiScale:MultiScale;
-		public function set multiScale(val:MultiScale):void
-		{
-			_multiScale = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get multiScale():MultiScale
-		{
-			return _multiScale;
 		}
 		
 		protected var _origin:Point;
@@ -326,6 +315,7 @@
 		}
 		
 		protected var _elements:Array; // of IElement
+		protected var _elementsPlaced:Boolean = false;
 		public function get elements():Array
 		{
 			return _elements;
@@ -639,6 +629,7 @@
 
 		protected function applyGraphLayouts(unscaledWidth:Number, unscaledHeight:Number):void
 		{
+			trace("APPLYING GRAPH LAYOUTS FOR", unscaledWidth, unscaledHeight);
 			if (_graphLayouts && _graphLayouts.length>0) {
 				for each (var t:IGraphLayout in _graphLayouts) t.apply(unscaledWidth, unscaledHeight);
 			}

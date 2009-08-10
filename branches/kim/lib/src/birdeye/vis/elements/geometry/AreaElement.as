@@ -203,19 +203,6 @@ trace (getTimer(), "area ele");
 						scale2RelativeValue = scale3.size - zPos;
 					}
 	
-					if (multiScale)
-					{
-						pos1 = multiScale.scale1.getPosition(currentItem[dim1]);
-						pos2 = INumerableScale(multiScale.scales[
-											currentItem[multiScale.dim1]
-											]).getPosition(currentItem[dim2]);
-					} else if (chart.multiScale) {
-						pos1 = chart.multiScale.scale1.getPosition(currentItem[dim1]);
-						pos2 = INumerableScale(chart.multiScale.scales[
-											currentItem[chart.multiScale.dim1]
-											]).getPosition(currentItem[dim2]);
-					}
-	
 					if (colorScale)
 					{
 						var col:* = colorScale.getPosition(currentItem[colorField]);

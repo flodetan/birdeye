@@ -24,7 +24,7 @@ package birdeye.vis.coords
 	public class BaseCoordinates extends VisScene implements ICoordinates
 	{
 		
-		private var placed:Boolean = false;
+		
 		
 		public function BaseCoordinates()
 		{
@@ -41,7 +41,7 @@ package birdeye.vis.coords
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		
+
 		/** Array of elements, mandatory for any coords scene.
 		 * Each element must implement the IElement interface which defines 
 		 * methods that allow to set fields, basic styles, axes, dataproviders, renderers,
@@ -56,8 +56,8 @@ package birdeye.vis.coords
 		override public function set elements(val:Array):void
 		{
 			_elements = val;
-						
-			placed = false;
+			_elementsPlaced = false;
+			
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -66,16 +66,21 @@ package birdeye.vis.coords
 		{
 			super.commitProperties();
 			
-			if (!dataItems) return;
-			
-			removeAllElements();
+			// replace elements AND guides if one of them is not placed
+			if (!_elementsPlaced || !_guidesPlaced)
+			{
+				removeAllElements();
+				_elementsPlaced = false;
+				_guidesPlaced = false;
+			}
 			
 			nCursors = 0;
 			
-			if (guides)
+			if (guides && !_guidesPlaced)
 			{
 trace(getTimer(), "placing guides");
 				placeGuides();
+				_guidesPlaced = true;
 trace(getTimer(), "END placing guides");
 			}
 			
@@ -85,17 +90,22 @@ trace(getTimer(), "END placing guides");
 			
 			if (elements)
 			{
-trace(getTimer(), "placing elements");				
-				var nCursors:uint = placeElements(countStackableElements);
-trace(getTimer(), "END placing elements");					
+trace(getTimer(), "placing elements");	
+				if (!_elementsPlaced)
+				{
+					placeElements();
+					_elementsPlaced = true;
+				}
+trace(getTimer(), "END placing elements");	
+							
+				var nCursors:uint = initElements(countStackableElements);
+				
 				if (nCursors == elements.length)
 				{
-					trace("DATA INVALIDATED");
+					trace(getTimer(), "DATA INVALIDATED");
 					invalidatedData = true;
 				}
 			}
-			
-			placed = true;
 			
 			if (invalidatedData)
 			{
@@ -103,14 +113,14 @@ trace(getTimer(), "stack elements");
 				initStackElements(countStackableElements);
 trace(getTimer(), "END stack elements");
 			}
+
 			
 			if (!axesFeeded)
 			{
 trace(getTimer(), "feeding scales");
 				feedScales();
 trace(getTimer(), "END feeding scales");
-			}
-			
+			}			
 			
 		}
 		
@@ -151,15 +161,22 @@ trace(getTimer(), "END feeding scales");
 		 * init's each element (by calling <code>initElement</code>)</br>
 		 * and places the element (by calling <code>placeElement</code>)</br>
 		 */
-		protected function placeElements(countStackableElements:Array):uint
+		protected function placeElements():void
 		{
-			var nCursors:uint = 0;
+			for each (var element:IElement in elements)
+			{	
+				placeElement(element);
+			}
+			
+		}
+		
+		protected function initElements(countStackableElements:Array):uint
+		{
 			_stackedElements = [];
+			var nCursors:uint = 0;
 			for each (var element:IElement in elements)
 			{
 				nCursors += initElement(element, countStackableElements);
-				
-				placeElement(element);
 			}
 			
 			return nCursors;
@@ -280,6 +297,8 @@ trace(getTimer(), "END feeding scales");
 			{
 				usedDataItems = stackElement.dataItems;
 			}
+			
+			if (usedDataItems == null) return;
 			
 			// determine which dimension is used for the index of the element
 			// and which dimension is used for plotting
@@ -490,13 +509,13 @@ trace(getTimer(), "END feeding scales");
 		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
 			setActualSize(unscaledWidth, unscaledHeight);
+			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
 			trace("update display list", this);
 			
-			if (placed && invalidatedData && dataItems)
+			if (_elementsPlaced && _guidesPlaced && invalidatedData && dataItems)
 			{
 					
 				validateBounds(unscaledWidth, unscaledHeight);

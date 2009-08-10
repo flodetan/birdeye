@@ -119,10 +119,6 @@ trace (getTimer(), "drawing column ele");
 					var angleInterval:Number;
 					if (scale1) 
 						angleInterval = scale1.scaleInterval * chart.columnWidthRate;
-					else if (multiScale)
-						angleInterval = multiScale.scale1.scaleInterval * chart.columnWidthRate;
-					else if (chart.multiScale)
-						angleInterval = chart.multiScale.scale1.scaleInterval * chart.columnWidthRate;
 						
 					switch (_stackType)
 					{
@@ -188,24 +184,6 @@ trace (getTimer(), "drawing column ele");
 						{
 							zPos = scale3.getPosition(currentItem[dim3]);
 							scale2RelativeValue = scale3.size - zPos;
-						}
-		
-						if (multiScale)
-						{
-							pos1 = multiScale.scale1.getPosition(currentItem[dim1]);
-							pos2 = INumerableScale(multiScale.scales[
-												currentItem[multiScale.dim1]
-												]).getPosition(currentItem[tmpDim2]);
-							dataFields["dim2"] = tmpArray[i];
-						} else if (chart.multiScale) {
-							baseScale2 = getDim2MinPosition(INumerableScale(chart.multiScale.scales[
-												currentItem[chart.multiScale.dim1]
-												]));
-							pos1 = chart.multiScale.scale1.getPosition(currentItem[dim1]);
-							pos2 = INumerableScale(chart.multiScale.scales[
-												currentItem[chart.multiScale.dim1]
-												]).getPosition(currentItem[tmpDim2] + innerBase2);
-							dataFields["dim2"] = tmpArray[i];
 						}
 		
 						if (colorScale)
@@ -335,12 +313,6 @@ trace (getTimer(), "drawing column ele");
 									break;
 								case STACKED100:
 									innerAngleSize = arcSize;
-									if (chart.multiScale)
-										baseScale2 = INumerableScale(chart.multiScale.scales[
-													currentItem[chart.multiScale.dim1]
-													]).getPosition(innerBase2);
-									else if (scale2)
-										baseScale2 = scale2.getPosition(innerBase2);
 
 									innerBase2 += currentItem[tmpDim2];
 									break;

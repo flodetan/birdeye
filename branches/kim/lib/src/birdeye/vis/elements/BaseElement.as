@@ -1035,9 +1035,6 @@ package birdeye.vis.elements
 				axesCheck = axesCheck && (scale1.size>0);
 			} 
 
-			if ((multiScale && multiScale.scales) || (chart && chart.multiScale && chart.multiScale.scales))
-				axesCheck = true;
-
 			var colorsCheck:Boolean = 
 				(fill || stroke || colorScale);
 

@@ -135,19 +135,6 @@ trace (getTimer(), "drawing line ele");
 						zPos = scale3.getPosition(currentItem[dim3]);
 						scale2RelativeValue = scale3.size - zPos;
 					}
-
-					if (multiScale)
-					{
-						pos1 = multiScale.scale1.getPosition(currentItem[dim1]);
-						pos2 = INumerableScale(multiScale.scales[
-											currentItem[multiScale.dim1]
-											]).getPosition(currentItem[dim2]);
-					} else if (chart.multiScale) {
-						pos1 = chart.multiScale.scale1.getPosition(currentItem[dim1]);
-						pos2 = INumerableScale(chart.multiScale.scales[
-											currentItem[chart.multiScale.dim1]
-											]).getPosition(currentItem[dim2]);
-					}
 	
 					if (chart.coordType == VisScene.POLAR)
 					{
