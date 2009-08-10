@@ -82,6 +82,10 @@
  							 	<scales:Category id="c" categoryField="pressure" />
 							 	<scales:Linear id="l" numberOfIntervals="1" />       		 				
         		 			</facets:scales>
+        		 			<facets:guides>
+        		 				<axis:Axis scale="{c}" placement="bottom" sizeLabel="9" />
+        		 				<axis:Axis scale="{l}" placement="left" sizeLabel="9" />	
+        		 			</facets:guides>
         		 			<facets:elements>
         		 				<elements:ColumnElement id="a1"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R1" styleName="solid1" displayName="R1" />
         		 			</facets:elements>
