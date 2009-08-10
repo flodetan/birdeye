@@ -76,7 +76,7 @@
 				invalidateProperties();
 				invalidateDisplayList();
 			} else 
-				cleanAll();
+				clearAll();
 		}
 		public function get active():Boolean
 		{
@@ -675,7 +675,7 @@
 					IScale(_scales[i]).resetValues();
 		}
 		
-		protected function cleanAll():void
+		protected function clearAll():void
 		{
 			if (elements && elements.length > 0)
 				for (var i:uint = 0; i<elements.length; i++)
