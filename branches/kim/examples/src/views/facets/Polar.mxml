@@ -95,12 +95,8 @@
         		 			</facets:coord>
         		 			<facets:scales>
  							 	<scales:CategoryAngle id="c" categoryField="pressure" />
-							 	<scales:Linear id="l" numberOfIntervals="1"/>       		 				
+							 	<scales:Linear id="l" numberOfIntervals="1" size="100"/>       		 				
         		 			</facets:scales>
-        		 			<facets:guides>
-        		 				<axis:Axis scale="{c}" placement="horizontal_center" fontLabel="tahoma" sizeLabel="9" showAxis="true" />
-        		 				<axis:Axis scale="{l}" placement="left" fontLabel="tahoma" sizeLabel="9" showAxis="false"  height="100" />
-        		 			</facets:guides>
         		 			<facets:elements>
         		 				<elements:LineElement id="a1" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R1" styleName="solid1" displayName="R1" />
 							 	<elements:LineElement id="a2" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R2" styleName="solid2" displayName="R2" />
