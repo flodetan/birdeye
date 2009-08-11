@@ -27,6 +27,12 @@ package birdeye.vis.interfaces.scales
 		function set subScale(val:IFactory):void;
 		function get subScale():IFactory;
 		
+		/**
+		 * Set the size for all the subcales
+		 */
+		 function set subScalesSize(val:Number):void;
+		 function get subScalesSize():Number;
+		
 		
 		/**
 		 * Get all the generated subscales.

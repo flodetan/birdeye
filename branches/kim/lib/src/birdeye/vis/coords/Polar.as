@@ -36,6 +36,7 @@ package birdeye.vis.coords
 	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.interfaces.guides.IGuide;
 	import birdeye.vis.interfaces.scales.IScale;
+	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
 	import flash.display.DisplayObject;
@@ -164,6 +165,11 @@ package birdeye.vis.coords
 			if (element.scale2)
 			{
 				element.scale2.size = Math.min(unscaledWidth, unscaledHeight)/2;
+			}
+			
+			if ( element.scale1 is ISubScale) 
+			{
+				(element.scale1 as ISubScale).subScalesSize =  Math.min(unscaledWidth, unscaledHeight)/2;
 			}
 		}
 			

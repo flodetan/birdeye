@@ -28,6 +28,7 @@
  package birdeye.vis.scales
 {
 	import birdeye.vis.interfaces.scales.INumerableScale;
+	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.interfaces.scales.ISubScale;
 	
 	import mx.core.IFactory;
@@ -108,6 +109,25 @@
 			return _subScale != null;
 		}
 		
+		private var _subScalesSize:Number;
+		public function set subScalesSize(val:Number):void
+		{
+			_subScalesSize = val;
+			if (_subScales)
+			{
+				for each (var sc:IScale in _subScales)
+				{
+					sc.size = val;
+				}
+			}
+			
+		}
+		
+		public function get subScalesSize():Number
+		{
+			return _subScalesSize;
+		}
+		
 		
 		private var _minMax:Array;
 		private var _subScales:Array;
@@ -137,7 +157,7 @@
 						var s:INumerableScale = _subScale.newInstance();
 						s.min = _minMax[c].min;
 						s.max = _minMax[c].max;
-						s.size = size;
+						s.size = _subScalesSize;
 						s.dimension = dimension;
 						_subScales[c] = s;
 						s.commit();

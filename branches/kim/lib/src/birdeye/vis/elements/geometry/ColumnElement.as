@@ -183,16 +183,13 @@ trace (getTimer(), "drawing column ele");
 							if (_stackType == STACKED100)
 							{
 								baseScale2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(baseValues[j] + innerBase2);
-								pos2 = scale2.getPosition(
-									baseValues[j] + Math.max(0,currentItem[tmpDim2] + innerBase2));
 								pos2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(baseValues[j] + Math.max(0,currentItem[tmpDim2] + innerBase2));
-
 							} else {
-								pos2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(currentItem[dim2] + innerBase2);
-
+								baseScale2 = getDim2MinPosition((scale1 as ISubScale).subScales[currentItem[dim1]]);
+								pos2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(currentItem[tmpDim2] + innerBase2);
 							}
 							
-													}
+						}
 						
 						var scale2RelativeValue:Number = NaN;
 		
@@ -271,7 +268,6 @@ trace (getTimer(), "drawing column ele");
 							}
 							
 			 				var bounds:Rectangle = new Rectangle(pos1, pos2, innerColWidth, baseScale2 - pos2);
-			
 							// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 							// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
   							createTTGG(currentItem, dataFields, pos1 + innerColWidth/2, pos2, scale2RelativeValue, 
@@ -349,8 +345,8 @@ trace (getTimer(), "drawing column ele");
 			
 							var xPos:Number = PolarCoordinateTransform.getX(startAngle+innerAngleSize/2, pos2, chart.origin);
 							var yPos:Number = PolarCoordinateTransform.getY(startAngle+innerAngleSize/2, pos2, chart.origin); 
-		 	
- 							createTTGG(currentItem, dataFields, xPos, yPos, NaN, _rendererSize, i);
+		 					
+							createTTGG(currentItem, dataFields, xPos, yPos, NaN, _rendererSize, i);
  							
 							if (ttGG && _extendMouseEvents)
 								gg = ttGG;
