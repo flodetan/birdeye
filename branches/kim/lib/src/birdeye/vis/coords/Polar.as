@@ -119,9 +119,9 @@ package birdeye.vis.coords
 			}	
 		}
 
-		override protected function updateScale(scale:IScale, element:IElement, dim:Object):void
+		override protected function updateScale(scale:IScale, element:IElement, elementsMinMax:Array, dim:Object):void
 		{
-			super.updateScale(scale, element,dim);
+			super.updateScale(scale, element,elementsMinMax, dim);
 			
 			
 			// every scale it dimension 1 in polar

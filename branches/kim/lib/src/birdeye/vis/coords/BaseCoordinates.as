@@ -13,12 +13,15 @@ package birdeye.vis.coords
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
+	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.BaseScale;
 	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
+	
+	import mx.core.UIComponent;
 	
 	public class BaseCoordinates extends VisScene implements ICoordinates
 	{
@@ -105,7 +108,7 @@ package birdeye.vis.coords
 	trace(getTimer(), "END placing elements");	
 					}
 	
-								
+	trace(getTimer(), "initing elements");			
 					var nCursors:uint = initElements(countStackableElements);
 					
 					if (nCursors == elements.length)
@@ -117,6 +120,7 @@ package birdeye.vis.coords
 					{
 						invalidatedData = false;
 					}
+	trace(getTimer(), "END initing elements");
 				}
 				
 				if (invalidatedData)
@@ -203,6 +207,10 @@ package birdeye.vis.coords
 		 */
 		protected function initElement(element:IElement, countStackableElements:Array):uint
 		{
+			// TODO create a better way for this
+			// the element has it's validateProperties called as otherway a dataProvider inside
+			// the element (different of the chart) is not converted to dataItems in time...
+			(element as UIComponent).validateProperties();
 			// if element dataprovider doesn' exist or it refers to the
 			// chart dataProvider, than set its cursor to this chart cursor (this.cursor)
 			if (dataItems && (! element.dataProvider 
@@ -363,8 +371,7 @@ package birdeye.vis.coords
 				else
 				{
 					_maxStacked100 = Math.max(_maxStacked100,localMax);
-				}
-				
+				}				
 				// store this element's position as the last processed stack element at index j	
 				lastProcessedStackElements[indexValue] = elementPosition;	
 				
@@ -399,9 +406,21 @@ package birdeye.vis.coords
 			// init axes of all elements that have their own axes
 			// since these are children of each elements, they are 
 			// for sure ready for feeding and it won't affect the axesFeeded status
+			var elementsMinMax:Array = [];
 			for (var i:Number = 0; i<elements.length; i++)
-				initElementsScales(elements[i]);
-						
+				initElementsScales(elements[i], elementsMinMax);
+			
+			//if (elementsMinMax.length > 0)
+			//{
+				for ( i = 0;i<scales.length;i++)
+				{
+					if (scales[i] && scales[i] is ISubScale && (scales[i] as ISubScale).subScalesActive)
+					{
+						(scales[i] as ISubScale).feedMinMax(elementsMinMax);
+					}
+				}
+			//}
+			
 			commitValidatingScales();
 			
 			axesFeeded = true;
@@ -410,27 +429,20 @@ package birdeye.vis.coords
 		
 		/** @Private
 		 * Init the axes owned by the Element passed to this method.*/
-		protected function initElementsScales(element:IElement):void
+		protected function initElementsScales(element:IElement, elementsMinMax:Array):void
 		{
 			if (element.dataItems)
-			{
-				var catElements:Array;
-				var j:Number;
-
-				var cursIndex:uint = 0;
-				var currentItem:Object;
-				
-				if (element.scale1) updateScale(element.scale1, element, "Dim1");
-				if (element.scale2) updateScale(element.scale2, element, "Dim2");
-				if (element.scale3) updateScale(element.scale3, element, "Dim3");
-				if (element.colorScale) updateScale(element.colorScale, element, "Color");
-				if (element.sizeScale) updateScale(element.sizeScale, element, "Size");
-								
+			{				
+				if (element.scale1) updateScale(element.scale1, element, elementsMinMax, "Dim1");
+				if (element.scale2) updateScale(element.scale2, element, elementsMinMax, "Dim2");
+				if (element.scale3) updateScale(element.scale3, element, elementsMinMax, "Dim3");
+				if (element.colorScale) updateScale(element.colorScale, element, elementsMinMax, "Color");
+				if (element.sizeScale) updateScale(element.sizeScale, element, elementsMinMax, "Size");					
 			}
 		}
 		
 		
-		protected function updateScale(scale:IScale, element:IElement, dim:Object):void
+		protected function updateScale(scale:IScale, element:IElement, elementsMinMax:Array, dim:Object):void
 		{	
 			// nothing to update...
 			if (!scale || !element) return;
@@ -467,11 +479,27 @@ package birdeye.vis.coords
 					for (var cursIndex:uint = 0; cursIndex<element.dataItems.length; cursIndex++)
 					{
 						var currentItem:Object = element.dataItems[cursIndex];
+						var category:Object = currentItem[IEnumerableScale(scale).categoryField];
 
 						// if the category value already exists in the axis, than skip it
-						if (catElements.indexOf(currentItem[IEnumerableScale(scale).categoryField]) == -1)
-							catElements[j++] = 
-								currentItem[IEnumerableScale(scale).categoryField];
+						if (catElements.indexOf(category) == -1)
+							catElements[j++] = category;
+								
+						if (scale is ISubScale && (scale as ISubScale).subScalesActive)
+						{
+							if (!elementsMinMax[category])
+							{
+								elementsMinMax[category] = {min: int.MAX_VALUE, max:int.MIN_VALUE};
+							}
+							
+							// this has a hard coded  dim2
+							// this is NOT good
+							var maxDim2:Number = getDimMaxValue(currentItem, element.dim2, element.collisionType == StackElement.STACKED100);
+							var minDim2:Number = getDimMinValue(currentItem, element.dim2);
+							
+							elementsMinMax[category].min = Math.min(elementsMinMax[category].min, minDim2);
+							elementsMinMax[category].max = Math.max(elementsMinMax[category].max, maxDim2);
+						}
 					}
 							
 					// set the elements propery of the CategoryAxis owned by the current element
@@ -531,10 +559,8 @@ package birdeye.vis.coords
 				super.updateDisplayList(unscaledWidth, unscaledHeight);
 				setActualSize(unscaledWidth, unscaledHeight);
 	
-				if (_elementsPlaced && _guidesPlaced && invalidatedData && dataItems)
-				{
-					trace("update display list", unscaledWidth, unscaledHeight, this);
-						
+				if (_elementsPlaced && _guidesPlaced && invalidatedData && axesFeeded)
+				{						
 					validateBounds(unscaledWidth, unscaledHeight);
 					
 					setBounds(unscaledWidth, unscaledHeight);

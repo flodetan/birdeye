@@ -33,6 +33,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.UpTriangleRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.scales.INumerableScale;
+	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.GraphicPoint;
@@ -186,6 +187,11 @@ trace (getTimer(), "area ele");
 							var line:Line = new Line(pos1, pos2, pos1 + + ttXoffset/3, pos2 + ttYoffset);
 							line.stroke = stroke;
 			 				ttShapes[0] = line;
+					}
+					
+					if (scale1 is ISubScale && (scale1 as ISubScale).subScalesActive)
+					{
+						pos2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(currentItem[dim2]);
 					}
 					
 					var scale2RelativeValue:Number = NaN;

@@ -166,7 +166,6 @@ trace(getTimer(), "drawing bar");
 				 				ttShapes[0] = line;
 								break;
 							case STACKED:
-								trace("bar", yPos, size/2, size/_total, _stackPosition);
 								yPos = yPos + size/2 - size/_total * (_stackPosition + 1);
 								barWidth  = size/_total;
 								break;
@@ -263,8 +262,9 @@ trace(getTimer(), "drawing bar");
 						zSort();
 					_invalidatedElementGraphic = false;
 				}
+	trace(getTimer(), "END drawing bar");
 			}
-trace(getTimer(), "END drawing bar");
+
 		}
 		
 		private function getXMinPosition():Number

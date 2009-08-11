@@ -28,7 +28,7 @@
 package birdeye.vis.elements
 {
 	import birdeye.events.ElementDataItemsChangeEvent;
-	import birdeye.vis.coords.Cartesian;
+	import birdeye.vis.coords.BaseCoordinates;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.interfaces.ICoordinates;
@@ -36,7 +36,6 @@ package birdeye.vis.elements
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
-	import birdeye.vis.scales.BaseScale;
 	import birdeye.vis.scales.MultiScale;
 	
 	import com.degrafa.GeometryGroup;
@@ -57,6 +56,7 @@ package birdeye.vis.elements
 	import flash.events.MouseEvent;
 	import flash.utils.Dictionary;
 	import flash.utils.describeType;
+	import flash.utils.getTimer;
 	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
@@ -513,11 +513,11 @@ package birdeye.vis.elements
 		  		// to let the chart update with the element data provider change. in fact
 		  		// the element dataprovider modifies the chart data and axes properties
 		  		// therefore it modifies the chart properties and displaying
-		  		if (chart is Cartesian)
+		  		if (chart is BaseCoordinates)
 		  		{
-			  		Cartesian(chart).axesFeeded = false;
-			  		Cartesian(chart).invalidateProperties();
-			  		Cartesian(chart).invalidateDisplayList();
+			  		BaseCoordinates(chart).axesFeeded = false;
+			  		BaseCoordinates(chart).invalidateProperties();
+			  		BaseCoordinates(chart).invalidateDisplayList();
 		  		}
 
 	  			invalidatedData = true;
@@ -867,7 +867,9 @@ package birdeye.vis.elements
 			super.commitProperties();
 
 			if (invalidatedData && _cursor)
+			{
 				loadElementsValues();
+			}
 			
 			// since we use Degrafa, the background is needed in the element
 			// to allow events for tooltips all over the element.

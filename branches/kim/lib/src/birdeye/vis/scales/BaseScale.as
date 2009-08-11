@@ -85,6 +85,11 @@ package birdeye.vis.scales
 			}
 		}
 		
+		public function get isInvalidated():Boolean
+		{
+			return invalidated;
+		}
+		
 		
 		/**
 		 * This is an implementation of the IValidatingChild interface.</br>

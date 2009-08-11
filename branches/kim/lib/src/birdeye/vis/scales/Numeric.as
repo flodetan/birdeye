@@ -51,6 +51,13 @@ package birdeye.vis.scales
 		public function get completeDataValues():Array
 		{
 			var toReturn:Array = new Array();
+			
+			if (min == max) 
+			{
+				toReturn.push(min);
+				return toReturn;
+			}
+			
 			for (var snap:Number = min; snap<=max; snap += dataInterval)
 			{
 				toReturn.push(snap);

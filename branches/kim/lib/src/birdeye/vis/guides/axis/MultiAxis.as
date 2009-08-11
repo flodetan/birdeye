@@ -3,7 +3,7 @@ package birdeye.vis.guides.axis
 	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.interfaces.scales.IScale;
-	import birdeye.vis.scales.CategoryAngle;
+	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.PolarCoordinateTransform;
 	
 	import com.degrafa.GeometryComposition;
@@ -57,71 +57,23 @@ package birdeye.vis.guides.axis
 			this.graphicsTarget = t;
 		}
 		
-		private var _categoryScale:CategoryAngle;
-		
-		/**
-		 * Specify the category scale that is used to separate different scales on.
-		 */
-		public function set categoryScale(val:CategoryAngle):void
-		{
-			_categoryScale = val;
-		}
-		
-		public function get categoryScale():CategoryAngle
-		{
-			return _categoryScale;	
-		}
-		
-		private var _subScale:Object;
+		private var _subScale:ISubScale;
 		private var _subScaleInterface:IScale;
 		private var _subScalesArray:Array;
 		
 		/**
-		 * Specify the scale that is used for all the categories defined by the categoryscale.</br>
-		 * One scale can be specified and through the <code>shareSubScale</code> property the cloning method can be specified.</br>
-		 * An array can be specified wherein the each scale is used according to the categories.</br>
-		 * If this array is too short, modulo is used to gain enough scales.</br>
-		 * If this array is too long, only the needed scales are used.</br>
 		 */
-		public function set subScale(val:Object):void
+		public function set subScale(val:ISubScale):void
 		{
 			_subScale = val;
-			
-			if (val is IScale)	
-			{
-				_subScaleInterface = val as IScale;	
-			}
-			else if (val is Array)
-			{
-				_subScalesArray = val as Array;	
-	
-			}
+
 		}
 		
-		public function get subScale():Object
+		public function get subScale():ISubScale
 		{
 			return _subScale;	
 		}
 		
-		
-		private var _shareSubScale:Boolean = true;
-		
-		/**
-		 * Property indicates if the given subscale will be shared for all the categories</br>
-		 * <code>true</code> indicates that only one subscale will be used for all categories (all scales will have the same min and max)</br>
-		 * <code>false</code> indicates that the given subscale will be cloned for each category. Creating a different scale for each category</br>
-		 * <b>Default:</b> <code>true</code>
-		 */
-		[Inspectable(enumeration="true,false")]
-		public function set shareSubScale(val:Boolean):void
-		{
-			_shareSubScale = val;	
-		}
-		
-		public function get shareSubScale():Boolean
-		{
-			return _shareSubScale;	
-		}
 		
 		/** 
 		 * Impossible to indicate. A MultiAxis is always placed in the center.
@@ -181,7 +133,7 @@ package birdeye.vis.guides.axis
 		{
 			//if (invalidated)
 			//{
-			if (_categoryScale && _categoryScale.completeDataValues && _categoryScale.completeDataValues.length > 0)
+			if (_subScale && _subScale.completeDataValues && _subScale.completeDataValues.length > 0)
 			{
 				removeAllElements();
 				
@@ -191,16 +143,16 @@ package birdeye.vis.guides.axis
 				invalidated = false;
 				var line:Line;
 				
-				var categories:Array = _categoryScale.completeDataValues;
-				var nbrCategories:int = _categoryScale.completeDataValues.length;
+				var categories:Array = _subScale.completeDataValues;
+				var nbrCategories:int = _subScale.completeDataValues.length;
 				
 				var web:Array = new Array();
 				
 				for (var i:int = 0; i<nbrCategories; i++)
 				{
-					var subSc:IScale = _subScalesArray[i % _subScalesArray.length]	
+					var subSc:IScale = _subScale.subScales[categories[i]];
 	
-					var angle:int = _categoryScale.getPosition(categories[i]);
+					var angle:int = _subScale.getPosition(categories[i]);
 					var endPosition:Point = PolarCoordinateTransform.getXY(angle,_size,coordinates.origin);
 					
 					// draw a line a bit shorter to allow the label of the axis to be seen

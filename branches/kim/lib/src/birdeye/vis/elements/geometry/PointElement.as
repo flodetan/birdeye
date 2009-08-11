@@ -39,6 +39,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
+	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
@@ -217,6 +218,11 @@ trace (getTimer(), "drawing point ele");
 			if (scale2)
 			{
 				scaleResults["pos2"] = scale2.getPosition(dim2);
+			}
+			
+			if (scale1 is ISubScale && (scale1 as ISubScale).subScalesActive)
+			{
+				scaleResults["pos2"] = (scale1 as ISubScale).subScales[dim1].getPosition(dim2);
 			} 
 
 			var scale2RelativeValue:Number = NaN;

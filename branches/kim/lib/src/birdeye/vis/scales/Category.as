@@ -27,11 +27,14 @@
  
  package birdeye.vis.scales
 {
-	import birdeye.vis.interfaces.scales.IEnumerableScale;
+	import birdeye.vis.interfaces.scales.INumerableScale;
+	import birdeye.vis.interfaces.scales.ISubScale;
+	
+	import mx.core.IFactory;
 	
 	[Exclude(name="scaleType", kind="property")]
 	[Exclude(name="dataProvider", kind="property")]
-	public class Category extends BaseScale implements IEnumerableScale
+	public class Category extends BaseScale implements ISubScale
 	{
  		/** Define the category strings for category scales.*/
 		override public function set dataValues(val:Array):void
@@ -88,6 +91,61 @@
 			_initialOffset = val;
 			invalidate();
 		} 
+		
+		private var _subScale:IFactory;
+		public function set subScale(val:IFactory):void
+		{
+			_subScale = val;
+		}
+		
+		public function get subScale():IFactory
+		{
+			return _subScale;
+		}
+		
+		public function get subScalesActive():Boolean
+		{
+			return _subScale != null;
+		}
+		
+		
+		private var _minMax:Array;
+		private var _subScales:Array;
+		public function feedMinMax(minMaxData:Array):void
+		{
+			_minMax = minMaxData;
+			invalidate();
+		}
+		
+		public function get subScales():Array
+		{
+			return _subScales;
+		}
+		
+		override public function commit():void
+		{
+			if (isInvalidated)
+			{
+				super.commit();
+		
+				if (subScale)
+				{
+					_subScales = new Array(_minMax.length);
+					
+					for (var c:Object in _minMax)
+					{
+						var s:INumerableScale = _subScale.newInstance();
+						s.min = _minMax[c].min;
+						s.max = _minMax[c].max;
+						s.size = size;
+						s.dimension = dimension;
+						_subScales[c] = s;
+						s.commit();
+					}			
+				}
+			}
+			
+		}
 		
 		// UIComponent flow
 		

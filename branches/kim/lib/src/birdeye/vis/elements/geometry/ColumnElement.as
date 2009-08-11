@@ -37,6 +37,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
+	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
@@ -176,6 +177,22 @@ trace (getTimer(), "drawing column ele");
 							}
 							dataFields["dim2"] = tmpArray[i];
 						}
+						
+						if (scale1 is ISubScale && (scale1 as ISubScale).subScalesActive)
+						{
+							if (_stackType == STACKED100)
+							{
+								baseScale2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(baseValues[j] + innerBase2);
+								pos2 = scale2.getPosition(
+									baseValues[j] + Math.max(0,currentItem[tmpDim2] + innerBase2));
+								pos2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(baseValues[j] + Math.max(0,currentItem[tmpDim2] + innerBase2));
+
+							} else {
+								pos2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(currentItem[dim2] + innerBase2);
+
+							}
+							
+													}
 						
 						var scale2RelativeValue:Number = NaN;
 		
