@@ -91,7 +91,7 @@ package birdeye.vis.elements.geometry
 			if (! itemRenderer)
 				itemRenderer = new ClassFactory(UpTriangleRenderer);
 
-			if (!isListeningMouseMove)
+			if (!isListeningMouseMove && chart)
 			{
 				chart.elementsContainer.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 				isListeningMouseMove = true;
