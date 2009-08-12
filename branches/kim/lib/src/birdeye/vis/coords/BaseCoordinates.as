@@ -58,7 +58,6 @@ package birdeye.vis.coords
 		override public function set elements(val:Array):void
 		{
 			_elements = val;
-			_elementsPlaced = false;
 			
 			invalidateProperties();
 			invalidateDisplayList();
@@ -70,45 +69,25 @@ package birdeye.vis.coords
 			{
 				super.commitProperties();
 				
-				// replace elements AND guides if one of them is not placed
-				if (!_elementsPlaced || !_guidesPlaced)
-				{
-					removeAllElements();
-					_elementsPlaced = false;
-					_guidesPlaced = false;
-				}
-				
+				removeAllElements();
+
 				nCursors = 0;
-				if (!_guidesPlaced)
+				if (guides)
 				{
-					if (guides)
-					{
-		trace(getTimer(), "placing guides");
-						placeGuides();
-		trace(getTimer(), "END placing guides");
-					}	
-					
-					// guides are optional, so no guides still mean placed	
-					_guidesPlaced = true;
-	
-				}
-				
-				
+	trace(getTimer(), "placing guides");
+					placeGuides();
+	trace(getTimer(), "END placing guides");
+				}	
 				// data structure to count different type of stackable elements		
 				var countStackableElements:Array = [];
 				
 				if (elements)
 				{
-		
-					if (!_elementsPlaced)
-					{
-	trace(getTimer(), "placing elements");
-						placeElements();
-						_elementsPlaced = true;
-	trace(getTimer(), "END placing elements");	
-					}
-	
-	trace(getTimer(), "initing elements");			
+trace(getTimer(), "placing elements");
+					placeElements();
+trace(getTimer(), "END placing elements");	
+
+trace(getTimer(), "initing elements");			
 					var nCursors:uint = initElements(countStackableElements);
 					
 					if (nCursors == elements.length)
@@ -559,7 +538,7 @@ package birdeye.vis.coords
 				super.updateDisplayList(unscaledWidth, unscaledHeight);
 				setActualSize(unscaledWidth, unscaledHeight);
 	
-				if (_elementsPlaced && _guidesPlaced && invalidatedData && axesFeeded)
+				if (invalidatedData && axesFeeded)
 				{						
 					validateBounds(unscaledWidth, unscaledHeight);
 					

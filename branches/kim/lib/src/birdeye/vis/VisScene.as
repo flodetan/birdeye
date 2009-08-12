@@ -208,14 +208,12 @@
 		
 		
 		protected var _guides:Array; /* of IGuide */
-		protected var _guidesPlaced:Boolean = false;
 		/** Array of guides. */
 		[Inspectable(category="General", arrayType="birdeye.vis.interfaces.IGuide")]
 		[ArrayElementType("birdeye.vis.interfaces.guides.IGuide")]
 		public function set guides(val:Array):void
 		{
 			_guides = val;
-			_guidesPlaced = false;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -333,7 +331,6 @@
 		}
 		
 		protected var _elements:Array; // of IElement
-		protected var _elementsPlaced:Boolean = false;
 		public function get elements():Array
 		{
 			return _elements;
