@@ -477,7 +477,10 @@ trace(getTimer(), "initing elements");
 							var minDim2:Number = getDimMinValue(currentItem, element.dim2);
 							
 							elementsMinMax[category].min = Math.min(elementsMinMax[category].min, minDim2);
-							elementsMinMax[category].max = Math.max(elementsMinMax[category].max, maxDim2);
+							if (!isNaN(_maxStacked100))
+								elementsMinMax[category].max = _maxStacked100;
+							else 
+								elementsMinMax[category].max = Math.max(elementsMinMax[category].max, maxDim2);
 						}
 					}
 							
