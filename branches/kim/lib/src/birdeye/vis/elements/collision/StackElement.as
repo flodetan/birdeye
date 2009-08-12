@@ -79,6 +79,17 @@ package birdeye.vis.elements.collision
 			return _baseValues;
 		}
 
+		public var _topValues:Array;
+		public function set topValues(val:Array):void
+		{
+			_topValues = val;
+			invalidateProperties();
+		}
+		public function get topValues():Array
+		{
+			return _topValues;
+		}
+
 		protected var _total:Number = NaN;
 		public function set total(val:Number):void
 		{
