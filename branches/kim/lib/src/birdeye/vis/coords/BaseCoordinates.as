@@ -278,9 +278,9 @@ package birdeye.vis.coords
 			// only execute the rest if the type is stacked100
 			if (_type != StackElement.STACKED100) return;
 			
-			var allElementsBaseValues:Array = []; 
+			var allElementsBaseAndTopValues:Array = []; 
 			for (var i:int=0;i<_stackedElements.length;i++)
-				allElementsBaseValues[i] = {indexElements: i, baseValues: []};
+				allElementsBaseAndTopValues[i] = {indexElements: i, baseValues: [], topValues: []};
 			
 			_maxStacked100 = NaN;
 			
@@ -290,13 +290,14 @@ package birdeye.vis.coords
 			var position:uint = 0;
 			for each (stackElement in _stackedElements)
 			{
-				initStackElement(stackElement, position++, allElementsBaseValues, lastProcessedStackElements);
+				initStackElement(stackElement, position++, allElementsBaseAndTopValues, lastProcessedStackElements);
 			}
 			
 			// set the base values that we're calculated 
 			for (var s:uint = 0;s<_stackedElements.length; s++)
 			{
-				IStack(_stackedElements[s]).baseValues = allElementsBaseValues[s].baseValues;		
+				IStack(_stackedElements[s]).baseValues = allElementsBaseAndTopValues[s].baseValues;		
+				IStack(_stackedElements[s]).topValues = allElementsBaseAndTopValues[s].topValues;		
 			}
 		}
 		
@@ -308,7 +309,7 @@ package birdeye.vis.coords
 		 * @param allElementsBaseValues Data structure to keep track of all the base values per element
 		 * @param lastProcessedStackElements Data structure to keep track of the last processed stack element per category or angle or...
 		 */
-		protected function initStackElement(stackElement:IStack, elementPosition:uint, allElementsBaseValues:Array, lastProcessedStackElements:Array):void
+		protected function initStackElement(stackElement:IStack, elementPosition:uint, allElementsBaseAndTopValues:Array, lastProcessedStackElements:Array):void
 		{
 			 	
 			
@@ -337,6 +338,9 @@ package birdeye.vis.coords
 				// determine which index of stack element was processed before at this index
 				var lastProcessedStackElementIndex:Number = lastProcessedStackElements[indexValue];
 				
+				// determine the maximum of the current element
+				var maxCurrentD2:Number = getDimMaxValue(currentItem, stackElement[dims.valueDim], stackElement.collisionType == StackElement.STACKED100);
+
 				// if we are not the first and there was somebody before us
 				// calculate new positions
 				if (elementPosition>0 && lastProcessedStackElementIndex>=0)
@@ -344,24 +348,19 @@ package birdeye.vis.coords
 					// determine the previous stack element
 					var lastProcessedStackElement:IStack = _stackedElements[lastProcessedStackElementIndex];
 					
-					// determine the new maximum	
-					var maxCurrentD2:Number = getDimMaxValue(currentItem, lastProcessedStackElement[dims.valueDim], lastProcessedStackElement.collisionType == StackElement.STACKED100);
-					
 					// store this maximum in the basevalues of the element
-					allElementsBaseValues[elementPosition].baseValues[indexValue] = allElementsBaseValues[lastProcessedStackElementIndex].baseValues[indexValue] + Math.max(0,maxCurrentD2);
+					allElementsBaseAndTopValues[elementPosition].baseValues[indexValue] = allElementsBaseAndTopValues[lastProcessedStackElementIndex].topValues[indexValue];
 				} 
 				else
 				{ 
 					// no previous elements or we are first
 					// set to 0
-					allElementsBaseValues[elementPosition].baseValues[indexValue] = 0;
+					allElementsBaseAndTopValues[elementPosition].baseValues[indexValue] = 0;
 				}
 
 
-				// determine the maximum of the current element
-				maxCurrentD2 = getDimMaxValue(currentItem, stackElement[dims.valueDim], stackElement.collisionType == StackElement.STACKED100);
-
-				var localMax:Number = allElementsBaseValues[elementPosition].baseValues[indexValue] + Math.max(0,maxCurrentD2);
+				var localMax:Number = allElementsBaseAndTopValues[elementPosition].baseValues[indexValue] + Math.max(0,maxCurrentD2);
+				allElementsBaseAndTopValues[elementPosition].topValues[indexValue] = localMax;
 				
 				// update maxStacked100 if necessary
 				if (isNaN(_maxStacked100))
@@ -400,6 +399,7 @@ package birdeye.vis.coords
 		
 		protected function feedScales():void
 		{
+			if (!scales) return;
 			
 			resetScales();
 			
