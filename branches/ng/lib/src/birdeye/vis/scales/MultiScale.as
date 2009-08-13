@@ -368,7 +368,7 @@ package birdeye.vis.scales
 				for each (var category:String in scale1.dataProvider)
 				{
 					scales[category] = new Numeric();
-					Numeric(scales[category]).showAxis = false;
+					// TODO Numeric(scales[category]).showAxis = false;
 					
 					if (_function != null)
 						Numeric(scales[category]).f = _function;

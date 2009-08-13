@@ -34,9 +34,10 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.RectangleRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
-	import birdeye.vis.interfaces.IEnumerableScale;
-	import birdeye.vis.interfaces.INumerableScale;
-	import birdeye.vis.interfaces.IScale;
+	import birdeye.vis.interfaces.scales.IEnumerableScale;
+	import birdeye.vis.interfaces.scales.INumerableScale;
+	import birdeye.vis.interfaces.scales.IScale;
+	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
@@ -119,10 +120,6 @@ trace (getTimer(), "drawing column ele");
 					var angleInterval:Number;
 					if (scale1) 
 						angleInterval = scale1.scaleInterval * chart.columnWidthRate;
-					else if (multiScale)
-						angleInterval = multiScale.scale1.scaleInterval * chart.columnWidthRate;
-					else if (chart.multiScale)
-						angleInterval = chart.multiScale.scale1.scaleInterval * chart.columnWidthRate;
 						
 					switch (_stackType)
 					{
@@ -181,31 +178,26 @@ trace (getTimer(), "drawing column ele");
 							dataFields["dim2"] = tmpArray[i];
 						}
 						
+						if (scale1 is ISubScale && (scale1 as ISubScale).subScalesActive)
+						{
+							if (_stackType == STACKED100)
+							{
+								baseScale2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(baseValues[j] + innerBase2);
+								pos2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(baseValues[j] + Math.max(0,currentItem[tmpDim2] + innerBase2));
+							} else {
+								baseScale2 = getDim2MinPosition((scale1 as ISubScale).subScales[currentItem[dim1]]);
+								pos2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(currentItem[tmpDim2] + innerBase2);
+							}
+							
+						}
+						
 						var scale2RelativeValue:Number = NaN;
 		
 						// TODO: fix stacked100 on 3D
 						if (scale3)
 						{
 							zPos = scale3.getPosition(currentItem[dim3]);
-							scale2RelativeValue = XYZ(scale3).height - zPos;
-						}
-		
-						if (multiScale)
-						{
-							pos1 = multiScale.scale1.getPosition(currentItem[dim1]);
-							pos2 = INumerableScale(multiScale.scales[
-												currentItem[multiScale.dim1]
-												]).getPosition(currentItem[tmpDim2]);
-							dataFields["dim2"] = tmpArray[i];
-						} else if (chart.multiScale) {
-							baseScale2 = getDim2MinPosition(INumerableScale(chart.multiScale.scales[
-												currentItem[chart.multiScale.dim1]
-												]));
-							pos1 = chart.multiScale.scale1.getPosition(currentItem[dim1]);
-							pos2 = INumerableScale(chart.multiScale.scales[
-												currentItem[chart.multiScale.dim1]
-												]).getPosition(currentItem[tmpDim2] + innerBase2);
-							dataFields["dim2"] = tmpArray[i];
+							scale2RelativeValue = scale3.size - zPos;
 						}
 		
 						if (colorScale)
@@ -248,7 +240,7 @@ trace (getTimer(), "drawing column ele");
 									}
 									break;
 								case STACKED:
-									pos1 = pos1 + tmpSize/2 - tmpSize/_total * _stackPosition;
+									pos1 = pos1 + tmpSize/2 - tmpSize/_total * (_stackPosition + 1);
 									colWidth = tmpSize/_total;
 									break;
 							}
@@ -276,7 +268,6 @@ trace (getTimer(), "drawing column ele");
 							}
 							
 			 				var bounds:Rectangle = new Rectangle(pos1, pos2, innerColWidth, baseScale2 - pos2);
-			
 							// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 							// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
   							createTTGG(currentItem, dataFields, pos1 + innerColWidth/2, pos2, scale2RelativeValue, 
@@ -335,12 +326,6 @@ trace (getTimer(), "drawing column ele");
 									break;
 								case STACKED100:
 									innerAngleSize = arcSize;
-									if (chart.multiScale)
-										baseScale2 = INumerableScale(chart.multiScale.scales[
-													currentItem[chart.multiScale.dim1]
-													]).getPosition(innerBase2);
-									else if (scale2)
-										baseScale2 = scale2.getPosition(innerBase2);
 
 									innerBase2 += currentItem[tmpDim2];
 									break;
@@ -360,8 +345,8 @@ trace (getTimer(), "drawing column ele");
 			
 							var xPos:Number = PolarCoordinateTransform.getX(startAngle+innerAngleSize/2, pos2, chart.origin);
 							var yPos:Number = PolarCoordinateTransform.getY(startAngle+innerAngleSize/2, pos2, chart.origin); 
-		 	
- 							createTTGG(currentItem, dataFields, xPos, yPos, NaN, _rendererSize, i);
+		 					
+							createTTGG(currentItem, dataFields, xPos, yPos, NaN, _rendererSize, i);
  							
 							if (ttGG && _extendMouseEvents)
 								gg = ttGG;

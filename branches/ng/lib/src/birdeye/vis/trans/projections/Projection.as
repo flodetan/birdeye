@@ -28,7 +28,7 @@
 package birdeye.vis.trans.projections
 {
 	import birdeye.vis.interfaces.IProjection;
-	import birdeye.vis.interfaces.IScaleUI;
+	import birdeye.vis.interfaces.scales.IScale;
 	
 	//This class calculates latitude & longitude from x & y. And vice versa
 	public class Projection implements IProjection
@@ -71,8 +71,8 @@ package birdeye.vis.trans.projections
 			_maxLong = val;
 		}
 		
-		private var _latScale:IScaleUI;
-		public function set latScale(val:IScaleUI):void
+		private var _latScale:IScale;
+		public function set latScale(val:IScale):void
 		{
 			_latScale = val;
 			if (_latScale.dataValues)
@@ -83,8 +83,8 @@ package birdeye.vis.trans.projections
 			_latScale.f = funcDim2;
 		}
 
-		private var _longScale:IScaleUI;
-		public function set longScale(val:IScaleUI):void
+		private var _longScale:IScale;
+		public function set longScale(val:IScale):void
 		{
 			_longScale = val;
 			if (_longScale.dataValues)

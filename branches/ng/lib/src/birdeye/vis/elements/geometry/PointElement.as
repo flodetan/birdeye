@@ -33,12 +33,13 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.facets.FacetContainer;
+	import birdeye.vis.guides.axis.Axis;
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
-	import birdeye.vis.interfaces.IEnumerableScale;
-	import birdeye.vis.interfaces.INumerableScale;
+	import birdeye.vis.interfaces.scales.IEnumerableScale;
+	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
@@ -118,6 +119,17 @@ trace (getTimer(), "drawing point ele");
 	 							el.push(baseEl.clone());
 	 						}
 	 						coord.elements = el;
+	 						
+	 						var gu:Array = new Array();
+	 						for each (var g:Object in subco.guides)
+	 						{
+	 							if (g is Axis)
+	 							{
+	 								gu.push((g as Axis).clone());
+	 							}
+	 						}
+	 						coord.guides = gu;
+	 						
 	 						
 	 						coord.width = bounds.width;
 	 						coord.height = bounds.height;
@@ -206,6 +218,11 @@ trace (getTimer(), "drawing point ele");
 			if (scale2)
 			{
 				scaleResults["pos2"] = scale2.getPosition(dim2);
+			}
+			
+			if (scale1 is ISubScale && (scale1 as ISubScale).subScalesActive)
+			{
+				scaleResults["pos2"] = (scale1 as ISubScale).subScales[dim1].getPosition(dim2);
 			} 
 
 			var scale2RelativeValue:Number = NaN;
@@ -213,24 +230,8 @@ trace (getTimer(), "drawing point ele");
 			if (scale3)
 			{
 				scaleResults["pos3"] = scale3.getPosition(dim3);
-				scaleResults["pos3Relative"] = XYZ(scale3).height - scaleResults["pos3"];
+				scaleResults["pos3Relative"] = scale3.size - scaleResults["pos3"];
 			} 
-			
-			if (currentItem)
-			{
-				if (multiScale)
-				{
-					scaleResults["pos1"] = multiScale.scale1.getPosition(dim1);
-					scaleResults["pos2"] = INumerableScale(multiScale.scales[
-										currentItem[multiScale.dim1]
-										]).getPosition(dim2);
-				} else if (chart.multiScale) {
-					scaleResults["pos1"] = chart.multiScale.scale1.getPosition(dim1);
-					scaleResults["pos2"] = INumerableScale(chart.multiScale.scales[
-										currentItem[chart.multiScale.dim1]
-										]).getPosition(dim2);
-				}
-			}
 			
 			if (colorScale)
 			{

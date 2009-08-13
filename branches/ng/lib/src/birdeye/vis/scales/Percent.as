@@ -27,7 +27,6 @@
  
 package birdeye.vis.scales
 {
-	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.scales.BaseScale;
 	
 	public class Percent extends Numeric
@@ -50,7 +49,6 @@ package birdeye.vis.scales
 		
 		public function Percent():void
 		{
-			showAxis = false;
 		}
 
 		override public function getPosition(dataValue:*):*

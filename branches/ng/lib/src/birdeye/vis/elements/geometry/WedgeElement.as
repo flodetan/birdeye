@@ -31,7 +31,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.ArcPath;
 	import birdeye.vis.guides.renderers.CircleRenderer;
-	import birdeye.vis.interfaces.IScale;
+	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;

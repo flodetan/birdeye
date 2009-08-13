@@ -46,16 +46,6 @@
 			_scaleType = BaseScale.LINEAR;
 		}
 		
-		override protected function commitProperties():void
-		{
-			super.commitProperties();
-		}
-		
-		override protected function updateDisplayList(w:Number, h:Number):void
-		{
-			super.updateDisplayList(w,h);
-		}
-		
 		// other methods
 
 		/** @Private
@@ -64,20 +54,17 @@
 		{
 			var pos:Number = NaN;
 			if (! (isNaN(max) || isNaN(min)))
-				switch (placement)
+				switch (dimension)
 				{
-					case BOTTOM:
-					case TOP:
-					case HORIZONTAL_CENTER:
+					case DIMENSION_1:
 						pos = size * (Number(dataValue) - min)/(max - min);
 						break;
-					case LEFT:
-					case RIGHT:
-					case VERTICAL_CENTER:
+					case DIMENSION_2:
 						pos = size * (1 - (Number(dataValue) - min)/(max - min));
 						break;
 					default:
-						pos = _scaleValues[0] + size * (Number(dataValue) - min)/(max - min);
+						pos = size * (Number(dataValue) - min)/(max - min);
+						//pos = _scaleValues[0] + size * (Number(dataValue) - min)/(max - min);
 				}
 				
 			return pos;

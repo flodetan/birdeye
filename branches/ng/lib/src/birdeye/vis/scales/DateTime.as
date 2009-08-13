@@ -27,7 +27,7 @@
  
 package birdeye.vis.scales
 {
-	public class DateTime extends XYZ 
+	public class DateTime extends BaseScale  
 	{
 		public function DateTime()
 		{

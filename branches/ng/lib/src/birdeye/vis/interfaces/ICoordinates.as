@@ -27,21 +27,16 @@
  
 package birdeye.vis.interfaces
 {
-	import birdeye.vis.scales.MultiScale;
-	import birdeye.vis.trans.projections.Projection;
-	
+	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
 	
-	public interface ICoordinates extends IInteractive
+	public interface ICoordinates extends IInteractive, IEventDispatcher
 	{
 		function set coordType(val:String):void;
 		function get coordType():String;
 
 		function set origin(val:Point):void;
 		function get origin():Point;
-
-		function set multiScale(val:MultiScale):void;
-		function get multiScale():MultiScale;
 
 		function set transforms(val:Array):void;
 

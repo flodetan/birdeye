@@ -14,6 +14,7 @@ package birdeye.vis.facets
 		public var coord:ICoordinates;
 		public var scales:Array;
 		public var elements:Array;
+		public var guides:Array;
 		
 		public function newInstance():*
 		{

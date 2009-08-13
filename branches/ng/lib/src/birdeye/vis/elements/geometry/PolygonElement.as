@@ -31,7 +31,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.UpTriangleRenderer;
-	import birdeye.vis.interfaces.IScaleUI;
+	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.scales.*;
 	import birdeye.vis.trans.projections.Projection;
 	
@@ -91,7 +91,7 @@ package birdeye.vis.elements.geometry
 			if (! itemRenderer)
 				itemRenderer = new ClassFactory(UpTriangleRenderer);
 
-			if (!isListeningMouseMove)
+			if (!isListeningMouseMove && chart)
 			{
 				chart.elementsContainer.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 				isListeningMouseMove = true;
@@ -217,17 +217,17 @@ trace(getTimer(), "drawing polygon ele");
 			posY = localPoint.y;
 			posX = localPoint.x;
 
-			if (scale2 && scale2 is IScaleUI && IScaleUI(scale2).pointer)
+			/*if (scale2 && scale2 is IAxis && IAxis(scale2).pointer)
 			{
-				IScaleUI(scale2).pointerY = posY;
-				IScaleUI(scale2).pointer.visible = true;
+				IAxis(scale2).pointerY = posY;
+				IAxis(scale2).pointer.visible = true;
 			} 
 
-			if (scale1 && scale1 is IScaleUI && IScaleUI(scale1).pointer)
+			if (scale1 && scale1 is IAxis && IAxis(scale1).pointer)
 			{
-				IScaleUI(scale1).pointerX = posX;
-				IScaleUI(scale1).pointer.visible = true;
-			}
+				IAxis(scale1).pointerX = posX;
+				IAxis(scale1).pointer.visible = true;
+			}*/
 		}
 
 		override public function refresh():void

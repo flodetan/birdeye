@@ -27,7 +27,6 @@
  
 package birdeye.vis.scales
 {
-	import birdeye.vis.interfaces.INumerableScale;
 	import birdeye.vis.scales.BaseScale;
 	
 	public class PercentAngle extends Percent
