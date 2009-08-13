@@ -25,7 +25,7 @@
 			{
 				subject = ["A", "B", "C", "D", "E", "F"];
 				var ac:ArrayCollection = new ArrayCollection();
-				var R1:Number, R2:Number, R3:Number, R4:Number;
+				var R1:Number, R2:Number, R3:Number, R4:Number, R5:Number;
 				
 				for (var i:Number = 0; i<subject.length; i++)
 				{
@@ -34,7 +34,8 @@
 						R1: R1=Math.round(Math.random() * 1000),
 						R2: R2=Math.round(Math.random() * 1000),
 						R3: R3=Math.round(Math.random() * 1000),
-						R4: R4=Math.round(Math.random() * 1000)
+						R4: R4=Math.round(Math.random() * 1000),
+						R5: R5=Math.round(Math.random() * 1000)
 					});
 				}
 				dt = ac;
@@ -82,7 +83,6 @@
     	
     	<mx:HBox >
     		<mx:Button label="Generate" click="createDT();createDT1()"/>
-    		<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4])"/>
 		</mx:HBox>
     	
     	<coords:Cartesian id="ac3" width="90%" height="90%" dataTipFunction="dtFunc" showDataTips="true" type="stacked100">
@@ -98,8 +98,9 @@
  			<grid:Grid scale1="{l2}" scale2="{c2}" />
  		</coords:guides>
 		 <coords:elements>
+		 	<elements:AreaElement id="a5" dataProvider="{dt}" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l2}" scale1="{c2}" dim1="subject" dim2="R5" styleName="grad3" strokeAlpha=".5" displayName="R5"/>
 		 	<elements:AreaElement id="a1" dataProvider="{dt}" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l2}" scale1="{c2}" dim1="subject" dim2="R1" styleName="grad1" strokeAlpha=".5" displayName="R1"/>
-		 	<elements:ColumnElement id="c1" dataProvider="{dt}" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.RectangleRenderer" scale2="{l2}" scale1="{c2}" collisionType="stacked" dim2="['R1','R4','R2']" dim1="subject" styleName="grad1" strokeAlpha=".5" displayName="R1"/>
+		 	<elements:ColumnElement id="c1" dataProvider="{dt}" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.RectangleRenderer" scale2="{l2}" scale1="{c2}" collisionType="stacked" dim2="['R1','R4','R2']" dim1="subject" styleName="grad2" strokeAlpha=".5" displayName="R1"/>
     		<elements:AreaElement id="a2" dataProvider="{dt1}" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l2}" scale1="{c2}" dim1="subject" dim2="R2" styleName="grad2" strokeAlpha=".5" displayName="R2"/>
     		<elements:AreaElement id="a3" dataProvider="{dt1}" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l1}" scale1="{c2}" dim1="subject" dim2="R3" styleName="grad3" strokeAlpha=".5" displayName="R3"/>
     		<elements:AreaElement id="a4" dataProvider="{dt1}" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l1}" scale1="{c2}" dim1="subject" dim2="R4" styleName="grad4" strokeAlpha=".5" displayName="R4"/>
