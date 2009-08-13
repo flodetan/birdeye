@@ -44,7 +44,6 @@ package birdeye.vis.elements.geometry
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.paint.SolidFill;
-	import com.degrafa.paint.SolidStroke;
 	
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
@@ -94,9 +93,6 @@ trace (getTimer(), "drawing column ele");
 
 				var pos1:Number, pos2:Number, zPos:Number = NaN;
 				var j:Object;
-				
-				var ttShapes:Array;
-				var ttXoffset:Number = NaN, ttYoffset:Number = NaN;
 				
 				var baseScale2:Number = getDim2MinPosition(scale2);
 				var tmpSize:Number, colWidth:Number = 0; 
@@ -229,15 +225,6 @@ trace (getTimer(), "drawing column ele");
 								case STACKED100:
 									colWidth = tmpSize;
 									pos1 = pos1 - tmpSize/2;
-									ttShapes = [];
-									ttXoffset = -20;
-									ttYoffset = 55;
-									if (chart.customTooltTipFunction == null)
-									{
-										var line:Line = new Line(pos1+ colWidth/2, pos2, pos1 + colWidth/2 + ttXoffset/3, pos2 + ttYoffset);
-										line.stroke = new SolidStroke(0xaaaaaa,1,2);
-						 				ttShapes[0] = line;
-									}
 									break;
 								case STACKED:
 									pos1 = pos1 + tmpSize/2 - tmpSize/_total * (_stackPosition + 1);
@@ -259,11 +246,6 @@ trace (getTimer(), "drawing column ele");
 								case STACKED:
 									innerColWidth = colWidth/tmpArray.length;
 									pos1 = pos1 + innerColWidth * i;
-									if (ttShapes && ttShapes[0] is Line)
-									{
-						 				Line(ttShapes[0]).x = pos1 + innerColWidth/2;
-						 				Line(ttShapes[0]).x1 = pos1 + innerColWidth/2 + ttXoffset/3;
-									}
 									break;
 							}
 							
@@ -271,7 +253,7 @@ trace (getTimer(), "drawing column ele");
 							// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 							// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
   							createTTGG(currentItem, dataFields, pos1 + innerColWidth/2, pos2, scale2RelativeValue, 
-  										3, i, ttShapes,ttXoffset,ttYoffset,true);
+  										3, i,null,NaN,NaN,true);
  			 
 							if (dim3)
 							{
@@ -326,17 +308,11 @@ trace (getTimer(), "drawing column ele");
 									break;
 								case STACKED100:
 									innerAngleSize = arcSize;
-
 									innerBase2 += currentItem[tmpDim2];
 									break;
 								case STACKED:
 									innerAngleSize = arcSize/tmpArray.length;
 									startAngle = startAngle + innerAngleSize * i;
-									if (ttShapes && ttShapes[0] is Line)
-									{
-						 				Line(ttShapes[0]).x = pos1 + innerAngleSize/2;
-						 				Line(ttShapes[0]).x1 = pos1 + innerAngleSize/2 + ttXoffset/3;
-									}
 									break;
 							}
 							
