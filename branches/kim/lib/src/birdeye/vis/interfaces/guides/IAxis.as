@@ -27,9 +27,7 @@
 
 package birdeye.vis.interfaces.guides
 {
-	import birdeye.vis.interfaces.guides.IGuide;
-	
-	import com.degrafa.geometry.Line;
+	import birdeye.vis.interfaces.scales.IScale;
 	
 	public interface IAxis extends IGuide
 	{

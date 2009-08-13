@@ -130,6 +130,36 @@ package birdeye.vis.coords
 
 		}
 		
+		override protected function feedScales():void
+		{
+			if (!scales) return;
+			
+			resetScales();
+			
+			// init axes of all elements that have their own axes
+			// since these are children of each elements, they are 
+			// for sure ready for feeding and it won't affect the axesFeeded status
+			var elementsMinMax:Array = [];
+			for (var i:Number = 0; i<elements.length; i++)
+				initElementsScales(elements[i], elementsMinMax);
+			
+			//if (elementsMinMax.length > 0)
+			//{
+				for ( i = 0;i<scales.length;i++)
+				{
+					if (scales[i] && scales[i] is ISubScale && (scales[i] as ISubScale).subScalesActive)
+					{
+						(scales[i] as ISubScale).feedMinMax(elementsMinMax);
+					}
+				}
+			//}
+			
+			commitValidatingScales();
+			
+			axesFeeded = true;
+				
+		}
+		
 
 		override protected function updateAndDrawGuide(guide:IGuide, unscaledWidth:Number, unscaledHeight:Number):void
 		{

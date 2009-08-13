@@ -858,7 +858,12 @@ trace(getTimer(), "drawing axis");
 					{
 						
 						// create thick line
-			 			thick = new Line(xMin + thickWidth * sign, scale.getPosition(dataLabel), xMax, scale.getPosition(dataLabel));
+						var yPos:Number = scale.getPosition(dataLabel);
+						if (coordinates && coordinates.origin)
+						{
+							yPos = coordinates.origin.y - yPos;	
+						}
+			 			thick = new Line(xMin + thickWidth * sign, yPos, xMax, yPos);
 						thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 						gg.geometryCollection.addItem(thick);
 			
@@ -866,14 +871,7 @@ trace(getTimer(), "drawing axis");
 	 					label = new RasterTextPlus();
 	 					label.fontFamily = fontLabel;
 	 					label.fontSize = sizeLabel;
-	 					if (dataLabel is Number)
-	 					{
-	 						label.text = String(Math.round(dataLabel as Number));
-	 					}
-	 					else
-	 					{
-	 						label.text = String(dataLabel);
-	 					}
+	 					label.text = String(dataLabel);
 	 					label.visible = true;
 						label.autoSize = TextFieldAutoSize.LEFT;
 						label.autoSizeField = true;
@@ -895,7 +893,7 @@ trace(getTimer(), "drawing axis");
 							label.transform = rot;
 						}
 						
-						label.y = scale.getPosition(dataLabel)-label.displayObject.height/2;
+						label.y = yPos-label.displayObject.height/2;
 						label.x = thickWidth * sign; 
 						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
@@ -912,14 +910,7 @@ trace(getTimer(), "drawing axis");
 	
 						// create label 
 	 					label = new RasterTextPlus();
-						if (dataLabel is Number)
-	 					{
-	 						label.text = String(Math.round(dataLabel as Number));
-	 					}
-	 					else
-	 					{
-	 						label.text = String(dataLabel);
-	 					}
+						label.text = String(dataLabel);
 	 					label.fontFamily = fontLabel;
 	 					label.fontSize = sizeLabel;
 	 					label.visible = true;
@@ -988,7 +979,13 @@ trace(getTimer(), "drawing axis");
 					case Axis.LEFT:
 					case Axis.VERTICAL_CENTER:
 					case Axis.RIGHT:
-						pointerY = scale.getPosition(pos);
+						var posY:Number = scale.getPosition(pos);
+						if (coordinates && coordinates.origin)
+						{
+							posY = coordinates.origin.y - posY;
+						}
+
+						pointerY = posY;
 						_pointer.visible = true;
 						break;
 
