@@ -1471,7 +1471,7 @@ package birdeye.vis.elements
 		}
 
 		/** Remove all graphic elements of the series.*/
-		public function removeAllElements():void
+		public function clearAll():void
 		{
  			// Iterating backwards here is essential, because during the 
  			// iteration we are modifying the collection we are iterating over.
@@ -1483,7 +1483,7 @@ package birdeye.vis.elements
 					item.removeEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 					item.removeEventListener(MouseEvent.DOUBLE_CLICK, onMouseDoubleClick);
 					item.removeEventListener(MouseEvent.CLICK, onMouseClick);
-					(item as DataItemLayout).removeAllElements();
+					(item as DataItemLayout).clearAll();
 				}
 				graphicsCollection.removeItemAt(i);
 			}
@@ -1570,7 +1570,7 @@ package birdeye.vis.elements
 		}
 		
 		protected function prepareForItemDisplayObjectsCreation():void {
-			removeAllElements();
+			clearAll();
 		
 			if (_itemDisplayObjects) {
 				for (var itemId:Object in _itemDisplayObjects) {

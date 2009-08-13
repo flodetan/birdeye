@@ -384,7 +384,7 @@ package birdeye.vis.coords
 				{
 					child = leftContainer.getChildAt(0); 
 					if (child is IAxis)
-						IAxis(child).removeAllElements();
+						IAxis(child).clearAll();
 				}
 				leftContainer.removeAllChildren();
 			}
@@ -395,7 +395,7 @@ package birdeye.vis.coords
 				{
 					child = rightContainer.getChildAt(0); 
 					if (child is IAxis)
-						IAxis(child).removeAllElements();
+						IAxis(child).clearAll();
 				}
 				rightContainer.removeAllChildren();
 			}
@@ -406,7 +406,7 @@ package birdeye.vis.coords
 				{
 					child = topContainer.getChildAt(0); 
 					if (child is IAxis)
-						IAxis(child).removeAllElements();
+						IAxis(child).clearAll();
 				}
 				topContainer.removeAllChildren();
 			}
@@ -417,7 +417,7 @@ package birdeye.vis.coords
 				{
 					child = bottomContainer.getChildAt(0); 
 					if (child is IAxis)
-						IAxis(child).removeAllElements();
+						IAxis(child).clearAll();
 				}
 				bottomContainer.removeAllChildren();
 			}
@@ -428,7 +428,7 @@ package birdeye.vis.coords
 				{
 					child = bottomContainer.getChildAt(0); 
 					if (child is IAxis)
-						IAxis(child).removeAllElements();
+						IAxis(child).clearAll();
 				}
 				bottomContainer.removeAllChildren();
 			}

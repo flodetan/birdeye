@@ -204,7 +204,7 @@ package birdeye.vis.data
 		
 		/** @Private
 		 * Remove all elements from the component*/
-		public function removeAllElements():void
+		public function clearAll():void
 		{
  			// Iterating backwards here is essential, because during the 
  			// iteration we are modifying the collection we are iterating over.

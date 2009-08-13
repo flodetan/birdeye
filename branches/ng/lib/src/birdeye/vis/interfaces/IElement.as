@@ -150,8 +150,9 @@ package birdeye.vis.interfaces
 		/** Update the data items status.*/
 		function refresh():void;
 
-		/** Remove all elements from the Element (Surface component).*/
-		function removeAllElements():void;
+		/** Element must provide the clear all graphics items when refreshed, thus insuring
+		 * both display refresh and memory clearing..*/
+		function clearAll():void;
 		
 	}
 }

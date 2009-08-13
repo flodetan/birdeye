@@ -598,7 +598,7 @@ package birdeye.vis.guides.axis
 			StyleManager.setStyleDeclaration("Axis", selector, true);
 		}
 		
-		public function removeAllElements():void
+		public function clearAll():void
 		{
 			if (gg)
 			{
@@ -690,7 +690,7 @@ package birdeye.vis.guides.axis
 
 			if (showAxis && invalidated)
 			{
-				removeAllElements();
+				clearAll();
 				drawAxisLine(w,h)
 	
 				//if (readyForLayout)

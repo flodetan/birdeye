@@ -652,14 +652,14 @@ trace(getTimer(), "initing elements");
 					var child:DisplayObject = _elementsContainer.getChildAt(0); 
 					
 					if (child is IElement)
-						IElement(child).removeAllElements();
+						IElement(child).clearAll();
 						
 					if (child is IGuide)
-						IGuide(child).removeAllElements();
+						IGuide(child).clearAll();
 						
 					if (child is DataItemLayout)
 					{
-						DataItemLayout(child).removeAllElements();
+						DataItemLayout(child).clearAll();
 						DataItemLayout(child).geometryCollection.items = [];
 						DataItemLayout(child).geometry = [];
 					}
