@@ -56,15 +56,6 @@
 				tt += '\n' + dataFields[1] + ": " + currDatatip[dataFields[1]];
 				return  tt;
 			}
-
-			private function changeForm(a:Array):void
-			{
-				for (var i:Number = 0; i<a.length; i++)
-					if (a[i].form == "curve")
-						a[i].form = "line";
-					else 
-						a[i].form = "curve";
-			}
 		]]>
 	</mx:Script>
 	
@@ -73,7 +64,6 @@
     	
     	<mx:HBox>
     		<mx:Button label="Generate" click="createDT()"/>
-			<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4,a5])"/>
 		</mx:HBox>
 		       	<coords:Cartesian id="cc4" width="90%" height="90%" dataTipFunction="dtFunc" showDataTips="true" dataProvider="{dt}" 
        		type="stacked100">
