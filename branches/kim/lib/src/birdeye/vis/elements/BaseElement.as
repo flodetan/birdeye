@@ -31,6 +31,8 @@ package birdeye.vis.elements
 	import birdeye.vis.coords.BaseCoordinates;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.collision.StackElement;
+	import birdeye.vis.elements.events.ElementRollOutEvent;
+	import birdeye.vis.elements.events.ElementRollOverEvent;
 	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
@@ -56,7 +58,6 @@ package birdeye.vis.elements
 	import flash.events.MouseEvent;
 	import flash.utils.Dictionary;
 	import flash.utils.describeType;
-	import flash.utils.getTimer;
 	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
@@ -1117,32 +1118,39 @@ package birdeye.vis.elements
 					showGeometryTip(extGG);
 				}
 			}
-
-			/*var tmpDim1:String;
+			
+			var rollOverE:ElementRollOverEvent = new ElementRollOverEvent(ElementRollOverEvent.ELEMENT_ROLL_OVER);
+			
+			var tmpDim1:String;
 				if (dim1 is Array)
 					tmpDim1 = dim1[extGG.collisionTypeIndex];
 				else 
 					tmpDim1 = String(dim1);
-				IScaleUI(scale1).pointerX = IScaleUI(scale1).getPosition(extGG.currentItem[tmpDim1]);
-				IScaleUI(scale1).pointer.visible = true;
-			}
-			
-			if (scale2 && scale2 is IScaleUI && IScaleUI(scale2).pointer && chart.coordType == VisScene.CARTESIAN)
-			{
-				var tmpDim2:String;
+					
+			var tmpDim2:String;
 				if (dim2 is Array)
 					tmpDim2 = dim2[extGG.collisionTypeIndex];
 				else 
 					tmpDim2 = String(dim2);
-				IScaleUI(scale2).pointerY = IScaleUI(scale2).getPosition(extGG.currentItem[tmpDim2]);
-				IScaleUI(scale2).pointer.visible = true;
-			} 
-
-			if (scale3 && scale3 is IScaleUI && IScaleUI(scale3).pointer && chart.coordType == VisScene.CARTESIAN)
-			{
-				IScaleUI(scale3).pointerY = extGG.posZ;
-				IScaleUI(scale3).pointer.visible = true;
-			}*/
+					
+			var tmpDim3:String;
+				if (dim3 is Array)
+					tmpDim3 = dim2[extGG.collisionTypeIndex];
+				else
+					tmpDim3 = String(dim3);
+			
+		
+			rollOverE.dim1 = tmpDim1;
+			rollOverE.dim2 = tmpDim2;
+			rollOverE.dim3 = tmpDim3
+			rollOverE.scale1 = scale1;
+			rollOverE.scale2 = scale2;
+			rollOverE.scale3 = scale3;
+			rollOverE.pos1 = extGG.currentItem[tmpDim1];
+			rollOverE.pos2 = extGG.currentItem[tmpDim2];
+			rollOverE.pos3 = extGG.currentItem[tmpDim3];
+			
+			chart.dispatchEvent(rollOverE);
 			
 			if (_mouseOverFunction != null)
 				_mouseOverFunction(extGG);
@@ -1164,15 +1172,10 @@ package birdeye.vis.elements
 				myTT = null;
 				toolTip = null;
 			}
-
-			/*if (scale1 && scale1 is IAxis && IAxis(scale1).pointer)
-				IAxis(scale1).pointer.visible = false;
-
-			if (scale2 && scale2 is IAxis && IAxis(scale2).pointer)
-				IAxis(scale2).pointer.visible = false;
-
-			if (scale3 && scale3 is IAxis && IAxis(scale3).pointer)
-				IAxis(scale3).pointer.visible = false;*/
+			
+			var rolloutE:ElementRollOutEvent = new ElementRollOutEvent(ElementRollOutEvent.ELEMENT_ROLL_OUT);
+			
+			chart.dispatchEvent(rolloutE);
 
 			if (_mouseOutFunction != null)
 				_mouseOutFunction(extGG);

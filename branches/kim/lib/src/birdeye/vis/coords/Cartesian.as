@@ -140,56 +140,44 @@ package birdeye.vis.coords
 					switch (axis.placement)
 					{
 						case Axis.TOP:
-							if(!topContainer.contains(DisplayObject(axis)))
+							if(axis is DisplayObject && !topContainer.contains(DisplayObject(axis)) && !DisplayObject(axis).parent)
 							{
-								if (!DisplayObject(axis).parent)
-								{
-									topContainer.addChild(DisplayObject(axis));
-								}
-								else
-								{
-									axis.targets.push(topContainer);
-								}
+								topContainer.addChild(DisplayObject(axis));
+							}
+							else
+							{
+								axis.targets.push(topContainer);
 							}
 							break; 
 						case Axis.BOTTOM:
-							if (!bottomContainer.contains(DisplayObject(axis)))
+							if(axis is DisplayObject && !bottomContainer.contains(DisplayObject(axis)) && !DisplayObject(axis).parent)
 							{
-								if (!DisplayObject(axis).parent)
-								{
-									bottomContainer.addChild(DisplayObject(axis));
-								}
-								else
-								{
-									axis.targets.push(bottomContainer);
-								}
+								bottomContainer.addChild(DisplayObject(axis));
+							}
+							else
+							{
+								axis.targets.push(bottomContainer);
 							}
 							break;
 							
 						case Axis.LEFT:
-							if (!leftContainer.contains(DisplayObject(axis)))
+							if(axis is DisplayObject && !leftContainer.contains(DisplayObject(axis)) && !DisplayObject(axis).parent)
 							{
-								if (!DisplayObject(axis).parent)
-								{
-									leftContainer.addChild(DisplayObject(axis));
-								}
-								else
-								{
-									axis.targets.push(leftContainer);
-								}
+								leftContainer.addChild(DisplayObject(axis));
+							}
+							else
+							{
+								axis.targets.push(leftContainer);
 							}
 							break;
 						case Axis.RIGHT:
-							if (!rightContainer.contains(DisplayObject(axis)))
+							if(axis is DisplayObject && !rightContainer.contains(DisplayObject(axis)) && !DisplayObject(axis).parent)
 							{
-								if (!DisplayObject(axis).parent)
-								{
-									rightContainer.addChild(DisplayObject(axis));
-								}
-								else
-								{
-									axis.targets.push(rightContainer);
-								}
+								rightContainer.addChild(DisplayObject(axis));
+							}
+							else
+							{
+								axis.targets.push(rightContainer);
 							}
 							break;
 					}

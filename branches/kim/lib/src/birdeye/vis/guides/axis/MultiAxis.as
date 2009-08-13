@@ -1,5 +1,7 @@
 package birdeye.vis.guides.axis
 {
+	import birdeye.vis.elements.events.ElementRollOutEvent;
+	import birdeye.vis.elements.events.ElementRollOverEvent;
 	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.interfaces.scales.IScale;
@@ -118,7 +120,21 @@ package birdeye.vis.guides.axis
 		private var _coordinates:ICoordinates; 
 		public function set coordinates(val:ICoordinates):void
 		{
-			_coordinates = val;	
+			// first remove old event listeners if they exist
+			if (_coordinates)
+			{
+				_coordinates.removeEventListener(ElementRollOutEvent.ELEMENT_ROLL_OUT, onElementRollOut);
+				_coordinates.removeEventListener(ElementRollOverEvent.ELEMENT_ROLL_OVER, onElementRollOver);
+			}
+			
+			_coordinates = val;
+			
+			// add the new event listeners
+			if (_coordinates)
+			{
+				_coordinates.addEventListener(ElementRollOverEvent.ELEMENT_ROLL_OVER, onElementRollOver);
+				_coordinates.addEventListener(ElementRollOutEvent.ELEMENT_ROLL_OUT, onElementRollOut);
+			}
 		}
 		
 		public function get coordinates():ICoordinates
@@ -159,9 +175,18 @@ package birdeye.vis.guides.axis
 					// TODO set the label a bit further instead of shortening the line?
 					var endLinePosition:Point = PolarCoordinateTransform.getXY(angle,_size-5,coordinates.origin);
 	 				line = new Line(coordinates.origin.x, coordinates.origin.y, endLinePosition.x, endLinePosition.y);
-					line.stroke = new SolidStroke(0x000000, 1,1);
-					
+					line.stroke = new SolidStroke(0x000000, 1,1);					
 					this.geometryCollection.addItem(line);
+					
+					if (showPointer)
+					{
+						_pointer = new Line();
+						_pointer.stroke = new SolidStroke(colorPointer, 1, weightPointer);
+						_pointer.visible = false;
+						this.geometryCollection.addItem(_pointer);
+					}
+										
+					
 					// add 0,20,40,...,100
 					for (var j:int=0;j<(subSc.completeDataValues.length - 1);j++)
 					{
@@ -232,6 +257,34 @@ package birdeye.vis.guides.axis
 			}
 		}
 		
+		private function onElementRollOver(e:ElementRollOverEvent):void
+		{
+			
+			if (_pointer)
+			{
+				
+				var angle:Number = subScale.getPosition(e.pos1);
+				var pos2:Number = subScale.subScales[e.pos1].getPosition(e.pos2);
+				var pos2pt:Point = PolarCoordinateTransform.getXY(angle,pos2, coordinates.origin);
+
+				
+				var posMinPt:Point =  PolarCoordinateTransform.getXY((angle+90)%360,_sizePointer/2,pos2pt);
+				var posMaxPt:Point = PolarCoordinateTransform.getXY((angle-90)%360,_sizePointer/2, pos2pt);
+				
+				_pointer.x = posMinPt.x;
+				_pointer.y = posMinPt.y;
+				_pointer.x1 = posMaxPt.x;
+				_pointer.y1 = posMaxPt.y;
+				
+				_pointer.visible = true;
+			}
+		}
+		
+		private function onElementRollOut(e:ElementRollOutEvent):void
+		{
+			_pointer.visible = false;
+		}
+		
 		
 		private var _alphaFill:Number;
 		/** Set the fill alpha.*/
@@ -287,6 +340,53 @@ package birdeye.vis.guides.axis
 		{
 			return _weightStroke;
 		}
+		
+		protected var _colorPointer:uint = 0xFF0000;
+		/** Set the pointer color used in the axis.*/
+		public function set colorPointer(val:uint):void
+		{
+			_colorPointer = val;
+		}
+		public function get colorPointer():uint
+		{
+			return _colorPointer;
+		}
+		
+		protected var _sizePointer:Number = 12;
+		/** Set the pointer size used in the axis.*/
+		public function set sizePointer(val:Number):void
+		{
+			_sizePointer = val;
+		}
+		public function get sizePointer():Number
+		{
+			return _sizePointer;
+		}
+
+		protected var _weightPointer:Number = 3;
+		/** Set the pointer weight used in the axis.*/
+		public function set weightPointer(val:Number):void
+		{
+			_weightPointer = val;
+		}
+		public function get weightPointer():Number
+		{
+			return _weightPointer;
+		}
+		
+		private var _showPointer:Boolean = true;
+		/** Show pointer on the axis */
+		[Inspectable(enumeration="false,true")]
+		public function set showPointer(val:Boolean):void
+		{
+			_showPointer = val;
+		}
+		public function get showPointer():Boolean
+		{
+			return _showPointer;
+		}
+
+		protected var _pointer:Line;
 
 		protected var _colorGradients:Array;
 		/** Set the gradientColors to be used for the the axis.*/

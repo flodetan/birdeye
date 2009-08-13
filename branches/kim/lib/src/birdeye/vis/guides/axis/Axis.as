@@ -1,5 +1,7 @@
 package birdeye.vis.guides.axis
 {
+	import birdeye.vis.elements.events.ElementRollOutEvent;
+	import birdeye.vis.elements.events.ElementRollOverEvent;
 	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.interfaces.scales.IScale;
@@ -302,7 +304,7 @@ package birdeye.vis.guides.axis
 		}
 		
 		private var _showPointer:Boolean = true;
-		/** Show labels on the axis */
+		/** Show pointer on the axis */
 		[Inspectable(enumeration="false,true")]
 		public function set showPointer(val:Boolean):void
 		{
@@ -315,7 +317,7 @@ package birdeye.vis.guides.axis
 
 		/** Position the pointer to the specified x position. Used by a cartesian series
 		 * if the current axis is x.*/
-		public function set pointerX(val:Number):void
+		private function set pointerX(val:Number):void
 		{
 			if (pointer)
 				pointer.x = pointer.x1 = val;
@@ -323,7 +325,7 @@ package birdeye.vis.guides.axis
 		
 		/** Position the pointer to the specified y position. Used by a cartesian series
 		 * if the current axis is vertical.*/
-		public function set pointerY(val:Number):void
+		private function set pointerY(val:Number):void
 		{
 			if (pointer) 
 				pointer.y = pointer.y1 = val;
@@ -417,7 +419,21 @@ package birdeye.vis.guides.axis
 		private var _coordinates:ICoordinates;
 		public function set coordinates(val:ICoordinates):void
 		{
+			// first remove old event listeners if they exist
+			if (_coordinates)
+			{
+				_coordinates.removeEventListener(ElementRollOutEvent.ELEMENT_ROLL_OUT, onElementRollOut);
+				_coordinates.removeEventListener(ElementRollOverEvent.ELEMENT_ROLL_OVER, onElementRollOver);
+			}
+			
 			_coordinates = val;
+			
+			// add the new event listeners
+			if (_coordinates)
+			{
+				_coordinates.addEventListener(ElementRollOverEvent.ELEMENT_ROLL_OVER, onElementRollOver);
+				_coordinates.addEventListener(ElementRollOutEvent.ELEMENT_ROLL_OUT, onElementRollOut);
+			}		
 		}
 		
 		public function get coordinates():ICoordinates
@@ -938,6 +954,56 @@ trace(getTimer(), "drawing axis");
 			}
 		
 		}
+		
+		private function onElementRollOver(e:ElementRollOverEvent):void
+		{
+			if (_pointer)
+			{
+				var pos:Object;
+				if (scale == e.scale1)
+				{
+					pos = e.pos1;	
+				}
+				else if (scale == e.scale2)
+				{
+					pos = e.pos2;
+				}
+				else if (scale == e.scale3)
+				{
+					pos = e.pos3;
+				}
+				else
+				{
+					return;
+				}
+					
+				switch (placement)
+				{
+					case Axis.BOTTOM:
+					case Axis.HORIZONTAL_CENTER:
+					case Axis.TOP:
+						pointerX = scale.getPosition(pos);
+						_pointer.visible = true;
+						break;
+					case Axis.LEFT:
+					case Axis.VERTICAL_CENTER:
+					case Axis.RIGHT:
+						pointerY = scale.getPosition(pos);
+						_pointer.visible = true;
+						break;
+
+				}
+			}
+		}
+		
+		private function onElementRollOut(e:ElementRollOutEvent):void
+		{
+			if (_pointer)
+			{
+				this._pointer.visible = false;
+			}
+		}
+		
 		
 		/**
 		 * @inheritDoc

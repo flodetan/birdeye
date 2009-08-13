@@ -33,14 +33,6 @@ package birdeye.vis.interfaces.guides
 	
 	public interface IAxis extends IGuide
 	{
-		/** Position the axis pointer on the specific Y coordinate value. */ 
-		//function set pointerY(val:Number):void;
-
-		/** Position the axis pointer on the specific X coordinate value. */ 
-		//function set pointerX(val:Number):void;
-		
-		/** Get the axis pointer. Can be used to change colors, stroke, visibility...*/
-		//function get pointer():Line;
 	
 		/** Set the axis placement.*/
 		function set placement(val:String):void
