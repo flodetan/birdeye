@@ -657,7 +657,15 @@ package birdeye.vis.guides.axis
 			return _showLabels;
 		}
 		
-		public var maxLblSize:Number = 0;
+		protected var _maxLblSize:Number = 0;
+		public function set maxLblSize(val:Number):void
+		{
+			_maxLblSize = val;
+		}
+		public function get maxLblSize():Number
+		{
+			return _maxLblSize;
+		}
 
 		/** @Private */
 		protected function calculateMaxLabelStyled():void
@@ -804,12 +812,12 @@ package birdeye.vis.guides.axis
 						case BOTTOM:
 						case HORIZONTAL_CENTER:
 							//height = Math.max(5,maxLblSize * Math.sin(-_rotateLabels*Math.PI/180));
-							height = sizeLabel + thickWidth + 10;
+							minHeight = sizeLabel + thickWidth + 10 + maxLblSize * Math.sin(-_rotateLabels*Math.PI/180);
 							break;							
 						case LEFT:
 						case RIGHT:
 						case VERTICAL_CENTER:				
-							width = Math.max(5, maxLblSize * Math.cos(_rotateLabels*Math.PI/180));
+							minWidth = Math.max(5, maxLblSize * Math.cos(_rotateLabels*Math.PI/180));
 							break;
 					}
 					
@@ -924,7 +932,8 @@ trace(getTimer(), "drawing axis");
 							{
 								case TOP:
 									_rotateLabelsOn = "centerLeft";
-									label.x = scale.getPosition(dataLabel); 
+									label.x = scale.getPosition(dataLabel);
+									label.y += height*.9; 
 									break;
 								case BOTTOM:
 									_rotateLabelsOn = "topRight";
