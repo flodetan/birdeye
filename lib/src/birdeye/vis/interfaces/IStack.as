@@ -27,7 +27,7 @@
  
 package birdeye.vis.interfaces
 {
-	public interface IStack
+	public interface IStack extends IElement
 	{
 		/** Set the position of the current component (element) inside a stack.*/
 		function set stackPosition(val:Number):void;
@@ -45,6 +45,10 @@ package birdeye.vis.interfaces
 		/** Set the baseValues for stacked 100 collisions (columns, area, bars).*/
 		function set baseValues(val:Array):void;
 		function get baseValues():Array;
+
+		/** Set the topValues for stacked 100 collisions (columns, area, bars).*/
+		function set topValues(val:Array):void;
+		function get topValues():Array;
 
 		/** Set the scale that defines the 'direction' of the stack. For ex. BarElements are stacked horizontally with 
 		 * stack100 and vertically with normal stack. Columns (for both polar and cartesians)

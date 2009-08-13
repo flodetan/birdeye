@@ -27,21 +27,15 @@
  
  package birdeye.vis.scales
 {
-	import birdeye.vis.interfaces.IEnumerableScale;
+	import birdeye.vis.interfaces.scales.INumerableScale;
+	import birdeye.vis.interfaces.scales.IScale;
+	import birdeye.vis.interfaces.scales.ISubScale;
 	
-	import com.degrafa.GeometryComposition;
-	import com.degrafa.geometry.Line;
-	import com.degrafa.geometry.RasterTextPlus;
-	import com.degrafa.paint.SolidFill;
-	import com.degrafa.paint.SolidStroke;
-	import com.degrafa.transform.RotateTransform;
-	
-	import flash.text.TextFieldAutoSize;
-	import flash.utils.getTimer;
+	import mx.core.IFactory;
 	
 	[Exclude(name="scaleType", kind="property")]
 	[Exclude(name="dataProvider", kind="property")]
-	public class Category extends XYZ implements IEnumerableScale
+	public class Category extends BaseScale implements ISubScale
 	{
  		/** Define the category strings for category scales.*/
 		override public function set dataValues(val:Array):void
@@ -61,11 +55,21 @@
 		public function set dataProvider(val:Array):void
 		{
 			_dataProvider = val;
-			invalidateProperties();
+			invalidate();
 		}
 		public function get dataProvider():Array
 		{
 			return _dataProvider;
+		}
+		
+		/**
+		 * Returns all the data values</br>
+		 * For a numeric scale this is min and max and everything in between.</br>
+		 * For a category scale this is identical to dataValues.</br>
+		 */
+		public function get completeDataValues():Array
+		{
+			return this.dataProvider;
 		}
 		
 		private var _categoryField:String;
@@ -74,7 +78,8 @@
 		public function set categoryField(val:String):void
 		{
 			_categoryField = val;
-			invalidateProperties();
+			
+			invalidate();
 		}
 		public function get categoryField():String
 		{
@@ -85,15 +90,83 @@
 		public function set initialOffset(val:Number):void
 		{
 			_initialOffset = val;
+			invalidate();
 		} 
-
-		override public function get maxLblSize():Number
+		
+		private var _subScale:IFactory;
+		public function set subScale(val:IFactory):void
 		{
-			if (isNaN(_maxLblSize) && dataProvider)
-				maxLabelSize();
-			return _maxLblSize;
+			_subScale = val;
 		}
-
+		
+		public function get subScale():IFactory
+		{
+			return _subScale;
+		}
+		
+		public function get subScalesActive():Boolean
+		{
+			return _subScale != null;
+		}
+		
+		private var _subScalesSize:Number;
+		public function set subScalesSize(val:Number):void
+		{
+			_subScalesSize = val;
+			if (_subScales)
+			{
+				for each (var sc:IScale in _subScales)
+				{
+					sc.size = val;
+				}
+			}
+			
+		}
+		
+		public function get subScalesSize():Number
+		{
+			return _subScalesSize;
+		}
+		
+		
+		private var _minMax:Array;
+		private var _subScales:Array;
+		public function feedMinMax(minMaxData:Array):void
+		{
+			_minMax = minMaxData;
+			invalidate();
+		}
+		
+		public function get subScales():Array
+		{
+			return _subScales;
+		}
+		
+		override public function commit():void
+		{
+			if (isInvalidated)
+			{
+				super.commit();
+		
+				if (subScale)
+				{
+					_subScales = new Array(_minMax.length);
+					
+					for (var c:Object in _minMax)
+					{
+						var s:INumerableScale = _subScale.newInstance();
+						s.min = _minMax[c].min;
+						s.max = _minMax[c].max;
+						s.size = _subScalesSize;
+						s.dimension = dimension;
+						_subScales[c] = s;
+						s.commit();
+					}			
+				}
+			}
+			
+		}
+		
 		// UIComponent flow
 		
 		public function Category()
@@ -102,193 +175,7 @@
 			_scaleType = BaseScale.CATEGORY;
 			_dataInterval = 1;
 		}
-		
-		override protected function commitProperties():void
-		{
-			super.commitProperties();
 			
-			// the interval is given by the axis lenght divided the number of 
-			// category elements loaded in the CategoryAxis
-			if (dataProvider && dataProvider.length >0)
-			{
-				var recIsGivenInterval:Boolean = isGivenInterval;
-				if (_scaleInterval != size/dataProvider.length)
-					scaleInterval = size/dataProvider.length;
-					
-				isGivenInterval = recIsGivenInterval;
-			}
-		}
-		
-		override protected function measure():void
-		{
-			super.measure();
- 			if (dataProvider && dataProvider.length>0 && placement)
-				maxLabelSize();
- 		}
- 		
-		// other methods
-		
-		/** @Private
-		 * Calculate the maximum label size, necessary to define the needed 
-		 * width (for y axes) or height (for x axes) of the CategoryAxis.*/
-		override protected function maxLabelSize():void
-		{
-			var tmp:RasterTextPlus = new RasterTextPlus();
- 			tmp.fontFamily = fontLabel;
- 			tmp.fontSize = sizeLabel;
-			tmp.autoSize = TextFieldAutoSize.LEFT;
-			tmp.autoSizeField = true;
-
-			_maxLblSize = 0;
-			for (var i:Number = 0; i<_dataProvider.length; i++)
-			{
-				tmp.text = String(_dataProvider[i]);
-				_maxLblSize = Math.max(_maxLblSize, tmp.displayObject.width); 
-			}
-
-			switch (placement)
-			{
-				case TOP:
-				case BOTTOM:
-				case HORIZONTAL_CENTER:
-					height = Math.max(5, _maxLblSize * Math.sin(-_rotateLabels));
-					break;
-				case LEFT:
-				case RIGHT:
-				case DIAGONAL:
-				case VERTICAL_CENTER:
-					width = Math.max(5, _maxLblSize * Math.cos(_rotateLabels));
-					break;
-			}
-			
-			// calculate the maximum label size according to the 
-			// styles defined for the axis 
-			super.calculateMaxLabelStyled();
-		}
-		
-		/** @Private
-		 * Implement the drawAxes method to draw the axis according to its orientation.*/
-		override protected function drawAxes(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
-		{
-			if (dataProvider && dataProvider.length>0)
-				scaleInterval = size/dataProvider.length;
-			else 
-				_scaleInterval = NaN;
-
-			var snap:Number, dataProviderIndex:Number=0;
-
-			if (isNaN(_maxLblSize) && dataProvider && dataProvider.length>0 && placement)
-				maxLabelSize();
-
-			if (_scaleInterval > 0 && invalidated)
-			{
-trace(getTimer(), "drawing category scale");
-				invalidated = false;
-				
-				// vertical orientation
-				if (xMin == xMax)
-				{
-					for (snap = yMax - _scaleInterval/2; snap>yMin; snap -= _scaleInterval*_dataInterval)
-					{
-
-						// create thick line
-			 			thick = new Line(xMin + thickWidth * sign, snap, xMax, snap);
-						thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
-						gg.geometryCollection.addItem(thick);
-			
-						// create label 
-	 					label = new RasterTextPlus();
-						label.text = String(dataProvider[dataProviderIndex]);
-						dataProviderIndex += _dataInterval;
-	 					label.fontFamily = fontLabel;
-	 					label.fontSize = sizeLabel;
-	 					label.visible = true;
-						label.autoSize = TextFieldAutoSize.LEFT;
-						label.autoSizeField = true;
-						if (!isNaN(_rotateLabels) || _rotateLabels != 0)
-						{
-							var rot:RotateTransform = new RotateTransform();
-							rot = new RotateTransform();
-							switch (placement)
-							{
-								case RIGHT:
-									_rotateLabelsOn = "centerLeft";
-									break;
-								case LEFT:
-									_rotateLabelsOn = "centerRight";
-									break;
-							}
-							rot.registrationPoint = _rotateLabelsOn;
-							rot.angle = _rotateLabels;
-							label.transform = rot;
-						}
-						
-						label.y = snap-label.displayObject.height/2;
-						label.x = Math.min(thickWidth, (label.displayObject.width + thickWidth) * sign);
-						label.fill = new SolidFill(colorLabel);
-						gg.geometryCollection.addItem(label);
-					}
-				} 
-				else 
-				// horizontal orientation
-				{
-					for (snap = xMin + _scaleInterval/2; snap<xMax; snap += _scaleInterval*_dataInterval)
-					{
-						
-						// create thick line
-			 			thick = new Line(snap, yMin + thickWidth * sign, snap, yMax);
-						thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
-						gg.geometryCollection.addItem(thick);
-	
-						// create label 
-	 					label = new RasterTextPlus();
-						label.text = String(dataProvider[dataProviderIndex]);
-						dataProviderIndex += _dataInterval;
-	 					label.fontFamily = fontLabel;
-	 					label.fontSize = sizeLabel;
-	 					label.visible = true;
-						label.autoSize = TextFieldAutoSize.LEFT;
-						label.autoSizeField = true;
-						if (!isNaN(_rotateLabels) && _rotateLabels != 0)
-						{
-							rot = new RotateTransform();
-							switch (placement)
-							{
-								case TOP:
-									_rotateLabelsOn = "centerLeft";
-									label.x = snap; 
-									break;
-								case BOTTOM:
-									_rotateLabelsOn = "topRight";
-									// since the label rotates on his right end point we have to move it back
-									// of his total width lenght
-									label.x = snap-label.displayObject.width*.9; 
-									break;
-							}
-							rot.registrationPoint = _rotateLabelsOn;
-							rot.angle = _rotateLabels;
-							label.transform = rot;
-						} else
-							label.x = snap-label.displayObject.width/2; 
-							
-						label.y = thickWidth - ((sign<0) ? label.displayObject.height : 0);
-						label.fill = new SolidFill(colorLabel);
-						gg.geometryCollection.addItem(label);
-					}
-				}
-trace(getTimer(), "drawing category scale");
-			}
-		}
-		
-		override protected function isReadyForLayout():Boolean
-		{
-			var globalCheck:Boolean = super.isReadyForLayout();
-			
-			// if placement is set, elements are loaded and interval calculated
-			// than the axis is ready to be drawn
-			globalCheck = globalCheck && (dataProvider && _categoryField);
-			return globalCheck;
-		}
 		
 		/** @Private
 		 * Override the XYZAxis getPostion method based on the linear scaling.*/
@@ -296,19 +183,17 @@ trace(getTimer(), "drawing category scale");
 		{
 			var pos:Number = NaN;
 			
-			switch (placement)
+			switch (dimension)
 			{
-				case BOTTOM:
-				case TOP:
+				case DIMENSION_1:
 					pos = ((dataProvider.indexOf(dataValue)+_initialOffset) / dataProvider.length) * size;
 					break;
-				case LEFT:
-				case RIGHT:
+				case DIMENSION_2:
 					pos = size - ((dataProvider.indexOf(dataValue)+_initialOffset) / dataProvider.length) * size;
 					break;
-				case DIAGONAL:
-					pos = ((dataProvider.indexOf(dataValue)+_initialOffset) / dataProvider.length) * size;
-					break;
+				//case DIAGONAL:
+				//	pos = ((dataProvider.indexOf(dataValue)+_initialOffset) / dataProvider.length) * size;
+				//		break;
 			}
 				
 			return pos;
@@ -317,8 +202,6 @@ trace(getTimer(), "drawing category scale");
 		override public function resetValues():void
 		{
 			super.resetValues();
-			invalidated = true;
-			_maxLblSize = NaN;
 				
 			_dataProvider = [];
 		}

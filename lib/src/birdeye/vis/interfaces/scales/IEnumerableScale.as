@@ -24,35 +24,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package birdeye.vis.interfaces
+ 
+ package birdeye.vis.interfaces.scales
 {
-	import com.degrafa.geometry.Line;
-	
-	public interface IScaleUI extends IScale
+	public interface IEnumerableScale extends IScale
 	{
-		/** Position the axis pointer on the specific Y coordinate value. */ 
-		function set pointerY(val:Number):void;
-
-		/** Position the axis pointer on the specific X coordinate value. */ 
-		function set pointerX(val:Number):void;
+		/** Set-get the dataProvider that have to be enumerable. */
+		function set dataProvider(val:Array):void
+		function get dataProvider():Array
 		
-		/** Get the axis pointer. Can be used to change colors, stroke, visibility...*/
-		function get pointer():Line;
-
-		/** If true, create and show the axis.*/
-		function set showAxis(val:Boolean):void;
-
-		/** Draw the scale.*/
-		function draw():void
-
-		/** The axis must provide the removal all elements when refreshed, thus insuring
-		 * both display refresh and memory clearing.*/
-		function removeAllElements():void
-		
-		/**
-		 * The targets where the axis is drawn.
-		 */
-		function get targets():Array;
+		/** Category field that is used to filter elements.*/
+		function set categoryField(val:String):void
+		function get categoryField():String
 	}
 }

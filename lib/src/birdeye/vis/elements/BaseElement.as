@@ -28,17 +28,16 @@
 package birdeye.vis.elements
 {
 	import birdeye.events.ElementDataItemsChangeEvent;
-	import birdeye.vis.VisScene;
-	import birdeye.vis.coords.Cartesian;
+	import birdeye.vis.coords.BaseCoordinates;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.collision.StackElement;
+	import birdeye.vis.elements.events.ElementRollOutEvent;
+	import birdeye.vis.elements.events.ElementRollOverEvent;
 	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IElement;
-	import birdeye.vis.interfaces.IEnumerableScale;
-	import birdeye.vis.interfaces.INumerableScale;
-	import birdeye.vis.interfaces.IScale;
-	import birdeye.vis.interfaces.IScaleUI;
-	import birdeye.vis.scales.BaseScale;
+	import birdeye.vis.interfaces.scales.IEnumerableScale;
+	import birdeye.vis.interfaces.scales.INumerableScale;
+	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.MultiScale;
 	
 	import com.degrafa.GeometryGroup;
@@ -261,9 +260,7 @@ package birdeye.vis.elements
 		private var _scale1:IScale;
 		public function set scale1(val:IScale):void
 		{
-			_scale1 = val;
-			if (_scale1.placement != BaseScale.BOTTOM && _scale1.placement != BaseScale.TOP)
-				_scale1.placement = BaseScale.BOTTOM;
+			_scale1 = val;				
 
 			invalidateProperties();
 			invalidatingDisplay();
@@ -278,6 +275,7 @@ package birdeye.vis.elements
 		{
 			_scale2 = val;
 			
+
 /* 			if POLAR
 			if (val is IScaleUI && IScaleUI(_scale2).placement != BaseScale.HORIZONTAL_CENTER 
 								&& IScaleUI(_scale2).placement != BaseScale.VERTICAL_CENTER)
@@ -299,8 +297,6 @@ package birdeye.vis.elements
 		public function set scale3(val:IScale):void
 		{
 			_scale3 = val;
-			if (_scale3.placement != BaseScale.DIAGONAL)
-				_scale3.placement = BaseScale.DIAGONAL;
 
 			invalidateProperties();
 			invalidatingDisplay();
@@ -518,11 +514,11 @@ package birdeye.vis.elements
 		  		// to let the chart update with the element data provider change. in fact
 		  		// the element dataprovider modifies the chart data and axes properties
 		  		// therefore it modifies the chart properties and displaying
-		  		if (chart is Cartesian)
+		  		if (chart is BaseCoordinates)
 		  		{
-			  		Cartesian(chart).axesFeeded = false;
-			  		Cartesian(chart).invalidateProperties();
-			  		Cartesian(chart).invalidateDisplayList();
+			  		BaseCoordinates(chart).axesFeeded = false;
+			  		BaseCoordinates(chart).invalidateProperties();
+			  		BaseCoordinates(chart).invalidateDisplayList();
 		  		}
 
 	  			invalidatedData = true;
@@ -872,7 +868,9 @@ package birdeye.vis.elements
 			super.commitProperties();
 
 			if (invalidatedData && _cursor)
+			{
 				loadElementsValues();
+			}
 			
 			// since we use Degrafa, the background is needed in the element
 			// to allow events for tooltips all over the element.
@@ -947,7 +945,7 @@ package birdeye.vis.elements
 			if (_invalidatedElementGraphic)
 				drawElement();
 		}
-
+		
 		protected var dataFields:Array;
 		public function drawElement():void
 		{
@@ -961,7 +959,7 @@ package birdeye.vis.elements
 			dataFields["dim3"] = dim3;
 			dataFields["colorField"] = colorField;
 			dataFields["sizeField"] = sizeField;
-	
+
 			if (stylesChanged)
 			{
 				// Redraw gradient fill only if style changed.
@@ -1088,9 +1086,6 @@ package birdeye.vis.elements
 				axesCheck = axesCheck && (scale1.size>0);
 			} 
 
-			if ((multiScale && multiScale.scales) || (chart.multiScale && chart.multiScale.scales))
-				axesCheck = true;
-
 			var colorsCheck:Boolean = 
 				(fill || stroke || colorScale);
 
@@ -1123,34 +1118,39 @@ package birdeye.vis.elements
 					showGeometryTip(extGG);
 				}
 			}
-
-			if (scale1 && scale1 is IScaleUI && IScaleUI(scale1).pointer && chart.coordType == VisScene.CARTESIAN)
-			{
-				var tmpDim1:String;
+			
+			var rollOverE:ElementRollOverEvent = new ElementRollOverEvent(ElementRollOverEvent.ELEMENT_ROLL_OVER);
+			
+			var tmpDim1:String;
 				if (dim1 is Array)
 					tmpDim1 = dim1[extGG.collisionTypeIndex];
 				else 
 					tmpDim1 = String(dim1);
-				IScaleUI(scale1).pointerX = IScaleUI(scale1).getPosition(extGG.currentItem[tmpDim1]);
-				IScaleUI(scale1).pointer.visible = true;
-			}
-			
-			if (scale2 && scale2 is IScaleUI && IScaleUI(scale2).pointer && chart.coordType == VisScene.CARTESIAN)
-			{
-				var tmpDim2:String;
+					
+			var tmpDim2:String;
 				if (dim2 is Array)
 					tmpDim2 = dim2[extGG.collisionTypeIndex];
 				else 
 					tmpDim2 = String(dim2);
-				IScaleUI(scale2).pointerY = IScaleUI(scale2).getPosition(extGG.currentItem[tmpDim2]);
-				IScaleUI(scale2).pointer.visible = true;
-			} 
-
-			if (scale3 && scale3 is IScaleUI && IScaleUI(scale3).pointer && chart.coordType == VisScene.CARTESIAN)
-			{
-				IScaleUI(scale3).pointerY = extGG.posZ;
-				IScaleUI(scale3).pointer.visible = true;
-			}
+					
+			var tmpDim3:String;
+				if (dim3 is Array)
+					tmpDim3 = dim2[extGG.collisionTypeIndex];
+				else
+					tmpDim3 = String(dim3);
+			
+		
+			rollOverE.dim1 = tmpDim1;
+			rollOverE.dim2 = tmpDim2;
+			rollOverE.dim3 = tmpDim3
+			rollOverE.scale1 = scale1;
+			rollOverE.scale2 = scale2;
+			rollOverE.scale3 = scale3;
+			rollOverE.pos1 = extGG.currentItem[tmpDim1];
+			rollOverE.pos2 = extGG.currentItem[tmpDim2];
+			rollOverE.pos3 = extGG.currentItem[tmpDim3];
+			
+			chart.dispatchEvent(rollOverE);
 			
 			if (_mouseOverFunction != null)
 				_mouseOverFunction(extGG);
@@ -1172,15 +1172,10 @@ package birdeye.vis.elements
 				myTT = null;
 				toolTip = null;
 			}
-
-			if (scale1 && scale1 is IScaleUI && IScaleUI(scale1).pointer)
-				IScaleUI(scale1).pointer.visible = false;
-
-			if (scale2 && scale2 is IScaleUI && IScaleUI(scale2).pointer)
-				IScaleUI(scale2).pointer.visible = false;
-
-			if (scale3 && scale3 is IScaleUI && IScaleUI(scale3).pointer)
-				IScaleUI(scale3).pointer.visible = false;
+			
+			var rolloutE:ElementRollOutEvent = new ElementRollOutEvent(ElementRollOutEvent.ELEMENT_ROLL_OUT);
+			
+			chart.dispatchEvent(rolloutE);
 
 			if (_mouseOutFunction != null)
 				_mouseOutFunction(extGG);
@@ -1276,10 +1271,10 @@ package birdeye.vis.elements
 			{
 				// if no tips but interactivity is required than add roll over events and pass
 				// data and positioning information about the current data item 
-				ttGG.create(item, dataFields, xPos, yPos, zPos, NaN, collisionIndex, null, NaN, NaN, false);
+				ttGG.create(item, dataFields, xPos, yPos, zPos, NaN,collisionIndex,  null, NaN, NaN, false);
 			} else {
 				// if no tips and no interactivity than just add location info needed for pointers
-				ttGG.create(null, null, xPos, yPos, zPos, NaN, collisionIndex, null, NaN, NaN, false);
+				ttGG.create(null, null, xPos, yPos, zPos, NaN,collisionIndex, null, NaN, NaN, false);
 			}
 
 			if (chart.showAllDataTips)

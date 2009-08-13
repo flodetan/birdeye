@@ -32,7 +32,8 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.UpTriangleRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
-	import birdeye.vis.interfaces.INumerableScale;
+	import birdeye.vis.interfaces.scales.INumerableScale;
+	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.GraphicPoint;
@@ -188,6 +189,11 @@ trace (getTimer(), "area ele");
 			 				ttShapes[0] = line;
 					}
 					
+					if (scale1 is ISubScale && (scale1 as ISubScale).subScalesActive)
+					{
+						pos2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(currentItem[dim2]);
+					}
+					
 					var scale2RelativeValue:Number = NaN;
 	
 					if (scale3)
@@ -200,20 +206,7 @@ trace (getTimer(), "area ele");
 						// up side down. this trick allows to visualize the y axis as
 						// if it would be a z. when there will be a 3d line class, it will 
 						// be replaced
-						scale2RelativeValue = XYZ(scale3).height - zPos;
-					}
-	
-					if (multiScale)
-					{
-						pos1 = multiScale.scale1.getPosition(currentItem[dim1]);
-						pos2 = INumerableScale(multiScale.scales[
-											currentItem[multiScale.dim1]
-											]).getPosition(currentItem[dim2]);
-					} else if (chart.multiScale) {
-						pos1 = chart.multiScale.scale1.getPosition(currentItem[dim1]);
-						pos2 = INumerableScale(chart.multiScale.scales[
-											currentItem[chart.multiScale.dim1]
-											]).getPosition(currentItem[dim2]);
+						scale2RelativeValue = scale3.size - zPos;
 					}
 	
 					if (colorScale)

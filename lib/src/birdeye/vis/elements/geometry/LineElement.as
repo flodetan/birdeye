@@ -32,7 +32,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.guides.renderers.LineRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
-	import birdeye.vis.interfaces.INumerableScale;
+	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.GraphicPoint;
@@ -121,6 +121,7 @@ trace (getTimer(), "drawing line ele");
 					if (scale1)
 					{
 						pos1 = scale1.getPosition(currentItem[dim1]);
+						
 					}
 					
 					if (scale2)
@@ -128,25 +129,17 @@ trace (getTimer(), "drawing line ele");
 						pos2 = scale2.getPosition(currentItem[dim2]);
 					}
 					
+					if (scale1 is ISubScale && (scale1 as ISubScale).subScalesActive)
+					{
+						pos2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(currentItem[dim2]);
+					}
+					
 					var scale2RelativeValue:Number = NaN;
 	
 					if (scale3)
 					{
 						zPos = scale3.getPosition(currentItem[dim3]);
-						scale2RelativeValue = XYZ(scale3).height - zPos;
-					}
-
-					if (multiScale)
-					{
-						pos1 = multiScale.scale1.getPosition(currentItem[dim1]);
-						pos2 = INumerableScale(multiScale.scales[
-											currentItem[multiScale.dim1]
-											]).getPosition(currentItem[dim2]);
-					} else if (chart.multiScale) {
-						pos1 = chart.multiScale.scale1.getPosition(currentItem[dim1]);
-						pos2 = INumerableScale(chart.multiScale.scales[
-											currentItem[chart.multiScale.dim1]
-											]).getPosition(currentItem[dim2]);
+						scale2RelativeValue = scale3.size - zPos;
 					}
 	
 					if (chart.coordType == VisScene.POLAR)

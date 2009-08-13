@@ -47,72 +47,26 @@
 		}
 		
 		// other methods
-
-		/** @Private
-		 * Draw axes depending on their orientation:
-		 * xMin == xMax means that the orientation is vertical; 
-		 * yMin == yMax means that the orientation is horizontal.
-		 */
-		override protected function drawAxes(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
+		
+		override public function get completeDataValues():Array
 		{
+			var tmp:Array = new Array();
+			
 			var tmpInterval:Number = (Math.log(min)<=1)? 0: Math.log(min);
 			var snap:Number = Math.pow(10,tmpInterval);
 			
-			if (isNaN(maxLblSize) && !isNaN(min) && !isNaN(max) && placement)
-				maxLabelSize();
-
-			if (size > 0 && !isNaN(dataInterval))
-			{	
-				if (xMin == xMax)
+			for (; snap<max; tmpInterval++)
+			{
+				for (snap = Math.pow(10,tmpInterval); 
+					snap<max && snap<Math.pow(10,tmpInterval+1); 
+					snap += Math.pow(10, tmpInterval) * ((isGivenInterval)? dataInterval:1))
 				{
-					for (; snap<max; tmpInterval++)
-					{
-						for (snap = Math.pow(10,tmpInterval); 
-							snap<max && snap<Math.pow(10,tmpInterval+1); 
-							snap += Math.pow(10, tmpInterval) * ((isGivenInterval)? dataInterval:1))
-						{
-							// create thick line
-				 			thick = new Line(xMin + thickWidth * sign, getPosition(snap), xMax, getPosition(snap));
-							thick.stroke = new SolidStroke(_colorStroke, 1,_weightStroke);
-							gg.geometryCollection.addItem(thick);
-				
-							// create label 
-		 					label = new RasterTextPlus();
-		 					label.fontFamily = fontLabel;
-		 					label.fontSize = sizeLabel;
-							label.text = String(Math.round(snap));
-		 					label.visible = true;
-							label.autoSize = TextFieldAutoSize.LEFT;
-							label.autoSizeField = true;
-							label.y = getPosition(snap)-label.displayObject.height/2;
-							label.x = thickWidth * sign; 
-							label.fill = new SolidFill(colorLabel);
-							gg.geometryCollection.addItem(label);
-						}
-					}
-				} else {
-					for (snap = min; snap<max; snap += dataInterval)
-					{
-						// create thick line
-			 			thick = new Line(getPosition(snap), yMin + thickWidth * sign, getPosition(snap), yMax);
-						thick.stroke = new SolidStroke(_colorStroke, 1,_weightStroke);
-						gg.geometryCollection.addItem(thick);
-	
-						// create label 
-	 					label = new RasterTextPlus();
-						label.text = String(Math.round(snap));
-	 					label.fontFamily = fontLabel;
-	 					label.fontSize = sizeLabel;
-	 					label.visible = true;
-						label.autoSize = TextFieldAutoSize.LEFT;
-						label.autoSizeField = true;
-						label.y = thickWidth;
-						label.x = getPosition(snap)-label.displayObject.width/2; 
-						label.fill = new SolidFill(colorLabel);
-						gg.geometryCollection.addItem(label);
-					}
+					tmp.push(snap);		
+					
 				}
 			}
+			
+			return tmp;
 		}
 		
 		/** @Private
@@ -125,16 +79,12 @@
 			var logDataValue:Number = (Number(dataValue)<=1) ? 0 : Math.log(Number(dataValue));
 			
 			if (! (isNaN(max) || isNaN(min)))
-				switch (placement)
+				switch (dimension)
 				{
-					case BOTTOM:
-					case TOP:
-					case HORIZONTAL_CENTER:
+					case DIMENSION_1:
 						pos = size * (logDataValue - logMin)/(logMax - logMin);
 						break;
-					case LEFT:
-					case RIGHT:
-					case VERTICAL_CENTER:
+					case DIMENSION_2:
 						pos = size * (1 - (logDataValue - logMin)/(logMax - logMin));
 						break;
 				}

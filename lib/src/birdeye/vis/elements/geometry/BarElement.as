@@ -32,8 +32,8 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.RectangleRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
-	import birdeye.vis.interfaces.IEnumerableScale;
-	import birdeye.vis.interfaces.INumerableScale;
+	import birdeye.vis.interfaces.scales.IEnumerableScale;
+	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
@@ -42,6 +42,7 @@ package birdeye.vis.elements.geometry
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
+	import flash.utils.getTimer;
 	
 	import mx.core.ClassFactory;
 
@@ -79,6 +80,7 @@ package birdeye.vis.elements.geometry
 		{
 			if (isReadyForLayout() && _invalidatedElementGraphic)
 			{
+trace(getTimer(), "drawing bar");
 				super.drawElement();
 				removeAllElements();
 
@@ -164,7 +166,7 @@ package birdeye.vis.elements.geometry
 				 				ttShapes[0] = line;
 								break;
 							case STACKED:
-								yPos = yPos + size/2 - size/_total * _stackPosition;
+								yPos = yPos + size/2 - size/_total * (_stackPosition + 1);
 								barWidth  = size/_total;
 								break;
 						}
@@ -199,7 +201,7 @@ package birdeye.vis.elements.geometry
 						if (scale3)
 						{
 							zPos = scale3.getPosition(currentItem[dim3]);
-							scale2RelativeValue = XYZ(scale3).height - zPos;
+							scale2RelativeValue = scale3.size - zPos;
 						}
 		
 						if (colorScale)
@@ -260,7 +262,9 @@ package birdeye.vis.elements.geometry
 						zSort();
 					_invalidatedElementGraphic = false;
 				}
+	trace(getTimer(), "END drawing bar");
 			}
+
 		}
 		
 		private function getXMinPosition():Number

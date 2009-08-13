@@ -51,18 +51,6 @@
 		{
 			super();
 			_scaleType = BaseScale.CONSTANT;
-			showLabels = false;
-			_maxLblSize = 0;
-		}
-		
-		override protected function commitProperties():void
-		{
-			super.commitProperties();
-		}
-		
-		override protected function updateDisplayList(w:Number, h:Number):void
-		{
-			super.updateDisplayList(w,h);
 		}
 		
 		// other methods
@@ -79,16 +67,12 @@
 			if (!isNaN(_constant))
 			{
 				if (! (isNaN(max) || isNaN(min)))
-					switch (placement)
+					switch (dimension)
 					{
-						case BOTTOM:
-						case TOP:
-						case HORIZONTAL_CENTER:
+						case DIMENSION_1:
 							pos = _constant;
 							break;
-						case LEFT:
-						case RIGHT:
-						case VERTICAL_CENTER:
+						case DIMENSION_2:
 							pos = size - _constant;
 							break;
 					}

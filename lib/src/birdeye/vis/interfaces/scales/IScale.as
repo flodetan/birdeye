@@ -25,11 +25,12 @@
  * THE SOFTWARE.
  */
  
-package birdeye.vis.interfaces
+package birdeye.vis.interfaces.scales
 {
 	import flash.geom.Point;
+	import birdeye.vis.interfaces.validation.IValidatingScale;
 	
-	public interface IScale
+	public interface IScale extends IValidatingScale
 	{
 		/** Calculates and returns the coordinate of a data value in the axis (depends on 
 		 * scale type). */
@@ -63,11 +64,20 @@ package birdeye.vis.interfaces
  		 * scale. The values array has higher priority over the min, max and dataProvider properties.*/
 		function set dataValues(val:Array):void
 		function get dataValues():Array
+		
+		/**
+		 * Returns all the data values</br>
+		 * For a numeric scale this is min and max and everything in between.</br>
+		 * For a category scale this is identical to dataValues.</br>
+		 */
+		function get completeDataValues():Array
 
-		/** Set the axis placement.*/
-		function set placement(val:String):void
-		function get placement():String
 
+		/**
+		 * Set X|Y|Z based on
+		 */ 
+		function set dimension(dim:String):void
+		function get dimension():String;
 
 /*		/** Set the origin point of the scale.
 		function set origin(val:Point):void

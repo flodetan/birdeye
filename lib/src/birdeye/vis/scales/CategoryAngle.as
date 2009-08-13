@@ -27,7 +27,6 @@
  
  package birdeye.vis.scales
 {
-	import birdeye.vis.interfaces.IEnumerableScale;
 	
 	public class CategoryAngle extends Category
 	{
@@ -46,7 +45,6 @@
 
 		public function CategoryAngle():void
 		{
-			showAxis = false;
 			scaleValues = [0,360];
 			_scaleInterval = NaN;
 		}

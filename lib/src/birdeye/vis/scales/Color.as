@@ -34,13 +34,7 @@
 	{
 		public function Color():void
 		{
-			showAxis = false;
 			_scaleValues = [0x000000,0xffffff];
-		}
-		
-		override protected function updateDisplayList(w:Number, h:Number):void
-		{
-			// no need to draw
 		}
 		
 		// other methods
