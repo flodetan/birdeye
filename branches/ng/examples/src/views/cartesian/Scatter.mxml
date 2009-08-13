@@ -53,7 +53,7 @@
 		<coords:scales>
 		 	<scales:Category id="c" categoryField="subject" />
 		 	<scales:Linear id="l" />
-			<scales:Linear id="size" scaleValues="[10,30]" />
+			<scales:Linear id="size" scaleValues="[0,30]" />
 		</coords:scales>
 		<coords:guides>
 			<axis:Axis scale="{c}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="15" sizePointer="12" />
