@@ -126,11 +126,6 @@ trace (getTimer(), "area ele");
 				var y0:Number = getYMinPosition();
 				var y0Prev:Number;
 
-				// shapes array defining the tooltip geometries
-				var ttShapes:Array;
-				// tooltip distance from the hitarea position
-				var ttXoffset:Number = NaN, ttYoffset:Number = NaN;
-				
 				poly = new Polygon();
 				poly.data = "";
 	
@@ -175,18 +170,6 @@ trace (getTimer(), "area ele");
 						} else 
 							// if not stacked, than the y coordinate is given by the own y axis
 							pos2 = scale2.getPosition(currentItem[dim2]);
-					}
-					
-					// if stacked 100 than change the default tooltip shape to a line
-					// that won't be covered by the children layering
-					if (_stackType == STACKED100)
-					{
-							ttShapes = [];
-							ttXoffset = -30;
-							ttYoffset = 20;
-							var line:Line = new Line(pos1, pos2, pos1 + + ttXoffset/3, pos2 + ttYoffset);
-							line.stroke = stroke;
-			 				ttShapes[0] = line;
 					}
 					
 					if (scale1 is ISubScale && (scale1 as ISubScale).subScalesActive)

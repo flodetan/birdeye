@@ -87,9 +87,6 @@ trace(getTimer(), "drawing bar");
 				var xPos:Number, yPos:Number, zPos:Number = NaN;
 				var j:Object;
 	
-				var ttShapes:Array;
-				var ttXoffset:Number = NaN, ttYoffset:Number = NaN;
-			
 				var x0:Number = getXMinPosition();
 				var size:Number = NaN, barWidth:Number = 0; 
 				if (scale2)
@@ -158,12 +155,6 @@ trace(getTimer(), "drawing bar");
 							case STACKED100:
 								barWidth  = size;
 								yPos = yPos - size/2;
-								ttShapes = [];
-								ttXoffset = -20;
-								ttYoffset = 50;
-								var line:Line = new Line(xPos, yPos + barWidth/2, xPos + ttXoffset/3, yPos + barWidth/2 + ttYoffset);
-								line.stroke = stroke;
-				 				ttShapes[0] = line;
 								break;
 							case STACKED:
 								yPos = yPos + size/2 - size/_total * (_stackPosition + 1);
@@ -185,11 +176,6 @@ trace(getTimer(), "drawing bar");
 							case STACKED:
 								innerBarWidth = barWidth/tmpArray.length;
 								yPos = yPos + innerBarWidth * i;
-								if (ttShapes && ttShapes[0] is Line)
-								{
- 					 				Line(ttShapes[0]).y = yPos + innerBarWidth/2;
-					 				Line(ttShapes[0]).y1 = yPos + innerBarWidth/2 + ttYoffset;
- 								}
 								break;
 						}
 							
@@ -215,7 +201,7 @@ trace(getTimer(), "drawing bar");
 		
 						// yAxisRelativeValue is sent instead of zPos, so that the axis pointer is properly
 						// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-						createTTGG(currentItem, dataFields, xPos, yPos+innerBarWidth/2, scale2RelativeValue, 3, i, ttShapes,ttXoffset,ttYoffset);
+						createTTGG(currentItem, dataFields, xPos, yPos+innerBarWidth/2, scale2RelativeValue, 3, i);
 		
 						if (dim3)
 						{
