@@ -1471,7 +1471,7 @@ BaseElement {
 	labelColor: #000000;
 }
 
-BaseScale {
+Axis {
 	/* axis label */
 	labelFont: "verdana";
 	labelSize: 9;

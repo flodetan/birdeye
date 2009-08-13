@@ -7,7 +7,7 @@
 	xmlns:legend="birdeye.vis.guides.legend.*"
 	xmlns:facets="birdeye.vis.facets.*"
 	backgroundColor="#3f3f3f" 
-	creationComplete="createDT()" >
+	creationComplete="createDT()" xmlns:axis="birdeye.vis.guides.axis.*" xmlns:grid="birdeye.vis.guides.grid.*">
 
 <mx:Script>
 		<![CDATA[
@@ -76,21 +76,26 @@
 			<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4,a5])"/>
 		</mx:HBox>
 		       	<coords:Cartesian id="cc4" width="90%" height="90%" dataTipFunction="dtFunc" showDataTips="true" dataProvider="{dt}" 
-       		type="stacked100" showGrid="true">
+       		type="stacked100">
 			<coords:scales>
- 				<scales:Category id="c3" categoryField="type" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" showPointer="false" sizeLabel="12"/>
- 				<scales:Category id="c2" categoryField="subject" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" showPointer="false" numberOfIntervals="1" sizeLabel="12"/>
+ 				<scales:Category id="c3" categoryField="type" />
+ 				<scales:Category id="c2" categoryField="subject" />
 			</coords:scales>
+			<coords:guides>
+				<axis:Axis scale="{c3}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" sizeLabel="12" />
+				<axis:Axis scale="{c2}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" sizeLabel="12" />
+				<grid:Grid scale1="{c3}" scale2="{c2}" />
+			</coords:guides>
     		 <coords:elements>
     		 	<elements:PointElement scale1="{c3}" scale2="{c2}" dim1="type" dim2="subject" styleName="solid1" displayName="R3">
     		 		<elements:itemRenderer>
         		 		<facets:FacetContainer>
         		 			<facets:coord>
-        		 				<coords:Polar id="p1" showDataTips="true" columnWidthRate="0.5" showGrid="false"/>
+        		 				<coords:Polar id="p1" showDataTips="true" columnWidthRate="0.5" />
         		 			</facets:coord>
         		 			<facets:scales>
- 							 	<scales:CategoryAngle id="c" categoryField="pressure" placement="horizontal_center" fontLabel="tahoma" sizeLabel="9" showPointer="false" showAxis="true"/>
-							 	<scales:Linear id="l" placement="left" fontLabel="tahoma" sizeLabel="9" showAxis="false" numberOfIntervals="1" showPointer="false" height="100"/>       		 				
+ 							 	<scales:CategoryAngle id="c" categoryField="pressure" />
+							 	<scales:Linear id="l" numberOfIntervals="1" size="100"/>       		 				
         		 			</facets:scales>
         		 			<facets:elements>
         		 				<elements:LineElement id="a1" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R1" styleName="solid1" displayName="R1" />

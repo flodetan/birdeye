@@ -3,6 +3,7 @@
 	backgroundColor="#3f3f3f"
 	width="100%" height="100%" 
 	xmlns:polar="views.polar.*"
+	xmlns:stack="views.polar.stacks.*"
 	 >
 	
 
@@ -15,5 +16,7 @@
 		<polar:Sunburst label="Sunburst" width="100%" height="100%" />
 		<polar:Coxcomb label="Coxcomb" width="100%" height="100%" />
 		<polar:Custom label="Custom" width="100%" height="100%" />
+		<polar:Composite label="Composite" width="100%" height="100%" />
+		<stack:StackSample label="Stacks with multiple providers" width="100%" height="100%"/>
 	</mx:TabNavigator>
 </mx:VBox>

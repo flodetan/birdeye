@@ -7,8 +7,8 @@
 
 	<coords:Cartesian width="70%" height="100%" dataProvider="{data.dataProvider}" showDataTips="true" isMasked="false">
 		<coords:scales>
-	 		<scales:Category id="cat6" categoryField="subject" placement="right" showAxis="false"/>
-	 		<scales:Linear id="bar" placement="bottom" showAxis="false"/>
+	 		<scales:Category id="cat6" categoryField="subject" />
+	 		<scales:Linear id="bar" />
 		</coords:scales>
 		 <coords:elements>
 		 	<elements:BarElement scale1="{bar}" dim1="R1" scale2="{cat6}" dim2="subject" alphaStroke="0" styleName="grad2"/>

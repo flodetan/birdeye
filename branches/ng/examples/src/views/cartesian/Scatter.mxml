@@ -4,15 +4,16 @@
 	xmlns:series="birdeye.vis.elements.geometry.*"
 	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
 	backgroundColor="#3f3f3f" 
 	creationComplete="createDT()"
-	width="100%" height="100%" horizontalAlign="center" xmlns:coords="birdeye.vis.coords.*">
+	width="100%" height="100%" horizontalAlign="center" xmlns:coords="birdeye.vis.coords.*" xmlns:axis="birdeye.vis.guides.axis.*">
 
 <mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
 			import birdeye.util.EffectsUtil;
-			
+						
 			[Bindable]
 			public var dt:ArrayCollection;;
 
@@ -50,14 +51,19 @@
 	<mx:Button label="Generate" click="createDT()"/>
 	<coords:Cartesian id="sp" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true" isMasked="false">
 		<coords:scales>
-		 	<scales:Category id="c" categoryField="subject" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="15" sizePointer="12"/>
-		 	<scales:Linear id="l" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
-			<scales:Linear id="size" scaleValues="[10,30]" showAxis="false"/>
+		 	<scales:Category id="c" categoryField="subject" />
+		 	<scales:Linear id="l" />
+			<scales:Linear id="size" scaleValues="[10,30]" />
 		</coords:scales>
+		<coords:guides>
+			<axis:Axis scale="{c}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="15" sizePointer="12" />
+			<axis:Axis scale="{l}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+			<grid:Grid scale1="{l}" scale2="{c}" divideEnumerableScale="false"/>
+		</coords:guides>
 		 <coords:elements>
-		 	<series:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" dim2="R1" itemRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" styleName="grad1" displayName="R1"/>
-		 	<series:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" dim2="R2" itemRenderer="birdeye.vis.guides.renderers.ButterflyRenderer" styleName="grad3" displayName="R2"/>
-		 	<series:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" dim2="R3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="grad5" displayName="R3"/>
+		 	<series:PointElement scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" dim2="R1" itemRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" styleName="grad1" displayName="R1"/>
+		 	<series:PointElement scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" dim2="R2" itemRenderer="birdeye.vis.guides.renderers.ButterflyRenderer" styleName="grad3" displayName="R2"/>
+		 	<series:PointElement scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" dim2="R3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="grad5" displayName="R3"/>
 		 </coords:elements>
 	</coords:Cartesian>
 	<legend:Legend dataProvider="{sp}" direction="horizontal"/>
