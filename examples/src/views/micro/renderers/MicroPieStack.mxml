@@ -7,7 +7,7 @@
 
 	<coords:Polar width="70%" height="100%" dataProvider="{data.dataProvider}" columnWidthRate=".8" showDataTips="true">
 		<coords:scales>
-			<scales:Numeric id="l" scaleType="constant" showAxis="false"/>
+			<scales:Numeric id="l" scaleType="constant" />
 			<scales:PercentAngle id="a" size="360"/>
 			<scales:PercentAngle id="b" size="360"/>
 		</coords:scales>

@@ -4,9 +4,10 @@
 	xmlns:elements="birdeye.vis.elements.geometry.*"
 	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:guides="birdeye.vis.guides.legend.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
 	backgroundColor="#3f3f3f" 
 	creationComplete="createDT()"
-	width="100%" height="100%" horizontalAlign="center">
+	width="100%" height="100%" horizontalAlign="center" xmlns:axis="birdeye.vis.guides.axis.*">
 	<mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
@@ -55,9 +56,14 @@
 	<mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
 		<coords:Cartesian id="pc3" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true" isMasked="false">
 			<coords:scales>
-	 			<scales:Linear id="l" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
-	 			<scales:Category id="c" categoryField="index" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
+	 			<scales:Linear id="l" />
+	 			<scales:Category id="c" categoryField="index" />
 			</coords:scales>
+			<coords:guides>
+				<axis:Axis scale="{c}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{l}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<grid:Grid scale1="{l}" scale2="{c}" divideEnumerableScale="false"/>
+			</coords:guides>
 			 <coords:elements>
 			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" dim1="index" dim2="bronze" source="{rasterImage}" strokeAlpha="0" displayName="A" size="13"/>
 			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" dim1="index" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="solid1" dim2="gold" displayName="C" />

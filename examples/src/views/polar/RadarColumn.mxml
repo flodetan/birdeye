@@ -4,9 +4,10 @@
 	xmlns:pseries="birdeye.vis.elements.geometry.*"
 	xmlns:cseries="birdeye.vis.elements.*"
 	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:axis="birdeye.vis.guides.axis.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
 	creationComplete="createDT()"
-	width="100%" height="100%" horizontalAlign="center">
+	width="100%" height="100%" horizontalAlign="center" xmlns:axis1="birdeye.vis.guides.axis.*">
 	<mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
@@ -39,12 +40,10 @@
 			private function dtFunc(currDatatip:Object, dataFields:Array):String
 			{
 				var tt:String = dataFields["dim1"] + ": " + currDatatip[dataFields["dim1"]];
-				tt += '\n' + "Radius: " + dataFields["dim2"] + ": " + currDatatip[dataFields["dim2"]];
-				if (dataFields["sizeField"] != null)
-					tt += '\n' + "Size: " + dataFields["sizeField"] + ": " + currDatatip[dataFields["sizeField"]];
+				tt += '\n' + dataFields["dim2"] + ": " + currDatatip[dataFields["dim2"]];
 				return  tt;
 			}
-			
+
 			private function sizeFunc(dataValue:Object, min:Number, max:Number, size:Number):Number
 			{
 				return  Number(dataValue)/max * size;
@@ -55,17 +54,20 @@
 <mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
 	<mx:Button label="Generate" click="createDT()"/>
 	<polar:Polar id="rd" type="stacked" showDataTips="true" columnWidthRate=".7" dataTipFunction="dtFunc" dataProvider="{dt}" layout="radar" width="100%" height="100%">
-		<polar:multiScale>
-			<scales:MultiScale dim1="subject" labelFont="verdana" labelSize="10" labelColor="0x000000"/>
-		</polar:multiScale>
+		<polar:scales>
+			<scales:CategoryAngle id="c" categoryField="subject" subScale="birdeye.vis.scales.Linear" />
+		</polar:scales>
+		<polar:guides>
+			<axis:MultiAxis subScale="{c}" colorStroke="0x000000" colorLabel="0x000000" fontLabel="tahoma" sizeLabel="9" />
+		</polar:guides>
 		<polar:elements>
-			<pseries:ColumnElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad1" dim1="subject" dim2="R1" displayName="R1"/>
-			<pseries:ColumnElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad2" dim1="subject" dim2="R2" displayName="R2"/>
-			<pseries:ColumnElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
-			<pseries:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="solid2" dim1="subject" collisionType="stacked100" dim2="['R1','R3','R5']" displayName="Mix1"/>
-			<pseries:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" extendMouseEvents="true" styleName="grad4" dim1="subject" dim2="R4" displayName="R4"/>
-			<pseries:ColumnElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad5" dim1="subject" dim2="R5" displayName="R5"/>
-			<pseries:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad2" dim1="subject" collisionType="stacked100" dim2="['R1','R2']" displayName="Mix2"/>
+            <pseries:ColumnElement scale1="{c}" extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad1" dim1="subject" dim2="R1" displayName="R1"/>
+            <pseries:ColumnElement scale1="{c}" extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad2" dim1="subject" dim2="R2" displayName="R2"/>
+	        <pseries:ColumnElement scale1="{c}" extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
+            <pseries:ColumnElement scale1="{c}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="solid2" dim1="subject" collisionType="stacked100" dim2="['R1','R3','R5']" displayName="Mix1"/>
+            <pseries:ColumnElement scale1="{c}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" extendMouseEvents="true" styleName="grad4" dim1="subject" dim2="R4" displayName="R4"/>
+            <pseries:ColumnElement scale1="{c}" extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad5" dim1="subject" dim2="R5" displayName="R5"/>
+            <pseries:ColumnElement scale1="{c}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad2" dim1="subject" collisionType="stacked100" dim2="['R1','R2']" displayName="Mix2"/>
 		</polar:elements>
 	</polar:Polar>
 	<legend:Legend dataProvider="{rd}" direction="horizontal"/>

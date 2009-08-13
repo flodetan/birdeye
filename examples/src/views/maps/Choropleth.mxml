@@ -7,7 +7,7 @@
 	xmlns:elements="birdeye.vis.elements.geometry.*"
 	xmlns:trans="birdeye.vis.trans.projections.*"
 	xmlns:scales="birdeye.vis.scales.*"
-	xmlns:guides="birdeye.vis.guides.legend.*" creationComplete="init()">
+	xmlns:guides="birdeye.vis.guides.legend.*" creationComplete="init()" xmlns:axis="birdeye.vis.guides.axis.*">
 <mx:Script>
 		<![CDATA[
 			import birdeye.vis.data.dictionaries.WorldRegionTypes;
@@ -112,10 +112,14 @@
 					<trans:Projection id="myProj" proj="Miller cylindrical" latScale="{lat}" longScale="{long}"/>
 			</coords:transforms> 
 			<coords:scales>
- 				<scales:Numeric id="lat" dataValues="{[-90,90]}" dataInterval="20" placement="right" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb"/>
- 				<scales:Numeric id="long" dataValues="{[-180,180]}" dataInterval="20" placement="top" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb" />
- 				<scales:Numeric id="col" f="colorFunction" showAxis="false"/>
+ 				<scales:Numeric id="lat" dataValues="{[-90,90]}" dataInterval="20" />
+ 				<scales:Numeric id="long" dataValues="{[-180,180]}" dataInterval="20" />
+ 				<scales:Numeric id="col" f="colorFunction" />
 			</coords:scales>
+			<coords:guides>
+				<axis:Axis scale="{lat}" placement="right" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb" />
+				<axis:Axis scale="{long}" placement="top" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb" />
+			</coords:guides>
 			<coords:elements>
     		 	<elements:PolygonElement mouseClickFunction="clickF" extendMouseEvents="true" scale1="{long}" scale2="{lat}" polyDim="poly" colorScale="{col}" colorField="random" />
 			 </coords:elements>

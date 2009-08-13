@@ -3,10 +3,10 @@
 	xmlns:polar="birdeye.vis.coords.*"
 	xmlns:pseries="birdeye.vis.elements.geometry.*"
 	xmlns:cseries="birdeye.vis.elements.*"
-	xmlns:axis="birdeye.vis.scales.*"
+	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
 	creationComplete="createDT()"
-	width="100%" height="100%" horizontalAlign="center">
+	width="100%" height="100%" horizontalAlign="center" xmlns:axis1="birdeye.vis.guides.axis.*">
 	<mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
@@ -21,15 +21,15 @@
 				subject = ["A", "B", "C", "D", "E", "F"];
 				var ac:ArrayCollection = new ArrayCollection();
 				var ac1:ArrayCollection = new ArrayCollection();
-				for (var i:Number = 1; i<subject.length; i++)
+				for (var i:Number = 0; i<subject.length; i++)
 				{
 					ac.addItem({
 						subject: subject[i],
-						R1: Math.round(Math.random() * i*10* 1000),
-						R2: Math.round(Math.random() * i*10* 1000),
-						R3: Math.round(Math.random() * i*10* 1000),
-						R4: Math.round(Math.random() * i*10* 1000),
-						R5: Math.round(Math.random() * i*10* 1000)
+						R1: Math.round(Math.random() * (i+1)*10* 1000),
+						R2: Math.round(Math.random() * (i+1)*10* 1000),
+						R3: Math.round(Math.random() * (i+1)*10* 1000),
+						R4: Math.round(Math.random() * (i+1)*10* 1000),
+						R5: Math.round(Math.random() * (i+1)*10* 1000)
 					});
 				}
 				dt = ac;
@@ -53,15 +53,18 @@
 	</mx:HBox>
 		
 		<polar:Polar id="rd" type="stacked" showDataTips="true" dataProvider="{dt}" width="100%" height="100%" layout="radar">
-			<polar:multiScale>
-				<axis:MultiScale dim1="subject" colorStroke="0xbbbbbb" colorLabel="0xbbbbbb"/>
-			</polar:multiScale>
+			<polar:scales>
+				<scales:CategoryAngle id="c" categoryField="subject" subScale="birdeye.vis.scales.Linear"/>
+			</polar:scales>
+			<polar:guides>
+				<axis1:MultiAxis subScale="{c}"  colorStroke="0x000000" colorLabel="0x000000" fontLabel="tahoma" sizeLabel="9" />
+			</polar:guides>
 			<polar:elements>
-				<pseries:LineElement id="a1" styleName="solid1" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R1" displayName="R1"/>
-				<pseries:LineElement id="a2" styleName="solid2" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R2" displayName="R2"/>
-				<pseries:LineElement id="a3" styleName="solid3" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R3" displayName="R3"/>
-				<pseries:LineElement id="a4" styleName="solid4" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R4" displayName="R4"/>
-				<pseries:LineElement id="a5" styleName="solid5" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R5" displayName="R5"/>
+				<pseries:LineElement id="a1" scale1="{c}" styleName="solid1" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R1" displayName="R1"/>
+				<pseries:LineElement id="a2" scale1="{c}" styleName="solid2" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R2" displayName="R2"/>
+				<pseries:LineElement id="a3" scale1="{c}" styleName="solid3" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R3" displayName="R3"/>
+				<pseries:LineElement id="a4" scale1="{c}" styleName="solid4" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R4" displayName="R4"/>
+				<pseries:LineElement id="a5" scale1="{c}" styleName="solid5" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" dim1="subject" dim2="R5" displayName="R5"/>
 			</polar:elements>
 		</polar:Polar>
 		

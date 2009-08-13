@@ -7,8 +7,8 @@
 
 	<coords:Cartesian width="70%" height="100%" dataProvider="{data.dataProvider}" showDataTips="true" isMasked="false">
 		<coords:scales>
-			<scales:Category id="cat4" showAxis="false" placement="bottom" categoryField="subject"/>
-			<scales:Linear id="lin4" showAxis="false" placement="left"/>
+			<scales:Category id="cat4" categoryField="subject"/>
+			<scales:Linear id="lin4" />
 		</coords:scales>
 		 <coords:elements>
 		 	<elements:PointElement scale1="{cat4}" dim1="subject" scale2="{lin4}" size=".5" dim2="R1" styleName="solid1"/>
