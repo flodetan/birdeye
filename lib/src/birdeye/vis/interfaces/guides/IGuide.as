@@ -32,8 +32,8 @@ package birdeye.vis.interfaces.guides
 		function get position():String;	
 		
 		
-		/** The axis must provide the removal all elements when refreshed, thus insuring
+		/** The axis must provide the clear all graphics items when refreshed, thus insuring
 		 * both display refresh and memory clearing.*/
-		function removeAllElements():void
+		function clearAll():void
 	}
 }

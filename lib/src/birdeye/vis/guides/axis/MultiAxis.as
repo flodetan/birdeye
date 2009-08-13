@@ -109,7 +109,7 @@ package birdeye.vis.guides.axis
 		/** 
 		 * @see birdeye.vis.interfaces.guides.IAxis#removeAllElements 
 		 */
-		public function removeAllElements():void
+		public function clearAll():void
 		{
 			this.geometry = [];
 			this.geometryCollection.items = [];
@@ -151,7 +151,7 @@ package birdeye.vis.guides.axis
 			//{
 			if (_subScale && _subScale.completeDataValues && _subScale.completeDataValues.length > 0)
 			{
-				removeAllElements();
+				clearAll();
 				
 				stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 				fill = new SolidFill(colorFill, alphaFill);

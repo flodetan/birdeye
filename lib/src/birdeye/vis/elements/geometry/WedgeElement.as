@@ -84,7 +84,7 @@ package birdeye.vis.elements.geometry
 			if (isReadyForLayout() && _invalidatedElementGraphic)
 			{
 				super.drawElement();
-				removeAllElements();
+				clearAll();
 				var c:uint = 0;
 				
 				var angle:Number, radius:Number = NaN;

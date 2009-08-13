@@ -209,7 +209,7 @@ trace(getTimer(), "end drawing grid", this.id);
  			}
  		}
  		
- 		public function removeAllElements():void
+ 		public function clearAll():void
  		{
 			this.geometry = [];
 			this.geometryCollection.items = [];

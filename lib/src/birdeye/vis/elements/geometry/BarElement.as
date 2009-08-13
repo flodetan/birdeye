@@ -82,7 +82,7 @@ package birdeye.vis.elements.geometry
 			{
 trace(getTimer(), "drawing bar");
 				super.drawElement();
-				removeAllElements();
+				clearAll();
 
 				var xPos:Number, yPos:Number, zPos:Number = NaN;
 				var j:Object;

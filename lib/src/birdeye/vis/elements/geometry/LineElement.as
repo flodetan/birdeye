@@ -93,7 +93,7 @@ package birdeye.vis.elements.geometry
 			{
 trace (getTimer(), "drawing line ele");
 				super.drawElement();
-				removeAllElements();
+				clearAll();
 				if (bzSplines)
 					bzSplines.clearGraphicsTargets();
 				var xPrev:Number, yPrev:Number;

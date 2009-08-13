@@ -77,7 +77,7 @@ package birdeye.vis.elements.geometry
 			{
 trace (getTimer(), "drawing point ele");
 				super.drawElement();
-				removeAllElements();
+				clearAll();
 				
 				if (!itemRenderer)
 					itemRenderer = new ClassFactory(CircleRenderer);

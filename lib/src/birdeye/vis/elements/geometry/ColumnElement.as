@@ -89,7 +89,7 @@ package birdeye.vis.elements.geometry
 trace (getTimer(), "drawing column ele");
 
 				super.drawElement();
-				removeAllElements();
+				clearAll();
 
 				var pos1:Number, pos2:Number, zPos:Number = NaN;
 				var j:Object;

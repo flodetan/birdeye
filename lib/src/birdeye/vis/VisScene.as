@@ -705,7 +705,7 @@
 				if (child is DataItemLayout)
 				{
 					DataItemLayout(child).hideToolTip();
-					DataItemLayout(child).removeAllElements();
+					DataItemLayout(child).clearAll();
 					removeChildAt(i);
 				}
 			}
@@ -717,7 +717,7 @@
 				if (child is DataItemLayout)
 				{
 					DataItemLayout(child).hideToolTip();
-					DataItemLayout(child).removeAllElements();
+					DataItemLayout(child).clearAll();
 				}
 			}
 			graphicsCollection.items = [];
@@ -757,14 +757,14 @@
 	    {
 	            if (elements && elements.length > 0)
 	                    for (var i:uint = 0; i<elements.length; i++)
-	                            IElement(elements[i]).removeAllElements();
+	                            IElement(elements[i]).clearAll();
 	            if (guides && guides.length > 0)
 	            {
 	            	for (i=0;i<guides.length;i++)
 	            	{
 	            		if (guides[i] is IGuide)
 	            		{
-	            			(guides[i] as IGuide).removeAllElements();
+	            			(guides[i] as IGuide).clearAll();
 	            		}
 	            	}
 	            }

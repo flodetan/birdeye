@@ -107,7 +107,7 @@ package birdeye.vis.elements.geometry
 			{
 trace(getTimer(), "drawing polygon ele");
 				super.drawElement();
-				removeAllElements();
+				clearAll();
 				var xPrev:Number, yPrev:Number;
 				var pos1:Number, pos2:Number;
 				var t:uint = 0;
