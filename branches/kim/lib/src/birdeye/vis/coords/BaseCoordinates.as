@@ -239,7 +239,7 @@ trace(getTimer(), "initing elements");
 			}
 		}
 		
-		
+		private var categoryMaxStacked100:Array;
 		/**
 		 * This functions init the necessary datastructure in the stack elements</br>
 		 * This function only executes if the type is stacked100.</br>
@@ -267,6 +267,7 @@ trace(getTimer(), "initing elements");
 			// category or angle or ... 
 			var lastProcessedStackElements:Array = new Array();
 			var position:uint = 0;
+			categoryMaxStacked100 = [];
 			for each (stackElement in _stackedElements)
 			{
 				initStackElement(stackElement, position++, allElementsBaseAndTopValues, lastProcessedStackElements);
@@ -336,10 +337,11 @@ trace(getTimer(), "initing elements");
 					// set to 0
 					allElementsBaseAndTopValues[elementPosition].baseValues[indexValue] = 0;
 				}
-
-
+				
 				var localMax:Number = allElementsBaseAndTopValues[elementPosition].baseValues[indexValue] + Math.max(0,maxCurrentD2);
 				allElementsBaseAndTopValues[elementPosition].topValues[indexValue] = localMax;
+
+				categoryMaxStacked100[indexValue] = localMax;
 				
 				// update maxStacked100 if necessary
 				if (isNaN(_maxStacked100))
@@ -477,8 +479,8 @@ trace(getTimer(), "initing elements");
 							var minDim2:Number = getDimMinValue(currentItem, element.dim2);
 							
 							elementsMinMax[category].min = Math.min(elementsMinMax[category].min, minDim2);
-							if (!isNaN(_maxStacked100))
-								elementsMinMax[category].max = _maxStacked100;
+							if (_type == StackElement.STACKED100)
+								elementsMinMax[category].max = categoryMaxStacked100[category];
 							else 
 								elementsMinMax[category].max = Math.max(elementsMinMax[category].max, maxDim2);
 						}
