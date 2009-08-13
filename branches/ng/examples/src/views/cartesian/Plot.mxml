@@ -71,5 +71,17 @@
 			 </coords:elements>
 		</coords:Cartesian>
 		<guides:Legend dataProvider="{pc3}" direction="horizontal"/>	
+<mx:Spacer height="40"/>
+		<coords:Cartesian id="pc2" width="90%" height="50" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true" isMasked="false">
+			<coords:scales>
+	 			<scales:Linear id="l1" />
+			</coords:scales>
+			<coords:guides>
+				<axis:Axis scale="{l1}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+			</coords:guides>
+			 <coords:elements>
+			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{l1}" dim2="region" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" styleName="solid1" dim1="bronze"/>
+			 </coords:elements>
+		</coords:Cartesian>
 	</mx:VBox>
 </mx:VBox>
