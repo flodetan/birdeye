@@ -570,6 +570,7 @@ package birdeye.vis.elements
 			invalidatingDisplay();
 		}
 		
+		private var lastRandomColor:int = -1;
 		private var _randomColors:Boolean = false;
 		[Inspectable(enumeration="true,false")]
 		public function set randomColors(val:Boolean):void
@@ -1056,8 +1057,9 @@ package birdeye.vis.elements
 					fill = new SolidFill(_colors[_colors.length]);
 			} else if (randomColors)
 			{
-				tempColor = Math.random() * 255 * 255 * 255;
-				fill = new SolidFill(tempColor);
+				if (lastRandomColor == -1)
+					lastRandomColor = Math.random() * 255 * 255 * 255;
+				fill = new SolidFill(lastRandomColor);
 			}
 
 			stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
