@@ -61,7 +61,7 @@
 			<about:About label="About..." width="100%" height="100%"/>
 		</mx:TabNavigator>
 		
-		<mx:Label text="Last Update: 13 August 09" fontSize="10" color="#999999" />
+		<mx:Label text="Last Update: 14 August 09" fontSize="10" color="#999999" />
 	
 	</mx:VBox>
 	</mx:Box>
