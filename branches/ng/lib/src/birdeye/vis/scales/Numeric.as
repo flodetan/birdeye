@@ -160,24 +160,31 @@ package birdeye.vis.scales
 				_max = _dataValues[1];
 
 			// if no interval is specified by the user, than divide the axis in 5 parts
-			if (!isNaN(max) && !isNaN(min) && !isGivenInterval)
+			if (!isNaN(max) && !isNaN(min))
 			{
-				if (baseAtZero)
+				if (min == max)
 				{
-					if (max > 0)
+					if (!isGivenInterval) 
+						_dataInterval = 10;
+					max = min + dataInterval;
+				} else if (!isGivenInterval) {
+					if (baseAtZero)
 					{
-						if (max < numberOfIntervals)
-							_dataInterval = max;
-						else
-							_dataInterval = max / numberOfIntervals;
-					} else
-						_dataInterval = -min / numberOfIntervals;
-				} else {
-					if (Math.abs(max - min) < numberOfIntervals)
-						dataInterval = Math.abs(max - min);
-					else 
-						dataInterval = Math.abs((max - min) / numberOfIntervals)
-					isGivenInterval = false;
+						if (max > 0)
+						{
+							if (max < numberOfIntervals)
+								_dataInterval = max;
+							else
+								_dataInterval = max / numberOfIntervals;
+						} else
+							_dataInterval = -min / numberOfIntervals;
+					} else {
+						if (Math.abs(max - min) < numberOfIntervals)
+							dataInterval = Math.abs(max - min);
+						else 
+							dataInterval = Math.abs((max - min) / numberOfIntervals)
+						isGivenInterval = false;
+					}
 				}
 			}
 		}
