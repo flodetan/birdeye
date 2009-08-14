@@ -80,7 +80,7 @@
 				<coords:scales>
  					<scales:Category id="c" categoryField="subject"/>
 	 				<scales:Linear id="l" />
-					<scales:Linear id="size" scaleValues="[0,1]" />
+					<scales:Linear id="size" scaleValues="[.1,1]" />
 				</coords:scales>
 				<coords:guides>
 					<axis:Axis scale="{c}"  placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
