@@ -112,6 +112,7 @@ package birdeye.vis.coords
 			leftContainer.clipContent = false;
 			leftContainer.horizontalScrollPolicy = "off";
 			leftContainer.setStyle("horizontalAlign", "right");
+//			leftContainer.setStyle("backgroundColor", "0x666666");
 
 
 			rightContainer.verticalScrollPolicy = "off";
@@ -239,9 +240,9 @@ package birdeye.vis.coords
 		override protected function setBounds(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			leftContainer.move(0, topContainer.height);
-			rightContainer.move(unscaledWidth - rightContainer.width, topContainer.height);
-			bottomContainer.move(leftContainer.width, unscaledHeight - bottomContainer.height);
 			topContainer.move(leftContainer.width, 0);
+			bottomContainer.move(leftContainer.width, unscaledHeight - bottomContainer.height);
+			rightContainer.move(unscaledWidth - rightContainer.width, topContainer.height);
 
 			chartBounds = new Rectangle(leftContainer.x + leftContainer.width, 
 										topContainer.y + topContainer.height,
@@ -344,20 +345,23 @@ package birdeye.vis.coords
 				if (guide is IAxis)
 				{
 					var axis:IAxis = guide as IAxis;
+					var axisBounds:Rectangle = Surface(guide).getBounds(Surface(guide));
+					var estimatedAxisBoundWidth:Number = (isNaN(axisBounds.width)) ? 0 : axisBounds.width;
+					var estimatedAxisBoundHeight:Number = (isNaN(axisBounds.height)) ? 0 : axisBounds.height;
 					
 					switch (axis.placement)
 					{
 						case Axis.BOTTOM:
-							bottomSize += axis.maxLabelSize;
+							bottomSize += Math.max(axis.maxLabelSize, estimatedAxisBoundHeight);
 							break;
 						case Axis.TOP:
-							topSize += axis.maxLabelSize;
+							topSize += Math.max(axis.maxLabelSize, estimatedAxisBoundHeight);
 							break;
 						case Axis.RIGHT:
-							rightSize += axis.maxLabelSize;
+							rightSize += Math.max(axis.maxLabelSize, estimatedAxisBoundWidth);
 							break;
 						case Axis.LEFT:
-							leftSize += axis.maxLabelSize;
+							leftSize += Math.max(axis.maxLabelSize, estimatedAxisBoundWidth);
 							break;
 					}
 				}
