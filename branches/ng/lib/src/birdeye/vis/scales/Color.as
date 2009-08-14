@@ -27,14 +27,94 @@
  
  package birdeye.vis.scales
 {
-	import com.degrafa.paint.SolidFill;
+	import birdeye.util.ColorUtil;
+	
+	import com.degrafa.paint.palette.PaletteUtils;
 	
 	[Exclude(name="scaleType", kind="property")]
 	public class Color extends Linear
 	{
+		public static const INTERPOLATION_DEFAULT:String = "default";
+		public static const INTERPOLATION_HUE:String = "hue";
+		public static const INTERPOLAION_BRIGHTNESS:String = "brightness";
+		public static const INTERPOLATION_SATURATION:String = "saturation";
+		public static const INTERPOLATION_HSB:String = "hsb";
+		
+		private var generatedNumColors:uint = 48;
+		
+		private var colorPalette:Array = new Array();
+		
 		public function Color():void
 		{
-			_scaleValues = [0x000000,0xffffff];
+			scaleValues = [0x000000,0xffffff];
+
+		}
+		
+		private var _scaleValuesChanged:Boolean = false;
+		override public function set scaleValues(val:Array):void
+		{
+			super.scaleValues = val;
+			
+			_scaleValuesChanged = true;
+			invalidate();
+
+		}
+		
+		override public function commit():void
+		{
+			super.commit();
+			
+			if (_interPolationMethodChanged || _scaleValuesChanged)
+			{
+				_interPolationMethodChanged = false;
+				_scaleValuesChanged = false;
+				
+							
+				if (_interPolationMethod == INTERPOLATION_DEFAULT)
+				{
+					colorPalette = PaletteUtils.getInterpolatedPalette(generatedNumColors, _scaleValues[0], _scaleValues[1]);
+				}
+				else if (_interPolationMethod == INTERPOLATION_HUE)
+				{				
+					var hsb:Object = convertRGBuintToHSB(_scaleValues[0]);
+					var hsb2:Object = convertRGBuintToHSB(_scaleValues[1]);
+					
+					colorPalette = ColorUtil.interpolateHSB(generatedNumColors, hsb.h, hsb.s, hsb.b, hsb2.h, hsb.s, hsb.b);
+				}
+				else if (_interPolationMethod == INTERPOLATION_SATURATION)
+				{
+					hsb = convertRGBuintToHSB(_scaleValues[0]);
+					hsb2 = convertRGBuintToHSB(_scaleValues[1]);
+					
+					colorPalette = ColorUtil.interpolateHSB(generatedNumColors, hsb.h, hsb.s, hsb.b, hsb.h, hsb2.s, hsb.b);			
+				}
+				else if (_interPolationMethod == INTERPOLAION_BRIGHTNESS)
+				{
+					hsb = convertRGBuintToHSB(_scaleValues[0]);
+					hsb2 = convertRGBuintToHSB(_scaleValues[1]);
+					
+					colorPalette = ColorUtil.interpolateHSB(generatedNumColors, hsb.h, hsb.s, hsb.b, hsb.h, hsb.s, hsb2.b);			
+					
+				}
+				else if (_interPolationMethod == INTERPOLATION_HSB)
+				{
+					hsb = convertRGBuintToHSB(_scaleValues[0]);
+					hsb2 = convertRGBuintToHSB(_scaleValues[1]);
+					
+					colorPalette = ColorUtil.interpolateHSB(generatedNumColors, hsb.h, hsb.s, hsb.b, hsb2.h, hsb2.s, hsb2.b);			
+					
+				}
+			}
+			
+		}
+		
+		private function convertRGBuintToHSB(rgb:uint):Object
+		{
+			var red:uint = rgb>>16&0xFF;
+			var green:uint = rgb>>8&0xFF;
+			var blue:uint = rgb>>0&0xFF;
+				
+			return PaletteUtils.RGBtoHSB(red, green, blue);		
 		}
 		
 		// other methods
@@ -47,31 +127,38 @@
 			
 			var color:Number = NaN;
 			if (! (isNaN(max) || isNaN(min)))
-				color = size * (Number(dataValue) - min)/(max - min);
-				
-			return isNaN(color) ? null : new SolidFill(Math.min(_scaleValues[1], _scaleValues[0]) + color);
-		}
-
-		private function decimalToHex(value:uint):String
-		{
-			var hexDigits:String = "0123456789ABCDEF";
-			var hex:String = '';
-			
-			while (value > 0)
 			{
-				//get the next hex digit by masking everything except the last 4 bits (a single hex digit)
-				var next:uint = value & 0xF;
-				//shift number by 4 bits (the value in 'next')
-				value >>= 4;
-				//add the hex value of 'next' to the string
-				hex = hexDigits.charAt(next) + hex;
+				
+				var index:Number = Math.floor((Number(dataValue) - min) * generatedNumColors / max);
+				
+				return colorPalette[index];
 			}
-			//ensure there's at least one digit
-			if (hex.length == 0)
-				hex = '0'
+			return null;
+		}
+		
+		private var _interPolationMethod:String = "default";
+		private var _interPolationMethodChanged:Boolean = false;
+		/**
+		 * Set the method that is used to interpolate betweeen the two colors that are set</br>
+		 * by scaleValues.</br>
+		 * <code>default</code> mixes red,green,blue and alpha in a linear way</br>
+		 * <code>brightness</code> changes the brightness of the colors. Brightness can be used to represent categorical dimension, but only with a few categories. <b>The hue and saturation of the FIRST color are used as base values</b></br>
+		 * <code>hue</code> changes the hue of the colors. Hue is especially suited for categorical scales. <b>The brightness and saturation of the FIRST color are used as base values</b></br>
+		 * <code>saturation</code> changes the saturation of the colors. Saturation is recommended for respresenting uncertainty in a grahpic. <b>The brightness and hue of the FIRST color are used as base values</b></br>
+		 * <code>hsb</code> linearly interpolates between the hsb value of the given colors.</br>
+		 */
+		[Inspectable(enumeration="default,brightness,hue,saturation, hsb")]
+		public function set interpolationMethod(val:String):void
+		{
+			_interPolationMethod = val;	
+			_interPolationMethodChanged = true;
 			
-			//add the hexadecimal prefix
-			return '0x'+hex;
+			invalidate();
+		}
+		
+		public function get interpolationMethod():String
+		{
+			return _interPolationMethod;
 		}
 	}
 }
