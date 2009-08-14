@@ -800,10 +800,6 @@ package birdeye.vis.guides.axis
 				maxLblSize = Math.max(maxLblSize, tmp.displayObject.width);
 			}
 			
-			// create a padding
-			maxLblSize += 5;
-			
-			
 			if (showAxis)
 			{
 					switch (placement)
@@ -820,7 +816,7 @@ package birdeye.vis.guides.axis
 							minWidth = Math.max(5, maxLblSize * Math.cos(_rotateLabels*Math.PI/180));
 							break;
 					}
-					
+
 				// calculate the maximum label size according to the 
 				// styles defined for the axis 
 				calculateMaxLabelStyled();
