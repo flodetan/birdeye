@@ -902,7 +902,10 @@ trace(getTimer(), "drawing axis");
 						}
 						
 						label.y = yPos-label.displayObject.height/2;
-						label.x = thickWidth * sign; 
+						if (placement == LEFT)
+							label.x = width - thickWidth - label.displayObject.width;
+						else
+							label.x = thickWidth * sign;
 						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
 					}
