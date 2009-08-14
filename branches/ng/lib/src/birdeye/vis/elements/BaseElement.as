@@ -192,16 +192,19 @@ package birdeye.vis.elements
 			invalidatingDisplay();
 		}
 
-		private var _colorScale:INumerableScale;
+		private var _colorScale:IScale;
 		/** Define an axis to set the colorField for data items.*/
-		public function set colorScale(val:INumerableScale):void
+		public function set colorScale(val:IScale):void
 		{
 			_colorScale = val;
-			_colorScale.format = false;
+			if (_colorScale is INumerableScale)
+			{
+				(_colorScale as INumerableScale).format = false;
+			}
 
 			invalidatingDisplay();
 		}
-		public function get colorScale():INumerableScale
+		public function get colorScale():IScale
 		{
 			return _colorScale;
 		}
