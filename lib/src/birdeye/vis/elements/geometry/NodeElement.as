@@ -138,7 +138,7 @@ package birdeye.vis.elements.geometry {
 			const label:TextRenderer = TextRenderer.createTextLabel(
 				   0, 0 + _size,
 				   text,
-				   new SolidFill(0xffffff),  // TODO: add textFill property
+				   fill,  
 				   true, false
 			);
 			label.fontSize = 9;
