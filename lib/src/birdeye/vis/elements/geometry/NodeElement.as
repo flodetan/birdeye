@@ -109,6 +109,7 @@ package birdeye.vis.elements.geometry {
 			var renderer:IGeometry;
 			if (labelField)
 			{
+				// TODO link the labelField to data provider
 				renderer = new TextRenderer(null);
 				(renderer as TextRenderer).text = labelField;
 				(renderer as TextRenderer).fontSize = sizeLabel;
