@@ -41,6 +41,7 @@ package birdeye.vis.elements.geometry {
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
+	import flash.text.TextFieldAutoSize;
 
 	public class NodeElement extends BaseElement implements IGraphLayoutableElement {
 
@@ -106,7 +107,18 @@ package birdeye.vis.elements.geometry {
 		protected function createItemRenderer():IGeometry {
 			const bounds:Rectangle = new Rectangle(0 - _size, 0 - _size, _size * 2, _size * 2);
 			var renderer:IGeometry;
- 			if (_source)
+			if (labelField)
+			{
+				renderer = new TextRenderer(null);
+				(renderer as TextRenderer).text = labelField;
+				(renderer as TextRenderer).fontSize = sizeLabel;
+				(renderer as TextRenderer).fontFamily = fontLabel;
+				(renderer as TextRenderer).autoSize = TextFieldAutoSize.LEFT;
+				(renderer as TextRenderer).autoSizeField = true;
+				(renderer as TextRenderer).x -= (renderer as TextRenderer).displayObject.width/2;
+				(renderer as TextRenderer).y -= (renderer as TextRenderer).displayObject.height/2;
+			} 
+			if (_source)
 				renderer = new RasterRenderer(bounds, _source);
  			else {
  				if (itemRenderer) {
