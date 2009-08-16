@@ -26,16 +26,15 @@
  */
 package birdeye.vis.elements.geometry {
 
+	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.guides.renderers.IEdgeRenderer;
 	import birdeye.vis.guides.renderers.LineRenderer;
-	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.IEdgeElement;
 	import birdeye.vis.interfaces.IPositionableElement;
 	
-	import com.degrafa.paint.SolidFill;
-	
+	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
@@ -132,7 +131,12 @@ package birdeye.vis.elements.geometry {
 			prepareForItemDisplayObjectsCreation();
 			
 			const items:Vector.<Object> = dataItems;
-			
+			var dataFields:Array = [];
+			if (dimStart)
+				dataFields["dimStart"] = dimStart;
+			if (dimEnd)
+				dataFields["dimEnd"] = dimEnd;
+				
 			if (items){
 				items.forEach(function(item:Object, itemIndex:int, items:Vector.<Object>):void {
 					var pos1:Number = NaN, pos2:Number = NaN, pos3:Number = NaN;
@@ -143,6 +147,10 @@ package birdeye.vis.elements.geometry {
 					if (_node.isItemVisible(startItemId)  &&  _node.isItemVisible(endItemId)) {
 						var start:Position = _node.getItemPosition(startItemId);
 						var end:Position = _node.getItemPosition(endItemId);
+/* 						var middle:Position = new Position((start.pos1 + end.pos1)/2, (start.pos2 + end.pos2)/2);
+						
+						var relativeStart:Position = new Position(start.pos1 - middle.pos1, start.pos2 - middle.pos2);
+						var relativeEnd:Position = new Position(end.pos1 - middle.pos1, end.pos2 - middle.pos2); */
 
 						if (start && end) {
 							const itemId:String = edgeItemId(itemIndex, item);
@@ -150,7 +158,7 @@ package birdeye.vis.elements.geometry {
 							// the edge renderers are passed in the start/end coordinates
 							// and position and draw the edges accordingly.   
 							createItemDisplayObject(
-								Position.ZERO, itemId,
+								item, dataFields, Position.ZERO, itemId,
 								[ createItemRenderer(itemId, start.pos1, start.pos2, end.pos1, end.pos2)
 //								  TextRenderer.createTextLabel(
 //								  (start.pos1 + end.pos1)/2, (start.pos2 + end.pos2)/2,
@@ -161,6 +169,34 @@ package birdeye.vis.elements.geometry {
 						}
 					}
 				});
+			}
+		}
+		
+		// we need to override to avoid the cretion of tooltips whose position
+		// is not yet clear with the current implementation
+		override protected function createTTGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
+									zPos:Number, radius:Number, collisionIndex:Number = NaN, shapes:Array = null /* of IGeometry */, 
+									ttXoffset:Number = NaN, ttYoffset:Number = NaN, showGeometry:Boolean = true):void
+		{
+			if (graphicsCollection.items && graphicsCollection.items.length > ggIndex)
+				ttGG = graphicsCollection.items[ggIndex];
+			else {
+				ttGG = new DataItemLayout();
+				graphicsCollection.addItem(ttGG);
+			}
+			ggIndex++;
+			ttGG.target = chart.elementsContainer;
+
+			if (mouseClickFunction!=null || mouseDoubleClickFunction!=null || mouseOverFunction != null)
+			{
+				// if no tips but interactivity is required than add mouse events and pass
+				// data and positioning information about the current data item 
+				ttGG.create(item, dataFields, xPos, yPos, zPos, NaN,collisionIndex,  null, NaN, NaN, false);
+				if (mouseClickFunction != null)
+					ttGG.addEventListener(MouseEvent.CLICK, onMouseClick);
+	
+				if (mouseDoubleClickFunction != null)
+					ttGG.addEventListener(MouseEvent.DOUBLE_CLICK, onMouseDoubleClick);
 			}
 		}
 	}

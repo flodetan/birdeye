@@ -1596,15 +1596,13 @@ package birdeye.vis.elements
 		 * @param itemId
 		 * @param geometries Array of IGeometry objects 
 		 **/
-		protected function createItemDisplayObject(pos:Position, itemId:Object, geometries:Array):DisplayObject {
-			var group:GeometryGroup = new GeometryGroup();
-	        group.target = this;
-	        group.geometry = geometries;
-	        group.x = pos.pos1; 
-	        group.y = pos.pos2; 
-        	graphicsCollection.addItem(group);
-	        _itemDisplayObjects[itemId] = group;
-			return group;
+		protected function createItemDisplayObject(currentItem:Object, dataFields:Array, pos:Position, itemId:Object, geometries:Array):DisplayObject {
+			createTTGG(currentItem, dataFields, NaN, NaN, NaN, NaN);
+			ttGG.geometry = geometries;
+	        ttGG.x = pos.pos1; 
+	        ttGG.y = pos.pos2; 
+	        _itemDisplayObjects[itemId] = ttGG;
+			return ttGG;
 		}
 
 		public function refresh():void
