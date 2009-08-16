@@ -271,21 +271,8 @@ trace (getTimer(), "drawing point ele");
 				else
 				{					
  					var tmp:Object = itemRenderer.newInstance();
- 						
- 					if (tmp is DisplayObject)	
- 					{
- 						tmp.width = bounds.width;
- 						tmp.height = bounds.height;
- 						tmp.x = bounds.x;
- 						tmp.y = bounds.y;
- 						trace("ADDING CHILD ON x:" + bounds.x + " y:"+ bounds.y + " and w:"+bounds.width + " and h:"+bounds.height); 
- 						this.addChild(tmp as DisplayObject);
- 					}
- 					else
- 					{
- 						plot = tmp as IGeometry;
- 						if (plot is IBoundedRenderer) (plot as IBoundedRenderer).bounds = bounds;
- 					}
+ 					plot = tmp as IGeometry;
+ 					if (plot is IBoundedRenderer) (plot as IBoundedRenderer).bounds = bounds;
  				} 
 				
 				if(plot)
