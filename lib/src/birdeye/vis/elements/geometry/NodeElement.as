@@ -38,7 +38,6 @@ package birdeye.vis.elements.geometry {
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
-	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
@@ -150,6 +149,9 @@ package birdeye.vis.elements.geometry {
 			super.drawElement();
 				
 			prepareForItemDisplayObjectsCreation();
+			
+			var dataFields:Array = [];
+			if (dimName) dataFields["dimName"] = dimName;
 
 			const items:Vector.<Object> = dataItems;
 			if (items) {
@@ -159,7 +161,7 @@ package birdeye.vis.elements.geometry {
 						const position:Position = getItemPosition(itemId);
 						if (position != null) {
 							createItemDisplayObject(
-								position, itemId,
+								item, dataFields, position, itemId,
 								[createItemRenderer(), createLabelRenderer(item[dimName])]);
 						}
 					}
