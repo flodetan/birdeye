@@ -7,9 +7,9 @@
 	
 
 	<mx:TabNavigator id="nav" height="100%" width="100%" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" creationPolicy="auto">
+		<facet:Plot label="Plot" width="100%" height="100%"/>
+		<facet:Polar label="Polar" width="100%" height="100%"/>
 		<facet:Column label="Column" width="100%" height="100%"/>
 		<facet:Line label="Line" width="100%" height="100%"/>
-		<facet:Polar label="Polar" width="100%" height="100%"/>
-		<facet:Plot label="Plot" width="100%" height="100%"/>
 	</mx:TabNavigator>
 </mx:VBox>
