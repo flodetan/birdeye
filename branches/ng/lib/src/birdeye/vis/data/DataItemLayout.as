@@ -185,19 +185,25 @@ package birdeye.vis.data
 			if (_dataTipPrefix) 
 				toolTip = _dataTipPrefix;
 			
-			var dimNames:Array = ["dim1", "dim2", "dim3", "colorField", "sizeField"];
+			var dimNames:Array = ["dim1", "dim2", "dim3", "colorField", "sizeField", "dimStart", "dimEnd", "dimName"];
+			
+			var isFirst:Boolean = true;
+
 			for each (var dim:String in dimNames)
 			{
 				if (dataFields[dim])
 				{
 					if (! _dataTipPrefix)
 					{
-						if (dim=="dim1")
+						if (isFirst)
 							toolTip = String(((dataFields[dim]) ? dataFields[dim] + ": " + item[dataFields[dim]] : Number(item)));
 						else
 							toolTip += "\n" + ((dataFields[dim]) ? dataFields[dim] + ": " + item[dataFields[dim]] : Number(item)); 
 					} else 
 						toolTip += "\n" + ((dataFields[dim]) ? dataFields[dim] + ": " + item[dataFields[dim]] : Number(item)); 
+
+					if (isFirst)
+						isFirst = false;
 				}
 			}
 		}
