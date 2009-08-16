@@ -8,7 +8,14 @@
 	xmlns:util="util.*"
 	backgroundColor="#3f3f3f">
 
-	
+	<mx:Script>
+		<![CDATA[			
+			[Bindable]
+			[Embed(source="/assets/icons/raster.gif")]
+		 	public var rasterImage:Class;
+
+		]]>
+	</mx:Script>	
 	<mx:HBox horizontalAlign="center" width="100%">
 		<mx:Button label="Generate tree" click="generateTree()"/>
 		<mx:Button label="Generate graph" click="generateConnectedGraph()" id="generateGraphButton" enabled="true"/>
@@ -16,13 +23,13 @@
 	</mx:HBox>
 	
 	<mx:VBox horizontalAlign="center" width="100%" height="100%">
-		<coords:Cartesian id="graph" width="100%" height="100%">
+		<coords:Cartesian id="graph" width="100%" height="100%" showDataTips="true">
 			<coords:elements>
-				<elements:EdgeElement id="edge" dimStart="start" dimEnd="end" node="{node}" dataProvider="{edges}"
+				<elements:EdgeElement id="edge" dimStart="start" dimEnd="end" node="{node}" dataProvider="{edges}" mouseClickFunction="clickF"
 									  colorFill="0xFF0000" colorStroke="0x999999" strokeWeight="2" />
 									  
-				<elements:NodeElement id="node" dimId="id" dimName="name" dataProvider="{nodes}"
-									  colorFill="0x0000FF" alphaFill="1.0" strokeColor="0xFFFFFF" size="7" />
+				<elements:NodeElement id="node" dimId="id" dimName="name" dataProvider="{nodes}" source="{rasterImage}" mouseClickFunction="clickF"
+									  styleName="solid1" alphaFill="1.0" size="7" />
 			</coords:elements>
 			<coords:transforms>
 				<graphs:GraphLayout
@@ -40,6 +47,8 @@
 	
 	<mx:Script>
 	<![CDATA[
+		import mx.controls.Alert;
+		import birdeye.vis.data.DataItemLayout;
 		import birdeye.vis.trans.graphs.layout.ILayoutAlgorithm;
 		[Bindable]
 		public var nodes:ArrayCollection;
@@ -201,6 +210,14 @@
 				name += String.fromCharCode('A'.charCodeAt(0) + int(Math.random() * 26)); 
 			}
 			return name;
+		}
+		
+		private function clickF(data:DataItemLayout):void
+		{
+			var text:String = "Info:";
+			for each (var field:String in data.dataFields)
+				text += "\n" + field + ": " + data.currentItem[field];
+			Alert.show(text);
 		}
 	]]>
 	</mx:Script>
