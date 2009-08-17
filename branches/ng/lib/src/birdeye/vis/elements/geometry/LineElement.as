@@ -41,6 +41,7 @@ package birdeye.vis.elements.geometry
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.splines.BezierSpline;
 	import com.degrafa.paint.SolidFill;
+	import com.degrafa.paint.SolidStroke;
 	
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
@@ -163,9 +164,15 @@ trace (getTimer(), "drawing line ele");
 							fill = col;
 					} 
 	
+					if (sizeScale)
+					{
+						 var weight:Number = sizeScale.getPosition(currentItem[sizeField]);
+						stroke = new SolidStroke(colorStroke, alphaStroke, weight);
+					}
+
 					// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-    					createTTGG(currentItem, dataFields, pos1, pos2, scale2RelativeValue, 3);
+					createTTGG(currentItem, dataFields, pos1, pos2, scale2RelativeValue, 3);
    	 
 					if (dim3)
 					{
@@ -186,7 +193,7 @@ trace (getTimer(), "drawing line ele");
 							points.push(new GraphicPoint(pos1,pos2));
 					} else if (j++ > 0)
 					{
- 						var line:Line     = new Line(xPrev,yPrev,pos1,pos2);
+ 						var line:Line = new Line(xPrev,yPrev,pos1,pos2);
 						line.fill = fill;
 						line.stroke = stroke;
 						gg.geometryCollection.addItemAt(line,0);
