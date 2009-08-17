@@ -27,9 +27,7 @@
 
 package birdeye.vis.data.dictionaries
 {
-	import birdeye.vis.elements.BaseElement;
-	
-	import com.degrafa.Surface;
+	import flash.utils.getTimer;
 	
 	public class WorldCountriesPlus 
 	{
@@ -816,14 +814,14 @@ package birdeye.vis.data.dictionaries
 			for (var polyIdx:int = 0; polyIdx<longLatWeightPolygons[countryKey].length;polyIdx++)//Loop over all polygons of the country
 			{
 				longLatWeightPolygon = longLatWeightPolygons[countryKey][polyIdx];
-				longLatPolygon = new Array(longLatWeightPolygon.length);
+				longLatPolygon = []; //new Array(longLatWeightPolygon.length);
+				var newIdx:uint = 0;
 				for (var i:int=0; i<longLatWeightPolygon.length; i++) //For each corner of the polygon
 				{
 					if (longLatWeightPolygon[i][2] >= minSize || longLatWeightPolygon[i][2]==null) { //Skip the points with weight under minSize
-						longLatPolygon[i] = [longLatWeightPolygon[i][0],longLatWeightPolygon[i][1]]; //return only the lat,long values, skip the weight
+						longLatPolygon[newIdx++] = [longLatWeightPolygon[i][0],longLatWeightPolygon[i][1]]; //return only the lat,long values, skip the weight
 					}
 				}
-				longLatPolygon = longLatPolygon.filter(callback); //Trim away the empty elements from the array
 				
 				if (longLatPolygon.length < 3) { //If too few points remain, select the three heaviest points
 					var heaviest:Array = longLatWeightPolygon[0];
