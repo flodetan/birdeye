@@ -31,7 +31,6 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.UpTriangleRenderer;
-	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.scales.*;
 	import birdeye.vis.trans.projections.Projection;
 	
@@ -88,8 +87,8 @@ package birdeye.vis.elements.geometry
 		{
 			super.commitProperties();
 			// select the item renderer (must be an IGeomentry)
-			if (! itemRenderer)
-				itemRenderer = new ClassFactory(UpTriangleRenderer);
+			if (! graphicRenderer)
+				graphicRenderer = new ClassFactory(UpTriangleRenderer);
 
 			if (!isListeningMouseMove && chart)
 			{
@@ -106,6 +105,7 @@ package birdeye.vis.elements.geometry
 			if (isReadyForLayout() && _invalidatedElementGraphic)
 			{
 trace(getTimer(), "drawing polygon ele");
+var numCoords:Number = 0;
 				super.drawElement();
 				clearAll();
 				var xPrev:Number, yPrev:Number;
@@ -170,6 +170,7 @@ trace(getTimer(), "drawing polygon ele");
 	
 								for each (var pairs:Array in item)
 								{
+									numCoords++;
 									// data is composed by a set of arrays (Maps)
 									if (scale1)
 										pos1 = scale1.getPosition(pairs);
@@ -188,7 +189,7 @@ trace(getTimer(), "drawing polygon ele");
 					}
 				}
 				_invalidatedElementGraphic = false;
-trace(getTimer(), "drawing polygon ele");
+trace(getTimer(), "drawing polygon ele Num coords ", numCoords);
 			}
 		}
 

@@ -32,6 +32,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.VisScene;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.BaseElement;
+	import birdeye.vis.elements.RenderableElement;
 	import birdeye.vis.facets.FacetContainer;
 	import birdeye.vis.guides.axis.Axis;
 	import birdeye.vis.guides.renderers.CircleRenderer;
@@ -52,8 +53,9 @@ package birdeye.vis.elements.geometry
 	import flash.utils.getTimer;
 	
 	import mx.core.ClassFactory;
+	import mx.core.IDataRenderer;
 
-	public class PointElement extends BaseElement
+	public class PointElement extends RenderableElement
 	{
 		public function PointElement()
 		{
@@ -63,8 +65,8 @@ package birdeye.vis.elements.geometry
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
-			if (! itemRenderer)
-				itemRenderer = new ClassFactory(CircleRenderer);
+			if (! graphicRenderer)
+				graphicRenderer = new ClassFactory(CircleRenderer);
 		}
 
 		private var label:TextRenderer;
@@ -79,12 +81,12 @@ trace (getTimer(), "drawing point ele");
 				super.drawElement();
 				clearAll();
 				
-				if (!itemRenderer)
-					itemRenderer = new ClassFactory(CircleRenderer);
+				if (!graphicRenderer)
+					graphicRenderer = new ClassFactory(CircleRenderer);
 				
 				ggIndex = 0;
 				
-				if (itemRenderer is FacetContainer) 
+				if (graphicRenderer is FacetContainer) 
 				{
 					// ok two categories, we need to loop categories
 					// to avoid the issue where there are more subdata
@@ -107,7 +109,7 @@ trace (getTimer(), "drawing point ele");
 							var bounds:Rectangle = new Rectangle(scaleResults["pos1"] - enumScale1.size/2/enumLength1 + 5, scaleResults["pos2"] - enumScale2.size/2/enumLength2 + 5, enumScale1.size/enumLength1 - 10, enumScale2.size/enumLength2 - 10);
 
 
-	 						var subco:FacetContainer = itemRenderer.newInstance() as FacetContainer;
+	 						var subco:FacetContainer = graphicRenderer.newInstance() as FacetContainer;
 	 						
 	 						var coord:Object = subco.coord.clone();
 	 						
@@ -164,6 +166,19 @@ trace (getTimer(), "drawing point ele");
 							// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
 							createTTGG(currentItem, dataFields, scaleResults["pos1"], scaleResults["pos2"], scaleResults["pos3Relative"], scaleResults["size"]);
 			
+							if (itemRenderer != null)
+							{
+								var itmDisplay:DisplayObject = new itemRenderer();
+								if (dataField && itmDisplay is IDataRenderer)
+									(itmDisplay as IDataRenderer).data = currentItem[dataField];
+								addChild(itmDisplay);
+								if (sizeRenderer > 0)
+									DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = sizeRenderer;
+									
+								itmDisplay.x = scaleResults["pos1"] - itmDisplay.width/2;
+								itmDisplay.y = scaleResults["pos2"] - itmDisplay.height/2;
+							}
+							
 							if (dim3)
 							{
 								if (!isNaN(scaleResults["pos3"]))
@@ -270,7 +285,7 @@ trace (getTimer(), "drawing point ele");
 				}
 				else
 				{					
- 					var tmp:Object = itemRenderer.newInstance();
+ 					var tmp:Object = graphicRenderer.newInstance();
  					plot = tmp as IGeometry;
  					if (plot is IBoundedRenderer) (plot as IBoundedRenderer).bounds = bounds;
  				} 
@@ -317,13 +332,5 @@ trace (getTimer(), "drawing point ele");
 			
 			return filteredDataItems;
 		}
-		
-		private var _testje:Array;
-		public function set testje(t:Array):void
-		{
-			_testje = t;	
-		}
-		
-		 
 	}
 }

@@ -27,18 +27,21 @@
 package birdeye.vis.elements.geometry {
 
 	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.Position;
+	import birdeye.vis.elements.RenderableElement;
 	import birdeye.vis.guides.renderers.IEdgeRenderer;
 	import birdeye.vis.guides.renderers.LineRenderer;
 	import birdeye.vis.interfaces.IEdgeElement;
 	import birdeye.vis.interfaces.IPositionableElement;
 	
+	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
-	public class EdgeElement extends BaseElement implements IEdgeElement {
+	import mx.core.IDataRenderer;
+	
+	public class EdgeElement extends RenderableElement implements IEdgeElement {
 
 		public function EdgeElement() {
 			super();
@@ -84,10 +87,24 @@ package birdeye.vis.elements.geometry {
 			return _node;
 		}
 
-		protected function createItemRenderer(edgeItemId:String, x1:Number, y1:Number, x2:Number, y2:Number):IEdgeRenderer {
+		protected function createItemRenderer(currentItem:Object, edgeItemId:String, x1:Number, y1:Number, x2:Number, y2:Number):IEdgeRenderer {
 			var edgeRenderer:IEdgeRenderer;
- 			if (itemRenderer) {
-				edgeRenderer = itemRenderer.newInstance();
+
+			if (itemRenderer != null)
+			{
+				var itmDisplay:DisplayObject = new itemRenderer();
+				if (dataField && itmDisplay is IDataRenderer)
+					(itmDisplay as IDataRenderer).data = currentItem[dataField];
+				addChild(itmDisplay);
+				if (sizeRenderer > 0)
+					DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = sizeRenderer;
+					
+				itmDisplay.x -= itmDisplay.width/2;
+				itmDisplay.y -= itmDisplay.height/2;
+			}	
+					
+ 			if (graphicRenderer) {
+				edgeRenderer = graphicRenderer.newInstance();
 				if (!(edgeRenderer is IEdgeRenderer)) {
 					throw new Error("EdgeElement renderer factory produced not an IEdgeRenderer");
 				}
@@ -159,7 +176,7 @@ package birdeye.vis.elements.geometry {
 							// and position and draw the edges accordingly.   
 							createItemDisplayObject(
 								item, dataFields, Position.ZERO, itemId,
-								[ createItemRenderer(itemId, start.pos1, start.pos2, end.pos1, end.pos2)
+								[ createItemRenderer(item, itemId, start.pos1, start.pos2, end.pos1, end.pos2)
 //								  TextRenderer.createTextLabel(
 //								  (start.pos1 + end.pos1)/2, (start.pos2 + end.pos2)/2,
 //								  itemId + ": " + startItemId + "-" + endItemId, new SolidFill(0xffffff), 

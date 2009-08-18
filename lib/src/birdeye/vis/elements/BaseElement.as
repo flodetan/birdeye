@@ -94,6 +94,15 @@ package birdeye.vis.elements
 	
 	public class BaseElement extends Surface implements IElement
 	{
+		public static const DIM1:String = "dim1";
+		public static const DIM2:String = "dim2";
+		public static const DIM3:String = "dim3";
+		public static const COLOR_FIELD:String = "colorField";
+		public static const SIZE_FIELD:String = "sizeField";
+		public static const DIM_START:String = "dimStart";
+		public static const DIM_END:String = "dimEnd";
+		public static const DIM_NAME:String = "dimName";
+
 		protected var _invalidatedElementGraphic:Boolean = false;
 		
 		private var _chart:ICoordinates;
@@ -153,11 +162,11 @@ package birdeye.vis.elements
 			return _showFieldName;
 		}
 
-		protected var _showItemRenderer:Boolean = false;
+		protected var _showGraphicRenderer:Boolean = false;
 		[Inspectable(enumeration="true,false")]
-		public function set showItemRenderer(val:Boolean):void
+		public function set showGraphicRenderer(val:Boolean):void
 		{
-			_showItemRenderer = val;
+			_showGraphicRenderer = val;
 			invalidatingDisplay();
 		}
 
@@ -804,17 +813,17 @@ package birdeye.vis.elements
 			return _displayName;
 		}
 		
-		private var _itemRenderer:IFactory;
-		/** Set the item renderer to be used for both data items layout and related legend item.*/
-		public function set itemRenderer(val:IFactory):void
+		private var _graphicsRenderer:IFactory;
+		/** Set the graphics renderer to be used for both data items layout and related legend item.*/
+		public function set graphicRenderer(val:IFactory):void
 		{
-			_itemRenderer = val;
+			_graphicsRenderer = val;
 			invalidateProperties();
 			invalidatingDisplay();
 		}
-		public function get itemRenderer():IFactory
+		public function get graphicRenderer():IFactory
 		{
-			return _itemRenderer;
+			return _graphicsRenderer;
 		}
 		
 		protected var _source:Object;
@@ -958,11 +967,11 @@ package birdeye.vis.elements
 			dataFields = [];
 			// prepare data for a standard tooltip message in case the user
 			// has not set a dataTipFunction
-			dataFields["dim1"] = dim1;
-			dataFields["dim2"] = dim2;
-			dataFields["dim3"] = dim3;
-			dataFields["colorField"] = colorField;
-			dataFields["sizeField"] = sizeField;
+			dataFields[DIM1] = dim1;
+			dataFields[DIM2] = dim2;
+			dataFields[DIM3] = dim3;
+			dataFields[COLOR_FIELD] = colorField;
+			dataFields[SIZE_FIELD] = sizeField;
 
 			if (stylesChanged)
 			{
@@ -1151,9 +1160,13 @@ package birdeye.vis.elements
 			rollOverE.scale1 = scale1;
 			rollOverE.scale2 = scale2;
 			rollOverE.scale3 = scale3;
-			rollOverE.pos1 = extGG.currentItem[tmpDim1];
-			rollOverE.pos2 = extGG.currentItem[tmpDim2];
-			rollOverE.pos3 = extGG.currentItem[tmpDim3];
+			
+			if (extGG.currentItem)
+			{
+				rollOverE.pos1 = extGG.currentItem[tmpDim1];
+				rollOverE.pos2 = extGG.currentItem[tmpDim2];
+				rollOverE.pos3 = extGG.currentItem[tmpDim3];
+			}
 			
 			chart.dispatchEvent(rollOverE);
 			
@@ -1272,14 +1285,9 @@ package birdeye.vis.elements
 			{ 
 				initGGToolTip();
 				ttGG.create(item, dataFields, xPos, yPos, zPos, radius, collisionIndex, shapes, ttXoffset, ttYoffset, true, showGeometry);
-			} else if (mouseClickFunction!=null || mouseDoubleClickFunction!=null)
-			{
-				// if no tips but interactivity is required than add roll over events and pass
-				// data and positioning information about the current data item 
-				ttGG.create(item, dataFields, xPos, yPos, zPos, NaN,collisionIndex,  null, NaN, NaN, false);
 			} else {
-				// if no tips and no interactivity than just add location info needed for pointers
-				ttGG.create(null, null, xPos, yPos, zPos, NaN,collisionIndex, null, NaN, NaN, false);
+				// if no tips than just add data info and location info needed for pointers
+				ttGG.create(item, dataFields, xPos, yPos, zPos, NaN,collisionIndex, null, NaN, NaN, false);
 			}
 
 			if (chart.showAllDataTips)

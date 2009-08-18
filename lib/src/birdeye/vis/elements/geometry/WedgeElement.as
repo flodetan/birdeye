@@ -73,8 +73,8 @@ package birdeye.vis.elements.geometry
 			if (_stackType != OVERLAID || _stackType != STACKED100)
 				_stackType = STACKED100;
 
-			if (! itemRenderer)
-				itemRenderer = new ClassFactory(CircleRenderer);
+			if (! graphicRenderer)
+				graphicRenderer = new ClassFactory(CircleRenderer);
 		}
 
 		/** @Private 
