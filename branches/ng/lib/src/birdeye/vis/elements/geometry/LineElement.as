@@ -193,11 +193,14 @@ trace (getTimer(), "drawing line ele");
 							points.push(new GraphicPoint(pos1,pos2));
 					} else if (j++ > 0)
 					{
- 						var line:Line = new Line(xPrev,yPrev,pos1,pos2);
-						line.fill = fill;
-						line.stroke = stroke;
-						gg.geometryCollection.addItemAt(line,0);
-						line = null;     
+						if (!isNaN(xPrev) && !isNaN(yPrev) && !isNaN(pos1) && !isNaN(pos2))
+						{
+	 						var line:Line = new Line(xPrev,yPrev,pos1,pos2);
+							line.fill = fill;
+							line.stroke = stroke;
+							gg.geometryCollection.addItemAt(line,0);
+							line = null;     
+						}
 					}
 	
 					if (_showItemRenderer)
