@@ -539,7 +539,8 @@ trace(getTimer(), "initing elements");
 			
 			if (active)
 			{		
-		
+
+trace(getTimer(), "updateDisplaylist", unscaledWidth, unscaledHeight);		
 				super.updateDisplayList(unscaledWidth, unscaledHeight);
 				setActualSize(unscaledWidth, unscaledHeight);
 	
