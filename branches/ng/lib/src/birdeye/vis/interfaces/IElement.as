@@ -115,9 +115,9 @@ package birdeye.vis.interfaces
 		/** Set the stroke color.*/
 		function getStroke():IGraphicsStroke;
 
-		/** Set the itemRenderer used for the layout of data values.*/
-		function set itemRenderer(val:IFactory):void;
-		function get itemRenderer():IFactory;
+		/** Set the graphic renderer used for the layout of data values.*/
+		function set graphicRenderer(val:IFactory):void;
+		function get graphicRenderer():IFactory;
 
 		/** Set the cursor vector used by the Element. It can either derive from the Element own 
 		 * dataProvider or from the chart dataProvider.*/

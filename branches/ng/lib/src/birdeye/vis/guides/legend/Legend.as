@@ -129,12 +129,12 @@ package birdeye.vis.guides.legend
 					}
 
 					var bounds:Rectangle = new Rectangle(0,0, 10,10);
-					if (IElement(_dataProvider.elements[i]).itemRenderer && IElement(_dataProvider.elements[i]).displayName)
+					if (IElement(_dataProvider.elements[i]).graphicRenderer && IElement(_dataProvider.elements[i]).displayName)
 					{
 /* 						var rendererClass:Class = IElement(_dataProvider.series[i]).itemRenderer;
 						var renderer:IElementDataRenderer = new rendererClass();
  */
-						var renderer:IFactory = IElement(_dataProvider.elements[i]).itemRenderer;
+						var renderer:IFactory = IElement(_dataProvider.elements[i]).graphicRenderer;
 
  						var geom:Geometry;
  						if (IElement(_dataProvider.elements[i]).source)

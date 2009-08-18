@@ -63,8 +63,8 @@ package birdeye.vis.elements.geometry
 		{
 			super.commitProperties();
 
-			if (!itemRenderer)
-				itemRenderer = new ClassFactory(RectangleRenderer);
+			if (!graphicRenderer)
+				graphicRenderer = new ClassFactory(RectangleRenderer);
 
 			if (stackType == STACKED100 && chart)
 			{
@@ -224,15 +224,15 @@ trace(getTimer(), "drawing bar");
 		 				}
 		 				else 
 						{							
-							poly = itemRenderer.newInstance();
+							poly = graphicRenderer.newInstance();
 							if (poly is IBoundedRenderer) (poly as IBoundedRenderer).bounds = bounds;
 		
 						}
 							
-						if (_showItemRenderer)
+						if (_showGraphicRenderer)
 						{
 
-							var shape:IGeometry = itemRenderer.newInstance();
+							var shape:IGeometry = graphicRenderer.newInstance();
 							if (shape is IBoundedRenderer) (shape as IBoundedRenderer).bounds = bounds;
 							shape.fill = fill;
 							shape.stroke = stroke;

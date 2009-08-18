@@ -67,8 +67,8 @@ package birdeye.vis.elements.geometry
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
-			if (!itemRenderer)
-				itemRenderer = new ClassFactory(RectangleRenderer);
+			if (!graphicRenderer)
+				graphicRenderer = new ClassFactory(RectangleRenderer);
 
 			if (stackType == STACKED100 && chart)
 			{
@@ -275,7 +275,7 @@ trace (getTimer(), "drawing column ele");
  			 				if (_source)
 								poly = new RasterRenderer(bounds, _source);
 			 				else 
-								poly = itemRenderer.newInstance();
+								poly = graphicRenderer.newInstance();
 			
 							if (poly is IBoundedRenderer) (poly as IBoundedRenderer).bounds = bounds;
 							poly.fill = fill;
@@ -338,9 +338,9 @@ trace (getTimer(), "drawing column ele");
 							gg.geometryCollection.addItemAt(arc,0); 
 						}
 		
-						if (_showItemRenderer)
+						if (_showGraphicRenderer)
 						{
-							var shape:IGeometry = itemRenderer.newInstance();
+							var shape:IGeometry = graphicRenderer.newInstance();
 							if (shape is IBoundedRenderer) (shape as IBoundedRenderer).bounds = bounds;
 							shape.fill = fill;
 							shape.stroke = stroke;

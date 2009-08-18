@@ -27,8 +27,8 @@
  
 package birdeye.vis.elements.geometry {
 
-	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.Position;
+	import birdeye.vis.elements.RenderableElement;
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
@@ -39,10 +39,13 @@ package birdeye.vis.elements.geometry {
 	
 	import com.degrafa.IGeometry;
 	
+	import flash.display.DisplayObject;
 	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
+	
+	import mx.core.IDataRenderer;
 
-	public class NodeElement extends BaseElement implements IGraphLayoutableElement {
+	public class NodeElement extends RenderableElement implements IGraphLayoutableElement {
 
 		public function NodeElement() {
 			super();
@@ -103,14 +106,16 @@ package birdeye.vis.elements.geometry {
 			return _graphLayout.getNodeItemPosition(itemId);
 		}
 		
-		protected function createItemRenderer():IGeometry {
+		protected function createItemRenderer(currentItem:Object, position:Position):IGeometry {
 			const bounds:Rectangle = new Rectangle(0 - _size, 0 - _size, _size * 2, _size * 2);
 			var renderer:IGeometry;
 			if (labelField)
 			{
-				// TODO link the labelField to data provider
 				renderer = new TextRenderer(null);
-				(renderer as TextRenderer).text = labelField;
+
+				// check if label field is linked to data, in which case the label will refer to data
+				// otherwise, the label will refer to the labelField content
+				(renderer as TextRenderer).text = (currentItem) ? currentItem[labelField] : labelField;
 				(renderer as TextRenderer).fontSize = sizeLabel;
 				(renderer as TextRenderer).fontFamily = fontLabel;
 				(renderer as TextRenderer).autoSize = TextFieldAutoSize.LEFT;
@@ -118,11 +123,25 @@ package birdeye.vis.elements.geometry {
 				(renderer as TextRenderer).x -= (renderer as TextRenderer).displayObject.width/2;
 				(renderer as TextRenderer).y -= (renderer as TextRenderer).displayObject.height/2;
 			} 
+
+			if (itemRenderer != null)
+			{
+				var itmDisplay:DisplayObject = new itemRenderer();
+				if (dataField && itmDisplay is IDataRenderer)
+					(itmDisplay as IDataRenderer).data = currentItem[dataField];
+				addChild(itmDisplay);
+				if (sizeRenderer > 0)
+					DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = sizeRenderer;
+					
+				itmDisplay.x = position.pos1 - itmDisplay.width/2;
+				itmDisplay.y = position.pos2 - itmDisplay.height/2;
+			}
+			
 			if (_source)
 				renderer = new RasterRenderer(bounds, _source);
  			else {
- 				if (itemRenderer) {
- 					renderer = itemRenderer.newInstance();
+ 				if (graphicRenderer) {
+ 					renderer = graphicRenderer.newInstance();
  					if (renderer is IBoundedRenderer) (renderer as IBoundedRenderer).bounds = bounds;
  				} else {
 					renderer = new CircleRenderer(bounds);
@@ -162,7 +181,7 @@ package birdeye.vis.elements.geometry {
 						if (position != null) {
 							createItemDisplayObject(
 								item, dataFields, position, itemId,
-								[createItemRenderer(), createLabelRenderer(item[dimName])]);
+								[createItemRenderer(item, position), createLabelRenderer(item[dimName])]);
 						}
 					}
 				});

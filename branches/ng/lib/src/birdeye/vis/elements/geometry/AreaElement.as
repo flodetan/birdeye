@@ -93,8 +93,8 @@ package birdeye.vis.elements.geometry
 		{
 			super.commitProperties();
 			// select the item renderer (must be an IGeomentry)
-			if (! itemRenderer)
-				itemRenderer = new ClassFactory(UpTriangleRenderer);
+			if (! graphicRenderer)
+				graphicRenderer = new ClassFactory(UpTriangleRenderer);
 
 			// doesn't need to call super.commitProperties(), since it doesn't need to listen
 			// to axes interval changes 
@@ -247,11 +247,11 @@ trace (getTimer(), "area ele");
 							}
 					}
 						
-					if (_showItemRenderer)
+					if (_showGraphicRenderer)
 					{
 		 				var bounds:Rectangle = new Rectangle(pos1 - _rendererSize/2, pos2 - _rendererSize/2, _rendererSize, _rendererSize);
 		 				
-						var shape:IGeometry = itemRenderer.newInstance();
+						var shape:IGeometry = graphicRenderer.newInstance();
 						if (shape is IBoundedRenderer) (shape as IBoundedRenderer).bounds = bounds; 
 
 						shape.fill = fill;
