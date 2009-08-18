@@ -43,6 +43,7 @@ package birdeye.vis.coords
 	import mx.containers.HBox;
 	import mx.containers.VBox;
 	import mx.core.Container;
+	import mx.core.UIComponent;
 	
 	/** A CartesianChart can be used to create any 2D or 3D cartesian charts available in the library
 	 * apart from those who might have specific features, like stackable element or data-sizable items.
@@ -345,23 +346,21 @@ package birdeye.vis.coords
 				if (guide is IAxis)
 				{
 					var axis:IAxis = guide as IAxis;
-					var axisBounds:Rectangle = Surface(guide).getBounds(Surface(guide));
-					var estimatedAxisBoundWidth:Number = (isNaN(axisBounds.width)) ? 0 : axisBounds.width;
-					var estimatedAxisBoundHeight:Number = (isNaN(axisBounds.height)) ? 0 : axisBounds.height;
-					
+					var axisUI:UIComponent = guide as UIComponent;
+										
 					switch (axis.placement)
 					{
 						case Axis.BOTTOM:
-							bottomSize += Math.max(axis.maxLabelSize, estimatedAxisBoundHeight);
+							bottomSize += axisUI.minHeight;
 							break;
 						case Axis.TOP:
-							topSize += Math.max(axis.maxLabelSize, estimatedAxisBoundHeight);
+							topSize += axisUI.minHeight;
 							break;
 						case Axis.RIGHT:
-							rightSize += Math.max(axis.maxLabelSize, estimatedAxisBoundWidth);
+							rightSize += axisUI.minWidth;
 							break;
 						case Axis.LEFT:
-							leftSize += Math.max(axis.maxLabelSize, estimatedAxisBoundWidth);
+							leftSize += axisUI.minWidth;
 							break;
 					}
 				}

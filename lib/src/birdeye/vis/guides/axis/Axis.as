@@ -799,7 +799,6 @@ package birdeye.vis.guides.axis
 				tmp.text = String(scale.completeDataValues[i]);
 				maxLblSize = Math.max(maxLblSize, tmp.displayObject.width);
 			}
-			
 			if (showAxis)
 			{
 					switch (placement)
@@ -808,7 +807,7 @@ package birdeye.vis.guides.axis
 						case BOTTOM:
 						case HORIZONTAL_CENTER:
 							//height = Math.max(5,maxLblSize * Math.sin(-_rotateLabels*Math.PI/180));
-							minHeight = sizeLabel + thickWidth + 10 + maxLblSize * Math.sin(-_rotateLabels*Math.PI/180);
+							minHeight = sizeLabel + 10 + maxLblSize * Math.sin(-_rotateLabels*Math.PI/180);
 							break;							
 						case LEFT:
 						case RIGHT:
