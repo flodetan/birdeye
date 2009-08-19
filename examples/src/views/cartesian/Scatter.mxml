@@ -61,9 +61,9 @@
 			<grid:Grid scale1="{l}" scale2="{c}" divideEnumerableScale="false"/>
 		</coords:guides>
 		 <coords:elements>
-		 	<series:PointElement scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" dim2="R1" itemRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" styleName="grad1" displayName="R1"/>
-		 	<series:PointElement scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" dim2="R2" itemRenderer="birdeye.vis.guides.renderers.ButterflyRenderer" styleName="grad3" displayName="R2"/>
-		 	<series:PointElement scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" dim2="R3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="grad5" displayName="R3"/>
+		 	<series:PointElement scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" dim2="R1" graphicRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" styleName="grad1" displayName="R1"/>
+		 	<series:PointElement scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" dim2="R2" graphicRenderer="birdeye.vis.guides.renderers.ButterflyRenderer" styleName="grad3" displayName="R2"/>
+		 	<series:PointElement scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" dim2="R3" graphicRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="grad5" displayName="R3"/>
 		 </coords:elements>
 	</coords:Cartesian>
 	<legend:Legend dataProvider="{sp}" direction="horizontal"/>

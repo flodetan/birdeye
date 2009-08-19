@@ -21,6 +21,7 @@
 			{
 				regions = ["R1","R2","R3","R4","R5","R6","R7"];
 				var ac:ArrayCollection = new ArrayCollection();
+				var subjects:Array = ["medals"];
 				for (var i:Number = 0; i<regions.length; i++)
 				{
 					var gold:Number = Math.round(Math.random() * 1000),
@@ -33,7 +34,8 @@
 						gold: gold,
 						silver: silver,
 						bronze: bronze,
-						total: gold + bronze + silver
+						total: gold + bronze + silver,
+						newChart: {subjects: subjects, values: [gold, silver, bronze], country: regions[i]}
 					});
 				}
 				dt = ac;
@@ -65,9 +67,9 @@
 				<grid:Grid scale1="{l}" scale2="{c}" divideEnumerableScale="false"/>
 			</coords:guides>
 			 <coords:elements>
-			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" dim1="index" dim2="bronze" source="{rasterImage}" strokeAlpha="0" displayName="A" size="13"/>
-			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" dim1="index" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="solid1" dim2="gold" displayName="C" />
-			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" size="0" scale1="{c}" scale2="{l}" extendMouseEvents="true" labelField="R4" labelSize="15" labelFont="verdana" labelColor="#FF0000" dim1="index" dim2="silver" itemRenderer="birdeye.vis.guides.renderers.TextRenderer" displayName="B"/>
+			 	<elements:PointElement sizeRenderer="100" dataField="newChart" itemRenderer="views.cartesian.TestRenderer" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" dim1="index" dim2="bronze" source="{rasterImage}" strokeAlpha="0" displayName="A" size="13"/>
+			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" dim1="index" graphicRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="solid1" dim2="gold" displayName="C" />
+			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" size="0" scale1="{c}" scale2="{l}" extendMouseEvents="true" labelField="R4" labelSize="15" labelFont="verdana" labelColor="#FF0000" dim1="index" dim2="silver" graphicRenderer="birdeye.vis.guides.renderers.TextRenderer" displayName="B"/>
 			 </coords:elements>
 		</coords:Cartesian>
 		<guides:Legend dataProvider="{pc3}" direction="horizontal"/>	
@@ -81,7 +83,7 @@
 				<axis:Axis scale="{l1}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
 			</coords:guides>
 			 <coords:elements>
-			 	<elements:PointElement colorScale="{col}" colorField="bronze" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{l1}" dim2="region" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" dim1="bronze"/>
+			 	<elements:PointElement colorScale="{col}" colorField="bronze" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{l1}" dim2="region" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" dim1="bronze"/>
 			 </coords:elements>
 		</coords:Cartesian>
 	</mx:VBox>
