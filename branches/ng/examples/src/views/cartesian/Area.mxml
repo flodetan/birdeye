@@ -72,7 +72,7 @@
  		<coords:scales>
  			<scales:Category categoryField="subject" id="c" />
  			<scales:Category categoryField="subject1" id="c1" />
- 			<scales:Linear id="l1" />
+ 			<scales:Linear id="l1"/>
  			<scales:Linear id="l2" />
  			<scales:Linear id="l3" />
  			<scales:Linear id="l4" />
@@ -91,11 +91,11 @@
  			<grid:Grid scale1="{l2}" scale2="{c}" />
  		</coords:guides>
 		 <coords:elements>
-		 	<elements:AreaElement id="a1" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l2}" scale1="{c}" dim1="subject" dim2="R1" styleName="grad1" strokeAlpha=".5" displayName="R1"/>
-    		<elements:AreaElement id="a2" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l4}" scale1="{c1}" dim1="subject1" dim2="R2" styleName="grad2" strokeAlpha=".5" displayName="R2"/>
-    		<elements:AreaElement id="a3" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l3}" scale1="{c}" dim1="subject" dim2="R3" styleName="grad3" strokeAlpha=".5" displayName="R3"/>
-    		<elements:AreaElement id="a4" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l1}" scale1="{c1}" dim1="subject1" dim2="R4" styleName="grad4" strokeAlpha=".5" displayName="R4"/>
-    		<elements:AreaElement id="a5" showItemRenderer="true" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l5}" scale1="{c}" dim1="subject" dim2="R5" styleName="grad4" strokeAlpha=".5" displayName="R5"/>
+		 	<elements:AreaElement id="a1" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l2}" scale1="{c}" dim1="subject" dim2="R1" styleName="grad1" strokeAlpha=".5" displayName="R1"/>
+    		<elements:AreaElement id="a2" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l4}" scale1="{c1}" dim1="subject1" dim2="R2" styleName="grad2" strokeAlpha=".5" displayName="R2"/>
+    		<elements:AreaElement id="a3" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l3}" scale1="{c}" dim1="subject" dim2="R3" styleName="grad3" strokeAlpha=".5" displayName="R3"/>
+    		<elements:AreaElement id="a4" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l1}" scale1="{c1}" dim1="subject1" dim2="R4" styleName="grad4" strokeAlpha=".5" displayName="R4"/>
+    		<elements:AreaElement id="a5" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l5}" scale1="{c}" dim1="subject" dim2="R5" styleName="grad4" strokeAlpha=".5" displayName="R5"/>
 		 </coords:elements>
 	</coords:Cartesian>
 
