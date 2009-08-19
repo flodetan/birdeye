@@ -1604,13 +1604,23 @@ package birdeye.vis.elements
 		 * @param itemId
 		 * @param geometries Array of IGeometry objects 
 		 **/
-		protected function createItemDisplayObject(currentItem:Object, dataFields:Array, pos:Position, itemId:Object, geometries:Array):DisplayObject {
-			createTTGG(currentItem, dataFields, NaN, NaN, NaN, NaN);
-			ttGG.geometry = geometries;
-	        ttGG.x = pos.pos1; 
-	        ttGG.y = pos.pos2; 
-	        _itemDisplayObjects[itemId] = ttGG;
-			return ttGG;
+		protected function createItemDisplayObject(currentItem:Object, dataFields:Array, pos:Position, itemId:Object, renderers:Object):void {
+			var geometries:Array = renderers.graphicRenderer;
+			var itmDisplayObject:DisplayObject = renderers.itemRenderer;
+			if (itmDisplayObject)
+			{
+				itmDisplayObject.x = pos.pos1; 
+				itmDisplayObject.y = pos.pos2; 
+				addChild(itmDisplayObject);
+				_itemDisplayObjects[itemId] = itmDisplayObject;
+			} else if (geometries)
+			{
+				createTTGG(currentItem, dataFields, NaN, NaN, NaN, NaN);
+				ttGG.geometry = geometries;
+		        ttGG.x = pos.pos1; 
+		        ttGG.y = pos.pos2; 
+				_itemDisplayObjects[itemId] = ttGG;
+			}
 		}
 
 		public function refresh():void
