@@ -85,6 +85,14 @@ package birdeye.vis.guides.axis
 			}
 		}
 		
+		private var _padding:Number = 7;
+		/** Space left between multiple axes placed in the same location (left, top, bottom...).*/
+		public function set padding(val:Number):void
+		{
+			_padding = val;
+			invalidateDisplayList()
+		}
+		
 		public function get scale():IScale
 		{
 			return _scale;
@@ -808,12 +816,12 @@ package birdeye.vis.guides.axis
 						case BOTTOM:
 						case HORIZONTAL_CENTER:
 							//height = Math.max(5,maxLblSize * Math.sin(-_rotateLabels*Math.PI/180));
-							minHeight = sizeLabel + 10 + maxLblSize * Math.sin(-_rotateLabels*Math.PI/180);
+							minHeight = _padding + sizeLabel + 10 + maxLblSize * Math.sin(-_rotateLabels*Math.PI/180);
 							break;							
 						case LEFT:
 						case RIGHT:
 						case VERTICAL_CENTER:				
-							minWidth = Math.max(5, maxLblSize * Math.cos(_rotateLabels*Math.PI/180));
+							minWidth = _padding + Math.max(5, maxLblSize * Math.cos(_rotateLabels*Math.PI/180));
 							break;
 					}
 
@@ -864,7 +872,7 @@ trace(getTimer(), "drawing axis");
 				{
 					for (var i:uint = 0; i<scale.completeDataValues.length; i += completeValuesInterval)
 					{
-						var dataLabel:String = scale.completeDataValues[i];
+						var dataLabel:Object = scale.completeDataValues[i];
 						// create thick line
 						var yPos:Number = scale.getPosition(dataLabel);
 						if (coordinates && coordinates.origin)
