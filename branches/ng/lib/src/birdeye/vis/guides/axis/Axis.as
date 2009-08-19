@@ -4,6 +4,7 @@ package birdeye.vis.guides.axis
 	import birdeye.vis.elements.events.ElementRollOverEvent;
 	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.guides.IAxis;
+	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.Category;
 	
@@ -854,12 +855,16 @@ trace(getTimer(), "drawing axis");
 				var thick:Line;
 				var label:RasterTextPlus;
 				
+				// allow category labels to be intervalled, thus avoiding overlapping
+				var completeValuesInterval:uint = 1;
+				if (scale is IEnumerableScale && scaleInterval>1)
+					completeValuesInterval = scaleInterval;
 				// vertical orientation
 				if (xMin == xMax)
 				{
-					for each (var dataLabel:Object in scale.completeDataValues)
+					for (var i:uint = 0; i<scale.completeDataValues.length; i += completeValuesInterval)
 					{
-						
+						var dataLabel:String = scale.completeDataValues[i];
 						// create thick line
 						var yPos:Number = scale.getPosition(dataLabel);
 						if (coordinates && coordinates.origin)
@@ -906,8 +911,9 @@ trace(getTimer(), "drawing axis");
 					}
 				} else {
 				// horizontal orientation
-					for each (dataLabel in scale.completeDataValues)
+					for (i = 0; i<scale.completeDataValues.length; i += completeValuesInterval)
 					{
+						dataLabel = scale.completeDataValues[i];
 
 						// create thick line
 			 			thick = new Line(scale.getPosition(dataLabel), yMin + thickWidth * sign, scale.getPosition(dataLabel), yMax);
