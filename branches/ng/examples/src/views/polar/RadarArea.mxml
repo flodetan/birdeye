@@ -60,10 +60,10 @@
 				<axis:MultiAxis subScale="{c}" colorStroke="0x000000" colorLabel="0x000000" fontLabel="tahoma" sizeLabel="9" />
 			</polar:guides>
 			<polar:elements>
-				<pseries:AreaElement id="a1" styleName="grad1" scale1="{c}" dim1="subject" dim2="R1" itemRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" showItemRenderer="true" strokeColor="0xfff000" strokeAlpha="1" strokeWeight="1" gradientAlphas="{[0.1,0.1]}" displayName="R1"/>
-				<pseries:AreaElement id="a2" styleName="grad2" scale1="{c}" dim1="subject" dim2="R2" itemRenderer="birdeye.vis.guides.renderers.UpTriangleRenderer" showItemRenderer="true" strokeColor="0xffff00" strokeAlpha="1" strokeWeight="1" gradientAlphas="{[0.1,0.1]}" displayName="R2"/>
-				<pseries:AreaElement id="a3" styleName="grad3" scale1="{c}" dim1="subject" dim2="R3" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" showItemRenderer="true" strokeColor="0xff0000" strokeAlpha="1" strokeWeight="1" gradientAlphas="{[0.1,0.1]}" displayName="R3"/>
-				<pseries:AreaElement id="a4" styleName="grad4" scale1="{c}" dim1="subject" dim2="R4" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" showItemRenderer="true" strokeColor="0xE80CDE" strokeAlpha="1" strokeWeight="3" gradientAlphas="{[0.1,0.1]}" displayName="R4"/>
+				<pseries:AreaElement id="a1" styleName="grad1" scale1="{c}" dim1="subject" dim2="R1" graphicRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" showGraphicRenderer="true" strokeColor="0xfff000" strokeAlpha="1" strokeWeight="1" gradientAlphas="{[0.1,0.1]}" displayName="R1"/>
+				<pseries:AreaElement id="a2" styleName="grad2" scale1="{c}" dim1="subject" dim2="R2" graphicRenderer="birdeye.vis.guides.renderers.UpTriangleRenderer" showGraphicRenderer="true" strokeColor="0xffff00" strokeAlpha="1" strokeWeight="1" gradientAlphas="{[0.1,0.1]}" displayName="R2"/>
+				<pseries:AreaElement id="a3" styleName="grad3" scale1="{c}" dim1="subject" dim2="R3" graphicRenderer="birdeye.vis.guides.renderers.DiamondRenderer" showGraphicRenderer="true" strokeColor="0xff0000" strokeAlpha="1" strokeWeight="1" gradientAlphas="{[0.1,0.1]}" displayName="R3"/>
+				<pseries:AreaElement id="a4" styleName="grad4" scale1="{c}" dim1="subject" dim2="R4" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" showGraphicRenderer="true" strokeColor="0xE80CDE" strokeAlpha="1" strokeWeight="3" gradientAlphas="{[0.1,0.1]}" displayName="R4"/>
 			</polar:elements>
 		</polar:Polar>
 		
