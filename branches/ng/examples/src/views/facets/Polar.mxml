@@ -78,7 +78,7 @@
 			</coords:guides>
     		 <coords:elements>
     		 	<elements:PointElement scale1="{c3}" scale2="{c2}" dim1="type" dim2="subject" styleName="solid1" displayName="R3">
-    		 		<elements:itemRenderer>
+    		 		<elements:graphicRenderer>
         		 		<facets:FacetContainer>
         		 			<facets:coord>
         		 				<coords:Polar id="p1" showDataTips="true" columnWidthRate="0.5" />
@@ -95,7 +95,7 @@
 							 	<elements:LineElement id="a5" scale1="{c}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R5" styleName="solid5" displayName="R5" />
         		 			</facets:elements>
         		 		</facets:FacetContainer>
-        		 	</elements:itemRenderer>
+        		 	</elements:graphicRenderer>
         		 </elements:PointElement>
         	</coords:elements>
         </coords:Cartesian>	

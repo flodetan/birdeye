@@ -73,7 +73,7 @@
 			</coords:guides>
     		 <coords:elements>
     		 	<elements:PointElement scale1="{c3}" scale2="{c2}" dim1="type" dim2="subject" styleName="solid1" displayName="R3">
-    		 		<elements:itemRenderer>
+    		 		<elements:graphicRenderer>
         		 		<facets:FacetContainer>
         		 			<facets:coord>
         		 				<coords:Cartesian showDataTips="true" columnWidthRate="0.5" />
@@ -90,7 +90,7 @@
         		 				<elements:ColumnElement id="a1"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R1" styleName="solid1" displayName="R1" />
         		 			</facets:elements>
         		 		</facets:FacetContainer>
-        		 	</elements:itemRenderer>
+        		 	</elements:graphicRenderer>
         		 </elements:PointElement>
         	</coords:elements>
         </coords:Cartesian>
