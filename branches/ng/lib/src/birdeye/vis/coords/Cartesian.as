@@ -113,8 +113,8 @@ package birdeye.vis.coords
 			leftContainer.clipContent = false;
 			leftContainer.horizontalScrollPolicy = "off";
 			leftContainer.setStyle("horizontalAlign", "right");
-//			leftContainer.setStyle("backgroundColor", "0x666666");
-
+			leftContainer.setStyle("horizontalGap", 0);
+			leftContainer.setStyle("verticalGap", 0);
 
 			rightContainer.verticalScrollPolicy = "off";
 			rightContainer.clipContent = false;
