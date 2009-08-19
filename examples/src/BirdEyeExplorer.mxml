@@ -6,6 +6,7 @@
 	xmlns:micro="views.micro.*"
 	xmlns:maps="views.maps.*"
 	xmlns:graphs="views.graphs.*"
+	xmlns:mixing="views.mixing.*"
 	xmlns:recipes="views.recipes.*"
 	xmlns:about="views.about.*"
 	backgroundGradientColors="[#222222, #222222]"
@@ -57,11 +58,12 @@
 			<micro:Micro label="Micro" width="100%" height="100%"/>
 			<maps:Maps label="Maps" width="100%" height="100%"/>
 			<graphs:Graphs label="Graphs" width="100%" height="100%"/>
+			<mixing:Graphs label="Mixing" width="100%" height="100%"/>
 			<recipes:Recipes label="Recipes" width="100%" height="100%"/>
 			<about:About label="About..." width="100%" height="100%"/>
 		</mx:TabNavigator>
 		
-		<mx:Label text="Last Update: 16 August 09" fontSize="10" color="#999999" />
+		<mx:Label text="Last Update: 19 August 09" fontSize="10" color="#999999" />
 	
 	</mx:VBox>
 	</mx:Box>
