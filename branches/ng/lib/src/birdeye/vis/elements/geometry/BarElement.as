@@ -216,7 +216,10 @@ trace(getTimer(), "drawing bar");
 						}
 						
 						if (_extendMouseEvents)
+						{
 							gg = ttGG;
+							gg.target = this;
+						}
 		
 		 				if (_source)
 		 				{

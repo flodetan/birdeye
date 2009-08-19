@@ -176,7 +176,10 @@ package birdeye.vis.elements.geometry
 						createTTGG(currentItem, dataFields, xPos, yPos, NaN, _size, i);
 						
 		 				if (ttGG && _extendMouseEvents)
+		 				{
 							gg = ttGG;
+		 					gg.target = this;
+		 				}
 		 				
 						var arc:IGeometry;
 						
