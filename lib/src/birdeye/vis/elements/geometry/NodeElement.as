@@ -106,7 +106,24 @@ package birdeye.vis.elements.geometry {
 			return _graphLayout.getNodeItemPosition(itemId);
 		}
 		
-		protected function createItemRenderer(currentItem:Object, position:Position):IGeometry {
+		protected function createItemRenderer(currentItem:Object, position:Position):DisplayObject
+		{
+			if (itemRenderer != null)
+			{
+				var itmDisplay:DisplayObject = new itemRenderer();
+				if (dataField && itmDisplay is IDataRenderer)
+					(itmDisplay as IDataRenderer).data = currentItem[dataField];
+				addChild(itmDisplay);
+				if (sizeRenderer > 0)
+					DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = sizeRenderer;
+					
+				itmDisplay.x = position.pos1;
+				itmDisplay.y = position.pos2;
+			}
+			return itmDisplay;
+		}
+
+		protected function createGraphicRenderer(currentItem:Object, position:Position):IGeometry {
 			const bounds:Rectangle = new Rectangle(0 - _size, 0 - _size, _size * 2, _size * 2);
 			var renderer:IGeometry;
 			if (labelField)
@@ -124,19 +141,6 @@ package birdeye.vis.elements.geometry {
 				(renderer as TextRenderer).y -= (renderer as TextRenderer).displayObject.height/2;
 			} 
 
-			if (itemRenderer != null)
-			{
-				var itmDisplay:DisplayObject = new itemRenderer();
-				if (dataField && itmDisplay is IDataRenderer)
-					(itmDisplay as IDataRenderer).data = currentItem[dataField];
-				addChild(itmDisplay);
-				if (sizeRenderer > 0)
-					DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = sizeRenderer;
-					
-				itmDisplay.x = position.pos1 - itmDisplay.width/2;
-				itmDisplay.y = position.pos2 - itmDisplay.height/2;
-			}
-			
 			if (_source)
 				renderer = new RasterRenderer(bounds, _source);
  			else {
@@ -179,9 +183,12 @@ package birdeye.vis.elements.geometry {
 					if (isItemVisible(itemId)) {
 						const position:Position = getItemPosition(itemId);
 						if (position != null) {
+							var renderers:Object = {itemRenderer: createItemRenderer(item, position),
+													graphicRenderer: [createGraphicRenderer(item, position), 
+																	createLabelRenderer(item[dimName])]}
 							createItemDisplayObject(
 								item, dataFields, position, itemId,
-								[createItemRenderer(item, position), createLabelRenderer(item[dimName])]);
+								renderers);
 						}
 					}
 				});
