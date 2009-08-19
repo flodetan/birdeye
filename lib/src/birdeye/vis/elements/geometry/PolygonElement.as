@@ -136,6 +136,7 @@ var numCoords:Number = 0;
 					} 
 
 					createTTGG(currentItem, dataFields, NaN, NaN, NaN, NaN, NaN, null, NaN, NaN, false);
+					ttGG.target = this;
 
 					if (fullPoly && fullPoly.length > 0)
 					{

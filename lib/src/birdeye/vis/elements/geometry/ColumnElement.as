@@ -268,7 +268,10 @@ trace (getTimer(), "drawing column ele");
 							}
 			
 							if (ttGG && _extendMouseEvents)
+							{
 								gg = ttGG;
+								gg.target = this;
+							}
 							
 			//				poly = renderer.getGeometry(bounds);
 			
@@ -325,7 +328,10 @@ trace (getTimer(), "drawing column ele");
 							createTTGG(currentItem, dataFields, xPos, yPos, NaN, _rendererSize, i);
  							
 							if (ttGG && _extendMouseEvents)
+							{
 								gg = ttGG;
+								gg.target = this;
+							}
 								
 							var arc:IGeometry;
 							

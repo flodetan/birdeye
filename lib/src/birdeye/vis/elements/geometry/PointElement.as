@@ -194,7 +194,10 @@ trace (getTimer(), "drawing point ele");
 							}
 							
 							if (_extendMouseEvents)
+							{
 								gg = ttGG;
+								gg.target = this;
+							}
 		
 		
 							createPlotItems(currentItem, scaleResults);
