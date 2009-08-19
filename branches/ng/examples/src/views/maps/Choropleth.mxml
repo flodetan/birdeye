@@ -7,9 +7,10 @@
 	xmlns:elements="birdeye.vis.elements.geometry.*"
 	xmlns:trans="birdeye.vis.trans.projections.*"
 	xmlns:scales="birdeye.vis.scales.*"
-	xmlns:guides="birdeye.vis.guides.legend.*" creationComplete="init()" xmlns:axis="birdeye.vis.guides.axis.*">
+	xmlns:guides="birdeye.vis.guides.legend.*" creationComplete="init()" xmlns:axis="birdeye.vis.guides.axis.*" xmlns:modifiers="birdeye.vis.trans.modifiers.*">
 <mx:Script>
 		<![CDATA[
+			import birdeye.vis.data.dictionaries.WorldCountriesPlus;
 			import birdeye.vis.data.dictionaries.WorldRegionTypes;
 			import birdeye.vis.trans.modifiers.WhyattSimplification;
 			import birdeye.vis.trans.modifiers.Simplification;
@@ -27,8 +28,7 @@
 			public var ac:ArrayCollection = new ArrayCollection();
 			public function init():void
 			{
-				var ps:Simplification = new WhyattSimplification();
-				var wc:WorldCountries = new WorldCountries();
+				var wc:WorldCountriesPlus = new WorldCountriesPlus();
 				var countries:Array = wc.getCountriesListByRegion(WorldRegionTypes.REGION_WORLD);
 				var simplifiedCountries:ArrayCollection = new ArrayCollection();
 				for each (var country:String in countries)
@@ -36,7 +36,7 @@
 					var a:Array;
 					simplifiedCountries.addItem({
 						country: country,
-						poly: a = wc.getCountryPolygon(country),
+						poly: a = wc.getCountryPolygon(country, 90),
 						center: wc.getCountryCenter(country),
 						random: Math.random() * 100000
 					});
@@ -109,26 +109,22 @@
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
     	<coords:Cartesian id="myMap" width="90%" height="90%" dataProvider="{dt}" showDataTips="true" dataTipFunction="dtFunc">
     		 <coords:transforms>
-					<trans:Projection id="myProj" proj="Miller cylindrical" latScale="{lat}" longScale="{long}"/>
+					<trans:Projection id="myProj" proj="Geographic" latScale="{lat}" longScale="{long}"/>
 			</coords:transforms> 
 			<coords:scales>
  				<scales:Numeric id="lat" dataValues="{[-90,90]}" dataInterval="20" />
  				<scales:Numeric id="long" dataValues="{[-180,180]}" dataInterval="20" />
- 				<scales:Color id="col1" scaleValues="[0x000000, 0xffffff]"/>
+ 				<scales:Color id="col1" scaleValues="[0xff0000, 0xFFff00]"/>
 <!-- 				<scales:Numeric id="col" f="colorFunction" />
 -->			</coords:scales>
-			<coords:guides>
-				<axis:Axis scale="{lat}" placement="right" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb" />
-				<axis:Axis scale="{long}" placement="top" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb" />
-			</coords:guides>
 			<coords:elements>
     		 	<elements:PolygonElement mouseClickFunction="clickF" extendMouseEvents="true" scale1="{long}" scale2="{lat}" polyDim="poly" colorScale="{col1}" colorField="random" />
 			 </coords:elements>
     	</coords:Cartesian>
     	<guides:Legend dataProvider="{myMap}" direction="horizontal">
     		<guides:items>
-				<guides:LegendItem text="From 0" fillColor="0x000000" sizeRenderer="15" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
-				<guides:LegendItem text="To 100k" fillColor="0xffffff" sizeRenderer="15" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
+				<guides:LegendItem text="From 0" fillColor="0xff0000" sizeRenderer="15" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
+				<guides:LegendItem text="To 100k" fillColor="0xFFff00" sizeRenderer="15" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
 <!--				<guides:LegendItem text="0 to 30K" gradientColors="{[0xE8480A, 0xE8800A]}" alphaGradients="{[.7, .5]}" sizeRenderer="15" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
 				<guides:LegendItem text="30K to 50K" gradientColors="{[0xFF940D, 0xFFEB0D]}" alphaGradients="{[.7, .5]}" sizeRenderer="15" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
 				<guides:LegendItem text="50K to 70K" gradientColors="{[0xFF0000, 0xFF2300]}" alphaGradients="{[.7, .5]}" sizeRenderer="15" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />

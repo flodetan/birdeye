@@ -83,11 +83,11 @@
  				<scales:Numeric id="long" dataValues="{[-80,80]}" dataInterval="20" />
  				<scales:Numeric id="col" f="colorFunction" />
 			</coords:scales>
-			<coords:guides>
+<!--			<coords:guides>
 				<axis:Axis scale="{lat}" placement="right" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb" />
 				<axis:Axis scale="{long}" placement="top" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb" />
 			</coords:guides>
-    		 <coords:elements>
+-->    		 <coords:elements>
     		 	<elements:PolygonElement dataProvider="{dt}" scale1="{long}" scale2="{lat}" polyDim="poly" colorScale="{col}" />
 			 </coords:elements>
     	</coords:Cartesian>
