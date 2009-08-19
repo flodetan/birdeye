@@ -4,7 +4,7 @@
 	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
 	xmlns:grid="birdeye.vis.guides.grid.*"
-	backgroundColor="#3f3f3f" 
+	backgroundAlpha="0"
 	creationComplete="//createDT()"
 	verticalAlign="middle"
 	horizontalAlign="right"
@@ -87,7 +87,7 @@
 		 	<scales:Linear id="l" numberOfIntervals="2"/>
 		</coords:scales>
 		<coords:guides>
-			<axis:Axis scale="{c}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="15" sizePointer="12" />
+			<axis:Axis scale="{c}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="11" sizePointer="12" />
 			<axis:Axis scale="{l}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
 			<grid:Grid scale1="{l}" scale2="{c}" divideEnumerableScale="false"/>
 		</coords:guides>
