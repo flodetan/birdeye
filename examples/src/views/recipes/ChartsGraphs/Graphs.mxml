@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="100%" 
+	backgroundColor="#3f3f3f"
+	xmlns:mixing="views.mixing.*"
+	 >
+	
+
+	<mx:TabNavigator id="nav" height="100%" width="100%" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" creationPolicy="auto">
+		<mixing:SCycle label="Single Cycle" width="100%" height="100%"/>
+		<mixing:Concentric label="Concentric" width="100%" height="100%"/>
+		<mixing:PCentered label="Parent Centered" width="100%" height="100%"/>
+		<mixing:Hyperbolic label="Hyperbolic" width="100%" height="100%"/>
+		<mixing:Tree label="Tree" width="100%" height="100%"/>
+	</mx:TabNavigator>
+</mx:VBox>
