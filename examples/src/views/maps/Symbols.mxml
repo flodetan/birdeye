@@ -1,6 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" paddingLeft="150" paddingTop="50" width="100%" height="100%">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="100%"
+	horizontalAlign="center" verticalAlign="middle"
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:trans="birdeye.vis.trans.projections.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:guides="birdeye.vis.guides.legend.*" creationComplete="init()" xmlns:axis="birdeye.vis.guides.axis.*">
+<mx:Script>
+		<![CDATA[
+			import birdeye.vis.trans.modifiers.WhyattSimplification;
+			import birdeye.vis.trans.modifiers.Simplification;
+			import mx.controls.Alert;
+			import birdeye.vis.data.DataItemLayout;
+			import birdeye.vis.data.dictionaries.WorldRegionTypes;
+			import birdeye.vis.data.dictionaries.WorldCountries;
+			import birdeye.vis.trans.projections.Projection;
+			import mx.collections.ArrayCollection;
+			import com.degrafa.core.IGraphicsFill;
+			import com.degrafa.paint.RadialGradientFill;
+			import com.degrafa.paint.GradientStop;
+			
+			[Bindable]
+			public var dt:ArrayCollection = new ArrayCollection();
+			private var subjects:Array = ["cat1", "cat2", "cat3"];
+			public function init():void
+			{
+				var ps:Simplification = new WhyattSimplification();
+				var wc:WorldCountries = new WorldCountries();
+				var countries:Array = wc.getCountriesListByRegion("NorthAfrica");
+				var simplifiedCountries:ArrayCollection = new ArrayCollection();
+				for each (var country:String in countries)
+				{
+					var a:Array;
+					simplifiedCountries.addItem({
+						country: country,
+						poly: a = wc.getCountryPolygon(country),
+						center: wc.getCountryCenter(country),
+						random: Math.random() * 100000,
+						nestedChart: {
+							subjects: subjects,
+							values: [[Math.random() * 100, Math.random() * 100, Math.random() * 100],
+									[Math.random() * 100, Math.random() * 100, Math.random() * 100],
+									[Math.random() * 100, Math.random() * 100, Math.random() * 100]],
+							country: country
+							}
+					});
+				}
+
+				dt = simplifiedCountries;
+			}
+			
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String =  currDatatip.country;
+				tt += "\n Center: " + currDatatip.center;
+				tt += "\n Random data: " + currDatatip.random;
+				return  tt;
+			}
+			
+			private function colorFunction(dataValue:*, min:Number, max:Number, _size:Number):*
+			{
+				var fillGradients:Array;
+				var alphaGradients:Array;
+				var fill:com.degrafa.core.IGraphicsFill = new RadialGradientFill();
+
+				var grStop:GradientStop = new GradientStop(0x005AFF)
+				grStop.alpha = .7;
+				var g:Array = new Array();
+				g.push(grStop);
+
+				grStop = new GradientStop(0x005AFF);
+				grStop.alpha = .3;
+				g.push(grStop);
+
+				RadialGradientFill(fill).gradientStops = g;
+			 	return fill;
+			}
+		]]>
+	</mx:Script>
 	
-	<mx:Label text="Coming soon..." fontSize="14" />
+	
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+    	<coords:Cartesian id="myMap" width="90%" dataProvider="{dt}" height="90%" showDataTips="true" dataTipFunction="dtFunc">
+    		<coords:transforms>
+					<trans:Projection id="myProj" proj="Miller cylindrical" latScale="{lat}" longScale="{long}"/>
+			</coords:transforms>
+			<coords:scales>
+ 				<scales:Numeric id="lat" dataValues="{[20,40]}" dataInterval="20"/>
+ 				<scales:Numeric id="long" dataValues="{[-20,40]}" dataInterval="20" />
+			</coords:scales>
+    		 <coords:elements>
+    		 	<elements:PolygonElement scale1="{long}" scale2="{lat}" polyDim="poly" colorFill="0xffffff"/>
+    		 	<elements:PointElement itemRenderer="views.maps.SymbolRenderer" sizeRenderer="100" dataField="nestedChart"
+    		 			extendMouseEvents="true" scale1="{long}" scale2="{lat}" dim1="center" dim2="center"/>
+			 </coords:elements>
+    	</coords:Cartesian>
+    </mx:VBox>
 	
 </mx:VBox>
