@@ -58,9 +58,9 @@
 		</polar:guides>
 		<polar:elements>
 			<pseries:AreaElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l2}" styleName="grad2" alpha=".2" dim1="subject" dim2="R1" displayName="R1"/>
-			<pseries:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l1}" extendMouseEvents="true" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
+			<pseries:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l1}" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
 			<pseries:LineElement showAllDataItems="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l2}" extendMouseEvents="true" styleName="solid2" dim1="subject" dim2="R5" displayName="R5"/>
-			<pseries:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l1}" alpha=".3" styleName="grad1" dim1="subject" dim2="R2" displayName="R2"/>
+			<pseries:ColumnElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l1}" alpha=".3" styleName="grad1" dim1="subject" dim2="R2" displayName="R2"/>
 		</polar:elements>
 	</polar:Polar>
 	<legend:Legend dataProvider="{pc1}" direction="horizontal" />
