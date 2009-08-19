@@ -108,6 +108,8 @@ package birdeye.vis.trans.graphs.visual
 					v.x = _x;
 					v.y = _y;
 				}
+				v.x -= v.width/2;
+				v.y -= v.height/2;
 				v.dispatchEvent(new VGraphEvent(VGraphEvent.VNODE_UPDATED));
 			}
 		}
