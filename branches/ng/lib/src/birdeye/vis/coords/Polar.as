@@ -161,7 +161,7 @@ package birdeye.vis.coords
 		}
 		
 
-		override protected function updateAndDrawGuide(guide:IGuide, unscaledWidth:Number, unscaledHeight:Number):void
+		override protected function updateGuide(guide:IGuide, unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			if (guide is IAxis)
 			{
@@ -185,7 +185,7 @@ package birdeye.vis.coords
 			}	
 			
 			
-			super.updateAndDrawGuide(guide, unscaledWidth, unscaledHeight);
+			super.updateGuide(guide, unscaledWidth, unscaledHeight);
 		}
 		
 		override protected function updateElement(element:IElement, unscaledWidth:Number, unscaledHeight:Number):void

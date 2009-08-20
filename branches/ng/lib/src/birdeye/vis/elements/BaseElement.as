@@ -883,6 +883,8 @@ package birdeye.vis.elements
 			if (invalidatedData && _cursor)
 			{
 				loadElementsValues();
+				
+				invalidatedData = false;
 			}
 			
 			// since we use Degrafa, the background is needed in the element
