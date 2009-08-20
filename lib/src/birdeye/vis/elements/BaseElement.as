@@ -1621,6 +1621,7 @@ package birdeye.vis.elements
 				ttGG.geometry = geometries;
 		        ttGG.x = pos.pos1; 
 		        ttGG.y = pos.pos2; 
+		        ttGG.target = this;
 				_itemDisplayObjects[itemId] = ttGG;
 			}
 		}
