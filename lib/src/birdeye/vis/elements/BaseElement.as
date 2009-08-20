@@ -1458,7 +1458,7 @@ package birdeye.vis.elements
 					currentItem = dataItems[cursIndex];
 
 					currentValue = currentItem[field];
-					if (isNaN(max) || max < currentValue)
+					if ((isNaN(max) || max < currentValue) && !isNaN(currentValue))
 						max = currentValue;
 				}
 			}
@@ -1478,7 +1478,7 @@ package birdeye.vis.elements
 					currentItem = dataItems[cursIndex];
 
 					currentValue = currentItem[field];
-					if (isNaN(min) || min > currentValue)
+					if ( (isNaN(min) || min > currentValue) && !isNaN(currentValue))
 						min = currentValue;
 				}
 			}
