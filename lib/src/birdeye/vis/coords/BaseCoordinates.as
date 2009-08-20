@@ -63,6 +63,7 @@ package birdeye.vis.coords
 			invalidateDisplayList();
 		}
 		
+		
 		override protected function commitProperties():void
 		{
 			if (active)
@@ -534,6 +535,7 @@ trace(getTimer(), "initing elements");
 		}
 		
 		
+		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			
@@ -541,18 +543,22 @@ trace(getTimer(), "initing elements");
 			{		
 
 trace(getTimer(), "updateDisplaylist", unscaledWidth, unscaledHeight);		
-				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				super.updateDisplayList(unscaledWidth, unscaledHeight);				
+
 				setActualSize(unscaledWidth, unscaledHeight);
-	
+						
+				validateBounds(unscaledWidth, unscaledHeight);
+					
+				setBounds(unscaledWidth, unscaledHeight);
+					
+				updateElements(unscaledWidth, unscaledHeight);
+					
+				updateGuides(unscaledWidth, unscaledHeight);
+				
 				if (invalidatedData && axesFeeded)
-				{						
-					validateBounds(unscaledWidth, unscaledHeight);
+				{
 					
-					setBounds(unscaledWidth, unscaledHeight);
-					
-					updateElements(unscaledWidth, unscaledHeight);
-					
-					updateAndDrawGuides(unscaledWidth, unscaledHeight);
+					drawGuides(unscaledWidth, unscaledHeight);
 					
 					drawElements(unscaledWidth, unscaledHeight);
 					
@@ -562,6 +568,7 @@ trace(getTimer(), "updateDisplaylist", unscaledWidth, unscaledHeight);
 					setMask();
 					
 				}
+trace(getTimer(), "END updateDisplaylist", unscaledWidth, unscaledHeight);		
 			}
 		}
 		
@@ -595,8 +602,9 @@ trace(getTimer(), "updateDisplaylist", unscaledWidth, unscaledHeight);
 		
 		protected function updateElement(element:IElement, unscaledWidth:Number, unscaledHeight:Number):void
 		{
-			DisplayObject(element).width = unscaledWidth;
-			DisplayObject(element).height = unscaledHeight;
+			UIComponent(element).setActualSize(unscaledWidth, unscaledHeight);
+			//DisplayObject(element).width = unscaledWidth;
+			//DisplayObject(element).height = unscaledHeight;
 		}
 		
 		protected function drawElements(unscaledWidth:Number, unscaledHeight:Number):void
@@ -612,15 +620,28 @@ trace(getTimer(), "updateDisplaylist", unscaledWidth, unscaledHeight);
 			element.draw();
 		}
 		
-		protected function updateAndDrawGuides(unscaledWidth:Number, unscaledHeight:Number):void
+		protected function updateGuides(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			for each (var guide:IGuide in guides)
 			{
-				updateAndDrawGuide(guide, unscaledWidth, unscaledHeight);
+				updateGuide(guide, unscaledWidth, unscaledHeight);
 			}
 		}
 		
-		protected function updateAndDrawGuide(guide:IGuide, unscaledWidth:Number, unscaledHeight:Number):void
+		protected function updateGuide(guide:IGuide, unscaledWidth:Number, unscaledHeight:Number):void
+		{
+			
+		}
+		
+		protected function drawGuides(unscaledWidth:Number, unscaledHeight:Number):void
+		{
+			for each (var guide:IGuide in guides)
+			{
+				drawGuide(guide, unscaledWidth, unscaledHeight);
+			}
+		}
+		
+		protected function drawGuide(guide:IGuide, unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			guide.drawGuide(new Rectangle(0,0, unscaledWidth, unscaledHeight));	
 		}

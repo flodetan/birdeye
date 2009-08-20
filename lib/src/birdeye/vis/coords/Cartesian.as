@@ -120,15 +120,21 @@ package birdeye.vis.coords
 			rightContainer.clipContent = false;
 			rightContainer.horizontalScrollPolicy = "off";
 			rightContainer.setStyle("horizontalAlign", "left");
+			rightContainer.setStyle("horizontalGap", 0);
+			rightContainer.setStyle("verticalGap", 0);
 
 			topContainer.verticalScrollPolicy = "off";
 			topContainer.clipContent = false;
 			topContainer.horizontalScrollPolicy = "off";
 			topContainer.setStyle("verticalAlign", "bottom");
+			topContainer.setStyle("horizontalGap", 0);
+			topContainer.setStyle("verticalGap", 0);
 
 			bottomContainer.verticalScrollPolicy = "off";
 			bottomContainer.clipContent = false;
 			bottomContainer.horizontalScrollPolicy = "off";
+			bottomContainer.setStyle("horizontalGap", 0);
+			bottomContainer.setStyle("verticalGap", 0);
 			
 		}
 		
@@ -296,7 +302,7 @@ package birdeye.vis.coords
 		/**
 		 * @inheritDoc
 		 */
-		override protected function updateAndDrawGuide(guide:IGuide, unscaledWidth:Number, unscaledHeight:Number):void
+		override protected function updateGuide(guide:IGuide, unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			if (guide is IAxis)
 			{
@@ -306,18 +312,38 @@ package birdeye.vis.coords
 				{
 					case Axis.BOTTOM:
 						axis.size = chartBounds.width;
-						axis.drawGuide(new Rectangle(0,0, bottomContainer.width, bottomContainer.height));
 						break;
 					case Axis.TOP:
 						axis.size = chartBounds.width;
-						axis.drawGuide(new Rectangle(0,0, topContainer.width, topContainer.height));
 						break;
 					case Axis.LEFT:
 						axis.size = chartBounds.height;
-						axis.drawGuide(new Rectangle(0,0, leftContainer.width, leftContainer.height));
 						break;
 					case Axis.RIGHT:
 						axis.size = chartBounds.height;
+				}
+			}
+			
+		}
+		
+		override protected function drawGuide(guide:IGuide, unscaledWidth:Number, unscaledHeight:Number):void
+		{
+			if (guide is IAxis)
+			{
+				var axis:IAxis = guide as IAxis;
+			
+				switch (axis.placement)
+				{
+					case Axis.BOTTOM:
+						axis.drawGuide(new Rectangle(0,0, bottomContainer.width, bottomContainer.height));
+						break;
+					case Axis.TOP:
+						axis.drawGuide(new Rectangle(0,0, topContainer.width, topContainer.height));
+						break;
+					case Axis.LEFT:
+						axis.drawGuide(new Rectangle(0,0, leftContainer.width, leftContainer.height));
+						break;
+					case Axis.RIGHT:
 						axis.drawGuide(new Rectangle(0,0, rightContainer.width, rightContainer.height));
 				}
 							
@@ -326,7 +352,6 @@ package birdeye.vis.coords
 			{
 				guide.drawGuide(chartBounds);
 			}
-			
 		}
 		
 		/** @Private
