@@ -92,7 +92,7 @@
 			</coords:scales>
     		 <coords:elements>
     		 	<elements:PolygonElement scale1="{long}" scale2="{lat}" polyDim="poly" colorFill="0xffffff"/>
-    		 	<elements:PointElement itemRenderer="views.maps.SymbolRenderer" sizeRenderer="100" dataField="nestedChart"
+    		 	<elements:PointElement itemRenderer="views.itemRenderers.SymbolRenderer" sizeRenderer="100" dataField="nestedChart"
     		 			extendMouseEvents="true" scale1="{long}" scale2="{lat}" dim1="center" dim2="center"/>
 			 </coords:elements>
     	</coords:Cartesian>

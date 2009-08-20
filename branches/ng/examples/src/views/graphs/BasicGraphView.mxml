@@ -10,9 +10,7 @@
 
 	<mx:Script>
 		<![CDATA[			
-			[Bindable]
-			[Embed(source="/assets/icons/raster.gif")]
-		 	public var rasterImage:Class;
+			
 
 		]]>
 	</mx:Script>	
@@ -28,8 +26,8 @@
 				<elements:EdgeElement id="edge" dimStart="start" dimEnd="end" node="{node}" dataProvider="{edges}" mouseClickFunction="clickF"
 									  colorFill="0xFF0000" colorStroke="0x999999" strokeWeight="2" />
 									  
-				<elements:NodeElement id="node" dimId="id" dimName="name" dataProvider="{nodes}" source="{rasterImage}" mouseClickFunction="clickF"
-									  styleName="solid1" alphaFill="1.0" size="7" />
+				<elements:NodeElement id="node" dimId="id" dimName="name" dataProvider="{nodes}" 
+									sizeRenderer="25" itemRenderer="views.itemRenderers.CircleNode" mouseClickFunction="clickF" />
 			</coords:elements>
 			<coords:transforms>
 				<graphs:GraphLayout
