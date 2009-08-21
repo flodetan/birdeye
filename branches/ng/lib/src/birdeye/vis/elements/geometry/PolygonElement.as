@@ -36,6 +36,7 @@ package birdeye.vis.elements.geometry
 	
 	import com.degrafa.IGeometry;
 	import com.degrafa.core.IGraphicsFill;
+	import com.degrafa.geometry.Geometry;
 	import com.degrafa.geometry.Polygon;
 	import com.degrafa.paint.SolidFill;
 	
@@ -184,6 +185,7 @@ var numCoords:Number = 0;
 								}
 								poly.fill = fill;
 								poly.stroke = stroke; 
+			 					Geometry(poly).preDraw();
 								ttGG.geometryCollection.addItemAt(poly,0); 
 							}
 						}
