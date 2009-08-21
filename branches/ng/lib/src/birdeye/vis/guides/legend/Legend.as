@@ -40,6 +40,7 @@ package birdeye.vis.guides.legend
 	
 	import flash.events.Event;
 	import flash.geom.Rectangle;
+	import flash.text.TextFieldAutoSize;
 	import flash.utils.describeType;
 	
 	import mx.containers.Box;
@@ -119,6 +120,8 @@ package birdeye.vis.guides.legend
 					
 					var label:RasterText = new RasterText();
 					label.fontFamily = "verdana";
+					label.autoSize = TextFieldAutoSize.LEFT;
+					label.autoSizeField = true;
 					label.x = 15;
 
 					if (IElement(_dataProvider.elements[i]).displayName)
