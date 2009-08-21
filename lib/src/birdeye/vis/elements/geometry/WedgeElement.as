@@ -36,7 +36,7 @@ package birdeye.vis.elements.geometry
 	
 	import com.degrafa.IGeometry;
 	import com.degrafa.core.IGraphicsFill;
-	import com.degrafa.geometry.RasterTextPlus;
+	import com.degrafa.geometry.RasterText;
 	import com.degrafa.paint.GradientStop;
 	import com.degrafa.paint.LinearGradientFill;
 	import com.degrafa.paint.SolidFill;
@@ -245,15 +245,15 @@ package birdeye.vis.elements.geometry
 								xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
 								yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
 							}
-							var label:RasterTextPlus = new RasterTextPlus();
+							var label:RasterText = new RasterText();
 							label.text = currentItem[labelField];
 							label.fontFamily = fontLabel;
 							label.fontWeight = "bold";
 							label.fontSize = sizeLabel;
 							label.autoSize = TextFieldAutoSize.LEFT;
 							label.fill = new SolidFill(colorLabel);
-							label.x = xLlb- label.displayObject.width/2;
-							label.y = yLlb - label.displayObject.height/2;
+							label.x = xLlb- (label.textWidth + 4)/2;
+							label.y = yLlb - (label.fontSize + 4)/2;
 							gg.geometryCollection.addItem(label); 
 						} else if (_showFieldName)
 						{
@@ -263,15 +263,15 @@ package birdeye.vis.elements.geometry
 								xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
 								yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
 							}
-							label 	= new RasterTextPlus();
+							label 	= new RasterText();
 							label.text = tmpDim1;
 							label.fontFamily = fontLabel;
 							label.fontWeight = "bold";
 							label.fontSize = sizeLabel;
 							label.autoSize = TextFieldAutoSize.LEFT;
 							label.fill = new SolidFill(colorLabel);
-							label.x = xLlb- label.displayObject.width/2;
-							label.y = yLlb - label.displayObject.height/2;
+							label.x = xLlb- (label.textWidth + 4)/2;
+							label.y = yLlb - (label.fontSize + 4)/2;
 							gg.geometryCollection.addItem(label); 
 						}
 		
@@ -282,7 +282,7 @@ package birdeye.vis.elements.geometry
 				
 				if (displayName && aAxis && aAxis.size < 360)
 				{
-					label = new RasterTextPlus();
+					label = new RasterText();
 					label.text = displayName;
 					label.fontFamily = "verdana";
 					label.fontWeight = "bold";

@@ -32,7 +32,7 @@ package birdeye.vis.guides.legend
 	import com.degrafa.Surface;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
-	import com.degrafa.geometry.RasterTextPlus;
+	import com.degrafa.geometry.RasterText;
 	import com.degrafa.paint.GradientStop;
 	import com.degrafa.paint.LinearGradientFill;
 	import com.degrafa.paint.SolidFill;
@@ -235,12 +235,12 @@ package birdeye.vis.guides.legend
 			var w:Number = 0, h:Number = 0;
 			if (_text)
 			{
-				label = new RasterTextPlus();
+				label = new RasterText();
 				label.text = _text;
 				label.fontFamily = fontLabel;
 				label.fontSize = sizeLabel;
-				w = label.displayObject.width + 5 + _sizeRenderer;
-				h = Math.max(label.displayObject.height, _sizeRenderer) ;
+				w = label.width + 5 + _sizeRenderer;
+				h = Math.max(label.height, _sizeRenderer) ;
 			}
 
 			minWidth = w;
@@ -250,7 +250,7 @@ package birdeye.vis.guides.legend
 		private var fill:IGraphicsFill = new SolidFill(0x888888,0);
 		private var stroke:IGraphicsStroke = new SolidStroke(0x888888,1,1);
 		private var geometry:IGeometry;
-		private var label:RasterTextPlus;
+		private var label:RasterText;
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
@@ -306,7 +306,7 @@ package birdeye.vis.guides.legend
 
 			if (_text)
 			{
-				label = new RasterTextPlus();
+				label = new RasterText();
 				label.text = _text;
 				label.fontFamily = fontLabel;
 				label.fontSize = sizeLabel;

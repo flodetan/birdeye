@@ -28,12 +28,12 @@
 package birdeye.vis.guides.renderers
 {
 	import com.degrafa.core.IGraphicsFill;
-	import com.degrafa.geometry.RasterTextPlus;
+	import com.degrafa.geometry.RasterText;
 	
 	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
 
-	public class TextRenderer extends RasterTextPlus
+	public class TextRenderer extends RasterText
 	{
 		public function TextRenderer (bounds:Rectangle = null)
 		{
@@ -48,11 +48,11 @@ package birdeye.vis.guides.renderers
 			label.autoSize = TextFieldAutoSize.LEFT;
 			label.autoSizeField = true;
 			if (centerHorizontally)
-				label.x = xPos - label.displayObject.width/2;
+				label.x = xPos - (label.textWidth + 4)/2;
 			else
 				label.x = xPos;
 			if (centerVertically)
-				label.y = yPos - label.displayObject.height/2;
+				label.y = yPos - (label.fontSize + 4) /2;
 			else
 				label.y = yPos;
 			return label;

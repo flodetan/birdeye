@@ -29,14 +29,13 @@ package birdeye.vis.guides.legend
 {
 	import birdeye.vis.VisScene;
 	import birdeye.vis.guides.renderers.RasterRenderer;
-	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.IElement;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.Geometry;
-	import com.degrafa.geometry.RasterTextPlus;
+	import com.degrafa.geometry.RasterText;
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.events.Event;
@@ -118,7 +117,7 @@ package birdeye.vis.guides.legend
 					var gg:GeometryGroup = new GeometryGroup();
 					gg.target = surf;
 					
-					var label:RasterTextPlus = new RasterTextPlus();
+					var label:RasterText = new RasterText();
 					label.fontFamily = "verdana";
 					label.x = 15;
 

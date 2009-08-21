@@ -38,7 +38,6 @@ package birdeye.vis.elements
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
-	import birdeye.vis.scales.MultiScale;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
@@ -433,18 +432,6 @@ package birdeye.vis.elements
 		public function get labelField():String
 		{
 			return _labelField;
-		}
-
-		private var _multiScale:MultiScale;
-		public function set multiScale(val:MultiScale):void
-		{
-			_multiScale = val;
-			invalidateProperties();
-			invalidatingDisplay();
-		}
-		public function get multiScale():MultiScale
-		{
-			return _multiScale;
 		}
 
 		protected var _collisionType:String = StackElement.OVERLAID;

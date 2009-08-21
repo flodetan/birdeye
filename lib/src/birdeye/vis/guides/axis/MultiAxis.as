@@ -11,7 +11,7 @@ package birdeye.vis.guides.axis
 	import com.degrafa.GeometryComposition;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.Polyline;
-	import com.degrafa.geometry.RasterTextPlus;
+	import com.degrafa.geometry.RasterText;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
@@ -201,7 +201,7 @@ package birdeye.vis.guides.axis
 		 				}
 		 				web[j] += String(labelPosition.x) + "," + String(labelPosition.y) + " ";
 
-						label = new RasterTextPlus();
+						label = new RasterText();
 						if (dataLabel is Number)
 	 					{
 	 						label.text = String(Math.round(dataLabel as Number));
@@ -219,7 +219,7 @@ package birdeye.vis.guides.axis
 						label.stroke = stroke;
 						label.fill = new SolidFill(colorLabel);
 		
-						label.x = labelPosition.x - label.displayObject.width/2;
+						label.x = labelPosition.x - (label.textWidth + 4)/2;
 						label.y = labelPosition.y;
 	
 						this.geometryCollection.addItem(label);
@@ -227,7 +227,7 @@ package birdeye.vis.guides.axis
 	 				} 
 	 				
 	 				// add axis' name					
-					var label:RasterTextPlus = new RasterTextPlus();
+					var label:RasterText = new RasterText();
 					label.text = String(categories[i]);
  					label.fontFamily = fontLabel;
  					label.fontSize = sizeLabel;
@@ -236,8 +236,8 @@ package birdeye.vis.guides.axis
 					label.autoSizeField = true;
 					label.fill = new SolidFill(colorLabel);
 
-					label.x = endPosition.x - label.displayObject.width/2;
-					label.y = endPosition.y - label.displayObject.height/2;
+					label.x = endPosition.x - (label.textWidth + 4)/2;
+					label.y = endPosition.y - (label.fontSize + 4)/2;
 					
 					this.geometryCollection.addItem(label);
 				}
