@@ -239,8 +239,8 @@ package birdeye.vis.guides.legend
 				label.text = _text;
 				label.fontFamily = fontLabel;
 				label.fontSize = sizeLabel;
-				w = label.width + 5 + _sizeRenderer;
-				h = Math.max(label.height, _sizeRenderer) ;
+				w = label.textWidth + 5 + _sizeRenderer;
+				h = Math.max(label.fontSize, _sizeRenderer) ;
 			}
 
 			minWidth = w;
