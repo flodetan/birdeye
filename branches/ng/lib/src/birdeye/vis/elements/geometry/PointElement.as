@@ -45,6 +45,7 @@ package birdeye.vis.elements.geometry
 	
 	import com.degrafa.IGeometry;
 	import com.degrafa.core.IGraphicsFill;
+	import com.degrafa.geometry.Geometry;
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.display.DisplayObject;
@@ -172,9 +173,13 @@ trace (getTimer(), "drawing point ele");
 								if (dataField && itmDisplay is IDataRenderer)
 									(itmDisplay as IDataRenderer).data = currentItem[dataField];
 								addChild(itmDisplay);
-								if (sizeRenderer > 0)
+
+								if (sizeScale && sizeField && scaleResults["size"] > 0)
+									DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = scaleResults["size"];
+								else if (sizeRenderer > 0)
 									DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = sizeRenderer;
 									
+								
 								itmDisplay.x = scaleResults["pos1"] - itmDisplay.width/2;
 								itmDisplay.y = scaleResults["pos2"] - itmDisplay.height/2;
 							}
@@ -290,6 +295,7 @@ trace (getTimer(), "drawing point ele");
 				{					
  					var tmp:Object = graphicRenderer.newInstance();
  					plot = tmp as IGeometry;
+ 					Geometry(plot).preDraw();
  					if (plot is IBoundedRenderer) (plot as IBoundedRenderer).bounds = bounds;
  				} 
 				
