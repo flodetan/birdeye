@@ -39,6 +39,7 @@ package birdeye.vis.guides.legend
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.geom.Rectangle;
+	import flash.text.TextFieldAutoSize;
 	
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
@@ -237,6 +238,8 @@ package birdeye.vis.guides.legend
 			{
 				label = new RasterText();
 				label.text = _text;
+				label.autoSize = TextFieldAutoSize.LEFT;
+				label.autoSizeField = true;
 				label.fontFamily = fontLabel;
 				label.fontSize = sizeLabel;
 				w = label.textWidth + 5 + _sizeRenderer;
@@ -307,6 +310,8 @@ package birdeye.vis.guides.legend
 			if (_text)
 			{
 				label = new RasterText();
+				label.autoSize = TextFieldAutoSize.LEFT;
+				label.autoSizeField = true;
 				label.text = _text;
 				label.fontFamily = fontLabel;
 				label.fontSize = sizeLabel;
