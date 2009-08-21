@@ -28,7 +28,6 @@
  package birdeye.vis.scales
 {
 	import com.degrafa.geometry.Line;
-	import com.degrafa.geometry.RasterTextPlus;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	

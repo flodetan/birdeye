@@ -13,7 +13,7 @@ package birdeye.vis.guides.axis
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
 	import com.degrafa.geometry.Line;
-	import com.degrafa.geometry.RasterTextPlus;
+	import com.degrafa.geometry.RasterText;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	import com.degrafa.transform.RotateTransform;
@@ -85,7 +85,7 @@ package birdeye.vis.guides.axis
 			}
 		}
 		
-		private var _padding:Number = 7;
+		private var _padding:Number = 15;
 		/** Space left between multiple axes placed in the same location (left, top, bottom...).*/
 		public function set padding(val:Number):void
 		{
@@ -796,7 +796,7 @@ package birdeye.vis.guides.axis
 		 * width (for y axes) or height (for x axes) of the CategoryAxis.*/
 		protected function calculateMaxLabelSize():void
 		{
-			var tmp:RasterTextPlus = new RasterTextPlus();
+			var tmp:RasterText = new RasterText();
 			tmp.fontFamily = fontLabel;
 			tmp.fontSize = sizeLabel;
 			tmp.autoSize = TextFieldAutoSize.LEFT;
@@ -806,7 +806,7 @@ package birdeye.vis.guides.axis
 			for (var i:Number = 0;i<scale.completeDataValues.length;i++)
 			{
 				tmp.text = String(scale.completeDataValues[i]);
-				maxLblSize = Math.max(maxLblSize, tmp.displayObject.width);
+				maxLblSize = Math.max(maxLblSize, tmp.textWidth);
 			}
 			if (showAxis)
 			{
@@ -861,7 +861,7 @@ trace(getTimer(), "drawing axis");
 				invalidated = false;
 
 				var thick:Line;
-				var label:RasterTextPlus;
+				var label:RasterText;
 				
 				// allow category labels to be intervalled, thus avoiding overlapping
 				var completeValuesInterval:uint = 1;
@@ -884,7 +884,7 @@ trace(getTimer(), "drawing axis");
 						gg.geometryCollection.addItem(thick);
 			
 						// create label 
-	 					label = new RasterTextPlus();
+	 					label = new RasterText();
 	 					label.fontFamily = fontLabel;
 	 					label.fontSize = sizeLabel;
 	 					label.text = String(dataLabel);
@@ -909,9 +909,9 @@ trace(getTimer(), "drawing axis");
 							label.transform = rot;
 						}
 						
-						label.y = yPos-label.displayObject.height/2;
+						label.y = yPos-(label.fontSize )/2;
 						if (placement == LEFT)
-							label.x = width - thickWidth - label.displayObject.width;
+							label.x = width - thickWidth - (label.textWidth + 4);
 						else
 							label.x = thickWidth * sign;
 						label.fill = new SolidFill(colorLabel);
@@ -929,7 +929,7 @@ trace(getTimer(), "drawing axis");
 						gg.geometryCollection.addItem(thick);
 	
 						// create label 
-	 					label = new RasterTextPlus();
+	 					label = new RasterText();
 						label.text = String(dataLabel);
 	 					label.fontFamily = fontLabel;
 	 					label.fontSize = sizeLabel;
@@ -949,14 +949,21 @@ trace(getTimer(), "drawing axis");
 									break;
 								case BOTTOM:
 									_rotateLabelsOn = "topRight";
-									label.x = scale.getPosition(dataLabel)-label.displayObject.width*.9; 
+									label.x = scale.getPosition(dataLabel)-(label.textWidth + 4)*.9; 
 									break;
 							}
 							rot.registrationPoint = _rotateLabelsOn;
 							rot.angle = _rotateLabels;
 							label.transform = rot;
-						} else
-							label.x = scale.getPosition(dataLabel)-label.displayObject.width/2; 
+						} 
+						else
+						{
+							label.x = scale.getPosition(dataLabel)-(label.textWidth + 4)/2; 
+							if (placement == TOP)
+							{
+								label.y += label.fontSize;
+							}
+						}
 						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
 						
