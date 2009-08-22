@@ -46,6 +46,8 @@ package birdeye.vis.guides.legend
 	import mx.containers.Box;
 	import mx.core.Application;
 	import mx.core.IFactory;
+	import mx.styles.CSSStyleDeclaration;
+	import mx.styles.StyleManager;
 	
 	public class Legend extends Box
 	{
@@ -119,7 +121,8 @@ package birdeye.vis.guides.legend
 					gg.target = surf;
 					
 					var label:RasterText = new RasterText();
-					label.fontFamily = "verdana";
+					label.fontSize = sizeLabel;
+					label.fontFamily = fontLabel;
 					label.autoSize = TextFieldAutoSize.LEFT;
 					label.autoSizeField = true;
 					label.x = 15;
@@ -127,7 +130,7 @@ package birdeye.vis.guides.legend
 					if (IElement(_dataProvider.elements[i]).displayName)
 					{
 						label.text = IElement(_dataProvider.elements[i]).displayName;
-						label.fill = new SolidFill(0xffffff);
+						label.fill = new SolidFill(colorLabel);
 					}
 
 					var bounds:Rectangle = new Rectangle(0,0, 10,10);
@@ -173,6 +176,93 @@ package birdeye.vis.guides.legend
 				
 				// create/add legend items					
 			}
+		}
+		
+		private var stylesChanged:Boolean = false;
+		initializeStyles();
+		public static function initializeStyles():void
+		{
+			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("Legend");
+			if(!selector)
+			{
+				selector = new CSSStyleDeclaration();
+			}
+			selector.defaultFactory = function():void
+			{
+				this.labelFont = "verdana";
+				this.labelSize = 10;
+				this.labelColor = 0xffffff;
+
+					this.stylesChanged = true;
+			} 
+			StyleManager.setStyleDeclaration("Legend", selector, true);
+		}
+		
+		override public function styleChanged(styleProp:String):void
+		{
+			super.styleChanged(styleProp);
+
+			
+			if (styleProp == "labelFont" || styleProp == null)
+			{
+				if (!fontLabel && getStyle("labelFont") != this.fontLabel && getStyle("labelFont") != undefined)
+				{
+					this.fontLabel = getStyle("labelFont");
+				}
+			}
+			
+			if (styleProp == "labelColor" || styleProp == null)
+			{
+				if (isNaN(colorLabel) && getStyle("labelColor") != this.colorLabel && getStyle("labelColor") != undefined)
+				{
+					this.colorLabel = getStyle("labelColor");
+				}
+			}
+			
+			if (styleProp == "labelSize" || styleProp == null)
+			{
+				if (isNaN(sizeLabel) && getStyle("labelSize") != this.sizeLabel && getStyle("labelSize") != undefined)
+				{
+					this.sizeLabel = getStyle("labelSize");
+				}
+			}
+
+		}
+		
+		protected var _fontLabel:String;
+		/** Set the font label to be used for the axis.*/
+		public function set fontLabel(val:String):void
+		{
+			_fontLabel = val;
+			invalidateDisplayList();
+		}
+		public function get fontLabel():String
+		{
+			return _fontLabel;
+		}
+		
+				protected var _sizeLabel:Number = NaN;
+		/** Set the font size of the label to be used for the axis.*/
+		public function set sizeLabel(val:Number):void
+		{
+			_sizeLabel = val;
+			invalidateDisplayList();
+		}
+		public function get sizeLabel():Number
+		{
+			return _sizeLabel;
+		}
+
+		protected var _colorLabel:Number = NaN;
+		/** Set the label color to be used for the axis.*/
+		public function set colorLabel(val:Number):void
+		{
+			_colorLabel = val;
+			invalidateDisplayList();
+		}
+		public function get colorLabel():Number
+		{
+			return _colorLabel;
 		}
 	}
 }
