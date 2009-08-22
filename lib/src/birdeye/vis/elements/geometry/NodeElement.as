@@ -73,18 +73,6 @@ package birdeye.vis.elements.geometry {
 			return _dimId;
 		}
 
-		private var _dimName:String;
-		
-		public function set dimName(val:String):void {
-			_dimName = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-
-		public function get dimName():String {
-			return _dimName;
-		}
-		
 		override protected function createGlobalGeometryGroup():void {
 			// do nothing: no need to create the global group 
 	    }

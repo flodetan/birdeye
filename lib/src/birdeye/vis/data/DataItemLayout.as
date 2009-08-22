@@ -187,7 +187,7 @@ package birdeye.vis.data
 			if (_dataTipPrefix) 
 				toolTip = _dataTipPrefix;
 			
-			var dimNames:Array = [BaseElement.DIM1, BaseElement.DIM2, BaseElement.DIM3, BaseElement.COLOR_FIELD, BaseElement.SIZE_FIELD, BaseElement.DIM_START, BaseElement.DIM_END, BaseElement.DIM_NAME];
+			var dimNames:Array = BaseElement.fieldsNames;
 			
 			var isFirst:Boolean = true;
 

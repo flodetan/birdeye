@@ -98,9 +98,11 @@ package birdeye.vis.elements
 		public static const DIM3:String = "dim3";
 		public static const COLOR_FIELD:String = "colorField";
 		public static const SIZE_FIELD:String = "sizeField";
+		public static const LABEL_FIELD:String = "labelField";
 		public static const DIM_START:String = "dimStart";
 		public static const DIM_END:String = "dimEnd";
 		public static const DIM_NAME:String = "dimName";
+		public static var fieldsNames:Array = [DIM1, DIM2, DIM3, COLOR_FIELD, SIZE_FIELD, LABEL_FIELD, DIM_START, DIM_END, DIM_NAME];
 
 		protected var _invalidatedElementGraphic:Boolean = false;
 		
@@ -231,7 +233,17 @@ package birdeye.vis.elements
 			return _sizeScale;
 		}
 
+		private var _dimName:String;
+		public function set dimName(val:String):void {
+			_dimName = val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
 
+		public function get dimName():String {
+			return _dimName;
+		}
+		
 		private var _dim1:Object;
 		public function set dim1(val:Object):void
 		{
@@ -964,6 +976,8 @@ package birdeye.vis.elements
 			dataFields[DIM3] = dim3;
 			dataFields[COLOR_FIELD] = colorField;
 			dataFields[SIZE_FIELD] = sizeField;
+			dataFields[LABEL_FIELD] = labelField;
+			dataFields[DIM_NAME] = dimName;
 
 			if (stylesChanged)
 			{
