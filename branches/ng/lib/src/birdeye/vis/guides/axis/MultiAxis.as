@@ -9,6 +9,9 @@ package birdeye.vis.guides.axis
 	import birdeye.vis.scales.PolarCoordinateTransform;
 	
 	import com.degrafa.GeometryComposition;
+	import com.degrafa.Surface;
+	import com.degrafa.core.IGraphicsFill;
+	import com.degrafa.core.IGraphicsStroke;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.Polyline;
 	import com.degrafa.geometry.RasterText;
@@ -27,13 +30,22 @@ package birdeye.vis.guides.axis
 	 * For each category in the category scale the subscale will be used to draw an axis at the specified</br>
 	 * angle of the categoryScale.
 	 */
-	public class MultiAxis extends GeometryComposition implements IAxis
+	public class MultiAxis extends Surface implements IAxis
 	{
+		private var gg:GeometryComposition;
+		
+		/** Set the axis line color.*/
+		protected var stroke:IGraphicsStroke;
+
+		/** Set the axis fill color.*/
+		protected var fill:IGraphicsFill;
+
 		
 		public function MultiAxis()
 		{
 			super();
 
+			this.styleName = "MultiAxis";
 			stroke = new SolidStroke(0x000000, 1, 1);
 			fill = new SolidFill(0x000000, 1);
 		}
@@ -46,17 +58,14 @@ package birdeye.vis.guides.axis
 			return "elements";
 		}
 		
+		private var _targets:Array = new Array();
+		
 		/**
 		 * @see birdeye.vis.interfaces.guides.IGuide#targets
 		 */
 		public function get targets():Array
 		{
-			return this.graphicsTarget;
-		}
-		
-		public function set targets(t:Array):void
-		{
-			this.graphicsTarget = t;
+			return _targets;
 		}
 		
 		private var _subScale:ISubScale;
@@ -85,7 +94,7 @@ package birdeye.vis.guides.axis
 		
 		public function get placement():String
 		{
-			return Axis.VERTICAL_CENTER;	
+			return "";	
 		}
 
 		/**
@@ -111,10 +120,11 @@ package birdeye.vis.guides.axis
 		 */
 		public function clearAll():void
 		{
-			this.geometry = [];
-			this.geometryCollection.items = [];
-
-			invalidated = true;
+			if (gg)
+			{
+				gg.geometry = [];
+				gg.geometryCollection.items = [];
+			}
 		}
 		 
 		private var _coordinates:ICoordinates; 
@@ -142,6 +152,16 @@ package birdeye.vis.guides.axis
 			return _coordinates;
 		}
 		
+		override protected function createChildren():void
+		{
+
+			super.createChildren();
+			gg = new GeometryComposition();
+			targets.push(this);
+			gg.graphicsTarget = targets;
+			invalidateDisplayList();
+		}
+		
 		/**
 		 * @see birdeye.vis.interfaces.guides.IGuide#drawGuide
 		 */
@@ -156,7 +176,6 @@ package birdeye.vis.guides.axis
 				stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 				fill = new SolidFill(colorFill, alphaFill);
 				
-				invalidated = false;
 				var line:Line;
 				
 				var categories:Array = _subScale.completeDataValues;
@@ -176,14 +195,14 @@ package birdeye.vis.guides.axis
 					var endLinePosition:Point = PolarCoordinateTransform.getXY(angle,_size-5,coordinates.origin);
 	 				line = new Line(coordinates.origin.x, coordinates.origin.y, endLinePosition.x, endLinePosition.y);
 					line.stroke = new SolidStroke(0x000000, 1,1);					
-					this.geometryCollection.addItem(line);
+					gg.geometryCollection.addItem(line);
 					
 					if (showPointer)
 					{
 						_pointer = new Line();
 						_pointer.stroke = new SolidStroke(colorPointer, 1, weightPointer);
 						_pointer.visible = false;
-						this.geometryCollection.addItem(_pointer);
+						gg.geometryCollection.addItem(_pointer);
 					}
 										
 					
@@ -222,7 +241,7 @@ package birdeye.vis.guides.axis
 						label.x = labelPosition.x - (label.textWidth + 4)/2;
 						label.y = labelPosition.y;
 	
-						this.geometryCollection.addItem(label);
+						gg.geometryCollection.addItem(label);
 						
 	 				} 
 	 				
@@ -239,7 +258,7 @@ package birdeye.vis.guides.axis
 					label.x = endPosition.x - (label.textWidth + 4)/2;
 					label.y = endPosition.y - (label.fontSize + 4)/2;
 					
-					this.geometryCollection.addItem(label);
+					gg.geometryCollection.addItem(label);
 				}
 				
 				// draw lines between axes (the web)
@@ -251,7 +270,7 @@ package birdeye.vis.guides.axis
 						poly.data = web[i];
 						poly.stroke = webStroke;
 						poly.fill = new SolidFill(0x000000, 0);					
-						this.geometryCollection.addItem(poly);
+						gg.geometryCollection.addItem(poly);
 				}
 			//}
 			}
@@ -441,6 +460,116 @@ package birdeye.vis.guides.axis
 		public function get colorLabel():uint
 		{
 			return _colorLabel;
+		}
+		
+		override public function styleChanged(styleProp:String):void
+		{
+			super.styleChanged(styleProp);
+			
+			if (styleProp == "gradientColors" || styleProp == null)
+			{
+				if (!colorGradients && getStyle("gradientColors") != this.colorGradients && getStyle("gradientColors") != undefined)
+				{
+					this.colorGradients = getStyle("gradientColors");
+				}
+			}
+			
+			if (styleProp == "gradientAlphas" || styleProp == null)
+			{
+				if (!alphaGradients && getStyle("gradientAlphas") != this.alphaGradients && getStyle("gradientAlphas") != undefined)
+				{
+					this.alphaGradients = getStyle("gradientAlphas");
+				}
+			}
+
+			if (styleProp == "fillColor" || styleProp == null)
+			{
+				if (isNaN(colorFill) && getStyle("fillColor") != this.colorFill && getStyle("fillColor") != undefined)
+				{
+					this.colorFill = getStyle("fillColor");
+				}
+			}
+			
+			if (styleProp == "fillAlpha" || styleProp == null)
+			{
+				if (isNaN(alphaFill) && getStyle("fillAlpha") != this.alphaFill && getStyle("fillAlpha") != undefined)
+				{
+					this.alphaFill = getStyle("fillAlpha");
+				}
+			}
+			
+			if (styleProp == "strokeColor" || styleProp == null)
+			{
+				if (isNaN(colorStroke) && getStyle("strokeColor") != this.colorStroke && getStyle("strokeColor") != undefined)
+				{
+					this.colorStroke = getStyle("strokeColor");
+				}
+			}
+
+			if (styleProp == "strokeAlpha" || styleProp == null)
+			{
+				if (isNaN(alphaStroke) && getStyle("strokeAlpha") != this.alphaStroke && getStyle("strokeAlpha") != undefined)
+				{
+					this.alphaStroke = getStyle("strokeAlpha");
+				}
+			}
+
+			if (styleProp == "strokeWeight" || styleProp == null)
+			{
+				if (isNaN(weightStroke) && getStyle("strokeWeight") != this.weightStroke && getStyle("strokeWeight") != undefined)
+				{
+					this.weightStroke = getStyle("strokeWeight");
+				}
+			}
+			
+			if (styleProp == "labelFont" || styleProp == null)
+			{
+				if (!fontLabel && getStyle("labelFont") != this.fontLabel && getStyle("labelFont") != undefined)
+				{
+					this.fontLabel = getStyle("labelFont");
+				}
+			}
+			
+			if (styleProp == "labelColor" || styleProp == null)
+			{
+				if (isNaN(colorLabel) && getStyle("labelColor") != this.colorLabel && getStyle("labelColor") != undefined)
+				{
+					this.colorLabel = getStyle("labelColor");
+				}
+			}
+			
+			if (styleProp == "labelSize" || styleProp == null)
+			{
+				if (isNaN(sizeLabel) && getStyle("labelSize") != this.sizeLabel && getStyle("labelSize") != undefined)
+				{
+					this.sizeLabel = getStyle("labelSize");
+				}
+			}
+
+			if (styleProp == "pointerColor" || styleProp == null)
+			{
+				if (isNaN(colorPointer) && getStyle("pointerColor") != this.colorPointer && getStyle("pointerColor") != undefined)
+				{
+					this.colorPointer = getStyle("pointerColor");
+				}
+			}
+			
+			if (styleProp == "pointerSize" || styleProp == null)
+			{
+				if (isNaN(sizePointer) && getStyle("pointerSize") != this.sizePointer && getStyle("pointerSize") != undefined)
+				{
+					this.sizePointer = getStyle("pointerSize");
+				}
+			}
+
+			if (styleProp == "pointerWeight" || styleProp == null)
+			{
+				if (isNaN(weightPointer) && getStyle("pointerWeight") != this.weightPointer && getStyle("pointerWeight") != undefined)
+				{
+					this.weightPointer = getStyle("pointerWeight");
+				}
+			}
+
 		}
 		
 		private var stylesChanged:Boolean = true;
