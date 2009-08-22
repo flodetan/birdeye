@@ -563,7 +563,7 @@ trace(getTimer(), "updateDisplaylist", unscaledWidth, unscaledHeight);
 					drawElements(unscaledWidth, unscaledHeight);
 					
 					// listeners like legends will listen to this event
-					dispatchEvent(new Event("ProviderReady"));
+					dispatchEvent(new Event("ProviderReady", true));
 					
 					setMask();
 					
