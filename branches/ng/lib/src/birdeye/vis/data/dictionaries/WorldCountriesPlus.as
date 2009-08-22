@@ -34,6 +34,7 @@ package birdeye.vis.data.dictionaries
 		import flash.utils.Dictionary;
 
 		private var arrRegion:Array=[WorldRegionTypes.REGION_AFRICA, WorldRegionTypes.REGION_NORTH_AMERICA, WorldRegionTypes.REGION_SOUTH_AMERICA, WorldRegionTypes.REGION_ASIA, WorldRegionTypes.REGION_EUROPE, WorldRegionTypes.REGION_OCEANIA, WorldRegionTypes.REGION_WORLD, WorldRegionTypes.REGION_CIS];
+		private var arrContinents:Array=[WorldRegionTypes.REGION_AFRICA, WorldRegionTypes.REGION_NORTH_AMERICA, WorldRegionTypes.REGION_SOUTH_AMERICA, WorldRegionTypes.REGION_ASIA, WorldRegionTypes.REGION_EUROPE, WorldRegionTypes.REGION_OCEANIA];
 		private var arrSubRegion:Array=[WorldRegionTypes.SUBREGION_NORTHAFRICA, WorldRegionTypes.SUBREGION_SUBSAHARA, WorldRegionTypes.SUBREGION_EASTERNASIA, WorldRegionTypes.SUBREGION_SOUTHERNASIA, WorldRegionTypes.SUBREGION_SOUTHEASTERNASIA, WorldRegionTypes.SUBREGION_WESTERNASIA];//"Antartica", 
 		
 		//Regions
@@ -800,6 +801,11 @@ package birdeye.vis.data.dictionaries
 		
 		public function getCountriesPrefix():Array{
       		return arrWorld;
+    	}
+    	
+    	public function getRegions():Array
+    	{
+    		return arrContinents;
     	}
 
 		public function getCountriesName(countryKey:String):String {
