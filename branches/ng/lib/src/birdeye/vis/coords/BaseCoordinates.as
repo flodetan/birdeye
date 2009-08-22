@@ -339,7 +339,7 @@ trace(getTimer(), "initing elements");
 					allElementsBaseAndTopValues[elementPosition].baseValues[indexValue] = 0;
 				}
 				
-				var localMax:Number = allElementsBaseAndTopValues[elementPosition].baseValues[indexValue] + Math.max(0,maxCurrentD2);
+				var localMax:Number = allElementsBaseAndTopValues[elementPosition].baseValues[indexValue] + Math.max(0,isNaN(maxCurrentD2) ? 0 : maxCurrentD2);
 				allElementsBaseAndTopValues[elementPosition].topValues[indexValue] = localMax;
 
 				categoryMaxStacked100[indexValue] = localMax;
