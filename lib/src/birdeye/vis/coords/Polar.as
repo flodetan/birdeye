@@ -180,6 +180,12 @@ package birdeye.vis.coords
 							DisplayObject(axis).x = _origin.x - DisplayObject(axis).width;
 							DisplayObject(axis).y = _origin.y - axis.size;
 							break;
+						default:
+							DisplayObject(axis).x = 0;
+							DisplayObject(axis).y = 0;
+							DisplayObject(axis).width = unscaledWidth;
+							DisplayObject(axis).height = unscaledHeight;
+							break;
 					}
 				}
 			}	

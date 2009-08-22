@@ -959,6 +959,7 @@ trace(getTimer(), "drawing axis");
 						else
 						{
 							label.x = scale.getPosition(dataLabel)-(label.textWidth + 4)/2; 
+							trace("LABEL", label.x, label.textWidth, label.text);
 							if (placement == TOP)
 							{
 								label.y += label.fontSize;
