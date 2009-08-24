@@ -134,7 +134,7 @@ package birdeye.vis.trans.graphs
 
 		protected function createVisualGraph(width:Number, height:Number):VisualGraph {
 			var vg:VisualGraph;
-			if (/*_graphId != null  && */ _nodeElement.dataItems   &&  _edgeElement.dataItems) {
+			if (/*_graphId != null  && */ _nodeElement.dataItems) {
 				vg = new VisualGraph(
 					_graphId,
 					_nodeElement, _edgeElement,

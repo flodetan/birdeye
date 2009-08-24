@@ -41,12 +41,14 @@ package birdeye.vis.trans.graphs.data
 		}
 
 		public function get numberOfNodes():int {
+			if (!nodeElement) return 0;
 			const items:Vector.<Object> = nodeElement.dataItems;
 			if (!items) return 0;
 			return items.length;
 		}
 
 		public function get numberOfEdges():int {
+			if (!edgeElement) return 0;
 			const items:Vector.<Object> = edgeElement.dataItems;
 			if (!items) return 0;
 			return items.length;
