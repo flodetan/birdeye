@@ -38,10 +38,10 @@ package birdeye.vis.elements.geometry {
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
+	import com.degrafa.paint.SolidFill;
 	
 	import flash.display.DisplayObject;
 	import flash.geom.Rectangle;
-	import flash.text.TextFieldAutoSize;
 	
 	import mx.core.IDataRenderer;
 
@@ -71,6 +71,16 @@ package birdeye.vis.elements.geometry {
 
 		public function get dimId():String {
 			return _dimId;
+		}
+
+		private var _labelFillColor:int = 0xffffff;
+
+		public function set labelFillColor(color:int):void {
+			_labelFillColor = color;
+		}
+
+		public function get labelFillColor():int {
+			return _labelFillColor;
 		}
 
 		override protected function createGlobalGeometryGroup():void {
@@ -114,20 +124,6 @@ package birdeye.vis.elements.geometry {
 		protected function createGraphicRenderer(currentItem:Object, position:Position):IGeometry {
 			const bounds:Rectangle = new Rectangle(0 - _size, 0 - _size, _size * 2, _size * 2);
 			var renderer:IGeometry;
-			if (labelField)
-			{
-				renderer = new TextRenderer(null);
-
-				// check if label field is linked to data, in which case the label will refer to data
-				// otherwise, the label will refer to the labelField content
-				(renderer as TextRenderer).text = (currentItem) ? currentItem[labelField] : labelField;
-				(renderer as TextRenderer).fontSize = sizeLabel;
-				(renderer as TextRenderer).fontFamily = fontLabel;
-				(renderer as TextRenderer).autoSize = TextFieldAutoSize.LEFT;
-				(renderer as TextRenderer).autoSizeField = true;
-				(renderer as TextRenderer).x -= (renderer as TextRenderer).displayObject.width/2;
-				(renderer as TextRenderer).y -= (renderer as TextRenderer).displayObject.height/2;
-			} 
 
 			if (_source)
 				renderer = new RasterRenderer(bounds, _source);
@@ -148,7 +144,7 @@ package birdeye.vis.elements.geometry {
 			const label:TextRenderer = TextRenderer.createTextLabel(
 				   0, 0 + _size,
 				   text,
-				   fill,  
+				   new SolidFill(labelFillColor),
 				   true, false
 			);
 			label.fontSize = 9;
