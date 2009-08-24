@@ -182,7 +182,7 @@
 		
 		protected var _scales:Array; /* of IScale */
 		/** Array of scales, each element will take a scale target from this scale list.*/
-        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IScale")]
+        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.scale.IScale")]
         [ArrayElementType("birdeye.vis.interfaces.scales.IScale")]
 		public function set scales(val:Array):void
 		{
