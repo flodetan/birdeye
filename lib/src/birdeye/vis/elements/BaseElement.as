@@ -853,7 +853,6 @@ package birdeye.vis.elements
 		{
 			super();
 			collisionScale = VERTICAL;
-			suppressEventProcessing = true;
 		}
 
 		override protected function createChildren():void
@@ -874,8 +873,6 @@ package birdeye.vis.elements
 			gg = new DataItemLayout();
 			gg.target = this;
 			graphicsCollection.addItem(gg);
-			
-			gg.suppressEventProcessing = true;
 		}
 
 		override protected function commitProperties():void
@@ -1279,7 +1276,6 @@ package birdeye.vis.elements
 			else {
 				ttGG = new DataItemLayout();
 				graphicsCollection.addItem(ttGG);
-				ttGG.suppressEventProcessing = true;
 			}
 			ggIndex++;
 			ttGG.target = chart.elementsContainer;
