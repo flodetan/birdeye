@@ -219,6 +219,22 @@ package birdeye.vis.elements
 			return _colorScale;
 		}
 
+		protected function getItemFillColor(item:Object):IGraphicsFill {
+			var f:IGraphicsFill = null;
+			if (colorScale) {
+				var col:* = colorScale.getPosition(item[colorField]);
+				if (col is Number) {
+					f = new SolidFill(col);
+				} else if (col is IGraphicsFill) {
+					f = col;
+				}
+			}
+			if (!f) {
+				f = fill;
+			}
+			return f;
+		}
+		
 		private var _sizeScale:INumerableScale;
 		/** Define a scale to set the sizeField for data items.*/
 		public function set sizeScale(val:INumerableScale):void
@@ -231,6 +247,29 @@ package birdeye.vis.elements
 		public function get sizeScale():INumerableScale
 		{
 			return _sizeScale;
+		}
+
+		private var _itemIdField:String;
+		
+		public function set itemIdField(val:String):void {
+			_itemIdField = val;
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+
+		/**
+		 * Name of the field of the input data containing the itemId.
+		 **/
+		public function get itemIdField():String {
+			return _itemIdField;
+		}
+
+		protected static function getItemFieldValue(item:Object, fieldName:String):Object {
+			var value:Object = item[fieldName];
+			if (value is XMLList) {
+				value = value.toString();
+			}
+			return value;
 		}
 
 		private var _dimName:String;
@@ -548,11 +587,33 @@ package birdeye.vis.elements
 		
 		protected var _dataItems:Vector.<Object>;
 
+		protected var _dataItemsByIds:Dictionary;
+
+		public function getDataItemById(itemId:Object):Object {
+			if (_dataItemsByIds) {
+				return _dataItemsByIds[itemId];
+			} else {
+				return null;
+			}
+		}
+
+		private function initDataItemsById():void {
+			if (itemIdField) {
+				_dataItemsByIds = new Dictionary();
+				for each (var item:Object in _dataItems) {
+					_dataItemsByIds[item[itemIdField]] = item;
+				}
+			} else {
+				_dataItemsByIds = null;
+			}
+		}
+		
 		public function set dataItems(items:Vector.<Object>):void
 		{
 			const oldVal:Vector.<Object> = _dataItems;
 			if (items !== oldVal) {
 				_dataItems = items;
+				initDataItemsById();
 				_maxDim1Value = _maxDim2Value = _maxDim3Value = _totalDim1PositiveValue = NaN;
 				_minDim1Value = _minDim2Value = _minDim3Value = NaN;
 				_minColorValue = _maxColorValue = _minSizeValue = _maxSizeValue = NaN;

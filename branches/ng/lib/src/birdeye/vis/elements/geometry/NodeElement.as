@@ -61,18 +61,6 @@ package birdeye.vis.elements.geometry {
 			return _graphLayout;
 		}
 
-		private var _dimId:String;
-		
-		public function set dimId(val:String):void {
-			_dimId = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-
-		public function get dimId():String {
-			return _dimId;
-		}
-
 		private var _labelFillColor:int = 0xffffff;
 
 		public function set labelFillColor(color:int):void {
@@ -91,7 +79,7 @@ package birdeye.vis.elements.geometry {
 			const items:Vector.<Object> = dataItems;
 			if (!items) return -1;
 			for (var i:int = 0; i < items.length; i++) {
-				if (items[i][_dimId] == id) return i;
+				if (items[i][itemIdField] == id) return i;
 			}
 			return -1;
 		}
@@ -106,19 +94,21 @@ package birdeye.vis.elements.geometry {
 		
 		protected function createItemRenderer(currentItem:Object, position:Position):DisplayObject
 		{
-			if (itemRenderer != null)
-			{
-				var itmDisplay:DisplayObject = new itemRenderer();
-				if (dataField && itmDisplay is IDataRenderer)
-					(itmDisplay as IDataRenderer).data = currentItem[dataField];
-				addChild(itmDisplay);
-				if (sizeRenderer > 0)
-					DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = sizeRenderer;
+			var obj:DisplayObject = null;
+			if (itemRenderer != null) {
+				obj = new itemRenderer();
+				if (dataField  &&  obj is IDataRenderer) {
+					(obj as IDataRenderer).data = currentItem[dataField];
+				}
+				addChild(obj);
+				if (sizeRenderer > 0) {
+					obj.width = obj.height = sizeRenderer;
+				}
 					
-				itmDisplay.x = position.pos1;
-				itmDisplay.y = position.pos2;
+				obj.x = position.pos1;
+				obj.y = position.pos2;
 			}
-			return itmDisplay;
+			return obj;
 		}
 
 		protected function createGraphicRenderer(currentItem:Object, position:Position):IGeometry {
@@ -163,7 +153,7 @@ package birdeye.vis.elements.geometry {
 			const items:Vector.<Object> = dataItems;
 			if (items) {
 				items.forEach(function(item:Object, index:int, items:Vector.<Object>):void {
-					const itemId:Object = item[dimId];
+					const itemId:Object = item[itemIdField];
 					if (isItemVisible(itemId)) {
 						const position:Position = getItemPosition(itemId);
 						if (position != null) {

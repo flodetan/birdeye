@@ -32,6 +32,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.VisScene;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.BaseElement;
+	import birdeye.vis.elements.Position;
 	import birdeye.vis.elements.RenderableElement;
 	import birdeye.vis.facets.FacetContainer;
 	import birdeye.vis.guides.axis.Axis;
@@ -39,6 +40,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
+	import birdeye.vis.interfaces.IPositionableElement;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
@@ -56,7 +58,7 @@ package birdeye.vis.elements.geometry
 	import mx.core.ClassFactory;
 	import mx.core.IDataRenderer;
 
-	public class PointElement extends RenderableElement
+	public class PointElement extends RenderableElement implements IPositionableElement
 	{
 		public function PointElement()
 		{
@@ -68,6 +70,21 @@ package birdeye.vis.elements.geometry
 			super.commitProperties();
 			if (! graphicRenderer)
 				graphicRenderer = new ClassFactory(CircleRenderer);
+		}
+
+		public function getItemPosition(itemId:Object):Position {
+			const item:Object = getDataItemById(itemId);
+			if (item) {
+				const pos:Object = determinePositions(item[dim1], item[dim2], item[dim3],
+					 							  			   item[colorField], item[sizeField], item);
+				return new Position(pos["pos1"], pos["pos2"], pos["pos3Relative"]);
+			} else {
+				return Position.ZERO;
+			}
+		}
+
+		public function isItemVisible(itemId:Object):Boolean {
+			return true;
 		}
 
 		private var label:TextRenderer;
