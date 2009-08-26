@@ -753,7 +753,7 @@
 				IElement(elements[i]).refresh();
 		}
 		
-	    protected function clearAll():void
+	    public function clearAll():void
 	    {
 	            if (elements && elements.length > 0)
 	                    for (var i:uint = 0; i<elements.length; i++)
