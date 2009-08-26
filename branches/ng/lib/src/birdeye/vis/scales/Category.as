@@ -104,6 +104,22 @@
 			return _subScale;
 		}
 		
+		
+		private var _shareSubScale:Boolean = false;
+		/**
+		 * Set this to true if one min and max is needed for the whole multiaxis.
+		 * Defaults to <code>false</code>
+		 */
+		public function set shareSubScale(val:Boolean):void
+		{
+			_shareSubScale = val;
+		}
+		
+		public function get shareSubScale():Boolean
+		{
+			return _shareSubScale;
+		}
+		
 		public function get subScalesActive():Boolean
 		{
 			return _subScale != null;
@@ -152,16 +168,44 @@
 				{
 					_subScales = new Array(_minMax.length);
 					
-					for (var c:Object in _minMax)
+					if (!shareSubScale)
 					{
-						var s:INumerableScale = _subScale.newInstance();
-						s.min = _minMax[c].min;
-						s.max = _minMax[c].max;
+						for (var c:Object in _minMax)
+						{
+							var s:INumerableScale = _subScale.newInstance();
+							s.min = _minMax[c].min;
+							s.max = _minMax[c].max;
+							s.size = _subScalesSize;
+							s.dimension = dimension;
+							_subScales[c] = s;
+							s.commit();
+						}			
+					}
+					else
+					{
+						s = _subScale.newInstance();
 						s.size = _subScalesSize;
 						s.dimension = dimension;
-						_subScales[c] = s;
+						s.min = Number.MAX_VALUE;
+						s.max = Number.MIN_VALUE;
+						for (var c:Object in _minMax)
+						{
+							if (s.min > _minMax[c].min)
+							{
+								s.min = _minMax[c].min;
+							} 	
+							
+							if (s.max < _minMax[c].max)
+							{
+								s.max = _minMax[c].max;
+							}
+							
+							_subScales[c] = s;
+						}
+						
+						
 						s.commit();
-					}			
+					}
 				}
 			}
 			
