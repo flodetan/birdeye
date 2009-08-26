@@ -28,7 +28,7 @@
 
 	public interface IGraphLayoutableElement extends IPositionableElement {
 		
-		function get dimId():String;
+		function get itemIdField():String;
 
 		function set graphLayout(layout:IGraphLayout):void;
 

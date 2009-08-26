@@ -84,7 +84,7 @@ package birdeye.vis.elements.geometry {
 			return _node;
 		}
 
-		protected function createGraphicRenderer(edgeItemId:String, x1:Number, y1:Number, x2:Number, y2:Number):IEdgeRenderer {
+		protected function createGraphicRenderer(item:Object, edgeItemId:String, x1:Number, y1:Number, x2:Number, y2:Number):IEdgeRenderer {
 			var edgeRenderer:IEdgeRenderer;
  			if (graphicRenderer) {
 				edgeRenderer = graphicRenderer.newInstance();
@@ -98,7 +98,7 @@ package birdeye.vis.elements.geometry {
  			} else {
 				edgeRenderer = new LineRenderer(new Rectangle(x1, y1, x2, y2));
 			}	
-			edgeRenderer.fill = fill;
+			edgeRenderer.fill = getItemFillColor(item);
 			edgeRenderer.stroke = stroke;
 			_edgeRenderers[edgeItemId] = edgeRenderer;
 			return edgeRenderer;
@@ -141,8 +141,8 @@ package birdeye.vis.elements.geometry {
 				items.forEach(function(item:Object, itemIndex:int, items:Vector.<Object>):void {
 					var pos1:Number = NaN, pos2:Number = NaN, pos3:Number = NaN;
 	
-					const startItemId:Object = item[_dimStart];
-					const endItemId:Object = item[_dimEnd];
+					const startItemId:Object = getItemFieldValue(item, _dimStart);
+					const endItemId:Object = getItemFieldValue(item, _dimEnd);
 
 					if (_node.isItemVisible(startItemId)  &&  _node.isItemVisible(endItemId)) {
 						var start:Position = _node.getItemPosition(startItemId);
@@ -158,7 +158,11 @@ package birdeye.vis.elements.geometry {
 							// the edge renderers are passed in the start/end coordinates
 							// and position and draw the edges accordingly.   
 							var renderers:Object = {itemRenderer: null,
-													graphicRenderer: [createGraphicRenderer(itemId, start.pos1, start.pos2, end.pos1, end.pos2)]}
+													graphicRenderer: [
+														createGraphicRenderer(
+															item, itemId, start.pos1, start.pos2, end.pos1, end.pos2
+														)
+													]};
 							createItemDisplayObject(
 								item, dataFields, Position.ZERO, itemId, renderers
 //								  TextRenderer.createTextLabel(
