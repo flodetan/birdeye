@@ -146,6 +146,11 @@ trace(getTimer(), "drawing bar");
 							dataFields["dim1"] = tmpArray[i];
 						}
 						
+						if (isNaN(yPos) || isNaN(xPos))
+						{
+							continue;	
+						}
+						
 						switch (_stackType)
 						{
 							case OVERLAID:

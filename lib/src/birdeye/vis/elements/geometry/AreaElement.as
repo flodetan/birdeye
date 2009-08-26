@@ -121,7 +121,6 @@ trace (getTimer(), "area ele");
 				var xPrev:Number, yPrev:Number;
 				var pos1:Number, pos2:Number, zPos:Number;
 				var j:Object;
-				var t:Number = 0;
 				
 				var y0:Number = getYMinPosition();
 				var y0Prev:Number;
@@ -155,6 +154,7 @@ trace (getTimer(), "area ele");
 						pos1 = scale1.getPosition(currentItem[dim1]);
 					
 					j = currentItem[dim1];
+					
 					// if the Element has its own y axis, than get the y coordinate
 					// position of the data value filtered by yField
 					if (scale2)
@@ -165,11 +165,21 @@ trace (getTimer(), "area ele");
 						if (_stackType == STACKED100)
 						{
 							y0 = scale2.getPosition(baseValues[j]);
-							pos2 = scale2.getPosition(
-								baseValues[j] + Math.max(0,currentItem[dim2]));
-						} else 
+							if (!isNaN(currentItem[dim2]))
+							{
+								pos2 = scale2.getPosition(
+									baseValues[j] + Math.max(0,currentItem[dim2]));
+							}
+							else
+							{
+								pos2 = NaN;
+							}
+						} 
+						else 
+						{
 							// if not stacked, than the y coordinate is given by the own y axis
 							pos2 = scale2.getPosition(currentItem[dim2]);
+						}
 					}
 					
 					if (scale1 is ISubScale && (scale1 as ISubScale).subScalesActive)
@@ -233,18 +243,17 @@ trace (getTimer(), "area ele");
 		
 						// create the polygon only if there is more than 1 data value
 						// there cannot be an area with only the first data value 
-						if (chart.coordType == VisScene.CARTESIAN)
-							if (t++ > 0) 
-							{
-								poly = new Polygon()
-								poly.data =  String(xPrev) + "," + String(y0Prev) + " " +
-											String(xPrev) + "," + String(yPrev) + " " +
-											String(pos1) + "," + String(pos2) + " " +
-											String(pos1) + "," + String(y0);
-								poly.fill = fill;
-								poly.stroke = stroke;
-								gg.geometryCollection.addItemAt(poly,0);
-							}
+						if (chart.coordType == VisScene.CARTESIAN && !isNaN(xPrev) && !isNaN(yPrev) && !isNaN(y0Prev) && !isNaN(pos1) && !isNaN(pos2))
+						{
+							poly = new Polygon()
+							poly.data =  String(xPrev) + "," + String(y0Prev) + " " +
+										String(xPrev) + "," + String(yPrev) + " " +
+										String(pos1) + "," + String(pos2) + " " +
+										String(pos1) + "," + String(y0);
+							poly.fill = fill;
+							poly.stroke = stroke;
+							gg.geometryCollection.addItemAt(poly,0);
+						}
 					}
 						
 					if (_showGraphicRenderer)

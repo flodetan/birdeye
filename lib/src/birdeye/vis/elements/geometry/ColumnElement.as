@@ -213,6 +213,11 @@ trace (getTimer(), "drawing column ele");
 							else
 								arcSize = constTmpSize * _size;
 						}
+						
+						if (isNaN(pos1) || isNaN(pos2))
+						{
+							continue;
+						}
 
 						if (chart.coordType == VisScene.CARTESIAN)
 						{
@@ -282,8 +287,8 @@ trace (getTimer(), "drawing column ele");
 			
 							if (poly is IBoundedRenderer) (poly as IBoundedRenderer).bounds = bounds;
 							poly.fill = fill;
-							poly.stroke = stroke; 
-							gg.geometryCollection.addItemAt(poly,0);  
+							poly.stroke = stroke;						
+							gg.geometryCollection.addItemAt(poly,0);  							
 						} else if (chart.coordType == VisScene.POLAR)
 						{
 	/* 						var arcCenterX:Number = chart.origin.x - pos2;
