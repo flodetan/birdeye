@@ -1,0 +1,96 @@
+<node label="Mail Box">
+            <node label="Charts">
+                <node label="Cartesian">
+                		<node label="Area" data="views/cartesian/AreaChart.swf" />
+                		<node label="Bar" data="views/cartesian/BarChart.swf" />
+                		<node label="Bubble" data="views/cartesian/BubbleChart.swf" />
+                		<node label="Column" data="views/cartesian/ColumnChart.swf" />
+                		<node label="Line" data="views/cartesian/LineChart.swf" />
+                		<node label="Scatter" data="views/cartesian/ScatterChart.swf" />
+                		<node label="Composite" data="views/cartesian/CompositeChart.swf" />
+                		<node label="Multi-Axis" data="views/cartesian/MultiAxisChart.swf" />
+                		<node label="Stacking" data="views/cartesian/StackingChart.swf" />
+                </node>
+                <node label="Polar">
+                		<node label="Radar" data="views/polar/RadarChart.swf"/>
+                		<node label="Pie" data="views/polar/PieChart.swf" />
+                		<node label="Sunburst" data="views/polar/SunburstChart.swf" />
+                		<node label="Coxcomb" data="views/polar/CoxcombChart.swf" />
+                		<node label="Composite" data="views/polar/CompositeChart.swf" />
+                		<node label="Multi-Axis" data="views/polar/MultiAxisChart.swf" />
+                		<node label="Stacking" data="views/polar/StackingChart.swf" />
+                </node>
+                <node label="Facets">
+                		<node label="Plot" data="views/facets/PlotChart.swf" />
+                		<node label="Radar" data="views/facets/RadarChart.swf" />
+                </node>
+                <node label="MicroCharts">
+                		<node label="Sampler" data="views/micro/MicroChart.swf"/>
+                </node>
+                <node label="Schemas">
+                		<node label="Box" data="views/schemas/BoxChart.swf"/>
+                		<node label="Bullet" data="views/schemas/BulletChart.swf"/>
+                		<node label="Isotype" data="views/schemas/IsotypeChart.swf"/>
+                </node>
+                <node label="Examples">
+                		<node label="Events"/>
+                		<node label="Effects"/>
+                		<node label="Graphic Renderers"/>
+                		<node label="Item Renderers"/>
+                </node>
+            </node>
+            <node label="Maps">
+                <node label="Vector" data="views/maps/VectorMap.swf" />
+                <node label="Choropleth" data="views/maps/ChoroplethMap.swf" />
+                <node label="Cartogram" >
+                	<node label="Dorling" data="views/maps/DorlingMap.swf" />
+                	<node label="Non-contiguous" data="views/maps/NoncontiguousMap.swf" />
+                	<node label="Contiguous" data="views/maps/ContiguousMap.swf" />
+                </node>
+                <node label="Symbolization" data="views/maps/SymbolizationMap.swf" />
+                <node label="Simplification" data="views/maps/SimplificationMap.swf" />
+                <node label="KML" data="views/maps/KMLMap.swf" />
+                <node label="SHP" data="views/maps/SHPMap.swf" />
+            </node>
+            <node label="Graphs">
+                <node label="SingleCycle" data="views/graphs/SingleCycleGraph.swf"  />
+                <node label="Balloon" data="views/graphs/BalloonGraph.swf" />
+                <node label="Concentric" data="views/graphs/ConcentricGraph.swf" />
+                <node label="Parent-Centered" data="views/graphs/ParentCenteredGraph.swf" />
+                <node label="MDS" data="views/graphs/MDSGraph.swf" />
+                <node label="Force-Directed" data="views/graphs/ForceDirectedGraph.swf" />
+                <node label="Hyperbolic" data="views/graphs/HyperbolicGraph.swf" />
+                <node label="Packing-Models" data="views/graphs/PackingModelGraph.swf" />
+                <node label="Node Renderers" data="views/graphs/NodeRendererGraph.swf" />
+                <node label="Edge Renderers" data="views/graphs/EdgeRendererGraph.swf" />
+                
+            </node>
+            <node label="The Classics">
+                <node label="Minard" >
+                	<node label="Napoleon March" data="views/classics/NapoleonMarch.swf" />
+                	<node label="Carte Viande" data="views/classics/CarteViande.swf" />
+                </node>
+                <node label="Playfair" >
+                	<node label="temp" />
+                </node>
+                <node label="Nightingale" >
+                	<node label="Causes of Mortality" />
+                </node>
+            </node>
+            <node label="Help">
+                <node label="The Basics" >
+                	<node label="What is BirdEye?" />
+                	<node label="Grammar of Graphics" />
+                	<node label="Coords" />
+                	<node label="Scales" />
+                	<node label="Elements" />
+                	<node label="Guides" />
+                	<node label="Transforms" />
+                	<node label="Recipe" />
+                </node>
+                <node label="ASDocs" />
+                <node label="About" >
+                	<node label="Links" />
+                </node>
+            </node>
+</node> 

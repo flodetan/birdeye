@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+	width="100%" height="100%"
+	backgroundColor="#222222"
+	layout="absolute">
+	
+    <mx:Script>
+        <![CDATA[
+        import mx.modules.*;
+		import mx.events.ListEvent;
+		
+		
+		
+		[Bindable]
+        public var selectedNode:String;
+
+            // Event handler for the Tree control change event.
+        public function treeChanged(event:ListEvent):void {
+                selectedNode=myTree.selectedItem.@data;
+                removeModule(tourModuleLoader);
+                createModule(tourModuleLoader, selectedNode);
+                trace(myTree.selectedItem.@data);
+         }
+
+        public function createModule(m:ModuleLoader, s:String):void {
+            if (!m.url) {
+                m.url = s;
+                return;
+            }
+            
+            m.loadModule();
+        }
+        
+        public function removeModule(m:ModuleLoader):void {
+            m.unloadModule();
+        }
+        ]]>
+    </mx:Script>
+
+
+	
+	<mx:Style source="style/tourDeBirdEye.css" />
+	<mx:XML id="treeMenu" source="data/menu.xml" />
+	
+	<mx:VBox width="100%" height="100%" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
+		<mx:ApplicationControlBar width="100%" height="40" >
+			<mx:Label text="Tour de BirdEye" fontSize="14" />
+		</mx:ApplicationControlBar>
+	
+		<mx:HBox width="100%" height="100%">
+			<mx:Panel id="tourGuide" width="25%" height="100%" title="Tour Guide" >
+				
+			<mx:Tree id="myTree" width="100%" height="100%" labelField="@label"
+                showRoot="false" dataProvider="{treeMenu}" change="treeChanged(event)" />
+            
+            </mx:Panel>
+				
+			<mx:Panel id="viewPanel" width="100%" height="100%" headerHeight="0" verticalAlign="middle" horizontalAlign="center" >    
+							
+				<mx:ModuleLoader id="tourModuleLoader" width="100%" height="100%" />
+			
+			</mx:Panel>
+			
+		
+		</mx:HBox>
+	
+	</mx:VBox>
+	
+</mx:Application>
