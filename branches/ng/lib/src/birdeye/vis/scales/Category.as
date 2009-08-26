@@ -188,7 +188,7 @@
 						s.dimension = dimension;
 						s.min = Number.MAX_VALUE;
 						s.max = Number.MIN_VALUE;
-						for (var c:Object in _minMax)
+						for (c in _minMax)
 						{
 							if (s.min > _minMax[c].min)
 							{
