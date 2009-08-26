@@ -135,6 +135,11 @@ trace (getTimer(), "drawing line ele");
 						pos2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(currentItem[dim2]);
 					}
 					
+					if (isNaN(pos1) || isNaN(pos2))
+					{
+						continue;
+					}
+					
 					var scale2RelativeValue:Number = NaN;
 	
 					if (scale3)
@@ -235,7 +240,7 @@ trace (getTimer(), "drawing line ele");
 						bzSplines.autoClose = true;
 				}
 				
-				if (chart.coordType == VisScene.POLAR && !isNaN(firstX) && !isNaN(firstY))
+				if (chart.coordType == VisScene.POLAR && !isNaN(firstX) && !isNaN(firstY) && !isNaN(pos1) && !isNaN(pos2))
 				{
 						line = new Line(pos1,pos2, firstX, firstY);
 						line.fill = fill;
