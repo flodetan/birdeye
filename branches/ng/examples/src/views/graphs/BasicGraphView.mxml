@@ -25,9 +25,17 @@
 			<coords:elements>
 				<elements:EdgeElement id="edge" dimStart="start" dimEnd="end" node="{node}" dataProvider="{edges}" mouseClickFunction="clickF"
 									  colorFill="0xFF0000" colorStroke="0x999999" strokeWeight="2" />
-									  
-				<elements:NodeElement id="node" dimId="id" dimName="name" dataProvider="{nodes}" 
+
+							
+				<elements:NodeElement id="node" itemIdField="id" dimName="name" dataProvider="{nodes}" 
 									sizeRenderer="25" itemRenderer="views.itemRenderers.CircleNode" mouseClickFunction="clickF" />
+
+<!--
+ 							
+				<elements:NodeElement colorFill="0x0000ff" colorStroke="0xffffff" id="node" itemIdField="id" dimName="name"
+					                  dataProvider="{nodes}" mouseClickFunction="clickF" alphaFill="1.0" size="7" 
+					         labelFillColor="0xffffff"/> 
+-->
 			</coords:elements>
 			<coords:transforms>
 				<graphs:GraphLayout
@@ -55,7 +63,7 @@
 	
 		[Bindable]
 		public var layouter:ILayoutAlgorithm;
-		
+
 		import mx.collections.ArrayCollection;
 		
 		public function generateGraph():void {
