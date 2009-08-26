@@ -246,11 +246,11 @@ package birdeye.vis.elements.geometry
 								yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
 							}
 							var label:RasterText = new RasterText();
-							label.text = currentItem[labelField];
 							label.fontFamily = fontLabel;
 							label.fontWeight = "bold";
 							label.fontSize = sizeLabel;
 							label.autoSize = TextFieldAutoSize.LEFT;
+							label.text = currentItem[labelField];
 							label.fill = new SolidFill(colorLabel);
 							label.x = xLlb- (label.textWidth + 4)/2;
 							label.y = yLlb - (label.fontSize + 4)/2;

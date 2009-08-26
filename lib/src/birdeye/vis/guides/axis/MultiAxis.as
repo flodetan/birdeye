@@ -221,6 +221,13 @@ package birdeye.vis.guides.axis
 		 				web[j] += String(labelPosition.x) + "," + String(labelPosition.y) + " ";
 
 						label = new RasterText();
+	 					
+		 				label.fontFamily = fontLabel;
+		 				label.fontSize = sizeLabel;
+		 				label.visible = true;
+						label.autoSize = TextFieldAutoSize.LEFT;
+						label.autoSizeField = true;
+						
 						if (dataLabel is Number)
 	 					{
 	 						label.text = String(Math.round(dataLabel as Number));
@@ -230,11 +237,6 @@ package birdeye.vis.guides.axis
 	 						label.text = String(dataLabel);
 	 					}
 	 					
-		 				label.fontFamily = fontLabel;
-		 				label.fontSize = sizeLabel;
-		 				label.visible = true;
-						label.autoSize = TextFieldAutoSize.LEFT;
-						label.autoSizeField = true;
 						label.stroke = stroke;
 						label.fill = new SolidFill(colorLabel);
 		
@@ -247,12 +249,13 @@ package birdeye.vis.guides.axis
 	 				
 	 				// add axis' name					
 					var label:RasterText = new RasterText();
-					label.text = String(categories[i]);
  					label.fontFamily = fontLabel;
  					label.fontSize = sizeLabel;
  					label.visible = true;
 					label.autoSize = TextFieldAutoSize.LEFT;
 					label.autoSizeField = true;
+					label.text = String(categories[i]);
+					
 					label.fill = new SolidFill(colorLabel);
 
 					label.x = endPosition.x - (label.textWidth + 4)/2;
