@@ -914,10 +914,10 @@ trace(getTimer(), "drawing axis");
 	 					label = new RasterText();
 	 					label.fontFamily = fontLabel;
 	 					label.fontSize = sizeLabel;
-	 					label.text = String(dataLabel);
-	 					label.visible = true;
+	 					//label.visible = true;
 						label.autoSize = TextFieldAutoSize.LEFT;
 						label.autoSizeField = true;
+						label.text = String(dataLabel);
 						if (!isNaN(_rotateLabels) || _rotateLabels != 0)
 						{
 							var rot:RotateTransform = new RotateTransform();
@@ -957,12 +957,12 @@ trace(getTimer(), "drawing axis");
 	
 						// create label 
 	 					label = new RasterText();
-						label.text = String(dataLabel);
 	 					label.fontFamily = fontLabel;
 	 					label.fontSize = sizeLabel;
-	 					label.visible = true;
+	 					//label.visible = true;
 						label.autoSize = TextFieldAutoSize.LEFT;
 						label.autoSizeField = true;
+						label.text = String(dataLabel);
 						label.y = thickWidth;
 						if (!isNaN(_rotateLabels) && _rotateLabels != 0)
 						{
@@ -986,7 +986,6 @@ trace(getTimer(), "drawing axis");
 						else
 						{
 							label.x = scale.getPosition(dataLabel)-(label.textWidth + 4)/2; 
-							trace("LABEL", label.x, label.textWidth, label.text);
 							if (placement == TOP)
 							{
 								label.y += label.fontSize;
