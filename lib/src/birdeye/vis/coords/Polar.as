@@ -244,7 +244,7 @@ package birdeye.vis.coords
 				var polClone:Polar = cloneObj as Polar;
 				
 				polClone.layout = _layout;
-				polClone.type = _type;
+				polClone.collisionType = _collisionType;
 				polClone.fontSize = _fontSize;
 				
 				return polClone;

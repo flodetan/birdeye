@@ -32,14 +32,14 @@ package birdeye.vis.coords
 		{
 		}
 		
-		protected var _type:String = StackElement.OVERLAID;
+		protected var _collisionType:String = StackElement.OVERLAID;
 		/** Set the type of stack, overlaid if the series are shown on top of the other, 
 		 * or stacked if they appear staked one after the other (horizontally), or 
 		 * stacked100 if the columns are stacked one after the other (vertically).*/
 		[Inspectable(enumeration="overlaid,stacked,stacked100")]
-		public function set type(val:String):void
+		public function set collisionType(val:String):void
 		{
-			_type = val;
+			_collisionType = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -203,7 +203,7 @@ trace(getTimer(), "initing elements");
 			if (element is IStack)
 			{				
 				_stackedElements.push(element);
-				IStack(element).stackType = _type;
+				IStack(element).stackType = _collisionType;
 				// count all stackable elements according their type (overlaid, stacked100...)
 				// and store its position. This allows to have a general CartesianChart 
 				// elements that are stackable, where the type of stack used is defined internally
@@ -256,7 +256,7 @@ trace(getTimer(), "initing elements");
 			}
 			
 			// only execute the rest if the type is stacked100
-			if (_type != StackElement.STACKED100) return;
+			if (_collisionType != StackElement.STACKED100) return;
 			
 			var allElementsBaseAndTopValues:Array = []; 
 			for (var i:int=0;i<_stackedElements.length;i++)
@@ -480,7 +480,7 @@ trace(getTimer(), "initing elements");
 							var minDim2:Number = getDimMinValue(currentItem, element.dim2);
 							
 							elementsMinMax[category].min = Math.min(elementsMinMax[category].min, minDim2);
-							if (_type == StackElement.STACKED100)
+							if (_collisionType == StackElement.STACKED100)
 								elementsMinMax[category].max = categoryMaxStacked100[category];
 							else 
 								elementsMinMax[category].max = Math.max(elementsMinMax[category].max, maxDim2);
