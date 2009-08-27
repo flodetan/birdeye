@@ -11,7 +11,7 @@
 	creationComplete="createDT()"
 	width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
 
-<mx:Style source="/style/style.css" />
+<mx:Style source="/style/tourDeBirdEye.css" />
 <mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
@@ -70,7 +70,7 @@
     		<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4,a5])"/>
 		</mx:HBox>
     	
-    	<coords:Cartesian id="ac3" width="90%" height="90%" type="stacked" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true">
+    	<coords:Cartesian id="ac3" width="90%" height="90%" collisionType="stacked" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true">
  		<coords:scales>
  			<scales:Category categoryField="subject" id="c" />
  			<scales:Linear id="l"/>

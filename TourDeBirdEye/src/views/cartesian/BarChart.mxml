@@ -1,81 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Module xmlns:mx="http://www.adobe.com/2006/mxml" 
+	horizontalAlign="center" verticalAlign="middle"
 	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:schema="birdeye.vis.elements.schema.*"
 	xmlns:elements="birdeye.vis.elements.geometry.*"
 	xmlns:scales="birdeye.vis.scales.*"
-	xmlns:guides="birdeye.vis.guides.legend.*"
 	xmlns:grid="birdeye.vis.guides.grid.*"
 	xmlns:axis="birdeye.vis.guides.axis.*"
-	backgroundColor="#3f3f3f" 
-	creationComplete="createDT()"
-	width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
-	<mx:Script>
-		<![CDATA[
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	width="100%" height="100%" backgroundColor="#3f3f3f"
+	preinitialize="init()">
 
-			import mx.collections.ArrayCollection;
-			import mx.core.IToolTip;
-			import mx.controls.Alert;
-			import birdeye.vis.data.DataItemLayout;
-			import birdeye.util.EffectsUtil;
+<mx:Style source="/style/tourDeBirdEye.css" />
+
+<mx:Script>
+		<![CDATA[
+			import __AS3__.vec.Vector;
+			import flash.utils.getTimer;
+	    	import mx.collections.ArrayCollection;
+	    	import com.shortybmc.data.parser.CSV;
+	
+			private var csv:CSV;
+			private function init():void
+			{
+				csv = new CSV(new URLRequest('data/sampleData1.csv'));
+				csv.fieldSeperator = ';';
+				csv.addEventListener(Event.COMPLETE, completeHandler);
+			}
+			// Sample data fields: continent	Sum of gdp_total	Sum of population	Sum of total_area
+
+
 			
 			[Bindable]
-			public var dt:ArrayCollection;;
-
-			private var subject:Array;
+			private var filter:String = "";
 			
-			private function createDT():void
+			[Bindable]
+			private var dp:Vector.<Object>;
+			private function completeHandler(e:Event):void
 			{
-				subject = ["A", "B", "C", "D", "E", "F"];
-				var ac:ArrayCollection = new ArrayCollection();
-				var R1:Number, R2:Number, R3:Number, R4:Number;
+				filterCountryName(filter);
+			}
+			
+			private function filterCountryName(val:String):void
+			{
+				filter = val;
+				var tmpDP:Vector.<Object> = new Vector.<Object>();
+				var tmpRow:Array;
 				
-				for (var i:Number = 0; i<subject.length; i++)
+				var hd:Array = csv.header;
+				var pattern:RegExp = new RegExp(val, "i");
+				for (var i:Number = 0; i<csv.data.length; i++)
 				{
-					ac.addItem({
-						subject: subject[i],
-						R1: R1=Math.round(Math.random() * 1000),
-						R2: R2=Math.round(Math.random() * 1000),
-						R3: R3=Math.round(Math.random() * 1000),
-						R4: R4=Math.round(Math.random() * 1000)
-					});
+					var row:Array = csv.getRecordSet(i);
+					if (row.length == hd.length)
+					{
+						tmpRow = [];
+						
+						if (row.indexOf("World") == -1 && String(row[0]).search(pattern) != -1)
+						{
+							for (var j:Number = 0; j<hd.length; j++)
+								tmpRow[hd[j]] = (row[j] == "NA") ? 0 : row[j];
+						
+							tmpDP.push(tmpRow)
+						}
+					}
 				}
-				dt = ac;
+				dp = tmpDP;
 			}
-
-			private function dtFunc(currDatatip:Object, dataFields:Array):String
-			{
-				var tt:String = dataFields["dim1"] + ": " + currDatatip[dataFields["dim1"]];
-				tt += '\n' + dataFields["dim2"] + ": " + currDatatip[dataFields["dim2"]];
-				if (dataFields["sizeField"] != null)
-					tt += '\n' + dataFields["sizeField"] + ": " + currDatatip[dataFields["sizeField"]];
-				return  tt;
-			}
-            
 		]]>
 	</mx:Script>
-		<mx:Button label="Generate" click="createDT()"/>
 	
-		<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
-		
-		<coords:Cartesian id="bc" width="90%" height="90%" dataProvider="{dt}" showDataTips="true" dataTipFunction="dtFunc">
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+		<coords:Cartesian id="lc3" width="90%" height="90%" dataProvider="{dp}" showDataTips="true" collisionType="stacked">
 			<coords:scales>
-		    	<scales:Category id="c" categoryField="subject" />
-		    	<scales:Linear id="l" />
+ 				<scales:Category id="c1" categoryField="continent" />
+ 				<scales:Logarithm id="l1" dataInterval="10"/>
 			</coords:scales>
 			<coords:guides>
-				<axis:Axis scale="{c}" placement="left" strokeColor="#cccccc" colorPointer="0xFF0000" fontLabel="tahoma" labelColor="#cccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
-				<axis:Axis scale="{l}" placement="top" strokeColor="#cccccc" colorPointer="0xFF0000" fontLabel="tahoma" labelColor="#cccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
-	 		</coords:guides>
-	    	 <coords:elements>
-			 	<elements:BarElement scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="R1" dim2="subject" displayName="R1" styleName="grad1" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
-			 	<elements:BarElement scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="R2" dim2="subject" displayName="R2" styleName="grad2" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
-			 	<elements:BarElement scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="R3" dim2="subject" displayName="R3" styleName="grad3" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
-			 	<elements:BarElement scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="R4" dim2="subject" displayName="R4" styleName="grad4" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
+				<axis:Axis scale="{c1}" scaleInterval="1" rotateLabels="-30" placement="bottom" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{l1}" placement="left" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
+			</coords:guides>
+    		 <coords:elements>
+			 	<elements:ColumnElement extendMouseEvents="true" id="a1" scale1="{c1}" scale2="{l1}" dim1="continent" dim2="Sum of gdp_total" styleName="grad1" displayName="GDP" />
+        		 <elements:ColumnElement extendMouseEvents="true" id="a2" scale1="{c1}" scale2="{l1}" dim1="continent" dim2="Sum of population" styleName="grad2" displayName="Population" />
+    		 	<elements:ColumnElement extendMouseEvents="true" id="a3" scale1="{c1}" scale2="{l1}" dim1="continent" dim2="Sum of total_area" styleName="grad3" displayName="Total Area" />
 			 </coords:elements>
-		</coords:Cartesian>
-		
-		<guides:Legend dataProvider="{bc}" direction="horizontal" />	
-	
-		</mx:VBox>
+    	</coords:Cartesian>
+    	<legend:Legend dataProvider="{lc3}" direction="horizontal" />
+    </mx:VBox>
 
 </mx:Module>
