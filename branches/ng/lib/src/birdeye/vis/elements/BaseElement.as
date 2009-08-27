@@ -98,11 +98,13 @@ package birdeye.vis.elements
 		public static const DIM3:String = "dim3";
 		public static const COLOR_FIELD:String = "colorField";
 		public static const SIZE_FIELD:String = "sizeField";
+		public static const SIZE_START_FIELD:String = "sizeStartField";
+		public static const SIZE_END_FIELD:String = "sizeEndField";
 		public static const LABEL_FIELD:String = "labelField";
 		public static const DIM_START:String = "dimStart";
 		public static const DIM_END:String = "dimEnd";
 		public static const DIM_NAME:String = "dimName";
-		public static var fieldsNames:Array = [DIM1, DIM2, DIM3, COLOR_FIELD, SIZE_FIELD, LABEL_FIELD, DIM_START, DIM_END, DIM_NAME];
+		public static var fieldsNames:Array = [DIM1, DIM2, DIM3, COLOR_FIELD, SIZE_FIELD, SIZE_START_FIELD, SIZE_END_FIELD, LABEL_FIELD, DIM_START, DIM_END, DIM_NAME];
 
 		protected var _invalidatedElementGraphic:Boolean = false;
 		
@@ -452,14 +454,20 @@ package birdeye.vis.elements
 		protected var _maxSizeValue:Number = NaN;
 		public function get maxSizeValue():Number
 		{
-			_maxSizeValue = getMaxValue(_sizeField);
+			if (_sizeField)
+				_maxSizeValue = getMaxValue(_sizeField);
+			else if (_sizeStartField && _sizeEndField)
+				_maxSizeValue = Math.max(getMaxValue(_sizeStartField), getMaxValue(_sizeEndField));
 			return _maxSizeValue;
 		}
 
 		private var _minSizeValue:Number = NaN;
 		public function get minSizeValue():Number
 		{
-			_minSizeValue = getMinValue(_sizeField);
+			if (_sizeField)
+				_minSizeValue = getMinValue(_sizeField);
+			else if (_sizeStartField && _sizeEndField)
+				_minSizeValue = Math.min(getMinValue(_sizeStartField), getMinValue(_sizeEndField));
 			return _minSizeValue;
 		}
 
@@ -467,6 +475,7 @@ package birdeye.vis.elements
 		public function set sizeField(val:Object):void
 		{
 			_sizeField = val;
+			invalidateProperties();
 			invalidatingDisplay();
 		}
 		public function get sizeField():Object
@@ -474,6 +483,26 @@ package birdeye.vis.elements
 			return _sizeField;
 		}
 
+		protected var _sizeStartField:String;
+		public function set sizeStartField(val:String):void {
+			_sizeStartField = val;
+			invalidateProperties();
+			invalidatingDisplay();
+		}
+		public function get sizeStartField():String {
+			return _sizeStartField;
+		}
+
+		protected var _sizeEndField:String;
+		public function set sizeEndField(val:String):void	{
+			_sizeEndField = val;
+			invalidateProperties();
+			invalidatingDisplay();
+		}
+		public function get sizeEndField():String {
+			return _sizeEndField;
+		}
+		
 		private var _labelField:String;
 		public function set labelField(val:String):void
 		{
@@ -1034,6 +1063,8 @@ package birdeye.vis.elements
 			dataFields[DIM3] = dim3;
 			dataFields[COLOR_FIELD] = colorField;
 			dataFields[SIZE_FIELD] = sizeField;
+			dataFields[SIZE_START_FIELD] = sizeStartField;
+			dataFields[SIZE_END_FIELD] = sizeEndField;
 			dataFields[LABEL_FIELD] = labelField;
 			dataFields[DIM_NAME] = dimName;
 

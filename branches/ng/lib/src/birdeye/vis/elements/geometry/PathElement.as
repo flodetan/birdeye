@@ -56,7 +56,8 @@ package birdeye.vis.elements.geometry
 				
 				var startX:Number, startY:Number;
 				var endX:Number, endY:Number;
-				var j:Number = 0;
+				var sizeStart:Number = NaN;
+				var sizeEnd:Number = NaN;
 	
 				ggIndex = 0;
 	
@@ -95,11 +96,23 @@ package birdeye.vis.elements.geometry
 							fill = new SolidFill(col);
 						else if (col is IGraphicsFill)
 							fill = col;
-					} 
+					}
+					
+					if (sizeScale)
+					{
+						sizeStart = sizeScale.getPosition(currentItem[sizeStartField]);
+						sizeEnd = sizeScale.getPosition(currentItem[sizeEndField]);
+					}
+					
+					var centerX:Number = startX + (endX - startX)/2;
+					var centerY:Number = startY + (endY - startY)/2;
 	
 					// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createTTGG(currentItem, dataFields, NaN, NaN, NaN, 3);
+					createTTGG(currentItem, dataFields, centerX, centerY, NaN, 3);
+					
+					if (_extendMouseEvents)
+						gg = ttGG;
 
 					if (isNaN(sizeStart) || isNaN(sizeEnd))
 					{

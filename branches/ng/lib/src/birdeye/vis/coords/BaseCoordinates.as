@@ -75,46 +75,34 @@ package birdeye.vis.coords
 				nCursors = 0;
 				if (guides)
 				{
-	trace(getTimer(), "placing guides");
 					placeGuides();
-	trace(getTimer(), "END placing guides");
 				}	
 				// data structure to count different type of stackable elements		
 				var countStackableElements:Array = [];
 				
 				if (elements)
 				{
-trace(getTimer(), "placing elements");
 					placeElements();
-trace(getTimer(), "END placing elements");	
 
-trace(getTimer(), "initing elements");			
 					var nCursors:uint = initElements(countStackableElements);
 					
 					if (nCursors == elements.length)
 					{
-						trace(getTimer(), "DATA INVALIDATED");
 						invalidatedData = true;
 					}
 					else
 					{
 						invalidatedData = false;
 					}
-	trace(getTimer(), "END initing elements");
 				}
 				
 				if (invalidatedData)
 				{
-	trace(getTimer(), "stack elements");
 					initStackElements(countStackableElements);
-	trace(getTimer(), "END stack elements");
-	
 				
 					if (!axesFeeded)
 					{
-	trace(getTimer(), "feeding scales");
 						feedScales();
-	trace(getTimer(), "END feeding scales");
 					}
 				}
 			}
