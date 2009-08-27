@@ -57,5 +57,18 @@ package birdeye.vis.scales
 				size = 100;
 			return size * Number(dataValue) / _totalPositiveValue;
 		} 
+		
+		public function clone(obj:*=null):*
+		{
+			if (obj)
+			{
+				obj.size = this.size;
+				return obj;
+			}
+			else
+			{
+				return clone(new Percent());
+			}	
+		}
 	}
 }

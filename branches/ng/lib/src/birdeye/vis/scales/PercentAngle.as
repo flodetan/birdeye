@@ -50,5 +50,17 @@ package birdeye.vis.scales
 				size = 359.99;
 			return size * Number(dataValue) / _totalPositiveValue;
 		} 
+		
+		override public function clone(obj:*=null):*
+		{
+			if (obj)
+			{
+				return super.clone(obj);
+			}
+			else	
+			{
+				return clone(new PercentAngle());
+			}
+		}
 	}
 }
