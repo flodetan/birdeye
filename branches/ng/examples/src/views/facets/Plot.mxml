@@ -66,7 +66,7 @@
     		<mx:Button label="Generate" click="createDT()"/>
 		</mx:HBox>
 		       	<coords:Cartesian id="cc4" width="90%" height="90%" dataTipFunction="dtFunc" showDataTips="true" dataProvider="{dt}" 
-       		type="stacked100">
+       		collisionType="stacked100">
 			<coords:scales>
  				<scales:Category id="c3" categoryField="type"  />
  				<scales:Category id="c2" categoryField="subject"  />

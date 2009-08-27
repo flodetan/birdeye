@@ -68,7 +68,7 @@
 <!--    		<mx:HSlider id="tens" maximum="4" minimum="0" value="1" change="changeForm([a1,a2,a3,a4,a5])"/>
 -->		</mx:HBox>
     	
-    	<coords:Cartesian id="ac3" width="90%" height="90%" type="stacked" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true">
+    	<coords:Cartesian id="ac3" width="90%" height="90%" collisionType="stacked" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true">
  		<coords:scales>
  			<scales:Category categoryField="subject" id="c" />
  			<scales:Category categoryField="subject1" id="c1" />

@@ -62,7 +62,7 @@
 	<mx:Button label="Generate" click="createDT()"/>
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
        	<coords:Cartesian id="cc4" width="90%" height="90%" dataTipFunction="dtFunc" showDataTips="true" dataProvider="{dt}" 
-       		type="stacked100" >
+       		collisionType="stacked100" >
 			<coords:scales>
  				<scales:Category id="c3" categoryField="type"  />
  				<scales:Category id="c2" categoryField="subject"  />
