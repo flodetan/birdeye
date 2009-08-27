@@ -43,9 +43,9 @@ package birdeye.vis.trans.modifiers
 			var d:Number;
 			var recResults1:Array;
 			var recResults2:Array;
-			
-			epsilon = Math.pow(1.045,epsilon)-1; //Normalize epsilon, so that it ranges from 0(max simplification) to 100 (no simplification)
-			
+			var maxDist:Number = Math.pow(10,(100-epsilon)/10-8); //Normalize epsilon, so that it ranges from 0(no simplification) to 100 (max simplification)
+//trace ("F: " + (100-epsilon)/100);
+//trace ("maxDist: " + maxDist);
 			//Find the point with maximum distance
 			for (var i:int=1; i<polygon.length-2; i++) { 
  				d = orthogonalDistance(polygon, i);
@@ -55,7 +55,7 @@ package birdeye.vis.trans.modifiers
 				}
 			}
 
- 			if (dmax >= epsilon) {
+ 			if (dmax >= maxDist) {
 				//Recursive call
 				recResults1 = simplifyPolygon(polygon.slice(0,cutIndex),epsilon); //copy the simplified 1st part of polygon into a new array recResults1
 				recResults2 = simplifyPolygon(polygon.slice(cutIndex,polygon.length-1),epsilon); //copy the simplified 2nd part of polygon into a new array recResults2 				
