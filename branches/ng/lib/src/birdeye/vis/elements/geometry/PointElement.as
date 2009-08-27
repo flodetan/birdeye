@@ -195,7 +195,7 @@ trace (getTimer(), "drawing point ele");
 	 							
 	 							if (elem.scale2 is Percent)
 	 							{
-	 								var k:uint = subco.scales.indexOf(elem.scale2);
+	 								k = subco.scales.indexOf(elem.scale2);
 	 								
 	 								if (k > -1)
 	 								{
