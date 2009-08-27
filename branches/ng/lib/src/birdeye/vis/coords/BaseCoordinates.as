@@ -464,7 +464,7 @@ trace(getTimer(), "initing elements");
 						var category:Object = currentItem[IEnumerableScale(scale).categoryField];
 
 						// if the category value already exists in the axis, than skip it
-						if (catElements.indexOf(category) == -1)
+						if (category && catElements.indexOf(category) == -1)
 							catElements[j++] = category;
 								
 						if (scale is ISubScale && (scale as ISubScale).subScalesActive)
