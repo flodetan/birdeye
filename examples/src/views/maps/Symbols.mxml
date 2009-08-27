@@ -30,13 +30,15 @@
 				var wc:WorldCountries = new WorldCountries();
 				var countries:Array = wc.getCountriesListByRegion("NorthAfrica");
 				var simplifiedCountries:ArrayCollection = new ArrayCollection();
+				var previousCenter:Array; 
 				for each (var country:String in countries)
 				{
 					var a:Array;
 					simplifiedCountries.addItem({
 						country: country,
 						poly: a = wc.getCountryPolygon(country),
-						center: wc.getCountryCenter(country),
+						end: (previousCenter)? previousCenter : wc.getCountryCenter(country),
+						center: previousCenter = wc.getCountryCenter(country),
 						random: Math.random() * 100000,
 						nestedChart: {
 							subjects: subjects,
@@ -91,6 +93,8 @@
  				<scales:Numeric id="long" dataValues="{[-20,40]}" dataInterval="20" />
 			</coords:scales>
     		 <coords:elements>
+				<elements:PathElement scale1="{long}" scale2="{lat}" styleName="solid1"
+					dimStart="center" dimEnd="end" sizeStart="40" sizeEnd="15"/>
     		 	<elements:PolygonElement scale1="{long}" scale2="{lat}" polyDim="poly" colorFill="0xffffff"/>
     		 	<elements:PointElement itemRenderer="views.itemRenderers.SymbolRenderer" sizeRenderer="100" dataField="nestedChart"
     		 			extendMouseEvents="true" scale1="{long}" scale2="{lat}" dim1="center" dim2="center"/>

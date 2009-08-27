@@ -76,7 +76,7 @@
     		<mx:Button label="Generate" click="createDT();createDT1()"/>
 		</mx:HBox>
     	
-    	<coords:Cartesian id="ac3" width="90%" height="90%" dataTipFunction="dtFunc" showDataTips="true" type="stacked100">
+    	<coords:Cartesian id="ac3" width="90%" height="90%" dataTipFunction="dtFunc" showDataTips="true" collisionType="stacked100">
  		<coords:scales>
  			<scales:Category categoryField="subject" id="c2" />
  			<scales:Linear id="l2" />
