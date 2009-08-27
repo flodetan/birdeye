@@ -36,12 +36,15 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.RenderableElement;
 	import birdeye.vis.facets.FacetContainer;
 	import birdeye.vis.guides.axis.Axis;
+	import birdeye.vis.guides.axis.MultiAxis;
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
+	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.IPositionableElement;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
+	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
@@ -159,13 +162,51 @@ trace (getTimer(), "drawing point ele");
 	 						
 	 						var coord:Object = subco.coord.clone();
 	 						
-	 						coord.scales = subco.scales;
+	 						var sc:Array = new Array();
+	 						for each (var scale:IScale in subco.scales)
+	 						{
+	 							// percents need to have locally min and max
+	 							if (scale is Percent)
+	 							{
+	 								sc.push((scale as Percent).clone());
+	 							}
+	 							else
+	 							{
+	 								sc.push(scale);
+	 							}
+	 						}
+	 						coord.scales = sc;
 	 						
 	 						var el:Array = new Array();
 	 						for each (var baseEl:BaseElement in subco.elements)
 	 						{
-	 							el.push(baseEl.clone());
+	 							var elem:IElement = baseEl.clone();
+	 							
+	 							if (elem.scale1 is Percent)
+	 							{
+	 								var k:uint = subco.scales.indexOf(elem.scale1);
+	 								
+	 								if (k > -1)
+	 								{
+	 									elem.scale1 = sc[k];
+	 								}
+	 								
+	 							}
+	 							
+	 							if (elem.scale2 is Percent)
+	 							{
+	 								var k:uint = subco.scales.indexOf(elem.scale2);
+	 								
+	 								if (k > -1)
+	 								{
+	 									elem.scale2 = sc[k];
+	 								}
+	
+	 							}
+	 							
+	 							el.push(elem);
 	 						}
+	 						
 	 						coord.elements = el;
 	 						
 	 						var gu:Array = new Array();
@@ -173,7 +214,22 @@ trace (getTimer(), "drawing point ele");
 	 						{
 	 							if (g is Axis)
 	 							{
-	 								gu.push((g as Axis).clone());
+	 								var ta:Axis = (g as Axis).clone();
+	 								
+	 								if (ta.scale is Percent)
+	 								{
+	 									k= subco.scales.indexOf(ta.scale);
+	 									if (k > -1)
+	 									{
+	 										ta.scale = sc[k];
+	 									}
+	 								}
+	 								
+	 								gu.push(ta);
+	 							}
+	 							else if (g is MultiAxis)
+	 							{
+	 								gu.push((g as MultiAxis).clone());
 	 							}
 	 						}
 	 						coord.guides = gu;
