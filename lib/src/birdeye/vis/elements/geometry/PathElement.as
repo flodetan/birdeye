@@ -27,37 +27,20 @@
  
 package birdeye.vis.elements.geometry
 {
-	import birdeye.vis.VisScene;
 	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.elements.BaseElement;
-	import birdeye.vis.guides.renderers.LineRenderer;
-	import birdeye.vis.interfaces.IBoundedRenderer;
-	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
-	import com.degrafa.GraphicPoint;
-	import com.degrafa.IGeometry;
 	import com.degrafa.core.IGraphicsFill;
-	import com.degrafa.geometry.Line;
-	import com.degrafa.geometry.splines.BezierSpline;
+	import com.degrafa.geometry.Path;
 	import com.degrafa.paint.SolidFill;
-	import com.degrafa.paint.SolidStroke;
 	
-	import flash.geom.Rectangle;
-	import flash.utils.getTimer;
-	
-	import mx.core.ClassFactory;
+	import flash.geom.Point;
 
-	public class PathElement extends BaseElement
+	public class PathElement extends SegmentElement
 	{
 		public function PathElement()
 		{
 			super();
-		}
-		
-		override protected function commitProperties():void
-		{
-			super.commitProperties();
 		}
 
 		/** @Private 
@@ -66,12 +49,13 @@ package birdeye.vis.elements.geometry
 		{
 			if (isReadyForLayout() && _invalidatedElementGraphic)
 			{
-trace (getTimer(), "drawing line ele");
 				super.drawElement();
 				clearAll();
 
-				var xPrev:Number, yPrev:Number;
-				var pos1:Number, pos2:Number, zPos:Number;
+				var p1:Point, p2:Point, p3:Point, p4:Point;
+				
+				var startX:Number, startY:Number;
+				var endX:Number, endY:Number;
 				var j:Number = 0;
 	
 				ggIndex = 0;
@@ -94,40 +78,16 @@ trace (getTimer(), "drawing line ele");
 					
 					if (scale1)
 					{
-						pos1 = scale1.getPosition(currentItem[dim1]);
-						
+						startX = scale1.getPosition(currentItem[dimStart]);
+						endX = scale1.getPosition(currentItem[dimEnd]);
 					}
 					
 					if (scale2)
 					{
-						pos2 = scale2.getPosition(currentItem[dim2]);
+						startY = scale2.getPosition(currentItem[dimStart]);
+						endY = scale2.getPosition(currentItem[dimEnd]);
 					}
 					
-					if (scale1 is ISubScale && (scale1 as ISubScale).subScalesActive)
-					{
-						pos2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(currentItem[dim2]);
-					}
-					
-					var scale2RelativeValue:Number = NaN;
-	
-					if (scale3)
-					{
-						zPos = scale3.getPosition(currentItem[dim3]);
-						scale2RelativeValue = scale3.size - zPos;
-					}
-	
-					if (chart.coordType == VisScene.POLAR)
-					{
-	 					var xPos:Number = PolarCoordinateTransform.getX(pos1, pos2, chart.origin);
-						var yPos:Number = PolarCoordinateTransform.getY(pos1, pos2, chart.origin);
-	 					pos1 = xPos;
-						pos2 = yPos; 
-						if (j == 0)
-						{
-							var firstX:Number = pos1, firstY:Number = pos2;
-						}
-					}
-	
 					if (colorScale)
 					{
 						var col:* = colorScale.getPosition(currentItem[colorField]);
@@ -137,71 +97,47 @@ trace (getTimer(), "drawing line ele");
 							fill = col;
 					} 
 	
-					if (sizeScale)
-					{
-						 var weight:Number = sizeScale.getPosition(currentItem[sizeField]);
-						stroke = new SolidStroke(colorStroke, alphaStroke, weight);
-					}
-
 					// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createTTGG(currentItem, dataFields, pos1, pos2, scale2RelativeValue, 3);
-   	 
-					if (dim3)
-					{
-						if (!isNaN(zPos))
-						{
-							gg = new DataItemLayout();
-							gg.target = this;
-							graphicsCollection.addItem(gg);
-							ttGG.z = gg.z = zPos;
-						} else
-							zPos = 0;
-					}
-					
-					if (!isNaN(xPrev) && !isNaN(yPrev) && !isNaN(pos1) && !isNaN(pos2))
-					{
- 						var line:Line = new Line(xPrev,yPrev,pos1,pos2);
-						line.fill = fill;
-						line.stroke = stroke;
-						gg.geometryCollection.addItemAt(line,0);
-						line = null;     
-					}
-	
-					if (_showGraphicRenderer)
-					{
-		 				var bounds:Rectangle = new Rectangle(pos1 - _rendererSize/2, pos2 - _rendererSize/2, _rendererSize, _rendererSize);
-						
-						var shape:IGeometry = graphicRenderer.newInstance();
-						if (shape is IBoundedRenderer) (shape as IBoundedRenderer).bounds = bounds;
-						shape.fill = fill;
-						shape.stroke = stroke;
-						gg.geometryCollection.addItem(shape);
-					}
-	
-					xPrev = pos1; yPrev = pos2;
-					if (dim3)
-					{
-						gg.z = zPos;
-						if (isNaN(zPos))
-							zPos = 0;
-					}
-				}
-				
-				if (chart.coordType == VisScene.POLAR && !isNaN(firstX) && !isNaN(firstY))
-				{
-						line = new Line(pos1,pos2, firstX, firstY);
-						line.fill = fill;
-						line.stroke = stroke;
-						gg.geometryCollection.addItemAt(line,0);
-						line = null;
-				}
-	
-				if (dim3)
-					zSort();
+					createTTGG(currentItem, dataFields, NaN, NaN, NaN, 3);
 
+					if (isNaN(sizeStart) || isNaN(sizeEnd))
+					{
+						// line to P1
+						data = "M" + String(startX) + "," + String(startY) + " ";
+						// line to P2
+						data+= "L" + String(endX) + "," + String(endY) + " ";
+					} else {
+						var angleStartEnd:Number = Math.atan2(endY-startY, endX-startX) * 180/Math.PI;
+						var xDeltaStart:Number = sizeStart/2 * Math.cos(angleStartEnd);
+						var yDeltaStart:Number = sizeStart/2 * Math.sin(angleStartEnd);
+						var xDeltaEnd:Number = sizeEnd/2 * Math.cos(angleStartEnd);
+						var yDeltaEnd:Number = sizeEnd/2 * Math.sin(angleStartEnd);
+	
+						p1 = new Point(startX - xDeltaStart, startY - yDeltaStart);
+						p2 = new Point(startX + xDeltaStart, startY + yDeltaStart);
+						p3 = new Point(endX - xDeltaEnd, endY - yDeltaEnd);
+						p4 = new Point(endX - xDeltaEnd, endY - yDeltaEnd);
+						
+						var data:String;
+	 					// move to P1 
+						data = "M" + String(p1.x) + "," + String(p1.y) + " ";
+						// line to P2
+						data+= "L" + String(p2.x) + "," + String(p2.y) + " ";
+						// line to P3
+						data+= "L" + String(p3.x) + "," + String(p3.y) + " ";
+						// line to P4
+						data+= "L" + String(p4.x) + "," + String(p4.y) + " ";
+						// line to P1 and close
+						data+= "L" + String(p1.x) + "," + String(p1.y) + " z";
+					}
+ 					
+ 					var path:Path= new Path(data);
+					path.fill = fill;
+					path.stroke = stroke;
+					gg.geometryCollection.addItemAt(path,0);
+				}
 				_invalidatedElementGraphic = false;
-trace (getTimer(), "drawing line ele");
 			}
 		}
  	}

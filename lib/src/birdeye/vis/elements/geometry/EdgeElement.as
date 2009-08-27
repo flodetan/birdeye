@@ -27,7 +27,6 @@
 package birdeye.vis.elements.geometry {
 
 	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.guides.renderers.IEdgeRenderer;
 	import birdeye.vis.guides.renderers.LineRenderer;
@@ -38,36 +37,12 @@ package birdeye.vis.elements.geometry {
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
-	public class EdgeElement extends BaseElement implements IEdgeElement {
+	public class EdgeElement extends SegmentElement implements IEdgeElement {
 
 		public function EdgeElement() {
 			super();
 		}
 
-		private var _dimStart:String;
-		
-		public function set dimStart(val:String):void {
-			_dimStart = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		
-		public function get dimStart():String {
-			return _dimStart;
-		}
-
-		private var _dimEnd:String;
-		
-		public function set dimEnd(val:String):void	{
-			_dimEnd = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		
-		public function get dimEnd():String {
-			return _dimEnd;
-		}
-		
 		override protected function createGlobalGeometryGroup():void {
 			// do nothing: no need to create the global group 
 	    }
