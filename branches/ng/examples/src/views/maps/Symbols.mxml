@@ -34,10 +34,11 @@
 				for each (var country:String in countries)
 				{
 					var a:Array;
+					var end:Array = (previousCenter)? previousCenter : wc.getCountryCenter(country);
 					simplifiedCountries.addItem({
 						country: country,
 						poly: a = wc.getCountryPolygon(country),
-						end: (previousCenter)? previousCenter : wc.getCountryCenter(country),
+						end: (Math.random()*100 > 50) ? end : null,
 						center: previousCenter = wc.getCountryCenter(country),
 						sizeStart: Math.random() * 100,
 						sizeEnd: Math.random() * 20,
@@ -94,7 +95,7 @@
 			<coords:scales>
  				<scales:Numeric id="lat" dataValues="{[20,40]}" dataInterval="20"/>
  				<scales:Numeric id="long" dataValues="{[-20,40]}" dataInterval="20"/>
- 				<scales:Linear id="size" scaleValues="{[5,30]}"/>
+ 				<scales:Linear id="size" scaleValues="{[5,50]}"/>
 			</coords:scales>
     		 <coords:elements>
 				<elements:PathElement scale1="{long}" scale2="{lat}" sizeScale="{size}" styleName="solid1"
