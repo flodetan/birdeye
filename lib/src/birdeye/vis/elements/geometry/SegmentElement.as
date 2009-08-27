@@ -51,26 +51,6 @@ package birdeye.vis.elements.geometry
 			return _dimEnd;
 		}
 		
-		protected var _sizeStart:Number;
-		public function set sizeStart(val:Number):void {
-			_sizeStart = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get sizeStart():Number {
-			return _sizeStart;
-		}
-
-		protected var _sizeEnd:Number;
-		public function set sizeEnd(val:Number):void	{
-			_sizeEnd = val;
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		public function get sizeEnd():Number {
-			return _sizeEnd;
-		}
-		
 		public function SegmentElement()
 		{
 			super();
