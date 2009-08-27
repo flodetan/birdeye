@@ -472,7 +472,7 @@ package birdeye.vis.coords
 			{
 				var cartClone:Cartesian = cloneObj as Cartesian;
 				
-				cartClone.type = _type;
+				cartClone.collisionType = _collisionType;
 				
 				return cartClone;
 			}
