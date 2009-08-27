@@ -65,6 +65,7 @@ package birdeye.vis.elements.geometry
 				
 				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
 				{
+					startX = startY = NaN;
 	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
 						gg = graphicsCollection.items[ggIndex];
 					else
@@ -77,6 +78,9 @@ package birdeye.vis.elements.geometry
 
 					var currentItem:Object = _dataItems[cursorIndex];
 					
+					if (!currentItem[dimEnd] || !currentItem[dimStart])
+						continue;
+						
 					if (scale1)
 					{
 						startX = scale1.getPosition(currentItem[dimStart]);
