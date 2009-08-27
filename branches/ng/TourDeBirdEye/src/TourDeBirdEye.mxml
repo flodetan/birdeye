@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:cartesian="views.cartesian.*"
 	width="100%" height="100%"
 	backgroundColor="#222222"
 	layout="absolute">
@@ -56,7 +57,7 @@
             </mx:Panel>
 				
 			<mx:Panel id="viewPanel" width="100%" height="100%" headerHeight="0" verticalAlign="middle" horizontalAlign="center" >    
-							
+
 				<mx:ModuleLoader id="tourModuleLoader" width="100%" height="100%" />
 			
 			</mx:Panel>
