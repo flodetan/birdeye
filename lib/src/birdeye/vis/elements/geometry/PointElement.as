@@ -111,21 +111,49 @@ trace (getTimer(), "drawing point ele");
 					var enumScale1:IEnumerableScale = scale1 as IEnumerableScale;
 					var enumScale2:IEnumerableScale = scale2 as IEnumerableScale;
 					
-					var enumLength1:Number = enumScale1.dataProvider.length;
-					var enumLength2:Number = enumScale2.dataProvider.length;
+					var enumLength1:Number = 1;
+					var enumLength2:Number = 1;
+					if (enumScale1)
+					{
+						enumLength1 = enumScale1.dataProvider.length;
+					}
+					
+					if (enumScale2)
+					{
+						enumLength2 = enumScale2.dataProvider.length;
+					}
 					
 					for (var i:uint=0;i<enumLength1;i++)
 					{
 						for (var j:uint=0;j<enumLength2;j++)
 						{
-							var filteredData:Object = filterData(enumScale1.dataProvider[i], enumScale2.dataProvider[j], enumScale1.categoryField, enumScale2.categoryField);
-							
 							var currentItem:Object = _dataItems[cursorIndex];
-						
-							var scaleResults:Object = determinePositions(enumScale1.dataProvider[i], enumScale2.dataProvider[j], null, null, null, null);
-																							
-							var bounds:Rectangle = new Rectangle(scaleResults["pos1"] - enumScale1.size/2/enumLength1 + 5, scaleResults["pos2"] - enumScale2.size/2/enumLength2 + 5, enumScale1.size/enumLength1 - 10, enumScale2.size/enumLength2 - 10);
 
+							if (enumScale1 && enumScale2)
+							{
+								var filteredData:Object = filterData(enumScale1.dataProvider[i], enumScale1.categoryField, enumScale2.dataProvider[j],  enumScale2.categoryField);		
+		
+								var scaleResults:Object = determinePositions(enumScale1.dataProvider[i], enumScale2.dataProvider[j], null, null, null, null);
+																								
+								var bounds:Rectangle = new Rectangle(scaleResults["pos1"] - enumScale1.size/2/enumLength1 + 5, scaleResults["pos2"] - enumScale2.size/2/enumLength2 + 5, enumScale1.size/enumLength1 - 10, enumScale2.size/enumLength2 - 10);
+							}
+							else if (enumScale1 && !enumScale2)
+							{
+								filteredData = filterData(enumScale1.dataProvider[i], enumScale1.categoryField);
+								
+								scaleResults = determinePositions(enumScale1.dataProvider[i], null);
+								
+								bounds = new Rectangle(scaleResults["pos1"] - enumScale1.size/2/enumLength1 + 5, 0, enumScale1.size/enumLength1 - 10,height);
+
+							}
+							else if (!enumScale1 && enumScale2)
+							{
+								filteredData = filterData(enumScale2.dataProvider[j], enumScale2.categoryField);
+								
+								scaleResults = determinePositions(null,enumScale2.dataProvider[j]);
+								
+								bounds = new Rectangle(0, scaleResults["pos2"] - enumScale2.size/2/enumLength2 + 5, width,enumScale2.size/enumLength2 - 10);
+							}
 
 	 						var subco:FacetContainer = graphicRenderer.newInstance() as FacetContainer;
 	 						
@@ -343,14 +371,17 @@ trace (getTimer(), "drawing point ele");
 			}
 		}
 		
-		private function filterData(scale1Value:Object, scale2Value:Object, scale1CategoryField:Object, scale2CategoryField:Object):Vector.<Object>
+		private function filterData(scale1Value:Object, scale1CategoryField:Object, scale2Value:Object=null, scale2CategoryField:Object=null):Vector.<Object>
 		{
 			var filteredDataItems:Vector.<Object> = new Vector.<Object>();
 			for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
 			{
 				var currentItem:Object = _dataItems[cursorIndex];
 				
-				if (currentItem[scale1CategoryField] == scale1Value && currentItem[scale2CategoryField] == scale2Value)
+
+				if ( ( (!scale1Value || !scale1CategoryField) || (currentItem[scale1CategoryField] == scale1Value) ) && 
+					 ( (!scale2Value || !scale2CategoryField) || (currentItem[scale2CategoryField] == scale2Value) )
+				   )
 				{
 					filteredDataItems.push(currentItem);
 				}
