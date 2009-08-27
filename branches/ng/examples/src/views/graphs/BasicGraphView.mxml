@@ -110,10 +110,10 @@
 				if (reachableNodes[_edgeSet[i]["start"] - 1]) edgeSet.addItem(_edgeSet[i]);
 			}
 
-			trace("{");
-			for each (var n:Object in nodeSet) trace("node: " + n.id);
-			for each (var e:Object in edgeSet) trace("edge: " + e.start + "->" + e.end);
-			trace("}");
+//			trace("{");
+//			for each (var n:Object in nodeSet) trace("node: " + n.id);
+//			for each (var e:Object in edgeSet) trace("edge: " + e.start + "->" + e.end);
+//			trace("}");
 
 			edges = edgeSet;
 			nodes = nodeSet;
