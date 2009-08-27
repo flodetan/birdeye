@@ -108,15 +108,15 @@ package birdeye.vis.elements.geometry
 						// line to P2
 						data+= "L" + String(endX) + "," + String(endY) + " ";
 					} else {
-						var angleStartEnd:Number = Math.atan2(endY-startY, endX-startX) * 180/Math.PI;
-						var xDeltaStart:Number = sizeStart/2 * Math.cos(angleStartEnd);
-						var yDeltaStart:Number = sizeStart/2 * Math.sin(angleStartEnd);
-						var xDeltaEnd:Number = sizeEnd/2 * Math.cos(angleStartEnd);
-						var yDeltaEnd:Number = sizeEnd/2 * Math.sin(angleStartEnd);
+						var angleStartEnd:Number = Math.atan2(-(endY-startY), endX-startX) * 180/Math.PI;
+						var xDeltaStart:Number = sizeStart/2 * Math.sin(angleStartEnd*Math.PI/180);
+						var yDeltaStart:Number = sizeStart/2 * Math.cos(angleStartEnd*Math.PI/180);
+						var xDeltaEnd:Number = sizeEnd/2 * Math.sin(angleStartEnd*Math.PI/180);
+						var yDeltaEnd:Number = sizeEnd/2 * Math.cos(angleStartEnd*Math.PI/180);
 	
 						p1 = new Point(startX - xDeltaStart, startY - yDeltaStart);
 						p2 = new Point(startX + xDeltaStart, startY + yDeltaStart);
-						p3 = new Point(endX - xDeltaEnd, endY - yDeltaEnd);
+						p3 = new Point(endX + xDeltaEnd, endY + yDeltaEnd);
 						p4 = new Point(endX - xDeltaEnd, endY - yDeltaEnd);
 						
 						var data:String;
@@ -124,9 +124,9 @@ package birdeye.vis.elements.geometry
 						data = "M" + String(p1.x) + "," + String(p1.y) + " ";
 						// line to P2
 						data+= "L" + String(p2.x) + "," + String(p2.y) + " ";
-						// line to P3
+ 						// line to P3
 						data+= "L" + String(p3.x) + "," + String(p3.y) + " ";
-						// line to P4
+ 						// line to P4
 						data+= "L" + String(p4.x) + "," + String(p4.y) + " ";
 						// line to P1 and close
 						data+= "L" + String(p1.x) + "," + String(p1.y) + " z";
