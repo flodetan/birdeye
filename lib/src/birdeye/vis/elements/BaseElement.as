@@ -457,7 +457,7 @@ package birdeye.vis.elements
 			if (_sizeField)
 				_maxSizeValue = getMaxValue(_sizeField);
 			else if (_sizeStartField && _sizeEndField)
-				_maxSizeValue = Math.max(getMaxValue(_sizeStartField), getMaxValue(_sizeEndField));
+				_maxSizeValue = getMaxValueOnAllFields([_sizeStartField, _sizeEndField]);
 			return _maxSizeValue;
 		}
 
@@ -467,7 +467,7 @@ package birdeye.vis.elements
 			if (_sizeField)
 				_minSizeValue = getMinValue(_sizeField);
 			else if (_sizeStartField && _sizeEndField)
-				_minSizeValue = Math.min(getMinValue(_sizeStartField), getMinValue(_sizeEndField));
+				_minSizeValue = getMinValueOnAllFields([_sizeStartField, _sizeEndField]);
 			return _minSizeValue;
 		}
 
@@ -1557,6 +1557,32 @@ package birdeye.vis.elements
 			}
 			return max
 		}
+		
+		private function getMaxValueOnAllFields(fields:Array):Number
+		{
+			var max:Number = NaN;
+			if (dataItems && fields)
+			{
+				var currentItem:Object;
+				for (var cursIndex:uint = 0; cursIndex<dataItems.length; cursIndex++)
+				{
+					currentItem = dataItems[cursIndex];
+					
+					var tmpMax:Number = Number.MIN_VALUE;
+					for each (var field:String in fields)
+						if (isNaN(currentItem[field]))
+						{
+							tmpMax = NaN;
+							break;
+						} else 
+							tmpMax = Math.max(currentItem[field], tmpMax);
+
+					if ((isNaN(max) || max < tmpMax) && !isNaN(tmpMax))
+						max = tmpMax;
+				}
+			}
+			return max
+		}
 
 		private function getMinV(field:String):Number
 		{
@@ -1573,6 +1599,32 @@ package birdeye.vis.elements
 					currentValue = currentItem[field];
 					if ( (isNaN(min) || min > currentValue) && !isNaN(currentValue))
 						min = currentValue;
+				}
+			}
+			return min;
+		}
+
+		private function getMinValueOnAllFields(fields:Array):Number
+		{
+			var min:Number = NaN;
+			if (dataItems && fields)
+			{
+				var currentItem:Object;
+				for (var cursIndex:uint = 0; cursIndex<dataItems.length; cursIndex++)
+				{
+					currentItem = dataItems[cursIndex];
+					
+					var tmpMin:Number = Number.MAX_VALUE;
+					for each (var field:String in fields)
+						if (isNaN(currentItem[field]))
+						{
+							tmpMin = NaN;
+							break;
+						} else 
+							tmpMin = Math.min(currentItem[field], tmpMin);
+
+					if ((isNaN(min) || min > tmpMin) && !isNaN(tmpMin))
+						min = tmpMin;
 				}
 			}
 			return min;
