@@ -34,13 +34,13 @@
 				for each (var country:String in countries)
 				{
 					var a:Array;
-					var end:Array = (previousCenter)? previousCenter : wc.getCountryCenter(country);
+					var end:Array;
 					simplifiedCountries.addItem({
 						country: country,
 						poly: a = wc.getCountryPolygon(country),
-						end: (Math.random()*100 > 50) ? end : null,
+						end: end = (Math.random()*100 > 50) ? previousCenter : null,
 						center: previousCenter = wc.getCountryCenter(country),
-						sizeStart: Math.random() * 100,
+						sizeStart: (end) ? Math.random() * 100 : NaN,
 						sizeEnd: Math.random() * 20,
 						random: Math.random() * 100000,
 						nestedChart: {
@@ -88,6 +88,9 @@
 	
 	
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+    	<mx:HBox >
+    		<mx:Button label="Generate" click="init()"/>
+		</mx:HBox>
     	<coords:Cartesian id="myMap" width="90%" dataProvider="{dt}" height="90%" showDataTips="true" dataTipFunction="dtFunc">
     		<coords:transforms>
 					<trans:Projection id="myProj" proj="Miller cylindrical" latScale="{lat}" longScale="{long}"/>
@@ -95,12 +98,12 @@
 			<coords:scales>
  				<scales:Numeric id="lat" dataValues="{[20,40]}" dataInterval="20"/>
  				<scales:Numeric id="long" dataValues="{[-20,40]}" dataInterval="20"/>
- 				<scales:Linear id="size" scaleValues="{[5,50]}"/>
+ 				<scales:Linear id="size" scaleValues="{[10,100]}"/>
 			</coords:scales>
     		 <coords:elements>
+    		 	<elements:PolygonElement scale1="{long}" scale2="{lat}" polyDim="poly" colorFill="0xffffff"/>
 				<elements:PathElement scale1="{long}" scale2="{lat}" sizeScale="{size}" styleName="solid1"
 					dimStart="center" dimEnd="end" sizeStartField="sizeStart" sizeEndField="sizeEnd"/>
-    		 	<elements:PolygonElement scale1="{long}" scale2="{lat}" polyDim="poly" colorFill="0xffffff"/>
     		 	<elements:PointElement itemRenderer="views.itemRenderers.SymbolRenderer" sizeRenderer="100" dataField="nestedChart"
     		 			extendMouseEvents="true" scale1="{long}" scale2="{lat}" dim1="center" dim2="center"/>
 			 </coords:elements>
