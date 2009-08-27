@@ -39,6 +39,8 @@
 						poly: a = wc.getCountryPolygon(country),
 						end: (previousCenter)? previousCenter : wc.getCountryCenter(country),
 						center: previousCenter = wc.getCountryCenter(country),
+						sizeStart: Math.random() * 100,
+						sizeEnd: Math.random() * 20,
 						random: Math.random() * 100000,
 						nestedChart: {
 							subjects: subjects,
@@ -51,14 +53,6 @@
 				}
 
 				dt = simplifiedCountries;
-			}
-			
-			private function dtFunc(currDatatip:Object, dataFields:Array):String
-			{
-				var tt:String =  currDatatip.country;
-				tt += "\n Center: " + currDatatip.center;
-				tt += "\n Random data: " + currDatatip.random;
-				return  tt;
 			}
 			
 			private function colorFunction(dataValue:*, min:Number, max:Number, _size:Number):*
@@ -79,6 +73,15 @@
 				RadialGradientFill(fill).gradientStops = g;
 			 	return fill;
 			}
+
+			
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String =  currDatatip.country;
+				tt += "\n Center: " + currDatatip.center;
+				tt += "\n Random data: " + currDatatip.random;
+				return  tt;
+			}
 		]]>
 	</mx:Script>
 	
@@ -90,11 +93,12 @@
 			</coords:transforms>
 			<coords:scales>
  				<scales:Numeric id="lat" dataValues="{[20,40]}" dataInterval="20"/>
- 				<scales:Numeric id="long" dataValues="{[-20,40]}" dataInterval="20" />
+ 				<scales:Numeric id="long" dataValues="{[-20,40]}" dataInterval="20"/>
+ 				<scales:Linear id="size" scaleValues="{[5,30]}"/>
 			</coords:scales>
     		 <coords:elements>
-				<elements:PathElement scale1="{long}" scale2="{lat}" styleName="solid1"
-					dimStart="center" dimEnd="end" sizeStart="40" sizeEnd="15"/>
+				<elements:PathElement scale1="{long}" scale2="{lat}" sizeScale="{size}" styleName="solid1"
+					dimStart="center" dimEnd="end" sizeStartField="sizeStart" sizeEndField="sizeEnd"/>
     		 	<elements:PolygonElement scale1="{long}" scale2="{lat}" polyDim="poly" colorFill="0xffffff"/>
     		 	<elements:PointElement itemRenderer="views.itemRenderers.SymbolRenderer" sizeRenderer="100" dataField="nestedChart"
     		 			extendMouseEvents="true" scale1="{long}" scale2="{lat}" dim1="center" dim2="center"/>
