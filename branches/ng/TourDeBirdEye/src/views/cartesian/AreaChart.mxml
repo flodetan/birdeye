@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Module xmlns:mx="http://www.adobe.com/2006/mxml" 
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:recipe="birdeye.vis.recipes.cartesianCharts.*"
 	xmlns:coords="birdeye.vis.coords.*"
 	xmlns:elements="birdeye.vis.elements.geometry.*"
@@ -11,7 +11,6 @@
 	creationComplete="createDT()"
 	width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
 
-<mx:Style source="/style/tourDeBirdEye.css" />
 <mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
@@ -61,9 +60,6 @@
 			}
 		]]>
 	</mx:Script>
-	
-	
-	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
     	
     	<mx:HBox >
     		<mx:Button label="Generate" click="createDT()"/>
@@ -91,6 +87,4 @@
 
     <guides:Legend dataProvider="{ac3}" direction="horizontal"/>
 
-	</mx:VBox>
-	
-</mx:Module>
+</mx:VBox>

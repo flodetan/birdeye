@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:graphs="birdeye.vis.trans.graphs.*"
+	xmlns:util="util.*"
+	backgroundColor="#3f3f3f">
+
+	<mx:Script>
+		<![CDATA[			
+			
+
+		]]>
+	</mx:Script>	
+	<mx:HBox horizontalAlign="center" width="100%">
+		<mx:Button label="Generate tree" click="generateTree()"/>
+		<mx:Button label="Generate graph" click="generateConnectedGraph()" id="generateGraphButton" enabled="true"/>
+		<mx:CheckBox id="animate" label="animate" selected="{graphLayout.animate}" />
+	</mx:HBox>
+	
+	<mx:VBox horizontalAlign="center" width="100%" height="100%">
+		<coords:Cartesian id="graph" width="100%" height="100%" showDataTips="true">
+			<coords:elements>
+				<elements:EdgeElement id="edge" dimStart="start" dimEnd="end" node="{node}" dataProvider="{edges}" mouseClickFunction="clickF"
+									  colorFill="0xFF0000" colorStroke="0x999999" strokeWeight="2" />
+
+							
+				<elements:NodeElement id="node" itemIdField="id" dimName="name" dataProvider="{nodes}" 
+									sizeRenderer="25" itemRenderer="views.graphs.nodeRenderers.CircleNode" mouseClickFunction="clickF" />
+			</coords:elements>
+			<coords:transforms>
+				<graphs:GraphLayout
+						startNodeId="1"
+						id="graphLayout"
+						layouter="{layouter}"
+						applyToNode="{node}" applyToEdge="{edge}"
+						animate="{animate.selected}"
+						useIntegerPositions="true"
+					/>
+			</coords:transforms>
+		</coords:Cartesian>
+	</mx:VBox>
+
+	
+	<mx:Script>
+	<![CDATA[
+		import mx.controls.Alert;
+		import birdeye.vis.data.DataItemLayout;
+		import birdeye.vis.trans.graphs.layout.ILayoutAlgorithm;
+		[Bindable]
+		public var nodes:ArrayCollection;
+		[Bindable]
+		public var edges:ArrayCollection;
+	
+		[Bindable]
+		public var layouter:ILayoutAlgorithm;
+
+		import mx.collections.ArrayCollection;
+		
+		public function generateGraph():void {
+			const graph:Object = _generateGraph();
+			nodes = graph["nodes"];
+			edges = graph["edges"];
+		}
+
+		public function generateConnectedGraph():void {
+			const graph:Object = _generateGraph();
+
+			const _nodeSet:ArrayCollection = graph["nodes"];
+			const _edgeSet:ArrayCollection = graph["edges"];
+
+			const numNodes:int = _nodeSet.length;
+			const adjMatrix:Array = [];
+			
+			for (var i:int = 0; i < numNodes; i++) adjMatrix[i] = [];
+			
+			var zeroEdgesCnt:int = 0;
+			for each (var edge:Object in _edgeSet) {
+				const start:int = edge["start"] - 1;
+				const end:int = edge["end"] - 1;
+				if (start == 0 || end == 0) zeroEdgesCnt++;
+				adjMatrix[start][end] = true;
+			}
+			if (zeroEdgesCnt == 0) {
+				// workaround to avoid an exception in ParentCentered
+				// TODO: fix the problem in ParentCentered
+				_edgeSet.addItem({start: 1,	end: 2});
+				adjMatrix[0][1] = true;
+			}
+			
+			const reachableNodes:Array = [];
+			traverse(0, adjMatrix, reachableNodes);
+			
+			const nodeSet:ArrayCollection = new ArrayCollection();
+			const edgeSet:ArrayCollection = new ArrayCollection();
+			
+			for (i = 0; i < numNodes; i++) {
+				if (reachableNodes[i]) nodeSet.addItem(_nodeSet[i]);
+			}
+			for (i = 0; i < _edgeSet.length; i++) {
+				if (reachableNodes[_edgeSet[i]["start"] - 1]) edgeSet.addItem(_edgeSet[i]);
+			}
+
+//			trace("{");
+//			for each (var n:Object in nodeSet) trace("node: " + n.id);
+//			for each (var e:Object in edgeSet) trace("edge: " + e.start + "->" + e.end);
+//			trace("}");
+
+			edges = edgeSet;
+			nodes = nodeSet;
+		}
+
+		private function traverse(node:int, adjMatrix:Array, reachableNodes:Array):void {
+			reachableNodes[node] = true;
+			const numNodes:int = adjMatrix.length;
+			for (var i:int = 0; i < numNodes; i++) {
+				if (adjMatrix[node][i]  ||  adjMatrix[i][node]) {
+					if (!reachableNodes[i]) {
+						traverse(i, adjMatrix, reachableNodes);
+					}
+				}
+			}
+		}
+
+		private var graph_minNodes:int = 15;
+		private var graph_maxNodes:int = 30;
+		private var graph_minEdges:int = 20;
+		private var graph_maxEdges:int = 40;
+
+		private function _generateGraph():Object {
+			const nodeSet:ArrayCollection = new ArrayCollection();
+			const numNodes:int = int(Math.random() * (graph_maxNodes - graph_minNodes) + graph_minNodes); 
+			for (var i:int = 0; i < numNodes; i++) {
+				nodeSet.addItem({
+					id: i + 1,
+					name: (i + 1) + ". " + randomName() + " "
+				});
+			}
+	
+			const edgeSet:ArrayCollection = new ArrayCollection();
+			const numEdges:int = int(Math.random() * (graph_maxEdges - graph_minEdges) + graph_minEdges);
+			const edgesByStartEnd:Object = {};
+			for (i = 0; i < numEdges; i++) {
+				var start:int, end:int;
+				var key:String;
+				do {
+					start = int(Math.random() * numNodes) + 1;
+					end = int(Math.random() * numNodes) + 1;
+					key = String(start) + "-" + String(end);
+				} while (edgesByStartEnd[key]);
+				edgeSet.addItem({
+					start: start,
+					end: end
+				});
+				edgesByStartEnd[key] = true;
+			}
+			
+			return {nodes:nodeSet, edges:edgeSet};
+		}
+
+
+		
+		private var tree_maxLevel:int = 3;
+		private var tree_minChildren:int = 2;
+		private var tree_maxChildren:int = 3;
+		private var tree_maxId:int = 1000;
+	
+		public function generateTree():void {
+			lastId = 1;
+	
+			const nodeSet:ArrayCollection = new ArrayCollection();
+			const edgeSet:ArrayCollection = new ArrayCollection();
+			
+			nodeSet.addItem({
+				id: lastId,
+				name: lastId + ". " + randomName() + " "
+			});
+			generateSubtree(nodeSet, edgeSet, lastId, 1);
+			
+			edges = edgeSet;
+			nodes = nodeSet;
+		}
+	
+		private var lastId:int;
+		private function generateSubtree(nodeSet:ArrayCollection, edgeSet:ArrayCollection, parentId:int, level:int):void {
+			if (level > tree_maxLevel) return;
+			if (lastId >= tree_maxId) return;
+	
+			const numNodes:int = Math.round(Math.random() * (tree_maxChildren - tree_minChildren)) + tree_minChildren; 
+			for (var i:int = 0; i < numNodes; i++) {
+				var id:int = ++lastId; 
+				nodeSet.addItem({
+					id: id,
+					name: id + ". " + randomName() + " "
+				});
+				edgeSet.addItem({
+					start: parentId,
+					end: id
+				});
+				generateSubtree(nodeSet, edgeSet, id, level + 1);
+			}
+		}
+	
+		private function randomName():String {
+			var name:String = "";
+			for (var i:int = 0; i < 5; i++) {
+				name += String.fromCharCode('A'.charCodeAt(0) + int(Math.random() * 26)); 
+			}
+			return name;
+		}
+		
+		private function clickF(data:DataItemLayout):void
+		{
+			var text:String = "Info:";
+			for each (var field:String in data.dataFields)
+				text += "\n" + field + ": " + data.currentItem[field];
+			Alert.show(text);
+		}
+	]]>
+	</mx:Script>
+
+</mx:VBox>

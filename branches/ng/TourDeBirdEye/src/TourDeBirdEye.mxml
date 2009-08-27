@@ -1,44 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:cartesian="views.cartesian.*"
+	xmlns:graphs="views.graphs.*"
 	width="100%" height="100%"
 	backgroundColor="#222222"
 	layout="absolute">
 	
     <mx:Script>
         <![CDATA[
-        import mx.modules.*;
-		import mx.events.ListEvent;
-		
+        import mx.events.ListEvent;
+		import mx.containers.Canvas;
 		
 		
 		[Bindable]
-        public var selectedNode:String;
+        public var classRef:Class;
+        [Bindable]
+        public var currentExampleInstance:Canvas;
+
 
             // Event handler for the Tree control change event.
         public function treeChanged(event:ListEvent):void {
-                selectedNode=myTree.selectedItem.@data;
-                removeModule(tourModuleLoader);
-                createModule(tourModuleLoader, selectedNode);
+                classRef=myTree.selectedItem.@classRef as Class;
+                loadExample(classRef);
                 trace(myTree.selectedItem.@data);
          }
 
-        public function createModule(m:ModuleLoader, s:String):void {
-            if (!m.url) {
-                m.url = s;
-                return;
-            }
-            
-            m.loadModule();
+        public function loadExample(s:Class):void {
+            viewPanel.removeAllChildren();
+            var c:Class = classRef;
+            currentExampleInstance = new c();
+            viewPanel.addChild(currentExampleInstance);
         }
         
-        public function removeModule(m:ModuleLoader):void {
-            m.unloadModule();
-        }
         ]]>
     </mx:Script>
-
-
 	
 	<mx:Style source="style/tourDeBirdEye.css" />
 	<mx:XML id="treeMenu" source="data/menu.xml" />
@@ -58,10 +53,10 @@
 				
 			<mx:Panel id="viewPanel" width="100%" height="100%" headerHeight="0" verticalAlign="middle" horizontalAlign="center" >    
 
-				<mx:ModuleLoader id="tourModuleLoader" width="100%" height="100%" />
+				<!-- Examples load here -->
+				<cartesian:BarChart width="100%" height="100%" />
 			
 			</mx:Panel>
-			
 		
 		</mx:HBox>
 	
