@@ -62,8 +62,6 @@ package birdeye.vis.elements.geometry
 	
 				ggIndex = 0;
 	
-				var points:Array = [];
-				
 				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
 				{
 					startX = startY = NaN;
