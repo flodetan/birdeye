@@ -71,7 +71,7 @@
 		<coords:Cartesian id="lc3" width="90%" height="90%" dataProvider="{dp}" showDataTips="true" collisionType="stacked">
 			<coords:scales>
  				<scales:Category id="c1" categoryField="continent" />
- 				<scales:Logarithm id="l1" dataInterval="10000"/>
+ 				<scales:Logarithm id="l1" dataInterval="10"/>
 			</coords:scales>
 			<coords:guides>
 				<axis:Axis scale="{c1}" scaleInterval="1" placement="bottom" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
