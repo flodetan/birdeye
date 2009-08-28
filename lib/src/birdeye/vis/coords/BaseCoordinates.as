@@ -466,12 +466,21 @@ package birdeye.vis.coords
 							// this is NOT good
 							var maxDim2:Number = getDimMaxValue(currentItem, element.dim2, element.collisionType == StackElement.STACKED100);
 							var minDim2:Number = getDimMinValue(currentItem, element.dim2);
-							
-							elementsMinMax[category].min = Math.min(elementsMinMax[category].min, minDim2);
+							if (!isNaN(minDim2))
+							{
+								elementsMinMax[category].min = Math.min(elementsMinMax[category].min, minDim2);
+							}
+
 							if (_collisionType == StackElement.STACKED100)
 								elementsMinMax[category].max = categoryMaxStacked100[category];
 							else 
-								elementsMinMax[category].max = Math.max(elementsMinMax[category].max, maxDim2);
+							{
+								if (!isNaN(maxDim2))
+								{
+									elementsMinMax[category].max = Math.max(elementsMinMax[category].max, maxDim2);
+								}
+							}
+							
 						}
 					}
 							
