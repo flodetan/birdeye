@@ -45,7 +45,7 @@ package birdeye.vis.guides.axis
 		{
 			super();
 
-			this.styleName = "MultiAxis";
+			styleName = "MultiAxis";
 			stroke = new SolidStroke(0x000000, 1, 1);
 			fill = new SolidFill(0x000000, 1);
 		}
@@ -194,7 +194,7 @@ package birdeye.vis.guides.axis
 					// TODO set the label a bit further instead of shortening the line?
 					var endLinePosition:Point = PolarCoordinateTransform.getXY(angle,_size-5,coordinates.origin);
 	 				line = new Line(coordinates.origin.x, coordinates.origin.y, endLinePosition.x, endLinePosition.y);
-					line.stroke = new SolidStroke(0x000000, 1,1);					
+					line.stroke = new SolidStroke(colorStroke, 1,1);					
 					gg.geometryCollection.addItem(line);
 					
 					if (showPointer)
@@ -237,8 +237,9 @@ package birdeye.vis.guides.axis
 	 						label.text = String(dataLabel);
 	 					}
 	 					
-						label.stroke = stroke;
+						//label.stroke = stroke;
 						label.fill = new SolidFill(colorLabel);
+						trace("filling " + colorLabel);
 		
 						label.x = labelPosition.x - (label.textWidth + 4)/2;
 						label.y = labelPosition.y;
@@ -330,24 +331,24 @@ package birdeye.vis.guides.axis
 			return _alphaStroke;
 		}
 
-		private var _colorFill:uint;
+		private var _colorFill:Number;
 		/** Set the fill color to be used for the axis.*/
-		public function set colorFill(val:uint):void
+		public function set colorFill(val:Number):void
 		{
 			_colorFill = val;
 		}
-		public function get colorFill():uint
+		public function get colorFill():Number
 		{
 			return _colorFill;
 		}
 
-		protected var _colorStroke:uint;
+		protected var _colorStroke:Number;
 		/** Set the stroke color to be used for the axis.*/
-		public function set colorStroke(val:uint):void
+		public function set colorStroke(val:Number):void
 		{
 			_colorStroke = val;
 		}
-		public function get colorStroke():uint
+		public function get colorStroke():Number
 		{
 			return _colorStroke;
 		}
@@ -443,24 +444,24 @@ package birdeye.vis.guides.axis
 			return _fontLabel;
 		}
 
-		protected var _sizeLabel:uint;
+		protected var _sizeLabel:Number;
 		/** Set the font size of the label to be used for the axis.*/
-		public function set sizeLabel(val:uint):void
+		public function set sizeLabel(val:Number):void
 		{
 			_sizeLabel = val;
 		}
-		public function get sizeLabel():uint
+		public function get sizeLabel():Number
 		{
 			return _sizeLabel;
 		}
 
-		protected var _colorLabel:uint;
+		protected var _colorLabel:Number;
 		/** Set the label color to be used for the axis.*/
-		public function set colorLabel(val:uint):void
+		public function set colorLabel(val:Number):void
 		{
 			_colorLabel = val;
 		}
-		public function get colorLabel():uint
+		public function get colorLabel():Number
 		{
 			return _colorLabel;
 		}
