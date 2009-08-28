@@ -496,36 +496,50 @@ package birdeye.vis.coords
 					// since the same scale can be shared among several elements, the precedent min and max
 					// are also taken into account
 					if (INumerableScale(scale).scaleType != BaseScale.PERCENT)
-                    {                    
-						if (isNaN(INumerableScale(scale).max))
-						{
-							INumerableScale(scale).max = element["max"+dim+"Value"]; // TODO change this to a 'cleaner' technique?
-						}
-						else 
-						{
-							INumerableScale(scale).max = Math.max(INumerableScale(scale).max, element["max"+dim+"Value"]);
-						}
-						
-						if (isNaN(INumerableScale(scale).min))
-						{
-							INumerableScale(scale).min = element["min"+dim+"Value"];
-						}	
-						else
-						{ 
-							INumerableScale(scale).min = Math.min(INumerableScale(scale).min, element["min"+dim+"Value"]);
-						}
+                    { 
+                    	var maxValue:Number = element["max"+dim+"Value"];
+                    	var minValue:Number = element["min"+dim+"Value"];
+                    	
+                    	if (!isNaN(maxValue))
+                    	{
+	                    	                   
+							if (isNaN(INumerableScale(scale).max))
+							{
+								INumerableScale(scale).max = maxValue; // TODO change this to a 'cleaner' technique?
+							}
+							else 
+							{
+								INumerableScale(scale).max = Math.max(INumerableScale(scale).max, maxValue);
+							}
+                    	}
+                    	
+                    	if (!isNaN(minValue))
+                    	{
+							if (isNaN(INumerableScale(scale).min))
+							{
+								INumerableScale(scale).min = minValue;
+							}	
+							else
+							{ 
+								INumerableScale(scale).min = Math.min(INumerableScale(scale).min, minValue);
+							}
+                    	}
                     }
                     else
                     {
-                    	if (isNaN(INumerableScale(scale).totalPositiveValue))
+                    	var totPosValue:Number = element["total"+dim+"PositiveValue"];
+                    	if (!isNaN(totPosValue))
                     	{
-                            INumerableScale(scale).totalPositiveValue = element["total"+dim+"PositiveValue"];
+	                    	
+	                    	if (isNaN(INumerableScale(scale).totalPositiveValue))
+	                    	{
+	                            INumerableScale(scale).totalPositiveValue = totPosValue;
+	                    	}
+	                        else
+	                        {
+	                            INumerableScale(scale).totalPositiveValue += totPosValue;
+	                        }
                     	}
-                        else
-                        {
-                            INumerableScale(scale).totalPositiveValue += element["total"+dim+"PositiveValue"];
-                        }
- 
                     }
 				}
 			}
