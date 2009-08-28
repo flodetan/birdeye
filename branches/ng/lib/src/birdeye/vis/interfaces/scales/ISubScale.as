@@ -39,6 +39,15 @@ package birdeye.vis.interfaces.scales
 		 * @return an array with as index each category item
 		 */
 		 function get subScales():Array;
+		 
+		 /**
+		 * If set to true only one scale is used for all the categories.</br>
+		 * If set to false, each category has a separate scale (and separate min and max).
+		 * @default <code>false</code>
+		 */
+		 function get shareSubScale():Boolean
+		 function set shareSubScale(s:Boolean):void;
+		 
 	}
 
 }
