@@ -1,7 +1,7 @@
 <node label="Mail Box">
             <node label="Charts">
                 <node label="Cartesian">
-                		<node label="Area" classRef="views.cartesian.AreaChart1" />
+                		<node label="Area" classRef="views.cartesian.AreaChart" />
                 		<node label="Bar" classRef="views.cartesian.BarChart" />
                 		<node label="Bubble" classRef="views/cartesian/BubbleChart.swf" />
                 		<node label="Column" classRef="views/cartesian/ColumnChart.swf" />
