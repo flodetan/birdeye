@@ -143,6 +143,7 @@ package birdeye.vis.elements
 		/** Set the scale that defines the 'direction' of the stack. For ex. BarElements are stacked horizontally with 
 		 * stack100 and vertically with normal stack. Columns (for both polar and cartesians)
 		 * are stacked vertically with stack100, and horizontally for normal stack.*/
+		 [Inspectable(enumeration="horizontal,vertical")]
 		public function set collisionScale(val:String):void
 		{
 			_collisionScale = val;

@@ -260,18 +260,5 @@ trace(getTimer(), "drawing bar");
 			}
 
 		}
-		
-		private function getXMinPosition():Number
-		{
-			var xPos:Number;
-			if (scale1 && scale1 is INumerableScale)
-			{
-				if (!isNaN(_baseAt))
-					xPos = scale1.getPosition(_baseAt);
-				else
-					xPos = scale1.getPosition(INumerableScale(scale1).min);
-			}
-			return xPos;
-		}
 	}
 }

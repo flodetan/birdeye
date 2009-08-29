@@ -314,36 +314,5 @@ trace (getTimer(), "area ele");
 trace (getTimer(), "area ele");
 			}
 		}
-		
-		/** @Private 
-		 * Get the x minimum position of the AreaElement (only used in case the AreaElement is drawn 
-		 * vertically, i.e. the x axis is linear).*/ 
-		private function getXMinPosition():Number
-		{
-			var xPos:Number;
-			
-			if (scale1)
-			{
-				if (scale1 is INumerableScale)
-					xPos = scale1.getPosition(minDim1Value);
-			}
-			
-			return xPos;
-		}
-		
-		/** @Private 
-		 * Returns the y minimum position of the AreaElement.*/ 
-		private function getYMinPosition():Number
-		{
-			var yPos:Number;
-			if (scale2 && scale2 is INumerableScale)
-			{
-				if (!isNaN(_baseAt))
-					yPos = scale2.getPosition(_baseAt);
-				else
-					yPos = scale2.getPosition(minDim2Value);
-			}
-			return yPos;
-		}
 	}
 }
