@@ -27,10 +27,10 @@
  
 package birdeye.vis.elements.collision
 {
-	import birdeye.vis.coords.Cartesian;
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.geometry.*;
 	import birdeye.vis.interfaces.IStack;
+	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.scales.*;
 	
 	[Exclude(name="stackType", kind="property")] 
@@ -134,6 +134,39 @@ package birdeye.vis.elements.collision
 			}
 					
 			return max;
+		}
+
+		/** @Private 
+		 * Get the x minimum position of the AreaElement (only used in case the AreaElement is drawn 
+		 * vertically, i.e. the x axis is linear).*/ 
+		protected function getXMinPosition():Number
+		{
+			var xPos:Number;
+			
+			if (scale1 && scale1 is INumerableScale)
+			{
+				if (!isNaN(_baseAt))
+					xPos = scale1.getPosition(_baseAt);
+				else
+					xPos = scale1.getPosition(minDim1Value);
+			}
+			
+			return xPos;
+		}
+
+		/** @Private 
+		 * Returns the y minimum position of the AreaElement.*/ 
+		protected function getYMinPosition():Number
+		{
+			var yPos:Number;
+			if (scale2 && scale2 is INumerableScale)
+			{
+				if (!isNaN(_baseAt))
+					yPos = scale2.getPosition(_baseAt);
+				else
+					yPos = scale2.getPosition(minDim2Value);
+			}
+			return yPos;
 		}
 	}
 }

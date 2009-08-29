@@ -29,9 +29,10 @@ package birdeye.vis.elements.geometry
 {
 	import birdeye.vis.VisScene;
 	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.elements.BaseElement;
+	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.guides.renderers.LineRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
+	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
@@ -47,7 +48,6 @@ package birdeye.vis.elements.geometry
 	import flash.utils.getTimer;
 	
 	import mx.core.ClassFactory;
-	import birdeye.vis.elements.collision.StackElement;
 
 	public class LineElement extends StackElement
 	{
@@ -103,6 +103,7 @@ trace (getTimer(), "drawing line ele");
 				var j:Number = 0;
 				
 				var y0:Number = getYMinPosition();
+				var x0:Number = getYMinPosition();
 
 				ggIndex = 0;
 	
@@ -124,8 +125,21 @@ trace (getTimer(), "drawing line ele");
 					
 					if (scale1)
 					{
-						pos1 = scale1.getPosition(currentItem[dim1]);
-						
+						if (scale1 is INumerableScale && _stackType == STACKED100)
+						{
+							x0 = scale1.getPosition(baseValues[currentItem[dim2]]);
+							if (!isNaN(currentItem[dim1]))
+							{
+								pos1 = scale1.getPosition(
+									baseValues[currentItem[dim2]] + Math.max(0,currentItem[dim1]));
+							}
+							else
+							{
+								pos1 = NaN;
+							}
+						} else {
+							pos1 = scale1.getPosition(currentItem[dim1]);
+						}
 					}
 					
 					if (scale2)
@@ -133,7 +147,7 @@ trace (getTimer(), "drawing line ele");
 						// if the stackType is stacked100, than the y0 coordinate of 
 						// the current baseValue is added to the y coordinate of the current
 						// data value filtered by yField
-						if (_stackType == STACKED100)
+						if (scale2 is INumerableScale && _stackType == STACKED100)
 						{
 							y0 = scale2.getPosition(baseValues[currentItem[dim1]]);
 							if (!isNaN(currentItem[dim2]))
