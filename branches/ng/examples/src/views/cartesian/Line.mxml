@@ -55,10 +55,16 @@
 
 			private function changeStack():void
 			{
-				if (lc3.collisionType == "stacked100")
-					lc3.collisionType = "overlaid";
+				if (lc2.collisionType == "stacked100")
+				{
+ 					lc3.collisionType = "overlaid";
+ 					lc2.collisionType = "overlaid";
+				}
 				else 
-					lc3.collisionType = "stacked100";
+				{
+ 					lc3.collisionType = "stacked100";
+ 					lc2.collisionType = "stacked100";
+				}
 			}
 		]]>
 	</mx:Script>
@@ -68,11 +74,11 @@
     	
     	<mx:HBox>
     		<mx:Button label="Generate" click="createDT()"/>
-			<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4,a5])"/>
+			<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4,a5,a6,a7,a8,a9,a10])"/>
 			<mx:CheckBox label="Stacked100" selected="false" click="changeStack()"/>
 		</mx:HBox>
-		
-	    	<coords:Cartesian id="lc3" width="90%" height="90%" collisionType="overlaid" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
+		<mx:HBox width="100%" height="100%">
+	    	<coords:Cartesian id="lc3" width="100%" height="100%" collisionType="overlaid" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
 				<coords:scales>
 		 			<scales:Category id="c" categoryField="subject" />
 		 			<scales:Linear id="l" />
@@ -91,6 +97,25 @@
 				 </coords:elements>
 	    	</coords:Cartesian>
 		
+	    	<coords:Cartesian id="lc2" width="100%" height="100%" collisionType="overlaid" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
+				<coords:scales>
+		 			<scales:Category id="c1" categoryField="subject" />
+		 			<scales:Linear id="l1" />
+				</coords:scales>
+				<coords:guides>
+					<axis:Axis scale="{c1}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+					<axis:Axis scale="{l1}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+					<grid:Grid scale1="{l1}" scale2="{c1}" divideEnumerableScale="false" />
+				</coords:guides>
+	    		 <coords:elements>
+	    		 	<elements:LineElement id="a6" scale1="{l1}" scale2="{c1}" collisionScale="horizontal" showAllDataItems="true" dim2="subject" dim1="R1" styleName="solid1" displayName="R1" />
+				 	<elements:LineElement id="a7" scale1="{l1}" scale2="{c1}" collisionScale="horizontal"  showAllDataItems="true" dim2="subject" dim1="R2" styleName="solid2" displayName="R2" />
+				 	<elements:LineElement id="a8" scale1="{l1}" scale2="{c1}" collisionScale="horizontal" showAllDataItems="true" dim2="subject" dim1="R3" styleName="solid3" displayName="R3" />
+				 	<elements:LineElement id="a9" scale1="{l1}" scale2="{c1}" collisionScale="horizontal" showAllDataItems="true" dim2="subject" dim1="R4" styleName="solid4" displayName="R4" />
+				 	<elements:LineElement id="a10" scale1="{l1}" scale2="{c1}" collisionScale="horizontal" showAllDataItems="true" dim2="subject" dim1="R5" styleName="solid5" displayName="R5" />
+				 </coords:elements>
+	    	</coords:Cartesian>
+		</mx:HBox>
 		<legend:Legend dataProvider="{lc3}" direction="horizontal"/>	
     </mx:VBox>
 </mx:VBox>
