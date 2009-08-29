@@ -40,8 +40,13 @@ package birdeye.vis.coords
 		public function set collisionType(val:String):void
 		{
 			_collisionType = val;
+			axesFeeded = false;
 			invalidateProperties();
 			invalidateDisplayList();
+		}
+		public function get collisionType():String
+		{
+			return _collisionType;
 		}
 
 		/** Array of elements, mandatory for any coords scene.
