@@ -3,7 +3,7 @@
                 <node label="Cartesian">
                 		<node label="Area" classRef="views.cartesian.AreaChart" />
                 		<node label="Bar" classRef="views.cartesian.BarChart" />
-                		<node label="Bubble" classRef="views/cartesian/BubbleChart.swf" />
+                		<node label="Bubble" classRef="views.cartesian.BubbleChart" />
                 		<node label="Column" classRef="views/cartesian/ColumnChart.swf" />
                 		<node label="Line" classRef="views/cartesian/LineChart.swf" />
                 		<node label="Scatter" classRef="views/cartesian/ScatterChart.swf" />
@@ -67,7 +67,7 @@
             </node>
             <node label="The Classics">
                 <node label="Minard" >
-                	<node label="Napoleon March" classRef="views/classics/NapoleonMarch.swf" />
+                	<node label="Napoleon March" classRef="views.classics.NapoleonMarch" />
                 	<node label="Carte Viande" classRef="views/classics/CarteViande.swf" />
                 </node>
                 <node label="Playfair" >
