@@ -363,7 +363,7 @@ package birdeye.vis.coords
 			toReturn.indexDim = "dim1";
 			toReturn.valueDim = "dim2";
 			
-			if (stack.collisionScale == BaseElement.HORIZONTAL)
+			if (stack.collisionScale == BaseElement.SCALE1)
 			{
 				toReturn.indexDim = "dim2";
 				toReturn.valueDim = "dim1";		
