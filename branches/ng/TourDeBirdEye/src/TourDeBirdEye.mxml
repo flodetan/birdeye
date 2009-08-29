@@ -8,33 +8,7 @@
 	
     <mx:Script>
         <![CDATA[
-        	import mx.core.IContainer;
-        	import com.degrafa.geometry.display.IDisplayObjectProxy;
-        import mx.events.ListEvent;
-		import mx.containers.Canvas;
-		import views.cartesian.AreaChart
-		
-		[Bindable]
-        public var classRef:Class;
-        [Bindable]
-        public var currentExampleInstance:IContainer;
-
-		private var unusefulArray:Array = [AreaChart]; 
-		
-            // Event handler for the Tree control change event.
-        public function treeChanged(event:ListEvent):void {
-                classRef = Class(getDefinitionByName(myTree.selectedItem.@classRef));
-                loadExample(classRef);
-                trace(myTree.selectedItem.@data);
-                
-         }
-
-        public function loadExample(s:Class):void {
-            viewPanel.removeAllChildren();
-            var c:Class = classRef;
-            currentExampleInstance = new c();
-            viewPanel.addChild(DisplayObject(currentExampleInstance));
-        }
+        	include "main.as";
         
         ]]>
     </mx:Script>
