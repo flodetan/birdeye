@@ -52,6 +52,14 @@
 					else 
 						a[i].form = "curve";
 			}
+
+			private function changeStack():void
+			{
+				if (lc3.collisionType == "stacked100")
+					lc3.collisionType = "overlaid";
+				else 
+					lc3.collisionType = "stacked100";
+			}
 		]]>
 	</mx:Script>
 	
@@ -61,9 +69,10 @@
     	<mx:HBox>
     		<mx:Button label="Generate" click="createDT()"/>
 			<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4,a5])"/>
+			<mx:CheckBox label="Stacked100" selected="false" click="changeStack()"/>
 		</mx:HBox>
 		
-	    	<coords:Cartesian id="lc3" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
+	    	<coords:Cartesian id="lc3" width="90%" height="90%" collisionType="overlaid" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
 				<coords:scales>
 		 			<scales:Category id="c" categoryField="subject" />
 		 			<scales:Linear id="l" />
