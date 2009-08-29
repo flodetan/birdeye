@@ -33,7 +33,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.Position;
-	import birdeye.vis.elements.RenderableElement;
+	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.facets.FacetContainer;
 	import birdeye.vis.guides.axis.Axis;
 	import birdeye.vis.guides.axis.MultiAxis;
@@ -44,6 +44,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.IPositionableElement;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
+	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
@@ -61,8 +62,48 @@ package birdeye.vis.elements.geometry
 	import mx.core.ClassFactory;
 	import mx.core.IDataRenderer;
 
-	public class PointElement extends RenderableElement implements IPositionableElement
+	public class PointElement extends StackElement implements IPositionableElement, IDataRenderer
 	{
+		private var _data:Object;
+		/**
+		 *  @private
+		 *  The data to render or edit.
+		 */
+		public function set data(value:Object):void
+		{
+			_data = value;
+			invalidateDisplayList();
+		}
+		public function get data():Object
+		{
+			return _data;
+		}
+		
+		private var _dataField:String;
+		/** Define the dataField used to catch the data to be passed to the itemRenderer.*/
+		public function set dataField(val:String):void
+		{
+			_dataField = val;
+			invalidateDisplayList();
+		}
+		public function get dataField():String
+		{
+			return _dataField;
+		}
+		
+		private var _itemRenderer:Class;
+		/** Set the item renderer following the standard Flex approach. The item renderer can be
+		 * any DisplayObject that could be added as child to a UIComponent.*/ 
+		public function set itemRenderer(val:Class):void
+		{
+			_itemRenderer = val;
+			invalidatingDisplay();
+		}
+		public function get itemRenderer():Class
+		{
+			return _itemRenderer;
+		}
+		
 		public function PointElement()
 		{
 			super();
@@ -247,6 +288,9 @@ trace (getTimer(), "drawing point ele");
 				}
 				else
 				{		
+					y0 = getYMinPosition();
+					x0 = getYMinPosition();
+
 					for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
 					{
 			 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
@@ -326,7 +370,9 @@ trace (getTimer(), "drawing point ele");
 	
 			}
 		}
-		
+
+		private var y0:Number;
+		private var x0:Number;		
 		private function determinePositions(dim1:Object, dim2:Object, dim3:Object=null,color:Object=null, size:Object=null, currentItem:Object=null):Object
 		{
 			var scaleResults:Object = new Object();
@@ -336,19 +382,53 @@ trace (getTimer(), "drawing point ele");
 			
 			if (scale1)
 			{
-				scaleResults["pos1"] = scale1.getPosition(dim1);
-			} 
-			
-			if (scale2)
-			{
-				scaleResults["pos2"] = scale2.getPosition(dim2);
+				if (scale1 is INumerableScale && _stackType == STACKED100)
+				{
+					x0 = scale1.getPosition(baseValues[dim2]);
+					if (!isNaN(dim1 as Number))
+					{
+						scaleResults["pos1"] = scale1.getPosition(
+							baseValues[dim2] + Math.max(0,Number(dim1 as Number)));
+					}
+					else
+					{
+						scaleResults["pos1"] = NaN;
+					}
+				} else {
+					scaleResults["pos1"] = scale1.getPosition(dim1);
+				}
 			}
-			
+					
 			if (scale1 is ISubScale && (scale1 as ISubScale).subScalesActive)
 			{
 				scaleResults["pos2"] = (scale1 as ISubScale).subScales[dim1].getPosition(dim2);
 			} 
 
+			if (scale2)
+			{
+				// if the stackType is stacked100, than the y0 coordinate of 
+				// the current baseValue is added to the y coordinate of the current
+				// data value filtered by yField
+				if (scale2 is INumerableScale && _stackType == STACKED100)
+				{
+					y0 = scale2.getPosition(baseValues[dim1]);
+					if (!isNaN(dim2 as Number))
+					{
+						scaleResults["pos2"] = scale2.getPosition(
+							baseValues[dim1] + Math.max(0,dim2 as Number));
+					}
+					else
+					{
+						scaleResults["pos2"] = NaN;
+					}
+				} 
+				else 
+				{
+					// if not stacked, than the y coordinate is given by the own y axis
+					scaleResults["pos2"] = scale2.getPosition(dim2);
+				}
+			}
+					
 			var scale2RelativeValue:Number = NaN;
 
 			if (scale3)
@@ -444,6 +524,15 @@ trace (getTimer(), "drawing point ele");
 			}
 			
 			return filteredDataItems;
+		}
+
+		// Be sure to remove all children in case an item renderer is used
+		override public function clearAll():void
+		{
+			super.clearAll();
+			if (_itemRenderer)
+				for (var i:uint = 0; i<numChildren; )
+					removeChild(getChildAt(0));
 		}
 	}
 }
