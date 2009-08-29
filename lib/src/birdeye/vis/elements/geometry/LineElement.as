@@ -47,8 +47,9 @@ package birdeye.vis.elements.geometry
 	import flash.utils.getTimer;
 	
 	import mx.core.ClassFactory;
+	import birdeye.vis.elements.collision.StackElement;
 
-	public class LineElement extends BaseElement
+	public class LineElement extends StackElement
 	{
 		private const CURVE:String = "curve";
 		
@@ -100,7 +101,9 @@ trace (getTimer(), "drawing line ele");
 				var xPrev:Number, yPrev:Number;
 				var pos1:Number, pos2:Number, zPos:Number;
 				var j:Number = 0;
-	
+				
+				var y0:Number = getYMinPosition();
+
 				ggIndex = 0;
 	
 				var points:Array = [];
@@ -127,7 +130,27 @@ trace (getTimer(), "drawing line ele");
 					
 					if (scale2)
 					{
-						pos2 = scale2.getPosition(currentItem[dim2]);
+						// if the stackType is stacked100, than the y0 coordinate of 
+						// the current baseValue is added to the y coordinate of the current
+						// data value filtered by yField
+						if (_stackType == STACKED100)
+						{
+							y0 = scale2.getPosition(baseValues[currentItem[dim1]]);
+							if (!isNaN(currentItem[dim2]))
+							{
+								pos2 = scale2.getPosition(
+									baseValues[currentItem[dim1]] + Math.max(0,currentItem[dim2]));
+							}
+							else
+							{
+								pos2 = NaN;
+							}
+						} 
+						else 
+						{
+							// if not stacked, than the y coordinate is given by the own y axis
+							pos2 = scale2.getPosition(currentItem[dim2]);
+						}
 					}
 					
 					if (scale1 is ISubScale && (scale1 as ISubScale).subScalesActive)
