@@ -137,13 +137,13 @@ package birdeye.vis.elements
 			invalidatingDisplay();
 		}
 
-		public static const HORIZONTAL:String = "horizontal";
-		public static const VERTICAL:String = "vertical";
+		public static const SCALE1:String = "scale1";
+		public static const SCALE2:String = "scale2";
 		private var _collisionScale:String;
 		/** Set the scale that defines the 'direction' of the stack. For ex. BarElements are stacked horizontally with 
 		 * stack100 and vertically with normal stack. Columns (for both polar and cartesians)
 		 * are stacked vertically with stack100, and horizontally for normal stack.*/
-		 [Inspectable(enumeration="horizontal,vertical")]
+		 [Inspectable(enumeration="scale1,scale2")]
 		public function set collisionScale(val:String):void
 		{
 			_collisionScale = val;
@@ -943,7 +943,7 @@ package birdeye.vis.elements
 		public function BaseElement()
 		{
 			super();
-			collisionScale = VERTICAL;
+			collisionScale = SCALE2;
 		}
 
 		override protected function createChildren():void
@@ -1199,10 +1199,7 @@ package birdeye.vis.elements
 			var colorsCheck:Boolean = 
 				(fill || stroke || colorScale);
 
-			var globalCheck:Boolean = 
-				width>0 && height>0
-				&& chart
-				&& dataItems;
+			var globalCheck:Boolean = chart && dataItems;
 			
 			return globalCheck && axesCheck && colorsCheck;
 		}
