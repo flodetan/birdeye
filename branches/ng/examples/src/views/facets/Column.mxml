@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:recipes="birdeye.vis.recipes.cartesianCharts.*"
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:line="birdeye.vis.recipes.cartesianCharts.*"
 	xmlns:elements="birdeye.vis.elements.geometry.*"
 	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
 	xmlns:facets="birdeye.vis.facets.*"
 	backgroundColor="#3f3f3f" 
-	creationComplete="createDT()"
-	width="100%" height="100%" horizontalAlign="center" xmlns:coords="birdeye.vis.coords.*" xmlns:axis="birdeye.vis.guides.axis.*">
+	creationComplete="createDT()" xmlns:axis="birdeye.vis.guides.axis.*">
 
 <mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
-			import birdeye.util.EffectsUtil;
-						
+			
 			[Bindable]
 			public var dt:ArrayCollection;;
 
@@ -27,72 +26,60 @@
 				pressure = ["low", "medium", "high"];
 				type = ["organic", "chemical", "industrial", "nature",];
 				var ac:ArrayCollection = new ArrayCollection();
+				var facetData:ArrayCollection;
+				var facetItem:Object;
 
 				for (var i:Number = 0; i<subject.length; i++)
 				{
-					for (var j:Number=0; j<pressure.length;j++)
+					for (var k:Number=0; k<type.length;k++)
 					{
-						for (var k:Number=0; k<type.length;k++)
+						facetData = new ArrayCollection();
+						for (var j:Number=0; j<pressure.length;j++)
 						{
-							ac.addItem({
-								subject: subject[i],
-								pressure: pressure[j],
-								type: type[k],
-								R1:Math.round(Math.random() * 1000),
-								R2: Math.round(Math.random() * 1000),
-								R3: Math.round(Math.random() * 1000),
-								R4: Math.round(Math.random() * 1000),
-								R5: Math.round(Math.random() * 1000)
-							});
+							facetItem = {
+									pressure: pressure[j],
+									R1: Math.round(Math.random() * 1000),
+									R2: Math.round(Math.random() * 1000),
+									R3: Math.round(Math.random() * 1000),
+									R4: Math.round(Math.random() * 1000),
+									R5: Math.round(Math.random() * 1000)
+								}
+							facetData.addItem(facetItem);
 						}
+						ac.addItem({
+							subject: subject[i],
+							type: type[k],
+							newChart: facetData
+						});
 					}
 				}
 				dt = ac;
 			}
-
-			private function dtFunc(currDatatip:Object, dataFields:Array):String
-			{
-				var tt:String = "Info: " + currDatatip[dataFields[0]];
-				tt += '\n' + dataFields[1] + ": " + currDatatip[dataFields[1]];
-				return  tt;
-			}
 		]]>
 	</mx:Script>
 	
-	<mx:Button label="Generate" click="createDT()"/>
+	
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
-       	<coords:Cartesian id="cc4" width="90%" height="90%" dataTipFunction="dtFunc" showDataTips="true" dataProvider="{dt}" 
-       		collisionType="stacked100" >
+    	
+    	<mx:HBox>
+    		<mx:Button label="Generate" click="createDT()"/>
+		</mx:HBox>
+		       	<coords:Cartesian id="cc4" width="90%" height="90%" showDataTips="true" dataProvider="{dt}" 
+       		collisionType="stacked100">
 			<coords:scales>
  				<scales:Category id="c3" categoryField="type"  />
  				<scales:Category id="c2" categoryField="subject"  />
 			</coords:scales>
 			<coords:guides>
-				<axis:Axis scale="{c3}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
-				<axis:Axis scale="{c2}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{c3}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="12" />
+				<axis:Axis scale="{c2}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="12" />
 			</coords:guides>
     		 <coords:elements>
-    		 	<elements:PointElement scale1="{c3}" scale2="{c2}" dim1="type" dim2="subject" styleName="solid1" displayName="R3">
-    		 		<elements:graphicRenderer>
-        		 		<facets:FacetContainer>
-        		 			<facets:coord>
-        		 				<coords:Cartesian showDataTips="true" columnWidthRate="0.5" />
-        		 			</facets:coord>
-        		 			<facets:scales>
- 							 	<scales:Category id="c" categoryField="pressure" />
-							 	<scales:Linear id="l" numberOfIntervals="1" />       		 				
-        		 			</facets:scales>
-        		 			<facets:guides>
-        		 				<axis:Axis scale="{c}" placement="bottom" sizeLabel="9" />
-        		 				<axis:Axis scale="{l}" placement="left" sizeLabel="9" />	
-        		 			</facets:guides>
-        		 			<facets:elements>
-        		 				<elements:ColumnElement id="a1"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  scale1="{c}" scale2="{l}" showAllDataItems="true" dim1="pressure" dim2="R1" styleName="solid1" displayName="R1" />
-        		 			</facets:elements>
-        		 		</facets:FacetContainer>
-        		 	</elements:graphicRenderer>
+    		 	<elements:PointElement scale1="{c3}" scale2="{c2}" alphaStroke=".3" dim1="type" dim2="subject" styleName="solid1" displayName="R3"
+    		 		itemRenderer="views.itemRenderers.FacetColumnRenderer" dataField="newChart">
         		 </elements:PointElement>
         	</coords:elements>
-        </coords:Cartesian>
-	</mx:VBox>
+        </coords:Cartesian>	
+    </mx:VBox>
 </mx:VBox>
+
