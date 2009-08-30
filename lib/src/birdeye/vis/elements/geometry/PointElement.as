@@ -34,7 +34,6 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.elements.collision.StackElement;
-	import birdeye.vis.facets.FacetContainer;
 	import birdeye.vis.guides.axis.Axis;
 	import birdeye.vis.guides.axis.MultiAxis;
 	import birdeye.vis.guides.renderers.CircleRenderer;
@@ -148,224 +147,97 @@ trace (getTimer(), "drawing point ele");
 				
 				ggIndex = 0;
 				
-				if (graphicRenderer is FacetContainer) 
-				{
-					// ok two categories, we need to loop categories
-					// to avoid the issue where there are more subdata
-					var enumScale1:IEnumerableScale = scale1 as IEnumerableScale;
-					var enumScale2:IEnumerableScale = scale2 as IEnumerableScale;
-					
-					var enumLength1:Number = 1;
-					var enumLength2:Number = 1;
-					if (enumScale1)
-					{
-						enumLength1 = enumScale1.dataProvider.length;
-					}
-					
-					if (enumScale2)
-					{
-						enumLength2 = enumScale2.dataProvider.length;
-					}
-					
-					for (var i:uint=0;i<enumLength1;i++)
-					{
-						for (var j:uint=0;j<enumLength2;j++)
-						{
-							var currentItem:Object = _dataItems[cursorIndex];
+				var currentItem:Object;
+				var scaleResults:Object;
 
-							if (enumScale1 && enumScale2)
-							{
-								var filteredData:Object = filterData(enumScale1.dataProvider[i], enumScale1.categoryField, enumScale2.dataProvider[j],  enumScale2.categoryField);		
-		
-								var scaleResults:Object = determinePositions(enumScale1.dataProvider[i], enumScale2.dataProvider[j], null, null, null, null);
-																								
-								var bounds:Rectangle = new Rectangle(scaleResults["pos1"] - enumScale1.size/2/enumLength1 + 5, scaleResults["pos2"] - enumScale2.size/2/enumLength2 + 5, enumScale1.size/enumLength1 - 10, enumScale2.size/enumLength2 - 10);
-							}
-							else if (enumScale1 && !enumScale2)
-							{
-								filteredData = filterData(enumScale1.dataProvider[i], enumScale1.categoryField);
-								
-								scaleResults = determinePositions(enumScale1.dataProvider[i], null);
-								
-								bounds = new Rectangle(scaleResults["pos1"] - enumScale1.size/2/enumLength1 + 5, 0, enumScale1.size/enumLength1 - 10,height);
-
-							}
-							else if (!enumScale1 && enumScale2)
-							{
-								filteredData = filterData(enumScale2.dataProvider[j], enumScale2.categoryField);
-								
-								scaleResults = determinePositions(null,enumScale2.dataProvider[j]);
-								
-								bounds = new Rectangle(0, scaleResults["pos2"] - enumScale2.size/2/enumLength2 + 5, width,enumScale2.size/enumLength2 - 10);
-							}
-
-	 						var subco:FacetContainer = graphicRenderer.newInstance() as FacetContainer;
-	 						
-	 						var coord:Object = subco.coord.clone();
-	 						
-	 						var sc:Array = new Array();
-	 						for each (var scale:IScale in subco.scales)
-	 						{
-	 							// percents need to have locally min and max
-	 							if (scale is Percent)
-	 							{
-	 								sc.push((scale as Percent).clone());
-	 							}
-	 							else
-	 							{
-	 								sc.push(scale);
-	 							}
-	 						}
-	 						coord.scales = sc;
-	 						
-	 						var el:Array = new Array();
-	 						for each (var baseEl:BaseElement in subco.elements)
-	 						{
-	 							var elem:IElement = baseEl.clone();
-	 							
-	 							if (elem.scale1 is Percent)
-	 							{
-	 								var k:uint = subco.scales.indexOf(elem.scale1);
-	 								
-	 								if (k > -1)
-	 								{
-	 									elem.scale1 = sc[k];
-	 								}
-	 								
-	 							}
-	 							
-	 							if (elem.scale2 is Percent)
-	 							{
-	 								k = subco.scales.indexOf(elem.scale2);
-	 								
-	 								if (k > -1)
-	 								{
-	 									elem.scale2 = sc[k];
-	 								}
-	
-	 							}
-	 							
-	 							el.push(elem);
-	 						}
-	 						
-	 						coord.elements = el;
-	 						
-	 						var gu:Array = new Array();
-	 						for each (var g:Object in subco.guides)
-	 						{
-	 							if (g is Axis)
-	 							{
-	 								var ta:Axis = (g as Axis).clone();
-	 								
-	 								if (ta.scale is Percent)
-	 								{
-	 									k= subco.scales.indexOf(ta.scale);
-	 									if (k > -1)
-	 									{
-	 										ta.scale = sc[k];
-	 									}
-	 								}
-	 								
-	 								gu.push(ta);
-	 							}
-	 							else if (g is MultiAxis)
-	 							{
-	 								gu.push((g as MultiAxis).clone());
-	 							}
-	 						}
-	 						coord.guides = gu;
-	 						
-	 						
-	 						coord.width = bounds.width;
-	 						coord.height = bounds.height;
-	 						coord.x = bounds.x;
-	 						coord.y = bounds.y;
-	 						coord.dataProvider = filteredData;
-
-							this.addChild(coord as DisplayObject);
-						}
-					}
-				}
-				else
-				{		
-					y0 = getYMinPosition();
-					x0 = getYMinPosition();
-
-					for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
-					{
-			 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
-								gg = graphicsCollection.items[ggIndex];
-							else
-							{
-								gg = new DataItemLayout();
-								graphicsCollection.addItem(gg);
-							}
-							gg.target = this;
-							ggIndex++;
-							
-							currentItem = _dataItems[cursorIndex];
-							
-							scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
-																	currentItem[colorField], currentItem[sizeField], currentItem);
-		
-							// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
-							// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-							createTTGG(currentItem, dataFields, scaleResults["pos1"], scaleResults["pos2"], scaleResults["pos3Relative"], scaleResults["size"]);
-			
-							if (itemRenderer != null)
-							{
-								var itmDisplay:DisplayObject = new itemRenderer();
-								if (dataField && itmDisplay is IDataRenderer)
-									(itmDisplay as IDataRenderer).data = currentItem[dataField];
-								addChild(itmDisplay);
-
-								if (sizeScale && sizeField && scaleResults["size"] > 0)
-									DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = scaleResults["size"];
-								else if (sizeRenderer > 0)
-									DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = sizeRenderer;
-								else {
-									if (rendererWidth > 0)
-										DisplayObject(itmDisplay).width = rendererWidth;
-									if (rendererHeight > 0)
-										DisplayObject(itmDisplay).height = rendererHeight;
-								}
-								
-								itmDisplay.x = scaleResults["pos1"] - itmDisplay.width/2;
-								itmDisplay.y = scaleResults["pos2"] - itmDisplay.height/2;
-							}
-							
-							if (dim3)
-							{
-								if (!isNaN(scaleResults["pos3"]))
-								{
-									// why is this created again???
-									// is just setting the z value not enough?
-									gg = new DataItemLayout();
-									gg.target = this;
-									graphicsCollection.addItem(gg);
-									ttGG.z = gg.z = scaleResults["pos3"];
-								} else
-									scaleResults["pos3"] = 0;
-							}
-							
-							if (_extendMouseEvents)
-							{
-								gg = ttGG;
-								gg.target = this;
-							}
-		
-		
-							createPlotItems(currentItem, scaleResults);
-		
-							if (dim3)
-							{
-								gg.z = scaleResults["pos3"];
-								if (isNaN(scaleResults["pos3"]))
-									scaleResults["pos3"] = 0;
-							}
-					}
-				}
+				y0 = getYMinPosition();
+				x0 = getYMinPosition();
 				
+				var widthAutosize:Number = NaN;
+				var heightAutosize:Number = NaN;
+				if (scale1 && scale1 is IEnumerableScale && 
+					scale2 && scale2 is IEnumerableScale)
+				{
+					widthAutosize = IEnumerableScale(scale1).size/IEnumerableScale(scale1).dataProvider.length;
+					heightAutosize = IEnumerableScale(scale2).size/IEnumerableScale(scale2).dataProvider.length;
+				}
+
+				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
+				{
+	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
+						gg = graphicsCollection.items[ggIndex];
+					else
+					{
+						gg = new DataItemLayout();
+						graphicsCollection.addItem(gg);
+					}
+					gg.target = this;
+					ggIndex++;
+					
+					currentItem = _dataItems[cursorIndex];
+					
+					scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
+															currentItem[colorField], currentItem[sizeField], currentItem);
+
+					// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
+					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
+					createTTGG(currentItem, dataFields, scaleResults["pos1"], scaleResults["pos2"], scaleResults["pos3Relative"], scaleResults["size"]);
+	
+					if (itemRenderer != null)
+					{
+						var itmDisplay:DisplayObject = new itemRenderer();
+						if (dataField && itmDisplay is IDataRenderer)
+							(itmDisplay as IDataRenderer).data = currentItem[dataField];
+						addChild(itmDisplay);
+
+						if (sizeScale && sizeField && scaleResults["size"] > 0)
+							DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = scaleResults["size"];
+						else if (!isNaN(widthAutosize) && !isNaN(heightAutosize)) {
+							DisplayObject(itmDisplay).width = widthAutosize;
+							DisplayObject(itmDisplay).height = heightAutosize;
+						} else if (sizeRenderer > 0)
+							DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = sizeRenderer;
+ 						else {
+							if (rendererWidth > 0)
+								DisplayObject(itmDisplay).width = rendererWidth;
+							if (rendererHeight > 0)
+								DisplayObject(itmDisplay).height = rendererHeight;
+						}
+						
+						itmDisplay.x = scaleResults["pos1"] - itmDisplay.width/2;
+						itmDisplay.y = scaleResults["pos2"] - itmDisplay.height/2;
+					}
+					
+					if (dim3)
+					{
+						if (!isNaN(scaleResults["pos3"]))
+						{
+							// why is this created again???
+							// is just setting the z value not enough?
+							gg = new DataItemLayout();
+							gg.target = this;
+							graphicsCollection.addItem(gg);
+							ttGG.z = gg.z = scaleResults["pos3"];
+						} else
+							scaleResults["pos3"] = 0;
+					}
+					
+					if (_extendMouseEvents)
+					{
+						gg = ttGG;
+						gg.target = this;
+					}
+
+
+					createPlotItems(currentItem, scaleResults);
+
+					if (dim3)
+					{
+						gg.z = scaleResults["pos3"];
+						if (isNaN(scaleResults["pos3"]))
+							scaleResults["pos3"] = 0;
+					}
+				}
 				
 				if (dim3)
 					zSort();
