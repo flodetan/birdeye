@@ -323,7 +323,12 @@ trace (getTimer(), "drawing point ele");
 									DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = scaleResults["size"];
 								else if (sizeRenderer > 0)
 									DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = sizeRenderer;
-									
+								else {
+									if (rendererWidth > 0)
+										DisplayObject(itmDisplay).width = rendererWidth;
+									if (rendererHeight > 0)
+										DisplayObject(itmDisplay).height = rendererHeight;
+								}
 								
 								itmDisplay.x = scaleResults["pos1"] - itmDisplay.width/2;
 								itmDisplay.y = scaleResults["pos2"] - itmDisplay.height/2;
