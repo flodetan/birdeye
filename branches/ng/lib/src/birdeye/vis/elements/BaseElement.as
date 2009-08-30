@@ -832,6 +832,30 @@ package birdeye.vis.elements
 			return _sizeRenderer;
 		}
 
+		protected var _rendererWidth:uint;
+		/** Set the renderer width to be used for the data items.*/
+		public function set rendererWidth(val:uint):void
+		{
+			_rendererWidth = val;
+			invalidatingDisplay();
+		}
+		public function get rendererWidth():uint
+		{
+			return _rendererWidth;
+		}
+
+		protected var _rendererHeight:uint;
+		/** Set the renderer height to be used for the data items.*/
+		public function set rendererHeight(val:uint):void
+		{
+			_rendererHeight = val;
+			invalidatingDisplay();
+		}
+		public function get rendererHeight():uint
+		{
+			return _rendererHeight;
+		}
+
 		private var _mouseDoubleClickFunction:Function;
 		/** Set the function that should be used when a mouse double click event is triggered.
 		 * This function must accept an DataItemLayout as input value.
