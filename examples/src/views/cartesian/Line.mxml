@@ -108,11 +108,11 @@
 					<grid:Grid scale1="{l1}" scale2="{c1}" divideEnumerableScale="false" />
 				</coords:guides>
 	    		 <coords:elements>
-	    		 	<elements:LineElement id="a6" scale1="{l1}" scale2="{c1}" collisionScale="horizontal" showAllDataItems="true" dim2="subject" dim1="R1" styleName="solid1" displayName="R1" />
-				 	<elements:LineElement id="a7" scale1="{l1}" scale2="{c1}" collisionScale="horizontal"  showAllDataItems="true" dim2="subject" dim1="R2" styleName="solid2" displayName="R2" />
-				 	<elements:LineElement id="a8" scale1="{l1}" scale2="{c1}" collisionScale="horizontal" showAllDataItems="true" dim2="subject" dim1="R3" styleName="solid3" displayName="R3" />
-				 	<elements:LineElement id="a9" scale1="{l1}" scale2="{c1}" collisionScale="horizontal" showAllDataItems="true" dim2="subject" dim1="R4" styleName="solid4" displayName="R4" />
-				 	<elements:LineElement id="a10" scale1="{l1}" scale2="{c1}" collisionScale="horizontal" showAllDataItems="true" dim2="subject" dim1="R5" styleName="solid5" displayName="R5" />
+	    		 	<elements:LineElement id="a6" scale1="{l1}" scale2="{c1}" collisionScale="scale1" showAllDataItems="true" dim2="subject" dim1="R1" styleName="solid1" displayName="R1" />
+				 	<elements:LineElement id="a7" scale1="{l1}" scale2="{c1}" collisionScale="scale1"  showAllDataItems="true" dim2="subject" dim1="R2" styleName="solid2" displayName="R2" />
+				 	<elements:LineElement id="a8" scale1="{l1}" scale2="{c1}" collisionScale="scale1" showAllDataItems="true" dim2="subject" dim1="R3" styleName="solid3" displayName="R3" />
+				 	<elements:LineElement id="a9" scale1="{l1}" scale2="{c1}" collisionScale="scale1" showAllDataItems="true" dim2="subject" dim1="R4" styleName="solid4" displayName="R4" />
+				 	<elements:LineElement id="a10" scale1="{l1}" scale2="{c1}" collisionScale="scale1" showAllDataItems="true" dim2="subject" dim1="R5" styleName="solid5" displayName="R5" />
 				 </coords:elements>
 	    	</coords:Cartesian>
 		</mx:HBox>
