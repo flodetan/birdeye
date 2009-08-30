@@ -56,21 +56,24 @@
 	</mx:Script>
 	<mx:Button label="Generate" click="createDT()"/>
 	<mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
-		<coords:Cartesian id="pc3" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true" isMasked="false">
+		<coords:Cartesian id="pc3" width="90%" height="90%" dataTipFunction="dtFunc" collisionType="stacked100" dataProvider="{dt}" showDataTips="true" isMasked="false">
 			<coords:scales>
 	 			<scales:Linear id="l" />
 	 			<scales:Category id="c" categoryField="index" />
 			</coords:scales>
 			<coords:guides>
-				<axis:Axis scale="{c}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
-				<axis:Axis scale="{l}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{c}" placement="right" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{l}" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
 				<grid:Grid scale1="{l}" scale2="{c}" divideEnumerableScale="false"/>
 			</coords:guides>
 			 <coords:elements>
-			 	<elements:PointElement sizeRenderer="100" dataField="newChart" itemRenderer="views.cartesian.TestRenderer" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" dim1="index" dim2="bronze" strokeAlpha="0" displayName="A" size="13"/>
-			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l}" dim1="index" graphicRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="solid1" dim2="gold" displayName="C" />
-			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" size="0" scale1="{c}" scale2="{l}" extendMouseEvents="true" labelField="R4" labelSize="15" labelFont="verdana" labelColor="#FF0000" dim1="index" dim2="silver" 
-			 							graphicRenderer="birdeye.vis.guides.renderers.TextRenderer" displayName="B"/>
+			 	<elements:PointElement sizeRenderer="100" dataField="newChart" collisionScale="scale1" itemRenderer="views.cartesian.TestRenderer" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" 
+			 		scale1="{l}" scale2="{c}" dim1="bronze" dim2="index" strokeAlpha="0" displayName="A" size="13"/>
+			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" collisionScale="scale1" mouseOutFunction="EffectsUtil.removeEffects" 
+			 		scale1="{l}" scale2="{c}" dim1="gold" dim2="index" graphicRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="solid1" displayName="C" />
+			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" collisionScale="scale1" mouseOutFunction="EffectsUtil.removeEffects" 
+			 		size="0" scale1="{l}" scale2="{c}" extendMouseEvents="true" labelField="R4" labelSize="15" labelFont="verdana" labelColor="#FF0000" 
+			 		dim1="silver" dim2="index" graphicRenderer="birdeye.vis.guides.renderers.TextRenderer" displayName="B"/>
 			 </coords:elements>
 		</coords:Cartesian>
 		<guides:Legend dataProvider="{pc3}" direction="horizontal"/>	
