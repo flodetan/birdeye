@@ -123,102 +123,35 @@ trace (getTimer(), "drawing line ele");
 
 					var currentItem:Object = _dataItems[cursorIndex];
 					
-					if (scale1)
-					{
-						if (scale1 is INumerableScale && _stackType == STACKED100)
-						{
-							x0 = scale1.getPosition(baseValues[currentItem[dim2]]);
-							if (!isNaN(currentItem[dim1]))
-							{
-								pos1 = scale1.getPosition(
-									baseValues[currentItem[dim2]] + Math.max(0,currentItem[dim1]));
-							}
-							else
-							{
-								pos1 = NaN;
-							}
-						} else {
-							pos1 = scale1.getPosition(currentItem[dim1]);
-						}
-					}
+					scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
+															currentItem[colorField], currentItem[sizeField], currentItem);
 					
-					if (scale2)
-					{
-						// if the stackType is stacked100, than the y0 coordinate of 
-						// the current baseValue is added to the y coordinate of the current
-						// data value filtered by yField
-						if (scale2 is INumerableScale && _stackType == STACKED100)
-						{
-							y0 = scale2.getPosition(baseValues[currentItem[dim1]]);
-							if (!isNaN(currentItem[dim2]))
-							{
-								pos2 = scale2.getPosition(
-									baseValues[currentItem[dim1]] + Math.max(0,currentItem[dim2]));
-							}
-							else
-							{
-								pos2 = NaN;
-							}
-						} 
-						else 
-						{
-							// if not stacked, than the y coordinate is given by the own y axis
-							pos2 = scale2.getPosition(currentItem[dim2]);
-						}
-					}
-					
-					if (scale1 is ISubScale && (scale1 as ISubScale).subScalesActive)
-					{
-						pos2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(currentItem[dim2]);
-					}
-					
-					if (isNaN(pos1) || isNaN(pos2))
+					if (isNaN(scaleResults[POS1]) || isNaN(scaleResults[POS2]))
 					{
 						continue;
-					}
-					
-					var scale2RelativeValue:Number = NaN;
-	
-					if (scale3)
-					{
-						zPos = scale3.getPosition(currentItem[dim3]);
-						scale2RelativeValue = scale3.size - zPos;
 					}
 	
 					if (chart.coordType == VisScene.POLAR)
 					{
-	 					var xPos:Number = PolarCoordinateTransform.getX(pos1, pos2, chart.origin);
-						var yPos:Number = PolarCoordinateTransform.getY(pos1, pos2, chart.origin);
-	 					pos1 = xPos;
-						pos2 = yPos; 
 						if (j == 0)
 						{
-							var firstX:Number = pos1, firstY:Number = pos2;
+							var firstX:Number = scaleResults[POS1], firstY:Number = scaleResults[POS2];
 						}
 					}
-	
-					if (colorScale)
-					{
-						var col:* = colorScale.getPosition(currentItem[colorField]);
-						if (col is Number)
-							fill = new SolidFill(col);
-						else if (col is IGraphicsFill)
-							fill = col;
-					} 
-	
+
 					if (sizeScale)
 					{
-						 var weight:Number = sizeScale.getPosition(currentItem[sizeField]);
+						 var weight:Number = scaleResults[SIZE];
 						stroke = new SolidStroke(colorStroke, alphaStroke, weight);
 					}
 
 					// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createTTGG(currentItem, dataFields, pos1, pos2, scale2RelativeValue, 3);
+					createTTGG(currentItem, dataFields, scaleResults[POS1], scaleResults[POS2], scaleResults[POS3relative], 3);
    	 
 					if (dim3)
 					{
-						if (!isNaN(zPos))
+						if (!isNaN(scaleResults[POS3]))
 						{
 							gg = new DataItemLayout();
 							gg.target = this;
@@ -230,14 +163,14 @@ trace (getTimer(), "drawing line ele");
 					
 					if (_form == CURVE)
 					{
-						points.push(new GraphicPoint(pos1,pos2));
+						points.push(new GraphicPoint(scaleResults[POS1],scaleResults[POS2]));
 						if (isNaN(xPrev) && isNaN(yPrev) && chart.coordType != VisScene.POLAR)
-							points.push(new GraphicPoint(pos1,pos2));
+							points.push(new GraphicPoint(scaleResults[POS1],scaleResults[POS2]));
 					} else if (j++ > 0)
 					{
-						if (!isNaN(xPrev) && !isNaN(yPrev) && !isNaN(pos1) && !isNaN(pos2))
+						if (!isNaN(xPrev) && !isNaN(yPrev) && !isNaN(scaleResults[POS1]) && !isNaN(scaleResults[POS2]))
 						{
-	 						var line:Line = new Line(xPrev,yPrev,pos1,pos2);
+	 						var line:Line = new Line(xPrev,yPrev,scaleResults[POS1],scaleResults[POS2]);
 							line.fill = fill;
 							line.stroke = stroke;
 							gg.geometryCollection.addItemAt(line,0);
@@ -247,7 +180,7 @@ trace (getTimer(), "drawing line ele");
 	
 					if (_showGraphicRenderer)
 					{
-		 				var bounds:Rectangle = new Rectangle(pos1 - _rendererSize/2, pos2 - _rendererSize/2, _rendererSize, _rendererSize);
+		 				var bounds:Rectangle = new Rectangle(scaleResults[POS1] - _rendererSize/2, scaleResults[POS2] - _rendererSize/2, _rendererSize, _rendererSize);
 						
 						var shape:IGeometry = graphicRenderer.newInstance();
 						if (shape is IBoundedRenderer) (shape as IBoundedRenderer).bounds = bounds;
@@ -256,7 +189,7 @@ trace (getTimer(), "drawing line ele");
 						gg.geometryCollection.addItem(shape);
 					}
 	
-					xPrev = pos1; yPrev = pos2;
+					xPrev = scaleResults[POS1]; yPrev = scaleResults[POS2];
 					if (dim3)
 					{
 						gg.z = zPos;
@@ -267,7 +200,7 @@ trace (getTimer(), "drawing line ele");
 				
 				if (_form == CURVE)
 				{
-					points.push(new GraphicPoint(pos1+.0000001,pos2));
+					points.push(new GraphicPoint(scaleResults[POS1]+.0000001,scaleResults[POS2]));
 						
 					bzSplines = new BezierSpline(points);
  					bzSplines.tension = _tension;
@@ -277,9 +210,10 @@ trace (getTimer(), "drawing line ele");
 						bzSplines.autoClose = true;
 				}
 				
-				if (chart.coordType == VisScene.POLAR && !isNaN(firstX) && !isNaN(firstY) && !isNaN(pos1) && !isNaN(pos2))
+				if (chart.coordType == VisScene.POLAR && !isNaN(firstX) && !isNaN(firstY) 
+					&& !isNaN(scaleResults[POS1]) && !isNaN(scaleResults[POS2]))
 				{
-						line = new Line(pos1,pos2, firstX, firstY);
+						line = new Line(scaleResults[POS1],scaleResults[POS2], firstX, firstY);
 						line.fill = fill;
 						line.stroke = stroke;
 						gg.geometryCollection.addItemAt(line,0);

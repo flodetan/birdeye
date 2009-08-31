@@ -144,7 +144,6 @@ trace (getTimer(), "drawing point ele");
 				ggIndex = 0;
 				
 				var currentItem:Object;
-				var scaleResults:Object;
 
 				y0 = getYMinPosition();
 				x0 = getYMinPosition();
@@ -177,7 +176,7 @@ trace (getTimer(), "drawing point ele");
 
 					// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createTTGG(currentItem, dataFields, scaleResults["pos1"], scaleResults["pos2"], scaleResults["pos3Relative"], scaleResults["size"]);
+					createTTGG(currentItem, dataFields, scaleResults[POS1], scaleResults[POS2], scaleResults[POS3relative], scaleResults[SIZE]);
 	
 					if (itemRenderer != null)
 					{
@@ -186,8 +185,8 @@ trace (getTimer(), "drawing point ele");
 							(itmDisplay as IDataRenderer).data = currentItem[dataField];
 						addChild(itmDisplay);
 
-						if (sizeScale && sizeField && scaleResults["size"] > 0)
-							DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = scaleResults["size"];
+						if (sizeScale && sizeField && scaleResults[SIZE] > 0)
+							DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = scaleResults[SIZE];
 						else if (!isNaN(widthAutosize) && !isNaN(heightAutosize)) {
 							DisplayObject(itmDisplay).width = widthAutosize;
 							DisplayObject(itmDisplay).height = heightAutosize;
@@ -200,22 +199,22 @@ trace (getTimer(), "drawing point ele");
 								DisplayObject(itmDisplay).height = rendererHeight;
 						}
 						
-						itmDisplay.x = scaleResults["pos1"] - itmDisplay.width/2;
-						itmDisplay.y = scaleResults["pos2"] - itmDisplay.height/2;
+						itmDisplay.x = scaleResults[POS1] - itmDisplay.width/2;
+						itmDisplay.y = scaleResults[POS2] - itmDisplay.height/2;
 					}
 					
 					if (dim3)
 					{
-						if (!isNaN(scaleResults["pos3"]))
+						if (!isNaN(scaleResults[POS3]))
 						{
 							// why is this created again???
 							// is just setting the z value not enough?
 							gg = new DataItemLayout();
 							gg.target = this;
 							graphicsCollection.addItem(gg);
-							ttGG.z = gg.z = scaleResults["pos3"];
+							ttGG.z = gg.z = scaleResults[POS3];
 						} else
-							scaleResults["pos3"] = 0;
+							scaleResults[POS3] = 0;
 					}
 					
 					if (_extendMouseEvents)
@@ -229,9 +228,9 @@ trace (getTimer(), "drawing point ele");
 
 					if (dim3)
 					{
-						gg.z = scaleResults["pos3"];
-						if (isNaN(scaleResults["pos3"]))
-							scaleResults["pos3"] = 0;
+						gg.z = scaleResults[POS3];
+						if (isNaN(scaleResults[POS3]))
+							scaleResults[POS3] = 0;
 					}
 				}
 				
@@ -244,102 +243,11 @@ trace (getTimer(), "drawing point ele");
 			}
 		}
 
-		private var y0:Number;
-		private var x0:Number;		
-		private function determinePositions(dim1:Object, dim2:Object, dim3:Object=null,color:Object=null, size:Object=null, currentItem:Object=null):Object
-		{
-			var scaleResults:Object = new Object();
-			
-			scaleResults["size"] = _size;
-			scaleResults["color"] = fill;
-			
-			if (scale1)
-			{
-				if (scale1 is INumerableScale && _stackType == STACKED100)
-				{
-					x0 = scale1.getPosition(baseValues[dim2]);
-					if (!isNaN(dim1 as Number))
-					{
-						scaleResults["pos1"] = scale1.getPosition(
-							baseValues[dim2] + Math.max(0,Number(dim1 as Number)));
-					}
-					else
-					{
-						scaleResults["pos1"] = NaN;
-					}
-				} else {
-					scaleResults["pos1"] = scale1.getPosition(dim1);
-				}
-			}
-					
-			if (scale1 is ISubScale && (scale1 as ISubScale).subScalesActive)
-			{
-				scaleResults["pos2"] = (scale1 as ISubScale).subScales[dim1].getPosition(dim2);
-			} 
-
-			if (scale2)
-			{
-				// if the stackType is stacked100, than the y0 coordinate of 
-				// the current baseValue is added to the y coordinate of the current
-				// data value filtered by yField
-				if (scale2 is INumerableScale && _stackType == STACKED100)
-				{
-					y0 = scale2.getPosition(baseValues[dim1]);
-					if (!isNaN(dim2 as Number))
-					{
-						scaleResults["pos2"] = scale2.getPosition(
-							baseValues[dim1] + Math.max(0,dim2 as Number));
-					}
-					else
-					{
-						scaleResults["pos2"] = NaN;
-					}
-				} 
-				else 
-				{
-					// if not stacked, than the y coordinate is given by the own y axis
-					scaleResults["pos2"] = scale2.getPosition(dim2);
-				}
-			}
-					
-			var scale2RelativeValue:Number = NaN;
-
-			if (scale3)
-			{
-				scaleResults["pos3"] = scale3.getPosition(dim3);
-				scaleResults["pos3Relative"] = scale3.size - scaleResults["pos3"];
-			} 
-			
-			if (colorScale)
-			{
-				var col:* = colorScale.getPosition(color);
-				if (col is Number)
-					scaleResults["color"] = new SolidFill(col);
-				else if (col is IGraphicsFill)
-					scaleResults["color"] = col;
-			} 
-
-			if (chart.coordType == VisScene.POLAR)
-			{
-				var xPos:Number = PolarCoordinateTransform.getX(scaleResults["pos1"], scaleResults["pos2"], chart.origin);
-				var yPos:Number = PolarCoordinateTransform.getY(scaleResults["pos1"], scaleResults["pos2"], chart.origin);
-				scaleResults["pos1"] = xPos;
-				scaleResults["pos2"] = yPos; 
-			}
-
-			if (sizeScale)
-			{
-				scaleResults["size"] = sizeScale.getPosition(size);
-			}
-			
-			return scaleResults;
-		}
-		
 		private function createPlotItems(currentItem:Object, scaleResults:Object):void
 		{
-			var bounds:Rectangle = new Rectangle(scaleResults["pos1"] - scaleResults["size"], scaleResults["pos2"] - scaleResults["size"], scaleResults["size"] * 2, scaleResults["size"] * 2);
+			var bounds:Rectangle = new Rectangle(scaleResults[POS1] - scaleResults[SIZE], scaleResults[POS2] - scaleResults[SIZE], scaleResults[SIZE] * 2, scaleResults[SIZE] * 2);
 	
-			if (scaleResults["size"] > 0)
+			if (scaleResults[SIZE] > 0)
 			{
  				if (_source)
  				{
@@ -355,7 +263,7 @@ trace (getTimer(), "drawing point ele");
 				
 				if(plot)
 				{
-					plot.fill = scaleResults["color"];
+					plot.fill = scaleResults[COLOR];
 					plot.stroke = stroke;
 					gg.geometryCollection.addItemAt(plot,0); 
 				}
@@ -369,13 +277,13 @@ trace (getTimer(), "drawing point ele");
 				else
 					label.text = labelField;
 					
-				label.fill = scaleResults["color"];
+				label.fill = scaleResults[COLOR];
 				label.fontSize = sizeLabel;
 				label.fontFamily = fontLabel;
 				label.autoSize = TextFieldAutoSize.LEFT;
 				label.autoSizeField = true;
-				label.x = scaleResults["pos1"] - label.displayObject.width/2;
-				label.y = scaleResults["pos2"] - label.displayObject.height/2;
+				label.x = scaleResults[POS1] - label.displayObject.width/2;
+				label.y = scaleResults[POS2] - label.displayObject.height/2;
 				ttGG.geometryCollection.addItemAt(label,0); 
 			}
 		}
