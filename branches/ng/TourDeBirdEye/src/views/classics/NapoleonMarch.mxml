@@ -117,13 +117,10 @@
 			</coords:transforms>
 			<coords:scales>
  				<scales:Numeric id="lat" dataValues="{[53.5,56]}" dataInterval="1"/>
- 				<scales:Numeric id="long" dataValues="{[22,38]}" dataInterval="2"/>
+ 				<scales:Numeric id="long" dataValues="{[22,40]}" dataInterval="2"/>
  				<scales:Linear id="size" scaleValues="{[3,30]}"/>
 				<scales:Numeric id="col" f="colorFunction" />
 			</coords:scales>
-			<coords:guides>
-				<axis:Axis scale="{long}" placement="bottom"  colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
-			</coords:guides>
     		 <coords:elements>
     		 	<elements:PathElement dataProvider="{survivors}" 
     		 		scale1="{long}" scale2="{lat}" 
@@ -142,6 +139,7 @@
  				<scales:Linear id="temperature" dataValues="{[-40,5]}" dataInterval="10"/>
 			</coords:scales>
 			<coords:guides>
+				<axis:Axis scale="{long}" placement="bottom"  colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
 				<axis:Axis scale="{temperature}" placement="right" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
 			</coords:guides>
     		 <coords:elements>
