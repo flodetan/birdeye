@@ -1,15 +1,10 @@
 // ActionScript file
 		import mx.core.IContainer;
-        import com.degrafa.geometry.display.IDisplayObjectProxy;
-        import mx.events.ListEvent;
-		import mx.containers.Canvas;
+		import mx.events.ListEvent;
 		
-		// Cartesian
 		import views.cartesian.AreaChart;
 		import views.cartesian.BarChart;
 		import views.cartesian.BubbleChart;
-		
-		// Classics
 		import views.classics.NapoleonMarch;
 		
 		[Bindable]
@@ -21,10 +16,11 @@
 		
             // Event handler for the Tree control change event.
         public function treeChanged(event:ListEvent):void {
+        	try {
                 classRef = Class(getDefinitionByName(myTree.selectedItem.@classRef));
                 loadExample(classRef);
                 trace(myTree.selectedItem.@data);
-                
+        	} catch (e:Error) {}
          }
 
         public function loadExample(s:Class):void {
