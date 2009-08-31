@@ -139,7 +139,7 @@ package birdeye.vis.elements.collision
 		{
 			var scaleResults:Object = new Object();
 			
-			scaleResults[SIZE] = _size;
+			scaleResults[SIZE] = _graphicRendererSize;
 			scaleResults[COLOR] = fill;
 
 			// if the Element has its own scale1, than get the dim1 coordinate
