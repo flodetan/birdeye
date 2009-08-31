@@ -81,10 +81,16 @@
 				switch (dimension)
 				{
 					case DIMENSION_1:
-						pos = size * (logDataValue - logMin)/(logMax - logMin);
-						break;
+						if (direction == BaseScale.POSITIVE)
+							pos = size * (logDataValue - logMin)/(logMax - logMin);
+						else
+							pos = size - size * (logDataValue - logMin)/(logMax - logMin);
+					break;
 					case DIMENSION_2:
-						pos = size * (1 - (logDataValue - logMin)/(logMax - logMin));
+						if (direction == BaseScale.POSITIVE)
+							pos = size * (1 - (logDataValue - logMin)/(logMax - logMin));
+						else
+							pos = size - size * (1 - (logDataValue - logMin)/(logMax - logMin));
 						break;
 				}
 				
