@@ -122,13 +122,11 @@ trace (getTimer(), "area ele");
 				var pos1:Number, pos2:Number, zPos:Number;
 				var j:Object;
 				
-				var y0:Number = getYMinPosition();
-				var y0Prev:Number;
-
 				poly = new Polygon();
 				poly.data = "";
 	
-				var baseScale2:Number = getYMinPosition();
+				y0 = getYMinPosition();
+				var y0Prev:Number;
 
 				ggIndex = 0;
 				
@@ -166,9 +164,9 @@ trace (getTimer(), "area ele");
 							// to bypass some limitation of the BezierSpline it's necessary
 							// to create a double initial point. this allows the bezier line
 							// to be drawn without risks of having a large initial curve
-							points.push(new GraphicPoint(0, baseScale2));
+							points.push(new GraphicPoint(0, y0));
 							// the basescale2 is used to have a closure between points at the same height
-							points.push(new GraphicPoint(0, baseScale2));
+							points.push(new GraphicPoint(0, y0));
 						}
 						points.push(new GraphicPoint(scaleResults[POS1],scaleResults[POS2]));
 					} else {
@@ -231,9 +229,9 @@ trace (getTimer(), "area ele");
 					// to insure a proper closure with the 1st point inserted
 					if (chart.coordType == VisScene.CARTESIAN)
 					{
-						points.push(new GraphicPoint(width, baseScale2));
+						points.push(new GraphicPoint(width, y0));
 						// the double point prevent from drawing a large final bezier curve
-						points.push(new GraphicPoint(width, baseScale2-.0000000001));
+						points.push(new GraphicPoint(width, y0-.0000000001));
 					}
 				} else if (chart.coordType == VisScene.POLAR && poly.data)
 				{

@@ -207,11 +207,11 @@ trace (getTimer(), "drawing column ele");
 		
 						if (sizeScale)
 						{
-							_size = sizeScale.getPosition(currentItem[sizeField]);
+							_graphicRendererSize = sizeScale.getPosition(currentItem[sizeField]);
 							if (chart.coordType == VisScene.CARTESIAN)
-								tmpSize = constTmpSize * _size;
+								tmpSize = constTmpSize * _graphicRendererSize;
 							else
-								arcSize = constTmpSize * _size;
+								arcSize = constTmpSize * _graphicRendererSize;
 						}
 						
 						if (isNaN(pos1) || isNaN(pos2))

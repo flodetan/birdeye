@@ -161,11 +161,11 @@ package birdeye.vis.elements.geometry
 						{
 							if (sizeField is Array)
 							{
-								_size = sizeScale.getPosition(currentItem[sizeField[i]]);
+								_graphicRendererSize = sizeScale.getPosition(currentItem[sizeField[i]]);
 								dataFields["sizeField"] = sizeField[i];
 							} else
-								_size = sizeScale.getPosition(currentItem[sizeField]);
-							tmpRadius = _innerRadius + radius/_total * chart.columnWidthRate * _size;
+								_graphicRendererSize = sizeScale.getPosition(currentItem[sizeField]);
+							tmpRadius = _innerRadius + radius/_total * chart.columnWidthRate * _graphicRendererSize;
 						}
 
 						var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius, chart.origin);
@@ -173,7 +173,7 @@ package birdeye.vis.elements.geometry
 		
 						dataFields["dim1"] = tmpDim1;
 
-						createTTGG(currentItem, dataFields, xPos, yPos, NaN, _size, i);
+						createTTGG(currentItem, dataFields, xPos, yPos, NaN, _graphicRendererSize, i);
 						
 		 				if (ttGG && _extendMouseEvents)
 		 				{
