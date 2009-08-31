@@ -27,11 +27,16 @@
  
 package birdeye.vis.elements.collision
 {
+	import birdeye.vis.VisScene;
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.geometry.*;
 	import birdeye.vis.interfaces.IStack;
 	import birdeye.vis.interfaces.scales.INumerableScale;
+	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
+	
+	import com.degrafa.core.IGraphicsFill;
+	import com.degrafa.paint.SolidFill;
 	
 	[Exclude(name="stackType", kind="property")] 
 	[Exclude(name="total", kind="property")] 
@@ -119,6 +124,119 @@ package birdeye.vis.elements.collision
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
+		}
+
+		protected var y0:Number;
+		protected var x0:Number;		
+		protected var scaleResults:Object;
+		protected static const POS1:String = "POS1";
+		protected static const POS2:String = "POS2";
+		protected static const POS3:String = "POS3";
+		protected static const POS3relative:String = "POS3RELATIVE";
+		protected static const SIZE:String = "size";
+		protected static const COLOR:String = "color";
+		protected function determinePositions(dim1:Object, dim2:Object, dim3:Object=null,color:Object=null, size:Object=null, currentItem:Object=null):Object
+		{
+			var scaleResults:Object = new Object();
+			
+			scaleResults[SIZE] = _size;
+			scaleResults[COLOR] = fill;
+
+			// if the Element has its own scale1, than get the dim1 coordinate
+			// position of the data value filtered by dim1 field. If it's stacked100 than 
+			// it considers the last stacked value as a base value for the current one.
+			if (scale1)
+			{
+				if (scale1 is INumerableScale && _stackType == STACKED100)
+				{
+					x0 = scale1.getPosition(baseValues[dim2]);
+					if (!isNaN(dim1 as Number))
+					{
+						scaleResults[POS1] = scale1.getPosition(
+							baseValues[dim2] + Math.max(0,Number(dim1 as Number)));
+					}
+					else
+					{
+						scaleResults[POS1] = NaN;
+					}
+				} else {
+					scaleResults[POS1] = scale1.getPosition(dim1);
+				}
+			}
+					
+			// if there is a multiscale than use the scale2 corresponding to the current
+			// dim1 category to get the dim2 position
+			if (scale1 is ISubScale && (scale1 as ISubScale).subScalesActive)
+			{
+				scaleResults[POS2] = (scale1 as ISubScale).subScales[dim1].getPosition(dim2);
+			} 
+
+			// if the Element has its own scale2, than get the dim2 coordinate
+			// position of the data value filtered by dim2 field. If it's stacked100 than 
+			// it considers the last stacked value as a base value for the current one.
+			if (scale2)
+			{
+				// if the stackType is stacked100, than the y0 coordinate of 
+				// the current baseValue is added to the y coordinate of the current
+				// data value
+				if (scale2 is INumerableScale && _stackType == STACKED100)
+				{
+					y0 = scale2.getPosition(baseValues[dim1]);
+					if (!isNaN(dim2 as Number))
+					{
+						scaleResults[POS2] = scale2.getPosition(
+							baseValues[dim1] + Math.max(0,dim2 as Number));
+					}
+					else
+					{
+						scaleResults[POS2] = NaN;
+					}
+				} 
+				else 
+				{
+					// if not stacked, than the dim2 coordinate is given by the scale2
+					scaleResults[POS2] = scale2.getPosition(dim2);
+				}
+			}
+					
+			var scale2RelativeValue:Number = NaN;
+
+			if (scale3)
+			{
+				scaleResults[POS3] = scale3.getPosition(dim3);
+				// since there is no method yet to draw a real z axis 
+				// we create an y axis and rotate it to properly visualize 
+				// a 'fake' z axis. however zPos over this y axis corresponds to 
+				// the axis height - zPos, because the y axis in Flex is 
+				// up side down. this trick allows to visualize the y axis as
+				// if it would be a z. when there will be a 3d line class, it will 
+				// be replaced
+				scaleResults[POS3relative] = scale3.size - scaleResults[POS3];
+			} 
+			
+			if (colorScale)
+			{
+				var col:* = colorScale.getPosition(color);
+				if (col is Number)
+					scaleResults[COLOR] = new SolidFill(col);
+				else if (col is IGraphicsFill)
+					scaleResults[COLOR] = col;
+			} 
+
+			if (chart.coordType == VisScene.POLAR)
+			{
+				var xPos:Number = PolarCoordinateTransform.getX(scaleResults[POS1], scaleResults[POS2], chart.origin);
+				var yPos:Number = PolarCoordinateTransform.getY(scaleResults[POS1], scaleResults[POS2], chart.origin);
+				scaleResults[POS1] = xPos;
+				scaleResults[POS2] = yPos; 
+			}
+
+			if (sizeScale)
+			{
+				scaleResults[SIZE] = sizeScale.getPosition(size);
+			}
+			
+			return scaleResults;
 		}
 		
 		override protected function getMaxValue(field:Object):Number
