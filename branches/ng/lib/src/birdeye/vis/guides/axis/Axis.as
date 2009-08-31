@@ -936,7 +936,7 @@ trace(getTimer(), "drawing axis");
 							label.transform = rot;
 						}
 						
-						label.y = yPos-(label.fontSize )/2;
+						label.y = yPos-(label.displayObject.height )/2;
 						if (placement == LEFT)
 							label.x = width - thickWidth - (label.textWidth + 4);
 						else
