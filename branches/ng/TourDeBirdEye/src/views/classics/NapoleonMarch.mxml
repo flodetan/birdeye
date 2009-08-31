@@ -3,10 +3,12 @@
 	xmlns:coords="birdeye.vis.coords.*"
 	xmlns:schema="birdeye.vis.elements.schema.*"
 	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:trans="birdeye.vis.trans.projections.*"
 	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:grid="birdeye.vis.guides.grid.*"
 	xmlns:axis="birdeye.vis.guides.axis.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
+	initialize="init()"
 	width="100%" height="100%">
 	
 	<mx:Script>
@@ -16,85 +18,134 @@
 	    	import mx.collections.ArrayCollection;
 	    	import com.shortybmc.data.parser.CSV;
 	
-			private var csv:CSV;
+			private var csvSurv:CSV;
+			private var csvCities:CSV;
+			private var csvTemp:CSV;
 			private function init():void
 			{
-				csv = new CSV(new URLRequest('views/classics/data/Minard-Survivors.csv'));
-				csv.fieldSeperator = ',';
-				csv.addEventListener(Event.COMPLETE, completeHandler);
+				csvSurv = new CSV(new URLRequest('views/classics/data/Minard-Survivors.csv'));
+				csvSurv.fieldSeperator = ";";
+				csvSurv.addEventListener(Event.COMPLETE, completeHandler);
+				csvCities = new CSV(new URLRequest('views/classics/data/Minard-City.csv'));
+				csvCities.fieldSeperator = ";";
+				csvCities.addEventListener(Event.COMPLETE, completeHandler);
+				csvTemp = new CSV(new URLRequest('views/classics/data/Minard-Temp.csv'));
+				csvTemp.fieldSeperator = ";";
+				csvTemp.addEventListener(Event.COMPLETE, completeHandler);
 			}
+
 			// Sample data fields: lonp,latp,survivors,direction,group
 			
 			[Bindable]
-			private var filter:String = "";
-			
-			[Bindable]
 			private var dp:Vector.<Object>;
+			private var numFiles:uint = 0;
 			private function completeHandler(e:Event):void
 			{
-				filterCountryName(filter);
+				if (++numFiles == 3)
+				{
+					loadData();
+					mainChart.active = true;
+					tempChart.active = true;
+				}
 			}
 			
-			private function filterCountryName(val:String):void
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			[Bindable]
+			private var survivors:Vector.<Object> = new Vector.<Object>();
+			[Bindable]
+			private var cities:Vector.<Object> = new Vector.<Object>();
+			[Bindable]
+			private var temperatures:Vector.<Object> = new Vector.<Object>();
+			private function loadData():void
 			{
-				filter = val;
-				var tmpDP:Vector.<Object> = new Vector.<Object>();
-				var tmpRow:Array;
+				var row:Array;
+				var tmpVector:Vector.<Object> = new Vector.<Object>();
 				
-				var hd:Array = csv.header;
-				var pattern:RegExp = new RegExp(val, "i");
-				for (var i:Number = 0; i<csv.data.length; i++)
+				for (var i:Number = 0; i<csvSurv.data.length; i++)
 				{
-					var row:Array = csv.getRecordSet(i);
-					if (row.length == hd.length)
-					{
-						tmpRow = [];
-						
-						if (row.indexOf("World") == -1 && String(row[0]).search(pattern) != -1)
-						{
-							for (var j:Number = 0; j<hd.length; j++)
-								tmpRow[hd[j]] = (row[j] == "NA") ? 0 : row[j];
-						
-							tmpDP.push(tmpRow)
-						}
-					}
+					row = csvSurv.getRecordSet(i);
+					tmpVector.push({
+						coordp: [row[0], row[1]],
+						survivors:row[2],
+						direction: row[3],
+						group: row[4]
+						});
 				}
-				dp = tmpDP;
+				survivors = tmpVector;
+				tmpVector = new Vector.<Object>();
+				
+				for (i = 0; i<csvCities.data.length; i++)
+				{
+					row = csvCities.getRecordSet(i);
+					tmpVector.push({
+						coordc: [row[0], row[1]],
+						city: row[2]
+						});
+				}
+				cities = tmpVector;
+				tmpVector = new Vector.<Object>();
+				
+				for (i = 0; i<csvTemp.data.length; i++)
+				{
+					row = csvTemp.getRecordSet(i);
+					tmpVector.push({
+						lont: [row[0], 53],
+						temp: Number(row[1]),
+						date: row[2]
+						});
+				}
+				temperatures = tmpVector;
+				tmpVector = new Vector.<Object>();
+				
+			}
+			private function colorFunction(dataValue:*, min:Number, max:Number, _size:Number):*
+			{
+				if (dataValue == "A")
+					return 0xff0000;
+				return 0x000000;
 			}
 		]]>
 	</mx:Script>
 	
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
     	<!-- Survivor and City Chart -->
-    	<coords:Cartesian id="mainChart" width="90%" dataProvider="{dp}" height="90%">
-    		<coords:scales>
- 				<scales:Numeric id="lat" dataValues="{[20,40]}" dataInterval="10"/>
- 				<scales:Numeric id="long" dataValues="{[45,60]}" dataInterval="10"/>
- 				<scales:Linear id="size" scaleValues="{[10,100]}"/>
+    	<coords:Cartesian id="mainChart" width="100%" height="100%" active="false">
+    		<coords:transforms>
+					<trans:Projection id="myProj" proj="Miller cylindrical" latScale="{lat}" longScale="{long}"/>
+			</coords:transforms>
+			<coords:scales>
+ 				<scales:Numeric id="lat" dataValues="{[53.5,56]}" dataInterval="1"/>
+ 				<scales:Numeric id="long" dataValues="{[22,38]}" dataInterval="2"/>
+ 				<scales:Linear id="size" scaleValues="{[3,30]}"/>
+				<scales:Numeric id="col" f="colorFunction" />
 			</coords:scales>
 			<coords:guides>
-				<axis:Axis scale="{long}" scaleInterval="1" placement="bottom" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
-				<axis:Axis scale="{lat}" placement="left" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{long}" placement="bottom"  colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
 			</coords:guides>
     		 <coords:elements>
-    		 	<elements:PathElement scale1="{long}" scale2="{lat}" dim1="lonp" dim2="latp" styleName="grad1"
-    		 		sizeField="survivors" splitField="group" colorField="direction" />
-    		 	<elements:PointElement scale1="{long}" scale2="{lat}" dim1="lonp" dim2="latp" labelField="city" />
+    		 	<elements:PathElement dataProvider="{survivors}" 
+    		 		scale1="{long}" scale2="{lat}" 
+    		 		dim1="coordp" dim2="coordp" styleName="grad1"
+    		 		sizeScale="{size}" sizeField="survivors" 
+    		 		colorScale="{col}" colorField="direction"
+    		 		splitField="group"/>
+    		 	<elements:PointElement dataProvider="{cities}" 
+    		 		scale1="{long}" scale2="{lat}" dim1="coordc" dim2="coordc" 
+    		 		graphicRendererSize="0" sizeLabel="14" labelField="city" />
 			 </coords:elements>
     	</coords:Cartesian>
     	<!-- Tempurature Chart -->
-    	<coords:Cartesian id="tempChart" width="90%" dataProvider="{dp}" height="90%">
+    	<coords:Cartesian id="tempChart" width="100%" dataProvider="{temperatures}" height="30%" active="false">
     		<coords:scales>
- 				<scales:Numeric id="temperature" dataValues="{[20,40]}" dataInterval="10"/>
- 				<scales:Numeric id="long2" dataValues="{[45,60]}" dataInterval="10"/>
- 				<scales:Linear id="size2" scaleValues="{[10,100]}"/>
+ 				<scales:Linear id="temperature" dataValues="{[-40,5]}" dataInterval="10"/>
 			</coords:scales>
 			<coords:guides>
-				<axis:Axis scale="{long2}" scaleInterval="1" placement="bottom" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
-				<axis:Axis scale="{temperature}" placement="left" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{temperature}" placement="right" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
 			</coords:guides>
     		 <coords:elements>
-    		 	<elements:LineElement scale1="{long2}" scale2="{temperature}" dim1="lon1" dim2="temperature" labelField="date" />
+    		 	<elements:LineElement scale1="{long}" scale2="{temperature}" colorStroke="0x0000ff" weightStroke="10" dim1="lont" dim2="temp" labelField="date" />
 			 </coords:elements>
     	</coords:Cartesian>
     </mx:VBox>

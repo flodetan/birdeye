@@ -76,6 +76,7 @@
 			<coords:guides>
 				<axis:Axis scale="{c1}" scaleInterval="1" placement="bottom" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
 				<axis:Axis scale="{l1}" placement="left" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
+	 			<grid:Grid scale1="{l1}" scale2="{c1}" color="0xcccccc" divideEnumerableScale="true"/>
 			</coords:guides>
     		 <coords:elements>
 			 	<elements:ColumnElement extendMouseEvents="true" id="a1" scale1="{c1}" scale2="{l1}" dim1="continent" dim2="Sum of gdp_total" styleName="grad1" displayName="GDP" />
