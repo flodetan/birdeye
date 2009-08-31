@@ -379,25 +379,6 @@ trace (getTimer(), "drawing point ele");
 				ttGG.geometryCollection.addItemAt(label,0); 
 			}
 		}
-		
-		private function filterData(scale1Value:Object, scale1CategoryField:Object, scale2Value:Object=null, scale2CategoryField:Object=null):Vector.<Object>
-		{
-			var filteredDataItems:Vector.<Object> = new Vector.<Object>();
-			for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
-			{
-				var currentItem:Object = _dataItems[cursorIndex];
-				
-
-				if ( ( (!scale1Value || !scale1CategoryField) || (currentItem[scale1CategoryField] == scale1Value) ) && 
-					 ( (!scale2Value || !scale2CategoryField) || (currentItem[scale2CategoryField] == scale2Value) )
-				   )
-				{
-					filteredDataItems.push(currentItem);
-				}
-			}
-			
-			return filteredDataItems;
-		}
 
 		// Be sure to remove all children in case an item renderer is used
 		override public function clearAll():void
