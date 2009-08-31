@@ -541,71 +541,75 @@ package birdeye.vis.elements
 		 * to specify the chart data provider, and it's recommended not to do it. */
 		public function set dataProvider(value:Object):void
 		{
-			//_dataProvider = value;
-			if(typeof(value) == "string")
-	    	{
-	    		//string becomes XML
-	        	value = new XML(value);
-	     	}
-	        else if(value is XMLNode)
-	        {
-	        	//AS2-style XMLNodes become AS3 XML
-				value = new XML(XMLNode(value).toString());
-	        }
-			else if(value is XMLList)
+			if (value is Vector.<Object>)
 			{
-				if(XMLList(value).children().length()>0){
-					value = new XMLListCollection(value.children() as XMLList);
-				}else{
-					value = new XMLListCollection(value as XMLList);
+	  			dataItems = Vector.<Object>(value);
+
+			} else {
+				//_dataProvider = value;
+				if(typeof(value) == "string")
+		    	{
+		    		//string becomes XML
+		        	value = new XML(value);
+		     	}
+		        else if(value is XMLNode)
+		        {
+		        	//AS2-style XMLNodes become AS3 XML
+					value = new XML(XMLNode(value).toString());
+		        }
+				else if(value is XMLList)
+				{
+					if(XMLList(value).children().length()>0){
+						value = new XMLListCollection(value.children() as XMLList);
+					}else{
+						value = new XMLListCollection(value as XMLList);
+					}
 				}
-			}
-			else if(value is Array)
-			{
-				value = new ArrayCollection(value as Array);
-			}
-			
-			if(value is XML)
-			{
-				var list:XMLList = new XMLList();
-				list += value;
-				this._dataProvider = new XMLListCollection(list.children());
-			}
-			//if already a collection dont make new one
-	        else if(value is ICollectionView)
-	        {
-	            this._dataProvider = ICollectionView(value);
-	        }else if(value is Object)
-			{
-				// convert to an array containing this one item
-				this._dataProvider = new ArrayCollection( [value] );
-	  		}
-	  		else
-	  		{
-	  			this._dataProvider = new ArrayCollection();
-	  		}
-
-	  		if (ICollectionView(_dataProvider).length > 0)
-	  		{
-		  		_cursor = ICollectionView(_dataProvider).createCursor();
-		  		
-		  		// in case the chart is cartesian, we must invalidate 
-		  		// also the chart properties and display list
-		  		// to let the chart update with the element data provider change. in fact
-		  		// the element dataprovider modifies the chart data and axes properties
-		  		// therefore it modifies the chart properties and displaying
-		  		if (chart is BaseCoordinates)
-		  		{
-			  		BaseCoordinates(chart).axesFeeded = false;
-			  		BaseCoordinates(chart).invalidateProperties();
-			  		BaseCoordinates(chart).invalidateDisplayList();
+				else if(value is Array)
+				{
+					value = new ArrayCollection(value as Array);
+				}
+				
+				if(value is XML)
+				{
+					var list:XMLList = new XMLList();
+					list += value;
+					this._dataProvider = new XMLListCollection(list.children());
+				}
+				//if already a collection dont make new one
+		        else if(value is ICollectionView)
+		        {
+		            this._dataProvider = ICollectionView(value);
+		        }else if(value is Object)
+				{
+					// convert to an array containing this one item
+					this._dataProvider = new ArrayCollection( [value] );
 		  		}
-
-	  			invalidatedData = true;
-		  		invalidateSize();
-		  		invalidateProperties();
-				invalidatingDisplay();
+		  		else
+		  		{
+		  			this._dataProvider = new ArrayCollection();
+		  		}
+	
+		  		if (ICollectionView(_dataProvider).length > 0)
+		  		{
+			  		_cursor = ICollectionView(_dataProvider).createCursor();
+		  		}
+			}
+	  		// in case the chart is cartesian, we must invalidate 
+	  		// also the chart properties and display list
+	  		// to let the chart update with the element data provider change. in fact
+	  		// the element dataprovider modifies the chart data and axes properties
+	  		// therefore it modifies the chart properties and displaying
+	  		if (chart is BaseCoordinates)
+	  		{
+		  		BaseCoordinates(chart).axesFeeded = false;
+		  		BaseCoordinates(chart).invalidateProperties();
+		  		BaseCoordinates(chart).invalidateDisplayList();
 	  		}
+  			invalidatedData = true;
+	  		invalidateSize();
+	  		invalidateProperties();
+			invalidatingDisplay();
 		}		
 		/**
 		* Set the dataProvider to feed the chart. 
@@ -615,8 +619,6 @@ package birdeye.vis.elements
 			return _dataProvider;
 		}
 		
-		protected var _dataItems:Vector.<Object>;
-
 		protected var _dataItemsByIds:Dictionary;
 
 		public function getDataItemById(itemId:Object):Object {
@@ -638,6 +640,7 @@ package birdeye.vis.elements
 			}
 		}
 		
+		protected var _dataItems:Vector.<Object>;
 		public function set dataItems(items:Vector.<Object>):void
 		{
 			const oldVal:Vector.<Object> = _dataItems;
@@ -652,16 +655,15 @@ package birdeye.vis.elements
 				invalidatingDisplay();
 			}
 		}
-
 		public function get dataItems():Vector.<Object>
 		{
 			return _dataItems;
 		}
 		
-		protected var _size:Number = 5;
-		public function set size(val:Number):void
+		protected var _graphicRendererSize:Number = 5;
+		public function set graphicRendererSize(val:Number):void
 		{
-			_size = val;
+			_graphicRendererSize = val;
 			invalidatingDisplay();
 		}
 
