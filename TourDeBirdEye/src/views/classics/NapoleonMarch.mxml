@@ -44,7 +44,7 @@
 				if (++numFiles == 3)
 				{
 					loadData();
-					mainChart.active = true;
+					survChart.active = true;
 				}
 			}
 			
@@ -110,7 +110,7 @@
 	
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
     	<!-- Survivor and City Chart -->
-    	<coords:Cartesian id="mainChart" width="100%" height="100%" active="false">
+    	<coords:Cartesian id="survChart" width="90%" height="90%" active="false">
 			<coords:scales>
  				<scales:Linear id="size" scaleValues="{[3,30]}"/>
 				<scales:Numeric id="col" f="colorFunction" />
@@ -128,7 +128,15 @@
 			 </coords:elements>
     	</coords:Cartesian>
     	<!-- Tempurature Chart -->
-    	<coords:Cartesian id="tempChart" width="100%" dataProvider="{temperatures}" height="30%" active="false">
+    	<legend:Legend direction="horizontal" width="100%" height="20" horizontalAlign="center">
+    		<legend:LegendItem text="Advance" sizeRenderer="10" labelSize="14"
+    			itemRenderer="birdeye.vis.guides.renderers.RectangleRenderer" fillColor="0xff0000"/>
+    		<legend:LegendItem text="Retreat" sizeRenderer="10" labelSize="14"
+    			itemRenderer="birdeye.vis.guides.renderers.RectangleRenderer" fillColor="0x000000"/>
+    		<legend:LegendItem text="Temperature" sizeRenderer="10" labelSize="14"
+    			itemRenderer="birdeye.vis.guides.renderers.LineRenderer" strokeWeight="5" strokeColor="0x0000ff"/>
+    	</legend:Legend>
+    	<coords:Cartesian id="tempChart" width="90%" dataProvider="{temperatures}" height="30%" active="false">
     		<coords:transforms>
 					<trans:Projection id="myProj" proj="Miller cylindrical" latScale="{lat}" longScale="{long}"/>
 			</coords:transforms>
