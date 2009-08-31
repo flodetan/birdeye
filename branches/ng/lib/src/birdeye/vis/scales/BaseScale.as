@@ -122,6 +122,21 @@ package birdeye.vis.scales
 			return _scaleValues;
 		}
 
+		public static const POSITIVE:String = "positive";
+		public static const NEGATIVE:String = "negative";
+		private var _direction:String = POSITIVE;
+		/** Set the direction of the scale. A positive direction refers to left->right for
+		 * x axes, or down->up for y axes. Negative refers to right->left for x axes and 
+		 * up->down for y axes.*/
+		public function set direction(val:String):void
+		{
+			_direction = val;
+			invalidate();
+		}
+		public function get direction():String
+		{
+			return _direction;
+		}
 
 		protected var _function:Function;
 		/** Set the function that will be applied to calculate the getPosition of a 
