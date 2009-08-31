@@ -31,20 +31,15 @@ package birdeye.vis.elements.geometry
 	
 	import birdeye.vis.VisScene;
 	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.elements.collision.StackElement;
-	import birdeye.vis.guides.axis.Axis;
-	import birdeye.vis.guides.axis.MultiAxis;
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
-	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.IPositionableElement;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.INumerableScale;
-	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
@@ -60,6 +55,7 @@ package birdeye.vis.elements.geometry
 	
 	import mx.core.ClassFactory;
 	import mx.core.IDataRenderer;
+	import mx.core.IFactory;
 
 	public class PointElement extends StackElement implements IPositionableElement, IDataRenderer
 	{
@@ -90,15 +86,15 @@ package birdeye.vis.elements.geometry
 			return _dataField;
 		}
 		
-		private var _itemRenderer:Class;
+		private var _itemRenderer:IFactory;
 		/** Set the item renderer following the standard Flex approach. The item renderer can be
 		 * any DisplayObject that could be added as child to a UIComponent.*/ 
-		public function set itemRenderer(val:Class):void
+		public function set itemRenderer(val:IFactory):void
 		{
 			_itemRenderer = val;
 			invalidatingDisplay();
 		}
-		public function get itemRenderer():Class
+		public function get itemRenderer():IFactory
 		{
 			return _itemRenderer;
 		}
@@ -185,7 +181,7 @@ trace (getTimer(), "drawing point ele");
 	
 					if (itemRenderer != null)
 					{
-						var itmDisplay:DisplayObject = new itemRenderer();
+						var itmDisplay:DisplayObject = itemRenderer.newInstance();
 						if (dataField && itmDisplay is IDataRenderer)
 							(itmDisplay as IDataRenderer).data = currentItem[dataField];
 						addChild(itmDisplay);
