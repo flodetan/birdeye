@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:line="birdeye.vis.recipes.cartesianCharts.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	xmlns:facets="birdeye.vis.facets.*"
+	backgroundColor="#3f3f3f" 
+	creationComplete="init()" xmlns:axis="birdeye.vis.guides.axis.*">
+
+<mx:Script>
+		<![CDATA[
+			import mx.events.IndexChangedEvent;
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			private var sites:Array = [];
+			private var years:Array = [];
+			
+			private function createDT():void
+			{
+				var ac:ArrayCollection = new ArrayCollection();
+				var facetData:ArrayCollection;
+				var facetItem:Object;
+
+				for each (var s:String in sites)
+				{
+					for each (var y:Number=0 in years)
+					{
+						facetData = new ArrayCollection();
+						for each (var row:Object in csv.data)
+						{
+							if (row[INDEX_SITES] == s && row[INDEX_YEARS] == y)
+							{
+								facetItem = {
+										variety: row[INDEX_VARIETY],
+										yeld: row[INDEX_YELD]
+									}
+								facetData.addItem(facetItem);
+							}
+						}
+						ac.addItem({
+							site: s,
+							year: y,
+							newChart: facetData
+						});
+					}
+				}
+				dt = ac;
+			}
+
+			import __AS3__.vec.Vector;
+			import flash.utils.getTimer;
+	    	import mx.collections.ArrayCollection;
+	    	import com.shortybmc.data.parser.CSV;
+	
+			private var csv:CSV;
+			private function init():void
+			{
+				csv = new CSV(new URLRequest('./views/facets/barley.csv'));
+				csv.fieldSeperator = ';';
+				csv.addEventListener(Event.COMPLETE, completeHandler);
+			}
+			// Sample data fields: continent	Sum of gdp_total	Sum of population	Sum of total_area
+
+			[Bindable]
+			private var dp:Vector.<Object>;
+			private function completeHandler(e:Event):void
+			{
+				loadData();
+				createDT();
+			}
+			
+			static const INDEX_SITES:Number = 3;
+			static const INDEX_YEARS:Number = 2;
+			static const INDEX_VARIETY:Number = 1;
+			static const INDEX_YELD:Number = 0;
+			private function loadData():void
+			{
+				var row:Array;
+				for (var i:Number = 0; i<csv.data.length; i++)
+				{
+					row = csv.getRecordSet(i);
+					if (sites.indexOf(row[INDEX_SITES]) == -1)
+						 sites.push(row[INDEX_SITES]);
+						 
+					if (years.indexOf(row[INDEX_YEARS]) == -1)
+						 years.push(row[INDEX_YEARS]);
+				}
+			}
+		]]>
+	</mx:Script>
+	
+	
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+    	
+       	<coords:Cartesian id="cc4" width="90%" height="90%" showDataTips="true" dataProvider="{dt}">
+			<coords:scales>
+ 				<scales:Category id="c1" categoryField="year"  />
+ 				<scales:Category id="c2" categoryField="site"  />
+			</coords:scales>
+			<coords:guides>
+				<axis:Axis scale="{c1}" placement="bottom" colorLabel="0xbbbbbb" fontLabel="tahoma" weightPointer="3" sizeLabel="12" />
+				<axis:Axis scale="{c2}" placement="left" colorLabel="0xbbbbbb" fontLabel="tahoma" weightPointer="3" sizeLabel="12" />
+			</coords:guides>
+    		 <coords:elements>
+    		 	<elements:PointElement scale1="{c1}" scale2="{c2}" alphaFill=".2" dim1="year" dim2="site" alphaStroke="0"
+    		 		itemRenderer="views.itemRenderers.FacetLineRenderer" dataField="newChart">
+        		 </elements:PointElement>
+        	</coords:elements>
+        </coords:Cartesian>	
+    </mx:VBox>
+</mx:VBox>
+
