@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
+	backgroundAlpha="0"
+	xmlns:coords="birdeye.vis.coords.*" xmlns:axis="birdeye.vis.guides.axis.*" xmlns:cartesian="views.cartesian.*">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+						
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			private var subject:Array;
+			private var showAxis:Boolean;
+			override public function set data(value:Object):void
+			{
+				super.data = value;
+				showAxis = data.showAxis;
+				dt = ArrayCollection(data.dataProvider);
+			} 
+		]]>
+	</mx:Script>
+ 	<coords:Cartesian showDataTips="true" dataProvider="{dt}" width="100%" height="100%">
+	 	<coords:scales>
+	 	 	<scales:Category id="c" categoryField="variety"/>
+		 	<scales:Linear id="l" dataValues="[0,70]"/>       		 				
+	 	</coords:scales>
+	 	<coords:guides>
+	 		<axis:Axis scale="{c}" placement="right" colorLabel="0xbbbbbb" visible="{showAxis}" sizeLabel="9" />
+	 		<axis:Axis scale="{l}" placement="bottom" colorLabel="0xbbbbbb" sizeLabel="6" />	
+	 	</coords:guides>
+	 	<coords:elements>
+	 		<elements:LineElement id="a1" 
+	 			scale1="{l}" scale2="{c}" 
+	 			dim1="yeld" dim2="variety" styleName="solid1"/>
+	 	</coords:elements>
+	 </coords:Cartesian>
+</mx:VBox>

@@ -21,6 +21,7 @@
                 		<node label="Stacking" classRef="views/polar/StackingChart.swf" />
                 </node>
                 <node label="Facets">
+	                	<node label="Barley" classRef="views.facets.Barley" />
                 		<node label="Plot" classRef="views/facets/PlotChart.swf" />
                 		<node label="Radar" classRef="views/facets/RadarChart.swf" />
                 </node>
