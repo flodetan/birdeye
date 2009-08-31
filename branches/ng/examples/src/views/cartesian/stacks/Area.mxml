@@ -80,7 +80,7 @@
     	<coords:Cartesian id="ac3" width="90%" height="90%" dataTipFunction="dtFunc" showDataTips="true" collisionType="stacked100">
  		<coords:scales>
  			<scales:Category categoryField="subject" id="c2" />
- 			<scales:Linear id="l2" />
+ 			<scales:Linear id="l2" direction="negative"/>
  			<scales:Linear id="l1" />
  		</coords:scales>
  		<coords:guides>
