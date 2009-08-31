@@ -57,10 +57,16 @@
 				switch (dimension)
 				{
 					case DIMENSION_1:
-						pos = size * (Number(dataValue) - min)/(max - min);
+						if (direction == BaseScale.POSITIVE)
+							pos = size * (Number(dataValue) - min)/(max - min);
+						else
+							pos = size * (1 - (Number(dataValue) - min)/(max - min));
 						break;
 					case DIMENSION_2:
-						pos = size * (1 - (Number(dataValue) - min)/(max - min));
+						if (direction == BaseScale.POSITIVE)
+							pos = size * (1 - (Number(dataValue) - min)/(max - min));
+						else
+							pos = size * (Number(dataValue) - min)/(max - min);
 						break;
 					default:
 						pos = _scaleValues[0] + size * (Number(dataValue) - min)/(max - min);
