@@ -112,7 +112,7 @@ package birdeye.vis.elements.geometry {
 		}
 
 		protected function createGraphicRenderer(currentItem:Object, position:Position):IGeometry {
-			const bounds:Rectangle = new Rectangle(0 - _size, 0 - _size, _size * 2, _size * 2);
+			const bounds:Rectangle = new Rectangle(0 - _graphicRendererSize, 0 - _graphicRendererSize, _graphicRendererSize * 2, _graphicRendererSize * 2);
 			var renderer:IGeometry;
 
 			if (_source)
@@ -132,7 +132,7 @@ package birdeye.vis.elements.geometry {
 		
 		protected function createLabelRenderer(text:String):IGeometry {
 			const label:TextRenderer = TextRenderer.createTextLabel(
-				   0, 0 + _size,
+				   0, 0 + _graphicRendererSize,
 				   text,
 				   new SolidFill(labelFillColor),
 				   true, false

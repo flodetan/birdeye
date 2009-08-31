@@ -103,7 +103,7 @@ trace (getTimer(), "drawing line ele");
 				var j:Number = 0;
 				
 				var y0:Number = getYMinPosition();
-				var x0:Number = getYMinPosition();
+				var x0:Number = getXMinPosition();
 
 				ggIndex = 0;
 	
