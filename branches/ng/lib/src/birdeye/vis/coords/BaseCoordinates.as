@@ -64,6 +64,10 @@ package birdeye.vis.coords
 		{
 			_elements = val;
 			
+			for each (var element:IElement in elements)
+				if (! element.chart)
+						element.chart = this;
+
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -183,15 +187,12 @@ package birdeye.vis.coords
 			// TODO create a better way for this
 			// the element has it's validateProperties called as otherway a dataProvider inside
 			// the element (different of the chart) is not converted to dataItems in time...
-			(element as UIComponent).validateProperties();
+			UIComponent(element).validateProperties();
 			// if element dataprovider doesn' exist or it refers to the
 			// chart dataProvider, than set its cursor to this chart cursor (this.cursor)
 			if (dataItems && (! element.dataProvider 
 							|| element.dataProvider == this.dataProvider))
 				element.dataItems = dataItems;
-				
-			if (! element.chart)
-					element.chart = this;
 				
 			if (element is IStack)
 			{				
