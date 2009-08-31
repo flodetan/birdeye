@@ -100,7 +100,7 @@
 	    	<coords:Cartesian id="lc2" width="100%" height="100%" collisionType="overlaid" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
 				<coords:scales>
 		 			<scales:Category id="c1" categoryField="subject" />
-		 			<scales:Linear id="l1" />
+		 			<scales:Linear id="l1" direction="negative"/>
 				</coords:scales>
 				<coords:guides>
 					<axis:Axis scale="{c1}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
