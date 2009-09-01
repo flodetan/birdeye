@@ -149,8 +149,32 @@
 		private var _subScales:Array;
 		public function feedMinMax(minMaxData:Array):void
 		{
-			_minMax = minMaxData;
+			mergeMinMaxData(minMaxData);
 			invalidate();
+		}
+		
+		private function mergeMinMaxData(minMaxData:Array):void
+		{
+			if (!_minMax)
+			{
+				_minMax = minMaxData;
+			}
+			else
+			{
+				for (var cat:Object in minMaxData)
+				{
+					if (!_minMax[cat])
+					{
+						_minMax[cat] = minMaxData[cat];
+					}
+					else
+					{
+						trace(_minMax[cat].max, "max is now ", Math.max(_minMax[cat].max, minMaxData[cat].max)); 
+						_minMax[cat].max = Math.max(_minMax[cat].max, minMaxData[cat].max);
+						_minMax[cat].min = Math.min(_minMax[cat].min, minMaxData[cat].min);
+					}
+				}
+			}
 		}
 		
 		public function get subScales():Array
