@@ -41,6 +41,7 @@ package birdeye.vis.elements.geometry
 	public class PathElement extends BaseElement
 	{
 		private var _createJoint:Boolean = true;
+		[Inspectable(enumeration="true,false")]
 		public function set createJoint(val:Boolean):void
 		{
 			createJoint = val;
@@ -64,7 +65,7 @@ package birdeye.vis.elements.geometry
 				var splitGroups:Array = createSplitGroups();
 
 				var startX:Number, startY:Number;
-				var endX:Number, endY:Number;
+				var previousStartX:Number, previousStartY:Number;
 				var sizeStart:Number = NaN;
 				var sizeEnd:Number = NaN;
 	
@@ -76,7 +77,7 @@ package birdeye.vis.elements.geometry
 				{
 					for each (var sequence:Array in splitGroups)
 					{
-						endX = endY = NaN;
+						previousStartX = previousStartY = NaN;
 						for (var i:uint = 0; i<sequence.length; i++)
 						{
 							var item:Array = sequence[i];
@@ -85,25 +86,25 @@ package birdeye.vis.elements.geometry
 							if (sizeScale && sizeField)
 								sizeStart = sizeScale.getPosition(item[SIZE]);
 							
-							if (isNaN(endX) || isNaN(endY))
+							if (isNaN(previousStartX) || isNaN(previousStartY))
 							{
-								endX = startX;
-								endY = startY;
+								previousStartX = startX;
+								previousStartY = startY;
 								continue;
 							}
 							
-							createPathSegment(item[CURRENT_ITEM], startX, startY, endX, endY, 
+							createPathSegment(item[CURRENT_ITEM], previousStartX, previousStartY, startX, startY,  
 											((i==1) || (i==sequence.length-1)),
 											sizeStart, sizeEnd);
 							
-							endX = startX;
-							endY = startY;
+							previousStartX = startX;
+							previousStartY = startY;
 							if (sizeField)
 								sizeEnd = sizeStart;
 						}
 					}
 				} else { // consider the whole data as 1 path sequence group 
-					endX = endY = NaN;
+					previousStartX = previousStartY = NaN;
 					for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
 					{
 						var currentItem:Object = _dataItems[cursorIndex];
@@ -117,12 +118,12 @@ package birdeye.vis.elements.geometry
 						if (sizeScale && sizeField)
 							sizeStart = sizeScale.getPosition(currentItem[sizeField]);
 
-						createPathSegment(currentItem, startX, startY, endX, endY,
+						createPathSegment(currentItem, previousStartX, previousStartY, startX, startY, 
 										((cursorIndex==0) || (cursorIndex==_dataItems.length-1)),
 											sizeStart, sizeEnd);
 							
-						endX = startX;
-						endY = startY;
+						previousStartX = startX;
+						previousStartY = startY;
 						if (sizeField)
 							sizeEnd = sizeStart;
 					}
@@ -199,9 +200,9 @@ package birdeye.vis.elements.geometry
 					fill = col;
 			}
 			
-			if (_createJoint && !isNaN(sizeEnd) && !isFirstOrLast)
+			if (_createJoint && !isNaN(sizeStart) && !isFirstOrLast)
 			{
-				var circle:Circle = new Circle(endX, endY, sizeEnd/2);
+				var circle:Circle = new Circle(endX, endY, sizeStart/2);
 				circle.fill = fill;
 				circle.stroke = stroke;
 				gg.geometryCollection.addItemAt(circle,0);
