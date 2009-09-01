@@ -152,7 +152,10 @@ package birdeye.vis.elements.geometry
 			createTTGG(currentItem, dataFields, centerX, centerY, NaN, 3);
 			
 			if (_extendMouseEvents)
+			{
 				gg = ttGG;
+				gg.target = this;
+			}
 
 			if (isNaN(sizeStart) || isNaN(sizeEnd))
 			{
