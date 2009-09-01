@@ -7,7 +7,7 @@
 	xmlns:legend="birdeye.vis.guides.legend.*"
 	xmlns:facets="birdeye.vis.facets.*"
 	backgroundColor="#3f3f3f" 
-	creationComplete="init()" xmlns:axis="birdeye.vis.guides.axis.*">
+	xmlns:axis="birdeye.vis.guides.axis.*" xmlns:source="birdeye.vis.source.*">
 
 <mx:Script>
 		<![CDATA[
@@ -51,28 +51,10 @@
 				}
 				dt = ac;
 			}
-
-			import flash.utils.getTimer;
-	    	import mx.collections.ArrayCollection;
-	    	import com.shortybmc.data.parser.CSV;
-	
-			private var csv:CSV;
-			private function init():void
-			{
-				csv = new CSV(new URLRequest('./views/facets/data/barley.csv'));
-				csv.fieldSeperator = ';';
-				csv.addEventListener(Event.COMPLETE, completeHandler);
-			}
 			// Sample data fields: continent	Sum of gdp_total	Sum of population	Sum of total_area
 
 			[Bindable]
 			private var dp:Vector.<Object>;
-			private function completeHandler(e:Event):void
-			{
-				loadData();
-				createDT();
-			}
-			
 			private static const INDEX_SITES:Number = 3;
 			private static const INDEX_YEARS:Number = 2;
 			private static const INDEX_VARIETY:Number = 1;
@@ -89,6 +71,7 @@
 					if (years.indexOf(row[INDEX_YEARS]) == -1)
 						 years.push(row[INDEX_YEARS]);
 				}
+				createDT();
 			}
 		]]>
 	</mx:Script>
@@ -112,5 +95,7 @@
         	</coords:elements>
         </coords:Cartesian>	
     </mx:VBox>
+    <source:CSVTXT id="csv" url="./views/facets/data/barley.csv" fieldSeperator=";" onLoadingCompleted="loadData()">
+    </source:CSVTXT>
 </mx:VBox>
 
