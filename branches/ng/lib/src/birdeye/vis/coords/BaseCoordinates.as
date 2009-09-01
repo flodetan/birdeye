@@ -14,6 +14,7 @@ package birdeye.vis.coords
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.interfaces.scales.ISubScale;
+	import birdeye.vis.interfaces.validation.IValidatingScale;
 	import birdeye.vis.scales.BaseScale;
 	
 	import flash.display.DisplayObject;
@@ -22,6 +23,8 @@ package birdeye.vis.coords
 	import flash.utils.getTimer;
 	
 	import mx.core.UIComponent;
+	
+	
 	
 	public class BaseCoordinates extends VisScene implements ICoordinates
 	{
@@ -47,6 +50,23 @@ package birdeye.vis.coords
 		public function get collisionType():String
 		{
 			return _collisionType;
+		}
+		
+		
+		private var _sharedScales:Boolean = false;
+		/**
+		 * Indicates of the scales that are used are shared over several basecoordinates.</br>
+		 * If so these scales can not be reset by this coordinate system but need to be reset globally.</br>
+		 * @default false
+		 */
+		public function set sharedScales(s:Boolean):void
+		{
+			_sharedScales = s;	
+		}
+		
+		public function get sharedScales():Boolean
+		{
+			return _sharedScales;
 		}
 
 		/** Array of elements, mandatory for any coords scene.
@@ -377,8 +397,10 @@ package birdeye.vis.coords
 		{
 			if (!scales) return;
 			
-			resetScales();
-			
+			if (!sharedScales)
+			{
+				resetScales();
+			}
 			// init axes of all elements that have their own axes
 			// since these are children of each elements, they are 
 			// for sure ready for feeding and it won't affect the axesFeeded status
