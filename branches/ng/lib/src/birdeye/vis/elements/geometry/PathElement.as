@@ -44,7 +44,7 @@ package birdeye.vis.elements.geometry
 		[Inspectable(enumeration="true,false")]
 		public function set createJoint(val:Boolean):void
 		{
-			createJoint = val;
+			_createJoint = val;
 			invalidateDisplayList();
 		}
 		
