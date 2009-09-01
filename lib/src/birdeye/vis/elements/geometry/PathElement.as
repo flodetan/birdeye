@@ -67,7 +67,7 @@ package birdeye.vis.elements.geometry
 				var startX:Number, startY:Number;
 				var previousStartX:Number, previousStartY:Number;
 				var sizeStart:Number = NaN;
-				var sizeEnd:Number = NaN;
+				var previousSize:Number = NaN;
 	
 				ggIndex = 0;
 				
@@ -90,17 +90,18 @@ package birdeye.vis.elements.geometry
 							{
 								previousStartX = startX;
 								previousStartY = startY;
+								previousSize = sizeStart;
 								continue;
 							}
 							
 							createPathSegment(item[CURRENT_ITEM], previousStartX, previousStartY, startX, startY,  
-											((i==1) || (i==sequence.length-1)),
-											sizeStart, sizeEnd);
+											((i==0) || (i==sequence.length-1)),
+											previousSize, sizeStart);
 							
 							previousStartX = startX;
 							previousStartY = startY;
 							if (sizeField)
-								sizeEnd = sizeStart;
+								previousSize = sizeStart;
 						}
 					}
 				} else { // consider the whole data as 1 path sequence group 
@@ -118,14 +119,22 @@ package birdeye.vis.elements.geometry
 						if (sizeScale && sizeField)
 							sizeStart = sizeScale.getPosition(currentItem[sizeField]);
 
+						if (isNaN(previousStartX) || isNaN(previousStartY))
+						{
+							previousStartX = startX;
+							previousStartY = startY;
+							previousSize = sizeStart;
+							continue;
+						}
+						
 						createPathSegment(currentItem, previousStartX, previousStartY, startX, startY, 
 										((cursorIndex==0) || (cursorIndex==_dataItems.length-1)),
-											sizeStart, sizeEnd);
+											previousSize, sizeStart);
 							
 						previousStartX = startX;
 						previousStartY = startY;
 						if (sizeField)
-							sizeEnd = sizeStart;
+							previousSize = sizeStart;
 					}
 				}
 				_invalidatedElementGraphic = false;
