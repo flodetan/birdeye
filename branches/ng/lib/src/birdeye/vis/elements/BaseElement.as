@@ -559,7 +559,7 @@ package birdeye.vis.elements
 		{
 			if (value is Vector.<Object>)
 			{
-	  			dataItems = Vector.<Object>(value);
+	  			dataItems = value as Vector.<Object>;
 
 			} else {
 				//_dataProvider = value;
