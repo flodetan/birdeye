@@ -185,23 +185,10 @@ trace (getTimer(), "drawing point ele");
 						{
 							DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = scaleResults[SIZE];
 						}
-						else if (!isNaN(widthAutosize) || !isNaN(heightAutosize)) 
+						else if (!isNaN(widthAutosize) && !isNaN(heightAutosize)) 
 						{
-							if (isNaN(widthAutosize))
-							{
-								DisplayObject(itmDisplay).width = this.width;
-								DisplayObject(itmDisplay).height = heightAutosize
-							}
-							else if (isNaN(heightAutosize))
-							{
-								DisplayObject(itmDisplay).height = this.height;
-								DisplayObject(itmDisplay).width = widthAutosize;
-							}
-							else
-							{
-								DisplayObject(itmDisplay).width = widthAutosize;
-								DisplayObject(itmDisplay).height = heightAutosize;
-							}
+							DisplayObject(itmDisplay).height = heightAutosize;
+							DisplayObject(itmDisplay).width = widthAutosize;
 						} 
 						else if (sizeRenderer > 0)
 						{
@@ -209,7 +196,6 @@ trace (getTimer(), "drawing point ele");
 						}	
  						else 
  						{
- 							
 							if (rendererWidth > 0)
 								DisplayObject(itmDisplay).width = rendererWidth;
 							if (rendererHeight > 0)
