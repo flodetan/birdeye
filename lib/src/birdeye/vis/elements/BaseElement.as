@@ -100,11 +100,12 @@ package birdeye.vis.elements
 		public static const SIZE_FIELD:String = "sizeField";
 		public static const SIZE_START_FIELD:String = "sizeStartField";
 		public static const SIZE_END_FIELD:String = "sizeEndField";
+		public static const SPLIT_FIELD:String = "splitField";
 		public static const LABEL_FIELD:String = "labelField";
 		public static const DIM_START:String = "dimStart";
 		public static const DIM_END:String = "dimEnd";
 		public static const DIM_NAME:String = "dimName";
-		public static var fieldsNames:Array = [DIM1, DIM2, DIM3, COLOR_FIELD, SIZE_FIELD, SIZE_START_FIELD, SIZE_END_FIELD, LABEL_FIELD, DIM_START, DIM_END, DIM_NAME];
+		public static var fieldsNames:Array = [DIM1, DIM2, DIM3, COLOR_FIELD, SIZE_FIELD, SIZE_START_FIELD, SIZE_END_FIELD, SPLIT_FIELD, LABEL_FIELD, DIM_START, DIM_END, DIM_NAME];
 
 		protected var _invalidatedElementGraphic:Boolean = false;
 		
@@ -502,6 +503,21 @@ package birdeye.vis.elements
 		}
 		public function get sizeEndField():String {
 			return _sizeEndField;
+		}
+
+		protected var _splitField:String;
+		/** This field allows to define the data needed to separate paths sequences according
+		 * the specified field. If no field is specified, than the whole data will be considered
+		 * as a unique sequential group.*/
+		public function set splitField(val:String):void
+		{
+			_splitField = val;
+			invalidateProperties();
+			invalidatingDisplay();
+		}
+		public function get splitField():String
+		{
+			return _splitField;
 		}
 		
 		private var _labelField:String;
@@ -1092,6 +1108,7 @@ package birdeye.vis.elements
 			dataFields[SIZE_FIELD] = sizeField;
 			dataFields[SIZE_START_FIELD] = sizeStartField;
 			dataFields[SIZE_END_FIELD] = sizeEndField;
+			dataFields[SPLIT_FIELD] = splitField;
 			dataFields[LABEL_FIELD] = labelField;
 			dataFields[DIM_NAME] = dimName;
 
