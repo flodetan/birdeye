@@ -12,7 +12,7 @@
 		</coords:scales>
 		<coords:elements>
 			<elements:AreaElement scale1="{c4}" scale2="{l4}" extendMouseEvents="true" styleName="grad3" dim1="subject" dim2="R1"/>
-			<elements:PointElement scale1="{c4}" scale2="{l4}" size=".5" styleName="solid2" dim1="subject" dim2="R2"/>
+			<elements:PointElement scale1="{c4}" scale2="{l4}" graphicRendererSize=".5" styleName="solid2" dim1="subject" dim2="R2"/>
 			<elements:LineElement form="curve" scale1="{c4}" scale2="{l4}" extendMouseEvents="true" styleName="solid1" dim1="subject" dim2="R3"/>
 		</coords:elements>
 	</coords:Polar>
