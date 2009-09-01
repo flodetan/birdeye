@@ -1816,30 +1816,5 @@ package birdeye.vis.elements
 		{
 			// for the moment only overridden by PolygonElement
 		}
-		
-		public function clone():*
-		{
-            var c:Class = this['constructor'] as Class; 
-            var instance:Object = new c(); 
-            
-            var classInfo:XML = describeType(this); 
-            // List the object's variables, their values, and their types. 
-            for each ( var v:XML in classInfo..variable ) { 
-            	if (this[v.@name])
-                	instance[v.@name] = this[v.@name]; 
-            } 
-
-            // List accessors as properties. 
-            for each ( var a:XML in classInfo..accessor ) { 
-                // Do not user the property if it can't be read or written 
-                if( a.@access == 'readwrite' || a.@access == 'write') { 
-                    if (this[a.@name])
-                    	instance[ a.@name ] = this[a.@name]; 
-                } 
-
-            } 
-
-            return instance; 
-		}
 	}
 }

@@ -238,30 +238,6 @@ package birdeye.vis.coords
 			}
 		}
  */
-		/**
-		 * @inheritDoc
-		 */
-		override public function clone(cloneObj:Object=null):*
-		{
-			if (cloneObj && cloneObj is Polar)
-			{
-				var polClone:Polar = cloneObj as Polar;
-				
-				polClone.layout = _layout;
-				polClone.collisionType = _collisionType;
-				polClone.fontSize = _fontSize;
-				
-				return polClone;
-			}
-			else if (!cloneObj)
-			{
-				cloneObj = new Polar();
-				cloneObj = super(cloneObj);
-				return clone(cloneObj);
-			}
-			
-			return null;
-		}
 	}
 	
 }

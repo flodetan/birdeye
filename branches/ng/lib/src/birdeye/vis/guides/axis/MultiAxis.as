@@ -613,43 +613,6 @@ package birdeye.vis.guides.axis
 			} 
 			StyleManager.setStyleDeclaration("MultiAxis", selector, true);
 		}
-		
-				/**
-		 * @inheritDoc
-		 */
-		public function clone(cloneObj:Object=null):*
-		{
-			//  TODO implement
-			if (cloneObj && cloneObj is MultiAxis)
-			{
-				var axisClone:MultiAxis = cloneObj as MultiAxis;
-				
-				axisClone.alphaFill = this.alphaFill;
-				axisClone.subScale = this.subScale;
-				axisClone.alphaStroke = this.alphaStroke;
-				axisClone.alphaGradients = this.alphaGradients;
-				axisClone.colorFill = this.colorFill;
-				axisClone.colorGradients = this.colorGradients;
-				axisClone.colorLabel = this.colorLabel;
-				axisClone.colorPointer = this.colorPointer;
-				axisClone.colorStroke = this.colorStroke;
-				axisClone.fontLabel = this.fontLabel;
-				axisClone.placement = this.placement;
-				axisClone.showPointer = this.showPointer;
-				axisClone.sizeLabel = this.sizeLabel;
-				axisClone.sizePointer = this.sizePointer;
-				axisClone.weightPointer = this.weightPointer;
-				axisClone.weightStroke = this.weightStroke;
-				
-				return axisClone;
-			}
-			else if (!cloneObj)
-			{
-				cloneObj = new MultiAxis();
-				return clone(cloneObj);
-			}
-			
-			return null;
-		}
+
 	}
 }
