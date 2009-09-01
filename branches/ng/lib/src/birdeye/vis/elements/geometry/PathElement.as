@@ -211,7 +211,7 @@ package birdeye.vis.elements.geometry
 			
 			if (_createJoint && !isNaN(sizeStart) && !isFirstOrLast)
 			{
-				var circle:Circle = new Circle(endX, endY, sizeStart/2);
+				var circle:Circle = new Circle(endX, endY, sizeEnd/2);
 				circle.fill = fill;
 				circle.stroke = stroke;
 				gg.geometryCollection.addItemAt(circle,0);
