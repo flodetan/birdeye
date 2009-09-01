@@ -66,7 +66,7 @@
 				{
 					row = csvTemp.getRecordSet(i);
 					tmpVector.push({
-						lont: [row[0], NaN],
+						lont: row[0],
 						temp: Number(row[1]),
 						date: row[2]
 						});
@@ -79,7 +79,8 @@
 				{
 					row = csvSurv.getRecordSet(i);
 					tmpVector.push({
-						coordp: [row[0], row[1]],
+						longp: row[0], 
+						latp: row[1],
 						survivors:row[2],
 						direction: row[3],
 						group: row[4]
@@ -92,7 +93,8 @@
 				{
 					row = csvCities.getRecordSet(i);
 					tmpVector.push({
-						coordc: [row[0], row[1]],
+						longc: row[0], 
+						latc: row[1],
 						city: row[2]
 						});
 				}
@@ -117,13 +119,13 @@
 			</coords:scales>
     		 <coords:elements>
     		 	<elements:PathElement dataProvider="{survivors}" 
-    		 		scale1="{long}" scale2="{lat}" 
-    		 		dim1="coordp" dim2="coordp" styleName="grad1"
+    		 		scale1="{long}" scale2="{lat}" alphaStroke="0"
+    		 		dim1="longp" dim2="latp" styleName="grad1"
     		 		sizeScale="{size}" sizeField="survivors" 
     		 		colorScale="{col}" colorField="direction"
     		 		splitField="group"/>
     		 	<elements:PointElement dataProvider="{cities}" 
-    		 		scale1="{long}" scale2="{lat}" dim1="coordc" dim2="coordc" 
+    		 		scale1="{long}" scale2="{lat}" dim1="longc" dim2="latc" 
     		 		graphicRendererSize="0" sizeLabel="14" colorFill="0xffffff" labelField="city" />
 			 </coords:elements>
     	</coords:Cartesian>
@@ -137,12 +139,9 @@
     			itemRenderer="birdeye.vis.guides.renderers.LineRenderer" strokeWeight="5" strokeColor="0x0000ff"/>
     	</legend:Legend>
     	<coords:Cartesian id="tempChart" width="90%" dataProvider="{temperatures}" height="30%" active="false">
-    		<coords:transforms>
-					<trans:Projection id="myProj" proj="Miller cylindrical" latScale="{lat}" longScale="{long}"/>
-			</coords:transforms>
     		<coords:scales>
- 				<scales:Numeric id="lat" dataValues="{[53.5,56]}" dataInterval="1"/>
- 				<scales:Numeric id="long" dataValues="{[22,40]}" dataInterval="2"/>
+ 				<scales:Linear id="lat" dataValues="{[53.5,56]}" dataInterval="1"/>
+ 				<scales:Linear id="long" dataValues="{[22,40]}" dataInterval="2"/>
  				<scales:Linear id="temperature" dataValues="{[-40,5]}" dataInterval="10"/>
 			</coords:scales>
 			<coords:guides>
