@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100" height="100"
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:series="birdeye.vis.elements.geometry.*"
 	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
 	xmlns:grid="birdeye.vis.guides.grid.*"
 	backgroundAlpha="0"
-	creationComplete="//createDT()"
 	verticalAlign="middle"
 	horizontalAlign="right"
 	xmlns:coords="birdeye.vis.coords.*" xmlns:axis="birdeye.vis.guides.axis.*">
