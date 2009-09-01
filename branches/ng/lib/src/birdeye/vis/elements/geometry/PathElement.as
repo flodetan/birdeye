@@ -40,21 +40,6 @@ package birdeye.vis.elements.geometry
 
 	public class PathElement extends BaseElement
 	{
-		private var _splitField:String;
-		/** This field allows to define the data needed to separate paths sequences according
-		 * the specified field. If no field is specified, than the whole data will be considered
-		 * as a unique sequential group.*/
-		public function set splitField(val:String):void
-		{
-			_splitField = val;
-			invalidateProperties();
-			invalidatingDisplay();
-		}
-		public function get splitField():String
-		{
-			return _splitField;
-		}
-		
 		private var _createJoint:Boolean = true;
 		public function set createJoint(val:Boolean):void
 		{

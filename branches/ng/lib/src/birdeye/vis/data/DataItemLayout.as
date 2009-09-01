@@ -265,40 +265,5 @@ package birdeye.vis.data
 				ToolTipManager.destroyToolTip(tip);
 			} catch (e:Error) {}
 		}
-		
-		/*
-		TODO: Make width and height return the width of the bounding box.
-		      The following code doesn't work because the geometryCollection is
-		      always empty to the moment when boundingBox() is called. 
-		
-		public override function get width():Number {
-			return boundingBox().width;
-		}
-		
-		public override function get height():Number {
-			return boundingBox().height;
-		}
-		
-		public function boundingBox():Rectangle {
-			return calcBoundingBox(geometryCollection, new Rectangle(NaN, NaN, NaN, NaN));
-		}
-				
-		private static function calcBoundingBox(geoms:GeometryCollection, result:Rectangle):Rectangle {
-			for each(var geom:IGeometry in geoms) {
-				if (geom is GeometryCollection) {
-					calcBoundingBox(geom as GeometryCollection, result);
-				} else if (geom is IGraphic) {
-					const graphic:IGraphic = (geom as IGraphic);
-					
-					result.left = isNaN(result.left) ? graphic.x : Math.min(result.left, graphic.x);
-					result.right = isNaN(result.right) ? graphic.x + graphic.width : Math.max(result.right, graphic.x + graphic.width);
-					result.top = isNaN(result.top) ? graphic.y : Math.min(result.top, graphic.y);
-					result.bottom = isNaN(result.bottom) ? result.bottom : Math.max(result.bottom, graphic.y + graphic.height);
-				}
-			}
-			return result;
-		}
-		*/
-
 	}
 }
