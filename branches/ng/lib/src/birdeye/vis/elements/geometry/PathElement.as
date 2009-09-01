@@ -32,6 +32,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.core.IGraphicsFill;
+	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Path;
 	import com.degrafa.paint.SolidFill;
 	
@@ -52,6 +53,13 @@ package birdeye.vis.elements.geometry
 		public function get splitField():String
 		{
 			return _splitField;
+		}
+		
+		private var _createJoint:Boolean = true;
+		public function set createJoint(val:Boolean):void
+		{
+			createJoint = val;
+			invalidateDisplayList();
 		}
 		
 		public function PathElement()
@@ -84,8 +92,9 @@ package birdeye.vis.elements.geometry
 					for each (var sequence:Array in splitGroups)
 					{
 						endX = endY = NaN;
-						for each (var item:Array in sequence)
+						for (var i:uint = 0; i<sequence.length; i++)
 						{
+							var item:Array = sequence[i];
 							startX = scale1.getPosition(item[X]);
 							startY = scale2.getPosition(item[Y]);
 							if (sizeScale && sizeField)
@@ -98,7 +107,9 @@ package birdeye.vis.elements.geometry
 								continue;
 							}
 							
-							createPathSegment(item[CURRENT_ITEM], startX, startY, endX, endY, sizeStart, sizeEnd);
+							createPathSegment(item[CURRENT_ITEM], startX, startY, endX, endY, 
+											((i==1) || (i==sequence.length-1)),
+											sizeStart, sizeEnd);
 							
 							endX = startX;
 							endY = startY;
@@ -121,7 +132,9 @@ package birdeye.vis.elements.geometry
 						if (sizeScale && sizeField)
 							sizeStart = sizeScale.getPosition(currentItem[sizeField]);
 
-						createPathSegment(currentItem, startX, startY, endX, endY, sizeStart, sizeEnd);
+						createPathSegment(currentItem, startX, startY, endX, endY,
+										((cursorIndex==0) || (cursorIndex==_dataItems.length-1)),
+											sizeStart, sizeEnd);
 							
 						endX = startX;
 						endY = startY;
@@ -134,7 +147,7 @@ package birdeye.vis.elements.geometry
 		}
 		
 		private function createPathSegment(currentItem:Object, startX:Number, startY:Number, endX:Number, endY:Number, 
-											sizeStart:Number = NaN, sizeEnd:Number = NaN):void
+											isFirstOrLast:Boolean, sizeStart:Number = NaN, sizeEnd:Number = NaN):void
 		{
  			if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
 				gg = graphicsCollection.items[ggIndex];
@@ -197,11 +210,18 @@ package birdeye.vis.elements.geometry
 				else if (col is IGraphicsFill)
 					fill = col;
 			}
-						
+			
+			if (_createJoint && !isNaN(sizeEnd) && !isFirstOrLast)
+			{
+				var circle:Circle = new Circle(endX, endY, sizeEnd/2);
+				circle.fill = fill;
+				circle.stroke = stroke;
+				gg.geometryCollection.addItemAt(circle,0);
+			}
  			var path:Path= new Path(data);
 			path.fill = fill;
 			path.stroke = stroke;
-			gg.geometryCollection.addItemAt(path,0);
+			gg.geometryCollection.addItem(path);
 		}
 
 		
