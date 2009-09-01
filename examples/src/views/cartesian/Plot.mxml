@@ -67,7 +67,7 @@
 				<grid:Grid scale1="{l}" scale2="{c}" divideEnumerableScale="false"/>
 			</coords:guides>
 			 <coords:elements>
-			 	<elements:PointElement sizeRenderer="100" dataField="newChart" collisionScale="scale1" itemRenderer="views.cartesian.TestRenderer" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" 
+			 	<elements:PointElement rendererWidth="100" rendererHeight="100" dataField="newChart" collisionScale="scale1" itemRenderer="views.cartesian.TestRenderer" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" 
 			 		scale1="{l}" scale2="{c}" dim1="bronze" dim2="index" strokeAlpha="0" displayName="A" graphicRendererSize="13"/>
 			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" collisionScale="scale1" mouseOutFunction="EffectsUtil.removeEffects" 
 			 		scale1="{l}" scale2="{c}" dim1="gold" dim2="index" graphicRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="solid1" displayName="C" />
