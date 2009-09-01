@@ -246,8 +246,9 @@
 		override public function resetValues():void
 		{
 			super.resetValues();
-				
-			_dataProvider = [];
+			
+			if (!dataValues)
+				_dataProvider = [];
 		}
 	}
 }
