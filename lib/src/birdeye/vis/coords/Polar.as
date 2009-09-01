@@ -37,6 +37,7 @@ package birdeye.vis.coords
 	import birdeye.vis.interfaces.guides.IGuide;
 	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.interfaces.scales.ISubScale;
+	import birdeye.vis.interfaces.validation.IValidatingScale;
 	import birdeye.vis.scales.*;
 	
 	import flash.display.DisplayObject;
@@ -134,7 +135,10 @@ package birdeye.vis.coords
 		{
 			if (!scales) return;
 			
-			resetScales();
+			if (!sharedScales)
+			{
+				resetScales();
+			}
 			
 			// init axes of all elements that have their own axes
 			// since these are children of each elements, they are 
