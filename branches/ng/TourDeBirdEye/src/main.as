@@ -6,6 +6,7 @@
 		import views.cartesian.BarChart;
 		import views.cartesian.BubbleChart;
 		import views.classics.NapoleonMarch;
+		import views.classics.NapoleonMarchSOURCES;
 		import views.facets.Barley;
 		
 		[Bindable]
@@ -13,7 +14,7 @@
         [Bindable]
         public var currentExampleInstance:IContainer;
 
-		private var unusefulArray:Array = [AreaChart, BarChart, BubbleChart, NapoleonMarch, Barley ]; 
+		private var unusefulArray:Array = [AreaChart, BarChart, BubbleChart, NapoleonMarch, Barley, NapoleonMarchSOURCES]; 
 		
             // Event handler for the Tree control change event.
         public function treeChanged(event:ListEvent):void {
