@@ -118,7 +118,7 @@
 				<scales:Numeric id="col" f="colorFunction" />
 			</coords:scales>
     		 <coords:elements>
-    		 	<elements:PathElement dataProvider="{survivors}" 
+    		 	<elements:PathElement dataProvider="{survivors}" extendMouseEvents="true"
     		 		scale1="{long}" scale2="{lat}" alphaStroke="0"
     		 		dim1="longp" dim2="latp" styleName="grad1"
     		 		sizeScale="{size}" sizeField="survivors" 
