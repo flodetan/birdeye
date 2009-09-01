@@ -219,6 +219,10 @@ package birdeye.vis.guides.axis
 		 					web[j] = "";
 		 				}
 		 				web[j] += String(labelPosition.x) + "," + String(labelPosition.y) + " ";
+		 				
+		 				// only one set of denominations needed if we share subscales
+						if (i > 0 && (subScale as ISubScale).shareSubScale) continue;
+
 
 						label = new RasterText();
 	 					
