@@ -29,8 +29,8 @@
 		 	<scales:Linear id="l" direction="negative"/>       		 				
 	 	</coords:scales>
 	 	<coords:guides>
-	 		<axis:Axis scale="{c}" placement="right" colorLabel="0xbbbbbb" sizeLabel="7" />
-	 		<axis:Axis scale="{l}" placement="bottom" colorLabel="0xbbbbbb" sizeLabel="7" />	
+	 		<axis:Axis scale="{c}" placement="right" colorLabel="0xbbbbbb" sizeLabel="8" />
+	 		<axis:Axis scale="{l}" placement="bottom" colorLabel="0xbbbbbb" sizeLabel="6" />	
 	 	</coords:guides>
 	 	<coords:elements>
 	 		<elements:LineElement id="a1" 

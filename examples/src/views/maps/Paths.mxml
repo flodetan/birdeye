@@ -73,7 +73,7 @@
     	<mx:HBox >
     		<mx:Button label="Generate" click="init()"/>
 		</mx:HBox>
-    	<coords:Cartesian id="myMap" width="90%" dataProvider="{dt}" height="90%">
+    	<coords:Cartesian id="myMap" width="90%" height="90%">
     		<coords:transforms>
 					<trans:Projection id="myProj" proj="Miller cylindrical" latScale="{lat}" longScale="{long}"/>
 			</coords:transforms>
@@ -83,8 +83,8 @@
  				<scales:Linear id="size" scaleValues="{[10,100]}"/>
 			</coords:scales>
     		 <coords:elements>
-    		 	<elements:PolygonElement scale1="{long}" scale2="{lat}" polyDim="poly" colorFill="0xffffff"/>
-    		 	<elements:PathElement scale1="{long}" scale2="{lat}" dim1="center" dim2="center" styleName="solid1"
+    		 	<elements:PolygonElement dataProvider="{dt}" scale1="{long}" scale2="{lat}" polyDim="poly" colorFill="0xffffff"/>
+    		 	<elements:PathElement createJoint="false" dataProvider="{dt}" scale1="{long}" scale2="{lat}" dim1="center" dim2="center" styleName="solid1"
     		 		sizeScale="{size}" sizeField="random" splitField="group"/>
 			 </coords:elements>
     	</coords:Cartesian>

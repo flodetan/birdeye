@@ -11,7 +11,7 @@
 			<scales:Linear id="lin4" />
 		</coords:scales>
 		 <coords:elements>
-		 	<elements:PointElement scale1="{cat4}" dim1="subject" scale2="{lin4}" size=".5" dim2="R1" styleName="solid1"/>
+		 	<elements:PointElement scale1="{cat4}" dim1="subject" scale2="{lin4}" graphicRendererSize=".5" dim2="R1" styleName="solid1"/>
 		 </coords:elements>
 	</coords:Cartesian>
 </mx:HBox>
