@@ -462,28 +462,5 @@ package birdeye.vis.coords
 			}
 
 		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		override public function clone(cloneObj:Object=null):*
-		{
-			if (cloneObj && cloneObj is Cartesian)
-			{
-				var cartClone:Cartesian = cloneObj as Cartesian;
-				
-				cartClone.collisionType = _collisionType;
-				
-				return cartClone;
-			}
-			else if (!cloneObj)
-			{
-				cloneObj = new Cartesian();
-				cloneObj = super(cloneObj);
-				return clone(cloneObj);
-			}
-			
-			return null;
-		}
 	}
 }
