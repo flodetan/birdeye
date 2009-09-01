@@ -130,7 +130,10 @@ package birdeye.vis.source
 		{
 			var indexes:Array = [];
 			for (var i:uint = 0; i<fields.length; i++) 
-				indexes[i] = header.indexOf(fields[i]);
+			{
+				if ((indexes[i] = header.indexOf(fields[i])) == -1)
+					throw new Error("DataSet field NOT FOUND in the header of " + url);
+			}
 
 			return indexes;
 		}
