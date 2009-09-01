@@ -27,9 +27,6 @@
  
 package birdeye.vis.elements.geometry
 {
-	import __AS3__.vec.Vector;
-	
-	import birdeye.vis.VisScene;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.elements.collision.StackElement;
@@ -39,14 +36,10 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.IPositionableElement;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
-	import birdeye.vis.interfaces.scales.INumerableScale;
-	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
-	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.Geometry;
-	import com.degrafa.paint.SolidFill;
 	
 	import flash.display.DisplayObject;
 	import flash.geom.Rectangle;
@@ -150,11 +143,14 @@ trace (getTimer(), "drawing point ele");
 				
 				var widthAutosize:Number = NaN;
 				var heightAutosize:Number = NaN;
-				if (scale1 && scale1 is IEnumerableScale && 
-					scale2 && scale2 is IEnumerableScale)
+				if (scale1 && scale1 is IEnumerableScale)
 				{
-					widthAutosize = IEnumerableScale(scale1).size/IEnumerableScale(scale1).dataProvider.length;
-					heightAutosize = IEnumerableScale(scale2).size/IEnumerableScale(scale2).dataProvider.length;
+					widthAutosize = IEnumerableScale(scale1).size/IEnumerableScale(scale1).dataProvider.length - 10;					
+				} 
+				
+				if (scale2 && scale2 is IEnumerableScale)
+				{
+					heightAutosize = IEnumerableScale(scale2).size/IEnumerableScale(scale2).dataProvider.length - 10;
 				}
 
 				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
@@ -186,21 +182,57 @@ trace (getTimer(), "drawing point ele");
 						addChild(itmDisplay);
 
 						if (sizeScale && sizeField && scaleResults[SIZE] > 0)
+						{
 							DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = scaleResults[SIZE];
-						else if (!isNaN(widthAutosize) && !isNaN(heightAutosize)) {
-							DisplayObject(itmDisplay).width = widthAutosize;
-							DisplayObject(itmDisplay).height = heightAutosize;
-						} else if (sizeRenderer > 0)
+						}
+						else if (!isNaN(widthAutosize) || !isNaN(heightAutosize)) 
+						{
+							if (isNaN(widthAutosize))
+							{
+								DisplayObject(itmDisplay).width = this.width;
+								DisplayObject(itmDisplay).height = heightAutosize
+							}
+							else if (isNaN(heightAutosize))
+							{
+								DisplayObject(itmDisplay).height = this.height;
+								DisplayObject(itmDisplay).width = widthAutosize;
+							}
+							else
+							{
+								DisplayObject(itmDisplay).width = widthAutosize;
+								DisplayObject(itmDisplay).height = heightAutosize;
+							}
+						} 
+						else if (sizeRenderer > 0)
+						{
 							DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = sizeRenderer;
- 						else {
+						}	
+ 						else 
+ 						{
+ 							
 							if (rendererWidth > 0)
 								DisplayObject(itmDisplay).width = rendererWidth;
 							if (rendererHeight > 0)
 								DisplayObject(itmDisplay).height = rendererHeight;
 						}
 						
-						itmDisplay.x = scaleResults[POS1] - itmDisplay.width/2;
-						itmDisplay.y = scaleResults[POS2] - itmDisplay.height/2;
+						if (!isNaN(scaleResults[POS1]))
+						{
+							itmDisplay.x = scaleResults[POS1] - itmDisplay.width/2;
+						}
+						else
+						{
+							itmDisplay.x = 0;
+						}
+						
+						if (!isNaN(scaleResults[POS2]))
+						{
+							itmDisplay.y = scaleResults[POS2] - itmDisplay.height/2;
+						}
+						else
+						{
+							itmDisplay.y = 0;
+						}
 					}
 					
 					if (dim3)
