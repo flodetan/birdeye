@@ -27,6 +27,7 @@
 package birdeye.vis.elements
 {
 	import mx.core.IDataRenderer;
+	import mx.core.IFactory;
 	
 	public class RenderableElement extends BaseElement implements IDataRenderer
 	{
@@ -57,15 +58,15 @@ package birdeye.vis.elements
 			return _dataField;
 		}
 		
-		private var _itemRenderer:Class;
+		private var _itemRenderer:IFactory;
 		/** Set the item renderer following the standard Flex approach. The item renderer can be
 		 * any DisplayObject that could be added as child to a UIComponent.*/ 
-		public function set itemRenderer(val:Class):void
+		public function set itemRenderer(val:IFactory):void
 		{
 			_itemRenderer = val;
 			invalidatingDisplay();
 		}
-		public function get itemRenderer():Class
+		public function get itemRenderer():IFactory
 		{
 			return _itemRenderer;
 		}
