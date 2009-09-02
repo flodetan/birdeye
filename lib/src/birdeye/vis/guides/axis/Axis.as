@@ -918,7 +918,7 @@ trace(getTimer(), "drawing axis");
 						label.autoSize = TextFieldAutoSize.LEFT;
 						label.autoSizeField = true;
 						label.text = String(dataLabel);
-						if (!isNaN(_rotateLabels) || _rotateLabels != 0)
+						if (!isNaN(_rotateLabels) && _rotateLabels != 0)
 						{
 							var rot:RotateTransform = new RotateTransform();
 							rot = new RotateTransform();
