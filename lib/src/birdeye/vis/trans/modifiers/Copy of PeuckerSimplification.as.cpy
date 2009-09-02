@@ -28,43 +28,16 @@
 package birdeye.vis.trans.modifiers
 {
 	import birdeye.vis.data.Pair;
+	import birdeye.vis.data.PairPlus;
 
 	/** This class applies the Ramer-Douglas-Peucker simplification algorithm to the polygons of a country. 
 	 */
 	public class PeuckerSimplification extends Simplification
 	{
 
-		public override function simplifyPolygon(polygon:Vector.<Pair>, epsilon:Number):Vector.<Pair>
+		public override function simplifyPolygon(polygon:Vector.<Pair>, epsilon:Number):Vector.<PairPlus>
 		{
-			if (polygon.length == 0) { //Safeguard against infinite recursion
-				return polygon;
-			}
-			
-			var dmax:Number = 0
-			var cutIndex:int = 0
-			var d:Number;
-			var recResults1:Vector.<Pair>;
-			var recResults2:Vector.<Pair>;
-			var maxDist:Number = Math.pow(10,(100-epsilon)/10-8); //Normalize epsilon, so that it ranges from 0(no simplification) to 100 (max simplification)
-			//Find the point with maximum distance
-			for (var i:int=1; i<polygon.length-2; i++) { 
- 				d = orthogonalDistance(polygon, i);
-				if (d > dmax) {
-					cutIndex = i
-					dmax = d
-				}
-			}
-
- 			if (dmax >= maxDist) {
-				//Recursive call
-				recResults1 = simplifyPolygon(polygon.slice(0,cutIndex),epsilon); //copy the simplified 1st part of polygon into a new array recResults1
-				recResults2 = simplifyPolygon(polygon.slice(cutIndex,polygon.length-1),epsilon); //copy the simplified 2nd part of polygon into a new array recResults2 				
-
-				// Build the result list
-				return recResults1.concat(recResults2);
-			} else {
-				return polygon;
-			}
+			return new Vector.<PairPlus>();
 		}
 		
 		private function orthogonalDistance(polygon:Vector.<Pair>,i:int):Number {

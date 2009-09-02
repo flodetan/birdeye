@@ -32,6 +32,7 @@
 package birdeye.vis.trans.modifiers
 {
 	import birdeye.vis.data.Pair;
+	import birdeye.vis.data.PairPlus;
 
 	public class Simplification
 	{
@@ -40,14 +41,14 @@ package birdeye.vis.trans.modifiers
 			var simplerPolygons:Array = new Array(origPolygons.length);
 			for (var i:int=0; i<origPolygons.length; i++) //Loop over all polygons of the country
 			{
-				simplerPolygons[i] = simplifyPolygon(origPolygons[i], epsilon);
+				simplerPolygons[i] = simplifyPolygon(origPolygons[i], epsilon); //Copy the array to ensure that simplifyPolygon doesn't overwrite origPolygons's data
 			} // end loop over polygons
 			return simplerPolygons;
 		}
 
 		//This function is supposed to be overridden
-		public function simplifyPolygon(polygon:Vector.<Pair>, epsilon:Number):Vector.<Pair> {
-			return polygon;
+		public function simplifyPolygon(polygon:Vector.<Pair>, epsilon:Number):Vector.<PairPlus> {
+			return Vector.<PairPlus>(polygon);
 		}
 
 	}

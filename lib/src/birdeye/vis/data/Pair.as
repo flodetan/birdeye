@@ -1,4 +1,4 @@
-/* 
+/*  
  * The MIT License
  *
  * Copyright (c) 2008
@@ -24,30 +24,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-	/** A Simplification takes an Array of Polygons and simplifies the curves. It acts on country level,
-	 *  so simplification of an entire region would require several Simplifications, one for each country.
-	 *  The Simplification class is a superclass, supposed to be inherited with a specific simplification algorithm. 
-	 */
-package birdeye.vis.trans.modifiers
+ 
+package birdeye.vis.data
 {
 	import birdeye.vis.data.Pair;
-
-	public class Simplification
+	
+	public class Pair
 	{
+		protected var _dim1:Number;
+		protected var _dim2:Number;		
 		
-		public function simplify(origPolygons:Array, epsilon:Number):Array { 
-			var simplerPolygons:Array = new Array(origPolygons.length);
-			for (var i:int=0; i<origPolygons.length; i++) //Loop over all polygons of the country
-			{
-				simplerPolygons[i] = simplifyPolygon(origPolygons[i], epsilon);
-			} // end loop over polygons
-			return simplerPolygons;
+		public function Pair(d1:Number, d2:Number)
+		{
+			_dim1 = d1;
+			_dim2 = d2;
+		}
+		
+		public function toString():String {
+			return ("["+_dim1+","+_dim2+"]");
 		}
 
-		//This function is supposed to be overridden
-		public function simplifyPolygon(polygon:Vector.<Pair>, epsilon:Number):Vector.<Pair> {
-			return polygon;
+		public function set dim1(d1:Number):void {
+			_dim1 = d1;
+		}
+
+		public function get dim1():Number {
+			return _dim1;
+		}
+
+		public function set dim2(d2:Number):void {
+			_dim2 = d2;
+		}
+
+		public function get dim2():Number {
+			return _dim2;
 		}
 
 	}
