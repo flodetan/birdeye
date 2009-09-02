@@ -17,8 +17,8 @@
 		<coords:Cartesian id="graph" width="100%" height="100%" showDataTips="true">
 			<coords:elements>
 				<elements:NodeElement id="node" itemIdField="id" dimName="name" dataProvider="{nodes}" mouseClickFunction="clickF"
-									  dataField="newChart" graphicRenderer="birdeye.vis.guides.renderers.DiamondRenderer"
-									  styleName="solid1" alphaFill="1.0" graphicRendererSize="40" />
+									  dataField="newChart" sizeRenderer="100" itemRenderer="views.composite.NodeRenderer" 
+									  styleName="solid1" alphaFill="1.0" graphicRendererSize="7" />
 				<elements:EdgeElement id="edge" dimStart="start" dimEnd="end" node="{node}" dataProvider="{edges}" mouseClickFunction="clickF"
 									  colorFill="0xFF0000" colorStroke="0x999999" strokeWeight="2" />
 									  
