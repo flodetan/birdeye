@@ -5,7 +5,7 @@
 	xmlns:elements="birdeye.vis.elements.geometry.*"
 	xmlns:scales="birdeye.vis.scales.*">
 
-	<coords:Cartesian width="70%" height="100%" columnWidthRate="1" dataProvider="{data.dataProvider}" showDataTips="true" isMasked="false" collisionType="stacked">
+	<coords:Cartesian width="70%" height="100%" thicknessRatio="1" dataProvider="{data.dataProvider}" showDataTips="true" isMasked="false" collisionType="stacked">
 		<coords:scales>
 			<scales:Category id="cat3" categoryField="subject"/>
 			<scales:Linear id="lin3" />

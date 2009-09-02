@@ -80,7 +80,7 @@
  <mx:Fade id="fadeIn" alphaFrom="0" alphaTo="1" duration="1000"/>
 <mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
 	<mx:Button label="Generate" click="createDT()"/>
-	<polar:Polar id="rd" collisionType="stacked" showDataTips="true" columnWidthRate=".7" dataTipFunction="dtFunc" layout="radar" width="100%" height="100%">
+	<polar:Polar id="rd" collisionType="stacked" showDataTips="true" thicknessRatio=".7" dataTipFunction="dtFunc" layout="radar" width="100%" height="100%">
 		<polar:scales>
 			<scales:CategoryAngle id="c" categoryField="subject" subScale="birdeye.vis.scales.Linear" />
 		</polar:scales>
