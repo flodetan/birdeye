@@ -33,6 +33,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.UpTriangleRenderer;
 	import birdeye.vis.scales.*;
 	import birdeye.vis.trans.projections.Projection;
+	import birdeye.vis.data.Pair;
 	
 	import com.degrafa.IGeometry;
 	import com.degrafa.core.IGraphicsFill;
@@ -143,7 +144,7 @@ var numCoords:Number = 0;
 					{
 						// we could achieve the following with a recursive function but it slows down 
 						// significantly the process.
-						for each (var item:Array in fullPoly)
+						for each (var item:Vector.<Pair> in fullPoly)
 						{
 							if (item[0] is Number)
 							{
@@ -158,7 +159,7 @@ var numCoords:Number = 0;
 									pos2 = scale2.getPosition(item);
 								
 								poly.data += String(pos1) + "," + String(pos2) + " ";
-							} else if (item[0] is Array) {
+							} else if (item[0] is Pair) {
 								if (initiated)
 								{
 									poly.fill = fill;
@@ -170,9 +171,8 @@ var numCoords:Number = 0;
 								poly = new Polygon();
 								poly.data = " ";
 	
-								for each (var pairs:Array in item)
+								for each (var pairs:Pair in item)
 								{
-									numCoords++;
 									// data is composed by a set of arrays (Maps)
 									if (scale1)
 										pos1 = scale1.getPosition(pairs);
@@ -185,7 +185,6 @@ var numCoords:Number = 0;
 								}
 								poly.fill = fill;
 								poly.stroke = stroke; 
-			 					Geometry(poly).preDraw();
 								ttGG.geometryCollection.addItemAt(poly,0); 
 							}
 						}

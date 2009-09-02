@@ -28,6 +28,7 @@
 package birdeye.vis.trans.modifiers
 {
 	import birdeye.vis.data.Pair;
+	import birdeye.vis.data.PairPlus;
 
 	/** This class applies the Visvalingam-Whyatt simplification algorithm to the polygons of a country. 
 	 */
@@ -38,7 +39,7 @@ package birdeye.vis.trans.modifiers
 		private var _firstObj:Object;
 		private var _lastObj:Object;
 			
-		public override function simplifyPolygon(polygon:Vector.<Pair>, epsilon:Number):Vector.<Pair>
+		public override function simplifyPolygon(polygon:Vector.<Pair>, epsilon:Number):Vector.<PairPlus>
 		{
 			var prevObj:Object;
 			var currObj:Object;
@@ -152,13 +153,13 @@ package birdeye.vis.trans.modifiers
 		}
 
 		//Select the polygon corners with area size bigger than minSize
-		private function selection(minSize:Number,origLength:int):Vector.<Pair> {
+		private function selection(minSize:Number,origLength:int):Vector.<PairPlus> {
 			var obj:Object = _biggestObj;
 			var output:Array = new Array(origLength);
-			output[0]=new Pair(_firstObj.x,_firstObj.y);			//The first point has no size, so it's not in the area size list
-			output[origLength-1]=new Pair(_lastObj.x,_lastObj.y);	//The last point has no size, so it's not in the area size list
+			output[0]=new PairPlus(_firstObj.x,_firstObj.y,roundToTwoDecimals(_biggestObj.size));			//The first point has no size, so it's not in the area size list
+			output[origLength-1]=new PairPlus(_lastObj.x,_lastObj.y,Number.NaN);	//The last point has no size, so it's not in the area size list
 			while (obj.hasOwnProperty("size") && obj.size>=minSize) {
-				output[obj.index] = new Pair(obj.x,obj.y);
+				output[obj.index] = new PairPlus(obj.x,obj.y,roundToTwoDecimals(obj.size));
 				//obj--
 				if (notSmallestInList(obj)) {
 					obj=obj.smaller;
@@ -167,7 +168,7 @@ package birdeye.vis.trans.modifiers
 				}
 			}
 			output = output.filter(callback);
-			return Vector.<Pair>(output);
+			return Vector.<PairPlus>(output);
 		}
 
         private function callback(item:*, index:int, array:Array):Boolean {
@@ -192,6 +193,11 @@ package birdeye.vis.trans.modifiers
 		
 		private function notBiggestInList(obj:Object):Boolean {
 			return (obj.hasOwnProperty("bigger") && obj.bigger!=null)
+		}
+		
+		private function roundToTwoDecimals(indata:Number):Number {
+			const factor:Number = 100;
+			return Math.round(factor*indata) / factor;
 		}
 		
 	}

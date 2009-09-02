@@ -27,6 +27,7 @@
  
 package birdeye.vis.trans.projections
 {
+	import birdeye.vis.data.Pair;
 	import birdeye.vis.interfaces.IProjection;
 	import birdeye.vis.interfaces.scales.IScale;
 	
@@ -102,22 +103,22 @@ package birdeye.vis.trans.projections
 
 		public function funcDim1(latLon:*, minLong:Number, maxLong:Number, sizeX:Number):Number
 		{
-			var geoCoords:Array;
 			if (latLon is Number)
-				geoCoords = [latLon, _minLat]
+				return projectX(latLon, _minLat, sizeX, _minLat, _maxLat, minLong, maxLong);
+			else if (latLon is Pair)
+				return projectX(latLon.dim2, latLon.dim1, sizeX, _minLat, _maxLat, minLong, maxLong);
 			else 
-				geoCoords = latLon as Array;
-			return projectX(geoCoords[1], geoCoords[0], sizeX, _minLat, _maxLat, minLong, maxLong);
+				return projectX(latLon[1], latLon[0], sizeX, _minLat, _maxLat, minLong, maxLong);
 		}
 
 		public function funcDim2(latLon:*, minLat:Number, maxLat:Number, sizeY:Number):Number
 		{
-			var geoCoords:Array;
 			if (latLon is Number)
-				geoCoords = [_minLong, latLon]
-			else
-				geoCoords = latLon as Array;
-			return projectY(geoCoords[1], geoCoords[0], sizeY, minLat, maxLat, _minLong, _maxLong);
+				return projectY(_minLong, latLon, sizeY, minLat, maxLat, _minLong, _maxLong);
+			else if (latLon is Pair)
+				return projectY(latLon.dim2, latLon.dim1, sizeY, minLat, maxLat, _minLong, _maxLong);
+			else 
+				return projectY(latLon[1], latLon[0], sizeY, minLat, maxLat, _minLong, _maxLong);
 		}
 
 		public function funcDim3(dataValue:*, min3:Number, max3:Number, size3:Number):Number {return NaN}
