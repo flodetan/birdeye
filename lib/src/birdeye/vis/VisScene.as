@@ -260,15 +260,15 @@
 
 
 		
-		private var _columnWidthRate:Number = 0.6;
-		public function set columnWidthRate(val:Number):void
+		private var _thicknessRatio:Number = 0.6;
+		public function set thicknessRatio(val:Number):void
 		{
-			_columnWidthRate = val;
+			_thicknessRatio = val;
 			invalidateDisplayList();
 		}
-		public function get columnWidthRate():Number
+		public function get thicknessRatio():Number
 		{
-			return _columnWidthRate;
+			return _thicknessRatio;
 		}
 		
 		private var _customTooltTipFunction:Function;

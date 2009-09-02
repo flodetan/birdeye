@@ -92,10 +92,10 @@ trace(getTimer(), "drawing bar");
 				if (scale2)
 				{
 					if (scale2 is IEnumerableScale)
-						size = scale2.size/IEnumerableScale(scale2).dataProvider.length * chart.columnWidthRate;
+						size = scale2.size/IEnumerableScale(scale2).dataProvider.length * chart.thicknessRatio;
 					else if (scale2 is IEnumerableScale)
 						size = scale2.size / 
-								(INumerableScale(scale1).max - INumerableScale(scale2).min) * chart.columnWidthRate;
+								(INumerableScale(scale1).max - INumerableScale(scale2).min) * chart.thicknessRatio;
 				} 
 	
 				ggIndex = 0;
@@ -130,7 +130,7 @@ trace(getTimer(), "drawing bar");
 							yPos = scale2.getPosition(currentItem[dim2]);
 		
 							if (isNaN(size))
-		 						size = scale2.dataInterval * chart.columnWidthRate;
+		 						size = scale2.dataInterval * chart.thicknessRatio;
 						} 
 						
 						if (scale1)
