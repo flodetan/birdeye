@@ -96,7 +96,7 @@ package birdeye.vis.elements.geometry {
 		{
 			var obj:DisplayObject = null;
 			if (itemRenderer != null) {
-				obj = new itemRenderer();
+				obj = itemRenderer.newInstance();
 				if (dataField  &&  obj is IDataRenderer) {
 					(obj as IDataRenderer).data = currentItem[dataField];
 				}
@@ -167,6 +167,7 @@ package birdeye.vis.elements.geometry {
 					}
 				});
 			}
+			_invalidatedElementGraphic = false;
 		}
 
 

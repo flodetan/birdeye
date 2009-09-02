@@ -149,6 +149,7 @@ package birdeye.vis.elements.geometry {
 					}
 				});
 			}
+			_invalidatedElementGraphic = false;
 		}
 		
 		// we need to override to avoid the cretion of tooltips whose position
