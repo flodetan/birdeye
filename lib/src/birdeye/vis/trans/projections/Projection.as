@@ -149,6 +149,14 @@ package birdeye.vis.trans.projections
 
 		public function projectX(lat:Number, long:Number, sizeX:Number, minLat:Number=-90, maxLat:Number=90, minLong:Number=-180, maxLong:Number=180):Number
 		{
+			if (isNaN(minLat))
+				minLat=-90;
+			if (isNaN(maxLat))
+				maxLat=90;
+			if (isNaN(minLong))
+				minLong=-180;
+			if (isNaN(maxLong))
+				maxLong=180;
 			var transformation: Transformation = selectTransformation(lat, long, _proj);
 			var x:Number = transformation.projectX(lat, long, sizeX, minLat, maxLat, minLong, maxLong);
 			return x;
@@ -162,6 +170,14 @@ package birdeye.vis.trans.projections
 
 		public function projectY(lat:Number, long:Number, sizeY:Number, minLat:Number=-90, maxLat:Number=90, minLong:Number=-180, maxLong:Number=180):Number
 		{
+			if (isNaN(minLat))
+				minLat=-90;
+			if (isNaN(maxLat))
+				maxLat=90;
+			if (isNaN(minLong))
+				minLong=-180;
+			if (isNaN(maxLong))
+				maxLong=180;
 			var transformation: Transformation = selectTransformation(lat, long, _proj);
 			var y:Number = transformation.projectY(lat, long, sizeY, minLat, maxLat, minLong, maxLong);
 			return y;
