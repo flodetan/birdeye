@@ -8,7 +8,7 @@
 	xmlns:grid="birdeye.vis.guides.grid.*"
 	xmlns:axis="birdeye.vis.guides.axis.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
-	xmlns:sources="birdeye.vis.source.*"
+	xmlns:sources="birdeye.vis.source.csv.*"
 	width="100%" height="100%" xmlns:data="birdeye.vis.data.*">
 	
 	<mx:Script>

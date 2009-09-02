@@ -7,7 +7,7 @@
 	xmlns:legend="birdeye.vis.guides.legend.*"
 	xmlns:facets="birdeye.vis.facets.*"
 	backgroundColor="#3f3f3f" 
-	xmlns:axis="birdeye.vis.guides.axis.*" xmlns:source="birdeye.vis.source.*">
+	xmlns:axis="birdeye.vis.guides.axis.*" xmlns:source="birdeye.vis.source.csv.*">
 
 <mx:Script>
 		<![CDATA[
