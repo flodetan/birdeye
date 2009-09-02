@@ -11,9 +11,11 @@
 
 <mx:Script>
 		<![CDATA[
+			import birdeye.vis.source.csv.parser.CSV;
 			import mx.events.IndexChangedEvent;
 			import mx.collections.ArrayCollection;
-			
+			import birdeye.vis.source.csv.parser.CSV;
+						
 			[Bindable]
 			public var dt:ArrayCollection;;
 
@@ -55,7 +57,7 @@
 			import __AS3__.vec.Vector;
 			import flash.utils.getTimer;
 	    	import mx.collections.ArrayCollection;
-	    	import com.shortybmc.data.parser.CSV;
+			import birdeye.vis.source.csv.parser.CSV;
 	
 			private var csv:CSV;
 			private function init():void
