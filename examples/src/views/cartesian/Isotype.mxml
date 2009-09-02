@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:guides="birdeye.vis.guides.legend.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
+	backgroundColor="#3f3f3f" 
+	creationComplete="createDT()"
+	width="100%" height="100%" horizontalAlign="center" xmlns:axis="birdeye.vis.guides.axis.*">
+	<mx:Script>
+		<![CDATA[
+
+			import mx.collections.ArrayCollection;
+			import mx.core.IToolTip;
+			import mx.controls.Alert;
+			import birdeye.vis.data.DataItemLayout;
+			import birdeye.util.EffectsUtil;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			private var subject:Array;
+			
+			private function createDT():void
+			{
+				subject = ["A", "B", "C", "D", "E", "F"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var R1:Number, R2:Number, R3:Number, R4:Number;
+				
+				for (var i:Number = 0; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: R1=Math.round(Math.random() * 100),
+						R2: R2=Math.round(Math.random() * 100),
+						R3: R3=Math.round(Math.random() * 100),
+						R4: R4=Math.round(Math.random() * 100)
+					});
+				}
+				dt = ac;
+			}
+
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = dataFields["dim1"] + ": " + currDatatip[dataFields["dim1"]];
+				tt += '\n' + dataFields["dim2"] + ": " + currDatatip[dataFields["dim2"]];
+				if (dataFields["sizeField"] != null)
+					tt += '\n' + dataFields["sizeField"] + ": " + currDatatip[dataFields["sizeField"]];
+				return  tt;
+			}
+            
+		]]>
+	</mx:Script>
+	<mx:Button label="Generate" click="createDT()"/>
+	<mx:HBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
+	
+		<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
+		
+		<coords:Cartesian id="bc" width="90%" height="90%" thicknessRatio="1" dataProvider="{dt}" showDataTips="true" collisionType="stacked" dataTipFunction="dtFunc">
+			<coords:scales>
+		    	<scales:Category id="c" categoryField="subject" />
+		    	<scales:Linear id="l" />
+			</coords:scales>
+			<coords:guides>
+				<axis:Axis scale="{c}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{l}" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+	 		</coords:guides>
+	    	 <coords:elements>
+			 	<elements:IsotypeElement itemRenderer="views.itemRenderers.Image" rendererDataValue="5"
+			 		scale1="{l}" scale2="{c}" extendMouseEvents="true" 
+			 		dim1="R1" styleName="grad1" dim2="subject" displayName="R1"/>
+			 </coords:elements>
+		</coords:Cartesian>
+		<guides:Legend dataProvider="{bc}" direction="horizontal" />	
+		</mx:VBox>
+	</mx:HBox>
+</mx:VBox>
