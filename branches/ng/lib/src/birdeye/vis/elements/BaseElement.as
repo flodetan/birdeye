@@ -1674,6 +1674,8 @@ package birdeye.vis.elements
 		/** Remove all graphic elements of the series.*/
 		public function clearAll():void
 		{
+			_invalidatedElementGraphic = true;
+
  			// Iterating backwards here is essential, because during the 
  			// iteration we are modifying the collection we are iterating over.
  			var i:int;
