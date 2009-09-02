@@ -56,7 +56,7 @@
 				_scaleInterval = _size/ dataProvider.length;
 
 				if (_function == null)
-					return dataProvider.indexOf(dataValue) * _scaleInterval + _scaleValues[0];
+					return ((dataProvider.length - dataProvider.indexOf(dataValue)) % dataProvider.length) * _scaleInterval + _scaleValues[0];
 				else 
 					return  _function(dataValue, _scaleValues[0], _scaleValues[1], _scaleInterval);
 			}
