@@ -25,14 +25,13 @@
  * THE SOFTWARE.
  */
  
-package birdeye.vis.source
+package birdeye.vis.source.csv
 {
 	import __AS3__.vec.Vector;
 	
 	import birdeye.vis.data.DataSet;
 	import birdeye.vis.interfaces.sources.ISource;
-	
-	import com.shortybmc.data.parser.CSV;
+	import birdeye.vis.source.csv.parser.CSV;
 	
 	import flash.events.Event;
 	import flash.net.URLRequest;
