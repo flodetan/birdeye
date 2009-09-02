@@ -39,7 +39,7 @@
 
 <mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
 	<mx:Button label="Generate" click="createDT()"/>
-	<polar:Polar collisionType="stacked100" columnWidthRate="1" id="pc1" dataProvider="{dt}" 
+	<polar:Polar collisionType="stacked100" thicknessRatio="1" id="pc1" dataProvider="{dt}" 
 		showDataTips="true" width="100%" height="100%">
 	<polar:scales>
 			<axis:CategoryAngle id="c" categoryField="subject"/>

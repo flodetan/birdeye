@@ -5,7 +5,7 @@
 	xmlns:elements="birdeye.vis.elements.geometry.*"
 	xmlns:scales="birdeye.vis.scales.*">
 
-	<coords:Polar width="70%" height="100%" dataProvider="{data.dataProvider}" columnWidthRate=".8" showDataTips="true">
+	<coords:Polar width="70%" height="100%" dataProvider="{data.dataProvider}" thicknessRatio=".8" showDataTips="true">
 		<coords:scales>
 			<scales:Numeric id="l" scaleType="constant" />
 			<scales:PercentAngle id="a" size="360"/>

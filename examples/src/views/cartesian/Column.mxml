@@ -76,7 +76,7 @@
 	
 	<mx:Button label="Generate" click="createDT()"/>
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
-	       	<coords:Cartesian id="cc4" width="90%" height="90%" columnWidthRate="1" showDataTips="false" dataProvider="{dt}" 
+	       	<coords:Cartesian id="cc4" width="90%" height="90%" thicknessRatio="1" showDataTips="false" dataProvider="{dt}" 
 	       		collisionType="stacked100">
 				<coords:scales>
  					<scales:Category id="c" categoryField="subject"/>
@@ -98,7 +98,7 @@
         		 </coords:elements>
         	</coords:Cartesian>
 			<legend:Legend dataProvider="{cc4}" direction="horizontal"/>
-	       	<coords:Cartesian id="cc5" width="90%" height="90%" columnWidthRate="1" dataTipFunction="dtFunc" showDataTips="true" dataProvider="{dt}" 
+	       	<coords:Cartesian id="cc5" width="90%" height="90%" thicknessRatio="1" dataTipFunction="dtFunc" showDataTips="true" dataProvider="{dt}" 
 	       		collisionType="stacked">
 				<coords:scales>
  					<scales:Category id="c1" categoryField="subject" />
