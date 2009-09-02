@@ -28,7 +28,8 @@
 
 							
 				<elements:NodeElement id="node" itemIdField="id" dimName="name" dataProvider="{nodes}" 
-									sizeRenderer="25" itemRenderer="views.itemRenderers.CircleNode" mouseClickFunction="clickF" />
+									graphicRenderer="birdeye.vis.guides.renderers.DiamondRenderer"
+									graphicRendererSize="20"/>
 
 <!--
  							
