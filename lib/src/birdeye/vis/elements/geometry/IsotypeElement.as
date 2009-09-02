@@ -1,0 +1,343 @@
+/*  
+ * The MIT License
+ *
+ * Copyright (c) 2008
+ * United Nations Office at Geneva
+ * Center for Advanced Visual Analytics
+ * http://cava.unog.ch
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+ 
+package birdeye.vis.elements.geometry
+{
+	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.elements.collision.*;
+	import birdeye.vis.guides.renderers.RectangleRenderer;
+	import birdeye.vis.interfaces.scales.IEnumerableScale;
+	import birdeye.vis.interfaces.scales.INumerableScale;
+	import birdeye.vis.scales.*;
+	
+	import com.degrafa.core.IGraphicsFill;
+	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.paint.SolidFill;
+	
+	import flash.display.DisplayObject;
+	import flash.utils.getTimer;
+	
+	import mx.containers.Canvas;
+	import mx.core.ClassFactory;
+	import mx.core.IFactory;
+
+	public class IsotypeElement extends StackElement
+	{
+		public static const HORIZONTAL:String = "horizontal";
+		public static const VERTICAL:String = "vertical";
+		
+		private var _direction:String = HORIZONTAL;
+		[Inspectable(enumeration="horizontal,vertical")]
+		public function set direction(val:String):void
+		{
+			_direction = val;
+			invalidateDisplayList();
+		}
+		public function get direction():String
+		{
+			return _direction;
+		}
+		
+		private var _itemRenderer:IFactory;
+		/** Set the item renderer following the standard Flex approach. The item renderer can be
+		 * any DisplayObject that could be added as child to a UIComponent.*/ 
+		public function set itemRenderer(val:IFactory):void
+		{
+			_itemRenderer = val;
+			invalidatingDisplay();
+		}
+		public function get itemRenderer():IFactory
+		{
+			return _itemRenderer;
+		}
+		
+		override public function get elementType():String
+		{
+			return "isotype";
+		}
+		
+		private var _rendererDataValue:Number;
+		/** Set a unit data value to the renderer used for the Isotype.*/
+		public function set rendererDataValue(val:Number):void
+		{
+			_rendererDataValue = val;
+		}
+		public function get rendererDataValue():Number
+		{
+			return _rendererDataValue;
+		}
+
+		public function IsotypeElement()
+		{
+			super();
+			collisionScale = SCALE1;
+		}
+	
+		override protected function commitProperties():void
+		{
+			super.commitProperties();
+			if (! graphicRenderer)
+				graphicRenderer = new ClassFactory(RectangleRenderer);
+		}
+
+		/** @Private 
+		 * Called by super.updateDisplayList when the element is ready for layout.*/
+		override public function drawElement():void
+		{
+			if (isReadyForLayout() && _invalidatedElementGraphic)
+			{
+trace(getTimer(), "drawing isotype");
+				super.drawElement();
+				clearAll();
+
+				var xPos:Number, yPos:Number, zPos:Number = NaN;
+				var j:Object;
+	
+				var y0:Number = getYMinPosition();
+				var x0:Number = getXMinPosition();
+
+				var availableThickness:Number = NaN, finalThickness:Number = 0; 
+				if (scale2)
+				{
+					if (scale2 is IEnumerableScale)
+						availableThickness = scale2.size/IEnumerableScale(scale2).dataProvider.length * chart.thicknessRatio;
+					else if (scale2 is IEnumerableScale)
+						availableThickness = scale2.size / 
+								(INumerableScale(scale1).max - INumerableScale(scale2).min) * chart.thicknessRatio;
+				} 
+	
+				ggIndex = 0;
+	
+				var tmpDim1:String;
+				var innerBase1:Number;
+
+				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
+				{
+					var currentItem:Object = _dataItems[cursorIndex];
+					
+					var tmpArray:Array = (dim1 is Array) ? dim1 as Array : [String(dim1)];
+					
+					innerBase1 = 0;
+					j = currentItem[dim2];
+
+					for (var i:Number = 0; i<tmpArray.length; i++)
+					{
+		 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
+							gg = graphicsCollection.items[ggIndex];
+						else
+						{
+							gg = new DataItemLayout();
+							graphicsCollection.addItem(gg);
+						}
+						gg.target = this;
+						ggIndex++;
+	
+						tmpDim1 = tmpArray[i];
+						if (scale2)
+						{
+							yPos = scale2.getPosition(currentItem[dim2]);
+		
+							if (isNaN(availableThickness))
+		 						availableThickness = scale2.dataInterval * chart.thicknessRatio;
+						} 
+						
+						if (scale1)
+						{
+							if (_stackType == STACKED100)
+							{
+								x0 = scale1.getPosition(baseValues[j] + innerBase1);
+								xPos = scale1.getPosition(
+									baseValues[j] + Math.max(0,currentItem[tmpDim1] + innerBase1));
+							} else {
+								xPos = scale1.getPosition(currentItem[tmpDim1] + innerBase1);
+							}
+							dataFields["dim1"] = tmpArray[i];
+						}
+						
+						if (isNaN(yPos) || isNaN(xPos))
+						{
+							continue;	
+						}
+						
+						switch (_stackType)
+						{
+							case OVERLAID:
+								finalThickness = availableThickness;
+								yPos = yPos - availableThickness/2;
+								break;
+							case STACKED100:
+								finalThickness  = availableThickness;
+								yPos = yPos - availableThickness/2;
+								break;
+							case STACKED:
+								yPos = yPos + availableThickness/2 - availableThickness/_total * (_stackPosition + 1);
+								finalThickness  = availableThickness/_total;
+								break;
+						}
+						
+						var innerThickness:Number;
+						switch (_collisionType)
+						{
+							case OVERLAID:
+								innerThickness = finalThickness;
+								break;
+							case STACKED100:
+								innerThickness = finalThickness;
+								x0 = scale1.getPosition(innerBase1);
+								innerBase1 += currentItem[tmpDim1];
+								break;
+							case STACKED:
+								innerThickness = finalThickness/tmpArray.length;
+								yPos = yPos + innerThickness * i;
+								break;
+						}
+							
+						var scale2RelativeValue:Number = NaN;
+		
+						// TODO: fix stacked100 on 3D
+						if (scale3)
+						{
+							zPos = scale3.getPosition(currentItem[dim3]);
+							scale2RelativeValue = scale3.size - zPos;
+						}
+		
+						if (colorScale)
+						{
+							var col:* = colorScale.getPosition(currentItem[colorField]);
+							if (col is Number)
+								fill = new SolidFill(col);
+							else if (col is IGraphicsFill)
+								fill = col;
+						} 
+
+						var bounds:RegularRectangle = new RegularRectangle(x0, yPos, xPos -x0, innerThickness);
+						bounds.fill = fill;
+						bounds.alpha = 0;
+
+						createTTGG(currentItem, dataFields, xPos, yPos+innerThickness/2, scale2RelativeValue, 3);
+
+						if (dim3)
+						{
+							if (!isNaN(zPos))
+							{
+								gg = new DataItemLayout();
+								gg.target = this;
+								graphicsCollection.addItem(gg);
+								ttGG.z = gg.z = zPos;
+							} else
+								zPos = 0;
+						}
+						
+						if (_extendMouseEvents)
+						{
+							gg = ttGG;
+							gg.target = this;
+						}
+						gg.geometryCollection.addItem(bounds);
+						
+						var itmDisplay:DisplayObject;
+						if (itemRenderer != null)
+						{
+							itmDisplay = itemRenderer.newInstance();
+						}
+						var totalValue:Number;
+						if (direction == VERTICAL)
+						{
+							totalValue = currentItem[dim2];
+						} else {
+							totalValue = currentItem[dim1];
+						}
+						
+						var isoGeometries:Canvas = createIsoGeometries(itmDisplay, bounds, totalValue, rendererDataValue);
+						isoGeometries.width = bounds.width;
+						isoGeometries.height = bounds.height;
+						isoGeometries.x = bounds.x;
+						isoGeometries.y = bounds.y;
+						
+						addChildAt(isoGeometries,0);
+					}
+		
+					_invalidatedElementGraphic = false;
+				}
+	trace(getTimer(), "END drawing isotype");
+			}
+
+		}
+		
+		private function createIsoGeometries(displayObj:DisplayObject, bounds:RegularRectangle, totalValue:Number, unitValue:Number):Canvas
+		{
+			var isoGroup:Canvas = new Canvas();
+			isoGroup.verticalScrollPolicy = "off";
+			isoGroup.horizontalScrollPolicy = "off";
+			
+			var totalPixels:Number;
+			var actualRendererSize:Number;
+			if (direction == VERTICAL)
+			{
+				totalPixels = bounds.height;
+				actualRendererSize = displayObj.height;
+			} else {
+				totalPixels = bounds.width;
+				actualRendererSize = displayObj.width;
+			}
+			
+			var unitPixels:Number = totalPixels * unitValue/totalValue;
+			var resizingRatio:Number = actualRendererSize / unitPixels;
+			
+			displayObj.width /= resizingRatio;
+			displayObj.height /= resizingRatio;
+			
+			var numRepetitions:Number = Math.ceil(totalValue / unitValue);
+			for (var i:uint = 0; i<numRepetitions; i++)
+			{
+				var resizedItem:DisplayObject = itemRenderer.newInstance();
+				resizedItem.width = (displayObj.width > 0) ? displayObj.width : unitPixels;
+				resizedItem.height = (displayObj.height > 0) ? displayObj.height : unitPixels;
+				if (direction == VERTICAL)
+				{
+					resizedItem.y = resizedItem.height * i;
+					resizedItem.x = bounds.width/2 - resizedItem.width/2
+				} else {
+					resizedItem.x = resizedItem.width * i + (unitPixels-resizedItem.width)/2;
+					resizedItem.y = bounds.height/2 - resizedItem.height/2
+				}
+				
+				isoGroup.addChild(resizedItem);
+			}
+			return isoGroup;
+		}
+		
+		// Be sure to remove all children in case an item renderer is used
+		override public function clearAll():void
+		{
+			super.clearAll();
+			if (_itemRenderer)
+				for (var i:uint = 0; i<numChildren; )
+					removeChild(getChildAt(0));
+		}
+	}
+}
