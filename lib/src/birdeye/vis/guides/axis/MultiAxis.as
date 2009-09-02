@@ -12,6 +12,7 @@ package birdeye.vis.guides.axis
 	import com.degrafa.Surface;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
+	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.Polyline;
 	import com.degrafa.geometry.RasterText;
@@ -32,7 +33,7 @@ package birdeye.vis.guides.axis
 	 */
 	public class MultiAxis extends Surface implements IAxis
 	{
-		private var gg:GeometryComposition;
+		protected var gg:GeometryComposition;
 		
 		/** Set the axis line color.*/
 		protected var stroke:IGraphicsStroke;
@@ -56,6 +57,21 @@ package birdeye.vis.guides.axis
 		public function get position():String
 		{
 			return "elements";
+		}
+		
+		private var _gridType:String = "web";
+		public static const GRID_WEB:String = "web";
+		public static const GRID_CIRCLE:String = "circle";
+		
+		[Inspectable(enumeration="web,circle", defaultValue="web")]
+		public function set gridType(gt:String):void
+		{
+			_gridType = gt;	
+		}
+		
+		public function get gridType():String
+		{
+			return _gridType;
 		}
 		
 		private var _targets:Array = new Array();
@@ -243,12 +259,23 @@ package birdeye.vis.guides.axis
 	 					
 						//label.stroke = stroke;
 						label.fill = new SolidFill(colorLabel);
-						trace("filling " + colorLabel);
 		
 						label.x = labelPosition.x - (label.textWidth + 4)/2;
 						label.y = labelPosition.y;
 	
 						gg.geometryCollection.addItem(label);
+						
+						if (_gridType == MultiAxis.GRID_CIRCLE && i == 0)
+						{
+							var circle:Circle = new Circle();
+							circle.stroke = new SolidStroke(0x000000, .15);
+							circle.fill = null;
+							circle.radius = pos;
+							circle.centerX = coordinates.origin.x;
+							circle.centerY = coordinates.origin.y;
+							
+							gg.geometryCollection.addItem(circle);
+						}
 						
 	 				} 
 	 				
@@ -270,15 +297,18 @@ package birdeye.vis.guides.axis
 				}
 				
 				// draw lines between axes (the web)
-				var webStroke:SolidStroke = new SolidStroke(0x000000, .15);
-				for (i=0;i<web.length;i++)
+				if (_gridType == MultiAxis.GRID_WEB)
 				{
-						var poly:Polyline = new Polyline();
-						poly.autoClose = true;
-						poly.data = web[i];
-						poly.stroke = webStroke;
-						poly.fill = new SolidFill(0x000000, 0);					
-						gg.geometryCollection.addItem(poly);
+					var webStroke:SolidStroke = new SolidStroke(0x000000, .15);
+					for (i=0;i<web.length;i++)
+					{
+							var poly:Polyline = new Polyline();
+							poly.autoClose = true;
+							poly.data = web[i];
+							poly.stroke = webStroke;
+							poly.fill = new SolidFill(0x000000, 0);					
+							gg.geometryCollection.addItem(poly);
+					}
 				}
 			//}
 			}
