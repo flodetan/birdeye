@@ -46,6 +46,6 @@ package birdeye.vis.interfaces
 		 * so that all stacked100 elements fit into the chart.*/
 		function get maxStacked100():Number;
 		
-		function get columnWidthRate():Number;
+		function get thicknessRatio():Number;
 	}
 }
