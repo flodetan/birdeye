@@ -99,10 +99,10 @@ trace (getTimer(), "drawing column ele");
 				if (scale1)
 				{
 					if (scale1 is IEnumerableScale)
-						tmpSize = scale1.size/IEnumerableScale(scale1).dataProvider.length * chart.columnWidthRate;
+						tmpSize = scale1.size/IEnumerableScale(scale1).dataProvider.length * chart.thicknessRatio;
 					else if (scale1 is INumerableScale)
 						tmpSize = scale1.size / 
-								(INumerableScale(scale1).max - INumerableScale(scale1).min) * chart.columnWidthRate;
+								(INumerableScale(scale1).max - INumerableScale(scale1).min) * chart.thicknessRatio;
 
 					var constTmpSize:Number = tmpSize;
 				}
@@ -115,7 +115,7 @@ trace (getTimer(), "drawing column ele");
 			
 					var angleInterval:Number;
 					if (scale1) 
-						angleInterval = scale1.scaleInterval * chart.columnWidthRate;
+						angleInterval = scale1.scaleInterval * chart.thicknessRatio;
 						
 					switch (_stackType)
 					{

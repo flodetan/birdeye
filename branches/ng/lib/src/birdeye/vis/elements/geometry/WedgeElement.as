@@ -118,7 +118,7 @@ package birdeye.vis.elements.geometry
 				if (_total>0)
 				{
 					_innerRadius = radius/_total * _stackPosition; 
-					tmpRadius = _innerRadius + radius/_total * chart.columnWidthRate;
+					tmpRadius = _innerRadius + radius/_total * chart.thicknessRatio;
 				}
 	
 				var arcCenterX:Number = chart.origin.x - radius;
@@ -165,7 +165,7 @@ package birdeye.vis.elements.geometry
 								dataFields["sizeField"] = sizeField[i];
 							} else
 								_graphicRendererSize = sizeScale.getPosition(currentItem[sizeField]);
-							tmpRadius = _innerRadius + radius/_total * chart.columnWidthRate * _graphicRendererSize;
+							tmpRadius = _innerRadius + radius/_total * chart.thicknessRatio * _graphicRendererSize;
 						}
 
 						var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius, chart.origin);
