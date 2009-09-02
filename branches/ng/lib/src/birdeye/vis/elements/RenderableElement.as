@@ -27,7 +27,6 @@
 package birdeye.vis.elements
 {
 	import mx.core.IDataRenderer;
-	import mx.messaging.channels.StreamingAMFChannel;
 	
 	public class RenderableElement extends BaseElement implements IDataRenderer
 	{
