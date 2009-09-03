@@ -9,26 +9,64 @@
 	xmlns:axis="birdeye.vis.guides.axis.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
 	xmlns:sources="birdeye.vis.source.csv.*"
-	width="100%" height="100%" xmlns:data="birdeye.vis.data.*">
+	xmlns:data="birdeye.vis.data.*" backgroundColor="#333333"
+	width="100%" height="100%" >
 	
 	<mx:Script>
 		<![CDATA[
+		
+			import com.degrafa.paint.GradientStop;
+			import com.degrafa.core.IGraphicsFill;
+			import com.degrafa.paint.LinearGradientFill;
+		
 			private function colorFunction(dataValue:*, min:Number, max:Number, _size:Number):*
-			{
-				if (dataValue == "A")
-					return 0xff0000;
-				return 0x000000;
-			}
+				{
+					var val:Number = Number(dataValue);
+					var fillGradients:Array;
+					var alphaGradients:Array;
+					var fill:com.degrafa.core.IGraphicsFill = new LinearGradientFill();
+					
+					if (dataValue == "A")
+					{
+					fillGradients = [0xFFD700, 0xDAA520];
+					alphaGradients = [.7, .5];
+					} else {
+					fillGradients = [0xCCCCCC, 0x666666];
+					alphaGradients = [.7, .5];
+					}
+					
+					var grStop:GradientStop = new GradientStop(fillGradients[0])
+					grStop.alpha = alphaGradients[0];
+					var g:Array = new Array();
+					g.push(grStop);
+					
+					grStop = new GradientStop(fillGradients[1]);
+					grStop.alpha = alphaGradients[1];
+					g.push(grStop);
+					
+					LinearGradientFill(fill).gradientStops = g;
+					return fill;
+				}
 		]]>
 	</mx:Script>
 	
-	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" paddingTop="10" >
+    	
+    	<mx:HBox width="90%" height="150" verticalAlign="middle" horizontalAlign="center" borderColor="#666666" borderThickness="1" borderStyle="solid" >
+    		<mx:Label fontSize="14" text="Carte Figurative..." />
+    	</mx:HBox>
+    	
     	<!-- Survivor and City Chart -->
     	<coords:Cartesian id="survChart" width="90%" height="90%">
 			<coords:scales>
- 				<scales:Linear id="size" scaleValues="{[3,30]}"/>
+				<scales:Linear id="lat" dataValues="{[53.8,55.9]}" dataInterval="1"/>
+ 				<scales:Linear id="size" scaleValues="{[5,50]}"/>
 				<scales:Numeric id="col" f="colorFunction" />
 			</coords:scales>
+			<coords:guides>
+				<axis:Axis scale="{lat}" placement="right" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<grid:Grid scale2="{long}" color="0xcccccc" divideEnumerableScale="true"/>
+			</coords:guides>
     		 <coords:elements>
     		 	<elements:PathElement dataProvider="{survivors.dataProvider}" extendMouseEvents="true"
     		 		scale1="{long}" scale2="{lat}" alphaStroke="0"
@@ -41,7 +79,26 @@
     		 		graphicRendererSize="0" sizeLabel="14" colorFill="0xffffff" labelField="city" />
 			 </coords:elements>
     	</coords:Cartesian>
+    	
     	<!-- Tempurature Chart -->
+    	<coords:Cartesian id="tempChart" width="90%" height="30%">
+    		<coords:scales>
+ 				<scales:Linear id="long" dataValues="{[23,39]}" dataInterval="2"/>
+ 				<scales:Linear id="temperature" dataValues="{[-40,5]}" dataInterval="10"/>
+			</coords:scales>
+			<coords:guides>
+				<axis:Axis scale="{long}" placement="bottom"  colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{temperature}" placement="right" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<grid:Grid scale1="{temperature}" scale2="{long}" color="0xcccccc" divideEnumerableScale="true"/>
+			</coords:guides>
+    		 <coords:elements>
+    		 	<elements:LineElement dataProvider="{temperatures.dataProvider}" scale1="{long}" scale2="{temperature}" colorStroke="0xFFD700" weightStroke="2" dim1="lont" dim2="temp" labelField="date" />
+    		 	<elements:PointElement dataProvider="{temperatures.dataProvider}"
+    		 		scale1="{long}" scale2="{temperature}" dim1="lont" dim2="temp" 
+    		 		graphicRendererSize="0" sizeLabel="14" colorFill="0xffffff" labelField="date" />
+			 </coords:elements>
+    	</coords:Cartesian>
+    	
     	<legend:Legend direction="horizontal" width="100%" height="20" horizontalAlign="center">
     		<legend:LegendItem text="Advance" sizeRenderer="10" labelSize="14"
     			itemRenderer="birdeye.vis.guides.renderers.RectangleRenderer" fillColor="0xff0000"/>
@@ -50,20 +107,7 @@
     		<legend:LegendItem text="Temperature" sizeRenderer="10" labelSize="14"
     			itemRenderer="birdeye.vis.guides.renderers.LineRenderer" strokeWeight="5" strokeColor="0x0000ff"/>
     	</legend:Legend>
-    	<coords:Cartesian id="tempChart" width="90%" height="30%">
-    		<coords:scales>
- 				<scales:Linear id="lat" dataValues="{[53.5,56]}" dataInterval="1"/>
- 				<scales:Linear id="long" dataValues="{[22,40]}" dataInterval="2"/>
- 				<scales:Linear id="temperature" dataValues="{[-40,5]}" dataInterval="10"/>
-			</coords:scales>
-			<coords:guides>
-				<axis:Axis scale="{long}" placement="bottom"  colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
-				<axis:Axis scale="{temperature}" placement="right" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
-			</coords:guides>
-    		 <coords:elements>
-    		 	<elements:LineElement dataProvider="{temperatures.dataProvider}" scale1="{long}" scale2="{temperature}" colorStroke="0x0000ff" weightStroke="10" dim1="lont" dim2="temp" labelField="date" />
-			 </coords:elements>
-    	</coords:Cartesian>
+    	
     </mx:VBox>
 
 	<sources:CSVTXT id="csvTemp" fieldSeperator=";" url="views/classics/data/Minard-Temp.csv">

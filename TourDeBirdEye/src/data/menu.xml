@@ -5,71 +5,71 @@
                 		<node label="Bar" classRef="views.cartesian.BarChart" />
                 		<node label="Bubble" classRef="views.cartesian.BubbleChart" />
                 		<node label="Column" classRef="views.cartesian.ColumnChart" />
-                		<node label="Line" classRef="views/cartesian/LineChart.swf" />
-                		<node label="Scatter" classRef="views/cartesian/ScatterChart.swf" />
-                		<node label="Composite" classRef="views/cartesian/CompositeChart.swf" />
-                		<node label="Multi-Axis" classRef="views/cartesian/MultiAxisChart.swf" />
-                		<node label="Stacking" classRef="views/cartesian/StackingChart.swf" />
+                		<node label="Line" classRef="views.cartesian.LineChart" />
+                		<node label="Scatter" classRef="views.cartesian.ScatterChart" />
+                		<node label="Composite" classRef="views.cartesian.CompositeChart" />
+                		<node label="Multi-Axis" classRef="views.cartesian.MultiAxisChart" />
+                		<node label="Stacking" classRef="views.cartesian.StackingChart" />
                 </node>
                 <node label="Polar">
-                		<node label="Radar" classRef="views/polar/RadarChart.swf"/>
-                		<node label="Pie" classRef="views/polar/PieChart.swf" />
-                		<node label="Sunburst" classRef="views/polar/SunburstChart.swf" />
-                		<node label="Coxcomb" classRef="views/polar/CoxcombChart.swf" />
-                		<node label="Composite" classRef="views/polar/CompositeChart.swf" />
-                		<node label="Multi-Axis" classRef="views/polar/MultiAxisChart.swf" />
-                		<node label="Stacking" classRef="views/polar/StackingChart.swf" />
+                		<node label="Radar" classRef="views.polar.RadarChart"/>
+                		<node label="Pie" classRef="views.polar.PieChart" />
+                		<node label="Sunburst" classRef="views.polar.SunburstChart" />
+                		<node label="Coxcomb" classRef="views.polar.CoxcombChart" />
+                		<node label="Composite" classRef="views.polar.CompositeChart" />
+                		<node label="Multi-Axis" classRef="views.polar.MultiAxisChart" />
+                		<node label="Stacking" classRef="views.polar.StackingChart" />
                 </node>
                 <node label="Facets">
 	                	<node label="Barley" classRef="views.facets.Barley" />
-                		<node label="Plot" classRef="views/facets/PlotChart.swf" />
-                		<node label="Radar" classRef="views/facets/RadarChart.swf" />
+                		<node label="Plot" classRef="views.facets.PlotChart" />
+                		<node label="Radar" classRef="views.facets.RadarChart" />
                 </node>
                 <node label="MicroCharts">
-                		<node label="Sampler" classRef="views/micro/MicroChart.swf"/>
+                		<node label="Sampler" classRef="views.micro.MicroChart"/>
                 </node>
                 <node label="Schemas">
-                		<node label="Box" classRef="views/schemas/BoxChart.swf"/>
-                		<node label="Bullet" classRef="views/schemas/BulletChart.swf"/>
+                		<node label="Box" classRef="views.schemas.BoxChart"/>
+                		<node label="Bullet" classRef="views.schemas.BulletChart"/>
                 		<node label="Isotype" classRef="views.schemas.Isotype"/>
                 </node>
                 <node label="Examples">
-                		<node label="Events"/>
-                		<node label="Effects"/>
-                		<node label="Graphic Renderers"/>
-                		<node label="Item Renderers"/>
+                		<node label="Events" classRef="views.examples.Events" />
+                		<node label="Effects" classRef="views.examples.Effects" />
+                		<node label="Graphic Renderers" classRef="views.examples.GraphicRenderers" />
+                		<node label="Item Renderers" classRef="views.examples.ItemRenderers" />
                 </node>
             </node>
             <node label="Maps">
-                <node label="Vector" classRef="views/maps/VectorMap.swf" />
-                <node label="Choropleth" classRef="views/maps/ChoroplethMap.swf" />
+                <node label="Vector" classRef="views.maps.VectorMap" />
+                <node label="Choropleth" classRef="views.maps.ChoroplethMap" />
                 <node label="Cartogram" >
-                	<node label="Dorling" classRef="views/maps/DorlingMap.swf" />
-                	<node label="Non-contiguous" classRef="views/maps/NoncontiguousMap.swf" />
-                	<node label="Contiguous" classRef="views/maps/ContiguousMap.swf" />
+                	<node label="Dorling" classRef="views.maps.DorlingMap" />
+                	<node label="Non-contiguous" classRef="views.maps.NoncontiguousMap" />
+                	<node label="Contiguous" classRef="views.maps.ContiguousMap" />
                 </node>
-                <node label="Symbolization" classRef="views/maps/SymbolizationMap.swf" />
-                <node label="Simplification" classRef="views/maps/SimplificationMap.swf" />
-                <node label="KML" classRef="views/maps/KMLMap.swf" />
-                <node label="SHP" classRef="views/maps/SHPMap.swf" />
+                <node label="Symbolization" classRef="views.maps.SymbolizationMap" />
+                <node label="Simplification" classRef="views.maps.SimplificationMap" />
+                <node label="KML" classRef="views.maps.KMLMap" />
+                <node label="SHP" classRef="views.maps.SHPMap" />
             </node>
             <node label="Graphs">
-                <node label="SingleCycle" classRef="views/graphs/SingleCycleGraph.swf"  />
-                <node label="Balloon" classRef="views/graphs/BalloonGraph.swf" />
-                <node label="Concentric" classRef="views/graphs/ConcentricGraph.swf" />
-                <node label="Parent-Centered" classRef="views/graphs/ParentCenteredGraph.swf" />
-                <node label="MDS" classRef="views/graphs/MDSGraph.swf" />
-                <node label="Force-Directed" classRef="views/graphs/ForceDirectedGraph.swf" />
-                <node label="Hyperbolic" classRef="views/graphs/HyperbolicGraph.swf" />
-                <node label="Packing-Models" classRef="views/graphs/PackingModelGraph.swf" />
-                <node label="Node Renderers" classRef="views/graphs/NodeRendererGraph.swf" />
-                <node label="Edge Renderers" classRef="views/graphs/EdgeRendererGraph.swf" />
+                <node label="SingleCycle" classRef="views.graphs.SingleCycleGraph"  />
+                <node label="Balloon" classRef="views.graphs.BalloonGraph" />
+                <node label="Concentric" classRef="views.graphs.ConcentricGraph" />
+                <node label="Parent-Centered" classRef="views.graphs.ParentCenteredGraph" />
+                <node label="MDS" classRef="views.graphs.MDSGraph" />
+                <node label="Force-Directed" classRef="views.graphs.ForceDirectedGraph" />
+                <node label="Hyperbolic" classRef="views.graphs.HyperbolicGraph" />
+                <node label="Packing-Models" classRef="views.graphs.PackingModelGraph" />
+                <node label="Node Renderers" classRef="views.graphs.NodeRendererGraph" />
+                <node label="Edge Renderers" classRef="views.graphs.EdgeRendererGraph" />
                 
             </node>
             <node label="The Classics">
                 <node label="Minard" >
                 	<node label="Napoleon March" classRef="views.classics.NapoleonMarch" />
-                	<node label="Carte Viande" classRef="views/classics/CarteViande.swf" />
+                	<node label="Carte Viande" classRef="views.classics.CarteViande" />
                 </node>
                 <node label="Playfair" >
                 	<node label="temp" />

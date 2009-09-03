@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:guides="birdeye.vis.guides.legend.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
+	xmlns:axis="birdeye.vis.guides.axis.*"
+	xmlns:sources="birdeye.vis.source.csv.*"
+	xmlns:data="birdeye.vis.data.*"
+	backgroundColor="#3f3f3f" 
+	width="100%" height="100%" horizontalAlign="center" >
+	
+	<mx:Script>
+		<![CDATA[
+
+			import mx.collections.ArrayCollection;
+			import mx.core.IToolTip;
+			import mx.controls.Alert;
+			import birdeye.vis.data.DataItemLayout;
+			import birdeye.util.EffectsUtil;
+			
+			private var subject:Array;
+			
+			
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = dataFields["dim1"] + ": " + currDatatip[dataFields["dim1"]];
+				tt += '\n' + dataFields["dim2"] + ": " + currDatatip[dataFields["dim2"]];
+				if (dataFields["sizeField"] != null)
+					tt += '\n' + dataFields["sizeField"] + ": " + currDatatip[dataFields["sizeField"]];
+				return  tt;
+			}
+            
+		]]>
+	</mx:Script>
+		<sources:CSVTXT id="csvTemp" fieldSeperator=";" url="data/simpleData.csv">
+		<sources:dataProviders>
+			<data:DataSet id="records" fields="{['category','A','B','C']}"/>
+		</sources:dataProviders>
+		</sources:CSVTXT>
+		
+		<coords:Cartesian id="bc" width="90%" height="90%" showDataTips="true" dataTipFunction="dtFunc" collisionType="stacked" >
+			<coords:scales>
+		    	<scales:Category id="c" categoryField="category" />
+		    	<scales:Linear id="l" />
+			</coords:scales>
+			<coords:guides>
+				<axis:Axis scale="{c}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{l}" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<grid:Grid scale1="{l}" scale2="{c}" />
+	 		</coords:guides>
+	    	 <coords:elements>
+			 	<elements:BarElement dataProvider="{records.dataProvider}" scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="A" styleName="grad1" dim2="category" displayName="A" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
+			 	<elements:BarElement dataProvider="{records.dataProvider}" scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="B" styleName="grad3" dim2="category" displayName="B" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
+			 	<elements:BarElement dataProvider="{records.dataProvider}" scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="C" styleName="grad5" dim2="category" displayName="C" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
+			 </coords:elements>
+		</coords:Cartesian>
+		<guides:Legend dataProvider="{bc}" direction="horizontal" />	
+	
+</mx:VBox>
+
