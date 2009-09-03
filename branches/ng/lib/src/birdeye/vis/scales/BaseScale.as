@@ -128,6 +128,7 @@ package birdeye.vis.scales
 		/** Set the direction of the scale. A positive direction refers to left->right for
 		 * x axes, or down->up for y axes. Negative refers to right->left for x axes and 
 		 * up->down for y axes.*/
+		 [Inspectable(enumeration="positive,negative")]
 		public function set direction(val:String):void
 		{
 			_direction = val;
