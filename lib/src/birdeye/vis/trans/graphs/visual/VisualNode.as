@@ -116,8 +116,8 @@ package birdeye.vis.trans.graphs.visual
 		{
 			const v:DisplayObject = view;
 			if (v) {
-				_x = v.x + v.width/2;
-				_y = v.y + v.height/2;
+				_x = v.x + v.width * v.scaleX/2;
+				_y = v.y + v.height * v.scaleY/2;
 			}
 		}
 
