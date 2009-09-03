@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="70" height="103" alpha="1" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+	<mx:Image source="views/schemas/isotypes/girl.png" width="100%" height="100%" alpha=".9" horizontalAlign="right" verticalAlign="middle"/>
+	
+</mx:VBox>
