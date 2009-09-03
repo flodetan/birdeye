@@ -114,6 +114,7 @@
 		}
 		
 		protected var _isMasked:Boolean = false;
+		[Inspectable(enumeration="true,false")]
 		public function set isMasked(val:Boolean):void
 		{
 			_isMasked = val;
