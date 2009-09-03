@@ -300,7 +300,7 @@ trace(getTimer(), "drawing isotype");
 					bounds.fill = fill;
 					bounds.alpha = 0;
 
-					createTTGG(currentItem, dataFields, xPos, yPos+innerThickness/2, scale2RelativeValue, 3);
+					createTTGG(currentItem, dataFields, xPos, yPos+innerThickness/2, scale2RelativeValue, 3, i);
 
 					if (dim3)
 					{
@@ -466,7 +466,7 @@ trace(getTimer(), "drawing isotype");
 					bounds.fill = fill;
 					bounds.alpha = 0;
 
-					createTTGG(currentItem, dataFields, xPos+innerThickness/2, yPos, scale2RelativeValue, 3);
+					createTTGG(currentItem, dataFields, xPos+innerThickness/2, yPos, scale2RelativeValue, 3, i);
 
 					if (dim3)
 					{
