@@ -135,17 +135,17 @@ trace(getTimer(), "drawing isotype");
 		private function createIsoGeometries(displayObj:DisplayObject, bounds:RegularRectangle, totalValue:Number, unitValue:Number):Canvas
 		{
 			var isoGroup:Canvas = new Canvas();
-			isoGroup.verticalScrollPolicy = "off";
-			isoGroup.horizontalScrollPolicy = "off";
-			
+  			isoGroup.verticalScrollPolicy = "off";
+			isoGroup.horizontalScrollPolicy = "off"; 
+ 			
 			var totalPixels:Number;
 			var actualRendererSize:Number;
 			if (direction == VERTICAL)
 			{
-				totalPixels = bounds.height;
+				totalPixels = Math.abs(bounds.height);
 				actualRendererSize = displayObj.height;
 			} else {
-				totalPixels = bounds.width;
+				totalPixels = Math.abs(bounds.width);
 				actualRendererSize = displayObj.width;
 			}
 			
@@ -163,11 +163,17 @@ trace(getTimer(), "drawing isotype");
 				resizedItem.height = (displayObj.height > 0) ? displayObj.height : unitPixels;
 				if (direction == VERTICAL)
 				{
-					resizedItem.y = resizedItem.height * i;
 					resizedItem.x = bounds.width/2 - resizedItem.width/2
+					if (scale2.direction == BaseScale.POSITIVE)
+						resizedItem.y = resizedItem.height * i;
+					else 
+						resizedItem.y = resizedItem.height * i - totalPixels;
 				} else {
-					resizedItem.x = resizedItem.width * i + (unitPixels-resizedItem.width)/2;
 					resizedItem.y = bounds.height/2 - resizedItem.height/2
+					if (scale1.direction == BaseScale.POSITIVE)
+						resizedItem.x = resizedItem.width * i + (unitPixels-resizedItem.width)/2;
+					else 
+						resizedItem.x = totalPixels - (resizedItem.width * (i+1) + (unitPixels-resizedItem.width)/2);
 				}
 				
 				isoGroup.addChild(resizedItem);
@@ -330,9 +336,12 @@ trace(getTimer(), "drawing isotype");
 					totalValue = currentItem[tmpDim1];
 					
 					var isoGeometries:Canvas = createIsoGeometries(itmDisplay, bounds, totalValue, rendererDataValue);
-					isoGeometries.width = bounds.width;
-					isoGeometries.height = bounds.height;
-					isoGeometries.x = bounds.x;
+					isoGeometries.width = Math.abs(bounds.width);
+					isoGeometries.height = Math.abs(bounds.height);
+					if (scale1.direction == BaseScale.POSITIVE)
+						isoGeometries.x = bounds.x;
+					else
+						isoGeometries.x = width-Math.abs(bounds.width);
 					isoGeometries.y = bounds.y;
 					
 					addChildAt(isoGeometries,0);
