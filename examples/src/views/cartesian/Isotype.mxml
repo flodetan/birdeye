@@ -57,22 +57,32 @@
 	
 		<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
 		
-		<coords:Cartesian id="bc" width="90%" height="90%" thicknessRatio="1" dataProvider="{dt}" showDataTips="true" collisionType="stacked" dataTipFunction="dtFunc">
+		<coords:Cartesian id="bc" width="90%" height="90%" 
+			thicknessRatio=".5" dataProvider="{dt}" showDataTips="true" 
+			dataTipFunction="dtFunc">
 			<coords:scales>
 		    	<scales:Category id="c" categoryField="subject" />
 		    	<scales:Linear id="l" />
+		    	<scales:Category id="c1" categoryField="subject" />
+		    	<scales:Linear id="l1" direction="negative"/>
 			</coords:scales>
 			<coords:guides>
-				<axis:Axis scale="{c}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
-				<axis:Axis scale="{l}" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{c}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{l}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{c1}" placement="right" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{l1}" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
 	 		</coords:guides>
 	    	 <coords:elements>
-			 	<elements:IsotypeElement itemRenderer="views.itemRenderers.Image" rendererDataValue="5"
-			 		scale1="{l}" scale2="{c}" extendMouseEvents="true" 
-			 		dim1="R1" styleName="grad1" dim2="subject" displayName="R1"/>
+			 	<elements:IsotypeElement direction="vertical" collisionType="stacked" 
+			 		itemRenderer="views.itemRenderers.Image1" rendererDataValue="5"
+			 		scale1="{c}" scale2="{l}" extendMouseEvents="true" 
+			 		dim1="subject" styleName="grad1" dim2="R1"/>
+			 	<elements:IsotypeElement direction="horizontal"
+			 		itemRenderer="views.itemRenderers.Image" rendererDataValue="5"
+			 		scale1="{l1}" scale2="{c1}" extendMouseEvents="true" 
+			 		dim1="R2" collisionType="stacked" styleName="grad1" dim2="subject"/>
 			 </coords:elements>
 		</coords:Cartesian>
-		<guides:Legend dataProvider="{bc}" direction="horizontal" />	
 		</mx:VBox>
 	</mx:HBox>
 </mx:VBox>
