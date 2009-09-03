@@ -7,68 +7,19 @@
 	xmlns:grid="birdeye.vis.guides.grid.*"
 	xmlns:axis="birdeye.vis.guides.axis.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
+	xmlns:sources="birdeye.vis.source.csv.*"
+	xmlns:data="birdeye.vis.data.*"
 	horizontalAlign="center" verticalAlign="bottom"
 	width="100%" height="100%" backgroundColor="#3f3f3f"
-	preinitialize="init()">
+	>
 
-<mx:Script>
-		<![CDATA[
-			import __AS3__.vec.Vector;
-			import flash.utils.getTimer;
-	    	import mx.collections.ArrayCollection;
-	    	import com.shortybmc.data.parser.CSV;
-	
-			private var csv:CSV;
-			private function init():void
-			{
-				csv = new CSV(new URLRequest('data/sampleData1.csv'));
-				csv.fieldSeperator = ';';
-				csv.addEventListener(Event.COMPLETE, completeHandler);
-			}
-			// Sample data fields: continent	Sum of gdp_total	Sum of population	Sum of total_area
-
-
-			
-			[Bindable]
-			private var filter:String = "";
-			
-			[Bindable]
-			private var dp:Vector.<Object>;
-			private function completeHandler(e:Event):void
-			{
-				filterCountryName(filter);
-			}
-			
-			private function filterCountryName(val:String):void
-			{
-				filter = val;
-				var tmpDP:Vector.<Object> = new Vector.<Object>();
-				var tmpRow:Array;
-				
-				var hd:Array = csv.header;
-				var pattern:RegExp = new RegExp(val, "i");
-				for (var i:Number = 0; i<csv.data.length; i++)
-				{
-					var row:Array = csv.getRecordSet(i);
-					if (row.length == hd.length)
-					{
-						tmpRow = [];
-						
-						if (row.indexOf("World") == -1 && String(row[0]).search(pattern) != -1)
-						{
-							for (var j:Number = 0; j<hd.length; j++)
-								tmpRow[hd[j]] = (row[j] == "NA") ? 0 : row[j];
-						
-							tmpDP.push(tmpRow)
-						}
-					}
-				}
-				dp = tmpDP;
-			}
-		]]>
-	</mx:Script>
-	
-		<coords:Cartesian id="lc3" width="90%" height="90%" dataProvider="{dp}" showDataTips="true" collisionType="stacked" >
+		<sources:CSVTXT id="csvTemp" fieldSeperator=";" url="data/sampleData1.csv">
+		<sources:dataProviders>
+			<data:DataSet id="records" fields="{['continent','Sum of gdp_total','Sum of population','Sum of total_area']}"/>
+		</sources:dataProviders>
+		</sources:CSVTXT>
+		
+		<coords:Cartesian id="lc3" width="90%" height="90%" showDataTips="true" collisionType="stacked" >
 			<coords:scales>
  				<scales:Category id="c1" categoryField="continent" />
  				<scales:Logarithm id="l1" dataInterval="10"/>
@@ -79,9 +30,9 @@
 	 			<grid:Grid scale1="{l1}" scale2="{c1}" color="0xcccccc" divideEnumerableScale="true"/>
 			</coords:guides>
     		 <coords:elements>
-			 	<elements:ColumnElement extendMouseEvents="true" id="a1" scale1="{c1}" scale2="{l1}" dim1="continent" dim2="Sum of gdp_total" styleName="grad1" displayName="GDP" />
-        		 <elements:ColumnElement extendMouseEvents="true" id="a2" scale1="{c1}" scale2="{l1}" dim1="continent" dim2="Sum of population" styleName="grad3" displayName="Population" />
-    		 	<elements:ColumnElement extendMouseEvents="true" id="a3" scale1="{c1}" scale2="{l1}" dim1="continent" dim2="Sum of total_area" styleName="grad5" displayName="Total Area" />
+			 	<elements:ColumnElement dataProvider="{records.dataProvider}" extendMouseEvents="true" id="a1" scale1="{c1}" scale2="{l1}" dim1="continent" dim2="Sum of gdp_total" styleName="grad1" displayName="GDP" />
+        		 <elements:ColumnElement dataProvider="{records.dataProvider}" extendMouseEvents="true" id="a2" scale1="{c1}" scale2="{l1}" dim1="continent" dim2="Sum of population" styleName="grad3" displayName="Population" />
+    		 	<elements:ColumnElement dataProvider="{records.dataProvider}" extendMouseEvents="true" id="a3" scale1="{c1}" scale2="{l1}" dim1="continent" dim2="Sum of total_area" styleName="grad5" displayName="Total Area" />
 			 </coords:elements>
     	</coords:Cartesian>
     	<legend:Legend dataProvider="{lc3}" direction="horizontal" />

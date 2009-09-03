@@ -9,7 +9,6 @@
     <mx:Script>
         <![CDATA[
         	include "main.as";
-        
         ]]>
     </mx:Script>
 	
