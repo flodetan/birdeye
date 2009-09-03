@@ -75,7 +75,7 @@ package birdeye.vis.trans.projections
 			const numberOfSteps:int = 4;
 			var stepSize:Number = (maxLat - minLat)/numberOfSteps;
 			_minX = calcX(minLat, minLong);
-			var maxX:Number = calcX(maxLat, minLong);
+			var maxX:Number = calcX(minLat, maxLong);
 			var lat:Number;
 			var i:int;
 			for (i = 1; i <= numberOfSteps; i++)
