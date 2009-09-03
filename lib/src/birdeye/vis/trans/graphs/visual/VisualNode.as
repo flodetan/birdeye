@@ -102,14 +102,12 @@ package birdeye.vis.trans.graphs.visual
 			const v:DisplayObject = view;
 			if (v) {
 				if (_visualGraph.useIntegerPositions) {
-					v.x = Math.round(_x);
-					v.y = Math.round(_y);
+					v.x = Math.round(_x - v.width * v.scaleX/2);
+					v.y = Math.round(_y - v.height * v.scaleY/2);
 				} else {
-					v.x = _x;
-					v.y = _y;
+					v.x = _x - v.width * v.scaleX/2;
+					v.y = _y - v.height * v.scaleY/2;
 				}
-				v.x -= v.width/2;
-				v.y -= v.height/2;
 				v.dispatchEvent(new VGraphEvent(VGraphEvent.VNODE_UPDATED));
 			}
 		}
@@ -118,8 +116,8 @@ package birdeye.vis.trans.graphs.visual
 		{
 			const v:DisplayObject = view;
 			if (v) {
-				_x = v.x;
-				_y = v.y;
+				_x = v.x + v.width/2;
+				_y = v.y + v.height/2;
 			}
 		}
 
