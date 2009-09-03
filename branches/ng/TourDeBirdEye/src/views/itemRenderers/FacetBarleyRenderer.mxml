@@ -9,33 +9,39 @@
 
 	<mx:Script>
 		<![CDATA[
+			import birdeye.vis.interfaces.scales.IScale;
 			import mx.collections.ArrayCollection;
 						
 			[Bindable]
 			public var dt:ArrayCollection;;
 
+			[Bindable]
+			private var scale1:IScale;
+			[Bindable]
+			private var scale2:IScale;
+		
 			private var subject:Array;
+			[Bindable]
 			private var showAxis:Boolean;
 			override public function set data(value:Object):void
 			{
 				super.data = value;
 				showAxis = data.showAxis;
-				dt = ArrayCollection(data.dataProvider);
+				dt = ArrayCollection(data.ac);
+				
+				scale1 = data.scales.l;
+				scale2 = data.scales.c;
 			} 
 		]]>
 	</mx:Script>
- 	<coords:Cartesian showDataTips="true" dataProvider="{dt}" width="100%" height="100%">
-	 	<coords:scales>
-	 	 	<scales:Category id="c" categoryField="variety"/>
-		 	<scales:Linear id="l" dataValues="[0,70]" dataInterval="10"/>       		 				
-	 	</coords:scales>
+ 	<coords:Cartesian showDataTips="true" dataProvider="{dt}" width="100%" height="100%" sharedScales="true" scales="{[scale1,scale2]}">
 	 	<coords:guides>
-	 		<axis:Axis scale="{c}" placement="right" colorLabel="0xbbbbbb" visible="{showAxis}" sizeLabel="9" />
-	 		<axis:Axis scale="{l}" placement="bottom" colorLabel="0xbbbbbb" sizeLabel="6" />	
+	 		<axis:Axis scale="{scale2}" placement="right" colorLabel="0xbbbbbb" visible="{showAxis}" sizeLabel="9" />
+	 		<axis:Axis scale="{scale1}" placement="bottom" colorLabel="0xbbbbbb" sizeLabel="6" />	
 	 	</coords:guides>
 	 	<coords:elements>
 	 		<elements:LineElement id="a1" 
-	 			scale1="{l}" scale2="{c}" 
+	 			scale1="{scale1}" scale2="{scale2}" 
 	 			dim1="yeld" dim2="variety" styleName="solid1"/>
 	 	</coords:elements>
 	 </coords:Cartesian>
