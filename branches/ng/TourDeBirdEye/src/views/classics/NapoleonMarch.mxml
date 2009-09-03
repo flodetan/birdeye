@@ -8,99 +8,11 @@
 	xmlns:grid="birdeye.vis.guides.grid.*"
 	xmlns:axis="birdeye.vis.guides.axis.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
-	initialize="init()"
-	width="100%" height="100%">
+	xmlns:sources="birdeye.vis.source.csv.*"
+	width="100%" height="100%" xmlns:data="birdeye.vis.data.*">
 	
 	<mx:Script>
 		<![CDATA[
-			import __AS3__.vec.Vector;
-			import flash.utils.getTimer;
-	    	import mx.collections.ArrayCollection;
-	    	import com.shortybmc.data.parser.CSV;
-	
-			private var csvSurv:CSV;
-			private var csvCities:CSV;
-			private var csvTemp:CSV;
-			private function init():void
-			{
-				csvSurv = new CSV(new URLRequest('views/classics/data/Minard-Survivors.csv'));
-				csvSurv.fieldSeperator = ";";
-				csvSurv.addEventListener(Event.COMPLETE, completeHandler);
-				csvCities = new CSV(new URLRequest('views/classics/data/Minard-City.csv'));
-				csvCities.fieldSeperator = ";";
-				csvCities.addEventListener(Event.COMPLETE, completeHandler);
-				csvTemp = new CSV(new URLRequest('views/classics/data/Minard-Temp.csv'));
-				csvTemp.fieldSeperator = ";";
-				csvTemp.addEventListener(Event.COMPLETE, completeHandler);
-			}
-
-			// Sample data fields: lonp,latp,survivors,direction,group
-			
-			[Bindable]
-			private var dp:Vector.<Object>;
-			private var numFiles:uint = 0;
-			private function completeHandler(e:Event):void
-			{
-				if (++numFiles == 3)
-				{
-					loadData();
-					survChart.active = true;
-				}
-			}
-			
-			[Bindable]
-			public var dt:ArrayCollection;;
-
-			[Bindable]
-			private var survivors:Vector.<Object> = new Vector.<Object>();
-			[Bindable]
-			private var cities:Vector.<Object> = new Vector.<Object>();
-			[Bindable]
-			private var temperatures:Vector.<Object> = new Vector.<Object>();
-			private function loadData():void
-			{
-				var row:Array;
-				var tmpVector:Vector.<Object> = new Vector.<Object>();
-				
-				for (i = 0; i<csvTemp.data.length; i++)
-				{
-					row = csvTemp.getRecordSet(i);
-					tmpVector.push({
-						lont: row[0],
-						temp: Number(row[1]),
-						date: row[2]
-						});
-				}
-				temperatures = tmpVector;
-				tempChart.active = true;
-				tmpVector = new Vector.<Object>();
-				
-				for (var i:Number = 0; i<csvSurv.data.length; i++)
-				{
-					row = csvSurv.getRecordSet(i);
-					tmpVector.push({
-						longp: row[0], 
-						latp: row[1],
-						survivors:row[2],
-						direction: row[3],
-						group: row[4]
-						});
-				}
-				survivors = tmpVector;
-				tmpVector = new Vector.<Object>();
-				
-				for (i = 0; i<csvCities.data.length; i++)
-				{
-					row = csvCities.getRecordSet(i);
-					tmpVector.push({
-						longc: row[0], 
-						latc: row[1],
-						city: row[2]
-						});
-				}
-				cities = tmpVector;
-				tmpVector = new Vector.<Object>();
-			}
 			private function colorFunction(dataValue:*, min:Number, max:Number, _size:Number):*
 			{
 				if (dataValue == "A")
@@ -112,20 +24,20 @@
 	
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
     	<!-- Survivor and City Chart -->
-    	<coords:Cartesian id="survChart" width="90%" height="90%" active="false">
+    	<coords:Cartesian id="survChart" width="90%" height="90%">
 			<coords:scales>
  				<scales:Linear id="size" scaleValues="{[3,30]}"/>
 				<scales:Numeric id="col" f="colorFunction" />
 			</coords:scales>
     		 <coords:elements>
-    		 	<elements:PathElement dataProvider="{survivors}" extendMouseEvents="true"
+    		 	<elements:PathElement dataProvider="{survivors.dataProvider}" extendMouseEvents="true"
     		 		scale1="{long}" scale2="{lat}" alphaStroke="0"
-    		 		dim1="longp" dim2="latp" styleName="grad1"
+    		 		dim1="lonp" dim2="latp" styleName="grad1"
     		 		sizeScale="{size}" sizeField="survivors" 
     		 		colorScale="{col}" colorField="direction"
     		 		splitField="group"/>
-    		 	<elements:PointElement dataProvider="{cities}" 
-    		 		scale1="{long}" scale2="{lat}" dim1="longc" dim2="latc" 
+    		 	<elements:PointElement dataProvider="{cities.dataProvider}"
+    		 		scale1="{long}" scale2="{lat}" dim1="lonc" dim2="latc" 
     		 		graphicRendererSize="0" sizeLabel="14" colorFill="0xffffff" labelField="city" />
 			 </coords:elements>
     	</coords:Cartesian>
@@ -138,7 +50,7 @@
     		<legend:LegendItem text="Temperature" sizeRenderer="10" labelSize="14"
     			itemRenderer="birdeye.vis.guides.renderers.LineRenderer" strokeWeight="5" strokeColor="0x0000ff"/>
     	</legend:Legend>
-    	<coords:Cartesian id="tempChart" width="90%" dataProvider="{temperatures}" height="30%" active="false">
+    	<coords:Cartesian id="tempChart" width="90%" height="30%">
     		<coords:scales>
  				<scales:Linear id="lat" dataValues="{[53.5,56]}" dataInterval="1"/>
  				<scales:Linear id="long" dataValues="{[22,40]}" dataInterval="2"/>
@@ -149,10 +61,24 @@
 				<axis:Axis scale="{temperature}" placement="right" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
 			</coords:guides>
     		 <coords:elements>
-    		 	<elements:LineElement scale1="{long}" scale2="{temperature}" colorStroke="0x0000ff" weightStroke="10" dim1="lont" dim2="temp" labelField="date" />
+    		 	<elements:LineElement dataProvider="{temperatures.dataProvider}" scale1="{long}" scale2="{temperature}" colorStroke="0x0000ff" weightStroke="10" dim1="lont" dim2="temp" labelField="date" />
 			 </coords:elements>
     	</coords:Cartesian>
     </mx:VBox>
-	
-	
+
+	<sources:CSVTXT id="csvTemp" fieldSeperator=";" url="views/classics/data/Minard-Temp.csv">
+		<sources:dataProviders>
+			<data:DataSet id="temperatures" fields="{['lont','temp','date']}"/>
+		</sources:dataProviders>
+	</sources:CSVTXT>
+	<sources:CSVTXT id="csvCities" fieldSeperator=";" url="views/classics/data/Minard-City.csv">
+		<sources:dataProviders>
+			<data:DataSet id="cities" fields="{['lonc','latc','city']}"/>
+		</sources:dataProviders>
+	</sources:CSVTXT>
+	<sources:CSVTXT id="csvSurv" fieldSeperator=";" url="views/classics/data/Minard-Survivors.csv">
+		<sources:dataProviders>
+			<data:DataSet id="survivors" fields="{['lonp','latp','survivors','direction','group']}"/>
+		</sources:dataProviders>
+	</sources:CSVTXT>
 </mx:Canvas>
