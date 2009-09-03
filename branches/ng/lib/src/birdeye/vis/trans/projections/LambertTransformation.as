@@ -27,12 +27,11 @@
 
 package birdeye.vis.trans.projections
 {
-	import flash.geom.Point;
 
 	public class LambertTransformation extends Transformation
 	{
-		private const _lstart:Number=0.5;		
-		private const _stdLat:Number=0.5;
+		private const _lstart:Number=0;		
+		private const _stdLat:Number=0;	
 		
 		public function LambertTransformation()
 		{
@@ -69,8 +68,17 @@ package birdeye.vis.trans.projections
 			var longRad:Number=convertDegToRad(longDeg);
 			var kayPrim:Number = calc_kayPrim(latRad,longRad);
 			
-			//x	= k'*cos(lat)*sin(long-_lstart)
-			return kayPrim * Math.cos(latRad)*Math.sin(longRad-_lstart);
+			if (isFinite(kayPrim)) {
+				//x	= k'*cos(lat)*sin(long-_lstart)
+				return kayPrim * Math.cos(latRad)*Math.sin(longRad-_lstart);
+			} else {	
+				//When longRad-lstart is pi and lat is 0, kayPrim becomes infinite and x goes towards the square root of 2
+				if (longRad >= 0) {
+					return 2;
+				} else {
+					return -2;	
+				}
+			}
 		}
 
 		public override function calcY(latDeg:Number, longDeg:Number):Number
@@ -79,8 +87,34 @@ package birdeye.vis.trans.projections
 			var longRad:Number=convertDegToRad(longDeg);
 			var kayPrim:Number = calc_kayPrim(latRad,longRad);
 			
-			//y	= k'[cos(stdLat)sin(lat)-sin(_stdLat)cos(lat)cos(long-_lstart)]
-			return kayPrim * (Math.cos(_stdLat)*Math.sin(latRad)-Math.sin(_stdLat)*Math.cos(latRad)*Math.cos(longRad-_lstart));						
+			if (isFinite(kayPrim)) {
+				//y	= k'[cos(stdLat)sin(lat)-sin(_stdLat)cos(lat)cos(long-_lstart)]
+				return kayPrim * (Math.cos(_stdLat)*Math.sin(latRad)-Math.sin(_stdLat)*Math.cos(latRad)*Math.cos(longRad-_lstart));
+			} else {	
+				//When longRad-lstart is pi and lat is 0, kayPrim becomes infinite and y goes towards 2
+				if (latRad >= 0) {
+					return 2;			
+				} else {
+					return -2;
+				}
+			}
 		}
+		
+		protected override function calcUnscaledSizeX(minLat:Number=-90, maxLat:Number=90, minLong:Number=-180, maxLong:Number=180):Number
+		{
+			if (minLat<=0 && maxLat>=0) {
+				var degLStart:Number=convertRadToDeg(_lstart);
+				_minX = calcX(0, minLong+degLStart);
+				var maxX:Number = calcX(0, maxLong+degLStart);
+				return Math.abs(maxX-_minX);
+			} else {
+				return super.calcUnscaledSizeX(minLat,maxLat,minLong,maxLong);
+			}
+		}
+
+		private function convertRadToDeg(rad:Number):Number {
+			return rad * 180 / Math.PI ;
+		}
+
 	}
 }
