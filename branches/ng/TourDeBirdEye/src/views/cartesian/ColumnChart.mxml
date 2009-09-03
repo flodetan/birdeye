@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
-	horizontalAlign="center" verticalAlign="middle"
 	xmlns:coords="birdeye.vis.coords.*"
 	xmlns:schema="birdeye.vis.elements.schema.*"
 	xmlns:elements="birdeye.vis.elements.geometry.*"
@@ -8,6 +7,7 @@
 	xmlns:grid="birdeye.vis.guides.grid.*"
 	xmlns:axis="birdeye.vis.guides.axis.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
+	horizontalAlign="center" verticalAlign="bottom"
 	width="100%" height="100%" backgroundColor="#3f3f3f"
 	preinitialize="init()">
 
@@ -68,7 +68,7 @@
 		]]>
 	</mx:Script>
 	
-		<coords:Cartesian id="lc3" width="90%" height="90%" dataProvider="{dp}" showDataTips="true" collisionType="stacked">
+		<coords:Cartesian id="lc3" width="90%" height="90%" dataProvider="{dp}" showDataTips="true" collisionType="stacked" >
 			<coords:scales>
  				<scales:Category id="c1" categoryField="continent" />
  				<scales:Logarithm id="l1" dataInterval="10"/>
