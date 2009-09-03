@@ -32,16 +32,12 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.guides.renderers.LineRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
-	import birdeye.vis.interfaces.scales.INumerableScale;
-	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.GraphicPoint;
 	import com.degrafa.IGeometry;
-	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.splines.BezierSpline;
-	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.geom.Rectangle;
@@ -72,6 +68,28 @@ package birdeye.vis.elements.geometry
 		{
 			_tension = val;
 			invalidatingDisplay();
+		}
+		
+		
+		
+		private var _autoClose:Boolean = true;
+		/**
+		 * Set if the line needs to be autoclosed in a polar chart.
+		 * Defaults to true.
+		 */
+		[Inspectable(enumeration="true,false")]
+		public function set autoClose(a:Boolean):void
+		{
+			if (a != _autoClose)
+			{
+				_autoClose = a;
+				invalidatingDisplay();
+			}
+		}
+		
+		public function get autoClose():Boolean
+		{
+			return _autoClose;
 		}
 		
 		public function LineElement()
@@ -206,11 +224,11 @@ trace (getTimer(), "drawing line ele");
  					bzSplines.tension = _tension;
 					bzSplines.stroke = stroke;
 					bzSplines.graphicsTarget = [this];
-					if (chart.coordType == VisScene.POLAR)
+					if (chart.coordType == VisScene.POLAR && autoClose)
 						bzSplines.autoClose = true;
 				}
 				
-				if (chart.coordType == VisScene.POLAR && !isNaN(firstX) && !isNaN(firstY) 
+				if (chart.coordType == VisScene.POLAR && autoClose && !isNaN(firstX) && !isNaN(firstY) 
 					&& !isNaN(scaleResults[POS1]) && !isNaN(scaleResults[POS2]))
 				{
 						line = new Line(scaleResults[POS1],scaleResults[POS2], firstX, firstY);
