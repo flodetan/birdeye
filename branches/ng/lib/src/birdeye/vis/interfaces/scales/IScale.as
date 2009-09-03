@@ -79,12 +79,10 @@ package birdeye.vis.interfaces.scales
 		function set dimension(dim:String):void
 		function get dimension():String;
 
-/*		/** Set the origin point of the scale.
-		function set origin(val:Point):void
-		function get origin():Point
-		
-		/** Set the angle of the scale.
-		function set angle(val:Number):void
-		function get angle():Number
- */	}
+		/** Set the direction of the scale. A positive direction refers to left->right for
+		 * x axes, or down->up for y axes. Negative refers to right->left for x axes and 
+		 * up->down for y axes.*/
+		function set direction(val:String):void
+		function get direction():String;
+	}
 }
