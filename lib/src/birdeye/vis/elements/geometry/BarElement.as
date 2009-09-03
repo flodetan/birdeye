@@ -38,7 +38,6 @@ package birdeye.vis.elements.geometry
 	
 	import com.degrafa.IGeometry;
 	import com.degrafa.core.IGraphicsFill;
-	import com.degrafa.geometry.Line;
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
@@ -93,9 +92,9 @@ trace(getTimer(), "drawing bar");
 				{
 					if (scale2 is IEnumerableScale)
 						size = scale2.size/IEnumerableScale(scale2).dataProvider.length * chart.thicknessRatio;
-					else if (scale2 is IEnumerableScale)
+					else if (scale2 is INumerableScale)
 						size = scale2.size / 
-								(INumerableScale(scale1).max - INumerableScale(scale2).min) * chart.thicknessRatio;
+								(INumerableScale(scale2).max - INumerableScale(scale2).min) * chart.thicknessRatio;
 				} 
 	
 				ggIndex = 0;
