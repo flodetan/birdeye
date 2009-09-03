@@ -69,7 +69,6 @@
             <node label="The Classics">
                 <node label="Minard" >
                 	<node label="Napoleon March" classRef="views.classics.NapoleonMarch" />
-                	<node label="Napoleon March with sources" classRef="views.classics.NapoleonMarchSOURCES" />
                 	<node label="Carte Viande" classRef="views/classics/CarteViande.swf" />
                 </node>
                 <node label="Playfair" >
