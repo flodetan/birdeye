@@ -190,6 +190,16 @@ trace (getTimer(), "drawing point ele");
 							DisplayObject(itmDisplay).height = heightAutosize;
 							DisplayObject(itmDisplay).width = widthAutosize;
 						} 
+						else if (!isNaN(widthAutosize) && !scale2)
+						{
+							DisplayObject(itmDisplay).height = this.height;
+							DisplayObject(itmDisplay).width = widthAutosize;							
+						}
+						else if (!isNaN(heightAutosize) && !scale1)
+						{
+							DisplayObject(itmDisplay).height = heightAutosize;
+							DisplayObject(itmDisplay).width = this.width;
+						}							
 						else if (sizeRenderer > 0)
 						{
 							DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = sizeRenderer;
