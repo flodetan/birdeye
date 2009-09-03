@@ -55,6 +55,12 @@ package birdeye.vis.elements.geometry
 		public function set direction(val:String):void
 		{
 			_direction = val;
+			if (direction == VERTICAL)
+				collisionScale = SCALE2;
+			else 
+				collisionScale = SCALE1;
+
+			invalidateProperties();
 			invalidateDisplayList();
 		}
 		public function get direction():String
@@ -94,6 +100,7 @@ package birdeye.vis.elements.geometry
 		public function IsotypeElement()
 		{
 			super();
+			direction = HORIZONTAL;
 			collisionScale = SCALE1;
 		}
 	
@@ -114,175 +121,12 @@ trace(getTimer(), "drawing isotype");
 				super.drawElement();
 				clearAll();
 
-				var xPos:Number, yPos:Number, zPos:Number = NaN;
-				var j:Object;
-	
-				var y0:Number = getYMinPosition();
-				var x0:Number = getXMinPosition();
+				if (direction == HORIZONTAL)
+					drawHorizontalLayout();
+				else
+					drawVerticalLayout();
 
-				var availableThickness:Number = NaN, finalThickness:Number = 0; 
-				if (scale2)
-				{
-					if (scale2 is IEnumerableScale)
-						availableThickness = scale2.size/IEnumerableScale(scale2).dataProvider.length * chart.thicknessRatio;
-					else if (scale2 is IEnumerableScale)
-						availableThickness = scale2.size / 
-								(INumerableScale(scale1).max - INumerableScale(scale2).min) * chart.thicknessRatio;
-				} 
-	
-				ggIndex = 0;
-	
-				var tmpDim1:String;
-				var innerBase1:Number;
-
-				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
-				{
-					var currentItem:Object = _dataItems[cursorIndex];
-					
-					var tmpArray:Array = (dim1 is Array) ? dim1 as Array : [String(dim1)];
-					
-					innerBase1 = 0;
-					j = currentItem[dim2];
-
-					for (var i:Number = 0; i<tmpArray.length; i++)
-					{
-		 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
-							gg = graphicsCollection.items[ggIndex];
-						else
-						{
-							gg = new DataItemLayout();
-							graphicsCollection.addItem(gg);
-						}
-						gg.target = this;
-						ggIndex++;
-	
-						tmpDim1 = tmpArray[i];
-						if (scale2)
-						{
-							yPos = scale2.getPosition(currentItem[dim2]);
-		
-							if (isNaN(availableThickness))
-		 						availableThickness = scale2.dataInterval * chart.thicknessRatio;
-						} 
-						
-						if (scale1)
-						{
-							if (_stackType == STACKED100)
-							{
-								x0 = scale1.getPosition(baseValues[j] + innerBase1);
-								xPos = scale1.getPosition(
-									baseValues[j] + Math.max(0,currentItem[tmpDim1] + innerBase1));
-							} else {
-								xPos = scale1.getPosition(currentItem[tmpDim1] + innerBase1);
-							}
-							dataFields["dim1"] = tmpArray[i];
-						}
-						
-						if (isNaN(yPos) || isNaN(xPos))
-						{
-							continue;	
-						}
-						
-						switch (_stackType)
-						{
-							case OVERLAID:
-								finalThickness = availableThickness;
-								yPos = yPos - availableThickness/2;
-								break;
-							case STACKED100:
-								finalThickness  = availableThickness;
-								yPos = yPos - availableThickness/2;
-								break;
-							case STACKED:
-								yPos = yPos + availableThickness/2 - availableThickness/_total * (_stackPosition + 1);
-								finalThickness  = availableThickness/_total;
-								break;
-						}
-						
-						var innerThickness:Number;
-						switch (_collisionType)
-						{
-							case OVERLAID:
-								innerThickness = finalThickness;
-								break;
-							case STACKED100:
-								innerThickness = finalThickness;
-								x0 = scale1.getPosition(innerBase1);
-								innerBase1 += currentItem[tmpDim1];
-								break;
-							case STACKED:
-								innerThickness = finalThickness/tmpArray.length;
-								yPos = yPos + innerThickness * i;
-								break;
-						}
-							
-						var scale2RelativeValue:Number = NaN;
-		
-						// TODO: fix stacked100 on 3D
-						if (scale3)
-						{
-							zPos = scale3.getPosition(currentItem[dim3]);
-							scale2RelativeValue = scale3.size - zPos;
-						}
-		
-						if (colorScale)
-						{
-							var col:* = colorScale.getPosition(currentItem[colorField]);
-							if (col is Number)
-								fill = new SolidFill(col);
-							else if (col is IGraphicsFill)
-								fill = col;
-						} 
-
-						var bounds:RegularRectangle = new RegularRectangle(x0, yPos, xPos -x0, innerThickness);
-						bounds.fill = fill;
-						bounds.alpha = 0;
-
-						createTTGG(currentItem, dataFields, xPos, yPos+innerThickness/2, scale2RelativeValue, 3);
-
-						if (dim3)
-						{
-							if (!isNaN(zPos))
-							{
-								gg = new DataItemLayout();
-								gg.target = this;
-								graphicsCollection.addItem(gg);
-								ttGG.z = gg.z = zPos;
-							} else
-								zPos = 0;
-						}
-						
-						if (_extendMouseEvents)
-						{
-							gg = ttGG;
-							gg.target = this;
-						}
-						gg.geometryCollection.addItem(bounds);
-						
-						var itmDisplay:DisplayObject;
-						if (itemRenderer != null)
-						{
-							itmDisplay = itemRenderer.newInstance();
-						}
-						var totalValue:Number;
-						if (direction == VERTICAL)
-						{
-							totalValue = currentItem[dim2];
-						} else {
-							totalValue = currentItem[dim1];
-						}
-						
-						var isoGeometries:Canvas = createIsoGeometries(itmDisplay, bounds, totalValue, rendererDataValue);
-						isoGeometries.width = bounds.width;
-						isoGeometries.height = bounds.height;
-						isoGeometries.x = bounds.x;
-						isoGeometries.y = bounds.y;
-						
-						addChildAt(isoGeometries,0);
-					}
-		
-					_invalidatedElementGraphic = false;
-				}
+				_invalidatedElementGraphic = false;
 	trace(getTimer(), "END drawing isotype");
 			}
 
@@ -330,7 +174,338 @@ trace(getTimer(), "drawing isotype");
 			}
 			return isoGroup;
 		}
+
+		private function drawHorizontalLayout():void
+		{
+			var xPos:Number, yPos:Number, zPos:Number = NaN;
+			var j:Object;
+
+			var x0:Number = getXMinPosition();
+
+			var availableThickness:Number = NaN, finalThickness:Number = 0; 
+			if (scale2)
+			{
+				if (scale2 is IEnumerableScale)
+					availableThickness = scale2.size/IEnumerableScale(scale2).dataProvider.length * chart.thicknessRatio;
+				else if (scale2 is INumerableScale)
+					availableThickness = scale2.size / 
+							(INumerableScale(scale2).max - INumerableScale(scale2).min) * chart.thicknessRatio;
+			} 
+
+			ggIndex = 0;
+
+			var tmpDim1:String;
+			var innerBase1:Number;
+
+			for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
+			{
+				var currentItem:Object = _dataItems[cursorIndex];
+				
+				var tmpArray:Array = (dim1 is Array) ? dim1 as Array : [String(dim1)];
+				
+				innerBase1 = 0;
+				j = currentItem[dim2];
+
+				for (var i:Number = 0; i<tmpArray.length; i++)
+				{
+	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
+						gg = graphicsCollection.items[ggIndex];
+					else
+					{
+						gg = new DataItemLayout();
+						graphicsCollection.addItem(gg);
+					}
+					gg.target = this;
+					ggIndex++;
+
+					tmpDim1 = tmpArray[i];
+					if (scale2)
+					{
+						yPos = scale2.getPosition(currentItem[dim2]);
+	
+						if (isNaN(availableThickness))
+	 						availableThickness = scale2.dataInterval * chart.thicknessRatio;
+					} 
+					
+					if (scale1)
+					{
+						if (_stackType == STACKED100)
+						{
+							x0 = scale1.getPosition(baseValues[j] + innerBase1);
+							xPos = scale1.getPosition(
+								baseValues[j] + Math.max(0,currentItem[tmpDim1] + innerBase1));
+						} else {
+							xPos = scale1.getPosition(currentItem[tmpDim1] + innerBase1);
+						}
+						dataFields[DIM1] = tmpArray[i];
+					}
+					
+					if (isNaN(yPos) || isNaN(xPos))
+					{
+						continue;	
+					}
+					
+					switch (_stackType)
+					{
+						case OVERLAID:
+							finalThickness = availableThickness;
+							yPos = yPos - availableThickness/2;
+							break;
+						case STACKED100:
+							finalThickness  = availableThickness;
+							yPos = yPos - availableThickness/2;
+							break;
+						case STACKED:
+							yPos = yPos + availableThickness/2 - availableThickness/_total * (_stackPosition + 1);
+							finalThickness  = availableThickness/_total;
+							break;
+					}
+					
+					var innerThickness:Number;
+					switch (_collisionType)
+					{
+						case OVERLAID:
+							innerThickness = finalThickness;
+							break;
+						case STACKED100:
+							innerThickness = finalThickness;
+							x0 = scale1.getPosition(innerBase1);
+							innerBase1 += currentItem[tmpDim1];
+							break;
+						case STACKED:
+							innerThickness = finalThickness/tmpArray.length;
+							yPos = yPos + innerThickness * i;
+							break;
+					}
+						
+					var scale2RelativeValue:Number = NaN;
+	
+					// TODO: fix stacked100 on 3D
+					if (scale3)
+					{
+						zPos = scale3.getPosition(currentItem[dim3]);
+						scale2RelativeValue = scale3.size - zPos;
+					}
+	
+					if (colorScale)
+					{
+						var col:* = colorScale.getPosition(currentItem[colorField]);
+						if (col is Number)
+							fill = new SolidFill(col);
+						else if (col is IGraphicsFill)
+							fill = col;
+					} 
+
+					var bounds:RegularRectangle = new RegularRectangle(x0, yPos, xPos -x0, innerThickness);
+					bounds.fill = fill;
+					bounds.alpha = 0;
+
+					createTTGG(currentItem, dataFields, xPos, yPos+innerThickness/2, scale2RelativeValue, 3);
+
+					if (dim3)
+					{
+						if (!isNaN(zPos))
+						{
+							gg = new DataItemLayout();
+							gg.target = this;
+							graphicsCollection.addItem(gg);
+							ttGG.z = gg.z = zPos;
+						} else
+							zPos = 0;
+					}
+					
+					if (_extendMouseEvents)
+					{
+						gg = ttGG;
+						gg.target = this;
+					}
+					gg.geometryCollection.addItem(bounds);
+					
+					var itmDisplay:DisplayObject;
+					if (itemRenderer != null)
+					{
+						itmDisplay = itemRenderer.newInstance();
+					}
+					var totalValue:Number;
+					totalValue = currentItem[tmpDim1];
+					
+					var isoGeometries:Canvas = createIsoGeometries(itmDisplay, bounds, totalValue, rendererDataValue);
+					isoGeometries.width = bounds.width;
+					isoGeometries.height = bounds.height;
+					isoGeometries.x = bounds.x;
+					isoGeometries.y = bounds.y;
+					
+					addChildAt(isoGeometries,0);
+				}
+			}
+		}
 		
+		private function drawVerticalLayout():void
+		{
+			var xPos:Number, yPos:Number, zPos:Number = NaN;
+			var j:Object;
+
+			var y0:Number = getYMinPosition();
+
+			var availableThickness:Number = NaN, finalThickness:Number = 0; 
+
+			if (scale1)
+			{
+				if (scale1 is IEnumerableScale)
+					availableThickness = scale1.size/IEnumerableScale(scale1).dataProvider.length * chart.thicknessRatio;
+				else if (scale1 is INumerableScale)
+					availableThickness = scale1.size / 
+							(INumerableScale(scale1).max - INumerableScale(scale1).min) * chart.thicknessRatio;
+			} 
+
+			ggIndex = 0;
+
+			var tmpDim2:String;
+			var innerBase2:Number;
+
+			for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
+			{
+				var currentItem:Object = _dataItems[cursorIndex];
+				
+				var tmpArray:Array = (dim2 is Array) ? dim2 as Array : [String(dim2)];
+				
+				innerBase2 = 0;
+				j = currentItem[dim1];
+
+				for (var i:Number = 0; i<tmpArray.length; i++)
+				{
+	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
+						gg = graphicsCollection.items[ggIndex];
+					else
+					{
+						gg = new DataItemLayout();
+						graphicsCollection.addItem(gg);
+					}
+					gg.target = this;
+					ggIndex++;
+
+					tmpDim2 = tmpArray[i];
+					if (scale1)
+					{
+						xPos = scale1.getPosition(currentItem[dim1]);
+	
+						if (isNaN(availableThickness))
+	 						availableThickness = scale1.dataInterval * chart.thicknessRatio;
+					} 
+					
+					if (scale2)
+					{
+						if (_stackType == STACKED100)
+						{
+							y0 = scale2.getPosition(baseValues[j] + innerBase2);
+							yPos = scale2.getPosition(
+								baseValues[j] + Math.max(0,currentItem[tmpDim2] + innerBase2));
+						} else {
+							yPos = scale2.getPosition(currentItem[tmpDim2] + innerBase2);
+						}
+						dataFields[DIM2] = tmpArray[i];
+					}
+					
+					if (isNaN(yPos) || isNaN(xPos))
+					{
+						continue;	
+					}
+					
+					switch (_stackType)
+					{
+						case OVERLAID:
+							finalThickness = availableThickness;
+							xPos = xPos - availableThickness/2;
+							break;
+						case STACKED100:
+							finalThickness  = availableThickness;
+							xPos = xPos - availableThickness/2;
+							break;
+						case STACKED:
+							xPos = xPos + availableThickness/2 - availableThickness/_total * (_stackPosition + 1);
+							finalThickness  = availableThickness/_total;
+							break;
+					}
+					
+					var innerThickness:Number;
+					switch (_collisionType)
+					{
+						case OVERLAID:
+							innerThickness = finalThickness;
+							break;
+						case STACKED100:
+							innerThickness = finalThickness;
+							y0 = scale2.getPosition(innerBase2);
+							innerBase2 += currentItem[tmpDim2];
+							break;
+						case STACKED:
+							innerThickness = finalThickness/tmpArray.length;
+							xPos = xPos + innerThickness * i;
+							break;
+					}
+						
+					var scale2RelativeValue:Number = NaN;
+	
+					// TODO: fix stacked100 on 3D
+					if (scale3)
+					{
+						zPos = scale3.getPosition(currentItem[dim3]);
+						scale2RelativeValue = scale3.size - zPos;
+					}
+	
+					if (colorScale)
+					{
+						var col:* = colorScale.getPosition(currentItem[colorField]);
+						if (col is Number)
+							fill = new SolidFill(col);
+						else if (col is IGraphicsFill)
+							fill = col;
+					} 
+
+					var bounds:RegularRectangle = new RegularRectangle(xPos, yPos, innerThickness, y0 -yPos);
+					bounds.fill = fill;
+					bounds.alpha = 0;
+
+					createTTGG(currentItem, dataFields, xPos+innerThickness/2, yPos, scale2RelativeValue, 3);
+
+					if (dim3)
+					{
+						if (!isNaN(zPos))
+						{
+							gg = new DataItemLayout();
+							gg.target = this;
+							graphicsCollection.addItem(gg);
+							ttGG.z = gg.z = zPos;
+						} else
+							zPos = 0;
+					}
+					
+					if (_extendMouseEvents)
+					{
+						gg = ttGG;
+						gg.target = this;
+					}
+					gg.geometryCollection.addItem(bounds);
+					
+					var itmDisplay:DisplayObject;
+					if (itemRenderer != null)
+					{
+						itmDisplay = itemRenderer.newInstance();
+					}
+					var totalValue:Number;
+					totalValue = currentItem[tmpDim2];
+
+					var isoGeometries:Canvas = createIsoGeometries(itmDisplay, bounds, totalValue, rendererDataValue);
+					isoGeometries.width = bounds.width;
+					isoGeometries.height = bounds.height;
+					isoGeometries.x = bounds.x;
+					isoGeometries.y = bounds.y;
+					
+					addChildAt(isoGeometries,0);
+				}
+			}
+		}
+
 		// Be sure to remove all children in case an item renderer is used
 		override public function clearAll():void
 		{
