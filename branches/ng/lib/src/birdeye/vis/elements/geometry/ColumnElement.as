@@ -278,8 +278,6 @@ trace (getTimer(), "drawing column ele");
 								gg.target = this;
 							}
 							
-			//				poly = renderer.getGeometry(bounds);
-			
  			 				if (_source)
 								poly = new RasterRenderer(bounds, _source);
 			 				else 
@@ -291,9 +289,6 @@ trace (getTimer(), "drawing column ele");
 							gg.geometryCollection.addItemAt(poly,0);  							
 						} else if (chart.coordType == VisScene.POLAR)
 						{
-	/* 						var arcCenterX:Number = chart.origin.x - pos2;
-							var arcCenterY:Number = chart.origin.y - pos2;
-	 */
 							var startAngle:Number; 
 							switch (_stackType) 
 							{
