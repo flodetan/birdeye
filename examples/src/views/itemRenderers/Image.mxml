@@ -1,2 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<mx:Image xmlns:mx="http://www.adobe.com/2006/mxml" source="./assets/icons/raster.gif" width="20" height="30" horizontalAlign="right" verticalAlign="middle"/>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="20" height="30">
+	<mx:Image source="./assets/icons/raster.gif" width="100%" height="100%" horizontalAlign="right" verticalAlign="middle"/>
+	
+</mx:VBox>
