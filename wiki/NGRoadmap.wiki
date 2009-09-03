@@ -27,4 +27,5 @@ These are a list of issues that need fixing before we can start on the next-next
 
 
 = Long term =
-Become independent of Degrafa!
+
+To generate vector graphics using an open standard such as SVG.
