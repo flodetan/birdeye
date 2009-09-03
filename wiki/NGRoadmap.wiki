@@ -1,0 +1,30 @@
+#summary The roadmap for the new generation BirdEye
+#labels Phase-Requirements
+= Introduction =
+This document has two goals, list the roadmap and the status on that roadmap<br>
+The roadmap is currently split in two major parts, short term and long term roadmap.<br>
+The statusses are not there yet.
+
+
+= Short term =
+These are a list of issues that need fixing before we can start on the next-next generation!
+
+
+
+== Charts ==
+ * multiaxis for cartesians
+ * a better collision approach that allows to style inner collision items
+ * datetime scale
+ * a proper form property to curve lines and areas
+ * axis itemRenderer (this is started) and interactivity
+ * Renderer rotation.
+ * unify Column/Bars into RectElement
+ * have the Wedge to work as both Bar/Columns for polar coords
+
+== Graphs ==
+
+== Maps ==
+
+
+= Long term =
+Become independent of Degrafa!
