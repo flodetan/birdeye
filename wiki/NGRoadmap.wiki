@@ -13,7 +13,7 @@ These are a list of issues that need fixing before we can start on the next-next
 
 == Charts ==
  * multiaxis for cartesians
- * extebd collisions to allow styling and inner property access 
+ * extend collisions to allow styling and inner property access 
  * datetime scale
  * a proper form property to curve lines and areas
  * axis itemRenderer (started) and interactivity
