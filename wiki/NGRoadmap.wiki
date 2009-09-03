@@ -13,13 +13,15 @@ These are a list of issues that need fixing before we can start on the next-next
 
 == Charts ==
  * multiaxis for cartesians
- * a better collision approach that allows to style inner collision items
+ * extebd collisions to allow styling and inner property access 
  * datetime scale
  * a proper form property to curve lines and areas
- * axis itemRenderer (this is started) and interactivity
- * Renderer rotation.
+ * axis itemRenderer (started) and interactivity
+ * renderer rotation.
  * unify Column/Bars into RectElement
  * have the Wedge to work as both Bar/Columns for polar coords
+ * AsDoc
+ * SVG export
 
 == Graphs ==
 
