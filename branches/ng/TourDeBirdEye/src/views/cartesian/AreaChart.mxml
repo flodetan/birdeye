@@ -66,7 +66,7 @@
     		<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4,a5])"/>
 		</mx:HBox>
     	
-    	<coords:Cartesian id="ac3" width="90%" height="90%" collisionType="stacked" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true">
+    	<coords:Cartesian id="ac3" width="90%" height="90%" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true">
  		<coords:scales>
  			<scales:Category categoryField="subject" id="c" />
  			<scales:Linear id="l"/>
@@ -77,11 +77,11 @@
  			<grid:Grid scale1="{l}" scale2="{c}" />
  		</coords:guides>
 		 <coords:elements>
-		 	<elements:AreaElement id="a1" collisionType="stacked" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l}" scale1="{c}" dim1="subject" dim2="R1" styleName="grad1" strokeAlpha=".5" displayName="R1"/>
-    		<elements:AreaElement id="a2" collisionType="stacked" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l}" scale1="{c}" dim1="subject" dim2="R2" styleName="grad2" strokeAlpha=".5" displayName="R2"/>
-    		<elements:AreaElement id="a3" collisionType="stacked" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l}" scale1="{c}" dim1="subject" dim2="R3" styleName="grad3" strokeAlpha=".5" displayName="R3"/>
-    		<elements:AreaElement id="a4" collisionType="stacked" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l}" scale1="{c}" dim1="subject" dim2="R4" styleName="grad4" strokeAlpha=".5" displayName="R4"/>
-    		<elements:AreaElement id="a5" collisionType="stacked" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l}" scale1="{c}" dim1="subject" dim2="R5" styleName="grad5" strokeAlpha=".5" displayName="R5"/>
+		 	<elements:AreaElement id="a1" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l}" scale1="{c}" dim1="subject" dim2="R1" styleName="grad1" strokeAlpha=".5" displayName="R1"/>
+    		<elements:AreaElement id="a2" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l}" scale1="{c}" dim1="subject" dim2="R2" styleName="grad2" strokeAlpha=".5" displayName="R2"/>
+    		<elements:AreaElement id="a3" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l}" scale1="{c}" dim1="subject" dim2="R3" styleName="grad3" strokeAlpha=".5" displayName="R3"/>
+    		<elements:AreaElement id="a4" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l}" scale1="{c}" dim1="subject" dim2="R4" styleName="grad4" strokeAlpha=".5" displayName="R4"/>
+    		<elements:AreaElement id="a5" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l}" scale1="{c}" dim1="subject" dim2="R5" styleName="grad5" strokeAlpha=".5" displayName="R5"/>
 		 </coords:elements>
 	</coords:Cartesian>
 

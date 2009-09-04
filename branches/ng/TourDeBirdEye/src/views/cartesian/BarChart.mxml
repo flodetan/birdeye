@@ -22,7 +22,7 @@
 		</sources:dataProviders>
 		</sources:CSVTXT>
 		
-		<coords:Cartesian id="bc" width="90%" height="90%" dataProvider="{records.dataProvider}" showDataTips="true" collisionType="stacked" >
+		<coords:Cartesian id="bc" width="90%" height="90%" dataProvider="{records.dataProvider}" showDataTips="true" collisionType="cluster" >
 			<coords:scales>
 		    	<scales:Category id="c" categoryField="category" />
 		    	<scales:Linear id="l" />
