@@ -36,7 +36,7 @@
 	</mx:Script>
  	<coords:Cartesian showDataTips="true" dataProvider="{dt}" width="100%" height="100%" sharedScales="true" scales="{[scale1,scale2]}">
 	 	<coords:guides>
-	 		<grid:Grid scale2="{scale2}"/>
+	 		<grid:Grid scale2="{scale2}" divideEnumerableScale="false"/>
 	 		<axis:Axis scale="{scale2}" placement="left" colorLabel="0xbbbbbb" sizeLabel="9" />
 	 		<axis:Axis scale="{scale1}" placement="bottom" colorLabel="0xbbbbbb" visible="{showAxis}" sizeLabel="10" />	
 	 	</coords:guides>
