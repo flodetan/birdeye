@@ -48,23 +48,8 @@ package birdeye.vis.elements.geometry
 	import mx.core.IDataRenderer;
 	import mx.core.IFactory;
 
-	public class PointElement extends StackElement implements IPositionableElement, IDataRenderer
+	public class PointElement extends StackElement implements IPositionableElement
 	{
-		private var _data:Object;
-		/**
-		 *  @private
-		 *  The data to render or edit.
-		 */
-		public function set data(value:Object):void
-		{
-			_data = value;
-			invalidateDisplayList();
-		}
-		public function get data():Object
-		{
-			return _data;
-		}
-		
 		private var _dataField:String;
 		/** Define the dataField used to catch the data to be passed to the itemRenderer.*/
 		public function set dataField(val:String):void
