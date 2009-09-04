@@ -105,6 +105,8 @@ package birdeye.vis.trans.projections
 		{
 			if (latLon is Number)
 				return projectX(_minLat, latLon, sizeX, _minLat, _maxLat, minLong, maxLong);
+			else if (latLon is String)
+				return projectX(_minLat, Number(latLon), sizeX, _minLat, _maxLat, minLong, maxLong);
 			else if (latLon is Pair)
 				return projectX(latLon.dim2, latLon.dim1, sizeX, _minLat, _maxLat, minLong, maxLong);
 			else 
@@ -115,6 +117,8 @@ package birdeye.vis.trans.projections
 		{
 			if (latLon is Number)
 				return projectY(latLon, _minLong, sizeY, minLat, maxLat, _minLong, _maxLong);
+			else if (latLon is String)
+				return projectY(Number(latLon), _minLong, sizeY, minLat, maxLat, _minLong, _maxLong);
 			else if (latLon is Pair)
 				return projectY(latLon.dim2, latLon.dim1, sizeY, minLat, maxLat, _minLong, _maxLong);
 			else 
