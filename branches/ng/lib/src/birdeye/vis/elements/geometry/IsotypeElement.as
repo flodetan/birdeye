@@ -165,7 +165,7 @@ trace(getTimer(), "drawing isotype");
 				{
 					resizedItem.x = bounds.width/2 - resizedItem.width/2
 					if (scale2.direction == BaseScale.POSITIVE)
-						resizedItem.y = resizedItem.height * i;
+						resizedItem.y = totalPixels - resizedItem.height * (i+1);
 					else 
 						resizedItem.y = resizedItem.height * i - totalPixels;
 				} else {
