@@ -7,7 +7,7 @@
 	xmlns:legend="birdeye.vis.guides.legend.*"
 	xmlns:facets="birdeye.vis.facets.*"
 	backgroundColor="#3f3f3f" 
-	xmlns:axis="birdeye.vis.guides.axis.*" xmlns:source="birdeye.vis.source.csv.*">
+	xmlns:axis="birdeye.vis.guides.axis.*" xmlns:source="birdeye.vis.source.csv.*" xmlns:grid="birdeye.vis.guides.grid.*">
 
 <mx:Script>
 		<![CDATA[
@@ -74,6 +74,7 @@
  				<scales:Category id="c2" categoryField="site"  />
 			</coords:scales>
 			<coords:guides>
+				<grid:Grid scale2="{c2}" divideEnumerableScale="true"/>
 				<axis:Axis scale="{c2}" placement="right" colorLabel="0xbbbbbb" fontLabel="tahoma" weightPointer="3" sizeLabel="12" />
 			</coords:guides>
     		 <coords:elements>
