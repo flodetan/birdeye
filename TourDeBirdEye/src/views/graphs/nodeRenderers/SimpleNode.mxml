@@ -9,7 +9,7 @@
     
         <!-- Creating fills. -->
         <degrafa:fills>
-            <paint:RadialGradientFill   id="redGradient"
+            <paint:LinearGradientFill   id="redGradient"
                                         angle="45"
                                         focalPointRatio=".5">
                 <paint:GradientStop alpha=".3"
@@ -18,7 +18,7 @@
                 <paint:GradientStop alpha=".8"
                                     ratio="1"
                                     color="#FF2300"/>
-            </paint:RadialGradientFill>
+            </paint:LinearGradientFill>
         </degrafa:fills>
         
         <!-- Creating a Geometry Group. -->
