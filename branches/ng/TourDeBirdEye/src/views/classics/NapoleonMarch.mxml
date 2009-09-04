@@ -76,7 +76,7 @@
     		 		splitField="group"/>
     		 	<elements:PointElement dataProvider="{cities.dataProvider}"
     		 		scale1="{long}" scale2="{lat}" dim1="lonc" dim2="latc" 
-    		 		graphicRendererSize="0" sizeLabel="14" colorFill="0xffffff" labelField="city" />
+    		 		graphicRendererSize="0" sizeLabel="14" colorLabel="0xffffff" labelField="city" />
 			 </coords:elements>
     	</coords:Cartesian>
     	
@@ -92,11 +92,9 @@
 				<grid:Grid scale1="{temperature}" scale2="{long}" color="0xcccccc" divideEnumerableScale="true"/>
 			</coords:guides>
     		 <coords:elements>
-    		 	<elements:LineElement dataProvider="{temperatures.dataProvider}" scale1="{long}" scale2="{temperature}" colorStroke="0xFFD700" weightStroke="2" dim1="lont" dim2="temp" labelField="date" />
-    		 	<elements:PointElement dataProvider="{temperatures.dataProvider}"
-    		 		scale1="{long}" scale2="{temperature}" dim1="lont" dim2="temp" 
-    		 		graphicRendererSize="0" sizeLabel="14" colorFill="0xffffff" labelField="date" />
-			 </coords:elements>
+    		 	<elements:LineElement dataProvider="{temperatures.dataProvider}" scale1="{long}" scale2="{temperature}" colorStroke="0xFFD700" weightStroke="2" dim1="lont" dim2="temp" 
+    		 		sizeLabel="14" colorLabel="0xffffff" labelField="date" />
+		 </coords:elements>
     	</coords:Cartesian>
     	<legend:Legend direction="horizontal" width="100%" height="20" horizontalAlign="center">
     		<legend:LegendItem text="Advance" sizeRenderer="10" labelSize="14"
