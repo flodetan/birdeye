@@ -52,7 +52,7 @@
     		<mx:Button label="Generate" click="createDT()"/>
 			<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4])"/>
 	</mx:HBox>
-		<polar:Polar id="rd" collisionType="stacked" showDataTips="true" dataProvider="{dt}" width="100%" height="100%" layout="radar">
+		<polar:Polar id="rd" collisionType="cluster" showDataTips="true" dataProvider="{dt}" width="100%" height="100%" layout="radar">
 			<polar:scales>
 				<scales:CategoryAngle id="c" categoryField="subject" subScale="birdeye.vis.scales.Linear"/>
 			</polar:scales>

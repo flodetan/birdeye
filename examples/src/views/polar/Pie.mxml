@@ -55,7 +55,7 @@
 
 <mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
     	<mx:Button label="Generate" click="createDT()"/>
-	<polar:Polar dataProvider="{dt}" width="100%" height="100%" thicknessRatio=".3" collisionType="stacked" dataTipFunction="dtFunc">
+	<polar:Polar dataProvider="{dt}" width="100%" height="100%" thicknessRatio=".3" collisionType="cluster" dataTipFunction="dtFunc">
 		<polar:scales>
 			<scales:Numeric id="l" scaleType="constant" />
 			<scales:PercentAngle id="a" size="270"/>

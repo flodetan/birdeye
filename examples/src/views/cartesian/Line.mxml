@@ -62,8 +62,8 @@
 				}
 				else 
 				{
- 					lc3.collisionType = "stacked100";
- 					lc2.collisionType = "stacked100";
+ 					lc3.collisionType = "stack";
+ 					lc2.collisionType = "stack";
 				}
 			}
 		]]>
@@ -75,7 +75,7 @@
     	<mx:HBox>
     		<mx:Button label="Generate" click="createDT()"/>
 			<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4,a5,a6,a7,a8,a9,a10])"/>
-			<mx:CheckBox label="Stacked100" selected="false" click="changeStack()"/>
+			<mx:CheckBox label="Stack" selected="false" click="changeStack()"/>
 		</mx:HBox>
 		<mx:HBox width="100%" height="100%">
 	    	<coords:Cartesian id="lc3" width="100%" height="100%" collisionType="overlaid" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true">
