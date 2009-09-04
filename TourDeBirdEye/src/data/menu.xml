@@ -7,6 +7,7 @@
                 		<node label="Column" classRef="views.cartesian.ColumnChart" />
                 		<node label="Line" classRef="views.cartesian.LineChart" />
                 		<node label="Scatter" classRef="views.cartesian.ScatterChart" />
+                		<node label="Dot Plot" classRef="views.cartesian.DotChart" />
                 		<node label="Composite" classRef="views.cartesian.CompositeChart" />
                 		<node label="Multi-Axis" classRef="views.cartesian.MultiAxisChart" />
                 		<node label="Stacking" classRef="views.cartesian.StackingChart" />
@@ -16,9 +17,9 @@
                 		<node label="Pie" classRef="views.polar.PieChart" />
                 		<node label="Sunburst" classRef="views.polar.SunburstChart" />
                 		<node label="Coxcomb" classRef="views.polar.CoxcombChart" />
-                		<node label="Composite" classRef="views.polar.CompositeChart" />
-                		<node label="Multi-Axis" classRef="views.polar.MultiAxisChart" />
-                		<node label="Stacking" classRef="views.polar.StackingChart" />
+                		<node label="Composite" classRef="views.polar.CompositePolarChart" />
+                		<node label="Multi-Axis" classRef="views.polar.MultiAxisPolarChart" />
+                		<node label="Stacking" classRef="views.polar.StackingPolarChart" />
                 </node>
                 <node label="Facets">
 	                	<node label="Barley" classRef="views.facets.Barley" />
@@ -26,7 +27,7 @@
                 		<node label="Radar" classRef="views.facets.RadarChart" />
                 </node>
                 <node label="MicroCharts">
-                		<node label="Sampler" classRef="views.micro.MicroChart"/>
+                		<node label="Sampler" classRef="views.micro.MicroCharts"/>
                 </node>
                 <node label="Schemas">
                 		<node label="Box" classRef="views.schemas.BoxChart"/>
@@ -61,6 +62,7 @@
                 <node label="MDS" classRef="views.graphs.MDSGraph" />
                 <node label="Force-Directed" classRef="views.graphs.ForceDirectedGraph" />
                 <node label="Hyperbolic" classRef="views.graphs.HyperbolicGraph" />
+                <node label="Tree" classRef="views.graphs.TreeGraph" />
                 <node label="Packing-Models" classRef="views.graphs.PackingModelGraph" />
                 <node label="Node Renderers" classRef="views.graphs.NodeRendererGraph" />
                 <node label="Edge Renderers" classRef="views.graphs.EdgeRendererGraph" />
@@ -72,7 +74,7 @@
                 	<node label="Carte Viande" classRef="views.classics.CarteViande" />
                 </node>
                 <node label="Playfair" >
-                	<node label="temp" />
+                	<node label="Prices, wages, and reigns" classRef="views.classics.PlayfairWheat" />
                 </node>
                 <node label="Nightingale" >
                 	<node label="Causes of Mortality" />
