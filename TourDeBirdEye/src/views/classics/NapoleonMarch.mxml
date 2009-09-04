@@ -98,14 +98,13 @@
     		 		graphicRendererSize="0" sizeLabel="14" colorFill="0xffffff" labelField="date" />
 			 </coords:elements>
     	</coords:Cartesian>
-    	
     	<legend:Legend direction="horizontal" width="100%" height="20" horizontalAlign="center">
     		<legend:LegendItem text="Advance" sizeRenderer="10" labelSize="14"
-    			itemRenderer="birdeye.vis.guides.renderers.RectangleRenderer" fillColor="0xff0000"/>
+    			itemRenderer="birdeye.vis.guides.renderers.RectangleRenderer" gradientColors="[0xFFD700, 0xDAA520]" gradientAlphas="[.7, .5]"/>
     		<legend:LegendItem text="Retreat" sizeRenderer="10" labelSize="14"
-    			itemRenderer="birdeye.vis.guides.renderers.RectangleRenderer" fillColor="0x000000"/>
+    			itemRenderer="birdeye.vis.guides.renderers.RectangleRenderer" gradientColors="[0xCCCCCC, 0x666666]" gradientAlphas="[.7, .5]"/>
     		<legend:LegendItem text="Temperature" sizeRenderer="10" labelSize="14"
-    			itemRenderer="birdeye.vis.guides.renderers.LineRenderer" strokeWeight="5" strokeColor="0x0000ff"/>
+    			itemRenderer="birdeye.vis.guides.renderers.LineRenderer" strokeWeight="2" strokeColor="0xFFD700"/>
     	</legend:Legend>
     	
     </mx:VBox>
