@@ -2,25 +2,13 @@
 		import mx.core.IContainer;
 		import mx.events.ListEvent;
 		
-		// Cartesian
 		import views.cartesian.AreaChart;
 		import views.cartesian.BarChart;
 		import views.cartesian.BubbleChart;
 		import views.cartesian.ColumnChart;
 		import views.classics.NapoleonMarch;
 		import views.facets.Barley;
-		import views.schemas.Isotype;
-		
-		// Polar
-		import views.polar.CoxcombChart;
-		import views.polar.PieChart;
-		import views.polar.RadarChart;
-		import views.polar.SunburstChart;
-		
-		// Micro
-		import views.micro.MicroCharts;
-		
-		// Graphs
+		import views.facets.Barley1;
 		import views.graphs.BalloonGraph;
 		import views.graphs.ConcentricGraph;
 		import views.graphs.EdgeRendererGraph;
@@ -32,17 +20,8 @@
 		import views.graphs.ParentCenteredGraph;
 		import views.graphs.SingleCycleGraph;
 		import views.graphs.TreeGraph;
-		
-		// Maps
-		import views.maps.ChoroplethMap;
-		import views.maps.ContiguousMap;
-		import views.maps.DorlingMap;
-		import views.maps.KMLMap;
-		import views.maps.NoncontiguousMap;
-		import views.maps.SHPMap;
-		import views.maps.SimplificationMap;
-		import views.maps.SymbolizationMap;
-		import views.maps.VectorMap;
+		import views.micro.MicroCharts;
+		import views.schemas.Isotype;
 		
 		
 		[Bindable]
@@ -51,7 +30,7 @@
         public var currentExampleInstance:IContainer;
 
 		private var unusefulArray:Array = [AreaChart, BarChart, ColumnChart, BubbleChart, 
-											NapoleonMarch, Barley, Isotype, MicroCharts,
+											NapoleonMarch, Barley, Barley1, Isotype, MicroCharts,
 											BalloonGraph, ConcentricGraph, HyperbolicGraph,
 											EdgeRendererGraph, ForceDirectedGraph, MDSGraph, NodeRendererGraph,
 											PackingModelGraph, ParentCenteredGraph, SingleCycleGraph, TreeGraph   ]; 
