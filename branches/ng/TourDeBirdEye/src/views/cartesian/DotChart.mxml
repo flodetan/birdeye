@@ -12,29 +12,34 @@
 	horizontalAlign="center" verticalAlign="bottom"
 	width="100%" height="100%" backgroundColor="#3f3f3f"
 	>
-
-		<sources:CSVTXT id="csvTemp" fieldSeperator=";" url="data/sampleData1.csv">
+		<!--
+		   	1. FIRM: Firm name
+   			2. SPEND: TV advertising budget, 1983 ($ millions)
+   			3. MILIMP: Millions of retained impressions per week 
+   		-->
+   		
+		<sources:CSVTXT id="csvTemp" fieldSeperator=";" url="data/tvAdYields.csv">
 		<sources:dataProviders>
-			<data:DataSet id="records" fields="{['continent','Sum of gdp_total','Sum of population','Sum of total_area']}"/>
+			<data:DataSet id="records" fields="{['FIRM','SPEND','MILIMP']}"/>
 		</sources:dataProviders>
 		</sources:CSVTXT>
-		
-		<coords:Cartesian id="lc3" width="90%" height="90%" showDataTips="true>
+		<mx:Spacer height="10" />
+		<mx:Label text="TV Ad Yields" />
+		<mx:Label text="Wall Street Journal, March 1, 1984" />
+		<mx:TextArea width="50%" height="60" verticalScrollPolicy="off" borderStyle="none" editable="false" text="This data appeared in the Wall Street Journal. The advertisement were selected by an annual survey conducted by Video Board Tests, Inc., a New York ad-testing company, based on interviews with 20,000 adults who were asked to name the most outstanding TV commercial they had seen, noticed, and liked. The retained impressions were based on a survey of 4,000 adults, in which regular product users were asked to cite a commercial they had seen for that product category in the past week." />
+		<coords:Cartesian id="pc3" dataProvider="{records.dataProvider}" width="90%" height="90%" showDataTips="true" isMasked="false">
 			<coords:scales>
- 				<scales:Category id="c1" categoryField="continent" />
- 				<scales:Logarithm id="l1" dataInterval="10"/>
+	 			<scales:Linear id="l" />
+	 			<scales:Linear id="c" />
 			</coords:scales>
 			<coords:guides>
-				<axis:Axis scale="{c1}" scaleInterval="1" placement="bottom" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
-				<axis:Axis scale="{l1}" placement="left" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
-	 			<grid:Grid scale1="{l1}" scale2="{c1}" color="0xcccccc" divideEnumerableScale="true"/>
+				<axis:Axis scale="{c}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{l}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<grid:Grid scale1="{l}" scale2="{c}" divideEnumerableScale="false"/>
 			</coords:guides>
-    		 <coords:elements>
-			 	<elements:ColumnElement dataProvider="{records.dataProvider}" extendMouseEvents="true" id="a1" scale1="{c1}" scale2="{l1}" dim1="continent" dim2="Sum of gdp_total" styleName="grad1" displayName="GDP" />
-        		 <elements:ColumnElement dataProvider="{records.dataProvider}" extendMouseEvents="true" id="a2" scale1="{c1}" scale2="{l1}" dim1="continent" dim2="Sum of population" styleName="grad3" displayName="Population" />
-    		 	<elements:ColumnElement dataProvider="{records.dataProvider}" extendMouseEvents="true" id="a3" scale1="{c1}" scale2="{l1}" dim1="continent" dim2="Sum of total_area" styleName="grad5" displayName="Total Area" />
+			 <coords:elements>
+			 	<elements:PointElement scale1="{l}" scale2="{c}" dim1="SPEND" dim2="MILIMP" labelField="FIRM" strokeAlpha="0" styleName="grad2" graphicRendererSize="8"/>
 			 </coords:elements>
-    	</coords:Cartesian>
-    	<legend:Legend dataProvider="{lc3}" direction="horizontal" />
-    </mx:VBox>
+		</coords:Cartesian>
+	</mx:VBox>
 

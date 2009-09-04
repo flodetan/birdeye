@@ -6,9 +6,14 @@
 		import views.cartesian.BarChart;
 		import views.cartesian.BubbleChart;
 		import views.cartesian.ColumnChart;
+		import views.cartesian.DotChart;
+		
 		import views.classics.NapoleonMarch;
+		import views.schemas.Isotype;
+		
 		import views.facets.Barley;
 		import views.facets.Barley1;
+		
 		import views.graphs.BalloonGraph;
 		import views.graphs.ConcentricGraph;
 		import views.graphs.EdgeRendererGraph;
@@ -21,7 +26,7 @@
 		import views.graphs.SingleCycleGraph;
 		import views.graphs.TreeGraph;
 		import views.micro.MicroCharts;
-		import views.schemas.Isotype;
+		
 		
 		
 		[Bindable]
@@ -29,7 +34,7 @@
         [Bindable]
         public var currentExampleInstance:IContainer;
 
-		private var unusefulArray:Array = [AreaChart, BarChart, ColumnChart, BubbleChart, 
+		private var unusefulArray:Array = [AreaChart, BarChart, ColumnChart, BubbleChart, DotChart,
 											NapoleonMarch, Barley, Barley1, Isotype, MicroCharts,
 											BalloonGraph, ConcentricGraph, HyperbolicGraph,
 											EdgeRendererGraph, ForceDirectedGraph, MDSGraph, NodeRendererGraph,

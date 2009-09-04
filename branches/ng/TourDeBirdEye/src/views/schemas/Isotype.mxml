@@ -57,7 +57,7 @@
 	
 		<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
 		
-		<coords:Cartesian id="bc" width="90%" height="90%" collisionType="stacked"
+		<coords:Cartesian id="bc" width="90%" height="90%" collisionType="stack"
 			thicknessRatio=".8" dataProvider="{dt}" showDataTips="true" 
 			dataTipFunction="dtFunc">
 			<coords:scales>
