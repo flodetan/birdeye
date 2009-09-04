@@ -32,7 +32,6 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
-	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.IPositionableElement;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
@@ -43,7 +42,6 @@ package birdeye.vis.elements.geometry
 	
 	import flash.display.DisplayObject;
 	import flash.geom.Rectangle;
-	import flash.text.TextFieldAutoSize;
 	import flash.utils.getTimer;
 	
 	import mx.core.ClassFactory;
@@ -168,6 +166,11 @@ trace (getTimer(), "drawing point ele");
 					
 					scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
 															currentItem[colorField], currentItem[sizeField], currentItem);
+				
+					if (dim1 && currentItem[dim1] == undefined ||
+						dim2 && currentItem[dim2] == undefined ||
+						dim3 && currentItem[dim3] == undefined)
+						continue;
 
 					// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
