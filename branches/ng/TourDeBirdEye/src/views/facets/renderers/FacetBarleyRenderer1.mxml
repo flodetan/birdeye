@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
+	backgroundAlpha="0"
+	xmlns:coords="birdeye.vis.coords.*" xmlns:axis="birdeye.vis.guides.axis.*" xmlns:cartesian="views.cartesian.*">
+
+	<mx:Script>
+		<![CDATA[
+			import __AS3__.vec.Vector;
+			import birdeye.vis.interfaces.scales.IScale;
+			import mx.collections.ArrayCollection;
+						
+			[Bindable]
+			public var dt:Vector.<Object>;
+
+			[Bindable]
+			private var scale1:IScale;
+			[Bindable]
+			private var scale2:IScale;
+		
+			[Bindable]
+			private var showAxis:Boolean;
+			override public function set data(value:Object):void
+			{
+				super.data = value;
+				showAxis = data.showAxis;
+				dt = data.ac as Vector.<Object>;
+				
+				scale1 = data.scales.l;
+				scale2 = data.scales.c;
+			} 
+		]]>
+	</mx:Script>
+ 	<coords:Cartesian showDataTips="true" dataProvider="{dt}" width="100%" height="100%" sharedScales="true" scales="{[scale1,scale2]}">
+	 	<coords:guides>
+	 		<grid:Grid scale2="{scale2}"/>
+	 		<axis:Axis scale="{scale2}" placement="left" colorLabel="0xbbbbbb" sizeLabel="9" />
+	 		<axis:Axis scale="{scale1}" placement="bottom" colorLabel="0xbbbbbb" visible="{showAxis}" sizeLabel="10" />	
+	 	</coords:guides>
+	 	<coords:elements>
+	 		<elements:PointElement 
+	 			scale1="{scale1}" scale2="{scale2}" 
+	 			dim1="{String(1932)}" dim2="variety" styleName="grad1"/>
+	 		<elements:PointElement 
+	 			scale1="{scale1}" scale2="{scale2}" 
+	 			dim1="{String(1931)}" dim2="variety" styleName="grad4"/>
+	 	</coords:elements>
+	 </coords:Cartesian>
+</mx:VBox>
