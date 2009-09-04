@@ -104,7 +104,7 @@ package birdeye.vis.trans.projections
 		public function funcDim1(latLon:*, minLong:Number, maxLong:Number, sizeX:Number):Number
 		{
 			if (latLon is Number)
-				return projectX(latLon, _minLat, sizeX, _minLat, _maxLat, minLong, maxLong);
+				return projectX(_minLat, latLon, sizeX, _minLat, _maxLat, minLong, maxLong);
 			else if (latLon is Pair)
 				return projectX(latLon.dim2, latLon.dim1, sizeX, _minLat, _maxLat, minLong, maxLong);
 			else 
@@ -114,7 +114,7 @@ package birdeye.vis.trans.projections
 		public function funcDim2(latLon:*, minLat:Number, maxLat:Number, sizeY:Number):Number
 		{
 			if (latLon is Number)
-				return projectY(_minLong, latLon, sizeY, minLat, maxLat, _minLong, _maxLong);
+				return projectY(latLon, _minLong, sizeY, minLat, maxLat, _minLong, _maxLong);
 			else if (latLon is Pair)
 				return projectY(latLon.dim2, latLon.dim1, sizeY, minLat, maxLat, _minLong, _maxLong);
 			else 
@@ -157,6 +157,7 @@ package birdeye.vis.trans.projections
 				minLong=-180;
 			if (isNaN(maxLong))
 				maxLong=180;
+
 			var transformation: Transformation = selectTransformation(lat, long, _proj);
 			var x:Number = transformation.projectX(lat, long, sizeX, minLat, maxLat, minLong, maxLong);
 			return x;
@@ -178,6 +179,7 @@ package birdeye.vis.trans.projections
 				minLong=-180;
 			if (isNaN(maxLong))
 				maxLong=180;
+
 			var transformation: Transformation = selectTransformation(lat, long, _proj);
 			var y:Number = transformation.projectY(lat, long, sizeY, minLat, maxLat, minLong, maxLong);
 			return y;
