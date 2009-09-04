@@ -77,7 +77,7 @@
     		<mx:Button label="Generate" click="createDT();createDT1()"/>
 		</mx:HBox>
     	
-    	<coords:Cartesian id="ac3" width="90%" height="90%" dataTipFunction="dtFunc" showDataTips="true" collisionType="stacked100">
+    	<coords:Cartesian id="ac3" width="90%" height="90%" dataTipFunction="dtFunc" showDataTips="true" collisionType="stack">
  		<coords:scales>
  			<scales:Category categoryField="subject" id="c2" />
  			<scales:Linear id="l2" direction="negative"/>
@@ -92,7 +92,7 @@
 		 <coords:elements>
 		 	<elements:AreaElement id="a5" dataProvider="{dt}" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l2}" scale1="{c2}" dim1="subject" dim2="R5" styleName="grad3" strokeAlpha=".5" displayName="R5"/>
 		 	<elements:AreaElement id="a1" dataProvider="{dt}" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l2}" scale1="{c2}" dim1="subject" dim2="R1" styleName="grad1" strokeAlpha=".5" displayName="R1"/>
-		 	<elements:ColumnElement id="c1" dataProvider="{dt}" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.RectangleRenderer" scale2="{l2}" scale1="{c2}" collisionType="stacked" dim2="['R1','R4','R2']" dim1="subject" styleName="grad2" strokeAlpha=".5" displayName="R1"/>
+		 	<elements:ColumnElement id="c1" dataProvider="{dt}" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.RectangleRenderer" scale2="{l2}" scale1="{c2}" collisionType="cluster" dim2="['R1','R4','R2']" dim1="subject" styleName="grad2" strokeAlpha=".5" displayName="R1"/>
     		<elements:AreaElement id="a2" dataProvider="{dt1}" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l2}" scale1="{c2}" dim1="subject" dim2="R2" styleName="grad2" strokeAlpha=".5" displayName="R2"/>
     		<elements:AreaElement id="a3" dataProvider="{dt1}" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l1}" scale1="{c2}" dim1="subject" dim2="R3" styleName="grad3" strokeAlpha=".5" displayName="R3"/>
     		<elements:AreaElement id="a4" dataProvider="{dt1}" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l1}" scale1="{c2}" dim1="subject" dim2="R4" styleName="grad4" strokeAlpha=".5" displayName="R4"/>

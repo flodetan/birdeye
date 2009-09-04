@@ -78,7 +78,7 @@
 	
 		<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
 		
-		<coords:Cartesian id="bc" width="90%" height="90%" showDataTips="true" collisionType="stacked" dataTipFunction="dtFunc">
+		<coords:Cartesian id="bc" width="90%" height="90%" showDataTips="true" collisionType="cluster" dataTipFunction="dtFunc">
 			<coords:scales>
 		    	<scales:Category id="c" categoryField="subject" />
 		    	<scales:Linear id="l" />
@@ -89,8 +89,8 @@
 	 		</coords:guides>
 	    	 <coords:elements>
 			 	<elements:BarElement dataProvider="{dt}" scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="R1" styleName="grad1" dim2="subject" displayName="R1" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
-			 	<elements:BarElement dataProvider="{dt1}" scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="['R1','R4','R3']" collisionType="stacked100" styleName="grad4" dim2="subject" displayName="Mix" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
-			 	<elements:BarElement dataProvider="{dt1}" scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="['R4','R2','R3']" collisionType="stacked" dim2="subject" displayName="Mix" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
+			 	<elements:BarElement dataProvider="{dt1}" scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="['R1','R4','R3']" collisionType="stack" styleName="grad4" dim2="subject" displayName="Mix" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
+			 	<elements:BarElement dataProvider="{dt1}" scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="['R4','R2','R3']" collisionType="cluster" dim2="subject" displayName="Mix" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
 			 </coords:elements>
 		</coords:Cartesian>
 		<guides:Legend dataProvider="{bc}" direction="horizontal" />	
@@ -98,7 +98,7 @@
 		</mx:VBox>
 		
 		<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
-		<coords:Cartesian id="bc2" width="90%" height="90%" showDataTips="true" collisionType="stacked100" dataTipFunction="dtFunc">
+		<coords:Cartesian id="bc2" width="90%" height="90%" showDataTips="true" collisionType="stack" dataTipFunction="dtFunc">
 			<coords:scales>
 		    		<scales:Category id="c1" categoryField="subject"  />
 		    		<scales:Linear id="l1" />
@@ -112,7 +112,7 @@
 			 	<elements:BarElement dataProvider="{dt}" scale1="{l1}" scale2="{c1}" extendMouseEvents="true" dim1="R2" styleName="grad2" dim2="subject" displayName="R2" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"/>
 			 	<elements:BarElement dataProvider="{dt1}" scale1="{l1}" scale2="{c1}" extendMouseEvents="true" dim1="R3" styleName="grad3" dim2="subject" displayName="R3" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"/>
 			 	<elements:BarElement dataProvider="{dt1}" scale1="{l1}" scale2="{c1}" extendMouseEvents="true" dim1="R4" styleName="grad4" dim2="subject" displayName="R4" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"/>
-			 	<elements:BarElement dataProvider="{dt1}" scale1="{l1}" scale2="{c1}" extendMouseEvents="true" collisionType="stacked" dim1="['R1','R4','R2']" styleName="grad5" dim2="subject" displayName="R4" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"/>
+			 	<elements:BarElement dataProvider="{dt1}" scale1="{l1}" scale2="{c1}" extendMouseEvents="true" collisionType="cluster" dim1="['R1','R4','R2']" styleName="grad5" dim2="subject" displayName="R4" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"/>
 			 </coords:elements>
 		</coords:Cartesian>
 		<guides:Legend dataProvider="{bc2}" direction="horizontal" />	

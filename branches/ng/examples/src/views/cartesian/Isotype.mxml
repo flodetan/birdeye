@@ -73,14 +73,14 @@
 				<axis:Axis scale="{l1}" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
 	 		</coords:guides>
 	    	 <coords:elements>
-			 	<elements:IsotypeElement direction="vertical" collisionType="stacked" 
+			 	<elements:IsotypeElement direction="vertical" collisionType="cluster" 
 			 		itemRenderer="views.itemRenderers.Image1" rendererDataValue="5"
 			 		scale1="{c}" scale2="{l}" extendMouseEvents="true" 
 			 		dim1="subject" styleName="grad1" dim2="R1"/>
 			 	<elements:IsotypeElement direction="horizontal"
 			 		itemRenderer="views.itemRenderers.Image" rendererDataValue="5"
 			 		scale1="{l1}" scale2="{c1}" extendMouseEvents="true" 
-			 		dim1="R2" collisionType="stacked" styleName="grad1" dim2="subject"/>
+			 		dim1="R2" collisionType="cluster" styleName="grad1" dim2="subject"/>
 			 </coords:elements>
 		</coords:Cartesian>
 		</mx:VBox>

@@ -56,7 +56,7 @@
 	</mx:Script>
 	<mx:Button label="Generate" click="createDT()"/>
 	<mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
-		<coords:Cartesian id="pc3" width="90%" height="90%" dataTipFunction="dtFunc" collisionType="stacked100" dataProvider="{dt}" showDataTips="true" isMasked="false">
+		<coords:Cartesian id="pc3" width="90%" height="90%" dataTipFunction="dtFunc" collisionType="stack" dataProvider="{dt}" showDataTips="true" isMasked="false">
 			<coords:scales>
 	 			<scales:Linear id="l" />
 	 			<scales:Category id="c" categoryField="index" />
