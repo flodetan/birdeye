@@ -1542,7 +1542,7 @@ package birdeye.vis.elements
 					for (var i:Number = 0; i<tmpArray.length; i++)
 					{
 						currentValue = currentItem[tmpArray[i]];
-						if (currentValue > 0)
+						if (!isNaN(currentValue) && currentValue > 0)
 						{
 							if (isNaN(tot))
 								tot = currentValue;
