@@ -46,8 +46,8 @@ package birdeye.vis.elements.collision
 	public class StackElement extends BaseElement implements IStack
 	{
 		public static const OVERLAID:String = "overlaid";
-		public static const STACKED:String = "stacked";
-		public static const STACKED100:String = "stacked100";
+		public static const CLUSTER:String = "cluster";
+		public static const STACKED:String = "stack";
 		
 		protected var _stackType:String = OVERLAID;
 		public function set stackType(val:String):void
@@ -147,7 +147,7 @@ package birdeye.vis.elements.collision
 			// it considers the last stacked value as a base value for the current one.
 			if (scale1)
 			{
-				if (scale1 is INumerableScale && _stackType == STACKED100)
+				if (scale1 is INumerableScale && _stackType == STACKED)
 				{
 					x0 = scale1.getPosition(baseValues[dim2]);
 					if (!isNaN(dim1 as Number))
@@ -179,7 +179,7 @@ package birdeye.vis.elements.collision
 				// if the stackType is stacked100, than the y0 coordinate of 
 				// the current baseValue is added to the y coordinate of the current
 				// data value
-				if (scale2 is INumerableScale && _stackType == STACKED100)
+				if (scale2 is INumerableScale && _stackType == STACKED)
 				{
 					y0 = scale2.getPosition(baseValues[dim1]);
 					if (!isNaN(dim2 as Number))
@@ -243,9 +243,9 @@ package birdeye.vis.elements.collision
 		{
 			var max:Number = super.getMaxValue(field);
 				
-			if (chart && stackType == STACKED100) 
+			if (chart && stackType == STACKED) 
 			{
-				if (collisionType == STACKED100)
+				if (collisionType == STACKED)
 					max += Math.max(max, chart.maxStacked100);
 				else
 					max = Math.max(max, chart.maxStacked100);
