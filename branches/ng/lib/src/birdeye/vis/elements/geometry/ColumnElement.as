@@ -70,7 +70,7 @@ package birdeye.vis.elements.geometry
 			if (!graphicRenderer)
 				graphicRenderer = new ClassFactory(RectangleRenderer);
 
-			if (stackType == STACKED100 && chart)
+			if (stackType == STACKED && chart)
 			{
 				if (scale2 && scale2 is INumerableScale)
 					INumerableScale(scale2).max = chart.maxStacked100;
@@ -119,11 +119,11 @@ trace (getTimer(), "drawing column ele");
 						
 					switch (_stackType)
 					{
-						case STACKED:
+						case CLUSTER:
 							arcSize = angleInterval/_total;
 							break;
 						case OVERLAID:
-						case STACKED100:
+						case STACKED:
 							arcSize = angleInterval;
 							break;
 					}
@@ -163,7 +163,7 @@ trace (getTimer(), "drawing column ele");
 						if (scale2)
 						{
 							
-							if (_stackType == STACKED100)
+							if (_stackType == STACKED)
 							{
 								baseScale2 = scale2.getPosition(baseValues[j] + innerBase2);
 								pos2 = scale2.getPosition(
@@ -176,7 +176,7 @@ trace (getTimer(), "drawing column ele");
 						
 						if (scale1 is ISubScale && (scale1 as ISubScale).subScalesActive)
 						{
-							if (_stackType == STACKED100)
+							if (_stackType == STACKED)
 							{
 								baseScale2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(baseValues[j] + innerBase2);
 								pos2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(baseValues[j] + Math.max(0,currentItem[tmpDim2] + innerBase2));
@@ -227,11 +227,11 @@ trace (getTimer(), "drawing column ele");
 									colWidth = tmpSize;
 									pos1 = pos1 - tmpSize/2;
 									break;
-								case STACKED100:
+								case STACKED:
 									colWidth = tmpSize;
 									pos1 = pos1 - tmpSize/2;
 									break;
-								case STACKED:
+								case CLUSTER:
 									pos1 = pos1 + tmpSize/2 - tmpSize/_total * (_stackPosition + 1);
 									colWidth = tmpSize/_total;
 									break;
@@ -243,12 +243,12 @@ trace (getTimer(), "drawing column ele");
 								case OVERLAID:
 									innerColWidth = colWidth;
 									break;
-								case STACKED100:
+								case STACKED:
 									innerColWidth = colWidth;
 									baseScale2 = scale2.getPosition(innerBase2);
 									innerBase2 += currentItem[tmpDim2];
 									break;
-								case STACKED:
+								case CLUSTER:
 									innerColWidth = colWidth/tmpArray.length;
 									pos1 = pos1 + innerColWidth * i;
 									break;
@@ -292,11 +292,11 @@ trace (getTimer(), "drawing column ele");
 							var startAngle:Number; 
 							switch (_stackType) 
 							{
-								case STACKED:
+								case CLUSTER:
 									startAngle = pos1 - angleInterval/2 + constTmpSize *_stackPosition;
 									break;
 								case OVERLAID:
-								case STACKED100:
+								case STACKED:
 									startAngle = pos1 - angleInterval/2;
 									break;
 							}
@@ -309,11 +309,11 @@ trace (getTimer(), "drawing column ele");
 									innerAngleSize = arcSize;
 									startAngle = startAngle;
 									break;
-								case STACKED100:
+								case STACKED:
 									innerAngleSize = arcSize;
 									innerBase2 += currentItem[tmpDim2];
 									break;
-								case STACKED:
+								case CLUSTER:
 									innerAngleSize = arcSize/tmpArray.length;
 									startAngle = startAngle + innerAngleSize * i;
 									break;

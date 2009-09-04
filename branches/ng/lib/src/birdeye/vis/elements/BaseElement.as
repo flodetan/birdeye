@@ -534,7 +534,7 @@ package birdeye.vis.elements
 
 		protected var _collisionType:String = StackElement.OVERLAID;
 		/** Define the type of collisions in case the dimN involves more than one data.*/
-		[Inspectable(enumeration="overlaid,stacked,stacked100")]
+		[Inspectable(enumeration="overlaid,cluster,stack")]
 		public function set collisionType(val:String):void
 		{
 			_collisionType = val;
@@ -1588,7 +1588,7 @@ package birdeye.vis.elements
 					if (isNaN(max))
 						max = tmpMax;
 					else {
-						if (collisionType == StackElement.STACKED100)
+						if (collisionType == StackElement.STACKED)
 							max += Math.max(0,tmpMax);
 						else 
 							max = Math.max(max, tmpMax);

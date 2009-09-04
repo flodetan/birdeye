@@ -235,7 +235,7 @@ trace(getTimer(), "drawing isotype");
 					
 					if (scale1)
 					{
-						if (_stackType == STACKED100)
+						if (_stackType == STACKED)
 						{
 							x0 = scale1.getPosition(baseValues[j] + innerBase1);
 							xPos = scale1.getPosition(
@@ -257,11 +257,11 @@ trace(getTimer(), "drawing isotype");
 							finalThickness = availableThickness;
 							yPos = yPos - availableThickness/2;
 							break;
-						case STACKED100:
+						case STACKED:
 							finalThickness  = availableThickness;
 							yPos = yPos - availableThickness/2;
 							break;
-						case STACKED:
+						case CLUSTER:
 							yPos = yPos + availableThickness/2 - availableThickness/_total * (_stackPosition + 1);
 							finalThickness  = availableThickness/_total;
 							break;
@@ -273,12 +273,12 @@ trace(getTimer(), "drawing isotype");
 						case OVERLAID:
 							innerThickness = finalThickness;
 							break;
-						case STACKED100:
+						case STACKED:
 							innerThickness = finalThickness;
 							x0 = scale1.getPosition(innerBase1);
 							innerBase1 += currentItem[tmpDim1];
 							break;
-						case STACKED:
+						case CLUSTER:
 							innerThickness = finalThickness/tmpArray.length;
 							yPos = yPos + innerThickness * i;
 							break;
@@ -404,7 +404,7 @@ trace(getTimer(), "drawing isotype");
 					
 					if (scale2)
 					{
-						if (_stackType == STACKED100)
+						if (_stackType == STACKED)
 						{
 							y0 = scale2.getPosition(baseValues[j] + innerBase2);
 							yPos = scale2.getPosition(
@@ -426,11 +426,11 @@ trace(getTimer(), "drawing isotype");
 							finalThickness = availableThickness;
 							xPos = xPos - availableThickness/2;
 							break;
-						case STACKED100:
+						case STACKED:
 							finalThickness  = availableThickness;
 							xPos = xPos - availableThickness/2;
 							break;
-						case STACKED:
+						case CLUSTER:
 							xPos = xPos + availableThickness/2 - availableThickness/_total * (_stackPosition + 1);
 							finalThickness  = availableThickness/_total;
 							break;
@@ -442,12 +442,12 @@ trace(getTimer(), "drawing isotype");
 						case OVERLAID:
 							innerThickness = finalThickness;
 							break;
-						case STACKED100:
+						case STACKED:
 							innerThickness = finalThickness;
 							y0 = scale2.getPosition(innerBase2);
 							innerBase2 += currentItem[tmpDim2];
 							break;
-						case STACKED:
+						case CLUSTER:
 							innerThickness = finalThickness/tmpArray.length;
 							xPos = xPos + innerThickness * i;
 							break;

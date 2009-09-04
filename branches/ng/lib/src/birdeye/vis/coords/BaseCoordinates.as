@@ -66,7 +66,7 @@ package birdeye.vis.coords
 		/** Set the type of stack, overlaid if the series are shown on top of the other, 
 		 * or stacked if they appear staked one after the other (horizontally), or 
 		 * stacked100 if the columns are stacked one after the other (vertically).*/
-		[Inspectable(enumeration="overlaid,stacked,stacked100")]
+		[Inspectable(enumeration="overlaid,cluster,stack")]
 		public function set collisionType(val:String):void
 		{
 			_collisionType = val;
@@ -297,7 +297,7 @@ package birdeye.vis.coords
 			}
 			
 			// only execute the rest if the type is stacked100
-			if (_collisionType != StackElement.STACKED100) return;
+			if (_collisionType != StackElement.STACKED) return;
 			
 			var allElementsBaseAndTopValues:Array = []; 
 			for (var i:int=0;i<_stackedElements.length;i++)
@@ -361,7 +361,7 @@ package birdeye.vis.coords
 				var lastProcessedStackElementIndex:Number = lastProcessedStackElements[indexValue];
 				
 				// determine the maximum of the current element
-				var maxCurrentD2:Number = getDimMaxValue(currentItem, stackElement[dims.valueDim], stackElement.collisionType == StackElement.STACKED100);
+				var maxCurrentD2:Number = getDimMaxValue(currentItem, stackElement[dims.valueDim], stackElement.collisionType == StackElement.STACKED);
 
 				// if we are not the first and there was somebody before us
 				// calculate new positions
@@ -519,14 +519,14 @@ package birdeye.vis.coords
 							
 							// this has a hard coded  dim2
 							// this is NOT good
-							var maxDim2:Number = getDimMaxValue(currentItem, element.dim2, element.collisionType == StackElement.STACKED100);
+							var maxDim2:Number = getDimMaxValue(currentItem, element.dim2, element.collisionType == StackElement.STACKED);
 							var minDim2:Number = getDimMinValue(currentItem, element.dim2);
 							if (!isNaN(minDim2))
 							{
 								elementsMinMax[category].min = Math.min(elementsMinMax[category].min, minDim2);
 							}
 
-							if (_collisionType == StackElement.STACKED100)
+							if (_collisionType == StackElement.STACKED)
 								elementsMinMax[category].max = categoryMaxStacked100[category];
 							else 
 							{

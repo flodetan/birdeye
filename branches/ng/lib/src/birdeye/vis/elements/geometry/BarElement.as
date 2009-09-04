@@ -65,7 +65,7 @@ package birdeye.vis.elements.geometry
 			if (!graphicRenderer)
 				graphicRenderer = new ClassFactory(RectangleRenderer);
 
-			if (stackType == STACKED100 && chart)
+			if (stackType == STACKED && chart)
 			{
 				if (scale1 && scale1 is INumerableScale)
 					INumerableScale(scale1).max = chart.maxStacked100;
@@ -134,7 +134,7 @@ trace(getTimer(), "drawing bar");
 						
 						if (scale1)
 						{
-							if (_stackType == STACKED100)
+							if (_stackType == STACKED)
 							{
 								x0 = scale1.getPosition(baseValues[j] + innerBase1);
 								xPos = scale1.getPosition(
@@ -156,11 +156,11 @@ trace(getTimer(), "drawing bar");
 								barWidth = size;
 								yPos = yPos - size/2;
 								break;
-							case STACKED100:
+							case STACKED:
 								barWidth  = size;
 								yPos = yPos - size/2;
 								break;
-							case STACKED:
+							case CLUSTER:
 								yPos = yPos + size/2 - size/_total * (_stackPosition + 1);
 								barWidth  = size/_total;
 								break;
@@ -172,12 +172,12 @@ trace(getTimer(), "drawing bar");
 							case OVERLAID:
 								innerBarWidth = barWidth;
 								break;
-							case STACKED100:
+							case STACKED:
 								innerBarWidth = barWidth;
 								x0 = scale1.getPosition(innerBase1);
 								innerBase1 += currentItem[tmpDim1];
 								break;
-							case STACKED:
+							case CLUSTER:
 								innerBarWidth = barWidth/tmpArray.length;
 								yPos = yPos + innerBarWidth * i;
 								break;

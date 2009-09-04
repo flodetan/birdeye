@@ -70,8 +70,8 @@ package birdeye.vis.elements.geometry
 		{
 			super.commitProperties();
 
-			if (_stackType != OVERLAID || _stackType != STACKED100)
-				_stackType = STACKED100;
+			if (_stackType != OVERLAID || _stackType != STACKED)
+				_stackType = STACKED;
 
 			if (! graphicRenderer)
 				graphicRenderer = new ClassFactory(CircleRenderer);
@@ -95,7 +95,7 @@ package birdeye.vis.elements.geometry
 				
 				switch (_stackType)
 				{
-					case STACKED100:
+					case STACKED:
 						break;
 					case OVERLAID:
 						break;
