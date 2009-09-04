@@ -119,7 +119,6 @@ package birdeye.vis.elements.geometry
 			return true;
 		}
 
-		private var label:TextRenderer;
 		private var plot:IGeometry;
 		/** @Private 
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
@@ -295,24 +294,6 @@ trace (getTimer(), "drawing point ele");
 					plot.stroke = stroke;
 					gg.geometryCollection.addItemAt(plot,0); 
 				}
-			}
-			
-			if (labelField)
-			{
-				label = new TextRenderer(null);
-				if (currentItem[labelField])
-					label.text = currentItem[labelField];
-				else
-					label.text = labelField;
-					
-				label.fill = scaleResults[COLOR];
-				label.fontSize = sizeLabel;
-				label.fontFamily = fontLabel;
-				label.autoSize = TextFieldAutoSize.LEFT;
-				label.autoSizeField = true;
-				label.x = scaleResults[POS1] - label.displayObject.width/2;
-				label.y = scaleResults[POS2] - label.displayObject.height/2;
-				ttGG.geometryCollection.addItemAt(label,0); 
 			}
 		}
 

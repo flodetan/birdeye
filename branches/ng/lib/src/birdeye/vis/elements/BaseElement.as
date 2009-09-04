@@ -33,6 +33,7 @@ package birdeye.vis.elements
 	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.elements.events.ElementRollOutEvent;
 	import birdeye.vis.elements.events.ElementRollOverEvent;
+	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
@@ -55,8 +56,8 @@ package birdeye.vis.elements
 	
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
+	import flash.text.TextFieldAutoSize;
 	import flash.utils.Dictionary;
-	import flash.utils.describeType;
 	import flash.xml.XMLNode;
 	
 	import mx.collections.ArrayCollection;
@@ -1395,6 +1396,7 @@ package birdeye.vis.elements
 			}
 		}
 		
+		private var label:TextRenderer;
 		protected var ggIndex:Number;
 		/** @Private
 		 * Override the creation of ttGeom in order to avoid the usage of gg also in case
@@ -1409,6 +1411,24 @@ package birdeye.vis.elements
 			else {
 				ttGG = new DataItemLayout();
 				graphicsCollection.addItem(ttGG);
+			}
+
+			if (labelField)
+			{
+				label = new TextRenderer(null);
+				if (item[labelField])
+					label.text = item[labelField];
+				else
+					label.text = labelField;
+					
+				label.fill = new SolidFill(colorLabel);
+				label.fontSize = sizeLabel;
+				label.fontFamily = fontLabel;
+				label.autoSize = TextFieldAutoSize.LEFT;
+				label.autoSizeField = true;
+				label.x = xPos - label.displayObject.width/2;
+				label.y = yPos - label.displayObject.height/2;
+				ttGG.geometryCollection.addItemAt(label,0); 
 			}
 			ggIndex++;
 			ttGG.target = chart.elementsContainer;
