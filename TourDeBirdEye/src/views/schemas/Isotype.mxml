@@ -58,14 +58,14 @@
 		<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
 		
 		<coords:Cartesian id="bc" width="90%" height="90%" collisionType="stacked"
-			thicknessRatio=".5" dataProvider="{dt}" showDataTips="true" 
+			thicknessRatio=".8" dataProvider="{dt}" showDataTips="true" 
 			dataTipFunction="dtFunc">
 			<coords:scales>
 		    	<scales:Category id="c" categoryField="subject" />
-		    	<scales:Linear id="l" />
+		    	<scales:Linear id="l" direction="negative"/>
 		   </coords:scales>
 			<coords:guides>
-				<axis:Axis scale="{c}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{c}" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
 				<axis:Axis scale="{l}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
 			</coords:guides>
 	    	 <coords:elements>
