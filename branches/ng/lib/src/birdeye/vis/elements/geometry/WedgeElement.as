@@ -157,6 +157,8 @@ package birdeye.vis.elements.geometry
 						tmpDim1 = tmpArray[i];
 						angle = aAxis.getPosition(currentItem[tmpDim1]);
 						
+						if (isNaN(angle)) continue;
+						
 						if (sizeScale)
 						{
 							if (sizeField is Array)
