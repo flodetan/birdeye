@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:polar="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	creationComplete="createDT()"
+	width="150" height="150" horizontalAlign="center" verticalAlign="middle" >
+	
+<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import birdeye.util.EffectsUtil;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			[Bindable]
+			public var dt1:ArrayCollection;;
+
+			private var subject:Array;
+			
+			private var regions:Array = ["R1", "R2", "R3", "R4"];
+			private function createDT():void
+			{
+				var ac:ArrayCollection = new ArrayCollection();
+				for (var i:Number = 0; i<regions.length; i++)
+				{
+					ac.addItem({
+						region: regions[i],
+						GDP: Math.round(Math.random() * 1000),
+						Area: Math.round(Math.random() * 1000),
+						Density: Math.round(Math.random() * 1000),
+						Population: Math.round(Math.random() * 1000)
+					});
+				}
+				dt = ac;
+
+				var ac1:ArrayCollection = new ArrayCollection();
+				for (i = 1; i<40; i++)
+					ac1.addItem({
+						R1: Math.round(Math.random() * i*10* 1000)
+					});
+
+				dt = ac;
+				dt1 = ac1;
+			}
+
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = currDatatip[dataFields["dim1"]];
+				return  tt;
+			}
+		]]>
+	</mx:Script>
+
+	<polar:Polar dataProvider="{dt}" width="100%" height="100%" thicknessRatio=".3" collisionType="stacked" dataTipFunction="dtFunc">
+		<polar:scales>
+			<scales:Numeric id="l" scaleType="constant" />
+			<scales:PercentAngle id="a" size="360"/>
+		</polar:scales>
+		<polar:elements>
+			<elements:WedgeElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{a}" scale2="{l}" alpha=".6" radiusLabelOffset="5" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" extendMouseEvents="true" dim1="GDP" />
+		</polar:elements>
+	</polar:Polar>
+
+</mx:Box>

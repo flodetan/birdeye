@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:schema="birdeye.vis.elements.schema.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
+	xmlns:axis="birdeye.vis.guides.axis.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	xmlns:sources="birdeye.vis.source.csv.*"
+	xmlns:data="birdeye.vis.data.*"
+	horizontalAlign="center" verticalAlign="bottom"
+	width="100%" height="100%" backgroundColor="#3f3f3f"
+	>
+
+		<sources:CSVTXT id="csvTemp" fieldSeperator=";" url="data/sampleData1.csv">
+		<sources:dataProviders>
+			<data:DataSet id="records" fields="{['continent','Sum of gdp_total','Sum of population','Sum of total_area']}"/>
+		</sources:dataProviders>
+		</sources:CSVTXT>
+		
+		<coords:Cartesian id="lc3" width="90%" height="90%" showDataTips="true" collisionType="stacked" >
+			<coords:scales>
+ 				<scales:Category id="c1" categoryField="continent" />
+ 				<scales:Logarithm id="l1" dataInterval="10"/>
+			</coords:scales>
+			<coords:guides>
+				<axis:Axis scale="{c1}" scaleInterval="1" placement="bottom" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{l1}" placement="left" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
+	 			<grid:Grid scale1="{l1}" scale2="{c1}" color="0xcccccc" divideEnumerableScale="true"/>
+			</coords:guides>
+    		 <coords:elements>
+			 	<elements:ColumnElement dataProvider="{records.dataProvider}" extendMouseEvents="true" id="a1" scale1="{c1}" scale2="{l1}" dim1="continent" dim2="Sum of gdp_total" styleName="grad1" displayName="GDP" />
+        		 <elements:ColumnElement dataProvider="{records.dataProvider}" extendMouseEvents="true" id="a2" scale1="{c1}" scale2="{l1}" dim1="continent" dim2="Sum of population" styleName="grad3" displayName="Population" />
+    		 	<elements:ColumnElement dataProvider="{records.dataProvider}" extendMouseEvents="true" id="a3" scale1="{c1}" scale2="{l1}" dim1="continent" dim2="Sum of total_area" styleName="grad5" displayName="Total Area" />
+			 </coords:elements>
+    	</coords:Cartesian>
+    	<legend:Legend dataProvider="{lc3}" direction="horizontal" />
+    </mx:VBox>
+
