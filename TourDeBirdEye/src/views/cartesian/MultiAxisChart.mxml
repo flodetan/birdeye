@@ -19,7 +19,7 @@
 		</sources:dataProviders>
 		</sources:CSVTXT>
 		
-		<coords:Cartesian id="lc3" width="90%" height="90%" showDataTips="true" collisionType="stacked" >
+		<coords:Cartesian id="lc3" width="90%" height="90%" showDataTips="true">
 			<coords:scales>
  				<scales:Category id="c1" categoryField="continent" />
  				<scales:Logarithm id="l1" dataInterval="10"/>
