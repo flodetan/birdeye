@@ -22,7 +22,8 @@
                 		<node label="Stacking" classRef="views.polar.StackingPolarChart" />
                 </node>
                 <node label="Facets">
-	                	<node label="Barley" classRef="views.facets.Barley" />
+	                	<node label="Barley I" classRef="views.facets.Barley" />
+	                	<node label="Barley II" classRef="views.facets.Barley1" />
                 		<node label="Plot" classRef="views.facets.PlotChart" />
                 		<node label="Radar" classRef="views.facets.RadarChart" />
                 </node>
