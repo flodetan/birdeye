@@ -45,10 +45,13 @@ package birdeye.vis.guides.axis
 	import com.degrafa.paint.SolidStroke;
 	import com.degrafa.transform.RotateTransform;
 	
+	import flash.display.DisplayObject;
 	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
 	import flash.utils.getTimer;
 	
+	import mx.core.IDataRenderer;
+	import mx.core.IFactory;
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
 	
@@ -91,6 +94,68 @@ package birdeye.vis.guides.axis
 			styleName = "Axis";
 		}
 		
+		private var _data:Object;
+		/** Define the data to be passed to the axisRenderer.*/
+		public function set data(val:Object):void
+		{
+			_data = val;
+			invalidateDisplayList();
+		}
+		public function get data():Object
+		{
+			return _data;
+		}
+		
+		private var _labelRenderer:IFactory;
+		/** Set the label renderer following the standard Flex approach. The label renderer can be
+		 * any DisplayObject that could be added as child to a UIComponent.*/ 
+		public function set labelRenderer(val:IFactory):void
+		{
+			_labelRenderer= val;
+			invalidateDisplayList();
+		}
+		public function get labelRenderer():IFactory
+		{
+			return _labelRenderer;
+		}
+		
+		private var _axisRenderer:IFactory;
+		/** Set the axis renderer following the standard Flex approach. The axis renderer can be
+		 * any DisplayObject that could be added as child to a UIComponent.*/ 
+		public function set axisRenderer(val:IFactory):void
+		{
+			_axisRenderer= val;
+			invalidateDisplayList();
+		}
+		public function get axisRenderer():IFactory
+		{
+			return _axisRenderer;
+		}
+		
+		protected var _axisRendererWidth:uint;
+		/** Set the axis renderer width to be used for the data items.*/
+		public function set axisRendererWidth(val:uint):void
+		{
+			_axisRendererWidth = val;
+			invalidateDisplayList()
+		}
+		public function get axisRendererWidth():uint
+		{
+			return _axisRendererWidth;
+		}
+
+		protected var _axisRendererHeight:uint;
+		/** Set the axis renderer height to be used for the data items.*/
+		public function set axisRendererHeight(val:uint):void
+		{
+			_axisRendererHeight = val;
+			invalidateDisplayList();
+		}
+		public function get axisRendererHeight():uint
+		{
+			return _axisRendererHeight;
+		}
+
 		public function get position():String
 		{
 			return "sides";
@@ -679,7 +744,6 @@ package birdeye.vis.guides.axis
 			}
 		}
 		
-		
 		private var _showLabels:Boolean = true;
 		/** Show labels on the axis */
 		[Inspectable(enumeration="false,true")]
@@ -873,132 +937,159 @@ package birdeye.vis.guides.axis
 			if (scale && scale.completeDataValues.length > 0 && isNaN(maxLblSize) && placement && size > 0)
 				calculateMaxLabelSize();
 			
-			/*if (scale.dataValues && scale.dataValues.length > 0)
-			{
-				_scaleInterval = size/scale.dataValues.length;
-			}
-			else
-			{
-				_scaleInterval = NaN;
-			}*/
-
 			if (invalidated)
 			{	
-trace(getTimer(), "drawing axis");
-				invalidated = false;
-
-				var thick:Line;
-				var label:RasterText;
-				
-				// allow category labels to be intervalled, thus avoiding overlapping
-				var completeValuesInterval:uint = 1;
-				if (scale is IEnumerableScale && scaleInterval>1)
-					completeValuesInterval = scaleInterval;
-				// vertical orientation
-				if (xMin == xMax)
+				if (!axisRenderer)
 				{
-					for (var i:uint = 0; i<scale.completeDataValues.length; i += completeValuesInterval)
-					{
-						var dataLabel:Object = scale.completeDataValues[i];
-						// create thick line
-						var yPos:Number = scale.getPosition(dataLabel);
-						if (coordinates && coordinates.origin)
-						{
-							yPos = coordinates.origin.y - yPos;	
-						}
-			 			thick = new Line(xMin + thickWidth * sign, yPos, xMax, yPos);
-						thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
-						gg.geometryCollection.addItem(thick);
+					drawLabels(xMin, xMax, yMin, yMax, sign);
+				} else {
+					var itmDisplay:DisplayObject = axisRenderer.newInstance();
+					if (data && itmDisplay is IDataRenderer)
+						(itmDisplay as IDataRenderer).data = data;
+					addChild(itmDisplay);
+
+					if (axisRendererWidth > 0)
+						DisplayObject(itmDisplay).width = axisRendererWidth ;
+					if (axisRendererHeight > 0)
+						DisplayObject(itmDisplay).height = axisRendererHeight;
+				}
+			}
+		}
+		
+		private function drawLabels(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
+		{
+trace(getTimer(), "drawing axis");
+			invalidated = false;
+
+			var thick:Line;
+			var label:RasterText;
 			
+			// allow category labels to be intervalled, thus avoiding overlapping
+			var completeValuesInterval:uint = 1;
+			if (scale is IEnumerableScale && scaleInterval>1)
+				completeValuesInterval = scaleInterval;
+			// vertical orientation
+			if (xMin == xMax)
+			{
+				for (var i:uint = 0; i<scale.completeDataValues.length; i += completeValuesInterval)
+				{
+					var dataLabel:Object = scale.completeDataValues[i];
+					// create thick line
+					var yPos:Number = scale.getPosition(dataLabel);
+					if (coordinates && coordinates.origin)
+					{
+						yPos = coordinates.origin.y - yPos;	
+					}
+		 			thick = new Line(xMin + thickWidth * sign, yPos, xMax, yPos);
+					thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
+					gg.geometryCollection.addItem(thick);
+		
+					if (!_labelRenderer)
+					{
 						// create label 
-	 					label = new RasterText();
-	 					label.fontFamily = fontLabel;
-	 					label.fontSize = sizeLabel;
-	 					//label.visible = true;
-						label.autoSize = TextFieldAutoSize.LEFT;
-						label.autoSizeField = true;
-						label.text = String(dataLabel);
-						if (!isNaN(_rotateLabels) && _rotateLabels != 0)
-						{
-							var rot:RotateTransform = new RotateTransform();
-							rot = new RotateTransform();
-							switch (placement)
-							{
-								case RIGHT:
-									_rotateLabelsOn = "centerLeft";
-									break;
-								case LEFT:
-									_rotateLabelsOn = "centerRight";
-									break;
-							}
-							rot.registrationPoint = _rotateLabelsOn;
-							rot.angle = _rotateLabels;
-							label.transform = rot;
-						}
-						
-						label.y = yPos-(label.displayObject.height )/2;
-						if (placement == LEFT)
-							label.x = width - thickWidth - (label.textWidth + 4);
-						else
-							label.x = thickWidth * sign;
+						label = createLabels("vertical", String(dataLabel), yPos);
 						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
 					}
-				} else {
-				// horizontal orientation
-					for (i = 0; i<scale.completeDataValues.length; i += completeValuesInterval)
-					{
-						dataLabel = scale.completeDataValues[i];
+				}
+			} else {
+			// horizontal orientation
+				for (i = 0; i<scale.completeDataValues.length; i += completeValuesInterval)
+				{
+					dataLabel = scale.completeDataValues[i];
 
-						// create thick line
-			 			thick = new Line(scale.getPosition(dataLabel), yMin + thickWidth * sign, scale.getPosition(dataLabel), yMax);
-						thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
-						gg.geometryCollection.addItem(thick);
-	
+					// create thick line
+		 			thick = new Line(scale.getPosition(dataLabel), yMin + thickWidth * sign, scale.getPosition(dataLabel), yMax);
+					thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
+					gg.geometryCollection.addItem(thick);
+
+					if (!_labelRenderer)
+					{
 						// create label 
-	 					label = new RasterText();
-	 					label.fontFamily = fontLabel;
-	 					label.fontSize = sizeLabel;
-	 					//label.visible = true;
-						label.autoSize = TextFieldAutoSize.LEFT;
-						label.autoSizeField = true;
-						label.text = String(dataLabel);
-						label.y = thickWidth;
-						if (!isNaN(_rotateLabels) && _rotateLabels != 0)
-						{
-							rot = new RotateTransform();
-							switch (placement)
-							{
-								case TOP:
-									_rotateLabelsOn = "centerLeft";
-									label.x = scale.getPosition(dataLabel);
-									label.y += height*.9; 
-									break;
-								case BOTTOM:
-									_rotateLabelsOn = "topRight";
-									label.x = scale.getPosition(dataLabel)-(label.textWidth + 4)*.9; 
-									break;
-							}
-							rot.registrationPoint = _rotateLabelsOn;
-							rot.angle = _rotateLabels;
-							label.transform = rot;
-						} 
-						else
-						{
-							label.x = scale.getPosition(dataLabel)-(label.textWidth + 4)/2; 
-							if (placement == TOP)
-							{
-								label.y += label.fontSize;
-							}
-						}
+						label = createLabels("horizontal", String(dataLabel), NaN);
 						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
-						
-						
 					}
 				}
 			}
+		}
 		
+		private function createLabels(direction:String, dataLabel:String, pos:Number):RasterText
+		{
+			var label:RasterText;
+			if (direction == "vertical")
+			{
+ 				label = new RasterText();
+ 				label.fontFamily = fontLabel;
+ 				label.fontSize = sizeLabel;
+ 				//label.visible = true;
+				label.autoSize = TextFieldAutoSize.LEFT;
+				label.autoSizeField = true;
+				label.text = String(dataLabel);
+				if (!isNaN(_rotateLabels) && _rotateLabels != 0)
+				{
+					var rot:RotateTransform = new RotateTransform();
+					rot = new RotateTransform();
+					switch (placement)
+					{
+						case RIGHT:
+							_rotateLabelsOn = "centerLeft";
+							break;
+						case LEFT:
+							_rotateLabelsOn = "centerRight";
+							break;
+					}
+					rot.registrationPoint = _rotateLabelsOn;
+					rot.angle = _rotateLabels;
+					label.transform = rot;
+				}
+				
+				label.y = pos-(label.displayObject.height )/2;
+				if (placement == LEFT)
+					label.x = width - thickWidth - (label.textWidth + 4);
+				else
+					label.x = thickWidth * sign;
+				
+			} else {
+				// create label 
+ 				label = new RasterText();
+ 				label.fontFamily = fontLabel;
+ 				label.fontSize = sizeLabel;
+ 				//label.visible = true;
+				label.autoSize = TextFieldAutoSize.LEFT;
+				label.autoSizeField = true;
+				label.text = String(dataLabel);
+				label.y = thickWidth;
+				if (!isNaN(_rotateLabels) && _rotateLabels != 0)
+				{
+					rot = new RotateTransform();
+					switch (placement)
+					{
+						case TOP:
+							_rotateLabelsOn = "centerLeft";
+							label.x = scale.getPosition(dataLabel);
+							label.y += height*.9; 
+							break;
+						case BOTTOM:
+							_rotateLabelsOn = "topRight";
+							label.x = scale.getPosition(dataLabel)-(label.textWidth + 4)*.9; 
+							break;
+					}
+					rot.registrationPoint = _rotateLabelsOn;
+					rot.angle = _rotateLabels;
+					label.transform = rot;
+				} 
+				else
+				{
+					label.x = scale.getPosition(dataLabel)-(label.textWidth + 4)/2; 
+					if (placement == TOP)
+					{
+						label.y += label.fontSize;
+					}
+				}
+				
+			}
+			return label;
 		}
 		
 		private function onElementRollOver(e:ElementRollOverEvent):void
