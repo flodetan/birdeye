@@ -102,7 +102,7 @@
 			</coords:guides>
     		 <coords:elements>
     		 	<elements:PointElement scale1="{c1}" scale2="{c2}" graphicRendererSize="0" dim1="year" dim2="site" 
-    		 		itemRenderer="views.itemRenderers.FacetBarleyRenderer" dataField="newChart">
+    		 		itemRenderer="views.facets.renderers.FacetBarleyRenderer" dataField="newChart">
         		 </elements:PointElement>
         	</coords:elements>
         </coords:Cartesian>	
