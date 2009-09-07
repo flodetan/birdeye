@@ -55,7 +55,7 @@
 
 			private function changeStack():void
 			{
-				if (lc2.collisionType == "stacked100")
+				if (lc2.collisionType == "stack")
 				{
  					lc3.collisionType = "overlaid";
  					lc2.collisionType = "overlaid";
