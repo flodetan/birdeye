@@ -29,29 +29,23 @@ package birdeye.vis.guides.renderers
 {
 	import birdeye.vis.interfaces.IBoundedRenderer;
 	
-	import com.degrafa.geometry.RegularRectangle;
+	import com.degrafa.geometry.Path;
 	
 	import flash.geom.Rectangle;
 
-	public class RectangleRenderer extends RegularRectangle implements IBoundedRenderer // ISeriesDataRenderer
+	public class RectangleRenderer extends Path implements IBoundedRenderer 
 	{
 		public function RectangleRenderer(bounds:Rectangle=null):void
 		{
-			super();
 			if(bounds) this.bounds = bounds;
 		}
 		
 		public function set bounds(bounds:Rectangle):void
 		{
-			this.x = bounds.x;
-			this.y = bounds.y;
-			this.width = bounds.width;
-			this.height = bounds.height;
+			data = "M" + String(bounds.x) + " " + String(bounds.y) + " " +
+				"L" + String(bounds.x+bounds.width) + " " + String(bounds.y) + " " +
+				"L" + String(bounds.x+bounds.width) + " " + String(bounds.y+bounds.height) + " " +
+				"L" + String(bounds.x) + " " + String(bounds.y+bounds.height) + " z";
 		}
-
-/* 		public function getGeometry(bounds:Rectangle):Geometry
-		{
-			return new RegularRectangle(bounds.x, bounds.y, bounds.width, bounds.height);
-		}
- */	}
+	}
 }

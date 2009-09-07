@@ -29,26 +29,24 @@ package birdeye.vis.guides.renderers
 {
 	import birdeye.vis.interfaces.IBoundedRenderer;
 	
-	import com.degrafa.geometry.Polygon;
+	import com.degrafa.geometry.Path;
 	
 	import flash.geom.Rectangle;
 
-	public class DownTriangleRenderer extends Polygon implements IBoundedRenderer
+	public class DownTriangleRenderer extends Path implements IBoundedRenderer
 	{
 		public function DownTriangleRenderer (bounds:Rectangle=null)
 		{
-			super();
-			
 			if (bounds) this.bounds = bounds;
 
 		}
 		
 		public function set bounds(bounds:Rectangle):void
 		{
-			data =  String(bounds.x) + "," + String(bounds.y) + " " +
-					String(bounds.x + bounds.width/2) + "," + String(bounds.y + bounds.height) + " " +
-					String(bounds.x + bounds.width) + "," + String(bounds.y) + " " +
-					String(bounds.x) + "," + String(bounds.y) + " ";			
+			data =  "M" + String(bounds.x) + " " + String(bounds.y) + " " +
+					"L" + String(bounds.x + bounds.width/2) + " " + String(bounds.y + bounds.height) + " " +
+					"L" + String(bounds.x + bounds.width) + " " + String(bounds.y) + " " +
+					"L" + String(bounds.x) + " " + String(bounds.y) + " z";			
 		}
 	}
 }
