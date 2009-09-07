@@ -118,7 +118,31 @@ package birdeye.vis.guides.axis
 		{
 			return _labelRenderer;
 		}
-		
+
+		protected var _labelRendererWidth:uint;
+		/** Set the label renderer width to be used for the data items.*/
+		public function set labelRendererWidth(val:uint):void
+		{
+			_labelRendererWidth = val;
+			invalidateDisplayList()
+		}
+		public function get labelRendererWidth():uint
+		{
+			return _labelRendererWidth;
+		}
+
+		protected var _labelRendererHeight:uint;
+		/** Set the axis renderer height to be used for the data items.*/
+		public function set labelRendererHeight(val:uint):void
+		{
+			_labelRendererHeight = val;
+			invalidateDisplayList();
+		}
+		public function get labelRendererHeight():uint
+		{
+			return _labelRendererHeight;
+		}
+
 		private var _axisRenderer:IFactory;
 		/** Set the axis renderer following the standard Flex approach. The axis renderer can be
 		 * any DisplayObject that could be added as child to a UIComponent.*/ 
@@ -723,6 +747,9 @@ package birdeye.vis.guides.axis
 				} 
 			}
 
+			for (i = numChildren - 1; i >= 0; i--) {
+				removeChildAt(i);
+			}
 			invalidated = true;
 		}
 
@@ -943,15 +970,19 @@ package birdeye.vis.guides.axis
 				{
 					drawLabels(xMin, xMax, yMin, yMax, sign);
 				} else {
-					var itmDisplay:DisplayObject = axisRenderer.newInstance();
-					if (data && itmDisplay is IDataRenderer)
-						(itmDisplay as IDataRenderer).data = data;
-					addChild(itmDisplay);
+					var axisRnd:DisplayObject = axisRenderer.newInstance();
+					if (data && axisRnd is IDataRenderer)
+						(axisRnd as IDataRenderer).data = data;
+					addChild(axisRnd);
 
 					if (axisRendererWidth > 0)
-						DisplayObject(itmDisplay).width = axisRendererWidth ;
+						DisplayObject(axisRnd).width = axisRendererWidth ;
+					else if (parent)
+						DisplayObject(axisRnd).width = parent.width;
 					if (axisRendererHeight > 0)
-						DisplayObject(itmDisplay).height = axisRendererHeight;
+						DisplayObject(axisRnd).height = axisRendererHeight;
+					else if (parent)
+						DisplayObject(axisRnd).height = parent.height;
 				}
 			}
 		}
@@ -987,9 +1018,16 @@ trace(getTimer(), "drawing axis");
 					if (!_labelRenderer)
 					{
 						// create label 
-						label = createLabels("vertical", String(dataLabel), yPos);
+						label = createLabelText("vertical", String(dataLabel), yPos);
 						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
+					} else {
+						var labelRnd:DisplayObject = createLabelRenderer(dataLabel);
+						labelRnd.y = yPos - labelRnd.height/2;
+						if (placement == LEFT)
+							labelRnd.x = width - thickWidth - (labelRnd.width);
+						else
+							labelRnd.x = thickWidth * sign;
 					}
 				}
 			} else {
@@ -997,24 +1035,33 @@ trace(getTimer(), "drawing axis");
 				for (i = 0; i<scale.completeDataValues.length; i += completeValuesInterval)
 				{
 					dataLabel = scale.completeDataValues[i];
+					
+					var xPos:Number = scale.getPosition(dataLabel);
 
 					// create thick line
-		 			thick = new Line(scale.getPosition(dataLabel), yMin + thickWidth * sign, scale.getPosition(dataLabel), yMax);
+		 			thick = new Line(xPos, yMin + thickWidth * sign, xPos, yMax);
 					thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 					gg.geometryCollection.addItem(thick);
 
 					if (!_labelRenderer)
 					{
 						// create label 
-						label = createLabels("horizontal", String(dataLabel), NaN);
+						label = createLabelText("horizontal", String(dataLabel), NaN);
 						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
+					} else {
+						var labelRnd:DisplayObject = createLabelRenderer(dataLabel);
+						labelRnd.x = xPos - labelRnd.width/2;
+						if (placement == TOP)
+							labelRnd.y = height - thickWidth - (labelRnd.height);
+						else
+							labelRnd.y = thickWidth * sign;
 					}
 				}
 			}
 		}
 		
-		private function createLabels(direction:String, dataLabel:String, pos:Number):RasterText
+		private function createLabelText(direction:String, dataLabel:String, pos:Number):RasterText
 		{
 			var label:RasterText;
 			if (direction == "vertical")
@@ -1090,6 +1137,25 @@ trace(getTimer(), "drawing axis");
 				
 			}
 			return label;
+		}
+		
+		private function createLabelRenderer(dataLabel:Object):DisplayObject
+		{
+			var lblRenderer:DisplayObject = labelRenderer.newInstance();
+			if (lblRenderer is IDataRenderer)
+				(lblRenderer as IDataRenderer).data = dataLabel;
+			addChild(lblRenderer);
+	
+			if (sizeLabel> 0)
+				DisplayObject(lblRenderer).width = DisplayObject(lblRenderer).height = sizeLabel;
+			else {
+				if (labelRendererWidth > 0)
+					DisplayObject(lblRenderer).width = labelRendererWidth;
+	
+				if (labelRendererHeight > 0)
+					DisplayObject(lblRenderer).height = labelRendererHeight;
+			}
+			return lblRenderer;
 		}
 		
 		private function onElementRollOver(e:ElementRollOverEvent):void
