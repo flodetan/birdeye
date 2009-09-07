@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
+	backgroundAlpha="0"
+	xmlns:coords="birdeye.vis.coords.*" xmlns:axis="birdeye.vis.guides.axis.*">
+
+<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import birdeye.util.EffectsUtil;
+						
+			[Bindable]
+			public var dt:Object
+
+			override public function set data(value:Object):void
+			{
+				super.data = value;
+				dt = data;
+			} 
+		]]>
+	</mx:Script>
+	<coords:Cartesian id="sp" width="100%" height="100%" dataProvider="{dt}" showDataTips="true" thicknessRatio="1">
+		<coords:scales>
+ 			<scales:Linear id="l" />
+ 			<scales:Category id="c" categoryField="index" />
+		</coords:scales>
+		 <coords:elements>
+		 	<elements:ColumnElement mouseOverFunction="EffectsUtil.setGlowEffect" 
+		 		mouseOutFunction="EffectsUtil.removeEffects" 
+		 		scale1="{c}" scale2="{l}" dim1="index" dim2="gold" styleName="solid1"/>
+		 </coords:elements>
+	</coords:Cartesian>
+</mx:VBox>
