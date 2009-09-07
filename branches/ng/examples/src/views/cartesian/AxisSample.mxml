@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:guides="birdeye.vis.guides.legend.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
+	backgroundColor="#3f3f3f" 
+	creationComplete="createDT()"
+	width="100%" height="100%" horizontalAlign="center" xmlns:axis="birdeye.vis.guides.axis.*">
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import birdeye.util.EffectsUtil;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+			private var regions:Array;
+			
+			private function createDT():void
+			{
+				regions = ["R1","R2","R3","R4","R5","R6","R7"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var subjects:Array = ["medals"];
+				for (var i:Number = 0; i<regions.length; i++)
+				{
+					var gold:Number = Math.round(Math.random() * 1000),
+						silver:Number = Math.round(Math.random() * 1000),
+						bronze:Number = Math.round(Math.random() * 1000);
+					ac.addItem({
+						index: "cat" + i,
+						year: 2000 + i,
+						region: regions[i],
+						gold: gold,
+						silver: silver,
+						bronze: bronze,
+						total: gold + bronze + silver
+					});
+				}
+				dt = ac;
+			}
+			
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = dataFields["dim1"] + ": " + currDatatip[dataFields["dim1"]];
+				tt += '\n' + dataFields["dim2"] + ": " + currDatatip[dataFields["dim2"]];
+				return  tt;
+			}
+			
+			[Bindable]
+			[Embed(source="/assets/icons/raster.gif")]
+		 	public var rasterImage:Class;
+
+		]]>
+	</mx:Script>
+	<mx:Button label="Generate" click="createDT()"/>
+	<mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+		<coords:Cartesian id="pc3" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true" isMasked="false">
+			<coords:scales>
+	 			<scales:Linear id="l" />
+	 			<scales:Category id="c" categoryField="index" />
+			</coords:scales>
+			<coords:guides>
+				<axis:Axis scale="{c}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{c}" placement="left" colorPointer="0xFF0000" labelRenderer="views.itemRenderers.LabelRenderer" labelSize="20"/>
+				<axis:Axis scale="{c}" placement="right" data="{dt}" axisRendererWidth="30" axisRenderer="views.itemRenderers.RightAxisRenderer"/>
+				<axis:Axis scale="{l}" placement="top" data="{dt}" axisRendererHeight="30" axisRenderer="views.itemRenderers.TopAxisRenderer"/>
+				<axis:Axis scale="{l}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<grid:Grid scale1="{l}" scale2="{c}" divideEnumerableScale="false"/>
+			</coords:guides>
+			 <coords:elements>
+			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" collisionScale="scale1" mouseOutFunction="EffectsUtil.removeEffects" 
+			 		scale1="{l}" scale2="{c}" dim1="gold" dim2="index" graphicRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="solid1" displayName="C" />
+			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" collisionScale="scale1" mouseOutFunction="EffectsUtil.removeEffects" 
+			 		graphicRendererSize="0" scale1="{l}" scale2="{c}" extendMouseEvents="true" labelField="R4" labelSize="15" labelFont="verdana" labelColor="#FF0000" 
+			 		dim1="silver" dim2="index" graphicRenderer="birdeye.vis.guides.renderers.TextRenderer" displayName="B"/>
+			 </coords:elements>
+		</coords:Cartesian>
+	</mx:VBox>
+</mx:VBox>
