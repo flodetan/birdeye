@@ -320,6 +320,7 @@ package birdeye.vis.coords
 			{
 				IStack(_stackedElements[s]).baseValues = allElementsBaseAndTopValues[s].baseValues;		
 				IStack(_stackedElements[s]).topValues = allElementsBaseAndTopValues[s].topValues;		
+				IStack(_stackedElements[s]).maxCategoryValues = categoryMaxStacked100;		
 			}
 		}
 		

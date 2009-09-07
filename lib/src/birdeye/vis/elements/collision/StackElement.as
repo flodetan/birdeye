@@ -95,6 +95,18 @@ package birdeye.vis.elements.collision
 			return _topValues;
 		}
 
+		public var _maxCategoryValues:Array;
+		/** Set the maximum values for each category of the element. Used for stack100.*/
+		public function set maxCategoryValues(val:Array):void
+		{
+			_maxCategoryValues = val;
+			invalidateProperties();
+		}
+		public function get maxCategoryValues():Array
+		{
+			return _maxCategoryValues;
+		}
+
 		protected var _total:Number = NaN;
 		public function set total(val:Number):void
 		{

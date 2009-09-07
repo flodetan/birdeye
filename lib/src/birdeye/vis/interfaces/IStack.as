@@ -32,7 +32,7 @@ package birdeye.vis.interfaces
 		/** Set the position of the current component (element) inside a stack.*/
 		function set stackPosition(val:Number):void;
 		
-		/** Set the total of stacked elements inside a stack.*/
+		/** Set the total of clustered elements inside a cluster collision.*/
 		function set total(val:Number):void;
 
 		/** Set the element type (columns, area, bars).*/
@@ -46,9 +46,13 @@ package birdeye.vis.interfaces
 		function set baseValues(val:Array):void;
 		function get baseValues():Array;
 
-		/** Set the topValues for stacked 100 collisions (columns, area, bars).*/
+		/** Set the topValues for stacked collisions.*/
 		function set topValues(val:Array):void;
 		function get topValues():Array;
+
+		/** Set the maximum values for each category of the element. Used for stack100.*/
+		function set maxCategoryValues(val:Array):void;
+		function get maxCategoryValues():Array;
 
 		/** Set the scale that defines the 'direction' of the stack. For ex. BarElements are stacked horizontally with 
 		 * stack100 and vertically with normal stack. Columns (for both polar and cartesians)
