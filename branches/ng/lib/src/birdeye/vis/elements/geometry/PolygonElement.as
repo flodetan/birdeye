@@ -28,16 +28,16 @@
 package birdeye.vis.elements.geometry
 {
 	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.data.Pair;
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.UpTriangleRenderer;
 	import birdeye.vis.scales.*;
 	import birdeye.vis.trans.projections.Projection;
-	import birdeye.vis.data.Pair;
 	
 	import com.degrafa.IGeometry;
 	import com.degrafa.core.IGraphicsFill;
-	import com.degrafa.geometry.Geometry;
+	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.Polygon;
 	import com.degrafa.paint.SolidFill;
 	
@@ -99,7 +99,7 @@ package birdeye.vis.elements.geometry
 			}
 		}
 
-		protected var poly:Polygon;
+		protected var poly:Path;
 		/** @Private 
 		 * Called by super.updateDisplayList when the element is ready for layout.*/
 		override public function drawElement():void
@@ -119,8 +119,7 @@ var numCoords:Number = 0;
 				
 				dataFields["polyDim"] = _polyDim;
 				
-				poly = new Polygon();
-				poly.data = " ";
+				var data:String;
 
 				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
 				{
@@ -158,18 +157,21 @@ var numCoords:Number = 0;
 								if (scale2)
 									pos2 = scale2.getPosition(item);
 								
-								poly.data += String(pos1) + "," + String(pos2) + " ";
+								data = "M" + String(pos1) + "," + String(pos2) + " ";
 							} else if (item[0] is Pair) {
 								if (initiated)
 								{
+									data += "z";
+									poly = new Path(data);
 									poly.fill = fill;
 									poly.stroke = stroke;
 									ttGG.geometryCollection.addItemAt(poly,0);
 								}
 								initiated = false;
 								
-								poly = new Polygon();
-								poly.data = " ";
+								data = " ";
+								
+								var i:uint = 0;
 	
 								for each (var pairs:Pair in item)
 								{
@@ -181,8 +183,13 @@ var numCoords:Number = 0;
 									if (scale2)
 										pos2 = scale2.getPosition(pairs);
 									
-									poly.data += String(pos1) + "," + String(pos2) + " ";
+									if (i++ == 0)
+										data = "M" + String(pos1) + "," + String(pos2) + " ";
+									else
+										data += "L" + String(pos1) + "," + String(pos2) + " ";
 								}
+								data += "z";
+								poly = new Path(data);
 								poly.fill = fill;
 								poly.stroke = stroke; 
 								ttGG.geometryCollection.addItemAt(poly,0); 
