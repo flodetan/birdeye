@@ -32,11 +32,11 @@
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.IGraphLayout;
-	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.IProjection;
-	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.interfaces.ITransform;
 	import birdeye.vis.interfaces.guides.IGuide;
+	import birdeye.vis.interfaces.scales.INumerableScale;
+	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.interfaces.validation.IValidatingChild;
 	import birdeye.vis.interfaces.validation.IValidatingParent;
 	import birdeye.vis.interfaces.validation.IValidatingScale;
@@ -119,6 +119,18 @@
 		{
 			_isMasked = val;
 			invalidateDisplayList();
+		}
+		
+		public function get svgData():String
+		{
+			var _svgData:String = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" version="1.1" width="700" height="300"> <path d="';
+			if (elements)
+				for each (var element:IElement in elements)
+					if (element.svgData)
+						_svgData += element.svgData;
+
+			_svgData += '"/></svg>';
+			return _svgData;
 		}
 		
 		private var _coordType:String;

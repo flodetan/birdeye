@@ -91,6 +91,8 @@ trace (getTimer(), "drawing column ele");
 				super.drawElement();
 				clearAll();
 
+				svgData = "";
+
 				var pos1:Number, pos2:Number, zPos:Number = NaN;
 				var j:Object;
 				
@@ -283,7 +285,11 @@ trace (getTimer(), "drawing column ele");
 			 				else 
 								poly = graphicRenderer.newInstance();
 			
-							if (poly is IBoundedRenderer) (poly as IBoundedRenderer).bounds = bounds;
+							if (poly is IBoundedRenderer)
+							{
+								(poly as IBoundedRenderer).bounds = bounds;
+								svgData += (poly as IBoundedRenderer).data;
+							} 
 							poly.fill = fill;
 							poly.stroke = stroke;						
 							gg.geometryCollection.addItemAt(poly,0);  							
@@ -337,7 +343,8 @@ trace (getTimer(), "drawing column ele");
 							
 							arc = 
 								new ArcPath(baseScale2, pos2, startAngle, innerAngleSize, chart.origin);
-	//								new EllipticalArc(arcCenterX, arcCenterY, wSize, hSize, startAngle, arcSize, "pie");
+								
+							svgData += arc.data;
 			
 							arc.fill = fill;
 							arc.stroke = stroke;
@@ -347,7 +354,11 @@ trace (getTimer(), "drawing column ele");
 						if (_showGraphicRenderer)
 						{
 							var shape:IGeometry = graphicRenderer.newInstance();
-							if (shape is IBoundedRenderer) (shape as IBoundedRenderer).bounds = bounds;
+							if (shape is IBoundedRenderer)
+							{
+								(shape as IBoundedRenderer).bounds = bounds;
+								svgData += (shape as IBoundedRenderer).data;
+							} 
 							shape.fill = fill;
 							shape.stroke = stroke;
 							gg.geometryCollection.addItem(shape);

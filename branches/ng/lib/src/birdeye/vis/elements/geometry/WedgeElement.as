@@ -85,6 +85,9 @@ package birdeye.vis.elements.geometry
 			{
 				super.drawElement();
 				clearAll();
+				
+				svgData = "";
+				
 				var c:uint = 0;
 				
 				var angle:Number, radius:Number = NaN;
@@ -189,7 +192,9 @@ package birdeye.vis.elements.geometry
 							_innerRadius = tmpRadius;
 		
 						arc = new ArcPath(Math.max(0, _innerRadius), tmpRadius, startAngle, angle, chart.origin);
-			
+						
+						svgData += arc.data;
+						
 						var tempColor:int;
 						
 						if (colorField)

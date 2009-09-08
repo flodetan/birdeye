@@ -52,6 +52,7 @@ package birdeye.vis.elements.geometry
 			{
 				super.drawElement();
 				clearAll();
+				svgData = "";
 
 				var p1:Point, p2:Point, p3:Point, p4:Point;
 				
@@ -156,6 +157,7 @@ package birdeye.vis.elements.geometry
 					}
  					
  					var path:Path= new Path(data);
+ 					svgData += data;
 					path.fill = fill;
 					path.stroke = stroke;
 					gg.geometryCollection.addItemAt(path,0);

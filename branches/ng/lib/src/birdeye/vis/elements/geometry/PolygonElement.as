@@ -110,6 +110,7 @@ trace(getTimer(), "drawing polygon ele");
 var numCoords:Number = 0;
 				super.drawElement();
 				clearAll();
+				svgData = "";
 				var xPrev:Number, yPrev:Number;
 				var pos1:Number, pos2:Number;
 				var t:uint = 0;
@@ -166,6 +167,7 @@ var numCoords:Number = 0;
 									poly.fill = fill;
 									poly.stroke = stroke;
 									ttGG.geometryCollection.addItemAt(poly,0);
+									svgData += data;
 								}
 								initiated = false;
 								
@@ -193,6 +195,8 @@ var numCoords:Number = 0;
 								poly.fill = fill;
 								poly.stroke = stroke; 
 								ttGG.geometryCollection.addItemAt(poly,0); 
+								
+								svgData += data;
 							}
 						}
 					}
