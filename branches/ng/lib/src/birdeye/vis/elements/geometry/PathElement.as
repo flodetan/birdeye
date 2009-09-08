@@ -62,7 +62,6 @@ package birdeye.vis.elements.geometry
 				super.drawElement();
 				clearAll();
 				
-				svgData = "";
 				var splitGroups:Array = createSplitGroups();
 
 				var startX:Number, startY:Number;
@@ -138,6 +137,7 @@ package birdeye.vis.elements.geometry
 							previousSize = sizeStart;
 					}
 				}
+				svgData += '"/>';
 				_invalidatedElementGraphic = false;
 			}
 		}

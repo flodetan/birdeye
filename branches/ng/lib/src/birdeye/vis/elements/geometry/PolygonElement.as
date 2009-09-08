@@ -110,7 +110,7 @@ trace(getTimer(), "drawing polygon ele");
 var numCoords:Number = 0;
 				super.drawElement();
 				clearAll();
-				svgData = "";
+
 				var xPrev:Number, yPrev:Number;
 				var pos1:Number, pos2:Number;
 				var t:uint = 0;
@@ -201,6 +201,7 @@ var numCoords:Number = 0;
 						}
 					}
 				}
+				svgData += '"/>';
 				_invalidatedElementGraphic = false;
 trace(getTimer(), "drawing polygon ele Num coords ", numCoords);
 			}

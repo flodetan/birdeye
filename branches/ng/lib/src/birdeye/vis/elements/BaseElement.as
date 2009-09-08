@@ -1108,6 +1108,7 @@ package birdeye.vis.elements
 		public function drawElement():void
 		{
 			_invalidatedElementGraphic = false;
+			svgData = '<path d="';
 			
 			dataFields = [];
 			// prepare data for a standard tooltip message in case the user

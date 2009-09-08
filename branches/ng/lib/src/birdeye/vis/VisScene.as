@@ -124,13 +124,13 @@
 		public function get svgData():String
 		{
 			var _svgData:String = '<svg xmlns="http://www.w3.org/2000/svg" ' + 
-					'			version="1.1" width="700" height="300"> <path d="';
+					'			version="1.1" width="700" height="300">';
 			if (elements)
 				for each (var element:IElement in elements)
 					if (element.svgData)
 						_svgData += element.svgData;
 
-			_svgData += '"/></svg>';
+			_svgData += '</svg>';
 			return _svgData;
 		}
 		

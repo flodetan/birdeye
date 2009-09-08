@@ -86,8 +86,6 @@ package birdeye.vis.elements.geometry
 				super.drawElement();
 				clearAll();
 				
-				svgData = "";
-				
 				var c:uint = 0;
 				
 				var angle:Number, radius:Number = NaN;
@@ -300,6 +298,7 @@ package birdeye.vis.elements.geometry
 					gg.geometryCollection.addItem(label); 
 				}
 			}
+			svgData += '"/>';
 			_invalidatedElementGraphic = false;
 		}
 	}

@@ -112,7 +112,7 @@ package birdeye.vis.elements.geometry
 trace (getTimer(), "area ele");
 				super.drawElement();
 				clearAll();
-				svgData = "";
+
 				if (bzSplines)
 					bzSplines.clearGraphicsTargets();
 				var xPrev:Number, yPrev:Number;
@@ -242,6 +242,7 @@ trace (getTimer(), "area ele");
 					gg.geometryCollection.addItem(poly);
 				}
 	
+				svgData += '"/>';
 				if (dim3)
 					zSort();
 				_invalidatedElementGraphic = false;

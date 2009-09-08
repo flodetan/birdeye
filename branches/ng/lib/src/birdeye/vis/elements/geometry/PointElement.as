@@ -248,7 +248,7 @@ trace (getTimer(), "drawing point ele");
 							scaleResults[POS3] = 0;
 					}
 				}
-				
+				svgData += '"/>';
 				if (dim3)
 					zSort();
 	
@@ -273,7 +273,11 @@ trace (getTimer(), "drawing point ele");
  					var tmp:Object = graphicRenderer.newInstance();
  					plot = tmp as IGeometry;
  					Geometry(plot).preDraw();
- 					if (plot is IBoundedRenderer) (plot as IBoundedRenderer).bounds = bounds;
+ 					if (plot is IBoundedRenderer)
+ 					{
+ 						(plot as IBoundedRenderer).bounds = bounds;
+ 						svgData += (plot as IBoundedRenderer).data;
+ 					} 
  				} 
 				
 				if(plot)

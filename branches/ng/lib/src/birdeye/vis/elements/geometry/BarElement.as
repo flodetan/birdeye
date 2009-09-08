@@ -83,8 +83,6 @@ trace(getTimer(), "drawing bar");
 				super.drawElement();
 				clearAll();
 				
-				svgData = "";
-
 				var xPos:Number, yPos:Number, zPos:Number = NaN;
 				var j:Object;
 	
@@ -264,6 +262,7 @@ trace(getTimer(), "drawing bar");
 					if (dim3)
 						zSort();
 					_invalidatedElementGraphic = false;
+					svgData += '"/>';
 				}
 	trace(getTimer(), "END drawing bar");
 			}
