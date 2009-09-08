@@ -91,8 +91,6 @@ trace (getTimer(), "drawing column ele");
 				super.drawElement();
 				clearAll();
 
-				svgData = "";
-
 				var pos1:Number, pos2:Number, zPos:Number = NaN;
 				var j:Object;
 				
@@ -369,6 +367,7 @@ trace (getTimer(), "drawing column ele");
 				if (dim3)
 					zSort();
 
+				svgData += '"/>';
 				_invalidatedElementGraphic = false;
 trace (getTimer(), "drawing column ele");
 			}

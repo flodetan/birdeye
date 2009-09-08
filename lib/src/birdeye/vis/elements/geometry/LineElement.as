@@ -115,7 +115,6 @@ package birdeye.vis.elements.geometry
 trace (getTimer(), "drawing line ele");
 				super.drawElement();
 				clearAll();
-				svgData = "";
 				
 				if (bzSplines)
 					bzSplines.clearGraphicsTargets();
@@ -249,6 +248,8 @@ trace (getTimer(), "drawing line ele");
 	
 				if (dim3)
 					zSort();
+
+				svgData += '"/>';
 
 				_invalidatedElementGraphic = false;
 trace (getTimer(), "drawing line ele");
