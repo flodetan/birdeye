@@ -138,6 +138,16 @@ package birdeye.vis.elements
 			_filter2 = val;
 			invalidatingDisplay();
 		}
+		
+		private var _svgData:String;
+		public function set svgData(val:String):void
+		{
+			_svgData = val;
+		}
+		public function get svgData():String
+		{
+			return _svgData;
+		}
 
 		public static const SCALE1:String = "scale1";
 		public static const SCALE2:String = "scale2";

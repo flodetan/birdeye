@@ -33,16 +33,12 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.UpTriangleRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.scales.INumerableScale;
-	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.GraphicPoint;
 	import com.degrafa.IGeometry;
-	import com.degrafa.core.IGraphicsFill;
-	import com.degrafa.geometry.Line;
-	import com.degrafa.geometry.Polygon;
+	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.splines.BezierSpline;
-	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
@@ -105,7 +101,7 @@ package birdeye.vis.elements.geometry
 			}
 		}
 
-		protected var poly:Polygon;
+		protected var poly:Path;
 		private var bzSplines:BezierSpline;
 		/** @Private 
 		 * Called by super.updateDisplayList when the element is ready for layout.*/
@@ -116,15 +112,13 @@ package birdeye.vis.elements.geometry
 trace (getTimer(), "area ele");
 				super.drawElement();
 				clearAll();
+				svgData = "";
 				if (bzSplines)
 					bzSplines.clearGraphicsTargets();
 				var xPrev:Number, yPrev:Number;
 				var pos1:Number, pos2:Number, zPos:Number;
 				var j:Object;
 				
-				poly = new Polygon();
-				poly.data = "";
-	
 				y0 = getYMinPosition();
 				var y0Prev:Number;
 
@@ -171,18 +165,23 @@ trace (getTimer(), "area ele");
 						points.push(new GraphicPoint(scaleResults[POS1],scaleResults[POS2]));
 					} else {
 						if (chart.coordType == VisScene.POLAR)
-							poly.data += String(scaleResults[POS1]) + "," + String(scaleResults[POS2]) + " ";
+							if (!data)
+								data = "M" + String(scaleResults[POS1]) + "," + String(scaleResults[POS2]) + " ";
+							else
+								data += "L" + String(scaleResults[POS1]) + "," + String(scaleResults[POS2]) + " ";
 		
 						// create the polygon only if there is more than 1 data value
 						// there cannot be an area with only the first data value 
 						if (chart.coordType == VisScene.CARTESIAN && !isNaN(xPrev) && !isNaN(yPrev) && !isNaN(y0Prev) 
 							&& !isNaN(scaleResults[POS1]) && !isNaN(scaleResults[POS2]))
 						{
-							poly = new Polygon()
-							poly.data =  String(xPrev) + "," + String(y0Prev) + " " +
-										String(xPrev) + "," + String(yPrev) + " " +
-										String(scaleResults[POS1]) + "," + String(scaleResults[POS2]) + " " +
-										String(scaleResults[POS1]) + "," + String(y0);
+							var data:String;
+							data =  "M" + String(xPrev) + "," + String(y0Prev) + " " +
+									"L" + String(xPrev) + "," + String(yPrev) + " " +
+									"L" + String(scaleResults[POS1]) + "," + String(scaleResults[POS2]) + " " +
+									"L" + String(scaleResults[POS1]) + "," + String(y0) + " z";
+							svgData += data;
+							poly = new Path(data);
 							poly.fill = fill;
 							poly.stroke = stroke;
 							gg.geometryCollection.addItemAt(poly,0);
@@ -233,8 +232,11 @@ trace (getTimer(), "area ele");
 						// the double point prevent from drawing a large final bezier curve
 						points.push(new GraphicPoint(width, y0-.0000000001));
 					}
-				} else if (chart.coordType == VisScene.POLAR && poly.data)
+				} else if (chart.coordType == VisScene.POLAR && data)
 				{
+					data += "z";
+					svgData += data;
+					poly = new Path(data);
 					poly.fill = fill;
 					poly.stroke = stroke;
 					gg.geometryCollection.addItem(poly);

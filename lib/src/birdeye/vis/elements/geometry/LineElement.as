@@ -37,6 +37,7 @@ package birdeye.vis.elements.geometry
 	import com.degrafa.GraphicPoint;
 	import com.degrafa.IGeometry;
 	import com.degrafa.geometry.Line;
+	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.splines.BezierSpline;
 	import com.degrafa.paint.SolidStroke;
 	
@@ -114,6 +115,8 @@ package birdeye.vis.elements.geometry
 trace (getTimer(), "drawing line ele");
 				super.drawElement();
 				clearAll();
+				svgData = "";
+				
 				if (bzSplines)
 					bzSplines.clearGraphicsTargets();
 				var xPrev:Number, yPrev:Number;
@@ -188,7 +191,10 @@ trace (getTimer(), "drawing line ele");
 					{
 						if (!isNaN(xPrev) && !isNaN(yPrev) && !isNaN(scaleResults[POS1]) && !isNaN(scaleResults[POS2]))
 						{
-	 						var line:Line = new Line(xPrev,yPrev,scaleResults[POS1],scaleResults[POS2]);
+							var data:String = "M" + String(xPrev) + "," + String(yPrev) + " " +
+											"L" + String(scaleResults[POS1]) + "," + String(scaleResults[POS2]);
+							var line:Path= new Path(data);
+							svgData += data;
 							line.fill = fill;
 							line.stroke = stroke;
 							gg.geometryCollection.addItemAt(line,0);
@@ -231,7 +237,10 @@ trace (getTimer(), "drawing line ele");
 				if (chart.coordType == VisScene.POLAR && autoClose && !isNaN(firstX) && !isNaN(firstY) 
 					&& !isNaN(scaleResults[POS1]) && !isNaN(scaleResults[POS2]))
 				{
-						line = new Line(scaleResults[POS1],scaleResults[POS2], firstX, firstY);
+						data = "M" + String(scaleResults[POS1]) + "," + String(scaleResults[POS2]) + " " +
+								"L" + String(firstX) + "," + String(firstY);
+						line = new Path(data);
+						svgData += data;
 						line.fill = fill;
 						line.stroke = stroke;
 						gg.geometryCollection.addItemAt(line,0);

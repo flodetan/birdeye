@@ -62,6 +62,7 @@ package birdeye.vis.elements.geometry
 				super.drawElement();
 				clearAll();
 				
+				svgData = "";
 				var splitGroups:Array = createSplitGroups();
 
 				var startX:Number, startY:Number;
@@ -217,6 +218,7 @@ package birdeye.vis.elements.geometry
 				gg.geometryCollection.addItemAt(circle,0);
 			}
  			var path:Path= new Path(data);
+ 			svgData += data;
 			path.fill = fill;
 			path.stroke = stroke;
 			gg.geometryCollection.addItem(path);

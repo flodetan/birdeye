@@ -9,5 +9,6 @@ package birdeye.vis.interfaces
 	public interface IBoundedRenderer
 	{	
 		function set bounds(bounds:Rectangle):void;
+		function get data():Object;
 	}
 }

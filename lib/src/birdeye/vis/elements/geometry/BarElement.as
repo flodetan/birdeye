@@ -82,6 +82,8 @@ package birdeye.vis.elements.geometry
 trace(getTimer(), "drawing bar");
 				super.drawElement();
 				clearAll();
+				
+				svgData = "";
 
 				var xPos:Number, yPos:Number, zPos:Number = NaN;
 				var j:Object;
@@ -232,7 +234,11 @@ trace(getTimer(), "drawing bar");
 		 				else 
 						{							
 							poly = graphicRenderer.newInstance();
-							if (poly is IBoundedRenderer) (poly as IBoundedRenderer).bounds = bounds;
+							if (poly is IBoundedRenderer)
+							{
+								(poly as IBoundedRenderer).bounds = bounds;
+								svgData += (poly as IBoundedRenderer).data;
+							} 
 		
 						}
 							
@@ -240,7 +246,11 @@ trace(getTimer(), "drawing bar");
 						{
 
 							var shape:IGeometry = graphicRenderer.newInstance();
-							if (shape is IBoundedRenderer) (shape as IBoundedRenderer).bounds = bounds;
+							if (shape is IBoundedRenderer)
+							{
+								(shape as IBoundedRenderer).bounds = bounds;
+								svgData += (shape as IBoundedRenderer).data;
+							} 
 							shape.fill = fill;
 							shape.stroke = stroke;
 							gg.geometryCollection.addItem(shape);

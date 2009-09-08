@@ -154,5 +154,7 @@ package birdeye.vis.interfaces
 		 * both display refresh and memory clearing..*/
 		function clearAll():void;
 		
+		/** Return the svg data corresponding to this element.*/
+		function get svgData():String;
 	}
 }
