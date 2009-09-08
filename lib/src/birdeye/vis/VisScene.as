@@ -123,7 +123,8 @@
 		
 		public function get svgData():String
 		{
-			var _svgData:String = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" version="1.1" width="700" height="300"> <path d="';
+			var _svgData:String = '<svg xmlns="http://www.w3.org/2000/svg" ' + 
+					'			version="1.1" width="700" height="300"> <path d="';
 			if (elements)
 				for each (var element:IElement in elements)
 					if (element.svgData)
