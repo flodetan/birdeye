@@ -40,6 +40,7 @@ package birdeye.vis.guides.axis
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
 	import com.degrafa.geometry.Line;
+	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.RasterText;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
@@ -93,7 +94,18 @@ package birdeye.vis.guides.axis
 		{
 			styleName = "Axis";
 		}
-		
+
+		private var _svgData:String;
+		/** String containing the svg data to be exported.*/ 
+		public function set svgData(val:String):void
+		{
+			_svgData = val;
+		}
+		public function get svgData():String
+		{
+			return _svgData;
+		}
+
 		private var _data:Object;
 		/** Define the data to be passed to the axisRenderer.*/
 		public function set data(val:Object):void
@@ -826,6 +838,10 @@ package birdeye.vis.guides.axis
 			if (showAxis && invalidated)
 			{
 				clearAll();
+				svgData = '\n<g style="fill:none' + 
+						';fill-opacity:1;stroke:#000000' + 
+						';stroke-width:1;stroke-opacity:1;">\n<path d="';
+
 				drawAxisLine(w,h)
 	
 				//if (readyForLayout)
@@ -901,8 +917,12 @@ package birdeye.vis.guides.axis
 					y0 = 0; y1 = h;
 					break;
 			}
+			
+			var tmpSVG:String = "M" + String(x0) + "," + String(y0) + " " + 
+							"L" + String(x1) + "," + String(y1) + " ";
 
-			var line:Line = new Line(x0,y0,x1,y1);
+			var line:Path = new Path(tmpSVG);
+			svgData += tmpSVG;
 			line.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 
 			gg.geometryCollection.addItem(line);
@@ -960,7 +980,6 @@ package birdeye.vis.guides.axis
 		 
 		protected function drawAxes(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
 		{
-			
 			if (scale && scale.completeDataValues.length > 0 && isNaN(maxLblSize) && placement && size > 0)
 				calculateMaxLabelSize();
 			
@@ -992,7 +1011,7 @@ package birdeye.vis.guides.axis
 trace(getTimer(), "drawing axis");
 			invalidated = false;
 
-			var thick:Line;
+			var thick:Path;
 			var label:RasterText;
 			
 			// allow category labels to be intervalled, thus avoiding overlapping
@@ -1011,7 +1030,13 @@ trace(getTimer(), "drawing axis");
 					{
 						yPos = coordinates.origin.y - yPos;	
 					}
-		 			thick = new Line(xMin + thickWidth * sign, yPos, xMax, yPos);
+
+					var tmpSVG:String = "M" + String(xMin + thickWidth * sign) + "," + String(yPos) + " " + 
+									"L" + String(xMax) + "," + String(yPos) + " ";
+		
+		 			thick = new Path(tmpSVG);
+					svgData += tmpSVG;
+
 					thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 					gg.geometryCollection.addItem(thick);
 		
@@ -1039,7 +1064,11 @@ trace(getTimer(), "drawing axis");
 					var xPos:Number = scale.getPosition(dataLabel);
 
 					// create thick line
-		 			thick = new Line(xPos, yMin + thickWidth * sign, xPos, yMax);
+					tmpSVG = "M" + String(xPos) + "," + String(yMin + thickWidth * sign) + " " + 
+									"L" + String(xPos) + "," + String(yMax) + " ";
+		
+		 			thick = new Path(tmpSVG);
+					svgData += tmpSVG;
 					thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 					gg.geometryCollection.addItem(thick);
 

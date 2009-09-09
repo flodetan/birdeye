@@ -126,6 +126,17 @@ package birdeye.vis.guides.axis
 			return _size; 
 		}
 		
+		private var _svgData:String;
+		/** String containing the svg data to be exported.*/ 
+		public function set svgData(val:String):void
+		{
+			_svgData = val;
+		}
+		public function get svgData():String
+		{
+			return _svgData;
+		}
+
 		/**
 		 * @see birdeye.vis.interfaces.guides.IAxis#maxLabelSize
 		 */
