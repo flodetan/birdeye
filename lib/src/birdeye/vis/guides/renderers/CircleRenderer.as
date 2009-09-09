@@ -50,7 +50,7 @@ package birdeye.vis.guides.renderers
 			data = "M" + String(xCenter+radius) + " " + String(yCenter) + " ";
 
 			// arc to 2nd inner point with radius = r
-			data+= "A" + String(radius) + " " + String(radius) + " 0 " + "1 1 " + String(xCenter+radius) + " " + String(yCenter-0.00001)  + " z";
+			data+= "A" + String(radius) + " " + String(radius) + " 0 " + "1 1 " + String(xCenter+radius) + " " + String(yCenter-0.01)  + " z";
 		}
 	}
 }
