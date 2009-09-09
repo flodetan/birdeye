@@ -34,7 +34,7 @@ package birdeye.vis.guides.grid
 	import birdeye.vis.scales.BaseScale;
 	
 	import com.degrafa.GeometryComposition;
-	import com.degrafa.geometry.Line;
+	import com.degrafa.geometry.Path;
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.geom.Rectangle;
@@ -53,7 +53,6 @@ package birdeye.vis.guides.grid
 			//autoClearGraphicsTarget = false;
 			stroke = new SolidStroke(0x000000, .3, 1);
 		}
-		
 		
 		public function get position():String
 		{
@@ -94,6 +93,17 @@ package birdeye.vis.guides.grid
 			return _scale3;	
 		}
 		
+		private var _svgData:String = "";
+		/** String containing the svg data to be exported.*/ 
+		public function set svgData(val:String):void
+		{
+			_svgData = val;
+		}
+		public function get svgData():String
+		{
+			return _svgData;
+		}
+
 		/**
 		 * @see birdeye.vis.interfaces.guides.IGuide#coordinates
 		 */
@@ -171,6 +181,10 @@ package birdeye.vis.guides.grid
 
 trace(getTimer(), "drawing grid", this.id);
 			
+			svgData = '\n<g style="fill:none' + 
+					';fill-opacity:1;stroke:#000000' + 
+					';stroke-width:1;stroke-opacity:1;">\n<path d="';
+
 			var nbrOfItems:Number = drawLinesBasedOnScale(scale1, bounds);
 			nbrOfItems = drawLinesBasedOnScale(scale2, bounds, nbrOfItems);
 			// scale3 not implemented yet, not sure about how it works
@@ -194,33 +208,32 @@ trace(getTimer(), "end drawing grid", this.id);
 				for each (var dataLabel:Object in scale.completeDataValues)
 				{
 				
-					var item:Line = Line(this.geometryCollection.getItemAt(startIndex++));
+					var item:Path= Path(this.geometryCollection.getItemAt(startIndex++));
 					var position:Number = scale.getPosition(dataLabel) + offset;
 					if (!item)
 					{
 						trace("grid new item");
-						item = new Line();
+						item = new Path();
 						item.stroke = stroke;
 						this.geometryCollection.addItem(item);
 					}
 					
+					var itemData:String = "";
 					
 		 			if (scale.dimension == BaseScale.DIMENSION_2)
 		 			{
 		 				// horizontal
-		 				item.y = position;
-						item.y1 = position;
-						item.x = 0;
-						item.x1 = bounds.width; // NOT GOOD
-					}
-					else if (scale.dimension == BaseScale.DIMENSION_1)
+		 				itemData = "M" + String(0) + " " + String(position) + " " + 
+		 							"L" + String(bounds.width) + " " + String(position) + " ";
+					} else if (scale.dimension == BaseScale.DIMENSION_1)
 					{
 						// vertical
-						item.x = position;
-						item.x1 = position;
-						item.y1 = bounds.height;
-						item.y = 0;
+						itemData = "M" + String(position) + " " + String(0) + " " + 
+		 							"L" + String(position) + " " + String(bounds.height) + " ";
 					}	
+					item.data = itemData;
+					
+					svgData += itemData;
 				}
 				
  			}
