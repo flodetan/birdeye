@@ -1108,8 +1108,6 @@ package birdeye.vis.elements
 		public function drawElement():void
 		{
 			_invalidatedElementGraphic = false;
-			svgData = '<path d="';
-			
 			dataFields = [];
 			// prepare data for a standard tooltip message in case the user
 			// has not set a dataTipFunction
@@ -1173,8 +1171,19 @@ package birdeye.vis.elements
 				rectBackGround.height = unscaledHeight;
 			}
 			
+			var fillValues:Array = getFillValues();
+			var rgbFill:String = toHex(fillValues[0]);
+			var rgbStroke:String = toHex(colorStroke);
+
+			svgData = '\n<g style="fill:#' + rgbFill + ';fill-opacity:1;stroke:#' + rgbStroke + ';stroke-width:1;stroke-opacity:1;">\n<path d="';
+
 			// to be overridden by each element implementation
 		}
+
+        private function toHex(item:Object):String {
+            var hex:String = Number(item).toString(16);
+            return ("00000" + hex).substr(-6);
+        }
 		
 		private function getFillStrokeColors():void
 		{
@@ -1226,6 +1235,22 @@ package birdeye.vis.elements
 			}
 
 			stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
+		}
+
+		private function getFillValues():Array
+		{
+			if (colorGradients)
+				return colorGradients;
+			
+			if (_colorsStart && _colorsStop)
+				return [_colorsStart, _colorsStop];
+			else if (randomColors)
+			{
+				if (lastRandomColor == -1)
+					lastRandomColor = Math.random() * 255 * 255 * 255;
+				return [lastRandomColor];
+			}
+			return [colorFill];
 		}
 		
 		protected function isReadyForLayout():Boolean

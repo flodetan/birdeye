@@ -262,7 +262,6 @@ trace(getTimer(), "drawing bar");
 					if (dim3)
 						zSort();
 					_invalidatedElementGraphic = false;
-					svgData += '"/>';
 				}
 	trace(getTimer(), "END drawing bar");
 			}

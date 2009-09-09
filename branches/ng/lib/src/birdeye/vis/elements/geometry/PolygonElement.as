@@ -201,7 +201,6 @@ var numCoords:Number = 0;
 						}
 					}
 				}
-				svgData += '"/>';
 				_invalidatedElementGraphic = false;
 trace(getTimer(), "drawing polygon ele Num coords ", numCoords);
 			}

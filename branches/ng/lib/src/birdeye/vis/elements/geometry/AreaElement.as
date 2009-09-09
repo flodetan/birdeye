@@ -242,7 +242,6 @@ trace (getTimer(), "area ele");
 					gg.geometryCollection.addItem(poly);
 				}
 	
-				svgData += '"/>';
 				if (dim3)
 					zSort();
 				_invalidatedElementGraphic = false;

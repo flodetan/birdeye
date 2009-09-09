@@ -248,7 +248,6 @@ trace (getTimer(), "drawing point ele");
 							scaleResults[POS3] = 0;
 					}
 				}
-				svgData += '"/>';
 				if (dim3)
 					zSort();
 	

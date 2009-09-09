@@ -249,8 +249,6 @@ trace (getTimer(), "drawing line ele");
 				if (dim3)
 					zSort();
 
-				svgData += '"/>';
-
 				_invalidatedElementGraphic = false;
 trace (getTimer(), "drawing line ele");
 			}
