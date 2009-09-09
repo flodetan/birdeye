@@ -35,5 +35,13 @@ package birdeye.vis.interfaces.guides
 		/** The axis must provide the clear all graphics items when refreshed, thus insuring
 		 * both display refresh and memory clearing.*/
 		function clearAll():void
+
+		/** Return the svg data corresponding to this guide.*/
+		function get svgData():String;
+
+		/** Return the x position of this guide.*/
+		function get x():Number;
+		/** Return the y position of this guide.*/
+		function get y():Number;
 	}
 }
