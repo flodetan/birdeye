@@ -7,6 +7,7 @@
 	xmlns:maps="views.maps.*"
 	xmlns:graphs="views.graphs.*"
 	xmlns:composite="views.composite.*"
+	xmlns:svg="views.SVG.*"
 	xmlns:recipes="views.recipes.*"
 	xmlns:about="views.about.*"
 	backgroundGradientColors="[#222222, #222222]"
@@ -59,6 +60,7 @@
 			<maps:Maps label="Maps" width="100%" height="100%"/>
 			<graphs:Graphs label="Graphs" width="100%" height="100%"/>
 			<composite:Composite label="Composite" width="100%" height="100%"/>
+			<svg:Svg label="SVG" width="100%" height="100%"/>
 			<recipes:Recipes label="Recipes" width="100%" height="100%"/>
 			<about:About label="About..." width="100%" height="100%"/>
 		</mx:TabNavigator>
