@@ -219,7 +219,7 @@ package birdeye.vis.elements.geometry
 				tmpCircleData = "M" + String(endX+sizeEnd/2) + " " + String(endY) + " ";
 	
 				// arc to 2nd inner point with radius = r
-				tmpCircleData += "A" + String(sizeEnd/2) + " " + String(sizeEnd/2) + " 0 " + "1 1 " + String(endX+sizeEnd/2) + " " + String(endY-0.00001)  + " z ";
+				tmpCircleData += "A" + String(sizeEnd/2) + " " + String(sizeEnd/2) + " 0 " + "1 1 " + String(endX+sizeEnd/2) + " " + String(endY-0.001)  + " z ";
 				
 				var circle:Path = new Path(tmpCircleData);
 				circleData += tmpCircleData;
