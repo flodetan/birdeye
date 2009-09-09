@@ -10,6 +10,7 @@
 	<mx:TabNavigator id="nav" height="100%" width="100%" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" creationPolicy="auto">
 		<cartesian:Area label="Area" width="100%" height="100%"/>
 		<cartesian:Bar label="Bar" width="100%" height="100%"/>
+		<cartesian:Piramyd label="Piramyd" width="100%" height="100%"/>
 		<cartesian:Isotype label="Isotype" width="100%" height="100%"/>
 		<cartesian:Bubble label="Bubble" width="100%" height="100%"/>
 		<cartesian:Column label="Column" width="100%" height="100%"/>
