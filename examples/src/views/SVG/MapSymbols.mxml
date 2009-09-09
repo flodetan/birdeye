@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
-	width="100%" height="100%"
-	horizontalAlign="center" verticalAlign="middle"
-	xmlns:coords="birdeye.vis.coords.*"
-	xmlns:elements="birdeye.vis.elements.geometry.*"
-	xmlns:trans="birdeye.vis.trans.projections.*"
-	xmlns:scales="birdeye.vis.scales.*"
-	xmlns:guides="birdeye.vis.guides.legend.*" creationComplete="createDT()" xmlns:axis="birdeye.vis.guides.axis.*">
-<mx:Script>
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:polar="birdeye.vis.coords.*"
+	xmlns:pseries="birdeye.vis.elements.geometry.*"
+	xmlns:cseries="birdeye.vis.elements.*"
+	xmlns:axis="birdeye.vis.scales.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	creationComplete="createDT()"
+	width="100%" height="100%" horizontalAlign="center" xmlns:axis1="birdeye.vis.guides.axis.*">
+	<mx:Script>
 		<![CDATA[
 			import birdeye.vis.data.UtilSVG;
 			import mx.collections.ArrayCollection;
@@ -22,54 +22,55 @@
 			{
 				subject = ["A", "B", "C", "D", "E", "F"];
 				var ac:ArrayCollection = new ArrayCollection();
-				var r1:Number, r2:Number, r3:Number, r4:Number;
-				for (var i:Number = 0; i<subject.length; i++)
+				for (var i:Number = 1; i<subject.length; i++)
 				{
 					ac.addItem({
 						subject: subject[i],
-						R1: r1=Math.round(Math.random() * 1000),
-						R2: r2=Math.round(Math.random() * 1000),
-						R3: r3=Math.round(Math.random() * 1000),
-						R4: r4=Math.round(Math.random() * 1000),
-						total: r1+r2+r3+r4 
+						R1: Math.round(Math.random() * 100),
+						R2: Math.round(Math.random() * 100),
+						R3: Math.round(Math.random() * 100),
+						R4: Math.round(Math.random() * 100),
+						R5: Math.round(Math.random() * 100)
 					});
 				}
 				dt = ac;
 			}
-
-			private function dtFunc(currDatatip:Object, dataFields:Array):String
-			{
-				var tt:String = dataFields["dim1"] + ": " + currDatatip[dataFields["dim1"]];
-				tt += '\n' + "Y: " + dataFields["dim2"] + ": " + currDatatip[dataFields["dim2"]];
-				if (dataFields["sizeField"] != null)
-					tt += '\n' + "Size: " + dataFields["sizeField"] + ": " + currDatatip[dataFields["sizeField"]];
-				return  tt;
-			}
 		]]>
 	</mx:Script>
-	
-	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
-    	<mx:HBox >
-			<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([bb.svgData], bb.width, bb.height))"/>
-		</mx:HBox>
-	<coords:Cartesian id="bb" width="90%" height="90%" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true" isMasked="false">
-		<coords:scales>
-	 		<scales:Category id="c" categoryField="subject" />
-		 	<scales:Linear id="l" />
-			<scales:Linear id="size" scaleValues="[5,30]"/>
-		</coords:scales>
-		<coords:guides>
-			<axis:Axis scale="{c}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
-			<axis:Axis scale="{c}" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
-			<axis:Axis scale="{l}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
-		</coords:guides>
-		 <coords:elements>
-		 	<elements:PointElement scale1="{c}" scale2="{l}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" styleName="grad1" dim2="R1" displayName="R1"/>
-		 	<elements:PointElement scale1="{c}" scale2="{l}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" styleName="grad3" dim2="R2" displayName="R2"/>
-		 	<elements:PointElement scale1="{c}" scale2="{l}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" styleName="grad5" dim2="R3" displayName="R3"/>
-		 	<elements:PointElement scale1="{c}" scale2="{l}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" styleName="grad4" dim2="R4" displayName="R4"/>
-		 </coords:elements>
-	</coords:Cartesian>
-    </mx:VBox>
+
+<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
+
+	<mx:HBox >
+		<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([pc1.svgData], pc1.width, pc1.height))"/>
+		<mx:Button label="Generate" click="createDT()"/>
+	</mx:HBox>
+
+	<polar:Polar collisionType="stack" thicknessRatio=".2" id="pc1" dataProvider="{dt}" 
+		showDataTips="true" width="100%" height="100%">
+<!--		<coxcomb:angleScale>
+			<axis:CategoryAngle categoryField="subject" />
+		</coxcomb:angleScale>
+		<coxcomb:radiusScale>
+			<axis:Linear showAxis="false"/>
+		</coxcomb:radiusScale>
+-->		<polar:scales>
+			<axis:CategoryAngle id="c" categoryField="subject"/>
+			<axis:Linear id="l1" />
+			<axis:Linear id="l2" />
+		</polar:scales>
+		<polar:guides>
+			<axis1:Axis scale="{l1}" placement="horizontal_center" sizeLabel="11" colorPointer="0xffffff" weightPointer="5"/>
+			<axis1:Axis scale="{l2}" placement="vertical_center" sizeLabel="11" colorPointer="0xff0000" weightPointer="5"/>
+		</polar:guides>
+		<polar:elements>
+			<pseries:AreaElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l2}" styleName="grad2" alpha=".2" dim1="subject" dim2="R1" displayName="R1"/>
+			<pseries:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l1}" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
+			<pseries:LineElement showAllDataItems="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l2}" extendMouseEvents="true" styleName="solid2" dim1="subject" dim2="R5" displayName="R5"/>
+			<pseries:ColumnElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l1}" alpha=".3" styleName="grad1" dim1="subject" dim2="R2" displayName="R2"/>
+		</polar:elements>
+	</polar:Polar>
+	<legend:Legend dataProvider="{pc1}" direction="horizontal" />
 	
 </mx:VBox>
+
+</mx:Box>
