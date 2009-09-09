@@ -53,8 +53,7 @@ package birdeye.vis.data
 					var bodySVGHeader:String = "";
 					if (svg is String)
 					{
-						bodySVGHeader = '\n<svg>';
-						body += bodySVGHeader + svg + "</svg>\n";
+						body += svg;
 					} else if (svg is Object) {
 						bodySVGHeader = '\n<svg x="' + svg.x + '" y="' + svg.y + '">';
 						body += bodySVGHeader + svg.data + "</svg>\n";
