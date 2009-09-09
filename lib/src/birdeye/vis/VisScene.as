@@ -123,11 +123,35 @@
 		
 		public function get svgData():String
 		{
-			var _svgData:String = '\n';
+			var _svgData:String = '';
 			if (elements)
 				for each (var element:IElement in elements)
 					if (element.svgData)
-						_svgData += element.svgData + '"\n/>\n</g>';;
+					{
+						if (elementsContainer)
+							_svgData += '\n<svg x="' + String(elementsContainer.x) + 
+											'" y="' + String(elementsContainer.y) + '">' +
+										 element.svgData + '"\n/>\n</g>\n</svg>';
+						else
+							_svgData += '\n<svg>' + element.svgData + '"\n/>\n</g>\n</svg>';
+					}
+
+			_svgData += '\n';
+
+			if (guides)
+				for each (var guide:IGuide in guides)
+					if (guide.svgData)
+					{
+						var initialPoint:Point = localToContent(new Point(guide.x, guide.y));
+						
+						if (initialPoint)
+						{
+							_svgData += '\n<svg x="' + String(initialPoint.x + elementsContainer.x) + 
+											'" y="' + String(initialPoint.y + elementsContainer.y) + '">' +
+										 guide.svgData + '"\n/>\n</g>\n</svg>';
+						} else
+							_svgData += '\n<svg>' + guide.svgData + '"\n/>\n</g>\n</svg>';
+					}
 
 			_svgData += '\n';
 			return _svgData;
