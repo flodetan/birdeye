@@ -298,7 +298,6 @@ package birdeye.vis.elements.geometry
 					gg.geometryCollection.addItem(label); 
 				}
 			}
-			svgData += '"/>';
 			_invalidatedElementGraphic = false;
 		}
 	}

@@ -162,7 +162,6 @@ package birdeye.vis.elements.geometry
 					gg.geometryCollection.addItemAt(path,0);
 				}
 				_invalidatedElementGraphic = false;
-				svgData += '"/>';
 			}
 		}
  	}

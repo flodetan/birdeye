@@ -367,7 +367,6 @@ trace (getTimer(), "drawing column ele");
 				if (dim3)
 					zSort();
 
-				svgData += '"/>';
 				_invalidatedElementGraphic = false;
 trace (getTimer(), "drawing column ele");
 			}

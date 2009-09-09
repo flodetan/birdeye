@@ -32,7 +32,6 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.core.IGraphicsFill;
-	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Path;
 	import com.degrafa.paint.SolidFill;
 	
@@ -61,6 +60,8 @@ package birdeye.vis.elements.geometry
 			{
 				super.drawElement();
 				clearAll();
+				
+				circleData = "";
 				
 				var splitGroups:Array = createSplitGroups();
 
@@ -137,11 +138,12 @@ package birdeye.vis.elements.geometry
 							previousSize = sizeStart;
 					}
 				}
-				svgData += '"/>';
+				svgData += circleData;
 				_invalidatedElementGraphic = false;
 			}
 		}
 		
+		private var circleData:String = "";
 		private function createPathSegment(currentItem:Object, startX:Number, startY:Number, endX:Number, endY:Number, 
 											isFirstOrLast:Boolean, sizeStart:Number = NaN, sizeEnd:Number = NaN):void
 		{
@@ -198,7 +200,7 @@ package birdeye.vis.elements.geometry
  				// line to P4
 				data+= "L" + String(p4.x) + "," + String(p4.y) + " ";
 				// line to P1 and close
-				data+= "L" + String(p1.x) + "," + String(p1.y) + " z";
+				data+= "L" + String(p1.x) + "," + String(p1.y) + " z ";
 			}
  			
 			if (colorScale)
@@ -212,7 +214,15 @@ package birdeye.vis.elements.geometry
 			
 			if (_createJoint && !isNaN(sizeStart) && !isFirstOrLast)
 			{
-				var circle:Circle = new Circle(endX, endY, sizeEnd/2);
+				var tmpCircleData:String;
+				// move to 1st inner point
+				tmpCircleData = "M" + String(endX+sizeEnd/2) + " " + String(endY) + " ";
+	
+				// arc to 2nd inner point with radius = r
+				tmpCircleData += "A" + String(sizeEnd/2) + " " + String(sizeEnd/2) + " 0 " + "1 1 " + String(endX+sizeEnd/2) + " " + String(endY-0.00001)  + " z ";
+				
+				var circle:Path = new Path(tmpCircleData);
+				circleData += tmpCircleData;
 				circle.fill = fill;
 				circle.stroke = stroke;
 				gg.geometryCollection.addItemAt(circle,0);
