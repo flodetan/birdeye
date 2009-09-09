@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="100%"
+	horizontalAlign="center" verticalAlign="middle"
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:trans="birdeye.vis.trans.projections.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:guides="birdeye.vis.guides.legend.*" creationComplete="createDT()" xmlns:axis="birdeye.vis.guides.axis.*">
+<mx:Script>
+		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
+			import mx.collections.ArrayCollection;
+			import birdeye.util.EffectsUtil;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			private var subject:Array;
+			
+			private function createDT():void
+			{
+				subject = ["A", "B", "C", "D", "E", "F"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var r1:Number, r2:Number, r3:Number, r4:Number;
+				for (var i:Number = 0; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: r1=Math.round(Math.random() * 1000),
+						R2: r2=Math.round(Math.random() * 1000),
+						R3: r3=Math.round(Math.random() * 1000),
+						R4: r4=Math.round(Math.random() * 1000),
+						total: r1+r2+r3+r4 
+					});
+				}
+				dt = ac;
+			}
+
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = dataFields["dim1"] + ": " + currDatatip[dataFields["dim1"]];
+				tt += '\n' + "Y: " + dataFields["dim2"] + ": " + currDatatip[dataFields["dim2"]];
+				if (dataFields["sizeField"] != null)
+					tt += '\n' + "Size: " + dataFields["sizeField"] + ": " + currDatatip[dataFields["sizeField"]];
+				return  tt;
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+    	<mx:HBox >
+			<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([bb.svgData], bb.width, bb.height))"/>
+		</mx:HBox>
+	<coords:Cartesian id="bb" width="90%" height="90%" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true" isMasked="false">
+		<coords:scales>
+	 		<scales:Category id="c" categoryField="subject" />
+		 	<scales:Linear id="l" />
+			<scales:Linear id="size" scaleValues="[5,30]"/>
+		</coords:scales>
+		<coords:guides>
+			<axis:Axis scale="{c}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+			<axis:Axis scale="{c}" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+			<axis:Axis scale="{l}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+		</coords:guides>
+		 <coords:elements>
+		 	<elements:PointElement scale1="{c}" scale2="{l}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" styleName="grad1" dim2="R1" displayName="R1"/>
+		 	<elements:PointElement scale1="{c}" scale2="{l}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" styleName="grad3" dim2="R2" displayName="R2"/>
+		 	<elements:PointElement scale1="{c}" scale2="{l}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" styleName="grad5" dim2="R3" displayName="R3"/>
+		 	<elements:PointElement scale1="{c}" scale2="{l}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" styleName="grad4" dim2="R4" displayName="R4"/>
+		 </coords:elements>
+	</coords:Cartesian>
+    </mx:VBox>
+	
+</mx:VBox>
