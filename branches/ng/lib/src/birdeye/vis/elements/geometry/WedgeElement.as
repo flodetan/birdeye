@@ -191,7 +191,7 @@ package birdeye.vis.elements.geometry
 		
 						arc = new ArcPath(Math.max(0, _innerRadius), tmpRadius, startAngle, angle, chart.origin);
 						
-						svgData += arc.data;
+						addSVGData(arc.data);
 						
 						var tempColor:int;
 						
@@ -298,6 +298,7 @@ package birdeye.vis.elements.geometry
 					gg.geometryCollection.addItem(label); 
 				}
 			}
+			createSVG();
 			_invalidatedElementGraphic = false;
 		}
 	}

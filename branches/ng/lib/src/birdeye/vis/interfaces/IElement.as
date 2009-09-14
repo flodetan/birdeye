@@ -156,5 +156,10 @@ package birdeye.vis.interfaces
 		
 		/** Return the svg data corresponding to this element.*/
 		function get svgData():String;
+
+		/** Return the x position of this guide.*/
+		function get x():Number;
+		/** Return the y position of this guide.*/
+		function get y():Number;
 	}
 }

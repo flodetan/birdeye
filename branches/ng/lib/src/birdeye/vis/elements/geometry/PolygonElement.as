@@ -196,11 +196,13 @@ var numCoords:Number = 0;
 								poly.stroke = stroke; 
 								ttGG.geometryCollection.addItemAt(poly,0); 
 								
-								svgData += data;
+								addSVGData(data);
 							}
 						}
 					}
 				}
+
+				createSVG();
 				_invalidatedElementGraphic = false;
 trace(getTimer(), "drawing polygon ele Num coords ", numCoords);
 			}

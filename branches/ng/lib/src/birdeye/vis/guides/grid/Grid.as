@@ -54,6 +54,11 @@ package birdeye.vis.guides.grid
 			stroke = new SolidStroke(0x000000, .3, 1);
 		}
 		
+		public function get parentContainer():Object
+		{
+			return parent as Object;
+		}
+		
 		public function get position():String
 		{
 			return "elements";

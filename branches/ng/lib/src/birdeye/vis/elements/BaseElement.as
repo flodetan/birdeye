@@ -139,6 +139,7 @@ package birdeye.vis.elements
 			invalidatingDisplay();
 		}
 		
+		protected var svgMultiColorData:Array = [];
 		private var _svgData:String;
 		public function set svgData(val:String):void
 		{
@@ -556,7 +557,6 @@ package birdeye.vis.elements
 		}
 
 		protected var gg:GeometryGroup;
-//		protected var dataItems:Array = [];
 		protected var fill:IGraphicsFill;
 		protected var stroke:IGraphicsStroke = new SolidStroke(0x888888,1,1);
 		
@@ -1105,9 +1105,14 @@ package birdeye.vis.elements
 		}
 		
 		protected var dataFields:Array;
+		protected var fillValues:Array;
+		protected var rgbFill:String;
+		protected var rgbStroke:String;
 		public function drawElement():void
 		{
 			_invalidatedElementGraphic = false;
+			svgMultiColorData = [];
+
 			dataFields = [];
 			// prepare data for a standard tooltip message in case the user
 			// has not set a dataTipFunction
@@ -1171,19 +1176,48 @@ package birdeye.vis.elements
 				rectBackGround.height = unscaledHeight;
 			}
 			
-			var fillValues:Array = getFillValues();
-			var rgbFill:String = toHex(fillValues[0]);
-			var rgbStroke:String = toHex(colorStroke);
+			fillValues = getFillValues();
+			rgbFill = toHex(fillValues[0]);
+			rgbStroke = toHex(colorStroke);
 
-			svgData = '\n<g style="fill:#' + rgbFill + ';fill-opacity:1;stroke:#' + rgbStroke + ';stroke-width:1;stroke-opacity:1;">\n<path d="';
+//			svgData = '\n<g style="fill:#' + rgbFill + ';fill-opacity:1;stroke:#' + rgbStroke + ';stroke-width:1;stroke-opacity:1;">\n<path d="';
 
 			// to be overridden by each element implementation
 		}
 
-        private function toHex(item:Object):String {
+        protected function toHex(item:Object):String {
             var hex:String = Number(item).toString(16);
             return ("00000" + hex).substr(-6);
         }
+        
+        protected function addSVGData(data:Object):void
+        {
+        	svgMultiColorData.push({
+						data: data,
+						rgbFill: rgbFill,
+						fillAlpha: alphaFill,
+						rgbStroke: rgbStroke,
+						strokeAlpha: alphaStroke
+					});
+        }
+        
+        protected function createSVG():void
+        {
+			svgData = "";
+			for each(var svg:Object in svgMultiColorData)
+			{
+				svgData += 
+					'\n<g style="' +
+					'fill:' + ((svg.rgbFill) ? '#' + svg.rgbFill:'none') + 
+					';fill-opacity:' + svg.fillAlpha + ';' + 
+					'stroke:' + ((svg.rgbStroke) ? '#' + svg.rgbStroke:'none') + 
+					';stroke-opacity:' + svg.strokeAlpha + ';' + ';">\n' + 
+					'<path d="' + svg.data + '"\n/>' + '\n</g>';
+
+//						'<path d="' + circleData + '"\n/>' +
+			} 
+        }
+
 		
 		private function getFillStrokeColors():void
 		{
