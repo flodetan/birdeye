@@ -251,6 +251,7 @@ trace (getTimer(), "drawing point ele");
 				if (dim3)
 					zSort();
 	
+				createSVG();
 				_invalidatedElementGraphic = false;
 trace (getTimer(), "drawing point ele");
 	
@@ -275,7 +276,7 @@ trace (getTimer(), "drawing point ele");
  					if (plot is IBoundedRenderer)
  					{
  						(plot as IBoundedRenderer).bounds = bounds;
- 						svgData += (plot as IBoundedRenderer).data;
+						addSVGData((plot as IBoundedRenderer).data);
  					} 
  				} 
 				

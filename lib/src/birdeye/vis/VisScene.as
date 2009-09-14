@@ -30,6 +30,7 @@
 	import __AS3__.vec.Vector;
 	
 	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.guides.grid.Grid;
 	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.IGraphLayout;
 	import birdeye.vis.interfaces.IProjection;
@@ -124,16 +125,16 @@
 		public function get svgData():String
 		{
 			var _svgData:String = '';
+			var initialPoint:Point;
 			if (elements)
 				for each (var element:IElement in elements)
 					if (element.svgData)
 					{
-						if (elementsContainer)
-							_svgData += '\n<svg x="' + String(elementsContainer.x) + 
-											'" y="' + String(elementsContainer.y) + '">' +
-										 element.svgData + '"\n/>\n</g>\n</svg>';
-						else
-							_svgData += '\n<svg>' + element.svgData + '"\n/>\n</g>\n</svg>';
+						initialPoint = contentToGlobal(new Point(elementsContainer.x + element.x, 
+																elementsContainer.y + element.y));
+						_svgData += '\n<svg x="' + String(initialPoint.x) + 
+										'" y="' + String(initialPoint.y) + '">' +
+									 element.svgData + '\n</svg>';
 					}
 
 			_svgData += '\n';
@@ -142,15 +143,18 @@
 				for each (var guide:IGuide in guides)
 					if (guide.svgData)
 					{
-						var initialPoint:Point = localToContent(new Point(guide.x, guide.y));
-						
-						if (initialPoint)
-						{
-							_svgData += '\n<svg x="' + String(initialPoint.x + elementsContainer.x) + 
-											'" y="' + String(initialPoint.y + elementsContainer.y) + '">' +
-										 guide.svgData + '"\n/>\n</g>\n</svg>';
-						} else
-							_svgData += '\n<svg>' + guide.svgData + '"\n/>\n</g>\n</svg>';
+						if (guide.parentContainer)
+							initialPoint = localToGlobal(new Point(guide.parentContainer.x + guide.x, 
+																	guide.parentContainer.y + guide.y));
+						else if (guide is Grid)
+							initialPoint = localToGlobal(new Point(elementsContainer.x, 
+																	elementsContainer.y));
+						else
+							initialPoint = localToGlobal(new Point(guide.x, guide.y));
+							
+						_svgData += '\n<svg x="' + String(initialPoint.x) + 
+										'" y="' + String(initialPoint.y) + '">' +
+									 guide.svgData + '"\n/>\n</g>\n</svg>';
 					}
 
 			_svgData += '\n';

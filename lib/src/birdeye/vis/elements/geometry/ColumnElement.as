@@ -286,7 +286,7 @@ trace (getTimer(), "drawing column ele");
 							if (poly is IBoundedRenderer)
 							{
 								(poly as IBoundedRenderer).bounds = bounds;
-								svgData += (poly as IBoundedRenderer).data;
+								addSVGData((poly as IBoundedRenderer).data);
 							} 
 							poly.fill = fill;
 							poly.stroke = stroke;						
@@ -342,7 +342,7 @@ trace (getTimer(), "drawing column ele");
 							arc = 
 								new ArcPath(baseScale2, pos2, startAngle, innerAngleSize, chart.origin);
 								
-							svgData += arc.data;
+							addSVGData(arc.data);
 			
 							arc.fill = fill;
 							arc.stroke = stroke;
@@ -355,7 +355,7 @@ trace (getTimer(), "drawing column ele");
 							if (shape is IBoundedRenderer)
 							{
 								(shape as IBoundedRenderer).bounds = bounds;
-								svgData += (shape as IBoundedRenderer).data;
+								addSVGData((shape as IBoundedRenderer).data);
 							} 
 							shape.fill = fill;
 							shape.stroke = stroke;
@@ -367,6 +367,7 @@ trace (getTimer(), "drawing column ele");
 				if (dim3)
 					zSort();
 
+				createSVG();
 				_invalidatedElementGraphic = false;
 trace (getTimer(), "drawing column ele");
 			}

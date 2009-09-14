@@ -37,8 +37,8 @@ package birdeye.vis.data
 		 * and can be composed by either Objects or Strings. 
 		 * If they are objects, than they must have the following fields in order to work properly: 
 		 * <p> data (representing svg data for the specidied chart);</p> 
-		 * <p> x (to identify the x position for the specified chart);</p> 
-		 * <p> y (to identify the y position for the specified chart).</p>
+		 * <p> x (optional, to identify the x position for the specified chart);</p> 
+		 * <p> y (optional, to identify the y position for the specified chart).</p>
 		 * <p> The width and height paramenter passed to createSVG, represent the whole size of the svg result.</p>*/ 
 		public static function createSVG(svgs:Array, width:Number = 1000, height:Number = 1000):String
 		{
@@ -55,7 +55,11 @@ package birdeye.vis.data
 					{
 						body += svg;
 					} else if (svg is Object) {
-						bodySVGHeader = '\n<svg x="' + svg.x + '" y="' + svg.y + '">';
+						
+						if (svg.x && svg.y)
+							bodySVGHeader = '\n<svg x="' + svg.x + '" y="' + svg.y + '">';
+						else 
+							bodySVGHeader = '\n<svg>';
 						body += bodySVGHeader + svg.data + "</svg>\n";
 					}
 				}

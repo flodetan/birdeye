@@ -180,7 +180,7 @@ trace (getTimer(), "area ele");
 									"L" + String(xPrev) + "," + String(yPrev) + " " +
 									"L" + String(scaleResults[POS1]) + "," + String(scaleResults[POS2]) + " " +
 									"L" + String(scaleResults[POS1]) + "," + String(y0) + " z";
-							svgData += data;
+							addSVGData(data);
 							poly = new Path(data);
 							poly.fill = fill;
 							poly.stroke = stroke;
@@ -235,7 +235,7 @@ trace (getTimer(), "area ele");
 				} else if (chart.coordType == VisScene.POLAR && data)
 				{
 					data += "z";
-					svgData += data;
+					addSVGData(data)
 					poly = new Path(data);
 					poly.fill = fill;
 					poly.stroke = stroke;
@@ -244,6 +244,8 @@ trace (getTimer(), "area ele");
 	
 				if (dim3)
 					zSort();
+
+				createSVG();
 				_invalidatedElementGraphic = false;
 				
 trace (getTimer(), "area ele");

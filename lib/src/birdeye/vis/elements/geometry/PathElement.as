@@ -138,7 +138,8 @@ package birdeye.vis.elements.geometry
 							previousSize = sizeStart;
 					}
 				}
-				svgData += circleData;
+				
+				createSVG();
 				_invalidatedElementGraphic = false;
 			}
 		}
@@ -207,8 +208,10 @@ package birdeye.vis.elements.geometry
 			{
 				var col:* = colorScale.getPosition(currentItem[colorField]);
 				if (col is Number)
+				{
 					fill = new SolidFill(col);
-				else if (col is IGraphicsFill)
+					rgbFill = toHex(col);
+				} else if (col is IGraphicsFill)
 					fill = col;
 			}
 			
@@ -228,7 +231,8 @@ package birdeye.vis.elements.geometry
 				gg.geometryCollection.addItemAt(circle,0);
 			}
  			var path:Path= new Path(data);
- 			svgData += data;
+ 			addSVGData(data);
+ 			addSVGData(tmpCircleData);
 			path.fill = fill;
 			path.stroke = stroke;
 			gg.geometryCollection.addItem(path);

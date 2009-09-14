@@ -39,6 +39,9 @@ package birdeye.vis.interfaces.guides
 		/** Return the svg data corresponding to this guide.*/
 		function get svgData():String;
 
+		/** Return the parent container of this guide.*/
+		function get parentContainer():Object;
+
 		/** Return the x position of this guide.*/
 		function get x():Number;
 		/** Return the y position of this guide.*/

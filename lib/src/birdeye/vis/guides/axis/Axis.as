@@ -95,6 +95,12 @@ package birdeye.vis.guides.axis
 			styleName = "Axis";
 		}
 
+		public function get parentContainer():Object
+		{
+			return parent as Object;
+		}
+		
+		private var svgText:String;
 		private var _svgData:String;
 		/** String containing the svg data to be exported.*/ 
 		public function set svgData(val:String):void
@@ -838,6 +844,7 @@ package birdeye.vis.guides.axis
 			if (showAxis && invalidated)
 			{
 				clearAll();
+				svgText = "";
 				svgData = '\n<g style="fill:none' + 
 						';fill-opacity:1;stroke:#000000' + 
 						';stroke-width:1;stroke-opacity:1;">\n<path d="';
@@ -880,6 +887,7 @@ package birdeye.vis.guides.axis
 					_pointer.stroke = new SolidStroke(colorPointer, 1, weightPointer);
 					_pointer.visible = false;
 
+					svgData += '"\n/>' + svgText;
 					gg.geometryCollection.addItem(_pointer);
 				//}
 			}
@@ -1079,7 +1087,7 @@ trace(getTimer(), "drawing axis");
 						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
 					} else {
-						var labelRnd:DisplayObject = createLabelRenderer(dataLabel);
+						labelRnd = createLabelRenderer(dataLabel);
 						labelRnd.x = xPos - labelRnd.width/2;
 						if (placement == TOP)
 							labelRnd.y = height - thickWidth - (labelRnd.height);
@@ -1164,6 +1172,11 @@ trace(getTimer(), "drawing axis");
 					}
 				}
 				
+				svgText += '\n<text style="font-family: ' + fontLabel + 
+								'; font-size: ' + sizeLabel + ';"' +
+								' x="' + label.x + '" ' + 
+								'y="' + label.y + '">' + String(dataLabel) +
+								'\n</text>';
 			}
 			return label;
 		}

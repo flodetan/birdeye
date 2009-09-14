@@ -14,7 +14,8 @@ package birdeye.vis.guides.axis
 	import com.degrafa.core.IGraphicsStroke;
 	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Line;
-	import com.degrafa.geometry.Polyline;
+	import com.degrafa.geometry.Path;
+	import com.degrafa.geometry.Polygon;
 	import com.degrafa.geometry.RasterText;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
@@ -49,6 +50,11 @@ package birdeye.vis.guides.axis
 			styleName = "MultiAxis";
 			stroke = new SolidStroke(0x000000, 1, 1);
 			fill = new SolidFill(0x000000, 1);
+		}
+		
+		public function get parentContainer():Object
+		{
+			return parent as Object;
 		}
 		
 		/**
@@ -200,10 +206,12 @@ package birdeye.vis.guides.axis
 			{
 				clearAll();
 				
+				svgData = '\n<g style="fill:none' + 
+						';fill-opacity:1;stroke:#000000' + 
+						';stroke-width:1;stroke-opacity:1;">';
+
 				stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 				fill = new SolidFill(colorFill, alphaFill);
-				
-				var line:Line;
 				
 				var categories:Array = _subScale.completeDataValues;
 				var nbrCategories:int = _subScale.completeDataValues.length;
@@ -220,7 +228,11 @@ package birdeye.vis.guides.axis
 					// draw a line a bit shorter to allow the label of the axis to be seen
 					// TODO set the label a bit further instead of shortening the line?
 					var endLinePosition:Point = PolarCoordinateTransform.getXY(angle,_size-5,coordinates.origin);
-	 				line = new Line(coordinates.origin.x, coordinates.origin.y, endLinePosition.x, endLinePosition.y);
+					var tmpSVG:String = "M" + String(coordinates.origin.x) + "," + String(coordinates.origin.y) + " " + 
+									"L" + String(endLinePosition.x) + "," + String(endLinePosition.y) + " ";
+
+					var line:Path = new Path(tmpSVG);
+					svgData += '\n<path d="' + tmpSVG + '"\n/>';
 					line.stroke = new SolidStroke(colorStroke, 1,1);					
 					gg.geometryCollection.addItem(line);
 					
@@ -273,12 +285,24 @@ package birdeye.vis.guides.axis
 		
 						label.x = labelPosition.x - (label.textWidth + 4)/2;
 						label.y = labelPosition.y;
+						
+						svgData += '\n<text style="font-family: ' + fontLabel + 
+										'; font-size: ' + sizeLabel + ';"' +
+										' x="' + label.x + '" ' + 
+										'y="' + label.y + '">' + String(dataLabel) +
+										'\n</text>';
 	
 						gg.geometryCollection.addItem(label);
 						
 						if (_gridType == MultiAxis.GRID_CIRCLE && i == 0)
 						{
 							var circle:Circle = new Circle();
+
+							svgData += '\n<circle cx="' + coordinates.origin.x + 
+										'" cy="' + coordinates.origin.y + 
+										'" r="' + pos + 
+										'" style="stroke-opacity:.15;"\n/>';
+
 							circle.stroke = new SolidStroke(0x000000, .15);
 							circle.fill = null;
 							circle.radius = pos;
@@ -313,9 +337,10 @@ package birdeye.vis.guides.axis
 					var webStroke:SolidStroke = new SolidStroke(0x000000, .15);
 					for (i=0;i<web.length;i++)
 					{
-							var poly:Polyline = new Polyline();
-							poly.autoClose = true;
+							var poly:Polygon = new Polygon();
 							poly.data = web[i];
+							svgData += '\n<polygon points="' + web[i] + 
+										'" style="stroke-opacity:.15;"\n/>';
 							poly.stroke = webStroke;
 							poly.fill = new SolidFill(0x000000, 0);					
 							gg.geometryCollection.addItem(poly);

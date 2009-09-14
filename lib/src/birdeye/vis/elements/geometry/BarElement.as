@@ -235,7 +235,7 @@ trace(getTimer(), "drawing bar");
 							if (poly is IBoundedRenderer)
 							{
 								(poly as IBoundedRenderer).bounds = bounds;
-								svgData += (poly as IBoundedRenderer).data;
+								addSVGData((poly as IBoundedRenderer).data);
 							} 
 		
 						}
@@ -247,7 +247,7 @@ trace(getTimer(), "drawing bar");
 							if (shape is IBoundedRenderer)
 							{
 								(shape as IBoundedRenderer).bounds = bounds;
-								svgData += (shape as IBoundedRenderer).data;
+								addSVGData((shape as IBoundedRenderer).data);
 							} 
 							shape.fill = fill;
 							shape.stroke = stroke;
@@ -261,6 +261,8 @@ trace(getTimer(), "drawing bar");
 		
 					if (dim3)
 						zSort();
+
+					createSVG();
 					_invalidatedElementGraphic = false;
 				}
 	trace(getTimer(), "END drawing bar");
