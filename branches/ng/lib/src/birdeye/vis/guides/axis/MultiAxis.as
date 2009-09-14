@@ -206,9 +206,7 @@ package birdeye.vis.guides.axis
 			{
 				clearAll();
 				
-				svgData = '\n<g style="fill:none' + 
-						';fill-opacity:1;stroke:#000000' + 
-						';stroke-width:1;stroke-opacity:1;">';
+				svgData = "";
 
 				stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 				fill = new SolidFill(colorFill, alphaFill);
@@ -347,6 +345,10 @@ package birdeye.vis.guides.axis
 					}
 				}
 			//}
+				svgData = '\n<g style="fill:none' + 
+						';fill-opacity:1;stroke:#000000' + 
+						';stroke-width:1;stroke-opacity:1;">' + 
+						svgData + ';\n/>\n</g>';
 			}
 		}
 		

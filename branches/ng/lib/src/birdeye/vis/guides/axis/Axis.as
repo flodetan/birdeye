@@ -887,7 +887,7 @@ package birdeye.vis.guides.axis
 					svgData = '\n<g style="fill:none' + 
 						';fill-opacity:1;stroke:#000000' + 
 						';stroke-width:1;stroke-opacity:1;">\n' +
-						svgText + '\n<path d="' + svgData + '"\n/>' ;
+						svgText + '\n<path d="' + svgData + '"\n/>\n</g>' ;
 					gg.geometryCollection.addItem(_pointer);
 				//}
 			}
