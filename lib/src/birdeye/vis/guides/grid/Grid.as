@@ -185,10 +185,7 @@ package birdeye.vis.guides.grid
 		{
 
 trace(getTimer(), "drawing grid", this.id);
-			
-			svgData = '\n<g style="fill:none' + 
-					';fill-opacity:1;stroke:#000000' + 
-					';stroke-width:1;stroke-opacity:1;">\n<path d="';
+			svgData = "";
 
 			var nbrOfItems:Number = drawLinesBasedOnScale(scale1, bounds);
 			nbrOfItems = drawLinesBasedOnScale(scale2, bounds, nbrOfItems);
@@ -197,7 +194,10 @@ trace(getTimer(), "drawing grid", this.id);
 			clearExcessGeometries(nbrOfItems);
 			
 trace(getTimer(), "end drawing grid", this.id);
-
+			svgData = '\n<g style="fill:none' + 
+					';fill-opacity:1;stroke:#000000' + 
+					';stroke-width:1;stroke-opacity:1;">\n' +
+					'<path d="' + svgData + '"\n/>\n</g>';
  		}
  		
  		private function drawLinesBasedOnScale(scale:IScale, bounds:Rectangle, startIndex:Number=0):Number

@@ -154,7 +154,7 @@
 							
 						_svgData += '\n<svg x="' + String(initialPoint.x) + 
 										'" y="' + String(initialPoint.y) + '">' +
-									 guide.svgData + '"\n/>\n</g>\n</svg>';
+									 guide.svgData + '"\n</svg>';
 					}
 
 			_svgData += '\n';
