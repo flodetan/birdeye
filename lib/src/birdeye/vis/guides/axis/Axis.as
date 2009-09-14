@@ -844,10 +844,7 @@ package birdeye.vis.guides.axis
 			if (showAxis && invalidated)
 			{
 				clearAll();
-				svgText = "";
-				svgData = '\n<g style="fill:none' + 
-						';fill-opacity:1;stroke:#000000' + 
-						';stroke-width:1;stroke-opacity:1;">\n<path d="';
+				svgText = svgData = "";
 
 				drawAxisLine(w,h)
 	
@@ -887,7 +884,10 @@ package birdeye.vis.guides.axis
 					_pointer.stroke = new SolidStroke(colorPointer, 1, weightPointer);
 					_pointer.visible = false;
 
-					svgData += '"\n/>' + svgText;
+					svgData = '\n<g style="fill:none' + 
+						';fill-opacity:1;stroke:#000000' + 
+						';stroke-width:1;stroke-opacity:1;">\n' +
+						svgText + '\n<path d="' + svgData + '"\n/>' ;
 					gg.geometryCollection.addItem(_pointer);
 				//}
 			}
@@ -1171,13 +1171,13 @@ trace(getTimer(), "drawing axis");
 						label.y += label.fontSize;
 					}
 				}
-				
-				svgText += '\n<text style="font-family: ' + fontLabel + 
-								'; font-size: ' + sizeLabel + ';"' +
-								' x="' + label.x + '" ' + 
-								'y="' + label.y + '">' + String(dataLabel) +
-								'\n</text>';
 			}
+				
+			svgText += '\n<text style="font-family: ' + fontLabel + 
+							'; font-size: ' + sizeLabel + ';"' +
+							' x="' + label.x + '" ' + 
+							'y="' + label.y + '">' + String(dataLabel) +
+							'\n</text>';
 			return label;
 		}
 		
