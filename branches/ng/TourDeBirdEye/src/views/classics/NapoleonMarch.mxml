@@ -14,6 +14,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
 			private function colorFunction(dataValue:*, min:Number, max:Number, _size:Number):*
 				{
 					if (dataValue == "A")
@@ -23,10 +24,15 @@
 		]]>
 	</mx:Script>
 	
-	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" paddingTop="10" >
+	<mx:VBox id="svgSpace" width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" paddingTop="10" >
     	
-    	<mx:HBox width="90%" height="150" verticalAlign="middle" horizontalAlign="center" borderColor="#666666" borderThickness="1" borderStyle="solid" >
+    	<mx:HBox width="90%" height="50" verticalAlign="middle" horizontalAlign="center" borderColor="#666666" borderThickness="1" borderStyle="solid" >
     		<mx:Label fontSize="14" text="Carte Figurative..." />
+			<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG(
+						[{data: survChart.svgData}, 
+						 {data: tempChart.svgData}], 
+						 parentApplication.width, 
+						 parentApplication.height))"/>
     	</mx:HBox>
     	
     	<!-- Survivor and City Chart -->
@@ -42,8 +48,8 @@
 			</coords:guides>
     		 <coords:elements>
     		 	<elements:PathElement dataProvider="{survivors.dataProvider}" extendMouseEvents="true"
-    		 		scale1="{long}" scale2="{lat}" alphaStroke="0"
-    		 		dim1="lonp" dim2="latp" styleName="grad1"
+    		 		scale1="{long}" scale2="{lat}" alphaStroke="0" strokeAlpha="0"
+    		 		dim1="lonp" dim2="latp" styleName="grad1" fillAlpha="1"
     		 		sizeScale="{size}" sizeField="survivors" 
     		 		colorScale="{col}" colorField="direction"
     		 		splitField="group"/>
