@@ -32,17 +32,14 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.ArcPath;
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
-	import birdeye.vis.interfaces.IExportableSVG;
+	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.core.IGraphicsFill;
-	import com.degrafa.geometry.RasterText;
 	import com.degrafa.paint.GradientStop;
 	import com.degrafa.paint.LinearGradientFill;
 	import com.degrafa.paint.SolidFill;
-	
-	import flash.text.TextFieldAutoSize;
 	
 	import mx.core.ClassFactory;
 
@@ -186,7 +183,7 @@ package birdeye.vis.elements.geometry
 		 					gg.target = this;
 		 				}
 		 				
-						var arc:IExportableSVG;
+						var arc:IBoundedRenderer;
 						
 						if (_innerRadius > tmpRadius)
 							_innerRadius = tmpRadius;

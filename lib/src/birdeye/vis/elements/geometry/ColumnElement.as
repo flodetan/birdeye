@@ -34,7 +34,6 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.RectangleRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
-	import birdeye.vis.interfaces.IExportableSVG;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
@@ -337,7 +336,7 @@ trace (getTimer(), "drawing column ele");
 								gg.target = this;
 							}
 								
-							var arc:IExportableSVG;
+							var arc:IBoundedRenderer;
 							
 							arc = 
 								new ArcPath(baseScale2, pos2, startAngle, innerAngleSize, chart.origin);
