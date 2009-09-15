@@ -62,7 +62,7 @@ package birdeye.vis.guides.renderers
 
 		public function get svgData():String
 		{
-     			return '\n<image x="' + x + '" y="' + y + '" width="' + width + '" height="' + height + '" ' +
+     			return '<image x="' + x + '" y="' + y + '" width="' + width + '" height="' + height + '" ' +
      					'xlink:href="' + _s + '"/>';
 		}
 	}
