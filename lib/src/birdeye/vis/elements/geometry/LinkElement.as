@@ -156,11 +156,12 @@ package birdeye.vis.elements.geometry
 					}
  					
  					var path:Path= new Path(data);
- 					svgData += data;
+					addSVGData('\n<path d="' + data + '"/>');
 					path.fill = fill;
 					path.stroke = stroke;
 					gg.geometryCollection.addItemAt(path,0);
 				}
+				createSVG();
 				_invalidatedElementGraphic = false;
 			}
 		}

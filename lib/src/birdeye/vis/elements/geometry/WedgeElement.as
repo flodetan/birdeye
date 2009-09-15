@@ -31,10 +31,11 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.ArcPath;
 	import birdeye.vis.guides.renderers.CircleRenderer;
+	import birdeye.vis.guides.renderers.TextRenderer;
+	import birdeye.vis.interfaces.IExportableSVG;
 	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.*;
 	
-	import com.degrafa.IGeometry;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.RasterText;
 	import com.degrafa.paint.GradientStop;
@@ -64,12 +65,13 @@ package birdeye.vis.elements.geometry
 		public function WedgeElement()
 		{
 			super();
+			labelCreationNotOverridden = false;
 		}
 		
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
-
+			
 			if (_stackType != OVERLAID || _stackType != STACKED)
 				_stackType = STACKED;
 
@@ -184,14 +186,14 @@ package birdeye.vis.elements.geometry
 		 					gg.target = this;
 		 				}
 		 				
-						var arc:IGeometry;
+						var arc:IExportableSVG;
 						
 						if (_innerRadius > tmpRadius)
 							_innerRadius = tmpRadius;
 		
 						arc = new ArcPath(Math.max(0, _innerRadius), tmpRadius, startAngle, angle, chart.origin);
 						
-						addSVGData(arc.data);
+						addSVGData(arc.svgData);
 						
 						var tempColor:int;
 						
@@ -250,15 +252,9 @@ package birdeye.vis.elements.geometry
 								xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
 								yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
 							}
-							var label:RasterText = new RasterText();
-							label.fontFamily = fontLabel;
+							var label:TextRenderer = new TextRenderer(xLlb, yLlb, currentItem[labelField], new SolidFill(colorLabel),
+																	true, true, sizeLabel, fontLabel);
 							label.fontWeight = "bold";
-							label.fontSize = sizeLabel;
-							label.autoSize = TextFieldAutoSize.LEFT;
-							label.text = currentItem[labelField];
-							label.fill = new SolidFill(colorLabel);
-							label.x = xLlb- (label.textWidth + 4)/2;
-							label.y = yLlb - (label.fontSize + 4)/2;
 							gg.geometryCollection.addItem(label); 
 						} else if (_showFieldName)
 						{
@@ -268,15 +264,9 @@ package birdeye.vis.elements.geometry
 								xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
 								yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
 							}
-							label 	= new RasterText();
-							label.text = tmpDim1;
-							label.fontFamily = fontLabel;
+							label = new TextRenderer(xLlb, yLlb, tmpDim1, new SolidFill(colorLabel),
+																	true, true, sizeLabel, fontLabel);
 							label.fontWeight = "bold";
-							label.fontSize = sizeLabel;
-							label.autoSize = TextFieldAutoSize.LEFT;
-							label.fill = new SolidFill(colorLabel);
-							label.x = xLlb- (label.textWidth + 4)/2;
-							label.y = yLlb - (label.fontSize + 4)/2;
 							gg.geometryCollection.addItem(label); 
 						}
 		
@@ -287,14 +277,11 @@ package birdeye.vis.elements.geometry
 				
 				if (displayName && aAxis && aAxis.size < 360)
 				{
-					label = new RasterText();
-					label.text = displayName;
-					label.fontFamily = "verdana";
+					label = new TextRenderer(PolarCoordinateTransform.getX(0, _innerRadius, chart.origin), 
+															PolarCoordinateTransform.getY(0, _innerRadius, chart.origin), 
+															displayName, new SolidFill(0x000000),
+															false, false, 12, "verdana");
 					label.fontWeight = "bold";
-					label.autoSize = TextFieldAutoSize.LEFT;
-					label.fill = new SolidFill(0x000000);
-					label.x = PolarCoordinateTransform.getX(0, _innerRadius, chart.origin);
-					label.y = PolarCoordinateTransform.getY(0, _innerRadius, chart.origin);
 					gg.geometryCollection.addItem(label); 
 				}
 			}

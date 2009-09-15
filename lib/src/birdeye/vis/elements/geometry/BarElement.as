@@ -235,7 +235,7 @@ trace(getTimer(), "drawing bar");
 							if (poly is IBoundedRenderer)
 							{
 								(poly as IBoundedRenderer).bounds = bounds;
-								addSVGData((poly as IBoundedRenderer).data);
+								addSVGData((poly as IBoundedRenderer).svgData);
 							} 
 		
 						}
@@ -247,7 +247,7 @@ trace(getTimer(), "drawing bar");
 							if (shape is IBoundedRenderer)
 							{
 								(shape as IBoundedRenderer).bounds = bounds;
-								addSVGData((shape as IBoundedRenderer).data);
+								addSVGData((shape as IBoundedRenderer).svgData);
 							} 
 							shape.fill = fill;
 							shape.stroke = stroke;

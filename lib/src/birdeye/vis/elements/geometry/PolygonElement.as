@@ -196,7 +196,7 @@ var numCoords:Number = 0;
 								poly.stroke = stroke; 
 								ttGG.geometryCollection.addItemAt(poly,0); 
 								
-								addSVGData(data);
+								addSVGData('\n<path d="' + data + '"/>');
 							}
 						}
 					}
