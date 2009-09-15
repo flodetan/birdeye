@@ -33,6 +33,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
+	import birdeye.vis.interfaces.IExportableSVG;
 	import birdeye.vis.interfaces.IPositionableElement;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.scales.*;
@@ -267,6 +268,7 @@ trace (getTimer(), "drawing point ele");
  				if (_source)
  				{
 					plot = new RasterRenderer(bounds, _source);
+					addSVGData((plot as IExportableSVG).svgData);
 				}
 				else
 				{					
