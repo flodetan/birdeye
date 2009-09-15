@@ -42,6 +42,7 @@ package birdeye.vis.elements.geometry
 	import com.degrafa.geometry.Geometry;
 	
 	import flash.display.DisplayObject;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
 	
@@ -61,6 +62,22 @@ package birdeye.vis.elements.geometry
 		public function get dataField():String
 		{
 			return _dataField;
+		}
+		
+		override public function get svgData():String
+		{
+			var child:Object;
+			var localOriginPoint:Point = localToGlobal(new Point(x, y)); 
+			for (var i:uint = 0; i<numChildren; i++)
+			{
+				child = getChildAt(i);
+				if (child is IExportableSVG)
+					_svgData += '<svg x="' + String(-localOriginPoint.x) +
+								   '" y="' + String(-localOriginPoint.y) + '">' + 
+								   IExportableSVG(child).svgData + 
+								'</svg>';
+			}
+			return _svgData;
 		}
 		
 		private var _itemRenderer:IFactory;
