@@ -9,7 +9,8 @@
 	backgroundColor="#3f3f3f">
 
 	<mx:Script>
-		<![CDATA[			
+		<![CDATA[
+			import birdeye.vis.data.UtilSVG;			
 			
 
 		]]>
@@ -21,6 +22,7 @@
 	</mx:HBox>
 	
 	<mx:VBox horizontalAlign="center" width="100%" height="100%">
+		<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([graph.svgData], parentApplication.width, parentApplication.height))"/>
 		<coords:Cartesian id="graph" width="100%" height="100%" showDataTips="true">
 			<coords:elements>
 				<elements:EdgeElement id="edge" dimStart="start" dimEnd="end" node="{node}" dataProvider="{edges}" mouseClickFunction="clickF"
@@ -28,7 +30,7 @@
 
 							
 				<elements:NodeElement id="node" itemIdField="id" dimName="name" dataProvider="{nodes}" 
-									sizeRenderer="25" itemRenderer="views.itemRenderers.CircleNode" mouseClickFunction="clickF" />
+									graphicRendererSize="25" mouseClickFunction="clickF" />
 
 <!--
  							
