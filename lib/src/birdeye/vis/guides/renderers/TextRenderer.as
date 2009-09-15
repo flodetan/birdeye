@@ -76,7 +76,9 @@ package birdeye.vis.guides.renderers
 		
 		public function get svgData():String
 		{
-			return '\n<text style="font-family: ' + fontSize + '; font-size: ' + fontSize + ';"' +
+			return '<text style="font-family: ' + fontFamily + 
+								'; font-size: ' + fontSize + 
+								'; stroke-width: 1' + ';"' +
 					' x="' + x + '" y="' + y + '">' +
 					text + '</text>';
 		}
