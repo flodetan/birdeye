@@ -27,16 +27,17 @@
  
 package birdeye.vis.guides.renderers
 {
-	import birdeye.vis.interfaces.IExportableSVG;
+	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.geometry.Path;
 	
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 
 	/** Not to be used as the other renderers, this allows to shape an arc with an inner radius.
 	 * Used in PieChart, CoxCombo and other PolarCharts.*/
-	public class ArcPath extends Path  implements IExportableSVG
+	public class ArcPath extends Path  implements IBoundedRenderer
 	{
 		public function ArcPath(r:Number, R:Number, startAngle:Number, arcAngle:Number, center:Point)
 		{
@@ -69,6 +70,10 @@ package birdeye.vis.guides.renderers
 			data+= "A" + String(R) + " " + String(R) + " 0 " + arcFlag + " 1 " + String(RP1.x) + " " + String(RP1.y) + " z";
 			
 			super(data);
+		}
+		
+		public function set bounds(bounds:Rectangle):void
+		{
 		}
 		
 		public function get svgData():String
