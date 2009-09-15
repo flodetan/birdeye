@@ -30,8 +30,8 @@ package birdeye.vis.elements.geometry {
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.guides.renderers.IEdgeRenderer;
 	import birdeye.vis.guides.renderers.LineRenderer;
-	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.IEdgeElement;
+	import birdeye.vis.interfaces.IExportableSVG;
 	import birdeye.vis.interfaces.IPositionableElement;
 	
 	import flash.events.MouseEvent;
@@ -48,7 +48,7 @@ package birdeye.vis.elements.geometry {
 		{
 			_svgData = "";
 			svgMultiColorData = [];
-			for each (var renderer:IBoundedRenderer in _edgeRenderers)
+			for each (var renderer:IExportableSVG in _edgeRenderers)
 				addSVGData(renderer.svgData);
 
 			createSVG();

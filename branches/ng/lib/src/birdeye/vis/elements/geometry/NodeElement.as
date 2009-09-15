@@ -34,6 +34,7 @@ package birdeye.vis.elements.geometry {
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
+	import birdeye.vis.interfaces.IExportableSVG;
 	import birdeye.vis.interfaces.IGraphLayout;
 	import birdeye.vis.interfaces.IGraphLayoutableElement;
 	import birdeye.vis.scales.*;
@@ -64,7 +65,7 @@ package birdeye.vis.elements.geometry {
 				{
 					for each (var geom:Geometry in DataItemLayout(itemDisplayObject).geometry)
 					{
-						if (geom is IBoundedRenderer)
+						if (geom is IExportableSVG)
 						{
 							var initialPoint:Point = localToContent(new Point(
 												itemDisplayObject.x - geom.bounds.width/2, 
@@ -78,7 +79,7 @@ package birdeye.vis.elements.geometry {
 									';fill-opacity:' + alphaFill + ';' + 
 									'stroke:' + ((rgbStroke) ? '#' + rgbStroke:'none') + 
 									';stroke-opacity:' + alphaStroke + ';' + ';">\n' + 
-									IBoundedRenderer(geom).svgData +  
+									IExportableSVG(geom).svgData +  
 									'\n</g>\n' +
 									'</svg>\n';
 						}
