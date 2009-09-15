@@ -27,9 +27,9 @@
  
 package birdeye.vis.guides.renderers
 {
-	import com.degrafa.IGeometry;
+	import birdeye.vis.interfaces.IBoundedRenderer;
 
-	public interface IEdgeRenderer extends IGeometry {
+	public interface IEdgeRenderer extends IBoundedRenderer {
 		
 		function set startX(value:Number):void;
 
