@@ -276,7 +276,7 @@ trace (getTimer(), "drawing point ele");
  					if (plot is IBoundedRenderer)
  					{
  						(plot as IBoundedRenderer).bounds = bounds;
-						addSVGData((plot as IBoundedRenderer).data);
+						addSVGData((plot as IBoundedRenderer).svgData);
  					} 
  				} 
 				

@@ -193,7 +193,7 @@ trace (getTimer(), "drawing line ele");
 							var data:String = "M" + String(xPrev) + "," + String(yPrev) + " " +
 											"L" + String(scaleResults[POS1]) + "," + String(scaleResults[POS2]);
 							var line:Path= new Path(data);
-							addSVGData(data);
+							addSVGData('\n<path d="' + data + '"/>');
 							line.fill = fill;
 							line.stroke = stroke;
 							gg.geometryCollection.addItemAt(line,0);
@@ -239,7 +239,7 @@ trace (getTimer(), "drawing line ele");
 						data = "M" + String(scaleResults[POS1]) + "," + String(scaleResults[POS2]) + " " +
 								"L" + String(firstX) + "," + String(firstY);
 						line = new Path(data);
-						addSVGData(data);
+						addSVGData('\n<path d="' + data + '"/>');
 						line.fill = fill;
 						line.stroke = stroke;
 						gg.geometryCollection.addItemAt(line,0);

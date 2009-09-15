@@ -231,8 +231,8 @@ package birdeye.vis.elements.geometry
 				gg.geometryCollection.addItemAt(circle,0);
 			}
  			var path:Path= new Path(data);
- 			addSVGData(data);
- 			addSVGData(tmpCircleData);
+			addSVGData('\n<path d="' + data + '"/>');
+			addSVGData('\n<path d="' + tmpCircleData + '"/>');
 			path.fill = fill;
 			path.stroke = stroke;
 			gg.geometryCollection.addItem(path);

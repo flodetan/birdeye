@@ -34,6 +34,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.RectangleRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
+	import birdeye.vis.interfaces.IExportableSVG;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
@@ -42,7 +43,6 @@ package birdeye.vis.elements.geometry
 	
 	import com.degrafa.IGeometry;
 	import com.degrafa.core.IGraphicsFill;
-	import com.degrafa.geometry.Line;
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
@@ -286,7 +286,7 @@ trace (getTimer(), "drawing column ele");
 							if (poly is IBoundedRenderer)
 							{
 								(poly as IBoundedRenderer).bounds = bounds;
-								addSVGData((poly as IBoundedRenderer).data);
+								addSVGData((poly as IBoundedRenderer).svgData);
 							} 
 							poly.fill = fill;
 							poly.stroke = stroke;						
@@ -337,12 +337,12 @@ trace (getTimer(), "drawing column ele");
 								gg.target = this;
 							}
 								
-							var arc:IGeometry;
+							var arc:IExportableSVG;
 							
 							arc = 
 								new ArcPath(baseScale2, pos2, startAngle, innerAngleSize, chart.origin);
 								
-							addSVGData(arc.data);
+							addSVGData(arc.svgData);
 			
 							arc.fill = fill;
 							arc.stroke = stroke;
@@ -355,7 +355,7 @@ trace (getTimer(), "drawing column ele");
 							if (shape is IBoundedRenderer)
 							{
 								(shape as IBoundedRenderer).bounds = bounds;
-								addSVGData((shape as IBoundedRenderer).data);
+								addSVGData((shape as IBoundedRenderer).svgData);
 							} 
 							shape.fill = fill;
 							shape.stroke = stroke;
