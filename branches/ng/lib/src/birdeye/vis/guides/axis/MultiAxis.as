@@ -285,7 +285,8 @@ package birdeye.vis.guides.axis
 						label.y = labelPosition.y;
 						
 						svgData += '\n<text style="font-family: ' + fontLabel + 
-										'; font-size: ' + sizeLabel + ';"' +
+										'; font-size: ' + sizeLabel + 
+										'; stroke-width: 1' + ';"' +
 										' x="' + label.x + '" ' + 
 										'y="' + label.y + '">' + String(dataLabel) +
 										'\n</text>';

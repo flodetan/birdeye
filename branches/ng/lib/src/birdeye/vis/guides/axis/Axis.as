@@ -1174,7 +1174,8 @@ trace(getTimer(), "drawing axis");
 			}
 				
 			svgText += '\n<text style="font-family: ' + fontLabel + 
-							'; font-size: ' + sizeLabel + ';"' +
+							'; font-size: ' + sizeLabel + 
+							'; stroke-width: 1' + ';"' +
 							' x="' + label.x + '" ' + 
 							'y="' + label.y + '">' + String(dataLabel) +
 							'\n</text>';
