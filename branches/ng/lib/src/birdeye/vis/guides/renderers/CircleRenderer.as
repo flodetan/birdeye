@@ -29,14 +29,16 @@ package birdeye.vis.guides.renderers
 {
 	import birdeye.vis.interfaces.IBoundedRenderer;
 	
-	import com.degrafa.geometry.Path;
+	import com.degrafa.geometry.Circle;
 	
 	import flash.geom.Rectangle;
 
-	public class CircleRenderer extends Path implements IBoundedRenderer
+	public class CircleRenderer extends Circle implements IBoundedRenderer
 	{
 		public function CircleRenderer(bounds:Rectangle=null)
 		{
+			super();
+			
 			if (bounds)	this.bounds = bounds;
 		}
 	
@@ -46,11 +48,14 @@ package birdeye.vis.guides.renderers
 			var yCenter:Number = bounds.y + bounds.height/2;
 			var radius:Number = (bounds.width + bounds.height)/4;  
 	
-			// move to 1st inner point
-			data = "M" + String(xCenter+radius) + " " + String(yCenter) + " ";
-
-			// arc to 2nd inner point with radius = r
-			data+= "A" + String(radius) + " " + String(radius) + " 0 " + "1 1 " + String(xCenter+radius) + " " + String(yCenter-0.01)  + " z";
+			this.centerX = xCenter;
+			this.centerY = yCenter;
+			this.radius = radius;
+		}
+		
+		public function get svgData():String
+		{
+			return '<circle cx="' + centerX + bounds.width/2 + '" cy="' + centerY + bounds.height/2 + '" r="' + radius + '"/>';
 		}
 	}
 }

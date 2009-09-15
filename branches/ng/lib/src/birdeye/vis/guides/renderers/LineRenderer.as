@@ -31,11 +31,12 @@ package birdeye.vis.guides.renderers
 	
 	import com.degrafa.geometry.Line;
 	
-	import flash.geom.Point;
 	import flash.geom.Rectangle;
 
-	public class LineRenderer extends Line implements IBoundedRenderer, IEdgeRenderer
+	public class LineRenderer extends Line implements IEdgeRenderer
 	{
+		private var _svgData:String;
+		
 		public function LineRenderer(bounds:Rectangle=null)
 		{
 			super();
@@ -47,11 +48,19 @@ package birdeye.vis.guides.renderers
 			this.x = bounds.x;
 			this.y = bounds.y;
 			this.x1 = bounds.width;
-			this.y1 = bounds.height;	
+			this.y1 = bounds.height;
+			updateSVGData();
+		}
+		
+		private function updateSVGData():void
+		{
+			_svgData = " M " + String(x) + "," + String(y) + " " +
+					  " L " + String(x1) + "," + String(y1) + " ";
 		}
 
 		public function set startX(value:Number):void {
 			x = value;
+			updateSVGData();
 		}
 
 		public function get startX():Number {
@@ -60,6 +69,7 @@ package birdeye.vis.guides.renderers
 		
 		public function set endX(value:Number):void {
 			x1 = value;
+			updateSVGData();
 		}
 
 		public function get endX():Number {
@@ -68,6 +78,7 @@ package birdeye.vis.guides.renderers
 
 		public function set startY(value:Number):void {
 			y = value;
+			updateSVGData();
 		}
 
 		public function get startY():Number {
@@ -76,11 +87,16 @@ package birdeye.vis.guides.renderers
 		
 		public function set endY(value:Number):void {
 			y1 = value;
+			updateSVGData();
 		}
 
 		public function get endY():Number {
 			return y1;
 		}
 
+		public function get svgData():String
+		{
+			return '<path d="' + _svgData + '"/>';
+		}
 	}
 }
