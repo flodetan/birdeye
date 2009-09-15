@@ -168,6 +168,7 @@ package birdeye.vis.elements
 		}
 		
 		protected var _showFieldName:Boolean = false;
+		[Inspectable(enumeration="true,false")]
 		public function set showFieldName(val:Boolean):void
 		{
 			_showFieldName = val;
@@ -1513,6 +1514,7 @@ package birdeye.vis.elements
 					
 				label = new TextRenderer(xPos, yPos,
 										text, new SolidFill(colorLabel), true, true, sizeLabel, fontLabel);
+				addSVGData(label.svgData);
 				ttGG.geometryCollection.addItemAt(label,0); 
 			}
 			ggIndex++;
