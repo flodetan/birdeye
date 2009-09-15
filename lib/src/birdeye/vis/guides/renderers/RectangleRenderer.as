@@ -47,5 +47,10 @@ package birdeye.vis.guides.renderers
 				"L" + String(bounds.x+bounds.width) + " " + String(bounds.y+bounds.height) + " " +
 				"L" + String(bounds.x) + " " + String(bounds.y+bounds.height) + " z";
 		}
+
+		public function get svgData():String
+		{
+			return '<path d="' + data + '"/>';
+		}
 	}
 }

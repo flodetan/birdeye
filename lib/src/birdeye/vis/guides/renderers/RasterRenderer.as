@@ -59,5 +59,11 @@ package birdeye.vis.guides.renderers
 			x = bounds.x;
 			y = bounds.y;
 		}
+
+		public function get svgData():String
+		{
+     			return '<image x=" " y=" " width=" " height=" " ' + 
+     					'xlink:href="' + 'http://jenkov.com/images/layout/top-bar-logo.png" />';
+		}
 	}
 }

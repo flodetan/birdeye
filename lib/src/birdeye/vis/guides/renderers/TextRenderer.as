@@ -27,36 +27,50 @@
  
 package birdeye.vis.guides.renderers
 {
+	import birdeye.vis.interfaces.IExportableSVG;
+	
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.RasterText;
 	
-	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
 
-	public class TextRenderer extends RasterText
+	public class TextRenderer extends RasterText implements IExportableSVG
 	{
-		public function TextRenderer (bounds:Rectangle = null)
+		public function TextRenderer (xPos:Number = NaN, yPos:Number = NaN, text:String = null, fill:IGraphicsFill = null,
+									 centerHorizontally:Boolean = false, centerVertically:Boolean = false,
+									 fontSize:Number = 12, fontLabel:String = "tahoma") 
 		{
-		}
-		
-		public static function createTextLabel(xPos:Number, yPos:Number, text:String, fill:IGraphicsFill,
-											   centerHorizontally:Boolean = true, centerVertically:Boolean = true):TextRenderer {
-			const label:TextRenderer = new TextRenderer();
-			label.text = text;
-			label.fill = fill;
-			label.alpha = 1.0;
-			label.autoSize = TextFieldAutoSize.LEFT;
-			label.autoSizeField = true;
+			if (text)
+				this.text = text;
+
+			if (fontSize)
+				this.fontSize = fontSize;
+
+			if (fontFamily)
+				this.fontFamily = fontLabel;
+
+			if (fill)
+				this.fill = fill;
+
+			if (alpha)
+				this.alpha = 1.0;
+
+			this.autoSize = TextFieldAutoSize.LEFT;
+			this.autoSizeField = true;
 			if (centerHorizontally)
-				label.x = xPos - (label.textWidth + 4)/2;
+				x = xPos - (textWidth + 4)/2;
 			else
-				label.x = xPos;
+				x = xPos;
 			if (centerVertically)
-				label.y = yPos - (label.fontSize + 4) /2;
+				y = yPos - (fontSize + 4) /2;
 			else
-				label.y = yPos;
-			return label;
+				y = yPos;
 		}
 		
+		public function get svgData():String
+		{
+			return '<text x="' + bounds.width/2 + '" y="' + bounds.height + '">' +
+					text + '</text>';
+		}
 	}
 }
