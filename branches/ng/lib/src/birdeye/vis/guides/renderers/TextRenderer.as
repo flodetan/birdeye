@@ -37,6 +37,8 @@ package birdeye.vis.guides.renderers
 
 	public class TextRenderer extends RasterText implements IExportableSVG
 	{
+		var svgTextY:Number;
+		
 		public function TextRenderer (xPos:Number = NaN, yPos:Number = NaN, text:String = null, fill:IGraphicsFill = null,
 									 centerHorizontally:Boolean = false, centerVertically:Boolean = false,
 									 fontSize:Number = 12, fontLabel:String = "tahoma") 
@@ -72,6 +74,8 @@ package birdeye.vis.guides.renderers
 				y = yPos - (fontSize + 4) /2;
 			else
 				y = yPos;
+			
+			svgTextY = y + fontSize;
 		}
 		
 		public function get svgData():String
@@ -79,7 +83,7 @@ package birdeye.vis.guides.renderers
 			return '<text style="font-family: ' + fontFamily + 
 								'; font-size: ' + fontSize + 
 								'; stroke-width: 1' + ';"' +
-					' x="' + x + '" y="' + y + '">' +
+					' x="' + x + '" y="' + svgTextY + '">' +
 					text + '</text>';
 		}
 	}

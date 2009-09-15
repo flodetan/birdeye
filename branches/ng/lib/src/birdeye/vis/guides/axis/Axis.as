@@ -884,8 +884,7 @@ package birdeye.vis.guides.axis
 					_pointer.stroke = new SolidStroke(colorPointer, 1, weightPointer);
 					_pointer.visible = false;
 
-					svgData = '\n<g style="fill:none' + 
-						';fill-opacity:1;stroke:#000000' + 
+					svgData = '\n<g style="stroke:#000000' + 
 						';stroke-width:1;stroke-opacity:1;">\n' +
 						svgText + '\n<path d="' + svgData + '"\n/>\n</g>' ;
 					gg.geometryCollection.addItem(_pointer);
@@ -1100,6 +1099,7 @@ trace(getTimer(), "drawing axis");
 		
 		private function createLabelText(direction:String, dataLabel:String, pos:Number):RasterText
 		{
+			var svgTextY:Number;
 			var label:RasterText;
 			if (direction == "vertical")
 			{
@@ -1128,13 +1128,14 @@ trace(getTimer(), "drawing axis");
 					label.transform = rot;
 				}
 				
+				svgTextY = pos + label.displayObject.height/2;
 				label.y = pos-(label.displayObject.height )/2;
 				if (placement == LEFT)
 					label.x = width - thickWidth - (label.textWidth + 4);
 				else
 					label.x = thickWidth * sign;
 				
-			} else {
+			} else { // horizontal
 				// create label 
  				label = new RasterText();
  				label.fontFamily = fontLabel;
@@ -1144,6 +1145,8 @@ trace(getTimer(), "drawing axis");
 				label.autoSizeField = true;
 				label.text = String(dataLabel);
 				label.y = thickWidth;
+				svgTextY = thickWidth + label.displayObject.height;
+
 				if (!isNaN(_rotateLabels) && _rotateLabels != 0)
 				{
 					rot = new RotateTransform();
@@ -1162,9 +1165,7 @@ trace(getTimer(), "drawing axis");
 					rot.registrationPoint = _rotateLabelsOn;
 					rot.angle = _rotateLabels;
 					label.transform = rot;
-				} 
-				else
-				{
+				} else {
 					label.x = scale.getPosition(dataLabel)-(label.textWidth + 4)/2; 
 					if (placement == TOP)
 					{
@@ -1175,9 +1176,9 @@ trace(getTimer(), "drawing axis");
 				
 			svgText += '\n<text style="font-family: ' + fontLabel + 
 							'; font-size: ' + sizeLabel + 
-							'; stroke-width: 1' + ';"' +
+							'; stroke-width: 1; font-weight: 1;"' +
 							' x="' + label.x + '" ' + 
-							'y="' + label.y + '">' + String(dataLabel) +
+							'y="' + svgTextY + '">' + String(dataLabel) +
 							'\n</text>';
 			return label;
 		}
