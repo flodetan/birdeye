@@ -27,15 +27,11 @@
  
 package birdeye.vis.interfaces
 {
-	import com.degrafa.IGeometry;
-	
-	import flash.geom.Rectangle;
-	
 	/**
 	 * This interface defines the necessary setter </br>
 	 * for a renderer that can be exported to SVG.
 	 */
-	public interface IExportableSVG extends IGeometry
+	public interface IExportableSVG 
 	{	
 		function get svgData():String;
 	}
