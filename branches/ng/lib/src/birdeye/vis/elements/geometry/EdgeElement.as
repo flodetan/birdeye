@@ -30,6 +30,7 @@ package birdeye.vis.elements.geometry {
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.guides.renderers.IEdgeRenderer;
 	import birdeye.vis.guides.renderers.LineRenderer;
+	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.IEdgeElement;
 	import birdeye.vis.interfaces.IPositionableElement;
 	
@@ -37,10 +38,21 @@ package birdeye.vis.elements.geometry {
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
-	public class EdgeElement extends SegmentElement implements IEdgeElement {
-
+	public class EdgeElement extends SegmentElement implements IEdgeElement 
+	{
 		public function EdgeElement() {
 			super();
+		}
+
+		override public function get svgData():String
+		{
+			_svgData = "";
+			svgMultiColorData = [];
+			for each (var renderer:IBoundedRenderer in _edgeRenderers)
+				addSVGData(renderer.svgData);
+
+			createSVG();
+			return _svgData;
 		}
 
 		override protected function createGlobalGeometryGroup():void {
@@ -131,15 +143,16 @@ package birdeye.vis.elements.geometry {
 							const itemId:String = edgeItemId(itemIndex, item);
 							// The display object is always positioned at (0, 0) and
 							// the edge renderers are passed in the start/end coordinates
-							// and position and draw the edges accordingly.   
-							var renderers:Object = {itemRenderer: null,
+							// and position and draw the edges accordingly.  
+							var renderer:Object =  {itemRenderer: null,
 													graphicRenderer: [
 														createGraphicRenderer(
 															item, itemId, start.pos1, start.pos2, end.pos1, end.pos2
 														)
 													]};
+
 							createItemDisplayObject(
-								item, dataFields, Position.ZERO, itemId, renderers
+								item, dataFields, Position.ZERO, itemId, renderer
 //								  TextRenderer.createTextLabel(
 //								  (start.pos1 + end.pos1)/2, (start.pos2 + end.pos2)/2,
 //								  itemId + ": " + startItemId + "-" + endItemId, new SolidFill(0xffffff), 

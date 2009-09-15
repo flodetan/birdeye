@@ -27,6 +27,7 @@
  
 package birdeye.vis.elements.geometry {
 
+	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.elements.RenderableElement;
 	import birdeye.vis.guides.renderers.CircleRenderer;
@@ -38,9 +39,11 @@ package birdeye.vis.elements.geometry {
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.IGeometry;
+	import com.degrafa.geometry.Geometry;
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.display.DisplayObject;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import mx.core.IDataRenderer;
@@ -51,6 +54,40 @@ package birdeye.vis.elements.geometry {
 			super();
 		}
 		
+		private var renderers:Array = [];
+		override public function get svgData():String
+		{
+			_svgData = "";
+			for each (var itemDisplayObject:DisplayObject in _itemDisplayObjects)
+			{
+				if (itemDisplayObject is DataItemLayout)
+				{
+					for each (var geom:Geometry in DataItemLayout(itemDisplayObject).geometry)
+					{
+						if (geom is IBoundedRenderer)
+						{
+							var initialPoint:Point = localToContent(new Point(
+												itemDisplayObject.x - geom.bounds.width/2, 
+												itemDisplayObject.y - geom.bounds.height/2));
+							
+							_svgData += 
+									'\n<svg x="' + initialPoint.x + '" y="' + initialPoint.y + '">' +
+									'\n<g x="' + geom.bounds.width/2 + '" y="' + geom.bounds.height/2 + 
+									'" style="' +
+									'fill:' + ((rgbFill) ? '#' + rgbFill:'none') + 
+									';fill-opacity:' + alphaFill + ';' + 
+									'stroke:' + ((rgbStroke) ? '#' + rgbStroke:'none') + 
+									';stroke-opacity:' + alphaStroke + ';' + ';">\n' + 
+									IBoundedRenderer(geom).svgData +  
+									'\n</g>\n' +
+									'</svg>\n';
+						}
+					}
+				}
+			}
+			return _svgData;
+		}
+
 		private var _graphLayout:IGraphLayout;
 
 		public function set graphLayout(layout:IGraphLayout):void {
@@ -131,21 +168,18 @@ package birdeye.vis.elements.geometry {
 		}
 		
 		protected function createLabelRenderer(text:String):IGeometry {
-			const label:TextRenderer = TextRenderer.createTextLabel(
-				   0, 0 + _graphicRendererSize,
-				   text,
-				   new SolidFill(labelFillColor),
-				   true, false
-			);
-			label.fontSize = 9;
-			label.fontFamily = "arial";
-			return label;
+			return new TextRenderer(
+							   0, 0 + _graphicRendererSize,
+							   text,
+							   new SolidFill(labelFillColor),
+							   true, false, sizeLabel, fontLabel);
 		}
 		
 		override public function drawElement():void {
 			super.drawElement();
 				
 			prepareForItemDisplayObjectsCreation();
+			renderers = [];
 			
 			var dataFields:Array = [];
 			if (dimName) dataFields["dimName"] = dimName;
@@ -157,12 +191,13 @@ package birdeye.vis.elements.geometry {
 					if (isItemVisible(itemId)) {
 						const position:Position = getItemPosition(itemId);
 						if (position != null) {
-							var renderers:Object = {itemRenderer: createItemRenderer(item, position),
+							var renderer:Object = {itemRenderer: createItemRenderer(item, position),
 													graphicRenderer: [createGraphicRenderer(item, position), 
 																	createLabelRenderer(item[dimName])]}
 							createItemDisplayObject(
 								item, dataFields, position, itemId,
-								renderers);
+								renderer);
+							renderers.push(renderer);
 						}
 					}
 				});
