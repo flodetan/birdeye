@@ -62,8 +62,8 @@ package birdeye.vis.guides.renderers
 
 		public function get svgData():String
 		{
-     			return '<image x=" " y=" " width=" " height=" " ' + 
-     					'xlink:href="' + 'http://jenkov.com/images/layout/top-bar-logo.png" />';
+     			return '\n<image x="' + x + '" y="' + y + '" width="' + width + '" height="' + height + '" ' +
+     					'xlink:href="' + _s + '"/>';
 		}
 	}
 }
