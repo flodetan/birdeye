@@ -140,6 +140,11 @@ package birdeye.vis.elements
 		
 		protected var svgMultiColorData:Array = [];
 		protected var _svgData:String;
+		/** This property contains all the svg data representing this element visualization. 
+		 * The svg data is collected from all renderers that implement the IExportableSVG interface.
+		 * These renderers can either be texts, basic graphics, images or more complex renderers that 
+		 * are external to the library (although the external renderers, for ex. mxml components,
+		 *  have to manually implement this interface).*/  
 		public function set svgData(val:String):void
 		{
 			_svgData = val;
