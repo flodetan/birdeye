@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" implements="birdeye.vis.interfaces.IExportableSVG"
 	xmlns:elements="birdeye.vis.elements.geometry.*"
 	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
@@ -13,6 +13,11 @@
 			import birdeye.vis.interfaces.scales.IScale;
 			import mx.collections.ArrayCollection;
 						
+			public function get svgData():String
+			{
+				return br.svgData;
+			}
+			
 			[Bindable]
 			public var dt:Vector.<Object>;
 
@@ -34,7 +39,7 @@
 			} 
 		]]>
 	</mx:Script>
- 	<coords:Cartesian showDataTips="true" dataProvider="{dt}" width="100%" height="100%" sharedScales="true" scales="{[scale1,scale2]}">
+ 	<coords:Cartesian id="br" showDataTips="true" dataProvider="{dt}" width="100%" height="100%" sharedScales="true" scales="{[scale1,scale2]}">
 	 	<coords:guides>
 	 		<grid:Grid scale2="{scale2}" divideEnumerableScale="false"/>
 	 		<axis:Axis scale="{scale2}" placement="left" colorLabel="0xbbbbbb" sizeLabel="9" />
