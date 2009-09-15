@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" implements="birdeye.vis.interfaces.IExportableSVG"
 	xmlns:series="birdeye.vis.elements.geometry.*"
 	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
@@ -11,6 +11,7 @@
 
 <mx:Script>
 		<![CDATA[
+			import birdeye.vis.interfaces.IExportableSVG;
 			import mx.collections.ArrayCollection;
 			import birdeye.util.EffectsUtil;
 						
@@ -28,6 +29,11 @@
 				region = String(data.country);
 				createDT1(data.subjects, data.values);
 			} 
+			
+			public function get svgData():String
+			{
+				return sp.svgData;
+			}
 			
 			private function createDT1(subj:Array, vals:Array):void
 			{
