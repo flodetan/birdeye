@@ -56,7 +56,6 @@ package birdeye.vis.elements
 	
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
-	import flash.text.TextFieldAutoSize;
 	import flash.utils.Dictionary;
 	import flash.xml.XMLNode;
 	
@@ -140,7 +139,7 @@ package birdeye.vis.elements
 		}
 		
 		protected var svgMultiColorData:Array = [];
-		private var _svgData:String;
+		protected var _svgData:String;
 		public function set svgData(val:String):void
 		{
 			_svgData = val;
@@ -178,6 +177,28 @@ package birdeye.vis.elements
 		{
 			return _showFieldName;
 		}
+
+		private var _labelOffsetX:Number;
+		public function set labelOffsetX(val:Number):void
+		{
+			_labelOffsetX = val;
+			invalidatingDisplay();
+		}		
+		public function get labelOffsetX():Number
+		{
+			return _labelOffsetX;
+		}		
+
+		private var _labelOffsetY:Number;
+		public function set labelOffsetY(val:Number):void
+		{
+			_labelOffsetY = val;
+			invalidatingDisplay();
+		}		
+		public function get labelOffsetY():Number
+		{
+			return _labelOffsetY;
+		}		
 
 		protected var _showGraphicRenderer:Boolean = false;
 		[Inspectable(enumeration="true,false")]
@@ -532,6 +553,7 @@ package birdeye.vis.elements
 			return _splitField;
 		}
 		
+		protected var labelCreationNotOverridden:Boolean = true;
 		private var _labelField:String;
 		public function set labelField(val:String):void
 		{
@@ -1111,7 +1133,6 @@ package birdeye.vis.elements
 		public function drawElement():void
 		{
 			_invalidatedElementGraphic = false;
-			svgMultiColorData = [];
 
 			dataFields = [];
 			// prepare data for a standard tooltip message in case the user
@@ -1203,18 +1224,17 @@ package birdeye.vis.elements
         
         protected function createSVG():void
         {
-			svgData = "";
+			_svgData = "";
 			for each(var svg:Object in svgMultiColorData)
 			{
-				svgData += 
+				_svgData += 
 					'\n<g style="' +
 					'fill:' + ((svg.rgbFill) ? '#' + svg.rgbFill:'none') + 
 					';fill-opacity:' + svg.fillAlpha + ';' + 
 					'stroke:' + ((svg.rgbStroke) ? '#' + svg.rgbStroke:'none') + 
-					';stroke-opacity:' + svg.strokeAlpha + ';' + ';">\n' + 
-					'<path d="' + svg.data + '"\n/>' + '\n</g>';
-
-//						'<path d="' + circleData + '"\n/>' +
+					';stroke-opacity:' + svg.strokeAlpha + ';' + ';">' + 
+					svg.data + 
+					'\n</g>';
 			} 
         }
 
@@ -1483,21 +1503,16 @@ package birdeye.vis.elements
 				graphicsCollection.addItem(ttGG);
 			}
 
-			if (labelField)
+			if (labelField && labelCreationNotOverridden)
 			{
-				label = new TextRenderer(null);
+				var text:String;
 				if (item[labelField])
-					label.text = item[labelField];
+					text = item[labelField];
 				else
-					label.text = labelField;
+					text = labelField;
 					
-				label.fill = new SolidFill(colorLabel);
-				label.fontSize = sizeLabel;
-				label.fontFamily = fontLabel;
-				label.autoSize = TextFieldAutoSize.LEFT;
-				label.autoSizeField = true;
-				label.x = xPos - label.displayObject.width/2;
-				label.y = yPos - label.displayObject.height/2;
+				label = new TextRenderer(xPos, yPos,
+										text, new SolidFill(colorLabel), true, true, sizeLabel, fontLabel);
 				ttGG.geometryCollection.addItemAt(label,0); 
 			}
 			ggIndex++;
@@ -1765,6 +1780,7 @@ package birdeye.vis.elements
 		public function clearAll():void
 		{
 			_invalidatedElementGraphic = true;
+			svgMultiColorData = [];
 
  			// Iterating backwards here is essential, because during the 
  			// iteration we are modifying the collection we are iterating over.
@@ -1874,7 +1890,7 @@ package birdeye.vis.elements
 			}
 		}
 
-		private var _itemDisplayObjects:Dictionary;
+		protected var _itemDisplayObjects:Dictionary;
 
 		public function getItemDisplayObject(itemId:Object):DisplayObject {
 			return _itemDisplayObjects[itemId];
