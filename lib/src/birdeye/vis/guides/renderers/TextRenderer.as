@@ -31,6 +31,7 @@ package birdeye.vis.guides.renderers
 	
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.RasterText;
+	import com.degrafa.paint.SolidFill;
 	
 	import flash.text.TextFieldAutoSize;
 
@@ -45,15 +46,21 @@ package birdeye.vis.guides.renderers
 
 			if (fontSize)
 				this.fontSize = fontSize;
-
+				
 			if (fontFamily)
 				this.fontFamily = fontLabel;
+			else
+				this.fontFamily = "arial";
 
 			if (fill)
 				this.fill = fill;
+			else
+				this.fill = new SolidFill(0x000000);
 
 			if (alpha)
-				this.alpha = 1.0;
+				this.alpha = alpha;
+			else
+				this.alpha = 1;
 
 			this.autoSize = TextFieldAutoSize.LEFT;
 			this.autoSizeField = true;
@@ -69,7 +76,8 @@ package birdeye.vis.guides.renderers
 		
 		public function get svgData():String
 		{
-			return '<text x="' + bounds.width/2 + '" y="' + bounds.height + '">' +
+			return '\n<text style="font-family: ' + fontSize + '; font-size: ' + fontSize + ';"' +
+					' x="' + x + '" y="' + y + '">' +
 					text + '</text>';
 		}
 	}
