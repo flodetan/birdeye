@@ -30,6 +30,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.RectangleRenderer;
+	import birdeye.vis.interfaces.IExportableSVG;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.scales.*;
@@ -39,6 +40,7 @@ package birdeye.vis.elements.geometry
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.display.DisplayObject;
+	import flash.geom.Point;
 	import flash.utils.getTimer;
 	
 	import mx.containers.Canvas;
@@ -81,6 +83,44 @@ package birdeye.vis.elements.geometry
 			return _itemRenderer;
 		}
 		
+		override public function get svgData():String
+		{
+			_svgData = "";
+			var child:Object;
+			var localOriginPoint:Point = localToGlobal(new Point(x, y)); 
+			for (var i:uint = 0; i<numChildren; i++)
+			{
+				child = getChildAt(i);
+				if (child is Canvas)
+				{
+					var canvasPosition:Point = localToGlobal(new Point((child as Canvas).x, (child as Canvas).y));
+					if (direction == VERTICAL)
+						_svgData += '<svg x="' + String(canvasPosition.x -localOriginPoint.x) + 
+									'" y="' + String(canvasPosition.y - localOriginPoint.y) + 
+									'" width="' + (child as Canvas).width + 
+									'">';
+					else
+						_svgData += '<svg x="' + String(canvasPosition.x -localOriginPoint.x) + 
+									'" y="' + String(canvasPosition.y - localOriginPoint.y) + 
+									'" height="' + (child as Canvas).height +
+									'">';
+
+ 					var canvasChildren:Array = child.getChildren();
+					for each (var isotype:DisplayObject in canvasChildren)
+						if (isotype is IExportableSVG)
+							_svgData += '<svg x="' + isotype.x + 
+											'" y="' + isotype.y + 
+											'" width="' + isotype.width + 
+											'" height="' + isotype.height + '">' +
+										IExportableSVG(isotype).svgData +
+										'</svg>'; 
+					_svgData += '\n</svg>';
+				}
+			}
+
+			return _svgData;
+		}
+
 		override public function get elementType():String
 		{
 			return "isotype";
