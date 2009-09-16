@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" implements="birdeye.vis.interfaces.IExportableSVG"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
+	backgroundAlpha="0"
+	verticalAlign="middle"
+	horizontalAlign="right"
+	xmlns:polar="birdeye.vis.coords.*" xmlns:axis="birdeye.vis.guides.axis.*">
+
+<mx:Script>
+		<![CDATA[
+			import birdeye.vis.interfaces.IExportableSVG;
+			import mx.collections.ArrayCollection;
+			import birdeye.util.EffectsUtil;
+						
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			private var subject:Array;
+			
+			override public function set data(value:Object):void
+			{
+				super.data = value;
+				createDT1(data.medals, data.values);
+			} 
+			
+			public function get svgData():String
+			{
+				return pc1.svgData;
+			}
+			
+			private function createDT1(subj:Array, vals:Array):void
+			{
+				var ac:ArrayCollection = new ArrayCollection();
+				for (var i:Number = 0; i<subj.length; i++)
+				{
+					ac.addItem({
+						subject: subj[i],
+						value: vals[i]
+					});
+				}
+				dt = ac;
+			}
+		]]>
+	</mx:Script>
+	<polar:Polar id="pc1" dataProvider="{dt}" width="100%" height="100%">
+		<polar:scales>
+			<scales:Numeric id="l" scaleType="constant" />
+			<scales:PercentAngle id="a" size="360"/>
+		</polar:scales>
+		<polar:elements>
+			<elements:WedgeElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  
+				scale1="{a}" scale2="{l}" alpha=".7" radiusLabelOffset="10" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" 
+				labelField="subject" extendMouseEvents="true" dim1="value"/>
+		</polar:elements>
+	</polar:Polar>
+</mx:VBox>
