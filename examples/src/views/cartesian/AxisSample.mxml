@@ -65,8 +65,8 @@
 			<coords:guides>
 				<axis:Axis scale="{c}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
 				<axis:Axis scale="{c}" placement="left" colorPointer="0xFF0000" labelRenderer="views.itemRenderers.LabelRenderer" labelSize="20"/>
-				<axis:Axis scale="{c}" placement="right" data="{dt}" axisRendererWidth="30" axisRenderer="views.itemRenderers.RightAxisRenderer"/>
-				<axis:Axis scale="{l}" placement="top" data="{dt}" axisRendererHeight="30" axisRenderer="views.itemRenderers.TopAxisRenderer"/>
+				<axis:Axis scale="{c}" placement="right" data="{dt}" axisRendererWidth="50" axisRenderer="views.itemRenderers.RightAxisRenderer"/>
+				<axis:Axis scale="{l}" placement="top" data="{dt}" axisRendererHeight="50" axisRenderer="views.itemRenderers.TopAxisRenderer"/>
 				<axis:Axis scale="{l}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
 				<grid:Grid scale1="{l}" scale2="{c}" divideEnumerableScale="false"/>
 			</coords:guides>

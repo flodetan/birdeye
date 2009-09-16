@@ -27,6 +27,7 @@
 				{
 					var gold:Number = Math.round(Math.random() * 1000),
 						silver:Number = Math.round(Math.random() * 1000),
+						fourth:Number = Math.round(Math.random() * 1000),
 						bronze:Number = Math.round(Math.random() * 1000);
 					ac.addItem({
 						index: "cat" + i,
@@ -35,7 +36,7 @@
 						gold: gold,
 						silver: silver,
 						bronze: bronze,
-						total: gold + bronze + silver,
+						fourth: fourth,
 						newChart: {subjects: subjects, values: [gold, silver, bronze], country: regions[i]}
 					});
 				}
@@ -60,7 +61,7 @@
 	<mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
 		<coords:Cartesian id="pc3" width="90%" height="90%" dataTipFunction="dtFunc" collisionType="overlaid" dataProvider="{dt}" showDataTips="true" isMasked="false">
 			<coords:scales>
-	 			<scales:Linear id="l" />
+	 			<scales:Linear id="l" direction="negative"/>
 	 			<scales:Category id="c" categoryField="index" />
 			</coords:scales>
 			<coords:guides>
@@ -70,10 +71,10 @@
 			</coords:guides>
 			 <coords:elements>
 			 	<elements:PointElement rendererWidth="100" rendererHeight="100" dataField="newChart" collisionScale="scale1" itemRenderer="views.cartesian.TestRenderer" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" 
-			 		scale1="{l}" scale2="{c}" dim1="bronze" dim2="index" strokeAlpha="0" displayName="A" graphicRendererSize="13"/>
+			 		scale1="{l}" scale2="{c}" dim1="bronze" dim2="index" strokeAlpha="0" displayName="A" graphicRendererSize="0"/>
 			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"
 			 		source="{rasterImage}"
-			 		scale1="{l}" scale2="{c}" dim1="total" dim2="index" strokeAlpha="0" displayName="Total" graphicRendererSize="13"/>
+			 		scale1="{l}" scale2="{c}" dim1="fourth" dim2="index" strokeAlpha="0" displayName="Fourth" graphicRendererSize="13"/>
 			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" collisionScale="scale1" mouseOutFunction="EffectsUtil.removeEffects" 
 			 		scale1="{l}" scale2="{c}" dim1="gold" dim2="index" graphicRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="solid1" displayName="C" />
 			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" collisionScale="scale1" mouseOutFunction="EffectsUtil.removeEffects" 
