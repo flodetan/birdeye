@@ -11,6 +11,7 @@
 
 <mx:Script>
 		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
 			import mx.collections.ArrayCollection;
 			
 			[Bindable]
@@ -74,6 +75,7 @@
     	
     	<mx:HBox>
     		<mx:Button label="Generate" click="createDT()"/>
+			<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([lc3.svgData, lc2.svgData], parentApplication.width, parentApplication.height))"/>
 			<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4,a5,a6,a7,a8,a9,a10])"/>
 			<mx:CheckBox label="Stack" selected="false" click="changeStack()"/>
 		</mx:HBox>

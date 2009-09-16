@@ -11,6 +11,7 @@
 
 <mx:Script>
 		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
 			import birdeye.vis.source.csv.parser.CSV;
 			import mx.events.IndexChangedEvent;
 			import mx.collections.ArrayCollection;
@@ -109,6 +110,7 @@
 	
 	
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+		<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([cc4.svgData], parentApplication.width, parentApplication.height))"/>
     	
        	<coords:Cartesian id="cc4" width="90%" height="90%" showDataTips="true" dataProvider="{dt}">
 			<coords:scales>
@@ -116,7 +118,7 @@
  				<scales:Category id="c2" categoryField="site"  />
 			</coords:scales>
 			<coords:guides>
-				<axis:Axis scale="{c1}" placement="bottom" colorLabel="0xbbbbbb" fontLabel="tahoma" weightPointer="3" sizeLabel="12" />
+				<axis:Axis scale="{c1}" placement="top" colorLabel="0xbbbbbb" fontLabel="tahoma" weightPointer="3" sizeLabel="12" />
 				<axis:Axis scale="{c2}" placement="left" colorLabel="0xbbbbbb" fontLabel="tahoma" weightPointer="3" sizeLabel="12" />
 			</coords:guides>
     		 <coords:elements>

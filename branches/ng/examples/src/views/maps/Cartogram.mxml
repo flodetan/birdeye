@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" implements="birdeye.vis.interfaces.IExportableSVG"
 	width="100%" height="100%"
 	horizontalAlign="center" verticalAlign="middle"
 	xmlns:coords="birdeye.vis.coords.*"
@@ -10,6 +10,7 @@
 	xmlns:guides="birdeye.vis.guides.legend.*" xmlns:axis="birdeye.vis.guides.axis.*">
 <mx:Script>
 		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
 			import mx.controls.Alert;
 			import birdeye.vis.data.DataItemLayout;
 			import birdeye.vis.data.dictionaries.WorldCountries;
@@ -20,6 +21,11 @@
 			public var dt:ArrayCollection = new ArrayCollection();
 			public var ac:ArrayCollection = new ArrayCollection();
 			
+			public function get svgData():String
+			{
+				return myMap.svgData;
+			}
+
 			public function init():void
 			{
 				ac = new ArrayCollection();
@@ -51,6 +57,7 @@
 	
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
     	<mx:Button label="Generate" click="init()"/>
+		<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([myMap.svgData], parentApplication.width, parentApplication.height))"/>
     	<coords:Cartesian id="myMap" width="90%" height="90%" dataProvider="{dt}" showDataTips="true" dataTipFunction="dtFunc">
     		<coords:transforms>
     			<trans:Projection id="myProj" proj="Geographic" latScale="{lat}" longScale="{long}"/>
