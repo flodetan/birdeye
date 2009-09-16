@@ -37,7 +37,7 @@ package birdeye.vis.guides.renderers
 
 	public class TextRenderer extends RasterText implements IExportableSVG
 	{
-		var svgTextY:Number;
+		private var svgTextY:Number;
 		
 		public function TextRenderer (xPos:Number = NaN, yPos:Number = NaN, text:String = null, fill:IGraphicsFill = null,
 									 centerHorizontally:Boolean = false, centerVertically:Boolean = false,
