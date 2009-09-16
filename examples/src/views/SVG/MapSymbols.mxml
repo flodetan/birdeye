@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:polar="birdeye.vis.coords.*"
-	xmlns:pseries="birdeye.vis.elements.geometry.*"
-	xmlns:cseries="birdeye.vis.elements.*"
-	xmlns:axis="birdeye.vis.scales.*"
-	xmlns:legend="birdeye.vis.guides.legend.*"
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:recipe="birdeye.vis.recipes.cartesianCharts.*"
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:guides="birdeye.vis.guides.legend.*"
+	backgroundColor="#3f3f3f" 
 	creationComplete="createDT()"
-	width="100%" height="100%" horizontalAlign="center" xmlns:axis1="birdeye.vis.guides.axis.*">
-	<mx:Script>
+	width="100%" height="100%" horizontalAlign="center" xmlns:axis="birdeye.vis.guides.axis.*" xmlns:grid="birdeye.vis.guides.grid.*">
+
+<mx:Script>
 		<![CDATA[
 			import birdeye.vis.data.UtilSVG;
 			import mx.collections.ArrayCollection;
-			import birdeye.util.EffectsUtil;
 			
 			[Bindable]
 			public var dt:ArrayCollection;;
@@ -20,57 +21,83 @@
 			
 			private function createDT():void
 			{
-				subject = ["A", "B", "C", "D", "E", "F"];
+				subject = ["catA", "catB", "catC", "catD", "catE", "catF"];
 				var ac:ArrayCollection = new ArrayCollection();
-				for (var i:Number = 1; i<subject.length; i++)
+				var R1:Number, R2:Number, R3:Number, R4:Number, R5:Number;
+				
+				for (var i:Number = 0; i<subject.length; i++)
 				{
 					ac.addItem({
 						subject: subject[i],
-						R1: Math.round(Math.random() * 100),
-						R2: Math.round(Math.random() * 100),
-						R3: Math.round(Math.random() * 100),
-						R4: Math.round(Math.random() * 100),
-						R5: Math.round(Math.random() * 100)
+						subject1: subject[i] + i,
+						R1: R1=Math.round(Math.random()) * 10 +1,
+						R2: R2=Math.round(Math.random() * 100),
+						R3: R3=Math.round(Math.random() * 1000),
+						R4: R4=Math.round(Math.random() * 10000),
+						R5: R5=Math.round(Math.random() * 100000)
 					});
 				}
 				dt = ac;
 			}
+
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = dataFields["dim1"] + ": " + currDatatip[dataFields["dim1"]];
+				tt += '\n' + dataFields["dim2"] + ": " + currDatatip[dataFields["dim2"]];
+				return  tt;
+			}
+
+			private function changeForm(a:Array):void
+			{
+				for (var i:Number = 0; i<a.length; i++)
+					if (a[i].form == "curve")
+						a[i].form = "line";
+					else {
+						a[i].form = "curve";
+//						AreaElement(a[i]).tension = tens.value;
+					}
+			}
 		]]>
 	</mx:Script>
-
-<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
-
-	<mx:HBox >
-		<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([pc1.svgData], pc1.width, pc1.height))"/>
-		<mx:Button label="Generate" click="createDT()"/>
-	</mx:HBox>
-
-	<polar:Polar collisionType="stack" thicknessRatio=".2" id="pc1" dataProvider="{dt}" 
-		showDataTips="true" width="100%" height="100%">
-<!--		<coxcomb:angleScale>
-			<axis:CategoryAngle categoryField="subject" />
-		</coxcomb:angleScale>
-		<coxcomb:radiusScale>
-			<axis:Linear showAxis="false"/>
-		</coxcomb:radiusScale>
--->		<polar:scales>
-			<axis:CategoryAngle id="c" categoryField="subject"/>
-			<axis:Linear id="l1" />
-			<axis:Linear id="l2" />
-		</polar:scales>
-		<polar:guides>
-			<axis1:Axis scale="{l1}" placement="horizontal_center" sizeLabel="11" colorPointer="0xffffff" weightPointer="5"/>
-			<axis1:Axis scale="{l2}" placement="vertical_center" sizeLabel="11" colorPointer="0xff0000" weightPointer="5"/>
-		</polar:guides>
-		<polar:elements>
-			<pseries:AreaElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l2}" styleName="grad2" alpha=".2" dim1="subject" dim2="R1" displayName="R1"/>
-			<pseries:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l1}" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
-			<pseries:LineElement showAllDataItems="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l2}" extendMouseEvents="true" styleName="solid2" dim1="subject" dim2="R5" displayName="R5"/>
-			<pseries:ColumnElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{c}" scale2="{l1}" alpha=".3" styleName="grad1" dim1="subject" dim2="R2" displayName="R2"/>
-		</polar:elements>
-	</polar:Polar>
-	<legend:Legend dataProvider="{pc1}" direction="horizontal" />
 	
-</mx:VBox>
+	
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+    	
+    	<mx:HBox >
+			<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([ac3.svgData], parentApplication.width, parentApplication.height))"/>
+		</mx:HBox>
+    	<coords:Cartesian id="ac3" width="90%" height="90%" collisionType="overlaid" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true">
+ 		<coords:scales>
+ 			<scales:Category categoryField="subject" id="c" />
+ 			<scales:Category categoryField="subject1" id="c1" />
+ 			<scales:Linear id="l1"/>
+ 			<scales:Linear id="l2" />
+ 			<scales:Linear id="l3" />
+ 			<scales:Linear id="l4" />
+ 			<scales:Linear id="l5" />
+ 		</coords:scales>
+ 		<coords:guides>
+ 			<axis:Axis scale="{c}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"  />
+ 			<axis:Axis scale="{c1}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"  />
+ 			<axis:Axis scale="{c1}" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"  />
+ 			<axis:Axis scale="{c}" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"  />
+ 			<axis:Axis scale="{l1}" placement="left" colorPointer="0xFF0000" fontLabel="verdana" colorLabel="0xffffff" weightPointer="5" sizeLabel="10" sizePointer="15" />
+ 			<axis:Axis scale="{l2}" placement="left" colorPointer="0x00FF00" fontLabel="verdana" colorLabel="0xffffff" weightPointer="5" sizeLabel="10" sizePointer="15"  />
+ 			<axis:Axis scale="{l3}" placement="right" colorPointer="0x00FF00" fontLabel="verdana" colorLabel="0xffffff" weightPointer="5" sizeLabel="10" sizePointer="15"  />
+ 			<axis:Axis scale="{l4}" placement="right" colorPointer="0x00FF00" fontLabel="verdana" colorLabel="0xffffff" weightPointer="5" sizeLabel="10" sizePointer="15"  />
+ 			<axis:Axis scale="{l5}" placement="right" rotateLabels="40" colorPointer="0x00FF00" fontLabel="verdana" colorLabel="0xffffff" weightPointer="5" sizeLabel="10" sizePointer="15"  />
+ 			<grid:Grid scale1="{l2}" scale2="{c}" />
+ 		</coords:guides>
+		 <coords:elements>
+		 	<elements:AreaElement id="a1" showFieldName="true" labelField="TEST" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l2}" scale1="{c}" dim1="subject" dim2="R1" styleName="grad1" strokeAlpha=".5" displayName="R1"/>
+    		<elements:AreaElement id="a2" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l4}" scale1="{c1}" dim1="subject1" dim2="R2" styleName="grad2" strokeAlpha=".5" displayName="R2"/>
+    		<elements:AreaElement id="a3" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l3}" scale1="{c}" dim1="subject" dim2="R3" styleName="grad3" strokeAlpha=".5" displayName="R3"/>
+    		<elements:AreaElement id="a4" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l1}" scale1="{c1}" dim1="subject1" dim2="R4" styleName="grad4" strokeAlpha=".5" displayName="R4"/>
+    		<elements:AreaElement id="a5" showGraphicRenderer="true" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" scale2="{l5}" scale1="{c}" dim1="subject" dim2="R5" styleName="grad4" strokeAlpha=".5" displayName="R5"/>
+		 </coords:elements>
+	</coords:Cartesian>
 
-</mx:Box>
+    <guides:Legend dataProvider="{ac3}" direction="horizontal"/>
+
+	</mx:VBox>
+</mx:VBox>

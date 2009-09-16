@@ -11,6 +11,7 @@
 
 <mx:Script>
 		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
 			import mx.collections.ArrayCollection;
 			import birdeye.util.EffectsUtil;
 			
@@ -51,6 +52,7 @@
 	
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
 	<mx:Button label="Generate" click="createDT()"/>
+	<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([bb.svgData], parentApplication.width, parentApplication.height))"/>
 	<coords:Cartesian id="bb" width="90%" height="90%" dataProvider="{dt}" dataTipFunction="dtFunc" showDataTips="true" isMasked="false">
 		<coords:scales>
 	 		<scales:Category id="c" categoryField="subject" />

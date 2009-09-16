@@ -59,7 +59,7 @@
 				<scales:CategoryAngle id="c" categoryField="subject" subScale="birdeye.vis.scales.Linear"/>
 			</polar:scales>
 			<polar:guides>
-				<axis:MultiAxis subScale="{c}" gridType="circle" colorStroke="0x000000" colorLabel="0x000000" fontLabel="tahoma" sizeLabel="4" />
+				<axis:MultiAxis subScale="{c}" gridType="circle" colorStroke="0x000000" colorLabel="0x000000" fontLabel="tahoma" sizeLabel="10" />
 			</polar:guides>
 			<polar:elements>
 				<pseries:AreaElement id="a1" styleName="grad1" scale1="{c}" dim1="subject" dim2="R1" graphicRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" showGraphicRenderer="true" strokeColor="0xfff000" strokeAlpha="1" strokeWeight="1" gradientAlphas="{[0.1,0.1]}" displayName="R1"/>

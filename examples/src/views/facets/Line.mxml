@@ -11,6 +11,7 @@
 
 <mx:Script>
 		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
 			import mx.collections.ArrayCollection;
 			
 			[Bindable]
@@ -63,6 +64,7 @@
     	
     	<mx:HBox>
     		<mx:Button label="Generate" click="createDT()"/>
+			<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([cc4.svgData], parentApplication.width, parentApplication.height))"/>
 		</mx:HBox>
 		       	<coords:Cartesian id="cc4" width="90%" height="90%" showDataTips="true" dataProvider="{dt}" 
        		collisionType="stack">

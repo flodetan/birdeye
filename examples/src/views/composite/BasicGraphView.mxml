@@ -9,6 +9,7 @@
 	backgroundColor="#3f3f3f">
 
 	<mx:HBox horizontalAlign="center" width="100%">
+		<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([graph.svgData], parentApplication.width, parentApplication.height))"/>
 		<mx:Button label="Generate tree" click="generateTree()"/>
 		<mx:CheckBox id="animate" label="animate" selected="{graphLayout.animate}" />
 	</mx:HBox>
@@ -39,6 +40,7 @@
 	
 	<mx:Script>
 	<![CDATA[
+		import birdeye.vis.data.UtilSVG;
 		import mx.controls.Alert;
 		import birdeye.vis.data.DataItemLayout;
 		import birdeye.vis.trans.graphs.layout.ILayoutAlgorithm;

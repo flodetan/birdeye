@@ -10,6 +10,7 @@
 	width="100%" height="100%" horizontalAlign="center" xmlns:axis="birdeye.vis.guides.axis.*">
 	<mx:Script>
 		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
 
 			import mx.collections.ArrayCollection;
 			import mx.core.IToolTip;
@@ -53,6 +54,7 @@
 		]]>
 	</mx:Script>
 	<mx:Button label="Generate" click="createDT()"/>
+	<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([bc.svgData], parentApplication.width, parentApplication.height))"/>
 	<mx:HBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
 	
 		<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >

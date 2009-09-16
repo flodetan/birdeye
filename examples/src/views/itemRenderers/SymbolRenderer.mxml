@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" implements="birdeye.vis.interfaces.IExportableSVG"
 	xmlns:series="birdeye.vis.elements.geometry.*"
 	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
@@ -20,6 +20,11 @@
 
 			private var subject:Array;
 			
+			public function get svgData():String
+			{
+				return sp.svgData;
+			}
+
 			override public function set data(value:Object):void
 			{
 				super.data = value;

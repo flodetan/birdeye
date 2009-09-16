@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Graphic
-	width="20" height="20" 
+	width="20" height="20" implements="birdeye.vis.interfaces.IExportableSVG"
 	xmlns="http://ns.adobe.com/mxml/2009" xmlns:mx="http://ns.adobe.com/mxml/2009"
 	alpha=".5">
+
+    <mx:Script>
+        <![CDATA[
+        	include "returnSVGdata.as";
+        ]]>
+    </mx:Script>
 	<Group width="100%" height="100%" >
-	    <Path width="100%" height="100%" data="M 0,0 L 100,0 L 100,100 L 0,100 z">
+	    <Path id="path" width="100%" height="100%" data="M 0,0 L 100,0 L 100,100 L 0,100 z">
 	        <fill>
-	            <mx:SolidColor color="#FF00FF" />
+	            <mx:SolidColor id="f" color="#FF00FF" />
 	        </fill>
 	        <stroke>
-	            <mx:SolidColorStroke color="#FFFF00" weight="3" />
+	            <mx:SolidColorStroke id="s" color="#FFFF00" weight="3" />
 	        </stroke>
 	    </Path>
 	</Group>

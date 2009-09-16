@@ -9,6 +9,7 @@
 	width="100%" height="100%" horizontalAlign="center" xmlns:axis1="birdeye.vis.guides.axis.*">
 	<mx:Script>
 		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
 			import mx.collections.ArrayCollection;
 			import birdeye.util.EffectsUtil;
 			
@@ -39,6 +40,7 @@
 
 <mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
 	<mx:Button label="Generate" click="createDT()"/>
+	<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([pc1.svgData], parentApplication.width, parentApplication.height))"/>
 	<polar:Polar collisionType="stack" thicknessRatio=".2" id="pc1" dataProvider="{dt}" 
 		showDataTips="true" width="100%" height="100%">
 <!--		<coxcomb:angleScale>
