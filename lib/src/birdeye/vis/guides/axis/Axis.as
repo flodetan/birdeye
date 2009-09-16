@@ -30,6 +30,7 @@ package birdeye.vis.guides.axis
 	import birdeye.vis.elements.events.ElementRollOutEvent;
 	import birdeye.vis.elements.events.ElementRollOverEvent;
 	import birdeye.vis.interfaces.ICoordinates;
+	import birdeye.vis.interfaces.IExportableSVG;
 	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
@@ -47,6 +48,7 @@ package birdeye.vis.guides.axis
 	import com.degrafa.transform.RotateTransform;
 	
 	import flash.display.DisplayObject;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
 	import flash.utils.getTimer;
@@ -109,6 +111,17 @@ package birdeye.vis.guides.axis
 		}
 		public function get svgData():String
 		{
+			var child:Object;
+			var localOriginPoint:Point = localToGlobal(new Point(x, y)); 
+			for (var i:uint = 0; i<numChildren; i++)
+			{
+				child = getChildAt(i);
+				if (child is IExportableSVG)
+					_svgData += '<svg x="' + String(-localOriginPoint.x) +
+								   '" y="' + String(-localOriginPoint.y) + '">' + 
+								   IExportableSVG(child).svgData + 
+								'</svg>';
+			}
 			return _svgData;
 		}
 
@@ -844,7 +857,7 @@ package birdeye.vis.guides.axis
 			if (showAxis && invalidated)
 			{
 				clearAll();
-				svgText = svgData = "";
+				svgText = _svgData = "";
 
 				drawAxisLine(w,h)
 	
@@ -884,9 +897,9 @@ package birdeye.vis.guides.axis
 					_pointer.stroke = new SolidStroke(colorPointer, 1, weightPointer);
 					_pointer.visible = false;
 
-					svgData = '\n<g style="stroke:#000000' + 
+					_svgData = '\n<g style="stroke:#000000' + 
 						';stroke-width:1;stroke-opacity:1;">\n' +
-						svgText + '\n<path d="' + svgData + '"\n/>\n</g>' ;
+						svgText + '\n<path d="' + _svgData + '"\n/>\n</g>' ;
 					gg.geometryCollection.addItem(_pointer);
 				//}
 			}
@@ -929,7 +942,7 @@ package birdeye.vis.guides.axis
 							"L" + String(x1) + "," + String(y1) + " ";
 
 			var line:Path = new Path(tmpSVG);
-			svgData += tmpSVG;
+			_svgData += tmpSVG;
 			line.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 
 			gg.geometryCollection.addItem(line);
@@ -1042,7 +1055,7 @@ trace(getTimer(), "drawing axis");
 									"L" + String(xMax) + "," + String(yPos) + " ";
 		
 		 			thick = new Path(tmpSVG);
-					svgData += tmpSVG;
+					_svgData += tmpSVG;
 
 					thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 					gg.geometryCollection.addItem(thick);
@@ -1075,7 +1088,7 @@ trace(getTimer(), "drawing axis");
 									"L" + String(xPos) + "," + String(yMax) + " ";
 		
 		 			thick = new Path(tmpSVG);
-					svgData += tmpSVG;
+					_svgData += tmpSVG;
 					thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 					gg.geometryCollection.addItem(thick);
 
@@ -1130,7 +1143,7 @@ trace(getTimer(), "drawing axis");
 				
 				svgTextY = pos + label.displayObject.height/2;
 				label.y = pos-(label.displayObject.height )/2;
-				if (placement == LEFT)
+				if (placement == LEFT || placement == VERTICAL_CENTER)
 					label.x = width - thickWidth - (label.textWidth + 4);
 				else
 					label.x = thickWidth * sign;
