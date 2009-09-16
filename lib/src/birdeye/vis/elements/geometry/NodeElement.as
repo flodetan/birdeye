@@ -83,12 +83,30 @@ package birdeye.vis.elements.geometry {
 									'\n</g>\n' +
 									'</svg>\n';
 						}
+
+						if (itemDisplayObject is IExportableSVG)
+								_svgData += '<svg x="' + String(-localOriginPoint.x) +
+											   '" y="' + String(-localOriginPoint.y) + '">' + 
+											   IExportableSVG(child).svgData + 
+											'</svg>';
 					}
 				}
 			}
+			var child:Object;
+			var localOriginPoint:Point = localToGlobal(new Point(x, y)); 
+			for (var i:uint = 0; i<numChildren; i++)
+			{
+				child = getChildAt(i);
+				if (child is IExportableSVG)
+					_svgData += '<svg x="' + String(-localOriginPoint.x) +
+								   '" y="' + String(-localOriginPoint.y) + '">' + 
+								   IExportableSVG(child).svgData + 
+								'</svg>';
+			}
+
 			return _svgData;
 		}
-
+		
 		private var _graphLayout:IGraphLayout;
 
 		public function set graphLayout(layout:IGraphLayout):void {
