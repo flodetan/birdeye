@@ -68,16 +68,17 @@ package birdeye.vis.elements.geometry
 		{
 			var child:Object;
 			var localOriginPoint:Point = localToGlobal(new Point(x, y)); 
+			var nestedScenesSVG:String = "";
 			for (var i:uint = 0; i<numChildren; i++)
 			{
 				child = getChildAt(i);
 				if (child is IExportableSVG)
-					_svgData += '<svg x="' + String(-localOriginPoint.x) +
-								   '" y="' + String(-localOriginPoint.y) + '">' + 
-								   IExportableSVG(child).svgData + 
-								'</svg>';
+					nestedScenesSVG += '<svg x="' + String(-localOriginPoint.x) +
+										   '" y="' + String(-localOriginPoint.y) + '">' + 
+										   IExportableSVG(child).svgData + 
+										'</svg>';
 			}
-			return _svgData;
+			return _svgData + nestedScenesSVG;
 		}
 		
 		private var _itemRenderer:IFactory;
