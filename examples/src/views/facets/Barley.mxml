@@ -123,8 +123,7 @@
 			</coords:guides>
     		 <coords:elements>
     		 	<elements:PointElement scale1="{c1}" scale2="{c2}" alphaFill=".2" dim1="year" dim2="site" alphaStroke="0"
-    		 		itemRenderer="views.itemRenderers.SharedFacetLineRenderer" dataField="newChart">
-        		 </elements:PointElement>
+    		 		itemRenderer="views.itemRenderers.SharedFacetLineRenderer" dataField="newChart"/>
         	</coords:elements>
         </coords:Cartesian>	
     </mx:VBox>
