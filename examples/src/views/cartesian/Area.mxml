@@ -65,7 +65,7 @@
     	
     	<mx:HBox >
     		<mx:Button label="Generate" click="createDT()"/>
-			<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([ac3.svgData], parentApplication.width, parentApplication.height))"/>
+			<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([ac3.svgData, legend.svgData], parentApplication.width, parentApplication.height))"/>
     		<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2,a3,a4,a5])"/>
 <!--    		<mx:HSlider id="tens" maximum="4" minimum="0" value="1" change="changeForm([a1,a2,a3,a4,a5])"/>
 -->		</mx:HBox>
@@ -101,7 +101,7 @@
 		 </coords:elements>
 	</coords:Cartesian>
 
-    <guides:Legend dataProvider="{ac3}" direction="horizontal"/>
+    <guides:Legend id="legend" dataProvider="{ac3}" direction="horizontal"/>
 
 	</mx:VBox>
 </mx:VBox>
