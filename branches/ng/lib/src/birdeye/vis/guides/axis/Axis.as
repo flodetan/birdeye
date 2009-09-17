@@ -974,12 +974,16 @@ package birdeye.vis.guides.axis
 						case BOTTOM:
 						case HORIZONTAL_CENTER:
 							//height = Math.max(5,maxLblSize * Math.sin(-_rotateLabels*Math.PI/180));
-							minHeight = _padding + sizeLabel + 10 + maxLblSize * Math.sin(-_rotateLabels*Math.PI/180);
+							minHeight = (_axisRendererHeight>0) ? 
+											_axisRendererHeight :
+											_padding + sizeLabel + 10 + maxLblSize * Math.sin(-_rotateLabels*Math.PI/180);
 							break;							
 						case LEFT:
 						case RIGHT:
 						case VERTICAL_CENTER:				
-							minWidth = _padding + Math.max(5, maxLblSize * Math.cos(_rotateLabels*Math.PI/180));
+							minWidth = (_axisRendererWidth>0) ?
+												_axisRendererWidth :
+												_padding + Math.max(5, maxLblSize * Math.cos(_rotateLabels*Math.PI/180));
 							break;
 					}
 
