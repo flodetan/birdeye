@@ -31,6 +31,7 @@ package birdeye.vis.guides.legend
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.IElement;
+	import birdeye.vis.interfaces.IExportableSVG;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
@@ -39,6 +40,7 @@ package birdeye.vis.guides.legend
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.events.Event;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
 	import flash.utils.describeType;
@@ -51,6 +53,36 @@ package birdeye.vis.guides.legend
 	
 	public class Legend extends Box
 	{
+		private var _svgData:String;
+		public function get svgData():String
+		{
+			_svgData = "";
+			var child:Object;
+			var localOriginPoint:Point = localToGlobal(new Point(x, y)); 
+			for (var i:uint = 0; i<numChildren; i++)
+			{
+				child = getChildAt(i);
+				if (child is IExportableSVG)
+					_svgData += '<svg x="' + String(-localOriginPoint.x) +
+								   '" y="' + String(-localOriginPoint.y) + '">' + 
+								   IExportableSVG(child).svgData + 
+								'</svg>';
+			}
+			
+			if (surf)
+			{
+				for each (var graphicItem:Object in surf.graphicsCollection)
+				{
+					if (graphicItem is IExportableSVG)
+						_svgData += '<svg x="' + String(-localOriginPoint.x) +
+									   '" y="' + String(-localOriginPoint.y) + '">' + 
+									   IExportableSVG(graphicItem).svgData + 
+									'</svg>';
+				}
+			}
+			return _svgData;
+		}
+
 		private var _legendTitle:String;
 		public function set legendTitle(val:String):void
 		{
@@ -98,6 +130,7 @@ package birdeye.vis.guides.legend
 			Application.application.addEventListener("ProviderReady",createLegend,true);
 		}
 		
+		var surf:Surface;
 		private function createLegend(e:Event):void
 		{
 			if (e.target == _dataProvider)
@@ -116,7 +149,7 @@ package birdeye.vis.guides.legend
 
 				for (i = 0; i<_dataProvider.elements.length; i++)
 				{
-					var surf:Surface = new Surface();
+					surf = new Surface();
 					var gg:GeometryGroup = new GeometryGroup();
 					gg.target = surf;
 					
