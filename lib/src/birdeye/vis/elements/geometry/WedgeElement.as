@@ -190,8 +190,6 @@ package birdeye.vis.elements.geometry
 		
 						arc = new ArcPath(Math.max(0, _innerRadius), tmpRadius, startAngle, angle, chart.origin);
 						
-						addSVGData(arc.svgData);
-						
 						var tempColor:int;
 						
 						if (colorField)
@@ -208,6 +206,7 @@ package birdeye.vis.elements.geometry
 						{
 							if (c < _colorsStart.length)
 							{
+								rgbFill = toHex(_colorsStart[c]);
 								fill = new LinearGradientFill();
 								var grStop:GradientStop = new GradientStop(_colorsStart[c])
 								grStop.alpha = alpha;
@@ -236,6 +235,8 @@ package birdeye.vis.elements.geometry
 						{
 							arc.fill = fill;
 						}
+
+						addSVGData(arc.svgData);
 		
 						arc.stroke = stroke;
 		
