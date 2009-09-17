@@ -62,22 +62,29 @@ package birdeye.vis.scales
 		* INTERFACE IVALIDATINGCHILD IMPLEMENTATION
 		*/
 		// TODO create a separate namespace for these functions and share them?
-		private var _valParent:IValidatingParent;
 		
+		protected var toBeInvalidated:Boolean = false;
+		private var _valParent:IValidatingParent;
 		public function set parent(val:IValidatingParent):void
 		{
 			_valParent = val;	
+			if (toBeInvalidated)
+			{
+				invalidate();
+				toBeInvalidated = false;
+			}
 		}
-		
 		public function get parent():IValidatingParent
 		{
 			return _valParent;
 		}
 		
 		private var invalidated:Boolean = false;
-		
 		public function invalidate():void
 		{
+			if (!_valParent)
+				toBeInvalidated = true;
+
 			if (!invalidated && _valParent)
 			{
 				_valParent.invalidate(this);
@@ -271,10 +278,7 @@ package birdeye.vis.scales
 		public function get dimension():String
 		{
 			return _dimension;
-		}
-		
-		// UIComponent flow
-		
+		}		
 
 		/** @Private
 		 * Given a data value, it returns the position of the data value on the current axis.
