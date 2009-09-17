@@ -53,7 +53,7 @@
 			<axis:Axis scale="{l}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
 		</coords:guides>
 		 <coords:elements>
-		 	<series:PointElement rendererWidth="300" rendererHeight="300" dataField="newChart" itemRenderer="views.SVG.Layer2" 
+		 	<series:PointElement rendererWidth="100" rendererHeight="100" dataField="newChart" itemRenderer="views.SVG.Layer2" 
 		 		scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  
 		 		extendMouseEvents="true" dim1="subject" dim2="total" colorFill="0xff0000"/>
 		 </coords:elements>
