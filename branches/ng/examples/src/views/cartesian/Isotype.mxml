@@ -76,11 +76,11 @@
 	 		</coords:guides>
 	    	 <coords:elements>
 			 	<elements:IsotypeElement direction="vertical" collisionType="cluster" 
-			 		itemRenderer="views.itemRenderers.SVGRenderer" rendererDataValue="10"
+			 		itemRenderer="views.itemRenderers.Image" rendererDataValue="10"
 			 		scale1="{c}" scale2="{l}" extendMouseEvents="true" 
 			 		dim1="subject" styleName="grad1" dim2="R1"/>
 			 	<elements:IsotypeElement direction="horizontal"
-			 		itemRenderer="views.itemRenderers.SVGRenderer1" rendererDataValue="10"
+			 		itemRenderer="views.itemRenderers.Image1" rendererDataValue="10"
 			 		scale1="{l1}" scale2="{c1}" extendMouseEvents="true" 
 			 		dim1="R2" collisionType="cluster" styleName="grad1" dim2="subject"/>
 			 </coords:elements>
