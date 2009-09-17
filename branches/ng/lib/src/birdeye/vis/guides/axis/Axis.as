@@ -1099,7 +1099,7 @@ trace(getTimer(), "drawing axis");
 					if (!_labelRenderer)
 					{
 						// create label 
-						label = createLabelText("horizontal", String(dataLabel), NaN);
+						label = createLabelText("horizontal", String(dataLabel), xPos);
 						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
 					} else {
@@ -1171,19 +1171,19 @@ trace(getTimer(), "drawing axis");
 					{
 						case TOP:
 							_rotateLabelsOn = "centerLeft";
-							label.x = scale.getPosition(dataLabel);
+							label.x = pos;
 							label.y += height*.9; 
 							break;
 						case BOTTOM:
 							_rotateLabelsOn = "topRight";
-							label.x = scale.getPosition(dataLabel)-(label.textWidth + 4)*.9; 
+							label.x = pos - (label.textWidth + 4)*.9; 
 							break;
 					}
 					rot.registrationPoint = _rotateLabelsOn;
 					rot.angle = _rotateLabels;
 					label.transform = rot;
 				} else {
-					label.x = scale.getPosition(dataLabel)-(label.textWidth + 4)/2; 
+					label.x = pos - (label.textWidth + 4)/2; 
 					if (placement == TOP)
 					{
 						label.y += label.fontSize;
