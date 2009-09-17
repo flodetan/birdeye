@@ -67,17 +67,19 @@ package birdeye.vis.guides.legend
 								   '" y="' + String(-localOriginPoint.y) + '">' + 
 								   IExportableSVG(child).svgData + 
 								'</svg>';
-			}
-			
-			if (surf)
-			{
-				for each (var graphicItem:Object in surf.graphicsCollection)
+				if (child is Surface)
 				{
-					if (graphicItem is IExportableSVG)
-						_svgData += '<svg x="' + String(-localOriginPoint.x) +
-									   '" y="' + String(-localOriginPoint.y) + '">' + 
-									   IExportableSVG(graphicItem).svgData + 
-									'</svg>';
+					for (var j:int = 0; j<Surface(child).numChildren; j++)
+					{
+						var geomGroup:Object = Surface(child).getChildAt(j);
+						if (geomGroup is GeometryGroup)
+							for each (var graphicItem:Object in GeometryGroup(geomGroup).geometry)
+								if (graphicItem is IExportableSVG)
+									_svgData += '<svg x="' + String(-localOriginPoint.x) +
+												   '" y="' + String(-localOriginPoint.y) + '">' + 
+												   IExportableSVG(graphicItem).svgData + 
+												'</svg>';
+					}
 				}
 			}
 			return _svgData;
