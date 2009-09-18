@@ -37,13 +37,11 @@ package birdeye.vis.guides.legend
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.Geometry;
-	import com.degrafa.geometry.RasterText;
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.text.TextFieldAutoSize;
 	import flash.utils.describeType;
 	
 	import mx.containers.Box;
@@ -63,12 +61,21 @@ package birdeye.vis.guides.legend
 			for (var i:uint = 0; i<numChildren; i++)
 			{
 				child = getChildAt(i);
-				if (child is IExportableSVG)
-					_svgData += '<svg x="' + String(-localOriginPoint.x) +
-								   '" y="' + String(-localOriginPoint.y) + '">' + 
-								   IExportableSVG(child).svgData + 
+				var ggOriginPoint:Point = localToGlobal(new Point(child.x, child.y)); 
+				if (child is LegendItem)
+					_svgData += LegendItem(child).svgData
+				else if (child is IExportableSVG)
+					_svgData += '<svg x="' + String(ggOriginPoint.x) +
+									'" y="' + String(ggOriginPoint.y) + '">' + 
+									'\n<g style="' +
+									'fill: #000000' + 
+									';fill-opacity: 1' + 
+									';stroke: #000000' + 
+									';stroke-opacity: 1;">' + 
+									IExportableSVG(child).svgData + 
+									'\n</g>' + 
 								'</svg>';
-				if (child is Surface)
+				else if (child is Surface)
 				{
 					for (var j:int = 0; j<Surface(child).numChildren; j++)
 					{
@@ -76,19 +83,18 @@ package birdeye.vis.guides.legend
 						if (geomGroup is GeometryGroup)
 							for each (var graphicItem:Object in GeometryGroup(geomGroup).geometry)
 							{
-								var ggOriginPoint:Point = localToGlobal(new Point(child.x, child.y)); 
+								ggOriginPoint = localToGlobal(new Point(child.x, child.y)); 
 								if (graphicItem is IExportableSVG)
 									_svgData += '<svg x="' + String(ggOriginPoint.x) +
 													'" y="' + String(ggOriginPoint.y) + '">' + 
 													'\n<g style="' +
 													'fill: #000000' + 
 													';fill-opacity: 1' + 
-													';stroke: #ff0000' + 
+													';stroke: #000000' + 
 													';stroke-opacity: 1;">' + 
 													IExportableSVG(graphicItem).svgData + 
 													'\n</g>' + 
 												'</svg>';
-								
 							}
 					}
 				}
@@ -143,7 +149,7 @@ package birdeye.vis.guides.legend
 			Application.application.addEventListener("ProviderReady",createLegend,true);
 		}
 		
-		var surf:Surface;
+		private var surf:Surface;
 		private function createLegend(e:Event):void
 		{
 			if (e.target == _dataProvider)
