@@ -27,17 +27,21 @@
  
 package birdeye.vis.guides.legend
 {
+	import birdeye.vis.data.UtilSVG;
+	import birdeye.vis.guides.renderers.TextRenderer;
+	import birdeye.vis.interfaces.IExportableSVG;
+	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
 	import com.degrafa.Surface;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
-	import com.degrafa.geometry.RasterText;
 	import com.degrafa.paint.GradientStop;
 	import com.degrafa.paint.LinearGradientFill;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
 	
@@ -64,6 +68,42 @@ package birdeye.vis.guides.legend
 
 	public class LegendItem extends Surface
 	{
+		public function get rgbFill():String
+		{
+			return UtilSVG.toHex(colorFill);
+		}
+		public function get rgbStroke():String
+		{
+			return UtilSVG.toHex(colorFill);
+		}
+
+		private var _svgData:String;
+		public function get svgData():String
+		{
+ 			_svgData = "";
+			var localOriginPoint:Point = localToGlobal(new Point(x, y)); 
+			if (gg)
+			{
+				if (geometry && geometry is IExportableSVG)
+					_svgData += '<svg x="' + String(localOriginPoint.x) +
+								   '" y="' + String(localOriginPoint.y) + '">' + 
+									'\n<g style="' +
+									'fill: #' + UtilSVG.toHex(colorFill) + 
+									';fill-opacity: ' + UtilSVG.toHex(alphaFill) + 
+									';stroke: #' + UtilSVG.toHex(colorStroke) + 
+									';stroke-opacity: 1;">' + 
+										IExportableSVG(geometry).svgData + 
+									'\n</g>' + 
+								'</svg>';
+				if (label && label is IExportableSVG)
+					_svgData += '<svg x="' + String(localOriginPoint.x) +
+								   '" y="' + String(localOriginPoint.y) + '">' + 
+									IExportableSVG(label).svgData + 
+								'</svg>';
+			}
+ 			return _svgData;
+		}
+		
 		private var _itemRenderer:Class;
 		/** Set the itemRenderer for this LegendItem.*/
 		public function set itemRenderer(val:Class):void
@@ -236,7 +276,7 @@ package birdeye.vis.guides.legend
 			var w:Number = 0, h:Number = 0;
 			if (_text)
 			{
-				label = new RasterText();
+				label = new TextRenderer();
 				label.text = _text;
 				label.autoSize = TextFieldAutoSize.LEFT;
 				label.autoSizeField = true;
@@ -253,7 +293,7 @@ package birdeye.vis.guides.legend
 		private var fill:IGraphicsFill = new SolidFill(0x888888,0);
 		private var stroke:IGraphicsStroke = new SolidStroke(0x888888,1,1);
 		private var geometry:IGeometry;
-		private var label:RasterText;
+		private var label:TextRenderer;
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
@@ -309,17 +349,13 @@ package birdeye.vis.guides.legend
 
 			if (_text)
 			{
-				label = new RasterText();
-				label.autoSize = TextFieldAutoSize.LEFT;
-				label.autoSizeField = true;
+				label = new TextRenderer(_sizeRenderer + 5);
 				label.text = _text;
 				label.fontFamily = fontLabel;
 				label.fontSize = sizeLabel;
 				label.fill = new SolidFill(colorLabel);
 				label.stroke = new SolidStroke(colorStroke);
  				
-				label.x = _sizeRenderer + 5;
-				
  				gg.geometryCollection.addItem(label);
 			}
 			width = Rectangle(this.getBounds(this)).width;
