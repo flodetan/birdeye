@@ -29,6 +29,7 @@ package birdeye.vis.guides.legend
 {
 	import birdeye.vis.VisScene;
 	import birdeye.vis.guides.renderers.RasterRenderer;
+	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
 	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.IExportableSVG;
@@ -74,11 +75,21 @@ package birdeye.vis.guides.legend
 						var geomGroup:Object = Surface(child).getChildAt(j);
 						if (geomGroup is GeometryGroup)
 							for each (var graphicItem:Object in GeometryGroup(geomGroup).geometry)
+							{
+								var ggOriginPoint:Point = localToGlobal(new Point(child.x, child.y)); 
 								if (graphicItem is IExportableSVG)
-									_svgData += '<svg x="' + String(-localOriginPoint.x) +
-												   '" y="' + String(-localOriginPoint.y) + '">' + 
-												   IExportableSVG(graphicItem).svgData + 
+									_svgData += '<svg x="' + String(ggOriginPoint.x) +
+													'" y="' + String(ggOriginPoint.y) + '">' + 
+													'\n<g style="' +
+													'fill: #000000' + 
+													';fill-opacity: 1' + 
+													';stroke: #ff0000' + 
+													';stroke-opacity: 1;">' + 
+													IExportableSVG(graphicItem).svgData + 
+													'\n</g>' + 
 												'</svg>';
+								
+							}
 					}
 				}
 			}
@@ -155,12 +166,9 @@ package birdeye.vis.guides.legend
 					var gg:GeometryGroup = new GeometryGroup();
 					gg.target = surf;
 					
-					var label:RasterText = new RasterText();
+					var label:TextRenderer = new TextRenderer(15);
 					label.fontSize = sizeLabel;
 					label.fontFamily = fontLabel;
-					label.autoSize = TextFieldAutoSize.LEFT;
-					label.autoSizeField = true;
-					label.x = 15;
 
 					if (IElement(_dataProvider.elements[i]).displayName)
 					{
