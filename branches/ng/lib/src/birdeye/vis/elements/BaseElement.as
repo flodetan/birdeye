@@ -1923,6 +1923,34 @@ package birdeye.vis.elements
 				_itemDisplayObjects[itemId] = ttGG;
 			}
 		}
+		
+		protected function getRendererWidth(item:Object = null):Number
+		{
+			if (sizeScale && sizeField && item)
+				return sizeScale.getPosition(item[sizeField]);
+			
+			if (rendererWidth>0)
+				return rendererWidth;
+			
+			if (sizeRenderer>0)
+				return sizeRenderer;
+				
+			return NaN;
+		}
+
+		protected function getRendererHeight(item:Object = null):Number
+		{
+			if (sizeScale && sizeField  && item)
+				return sizeScale.getPosition(item[sizeField]);
+			
+			if (rendererHeight>0)
+				return rendererHeight;
+			
+			if (sizeRenderer>0)
+				return sizeRenderer;
+				
+			return NaN;
+		}
 
 		public function refresh():void
 		{

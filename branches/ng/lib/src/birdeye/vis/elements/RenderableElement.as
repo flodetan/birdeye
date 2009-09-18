@@ -26,7 +26,8 @@
  */
 package birdeye.vis.elements
 {
-	import mx.core.IDataRenderer;
+	import flash.display.DisplayObject;
+	
 	import mx.core.IFactory;
 	
 	public class RenderableElement extends BaseElement
@@ -68,6 +69,39 @@ package birdeye.vis.elements
 			if (_itemRenderer)
 				for (var i:uint = 0; i<numChildren; )
 					removeChild(getChildAt(0));
+		}
+		
+		private var template:DisplayObject;
+		override protected function getRendererWidth(item:Object = null):Number
+		{
+			var w:Number = super.getRendererWidth(item);
+			if (!isNaN(w)) return w;
+			
+			if (_itemRenderer && !template)
+				template = _itemRenderer.newInstance();
+
+			if (template) w = template.width;
+			
+			if (!isNaN(w))
+				return w;
+			
+			return 0;
+		}
+
+		override protected function getRendererHeight(item:Object = null):Number
+		{
+			var h:Number = super.getRendererHeight(item);
+			if (!isNaN(h)) return h;
+			
+			if (_itemRenderer && !template)
+				template = _itemRenderer.newInstance();
+
+			if (template) h = template.height;
+			
+			if (!isNaN(h))
+				return h;
+			
+			return 0;
 		}
 	}
 }
