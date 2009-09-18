@@ -33,6 +33,7 @@ package birdeye.vis.elements
 	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.elements.events.ElementRollOutEvent;
 	import birdeye.vis.elements.events.ElementRollOverEvent;
+	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IElement;
@@ -46,7 +47,6 @@ package birdeye.vis.elements
 	import com.degrafa.Surface;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
-	import com.degrafa.geometry.Circle;
 	import com.degrafa.geometry.Geometry;
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.GradientStop;
@@ -56,6 +56,7 @@ package birdeye.vis.elements
 	
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
+	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	import flash.xml.XMLNode;
 	
@@ -1238,7 +1239,7 @@ package birdeye.vis.elements
 					'fill:' + ((svg.rgbFill) ? '#' + svg.rgbFill:'none') + 
 					';fill-opacity:' + svg.fillAlpha + ';' + 
 					'stroke:' + ((svg.rgbStroke) ? '#' + svg.rgbStroke:'none') + 
-					';stroke-opacity:' + svg.strokeAlpha + ';' + ';">' + 
+					';stroke-opacity:' + svg.strokeAlpha + ';">' + 
 					svg.data + 
 					'\n</g>';
 			} 
@@ -1481,12 +1482,14 @@ package birdeye.vis.elements
 			if (hitAreaFunction != null)
 				return hitAreaFunction(xPos, yPos, size);
 			else {
-				var geom:Circle = new Circle(xPos, yPos, size); 
+				var geom:CircleRenderer = new CircleRenderer(new Rectangle(xPos-size, yPos-size, size*2, size*2)); 
 				geom.fill = fill;
 				geom.stroke = stroke;
 				
 				if (!_showAllDataItems)
 					geom.alpha = 0;
+				else
+					addSVGData(geom.svgData);
 
 				return geom;
 			}
