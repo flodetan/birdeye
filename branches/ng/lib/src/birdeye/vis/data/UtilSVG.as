@@ -67,5 +67,12 @@ package birdeye.vis.data
 			
 			return header + body + end;
 		}
+		
+		/** Convert a number into hex string.*/
+		public static function toHex(value:Object):String
+		{
+            var hex:String = Number(value).toString(16);
+            return ("00000" + hex).substr(-6);
+		}
 	}
 }

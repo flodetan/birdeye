@@ -28,6 +28,7 @@
 package birdeye.vis.elements.geometry
 {
 	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.data.UtilSVG;
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.scales.*;
 	
@@ -210,7 +211,7 @@ package birdeye.vis.elements.geometry
 				if (col is Number)
 				{
 					fill = new SolidFill(col);
-					rgbFill = toHex(col);
+					rgbFill = UtilSVG.toHex(col);
 				} else if (col is IGraphicsFill)
 					fill = col;
 			}

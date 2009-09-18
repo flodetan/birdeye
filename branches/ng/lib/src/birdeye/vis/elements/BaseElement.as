@@ -30,6 +30,7 @@ package birdeye.vis.elements
 	import birdeye.events.ElementDataItemsChangeEvent;
 	import birdeye.vis.coords.BaseCoordinates;
 	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.data.UtilSVG;
 	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.elements.events.ElementRollOutEvent;
 	import birdeye.vis.elements.events.ElementRollOverEvent;
@@ -1205,19 +1206,12 @@ package birdeye.vis.elements
 			}
 			
 			fillValues = getFillValues();
-			rgbFill = toHex(fillValues[0]);
-			rgbStroke = toHex(colorStroke);
-
-//			svgData = '\n<g style="fill:#' + rgbFill + ';fill-opacity:1;stroke:#' + rgbStroke + ';stroke-width:1;stroke-opacity:1;">\n<path d="';
+			rgbFill = UtilSVG.toHex(fillValues[0]);
+			rgbStroke = UtilSVG.toHex(colorStroke);
 
 			// to be overridden by each element implementation
 		}
 
-        protected function toHex(item:Object):String {
-            var hex:String = Number(item).toString(16);
-            return ("00000" + hex).substr(-6);
-        }
-        
         protected function addSVGData(data:Object):void
         {
         	svgMultiColorData.push({
