@@ -32,6 +32,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.UpTriangleRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
+	import birdeye.vis.interfaces.IExportableSVG;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.scales.*;
 	
@@ -193,7 +194,11 @@ trace (getTimer(), "area ele");
 		 				var bounds:Rectangle = new Rectangle(scaleResults[POS1] - _rendererSize/2, scaleResults[POS2] - _rendererSize/2, _rendererSize, _rendererSize);
 		 				
 						var shape:IGeometry = graphicRenderer.newInstance();
-						if (shape is IBoundedRenderer) (shape as IBoundedRenderer).bounds = bounds; 
+						if (shape is IBoundedRenderer)
+						{
+							(shape as IBoundedRenderer).bounds = bounds; 
+							addSVGData(IExportableSVG(shape).svgData);
+						}
 
 						shape.fill = fill;
 						shape.stroke = stroke;
