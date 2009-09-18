@@ -205,10 +205,20 @@ package birdeye.vis.elements.geometry {
 
 			const items:Vector.<Object> = dataItems;
 			if (items) {
+				var rendWidth:Number = getRendererWidth(null);
+				var rendHeight:Number = getRendererHeight(null);
 				items.forEach(function(item:Object, index:int, items:Vector.<Object>):void {
 					const itemId:Object = item[itemIdField];
 					if (isItemVisible(itemId)) {
-						const position:Position = getItemPosition(itemId);
+						var position:Position = getItemPosition(itemId);
+						
+						if (sizeScale && sizeField)
+						{
+							rendWidth = getRendererWidth(item);
+							rendHeight = getRendererHeight(item);
+						}
+						position = new Position(position.pos1 - rendWidth/2, position.pos2 - rendHeight/2, position.pos3);
+
 						if (position != null) {
 							var renderer:Object = {itemRenderer: createItemRenderer(item, position),
 													graphicRenderer: [createGraphicRenderer(item, position), 
