@@ -55,7 +55,9 @@ package birdeye.vis.guides.renderers
 		
 		public function get svgData():String
 		{
-			return '<circle cx="' + centerX + bounds.width/2 + '" cy="' + centerY + bounds.height/2 + '" r="' + radius + '"/>';
+			return '<circle cx="' + String(centerX + bounds.width/2) + 
+						'" cy="' + String(centerY + bounds.height/2) + 
+						'" r="' + radius + '"/>';
 		}
 	}
 }
