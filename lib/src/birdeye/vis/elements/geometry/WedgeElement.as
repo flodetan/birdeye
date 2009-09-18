@@ -28,6 +28,7 @@
 package birdeye.vis.elements.geometry
 {
 	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.data.UtilSVG;
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.ArcPath;
 	import birdeye.vis.guides.renderers.CircleRenderer;
@@ -206,7 +207,7 @@ package birdeye.vis.elements.geometry
 						{
 							if (c < _colorsStart.length)
 							{
-								rgbFill = toHex(_colorsStart[c]);
+								rgbFill = UtilSVG.toHex(_colorsStart[c]);
 								fill = new LinearGradientFill();
 								var grStop:GradientStop = new GradientStop(_colorsStart[c])
 								grStop.alpha = alpha;
