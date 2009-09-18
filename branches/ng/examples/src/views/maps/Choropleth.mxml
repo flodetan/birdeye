@@ -111,7 +111,7 @@
 		]]>
 	</mx:Script>
 	
-	<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([myMap.svgData], parentApplication.width, parentApplication.height))"/>
+	<mx:Button label="SVG export" click="{(new FileReference()).save(UtilSVG.createSVG([myMap.svgData, legend.svgData], parentApplication.width, parentApplication.height))}"/>
 	
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
     	<coords:Cartesian id="myMap" width="90%" height="90%" dataProvider="{dt}" showDataTips="true" dataTipFunction="dtFunc">
@@ -128,7 +128,7 @@
     		 	<elements:PolygonElement mouseClickFunction="clickF" extendMouseEvents="true" scale1="{long}" scale2="{lat}" polyDim="poly" colorScale="{col1}" colorField="random" />
 			 </coords:elements>
     	</coords:Cartesian>
-    	<guides:Legend dataProvider="{myMap}" direction="horizontal">
+    	<guides:Legend id="legend" dataProvider="{myMap}" direction="horizontal">
     		<guides:items>
 				<guides:LegendItem text="From 0" fillColor="0xff0000" sizeRenderer="15" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
 				<guides:LegendItem text="To 100k" fillColor="0xFFff00" sizeRenderer="15" itemRenderer="birdeye.vis.guides.renderers.DiamondRenderer" />
