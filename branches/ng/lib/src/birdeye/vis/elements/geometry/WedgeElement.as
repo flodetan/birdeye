@@ -266,6 +266,7 @@ package birdeye.vis.elements.geometry
 							label = new TextRenderer(xLlb, yLlb, tmpDim1, new SolidFill(colorLabel),
 																	true, true, sizeLabel, fontLabel);
 							label.fontWeight = "bold";
+							addSVGData(label.svgData);
 							gg.geometryCollection.addItem(label); 
 						}
 		
