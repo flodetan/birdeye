@@ -24,14 +24,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package birdeye.util.geom
+
+package birdeye.vis.elements.events
 {
-	public interface IVisualObjectWithDimensions
+	import birdeye.vis.interfaces.IElement;
+	
+	import flash.events.Event;
+	
+	public class ElementEvent extends Event
 	{
-
-		function get width():Number;
-
-		function get height():Number;
+		private var _element:IElement;
 		
+		public function ElementEvent(type:String, element:IElement) {
+			super(type);
+			_element = element;
+		}
+		
+		public function get element():IElement {
+			return _element;
+		}
 	}
 }

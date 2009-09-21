@@ -27,7 +27,7 @@
 
 package birdeye.vis.trans.graphs.visual
 {
-	import birdeye.util.geom.IVisualObjectWithDimensions;
+	import birdeye.vis.trans.graphs.util.geom.IVisualObjectWithDimensions;
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.trans.graphs.model.IGraph;
 	

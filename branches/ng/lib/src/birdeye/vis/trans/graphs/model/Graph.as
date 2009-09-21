@@ -28,8 +28,8 @@
 
 package birdeye.vis.trans.graphs.model {
 
-	import birdeye.util.LogUtil;
 	import birdeye.vis.trans.graphs.data.IGraphDataProvider;
+	import birdeye.vis.trans.graphs.util.LogUtil;
 	
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;

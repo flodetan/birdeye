@@ -26,8 +26,8 @@
 package birdeye.vis.trans.graphs.layout
 {
 	
-	import birdeye.util.Geometry;
 	import birdeye.vis.trans.graphs.model.INode;
+	import birdeye.vis.trans.graphs.util.Geometry;
 	
 	import flash.geom.Point;
 	import flash.utils.Dictionary;

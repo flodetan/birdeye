@@ -22,10 +22,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package birdeye.util.geom {
+package birdeye.vis.trans.graphs.util.geom {
 
-	import birdeye.util.Geometry;
-	import birdeye.util.LogUtil;
+	import birdeye.vis.trans.graphs.util.Geometry;
+	import birdeye.vis.trans.graphs.util.LogUtil;
 	
 	/**
 	 * This class implements the Poincare model, which is used for 

@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package birdeye.util.geom {
+package birdeye.vis.trans.graphs.util.geom {
 
 	/**
 	 * This is an implementation of the interface <code>IVector</code>

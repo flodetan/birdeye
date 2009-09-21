@@ -24,34 +24,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
-package birdeye.util
+package birdeye.vis.trans.graphs.util.geom
 {
-	import flash.utils.getTimer;
+	public interface IVisualObjectWithDimensions
+	{
 
-	/**
-	 * This is a simple class to provide a timer function.
-	 * 
-	 * @author Nitin Lamba
-	 * */
-	public class StopWatch {
+		function get width():Number;
 
-		protected var prevTime:uint;
-
-		public function startTimer():void {
-			prevTime = getTimer();
-		}
-			
-		/**
-		 * Stops the timer and returns the 
-		 * time elapsed since last start timer call.
-		 * @return elapsed time
-		 */
-		public function stopTimer():uint {
-			var curTime:uint = getTimer();
-			return curTime - prevTime;
-		}
-  	}
-  
+		function get height():Number;
+		
+	}
 }
-

@@ -88,9 +88,8 @@ package birdeye.vis.elements.geometry
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
-			// select the item renderer (must be an IGeomentry)
-			if (! graphicRenderer)
-				graphicRenderer = new ClassFactory(UpTriangleRenderer);
+			
+			_extendMouseEvents = true;
 
 			if (!isListeningMouseMove && chart)
 			{

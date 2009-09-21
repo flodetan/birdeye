@@ -29,7 +29,7 @@ package birdeye.vis.trans.graphs.layout
 {
 	import __AS3__.vec.Vector;
 	
-	import birdeye.util.LogUtil;
+	import birdeye.vis.trans.graphs.util.LogUtil;
 	import birdeye.vis.trans.graphs.model.IGTree;
 	import birdeye.vis.trans.graphs.model.IGraph;
 	import birdeye.vis.trans.graphs.model.INode;

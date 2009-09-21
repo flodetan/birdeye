@@ -27,11 +27,10 @@
  
 package birdeye.vis.trans.graphs.layout
 {
-	import birdeye.util.Geometry;
-	import birdeye.util.LogUtil;
 	import birdeye.vis.trans.graphs.model.IGTree;
 	import birdeye.vis.trans.graphs.model.INode;
-	import birdeye.vis.trans.graphs.visual.IVisualGraph;
+	import birdeye.vis.trans.graphs.util.Geometry;
+	import birdeye.vis.trans.graphs.util.LogUtil;
 	
 	import flash.geom.Point;
 	

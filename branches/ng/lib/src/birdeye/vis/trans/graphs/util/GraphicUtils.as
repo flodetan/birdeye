@@ -22,9 +22,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package birdeye.util {
+package birdeye.vis.trans.graphs.util {
 	
-	import birdeye.util.geom.IVisualObjectWithDimensions;
+	import birdeye.vis.trans.graphs.util.geom.IVisualObjectWithDimensions;
 	
 	import flash.display.Graphics;
 	import flash.geom.Point;

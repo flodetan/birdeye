@@ -28,10 +28,13 @@
 package birdeye.vis.interfaces
 {
 	import birdeye.vis.elements.Position;
+	import birdeye.vis.trans.graphs.visual.VisualGraph;
 	
 	public interface IGraphLayout extends ITransform
 	{
 		function get graphId():String;
+
+		function get visualGraph():VisualGraph;
 
 		function apply(width:Number, height:Number):void;
 		

@@ -25,7 +25,7 @@
 
 package birdeye.vis.trans.graphs.visual
 {
-	import birdeye.events.VGraphEvent;
+	import birdeye.vis.trans.graphs.events.VGraphEvent;
 	import birdeye.vis.trans.graphs.model.INode;
 	
 	import flash.display.DisplayObject;

@@ -27,7 +27,7 @@
  
 package birdeye.vis.elements
 {
-	import birdeye.events.ElementDataItemsChangeEvent;
+	import birdeye.vis.elements.events.ElementDataItemsChangeEvent;
 	import birdeye.vis.coords.BaseCoordinates;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.data.UtilSVG;
@@ -56,6 +56,8 @@ package birdeye.vis.elements
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
@@ -915,6 +917,18 @@ package birdeye.vis.elements
 			return _rendererHeight;
 		}
 
+		private var _draggableItems:Boolean = true;
+		/** If set to true, than data items can be dragged. */
+		private function set draggableItems(val:Boolean):void
+		{
+			_draggableItems = val;
+			invalidatingDisplay();
+		}
+		private function get draggableItems():Boolean
+		{
+			return _draggableItems;
+		}
+
 		private var _mouseDoubleClickFunction:Function;
 		/** Set the function that should be used when a mouse double click event is triggered.
 		 * This function must accept an DataItemLayout as input value.
@@ -1212,6 +1226,60 @@ package birdeye.vis.elements
 			// to be overridden by each element implementation
 		}
 
+		private var stylesChanged:Boolean = true;
+		initializeStyles();
+		public static function initializeStyles():void
+		{
+			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("BaseElement");
+			if(!selector)
+			{
+				selector = new CSSStyleDeclaration();
+			}
+			selector.defaultFactory = function():void
+			{
+				this.gradientColors = null;
+				this.gradientAlphas = [0.5, 0.5];
+
+				this.fillColor = 0x000000;
+				this.fillAlpha = 1;
+
+				this.strokeColor = 0x111111;
+				this.strokeAlpha = 1;
+				this.strokeWeight = 1;
+
+				this.labelFont = "verdana";
+				this.labelSize = 9;
+				this.labelColor = 0x000000;
+				
+				this.rendererSize = 10;
+
+				this.stylesChanged = true;
+			} 
+			StyleManager.setStyleDeclaration("BaseElement", selector, true);
+		}
+		
+		// Override the styleChanged() method to detect changes in your new style.
+		override public function styleChanged(styleProp:String):void 
+		{
+			super.styleChanged(styleProp);
+			// Check to see if style changed.
+			switch(styleProp)
+			{
+				case "gradientColors":
+				case "gradientAlphas":
+				case "fillColor":
+				case "fillAlpha":
+				case "strokeColor":
+				case "strokeAlpha":
+				case "strokeWeight":
+				case "labelFont":
+				case "labelSize":
+				case "labelColor":
+					invalidateDisplayList();
+				break;
+			} 
+		}
+		
         protected function addSVGData(data:Object):void
         {
         	svgMultiColorData.push({
@@ -1238,7 +1306,6 @@ package birdeye.vis.elements
 					'\n</g>';
 			} 
         }
-
 		
 		private function getFillStrokeColors():void
 		{
@@ -1339,6 +1406,160 @@ package birdeye.vis.elements
 			return globalCheck && axesCheck && colorsCheck;
 		}
 
+		/** @Private
+		 * Sort the surface elements according their z position.*/ 
+		protected function zSort():void
+		{
+			var sortLayers:Array = new Array();
+			var nChildren:int = numChildren;
+			for(var i:int = 0; i < nChildren; i++) 
+			{
+				var child:* = getChildAt(0); 
+				var zPos:uint = DataItemLayout(child).z;
+				sortLayers.push([zPos, child]);
+				removeChildAt(0);
+			}
+			// sort them and add them back
+			sortLayers.sortOn("0", Array.NUMERIC);
+			for (i = 0; i < nChildren; i++) 
+				addChild(sortLayers[i][1]);
+		}
+
+		public var hitAreaFunction:Function;
+		protected function createMouseHitArea(xPos:Number, yPos:Number, size:Number):IGeometry 
+		{
+			if (hitAreaFunction != null)
+				return hitAreaFunction(xPos, yPos, size);
+			else {
+				var geom:CircleRenderer = new CircleRenderer(new Rectangle(xPos-size, yPos-size, size*2, size*2)); 
+				geom.fill = fill;
+				geom.stroke = stroke;
+				
+				if (!_showAllDataItems)
+					geom.alpha = 0;
+				else
+					addSVGData(geom.svgData);
+
+				return geom;
+			}
+		}
+		
+		protected var ttGG:DataItemLayout;
+		private var label:TextRenderer;
+		protected var ggIndex:Number;
+		/** @Private
+		 * Override the creation of ttGeom in order to avoid the usage of gg also in case
+		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
+		 * AreaElement, thus improving performances.*/ 
+		protected function createTTGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
+									zPos:Number, radius:Number, collisionIndex:Number = NaN, shapes:Array = null /* of IGeometry */, 
+									ttXoffset:Number = NaN, ttYoffset:Number = NaN, showGeometry:Boolean = true):void
+		{
+			if (graphicsCollection.items && graphicsCollection.items.length > ggIndex)
+				ttGG = graphicsCollection.items[ggIndex];
+			else {
+				ttGG = new DataItemLayout();
+				graphicsCollection.addItem(ttGG);
+			}
+
+			if (labelField && labelCreationNotOverridden)
+			{
+				var text:String;
+				if (item[labelField])
+					text = item[labelField];
+				else
+					text = labelField;
+					
+				label = new TextRenderer(xPos, yPos,
+										text, new SolidFill(colorLabel), true, true, sizeLabel, fontLabel);
+				addSVGData(label.svgData);
+				ttGG.geometryCollection.addItemAt(label,0); 
+			}
+			ggIndex++;
+			ttGG.target = chart.elementsContainer;
+			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
+			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
+			
+			ttGG.hitMouseArea = createMouseHitArea(xPos, yPos, _hitAreaSize);
+			
+ 			if (chart.showDataTips || chart.showAllDataTips)
+			{ 
+				initGGToolTip();
+				ttGG.create(item, dataFields, xPos, yPos, zPos, radius, collisionIndex, shapes, ttXoffset, ttYoffset, true, showGeometry);
+			} else {
+				// if no tips than just add data info and location info needed for pointers
+				ttGG.create(item, dataFields, xPos, yPos, zPos, NaN,collisionIndex, null, NaN, NaN, false);
+			}
+
+			if (chart.showAllDataTips)
+			{
+				ttGG.showToolTip();
+			} 
+
+			if (mouseClickFunction != null)
+				ttGG.addEventListener(MouseEvent.CLICK, onMouseClick);
+
+			if (mouseDoubleClickFunction != null)
+				ttGG.addEventListener(MouseEvent.DOUBLE_CLICK, onMouseDoubleClick);
+				
+			if (draggableItems)
+			{
+				if (!_extendMouseEvents)
+					gg.addEventListener(MouseEvent.MOUSE_DOWN, startDragging);
+				else
+					ttGG.addEventListener(MouseEvent.MOUSE_DOWN, startDragging);
+			}
+		}
+		
+		protected var draggedItem:DataItemLayout;
+		private var draggedItemPreviousTarget:DisplayObjectContainer;
+		private var isDraggingNow:Boolean = false;
+	    protected var offsetX:Number, offsetY:Number;
+		/**
+		 * @Private 
+		 * Starts item moving and trigger mouse move listener
+		*/
+		private function startDragging(e:MouseEvent):void
+		{
+			isDraggingNow = true;
+			draggedItem = DataItemLayout(e.target);
+			draggedItemPreviousTarget = draggedItem.target;
+			draggedItem.target = chart.elementsContainer;
+			
+	    	offsetX = e.stageX - draggedItem.x;
+	    	offsetY = e.stageY - draggedItem.y;
+			stage.addEventListener(MouseEvent.MOUSE_UP, stopDragging);
+	    	stage.addEventListener(MouseEvent.MOUSE_MOVE, dragDataItem);
+	    	chart.elementsContainer.addEventListener(MouseEvent.MOUSE_OUT, stopDragging);
+	    	dispatchEvent(new Event("DraggingStarted")); // TODO: create specific event 
+		}
+		
+		/**
+		 * @Private 
+		 * Move the data item while the mouse moves 
+		*/
+	    protected function dragDataItem(e:MouseEvent):void
+	    {
+	    	draggedItem.x = e.stageX - offsetX;
+	    	draggedItem.y = e.stageY - offsetY;
+	    	dispatchEvent(new Event("ItemMoving"));
+	    	e.updateAfterEvent();
+	    }
+	    
+		/**
+		 * @Private 
+		 * Stop data item moving 
+		*/
+	    private function stopDragging(e:MouseEvent):void
+	    {
+	    	draggedItem.target = draggedItemPreviousTarget;
+	    	isDraggingNow = false;
+	  		stage.removeEventListener(MouseEvent.MOUSE_UP, stopDragging);
+	    	stage.removeEventListener(MouseEvent.MOUSE_MOVE, dragDataItem)
+	    	chart.elementsContainer.removeEventListener(MouseEvent.MOUSE_OUT, stopDragging);
+	    	dispatchEvent(new Event("DragComplete"));
+	    }
+	    
 
 		/** @Private 
 		 * Custom tooltip variable.*/
@@ -1350,6 +1571,8 @@ package birdeye.vis.elements
 		{
 			var extGG:DataItemLayout = DataItemLayout(e.target);
 
+			if (isDraggingNow) return;
+			
 			if (chart.showDataTips) {
 				if (chart.customTooltTipFunction != null)
 				{
@@ -1410,6 +1633,9 @@ package birdeye.vis.elements
 		protected function handleRollOut(e:MouseEvent):void
 		{ 
 			var extGG:DataItemLayout = 	DataItemLayout(e.target);
+
+			if (isDraggingNow) return;
+
 			if (chart.showDataTips)
 			{
 				extGG.hideToolTip();
@@ -1452,102 +1678,6 @@ package birdeye.vis.elements
 		}
 
 		/** @Private
-		 * Sort the surface elements according their z position.*/ 
-		protected function zSort():void
-		{
-			var sortLayers:Array = new Array();
-			var nChildren:int = numChildren;
-			for(var i:int = 0; i < nChildren; i++) 
-			{
-				var child:* = getChildAt(0); 
-				var zPos:uint = DataItemLayout(child).z;
-				sortLayers.push([zPos, child]);
-				removeChildAt(0);
-			}
-			// sort them and add them back
-			sortLayers.sortOn("0", Array.NUMERIC);
-			for (i = 0; i < nChildren; i++) 
-				addChild(sortLayers[i][1]);
-		}
-
-		public var hitAreaFunction:Function;
-		protected function createMouseHitArea(xPos:Number, yPos:Number, size:Number):IGeometry 
-		{
-			if (hitAreaFunction != null)
-				return hitAreaFunction(xPos, yPos, size);
-			else {
-				var geom:CircleRenderer = new CircleRenderer(new Rectangle(xPos-size, yPos-size, size*2, size*2)); 
-				geom.fill = fill;
-				geom.stroke = stroke;
-				
-				if (!_showAllDataItems)
-					geom.alpha = 0;
-				else
-					addSVGData(geom.svgData);
-
-				return geom;
-			}
-		}
-		
-		private var label:TextRenderer;
-		protected var ggIndex:Number;
-		/** @Private
-		 * Override the creation of ttGeom in order to avoid the usage of gg also in case
-		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
-		 * AreaElement, thus improving performances.*/ 
-		protected function createTTGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
-									zPos:Number, radius:Number, collisionIndex:Number = NaN, shapes:Array = null /* of IGeometry */, 
-									ttXoffset:Number = NaN, ttYoffset:Number = NaN, showGeometry:Boolean = true):void
-		{
-			if (graphicsCollection.items && graphicsCollection.items.length > ggIndex)
-				ttGG = graphicsCollection.items[ggIndex];
-			else {
-				ttGG = new DataItemLayout();
-				graphicsCollection.addItem(ttGG);
-			}
-
-			if (labelField && labelCreationNotOverridden)
-			{
-				var text:String;
-				if (item[labelField])
-					text = item[labelField];
-				else
-					text = labelField;
-					
-				label = new TextRenderer(xPos, yPos,
-										text, new SolidFill(colorLabel), true, true, sizeLabel, fontLabel);
-				addSVGData(label.svgData);
-				ttGG.geometryCollection.addItemAt(label,0); 
-			}
-			ggIndex++;
-			ttGG.target = chart.elementsContainer;
-			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
-			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
-			
-			ttGG.hitMouseArea = createMouseHitArea(xPos, yPos, _hitAreaSize);
-			
- 			if (chart.showDataTips || chart.showAllDataTips)
-			{ 
-				initGGToolTip();
-				ttGG.create(item, dataFields, xPos, yPos, zPos, radius, collisionIndex, shapes, ttXoffset, ttYoffset, true, showGeometry);
-			} else {
-				// if no tips than just add data info and location info needed for pointers
-				ttGG.create(item, dataFields, xPos, yPos, zPos, NaN,collisionIndex, null, NaN, NaN, false);
-			}
-
-			if (chart.showAllDataTips)
-			{
-				ttGG.showToolTip();
-			} 
-
-			if (mouseClickFunction != null)
-				ttGG.addEventListener(MouseEvent.CLICK, onMouseClick);
-
-			if (mouseDoubleClickFunction != null)
-				ttGG.addEventListener(MouseEvent.DOUBLE_CLICK, onMouseDoubleClick);
-		}
-		
-		/** @Private
 		 * Override the init initGGToolTip in order to avoid the usage of gg also in case
 		 * the showdatatips is false. In that case there will only be 1 instance of gg in the 
 		 * element, thus improving performances.*/ 
@@ -1561,60 +1691,6 @@ package birdeye.vis.elements
 				ttGG.dataTipPrefix = chart.dataTipPrefix;
 		}
 
-		private var stylesChanged:Boolean = true;
-		initializeStyles();
-		public static function initializeStyles():void
-		{
-			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("BaseElement");
-			if(!selector)
-			{
-				selector = new CSSStyleDeclaration();
-			}
-			selector.defaultFactory = function():void
-			{
-				this.gradientColors = null;
-				this.gradientAlphas = [0.5, 0.5];
-
-				this.fillColor = 0x000000;
-				this.fillAlpha = 1;
-
-				this.strokeColor = 0x111111;
-				this.strokeAlpha = 1;
-				this.strokeWeight = 1;
-
-				this.labelFont = "verdana";
-				this.labelSize = 9;
-				this.labelColor = 0x000000;
-				
-				this.rendererSize = 10;
-
-				this.stylesChanged = true;
-			} 
-			StyleManager.setStyleDeclaration("BaseElement", selector, true);
-		}
-		
-		// Override the styleChanged() method to detect changes in your new style.
-		override public function styleChanged(styleProp:String):void 
-		{
-			super.styleChanged(styleProp);
-			// Check to see if style changed.
-			switch(styleProp)
-			{
-				case "gradientColors":
-				case "gradientAlphas":
-				case "fillColor":
-				case "fillAlpha":
-				case "strokeColor":
-				case "strokeAlpha":
-				case "strokeWeight":
-				case "labelFont":
-				case "labelSize":
-				case "labelColor":
-					invalidateDisplayList();
-				break;
-			} 
-		}
-		
 		private var currentValue:Number;
 		protected function getTotalPositiveValue(field:Object):Number
 		{
@@ -1828,30 +1904,13 @@ package birdeye.vis.elements
 			tooltipCreationListening = true;
 		}
 
-		protected var ttGG:DataItemLayout;
-		/** @Private
-		 * Override the creation of ttGeom. This should be unified among polar and cartesian series.
-		 * In order to improve performances in case the showdatatips is false
-		 * the ttGG creation will not be called and there will be only 1 gg, unless
-		 * interactivity is required or dim3 is not null and gg must be placed in the 3D space.*/ 
-/* 		protected function createTTGG(item:Object, dataFields:Array, xPos:Number, yPos:Number, 
-									zPos:Number, radius:Number, shapes:Array = null /* of IGeometry , 
-									ttXoffset:Number = NaN, ttYoffset:Number = NaN):void
-		{
-			// override
-		}
- */		
-		/** @Private
-		 * Init the ttGG after its creation.*/ 
-/* 		protected function initGGToolTip():void
-		{
-			// override
-		}
- */		
 		/** Implement function to manage mouse click events.*/
 		public function onMouseClick(e:MouseEvent):void
 		{
 			var target:DataItemLayout;
+
+			if (isDraggingNow) return;
+
 			if (e.target is DataItemLayout)
 			{
 				target = DataItemLayout(e.target);
@@ -1864,6 +1923,9 @@ package birdeye.vis.elements
 		public function onMouseDoubleClick(e:MouseEvent):void
 		{
 			var target:DataItemLayout;
+
+			if (isDraggingNow) return;
+
 			if (e.target is DataItemLayout)
 			{
 				target = DataItemLayout(e.target);
