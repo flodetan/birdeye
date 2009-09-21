@@ -16,7 +16,7 @@
 			import mx.core.IToolTip;
 			import mx.controls.Alert;
 			import birdeye.vis.data.DataItemLayout;
-			import birdeye.util.EffectsUtil;
+			import birdeye.vis.elements.util.EffectsUtil;
 			
 			[Bindable]
 			public var dt:ArrayCollection;;

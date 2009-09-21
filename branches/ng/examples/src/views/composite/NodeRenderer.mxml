@@ -13,7 +13,7 @@
 <mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
-			import birdeye.util.EffectsUtil;
+			import birdeye.vis.elements.util.EffectsUtil;
 						
 			public function get svgData():String
 			{
