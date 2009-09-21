@@ -22,14 +22,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package birdeye.util.geom {
-
-import flash.geom.Point;
+package birdeye.vis.trans.graphs.util.geom {
 
 	/**
-	 * This interface defines the functionality of a projector,
-	 * which is used to map points in Display Geometry (Screen) to
-	 * those in Non-Euclidean Space (Hyperbolic Geometry).
+	 * Represents a generic vector in any geometry.
+	 * We use this to define a vector in non-euclidean space
+	 * 
+	 * Each vector is located at a given base (point) of type <code>IPoint</code>.
+	 * For implementations where no information on the vector is available, 
+	 * its constructor must set itself to 0.
+	 * 
    * <hr>
 	 * The implementation is a rewrite of Jens Kanschik's Hypergraph
 	 * implementation in Java. However, apart from the general idea 
@@ -44,51 +46,60 @@ import flash.geom.Point;
 	 * 
 	 * @author Nitin Lamba
 	 */
-	public interface IProjector {
-
-		/** 
-		 * Project a IPoint (Hyperbolic Geometry) to Point (Display Geometry)
-		 */
-		function project(p:IPoint, d:IVisualObjectWithDimensions):Point;
-
-		/** 
-		 * Un-project a Point (Display Geometry) to IPoint (Hyperbolic Geometry)
-		 */
-		function unProject(p:Point, d:IVisualObjectWithDimensions, adjustBadNodes:Boolean):IPoint;
-		
-		/**
-		 * Returns the center of the circle in Euclidean space, which joins 
-		 * the two points P (x1, y1) and Q (x2, y2)
-		 * @return The center of the circle
-		 * */
-		function getCenter(x1:Number, y1:Number, x2:Number, y2:Number, d:IVisualObjectWithDimensions):Point;
-		
- 		/**
-		 * Returns the scaling factors at a point in the non-euclidean space.
-		 * @param p The point in the non-euclidean space
-		 * @return A point with scaling factors in X and Y directions.
-		 */
-		function getScale(p:IPoint):Point;
-
- 		/**
-		 * Returns the inverse of the view matrix.
-		 * @return The inverse of the view matrix.
-		 */
-		function getInverseViewMatrix():IIsometry;
+	public interface IVector {
 
 		/**
-		 * Returns the view matrix.
-		 * @return The view matrix.
-		 */		
-		function getViewMatrix():IIsometry;
-		
-		/**
-		 * Sets the view matrix and computes the inverse of the view matrix.
-		 * If vm is null, the view matrix is set to the identity transformation.
+		 * Returns the base (point) of the vector.
 		 * 
-		 * @param vm The new view matrix.
+		 * @return The base (point).
 		 */
-		function setViewMatrix(vm:IIsometry):void;
+		function get base():IPoint;
+
+		/**
+		 * Sets the base (point) of the vector. 
+		 * 
+		 * For correct behavior, all implementation have to set 
+		 * this vector to 0 after the base has changed.
+		 * 
+		 * @param p The new base point.
+		 */
+		function set base(p:IPoint):void;
+
+		/**
+		 * Returns the direction (point) of the vector.
+		 * 
+		 * @return The direction (point).
+		 */
+		function get dir():IPoint;
+		
+		/**Scales the vector with the specified factor.
+		 * This changes the length of the vector, but the base (point) is unchanged.
+		 * 
+		 * @param f The scaling factor.
+		 */
+		function scale(f:Number):void;
+
+		/** 
+		 * Sets this vector to the given vector.
+		 * The specified vector must belong to the same model.
+		 * 
+		 * @param vector The new vector</code>.
+		 */
+		function setTo(vector:IVector):void;
+
+		/** 
+		 * Creates a deep copy of the vector.
+		 * 
+		 * @return A deep copy of the vector.
+		 */
+		function clone():Object;
+		
+		/** 
+		 * Returns a String representation of the vector.
+		 * 
+		 * @return A String in appropriate format.
+		 */
+		function toString():String;
 	}
 
 }

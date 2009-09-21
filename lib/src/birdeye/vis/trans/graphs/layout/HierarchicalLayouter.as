@@ -27,10 +27,9 @@
  
 package birdeye.vis.trans.graphs.layout
 {
-	import birdeye.events.VGraphEvent;
-	import birdeye.util.LogUtil;
+	import birdeye.vis.trans.graphs.events.VGraphEvent;
 	import birdeye.vis.trans.graphs.model.INode;
-	import birdeye.vis.trans.graphs.visual.IVisualGraph;
+	import birdeye.vis.trans.graphs.util.LogUtil;
 	import birdeye.vis.trans.graphs.visual.IVisualNode;
 	
 	import flash.geom.Point;

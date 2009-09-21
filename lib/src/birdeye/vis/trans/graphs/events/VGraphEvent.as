@@ -25,7 +25,7 @@
  * THE SOFTWARE.
  */
 
-package birdeye.events
+package birdeye.vis.trans.graphs.events
 {
 	import flash.events.Event;
 	

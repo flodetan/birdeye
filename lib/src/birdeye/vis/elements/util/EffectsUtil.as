@@ -22,49 +22,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package birdeye.util.geom {
 
-	/**
-	 * Represents a generic point in any geometry.
-	 * We use this to define a point in non-euclidean space
-   * <hr>
-	 * The implementation is a rewrite of Jens Kanschik's Hypergraph
-	 * implementation in Java. However, apart from the general idea 
-	 * and some variable names, this code improves on hypergraph 
-	 * and also implements additional functionality.
-	 * 
-	 * Copyright (C) 2003  Jens Kanschik,
-	 * mail : jensKanschik@users.sourceforge.net
-	 * 
-	 * Copyright of this reimplementation in Flex:
-	 * (c) Nitin Lamba, 2007.
-	 * 
-	 * @author Nitin Lamba
-	 */
-	public interface IPoint {
-		/**
-		 * Sets this point to the given point.
-		 * @param p The new point.
-		 */
-		function setTo(p:IPoint):void;
+package birdeye.vis.elements.util
+{
+	import flash.filters.BitmapFilterQuality;
+	import flash.filters.BitmapFilterType;
+	import flash.filters.GradientGlowFilter;
+	
+	public class EffectsUtil
+	{
+		import birdeye.vis.data.DataItemLayout;
 		
-		/** Creates a deep copy of the Point.
-		 * @return A deep copy of the Point.
-		 */
-		function clone():Object;
+		public function EffectsUtil()
+		{
+		}
+
+		public static function setGlowEffect(target:DataItemLayout):void
+		{
+			var gradientGlow:GradientGlowFilter = new GradientGlowFilter();
+			gradientGlow.distance = 0;
+			gradientGlow.angle = 45;
+			gradientGlow.colors = [0x000000, DataItemLayout(target).fill];
+			gradientGlow.alphas = [0, 1];
+			gradientGlow.ratios = [0, 255];
+			gradientGlow.blurX = 8;
+			gradientGlow.blurY = 8;
+			gradientGlow.strength = 2;
+			gradientGlow.quality = BitmapFilterQuality.HIGH;
+			gradientGlow.type = BitmapFilterType.OUTER;
+			DataItemLayout(target).filters=[gradientGlow];
+		}
 		
-		/**
-		 * Returns true if the parameter object is equals to
-     * this and false otherwise.
-		 * 
-     * @param obj Any object.
-     * @return True if obj equals this.
-		 */
-		function equals(obj:Object):Boolean;
-		
-		/** Returns a String representation of the point.
-		 * @return A String in appropriate format.
-		 */
-		function toString():String;
+		public static function removeEffects(target:DataItemLayout):void
+		{
+			DataItemLayout(target).filters=[];
+		}
 	}
 }

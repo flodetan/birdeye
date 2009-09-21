@@ -27,7 +27,7 @@
  
 package birdeye.vis.trans.graphs
 {
-	import birdeye.events.ElementDataItemsChangeEvent;
+	import birdeye.vis.elements.events.ElementDataItemsChangeEvent;
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.interfaces.IEdgeElement;
 	import birdeye.vis.interfaces.IGraphLayout;
@@ -88,7 +88,7 @@ package birdeye.vis.trans.graphs
 			if (_layouter) _layouter.disableAnimation = !_animate;
 		}
 
-		protected function get visualGraph():VisualGraph {
+		public function get visualGraph():VisualGraph {
 			return _visualGraph;
 		}
 		 

@@ -1,4 +1,5 @@
-﻿package birdeye.util {
+﻿
+package birdeye.vis.trans.graphs.util {
 	import mx.logging.ILogger;
 	import mx.logging.Log;
 	

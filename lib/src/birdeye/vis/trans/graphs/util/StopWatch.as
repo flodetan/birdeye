@@ -24,24 +24,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package birdeye.events
+ 
+package birdeye.vis.trans.graphs.util
 {
-	import birdeye.vis.interfaces.IElement;
-	
-	import flash.events.Event;
-	
-	public class ElementEvent extends Event
-	{
-		private var _element:IElement;
-		
-		public function ElementEvent(type:String, element:IElement) {
-			super(type);
-			_element = element;
+	import flash.utils.getTimer;
+
+	/**
+	 * This is a simple class to provide a timer function.
+	 * 
+	 * @author Nitin Lamba
+	 * */
+	public class StopWatch {
+
+		protected var prevTime:uint;
+
+		public function startTimer():void {
+			prevTime = getTimer();
 		}
-		
-		public function get element():IElement {
-			return _element;
+			
+		/**
+		 * Stops the timer and returns the 
+		 * time elapsed since last start timer call.
+		 * @return elapsed time
+		 */
+		public function stopTimer():uint {
+			var curTime:uint = getTimer();
+			return curTime - prevTime;
 		}
-	}
+  	}
+  
 }
+

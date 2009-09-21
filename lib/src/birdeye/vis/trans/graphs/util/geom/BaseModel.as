@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package birdeye.util.geom {
+package birdeye.vis.trans.graphs.util.geom {
 
 	/**
 	 * This class provides a skeleton implementation of the <code>Model</code> interface

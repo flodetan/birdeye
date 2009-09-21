@@ -25,7 +25,7 @@
  * THE SOFTWARE.
  */
 
-package birdeye.events
+package birdeye.vis.elements.events
 {
 	import birdeye.vis.interfaces.IElement;
 

@@ -27,17 +27,16 @@
  package birdeye.vis.trans.graphs.layout
 {
 	
-	import birdeye.util.LogUtil;
-	import birdeye.util.geom.ComplexNumber;
-	import birdeye.util.geom.ComplexVector;
-	import birdeye.util.geom.IIsometry;
-	import birdeye.util.geom.IPoint;
-	import birdeye.util.geom.IProjector;
-	import birdeye.util.geom.IVector;
-	import birdeye.util.geom.PoincareModel;
-	import birdeye.util.geom.PoincareProjector;
 	import birdeye.vis.trans.graphs.model.INode;
-	import birdeye.vis.trans.graphs.visual.IVisualGraph;
+	import birdeye.vis.trans.graphs.util.LogUtil;
+	import birdeye.vis.trans.graphs.util.geom.ComplexNumber;
+	import birdeye.vis.trans.graphs.util.geom.ComplexVector;
+	import birdeye.vis.trans.graphs.util.geom.IIsometry;
+	import birdeye.vis.trans.graphs.util.geom.IPoint;
+	import birdeye.vis.trans.graphs.util.geom.IProjector;
+	import birdeye.vis.trans.graphs.util.geom.IVector;
+	import birdeye.vis.trans.graphs.util.geom.PoincareModel;
+	import birdeye.vis.trans.graphs.util.geom.PoincareProjector;
 	import birdeye.vis.trans.graphs.visual.IVisualNode;
 	import birdeye.vis.trans.graphs.visual.VisualNode;
 	

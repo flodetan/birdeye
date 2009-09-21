@@ -27,7 +27,7 @@
  
  package birdeye.vis.scales
 {
-	import birdeye.util.ColorUtil;
+	import birdeye.vis.elements.util.ColorUtil;
 	
 	import com.degrafa.paint.palette.PaletteUtils;
 	

@@ -38,12 +38,15 @@ package birdeye.vis.elements.geometry {
 	import birdeye.vis.interfaces.IGraphLayout;
 	import birdeye.vis.interfaces.IGraphLayoutableElement;
 	import birdeye.vis.scales.*;
+	import birdeye.vis.trans.graphs.visual.IVisualNode;
+	import birdeye.vis.trans.graphs.visual.VisualGraph;
 	
 	import com.degrafa.IGeometry;
 	import com.degrafa.geometry.Geometry;
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.display.DisplayObject;
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
@@ -126,6 +129,12 @@ package birdeye.vis.elements.geometry {
 		public function get labelFillColor():int {
 			return _labelFillColor;
 		}
+		
+		override protected function commitProperties():void
+		{
+			super.commitProperties();
+			_extendMouseEvents = true;
+		}
 
 		override protected function createGlobalGeometryGroup():void {
 			// do nothing: no need to create the global group 
@@ -146,6 +155,22 @@ package birdeye.vis.elements.geometry {
 		
 		public function getItemPosition(itemId:Object):Position {
 			return _graphLayout.getNodeItemPosition(itemId);
+		}
+
+	    override protected function dragDataItem(e:MouseEvent):void
+		{
+			super.dragDataItem(e);
+			if (!(e.target is DataItemLayout)) return;
+			var gg:DataItemLayout = DataItemLayout(e.target);
+			var item:Object = gg.currentItem;
+			
+			var vGraph:VisualGraph = _graphLayout.visualGraph;
+			var vNode:IVisualNode = vGraph.getVisualNodeById(item[itemIdField]);
+			
+	    	vNode.x = e.stageX - offsetX;
+	    	vNode.y = e.stageY - offsetY;
+			vGraph.redrawEdges();
+	    	e.updateAfterEvent();
 		}
 		
 		protected function createItemRenderer(currentItem:Object, position:Position):DisplayObject
@@ -233,40 +258,5 @@ package birdeye.vis.elements.geometry {
 			}
 			_invalidatedElementGraphic = false;
 		}
-
-
-		/*
-		protected function addMoveEventListeneres() : void {
-			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			addEventListener(MouseEvent.MOUSE_UP, onMouseUp);		
-			addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-			addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);			
-			addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-		}
-		
-		private var isMoving:Boolean;
-		private var originalPosition:Point = new Point();
-		
-		protected function onMouseDown(event:MouseEvent):void {
-			isMoving = true;
-			originalPosition.x = x;
-			originalPosition.y = y;
-		} 
-
-		protected function onMouseUp(event:MouseEvent):void {
-			if (isMoving) {
-				isMoving = false;
-			}
-		} 
-
-		protected function onMouseMove(event:MouseEvent):void {
-			if (isMoving) {
-				var dest:Point = parent.globalToLocal(new Point(event.stageX, event.stageY));
-				x = dest.x;
-				y = dest.y;
-			}
-		} 
-		*/
-
 	}
 }
