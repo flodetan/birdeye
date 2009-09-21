@@ -14,7 +14,7 @@
 			import birdeye.vis.data.UtilSVG;
 			import birdeye.vis.data.DataItemLayout;
 			import mx.collections.ArrayCollection;
-			import birdeye.util.EffectsUtil;
+			import birdeye.vis.elements.util.EffectsUtil;
 			
 			[Bindable]
 			public var dt:ArrayCollection;;
