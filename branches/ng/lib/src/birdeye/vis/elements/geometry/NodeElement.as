@@ -169,7 +169,11 @@ package birdeye.vis.elements.geometry {
 			
 	    	vNode.x = e.stageX - offsetX;
 	    	vNode.y = e.stageY - offsetY;
-			vGraph.redrawEdges();
+	    	var edges:Array = vNode.node.inEdges;
+	    	
+	    	if (vGraph.graph.isDirectional)
+	    		edges.concat(vNode.node.outEdges);
+			vGraph.redrawEdges(edges);
 	    	e.updateAfterEvent();
 		}
 		
