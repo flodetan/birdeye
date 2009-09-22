@@ -135,6 +135,7 @@ package birdeye.vis.elements.geometry {
 		{
 			super.commitProperties();
 			_extendMouseEvents = true;
+			draggableItems = true;
 		}
 
 		override protected function createGlobalGeometryGroup():void {
@@ -161,20 +162,25 @@ package birdeye.vis.elements.geometry {
 	    override protected function dragDataItem(e:MouseEvent):void
 		{
 			super.dragDataItem(e);
-			if (!(e.target is DataItemLayout)) return;
-			var gg:DataItemLayout = DataItemLayout(e.target);
-			var item:Object = gg.currentItem;
-			
+			var nodeID:String;
+			if (e.target is DataItemLayout)
+				nodeID = DataItemLayout(e.target).currentItem[itemIdField];
+			else if (e.target is DisplayObject && e.target.id)
+				nodeID = e.target.id;
+
 			var vGraph:VisualGraph = _graphLayout.visualGraph;
-			var vNode:IVisualNode = vGraph.getVisualNodeById(item[itemIdField]);
+			var vNode:IVisualNode = vGraph.getVisualNodeById(nodeID);
 			
-	    	vNode.x = e.stageX - offsetX;
-	    	vNode.y = e.stageY - offsetY;
-	    	var edges:Array = vNode.node.inEdges;
-	    	
-	    	if (vGraph.graph.isDirectional)
-	    		edges.concat(vNode.node.outEdges);
-			vGraph.redrawEdges(edges);
+			if (vNode)
+			{
+		    	vNode.x = e.stageX - offsetX + vNode.width/2;
+		    	vNode.y = e.stageY - offsetY + vNode.height/2;
+		    	var edges:Array = vNode.node.inEdges;
+		    	
+		    	if (vGraph.graph.isDirectional)
+		    		edges.concat(vNode.node.outEdges);
+				vGraph.redrawEdges(edges);
+			}
 	    	e.updateAfterEvent();
 		}
 		
@@ -193,21 +199,27 @@ package birdeye.vis.elements.geometry {
 		
 		protected function createItemRenderer(currentItem:Object, position:Position):DisplayObject
 		{
-			var obj:DisplayObject = null;
+			var obj:Object = null;
 			if (itemRenderer != null) {
 				obj = itemRenderer.newInstance();
-				if (dataField  &&  obj is IDataRenderer) {
+				if (dataField  &&  obj is IDataRenderer) 
 					(obj as IDataRenderer).data = currentItem[dataField];
-				}
-				addChild(obj);
+
+				// for the moment 'name' works as ID
+				obj.id = currentItem[itemIdField];
+
+				addChild(obj as DisplayObject);
 				if (sizeRenderer > 0) {
 					obj.width = obj.height = sizeRenderer;
 				}
 					
 				obj.x = position.pos1;
 				obj.y = position.pos2;
+				
+				if (draggableItems)
+					obj.addEventListener(MouseEvent.MOUSE_DOWN, super.startDragging);
 			}
-			return obj;
+			return obj as DisplayObject;
 		}
 
 		protected function createGraphicRenderer(currentItem:Object, position:Position):IGeometry {

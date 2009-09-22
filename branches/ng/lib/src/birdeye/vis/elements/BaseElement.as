@@ -27,11 +27,11 @@
  
 package birdeye.vis.elements
 {
-	import birdeye.vis.elements.events.ElementDataItemsChangeEvent;
 	import birdeye.vis.coords.BaseCoordinates;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.data.UtilSVG;
 	import birdeye.vis.elements.collision.StackElement;
+	import birdeye.vis.elements.events.ElementDataItemsChangeEvent;
 	import birdeye.vis.elements.events.ElementRollOutEvent;
 	import birdeye.vis.elements.events.ElementRollOverEvent;
 	import birdeye.vis.guides.renderers.CircleRenderer;
@@ -917,14 +917,14 @@ package birdeye.vis.elements
 			return _rendererHeight;
 		}
 
-		private var _draggableItems:Boolean = true;
+		private var _draggableItems:Boolean = false;
 		/** If set to true, than data items can be dragged. */
-		private function set draggableItems(val:Boolean):void
+		public function set draggableItems(val:Boolean):void
 		{
 			_draggableItems = val;
 			invalidatingDisplay();
 		}
-		private function get draggableItems():Boolean
+		public function get draggableItems():Boolean
 		{
 			return _draggableItems;
 		}
@@ -1511,7 +1511,7 @@ package birdeye.vis.elements
 			}
 		}
 		
-		protected var draggedItem:DataItemLayout;
+		protected var draggedItem:Object;
 		private var draggedItemPreviousTarget:DisplayObjectContainer;
 		private var isDraggingNow:Boolean = false;
 	    protected var offsetX:Number, offsetY:Number;
@@ -1519,15 +1519,27 @@ package birdeye.vis.elements
 		 * @Private 
 		 * Starts item moving and trigger mouse move listener
 		*/
-		private function startDragging(e:MouseEvent):void
+		protected function startDragging(e:MouseEvent):void
 		{
-			isDraggingNow = true;
-			draggedItem = DataItemLayout(e.target);
-			draggedItemPreviousTarget = draggedItem.target;
-			draggedItem.target = chart.elementsContainer;
+			var itemX:Number, itemY:Number;
+			draggedItem = e.target;
+			if (draggedItem is DataItemLayout)
+			{
+				draggedItem as DataItemLayout;
+				isDraggingNow = true;
+				draggedItemPreviousTarget = draggedItem.target;
+				draggedItem.target = chart.elementsContainer;
+			} 
 			
-	    	offsetX = e.stageX - draggedItem.x;
-	    	offsetY = e.stageY - draggedItem.y;
+			if (draggedItem is DisplayObject)
+			{
+				draggedItem as DisplayObject;
+				itemX = DisplayObject(draggedItem).x;
+				itemY = DisplayObject(draggedItem).y;
+			}
+			
+	    	offsetX = e.stageX - itemX;
+	    	offsetY = e.stageY - itemY;
 			stage.addEventListener(MouseEvent.MOUSE_UP, stopDragging);
 	    	stage.addEventListener(MouseEvent.MOUSE_MOVE, dragDataItem);
 	    	chart.elementsContainer.addEventListener(MouseEvent.MOUSE_OUT, stopDragging);
@@ -1552,8 +1564,11 @@ package birdeye.vis.elements
 		*/
 	    private function stopDragging(e:MouseEvent):void
 	    {
-	    	draggedItem.target = draggedItemPreviousTarget;
-	    	isDraggingNow = false;
+	    	if (isDraggingNow)
+	    	{
+		    	draggedItem.target = draggedItemPreviousTarget;
+		    	isDraggingNow = false;
+	    	}
 	  		stage.removeEventListener(MouseEvent.MOUSE_UP, stopDragging);
 	    	stage.removeEventListener(MouseEvent.MOUSE_MOVE, dragDataItem)
 	    	chart.elementsContainer.removeEventListener(MouseEvent.MOUSE_OUT, stopDragging);
