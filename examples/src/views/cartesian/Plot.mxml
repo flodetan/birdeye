@@ -70,7 +70,8 @@
 				<grid:Grid scale1="{l}" scale2="{c}" divideEnumerableScale="false"/>
 			</coords:guides>
 			 <coords:elements>
-			 	<elements:PointElement rendererWidth="100" rendererHeight="100" dataField="newChart" collisionScale="scale1" itemRenderer="views.cartesian.TestRenderer" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" 
+			 	<elements:PointElement rendererWidth="100" rendererHeight="100" dataField="newChart" collisionScale="scale1" 
+			 		draggableItems="true" itemRenderer="views.cartesian.TestRenderer" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" 
 			 		scale1="{l}" scale2="{c}" dim1="bronze" dim2="index" strokeAlpha="0" displayName="A" graphicRendererSize="0"/>
 			 	<elements:PointElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"
 			 		source="{rasterImage}"
