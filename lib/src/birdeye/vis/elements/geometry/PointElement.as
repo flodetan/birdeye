@@ -42,6 +42,7 @@ package birdeye.vis.elements.geometry
 	import com.degrafa.geometry.Geometry;
 	
 	import flash.display.DisplayObject;
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
@@ -189,33 +190,33 @@ trace (getTimer(), "drawing point ele");
 
 						if (sizeScale && sizeField && scaleResults[SIZE] > 0)
 						{
-							DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = scaleResults[SIZE];
+							itmDisplay.width = itmDisplay.height = scaleResults[SIZE];
 						}
 						else if (!isNaN(widthAutosize) && !isNaN(heightAutosize)) 
 						{
-							DisplayObject(itmDisplay).height = heightAutosize;
-							DisplayObject(itmDisplay).width = widthAutosize;
+							itmDisplay.height = heightAutosize;
+							itmDisplay.width = widthAutosize;
 						} 
 						else if (!isNaN(widthAutosize) && !scale2)
 						{
-							DisplayObject(itmDisplay).height = this.height;
-							DisplayObject(itmDisplay).width = widthAutosize;							
+							itmDisplay.height = this.height;
+							itmDisplay.width = widthAutosize;							
 						}
 						else if (!isNaN(heightAutosize) && !scale1)
 						{
-							DisplayObject(itmDisplay).height = heightAutosize;
-							DisplayObject(itmDisplay).width = this.width;
+							itmDisplay.height = heightAutosize;
+							itmDisplay.width = this.width;
 						}							
 						else if (sizeRenderer > 0)
 						{
-							DisplayObject(itmDisplay).width = DisplayObject(itmDisplay).height = sizeRenderer;
+							itmDisplay.width = itmDisplay.height = sizeRenderer;
 						}	
  						else 
  						{
 							if (rendererWidth > 0)
-								DisplayObject(itmDisplay).width = rendererWidth;
+								itmDisplay.width = rendererWidth;
 							if (rendererHeight > 0)
-								DisplayObject(itmDisplay).height = rendererHeight;
+								itmDisplay.height = rendererHeight;
 						}
 						
 						if (!isNaN(scaleResults[POS1]))
@@ -235,6 +236,9 @@ trace (getTimer(), "drawing point ele");
 						{
 							itmDisplay.y = 0;
 						}
+						
+						if (draggableItems)
+							itmDisplay.addEventListener(MouseEvent.MOUSE_DOWN, super.startDragging);
 					}
 					
 					if (dim3)
