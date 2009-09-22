@@ -27,11 +27,13 @@
  
 package birdeye.vis.trans.graphs.visual
 {
-	import birdeye.vis.trans.graphs.events.VGraphEvent;
+	import __AS3__.vec.Vector;
+	
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.interfaces.IEdgeElement;
 	import birdeye.vis.interfaces.IGraphLayoutableElement;
 	import birdeye.vis.trans.graphs.data.IGraphDataProvider;
+	import birdeye.vis.trans.graphs.events.VGraphEvent;
 	import birdeye.vis.trans.graphs.layout.ILayoutAlgorithm;
 	import birdeye.vis.trans.graphs.model.Graph;
 	import birdeye.vis.trans.graphs.model.IEdge;
@@ -190,24 +192,6 @@ package birdeye.vis.trans.graphs.visual
 
 				/* now update the history with the new node */
 				_currentVNodeHistory.unshift(_currentRootVNode);
-				
-				//LogUtil.debug(_LOG, "node:"+_currentRootVNode.id+" added to history");
-				
-				/* if we are currently limiting node visibility,
-				 * update the set of visible nodes since we 
-				 * have changed the root, the spanning tree has changed
-				 * and thus the set of visible nodes */
-//				if(_visibilityLimitActive) {
-//					setDistanceLimitedNodeIds(_graph.getTree(_currentRootVNode.node).
-//						getLimitedNodes(_maxVisibleDistance));
-//					updateVisibility();
-//				} else {
-//					/* if we do not limit visibility, we still need
-//					 * to force a new layout and redraw()
-//					 * (in the other case, this is done by updateVisibility()) */
-//					// disabled to remove implicit call to
-//					// draw();
-//				}
 			}
 		}
 		
@@ -477,8 +461,19 @@ package birdeye.vis.trans.graphs.visual
 			return Vector.<IVisualEdge>(_visualEdges);
 		}
 		
-		public function redrawEdges():void {
-			for each(var vedge:IVisualEdge in _visualEdges) {
+		public function redrawEdges(_edges:Array = null):void {
+			var _visEdges:Vector.<VisualEdge> = new Vector.<VisualEdge>();
+			if (!_edges)
+				_visEdges = _visualEdges;
+			else
+				for each (var e:Object in _edges)
+				{
+					if (e is IEdge)
+						_visEdges.push((e as IEdge).vedge);
+						
+				}
+			
+			for each(var vedge:IVisualEdge in _visEdges) {
 				if (vedge.visible) {
 					const edge:IEdge = vedge.edge;
 					const startVnode:IVisualNode = edge.node1.vnode;
@@ -608,6 +603,34 @@ package birdeye.vis.trans.graphs.visual
 		 * */
 		public function scroll(deltaX:Number, deltaY:Number):void {
 			// TODO: implement VisualGraph.scroll() (used by ForceDirectedLayouter)
+		}
+
+		/**
+		 * @inheritDoc
+		 * */
+		public function draw(flags:uint = 0):void {	
+			
+			/* first refresh does layoutChanges to true and
+			 * invalidate display list */
+			refresh();
+			
+			/* then force a layout pass in the layouter */
+			if(_layouter && 
+				_currentRootVNode &&
+				(_graph.noNodes > 0) &&
+				(this.width > 0) &&
+				(this.height > 0)
+				) {
+				_layouter.layoutPass();
+			}
+			
+			/* dispatch this change event, so some UI items
+			 * in the application can poll for updated values
+			 * for labels or something.
+			 * XXX To do: specify a subtype for more specific changes
+			 */
+			 
+			dispatchEvent(new VGraphEvent(VGraphEvent.VGRAPH_CHANGED));
 		}
 
 		public function refresh():void {

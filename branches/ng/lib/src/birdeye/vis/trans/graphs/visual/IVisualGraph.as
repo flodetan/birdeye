@@ -27,9 +27,9 @@
 
 package birdeye.vis.trans.graphs.visual
 {
-	import birdeye.vis.trans.graphs.util.geom.IVisualObjectWithDimensions;
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.trans.graphs.model.IGraph;
+	import birdeye.vis.trans.graphs.util.geom.IVisualObjectWithDimensions;
 	
 	import flash.display.DisplayObject;
 	import flash.events.IEventDispatcher;
@@ -62,7 +62,7 @@ package birdeye.vis.trans.graphs.visual
 		function get edges():Vector.<IVisualEdge>;
 		
 		/** This forces a redraw of all edges */
-		function redrawEdges():void;
+		function redrawEdges(visualEdges:Array = null):void;
 		
 		function isNodeVisible(nodeId:String):Boolean;
 
