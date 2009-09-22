@@ -30,7 +30,7 @@
 
 							
 				<elements:NodeElement id="node" itemIdField="id" dimName="name" dataProvider="{nodes}" 
-									graphicRendererSize="25" mouseClickFunction="clickF" />
+									graphicRendererSize="25" mouseDoubleClickFunction="EventsUtil.setNodeAsRoot" />
 
 <!--
  							
@@ -58,6 +58,8 @@
 		import mx.controls.Alert;
 		import birdeye.vis.data.DataItemLayout;
 		import birdeye.vis.trans.graphs.layout.ILayoutAlgorithm;
+		import birdeye.vis.trans.graphs.util.EventsUtil;
+		
 		[Bindable]
 		public var nodes:ArrayCollection;
 		[Bindable]
