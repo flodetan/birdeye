@@ -27,6 +27,7 @@
  
 package birdeye.vis.elements.geometry {
 
+	import birdeye.vis.VisScene;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.Position;
 	import birdeye.vis.elements.RenderableElement;
@@ -175,6 +176,19 @@ package birdeye.vis.elements.geometry {
 	    		edges.concat(vNode.node.outEdges);
 			vGraph.redrawEdges(edges);
 	    	e.updateAfterEvent();
+		}
+		
+		override public function onMouseDoubleClick(e:MouseEvent):void
+		{
+			if (!(e.target is DataItemLayout)) return;
+			var gg:DataItemLayout = DataItemLayout(e.target);
+			var item:Object = gg.currentItem;
+			
+			var vGraph:VisualGraph = _graphLayout.visualGraph;
+			var vNode:IVisualNode = vGraph.getVisualNodeById(item[itemIdField]);
+			
+			mouseDoubleClickFunction(vGraph, vNode);
+			VisScene(chart).invalidateDisplayList();
 		}
 		
 		protected function createItemRenderer(currentItem:Object, position:Position):DisplayObject
