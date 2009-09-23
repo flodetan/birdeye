@@ -28,7 +28,6 @@
 package birdeye.vis.trans.graphs
 {
 	import birdeye.vis.elements.events.ElementDataItemsChangeEvent;
-	import birdeye.vis.elements.Position;
 	import birdeye.vis.interfaces.IEdgeElement;
 	import birdeye.vis.interfaces.IGraphLayout;
 	import birdeye.vis.interfaces.IGraphLayoutableElement;
@@ -36,9 +35,11 @@ package birdeye.vis.trans.graphs
 	import birdeye.vis.trans.graphs.layout.ILayoutAlgorithm;
 	import birdeye.vis.trans.graphs.visual.VisualGraph;
 	
+	import flash.geom.Point;
+	
 	public class GraphLayout implements IGraphLayout
 	{
-		private var _startNodeId:String;
+		private var _rootNodeId:String;
 		private var _graphId:String;
 		private var _layouter:ILayoutAlgorithm;
 		private var _visualGraph:VisualGraph;
@@ -50,12 +51,12 @@ package birdeye.vis.trans.graphs
 		public function GraphLayout() {
 		}
 		
-		public function get startNodeId():String {
-			return _startNodeId;
+		public function get rootNodeId():String {
+			return _rootNodeId;
 		}
 
-		public function set startNodeId(id:String):void {
-			_startNodeId = id;
+		public function set rootNodeId(id:String):void {
+			_rootNodeId = id;
 		}
 		
 		public function get graphId():String {
@@ -69,19 +70,7 @@ package birdeye.vis.trans.graphs
 		public function get animate():Boolean {
 			return _animate;
 		}
-
-		public function get useIntegerPositions():Boolean {
-			return _useIntegerPositions;
-		}
 		
-		/**
-		 * If set to true the node positions will be rounded, so that
-		 * the nodes and especially the lables don't get blurred. 
-		 **/
-		public function set useIntegerPositions(value:Boolean):void {
-			_useIntegerPositions = value;
-		}
-
 		[Bindable]
 		public function set animate(value:Boolean):void {
 			_animate = value;
@@ -101,16 +90,13 @@ package birdeye.vis.trans.graphs
 			if (_layouter) _layouter.disableAnimation = !_animate;
 		}
 
-		public function set applyToNode(node:IGraphLayoutableElement):void {
-			node.graphLayout = this;
+		public function set nodeElement(node:IGraphLayoutableElement):void {
 			_nodeElement = node; 
-			_visualGraph = null;
 			_nodeElement.addEventListener(ElementDataItemsChangeEvent.TYPE, nodeDataItemsChanged);
 		}
 
-		public function set applyToEdge(edge:IEdgeElement):void {
+		public function set edgeElement(edge:IEdgeElement):void {
 			_edgeElement = edge;
-			_visualGraph = null;
 			_edgeElement.addEventListener(ElementDataItemsChangeEvent.TYPE, edgeDataItemsChanged);
 		}
 		
@@ -127,7 +113,7 @@ package birdeye.vis.trans.graphs
 			return _visualGraph.isNodeVisible(String(itemId));
 		}
 		
-		public function getNodeItemPosition(itemId:Object):Position {
+		public function getNodeItemPosition(itemId:Object):Point {
 			if (!_visualGraph) return null;
 			return _visualGraph.getNodePosition(String(itemId));
 		}
@@ -139,11 +125,10 @@ package birdeye.vis.trans.graphs
 					_graphId,
 					_nodeElement, _edgeElement,
 					new DataItemsGraphDataProvider(_nodeElement, _edgeElement),
-					width, height,
-					_useIntegerPositions
+					width, height
 				);
-				if (_startNodeId !== null) {
- 					vg.currentRootVNode = vg.getVisualNodeById(_startNodeId);
+				if (_rootNodeId !== null) {
+ 					vg.currentRootVNode = vg.getVisualNodeById(_rootNodeId);
  				}
  				vg.maxVisibleDistance = 1;
 			}
@@ -163,5 +148,9 @@ package birdeye.vis.trans.graphs
 			}
 		}
 
+		public function resetLayout():void
+		{
+			_visualGraph = null;
+		}
 	}
 }
