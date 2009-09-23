@@ -29,12 +29,12 @@ package birdeye.vis.elements.geometry {
 
 	import birdeye.vis.VisScene;
 	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.elements.Position;
 	import birdeye.vis.elements.RenderableElement;
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.IBoundedRenderer;
+	import birdeye.vis.interfaces.IEdgeElement;
 	import birdeye.vis.interfaces.IExportableSVG;
 	import birdeye.vis.interfaces.IGraphLayout;
 	import birdeye.vis.interfaces.IGraphLayoutableElement;
@@ -57,6 +57,17 @@ package birdeye.vis.elements.geometry {
 
 		public function NodeElement() {
 			super();
+		}
+		
+		private var _edgeElement:IEdgeElement;
+		public function set edgeElement(val:IEdgeElement):void
+		{
+			_edgeElement = val;
+			VisScene(visScene).invalidateDisplayList();
+		}
+		public function get edgeElement():IEdgeElement
+		{
+			return _edgeElement;
 		}
 		
 		private var renderers:Array = [];
@@ -155,7 +166,7 @@ package birdeye.vis.elements.geometry {
 			return _graphLayout.isNodeItemVisible(itemId);
 		}
 		
-		public function getItemPosition(itemId:Object):Position {
+		public function getItemPosition(itemId:Object):Point {
 			return _graphLayout.getNodeItemPosition(itemId);
 		}
 
@@ -194,10 +205,10 @@ package birdeye.vis.elements.geometry {
 			var vNode:IVisualNode = vGraph.getVisualNodeById(item[itemIdField]);
 			
 			mouseDoubleClickFunction(vGraph, vNode);
-			VisScene(chart).invalidateDisplayList();
+			VisScene(visScene).invalidateDisplayList();
 		}
 		
-		protected function createItemRenderer(currentItem:Object, position:Position):DisplayObject
+		protected function createItemRenderer(currentItem:Object, position:Point):DisplayObject
 		{
 			var obj:Object = null;
 			if (itemRenderer != null) {
@@ -213,8 +224,8 @@ package birdeye.vis.elements.geometry {
 					obj.width = obj.height = sizeRenderer;
 				}
 					
-				obj.x = position.pos1;
-				obj.y = position.pos2;
+				obj.x = position.x;
+				obj.y = position.y;
 				
 				if (draggableItems)
 					obj.addEventListener(MouseEvent.MOUSE_DOWN, super.startDragging);
@@ -222,7 +233,7 @@ package birdeye.vis.elements.geometry {
 			return obj as DisplayObject;
 		}
 
-		protected function createGraphicRenderer(currentItem:Object, position:Position):IGeometry {
+		protected function createGraphicRenderer(currentItem:Object, position:Point):IGeometry {
 			const bounds:Rectangle = new Rectangle(0 - _graphicRendererSize, 0 - _graphicRendererSize, _graphicRendererSize * 2, _graphicRendererSize * 2);
 			var renderer:IGeometry;
 
@@ -265,14 +276,14 @@ package birdeye.vis.elements.geometry {
 				items.forEach(function(item:Object, index:int, items:Vector.<Object>):void {
 					const itemId:Object = item[itemIdField];
 					if (isItemVisible(itemId)) {
-						var position:Position = getItemPosition(itemId);
+						var position:Point = getItemPosition(itemId);
 						
 						if (sizeScale && sizeField)
 						{
 							rendWidth = getRendererWidth(item);
 							rendHeight = getRendererHeight(item);
 						}
-						position = new Position(position.pos1 - rendWidth/2, position.pos2 - rendHeight/2, position.pos3);
+						position = new Point(position.x - rendWidth/2, position.y - rendHeight/2);
 
 						if (position != null) {
 							var renderer:Object = {itemRenderer: createItemRenderer(item, position),
