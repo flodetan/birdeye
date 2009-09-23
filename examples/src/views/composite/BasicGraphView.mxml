@@ -15,26 +15,25 @@
 	</mx:HBox>
 	
 	<mx:VBox horizontalAlign="center" width="100%" height="100%">
-		<coords:Cartesian id="graph" width="100%" height="100%" showDataTips="true">
-			<coords:elements>
-				<elements:NodeElement id="node" itemIdField="id" dimName="name" dataProvider="{nodes}" mouseClickFunction="clickF"
-									  dataField="newChart" sizeRenderer="100" itemRenderer="views.composite.NodeRenderer" 
-									  styleName="solid1" alphaFill="1.0" graphicRendererSize="7" />
-				<elements:EdgeElement id="edge" dimStart="start" dimEnd="end" node="{node}" dataProvider="{edges}" mouseClickFunction="clickF"
-									  colorFill="0xFF0000" colorStroke="0x999999" strokeWeight="2" />
-									  
-			</coords:elements>
+		<coords:Abstract id="graph" width="100%" height="100%" showDataTips="true">
 			<coords:transforms>
 				<graphs:GraphLayout
-						startNodeId="1"
+						rootNodeId="2"
 						id="graphLayout"
 						layouter="{layouter}"
-						applyToNode="{node}" applyToEdge="{edge}"
 						animate="{animate.selected}"
-						useIntegerPositions="true"
 					/>
 			</coords:transforms>
-		</coords:Cartesian>
+			<coords:elements>
+				<elements:NodeElement id="node" itemIdField="id" dimName="name" dataProvider="{nodes}"
+									  edgeElement="{edge}"
+									  graphLayout="{graphLayout}"
+									  dataField="newChart" sizeRenderer="100" itemRenderer="views.composite.NodeRenderer"/>
+				<elements:EdgeElement id="edge" dimStart="start" dimEnd="end" dataProvider="{edges}" mouseClickFunction="clickF"
+									  colorStroke="0x999999" strokeWeight="2" />
+									  
+			</coords:elements>
+		</coords:Abstract>
 	</mx:VBox>
 
 	
