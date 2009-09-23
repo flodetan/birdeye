@@ -112,21 +112,17 @@ package birdeye.vis.elements.geometry {
 		}
 		
 		private var _graphLayout:IGraphLayout;
-
 		public function set graphLayout(layout:IGraphLayout):void {
 			_graphLayout = layout;
 		}
-
 		public function get graphLayout():IGraphLayout {
 			return _graphLayout;
 		}
 
 		private var _labelFillColor:int = 0xffffff;
-
 		public function set labelFillColor(color:int):void {
 			_labelFillColor = color;
 		}
-
 		public function get labelFillColor():int {
 			return _labelFillColor;
 		}
@@ -194,7 +190,7 @@ package birdeye.vis.elements.geometry {
 			var vNode:IVisualNode = vGraph.getVisualNodeById(item[itemIdField]);
 			
 			mouseDoubleClickFunction(vGraph, vNode);
-			VisScene(chart).invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		
 		protected function createItemRenderer(currentItem:Object, position:Position):DisplayObject
@@ -251,7 +247,9 @@ package birdeye.vis.elements.geometry {
 		
 		override public function drawElement():void {
 			super.drawElement();
-				
+			
+			_graphLayout.apply(unscaledWidth, unscaledHeight);
+			
 			prepareForItemDisplayObjectsCreation();
 			renderers = [];
 			
