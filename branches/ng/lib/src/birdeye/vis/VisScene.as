@@ -31,6 +31,7 @@
 	
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.guides.grid.Grid;
+	import birdeye.vis.interfaces.ICoordinates;
 	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.IGraphLayout;
 	import birdeye.vis.interfaces.IProjection;
@@ -63,12 +64,11 @@
 	[Exclude(name="graphLayouts", kind="property")]
 
 	[DefaultProperty("dataProvider")]
-	public class VisScene extends Surface implements IValidatingParent
+	public class VisScene extends Surface implements IValidatingParent, ICoordinates
 	{
 		public static const CARTESIAN:String="cartesian";
 		public static const POLAR:String="polar";
-		
-		
+		public static const VISUAL:String="visual";
 		
 		// IMPLEMENTATION OF IVALIDATINGPARENT
 		
@@ -172,25 +172,38 @@
 			return _coordType;
 		}
 		
+		private var _transforms:Array;
         [Inspectable(category="General", arrayType="birdeye.vis.interfaces.ITransform")]
         [ArrayElementType("birdeye.vis.interfaces.ITransform")]
 		public function set transforms(val:Array):void
 		{
-			var _transforms:Array = val;
+			_transforms = val;
 			var p:uint = 0, l:uint = 0;
+			var proj:Array, gLayouts:Array;
 			for (var i:Number = 0; i<_transforms.length; i++)
 			{
 				if (_transforms[i] is IProjection)
 				{
-					if (!_projections)
-						_projections = [];
-					_projections[p++] = _transforms[i];
+					if (!proj)
+						proj = [];
+					proj[p++] = _transforms[i];
 				} else if (_transforms[i] is IGraphLayout) {
-					if (!_graphLayouts)
-						_graphLayouts = [];
-					_graphLayouts[l++] = _transforms[i];
+					if (!gLayouts)
+						gLayouts = [];
+					gLayouts[l++] = _transforms[i];
 				}
 			}
+			
+			// needed to properly invalidate the display list in case 
+			// any of these array is not empty
+			if (proj)
+				projections = proj;
+			if (gLayouts)
+				graphLayouts = gLayouts;
+		}
+		public function get transforms():Array
+		{
+			return _transforms;
 		}
 
 		private var _projections:Array;
@@ -200,15 +213,20 @@
 		public function set projections(val:Array):void
 		{
 			_projections = val;
+			invalidateDisplayList();
 		}
 
 		private var _graphLayouts:Array
-
         [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IGraphLayout")]
         [ArrayElementType("birdeye.vis.interfaces.IGraphLayout")]
 		public function set graphLayouts(val:Array):void
 		{
 			_graphLayouts = val;
+			invalidateDisplayList();
+		}
+		public function get graphLayouts():Array
+		{
+			return _graphLayouts;
 		}
 
 		protected var _maxStacked100:Number = NaN;
@@ -372,12 +390,29 @@
 		}
 		
 		protected var _elements:Array; // of IElement
+		/** Array of elements, mandatory for any coords scene.
+		 * Each element must implement the IElement interface which defines 
+		 * methods that allow to set fields, basic styles, axes, dataproviders, renderers,
+		 * max and min values, etc. Look at the IElement for more details.
+		 * Each element can define its own scale (in case a cartesian or polar coords )
+		 * or layout (for Visual).
+		 * The data providers are calculated based on the group of element that share them.*/
+        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IElement")]
+        [ArrayElementType("birdeye.vis.interfaces.IElement")]
+		public function set elements(val:Array):void
+		{
+			_elements = val;
+			
+			for each (var element:IElement in _elements)
+				if (! element.visScene)
+						element.visScene = this;
+			
+			invalidateProperties();
+			invalidateDisplayList();
+		}
 		public function get elements():Array
 		{
 			return _elements;
-		}
-		public function set elements(val:Array):void 	// to be overridden
-		{
 		}
 
 		private var _percentHeight:Number = NaN;
@@ -424,6 +459,7 @@
 		
 		protected var invalidatedData:Boolean = false;
 		public var axesFeeded:Boolean = true;
+		public var layoutsFeeded:Boolean = true;
 		protected var _dataProvider:Object=null;
 		public function set dataProvider(value:Object):void
 		{
@@ -483,8 +519,8 @@
 			}
 	  			
   			axesFeeded = false;
+  			layoutsFeeded = false;
   			invalidatedData = true;
-	  		invalidateSize();
 	  		invalidateProperties();
 			invalidateDisplayList();
 		}		
@@ -664,8 +700,6 @@
 						DataItemLayout(getChildAt(i)).showToolTip();
 				}
 			}
-
- 			applyGraphLayouts(unscaledWidth, unscaledHeight);
 		}
 		
 		// Other methods
@@ -683,14 +717,6 @@
 			
 		}
 
-		protected function applyGraphLayouts(unscaledWidth:Number, unscaledHeight:Number):void
-		{
-			if (_graphLayouts && _graphLayouts.length>0) {
-				for each (var t:IGraphLayout in _graphLayouts) t.apply(unscaledWidth, unscaledHeight);
-			}
-		}
-
-		
 		protected function getDimMaxValue(item:Object, dims:Object, stacked:Boolean = false):Number
 		{
 			if (dims is String)
