@@ -91,9 +91,9 @@ package birdeye.vis.elements.geometry
 			
 			_extendMouseEvents = true;
 
-			if (!isListeningMouseMove && chart)
+			if (!isListeningMouseMove && visScene)
 			{
-				chart.elementsContainer.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+				visScene.elementsContainer.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 				isListeningMouseMove = true;
 			}
 		}
@@ -211,10 +211,10 @@ trace(getTimer(), "drawing polygon ele Num coords ", numCoords);
 		{
 			var extGG:DataItemLayout = DataItemLayout(e.target);
 
-			if (chart.showDataTips) {
-				if (chart.customTooltTipFunction != null)
+			if (visScene.showDataTips) {
+				if (visScene.customTooltTipFunction != null)
 				{
-					myTT = chart.customTooltTipFunction(extGG);
+					myTT = visScene.customTooltTipFunction(extGG);
 		 			toolTip = myTT.text;
 				} else {
 					extGG.posX = extGG.mouseX;
@@ -228,7 +228,7 @@ trace(getTimer(), "drawing polygon ele Num coords ", numCoords);
 		{
 			var localPoint:Point, posX:Number, posY:Number;
 			
-			localPoint = new Point(chart.elementsContainer.mouseX, chart.elementsContainer.mouseY);
+			localPoint = new Point(visScene.elementsContainer.mouseX, visScene.elementsContainer.mouseY);
 			posY = localPoint.y;
 			posX = localPoint.x;
 

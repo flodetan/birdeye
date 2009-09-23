@@ -28,7 +28,6 @@
 package birdeye.vis.elements.geometry
 {
 	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.elements.Position;
 	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
@@ -107,14 +106,14 @@ package birdeye.vis.elements.geometry
 				graphicRenderer = new ClassFactory(CircleRenderer);
 		}
 
-		public function getItemPosition(itemId:Object):Position {
+		public function getItemPosition(itemId:Object):Point {
 			const item:Object = getDataItemById(itemId);
 			if (item) {
 				const pos:Object = determinePositions(item[dim1], item[dim2], item[dim3],
 					 							  			   item[colorField], item[sizeField], item);
-				return new Position(pos["pos1"], pos["pos2"], pos["pos3Relative"]);
+				return new Point(pos["pos1"], pos["pos2"]);
 			} else {
-				return Position.ZERO;
+				return new Point(0,0);
 			}
 		}
 

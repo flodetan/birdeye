@@ -95,10 +95,10 @@ package birdeye.vis.elements.geometry
 
 			// doesn't need to call super.commitProperties(), since it doesn't need to listen
 			// to axes interval changes 
-			if (stackType == STACKED && chart)
+			if (stackType == STACKED && visScene)
 			{
 				if (scale2 is INumerableScale)
-					INumerableScale(scale2).max = chart.maxStacked100;
+					INumerableScale(scale2).max = visScene.maxStacked100;
 			}
 		}
 
@@ -154,7 +154,7 @@ trace (getTimer(), "area ele");
 					// draw and manage the data items.
 					if (_form == CURVE)
 					{
-						if (isNaN(xPrev) && isNaN(yPrev) && chart.coordType == VisScene.CARTESIAN)
+						if (isNaN(xPrev) && isNaN(yPrev) && visScene.coordType == VisScene.CARTESIAN)
 						{
 							// to bypass some limitation of the BezierSpline it's necessary
 							// to create a double initial point. this allows the bezier line
@@ -165,7 +165,7 @@ trace (getTimer(), "area ele");
 						}
 						points.push(new GraphicPoint(scaleResults[POS1],scaleResults[POS2]));
 					} else {
-						if (chart.coordType == VisScene.POLAR)
+						if (visScene.coordType == VisScene.POLAR)
 							if (!data)
 								data = "M" + String(scaleResults[POS1]) + "," + String(scaleResults[POS2]) + " ";
 							else
@@ -173,7 +173,7 @@ trace (getTimer(), "area ele");
 		
 						// create the polygon only if there is more than 1 data value
 						// there cannot be an area with only the first data value 
-						if (chart.coordType == VisScene.CARTESIAN && !isNaN(xPrev) && !isNaN(yPrev) && !isNaN(y0Prev) 
+						if (visScene.coordType == VisScene.CARTESIAN && !isNaN(xPrev) && !isNaN(yPrev) && !isNaN(y0Prev) 
 							&& !isNaN(scaleResults[POS1]) && !isNaN(scaleResults[POS2]))
 						{
 							var data:String;
@@ -226,18 +226,18 @@ trace (getTimer(), "area ele");
 					bzSplines.fill = fill;
 					bzSplines.graphicsTarget = [this];
 					// if the coords are polar it's possible to autoclose the bezier shape
-					if (chart.coordType == VisScene.POLAR)
+					if (visScene.coordType == VisScene.POLAR)
 						bzSplines.autoClose = true;
 
 					// if the coords are cartesian we add a point with height resulted by baseScale2, in order 
 					// to insure a proper closure with the 1st point inserted
-					if (chart.coordType == VisScene.CARTESIAN)
+					if (visScene.coordType == VisScene.CARTESIAN)
 					{
 						points.push(new GraphicPoint(width, y0));
 						// the double point prevent from drawing a large final bezier curve
 						points.push(new GraphicPoint(width, y0-.0000000001));
 					}
-				} else if (chart.coordType == VisScene.POLAR && data)
+				} else if (visScene.coordType == VisScene.POLAR && data)
 				{
 					data += "z";
 					addSVGData('\n<path d="' + data + '"/>');
