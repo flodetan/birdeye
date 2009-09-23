@@ -25,11 +25,11 @@
 		<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([graph.svgData], parentApplication.width, parentApplication.height))"/>
 		<coords:Abstract id="graph" width="100%" height="100%" showDataTips="true">
 			<coords:elements>
-				<elements:EdgeElement id="edge" dimStart="start" dimEnd="end" dataProvider="{edges}" mouseClickFunction="clickF"
+				<elements:EdgeElement id="edge" dimFrom="start" dimTo="end" dataProvider="{edges}" mouseClickFunction="clickF"
 									  colorFill="0xFF0000" colorStroke="0x999999" strokeWeight="2" />
 
 							
-				<elements:NodeElement id="node" itemIdField="id" dimName="name" dataProvider="{nodes}" 
+				<elements:NodeElement id="node" nodeIdField="id" dimName="name" dataProvider="{nodes}" 
 									edgeElement="{edge}" graphLayout="{graphLayout}"
 									graphicRendererSize="25" mouseDoubleClickFunction="EventsUtil.setNodeAsRoot" />
 

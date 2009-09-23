@@ -25,11 +25,11 @@
 					/>
 			</coords:transforms>
 			<coords:elements>
-				<elements:NodeElement id="node" itemIdField="id" dimName="name" dataProvider="{nodes}"
+				<elements:NodeElement id="node" nodeIdField="id" dimName="name" dataProvider="{nodes}"
 									  edgeElement="{edge}"
 									  graphLayout="{graphLayout}"
 									  dataField="newChart" sizeRenderer="100" itemRenderer="views.composite.NodeRenderer"/>
-				<elements:EdgeElement id="edge" dimStart="start" dimEnd="end" dataProvider="{edges}" mouseClickFunction="clickF"
+				<elements:EdgeElement id="edge" dimFrom="start" dimTo="end" dataProvider="{edges}" mouseClickFunction="clickF"
 									  colorStroke="0x999999" strokeWeight="2" />
 									  
 			</coords:elements>
