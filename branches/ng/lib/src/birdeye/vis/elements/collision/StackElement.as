@@ -235,10 +235,10 @@ package birdeye.vis.elements.collision
 					scaleResults[COLOR] = col;
 			} 
 
-			if (chart.coordType == VisScene.POLAR)
+			if (visScene.coordType == VisScene.POLAR)
 			{
-				var xPos:Number = PolarCoordinateTransform.getX(scaleResults[POS1], scaleResults[POS2], chart.origin);
-				var yPos:Number = PolarCoordinateTransform.getY(scaleResults[POS1], scaleResults[POS2], chart.origin);
+				var xPos:Number = PolarCoordinateTransform.getX(scaleResults[POS1], scaleResults[POS2], visScene.origin);
+				var yPos:Number = PolarCoordinateTransform.getY(scaleResults[POS1], scaleResults[POS2], visScene.origin);
 				scaleResults[POS1] = xPos;
 				scaleResults[POS2] = yPos; 
 			}
@@ -255,12 +255,12 @@ package birdeye.vis.elements.collision
 		{
 			var max:Number = super.getMaxValue(field);
 				
-			if (chart && stackType == STACKED) 
+			if (visScene && stackType == STACKED) 
 			{
 				if (collisionType == STACKED)
-					max += Math.max(max, chart.maxStacked100);
+					max += Math.max(max, visScene.maxStacked100);
 				else
-					max = Math.max(max, chart.maxStacked100);
+					max = Math.max(max, visScene.maxStacked100);
 			}
 					
 			return max;
