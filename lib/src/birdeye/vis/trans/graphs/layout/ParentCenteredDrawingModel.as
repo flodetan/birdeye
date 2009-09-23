@@ -28,7 +28,7 @@ package birdeye.vis.trans.graphs.layout
 {
 	
 	import birdeye.vis.trans.graphs.model.INode;
-	import birdeye.vis.trans.graphs.util.Geometry;
+	import birdeye.vis.trans.graphs.util.MathUtil;
 	
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
@@ -137,8 +137,8 @@ package birdeye.vis.trans.graphs.layout
 			}
 			
 			/* normalize angles */
-			angleOff = Geometry.normaliseAngleDeg(angleOff);
-			polarPhi = Geometry.normaliseAngleDeg(polarPhi);
+			angleOff = MathUtil.normaliseAngleDeg(angleOff);
+			polarPhi = MathUtil.normaliseAngleDeg(polarPhi);
 			
 			/* set the local params */
 			_nodeOrigins[n] = origin;
@@ -157,7 +157,7 @@ package birdeye.vis.trans.graphs.layout
 			 * need to store the current polarR and polarPhis too...
 			 * due to the y-axis orientation, we have to change the sign
 			 * of the angle */
-			this.setPolarCoordinates(n, polarR, -Geometry.normaliseAngleDeg(polarPhi+angleOff));
+			this.setPolarCoordinates(n, polarR, -MathUtil.normaliseAngleDeg(polarPhi+angleOff));
 			
 			/* now get the relative cartesians, but we need to add the
 			 * local origin offset */

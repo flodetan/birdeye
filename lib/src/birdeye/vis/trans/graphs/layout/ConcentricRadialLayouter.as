@@ -29,7 +29,7 @@ package birdeye.vis.trans.graphs.layout
 {
 	import birdeye.vis.trans.graphs.model.IGTree;
 	import birdeye.vis.trans.graphs.model.INode;
-	import birdeye.vis.trans.graphs.util.Geometry;
+	import birdeye.vis.trans.graphs.util.MathUtil;
 	import birdeye.vis.trans.graphs.util.LogUtil;
 	
 	import flash.geom.Point;
@@ -341,7 +341,7 @@ package birdeye.vis.trans.graphs.layout
 			
 			/* diameter is an angular width value in radians,
 			 * so we convert it to degrees when used */
-			diameter = Geometry.rad2deg(diameter);
+			diameter = MathUtil.rad2deg(diameter);
 			
 			
 			//LogUtil.debug(_LOG, "depth:"+d+" diameter:"+diameter);
@@ -431,7 +431,7 @@ package birdeye.vis.trans.graphs.layout
 			pp = _currentDrawing.getRelCartCoordinates(ppr);
 			
 			/* now set the angular bounds */
-			_theta1 = dt + Geometry.rad2deg(Math.atan2((pp.y - rp.y),(pp.x - rp.y)));
+			_theta1 = dt + MathUtil.rad2deg(Math.atan2((pp.y - rp.y),(pp.x - rp.y)));
 			_theta2 = _theta1 + 360;
 			_previousRoot = r;
 		}
@@ -466,7 +466,7 @@ package birdeye.vis.trans.graphs.layout
 			
 			if(pn != null) {
 				pp = _currentDrawing.getRelCartCoordinates(pn);
-				base = Geometry.rad2deg(Geometry.normaliseAngle(Math.atan2(pp.y - np.y, pp.x - np.x))); 
+				base = MathUtil.rad2deg(MathUtil.normaliseAngle(Math.atan2(pp.y - np.y, pp.x - np.x))); 
 			}
 			
 			// else base remains 0
@@ -489,7 +489,7 @@ package birdeye.vis.trans.graphs.layout
 			for(i=0; i < cc; ++i) {
 				cn = _stree.getIthChildPerNode(n,i);
 				cp = _currentDrawing.getRelCartCoordinates(cn);
-				angles[i] = Geometry.normaliseAngleDeg(-base + Geometry.rad2deg(Math.atan2(cp.y - np.y, cp.x - np.x)));
+				angles[i] = MathUtil.normaliseAngleDeg(-base + MathUtil.rad2deg(Math.atan2(cp.y - np.y, cp.x - np.x)));
 				
 				/*
 				LogUtil.debug(_LOG, "childorder angle for child:"+cn.id+" of node:"+n.id+" has base:"+base+

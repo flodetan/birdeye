@@ -27,7 +27,7 @@ package birdeye.vis.trans.graphs.layout
 {
 	
 	import birdeye.vis.trans.graphs.model.INode;
-	import birdeye.vis.trans.graphs.util.Geometry;
+	import birdeye.vis.trans.graphs.util.MathUtil;
 	
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
@@ -182,7 +182,7 @@ package birdeye.vis.trans.graphs.layout
 							
 			_nodePolarRs[n] = polarR;
 			_nodePolarPhis[n] = polarPhi;
-			_nodeCartCoordinates[n] = Geometry.cartFromPolarDeg(polarR, polarPhi);
+			_nodeCartCoordinates[n] = MathUtil.cartFromPolarDeg(polarR, polarPhi);
 			
 			//LogUtil.debug(_LOG, "SetPolarCoordinates of node:"+n.id+" polarRadius:"+polarR+" polarPhi:"+polarPhi+" and in cartesian:"+(_nodeCartCoordinates[n] as Point).toString());
 			
@@ -206,7 +206,7 @@ package birdeye.vis.trans.graphs.layout
 			*/
 	
 			_nodePolarRs[n] = p.length;
-			_nodePolarPhis[n] = Geometry.polarAngleDeg(p);
+			_nodePolarPhis[n] = MathUtil.polarAngleDeg(p);
 			_nodeCartCoordinates[n] = p;
 			
 			/*
