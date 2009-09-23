@@ -157,7 +157,7 @@ package birdeye.vis.elements.geometry {
 			const items:Vector.<Object> = dataItems;
 			if (!items) return -1;
 			for (var i:int = 0; i < items.length; i++) {
-				if (items[i][itemIdField] == id) return i;
+				if (items[i][nodeIdField] == id) return i;
 			}
 			return -1;
 		}
@@ -175,7 +175,7 @@ package birdeye.vis.elements.geometry {
 			super.dragDataItem(e);
 			var nodeID:String;
 			if (e.target is DataItemLayout)
-				nodeID = DataItemLayout(e.target).currentItem[itemIdField];
+				nodeID = DataItemLayout(e.target).currentItem[nodeIdField];
 			else if (e.target is DisplayObject && e.target.id)
 				nodeID = e.target.id;
 
@@ -202,7 +202,7 @@ package birdeye.vis.elements.geometry {
 			var item:Object = gg.currentItem;
 			
 			var vGraph:VisualGraph = _graphLayout.visualGraph;
-			var vNode:IVisualNode = vGraph.getVisualNodeById(item[itemIdField]);
+			var vNode:IVisualNode = vGraph.getVisualNodeById(item[nodeIdField]);
 			
 			mouseDoubleClickFunction(vGraph, vNode);
 			VisScene(visScene).invalidateDisplayList();
@@ -217,7 +217,7 @@ package birdeye.vis.elements.geometry {
 					(obj as IDataRenderer).data = currentItem[dataField];
 
 				// for the moment 'name' works as ID
-				obj.id = currentItem[itemIdField];
+				obj.id = currentItem[nodeIdField];
 
 				addChild(obj as DisplayObject);
 				if (sizeRenderer > 0) {
@@ -274,7 +274,7 @@ package birdeye.vis.elements.geometry {
 				var rendWidth:Number = getRendererWidth(null);
 				var rendHeight:Number = getRendererHeight(null);
 				items.forEach(function(item:Object, index:int, items:Vector.<Object>):void {
-					const itemId:Object = item[itemIdField];
+					const itemId:Object = item[nodeIdField];
 					if (isItemVisible(itemId)) {
 						var position:Point = getItemPosition(itemId);
 						

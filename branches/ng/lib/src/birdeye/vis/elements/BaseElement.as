@@ -297,10 +297,10 @@ package birdeye.vis.elements
 			return _sizeScale;
 		}
 
-		private var _itemIdField:String;
+		private var _nodeIdField:String;
 		
-		public function set itemIdField(val:String):void {
-			_itemIdField = val;
+		public function set nodeIdField(val:String):void {
+			_nodeIdField = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -308,8 +308,8 @@ package birdeye.vis.elements
 		/**
 		 * Name of the field of the input data containing the itemId.
 		 **/
-		public function get itemIdField():String {
-			return _itemIdField;
+		public function get nodeIdField():String {
+			return _nodeIdField;
 		}
 
 		protected static function getItemFieldValue(item:Object, fieldName:String):Object {
@@ -691,10 +691,10 @@ package birdeye.vis.elements
 		}
 
 		private function initDataItemsById():void {
-			if (itemIdField) {
+			if (nodeIdField) {
 				_dataItemsByIds = new Dictionary();
 				for each (var item:Object in _dataItems) {
-					_dataItemsByIds[item[itemIdField]] = item;
+					_dataItemsByIds[item[nodeIdField]] = item;
 				}
 			} else {
 				_dataItemsByIds = null;

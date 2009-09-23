@@ -119,17 +119,17 @@ package birdeye.vis.elements.geometry {
 			
 			const items:Vector.<Object> = dataItems;
 			var dataFields:Array = [];
-			if (dimStart)
-				dataFields["dimStart"] = dimStart;
-			if (dimEnd)
-				dataFields["dimEnd"] = dimEnd;
+			if (dimFrom)
+				dataFields["dimStart"] = dimFrom;
+			if (dimTo)
+				dataFields["dimEnd"] = dimTo;
 				
 			if (items){
 				items.forEach(function(item:Object, itemIndex:int, items:Vector.<Object>):void {
 					var pos1:Number = NaN, pos2:Number = NaN, pos3:Number = NaN;
 	
-					const startItemId:Object = getItemFieldValue(item, _dimStart);
-					const endItemId:Object = getItemFieldValue(item, _dimEnd);
+					const startItemId:Object = getItemFieldValue(item, _dimFrom);
+					const endItemId:Object = getItemFieldValue(item, _dimTo);
 
 					if (_node.isItemVisible(startItemId)  &&  _node.isItemVisible(endItemId)) {
 						var start:Point = _node.getItemPosition(startItemId);

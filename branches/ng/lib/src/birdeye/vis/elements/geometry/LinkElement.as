@@ -77,19 +77,19 @@ package birdeye.vis.elements.geometry
 
 					var currentItem:Object = _dataItems[cursorIndex];
 					
-					if (!currentItem[dimEnd] || !currentItem[dimStart])
+					if (!currentItem[dimTo] || !currentItem[dimFrom])
 						continue;
 						
 					if (scale1)
 					{
-						startX = scale1.getPosition(currentItem[dimStart]);
-						endX = scale1.getPosition(currentItem[dimEnd]);
+						startX = scale1.getPosition(currentItem[dimFrom]);
+						endX = scale1.getPosition(currentItem[dimTo]);
 					}
 					
 					if (scale2)
 					{
-						startY = scale2.getPosition(currentItem[dimStart]);
-						endY = scale2.getPosition(currentItem[dimEnd]);
+						startY = scale2.getPosition(currentItem[dimFrom]);
+						endY = scale2.getPosition(currentItem[dimTo]);
 					}
 					
 					if (colorScale)
