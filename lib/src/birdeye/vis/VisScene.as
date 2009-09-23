@@ -185,7 +185,11 @@
 					if (!_projections)
 						_projections = [];
 					_projections[p++] = _transforms[i];
-				} 
+				} else if (_transforms[i] is IGraphLayout) {
+					if (!_graphLayouts)
+						_graphLayouts = [];
+					_graphLayouts[l++] = _transforms[i];
+				}
 			}
 		}
 
@@ -196,6 +200,15 @@
 		public function set projections(val:Array):void
 		{
 			_projections = val;
+		}
+
+		private var _graphLayouts:Array
+
+        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IGraphLayout")]
+        [ArrayElementType("birdeye.vis.interfaces.IGraphLayout")]
+		public function set graphLayouts(val:Array):void
+		{
+			_graphLayouts = val;
 		}
 
 		protected var _maxStacked100:Number = NaN;
@@ -651,6 +664,8 @@
 						DataItemLayout(getChildAt(i)).showToolTip();
 				}
 			}
+
+ 			applyGraphLayouts(unscaledWidth, unscaledHeight);
 		}
 		
 		// Other methods
@@ -668,6 +683,14 @@
 			
 		}
 
+		protected function applyGraphLayouts(unscaledWidth:Number, unscaledHeight:Number):void
+		{
+			if (_graphLayouts && _graphLayouts.length>0) {
+				for each (var t:IGraphLayout in _graphLayouts) t.apply(unscaledWidth, unscaledHeight);
+			}
+		}
+
+		
 		protected function getDimMaxValue(item:Object, dims:Object, stacked:Boolean = false):Number
 		{
 			if (dims is String)
