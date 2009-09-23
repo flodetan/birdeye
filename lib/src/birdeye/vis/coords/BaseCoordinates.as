@@ -53,11 +53,8 @@ package birdeye.vis.coords
 	
 	
 	
-	public class BaseCoordinates extends VisScene implements ICoordinates
+	public class BaseCoordinates extends VisScene 
 	{
-		
-		
-		
 		public function BaseCoordinates()
 		{
 		}
@@ -96,30 +93,6 @@ package birdeye.vis.coords
 			return _sharedScales;
 		}
 
-		/** Array of elements, mandatory for any coords scene.
-		 * Each element must implement the IElement interface which defines 
-		 * methods that allow to set fields, basic styles, axes, dataproviders, renderers,
-		 * max and min values, etc. Look at the IElement for more details.
-		 * Each element can define its own axes, which will have higher priority over the axes
-		 * that are provided by the dataProvider (a cartesian chart). In case no axes are 
-		 * defined for the element, than those of the data provider are used. 
-		 * The data provider (cartesian chart) axes values (min, max, etc) are calculated 
-		 * based on the group of element that share them.*/
-        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IElement")]
-        [ArrayElementType("birdeye.vis.interfaces.IElement")]
-		override public function set elements(val:Array):void
-		{
-			_elements = val;
-			
-			for each (var element:IElement in elements)
-				if (! element.chart)
-						element.chart = this;
-
-			invalidateProperties();
-			invalidateDisplayList();
-		}
-		
-		
 		override protected function commitProperties():void
 		{
 			if (active)
