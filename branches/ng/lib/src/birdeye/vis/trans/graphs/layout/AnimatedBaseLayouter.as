@@ -29,7 +29,7 @@ package birdeye.vis.trans.graphs.layout
 {
 
 	import birdeye.vis.trans.graphs.model.INode;
-	import birdeye.vis.trans.graphs.util.Geometry;
+	import birdeye.vis.trans.graphs.util.MathUtil;
 	import birdeye.vis.trans.graphs.util.GraphicUtils;
 	import birdeye.vis.trans.graphs.util.LogUtil;
 	import birdeye.vis.trans.graphs.visual.IVisualNode;
@@ -292,8 +292,8 @@ package birdeye.vis.trans.graphs.layout
 					currPoint = currPoint.subtract(_currentDrawing.centerOffset);
 				}
 				
-				currRadius = Geometry.polarRadius(currPoint);
-				currPhi = Geometry.polarAngleDeg(currPoint);
+				currRadius = MathUtil.polarRadius(currPoint);
+				currPhi = MathUtil.polarAngleDeg(currPoint);
 				
 				/* not sure if this really fixes the animation end cycle ... */
 				deltaRadius = (targetRadius - currRadius) * _animStep / _ANIMATIONSTEPS;
@@ -325,7 +325,7 @@ package birdeye.vis.trans.graphs.layout
 				/* we cannot set the coordinates in the _currentDrawing,
 				 * as we store our target coordinates there,
 				 * we need to set them directly in the vnode */
-				stepPoint = Geometry.cartFromPolarDeg(stepRadius,stepPhi);
+				stepPoint = MathUtil.cartFromPolarDeg(stepRadius,stepPhi);
 				
 				/* adjust the origin */
 				stepPoint = stepPoint.add(_currentDrawing.originOffset);

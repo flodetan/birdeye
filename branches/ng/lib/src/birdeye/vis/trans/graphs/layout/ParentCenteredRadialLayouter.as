@@ -28,7 +28,7 @@ package birdeye.vis.trans.graphs.layout
 {
 
 	import birdeye.vis.trans.graphs.model.INode;
-	import birdeye.vis.trans.graphs.util.Geometry;
+	import birdeye.vis.trans.graphs.util.MathUtil;
 	import birdeye.vis.trans.graphs.util.LogUtil;
 	import birdeye.vis.trans.graphs.visual.IVisualNode;
 	
@@ -446,7 +446,7 @@ package birdeye.vis.trans.graphs.layout
 			 * that means the sign of the y.coordinates is probably
 			 * reversed either, we try to compensate by changing the subtrating
 			 * order of the y coordinates */
-			zeroAngleOffset = Geometry.rad2deg(Math.atan2(vpcoords.y - vgpcoords.y, vgpcoords.x - vpcoords.x));
+			zeroAngleOffset = MathUtil.rad2deg(Math.atan2(vpcoords.y - vgpcoords.y, vgpcoords.x - vpcoords.x));
 			
 			/* the polar angle is also independent of the 
 			 * number of siblings
@@ -569,7 +569,7 @@ package birdeye.vis.trans.graphs.layout
 				/* delta is an angle in degrees now */
 				
 				/* now multiply with radius to get the segments length */
-				nodePolarR = Geometry.deg2rad(delta) * _currentDrawing.getLocalPolarR(vp);
+				nodePolarR = MathUtil.deg2rad(delta) * _currentDrawing.getLocalPolarR(vp);
 			}
 			//LogUtil.debug(_LOG, "RecurseCC9: set node:"+vi.id+"'s polarR to:"+nodePolarR);
 			

@@ -27,8 +27,8 @@ package birdeye.vis.trans.graphs.layout
 {
 
 	import birdeye.vis.trans.graphs.model.INode;
-	import birdeye.vis.trans.graphs.util.Geometry;
 	import birdeye.vis.trans.graphs.util.LogUtil;
+	import birdeye.vis.trans.graphs.util.MathUtil;
 	import birdeye.vis.trans.graphs.visual.IVisualNode;
 	
 	import flash.utils.Dictionary;
@@ -195,7 +195,7 @@ package birdeye.vis.trans.graphs.layout
 				/* position only visible nodes */
 				if (vn.visible) {
         			phi = _phi + (360 * i) / numVisibleNodes;
-					phi = Geometry.normaliseAngleDeg(phi);
+					phi = MathUtil.normaliseAngleDeg(phi);
 					
 					/* set the values */
 					ni = vn.node;
