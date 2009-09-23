@@ -24,7 +24,7 @@
  */
 package birdeye.vis.trans.graphs.util.geom {
 
-	import birdeye.vis.trans.graphs.util.Geometry;
+	import birdeye.vis.trans.graphs.util.MathUtil;
 	import birdeye.vis.trans.graphs.util.LogUtil;
 	
 	/**
@@ -115,8 +115,8 @@ package birdeye.vis.trans.graphs.util.geom {
 			var d3:Number = distP(z1, z2);
 			if (d3 == 0)
 				return 0;
-			var cos:Number = (Geometry.cosh(d1) * Geometry.cosh(d2) - Geometry.cosh(d3))
-						/ (Geometry.sinh(d1) * Geometry.sinh(d2));
+			var cos:Number = (MathUtil.cosh(d1) * MathUtil.cosh(d2) - MathUtil.cosh(d3))
+						/ (MathUtil.sinh(d1) * MathUtil.sinh(d2));
 			if (cos > 1)
 				cos = 1;
 			if (cos < -1)
@@ -134,8 +134,8 @@ package birdeye.vis.trans.graphs.util.geom {
 			var z:IPoint;
 			var t:Number;
 			if (Math.abs(alpha) > 1e-7) {
-				t = Geometry.arsinh(Geometry.sinh(distP(z1, p)) * Math.sin(alpha));
-				var s:Number = Geometry.arcosh(Geometry.cosh(distP(p, z1)) / Geometry.cosh(t));
+				t = MathUtil.arsinh(MathUtil.sinh(distP(z1, p)) * Math.sin(alpha));
+				var s:Number = MathUtil.arcosh(MathUtil.cosh(distP(p, z1)) / MathUtil.cosh(t));
 				
 				var p1:IPoint = (z1.clone() as IPoint);
 				getTranslationPPR(z1, z2, s / distP(z1, z2)).applyToPoint(p1);

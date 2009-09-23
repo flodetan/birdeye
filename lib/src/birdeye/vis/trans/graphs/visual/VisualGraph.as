@@ -29,7 +29,6 @@ package birdeye.vis.trans.graphs.visual
 {
 	import __AS3__.vec.Vector;
 	
-	import birdeye.vis.elements.Position;
 	import birdeye.vis.interfaces.IEdgeElement;
 	import birdeye.vis.interfaces.IGraphLayoutableElement;
 	import birdeye.vis.trans.graphs.data.IGraphDataProvider;
@@ -96,24 +95,17 @@ package birdeye.vis.trans.graphs.visual
 		 * */
 		private var _visibilityLimitActive:Boolean = true;
 
-		private var _useIntegerPositions:Boolean;
-
 		public function VisualGraph(id:String, node:IGraphLayoutableElement, edge:IEdgeElement,
 									graphDataProvider:IGraphDataProvider,
-									width:Number, height:Number,
-									useIntegerPositions:Boolean) {
+									width:Number, height:Number)
+		{
 			_nodeElement = node;
 			_edgeElement = edge;
 			_origin = new Point(0,0);
 			_graph = new Graph(id, graphDataProvider, false);
 			_width = width;
 			_height = height;
-			_useIntegerPositions = useIntegerPositions;
 			initFromGraph();
-		}
-
-		public function get useIntegerPositions():Boolean {
-			return _useIntegerPositions;
 		}
 
 		/**
@@ -545,16 +537,12 @@ package birdeye.vis.trans.graphs.visual
 			return vnode.visible;
 		}
 
-		public function getNodePosition(nodeId:String):Position {
+		public function getNodePosition(nodeId:String):Point {
 			const vnode:VisualNode = _visualIdsToNodes[nodeId];
 			if (!vnode) {
 				return null;
 			}
-			if (useIntegerPositions) {
-				return new Position(Math.round(vnode.x), Math.round(vnode.y));
-			} else {
-				return new Position(vnode.x, vnode.y);
-			}
+			return new Point(vnode.x, vnode.y);
 		}
 
 		public function getNodeDisplayObject(nodeId:String):DisplayObject {
