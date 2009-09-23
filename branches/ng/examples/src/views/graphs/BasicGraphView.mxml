@@ -23,13 +23,14 @@
 	
 	<mx:VBox horizontalAlign="center" width="100%" height="100%">
 		<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([graph.svgData], parentApplication.width, parentApplication.height))"/>
-		<coords:Cartesian id="graph" width="100%" height="100%" showDataTips="true">
+		<coords:Abstract id="graph" width="100%" height="100%" showDataTips="true">
 			<coords:elements>
-				<elements:EdgeElement id="edge" dimStart="start" dimEnd="end" node="{node}" dataProvider="{edges}" mouseClickFunction="clickF"
+				<elements:EdgeElement id="edge" dimStart="start" dimEnd="end" dataProvider="{edges}" mouseClickFunction="clickF"
 									  colorFill="0xFF0000" colorStroke="0x999999" strokeWeight="2" />
 
 							
 				<elements:NodeElement id="node" itemIdField="id" dimName="name" dataProvider="{nodes}" 
+									edgeElement="{edge}" graphLayout="{graphLayout}"
 									graphicRendererSize="25" mouseDoubleClickFunction="EventsUtil.setNodeAsRoot" />
 
 <!--
@@ -41,15 +42,13 @@
 			</coords:elements>
 			<coords:transforms>
 				<graphs:GraphLayout
-						startNodeId="1"
+						rootNodeId="1"
 						id="graphLayout"
 						layouter="{layouter}"
-						applyToNode="{node}" applyToEdge="{edge}"
 						animate="{animate.selected}"
-						useIntegerPositions="true"
 					/>
 			</coords:transforms>
-		</coords:Cartesian>
+		</coords:Abstract>
 	</mx:VBox>
 
 	
