@@ -27,7 +27,6 @@
 
 package birdeye.vis.trans.graphs.visual
 {
-	import birdeye.vis.elements.Position;
 	import birdeye.vis.trans.graphs.model.IGraph;
 	import birdeye.vis.trans.graphs.util.geom.IVisualObjectWithDimensions;
 	
@@ -66,7 +65,7 @@ package birdeye.vis.trans.graphs.visual
 		
 		function isNodeVisible(nodeId:String):Boolean;
 
-		function getNodePosition(nodeId:String):Position;
+		function getNodePosition(nodeId:String):Point;
 
 		function getNodeDisplayObject(nodeId:String):DisplayObject;
 
@@ -75,8 +74,6 @@ package birdeye.vis.trans.graphs.visual
 		function get currentRootVNode():IVisualNode;
 		
 		function get maxVisibleDistance():int;
-
-		function get useIntegerPositions():Boolean;
 
 		/**
 		 * Calculate and return the current bounding box of all visible nodes.
