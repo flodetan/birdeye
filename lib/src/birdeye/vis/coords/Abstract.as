@@ -53,7 +53,7 @@ package birdeye.vis.coords
 	public class Abstract extends VisScene implements ICoordinates
 	{
 		protected var _defaultLayout:ILayoutAlgorithm;
-		/** It's possible to define a default layout for the visual coords. If set, it will be used 
+		/** It's possible to define a default layout for the abstract coords. If set, it will be used 
 		 * for all elements that have not a layout defined.*/
 		public function set layout(val:IFactory):void
 		{
@@ -131,7 +131,8 @@ package birdeye.vis.coords
 			{
 				var graph:GraphLayout = validLayout.layout;
 				graph.nodeElement = validLayout.node;
-				graph.edgeElement = validLayout.edge;
+				if (validLayout.edge)
+					graph.edgeElement = validLayout.edge;
 				graph.apply(unscaledWidth, unscaledHeight)
 			}
 		}
