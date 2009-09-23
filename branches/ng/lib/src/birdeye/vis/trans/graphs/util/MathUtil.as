@@ -29,7 +29,7 @@ package birdeye.vis.trans.graphs.util {
 	 * This is a class to provide some static functions
 	 * to help with angles and geometry.
 	 * */
-	public class Geometry {
+	public class MathUtil {
 		
 		private static const _LOG:String = "utils.Geometry";		
 		/**
