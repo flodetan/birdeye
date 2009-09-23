@@ -27,14 +27,12 @@
 
 package birdeye.vis.interfaces
 {
-	import birdeye.vis.elements.Position;
-	
 	public interface IEdgeElement extends IElement
 	{
 
-		function get node():IPositionableElement;
+		function get nodeElement():IPositionableElement;
 		
-		function set node(val:IPositionableElement):void;
+		function set nodeElement(val:IPositionableElement):void;
 		
 		function get dimStart():String;
 		
