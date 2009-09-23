@@ -151,7 +151,7 @@ trace (getTimer(), "drawing line ele");
 						continue;
 					}
 	
-					if (chart.coordType == VisScene.POLAR)
+					if (visScene.coordType == VisScene.POLAR)
 					{
 						if (j == 0)
 						{
@@ -184,7 +184,7 @@ trace (getTimer(), "drawing line ele");
 					if (_form == CURVE)
 					{
 						points.push(new GraphicPoint(scaleResults[POS1],scaleResults[POS2]));
-						if (isNaN(xPrev) && isNaN(yPrev) && chart.coordType != VisScene.POLAR)
+						if (isNaN(xPrev) && isNaN(yPrev) && visScene.coordType != VisScene.POLAR)
 							points.push(new GraphicPoint(scaleResults[POS1],scaleResults[POS2]));
 					} else if (j++ > 0)
 					{
@@ -233,11 +233,11 @@ trace (getTimer(), "drawing line ele");
  					bzSplines.tension = _tension;
 					bzSplines.stroke = stroke;
 					bzSplines.graphicsTarget = [this];
-					if (chart.coordType == VisScene.POLAR && autoClose)
+					if (visScene.coordType == VisScene.POLAR && autoClose)
 						bzSplines.autoClose = true;
 				}
 				
-				if (chart.coordType == VisScene.POLAR && autoClose && !isNaN(firstX) && !isNaN(firstY) 
+				if (visScene.coordType == VisScene.POLAR && autoClose && !isNaN(firstX) && !isNaN(firstY) 
 					&& !isNaN(scaleResults[POS1]) && !isNaN(scaleResults[POS2]))
 				{
 						data = "M" + String(scaleResults[POS1]) + "," + String(scaleResults[POS2]) + " " +

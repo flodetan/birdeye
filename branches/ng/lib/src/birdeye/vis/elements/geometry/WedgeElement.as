@@ -119,11 +119,11 @@ package birdeye.vis.elements.geometry
 				if (_total>0)
 				{
 					_innerRadius = radius/_total * _stackPosition; 
-					tmpRadius = _innerRadius + radius/_total * chart.thicknessRatio;
+					tmpRadius = _innerRadius + radius/_total * visScene.thicknessRatio;
 				}
 	
-				var arcCenterX:Number = chart.origin.x - radius;
-				var arcCenterY:Number = chart.origin.y - radius;
+				var arcCenterX:Number = visScene.origin.x - radius;
+				var arcCenterY:Number = visScene.origin.y - radius;
 	
 				var wSize:Number, hSize:Number;
 				wSize = hSize = radius*2;
@@ -168,11 +168,11 @@ package birdeye.vis.elements.geometry
 								dataFields["sizeField"] = sizeField[i];
 							} else
 								_graphicRendererSize = sizeScale.getPosition(currentItem[sizeField]);
-							tmpRadius = _innerRadius + radius/_total * chart.thicknessRatio * _graphicRendererSize;
+							tmpRadius = _innerRadius + radius/_total * visScene.thicknessRatio * _graphicRendererSize;
 						}
 
-						var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius, chart.origin);
-						var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius, chart.origin); 
+						var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius, visScene.origin);
+						var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius, visScene.origin); 
 		
 						dataFields["dim1"] = tmpDim1;
 
@@ -189,7 +189,7 @@ package birdeye.vis.elements.geometry
 						if (_innerRadius > tmpRadius)
 							_innerRadius = tmpRadius;
 		
-						arc = new ArcPath(Math.max(0, _innerRadius), tmpRadius, startAngle, angle, chart.origin);
+						arc = new ArcPath(Math.max(0, _innerRadius), tmpRadius, startAngle, angle, visScene.origin);
 						
 						var tempColor:int;
 						
@@ -248,8 +248,8 @@ package birdeye.vis.elements.geometry
 							var xLlb:Number = xPos, yLlb:Number = yPos;
 							if (!isNaN(_radiusLabelOffset))
 							{
-								xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
-								yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
+								xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, visScene.origin);
+								yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, visScene.origin);
 							}
 							var label:TextRenderer = new TextRenderer(xLlb, yLlb, currentItem[labelField], new SolidFill(colorLabel),
 																	true, true, sizeLabel, fontLabel);
@@ -261,8 +261,8 @@ package birdeye.vis.elements.geometry
 							xLlb = xPos, yLlb = yPos;
 							if (!isNaN(_radiusLabelOffset))
 							{
-								xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
-								yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, chart.origin);
+								xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, visScene.origin);
+								yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, visScene.origin);
 							}
 							label = new TextRenderer(xLlb, yLlb, tmpDim1, new SolidFill(colorLabel),
 																	true, true, sizeLabel, fontLabel);
@@ -278,8 +278,8 @@ package birdeye.vis.elements.geometry
 				
 				if (displayName && aAxis && aAxis.size < 360)
 				{
-					label = new TextRenderer(PolarCoordinateTransform.getX(0, _innerRadius, chart.origin), 
-															PolarCoordinateTransform.getY(0, _innerRadius, chart.origin), 
+					label = new TextRenderer(PolarCoordinateTransform.getX(0, _innerRadius, visScene.origin), 
+															PolarCoordinateTransform.getY(0, _innerRadius, visScene.origin), 
 															displayName, new SolidFill(0x000000),
 															false, false, 12, "verdana");
 					label.fontWeight = "bold";

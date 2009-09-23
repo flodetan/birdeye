@@ -69,10 +69,10 @@ package birdeye.vis.elements.geometry
 			if (!graphicRenderer)
 				graphicRenderer = new ClassFactory(RectangleRenderer);
 
-			if (stackType == STACKED && chart)
+			if (stackType == STACKED && visScene)
 			{
 				if (scale2 && scale2 is INumerableScale)
-					INumerableScale(scale2).max = chart.maxStacked100;
+					INumerableScale(scale2).max = visScene.maxStacked100;
 			}
 		}
 
@@ -98,23 +98,23 @@ trace (getTimer(), "drawing column ele");
 				if (scale1)
 				{
 					if (scale1 is IEnumerableScale)
-						tmpSize = scale1.size/IEnumerableScale(scale1).dataProvider.length * chart.thicknessRatio;
+						tmpSize = scale1.size/IEnumerableScale(scale1).dataProvider.length * visScene.thicknessRatio;
 					else if (scale1 is INumerableScale)
 						tmpSize = scale1.size / 
-								(INumerableScale(scale1).max - INumerableScale(scale1).min) * chart.thicknessRatio;
+								(INumerableScale(scale1).max - INumerableScale(scale1).min) * visScene.thicknessRatio;
 
 					var constTmpSize:Number = tmpSize;
 				}
 	
 				ggIndex = 0;
  	
-				if (chart.coordType == VisScene.POLAR)
+				if (visScene.coordType == VisScene.POLAR)
 				{
 					var arcSize:Number = NaN;
 			
 					var angleInterval:Number;
 					if (scale1) 
-						angleInterval = scale1.scaleInterval * chart.thicknessRatio;
+						angleInterval = scale1.scaleInterval * visScene.thicknessRatio;
 						
 					switch (_stackType)
 					{
@@ -207,7 +207,7 @@ trace (getTimer(), "drawing column ele");
 						if (sizeScale)
 						{
 							_graphicRendererSize = sizeScale.getPosition(currentItem[sizeField]);
-							if (chart.coordType == VisScene.CARTESIAN)
+							if (visScene.coordType == VisScene.CARTESIAN)
 								tmpSize = constTmpSize * _graphicRendererSize;
 							else
 								arcSize = constTmpSize * _graphicRendererSize;
@@ -218,7 +218,7 @@ trace (getTimer(), "drawing column ele");
 							continue;
 						}
 
-						if (chart.coordType == VisScene.CARTESIAN)
+						if (visScene.coordType == VisScene.CARTESIAN)
 						{
 							switch (_stackType)
 							{
@@ -290,7 +290,7 @@ trace (getTimer(), "drawing column ele");
 							poly.fill = fill;
 							poly.stroke = stroke;						
 							gg.geometryCollection.addItemAt(poly,0);  							
-						} else if (chart.coordType == VisScene.POLAR)
+						} else if (visScene.coordType == VisScene.POLAR)
 						{
 							var startAngle:Number; 
 							switch (_stackType) 
@@ -325,8 +325,8 @@ trace (getTimer(), "drawing column ele");
 							var wSize:Number, hSize:Number;
 							wSize = hSize = pos2*2;
 			
-							var xPos:Number = PolarCoordinateTransform.getX(startAngle+innerAngleSize/2, pos2, chart.origin);
-							var yPos:Number = PolarCoordinateTransform.getY(startAngle+innerAngleSize/2, pos2, chart.origin); 
+							var xPos:Number = PolarCoordinateTransform.getX(startAngle+innerAngleSize/2, pos2, visScene.origin);
+							var yPos:Number = PolarCoordinateTransform.getY(startAngle+innerAngleSize/2, pos2, visScene.origin); 
 		 					
 							createTTGG(currentItem, dataFields, xPos, yPos, NaN, _rendererSize, i);
  							
@@ -339,7 +339,7 @@ trace (getTimer(), "drawing column ele");
 							var arc:IBoundedRenderer;
 							
 							arc = 
-								new ArcPath(baseScale2, pos2, startAngle, innerAngleSize, chart.origin);
+								new ArcPath(baseScale2, pos2, startAngle, innerAngleSize, visScene.origin);
 								
 							addSVGData(arc.svgData);
 			

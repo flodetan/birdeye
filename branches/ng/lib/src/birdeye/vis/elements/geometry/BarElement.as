@@ -65,10 +65,10 @@ package birdeye.vis.elements.geometry
 			if (!graphicRenderer)
 				graphicRenderer = new ClassFactory(RectangleRenderer);
 
-			if (stackType == STACKED && chart)
+			if (stackType == STACKED && visScene)
 			{
 				if (scale1 && scale1 is INumerableScale)
-					INumerableScale(scale1).max = chart.maxStacked100;
+					INumerableScale(scale1).max = visScene.maxStacked100;
 			}
 		}
 
@@ -91,10 +91,10 @@ trace(getTimer(), "drawing bar");
 				if (scale2)
 				{
 					if (scale2 is IEnumerableScale)
-						size = scale2.size/IEnumerableScale(scale2).dataProvider.length * chart.thicknessRatio;
+						size = scale2.size/IEnumerableScale(scale2).dataProvider.length * visScene.thicknessRatio;
 					else if (scale2 is INumerableScale)
 						size = scale2.size / 
-								(INumerableScale(scale2).max - INumerableScale(scale2).min) * chart.thicknessRatio;
+								(INumerableScale(scale2).max - INumerableScale(scale2).min) * visScene.thicknessRatio;
 				} 
 	
 				ggIndex = 0;
@@ -129,7 +129,7 @@ trace(getTimer(), "drawing bar");
 							yPos = scale2.getPosition(currentItem[dim2]);
 		
 							if (isNaN(size))
-		 						size = scale2.dataInterval * chart.thicknessRatio;
+		 						size = scale2.dataInterval * visScene.thicknessRatio;
 						} 
 						
 						if (scale1)

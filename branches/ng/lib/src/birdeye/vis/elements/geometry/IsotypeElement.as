@@ -232,10 +232,10 @@ trace(getTimer(), "drawing isotype");
 			if (scale2)
 			{
 				if (scale2 is IEnumerableScale)
-					availableThickness = scale2.size/IEnumerableScale(scale2).dataProvider.length * chart.thicknessRatio;
+					availableThickness = scale2.size/IEnumerableScale(scale2).dataProvider.length * visScene.thicknessRatio;
 				else if (scale2 is INumerableScale)
 					availableThickness = scale2.size / 
-							(INumerableScale(scale2).max - INumerableScale(scale2).min) * chart.thicknessRatio;
+							(INumerableScale(scale2).max - INumerableScale(scale2).min) * visScene.thicknessRatio;
 			} 
 
 			ggIndex = 0;
@@ -270,7 +270,7 @@ trace(getTimer(), "drawing isotype");
 						yPos = scale2.getPosition(currentItem[dim2]);
 	
 						if (isNaN(availableThickness))
-	 						availableThickness = scale2.dataInterval * chart.thicknessRatio;
+	 						availableThickness = scale2.dataInterval * visScene.thicknessRatio;
 					} 
 					
 					if (scale1)
@@ -401,10 +401,10 @@ trace(getTimer(), "drawing isotype");
 			if (scale1)
 			{
 				if (scale1 is IEnumerableScale)
-					availableThickness = scale1.size/IEnumerableScale(scale1).dataProvider.length * chart.thicknessRatio;
+					availableThickness = scale1.size/IEnumerableScale(scale1).dataProvider.length * visScene.thicknessRatio;
 				else if (scale1 is INumerableScale)
 					availableThickness = scale1.size / 
-							(INumerableScale(scale1).max - INumerableScale(scale1).min) * chart.thicknessRatio;
+							(INumerableScale(scale1).max - INumerableScale(scale1).min) * visScene.thicknessRatio;
 			} 
 
 			ggIndex = 0;
@@ -439,7 +439,7 @@ trace(getTimer(), "drawing isotype");
 						xPos = scale1.getPosition(currentItem[dim1]);
 	
 						if (isNaN(availableThickness))
-	 						availableThickness = scale1.dataInterval * chart.thicknessRatio;
+	 						availableThickness = scale1.dataInterval * visScene.thicknessRatio;
 					} 
 					
 					if (scale2)
