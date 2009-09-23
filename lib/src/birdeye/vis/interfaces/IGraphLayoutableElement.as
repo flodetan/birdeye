@@ -34,5 +34,6 @@
 
 		function get graphLayout():IGraphLayout;
 
+		function get edgeElement():IEdgeElement;
 	}
 }

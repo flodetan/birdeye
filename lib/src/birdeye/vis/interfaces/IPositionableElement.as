@@ -26,11 +26,11 @@
  */
 package birdeye.vis.interfaces
 {
-	import birdeye.vis.elements.Position;
+	import flash.geom.Point;
 	
 	public interface IPositionableElement extends IElement {
 		
-		function getItemPosition(itemId:Object):Position;
+		function getItemPosition(itemId:Object):Point;
 		
 		function isItemVisible(itemId:Object):Boolean;
 		

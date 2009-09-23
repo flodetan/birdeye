@@ -27,8 +27,9 @@
  
 package birdeye.vis.interfaces
 {
-	import birdeye.vis.elements.Position;
 	import birdeye.vis.trans.graphs.visual.VisualGraph;
+	
+	import flash.geom.Point;
 	
 	public interface IGraphLayout extends ITransform
 	{
@@ -40,6 +41,8 @@ package birdeye.vis.interfaces
 		
 		function isNodeItemVisible(itemId:Object):Boolean;
 
-		function getNodeItemPosition(itemId:Object):Position;
+		function getNodeItemPosition(itemId:Object):Point;
+		
+		function resetLayout():void;
 	}
 }
