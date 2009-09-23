@@ -27,7 +27,7 @@
  
 package birdeye.vis.elements
 {
-	import birdeye.vis.coords.BaseCoordinates;
+	import birdeye.vis.VisScene;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.data.UtilSVG;
 	import birdeye.vis.elements.collision.StackElement;
@@ -59,6 +59,7 @@ package birdeye.vis.elements
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	import flash.xml.XMLNode;
@@ -114,12 +115,12 @@ package birdeye.vis.elements
 		protected var _invalidatedElementGraphic:Boolean = false;
 		
 		private var _chart:ICoordinates;
-		public function set chart(val:ICoordinates):void
+		public function set visScene(val:ICoordinates):void
 		{
 			_chart = val;
 			invalidateProperties();
 		}
-		public function get chart():ICoordinates
+		public function get visScene():ICoordinates
 		{
 			return _chart;
 		}
@@ -659,14 +660,15 @@ package birdeye.vis.elements
 	  		// to let the chart update with the element data provider change. in fact
 	  		// the element dataprovider modifies the chart data and axes properties
 	  		// therefore it modifies the chart properties and displaying
-	  		if (chart is BaseCoordinates)
+	  		if (visScene is VisScene)
 	  		{
-		  		BaseCoordinates(chart).axesFeeded = false;
-		  		BaseCoordinates(chart).invalidateProperties();
-		  		BaseCoordinates(chart).invalidateDisplayList();
+		  		VisScene(visScene).axesFeeded = false;
+		  		VisScene(visScene).layoutsFeeded = false;
+		  		VisScene(visScene).invalidateProperties();
+		  		VisScene(visScene).invalidateDisplayList();
+	  			
 	  		}
   			invalidatedData = true;
-	  		invalidateSize();
 	  		invalidateProperties();
 			invalidatingDisplay();
 		}		
@@ -1087,7 +1089,7 @@ package birdeye.vis.elements
 			// belonging to other element could be covered by the background and 
 			// interactivity becomes impossible
 			// therefore background is created only if showDataTips is true
-			if (chart && chart.customTooltTipFunction!=null && chart.showDataTips && !tooltipCreationListening)
+			if (visScene && visScene.customTooltTipFunction!=null && visScene.showDataTips && !tooltipCreationListening)
 			{
 				initCustomTip();
 			}
@@ -1401,7 +1403,7 @@ package birdeye.vis.elements
 			var colorsCheck:Boolean = 
 				(fill || stroke || colorScale);
 
-			var globalCheck:Boolean = chart && dataItems;
+			var globalCheck:Boolean = visScene && dataItems;
 			
 			return globalCheck && axesCheck && colorsCheck;
 		}
@@ -1476,13 +1478,13 @@ package birdeye.vis.elements
 				ttGG.geometryCollection.addItemAt(label,0); 
 			}
 			ggIndex++;
-			ttGG.target = chart.elementsContainer;
+			ttGG.target = visScene.elementsContainer;
 			ttGG.addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 			ttGG.addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 			
 			ttGG.hitMouseArea = createMouseHitArea(xPos, yPos, _hitAreaSize);
 			
- 			if (chart.showDataTips || chart.showAllDataTips)
+ 			if (visScene.showDataTips || visScene.showAllDataTips)
 			{ 
 				initGGToolTip();
 				ttGG.create(item, dataFields, xPos, yPos, zPos, radius, collisionIndex, shapes, ttXoffset, ttYoffset, true, showGeometry);
@@ -1491,7 +1493,7 @@ package birdeye.vis.elements
 				ttGG.create(item, dataFields, xPos, yPos, zPos, NaN,collisionIndex, null, NaN, NaN, false);
 			}
 
-			if (chart.showAllDataTips)
+			if (visScene.showAllDataTips)
 			{
 				ttGG.showToolTip();
 			} 
@@ -1528,7 +1530,7 @@ package birdeye.vis.elements
 				draggedItem as DataItemLayout;
 				isDraggingNow = true;
 				draggedItemPreviousTarget = draggedItem.target;
-				draggedItem.target = chart.elementsContainer;
+				draggedItem.target = visScene.elementsContainer;
 			} 
 			
 			if (draggedItem is DisplayObject)
@@ -1542,7 +1544,7 @@ package birdeye.vis.elements
 	    	offsetY = e.stageY - itemY;
 			stage.addEventListener(MouseEvent.MOUSE_UP, stopDragging);
 	    	stage.addEventListener(MouseEvent.MOUSE_MOVE, dragDataItem);
-	    	chart.elementsContainer.addEventListener(MouseEvent.MOUSE_OUT, stopDragging);
+	    	visScene.elementsContainer.addEventListener(MouseEvent.MOUSE_OUT, stopDragging);
 	    	dispatchEvent(new Event("DraggingStarted")); // TODO: create specific event 
 		}
 		
@@ -1571,7 +1573,7 @@ package birdeye.vis.elements
 	    	}
 	  		stage.removeEventListener(MouseEvent.MOUSE_UP, stopDragging);
 	    	stage.removeEventListener(MouseEvent.MOUSE_MOVE, dragDataItem)
-	    	chart.elementsContainer.removeEventListener(MouseEvent.MOUSE_OUT, stopDragging);
+	    	visScene.elementsContainer.removeEventListener(MouseEvent.MOUSE_OUT, stopDragging);
 	    	dispatchEvent(new Event("DragComplete"));
 	    }
 	    
@@ -1588,10 +1590,10 @@ package birdeye.vis.elements
 
 			if (isDraggingNow) return;
 			
-			if (chart.showDataTips) {
-				if (chart.customTooltTipFunction != null)
+			if (visScene.showDataTips) {
+				if (visScene.customTooltTipFunction != null)
 				{
-					myTT = chart.customTooltTipFunction(extGG);
+					myTT = visScene.customTooltTipFunction(extGG);
 		 			toolTip = myTT.text;
 				} else {
 					extGG.showToolTip();
@@ -1634,7 +1636,7 @@ package birdeye.vis.elements
 				rollOverE.pos3 = extGG.currentItem[tmpDim3];
 			}
 			
-			chart.dispatchEvent(rollOverE);
+			visScene.dispatchEvent(rollOverE);
 			
 			if (_mouseOverFunction != null)
 				_mouseOverFunction(extGG);
@@ -1651,7 +1653,7 @@ package birdeye.vis.elements
 
 			if (isDraggingNow) return;
 
-			if (chart.showDataTips)
+			if (visScene.showDataTips)
 			{
 				extGG.hideToolTip();
 				hideGeometryTip(extGG);
@@ -1662,7 +1664,7 @@ package birdeye.vis.elements
 			
 			var rolloutE:ElementRollOutEvent = new ElementRollOutEvent(ElementRollOutEvent.ELEMENT_ROLL_OUT);
 			
-			chart.dispatchEvent(rolloutE);
+			visScene.dispatchEvent(rolloutE);
 
 			if (_mouseOutFunction != null)
 				_mouseOutFunction(extGG);
@@ -1700,10 +1702,10 @@ package birdeye.vis.elements
 		{
 			ttGG.toolTipFill = fill;
 			ttGG.toolTipStroke = stroke;
- 			if (chart.dataTipFunction != null)
-				ttGG.dataTipFunction = chart.dataTipFunction;
-			if (chart.dataTipPrefix!= null)
-				ttGG.dataTipPrefix = chart.dataTipPrefix;
+ 			if (visScene.dataTipFunction != null)
+				ttGG.dataTipFunction = visScene.dataTipFunction;
+			if (visScene.dataTipPrefix!= null)
+				ttGG.dataTipPrefix = visScene.dataTipPrefix;
 		}
 
 		private var currentValue:Number;
@@ -1981,21 +1983,21 @@ package birdeye.vis.elements
 		 * @param itemId
 		 * @param geometries Array of IGeometry objects 
 		 **/
-		protected function createItemDisplayObject(currentItem:Object, dataFields:Array, pos:Position, itemId:Object, renderers:Object):void {
+		protected function createItemDisplayObject(currentItem:Object, dataFields:Array, pos:Point, itemId:Object, renderers:Object):void {
 			var geometries:Array = renderers.graphicRenderer;
 			var itmDisplayObject:DisplayObject = renderers.itemRenderer;
 			if (itmDisplayObject)
 			{
-				itmDisplayObject.x = pos.pos1; 
-				itmDisplayObject.y = pos.pos2; 
+				itmDisplayObject.x = pos.x; 
+				itmDisplayObject.y = pos.y; 
 				addChild(itmDisplayObject);
 				_itemDisplayObjects[itemId] = itmDisplayObject;
 			} else if (geometries)
 			{
 				createTTGG(currentItem, dataFields, NaN, NaN, NaN, NaN);
 				ttGG.geometry = geometries;
-		        ttGG.x = pos.pos1; 
-		        ttGG.y = pos.pos2; 
+		        ttGG.x = pos.x; 
+		        ttGG.y = pos.y; 
 		        ttGG.target = this;
 				_itemDisplayObjects[itemId] = ttGG;
 			}
