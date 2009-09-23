@@ -34,9 +34,9 @@ package birdeye.vis.interfaces
 		
 		function set nodeElement(val:IPositionableElement):void;
 		
-		function get dimStart():String;
+		function get dimFrom():String;
 		
-		function get dimEnd():String;
+		function get dimTo():String;
 		
 		function setEdgePosition(edgeId:String, x1:Number, y1:Number, x2:Number, y2:Number):void;
 

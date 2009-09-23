@@ -31,24 +31,24 @@ package birdeye.vis.elements.geometry
 
 	public class SegmentElement extends BaseElement
 	{
-		protected var _dimStart:String;
-		public function set dimStart(val:String):void {
-			_dimStart = val;
+		protected var _dimFrom:String;
+		public function set dimFrom(val:String):void {
+			_dimFrom = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get dimStart():String {
-			return _dimStart;
+		public function get dimFrom():String {
+			return _dimFrom;
 		}
 
-		protected var _dimEnd:String;
-		public function set dimEnd(val:String):void	{
-			_dimEnd = val;
+		protected var _dimTo:String;
+		public function set dimTo(val:String):void	{
+			_dimTo = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
-		public function get dimEnd():String {
-			return _dimEnd;
+		public function get dimTo():String {
+			return _dimTo;
 		}
 		
 		public function SegmentElement()
