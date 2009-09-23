@@ -27,7 +27,6 @@
 package birdeye.vis.elements.geometry {
 
 	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.elements.Position;
 	import birdeye.vis.guides.renderers.IEdgeRenderer;
 	import birdeye.vis.guides.renderers.LineRenderer;
 	import birdeye.vis.interfaces.IEdgeElement;
@@ -35,6 +34,7 @@ package birdeye.vis.elements.geometry {
 	import birdeye.vis.interfaces.IPositionableElement;
 	
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
@@ -61,13 +61,13 @@ package birdeye.vis.elements.geometry {
 
 		private var _node:IPositionableElement;
 
-		public function set node(val:IPositionableElement):void {
+		public function set nodeElement(val:IPositionableElement):void {
 			_node = val;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
 		
-		public function get node():IPositionableElement {
+		public function get nodeElement():IPositionableElement {
 			return _node;
 		}
 
@@ -132,8 +132,8 @@ package birdeye.vis.elements.geometry {
 					const endItemId:Object = getItemFieldValue(item, _dimEnd);
 
 					if (_node.isItemVisible(startItemId)  &&  _node.isItemVisible(endItemId)) {
-						var start:Position = _node.getItemPosition(startItemId);
-						var end:Position = _node.getItemPosition(endItemId);
+						var start:Point = _node.getItemPosition(startItemId);
+						var end:Point = _node.getItemPosition(endItemId);
 /* 						var middle:Position = new Position((start.pos1 + end.pos1)/2, (start.pos2 + end.pos2)/2);
 						
 						var relativeStart:Position = new Position(start.pos1 - middle.pos1, start.pos2 - middle.pos2);
@@ -147,12 +147,12 @@ package birdeye.vis.elements.geometry {
 							var renderer:Object =  {itemRenderer: null,
 													graphicRenderer: [
 														createGraphicRenderer(
-															item, itemId, start.pos1, start.pos2, end.pos1, end.pos2
+															item, itemId, start.x, start.y, end.x, end.y
 														)
 													]};
 
 							createItemDisplayObject(
-								item, dataFields, Position.ZERO, itemId, renderer
+								item, dataFields, new Point(0,0), itemId, renderer
 //								  TextRenderer.createTextLabel(
 //								  (start.pos1 + end.pos1)/2, (start.pos2 + end.pos2)/2,
 //								  itemId + ": " + startItemId + "-" + endItemId, new SolidFill(0xffffff), 
@@ -178,7 +178,7 @@ package birdeye.vis.elements.geometry {
 				graphicsCollection.addItem(ttGG);
 			}
 			ggIndex++;
-			ttGG.target = chart.elementsContainer;
+			ttGG.target = visScene.elementsContainer;
 
 			if (mouseClickFunction!=null || mouseDoubleClickFunction!=null || mouseOverFunction != null)
 			{
