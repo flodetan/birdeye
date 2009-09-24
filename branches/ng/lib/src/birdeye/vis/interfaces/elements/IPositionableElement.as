@@ -24,17 +24,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
-package birdeye.vis.interfaces
+package birdeye.vis.interfaces.elements
 {
-	import com.degrafa.geometry.Geometry;
+	import birdeye.vis.interfaces.elements.IElement;
 	
-	import flash.geom.Rectangle;
+	import flash.geom.Point;
 	
-	public interface IRasterRenderer
-	{
-		/** Set the source of the raster to be used as renderer for a specific data item.*/
-		function set source(val:Object):void;
-		function get source():Object;
+	public interface IPositionableElement extends IElement {
+		
+		function getItemPosition(itemId:Object):Point;
+		
+		function isItemVisible(itemId:Object):Boolean;
+		
 	}
 }

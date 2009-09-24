@@ -30,7 +30,7 @@ package birdeye.vis.elements.collision
 	import birdeye.vis.VisScene;
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.geometry.*;
-	import birdeye.vis.interfaces.IStack;
+	import birdeye.vis.interfaces.elements.IStack;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;

@@ -29,11 +29,11 @@ package birdeye.vis.coords
 {
 	import birdeye.vis.VisScene;
 	import birdeye.vis.elements.geometry.*;
-	import birdeye.vis.interfaces.ICoordinates;
-	import birdeye.vis.interfaces.IEdgeElement;
-	import birdeye.vis.interfaces.IElement;
-	import birdeye.vis.interfaces.IGraphLayout;
-	import birdeye.vis.interfaces.IGraphLayoutableElement;
+	import birdeye.vis.interfaces.coords.ICoordinates;
+	import birdeye.vis.interfaces.elements.IEdgeElement;
+	import birdeye.vis.interfaces.elements.IElement;
+	import birdeye.vis.interfaces.elements.IGraphLayoutableElement;
+	import birdeye.vis.interfaces.transforms.IGraphLayout;
 	import birdeye.vis.trans.graphs.GraphLayout;
 	import birdeye.vis.trans.graphs.layout.ILayoutAlgorithm;
 	

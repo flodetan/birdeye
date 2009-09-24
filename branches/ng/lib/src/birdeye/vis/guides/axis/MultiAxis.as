@@ -2,7 +2,7 @@ package birdeye.vis.guides.axis
 {
 	import birdeye.vis.elements.events.ElementRollOutEvent;
 	import birdeye.vis.elements.events.ElementRollOverEvent;
-	import birdeye.vis.interfaces.ICoordinates;
+	import birdeye.vis.interfaces.coords.ICoordinates;
 	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.interfaces.scales.ISubScale;

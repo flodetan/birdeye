@@ -25,8 +25,10 @@
  * THE SOFTWARE.
  */
  
-package birdeye.vis.interfaces
+package birdeye.vis.interfaces.renderers
 {
+	import birdeye.vis.interfaces.IExportableSVG;
+	
 	import com.degrafa.IGeometry;
 	
 	import flash.geom.Rectangle;

@@ -25,7 +25,7 @@
  * THE SOFTWARE.
  */
  
-package birdeye.vis.interfaces
+package birdeye.vis.interfaces.elements
 {
 	public interface IStack extends IElement
 	{

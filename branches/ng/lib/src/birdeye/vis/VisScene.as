@@ -31,14 +31,13 @@
 	
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.guides.grid.Grid;
-	import birdeye.vis.interfaces.ICoordinates;
-	import birdeye.vis.interfaces.IElement;
-	import birdeye.vis.interfaces.IGraphLayout;
-	import birdeye.vis.interfaces.IProjection;
-	import birdeye.vis.interfaces.ITransform;
+	import birdeye.vis.interfaces.coords.ICoordinates;
+	import birdeye.vis.interfaces.elements.IElement;
 	import birdeye.vis.interfaces.guides.IGuide;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
+	import birdeye.vis.interfaces.transforms.IGraphLayout;
+	import birdeye.vis.interfaces.transforms.IProjection;
 	import birdeye.vis.interfaces.validation.IValidatingChild;
 	import birdeye.vis.interfaces.validation.IValidatingParent;
 	import birdeye.vis.interfaces.validation.IValidatingScale;
@@ -173,8 +172,8 @@
 		}
 		
 		private var _transforms:Array;
-        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.ITransform")]
-        [ArrayElementType("birdeye.vis.interfaces.ITransform")]
+        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.transforms.ITransform")]
+        [ArrayElementType("birdeye.vis.interfaces.transforms.ITransform")]
 		public function set transforms(val:Array):void
 		{
 			_transforms = val;
@@ -397,8 +396,8 @@
 		 * Each element can define its own scale (in case a cartesian or polar coords )
 		 * or layout (for Visual).
 		 * The data providers are calculated based on the group of element that share them.*/
-        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.IElement")]
-        [ArrayElementType("birdeye.vis.interfaces.IElement")]
+        [Inspectable(category="General", arrayType="birdeye.vis.interfaces.elements.IElement")]
+        [ArrayElementType("birdeye.vis.interfaces.elements.IElement")]
 		public function set elements(val:Array):void
 		{
 			_elements = val;

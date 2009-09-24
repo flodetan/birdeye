@@ -24,25 +24,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
-package birdeye.vis.interfaces
+
+package birdeye.vis.interfaces.elements
 {
-	import birdeye.vis.trans.graphs.visual.VisualGraph;
+	import birdeye.vis.interfaces.elements.IPositionableElement;
 	
-	import flash.geom.Point;
-	
-	public interface IGraphLayout extends ITransform
+	public interface IEdgeElement extends IElement
 	{
-		function get graphId():String;
 
-		function get visualGraph():VisualGraph;
-
-		function apply(width:Number, height:Number):void;
+		function get nodeElement():IPositionableElement;
 		
-		function isNodeItemVisible(itemId:Object):Boolean;
-
-		function getNodeItemPosition(itemId:Object):Point;
+		function set nodeElement(val:IPositionableElement):void;
 		
-		function resetLayout():void;
+		function get dimFrom():String;
+		
+		function get dimTo():String;
+		
+		function setEdgePosition(edgeId:String, x1:Number, y1:Number, x2:Number, y2:Number):void;
+
 	}
 }

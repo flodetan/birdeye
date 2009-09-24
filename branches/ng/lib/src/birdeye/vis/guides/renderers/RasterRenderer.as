@@ -27,8 +27,8 @@
  
 package birdeye.vis.guides.renderers
 {
-	import birdeye.vis.interfaces.IBoundedRenderer;
-	import birdeye.vis.interfaces.IRasterRenderer;
+	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
+	import birdeye.vis.interfaces.renderers.IRasterRenderer;
 	
 	import com.degrafa.geometry.RasterImage;
 	

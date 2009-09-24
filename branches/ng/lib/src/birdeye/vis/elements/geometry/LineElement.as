@@ -31,12 +31,11 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.guides.renderers.LineRenderer;
-	import birdeye.vis.interfaces.IBoundedRenderer;
+	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.GraphicPoint;
 	import com.degrafa.IGeometry;
-	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.splines.BezierSpline;
 	import com.degrafa.paint.SolidStroke;

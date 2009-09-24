@@ -29,16 +29,16 @@ package birdeye.vis.elements.geometry {
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.guides.renderers.IEdgeRenderer;
 	import birdeye.vis.guides.renderers.LineRenderer;
-	import birdeye.vis.interfaces.IEdgeElement;
 	import birdeye.vis.interfaces.IExportableSVG;
-	import birdeye.vis.interfaces.IPositionableElement;
+	import birdeye.vis.interfaces.elements.IEdgeElement;
+	import birdeye.vis.interfaces.elements.IPositionableElement;
 	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
-	public class EdgeElement extends SegmentElement implements IEdgeElement 
+	public class EdgeElement extends SegmentElement implements IEdgeElement
 	{
 		public function EdgeElement() {
 			super();

@@ -25,12 +25,29 @@
  * THE SOFTWARE.
  */
  
-package birdeye.vis.interfaces
+package birdeye.vis.interfaces.coords
 {
-	public interface IProjection extends ITransform
+	import birdeye.vis.interfaces.coords.IInteractive;
+	
+	import flash.events.IEventDispatcher;
+	import flash.geom.Point;
+	
+	public interface ICoordinates extends IInteractive, IEventDispatcher
 	{
-		function funcDim1(dataValue:*, min1:Number, max1:Number, size1:Number):Number;
-		function funcDim2(dataValue:*, min2:Number, max2:Number, size2:Number):Number;
-		function funcDim3(dataValue:*, min3:Number, max3:Number, size3:Number):Number;		
+		function set coordType(val:String):void;
+		function get coordType():String;
+
+		function set origin(val:Point):void;
+		function get origin():Point;
+
+		function set transforms(val:Array):void;
+
+		/** @Private
+		 * The maximum value among all elements stacked according to stacked100 type.
+		 * This is needed to "enlarge" the related axis to include all the stacked values
+		 * so that all stacked100 elements fit into the chart.*/
+		function get maxStacked100():Number;
+		
+		function get thicknessRatio():Number;
 	}
 }
