@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="20" height="30">
-	<mx:Image source="./assets/icons/raster.gif" width="100%" height="100%" horizontalAlign="right" verticalAlign="middle"/>
+<mx:Script>
+	<![CDATA[
+		[Bindable]
+		[Embed(source="/assets/icons/raster.gif")]
+	 	public var rasterImage:Class;
+	]]>
+</mx:Script>
+
+	<mx:Image source="{rasterImage}" width="100%" height="100%" horizontalAlign="right" verticalAlign="middle"/>
 	
 </mx:VBox>
