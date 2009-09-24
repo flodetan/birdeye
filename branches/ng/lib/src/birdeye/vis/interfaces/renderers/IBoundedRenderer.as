@@ -27,7 +27,7 @@
  
 package birdeye.vis.interfaces.renderers
 {
-	import birdeye.vis.interfaces.IExportableSVG;
+	import birdeye.vis.interfaces.data.IExportableSVG;
 	
 	import com.degrafa.IGeometry;
 	

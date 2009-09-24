@@ -27,7 +27,7 @@
  
 package birdeye.vis.guides.renderers
 {
-	import birdeye.vis.interfaces.IExportableSVG;
+	import birdeye.vis.interfaces.data.IExportableSVG;
 	
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.RasterText;

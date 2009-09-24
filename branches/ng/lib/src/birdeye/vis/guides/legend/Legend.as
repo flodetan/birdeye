@@ -30,7 +30,7 @@ package birdeye.vis.guides.legend
 	import birdeye.vis.VisScene;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
-	import birdeye.vis.interfaces.IExportableSVG;
+	import birdeye.vis.interfaces.data.IExportableSVG;
 	import birdeye.vis.interfaces.elements.IElement;
 	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
 	

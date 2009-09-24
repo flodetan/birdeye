@@ -29,8 +29,8 @@ package birdeye.vis.guides.axis
 {
 	import birdeye.vis.elements.events.ElementRollOutEvent;
 	import birdeye.vis.elements.events.ElementRollOverEvent;
-	import birdeye.vis.interfaces.IExportableSVG;
 	import birdeye.vis.interfaces.coords.ICoordinates;
+	import birdeye.vis.interfaces.data.IExportableSVG;
 	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;

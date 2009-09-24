@@ -29,7 +29,7 @@ package birdeye.vis.guides.legend
 {
 	import birdeye.vis.data.UtilSVG;
 	import birdeye.vis.guides.renderers.TextRenderer;
-	import birdeye.vis.interfaces.IExportableSVG;
+	import birdeye.vis.interfaces.data.IExportableSVG;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;

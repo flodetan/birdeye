@@ -31,7 +31,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.UpTriangleRenderer;
-	import birdeye.vis.interfaces.IExportableSVG;
+	import birdeye.vis.interfaces.data.IExportableSVG;
 	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.scales.*;

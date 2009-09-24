@@ -27,6 +27,7 @@
  
 package birdeye.vis.interfaces.transforms
 {
+	import birdeye.vis.trans.graphs.visual.IVisualNode;
 	import birdeye.vis.trans.graphs.visual.VisualGraph;
 	
 	import flash.geom.Point;
@@ -38,6 +39,8 @@ package birdeye.vis.interfaces.transforms
 		function get visualGraph():VisualGraph;
 
 		function apply(width:Number, height:Number):void;
+		
+		function set rootNode(vNode:IVisualNode):void;
 		
 		function isNodeItemVisible(itemId:Object):Boolean;
 

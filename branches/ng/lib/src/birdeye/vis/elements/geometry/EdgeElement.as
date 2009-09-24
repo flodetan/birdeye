@@ -29,7 +29,7 @@ package birdeye.vis.elements.geometry {
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.guides.renderers.IEdgeRenderer;
 	import birdeye.vis.guides.renderers.LineRenderer;
-	import birdeye.vis.interfaces.IExportableSVG;
+	import birdeye.vis.interfaces.data.IExportableSVG;
 	import birdeye.vis.interfaces.elements.IEdgeElement;
 	import birdeye.vis.interfaces.elements.IPositionableElement;
 	
