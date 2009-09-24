@@ -61,7 +61,8 @@
 		<polar:elements>
 			<elements:WedgeElement mouseOverFunction="EffectsUtil.setGlowEffect" 
 				mouseOutFunction="EffectsUtil.removeEffects" 
-				scale1="{a}" scale2="{l}" alpha=".6" 
+				scale1="{a}" scale2="{l}" alpha=".6"
+				labelField="region" 
 				radiusLabelOffset="5" 
 				colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" 
 				colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" 
