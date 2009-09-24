@@ -37,6 +37,7 @@ package birdeye.vis.elements
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.coords.ICoordinates;
+	import birdeye.vis.interfaces.data.IVisualDataID;
 	import birdeye.vis.interfaces.elements.IElement;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.INumerableScale;
@@ -1526,27 +1527,29 @@ package birdeye.vis.elements
 		{
 			var itemX:Number, itemY:Number;
 			draggedItem = e.target;
-			if (draggedItem is DataItemLayout)
+			if (draggedItem is IVisualDataID)
 			{
-				draggedItem as DataItemLayout;
-				isDraggingNow = true;
-				draggedItemPreviousTarget = draggedItem.target;
-				draggedItem.target = visScene.elementsContainer;
-			} 
-			
-			if (draggedItem is DisplayObject)
-			{
-				draggedItem as DisplayObject;
-				itemX = DisplayObject(draggedItem).x;
-				itemY = DisplayObject(draggedItem).y;
+				if (draggedItem is DataItemLayout)
+				{
+					draggedItem as DataItemLayout;
+					isDraggingNow = true;
+					draggedItemPreviousTarget = draggedItem.target;
+					draggedItem.target = visScene.elementsContainer;
+				} 
+				
+				if (draggedItem is DisplayObject)
+				{
+					draggedItem as DisplayObject;
+					itemX = DisplayObject(draggedItem).x;
+					itemY = DisplayObject(draggedItem).y;
+				}
+				
+		    	offsetX = e.stageX - itemX;
+		    	offsetY = e.stageY - itemY;
+				stage.addEventListener(MouseEvent.MOUSE_UP, stopDragging);
+		    	stage.addEventListener(MouseEvent.MOUSE_MOVE, dragDataItem);
+		    	dispatchEvent(new Event("DraggingStarted")); // TODO: create specific event 
 			}
-			
-	    	offsetX = e.stageX - itemX;
-	    	offsetY = e.stageY - itemY;
-			stage.addEventListener(MouseEvent.MOUSE_UP, stopDragging);
-	    	stage.addEventListener(MouseEvent.MOUSE_MOVE, dragDataItem);
-	    	visScene.elementsContainer.addEventListener(MouseEvent.MOUSE_OUT, stopDragging);
-	    	dispatchEvent(new Event("DraggingStarted")); // TODO: create specific event 
 		}
 		
 		/**
@@ -1574,7 +1577,6 @@ package birdeye.vis.elements
 	    	}
 	  		stage.removeEventListener(MouseEvent.MOUSE_UP, stopDragging);
 	    	stage.removeEventListener(MouseEvent.MOUSE_MOVE, dragDataItem)
-	    	visScene.elementsContainer.removeEventListener(MouseEvent.MOUSE_OUT, stopDragging);
 	    	dispatchEvent(new Event("DragComplete"));
 	    }
 	    
@@ -1630,11 +1632,11 @@ package birdeye.vis.elements
 			rollOverE.scale2 = scale2;
 			rollOverE.scale3 = scale3;
 			
-			if (extGG.currentItem)
+			if (extGG.data)
 			{
-				rollOverE.pos1 = extGG.currentItem[tmpDim1];
-				rollOverE.pos2 = extGG.currentItem[tmpDim2];
-				rollOverE.pos3 = extGG.currentItem[tmpDim3];
+				rollOverE.pos1 = extGG.data[tmpDim1];
+				rollOverE.pos2 = extGG.data[tmpDim2];
+				rollOverE.pos3 = extGG.data[tmpDim3];
 			}
 			
 			visScene.dispatchEvent(rollOverE);
@@ -1993,6 +1995,10 @@ package birdeye.vis.elements
 				itmDisplayObject.y = pos.y; 
 				addChild(itmDisplayObject);
 				_itemDisplayObjects[itemId] = itmDisplayObject;
+				if (mouseDoubleClickFunction != null)
+					DisplayObject(_itemDisplayObjects[itemId]).addEventListener(MouseEvent.DOUBLE_CLICK, onMouseDoubleClick);
+				if (mouseClickFunction != null)
+					DisplayObject(_itemDisplayObjects[itemId]).addEventListener(MouseEvent.CLICK, onMouseClick);
 			} else if (geometries)
 			{
 				createTTGG(currentItem, dataFields, NaN, NaN, NaN, NaN);
@@ -2002,6 +2008,9 @@ package birdeye.vis.elements
 		        ttGG.target = this;
 				_itemDisplayObjects[itemId] = ttGG;
 			}
+			
+			if (_itemDisplayObjects[itemId] is IVisualDataID && currentItem[nodeIdField])
+				IVisualDataID(_itemDisplayObjects[itemId]).visualObjectID = currentItem[nodeIdField];
 		}
 		
 		protected function getRendererWidth(item:Object = null):Number

@@ -34,6 +34,7 @@ package birdeye.vis.elements.geometry {
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
 	import birdeye.vis.interfaces.data.IExportableSVG;
+	import birdeye.vis.interfaces.data.IVisualDataID;
 	import birdeye.vis.interfaces.elements.IEdgeElement;
 	import birdeye.vis.interfaces.elements.IGraphLayoutableElement;
 	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
@@ -52,6 +53,7 @@ package birdeye.vis.elements.geometry {
 	import flash.geom.Rectangle;
 	
 	import mx.core.IDataRenderer;
+	import mx.core.IID;
 
 	public class NodeElement extends RenderableElement implements IGraphLayoutableElement {
 
@@ -172,18 +174,17 @@ package birdeye.vis.elements.geometry {
 
 	    override protected function dragDataItem(e:MouseEvent):void
 		{
-			super.dragDataItem(e);
-			var nodeID:String;
-			if (e.target is DataItemLayout)
-				nodeID = DataItemLayout(e.target).currentItem[nodeIdField];
-			else if (e.target is DisplayObject && e.target.id)
-				nodeID = e.target.id;
+			if (!(e.target is IVisualDataID)) return;
 
+			var nodeID:String = IVisualDataID(e.target).visualObjectID;
 			var vGraph:VisualGraph = _graphLayout.visualGraph;
 			var vNode:IVisualNode = vGraph.getVisualNodeById(nodeID);
-			
+
 			if (vNode)
 			{
+				super.dragDataItem(e);
+trace("ENTER", e.target.toString());
+				
 		    	vNode.x = e.stageX - offsetX + vNode.width/2;
 		    	vNode.y = e.stageY - offsetY + vNode.height/2;
 		    	var edges:Array = vNode.node.inEdges;
@@ -191,18 +192,18 @@ package birdeye.vis.elements.geometry {
 		    	if (vGraph.graph.isDirectional)
 		    		edges.concat(vNode.node.outEdges);
 				vGraph.redrawEdges(edges);
+		    	e.updateAfterEvent();
 			}
-	    	e.updateAfterEvent();
 		}
 		
 		override public function onMouseDoubleClick(e:MouseEvent):void
 		{
-			if (!(e.target is DataItemLayout)) return;
-			var gg:DataItemLayout = DataItemLayout(e.target);
-			var item:Object = gg.currentItem;
+			if (!(e.target is IVisualDataID)) return;
+			
+			var nodeID:String = IVisualDataID(e.target).visualObjectID;
 			
 			var vGraph:VisualGraph = _graphLayout.visualGraph;
-			var vNode:IVisualNode = vGraph.getVisualNodeById(item[nodeIdField]);
+			var vNode:IVisualNode = vGraph.getVisualNodeById(nodeID);
 			
 			mouseDoubleClickFunction(this, vNode);
 			VisScene(visScene).invalidateDisplayList();
@@ -215,9 +216,6 @@ package birdeye.vis.elements.geometry {
 				obj = itemRenderer.newInstance() as DisplayObject;
 				if (dataField  &&  obj is IDataRenderer) 
 					(obj as IDataRenderer).data = currentItem[dataField];
-
-				// for the moment 'name' works as ID
-				Object(obj).id = currentItem[nodeIdField];
 
 				addChild(obj as DisplayObject);
 				if (sizeRenderer > 0)
