@@ -4,7 +4,7 @@
 	xmlns:elements="birdeye.vis.elements.geometry.*"
 	xmlns:scales="birdeye.vis.scales.*"
 	creationComplete="createDT()"
-	width="150" height="150" horizontalAlign="center" verticalAlign="middle" >
+	horizontalAlign="center" verticalAlign="middle" >
 	
 <mx:Script>
 		<![CDATA[
@@ -59,7 +59,13 @@
 			<scales:PercentAngle id="a" size="360"/>
 		</polar:scales>
 		<polar:elements>
-			<elements:WedgeElement mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{a}" scale2="{l}" alpha=".6" radiusLabelOffset="5" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" extendMouseEvents="true" dim1="GDP" />
+			<elements:WedgeElement mouseOverFunction="EffectsUtil.setGlowEffect" 
+				mouseOutFunction="EffectsUtil.removeEffects" 
+				scale1="{a}" scale2="{l}" alpha=".6" 
+				radiusLabelOffset="5" 
+				colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" 
+				colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" 
+				extendMouseEvents="true" dim1="GDP" />
 		</polar:elements>
 	</polar:Polar>
 
