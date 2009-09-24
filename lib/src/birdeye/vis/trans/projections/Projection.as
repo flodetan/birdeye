@@ -28,8 +28,8 @@
 package birdeye.vis.trans.projections
 {
 	import birdeye.vis.data.Pair;
-	import birdeye.vis.interfaces.IProjection;
 	import birdeye.vis.interfaces.scales.IScale;
+	import birdeye.vis.interfaces.transforms.IProjection;
 	
 	//This class calculates latitude & longitude from x & y. And vice versa
 	public class Projection implements IProjection

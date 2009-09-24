@@ -33,7 +33,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.ArcPath;
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
-	import birdeye.vis.interfaces.IBoundedRenderer;
+	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
 	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.*;
 	

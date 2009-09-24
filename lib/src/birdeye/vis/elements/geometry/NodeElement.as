@@ -33,11 +33,11 @@ package birdeye.vis.elements.geometry {
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
-	import birdeye.vis.interfaces.IBoundedRenderer;
-	import birdeye.vis.interfaces.IEdgeElement;
 	import birdeye.vis.interfaces.IExportableSVG;
-	import birdeye.vis.interfaces.IGraphLayout;
-	import birdeye.vis.interfaces.IGraphLayoutableElement;
+	import birdeye.vis.interfaces.elements.IEdgeElement;
+	import birdeye.vis.interfaces.elements.IGraphLayoutableElement;
+	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
+	import birdeye.vis.interfaces.transforms.IGraphLayout;
 	import birdeye.vis.scales.*;
 	import birdeye.vis.trans.graphs.visual.IVisualNode;
 	import birdeye.vis.trans.graphs.visual.VisualGraph;

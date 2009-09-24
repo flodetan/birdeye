@@ -24,21 +24,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+ package birdeye.vis.interfaces.elements
+ {
+ 	import birdeye.vis.interfaces.elements.IEdgeElement;
+ 	import birdeye.vis.interfaces.transforms.IGraphLayout;
+ 	
 
-package birdeye.vis.interfaces
-{
-	public interface IEdgeElement extends IElement
-	{
+	public interface IGraphLayoutableElement extends IPositionableElement {
+		
+		function get nodeIdField():String;
 
-		function get nodeElement():IPositionableElement;
-		
-		function set nodeElement(val:IPositionableElement):void;
-		
-		function get dimFrom():String;
-		
-		function get dimTo():String;
-		
-		function setEdgePosition(edgeId:String, x1:Number, y1:Number, x2:Number, y2:Number):void;
+		function set graphLayout(layout:IGraphLayout):void;
 
+		function get graphLayout():IGraphLayout;
+
+		function get edgeElement():IEdgeElement;
 	}
 }

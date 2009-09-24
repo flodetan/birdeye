@@ -36,8 +36,8 @@ package birdeye.vis.elements
 	import birdeye.vis.elements.events.ElementRollOverEvent;
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
-	import birdeye.vis.interfaces.ICoordinates;
-	import birdeye.vis.interfaces.IElement;
+	import birdeye.vis.interfaces.coords.ICoordinates;
+	import birdeye.vis.interfaces.elements.IElement;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;

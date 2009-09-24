@@ -27,7 +27,7 @@
 
 package birdeye.vis.elements.events
 {
-	import birdeye.vis.interfaces.IElement;
+	import birdeye.vis.interfaces.elements.IElement;
 	
 	import flash.events.Event;
 	

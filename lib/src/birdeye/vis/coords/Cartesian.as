@@ -30,6 +30,8 @@ package birdeye.vis.coords
 	import birdeye.vis.VisScene;
 	import birdeye.vis.guides.axis.Axis;
 	import birdeye.vis.interfaces.*;
+	import birdeye.vis.interfaces.coords.ICoordinates;
+	import birdeye.vis.interfaces.elements.IElement;
 	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.interfaces.guides.IGuide;
 	import birdeye.vis.interfaces.scales.IScale;

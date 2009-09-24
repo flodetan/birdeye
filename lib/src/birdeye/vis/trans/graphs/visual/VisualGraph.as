@@ -29,8 +29,8 @@ package birdeye.vis.trans.graphs.visual
 {
 	import __AS3__.vec.Vector;
 	
-	import birdeye.vis.interfaces.IEdgeElement;
-	import birdeye.vis.interfaces.IGraphLayoutableElement;
+	import birdeye.vis.interfaces.elements.IEdgeElement;
+	import birdeye.vis.interfaces.elements.IGraphLayoutableElement;
 	import birdeye.vis.trans.graphs.data.IGraphDataProvider;
 	import birdeye.vis.trans.graphs.events.VGraphEvent;
 	import birdeye.vis.trans.graphs.layout.ILayoutAlgorithm;

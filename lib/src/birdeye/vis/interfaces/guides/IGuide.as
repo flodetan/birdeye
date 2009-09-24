@@ -1,6 +1,6 @@
 package birdeye.vis.interfaces.guides
 {
-	import birdeye.vis.interfaces.ICoordinates;
+	import birdeye.vis.interfaces.coords.ICoordinates;
 	
 	import flash.geom.Rectangle;
 	

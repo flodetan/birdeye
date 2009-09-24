@@ -26,7 +26,7 @@
  */
 
 
-package org.un.cava.birdeye.geovis.utils
+package birdeye.vis.aesthetics.color
 {
 	import mx.collections.ArrayCollection;
 	import mx.utils.ObjectUtil;

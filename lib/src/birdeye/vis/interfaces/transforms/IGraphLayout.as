@@ -25,10 +25,24 @@
  * THE SOFTWARE.
  */
  
-package birdeye.vis.interfaces
+package birdeye.vis.interfaces.transforms
 {
-	public interface ITransform
+	import birdeye.vis.trans.graphs.visual.VisualGraph;
+	
+	import flash.geom.Point;
+	
+	public interface IGraphLayout extends ITransform
 	{
-		// must be extended by specific interfaces (eg. IProjection, ILayout...) 
+		function get graphId():String;
+
+		function get visualGraph():VisualGraph;
+
+		function apply(width:Number, height:Number):void;
+		
+		function isNodeItemVisible(itemId:Object):Boolean;
+
+		function getNodeItemPosition(itemId:Object):Point;
+		
+		function resetLayout():void;
 	}
 }

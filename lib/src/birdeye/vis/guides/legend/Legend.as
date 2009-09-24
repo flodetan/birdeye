@@ -30,9 +30,9 @@ package birdeye.vis.guides.legend
 	import birdeye.vis.VisScene;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
-	import birdeye.vis.interfaces.IBoundedRenderer;
-	import birdeye.vis.interfaces.IElement;
 	import birdeye.vis.interfaces.IExportableSVG;
+	import birdeye.vis.interfaces.elements.IElement;
+	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;

@@ -24,16 +24,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- package birdeye.vis.interfaces {
+ 
+package birdeye.vis.interfaces.coords
+{
+	import com.degrafa.Surface;
+	
+	public interface IInteractive
+	{
+		function get customTooltTipFunction():Function;
+		function get showDataTips():Boolean;
+		function get showAllDataTips():Boolean;
+		function get dataTipFunction():Function;
+		function get dataTipPrefix():String;
 
-	public interface IGraphLayoutableElement extends IPositionableElement {
-		
-		function get nodeIdField():String;
-
-		function set graphLayout(layout:IGraphLayout):void;
-
-		function get graphLayout():IGraphLayout;
-
-		function get edgeElement():IEdgeElement;
+		function get elementsContainer():Surface;
 	}
 }

@@ -28,9 +28,9 @@
 package birdeye.vis.trans.graphs
 {
 	import birdeye.vis.elements.events.ElementDataItemsChangeEvent;
-	import birdeye.vis.interfaces.IEdgeElement;
-	import birdeye.vis.interfaces.IGraphLayout;
-	import birdeye.vis.interfaces.IGraphLayoutableElement;
+	import birdeye.vis.interfaces.elements.IEdgeElement;
+	import birdeye.vis.interfaces.elements.IGraphLayoutableElement;
+	import birdeye.vis.interfaces.transforms.IGraphLayout;
 	import birdeye.vis.trans.graphs.data.DataItemsGraphDataProvider;
 	import birdeye.vis.trans.graphs.layout.ILayoutAlgorithm;
 	import birdeye.vis.trans.graphs.visual.VisualGraph;

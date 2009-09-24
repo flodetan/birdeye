@@ -33,15 +33,13 @@ package birdeye.vis.coords
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.collision.StackElement;
-	import birdeye.vis.interfaces.ICoordinates;
-	import birdeye.vis.interfaces.IElement;
-	import birdeye.vis.interfaces.IStack;
+	import birdeye.vis.interfaces.elements.IElement;
+	import birdeye.vis.interfaces.elements.IStack;
 	import birdeye.vis.interfaces.guides.IGuide;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.interfaces.scales.ISubScale;
-	import birdeye.vis.interfaces.validation.IValidatingScale;
 	import birdeye.vis.scales.BaseScale;
 	
 	import flash.display.DisplayObject;

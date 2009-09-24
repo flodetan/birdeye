@@ -27,13 +27,13 @@
  
 package birdeye.vis.guides.renderers
 {
-	import birdeye.vis.interfaces.IBoundedRenderer;
+	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
 	
 	import com.degrafa.geometry.Path;
 	
 	import flash.geom.Rectangle;
 
-	public class RectangleRenderer extends Path implements IBoundedRenderer 
+	public class RectangleRenderer extends Path implements IBoundedRenderer
 	{
 		public function RectangleRenderer(bounds:Rectangle=null):void
 		{

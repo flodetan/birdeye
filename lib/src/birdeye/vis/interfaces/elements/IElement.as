@@ -25,8 +25,10 @@
  * THE SOFTWARE.
  */
  
-package birdeye.vis.interfaces
+package birdeye.vis.interfaces.elements
 {
+	import birdeye.vis.interfaces.coords.ICoordinates;
+	import birdeye.vis.interfaces.renderers.IRasterRenderer;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
 	

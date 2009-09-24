@@ -27,7 +27,7 @@
  
 package birdeye.vis.guides.renderers
 {
-	import birdeye.vis.interfaces.IBoundedRenderer;
+	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.geometry.Path;

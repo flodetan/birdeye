@@ -27,8 +27,8 @@
 
 package birdeye.vis.trans.graphs.data
 {
-	import birdeye.vis.interfaces.IEdgeElement;
-	import birdeye.vis.interfaces.IGraphLayoutableElement;
+	import birdeye.vis.interfaces.elements.IEdgeElement;
+	import birdeye.vis.interfaces.elements.IGraphLayoutableElement;
 	
 	public class DataItemsGraphDataProvider implements IGraphDataProvider
 	{

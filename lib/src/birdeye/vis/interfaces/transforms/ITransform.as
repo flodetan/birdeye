@@ -25,18 +25,10 @@
  * THE SOFTWARE.
  */
  
-package birdeye.vis.interfaces
+package birdeye.vis.interfaces.transforms
 {
-	import com.degrafa.Surface;
-	
-	public interface IInteractive
+	public interface ITransform
 	{
-		function get customTooltTipFunction():Function;
-		function get showDataTips():Boolean;
-		function get showAllDataTips():Boolean;
-		function get dataTipFunction():Function;
-		function get dataTipPrefix():String;
-
-		function get elementsContainer():Surface;
+		// must be extended by specific interfaces (eg. IProjection, ILayout...) 
 	}
 }

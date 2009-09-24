@@ -27,7 +27,7 @@
  
 package birdeye.vis.guides.grid
 {
-	import birdeye.vis.interfaces.ICoordinates;
+	import birdeye.vis.interfaces.coords.ICoordinates;
 	import birdeye.vis.interfaces.guides.IGuide;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
