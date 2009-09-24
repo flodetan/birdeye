@@ -5,51 +5,135 @@
 	xmlns:elements="birdeye.vis.elements.geometry.*"
 	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:graphs="birdeye.vis.trans.graphs.*"
-	xmlns:util="util.*"
-	xmlns:sources="birdeye.vis.source.csv.*"
-	xmlns:data="birdeye.vis.data.*"
-	width="100%" height="100%"
-	horizontalAlign="center" verticalAlign="middle"
+	xmlns:util="util.*" creationComplete="generateTree()"
 	backgroundColor="#3f3f3f">
 
-	<mx:Script>
-		<![CDATA[			
-		
-		import birdeye.vis.trans.graphs.layout.ILayoutAlgorithm;
-		
-		[Bindable]
-		public var layouter:ILayoutAlgorithm;
-
-		]]>
-	</mx:Script>
+	<mx:HBox horizontalAlign="center" width="100%">
+		<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([graph.svgData], parentApplication.width, parentApplication.height))"/>
+		<mx:Button label="Generate tree" click="generateTree()"/>
+		<mx:CheckBox id="animate" label="animate" selected="{graphLayout.animate}" />
+	</mx:HBox>
 	
-	<sources:CSVTXT id="csvNodes" fieldSeperator=";" url="data/simpleNodeList.csv">
-		<sources:dataProviders>
-			<data:DataSet id="nodeList" fields="{['nodeId','nodeName']}"/>
-		</sources:dataProviders>
-	</sources:CSVTXT>
-	<sources:CSVTXT id="csvEdges" fieldSeperator=";" url="data/simpleEdgeList.csv">
-		<sources:dataProviders>
-			<data:DataSet id="edgeList" fields="{['edgeId','fromId','toId']}"/>
-		</sources:dataProviders>
-	</sources:CSVTXT>
-
-	<coords:Cartesian id="graph" width="100%" height="100%" showDataTips="true">
-			<coords:elements>
-				<elements:EdgeElement id="edge" dataProvider="{edgeList.dataProvider}" dimStart="fromId" dimEnd="toId" node="{node}" 
-									  colorFill="0xFF0000" colorStroke="0x999999" strokeWeight="2" />
-				<elements:NodeElement id="node" dataProvider="{nodeList.dataProvider}" itemIdField="nodeId" dimName="nodeName"  
-									sizeRenderer="25" itemRenderer="views.graphs.nodeRenderers.SimpleNode" />
-			</coords:elements>
+	<mx:VBox horizontalAlign="center" width="100%" height="100%">
+		<coords:Abstract id="graph" width="100%" height="100%" showDataTips="true">
 			<coords:transforms>
 				<graphs:GraphLayout
-						startNodeId="n1"
+						rootNodeId="2"
 						id="graphLayout"
 						layouter="{layouter}"
-						applyToNode="{node}" applyToEdge="{edge}"
-						animate="true"
-						useIntegerPositions="true"
+						animate="{animate.selected}"
 					/>
 			</coords:transforms>
-	</coords:Cartesian>
+			<coords:elements>
+				<elements:NodeElement id="node" nodeIdField="id" dimName="name" dataProvider="{nodes}"
+									  edgeElement="{edge}" mouseDoubleClickFunction="EventsUtil.setNodeAsRoot"
+									  graphLayout="{graphLayout}"
+									  dataField="newChart" graphicRendererSize="40" />
+				<elements:EdgeElement id="edge" dimFrom="start" dimTo="end" dataProvider="{edges}" mouseClickFunction="clickF"
+									  colorStroke="0x999999" strokeWeight="2" />
+									  
+			</coords:elements>
+		</coords:Abstract>
+	</mx:VBox>
+
+	
+	<mx:Script>
+	<![CDATA[
+		import birdeye.vis.trans.graphs.util.EventsUtil;
+		import birdeye.vis.data.UtilSVG;
+		import mx.controls.Alert;
+		import birdeye.vis.data.DataItemLayout;
+		import birdeye.vis.trans.graphs.layout.ILayoutAlgorithm;
+		[Bindable]
+		public var nodes:ArrayCollection;
+		[Bindable]
+		public var edges:ArrayCollection;
+	
+		[Bindable]
+		public var layouter:ILayoutAlgorithm;
+		
+		import mx.collections.ArrayCollection;
+		
+		private function traverse(node:int, adjMatrix:Array, reachableNodes:Array):void {
+			reachableNodes[node] = true;
+			const numNodes:int = adjMatrix.length;
+			for (var i:int = 0; i < numNodes; i++) {
+				if (adjMatrix[node][i]  ||  adjMatrix[i][node]) {
+					if (!reachableNodes[i]) {
+						traverse(i, adjMatrix, reachableNodes);
+					}
+				}
+			}
+		}
+
+		private var subjects:Array = ["medals"];
+		private var lbl:String;
+
+		private var tree_maxLevel:int = 2;
+		private var tree_minChildren:int = 1;
+		private var tree_maxChildren:int = 3;
+		private var tree_maxId:int = 1000;
+	
+		public function generateTree():void {
+			lastId = 1;
+	
+			const nodeSet:ArrayCollection = new ArrayCollection();
+			const edgeSet:ArrayCollection = new ArrayCollection();
+			
+			nodeSet.addItem({
+				id: lastId,
+				name: lbl = lastId + ". " + randomName() + " ",
+				newChart: 
+						{subjects: subjects, 
+						values: [Math.random() * 1000, Math.random() * 100, Math.random() * 1000], 
+						country: lbl}
+			});
+			generateSubtree(nodeSet, edgeSet, lastId, 1);
+			
+			edges = edgeSet;
+			nodes = nodeSet;
+		}
+	
+		private var lastId:int;
+		private function generateSubtree(nodeSet:ArrayCollection, edgeSet:ArrayCollection, parentId:int, level:int):void {
+			if (level > tree_maxLevel) return;
+			if (lastId >= tree_maxId) return;
+	
+			const numNodes:int = Math.round(Math.random() * (tree_maxChildren - tree_minChildren)) + tree_minChildren; 
+			for (var i:int = 0; i < numNodes; i++) {
+				var id:int = ++lastId; 
+				nodeSet.addItem({
+					id: id,
+					name: lbl = id + ". " + randomName() + " ",
+					newChart: 
+							{subjects: subjects, 
+							values: [Math.random() * 1000, Math.random() * 100, Math.random() * 1000], 
+							country: lbl}
+				});
+				edgeSet.addItem({
+					start: parentId,
+					end: id
+				});
+				generateSubtree(nodeSet, edgeSet, id, level + 1);
+			}
+		}
+	
+		private function randomName():String {
+			var name:String = "";
+			for (var i:int = 0; i < 5; i++) {
+				name += String.fromCharCode('A'.charCodeAt(0) + int(Math.random() * 26)); 
+			}
+			return name;
+		}
+		
+		private function clickF(data:DataItemLayout):void
+		{
+			var text:String = "Info:";
+			for each (var field:String in data.dataFields)
+				text += "\n" + field + ": " + data.currentItem[field];
+			Alert.show(text);
+		}
+	]]>
+	</mx:Script>
+
 </mx:VBox>
