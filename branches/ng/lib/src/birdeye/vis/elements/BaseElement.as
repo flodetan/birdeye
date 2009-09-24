@@ -1632,11 +1632,11 @@ package birdeye.vis.elements
 			rollOverE.scale2 = scale2;
 			rollOverE.scale3 = scale3;
 			
-			if (extGG.data)
+			if (extGG.currentItem)
 			{
-				rollOverE.pos1 = extGG.data[tmpDim1];
-				rollOverE.pos2 = extGG.data[tmpDim2];
-				rollOverE.pos3 = extGG.data[tmpDim3];
+				rollOverE.pos1 = extGG.currentItem[tmpDim1];
+				rollOverE.pos2 = extGG.currentItem[tmpDim2];
+				rollOverE.pos3 = extGG.currentItem[tmpDim3];
 			}
 			
 			visScene.dispatchEvent(rollOverE);
