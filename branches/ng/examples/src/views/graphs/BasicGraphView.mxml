@@ -225,7 +225,7 @@
 		{
 			var text:String = "Info:";
 			for each (var field:String in data.dataFields)
-				text += "\n" + field + ": " + data.currentItem[field];
+				text += "\n" + field + ": " + data.data[field];
 			Alert.show(text);
 		}
 	]]>

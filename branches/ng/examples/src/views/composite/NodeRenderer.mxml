@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100" height="100"
-	xmlns:series="birdeye.vis.elements.geometry.*" implements="birdeye.vis.interfaces.data.IExportableSVG"
-	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:series="birdeye.vis.elements.geometry.*" implements="birdeye.vis.interfaces.data.IExportableSVG, birdeye.vis.interfaces.data.IVisualDataID"
+	xmlns:scales="birdeye.vis.scales.*" 
+	toolTip="Click to drag, Double click to set as root"
 	xmlns:legend="birdeye.vis.guides.legend.*"
 	xmlns:grid="birdeye.vis.guides.grid.*"
-	backgroundAlpha="0" 
+	backgroundAlpha="0" buttonMode="true"
 	verticalScrollPolicy="off"
 	horizontalScrollPolicy="off"
 	creationComplete="//createDT()"
@@ -15,6 +16,18 @@
 			import mx.collections.ArrayCollection;
 			import birdeye.vis.elements.util.EffectsUtil;
 						
+			[Bindable]
+			private var _visualObjectID:String;
+			/** Identify this data item among the element ones.*/
+			public function set visualObjectID(val:String):void
+			{
+				_visualObjectID = val;
+			}
+			public function get visualObjectID():String
+			{
+				return _visualObjectID;
+			}
+	
 			public function get svgData():String
 			{
 				return sp.svgData;
