@@ -33,7 +33,7 @@ package birdeye.vis.elements.geometry {
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
-	import birdeye.vis.interfaces.IExportableSVG;
+	import birdeye.vis.interfaces.data.IExportableSVG;
 	import birdeye.vis.interfaces.elements.IEdgeElement;
 	import birdeye.vis.interfaces.elements.IGraphLayoutableElement;
 	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
@@ -204,7 +204,7 @@ package birdeye.vis.elements.geometry {
 			var vGraph:VisualGraph = _graphLayout.visualGraph;
 			var vNode:IVisualNode = vGraph.getVisualNodeById(item[nodeIdField]);
 			
-			mouseDoubleClickFunction(vGraph, vNode);
+			mouseDoubleClickFunction(this, vNode);
 			VisScene(visScene).invalidateDisplayList();
 		}
 		

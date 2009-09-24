@@ -31,7 +31,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
-	import birdeye.vis.interfaces.IExportableSVG;
+	import birdeye.vis.interfaces.data.IExportableSVG;
 	import birdeye.vis.interfaces.elements.IPositionableElement;
 	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;

@@ -33,6 +33,7 @@ package birdeye.vis.trans.graphs
 	import birdeye.vis.interfaces.transforms.IGraphLayout;
 	import birdeye.vis.trans.graphs.data.DataItemsGraphDataProvider;
 	import birdeye.vis.trans.graphs.layout.ILayoutAlgorithm;
+	import birdeye.vis.trans.graphs.visual.IVisualNode;
 	import birdeye.vis.trans.graphs.visual.VisualGraph;
 	
 	import flash.geom.Point;
@@ -79,6 +80,12 @@ package birdeye.vis.trans.graphs
 
 		public function get visualGraph():VisualGraph {
 			return _visualGraph;
+		}
+		
+		public function set rootNode(val:IVisualNode):void
+		{
+			if (visualGraph)
+				visualGraph.currentRootVNode = val;
 		}
 		 
 		public function get layouter():ILayoutAlgorithm {

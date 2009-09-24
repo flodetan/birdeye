@@ -25,7 +25,7 @@
  * THE SOFTWARE.
  */
  
-package birdeye.vis.interfaces
+package birdeye.vis.interfaces.data
 {
 	/**
 	 * This interface defines the necessary setter </br>

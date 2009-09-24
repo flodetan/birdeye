@@ -27,14 +27,17 @@
  
 package birdeye.vis.trans.graphs.util
 {
+	import birdeye.vis.interfaces.elements.IGraphLayoutableElement;
+	import birdeye.vis.interfaces.transforms.IGraphLayout;
 	import birdeye.vis.trans.graphs.visual.IVisualNode;
 	import birdeye.vis.trans.graphs.visual.VisualGraph;
 	
 	public class EventsUtil
 	{
-		public static function setNodeAsRoot(vGraph:VisualGraph, vNode:IVisualNode):void
+		public static function setNodeAsRoot(nodeElement:IGraphLayoutableElement, vNode:IVisualNode):void
 		{
-			vGraph.currentRootVNode = vNode;
+			var graph:IGraphLayout = nodeElement.graphLayout;
+			graph.rootNode = vNode;
 		}
 		
 		public static function setSubTreeAsMainGraph(vGraph:VisualGraph, vNode:IVisualNode):void
