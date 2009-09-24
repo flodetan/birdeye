@@ -65,9 +65,15 @@
 			private var csv:CSV;
 			private function init():void
 			{
-				csv = new CSV(new URLRequest('./views/facets/barley.csv'));
+				csv = new CSV(new URLRequest('http://birdeye.googlecode.com/svn/branches/ng/examples/src/views/facets/barley.csv'));
 				csv.fieldSeperator = ';';
 				csv.addEventListener(Event.COMPLETE, completeHandler);
+				csv.addEventListener(ProgressEvent.PROGRESS, whileLoading);
+			}
+			
+			private function whileLoading(e:ProgressEvent):void
+			{
+trace (e.bytesLoaded + "\n")
 			}
 			// Sample data fields: continent	Sum of gdp_total	Sum of population	Sum of total_area
 
