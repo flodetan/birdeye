@@ -61,9 +61,9 @@
 
 			private function clickF(item:DataItemLayout):void
 			{
-				var tt:String =  item.currentItem.country;
-				tt += "\n Center: " + item.currentItem.center;
-				tt += "\n Random data: " + item.currentItem.random;
+				var tt:String =  item.data.country;
+				tt += "\n Center: " + item.data.center;
+				tt += "\n Random data: " + item.data.random;
 				Alert.show(tt);
 			}
 
