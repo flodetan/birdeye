@@ -210,18 +210,23 @@ package birdeye.vis.elements.geometry {
 		
 		protected function createItemRenderer(currentItem:Object, position:Point):DisplayObject
 		{
-			var obj:Object = null;
+			var obj:DisplayObject;
 			if (itemRenderer != null) {
-				obj = itemRenderer.newInstance();
+				obj = itemRenderer.newInstance() as DisplayObject;
 				if (dataField  &&  obj is IDataRenderer) 
 					(obj as IDataRenderer).data = currentItem[dataField];
 
 				// for the moment 'name' works as ID
-				obj.id = currentItem[nodeIdField];
+				Object(obj).id = currentItem[nodeIdField];
 
 				addChild(obj as DisplayObject);
-				if (sizeRenderer > 0) {
+				if (sizeRenderer > 0)
 					obj.width = obj.height = sizeRenderer;
+				else {
+					if (rendererWidth > 0) 
+						obj.width = rendererWidth ;
+					if (rendererHeight > 0) 
+						obj.height = rendererHeight;
 				}
 					
 				obj.x = position.x;
@@ -230,7 +235,7 @@ package birdeye.vis.elements.geometry {
 				if (draggableItems)
 					obj.addEventListener(MouseEvent.MOUSE_DOWN, super.startDragging);
 			}
-			return obj as DisplayObject;
+			return obj;
 		}
 
 		protected function createGraphicRenderer(currentItem:Object, position:Point):IGeometry {
