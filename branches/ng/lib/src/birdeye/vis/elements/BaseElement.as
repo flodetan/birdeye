@@ -1654,8 +1654,6 @@ package birdeye.vis.elements
 		{ 
 			var extGG:DataItemLayout = 	DataItemLayout(e.target);
 
-			if (isDraggingNow) return;
-
 			if (visScene.showDataTips)
 			{
 				extGG.hideToolTip();
@@ -1665,6 +1663,8 @@ package birdeye.vis.elements
 				toolTip = null;
 			}
 			
+			if (isDraggingNow) return;
+
 			var rolloutE:ElementRollOutEvent = new ElementRollOutEvent(ElementRollOutEvent.ELEMENT_ROLL_OUT);
 			
 			visScene.dispatchEvent(rolloutE);
