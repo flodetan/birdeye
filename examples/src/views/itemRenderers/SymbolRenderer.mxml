@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" implements="birdeye.vis.interfaces.IExportableSVG"
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" implements="birdeye.vis.interfaces.data.IExportableSVG"
 	xmlns:series="birdeye.vis.elements.geometry.*"
 	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"

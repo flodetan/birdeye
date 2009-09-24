@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100" height="100"
-	xmlns:series="birdeye.vis.elements.geometry.*" implements="birdeye.vis.interfaces.IExportableSVG"
+	xmlns:series="birdeye.vis.elements.geometry.*" implements="birdeye.vis.interfaces.data.IExportableSVG"
 	xmlns:scales="birdeye.vis.scales.*"
 	xmlns:legend="birdeye.vis.guides.legend.*"
 	xmlns:grid="birdeye.vis.guides.grid.*"
