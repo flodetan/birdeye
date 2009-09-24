@@ -3,6 +3,15 @@
 <mx:Script>
 	<![CDATA[
 		import mx.controls.SWFLoader;
+
+		[Bindable]
+		[Embed(source="/assets/icons/raster.gif")]
+	 	public var rasterImage:Class;
+
+		[Bindable]
+		[Embed(source="/assets/icons/logo.png")]
+	 	public var logoImage:Class;
+
 		override public function set data(value:Object):void
 		{
 			super.data = value;
@@ -10,9 +19,9 @@
 			img.percentWidth = img.percentHeight = 100;
 			addChild(img)
 			if (value == "cat1")
-				img.source = "./assets/icons/logo.png"; 
+				img.source = logoImage; 
 			else 
-				img.source="./assets/icons/raster.gif" 
+				img.source = rasterImage 
 		} 
 	]]>
 </mx:Script>
