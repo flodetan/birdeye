@@ -28,6 +28,7 @@
 package birdeye.vis.data
 {
 	import birdeye.vis.elements.BaseElement;
+	import birdeye.vis.interfaces.data.IVisualDataID;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
@@ -47,7 +48,7 @@ package birdeye.vis.data
 	 * If no function is defined for the tooltips, than the dataField value is taken for their content.
 	 * This class allows creating and positioning the graphics associated with the tooltips.
 	*/
-	public class DataItemLayout extends GeometryGroup
+	public class DataItemLayout extends GeometryGroup implements IVisualDataID
 	{
 		public var toolTip:String;
 		public var posX:Number;
@@ -115,6 +116,17 @@ package birdeye.vis.data
 		public function get yTTOffset():Number
 		{
 			return _yTTOffset;
+		}
+		
+		private var _visualObjectID:String;
+		/** Identify this data item among the element ones.*/
+		public function set visualObjectID(val:String):void
+		{
+			_visualObjectID = val;
+		}
+		public function get visualObjectID():String
+		{
+			return _visualObjectID;
 		}
 
 		private var _currentItem:Object;
