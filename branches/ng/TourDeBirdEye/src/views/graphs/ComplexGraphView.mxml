@@ -25,13 +25,12 @@
 					/>
 			</coords:transforms>
 			<coords:elements>
-				<elements:NodeElement id="node" nodeIdField="id" dimName="name" dataProvider="{nodes}"
-									  edgeElement="{edge}" 
-									  graphLayout="{graphLayout}"
-									  dataField="newChart" rendererWidth="300" rendererHeight="300" itemRenderer="views.graphs.nodeRenderers.ComplexNode"/>
 				<elements:EdgeElement id="edge" dimFrom="start" dimTo="end" dataProvider="{edges}" mouseClickFunction="clickF"
 									  colorStroke="0x999999" strokeWeight="2" />
-									  
+				<elements:NodeElement id="node" nodeIdField="id" dimName="name" dataProvider="{nodes}"
+									  edgeElement="{edge}" mouseDoubleClickFunction="EventsUtil.setNodeAsRoot"
+									  graphLayout="{graphLayout}"
+									  dataField="newChart" rendererWidth="100" rendererHeight="100" itemRenderer="views.graphs.nodeRenderers.ComplexNode"/>
 			</coords:elements>
 		</coords:Abstract>
 	</mx:VBox>
@@ -39,6 +38,7 @@
 	
 	<mx:Script>
 	<![CDATA[
+		import birdeye.vis.trans.graphs.util.EventsUtil;
 		import birdeye.vis.data.UtilSVG;
 		import mx.controls.Alert;
 		import birdeye.vis.data.DataItemLayout;
@@ -129,7 +129,7 @@
 		{
 			var text:String = "Info:";
 			for each (var field:String in data.dataFields)
-				text += "\n" + field + ": " + data.currentItem[field];
+				text += "\n" + field + ": " + data.data[field];
 			Alert.show(text);
 		}
 	]]>

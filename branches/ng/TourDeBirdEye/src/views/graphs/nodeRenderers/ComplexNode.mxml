@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:polar="birdeye.vis.coords.*"
-	xmlns:elements="birdeye.vis.elements.geometry.*"
-	xmlns:scales="birdeye.vis.scales.*"
-	creationComplete="createDT()"
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" 
+	toolTip="Click to drag, Double click to set as root"
+	xmlns:polar="birdeye.vis.coords.*" borderThickness="10"
+	xmlns:elements="birdeye.vis.elements.geometry.*" title="{_visualObjectID}"
+	xmlns:scales="birdeye.vis.scales.*" headerHeight="10" fontSize="7" textAlign="center"
+	implements="birdeye.vis.interfaces.data.IVisualDataID"
+	creationComplete="createDT()" buttonMode="true"
 	horizontalAlign="center" verticalAlign="middle" >
 	
 <mx:Script>
 		<![CDATA[
+			import birdeye.vis.interfaces.data.IVisualDataID;
 			import mx.collections.ArrayCollection;
 			import birdeye.vis.elements.util.EffectsUtil;
 			
@@ -16,6 +19,19 @@
 
 			[Bindable]
 			public var dt1:ArrayCollection;;
+
+			[Bindable]
+			private var _visualObjectID:String;
+			/** Identify this data item among the element ones.*/
+			public function set visualObjectID(val:String):void
+			{
+				_visualObjectID = val;
+			}
+			public function get visualObjectID():String
+			{
+				return _visualObjectID;
+			}
+	
 
 			private var subject:Array;
 			
@@ -53,7 +69,7 @@
 		]]>
 	</mx:Script>
 
-	<polar:Polar dataProvider="{dt}" width="100%" height="100%" thicknessRatio=".3" dataTipFunction="dtFunc">
+	<polar:Polar dataProvider="{dt}" width="100%" height="100%" dataTipFunction="dtFunc" buttonMode="false">
 		<polar:scales>
 			<scales:Numeric id="l" scaleType="constant" />
 			<scales:PercentAngle id="a" size="360"/>
@@ -70,4 +86,4 @@
 		</polar:elements>
 	</polar:Polar>
 
-</mx:Box>
+</mx:Panel>
