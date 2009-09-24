@@ -921,6 +921,7 @@ package birdeye.vis.elements
 
 		private var _draggableItems:Boolean = false;
 		/** If set to true, than data items can be dragged. */
+		[Inspectable(enumeration="true,false")]
 		public function set draggableItems(val:Boolean):void
 		{
 			_draggableItems = val;
