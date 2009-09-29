@@ -121,8 +121,8 @@ package birdeye.vis.trans.graphs.layout
 			 * BaseLayouter */
 			super.currentDrawing = _currentDrawing;
 			
-			_currentDrawing.originOffset = _vgraph.origin;
-			_currentDrawing.centerOffset = _vgraph.center;
+			_currentDrawing.originOffset = _graphLayout.origin;
+			_currentDrawing.centerOffset = _graphLayout.center;
 			_currentDrawing.centeredLayout = true;
 			//LogUtil.debug(_LOG, "New Drawing with origin:"+_currentDrawing.originOffset.toString());
 		}
@@ -167,12 +167,12 @@ package birdeye.vis.trans.graphs.layout
 	
 			//LogUtil.debug(_LOG, "layoutPass called");
 			
-			if(!_vgraph) {
+			if(!_graphLayout) {
 				LogUtil.warn(_LOG, "No Vgraph set in ConcentricRadialLayouter, aborting");
 				return false;
 			}
 			
-			if(!_vgraph.currentRootVNode) {
+			if(!_graphLayout.currentRootVNode) {
 				LogUtil.warn(_LOG, "This Layouter always requires a root node!");
 				return false;
 			}
@@ -186,10 +186,10 @@ package birdeye.vis.trans.graphs.layout
 				
 			/* establish the current root, if it has 
 			 * changed we need to reinit the drawing */
-			if(_root != _vgraph.currentRootVNode.node) {
+			if(_root != _graphLayout.currentRootVNode.node) {
 				/* don't forget to save the root here */
 				_previousRoot = _root;
-				_root = _vgraph.currentRootVNode.node;
+				_root = _graphLayout.currentRootVNode.node;
 				_layoutChanged = true;
 			}
 			
@@ -270,7 +270,7 @@ package birdeye.vis.trans.graphs.layout
 		 * */
 		private function autoFit():void {
 			var r:Number;
-			r = Math.min(_vgraph.width, _vgraph.height) / 2.0;
+			r = Math.min(_graphLayout.width, _graphLayout.height) / 2.0;
 			
 			if(_maxDepth > 0) {
 				_radiusInc = (r - (2 *DEFAULT_MARGIN)) / _maxDepth;

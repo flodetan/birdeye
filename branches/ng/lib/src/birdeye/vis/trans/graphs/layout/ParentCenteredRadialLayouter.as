@@ -99,12 +99,12 @@ package birdeye.vis.trans.graphs.layout
 			
 			//LogUtil.info(_LOG, "layoutPass called");
 			
-			if(!_vgraph) {
+			if(!_graphLayout) {
 				LogUtil.warn(_LOG, "No Vgraph set in PCRLayouter, aborting");
 				return false;
 			}
 			
-			if(!_vgraph.currentRootVNode) {
+			if(!_graphLayout.currentRootVNode) {
 				LogUtil.warn(_LOG, "This Layouter always requires a root node!");
 				return false;
 			}
@@ -120,8 +120,8 @@ package birdeye.vis.trans.graphs.layout
 			
 			/* establish the current root, if it has 
 			 * changed we need to reinit the model */
-			if(_root != _vgraph.currentRootVNode.node) {
-				_root = _vgraph.currentRootVNode.node;
+			if(_root != _graphLayout.currentRootVNode.node) {
+				_root = _graphLayout.currentRootVNode.node;
 				_layoutChanged = true;
 			}
 			
@@ -219,8 +219,8 @@ package birdeye.vis.trans.graphs.layout
 			/* set in super class */
 			super.currentDrawing = _currentDrawing;
 			
-			_currentDrawing.originOffset = _vgraph.origin;
-			_currentDrawing.centerOffset = _vgraph.center;
+			_currentDrawing.originOffset = _graphLayout.origin;
+			_currentDrawing.centerOffset = _graphLayout.center;
 			_currentDrawing.centeredLayout = true;
 			(_currentDrawing as ParentCenteredDrawingModel).phi = _phi;
 			(_currentDrawing as ParentCenteredDrawingModel).rootR = _rootR;
@@ -595,14 +595,14 @@ package birdeye.vis.trans.graphs.layout
 			
 			maxlen = 0;
 			currentRootR = _currentDrawing.rootR;
-			for each(vn in _vgraph.nodes) {	
+			for each(vn in _graphLayout.nodes) {	
 				if (vn.visible) {
 					len = _currentDrawing.getRelCartCoordinates(vn.node).length;
 					maxlen = Math.max(maxlen,len);
 				}
 			}
 			
-			lenlimit = (Math.min(_vgraph.width,_vgraph.height) - DEFAULT_MARGIN) / 2;
+			lenlimit = (Math.min(_graphLayout.width,_graphLayout.height) - DEFAULT_MARGIN) / 2;
 			
 			_rootR = currentRootR * (lenlimit / maxlen);
 			

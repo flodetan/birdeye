@@ -191,7 +191,7 @@
 			var k:int;
 			
 			var totalNodes:int = 0;
-  			for each(vn in _vgraph.nodes) {
+  			for each(vn in _graphLayout.nodes) {
   				if (vn.visible) totalNodes++;
   			}
 
@@ -201,7 +201,7 @@
 				//LogUtil.debug(_LOG, "Resetting node indexes...");
 				_nodeIndex = new Array(totalNodes);
 				k = 0;
-      			for each(vn in _vgraph.nodes) {
+      			for each(vn in _graphLayout.nodes) {
       				if (vn.visible) {
 						_nodeIndex[k] = vn;
 						++k;
@@ -332,7 +332,7 @@
 			
 			for (k = 0; k < _nodeIndex.length; k++) {
  				// Use Projector to map Complex Points to 2D display
-				newNodePos = _projector.project(_nodePositions[k] as IPoint, _vgraph);
+				newNodePos = _projector.project(_nodePositions[k] as IPoint, _graphLayout);
 				// DEBUG - CHECK:
 				if (isNaN(newNodePos.x)) {
 					trace ("HyperbolicLayout: Projected position for " + (_nodeIndex[k] as VisualNode).node.id + " = " + newNodePos);
@@ -364,7 +364,7 @@
 				// UnProject all nodes from 2D display to Complex Points
 				oldNodePos.x = (_nodeIndex[k] as IVisualNode).x;
 				oldNodePos.y = (_nodeIndex[k] as IVisualNode).y;
-				if ((_nodeIndex[k] as IVisualNode) != _vgraph.currentRootVNode) {
+				if ((_nodeIndex[k] as IVisualNode) != _graphLayout.currentRootVNode) {
 					// Start from Random positions for newly added nodes
 					temp = new ComplexNumber();
 					translateRandomly(temp, 1.5, 2.5);
@@ -382,7 +382,7 @@
 				// UnProject all nodes from 2D display to Complex Points
 				oldNodePos.x = (_nodeIndex[k] as IVisualNode).x;
 				oldNodePos.y = (_nodeIndex[k] as IVisualNode).y;
-				_nodePositions[k] = _projector.unProject(oldNodePos, _vgraph, true);
+				_nodePositions[k] = _projector.unProject(oldNodePos, _graphLayout, true);
 				// DEBUG - CHECK:
 				if (isNaN((_nodePositions[k] as ComplexNumber).real)) 
 					LogUtil.warn(_LOG, "HyperbolicLayout: " + (_nodeIndex[k] as VisualNode).node.id 
@@ -572,7 +572,7 @@
 			 * 3: Node Double-clicked: After changing visibility, move the node at the center
 			 */
 			// LogUtil.debug(_LOG, "Node: " + vn.node.id + " is CENTERED");
-			_animationIsometries = _projector.center(new Point(vn.x, vn.y), _vgraph, false);
+			_animationIsometries = _projector.center(new Point(vn.x, vn.y), _graphLayout, false);
 			_animInProgress = true;
 			resetAnimation();
 			startAnimation();
@@ -595,7 +595,7 @@
 			
 			var startPt:Point = new Point(_dragStartX, _dragStartY);
 			// get start point of dragging but do not adjust node if it is out of bounds
-			var startIPt:IPoint = _projector.unProject(startPt, _vgraph, false);
+			var startIPt:IPoint = _projector.unProject(startPt, _graphLayout, false);
 			
 			/* Restrict dragging to smaller steps. 
 			 * Distances in Hyperbolic geometry are very high close to the edge of the unit circle
@@ -603,12 +603,11 @@
 			if ( (startIPt != null) && ((startIPt as ComplexNumber).norm() < 0.9) ) {
 				// get isometry for changing the viewMatrix
 				var isometries:Array = _projector.moveP(startIPt, new Point(event.localX , event.localY),
-																								_vgraph, true);
+																								_graphLayout, true);
 				if(isometries != null) {
 					_projector.setViewMatrix(isometries[0]);
 					// Refresh Node positions - project and update
 					projectNodes(true);
-					_vgraph.refresh();
 				}
 			}
 			// update dragging start point
@@ -651,7 +650,7 @@
 			// Check for end condition
 			if(_animStep >= ANIMATION_STEPS) {
 				//LogUtil.warn(_LOG, "Animation complete, dragged/clicked node is in its final position");
-				//applyTargetToNodes(_vgraph.visibleVNodes);
+				//applyTargetToNodes(_graphLayout.visibleVNodes);
 				_animInProgress = false;
 				_animationIsometries = null;
 			} else 
@@ -659,7 +658,6 @@
 				_projector.setViewMatrix(_animationIsometries[_animStep]);
 				// Refresh Node positions - project and update
 				projectNodes(true);
-				_vgraph.refresh();
 				++_animStep;
 				startAnimation();
 			}

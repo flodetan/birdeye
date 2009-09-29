@@ -25,7 +25,7 @@
  
 package birdeye.vis.trans.graphs.layout
 {
-	import birdeye.vis.trans.graphs.visual.IVisualGraph;
+	import birdeye.vis.interfaces.transforms.IGraphLayout;
 	
 	[Exclude(name="disableAnimation", kind="property")]
 
@@ -48,7 +48,7 @@ package birdeye.vis.trans.graphs.layout
 		 * */
 		function resetAll():void;
 		
-		function set vgraph(vg:IVisualGraph):void;
+		function set graphLayout(vg:IGraphLayout):void;
 		
 		function set disableAnimation(value:Boolean):void;
 

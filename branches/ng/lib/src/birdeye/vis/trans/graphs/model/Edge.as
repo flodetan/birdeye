@@ -30,8 +30,6 @@ package birdeye.vis.trans.graphs.model {
 	
 	import birdeye.vis.trans.graphs.visual.IVisualEdge;
 	
-	import flash.events.EventDispatcher;
-	
 	import mx.core.IDataRenderer;
 	
 	
@@ -44,7 +42,7 @@ package birdeye.vis.trans.graphs.model {
 	 * @see Node
 	 * @see IVisualEdge
 	 * */
-	public class Edge extends EventDispatcher implements IEdge, IDataRenderer {
+	public class Edge implements IEdge {
 		
 		protected var _id:String;
 		protected var _graph:IGraph;
