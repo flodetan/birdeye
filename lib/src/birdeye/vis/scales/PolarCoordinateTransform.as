@@ -77,5 +77,27 @@ package birdeye.vis.scales
 
 			return y1;
 		}
+
+		/** Return the x,y point corresponding to a polar label coordinate point.*/
+		public static function getLabelXY(labelWidth:Number, labelHeight:Number, angle:Number):Point {
+			
+			var x:Number, y:Number;
+			
+			if( angle < 90 ) {
+				x = 0;
+				y = labelHeight;
+			} else if( angle >= 90 && angle < 180 ) {
+				x = labelWidth;
+				y = labelHeight;
+			} else if( angle >= 180 && angle < 270 ) {
+				x = labelWidth;
+				y = 0;
+			} else {
+				x = 0;
+				y = 0;
+			} 
+			
+			return new Point(x, y);
+		}
 	}
 }
