@@ -55,6 +55,7 @@ package birdeye.vis.elements
 	import com.degrafa.paint.LinearGradientFill;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
+	import com.degrafa.transform.RotateTransform;
 	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -1487,6 +1488,15 @@ package birdeye.vis.elements
 					
 				label = new TextRenderer(xPos, yPos,
 										text, new SolidFill(colorLabel), true, true, sizeLabel, fontLabel);
+
+				if (labelRotation) {
+					var transform:RotateTransform = new RotateTransform();
+					transform.angle= labelRotation;
+					transform.registrationPoint = "bottomLeft";
+				
+					label.transform = transform;
+				}
+				
 				addSVGData(label.svgData);
 				ttGG.geometryCollection.addItemAt(label,0); 
 			}
