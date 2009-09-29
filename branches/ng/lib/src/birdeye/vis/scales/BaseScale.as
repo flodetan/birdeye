@@ -182,7 +182,7 @@ package birdeye.vis.scales
 		public function set dataInterval(val:Number):void
 		{
 			_dataInterval = val;
-			isGivenInterval = true;
+			isGivenInterval = !isNaN(_dataInterval);
 			
 			//invalidate();
 		}
@@ -197,7 +197,7 @@ package birdeye.vis.scales
 		public function set scaleInterval(val:Number):void
 		{
 			_scaleInterval = val;
-			isGivenInterval = true;
+			isGivenInterval = !isNaN(_scaleInterval);
 			//invalidate();
 		}
 		public function get scaleInterval():Number
