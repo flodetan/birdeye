@@ -378,7 +378,10 @@ package birdeye.vis.guides.axis
 		
 		private function onElementRollOut(e:ElementRollOutEvent):void
 		{
-			_pointer.visible = false;
+			if (_pointer)
+			{
+				_pointer.visible = false;
+			}
 		}
 		
 		
