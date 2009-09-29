@@ -70,6 +70,7 @@ package birdeye.vis.elements.geometry
 		}
 		
 		private var _showPercent:Boolean;
+		[Inspectable(enumeration="true,false")]
 		public function set showPercent(val:Boolean):void
 		{
 			_showPercent = val;
