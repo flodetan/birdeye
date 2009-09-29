@@ -38,6 +38,8 @@ package birdeye.vis.elements.collision
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.paint.SolidFill;
 	
+	import flash.utils.Dictionary;
+	
 	[Exclude(name="stackType", kind="property")] 
 	[Exclude(name="total", kind="property")] 
 	[Exclude(name="stackPosition", kind="property")] 
@@ -73,36 +75,36 @@ package birdeye.vis.elements.collision
 			return _baseAt;
 		}
 		
-		public var _baseValues:Array;
-		public function set baseValues(val:Array):void
+		public var _baseValues:Dictionary;
+		public function set baseValues(val:Dictionary):void
 		{
 			_baseValues = val;
 			invalidateProperties();
 		}
-		public function get baseValues():Array
+		public function get baseValues():Dictionary
 		{
 			return _baseValues;
 		}
 
-		public var _topValues:Array;
-		public function set topValues(val:Array):void
+		public var _topValues:Dictionary;
+		public function set topValues(val:Dictionary):void
 		{
 			_topValues = val;
 			invalidateProperties();
 		}
-		public function get topValues():Array
+		public function get topValues():Dictionary
 		{
 			return _topValues;
 		}
 
-		public var _maxCategoryValues:Array;
+		public var _maxCategoryValues:Dictionary;
 		/** Set the maximum values for each category of the element. Used for stack100.*/
-		public function set maxCategoryValues(val:Array):void
+		public function set maxCategoryValues(val:Dictionary):void
 		{
 			_maxCategoryValues = val;
 			invalidateProperties();
 		}
-		public function get maxCategoryValues():Array
+		public function get maxCategoryValues():Dictionary
 		{
 			return _maxCategoryValues;
 		}
