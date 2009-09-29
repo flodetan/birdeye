@@ -250,7 +250,7 @@ trace(getTimer(), "end drawing grid", this.id);
  		{
  			while (this.geometryCollection.items.length > nbrOfItems)
  			{
- 				this.geometryCollection.removeItemAt(nbrOfItems++);
+ 				this.geometryCollection.removeItemAt(nbrOfItems);
  			}
  		}
  		
