@@ -211,6 +211,17 @@ package birdeye.vis.elements
 		{
 			return _labelOffsetY;
 		}		
+		
+		private var _labelRotation:Number;
+		public function set labelRotation(val:Number):void
+		{
+			_labelRotation = val;
+			invalidatingDisplay();
+		}		
+		public function get labelRotation():Number
+		{
+			return _labelRotation;
+		}
 
 		protected var _showGraphicRenderer:Boolean = false;
 		[Inspectable(enumeration="true,false")]
