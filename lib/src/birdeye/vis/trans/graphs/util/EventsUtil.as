@@ -30,7 +30,6 @@ package birdeye.vis.trans.graphs.util
 	import birdeye.vis.interfaces.elements.IGraphLayoutableElement;
 	import birdeye.vis.interfaces.transforms.IGraphLayout;
 	import birdeye.vis.trans.graphs.visual.IVisualNode;
-	import birdeye.vis.trans.graphs.visual.VisualGraph;
 	
 	public class EventsUtil
 	{
@@ -40,7 +39,7 @@ package birdeye.vis.trans.graphs.util
 			graph.rootNode = vNode;
 		}
 		
-		public static function setSubTreeAsMainGraph(vGraph:VisualGraph, vNode:IVisualNode):void
+		public static function setSubTreeAsMainGraph(nodeElement:IGraphLayoutableElement, vNode:IVisualNode):void
 		{
 		}
 	}

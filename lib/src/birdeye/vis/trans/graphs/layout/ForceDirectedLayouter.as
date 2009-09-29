@@ -28,7 +28,6 @@ package birdeye.vis.trans.graphs.layout
 {
 	import birdeye.vis.trans.graphs.model.IEdge;
 	import birdeye.vis.trans.graphs.visual.IVisualEdge;
-	import birdeye.vis.trans.graphs.visual.IVisualGraph;
 	import birdeye.vis.trans.graphs.visual.IVisualNode;
 	
 	import flash.events.MouseEvent;
@@ -357,7 +356,7 @@ package birdeye.vis.trans.graphs.layout
 			t_maxSpringMotion = 0.0;
 			
 			/* we need IEdges first */			
-			for each(t_ve in _vgraph.edges) {
+			for each(t_ve in _graphLayout.edges) {
 				if (t_ve.visible) {
 					/* now work on the edge */
 					t_edge = t_ve.edge;
@@ -408,10 +407,10 @@ package birdeye.vis.trans.graphs.layout
 		 * */
 		private function applyRepulsion():void {
 			t_maxRepulsiveMotion = 0.0;
-			for each(t_vn1 in _vgraph.nodes) {
+			for each(t_vn1 in _graphLayout.nodes) {
 				if (!t_vn1.visible) continue;
 				
-				for each(t_vn2 in _vgraph.nodes) {
+				for each(t_vn2 in _graphLayout.nodes) {
 					if (!t_vn2.visible) continue;
 					
 					if(t_vn1 != t_vn2) {
@@ -474,11 +473,11 @@ package birdeye.vis.trans.graphs.layout
 				/* check if we moved nodes out of bounds and 
 				 * do some scrolling */
 				if((_viewbounds.left < 0) || (_viewbounds.top < 0) ||
-				   (_viewbounds.bottom > _vgraph.height) ||
-				   (_viewbounds.right > _vgraph.width)) {
+				   (_viewbounds.bottom > _graphLayout.height) ||
+				   (_viewbounds.right > _graphLayout.width)) {
 					
-					t_dx = (_vgraph.width / 2) - (_viewbounds.x + (_viewbounds.width / 2));
-					t_dy = (_vgraph.height / 2) - (_viewbounds.y + (_viewbounds.height / 2));
+					t_dx = (_graphLayout.width / 2) - (_viewbounds.x + (_viewbounds.width / 2));
+					t_dy = (_graphLayout.height / 2) - (_viewbounds.y + (_viewbounds.height / 2));
 					
 				  /* limit to _SCROLL_STEP pixels at a time */
 					t_dx = Math.max(-_SCROLL_STEP, Math.min(t_dx, _SCROLL_STEP))
@@ -486,7 +485,7 @@ package birdeye.vis.trans.graphs.layout
 					
 					/* now scroll */
 					if((t_dx != 0) || (t_dy != 0)) {
-						_vgraph.scroll(t_dx, t_dy);
+						_graphLayout.scroll(t_dx, t_dy);
 						_layoutChanged = true;
 					}
 				}
@@ -505,7 +504,7 @@ package birdeye.vis.trans.graphs.layout
 			_maxMotion = 0.0;
 			
 			/* again work on all visible nodes */
-			for each(t_vn1 in _vgraph.nodes) {
+			for each(t_vn1 in _graphLayout.nodes) {
 				if (!t_vn1.visible) {
 					continue;
 				}
@@ -563,7 +562,7 @@ package birdeye.vis.trans.graphs.layout
 			
 			// TO-DO: Should it be called here or with actual scrolling? How often?
 			/* bounding box of nodes */
-			_viewbounds = _vgraph.calcNodesBoundingBox();
+			_viewbounds = _graphLayout.calcNodesBoundingBox();
 			
 			/* the viewbounds describe the current bounding box of
 			 * all nodes */
@@ -571,8 +570,8 @@ package birdeye.vis.trans.graphs.layout
 				
 				/* using the viewbounds the current percentage in coverage can be
 				 * calculated */
-				_coverage = Math.max((_viewbounds.bottom - _viewbounds.top) / _vgraph.height,
-														 (_viewbounds.right - _viewbounds.left) / _vgraph.width );
+				_coverage = Math.max((_viewbounds.bottom - _viewbounds.top) / _graphLayout.height,
+														 (_viewbounds.right - _viewbounds.left) / _graphLayout.width );
 				
 				/* calculate the delta coverage */
 				deltaCoverage = _AUTOFITCOVERAGE - _coverage;

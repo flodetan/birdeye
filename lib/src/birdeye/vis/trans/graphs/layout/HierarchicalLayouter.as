@@ -154,12 +154,12 @@ package birdeye.vis.trans.graphs.layout
 			
 			//LogUtil.info(_LOG, "layoutPass called");
 			
-			if(!_vgraph) {
+			if(!_graphLayout) {
 				LogUtil.warn(_LOG, "No Vgraph set in HierarchicalLayouter, aborting");
 				return false;
 			}
 			
-			if(!_vgraph.currentRootVNode) {
+			if(!_graphLayout.currentRootVNode) {
 				LogUtil.warn(_LOG, "This Layouter always requires a root node!");
 				return false;
 			}
@@ -175,8 +175,8 @@ package birdeye.vis.trans.graphs.layout
 			
 			/* establish the current root, if it has 
 			 * changed we need to reinit the model */
-			if(_root != _vgraph.currentRootVNode.node) {
-				_root = _vgraph.currentRootVNode.node;
+			if(_root != _graphLayout.currentRootVNode.node) {
+				_root = _graphLayout.currentRootVNode.node;
 				_layoutChanged = true;
 			}
 			
@@ -256,10 +256,10 @@ package birdeye.vis.trans.graphs.layout
 		public function set enableSiblingSpread(ss:Boolean):void {
 			_siblingSpreadEnabled = ss;
 			/* notify controls (specifically interleaving toggle */
-			if(_vgraph) {
+/* 			if(_graphLayout) {
 				_vgraph.dispatchEvent(new VGraphEvent(VGraphEvent.LAYOUTER_HIER_SIBLINGSPREAD));
 			}
-		}
+ */		}
 		
 		/**
 		 * @private
@@ -702,7 +702,7 @@ package birdeye.vis.trans.graphs.layout
 			/* set in super class */
 			super.currentDrawing = _currentDrawing;
 			
-			_currentDrawing.originOffset = _vgraph.origin;
+			_currentDrawing.originOffset = _graphLayout.origin;
 			
 			adjustCenter();
 		}
@@ -714,18 +714,18 @@ package birdeye.vis.trans.graphs.layout
 		private function adjustCenter():void {
 			switch(_orientation) {
 				case ORIENT_TOP_DOWN:
-					_currentDrawing.centerOffset = new Point((_vgraph.width / 2), DEFAULT_MARGIN + layerMargin);
+					_currentDrawing.centerOffset = new Point((_graphLayout.width / 2), DEFAULT_MARGIN + layerMargin);
 					break;
 				case ORIENT_BOTTOM_UP:
 					_currentDrawing.centerOffset =
-						new Point((_vgraph.width / 2), (_vgraph.height - DEFAULT_MARGIN - layerMargin));
+						new Point((_graphLayout.width / 2), (_graphLayout.height - DEFAULT_MARGIN - layerMargin));
 					break;
 				case ORIENT_LEFT_RIGHT:
-					_currentDrawing.centerOffset = new Point(DEFAULT_MARGIN + layerMargin, (_vgraph.height / 2) - DEFAULT_MARGIN);
+					_currentDrawing.centerOffset = new Point(DEFAULT_MARGIN + layerMargin, (_graphLayout.height / 2) - DEFAULT_MARGIN);
 					break;
 				case ORIENT_RIGHT_LEFT:
 					_currentDrawing.centerOffset =
-						new Point((_vgraph.width - DEFAULT_MARGIN - layerMargin), (_vgraph.height / 2) - DEFAULT_MARGIN);
+						new Point((_graphLayout.width - DEFAULT_MARGIN - layerMargin), (_graphLayout.height / 2) - DEFAULT_MARGIN);
 					break;
 				default:
 					throw Error("Invalid orientation value found in internal variable");
@@ -775,13 +775,13 @@ package birdeye.vis.trans.graphs.layout
 				switch(_orientation) {
 					case ORIENT_LEFT_RIGHT:
 					case ORIENT_RIGHT_LEFT:
-						_layerDistance = (_vgraph.width - 2 * (DEFAULT_MARGIN + layerMargin))  / _stree.maxDepth;
-						_defaultNodeDistance = (_vgraph.height - 2 * DEFAULT_MARGIN) / _stree.maxNumberPerLayer;
+						_layerDistance = (_graphLayout.width - 2 * (DEFAULT_MARGIN + layerMargin))  / _stree.maxDepth;
+						_defaultNodeDistance = (_graphLayout.height - 2 * DEFAULT_MARGIN) / _stree.maxNumberPerLayer;
 						break;
 					case ORIENT_TOP_DOWN:
 					case ORIENT_BOTTOM_UP:
-						_layerDistance = (_vgraph.height - 2 * (DEFAULT_MARGIN + layerMargin))  / _stree.maxDepth;
-						_defaultNodeDistance = (_vgraph.width - 2 * DEFAULT_MARGIN) / _stree.maxNumberPerLayer;
+						_layerDistance = (_graphLayout.height - 2 * (DEFAULT_MARGIN + layerMargin))  / _stree.maxDepth;
+						_defaultNodeDistance = (_graphLayout.width - 2 * DEFAULT_MARGIN) / _stree.maxNumberPerLayer;
 						break;
 					default:
 						throw Error("Invalid orientation value found in internal variable");

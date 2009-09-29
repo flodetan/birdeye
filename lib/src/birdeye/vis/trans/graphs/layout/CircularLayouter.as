@@ -75,7 +75,7 @@ package birdeye.vis.trans.graphs.layout
 		override public function layoutPass():Boolean {
 			//LogUtil.debug(_LOG, "layoutPass called");
 			
-			if(!_vgraph) {
+			if(!_graphLayout) {
 				LogUtil.warn(_LOG, "No Vgraph set in CircularLayouter, aborting...");
 				return false;
 			}
@@ -162,8 +162,8 @@ package birdeye.vis.trans.graphs.layout
 			/* Also set the object also in the BaseLayouter */
 			super.currentDrawing = _currentDrawing;
 			
-			_currentDrawing.originOffset = _vgraph.origin;
-			_currentDrawing.centerOffset = _vgraph.center;
+			_currentDrawing.originOffset = _graphLayout.origin;
+			_currentDrawing.centerOffset = _graphLayout.center;
 			_currentDrawing.centeredLayout = true;
 
 //			_vgraph.origin.x = 0;
@@ -183,7 +183,7 @@ package birdeye.vis.trans.graphs.layout
 			var visVNodes:Dictionary;
 			var i:int;
 
-			var nodes:Vector.<IVisualNode> = _vgraph.nodes;
+			var nodes:Vector.<IVisualNode> = _graphLayout.nodes;
 
 			var numVisibleNodes:int = 0;
 			for each(vn in nodes) {
@@ -217,7 +217,7 @@ package birdeye.vis.trans.graphs.layout
 		 * Do all the calculations required for autoFit
 		 * */
 		private function calculateAutoFit():void {
-			_radius = Math.min(_vgraph.width,_vgraph.height) / 2.0 - DEFAULT_MARGIN;
+			_radius = Math.min(_graphLayout.width,_graphLayout.height) / 2.0 - DEFAULT_MARGIN;
 		}
 	}
 }

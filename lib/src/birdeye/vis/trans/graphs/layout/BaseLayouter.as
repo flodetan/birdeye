@@ -29,11 +29,10 @@ package birdeye.vis.trans.graphs.layout
 {
 	import __AS3__.vec.Vector;
 	
-	import birdeye.vis.trans.graphs.util.LogUtil;
+	import birdeye.vis.interfaces.transforms.IGraphLayout;
 	import birdeye.vis.trans.graphs.model.IGTree;
 	import birdeye.vis.trans.graphs.model.IGraph;
 	import birdeye.vis.trans.graphs.model.INode;
-	import birdeye.vis.trans.graphs.visual.IVisualGraph;
 	import birdeye.vis.trans.graphs.visual.IVisualNode;
 	
 	import flash.events.EventDispatcher;
@@ -42,7 +41,7 @@ package birdeye.vis.trans.graphs.layout
 	
 	[Exclude(name="disableAnimation", kind="property")]
 	[Exclude(name="graph", kind="property")]
-	[Exclude(name="vgraph", kind="property")]
+	[Exclude(name="graphLayout", kind="property")]
 	[Exclude(name="phi", kind="property")]
 	[Exclude(name="layoutChanged", kind="method")]
 	[Exclude(name="activate", kind="event")]
@@ -84,9 +83,9 @@ package birdeye.vis.trans.graphs.layout
 		protected var _disableAnimation:Boolean = false;
 		
 		/**
-		 * All layouters need access to the VisualGraph.
+		 * All layouters need access to the graph layout.
 		 * */
-		protected var _vgraph:IVisualGraph = null;
+		protected var _graphLayout:IGraphLayout = null;
 		
 		/**
 		 * All layouters need access to the Graph.
@@ -127,9 +126,9 @@ package birdeye.vis.trans.graphs.layout
 		/**
 		 * @inheritDoc
 		 * */
-		public function set vgraph(vg:IVisualGraph):void {
-			_vgraph = vg;
-			_graph = _vgraph.graph;
+		public function set graphLayout(vg:IGraphLayout):void {
+			_graphLayout = vg;
+			_graph = _graphLayout.graph;
 			resetAll();
 		}
 
@@ -208,7 +207,7 @@ package birdeye.vis.trans.graphs.layout
 		public function get linkLength():Number {
 			/* NOP
 			 * but must not return 0, since some layouter
-			 * do not care about LL, but the vgraph will
+			 * do not care about LL, but the graphLayout will
 			 * not draw if LL is 0
 			 * so default is something else, like 1
 			 */

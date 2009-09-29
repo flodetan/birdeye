@@ -29,9 +29,8 @@ package birdeye.vis.trans.graphs.layout
 {
 
 	import birdeye.vis.trans.graphs.model.INode;
-	import birdeye.vis.trans.graphs.util.MathUtil;
-	import birdeye.vis.trans.graphs.util.GraphicUtils;
 	import birdeye.vis.trans.graphs.util.LogUtil;
+	import birdeye.vis.trans.graphs.util.MathUtil;
 	import birdeye.vis.trans.graphs.visual.IVisualNode;
 	
 	import flash.events.TimerEvent;
@@ -217,7 +216,7 @@ package birdeye.vis.trans.graphs.layout
 			_layoutChanged = true;
 			//_vgraph.dispatchEvent(new MouseEvent("forceRedrawEvent"));
 			//_vgraph.invalidateDisplayList();
-			_vgraph.redrawEdges();
+			_graphLayout.redrawEdges();
 
 			/* check if we ran out of anim cycles, but are not finished */
 			if (cyclefinished) {
@@ -225,7 +224,7 @@ package birdeye.vis.trans.graphs.layout
 				_animInProgress = false;
 			} else if(_animStep >= _ANIMATIONSTEPS) {
 				LogUtil.info(_LOG, "Exceeded animation steps, setting nodes to final positions...");
-				applyTargetToNodes(_vgraph.nodes);
+				applyTargetToNodes(_graphLayout.nodes);
 				_animInProgress = false;
 			} else {
 				++_animStep;
@@ -270,7 +269,7 @@ package birdeye.vis.trans.graphs.layout
 			/* careful for invisible nodes, the values are not
 			 * calculated (obviously), so we need to make sure
 			 * to exclude them */
-			for each (vn in _vgraph.nodes) {
+			for each (vn in _graphLayout.nodes) {
 				if (!vn.visible) {
 					continue;
 				}
@@ -318,7 +317,7 @@ package birdeye.vis.trans.graphs.layout
 				stepPhi = currPhi + deltaPhi;
 				
 				/* check if we are already done or not */
-				if(!GraphicUtils.equal(currPoint, _currentDrawing.getRelCartCoordinates(n))) {
+				if(!MathUtil.equal(currPoint, _currentDrawing.getRelCartCoordinates(n))) {
 					cyclefinished = false;
 				}
 				
@@ -373,7 +372,7 @@ package birdeye.vis.trans.graphs.layout
 			/* careful for invisible nodes, the values are not
 			 * calculated (obviously), so we need to make sure
 			 * to exclude them */
-			for each(vn in _vgraph.nodes) {
+			for each(vn in _graphLayout.nodes) {
 				if (!vn.visible) {
 					continue;
 				}
@@ -395,7 +394,7 @@ package birdeye.vis.trans.graphs.layout
 				}
 
 				/* check if we are already done or not */
-				if(!GraphicUtils.equal(currPoint, targetPoint)) {
+				if(!MathUtil.equal(currPoint, targetPoint)) {
 					cyclefinished = false;
 				}
 
@@ -433,7 +432,7 @@ package birdeye.vis.trans.graphs.layout
 			var targetPoint:Point;
 			
 
-			for each(vn in _vgraph.nodes) {
+			for each(vn in _graphLayout.nodes) {
 				if (!vn.visible) {
 					continue;
 				}

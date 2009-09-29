@@ -27,6 +27,7 @@
 
 package birdeye.vis.trans.graphs.visual
 {
+	import birdeye.vis.interfaces.transforms.IGraphLayout;
 	import birdeye.vis.trans.graphs.model.IEdge;
 	
 	import flash.display.DisplayObject;
@@ -35,9 +36,9 @@ package birdeye.vis.trans.graphs.visual
 	{
 		private var _edge:IEdge;
 		private var _visible:Boolean;
-		private var _visualGraph:IVisualGraph;
+		private var _visualGraph:IGraphLayout;
 
-		public function VisualEdge(visualGraph:IVisualGraph, edge:IEdge)
+		public function VisualEdge(visualGraph:IGraphLayout, edge:IEdge)
 		{
 			_visualGraph = visualGraph;
 			_edge = edge;

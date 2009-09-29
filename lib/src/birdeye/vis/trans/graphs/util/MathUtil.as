@@ -23,6 +23,8 @@
  * THE SOFTWARE.
  */
 package birdeye.vis.trans.graphs.util {
+	import birdeye.vis.trans.graphs.util.geom.IVisualObjectWithDimensions;
+	
 	import flash.geom.Point;
 	
 	/**
@@ -250,5 +252,89 @@ package birdeye.vis.trans.graphs.util {
 			}
 		}
     
+		/**
+		 * Function that tests if two points are equal within tolerance
+		 * The current tolerance limit is (1, 1) - same as pixel resolution on screen
+		 */
+		public static function equal(p1:Point, p2:Point):Boolean {
+			return (Math.abs(p1.x - p2.x) <= 1) && (Math.abs(p1.y - p2.y) <= 1);
+		}
+		
+		/**
+		 * Function that returns the center point of a display object
+		 */
+		public static function getCenter(c:IVisualObjectWithDimensions):Point {
+			return new Point(c.width / 2, c.height / 2);
+		}
+
+		/**
+		 * Returns the positive angle between two lines OP and OQ at point O, where:<br>
+		 * P = [x1, y1]<br>
+		 * Q = [x2, y2]<br>
+		 * O = [atX, atY]<br>
+		 * 
+		 * XXX why not use Math.atan2(y2 - y1, x2 - x1)?
+		 * How can point O affect the angle between 2 lines??
+		 */
+		public static function getAngle(x1:Number, y1:Number,
+										 x2:Number, y2:Number,
+										 atX:Number, atY:Number):Number {
+			var m1:Number = (y1 - atY) / (x1 - atX);
+			var m2:Number = (y2 - atY) / (x2 - atX);
+			var rtn:Number = Math.atan((m1 - m2) / (1 + m1 * m2));
+			return Math.abs(rtn);
+		}
+		/** 
+		 * Returns the endpoint Q of a line OP that is rotated clock-wise about point O, where:<br>
+		 * O = [centerX, centerY]<br>
+		 * P = [startX, startY]<br>
+		 * Q = [endX, endY]<br>
+		 * 
+		 * XXX Why not use Point.polar here?
+		 * 
+		 * initAngle = Math.atan2(startY - centerY, startx - centerX);
+		 * newAngle = initAngle + angleDelta
+		 * length = Point.distance(P,O);
+		 * resultQ = Point.polar(length,newAngle);
+		 * resultQ.offset(P.x,P.y)
+		 * 
+		 * should do it. 
+		 * 
+		 */
+		public static function getRotation(angleDelta:Number,
+											 centerX:Number, centerY:Number,
+											 startX:Number, startY:Number):Point {
+			var radius:Number = Math.sqrt((centerX - startX) * (centerX - startX) + (centerY - startY) * (centerY - startY));
+			var angle:Number, ax:Number, ay:Number;
+			
+			// Compute rotation based on location of points
+			// TO-DO: Perhaps, this can be further simplified
+			if (startY < centerY) { //quadrant 1 and 2
+				if (startX > centerX) {
+					// Quad 1:
+					angle = Math.acos((startX - centerX) / radius);
+					ax = centerX + Math.cos(angle + angleDelta) * radius;
+					ay = centerY - Math.sin(angle + angleDelta) * radius;
+				} else {
+					// Quad 2:
+					angle = Math.acos((centerY - startY) / radius);
+					ax = centerX - Math.sin(angle + angleDelta) * radius;
+					ay = centerY - Math.cos(angle + angleDelta) * radius;
+				}
+			} else { //quadrant 3 and 4
+				if (startX < centerX) {
+					// Quad 3:
+					angle = Math.acos((centerX - startX) / radius);
+					ax = centerX - Math.cos(angle + angleDelta) * radius;
+					ay = centerY + Math.sin(angle + angleDelta) * radius;
+				} else {
+					// Quad 4:
+					angle = Math.acos((startY - centerY) / radius);
+					ax = centerX + Math.sin(angle + angleDelta) * radius;
+					ay = centerY + Math.cos(angle + angleDelta) * radius;
+				}
+			}
+			return new Point(ax,ay);
+		}
 	}
 }

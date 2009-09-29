@@ -35,7 +35,7 @@ package birdeye.vis.trans.graphs.model {
 	 * of our data items, like nodes (vertices)
 	 * and edges, it specifies ID and data properties.
 	 */
-	public interface IDataItem extends IEventDispatcher {
+	public interface IDataItem {
 		
 		/**
 		 * Access to the id property of any item.

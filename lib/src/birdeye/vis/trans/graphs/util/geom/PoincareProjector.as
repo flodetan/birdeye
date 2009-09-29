@@ -25,7 +25,7 @@
 package birdeye.vis.trans.graphs.util.geom {
 
 import birdeye.vis.trans.graphs.layout.Hyperbolic2DLayouter;
-import birdeye.vis.trans.graphs.util.GraphicUtils;
+import birdeye.vis.trans.graphs.util.MathUtil;
 
 import flash.geom.Point;
 
@@ -135,7 +135,7 @@ import flash.geom.Point;
 		 * @return An array of steps for the move
 		 * */
 		public function center(p:Point, d:IVisualObjectWithDimensions, oneStep:Boolean):Array {
-			return move(p, GraphicUtils.getCenter(d), d, oneStep);
+			return move(p, MathUtil.getCenter(d), d, oneStep);
 		}
 		
 		/**
@@ -149,7 +149,7 @@ import flash.geom.Point;
 		 * @return An array of steps for the move
 		 * */
 		public function centerP(ip:IPoint, d:IVisualObjectWithDimensions, oneStep:Boolean):Array {
-			return moveP(ip, GraphicUtils.getCenter(d), d, oneStep);
+			return moveP(ip, MathUtil.getCenter(d), d, oneStep);
 		}
 		
 		/**

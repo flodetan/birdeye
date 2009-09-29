@@ -25,22 +25,22 @@
 
 package birdeye.vis.trans.graphs.visual
 {
+	import birdeye.vis.interfaces.transforms.IGraphLayout;
 	import birdeye.vis.trans.graphs.events.VGraphEvent;
 	import birdeye.vis.trans.graphs.model.INode;
 	
 	import flash.display.DisplayObject;
-	import flash.geom.Point;
 
 	public class VisualNode implements IVisualNode
 	{
 		private var _node:INode;
 		private var _moveable:Boolean;
 		private var _visible:Boolean;
-		private var _visualGraph:IVisualGraph;
+		private var _visualGraph:IGraphLayout;
 		private var _x:Number = NaN;
 		private var _y:Number = NaN;
 		
-		public function VisualNode(visualGraph:IVisualGraph, node:INode, moveable:Boolean)
+		public function VisualNode(visualGraph:IGraphLayout, node:INode, moveable:Boolean)
 		{
 			_visualGraph = visualGraph;
 			_node = node;

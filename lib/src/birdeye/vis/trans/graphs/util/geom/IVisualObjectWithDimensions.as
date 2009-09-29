@@ -28,10 +28,9 @@ package birdeye.vis.trans.graphs.util.geom
 {
 	public interface IVisualObjectWithDimensions
 	{
-
 		function get width():Number;
 
 		function get height():Number;
-		
+
 	}
 }

@@ -51,7 +51,6 @@ package birdeye.vis.trans.graphs.layout
 	 * 
 	 * @author Nitin Lamba
 	 **/
-	[ExcludeClass]
 	public class IterativeBaseLayouter extends BaseLayouter implements ILayoutAlgorithm {
 		
 		private static const _LOG:String = "graphLayout.layout.IterativeBaseLayouter";
@@ -167,7 +166,7 @@ package birdeye.vis.trans.graphs.layout
 				_stopWatch.startTimer();
 				// Step 1: Retrieve old coordinates from vNodes
 				/* basically, refresh coordinates from their 'view' UI components */
-				for each(vn in _vgraph.nodes) {
+				for each(vn in _graphLayout.nodes) {
 					if (vn.visible) {
 						vn.refresh();
 					}
@@ -182,7 +181,7 @@ package birdeye.vis.trans.graphs.layout
 				
 				// Step 3: Commit new coordinates to all vNodes
 				/* basically, set the view UI component to new values */
-				for each(vn in _vgraph.nodes) {
+				for each(vn in _graphLayout.nodes) {
 					if(vn.visible) {
 						vn.commit();
 					}
@@ -190,8 +189,7 @@ package birdeye.vis.trans.graphs.layout
 				
 				// Step 4: Update node position, redraw edges and sent update to the UI */
 				_layoutChanged = true;
-				_vgraph.redrawEdges();
-				_vgraph.dispatchEvent(new VGraphEvent(VGraphEvent.VGRAPH_CHANGED));
+				_graphLayout.redrawEdges();
 
 				_timerDelay = _stopWatch.stopTimer();
  				if (!_disableAnimation) {				
