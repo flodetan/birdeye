@@ -45,6 +45,7 @@ package birdeye.vis.coords
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
+	import flash.utils.Dictionary;
 	import flash.utils.getTimer;
 	
 	import mx.core.UIComponent;
@@ -252,7 +253,7 @@ package birdeye.vis.coords
 			}
 		}
 		
-		private var categoryMaxStacked100:Array;
+		private var categoryMaxStacked100:Dictionary;
 		/**
 		 * This functions init the necessary datastructure in the stack elements</br>
 		 * This function only executes if the type is stacked100.</br>
@@ -272,7 +273,7 @@ package birdeye.vis.coords
 			
 			var allElementsBaseAndTopValues:Array = []; 
 			for (var i:int=0;i<_stackedElements.length;i++)
-				allElementsBaseAndTopValues[i] = {indexElements: i, baseValues: [], topValues: []};
+				allElementsBaseAndTopValues[i] = {indexElements: i, baseValues: new Dictionary(), topValues: new Dictionary()};
 			
 			_maxStacked100 = NaN;
 			
@@ -280,7 +281,7 @@ package birdeye.vis.coords
 			// category or angle or ... 
 			var lastProcessedStackElements:Array = new Array();
 			var position:uint = 0;
-			categoryMaxStacked100 = [];
+			categoryMaxStacked100 = new Dictionary();
 			for each (stackElement in _stackedElements)
 			{
 				initStackElement(stackElement, position++, allElementsBaseAndTopValues, lastProcessedStackElements);

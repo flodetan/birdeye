@@ -27,6 +27,8 @@
  
 package birdeye.vis.interfaces.elements
 {
+	import flash.utils.Dictionary;
+	
 	public interface IStack extends IElement
 	{
 		/** Set the position of the current component (element) inside a stack.*/
@@ -43,16 +45,16 @@ package birdeye.vis.interfaces.elements
 		function get stackType():String;
 
 		/** Set the baseValues for stacked 100 collisions (columns, area, bars).*/
-		function set baseValues(val:Array):void;
-		function get baseValues():Array;
+		function set baseValues(val:Dictionary):void;
+		function get baseValues():Dictionary;
 
 		/** Set the topValues for stacked collisions.*/
-		function set topValues(val:Array):void;
-		function get topValues():Array;
+		function set topValues(val:Dictionary):void;
+		function get topValues():Dictionary;
 
 		/** Set the maximum values for each category of the element. Used for stack100.*/
-		function set maxCategoryValues(val:Array):void;
-		function get maxCategoryValues():Array;
+		function set maxCategoryValues(val:Dictionary):void;
+		function get maxCategoryValues():Dictionary;
 
 		/** Set the scale that defines the 'direction' of the stack. For ex. BarElements are stacked horizontally with 
 		 * stack100 and vertically with normal stack. Columns (for both polar and cartesians)

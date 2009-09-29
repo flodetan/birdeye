@@ -1067,7 +1067,7 @@ trace(getTimer(), "drawing axis");
 					if (!_labelRenderer)
 					{
 						// create label 
-						label = createLabelText("vertical", String(dataLabel), yPos);
+						label = createLabelText("vertical", dataLabel, yPos);
 						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
 					} else {
@@ -1099,7 +1099,7 @@ trace(getTimer(), "drawing axis");
 					if (!_labelRenderer)
 					{
 						// create label 
-						label = createLabelText("horizontal", String(dataLabel), xPos);
+						label = createLabelText("horizontal", dataLabel, xPos);
 						label.fill = new SolidFill(colorLabel);
 						gg.geometryCollection.addItem(label);
 					} else {
@@ -1114,7 +1114,7 @@ trace(getTimer(), "drawing axis");
 			}
 		}
 		
-		private function createLabelText(direction:String, dataLabel:String, pos:Number):RasterText
+		private function createLabelText(direction:String, dataLabel:Object, pos:Number):RasterText
 		{
 			var svgTextY:Number;
 			var label:RasterText;
