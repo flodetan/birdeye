@@ -41,7 +41,6 @@ package birdeye.vis.elements.geometry {
 	import birdeye.vis.interfaces.transforms.IGraphLayout;
 	import birdeye.vis.scales.*;
 	import birdeye.vis.trans.graphs.visual.IVisualNode;
-	import birdeye.vis.trans.graphs.visual.VisualGraph;
 	
 	import com.degrafa.IGeometry;
 	import com.degrafa.geometry.Geometry;
@@ -53,7 +52,6 @@ package birdeye.vis.elements.geometry {
 	import flash.geom.Rectangle;
 	
 	import mx.core.IDataRenderer;
-	import mx.core.IID;
 
 	public class NodeElement extends RenderableElement implements IGraphLayoutableElement {
 
@@ -177,7 +175,7 @@ package birdeye.vis.elements.geometry {
 			if (!(e.target is IVisualDataID)) return;
 
 			var nodeID:String = IVisualDataID(e.target).visualObjectID;
-			var vGraph:VisualGraph = _graphLayout.visualGraph;
+			var vGraph:IGraphLayout = _graphLayout;
 			var vNode:IVisualNode = vGraph.getVisualNodeById(nodeID);
 
 			if (vNode)
@@ -202,7 +200,7 @@ trace("ENTER", e.target.toString());
 			
 			var nodeID:String = IVisualDataID(e.target).visualObjectID;
 			
-			var vGraph:VisualGraph = _graphLayout.visualGraph;
+			var vGraph:IGraphLayout = _graphLayout;
 			var vNode:IVisualNode = vGraph.getVisualNodeById(nodeID);
 			
 			mouseDoubleClickFunction(this, vNode);
