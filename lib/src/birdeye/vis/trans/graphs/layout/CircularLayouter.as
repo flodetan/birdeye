@@ -204,8 +204,8 @@ package birdeye.vis.trans.graphs.layout
 				
 					/* set the orientation into the visual node */
 					vn.orientAngle = phi;
+					i += 1;
 				}
-				i += 1;
 			}
 			//LogUtil.debug(_LOG, "CircularLayouter: nodes set to new (r, phi)...");
 			return;
