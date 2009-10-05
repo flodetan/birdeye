@@ -33,6 +33,9 @@ package birdeye.vis.elements.geometry {
 	import birdeye.vis.interfaces.elements.IEdgeElement;
 	import birdeye.vis.interfaces.elements.IPositionableElement;
 	
+	import com.degrafa.geometry.Geometry;
+	
+	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -47,11 +50,53 @@ package birdeye.vis.elements.geometry {
 		override public function get svgData():String
 		{
 			_svgData = "";
-			svgMultiColorData = [];
-			for each (var renderer:IExportableSVG in _edgeRenderers)
-				addSVGData(renderer.svgData);
+			for each (var itemDisplayObject:DisplayObject in _itemDisplayObjects)
+			{
+				if (!itemDisplayObject.visible) continue;
+				
+				if (itemDisplayObject is DataItemLayout)
+				{
+					for each (var geom:Geometry in DataItemLayout(itemDisplayObject).geometry)
+					{
+						if (geom is IExportableSVG)
+						{
+							var initialPoint:Point = localToContent(new Point(
+												itemDisplayObject.x, 
+												itemDisplayObject.y));
+							
+							_svgData += 
+									'\n<svg x="' + initialPoint.x + '" y="' + initialPoint.y + '">' +
+									'\n<g x="' + geom.bounds.width/2 + '" y="' + geom.bounds.height/2 + 
+									'" style="' +
+									'fill:' + ((rgbFill) ? '#' + rgbFill:'none') + 
+									';fill-opacity:' + alphaFill + ';' + 
+									'stroke:' + ((rgbStroke) ? '#' + rgbStroke:'none') + 
+									';stroke-opacity:' + alphaStroke + ';' + ';">\n' + 
+									IExportableSVG(geom).svgData +  
+									'\n</g>\n' +
+									'</svg>\n';
+						}
 
-			createSVG();
+						if (itemDisplayObject is IExportableSVG)
+								_svgData += '<svg x="' + String(-localOriginPoint.x) +
+											   '" y="' + String(-localOriginPoint.y) + '">' + 
+											   IExportableSVG(child).svgData + 
+											'</svg>';
+					}
+				}
+			}
+			var child:Object;
+			var localOriginPoint:Point = localToGlobal(new Point(x, y)); 
+			for (var i:uint = 0; i<numChildren; i++)
+			{
+				child = getChildAt(i);
+				if (child is IExportableSVG)
+					_svgData += '<svg x="' + String(-localOriginPoint.x) +
+								   '" y="' + String(-localOriginPoint.y) + '">' + 
+								   IExportableSVG(child).svgData + 
+								'</svg>';
+			}
+
 			return _svgData;
 		}
 
