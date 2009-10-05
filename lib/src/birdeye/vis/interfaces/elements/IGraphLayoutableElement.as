@@ -26,17 +26,20 @@
  */
  package birdeye.vis.interfaces.elements
  {
- 	import birdeye.vis.interfaces.elements.IEdgeElement;
- 	import birdeye.vis.interfaces.transforms.IGraphLayout;
+ 	import birdeye.vis.trans.graphs.GraphLayout;
  	
 
 	public interface IGraphLayoutableElement extends IPositionableElement {
 		
 		function get nodeIdField():String;
 
-		function set graphLayout(layout:IGraphLayout):void;
+		function get rootNodeId():String;
 
-		function get graphLayout():IGraphLayout;
+		function set rootNodeId(val:String):void;
+
+		function set graphLayout(layout:GraphLayout):void;
+
+		function get graphLayout():GraphLayout;
 
 		function get edgeElement():IEdgeElement;
 	}
