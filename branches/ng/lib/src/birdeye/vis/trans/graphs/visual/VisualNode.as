@@ -60,6 +60,9 @@ package birdeye.vis.trans.graphs.visual
 		public function set visible(visible:Boolean):void
 		{
 			_visible = visible;
+			
+			if (view)
+				view.visible = visible;
 		}
 		
 		public function get x():Number
