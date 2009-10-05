@@ -35,12 +35,12 @@ package birdeye.vis.trans.graphs.util
 	{
 		public static function setNodeAsRoot(nodeElement:IGraphLayoutableElement, vNode:IVisualNode):void
 		{
-			var graph:IGraphLayout = nodeElement.graphLayout;
-			graph.rootNode = vNode;
+			nodeElement.rootNodeId = vNode.node.id;
 		}
 		
 		public static function setSubTreeAsMainGraph(nodeElement:IGraphLayoutableElement, vNode:IVisualNode):void
 		{
+			nodeElement.graphLayout.setVisibleNodeWithRelated(vNode);
 		}
 	}
 }
