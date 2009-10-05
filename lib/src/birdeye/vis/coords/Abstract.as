@@ -34,12 +34,12 @@ package birdeye.vis.coords
 	import birdeye.vis.interfaces.elements.IElement;
 	import birdeye.vis.interfaces.elements.IGraphLayoutableElement;
 	import birdeye.vis.interfaces.transforms.IGraphLayout;
-	import birdeye.vis.trans.graphs.GraphLayout;
 	import birdeye.vis.trans.graphs.layout.ILayoutAlgorithm;
 	
 	import flash.display.DisplayObject;
 	
 	import mx.core.IFactory;
+	import mx.core.UIComponent;
 	
 	/** 
 	 * The Abstract is the base coords that implements visualizations 
@@ -91,7 +91,7 @@ package birdeye.vis.coords
 			{
 				super.updateDisplayList(unscaledWidth, unscaledHeight);			
 				setActualSize(unscaledWidth, unscaledHeight);
-				commitValidatingLayouts();
+				drawLayoutableElements();
 			}
 		}
 		
@@ -125,16 +125,16 @@ package birdeye.vis.coords
 					(layout as IGraphLayout).resetLayout();
 		}
 		
-		private function commitValidatingLayouts():void
+		private function drawLayoutableElements():void
 		{
 			for each (var validLayout:Object in validatingLayouts)
 			{
-				var graph:GraphLayout = validLayout.layout;
-				graph.nodeElement = validLayout.node;
-				if (validLayout.edge)
-					graph.edgeElement = validLayout.edge;
-				graph.apply(unscaledWidth, unscaledHeight)
+ 				var nodeElement:IGraphLayoutableElement = validLayout.node as IGraphLayoutableElement;
+ 				UIComponent(nodeElement).setActualSize(width, height);
+				nodeElement.draw();
+ 
 			}
+
 		}
 	}
 }
