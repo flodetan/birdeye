@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox
+<mx:HBox
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:coords="birdeye.vis.coords.*"
 	xmlns:elements="birdeye.vis.elements.geometry.*"
@@ -15,42 +15,48 @@
 
 		]]>
 	</mx:Script>	
-	<mx:HBox horizontalAlign="center" width="100%">
-		<mx:Button label="Generate tree" click="generateTree()"/>
-		<mx:Button label="Generate graph" click="generateConnectedGraph()" id="generateGraphButton" enabled="true"/>
-		<mx:CheckBox id="animate" label="animate" selected="{graphLayout.animate}" />
-	</mx:HBox>
-	
 	<mx:VBox horizontalAlign="center" width="100%" height="100%">
-		<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([graph.svgData], parentApplication.width, parentApplication.height))"/>
 		<coords:Abstract id="graph" width="100%" height="100%" showDataTips="true">
+			<coords:transforms>
+				<graphs:GraphLayout isDirectional="false" id="graphLayout" layouter="{layouter}" maxVisibleDistance="4" animate="{animate.selected}"/>
+			</coords:transforms>
 			<coords:elements>
 				<elements:EdgeElement id="edge" dimFrom="start" dimTo="end" dataProvider="{edges}" mouseClickFunction="clickF"
 									  colorFill="0xFF0000" colorStroke="0x999999" strokeWeight="2" />
-
-							
-				<elements:NodeElement id="node" nodeIdField="id" dimName="name" dataProvider="{nodes}" 
+				<elements:NodeElement id="node" rootNodeId="1"
+									nodeIdField="id" dimName="name" dataProvider="{nodes}" 
 									edgeElement="{edge}" graphLayout="{graphLayout}"
-									graphicRendererSize="25" mouseDoubleClickFunction="EventsUtil.setNodeAsRoot" />
-
-<!--
- 							
-				<elements:NodeElement colorFill="0x0000ff" colorStroke="0xffffff" id="node" itemIdField="id" dimName="name"
-					                  dataProvider="{nodes}" mouseClickFunction="clickF" alphaFill="1.0" size="7" 
-					         labelFillColor="0xffffff"/> 
--->
+									graphicRendererSize="25" mouseDoubleClickFunction="{doubleClickFunction}" />
 			</coords:elements>
-			<coords:transforms>
-				<graphs:GraphLayout
-						rootNodeId="1"
-						id="graphLayout"
-						layouter="{layouter}"
-						animate="{animate.selected}"
-					/>
-			</coords:transforms>
 		</coords:Abstract>
 	</mx:VBox>
 
+	<mx:VBox width="230" height="100%" horizontalScrollPolicy="off" verticalScrollPolicy="off"
+		horizontalAlign="center" >		
+		<!-- Right Side Dashboard -->
+		<mx:Panel title="Double click" paddingTop="30" width="230" height="110" 
+			horizontalScrollPolicy="off" verticalScrollPolicy="off"
+			horizontalAlign="left" paddingLeft="5" paddingRight="5">
+			<mx:RadioButtonGroup id="doubleClick"/>
+			<mx:RadioButton label="Node as root" selected="true" groupName="doubleClick" click="selectDoubleClickFunction('1')"/>
+			<mx:RadioButton label="Node subtree to root" groupName="doubleClick" click="selectDoubleClickFunction('2')"/>
+			<mx:RadioButton label="Node subtree" groupName="doubleClick" click="selectDoubleClickFunction('3')"/>
+		</mx:Panel>						
+		
+		<mx:Panel title="Generate" width="230" height="120" horizontalScrollPolicy="off" verticalScrollPolicy="off"
+			horizontalAlign="center" paddingTop="30" >
+			<mx:LinkButton label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([graph.svgData], parentApplication.width, parentApplication.height))"/>
+			<mx:LinkButton label="Generate tree" click="generateTree()"/>
+			<mx:LinkButton label="Generate graph" click="generateConnectedGraph()" id="generateGraphButton" enabled="true"/>
+		</mx:Panel>
+		<mx:Panel title="Degree of separation" width="230" height="100" horizontalScrollPolicy="off" verticalScrollPolicy="off"
+			horizontalAlign="center" paddingTop="30" >
+			<mx:HSlider minimum="0" maximum="6" value="4" id="visDist" snapInterval="1" 
+				labels="{[visDist.minimum, visDist.maximum]}" tickInterval="1"
+				change="graphLayout.maxVisibleDistance = visDist.value"/>
+			<mx:CheckBox id="animate" label="animate" selected="true" />
+		</mx:Panel>
+	</mx:VBox>
 	
 	<mx:Script>
 	<![CDATA[
@@ -66,8 +72,30 @@
 	
 		[Bindable]
 		public var layouter:ILayoutAlgorithm;
+		
+		[Bindable]
+		private var doubleClickFunction:Function = EventsUtil.setNodeAsRoot;
 
 		import mx.collections.ArrayCollection;
+		
+		private function selectDoubleClickFunction(val:String):void
+		{
+			switch (val)
+			{
+				case '1':
+					doubleClickFunction = EventsUtil.setNodeAsRoot;
+					graphLayout.isDirectional = false;
+				break;
+				case '2':
+					doubleClickFunction = EventsUtil.setSubTreeAsMainGraph;
+					graphLayout.isDirectional = true;
+				break;
+				case '3':
+					doubleClickFunction = EventsUtil.setNodeAsRoot;
+					graphLayout.isDirectional = true;
+				break;
+			}
+		}
 		
 		public function generateGraph():void {
 			const graph:Object = _generateGraph();
@@ -231,4 +259,4 @@
 	]]>
 	</mx:Script>
 
-</mx:VBox>
+</mx:HBox>
