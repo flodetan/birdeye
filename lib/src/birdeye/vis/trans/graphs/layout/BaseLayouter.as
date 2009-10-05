@@ -178,7 +178,8 @@ package birdeye.vis.trans.graphs.layout
 		/**
 		 * @inheritDoc
 		 * */
-		[Bindable]	 
+		[Bindable]
+		[Inspectable(enumeration="true,false")]
 		public function get autoFitEnabled():Boolean {
 			return _autoFitEnabled;	
 		}
