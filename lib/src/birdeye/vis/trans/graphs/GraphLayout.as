@@ -50,10 +50,11 @@ package birdeye.vis.trans.graphs
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
+	import mx.collections.ArrayCollection;
 	import mx.logging.ILogger;
 	import mx.logging.Log;
 
-	
+	[Exclude(name="currentRootVNode", kind="property")]
 	public class GraphLayout implements IGraphLayout
 	{
 		private static const logger:ILogger = Log.getLogger("birdeye.vis.trans.graphs.GraphLayout");
@@ -68,7 +69,6 @@ package birdeye.vis.trans.graphs
 		private var _visualEdges:Vector.<VisualEdge>;
 		private var _visualIdsToNodes:Dictionary;
 
-		private var _rootNodeId:String;
 		private var _graphId:String;
 		private var _nodeElement:IGraphLayoutableElement;
 		private var _edgeElement:IEdgeElement;
@@ -97,7 +97,7 @@ package birdeye.vis.trans.graphs
 		 **/
 		private var _noNodesWithinDistance:uint;
 		
-		private var _maxVisibleDistance:int = 1;
+		private var _maxVisibleDistance:Number = NaN;
 
 		/**
 		 * This property controls if any visibility limit is currently
@@ -106,18 +106,18 @@ package birdeye.vis.trans.graphs
 		 * should be displayed. 
 		 * */
 		private var _visibilityLimitActive:Boolean = true;
-
-		public function GraphLayout() {
-		}
 		
-		public function get rootNodeId():String {
-			return _rootNodeId;
+		private var _isDirectional:Boolean = false;
+		public function set isDirectional(val:Boolean):void
+		{
+			if (_isDirectional != val && graph)
+			{
+				_isDirectional = val;
+				resetLayout();
+				apply(width, height)
+			}
 		}
 
-		public function set rootNodeId(id:String):void {
-			_rootNodeId = id;
-		}
-		
 		public function get graphId():String {
 			return _graphId;
 		}
@@ -126,14 +126,13 @@ package birdeye.vis.trans.graphs
 			_graphId = id;
 		}
 		
-		public function get animate():Boolean {
-			return _animate;
-		}
-		
 		[Bindable]
 		public function set animate(value:Boolean):void {
 			_animate = value;
 			if (_layouter) _layouter.disableAnimation = !_animate;
+		}
+		public function get animate():Boolean {
+			return _animate;
 		}
 
 		public function set rootNode(val:IVisualNode):void
@@ -205,19 +204,7 @@ package birdeye.vis.trans.graphs
 				/* if yes, apply the change */
 				_maxVisibleDistance = maxDist;
 				//LogUtil.debug(_LOG, "visible distance changed to: "+md);
-				
-				/* if our current limits are active we create a new
-				 * set of nodes within the distance and update the
-				 * visibility */
-				if(_visibilityLimitActive) {
-					if(_currentRootVNode == null) {
-						logger.warn("No root selected, not creating limited graph");
-						return;
-					} else {
-						setDistanceLimitedNodeIds(_graph.getTree(_currentRootVNode.node).
-							getLimitedNodes(_maxVisibleDistance));
-					}
-				}
+				apply(width, height);
 			}
 		}
 
@@ -346,17 +333,18 @@ package birdeye.vis.trans.graphs
 				_origin = new Point(0,0);
 				_graph = new Graph(_graphId, 
 								new DataItemsGraphDataProvider(_nodeElement, _edgeElement), 
-								false);
+								_isDirectional);
 				initFromGraph();
-				if (!currentRootVNode && _rootNodeId !== null) 
-	 				currentRootVNode = getVisualNodeById(_rootNodeId);
-				layouter.graphLayout = this;
 			}
 
 			if (_graph.nodes && _graph.nodes.length > 0) {
 				// if the layouter is Iterative it needs to be reset
 				// in order to invalidate its stability, that otherwise
 				// it would be considered as stable
+ 				currentRootVNode = getVisualNodeById(_nodeElement.rootNodeId);
+				layouter.graphLayout = this;
+				setVisibleDistance();
+
 				if (layouter is IterativeBaseLayouter) layouter.resetAll();
  				layouter.layoutPass();
 			} 
@@ -408,7 +396,7 @@ package birdeye.vis.trans.graphs
 				}
 			
 			for each(var vedge:IVisualEdge in _visEdges) {
-				if (vedge.visible) {
+				if (vedge.edge.node1.vnode.visible && vedge.edge.node2.vnode.visible) {
 					const edge:IEdge = vedge.edge;
 					const startVnode:IVisualNode = edge.node1.vnode;
 					const endVnode:IVisualNode = edge.node2.vnode;
@@ -432,7 +420,7 @@ package birdeye.vis.trans.graphs
 			var vnode:VisualNode = new VisualNode(this, node, true);
 			vnode.x = (_width - vnode.width) / 2;
 			vnode.y = (_height - vnode.height) / 2;
-			vnode.visible = true;
+			vnode.visible = false;
 			node.vnode = vnode;
 			return vnode;
 		}
@@ -532,6 +520,106 @@ package birdeye.vis.trans.graphs
 			// TODO: implement VisualGraph.scroll() (used by ForceDirectedLayouter)
 		}
 
+		private function setVisibleDistance():void
+		{
+			/* if our current limits are active we create a new
+			 * set of nodes within the distance and update the
+			 * visibility */
+			if(_visibilityLimitActive && !isNaN(_maxVisibleDistance)) {
+				if(_currentRootVNode == null) {
+					logger.warn("No root selected, not creating limited graph");
+					return;
+				} else {
+					setDistanceLimitedNodeIds(_graph.getTree(_currentRootVNode.node).
+						getLimitedNodes(_maxVisibleDistance));
+				}
+				updateVisibility();
+			}
+		}
+
+		public function setVisibleNodeWithRelated(vn:IVisualNode):void
+		{
+			if (!graph.isDirectional) throw new Error("Graph must be directional");
+			_layouter.resetAll();
+			
+			for each(var tmpNode:IVisualNode in nodes) {
+				tmpNode.visible = false;
+			}
+			
+			for each(var e:IVisualEdge in edges) {
+				e.visible = false;
+			}
+								
+			var enode:INode = vn.node;
+					
+			var arrTreeNodes:ArrayCollection = new ArrayCollection();
+			var arrTreeRoots:Array = [enode];
+			var curTreeRoot:INode = arrTreeRoots.pop();
+			
+			while(curTreeRoot.id != currentRootVNode.node.id)
+			{
+				if (arrTreeNodes.contains(curTreeRoot) == false)
+					arrTreeNodes.addItem(curTreeRoot);
+				
+				for each (var prevTreeRoot:INode in curTreeRoot.predecessors)
+					if (arrTreeRoots.indexOf(prevTreeRoot) < 0)
+						arrTreeRoots.push(prevTreeRoot);
+
+				curTreeRoot = arrTreeRoots.pop();
+			}
+			
+			arrTreeRoots = [enode];
+			curTreeRoot = arrTreeRoots.pop();
+			
+			while(curTreeRoot)
+			{
+				if (arrTreeNodes.contains(curTreeRoot) == false)
+				{
+					arrTreeNodes.addItem(curTreeRoot);
+				}
+				
+				for each (var nextTreeRoot:INode in curTreeRoot.successors)
+				{
+					if (arrTreeRoots.indexOf(nextTreeRoot) < 0)
+						arrTreeRoots.push(nextTreeRoot);
+				}
+				curTreeRoot = arrTreeRoots.pop();
+			}
+			
+			for each (var movedNode:INode in arrTreeNodes)
+			{
+				movedNode.vnode.visible = true;
+			}
+			
+			currentRootVNode.visible = true;
+			for each(var tmpEdge:IVisualEdge in edges) 
+				if (tmpEdge.edge.fromNode.vnode.visible == true &&
+					tmpEdge.edge.toNode.vnode.visible == true)
+					tmpEdge.visible = true;
+			
+			this.draw();
+		}
+		
+		private function updateVisibility():void
+		{
+			for each (var vn:IVisualNode in nodes)
+			{
+				if (_nodeIDsWithinDistanceLimit[vn])
+					vn.visible = true;
+				else
+					vn.visible = false;
+			}
+			
+			for each (var ve:IVisualEdge in edges)
+			{
+				if (ve.edge.node1.vnode.visible && ve.edge.node2.vnode.visible)
+					ve.visible = true;
+				else
+					ve.visible = false;
+			}
+
+		}
+
 		/**
 		 * @inheritDoc
 		 * */
@@ -550,7 +638,6 @@ package birdeye.vis.trans.graphs
 
 		public function resetLayout():void
 		{
-			currentRootVNode = null;
 			_graph = null;
 		}
 	}
