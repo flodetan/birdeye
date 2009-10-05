@@ -40,6 +40,7 @@ package birdeye.vis.elements.geometry {
 	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
 	import birdeye.vis.interfaces.transforms.IGraphLayout;
 	import birdeye.vis.scales.*;
+	import birdeye.vis.trans.graphs.GraphLayout;
 	import birdeye.vis.trans.graphs.visual.IVisualNode;
 	
 	import com.degrafa.IGeometry;
@@ -59,11 +60,21 @@ package birdeye.vis.elements.geometry {
 			super();
 		}
 		
+		private var _rootNodeId:String;
+		public function set rootNodeId(id:String):void {
+			_rootNodeId = id;
+			if (graphLayout)
+				graphLayout.apply(width, height);
+		}
+		public function get rootNodeId():String {
+			return _rootNodeId;
+		}
+		
 		private var _edgeElement:IEdgeElement;
 		public function set edgeElement(val:IEdgeElement):void
 		{
 			_edgeElement = val;
-			VisScene(visScene).invalidateDisplayList();
+			invalidatingDisplay();
 		}
 		public function get edgeElement():IEdgeElement
 		{
@@ -76,6 +87,8 @@ package birdeye.vis.elements.geometry {
 			_svgData = "";
 			for each (var itemDisplayObject:DisplayObject in _itemDisplayObjects)
 			{
+				if (!itemDisplayObject.visible) continue;
+				
 				if (itemDisplayObject is DataItemLayout)
 				{
 					for each (var geom:Geometry in DataItemLayout(itemDisplayObject).geometry)
@@ -122,13 +135,13 @@ package birdeye.vis.elements.geometry {
 			return _svgData;
 		}
 		
-		private var _graphLayout:IGraphLayout;
+		private var _graphLayout:GraphLayout;
 
-		public function set graphLayout(layout:IGraphLayout):void {
+		public function set graphLayout(layout:GraphLayout):void {
 			_graphLayout = layout;
 		}
 
-		public function get graphLayout():IGraphLayout {
+		public function get graphLayout():GraphLayout {
 			return _graphLayout;
 		}
 
@@ -261,9 +274,19 @@ trace("ENTER", e.target.toString());
 							   true, false, sizeLabel, fontLabel);
 		}
 		
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+		{
+			
+		}
+		
 		override public function drawElement():void {
 			super.drawElement();
-				
+
+			graphLayout.nodeElement = this;
+			if (edgeElement)
+				graphLayout.edgeElement = edgeElement;
+			graphLayout.apply(width, height)
+
 			prepareForItemDisplayObjectsCreation();
 			renderers = [];
 			
