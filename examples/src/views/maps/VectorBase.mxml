@@ -81,6 +81,7 @@
 	<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([myMap.svgData], parentApplication.width, parentApplication.height))"/>
 	
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+	<mx:Label text="Draggable countries ...."/>
     	<coords:Cartesian id="myMap" width="90%" height="90%" showDataTips="true" dataTipFunction="dtFunc">
     		<coords:transforms>
 					<trans:Projection id="myProj" proj="Miller cylindrical" latScale="{lat}" longScale="{long}"/>
@@ -95,7 +96,7 @@
 				<axis:Axis scale="{long}" placement="top" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb" />
 			</coords:guides>
 -->    		 <coords:elements>
-    		 	<elements:PolygonElement dataProvider="{dt}" scale1="{long}" scale2="{lat}" polyDim="poly" colorScale="{col}" />
+    		 	<elements:PolygonElement draggableItems="true" dataProvider="{dt}" scale1="{long}" scale2="{lat}" polyDim="poly" colorScale="{col}" />
 			 </coords:elements>
     	</coords:Cartesian>
     </mx:VBox>
