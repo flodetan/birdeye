@@ -92,6 +92,10 @@
 						else
 							pos = size - size * (1 - (logDataValue - logMin)/(logMax - logMin));
 						break;
+					default:
+						// in case both logMin and logMax are 0 than return the minimum scale value
+						pos = size * (logDataValue - logMin)/(logMax - logMin);
+						pos = (isNaN(pos)) ? _scaleValues[0] : pos + _scaleValues[0];
 				}
 				
 			return pos;
