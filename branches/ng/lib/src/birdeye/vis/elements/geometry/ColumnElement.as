@@ -72,7 +72,7 @@ package birdeye.vis.elements.geometry
 			if (stackType == STACKED && visScene)
 			{
 				if (scale2 && scale2 is INumerableScale)
-					INumerableScale(scale2).max = visScene.maxStacked100;
+					INumerableScale(scale2).max = Math.max(INumerableScale(scale2).max, visScene.maxStacked100);
 			}
 		}
 
