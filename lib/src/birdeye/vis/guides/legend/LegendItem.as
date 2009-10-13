@@ -338,6 +338,8 @@ package birdeye.vis.guides.legend
 			
 			stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 
+			gg.geometry = gg.geometryCollection.items = [];
+
 			if (_itemRenderer && _sizeRenderer>0)
 			{
 	 			var bounds:Rectangle = new Rectangle(0, 0, _sizeRenderer, _sizeRenderer);
