@@ -603,6 +603,22 @@
 			invalidateDisplayList();
 		}
 		
+		/** 
+		 * Indicate whether to have a background or not. Sometimes it's useful that the 
+		 * visscene is empty, for ex. when it shares the same space with another visscene and 
+		 * we want the scene on the back to have his interactivity.
+		 */
+		public var _backgroundEmpty:Boolean = false;
+		[Inspectable(enumeration="true,false")]
+		public function set backgroundEmpty(val:Boolean):void
+		{
+			_backgroundEmpty = val;
+		}
+		public function get backgroundEmpty():Boolean
+		{
+			return _backgroundEmpty;
+		}
+
 		/**
 		 * Return the mask needed to hide elements that draws outside the elementContainer boundaries.*/
 		public function get maskShape():Shape
@@ -627,15 +643,18 @@
 		{
 			super.createChildren();
 			
-			_maskShape = new Shape();
-			_elementsContainer.addChildAt(_maskShape, 0);
-			
-			ggBackGround = new GeometryGroup();
-			addChildAt(ggBackGround, 0);
-			ggBackGround.target = this;
-			rectBackGround = new RegularRectangle(0,0,0, 0);
-			rectBackGround.fill = new SolidFill(0x000000,0);
-			ggBackGround.geometryCollection.addItem(rectBackGround);
+			if (!backgroundEmpty)
+			{
+				_maskShape = new Shape();
+				_elementsContainer.addChildAt(_maskShape, 0);
+				
+				ggBackGround = new GeometryGroup();
+				addChildAt(ggBackGround, 0);
+				ggBackGround.target = this;
+				rectBackGround = new RegularRectangle(0,0,0, 0);
+				rectBackGround.fill = new SolidFill(0x000000,0);
+				ggBackGround.geometryCollection.addItem(rectBackGround);
+			}
 		}
 		
 		override protected function commitProperties():void
@@ -813,10 +832,10 @@
 			if (scale) scale.resetValues();
 		}
 		
-		public function refresh():void
+		public function refresh(updatedDataItems:Vector.<Object>, field:Object = null, colorFieldValues:Array = null, fieldID:Object = null):void
 		{
 			for (var i:Number = 0; i<elements.length; i++)
-				IElement(elements[i]).refresh();
+				IElement(elements[i]).refresh(updatedDataItems, field, colorFieldValues, fieldID);
 		}
 		
 	    public function clearAll():void
