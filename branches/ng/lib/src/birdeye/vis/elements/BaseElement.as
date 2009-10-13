@@ -397,16 +397,6 @@ package birdeye.vis.elements
 		public function set scale2(val:IScale):void
 		{
 			_scale2 = val;
-			
-
-/* 			if POLAR
-			if (val is IScaleUI && IScaleUI(_scale2).placement != BaseScale.HORIZONTAL_CENTER 
-								&& IScaleUI(_scale2).placement != BaseScale.VERTICAL_CENTER)
-				IScaleUI(_scale2).placement = BaseScale.HORIZONTAL_CENTER;
- 			if CARTESIAN
- 			if (_scale2.placement != BaseScale.LEFT && _scale2.placement != BaseScale.RIGHT)
-				_scale2.placement = BaseScale.LEFT;
- */			
 
 			invalidateProperties();
 			invalidatingDisplay();
@@ -1040,6 +1030,22 @@ package birdeye.vis.elements
 			return _source;
 		}
 		
+		/** 
+		 * Indicate whether to have a background or not. Sometimes it's useful that the 
+		 * visscene is empty, for ex. when it shares the same space with another visscene and 
+		 * we want the scene on the back to have his interactivity.
+		 */
+		public var _backgroundEmpty:Boolean = false;
+		[Inspectable(enumeration="true,false")]
+		public function set backgroundEmpty(val:Boolean):void
+		{
+			_backgroundEmpty = val;
+		}
+		public function get backgroundEmpty():Boolean
+		{
+			return _backgroundEmpty;
+		}
+
 		private var _index:Number;
 		public function set index(val:Number):void
 		{
@@ -1488,6 +1494,11 @@ package birdeye.vis.elements
 					
 				label = new TextRenderer(xPos, yPos,
 										text, new SolidFill(colorLabel), true, true, sizeLabel, fontLabel);
+										
+				if (!isNaN(_labelOffsetX) && _labelOffsetX != 0)
+					label.x += _labelOffsetX;
+				if (!isNaN(_labelOffsetY) && _labelOffsetY != 0)
+					label.y += _labelOffsetY;
 
 				if (labelRotation) {
 					var transform:RotateTransform = new RotateTransform();
@@ -1935,11 +1946,14 @@ package birdeye.vis.elements
 			// background is needed on each series to allow custom tooltip events
 			// all over the series space, mostly on those data items  
 			// located at the border of the series or gg
-			ggBackGround = new GeometryGroup();
-			graphicsCollection.addItemAt(ggBackGround,0);
-			rectBackGround = new RegularRectangle(0,0,0, 0);
-			rectBackGround.fill = new SolidFill(0x000000,0);
-			ggBackGround.geometryCollection.addItem(rectBackGround);
+			if (!backgroundEmpty)
+			{
+				ggBackGround = new GeometryGroup();
+				graphicsCollection.addItemAt(ggBackGround,0);
+				rectBackGround = new RegularRectangle(0,0,0, 0);
+				rectBackGround.fill = new SolidFill(0x000000,0);
+				ggBackGround.geometryCollection.addItem(rectBackGround);
+			}
 			
 			// once this is true, the listener will not be added anymore
 			tooltipCreationListening = true;
@@ -2062,7 +2076,7 @@ package birdeye.vis.elements
 			return NaN;
 		}
 
-		public function refresh():void
+		public function refresh(updatedDataItems:Vector.<Object>, field:Object = null, colorFieldValues:Array = null, fieldID:Object = null):void
 		{
 			// for the moment only overridden by PolygonElement
 		}
