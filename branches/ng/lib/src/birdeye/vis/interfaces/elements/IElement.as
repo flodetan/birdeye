@@ -149,8 +149,20 @@ package birdeye.vis.interfaces.elements
 		/** Implement the element drawing in the creation phase.*/
 		function draw():void;
 
-		/** Update the data items status.*/
-		function refresh():void;
+		/** Update the data items status. This means that the dataProvider is still the same
+		 * but we want to update it with new values for a single field (for ex. color field).
+		 * - updatedDataItems is the new data provider for the element, in fact if the 
+		 * data provider is not updated and the refresh involves 1 or more properties changes
+		 * the next display invalidation will consider the original data provider, without considering 
+		 * all the changes performed by the refresh.
+		 * - field is the field whose values are to be updated.
+		 * - fieldID is the field that can be used to uniquely identify 
+		 * adata item in the polygon (for ex. if the polygon is a country, 
+		 * than it's ISO code, or country name). 
+		 * - colorFieldValues is the array with the new values to be assigned to the 
+		 * field represented by fieldID
+		 * */
+		function refresh(updatedDataItems:Vector.<Object>, field:Object = null, colorFieldValues:Array = null, fieldID:Object = null):void;
 
 		/** Element must provide the clear all graphics items when refreshed, thus insuring
 		 * both display refresh and memory clearing..*/
