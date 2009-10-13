@@ -27,25 +27,23 @@
  
 package birdeye.vis.elements.geometry
 {
+	import __AS3__.vec.Vector;
+	
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.data.Pair;
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.collision.*;
-	import birdeye.vis.guides.renderers.UpTriangleRenderer;
 	import birdeye.vis.scales.*;
 	import birdeye.vis.trans.projections.Projection;
 	
 	import com.degrafa.IGeometry;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.Path;
-	import com.degrafa.geometry.Polygon;
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.utils.getTimer;
-	
-	import mx.core.ClassFactory;
 
 	public class PolygonElement extends BaseElement
 	{
@@ -245,8 +243,14 @@ trace(getTimer(), "drawing polygon ele Num coords ", numCoords);
 			}*/
 		}
 
-		override public function refresh():void
+		// fieldID is the field that can be used to uniquely identify 
+		// adata item in the polygon (for ex. if the polygon is a country, 
+		// than it's ISO code, or country name)
+		override public function refresh(updatedDataItems:Vector.<Object>, field:Object = null, colorFieldValues:Array = null, fieldID:Object = null):void
 		{
+			if (updatedDataItems)
+				_dataItems = updatedDataItems;
+
 			// in the future this will reflect a more proper dataItems structure
 			var nGG:Number = (graphicsCollection.items) ? graphicsCollection.items.length : 0;
 			var tmpGG:DataItemLayout;
@@ -256,17 +260,28 @@ trace(getTimer(), "drawing polygon ele Num coords ", numCoords);
 			
 			for (var i:Number = 0; i<nGG; i++)
 			{
-				if ((tmpGG = graphicsCollection.items[i]) is DataItemLayout && tmpGG.currentItem)
+				if (graphicsCollection.items[i] is DataItemLayout)
 				{
+					tmpGG = graphicsCollection.items[i];
+					if (!tmpGG.currentItem) continue;
 					if (colorScale && colorField)
 					{
-						dataValue = tmpGG.currentItem[colorField];
+						if (colorFieldValues && field == colorField)
+						{
+							dataValue = colorFieldValues[tmpGG.currentItem[fieldID]];
+							// update value in the data item 
+							tmpGG.currentItem[colorField] = dataValue;
+							if (!dataValue || dataValue == 0) 
+								dataValue = Numeric(colorScale).min;
+						} else
+							dataValue = tmpGG.currentItem[colorField];
+
 						tmpColor = colorScale.getPosition(dataValue); 
 
 						for (var j:uint = 0; j<tmpGG.geometryCollection.items.length; j++)
 						{
 							tmpGeometry = tmpGG.geometryCollection.items[j];
-							if (tmpGeometry is Polygon)
+							if (tmpGeometry is IGeometry)
 							{
 								if (tmpColor is Number)
 									tmpGeometry.fill = new SolidFill(tmpColor);
