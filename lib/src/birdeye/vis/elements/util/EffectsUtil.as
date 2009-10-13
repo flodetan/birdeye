@@ -41,12 +41,12 @@ package birdeye.vis.elements.util
 		{
 			var gradientGlow:GradientGlowFilter = new GradientGlowFilter();
 			gradientGlow.distance = 0;
-			gradientGlow.angle = 45;
-			gradientGlow.colors = [0x000000, DataItemLayout(target).fill];
-			gradientGlow.alphas = [0, 1];
+			gradientGlow.angle = 0;
+			gradientGlow.colors = [0xffffff, DataItemLayout(target).fill];
+			gradientGlow.alphas = [0, .3];
 			gradientGlow.ratios = [0, 255];
-			gradientGlow.blurX = 8;
-			gradientGlow.blurY = 8;
+			gradientGlow.blurX = 4;
+			gradientGlow.blurY = 4;
 			gradientGlow.strength = 2;
 			gradientGlow.quality = BitmapFilterQuality.HIGH;
 			gradientGlow.type = BitmapFilterType.OUTER;
