@@ -1,4 +1,31 @@
-package birdeye.vis.source.kml.parser
+/* 
+ * The MIT License
+ *
+ * Copyright (c) 2008
+ * United Nations Office at Geneva
+ * Center for Advanced Visual Analytics
+ * http://cava.unog.ch
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+ 
+ package birdeye.vis.source.kml.parser
 {
 	import birdeye.vis.data.Pair;
 
@@ -12,6 +39,8 @@ package birdeye.vis.source.kml.parser
 		public function get longLatPolygons():Array {
 			return _longLatPolygons;
 		}
+
+		private var _longLatBaryCenters:Array=new Array();
 
 		public function KMLParser()
 		{
@@ -109,6 +138,18 @@ package birdeye.vis.source.kml.parser
 			
 			//For each subtree on the "pathToCountry" level, execute "parseCountryPolygons"
 			recurTreePath(kml, pathToCountry, parseCountryPolygons, params);
+		}
+
+		private function parseCountryBaryCenter(country:XML):String {
+			const stringStart:String = "\t\t\tlongLatBaryCenters[\"" + country.ISO_3 + "\"]=[";
+			var output:String = stringStart + country.Point.coordinates.toString() + "];\n";
+			return output;
+		}
+		
+		private function parseBaryCenterKML(baryKml:XML):void{
+			for each (var country:XML in baryKml.Folder.Feature) {
+                _longLatBaryCenters[country.ISO_3] = parseCountryBaryCenter(country);
+            }
 		}
 
 /*
