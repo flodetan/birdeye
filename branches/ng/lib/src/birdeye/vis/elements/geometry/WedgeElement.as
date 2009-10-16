@@ -42,8 +42,6 @@ package birdeye.vis.elements.geometry
 	import com.degrafa.paint.LinearGradientFill;
 	import com.degrafa.paint.SolidFill;
 	
-	import flash.geom.Point;
-	
 	import mx.core.ClassFactory;
 
 	public class WedgeElement extends StackElement
@@ -75,6 +73,26 @@ package birdeye.vis.elements.geometry
 		{
 			_showPercent = val;
 			invalidatingDisplay();
+		}
+		
+		private var _labelFunction:Function;
+		/**
+		 * This allows a label function to set.</br>
+		 * This function is called to generate each label. </br>
+		 * It needs to accept three arguments: </br>
+		 * <code>item:Object</code> the current data item</br> 
+		 * <code>dataFields:Object</code> the possible data fields</br>
+		 * <code>percent:Number</code> the percent that this part of the pie takes</br>
+		 */
+		public function set labelFunction(lf:Function):void
+		{
+			_labelFunction = lf;
+			invalidatingDisplay();
+		}
+		
+		public function get labelFunction():Function
+		{
+			return _labelFunction;
 		}
 		
 		public function WedgeElement()
@@ -260,7 +278,7 @@ package birdeye.vis.elements.geometry
 		
 						gg.geometryCollection.addItemAt(arc,0); 
 						
-						if (labelField)
+						if (labelField || labelFunction)
 						{
 							var xLlb:Number = xPos, yLlb:Number = yPos;
 							if (!isNaN(_radiusLabelOffset))
@@ -268,10 +286,29 @@ package birdeye.vis.elements.geometry
 								xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, visScene.origin);
 								yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, visScene.origin);
 							}
-							var label:TextRenderer = new TextRenderer(xLlb, yLlb, currentItem[labelField], new SolidFill(colorLabel),
-																	true, true, sizeLabel, fontLabel);
+							
+							
+							var labelTxt:String;
+							if (labelField)
+							{
+								labelTxt = currentItem[labelField];
+							}
+							else if (labelFunction)
+							{
+								labelTxt = _labelFunction(currentItem, dataFields, Math.round(angle * 1000 / scale1.size) / 10);		
+							}
+							
+							var label:TextRenderer = new TextRenderer(xLlb, yLlb, labelTxt, new SolidFill(colorLabel),
+																	false, false, sizeLabel, fontLabel);
 							
 							label.fontWeight = "bold";
+							
+							var tAngle:Number = startAngle + angle / 2;
+							if (tAngle >= 90 && tAngle < 270)
+							{
+								// move the label so that anchor is right
+								label.x -= label.textWidth;
+							}
 
 							addSVGData(label.svgData);
 							gg.geometryCollection.addItem(label); 
