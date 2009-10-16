@@ -14,6 +14,7 @@
 			import birdeye.vis.trans.modifiers.Simplification;
 			import mx.controls.Alert;
 			import birdeye.vis.data.DataItemLayout;
+			import birdeye.vis.data.Pair;
 			import birdeye.vis.data.dictionaries.WorldRegionTypes;
 			import birdeye.vis.data.dictionaries.WorldCountries;
 			import birdeye.vis.trans.projections.Projection;
@@ -36,11 +37,11 @@
 				var wc:WorldCountries = new WorldCountries();
 				var countries:Array = wc.getCountriesListByRegion("NorthAfrica");
 				var simplifiedCountries:ArrayCollection = new ArrayCollection();
-				var previousCenter:Array; 
+				var previousCenter:Pair; 
 				for each (var country:String in countries)
 				{
 					var a:Array;
-					var end:Array;
+					var end:Pair;
 					simplifiedCountries.addItem({
 						country: country,
 						poly: a = wc.getCountryPolygon(country),

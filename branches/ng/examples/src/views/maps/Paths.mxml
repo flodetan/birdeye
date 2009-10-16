@@ -10,6 +10,7 @@
 <mx:Script>
 		<![CDATA[
 			import birdeye.vis.data.UtilSVG;
+			import birdeye.vis.data.Pair;
 			import birdeye.vis.trans.modifiers.WhyattSimplification;
 			import birdeye.vis.trans.modifiers.Simplification;
 			import mx.controls.Alert;
@@ -36,7 +37,7 @@
 				var wc:WorldCountries = new WorldCountries();
 				var countries:Array = wc.getCountriesListByRegion("NorthAfrica");
 				var simplifiedCountries:ArrayCollection = new ArrayCollection();
-				var previousCenter:Array; 
+				var previousCenter:Pair; 
 				for each (var country:String in countries)
 				{
 					var a:Array;
