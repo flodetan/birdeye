@@ -33,15 +33,18 @@ package birdeye.vis.guides.legend
 	import birdeye.vis.interfaces.data.IExportableSVG;
 	import birdeye.vis.interfaces.elements.IElement;
 	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
+	import birdeye.vis.scales.ColorCategory;
 	
 	import com.degrafa.GeometryGroup;
 	import com.degrafa.Surface;
 	import com.degrafa.geometry.Geometry;
 	import com.degrafa.paint.SolidFill;
+	import com.degrafa.paint.SolidStroke;
 	
 	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.text.TextFieldAutoSize;
 	import flash.utils.describeType;
 	
 	import mx.containers.Box;
@@ -102,6 +105,7 @@ package birdeye.vis.guides.legend
 			return _svgData;
 		}
 
+
 		private var _legendTitle:String;
 		public function set legendTitle(val:String):void
 		{
@@ -124,6 +128,8 @@ package birdeye.vis.guides.legend
 		public function set dataProvider(val:VisScene):void
 		{
 			_dataProvider = val;
+			
+			if (val == null) clearAll();
 			invalidateSize();
 			invalidateDisplayList();
 		}
@@ -149,24 +155,31 @@ package birdeye.vis.guides.legend
 			Application.application.addEventListener("ProviderReady",createLegend,true);
 		}
 		
+		private function clearAll():void
+		{
+			var nC:Number = numChildren;
+			for (var i:Number = 0; i<nC; i++)
+			{
+				var child:Object = getChildAt(0);
+				if (child is Surface && !(child is LegendItem))
+				{
+					for (var j:int = 0; j<Surface(child).numChildren; j++)
+						Surface(child).removeChildAt(0);
+ 					removeChildAt(0);
+	 			}
+	 		}
+	 	}
+	 			
+				
+		
 		private var surf:Surface;
 		private function createLegend(e:Event):void
 		{
 			if (e.target == _dataProvider)
 			{
-				var nC:Number = numChildren;
-				for (var i:Number = 0; i<nC; i++)
-				{
-					var child:Object = getChildAt(0);
-					if (child is Surface && !(child is LegendItem))
-					{
-						for (var j:int = 0; j<Surface(child).numChildren; j++)
-							Surface(child).removeChildAt(0);
-	 					removeChildAt(0);
-					}
-				}
-
-				for (i = 0; i<_dataProvider.elements.length; i++)
+				clearAll();
+				
+				for (var i:uint = 0; i<_dataProvider.elements.length; i++)
 				{
 					surf = new Surface();
 					var gg:GeometryGroup = new GeometryGroup();
@@ -209,17 +222,59 @@ package birdeye.vis.guides.legend
 						{
 							label.fill = geom.fill;
 						}
-					}
-
-					if (label.text)
-						gg.geometryCollection.addItem(label);
 						
-					if (geom || label.text)
+						if (label.text)
+							gg.geometryCollection.addItem(label);
+							
+						if (geom || label.text)
+						{
+							surf.graphicsCollection.addItem(gg);
+							surf.width = Rectangle(surf.getBounds(surf)).width;
+							surf.height = Rectangle(surf.getBounds(surf)).height;
+							addChild(surf);
+						}
+					}
+					else if (IElement(_dataProvider.elements[i]).colorScale && IElement(_dataProvider.elements[i]).colorScale is ColorCategory)
 					{
-						surf.graphicsCollection.addItem(gg);
-						surf.width = Rectangle(surf.getBounds(surf)).width;
-						surf.height = Rectangle(surf.getBounds(surf)).height;
-						addChild(surf);
+						var cc:ColorCategory = IElement(_dataProvider.elements[i]).colorScale as ColorCategory;
+						
+						for each (var o:Object in cc.completeDataValues)
+						{
+							surf = new Surface();
+							var gg:GeometryGroup = new GeometryGroup();
+							gg.target = surf;
+							var color:uint = cc.getPosition(o);
+							
+							var renderer:IFactory = IElement(_dataProvider.elements[i]).graphicRenderer;
+
+			 				var geom:Geometry;
+			 				if (IElement(_dataProvider.elements[i]).source)
+			 				{
+			 					geom = new RasterRenderer(bounds, IElement(_dataProvider.elements[i]).source);
+			 				} else {
+			 					
+			 					geom = renderer.newInstance();
+			 					
+			 					if (geom is IBoundedRenderer) (geom as IBoundedRenderer).bounds = bounds;
+			 				}
+							geom.fill = new SolidFill(color);
+							geom.stroke = new SolidStroke(color);
+							gg.geometryCollection.addItem(geom);
+							
+							var label:TextRenderer = new TextRenderer(15);
+							label.fontSize = sizeLabel;
+							label.fontFamily = fontLabel;
+							label.text = o.toString();
+							label.fill = new SolidFill(colorLabel);
+							
+							gg.geometryCollection.addItem(label);
+							
+							surf.graphicsCollection.addItem(gg);
+							surf.width = Rectangle(surf.getBounds(surf)).width;
+							surf.height = Rectangle(surf.getBounds(surf)).height;
+							addChild(surf);
+
+						}
 					}
 				}
 				
