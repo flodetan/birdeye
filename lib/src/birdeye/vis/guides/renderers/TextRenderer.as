@@ -43,9 +43,6 @@ package birdeye.vis.guides.renderers
 									 centerHorizontally:Boolean = false, centerVertically:Boolean = false,
 									 fontSize:Number = 12, fontLabel:String = "tahoma") 
 		{
-			if (text)
-				this.text = text;
-
 			if (fontSize)
 				this.fontSize = fontSize;
 				
@@ -66,6 +63,11 @@ package birdeye.vis.guides.renderers
 
 			this.autoSize = TextFieldAutoSize.LEFT;
 			this.autoSizeField = true;
+			if (text)
+				this.text = text;
+
+
+
 			if (centerHorizontally)
 				x = xPos - (textWidth + 4)/2;
 			else
