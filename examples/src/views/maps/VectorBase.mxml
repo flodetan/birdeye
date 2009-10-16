@@ -34,6 +34,7 @@
 				var countries:Array = wc.getCountriesListByRegion("World");
 				var kmlParser:KMLParser = new KMLParser();
 				kmlParser.parsePolygonKML(polygonKml, "Document.Folder.Feature.","ISO_3","Polygon.outerBoundaryIs.LinearRing.coordinates.");				
+				kmlParser.parseBaryCenterKML(polygonKml, "Document.Folder.Feature.","ISO_3","Point.coordinates.");				
 				var countriesData:ArrayCollection = new ArrayCollection();
 				for each (var country:String in countries)
 				{
@@ -41,7 +42,7 @@
 					countriesData.addItem({
 						country: country,
 						poly: a = kmlParser.longLatPolygons[country],
-						center: wc.getCountryCenter(country),
+						center: kmlParser.longLatBaryCenters[country],//wc.getCountryCenter(country),
 						random: Math.random() * 100000
 					});
 				}

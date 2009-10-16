@@ -1,0 +1,3097 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+
+  <Document>
+    <Schema name="Feature" parent="Placemark">
+      <SimpleField name="ISO_3" type="string"/>
+      <SimpleField name="STATUS" type="string"/>
+      <SimpleField name="COLOR_CODE" type="string"/>
+      <SimpleField name="Terr_ID" type="double"/>
+      <SimpleField name="Terr_Name" type="string"/>
+      <SimpleField name="Shape_Leng" type="double"/>
+      <SimpleField name="Shape_Area" type="double"/>
+    </Schema>
+    <Style id="style0">
+      <IconStyle id="subStyle0">
+        <color>ff000000</color>
+        <colorMode>normal</colorMode>
+        <Scale>1.000000</Scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon24.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <Folder>
+      <name>BaryCenters</name>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>7.987788,8.976808 </coordinates>
+        </Point>
+        <ISO_3>NGA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>NGA</COLOR_CODE>
+        <Terr_ID>179</Terr_ID>
+        <Terr_Name>Nigeria</Terr_Name>
+        <Shape_Leng>48.108048</Shape_Leng>
+        <Shape_Area>74.887644</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>19.296053,42.751687 </coordinates>
+        </Point>
+        <ISO_3>MNE</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MNE</COLOR_CODE>
+        <Terr_ID>164</Terr_ID>
+        <Terr_Name>Montenegro</Terr_Name>
+        <Shape_Leng>7.377032</Shape_Leng>
+        <Shape_Area>1.513965</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>27.984375,53.460297 </coordinates>
+        </Point>
+        <ISO_3>BLR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>BLR</COLOR_CODE>
+        <Terr_ID>24</Terr_ID>
+        <Terr_Name>Belarus</Terr_Name>
+        <Shape_Leng>31.66849</Shape_Leng>
+        <Shape_Area>28.157807</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-1.747007,12.146713 </coordinates>
+        </Point>
+        <ISO_3>BFA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>BFA</COLOR_CODE>
+        <Terr_ID>40</Terr_ID>
+        <Terr_Name>Burkina Faso</Terr_Name>
+        <Shape_Leng>27.007433</Shape_Leng>
+        <Shape_Area>22.634153</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>79.627816,22.606858 </coordinates>
+        </Point>
+        <ISO_3>IND</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>IND</COLOR_CODE>
+        <Terr_ID>113</Terr_ID>
+        <Terr_Name>India</Terr_Name>
+        <Shape_Leng>161.119302</Shape_Leng>
+        <Shape_Area>262.012966</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-1.081164,7.824267 </coordinates>
+        </Point>
+        <ISO_3>GHA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>GHA</COLOR_CODE>
+        <Terr_ID>91</Terr_ID>
+        <Terr_Name>Ghana</Terr_Name>
+        <Shape_Leng>23.013638</Shape_Leng>
+        <Shape_Area>19.611817</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>32.233743,1.324938 </coordinates>
+        </Point>
+        <ISO_3>UGA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>UGA</COLOR_CODE>
+        <Terr_ID>252</Terr_ID>
+        <Terr_Name>Uganda</Terr_Name>
+        <Shape_Leng>21.248214</Shape_Leng>
+        <Shape_Area>19.676808</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>44.504129,23.996171 </coordinates>
+        </Point>
+        <ISO_3>SAU</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>SAU</COLOR_CODE>
+        <Terr_ID>212</Terr_ID>
+        <Terr_Name>Saudi Arabia</Terr_Name>
+        <Shape_Leng>68.382261</Shape_Leng>
+        <Shape_Area>171.264744</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-88.550048,17.299323 </coordinates>
+        </Point>
+        <ISO_3>BLZ</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>BLZ</COLOR_CODE>
+        <Terr_ID>26</Terr_ID>
+        <Terr_Name>Belize</Terr_Name>
+        <Shape_Leng>8.551621</Shape_Leng>
+        <Shape_Area>1.876976</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>8.214956,16.750195 </coordinates>
+        </Point>
+        <ISO_3>NER</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>NER</COLOR_CODE>
+        <Terr_ID>178</Terr_ID>
+        <Terr_Name>Niger</Terr_Name>
+        <Shape_Leng>50.803634</Shape_Leng>
+        <Shape_Area>100.637807</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>3.411867,-54.422969 </coordinates>
+        </Point>
+        <ISO_3>BVT</ISO_3>
+        <STATUS>NO Territory</STATUS>
+        <COLOR_CODE>NOR</COLOR_CODE>
+        <Terr_ID>34</Terr_ID>
+        <Terr_Name>Bouvet Island</Terr_Name>
+        <Shape_Leng>0.358494</Shape_Leng>
+        <Shape_Area>0.007954</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>20.686201,6.342249 </coordinates>
+        </Point>
+        <ISO_3>CAF</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>CAF</COLOR_CODE>
+        <Terr_ID>47</Terr_ID>
+        <Terr_Name>Central African Repu</Terr_Name>
+        <Shape_Leng>42.208078</Shape_Leng>
+        <Shape_Area>50.602136</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-76.261706,24.367406 </coordinates>
+        </Point>
+        <ISO_3>BHS</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>BHS</COLOR_CODE>
+        <Terr_ID>18</Terr_ID>
+        <Terr_Name>Bahamas</Terr_Name>
+        <Shape_Leng>25.487711</Shape_Leng>
+        <Shape_Area>1.079053</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>58.766406,39.191547 </coordinates>
+        </Point>
+        <ISO_3>TKM</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>TKM</COLOR_CODE>
+        <Terr_ID>248</Terr_ID>
+        <Terr_Name>Turkmenistan</Terr_Name>
+        <Shape_Leng>44.801159</Shape_Leng>
+        <Shape_Area>57.860564</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>38.475003,35.104411 </coordinates>
+        </Point>
+        <ISO_3>SYR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>SYR</COLOR_CODE>
+        <Terr_ID>235</Terr_ID>
+        <Terr_Name>Syrian Arab Republic</Terr_Name>
+        <Shape_Leng>22.535543</Shape_Leng>
+        <Shape_Area>18.570611</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-61.493939,16.193134 </coordinates>
+        </Point>
+        <ISO_3>GLP</ISO_3>
+        <STATUS>FR Territory</STATUS>
+        <COLOR_CODE>FRA</COLOR_CODE>
+        <Terr_ID>97</Terr_ID>
+        <Terr_Name>Guadeloupe</Terr_Name>
+        <Shape_Leng>2.534376</Shape_Leng>
+        <Shape_Area>0.139607</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-6.735714,31.416697 </coordinates>
+        </Point>
+        <ISO_3>MAR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MAR</COLOR_CODE>
+        <Terr_ID>166</Terr_ID>
+        <Terr_Name>Morocco</Terr_Name>
+        <Shape_Leng>36.394054</Shape_Leng>
+        <Shape_Area>38.460625</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-84.100237,9.746003 </coordinates>
+        </Point>
+        <ISO_3>CRI</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>CRI</COLOR_CODE>
+        <Terr_ID>58</Terr_ID>
+        <Terr_Name>Costa Rica</Terr_Name>
+        <Shape_Leng>14.717413</Shape_Leng>
+        <Shape_Area>4.211859</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>169.429133,-44.818879 </coordinates>
+        </Point>
+        <ISO_3>NZL</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>NZL</COLOR_CODE>
+        <Terr_ID>176</Terr_ID>
+        <Terr_Name>New Zealand</Terr_Name>
+        <Shape_Leng>80.332292</Shape_Leng>
+        <Shape_Area>29.174222</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>2.550384,28.648929 </coordinates>
+        </Point>
+        <ISO_3>DZA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>DZA</COLOR_CODE>
+        <Terr_ID>3</Terr_ID>
+        <Terr_Name>Algeria</Terr_Name>
+        <Shape_Leng>70.540183</Shape_Leng>
+        <Shape_Area>213.513455</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>127.206462,40.076414 </coordinates>
+        </Point>
+        <ISO_3>PRK</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>PRK</COLOR_CODE>
+        <Terr_ID>64</Terr_ID>
+        <Terr_Name>Democratic People's</Terr_Name>
+        <Shape_Leng>27.069004</Shape_Leng>
+        <Shape_Area>12.918865</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>23.925844,-22.285449 </coordinates>
+        </Point>
+        <ISO_3>BWA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>BWA</COLOR_CODE>
+        <Terr_ID>33</Terr_ID>
+        <Terr_Name>Botswana</Terr_Name>
+        <Shape_Leng>33.930003</Shape_Leng>
+        <Shape_Area>50.677504</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>45.147631,-12.822921 </coordinates>
+        </Point>
+        <ISO_3>MYT</ISO_3>
+        <STATUS>FR Territory</STATUS>
+        <COLOR_CODE>FRA</COLOR_CODE>
+        <Terr_ID>157</Terr_ID>
+        <Terr_Name>Mayotte</Terr_Name>
+        <Shape_Leng>1.074497</Shape_Leng>
+        <Shape_Area>0.037155</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>35.035337,31.545732 </coordinates>
+        </Point>
+        <ISO_3>ISR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>ISR</COLOR_CODE>
+        <Terr_ID>119</Terr_ID>
+        <Terr_Name>Israel</Terr_Name>
+        <Shape_Leng>10.713118</Shape_Leng>
+        <Shape_Area>1.964047</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-79.477337,21.721155 </coordinates>
+        </Point>
+        <ISO_3>CUB</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>CUB</COLOR_CODE>
+        <Terr_ID>61</Terr_ID>
+        <Terr_Name>Cuba</Terr_Name>
+        <Shape_Leng>38.152421</Shape_Leng>
+        <Shape_Area>9.527287</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>35.881368,33.878374 </coordinates>
+        </Point>
+        <ISO_3>LBN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>LBN</COLOR_CODE>
+        <Terr_ID>137</Terr_ID>
+        <Terr_Name>Lebanon</Terr_Name>
+        <Shape_Leng>5.611562</Shape_Leng>
+        <Shape_Area>0.995859</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>102.491139,19.540096 </coordinates>
+        </Point>
+        <ISO_3>LAO</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>LAO</COLOR_CODE>
+        <Terr_ID>135</Terr_ID>
+        <Terr_Name>Lao People's Democra</Terr_Name>
+        <Shape_Leng>37.558285</Shape_Leng>
+        <Shape_Area>19.680375</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>160.009199,6.293391 </coordinates>
+        </Point>
+        <ISO_3>FSM</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>FSM</COLOR_CODE>
+        <Terr_ID>159</Terr_ID>
+        <Terr_Name>Micronesia (Federate</Terr_Name>
+        <Shape_Leng>1.042427</Shape_Leng>
+        <Shape_Area>0.042206</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>51.178845,25.306142 </coordinates>
+        </Point>
+        <ISO_3>QAT</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>QAT</COLOR_CODE>
+        <Terr_ID>198</Terr_ID>
+        <Terr_Name>Qatar</Terr_Name>
+        <Shape_Leng>4.977431</Shape_Leng>
+        <Shape_Area>1.017869</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-145.715872,-14.220586 </coordinates>
+        </Point>
+        <ISO_3>PYF</ISO_3>
+        <STATUS>FR Territory</STATUS>
+        <COLOR_CODE>FRA</COLOR_CODE>
+        <Terr_ID>84</Terr_ID>
+        <Terr_Name>French Polynesia</Terr_Name>
+        <Shape_Leng>3.930174</Shape_Leng>
+        <Shape_Area>0.17533</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-62.736679,17.313103 </coordinates>
+        </Point>
+        <ISO_3>KNA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>KNA</COLOR_CODE>
+        <Terr_ID>205</Terr_ID>
+        <Terr_Name>Saint Kitts and Nevi</Terr_Name>
+        <Shape_Leng>0.666458</Shape_Leng>
+        <Shape_Area>0.016625</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>4.625375,50.653901 </coordinates>
+        </Point>
+        <ISO_3>BEL</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>BEL</COLOR_CODE>
+        <Terr_ID>25</Terr_ID>
+        <Terr_Name>Belgium</Terr_Name>
+        <Shape_Leng>11.998977</Shape_Leng>
+        <Shape_Area>3.895521</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-14.866348,13.848381 </coordinates>
+        </Point>
+        <ISO_3>SEN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>SEN</COLOR_CODE>
+        <Terr_ID>214</Terr_ID>
+        <Terr_Name>Senegal</Terr_Name>
+        <Shape_Leng>31.010931</Shape_Leng>
+        <Shape_Area>16.428005</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>23.758809,38.481022 </coordinates>
+        </Point>
+        <ISO_3>GRC</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>GRC</COLOR_CODE>
+        <Terr_ID>94</Terr_ID>
+        <Terr_Name>Greece</Terr_Name>
+        <Shape_Leng>80.396788</Shape_Leng>
+        <Shape_Area>13.543423</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-80.108938,8.458999 </coordinates>
+        </Point>
+        <ISO_3>PAN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>PAN</COLOR_CODE>
+        <Terr_ID>188</Terr_ID>
+        <Terr_Name>Panama</Terr_Name>
+        <Shape_Leng>25.300793</Shape_Leng>
+        <Shape_Area>6.088302</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>45.185632,40.143019 </coordinates>
+        </Point>
+        <ISO_3>ARM</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>ARM</COLOR_CODE>
+        <Terr_ID>11</Terr_ID>
+        <Terr_Name>Armenia</Terr_Name>
+        <Shape_Leng>11.613751</Shape_Leng>
+        <Shape_Area>3.142071</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>127.355541,35.861497 </coordinates>
+        </Point>
+        <ISO_3>KOR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>KOR</COLOR_CODE>
+        <Terr_ID>199</Terr_ID>
+        <Terr_Name>Republic of Korea</Terr_Name>
+        <Shape_Leng>28.333243</Shape_Leng>
+        <Shape_Area>9.766878</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>73.842561,41.228120 </coordinates>
+        </Point>
+        <ISO_3>KGZ</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>KGZ</COLOR_CODE>
+        <Terr_ID>134</Terr_ID>
+        <Terr_Name>Kyrgyzstan</Terr_Name>
+        <Shape_Leng>36.754034</Shape_Leng>
+        <Shape_Area>21.511835</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>114.116770,22.346283 </coordinates>
+        </Point>
+        <ISO_3>HKG</ISO_3>
+        <STATUS>CN Special Administr</STATUS>
+        <COLOR_CODE>CHN</COLOR_CODE>
+        <Terr_ID>109</Terr_ID>
+        <Terr_Name>Hong Kong</Terr_Name>
+        <Shape_Leng>2.393891</Shape_Leng>
+        <Shape_Area>0.0899</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>25.268387,42.808479 </coordinates>
+        </Point>
+        <ISO_3>BGR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>BGR</COLOR_CODE>
+        <Terr_ID>39</Terr_ID>
+        <Terr_Name>Bulgaria</Terr_Name>
+        <Shape_Leng>20.315136</Shape_Leng>
+        <Shape_Area>12.210436</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>43.427589,42.238473 </coordinates>
+        </Point>
+        <ISO_3>GEO</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>GEO</COLOR_CODE>
+        <Terr_ID>89</Terr_ID>
+        <Terr_Name>Georgia</Terr_Name>
+        <Shape_Leng>17.856957</Shape_Leng>
+        <Shape_Area>7.623237</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>7.412771,43.747842 </coordinates>
+        </Point>
+        <ISO_3>MCO</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MCO</COLOR_CODE>
+        <Terr_ID>162</Terr_ID>
+        <Terr_Name>Monaco</Terr_Name>
+        <Shape_Leng>0.137402</Shape_Leng>
+        <Shape_Area>0.001036</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-64.513513,18.448106 </coordinates>
+        </Point>
+        <ISO_3>VGB</ISO_3>
+        <STATUS>UK Non-Self-Governin</STATUS>
+        <COLOR_CODE>GBR</COLOR_CODE>
+        <Terr_ID>37</Terr_ID>
+        <Terr_Name>British Virgin Islan</Terr_Name>
+        <Shape_Leng>0.639391</Shape_Leng>
+        <Shape_Area>0.009868</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>56.133518,21.073477 </coordinates>
+        </Point>
+        <ISO_3>OMN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>OMN</COLOR_CODE>
+        <Terr_ID>184</Terr_ID>
+        <Terr_Name>Oman</Terr_Name>
+        <Shape_Leng>32.197539</Shape_Leng>
+        <Shape_Area>26.712285</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>167.952962,-29.037419 </coordinates>
+        </Point>
+        <ISO_3>NFK</ISO_3>
+        <STATUS>AU Territory</STATUS>
+        <COLOR_CODE>AUS</COLOR_CODE>
+        <Terr_ID>181</Terr_ID>
+        <Terr_Name>Norfolk Island</Terr_Name>
+        <Shape_Leng>0.259748</Shape_Leng>
+        <Shape_Area>0.004538</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>84.219606,28.195011 </coordinates>
+        </Point>
+        <ISO_3>NPL</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>NPL</COLOR_CODE>
+        <Terr_ID>172</Terr_ID>
+        <Terr_Name>Nepal</Terr_Name>
+        <Shape_Leng>23.533188</Shape_Leng>
+        <Shape_Area>13.533721</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>10.574742,51.773870 </coordinates>
+        </Point>
+        <ISO_3>DEU</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>DEU</COLOR_CODE>
+        <Terr_ID>90</Terr_ID>
+        <Terr_Name>Germany</Terr_Name>
+        <Shape_Leng>56.025026</Shape_Leng>
+        <Shape_Area>45.871667</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>54.363366,24.154436 </coordinates>
+        </Point>
+        <ISO_3>ARE</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>ARE</COLOR_CODE>
+        <Terr_ID>254</Terr_ID>
+        <Terr_Name>United Arab Emirates</Terr_Name>
+        <Shape_Leng>16.552472</Shape_Leng>
+        <Shape_Area>6.285732</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-66.344216,18.215092 </coordinates>
+        </Point>
+        <ISO_3>PRI</ISO_3>
+        <STATUS>US Territory</STATUS>
+        <COLOR_CODE>USA</COLOR_CODE>
+        <Terr_ID>197</Terr_ID>
+        <Terr_Name>Puerto Rico</Terr_Name>
+        <Shape_Leng>4.788596</Shape_Leng>
+        <Shape_Area>0.781353</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-64.744856,32.312840 </coordinates>
+        </Point>
+        <ISO_3>BMU</ISO_3>
+        <STATUS>UK Non-Self-Governin</STATUS>
+        <COLOR_CODE>BMU</COLOR_CODE>
+        <Terr_ID>28</Terr_ID>
+        <Terr_Name>Bermuda</Terr_Name>
+        <Shape_Leng>0.391085</Shape_Leng>
+        <Shape_Area>0.002056</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>144.782295,13.449585 </coordinates>
+        </Point>
+        <ISO_3>GUM</ISO_3>
+        <STATUS>US Non-Self-Governin</STATUS>
+        <COLOR_CODE>GUM</COLOR_CODE>
+        <Terr_ID>98</Terr_ID>
+        <Terr_Name>Guam</Terr_Name>
+        <Shape_Leng>1.120028</Shape_Leng>
+        <Shape_Area>0.048059</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-13.131690,24.558661 </coordinates>
+        </Point>
+        <ISO_3>ESH</ISO_3>
+        <STATUS>Non-Self-Governing T</STATUS>
+        <COLOR_CODE>ESH</COLOR_CODE>
+        <Terr_ID>266</Terr_ID>
+        <Terr_Name>Western Sahara</Terr_Name>
+        <Shape_Leng>28.72601</Shape_Leng>
+        <Shape_Area>24.002536</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>21.697598,41.589333 </coordinates>
+        </Point>
+        <ISO_3>MKD</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MKD</COLOR_CODE>
+        <Terr_ID>239</Terr_ID>
+        <Terr_Name>The former Yugoslav</Terr_Name>
+        <Shape_Leng>7.215535</Shape_Leng>
+        <Shape_Area>2.749998</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>34.265306,-13.116067 </coordinates>
+        </Point>
+        <ISO_3>MWI</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MWI</COLOR_CODE>
+        <Terr_ID>148</Terr_ID>
+        <Terr_Name>Malawi</Terr_Name>
+        <Shape_Leng>22.907443</Shape_Leng>
+        <Shape_Area>9.884384</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>53.738655,32.673635 </coordinates>
+        </Point>
+        <ISO_3>IRN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>IRN</COLOR_CODE>
+        <Terr_ID>115</Terr_ID>
+        <Terr_Name>Iran (Islamic Republ</Terr_Name>
+        <Shape_Leng>75.773279</Shape_Leng>
+        <Shape_Area>161.769912</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-62.186716,16.737668 </coordinates>
+        </Point>
+        <ISO_3>MSR</ISO_3>
+        <STATUS>UK Non-Self-Governin</STATUS>
+        <COLOR_CODE>GBR</COLOR_CODE>
+        <Terr_ID>165</Terr_ID>
+        <Terr_Name>Montserrat</Terr_Name>
+        <Shape_Leng>0.378842</Shape_Leng>
+        <Shape_Area>0.009538</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>14.768154,-0.924188 </coordinates>
+        </Point>
+        <ISO_3>COG</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>COG</COLOR_CODE>
+        <Terr_ID>56</Terr_ID>
+        <Terr_Name>Congo</Terr_Name>
+        <Shape_Leng>37.860438</Shape_Leng>
+        <Shape_Area>27.974298</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>18.581561,78.791143 </coordinates>
+        </Point>
+        <ISO_3>SJM</ISO_3>
+        <STATUS>NO Territory</STATUS>
+        <COLOR_CODE>NOR</COLOR_CODE>
+        <Terr_ID>231</Terr_ID>
+        <Terr_Name>Svalbard and Jan May</Terr_Name>
+        <Shape_Leng>148.065563</Shape_Leng>
+        <Shape_Area>26.043822</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>9.547895,47.147629 </coordinates>
+        </Point>
+        <ISO_3>LIE</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>LIE</COLOR_CODE>
+        <Terr_ID>142</Terr_ID>
+        <Terr_Name>Liechtenstein</Terr_Name>
+        <Shape_Leng>0.633839</Shape_Leng>
+        <Shape_Area>0.020921</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>12.460984,43.947449 </coordinates>
+        </Point>
+        <ISO_3>SMR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>SMR</COLOR_CODE>
+        <Terr_ID>210</Terr_ID>
+        <Terr_Name>San Marino</Terr_Name>
+        <Shape_Leng>0.354957</Shape_Leng>
+        <Shape_Area>0.006671</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>47.108621,-18.054455 </coordinates>
+        </Point>
+        <ISO_3>MDG</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MDG</COLOR_CODE>
+        <Terr_ID>146</Terr_ID>
+        <Terr_Name>Madagascar</Terr_Name>
+        <Shape_Leng>45.456627</Shape_Leng>
+        <Shape_Area>51.07102</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>73.495546,-53.082097 </coordinates>
+        </Point>
+        <ISO_3>HMD</ISO_3>
+        <STATUS>AU Territory</STATUS>
+        <COLOR_CODE>AUS</COLOR_CODE>
+        <Terr_ID>106</Terr_ID>
+        <Terr_Name>Heard Island and McD</Terr_Name>
+        <Shape_Leng>1.232737</Shape_Leng>
+        <Shape_Area>0.053681</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>70.833845,38.775212 </coordinates>
+        </Point>
+        <ISO_3>TJK</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>TJK</COLOR_CODE>
+        <Terr_ID>237</Terr_ID>
+        <Terr_Name>Tajikistan</Terr_Name>
+        <Shape_Leng>33.87746</Shape_Leng>
+        <Shape_Area>14.715868</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-61.683315,12.109965 </coordinates>
+        </Point>
+        <ISO_3>GRD</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>GRD</COLOR_CODE>
+        <Terr_ID>96</Terr_ID>
+        <Terr_Name>Grenada</Terr_Name>
+        <Shape_Leng>0.681409</Shape_Leng>
+        <Shape_Area>0.028753</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-68.686672,12.188472 </coordinates>
+        </Point>
+        <ISO_3>ANT</ISO_3>
+        <STATUS>NL Territory</STATUS>
+        <COLOR_CODE>NLD</COLOR_CODE>
+        <Terr_ID>174</Terr_ID>
+        <Terr_Name>Netherlands Antilles</Terr_Name>
+        <Shape_Leng>1.988694</Shape_Leng>
+        <Shape_Area>0.06551</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>90.504295,27.394079 </coordinates>
+        </Point>
+        <ISO_3>BTN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>BTN</COLOR_CODE>
+        <Terr_ID>29</Terr_ID>
+        <Terr_Name>Bhutan</Terr_Name>
+        <Shape_Leng>9.205493</Shape_Leng>
+        <Shape_Area>3.635555</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-19.976364,65.232709 </coordinates>
+        </Point>
+        <ISO_3>ISL</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>ISL</COLOR_CODE>
+        <Terr_ID>112</Terr_ID>
+        <Terr_Name>Iceland</Terr_Name>
+        <Shape_Leng>58.777747</Shape_Leng>
+        <Shape_Area>19.573565</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>8.328122,46.757811 </coordinates>
+        </Point>
+        <ISO_3>CHE</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>CHE</COLOR_CODE>
+        <Terr_ID>234</Terr_ID>
+        <Terr_Name>Switzerland</Terr_Name>
+        <Shape_Leng>15.441497</Shape_Leng>
+        <Shape_Area>4.88968</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>101.199542,15.502027 </coordinates>
+        </Point>
+        <ISO_3>THA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>THA</COLOR_CODE>
+        <Terr_ID>238</Terr_ID>
+        <Terr_Name>Thailand</Terr_Name>
+        <Shape_Leng>65.520365</Shape_Leng>
+        <Shape_Area>43.143228</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>158.940593,-17.341633 </coordinates>
+        </Point>
+        <ISO_3>FJI</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>FJI</COLOR_CODE>
+        <Terr_ID>80</Terr_ID>
+        <Terr_Name>Fiji</Terr_Name>
+        <Shape_Leng>13.105285</Shape_Leng>
+        <Shape_Area>1.537444</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>50.601739,25.980963 </coordinates>
+        </Point>
+        <ISO_3>BHR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>BHR</COLOR_CODE>
+        <Terr_ID>19</Terr_ID>
+        <Terr_Name>Bahrain</Terr_Name>
+        <Shape_Leng>1.653716</Shape_Leng>
+        <Shape_Area>0.057736</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>50.434704,-7.291142 </coordinates>
+        </Point>
+        <ISO_3>SYC</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>SYC</COLOR_CODE>
+        <Terr_ID>217</Terr_ID>
+        <Terr_Name>Seychelles</Terr_Name>
+        <Shape_Leng>1.356725</Shape_Leng>
+        <Shape_Area>0.030892</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>5.208745,52.160556 </coordinates>
+        </Point>
+        <ISO_3>NLD</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>NLD</COLOR_CODE>
+        <Terr_ID>173</Terr_ID>
+        <Terr_Name>Netherlands</Terr_Name>
+        <Shape_Leng>27.125958</Shape_Leng>
+        <Shape_Area>4.677571</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>29.899848,-3.241797 </coordinates>
+        </Point>
+        <ISO_3>BDI</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>BDI</COLOR_CODE>
+        <Terr_ID>41</Terr_ID>
+        <Terr_Name>Burundi</Terr_Name>
+        <Shape_Leng>7.714742</Shape_Leng>
+        <Shape_Area>2.212387</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-172.115116,-13.780031 </coordinates>
+        </Point>
+        <ISO_3>WSM</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>WSM</COLOR_CODE>
+        <Terr_ID>209</Terr_ID>
+        <Terr_Name>Samoa</Terr_Name>
+        <Shape_Leng>3.019669</Shape_Leng>
+        <Shape_Area>0.245518</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>122.731179,11.244724 </coordinates>
+        </Point>
+        <ISO_3>PHL</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>PHL</COLOR_CODE>
+        <Terr_ID>193</Terr_ID>
+        <Terr_Name>Philippines</Terr_Name>
+        <Shape_Leng>130.231134</Shape_Leng>
+        <Shape_Area>24.300194</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>159.537743,-8.910545 </coordinates>
+        </Point>
+        <ISO_3>SLB</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>SLB</COLOR_CODE>
+        <Terr_ID>222</Terr_ID>
+        <Terr_Name>Solomon Islands</Terr_Name>
+        <Shape_Leng>30.461287</Shape_Leng>
+        <Shape_Area>2.218804</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-56.024798,-32.721374 </coordinates>
+        </Point>
+        <ISO_3>URY</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>URY</COLOR_CODE>
+        <Terr_ID>258</Terr_ID>
+        <Terr_Name>Uruguay</Terr_Name>
+        <Shape_Leng>18.486992</Shape_Leng>
+        <Shape_Area>17.126246</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>15.492250,49.811836 </coordinates>
+        </Point>
+        <ISO_3>CZE</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>CZE</COLOR_CODE>
+        <Terr_ID>63</Terr_ID>
+        <Terr_Name>Czech Republic</Terr_Name>
+        <Shape_Leng>18.449594</Shape_Leng>
+        <Shape_Area>9.824211</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>2.270183,46.336883 </coordinates>
+        </Point>
+        <ISO_3>FRA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>FRA</COLOR_CODE>
+        <Terr_ID>82</Terr_ID>
+        <Terr_Name>France</Terr_Name>
+        <Shape_Leng>65.847086</Shape_Leng>
+        <Shape_Area>64.348319</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-6.874353,62.021881 </coordinates>
+        </Point>
+        <ISO_3>FRO</ISO_3>
+        <STATUS>DK Territory</STATUS>
+        <COLOR_CODE>DNK</COLOR_CODE>
+        <Terr_ID>79</Terr_ID>
+        <Terr_Name>Faroe Islands</Terr_Name>
+        <Shape_Leng>5.743751</Shape_Leng>
+        <Shape_Area>0.25431</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>137.776432,35.992619 </coordinates>
+        </Point>
+        <ISO_3>JPN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>JPN</COLOR_CODE>
+        <Terr_ID>122</Terr_ID>
+        <Terr_Name>Japan</Terr_Name>
+        <Shape_Leng>118.053081</Shape_Leng>
+        <Shape_Area>37.941313</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>66.197373,48.286181 </coordinates>
+        </Point>
+        <ISO_3>KAZ</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>KAZ</COLOR_CODE>
+        <Terr_ID>128</Terr_ID>
+        <Terr_Name>Kazakhstan</Terr_Name>
+        <Shape_Leng>140.347606</Shape_Leng>
+        <Shape_Area>343.159947</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>44.021816,33.156784 </coordinates>
+        </Point>
+        <ISO_3>IRQ</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>IRQ</COLOR_CODE>
+        <Terr_ID>116</Terr_ID>
+        <Terr_Name>Iraq</Terr_Name>
+        <Shape_Leng>33.620057</Shape_Leng>
+        <Shape_Area>42.142045</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-9.225161,6.515548 </coordinates>
+        </Point>
+        <ISO_3>LBR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>LBR</COLOR_CODE>
+        <Terr_ID>140</Terr_ID>
+        <Terr_Name>Liberia</Terr_Name>
+        <Shape_Leng>15.171262</Shape_Leng>
+        <Shape_Area>7.848845</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>103.813638,1.351663 </coordinates>
+        </Point>
+        <ISO_3>SGP</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>SGP</COLOR_CODE>
+        <Terr_ID>219</Terr_ID>
+        <Terr_Name>Singapore</Terr_Name>
+        <Shape_Leng>0.858105</Shape_Leng>
+        <Shape_Area>0.044788</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>18.460461,14.949141 </coordinates>
+        </Point>
+        <ISO_3>TCD</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>TCD</COLOR_CODE>
+        <Terr_ID>48</Terr_ID>
+        <Terr_Name>Chad</Terr_Name>
+        <Shape_Leng>51.671999</Shape_Leng>
+        <Shape_Area>107.292346</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>9.819744,34.219543 </coordinates>
+        </Point>
+        <ISO_3>TUN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>TUN</COLOR_CODE>
+        <Terr_ID>246</Terr_ID>
+        <Terr_Name>Tunisia</Terr_Name>
+        <Shape_Leng>25.014365</Shape_Leng>
+        <Shape_Area>15.188935</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>39.582445,14.971691 </coordinates>
+        </Point>
+        <ISO_3>ERI</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>ERI</COLOR_CODE>
+        <Terr_ID>74</Terr_ID>
+        <Terr_Name>Eritrea</Terr_Name>
+        <Shape_Leng>25.50333</Shape_Leng>
+        <Shape_Area>10.059447</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-11.939061,8.423922 </coordinates>
+        </Point>
+        <ISO_3>SLE</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>SLE</COLOR_CODE>
+        <Terr_ID>218</Terr_ID>
+        <Terr_Name>Sierra Leone</Terr_Name>
+        <Shape_Leng>13.809757</Shape_Leng>
+        <Shape_Area>5.953839</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>12.452214,41.903359 </coordinates>
+        </Point>
+        <ISO_3>VAT</ISO_3>
+        <STATUS>Permanent Observer t</STATUS>
+        <COLOR_CODE>VAT</COLOR_CODE>
+        <Terr_ID>107</Terr_ID>
+        <Terr_Name>Holy See</Terr_Name>
+        <Shape_Leng>0.029744</Shape_Leng>
+        <Shape_Area>0.000054</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>12.461401,42.051185 </coordinates>
+        </Point>
+        <ISO_3>ITA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>ITA</COLOR_CODE>
+        <Terr_ID>120</Terr_ID>
+        <Terr_Name>Italy</Terr_Name>
+        <Shape_Leng>68.081492</Shape_Leng>
+        <Shape_Area>33.055113</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-170.694484,-14.299927 </coordinates>
+        </Point>
+        <ISO_3>ASM</ISO_3>
+        <STATUS>US Non-Self-Governin</STATUS>
+        <COLOR_CODE>ASM</COLOR_CODE>
+        <Terr_ID>4</Terr_ID>
+        <Terr_Name>American Samoa</Terr_Name>
+        <Shape_Leng>0.600145</Shape_Leng>
+        <Shape_Area>0.01372</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>105.047609,12.637796 </coordinates>
+        </Point>
+        <ISO_3>KHM</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>KHM</COLOR_CODE>
+        <Terr_ID>42</Terr_ID>
+        <Terr_Name>Cambodia</Terr_Name>
+        <Shape_Leng>21.994011</Shape_Leng>
+        <Shape_Area>15.128532</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>6.848193,0.650952 </coordinates>
+        </Point>
+        <ISO_3>STP</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>STP</COLOR_CODE>
+        <Terr_ID>211</Terr_ID>
+        <Terr_Name>Sao Tome and Princip</Terr_Name>
+        <Shape_Leng>1.528279</Shape_Leng>
+        <Shape_Area>0.092789</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>67.981723,-49.009785 </coordinates>
+        </Point>
+        <ISO_3>ATF</ISO_3>
+        <STATUS>FR Territory</STATUS>
+        <COLOR_CODE>FRA</COLOR_CODE>
+        <Terr_ID>85</Terr_ID>
+        <Terr_Name>French Southern and</Terr_Name>
+        <Shape_Leng>11.404207</Shape_Leng>
+        <Shape_Area>0.922685</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-72.198999,-37.616333 </coordinates>
+        </Point>
+        <ISO_3>CHL</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>CHL</COLOR_CODE>
+        <Terr_ID>49</Terr_ID>
+        <Terr_Name>Chile</Terr_Name>
+        <Shape_Leng>331.249928</Shape_Leng>
+        <Shape_Area>77.692985</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>16.343293,44.444795 </coordinates>
+        </Point>
+        <ISO_3>HRV</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>HRV</COLOR_CODE>
+        <Terr_ID>60</Terr_ID>
+        <Terr_Name>Croatia</Terr_Name>
+        <Shape_Leng>37.589281</Shape_Leng>
+        <Shape_Area>6.384652</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>47.780519,40.217768 </coordinates>
+        </Point>
+        <ISO_3>AZE</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>AZE</COLOR_CODE>
+        <Terr_ID>16</Terr_ID>
+        <Terr_Name>Azerbaijan</Terr_Name>
+        <Shape_Leng>28.027804</Shape_Leng>
+        <Shape_Area>17.407362</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>42.638766,11.738730 </coordinates>
+        </Point>
+        <ISO_3>DJI</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>DJI</COLOR_CODE>
+        <Terr_ID>67</Terr_ID>
+        <Terr_Name>Djibouti</Terr_Name>
+        <Shape_Leng>7.277615</Shape_Leng>
+        <Shape_Area>1.777759</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>19.183304,52.096874 </coordinates>
+        </Point>
+        <ISO_3>POL</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>POL</COLOR_CODE>
+        <Terr_ID>195</Terr_ID>
+        <Terr_Name>Poland</Terr_Name>
+        <Shape_Leng>35.327803</Shape_Leng>
+        <Shape_Area>40.910726</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-86.188591,14.845997 </coordinates>
+        </Point>
+        <ISO_3>HND</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>HND</COLOR_CODE>
+        <Terr_ID>108</Terr_ID>
+        <Terr_Name>Honduras</Terr_Name>
+        <Shape_Leng>20.971742</Shape_Leng>
+        <Shape_Area>9.422322</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>25.029527,-28.695832 </coordinates>
+        </Point>
+        <ISO_3>ZAF</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>ZAF</COLOR_CODE>
+        <Terr_ID>224</Terr_ID>
+        <Terr_Name>South Africa</Terr_Name>
+        <Shape_Leng>67.704725</Shape_Leng>
+        <Shape_Area>113.102377</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>30.479459,27.185703 </coordinates>
+        </Point>
+        <ISO_3>EGY</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>EGY</COLOR_CODE>
+        <Terr_ID>71</Terr_ID>
+        <Terr_Name>Egypt</Terr_Name>
+        <Shape_Leng>50.964257</Shape_Leng>
+        <Shape_Area>89.224364</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-5.085200,38.632397 </coordinates>
+        </Point>
+        <ISO_3>ESP</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>ESP</COLOR_CODE>
+        <Terr_ID>226</Terr_ID>
+        <Terr_Name>Spain</Terr_Name>
+        <Shape_Leng>61.216322</Shape_Leng>
+        <Shape_Area>53.61078</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>166.060457,-21.256932 </coordinates>
+        </Point>
+        <ISO_3>NCL</ISO_3>
+        <STATUS>FR Non-Self-Governin</STATUS>
+        <COLOR_CODE>FRA</COLOR_CODE>
+        <Terr_ID>175</Terr_ID>
+        <Terr_Name>New Caledonia</Terr_Name>
+        <Shape_Leng>12.571858</Shape_Leng>
+        <Shape_Area>1.640599</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>19.359526,47.260378 </coordinates>
+        </Point>
+        <ISO_3>HUN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>HUN</COLOR_CODE>
+        <Terr_ID>111</Terr_ID>
+        <Terr_Name>Hungary</Terr_Name>
+        <Shape_Leng>18.162064</Shape_Leng>
+        <Shape_Area>11.033293</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-61.791470,17.326884 </coordinates>
+        </Point>
+        <ISO_3>ATG</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>ATG</COLOR_CODE>
+        <Terr_ID>9</Terr_ID>
+        <Terr_Name>Antigua &amp; Barbuda</Terr_Name>
+        <Shape_Leng>1.162904</Shape_Leng>
+        <Shape_Area>0.045626</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>29.893166,-2.032464 </coordinates>
+        </Point>
+        <ISO_3>RWA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>RWA</COLOR_CODE>
+        <Terr_ID>203</Terr_ID>
+        <Terr_Name>Rwanda</Terr_Name>
+        <Shape_Leng>7.159863</Shape_Leng>
+        <Shape_Area>2.043385</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>10.392256,55.890028 </coordinates>
+        </Point>
+        <ISO_3>DNK</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>DNK</COLOR_CODE>
+        <Terr_ID>66</Terr_ID>
+        <Terr_Name>Denmark</Terr_Name>
+        <Shape_Leng>45.381694</Shape_Leng>
+        <Shape_Area>6.142946</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-174.796027,-20.313602 </coordinates>
+        </Point>
+        <ISO_3>TON</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>TON</COLOR_CODE>
+        <Terr_ID>243</Terr_ID>
+        <Terr_Name>Tonga</Terr_Name>
+        <Shape_Leng>1.309111</Shape_Leng>
+        <Shape_Area>0.040017</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-90.272178,15.852383 </coordinates>
+        </Point>
+        <ISO_3>GTM</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>GTM</COLOR_CODE>
+        <Terr_ID>100</Terr_ID>
+        <Terr_Name>Guatemala</Terr_Name>
+        <Shape_Leng>16.760197</Shape_Leng>
+        <Shape_Area>9.193014</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>35.381934,-6.422560 </coordinates>
+        </Point>
+        <ISO_3>TZA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>TZA</COLOR_CODE>
+        <Terr_ID>255</Terr_ID>
+        <Terr_Name>United Republic of T</Terr_Name>
+        <Shape_Leng>45.405474</Shape_Leng>
+        <Shape_Area>77.008771</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-21.220357,-77.691352 </coordinates>
+        </Point>
+        <ISO_3>ATA</ISO_3>
+        <STATUS></STATUS>
+        <COLOR_CODE>ATA</COLOR_CODE>
+        <Terr_ID>8</Terr_ID>
+        <Terr_Name>Antarctica</Terr_Name>
+        <Shape_Leng>1567.440248</Shape_Leng>
+        <Shape_Area>6033.098717</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>58.765571,-20.163688 </coordinates>
+        </Point>
+        <ISO_3>MUS</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MUS</COLOR_CODE>
+        <Terr_ID>156</Terr_ID>
+        <Terr_Name>Mauritius</Terr_Name>
+        <Shape_Leng>1.995267</Shape_Leng>
+        <Shape_Area>0.185447</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-27.437397,38.341965 </coordinates>
+        </Point>
+        <ISO_3>PRT</ISO_3>
+        <STATUS>PT Territory</STATUS>
+        <COLOR_CODE>PRT</COLOR_CODE>
+        <Terr_ID>17</Terr_ID>
+        <Terr_Name>Portugal</Terr_Name>
+        <Shape_Leng>6.522582</Shape_Leng>
+        <Shape_Area>0.264654</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-40.404318,73.790535 </coordinates>
+        </Point>
+        <ISO_3>GRL</ISO_3>
+        <STATUS>DK Territory</STATUS>
+        <COLOR_CODE>DNK</COLOR_CODE>
+        <Terr_ID>95</Terr_ID>
+        <Terr_Name>Greenland</Terr_Name>
+        <Shape_Leng>942.218113</Shape_Leng>
+        <Shape_Area>660.927118</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>18.124303,-21.547573 </coordinates>
+        </Point>
+        <ISO_3>NAM</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>NAM</COLOR_CODE>
+        <Terr_ID>169</Terr_ID>
+        <Terr_Name>Namibia</Terr_Name>
+        <Shape_Leng>48.902887</Shape_Leng>
+        <Shape_Area>72.310143</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-10.808026,20.452525 </coordinates>
+        </Point>
+        <ISO_3>MRT</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MRT</COLOR_CODE>
+        <Terr_ID>155</Terr_ID>
+        <Terr_Name>Mauritania</Terr_Name>
+        <Shape_Leng>52.30842</Shape_Leng>
+        <Shape_Area>89.905105</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>148.160159,-6.664343 </coordinates>
+        </Point>
+        <ISO_3>PNG</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>PNG</COLOR_CODE>
+        <Terr_ID>189</Terr_ID>
+        <Terr_Name>Papua New Guinea</Terr_Name>
+        <Shape_Leng>89.291382</Shape_Leng>
+        <Shape_Area>37.78041</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>89.963937,23.784454 </coordinates>
+        </Point>
+        <ISO_3>BGD</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>BGD</COLOR_CODE>
+        <Terr_ID>21</Terr_ID>
+        <Terr_Name>Bangladesh</Terr_Name>
+        <Shape_Leng>42.011872</Shape_Leng>
+        <Shape_Area>12.222446</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>47.950477,15.563412 </coordinates>
+        </Point>
+        <ISO_3>YEM</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>YEM</COLOR_CODE>
+        <Terr_ID>267</Terr_ID>
+        <Terr_Name>Yemen</Terr_Name>
+        <Shape_Leng>34.091497</Shape_Leng>
+        <Shape_Area>38.287082</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>178.283237,-7.540024 </coordinates>
+        </Point>
+        <ISO_3>TUV</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>TUV</COLOR_CODE>
+        <Terr_ID>250</Terr_ID>
+        <Terr_Name>Tuvalu</Terr_Name>
+        <Shape_Leng>0.402982</Shape_Leng>
+        <Shape_Area>0.002377</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>72.441138,-7.338329 </coordinates>
+        </Point>
+        <ISO_3>IOT</ISO_3>
+        <STATUS>UK Territory</STATUS>
+        <COLOR_CODE>IOT</COLOR_CODE>
+        <Terr_ID>36</Terr_ID>
+        <Terr_Name>British Indian Ocean</Terr_Name>
+        <Shape_Leng>0.849605</Shape_Leng>
+        <Shape_Area>0.007405</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-102.046052,58.622302 </coordinates>
+        </Point>
+        <ISO_3>CAN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>CAN</COLOR_CODE>
+        <Terr_ID>44</Terr_ID>
+        <Terr_Name>Canada</Terr_Name>
+        <Shape_Leng>2210.68326</Shape_Leng>
+        <Shape_Area>1694.025087</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-61.241299,10.563222 </coordinates>
+        </Point>
+        <ISO_3>TTO</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>TTO</COLOR_CODE>
+        <Terr_ID>244</Terr_ID>
+        <Terr_Name>Trinidad and Tobago</Terr_Name>
+        <Shape_Leng>4.384943</Shape_Leng>
+        <Shape_Area>0.413754</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-4.506424,16.515929 </coordinates>
+        </Point>
+        <ISO_3>MLI</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MLI</COLOR_CODE>
+        <Terr_ID>151</Terr_ID>
+        <Terr_Name>Mali</Terr_Name>
+        <Shape_Leng>64.20459</Shape_Leng>
+        <Shape_Area>106.649567</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-103.578389,24.127293 </coordinates>
+        </Point>
+        <ISO_3>MEX</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MEX</COLOR_CODE>
+        <Terr_ID>158</Terr_ID>
+        <Terr_Name>Mexico</Terr_Name>
+        <Shape_Leng>149.33105</Shape_Leng>
+        <Shape_Area>174.117661</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>125.711500,-8.839555 </coordinates>
+        </Point>
+        <ISO_3>TLS</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>TLS</COLOR_CODE>
+        <Terr_ID>240</Terr_ID>
+        <Terr_Name>Timor-Leste</Terr_Name>
+        <Shape_Leng>7.719579</Shape_Leng>
+        <Shape_Area>1.236303</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>114.819152,4.581283 </coordinates>
+        </Point>
+        <ISO_3>BRN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>BRN</COLOR_CODE>
+        <Terr_ID>38</Terr_ID>
+        <Terr_Name>Brunei Darussalam</Terr_Name>
+        <Shape_Leng>4.918849</Shape_Leng>
+        <Shape_Area>0.468299</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-100.999161,40.252636 </coordinates>
+        </Point>
+        <ISO_3>USA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>USA</COLOR_CODE>
+        <Terr_ID>256</Terr_ID>
+        <Terr_Name>United States of Ame</Terr_Name>
+        <Shape_Leng>725.62619</Shape_Leng>
+        <Shape_Area>1116.663593</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-65.891969,7.804640 </coordinates>
+        </Point>
+        <ISO_3>VEN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>VEN</COLOR_CODE>
+        <Terr_ID>261</Terr_ID>
+        <Terr_Name>Venezuela</Terr_Name>
+        <Shape_Leng>76.947471</Shape_Leng>
+        <Shape_Area>74.628397</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>18.026170,27.224538 </coordinates>
+        </Point>
+        <ISO_3>LBY</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>LBY</COLOR_CODE>
+        <Terr_ID>141</Terr_ID>
+        <Terr_Name>Libyan Arab Jamahiri</Terr_Name>
+        <Shape_Leng>57.444369</Shape_Leng>
+        <Shape_Area>147.34737</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>14.872133,46.131639 </coordinates>
+        </Point>
+        <ISO_3>SVN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>SVN</COLOR_CODE>
+        <Terr_ID>221</Terr_ID>
+        <Terr_Name>Slovenia</Terr_Name>
+        <Shape_Leng>9.952057</Shape_Leng>
+        <Shape_Area>2.376985</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-53.252645,3.838813 </coordinates>
+        </Point>
+        <ISO_3>GUF</ISO_3>
+        <STATUS>FR Territory</STATUS>
+        <COLOR_CODE>FRA</COLOR_CODE>
+        <Terr_ID>83</Terr_ID>
+        <Terr_Name>French Guiana</Terr_Name>
+        <Shape_Leng>12.253085</Shape_Leng>
+        <Shape_Area>6.807577</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-64.554019,-34.069346 </coordinates>
+        </Point>
+        <ISO_3>ARG</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>ARG</COLOR_CODE>
+        <Terr_ID>10</Terr_ID>
+        <Terr_Name>Argentina</Terr_Name>
+        <Shape_Leng>138.751303</Shape_Leng>
+        <Shape_Area>278.308942</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>0.880870,8.747135 </coordinates>
+        </Point>
+        <ISO_3>TGO</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>TGO</COLOR_CODE>
+        <Terr_ID>241</Terr_ID>
+        <Terr_Name>Togo</Terr_Name>
+        <Shape_Leng>14.0274</Shape_Leng>
+        <Shape_Area>4.692144</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-81.251874,19.307918 </coordinates>
+        </Point>
+        <ISO_3>CYM</ISO_3>
+        <STATUS>UK Non-Self-Governin</STATUS>
+        <COLOR_CODE>GBR</COLOR_CODE>
+        <Terr_ID>46</Terr_ID>
+        <Terr_Name>Cayman Islands</Terr_Name>
+        <Shape_Leng>0.733615</Shape_Leng>
+        <Shape_Area>0.017931</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>20.720026,44.092352 </coordinates>
+        </Point>
+        <ISO_3>SRB</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>SRB</COLOR_CODE>
+        <Terr_ID>216</Terr_ID>
+        <Terr_Name>Serbia</Terr_Name>
+        <Shape_Leng>19.573743</Shape_Leng>
+        <Shape_Area>9.900662</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-71.733806,21.792145 </coordinates>
+        </Point>
+        <ISO_3>TCA</ISO_3>
+        <STATUS>UK Non-Self-Governin</STATUS>
+        <COLOR_CODE>GBR</COLOR_CODE>
+        <Terr_ID>249</Terr_ID>
+        <Terr_Name>Turks and Caicos Isl</Terr_Name>
+        <Shape_Leng>1.201974</Shape_Leng>
+        <Shape_Area>0.026105</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>73.260862,3.353159 </coordinates>
+        </Point>
+        <ISO_3>MDV</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MDV</COLOR_CODE>
+        <Terr_ID>150</Terr_ID>
+        <Terr_Name>Maldives</Terr_Name>
+        <Shape_Leng>1.128634</Shape_Leng>
+        <Shape_Area>0.002739</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>13.030155,6.626626 </coordinates>
+        </Point>
+        <ISO_3>CMR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>CMR</COLOR_CODE>
+        <Terr_ID>43</Terr_ID>
+        <Terr_Name>Cameroon</Terr_Name>
+        <Shape_Leng>41.96063</Shape_Leng>
+        <Shape_Area>37.972711</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-171.852454,-9.194922 </coordinates>
+        </Point>
+        <ISO_3>TKL</ISO_3>
+        <STATUS>NZ Non-Self-Governin</STATUS>
+        <COLOR_CODE>TKL</COLOR_CODE>
+        <Terr_ID>242</Terr_ID>
+        <Terr_Name>Tokelau</Terr_Name>
+        <Shape_Leng>0.108695</Shape_Leng>
+        <Shape_Area>0.000606</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>168.401451,8.385086 </coordinates>
+        </Point>
+        <ISO_3>MHL</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MHL</COLOR_CODE>
+        <Terr_ID>153</Terr_ID>
+        <Terr_Name>Marshall Islands</Terr_Name>
+        <Shape_Leng>0.683478</Shape_Leng>
+        <Shape_Area>0.002844</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-72.868391,4.253060 </coordinates>
+        </Point>
+        <ISO_3>COL</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>COL</COLOR_CODE>
+        <Terr_ID>54</Terr_ID>
+        <Terr_Name>Colombia</Terr_Name>
+        <Shape_Leng>70.687551</Shape_Leng>
+        <Shape_Area>92.580475</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>25.174430,45.645985 </coordinates>
+        </Point>
+        <ISO_3>ROU</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>ROU</COLOR_CODE>
+        <Terr_ID>201</Terr_ID>
+        <Terr_Name>Romania</Terr_Name>
+        <Shape_Leng>29.036306</Shape_Leng>
+        <Shape_Area>27.498306</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-61.192859,13.256242 </coordinates>
+        </Point>
+        <ISO_3>VCT</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>VCT</COLOR_CODE>
+        <Terr_ID>208</Terr_ID>
+        <Terr_Name>Saint Vincent and th</Terr_Name>
+        <Shape_Leng>0.649526</Shape_Leng>
+        <Shape_Area>0.028545</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>43.784626,-11.980230 </coordinates>
+        </Point>
+        <ISO_3>COM</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>COM</COLOR_CODE>
+        <Terr_ID>55</Terr_ID>
+        <Terr_Name>Comoros</Terr_Name>
+        <Shape_Leng>3.060761</Shape_Leng>
+        <Shape_Area>0.142408</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-77.290223,18.126146 </coordinates>
+        </Point>
+        <ISO_3>JAM</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>JAM</COLOR_CODE>
+        <Terr_ID>121</Terr_ID>
+        <Terr_Name>Jamaica</Terr_Name>
+        <Shape_Leng>5.385796</Shape_Leng>
+        <Shape_Area>0.942435</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-159.250086,-20.185403 </coordinates>
+        </Point>
+        <ISO_3>COK</ISO_3>
+        <STATUS>NZ Territory</STATUS>
+        <COLOR_CODE>NZL</COLOR_CODE>
+        <Terr_ID>57</Terr_ID>
+        <Terr_Name>Cook Islands</Terr_Name>
+        <Shape_Leng>0.980635</Shape_Leng>
+        <Shape_Area>0.013072</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>31.520087,-26.574906 </coordinates>
+        </Point>
+        <ISO_3>SWZ</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>SWZ</COLOR_CODE>
+        <Terr_ID>232</Terr_ID>
+        <Terr_Name>Swaziland</Terr_Name>
+        <Shape_Leng>5.024903</Shape_Leng>
+        <Shape_Area>1.549992</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>20.036435,41.115789 </coordinates>
+        </Point>
+        <ISO_3>ALB</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>ALB</COLOR_CODE>
+        <Terr_ID>2</Terr_ID>
+        <Terr_Name>Albania</Terr_Name>
+        <Shape_Leng>9.625047</Shape_Leng>
+        <Shape_Area>3.073541</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>145.687207,15.098220 </coordinates>
+        </Point>
+        <ISO_3>MNP</ISO_3>
+        <STATUS>US Territory</STATUS>
+        <COLOR_CODE>USA</COLOR_CODE>
+        <Terr_ID>182</Terr_ID>
+        <Terr_Name>Northern Mariana Isl</Terr_Name>
+        <Shape_Leng>0.908861</Shape_Leng>
+        <Shape_Area>0.019928</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>28.244114,-29.595733 </coordinates>
+        </Point>
+        <ISO_3>LSO</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>LSO</COLOR_CODE>
+        <Terr_ID>138</Terr_ID>
+        <Terr_Name>Lesotho</Terr_Name>
+        <Shape_Leng>7.097998</Shape_Leng>
+        <Shape_Area>2.841507</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>103.803616,47.224048 </coordinates>
+        </Point>
+        <ISO_3>MNG</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MNG</COLOR_CODE>
+        <Terr_ID>163</Terr_ID>
+        <Terr_Name>Mongolia</Terr_Name>
+        <Shape_Leng>85.101527</Shape_Leng>
+        <Shape_Area>184.432048</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-59.460289,-51.714916 </coordinates>
+        </Point>
+        <ISO_3>FLK</ISO_3>
+        <STATUS>UK Non-Self-Governin</STATUS>
+        <COLOR_CODE>GBR</COLOR_CODE>
+        <Terr_ID>78</Terr_ID>
+        <Terr_Name>Falkland Islands (Ma</Terr_Name>
+        <Shape_Leng>19.082592</Shape_Leng>
+        <Shape_Area>1.495385</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>29.676439,-18.931388 </coordinates>
+        </Point>
+        <ISO_3>ZWE</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>ZWE</COLOR_CODE>
+        <Terr_ID>269</Terr_ID>
+        <Terr_Name>Zimbabwe</Terr_Name>
+        <Shape_Leng>26.298408</Shape_Leng>
+        <Shape_Area>33.463126</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>19.669794,48.724856 </coordinates>
+        </Point>
+        <ISO_3>SVK</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>SVK</COLOR_CODE>
+        <Terr_ID>220</Terr_ID>
+        <Terr_Name>Slovakia</Terr_Name>
+        <Shape_Leng>14.309691</Shape_Leng>
+        <Shape_Area>5.978077</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-60.965900,13.903085 </coordinates>
+        </Point>
+        <ISO_3>LCA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>LCA</COLOR_CODE>
+        <Terr_ID>206</Terr_ID>
+        <Terr_Name>Saint Lucia</Terr_Name>
+        <Shape_Leng>0.952991</Shape_Leng>
+        <Shape_Area>0.053125</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>108.343625,12.344649 </coordinates>
+        </Point>
+        <ISO_3>VNM</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>VNM</COLOR_CODE>
+        <Terr_ID>262</Terr_ID>
+        <Terr_Name>Vietnam</Terr_Name>
+        <Shape_Leng>66.866755</Shape_Leng>
+        <Shape_Area>27.556078</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>33.364570,39.136216 </coordinates>
+        </Point>
+        <ISO_3>TUR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>TUR</COLOR_CODE>
+        <Terr_ID>247</Terr_ID>
+        <Terr_Name>Turkey</Terr_Name>
+        <Shape_Leng>76.990732</Shape_Leng>
+        <Shape_Area>81.19928</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-169.868496,-19.052071 </coordinates>
+        </Point>
+        <ISO_3>NIU</ISO_3>
+        <STATUS>NZ Territory</STATUS>
+        <COLOR_CODE>NZL</COLOR_CODE>
+        <Terr_ID>180</Terr_ID>
+        <Terr_Name>Niue</Terr_Name>
+        <Shape_Leng>0.541415</Shape_Leng>
+        <Shape_Area>0.021414</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>80.549014,8.173787 </coordinates>
+        </Point>
+        <ISO_3>LKA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>LKA</COLOR_CODE>
+        <Terr_ID>228</Terr_ID>
+        <Terr_Name>Sri Lanka</Terr_Name>
+        <Shape_Leng>13.998463</Shape_Leng>
+        <Shape_Area>5.412089</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>33.440153,35.145334 </coordinates>
+        </Point>
+        <ISO_3>CYP</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>CYP</COLOR_CODE>
+        <Terr_ID>62</Terr_ID>
+        <Terr_Name>Cyprus</Terr_Name>
+        <Shape_Leng>6.037294</Shape_Leng>
+        <Shape_Area>0.902664</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>10.036472,1.983890 </coordinates>
+        </Point>
+        <ISO_3>GNQ</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>GNQ</COLOR_CODE>
+        <Terr_ID>73</Terr_ID>
+        <Terr_Name>Equatorial Guinea</Terr_Name>
+        <Shape_Leng>8.191</Shape_Leng>
+        <Shape_Area>2.188208</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-23.958685,16.067023 </coordinates>
+        </Point>
+        <ISO_3>CPV</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>CPV</COLOR_CODE>
+        <Terr_ID>45</Terr_ID>
+        <Terr_Name>Cape Verde</Terr_Name>
+        <Shape_Leng>6.512604</Shape_Leng>
+        <Shape_Area>0.340357</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-128.857872,-24.582597 </coordinates>
+        </Point>
+        <ISO_3>PCN</ISO_3>
+        <STATUS>UK Non-Self-Governin</STATUS>
+        <COLOR_CODE>GBR</COLOR_CODE>
+        <Terr_ID>194</Terr_ID>
+        <Terr_Name>Pitcairn Island</Terr_Name>
+        <Shape_Leng>0.338188</Shape_Leng>
+        <Shape_Area>0.004286</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>96.836589,-12.168561 </coordinates>
+        </Point>
+        <ISO_3>CCK</ISO_3>
+        <STATUS>AU Territory</STATUS>
+        <COLOR_CODE>AUS</COLOR_CODE>
+        <Terr_ID>53</Terr_ID>
+        <Terr_Name>Cocos (Keeling) Isla</Terr_Name>
+        <Shape_Leng>0.176662</Shape_Leng>
+        <Shape_Area>0.00149</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>24.580203,56.851106 </coordinates>
+        </Point>
+        <ISO_3>LVA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>LVA</COLOR_CODE>
+        <Terr_ID>136</Terr_ID>
+        <Terr_Name>Latvia</Terr_Name>
+        <Shape_Leng>19.342818</Shape_Leng>
+        <Shape_Area>9.516087</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-53.169127,-9.872666 </coordinates>
+        </Point>
+        <ISO_3>BRA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>BRA</COLOR_CODE>
+        <Terr_ID>35</Terr_ID>
+        <Terr_Name>Brazil</Terr_Name>
+        <Shape_Leng>248.756695</Shape_Leng>
+        <Shape_Area>707.050669</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-58.932876,4.847704 </coordinates>
+        </Point>
+        <ISO_3>GUY</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>GUY</COLOR_CODE>
+        <Terr_ID>104</Terr_ID>
+        <Terr_Name>Guyana</Terr_Name>
+        <Shape_Leng>25.707604</Shape_Leng>
+        <Shape_Area>17.175216</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>6.098623,49.768616 </coordinates>
+        </Point>
+        <ISO_3>LUX</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>LUX</COLOR_CODE>
+        <Terr_ID>144</Terr_ID>
+        <Terr_Name>Luxembourg</Terr_Name>
+        <Shape_Leng>2.646107</Shape_Leng>
+        <Shape_Area>0.322094</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>36.995909,31.384543 </coordinates>
+        </Point>
+        <ISO_3>JOR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>JOR</COLOR_CODE>
+        <Terr_ID>126</Terr_ID>
+        <Terr_Name>Jordan</Terr_Name>
+        <Shape_Leng>16.177976</Shape_Leng>
+        <Shape_Area>8.449117</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>135.343151,-25.457025 </coordinates>
+        </Point>
+        <ISO_3>AUS</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>AUS</COLOR_CODE>
+        <Terr_ID>14</Terr_ID>
+        <Terr_Name>Australia</Terr_Name>
+        <Shape_Leng>252.164979</Shape_Leng>
+        <Shape_Area>695.539902</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>9.503630,61.518479 </coordinates>
+        </Point>
+        <ISO_3>NOR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>NOR</COLOR_CODE>
+        <Terr_ID>183</Terr_ID>
+        <Terr_Name>Norway</Terr_Name>
+        <Shape_Leng>295.014946</Shape_Leng>
+        <Shape_Area>59.93968</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>28.503436,47.089793 </coordinates>
+        </Point>
+        <ISO_3>MDA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MDA</COLOR_CODE>
+        <Terr_ID>161</Terr_ID>
+        <Terr_Name>Moldova, Republic of</Terr_Name>
+        <Shape_Leng>12.457239</Shape_Leng>
+        <Shape_Area>3.998942</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>23.376716,-4.015587 </coordinates>
+        </Point>
+        <ISO_3>COD</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>COD</COLOR_CODE>
+        <Terr_ID>65</Terr_ID>
+        <Terr_Name>Democratic Republic</Terr_Name>
+        <Shape_Leng>83.431635</Shape_Leng>
+        <Shape_Area>189.790913</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>96.297484,21.395854 </coordinates>
+        </Point>
+        <ISO_3>MMR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MMR</COLOR_CODE>
+        <Terr_ID>168</Terr_ID>
+        <Terr_Name>Myanmar</Terr_Name>
+        <Shape_Leng>87.347308</Shape_Leng>
+        <Shape_Area>58.120122</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>105.702386,-10.445179 </coordinates>
+        </Point>
+        <ISO_3>CXR</ISO_3>
+        <STATUS>AU Territory</STATUS>
+        <COLOR_CODE>AUS</COLOR_CODE>
+        <Terr_ID>51</Terr_ID>
+        <Terr_Name>Christmas Island</Terr_Name>
+        <Shape_Leng>0.405143</Shape_Leng>
+        <Shape_Area>0.010238</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>47.687397,29.356321 </coordinates>
+        </Point>
+        <ISO_3>KWT</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>KWT</COLOR_CODE>
+        <Terr_ID>133</Terr_ID>
+        <Terr_Name>Kuwait</Terr_Name>
+        <Shape_Leng>7.548772</Shape_Leng>
+        <Shape_Area>1.55508</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>166.923192,-0.528315 </coordinates>
+        </Point>
+        <ISO_3>NRU</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>NRU</COLOR_CODE>
+        <Terr_ID>170</Terr_ID>
+        <Terr_Name>Nauru</Terr_Name>
+        <Shape_Leng>0.144691</Shape_Leng>
+        <Shape_Area>0.001484</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-64.807077,17.944913 </coordinates>
+        </Point>
+        <ISO_3>VIR</ISO_3>
+        <STATUS>US Non-Self-Governin</STATUS>
+        <COLOR_CODE>USA</COLOR_CODE>
+        <Terr_ID>257</Terr_ID>
+        <Terr_Name>United States Virgin</Terr_Name>
+        <Shape_Leng>1.236592</Shape_Leng>
+        <Shape_Area>0.025684</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>167.896170,-16.308522 </coordinates>
+        </Point>
+        <ISO_3>VUT</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>VUT</COLOR_CODE>
+        <Terr_ID>260</Terr_ID>
+        <Terr_Name>Vanuatu</Terr_Name>
+        <Shape_Leng>16.411498</Shape_Leng>
+        <Shape_Area>1.037141</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>45.804496,6.402382 </coordinates>
+        </Point>
+        <ISO_3>SOM</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>SOM</COLOR_CODE>
+        <Terr_ID>223</Terr_ID>
+        <Terr_Name>Somalia</Terr_Name>
+        <Shape_Leng>48.995311</Shape_Leng>
+        <Shape_Area>52.070403</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-61.359058,15.426026 </coordinates>
+        </Point>
+        <ISO_3>DMA</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>DMA</COLOR_CODE>
+        <Terr_ID>68</Terr_ID>
+        <Terr_Name>Dominica</Terr_Name>
+        <Shape_Leng>1.097111</Shape_Leng>
+        <Shape_Area>0.064835</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>30.439371,13.197363 </coordinates>
+        </Point>
+        <ISO_3>SDN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>SDN</COLOR_CODE>
+        <Terr_ID>229</Terr_ID>
+        <Terr_Name>Sudan</Terr_Name>
+        <Shape_Leng>73.633755</Shape_Leng>
+        <Shape_Area>208.159667</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-84.953159,12.905887 </coordinates>
+        </Point>
+        <ISO_3>NIC</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>NIC</COLOR_CODE>
+        <Terr_ID>177</Terr_ID>
+        <Terr_Name>Nicaragua</Terr_Name>
+        <Shape_Leng>18.030688</Shape_Leng>
+        <Shape_Area>10.668802</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>17.442383,-11.553455 </coordinates>
+        </Point>
+        <ISO_3>AGO</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>AGO</COLOR_CODE>
+        <Terr_ID>6</Terr_ID>
+        <Terr_Name>Angola</Terr_Name>
+        <Shape_Leng>58.873489</Shape_Leng>
+        <Shape_Area>103.81304</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-15.546180,13.436223 </coordinates>
+        </Point>
+        <ISO_3>GMB</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>GMB</COLOR_CODE>
+        <Terr_ID>87</Terr_ID>
+        <Terr_Name>Gambia</Terr_Name>
+        <Shape_Leng>10.776106</Shape_Leng>
+        <Shape_Area>0.895055</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-4.542128,54.221349 </coordinates>
+        </Point>
+        <ISO_3>IMY</ISO_3>
+        <STATUS>UK Territory</STATUS>
+        <COLOR_CODE>GBR</COLOR_CODE>
+        <Terr_ID>118</Terr_ID>
+        <Terr_Name>Isle of Man</Terr_Name>
+        <Shape_Leng>1.29516</Shape_Leng>
+        <Shape_Area>0.085146</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>27.218937,64.500053 </coordinates>
+        </Point>
+        <ISO_3>FIN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>FIN</COLOR_CODE>
+        <Terr_ID>81</Terr_ID>
+        <Terr_Name>Finland</Terr_Name>
+        <Shape_Leng>69.126109</Shape_Leng>
+        <Shape_Area>62.654973</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-142.355756,1.843581 </coordinates>
+        </Point>
+        <ISO_3>KIR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>KIR</COLOR_CODE>
+        <Terr_ID>131</Terr_ID>
+        <Terr_Name>Kiribati</Terr_Name>
+        <Shape_Leng>1.681798</Shape_Leng>
+        <Shape_Area>0.034351</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>119.267292,-2.974959 </coordinates>
+        </Point>
+        <ISO_3>IDN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>IDN</COLOR_CODE>
+        <Terr_ID>114</Terr_ID>
+        <Terr_Name>Indonesia</Terr_Name>
+        <Shape_Leng>416.254784</Shape_Leng>
+        <Shape_Area>153.002529</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-70.277471,18.814330 </coordinates>
+        </Point>
+        <ISO_3>DOM</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>DOM</COLOR_CODE>
+        <Terr_ID>69</Terr_ID>
+        <Terr_Name>Dominican Republic</Terr_Name>
+        <Shape_Leng>13.253866</Shape_Leng>
+        <Shape_Area>4.147569</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>2.331568,9.398571 </coordinates>
+        </Point>
+        <ISO_3>BEN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>BEN</COLOR_CODE>
+        <Terr_ID>27</Terr_ID>
+        <Terr_Name>Benin</Terr_Name>
+        <Shape_Leng>17.063629</Shape_Leng>
+        <Shape_Area>9.574102</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>64.799290,41.447353 </coordinates>
+        </Point>
+        <ISO_3>UZB</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>UZB</COLOR_CODE>
+        <Terr_ID>259</Terr_ID>
+        <Terr_Name>Uzbekistan</Terr_Name>
+        <Shape_Leng>60.322064</Shape_Leng>
+        <Shape_Area>48.370119</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>110.528860,3.948639 </coordinates>
+        </Point>
+        <ISO_3>MYS</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MYS</COLOR_CODE>
+        <Terr_ID>149</Terr_ID>
+        <Terr_Name>Malaysia</Terr_Name>
+        <Shape_Leng>60.766696</Shape_Leng>
+        <Shape_Area>26.753193</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>67.297715,34.427919 </coordinates>
+        </Point>
+        <ISO_3>AFG</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>AFG</COLOR_CODE>
+        <Terr_ID>1</Terr_ID>
+        <Terr_Name>Afghanistan</Terr_Name>
+        <Shape_Leng>50.803184</Shape_Leng>
+        <Shape_Area>62.566695</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-55.867785,4.167872 </coordinates>
+        </Point>
+        <ISO_3>SUR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>SUR</COLOR_CODE>
+        <Terr_ID>230</Terr_ID>
+        <Terr_Name>Suriname</Terr_Name>
+        <Shape_Leng>17.126626</Shape_Leng>
+        <Shape_Area>11.81042</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-5.551019,7.369096 </coordinates>
+        </Point>
+        <ISO_3>CIV</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>CIV</COLOR_CODE>
+        <Terr_ID>59</Terr_ID>
+        <Terr_Name>Côte d'Ivoire</Terr_Name>
+        <Shape_Leng>31.576815</Shape_Leng>
+        <Shape_Area>26.340498</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>31.752265,48.074673 </coordinates>
+        </Point>
+        <ISO_3>UKR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>UKR</COLOR_CODE>
+        <Terr_ID>253</Terr_ID>
+        <Terr_Name>Ukraine</Terr_Name>
+        <Shape_Leng>79.54534</Shape_Leng>
+        <Shape_Area>73.482961</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>14.442436,35.891981 </coordinates>
+        </Point>
+        <ISO_3>MLT</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MLT</COLOR_CODE>
+        <Terr_ID>152</Terr_ID>
+        <Terr_Name>Malta</Terr_Name>
+        <Shape_Leng>0.680206</Shape_Leng>
+        <Shape_Area>0.029387</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-72.854611,18.880726 </coordinates>
+        </Point>
+        <ISO_3>HTI</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>HTI</COLOR_CODE>
+        <Terr_ID>105</Terr_ID>
+        <Terr_Name>Haiti</Terr_Name>
+        <Shape_Leng>14.031058</Shape_Leng>
+        <Shape_Area>2.330601</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-64.475512,-16.733626 </coordinates>
+        </Point>
+        <ISO_3>BOL</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>BOL</COLOR_CODE>
+        <Terr_ID>31</Terr_ID>
+        <Terr_Name>Bolivia</Terr_Name>
+        <Shape_Leng>52.483567</Shape_Leng>
+        <Shape_Area>92.19013</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>16.738748,64.545152 </coordinates>
+        </Point>
+        <ISO_3>SWE</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>SWE</COLOR_CODE>
+        <Terr_ID>233</Terr_ID>
+        <Terr_Name>Sweden</Terr_Name>
+        <Shape_Leng>92.185724</Shape_Leng>
+        <Shape_Area>78.568604</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-1.534873,52.597352 </coordinates>
+        </Point>
+        <ISO_3>GBR</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>GBR</COLOR_CODE>
+        <Terr_ID>251</Terr_ID>
+        <Terr_Name>U.K. of Great Britai</Terr_Name>
+        <Shape_Leng>115.974317</Shape_Leng>
+        <Shape_Area>33.630447</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>35.189844,-17.646889 </coordinates>
+        </Point>
+        <ISO_3>MOZ</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>MOZ</COLOR_CODE>
+        <Terr_ID>167</Terr_ID>
+        <Terr_Name>Mozambique</Terr_Name>
+        <Shape_Leng>65.773293</Shape_Leng>
+        <Shape_Area>66.955061</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>55.544720,-21.122886 </coordinates>
+        </Point>
+        <ISO_3>REU</ISO_3>
+        <STATUS>FR Territory</STATUS>
+        <COLOR_CODE>FRA</COLOR_CODE>
+        <Terr_ID>200</Terr_ID>
+        <Terr_Name>Reunion</Terr_Name>
+        <Shape_Leng>1.809502</Shape_Leng>
+        <Shape_Area>0.229703</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>11.464620,-0.812692 </coordinates>
+        </Point>
+        <ISO_3>GAB</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>GAB</COLOR_CODE>
+        <Terr_ID>86</Terr_ID>
+        <Terr_Name>Gabon</Terr_Name>
+        <Shape_Leng>32.270569</Shape_Leng>
+        <Shape_Area>21.185796</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-75.326728,-9.667213 </coordinates>
+        </Point>
+        <ISO_3>PER</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>PER</COLOR_CODE>
+        <Terr_ID>192</Terr_ID>
+        <Terr_Name>Peru</Terr_Name>
+        <Shape_Leng>68.285453</Shape_Leng>
+        <Shape_Area>106.500858</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>28.051606,-13.047165 </coordinates>
+        </Point>
+        <ISO_3>ZMB</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>ZMB</COLOR_CODE>
+        <Terr_ID>268</Terr_ID>
+        <Terr_Name>Zambia</Terr_Name>
+        <Shape_Leng>49.14137</Shape_Leng>
+        <Shape_Area>62.814023</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-8.629055,53.332306 </coordinates>
+        </Point>
+        <ISO_3>IRL</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>IRL</COLOR_CODE>
+        <Terr_ID>117</Terr_ID>
+        <Terr_Name>Ireland</Terr_Name>
+        <Shape_Leng>34.82811</Shape_Leng>
+        <Shape_Area>9.359482</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>90.124708,62.844319 </coordinates>
+        </Point>
+        <ISO_3>RUS</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>RUS</COLOR_CODE>
+        <Terr_ID>202</Terr_ID>
+        <Terr_Name>Russian Federation</Terr_Name>
+        <Shape_Leng>1526.867562</Shape_Leng>
+        <Shape_Area>2930.996051</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>23.833139,55.294758 </coordinates>
+        </Point>
+        <ISO_3>LTU</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>LTU</COLOR_CODE>
+        <Terr_ID>143</Terr_ID>
+        <Terr_Name>Lithuania</Terr_Name>
+        <Shape_Leng>17.13205</Shape_Leng>
+        <Shape_Area>9.202557</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>1.587428,42.549993 </coordinates>
+        </Point>
+        <ISO_3>AND</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>AND</COLOR_CODE>
+        <Terr_ID>5</Terr_ID>
+        <Terr_Name>Andorra</Terr_Name>
+        <Shape_Leng>0.937342</Shape_Leng>
+        <Shape_Area>0.055584</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-11.031226,10.273416 </coordinates>
+        </Point>
+        <ISO_3>GIN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>GIN</COLOR_CODE>
+        <Terr_ID>102</Terr_ID>
+        <Terr_Name>Guinea</Terr_Name>
+        <Shape_Leng>31.720207</Shape_Leng>
+        <Shape_Area>20.238611</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>120.849530,23.736014 </coordinates>
+        </Point>
+        <ISO_3>TWN</ISO_3>
+        <STATUS>CN Province</STATUS>
+        <COLOR_CODE>CHN</COLOR_CODE>
+        <Terr_ID>236</Terr_ID>
+        <Terr_Name>Taiwan</Terr_Name>
+        <Shape_Leng>9.233407</Shape_Leng>
+        <Shape_Area>3.204208</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>39.863899,8.842762 </coordinates>
+        </Point>
+        <ISO_3>ETH</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>ETH</COLOR_CODE>
+        <Terr_ID>76</Terr_ID>
+        <Terr_Name>Ethiopia</Terr_Name>
+        <Shape_Leng>47.156501</Shape_Leng>
+        <Shape_Area>92.841429</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-59.561554,13.184835 </coordinates>
+        </Point>
+        <ISO_3>BRB</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>BRB</COLOR_CODE>
+        <Terr_ID>22</Terr_ID>
+        <Terr_Name>Barbados</Terr_Name>
+        <Shape_Leng>0.813976</Shape_Leng>
+        <Shape_Area>0.037212</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>38.025679,0.638006 </coordinates>
+        </Point>
+        <ISO_3>KEN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>KEN</COLOR_CODE>
+        <Terr_ID>129</Terr_ID>
+        <Terr_Name>Kenya</Terr_Name>
+        <Shape_Leng>33.611965</Shape_Leng>
+        <Shape_Area>47.303407</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>13.460688,47.559579 </coordinates>
+        </Point>
+        <ISO_3>AUT</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>AUT</COLOR_CODE>
+        <Terr_ID>15</Terr_ID>
+        <Terr_Name>Austria</Terr_Name>
+        <Shape_Leng>22.067992</Shape_Leng>
+        <Shape_Area>10.039437</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-58.175581,-23.520255 </coordinates>
+        </Point>
+        <ISO_3>PRY</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>PRY</COLOR_CODE>
+        <Terr_ID>191</Terr_ID>
+        <Terr_Name>Paraguay</Terr_Name>
+        <Shape_Leng>30.891912</Shape_Leng>
+        <Shape_Area>35.208732</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-63.067826,18.218432 </coordinates>
+        </Point>
+        <ISO_3>AIA</ISO_3>
+        <STATUS>UK Non-Self-Governin</STATUS>
+        <COLOR_CODE>AIA</COLOR_CODE>
+        <Terr_ID>7</Terr_ID>
+        <Terr_Name>Anguilla</Terr_Name>
+        <Shape_Leng>0.468382</Shape_Leng>
+        <Shape_Area>0.007797</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>107.400296,35.703649 </coordinates>
+        </Point>
+        <ISO_3>CHN</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>CHN</COLOR_CODE>
+        <Terr_ID>50</Terr_ID>
+        <Terr_Name>China</Terr_Name>
+        <Shape_Leng>304.033476</Shape_Leng>
+        <Shape_Area>947.807382</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-78.247751,-1.147179 </coordinates>
+        </Point>
+        <ISO_3>ECU</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>ECU</COLOR_CODE>
+        <Terr_ID>70</Terr_ID>
+        <Terr_Name>Ecuador</Terr_Name>
+        <Shape_Leng>35.220588</Shape_Leng>
+        <Shape_Area>20.753613</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-5.344939,36.140863 </coordinates>
+        </Point>
+        <ISO_3>GIB</ISO_3>
+        <STATUS>UK Non-Self-Governin</STATUS>
+        <COLOR_CODE>GBR</COLOR_CODE>
+        <Terr_ID>92</Terr_ID>
+        <Terr_Name>Gibraltar</Terr_Name>
+        <Shape_Leng>0.144828</Shape_Leng>
+        <Shape_Area>0.000786</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-7.970937,39.638365 </coordinates>
+        </Point>
+        <ISO_3>PRT</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>PRT</COLOR_CODE>
+        <Terr_ID>196</Terr_ID>
+        <Terr_Name>Portugal</Terr_Name>
+        <Shape_Leng>19.453638</Shape_Leng>
+        <Shape_Area>9.302478</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>134.568944,7.506065 </coordinates>
+        </Point>
+        <ISO_3>PLW</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>PLW</COLOR_CODE>
+        <Terr_ID>186</Terr_ID>
+        <Terr_Name>Palau</Terr_Name>
+        <Shape_Leng>1.105307</Shape_Leng>
+        <Shape_Area>0.031135</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>113.552192,22.179248 </coordinates>
+        </Point>
+        <ISO_3>MAC</ISO_3>
+        <STATUS>CN Special Administr</STATUS>
+        <COLOR_CODE>CHN</COLOR_CODE>
+        <Terr_ID>145</Terr_ID>
+        <Terr_Name>Macao</Terr_Name>
+        <Shape_Leng>0.153955</Shape_Leng>
+        <Shape_Area>0.000594</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-15.316298,11.837281 </coordinates>
+        </Point>
+        <ISO_3>GNB</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>GNB</COLOR_CODE>
+        <Terr_ID>103</Terr_ID>
+        <Terr_Name>Guinea-Bissau</Terr_Name>
+        <Shape_Leng>17.260426</Shape_Leng>
+        <Shape_Area>2.76099</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-69.974720,12.515860 </coordinates>
+        </Point>
+        <ISO_3>ABW</ISO_3>
+        <STATUS>NL Territory</STATUS>
+        <COLOR_CODE>ABW</COLOR_CODE>
+        <Terr_ID>12</Terr_ID>
+        <Terr_Name>Aruba</Terr_Name>
+        <Shape_Leng>0.610349</Shape_Leng>
+        <Shape_Area>0.016598</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>24.607346,58.663435 </coordinates>
+        </Point>
+        <ISO_3>EST</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>EST</COLOR_CODE>
+        <Terr_ID>75</Terr_ID>
+        <Terr_Name>Estonia</Terr_Name>
+        <Shape_Leng>23.652064</Shape_Leng>
+        <Shape_Area>7.107824</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-61.013505,14.641797 </coordinates>
+        </Point>
+        <ISO_3>MTQ</ISO_3>
+        <STATUS>FR Territory</STATUS>
+        <COLOR_CODE>FRA</COLOR_CODE>
+        <Terr_ID>154</Terr_ID>
+        <Terr_Name>Martinique</Terr_Name>
+        <Shape_Leng>1.379019</Shape_Leng>
+        <Shape_Area>0.096315</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>-88.822732,13.726028 </coordinates>
+        </Point>
+        <ISO_3>SLV</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>SLV</COLOR_CODE>
+        <Terr_ID>72</Terr_ID>
+        <Terr_Name>El Salvador</Terr_Name>
+        <Shape_Leng>7.253595</Shape_Leng>
+        <Shape_Area>1.719036</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>17.883773,44.133901 </coordinates>
+        </Point>
+        <ISO_3>BIH</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>BIH</COLOR_CODE>
+        <Terr_ID>32</Terr_ID>
+        <Terr_Name>Bosnia &amp; Herzegovina</Terr_Name>
+        <Shape_Leng>13.090583</Shape_Leng>
+        <Shape_Area>5.798427</Shape_Area>
+      </Feature>
+      <Feature>
+        <styleUrl>#style0</styleUrl>
+        <Point>
+          <coordinates>68.682852,29.656567 </coordinates>
+        </Point>
+        <ISO_3>PAK</ISO_3>
+        <STATUS>Member State</STATUS>
+        <COLOR_CODE>PAK</COLOR_CODE>
+        <Terr_ID>185</Terr_ID>
+        <Terr_Name>Pakistan</Terr_Name>
+        <Shape_Leng>66.736495</Shape_Leng>
+        <Shape_Area>73.978434</Shape_Area>
+      </Feature>
+    </Folder>
+  </Document>
+
+</kml>
