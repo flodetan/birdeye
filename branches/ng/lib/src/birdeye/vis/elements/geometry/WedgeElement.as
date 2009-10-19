@@ -278,7 +278,7 @@ package birdeye.vis.elements.geometry
 		
 						gg.geometryCollection.addItemAt(arc,0); 
 						
-						if (labelField || labelFunction)
+						if (labelField || labelFunction != null)
 						{
 							var xLlb:Number = xPos, yLlb:Number = yPos;
 							if (!isNaN(_radiusLabelOffset))
@@ -293,7 +293,7 @@ package birdeye.vis.elements.geometry
 							{
 								labelTxt = currentItem[labelField];
 							}
-							else if (labelFunction)
+							else if (labelFunction != null)
 							{
 								labelTxt = _labelFunction(currentItem, dataFields, Math.round(angle * 1000 / scale1.size) / 10);		
 							}
