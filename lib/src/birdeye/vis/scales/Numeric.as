@@ -160,7 +160,7 @@ package birdeye.vis.scales
 			// if no interval is specified by the user, than divide the axis in 5 parts
 			if (!isNaN(max) && !isNaN(min))
 			{
-				if (min == max)
+				if (min == max && isGivenInterval)
 				{
 					if (!isGivenInterval) 
 						_dataInterval = 10;
