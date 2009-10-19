@@ -145,6 +145,32 @@
 		}
 		
 		
+		private var _subScalesNumberOfIntervals:Number = 5;
+		/**
+		 * Set the number of intervals the subcales need to have.</br>
+		 * @default 5
+		 */
+		public function set subScalesNumberOfIntervals(val:Number):void
+		{
+			_subScalesNumberOfIntervals = val;
+			if (_subScales)
+			{
+				for each (var sc:BaseScale in _subScales)
+				{
+					if (sc)
+					{
+						sc.numberOfIntervals = _subScalesNumberOfIntervals;
+					}
+				}
+			}
+		}
+		
+		public function get subScalesNumberOfIntervals():Number
+		{
+			return _subScalesNumberOfIntervals;	
+		}
+		
+		
 		private var _minMax:Array;
 		private var _subScales:Array;
 		public function feedMinMax(minMaxData:Array):void
@@ -201,6 +227,10 @@
 							s.max = _minMax[c].max;
 							s.size = _subScalesSize;
 							s.dimension = dimension;
+							if (s is BaseScale)
+							{
+								(s as BaseScale).numberOfIntervals = _subScalesNumberOfIntervals;
+							}
 							_subScales[c] = s;
 							s.commit();
 						}			
@@ -212,6 +242,10 @@
 						s.dimension = dimension;
 						s.min = Number.MAX_VALUE;
 						s.max = Number.MIN_VALUE;
+						if (s is BaseScale)
+						{
+							(s as BaseScale).numberOfIntervals = _subScalesNumberOfIntervals;
+						}
 						for (c in _minMax)
 						{
 							if (s.min > _minMax[c].min)

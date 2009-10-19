@@ -206,11 +206,11 @@ package birdeye.vis.scales
 		}
 		
 		
-		protected var _numberOfIntervals:Number = 5;
+		protected var _numberOfIntervals:Number = NaN;
 		/** Set the number of intervals in the scale. For ex. 5 intervals, will define
 		 * 5 labels and ticks on the scale. This can be used as alternative to scaleInterval and
 		 * dataInterval. If dataInterval and scaleInterval are not defined than numberOfIntervals
-		 * is used and by default is 5.*/
+		 * is used. If numberOfIntervals is not set the scale will create the best possible scale.*/
 		public function set numberOfIntervals(val:Number):void
 		{
 			_numberOfIntervals = val;
