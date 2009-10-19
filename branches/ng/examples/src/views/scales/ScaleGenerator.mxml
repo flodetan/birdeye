@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="onCreationComplete(event)">
+	
+	<mx:Script>
+		<![CDATA[
+			import birdeye.vis.scales.util.NumericScaleDefinition;
+			import birdeye.vis.scales.util.NumericUtil;
+			
+			import mx.binding.utils.BindingUtils;
+			import mx.events.FlexEvent;
+			
+			
+			private function onCreationComplete(event:FlexEvent):void
+			{
+				BindingUtils.bindSetter(onChange, min, "text");
+				BindingUtils.bindSetter(onChange, max, "text");
+				BindingUtils.bindSetter(onChange, includeZero, "selected");
+			}
+			
+			private function onChange(c:Object):void
+			{
+				var minNbr:Number = new Number(min.text);
+				var maxNbr:Number = new Number(max.text);
+				
+				if (!isNaN(minNbr) && !isNaN(maxNbr) && minNbr < maxNbr)
+				{
+					var t:NumericScaleDefinition = NumericUtil.calculateIdealScale(minNbr, maxNbr, includeZero.selected);
+					
+					if (t)
+					{
+						minTxt.text = t.min.toString();
+						maxTxt.text = t.max.toString();
+						diffTxt.text = t.diff.toString();
+						nbrTxt.text = t.numberOfIntervals.toString();
+					}
+					else
+					{
+						minTxt.text = "None found";
+						maxTxt.text = "None found";
+						diffTxt.text = "None found";
+						nbrTxt.text = "None found";
+					}
+				}
+			}
+			
+			
+		]]>
+	</mx:Script>
+	
+	<mx:VBox width="300">
+		<mx:HBox>
+			<mx:Label text="Minimum" />
+			<mx:TextInput id="min" text="-12" />
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label text="Maximum" />
+			<mx:TextInput id="max" text="25" />
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label text="Include Zero" />
+			<mx:CheckBox id="includeZero" selected="true" />
+		</mx:HBox>		
+	</mx:VBox>
+	<mx:HBox>
+		<mx:VBox>
+			<mx:Label text="Scale result" />
+			<mx:Label text="Minimum:" />
+			<mx:Label text="Maximum:" />
+			<mx:Label text="Difference between ticks" />
+			<mx:Label text="Number of ticks" />			
+		</mx:VBox>
+		
+		<mx:VBox>
+			<mx:Label text=" " />
+			<mx:Label id="minTxt" />
+			<mx:Label id="maxTxt" />
+			<mx:Label id="diffTxt" />
+			<mx:Label id="nbrTxt" />			
+		</mx:VBox>
+
+	</mx:HBox>
+</mx:HBox>
