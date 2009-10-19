@@ -254,6 +254,18 @@ package birdeye.vis.elements
 			_showAllDataItems = val;
 			invalidatingDisplay();
 		}
+		
+		protected var _showAllDataTipsOnRollOver:Boolean = false;
+		[Inspectable(enumeration="true,false")]
+		/**
+		 * If set to true, all the datatips of an element will be shown on roll over on a datapoint.
+		 * @default false
+		 */
+		public function set showAllDataTipsOnRollOver(val:Boolean):void
+		{
+			_showAllDataTipsOnRollOver = val;
+			invalidatingDisplay();
+		}
 
 		protected var _showTipGeometry:Boolean = true;
 		[Inspectable(enumeration="true,false")]
@@ -1626,13 +1638,38 @@ package birdeye.vis.elements
 			if (isDraggingNow) return;
 			
 			if (visScene.showDataTips) {
-				if (visScene.customTooltTipFunction != null)
+				
+				if (_showAllDataTipsOnRollOver)
 				{
-					myTT = visScene.customTooltTipFunction(extGG);
-		 			toolTip = myTT.text;
-				} else {
-					extGG.showToolTip();
-					showGeometryTip(extGG);
+					for (var i:uint=0;i<graphicsCollection.items.length;i++)
+					{
+						if (graphicsCollection.items[i] is DataItemLayout)
+						{
+							var gg:DataItemLayout = graphicsCollection.items[i] as DataItemLayout;
+							
+							if (!gg.hitMouseArea) continue;
+							
+							if (visScene.customTooltTipFunction != null)
+							{
+								myTT = visScene.customTooltTipFunction(gg);
+								toolTip = myTT.text;
+							} else {
+								gg.showToolTip();
+								showGeometryTip(gg);
+							}
+						}
+					}
+				}
+				else
+				{
+					if (visScene.customTooltTipFunction != null)
+					{
+						myTT = visScene.customTooltTipFunction(extGG);
+			 			toolTip = myTT.text;
+					} else {
+						extGG.showToolTip();
+						showGeometryTip(extGG);
+					}
 				}
 			}
 			
@@ -1686,10 +1723,29 @@ package birdeye.vis.elements
 		{ 
 			var extGG:DataItemLayout = 	DataItemLayout(e.target);
 
+
+			
 			if (visScene.showDataTips)
 			{
 				extGG.hideToolTip();
 				hideGeometryTip(extGG);
+				
+				if (_showAllDataTipsOnRollOver)
+				{
+					for (var i:uint=0;i<graphicsCollection.items.length;i++)
+					{
+						if (graphicsCollection.items[i] is DataItemLayout)
+						{
+							var gg:DataItemLayout = graphicsCollection.items[i] as DataItemLayout;
+							
+							if (!gg.hitMouseArea) continue;
+							
+							gg.hideToolTip();
+							hideGeometryTip(gg);
+							
+						}
+					}
+				}
 				
 				myTT = null;
 				toolTip = null;
