@@ -8,7 +8,7 @@ package birdeye.vis.scales.util
 			this.max = max;
 			this.diff = diff;
 			this.niceNbrScore = niceNbrScore;
-			this.nbrOfTicks = nbrOfTicks;
+			this.numberOfIntervals = nbrOfTicks;
 			this.includesZero = includesZero;
 			this.dataCoverage = dataCoverage;
 		}
@@ -17,7 +17,7 @@ package birdeye.vis.scales.util
 		public var max:Number;
 		public var diff:Number;
 		public var niceNbrScore:Number;
-		public var nbrOfTicks:Number;
+		public var numberOfIntervals:Number;
 		public var includesZero:Boolean;
 		public var dataCoverage:Number;
 	}

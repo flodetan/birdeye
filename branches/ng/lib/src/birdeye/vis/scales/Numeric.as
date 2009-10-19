@@ -28,6 +28,8 @@
 package birdeye.vis.scales
 {
 	import birdeye.vis.interfaces.scales.INumerableScale;
+	import birdeye.vis.scales.util.NumericScaleDefinition;
+	import birdeye.vis.scales.util.NumericUtil;
 
 	public class Numeric extends BaseScale  implements INumerableScale
 	{
@@ -97,8 +99,6 @@ package birdeye.vis.scales
 		public function set min(val:Number):void
 		{
 			_min = val;
-			minFormatted = !_format;
-			formatMin();
 
 			invalidate();
 		}
@@ -118,8 +118,6 @@ package birdeye.vis.scales
 		public function set max(val:Number):void
 		{
 			_max = val;
-			maxFormatted = !_format;
-			formatMax();
 			
 			invalidate();
 		}
@@ -128,13 +126,13 @@ package birdeye.vis.scales
 			return _max;
 		}
 		
-		private var _baseAtZero:Boolean = false;
+		private var _baseAtZero:Boolean = true;
 		/** Set the base of the axis at zero. If all values of the axis are positive (negative), 
 		 * than the lowest base will be zero, even if the minimum value is higher (lower). */
 		public function set baseAtZero(val:Boolean):void
 		{
 			_baseAtZero = val;
-			//invalidate();
+			invalidate();
 		}
 		public function get baseAtZero():Boolean
 		{
@@ -166,30 +164,60 @@ package birdeye.vis.scales
 				{
 					if (!isGivenInterval) 
 						_dataInterval = 10;
-					max = min + dataInterval;
+					_max = min + dataInterval;
 				} else if (!isGivenInterval) {
-					if (baseAtZero)
+					var def:NumericScaleDefinition = NumericUtil.calculateIdealScale(min, max, baseAtZero);
+					
+					
+					if(!def)
 					{
-						if (max > 0)
+						trace("Could not calculate ideal scale for min",min,"max",max, "baseAtZero", baseAtZero);
+						createFixedScale();
+					}
+					else
+					{
+						if (!isNaN(_numberOfIntervals) && (_numberOfIntervals == def.numberOfIntervals) || isNaN(_numberOfIntervals))
 						{
-							if (max < numberOfIntervals)
-								_dataInterval = max;
-							else
-								_dataInterval = max / numberOfIntervals;
-						} else
-							_dataInterval = -min / numberOfIntervals;
-					} else {
-						if (Math.abs(max - min) < numberOfIntervals)
-							dataInterval = Math.abs(max - min);
-						else 
-							dataInterval = Math.abs((max - min) / numberOfIntervals)
-						isGivenInterval = false;
+							_min = def.min;
+							_max = def.max;
+							_dataInterval = def.diff;
+						}
+						else
+						{
+							createFixedScale();
+						}
 					}
 				}
 			}
 		}
 		
 		// other methods
+		
+		private function createFixedScale():void
+		{
+			minFormatted =false;
+			maxFormatted = false;
+			formatMin();
+			formatMax();
+			
+			if (baseAtZero)
+			{
+				if (max > 0)
+				{
+					if (max < numberOfIntervals)
+						_dataInterval = max;
+					else
+						_dataInterval = max / numberOfIntervals;
+				} else
+					_dataInterval = -min / numberOfIntervals;
+			} else {
+				if (Math.abs(max - min) < numberOfIntervals)
+					dataInterval = Math.abs(max - min);
+				else 
+					dataInterval = Math.abs((max - min) / numberOfIntervals)
+				isGivenInterval = false;
+			}
+		}
 
 
 		/** @Private
@@ -200,7 +228,8 @@ package birdeye.vis.scales
 			if (!maxFormatted && !isNaN(max))
 			{
 				var sign:Number = 1;
-				var tempMax:Number = Math.ceil(max);
+				
+				var tempMax:Number = Math.ceil(max - 0.0000001);
 				if (max<0)
 					sign = -1;
 				var maxLenght:Number = String(Math.abs(tempMax)).length;
@@ -230,14 +259,14 @@ package birdeye.vis.scales
 					tempMin = Math.ceil(tempMin);
 					tempMin *= Math.pow(10, minLenght-1);
 					_min = - tempMin;
-					maxFormatted = true;
+					minFormatted = true;
 				} else {
 					minLenght = String(tempMin).length;
 					tempMin /= Math.pow(10, minLenght);
 					tempMin = Math.floor(tempMin);
 					tempMin *= Math.pow(10, minLenght);
 					_min = tempMin;
-					maxFormatted = true;
+					minFormatted = true;
 				} 
 			}
 		}
@@ -266,5 +295,11 @@ package birdeye.vis.scales
 			totalPositiveValue = NaN;
 
 		} 
+		
+		
+		
+
+		
+		
 	}
 }

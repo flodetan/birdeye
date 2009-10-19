@@ -1,6 +1,6 @@
 package birdeye.vis.scales.util
 {
-	import org.hamcrest.mxml.object.Null;
+	
 	
 	
 	
@@ -22,7 +22,7 @@ package birdeye.vis.scales.util
 		 * The number of ticks on scale that is ideal.</br>
 		 * This is used in the scoring algorithm. </br>
 		*/
-		public static const idealNbrOfTicks:uint = 5;
+		public static const idealNumberOfIntervals:uint = 5;
 		
 		/**
 		 * The set of nice number that is used for dividing scales.</br>
@@ -38,7 +38,7 @@ package birdeye.vis.scales.util
 		 * it is entirely possible that they still get selected.</br>
 		 * For instance if the data coverage is superb.</br>
 		 */
-		public static const minNbrOfTicks:uint = 5;
+		public static const minNumberOfIntervals:uint = 2;
 		
 		/**
 		 * The maximum number of ticks on a scale.</br>
@@ -47,7 +47,7 @@ package birdeye.vis.scales.util
 		 * it is entirely possible that they still get selected.</br>
 		 * For instance if the data coverage is superb.</br>
 		 */
-		public static const maxNbrOfTicks:uint = 5;
+		public static const maxNumberOfIntervals:uint = 10;
 		
 		
 		////////////////////
@@ -63,7 +63,7 @@ package birdeye.vis.scales.util
 			// TODO this should be precalculated
 			var niceNbrs:Array = createBaseNiceNumbers(baseNiceNumber);
 			
-			var exp:Number = calculateClosestMatchingExponent(min, max, includeZero, idealNbrOfTicks);
+			var exp:Number = calculateClosestMatchingExponent(min, max, includeZero, idealNumberOfIntervals);
 			
 			var scaleIntervals:Array = createRangeOfCandidateScaleIntervals(min, max, exp, niceNbrs, includeZero);
 			
@@ -156,7 +156,7 @@ package birdeye.vis.scales.util
 		 */
 		protected static function calculateScaleInterval(dataMin:Number,dataMax:Number, niceNbr:BaseNiceNumber, exponent:Number, includeZero:Boolean):NumericScaleDefinition
 		{
-			var nbrOfTicks:Number = 1;
+			var nbrOfIntervals:Number = 0;
 			var tickDiff:Number = niceNbr.base * Math.pow(10, exponent);
 			var currentValue:Number;
 			var min:Number, max:Number;
@@ -178,7 +178,7 @@ package birdeye.vis.scales.util
 					while (currentValue > dataMin)
 					{
 						currentValue -= tickDiff;
-						nbrOfTicks++;
+						nbrOfIntervals++;
 					}
 					
 					min = currentValue;
@@ -201,7 +201,7 @@ package birdeye.vis.scales.util
 				{
 					currentValue += tickDiff;
 					
-					nbrOfTicks++;
+					nbrOfIntervals++;
 					
 				}
 				
@@ -228,7 +228,7 @@ package birdeye.vis.scales.util
 				{
 					currentValue -= tickDiff;
 
-					nbrOfTicks++;
+					nbrOfIntervals++;
 				}
 				
 				min = currentValue;
@@ -237,7 +237,7 @@ package birdeye.vis.scales.util
 			
 			var dataCoverage:Number = Math.abs(dataRange / (min - max));
 			
-			return new NumericScaleDefinition(min, max, tickDiff, niceNbr.score, nbrOfTicks, includeZero ,dataCoverage);
+			return new NumericScaleDefinition(min, max, tickDiff, niceNbr.score, nbrOfIntervals, includeZero ,dataCoverage);
 
 			
 		}
@@ -257,8 +257,7 @@ package birdeye.vis.scales.util
 				if (scaleDef)
 				{
 					var score:Number = calculateScore(scaleDef);
-				
-					//trace("Score ", scaleDef.diff, scaleDef.nbrOfTicks, scaleDef.dataCoverage, scaleDef.min, scaleDef.max, score);
+					//trace("Score ", scaleDef.diff, scaleDef.numberOfIntervals, scaleDef.dataCoverage, scaleDef.min, scaleDef.max, score);
 					
 					if (score > highestScore)
 					{
@@ -298,13 +297,13 @@ package birdeye.vis.scales.util
 			
 			var granularity:Number = 0;
 			
-			if (scaleInt.nbrOfTicks >= minNbrOfTicks && scaleInt.nbrOfTicks <= maxNbrOfTicks)
+			if (scaleInt.numberOfIntervals >= minNumberOfIntervals && scaleInt.numberOfIntervals <= maxNumberOfIntervals)
 			{
-				granularity = 1 - Math.abs(scaleInt.nbrOfTicks - idealNbrOfTicks) / idealNbrOfTicks;
+				granularity = 1 - Math.abs(scaleInt.numberOfIntervals - idealNumberOfIntervals) / idealNumberOfIntervals;
 			}
 			else
 			{
-				granularity = -1;
+				return NaN;
 			}
 
 			var dcScore:Number = 0;
