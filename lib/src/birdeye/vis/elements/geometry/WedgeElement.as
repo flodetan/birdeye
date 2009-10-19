@@ -330,7 +330,8 @@ package birdeye.vis.elements.geometry
 						if (_showPercent) {
 							
 							
-							var xLlb:Number = xPos, yLlb:Number = yPos;
+							xLlb = xPos;
+							yLlb = yPos;
 							if (!isNaN(_radiusPercentOffset))
 							{
 								xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusPercentOffset, visScene.origin);
