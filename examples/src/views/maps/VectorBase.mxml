@@ -33,8 +33,8 @@
 				var wc:WorldCountries = new WorldCountries();
 				var countries:Array = wc.getCountriesListByRegion("World");
 				var kmlParser:KMLParser = new KMLParser();
-				kmlParser.parsePolygonKML(polygonKml, "Document.Folder.Feature.","ISO_3","Polygon.outerBoundaryIs.LinearRing.coordinates.");				
-				kmlParser.parseBaryCenterKML(polygonKml, "Document.Folder.Feature.","ISO_3","Point.coordinates.");				
+				kmlParser.parsePolygonKML(polygonKml, "ISO_3", "Document.Folder.Feature.","Polygon.","outerBoundaryIs.LinearRing.coordinates.");				
+				kmlParser.parseBaryCenterKML(baryCenterKml, "ISO_3", "Document.Folder.Feature.","","Point.coordinates.");				
 				var countriesData:ArrayCollection = new ArrayCollection();
 				for each (var country:String in countries)
 				{
@@ -79,11 +79,15 @@
 		]]>
 	</mx:Script>
 	
-	<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([myMap.svgData], parentApplication.width, parentApplication.height))"/>
+	
+	
 	<mx:XML id="polygonKml" source="data/worldmap.kml" />
+	<mx:XML id="baryCenterKml" source="data/baryCenters.kml" />
+	
+	<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([myMap.svgData], parentApplication.width, parentApplication.height))"/>
 	
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
-	<mx:Label text="Draggable countries ...."/>
+		<mx:Label text="Draggable countries ...."/>
     	<coords:Cartesian id="myMap" width="90%" height="90%" showDataTips="true" dataTipFunction="dtFunc">
     		<coords:transforms>
 					<trans:Projection id="myProj" proj="Miller cylindrical" latScale="{lat}" longScale="{long}"/>
