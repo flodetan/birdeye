@@ -51,26 +51,48 @@
 		public function KMLParser()
 		{
 		}
+		
+	   /* The function nextLevel
+		* retrieves a set of descendants in the given XML tree "tree".
+		* The descendants are selected based on their names,
+		* specified by the first part of the parameter "path".
+		*/
+		private function nextLevel(tree:XML, path:String, jump:Boolean):XMLList {
+			//Take the first leg from the path (legs are separated by dots)
+			var firstLeg:String = path.substring(0,path.indexOf("."));
+			//Select XML children named like the first leg
+			var elementName:QName = new QName(tree.namespace(),firstLeg);
+			if (jump) { //Find not only direct children, but also grandchildren, great-grandchildren, etc
+				return tree.descendants(elementName);
+			} else { //Limit search to direct element children, i.e. not grandchildren, great-grandchildren, attributes etc
+				return tree.elements(elementName);
+			}
+		}
 
 	   /* The function recurTreePath
 		* recursively goes down through an XML tree "tree"
-		* to the level specified by "path"
+		* to the level specified by "jumpPath" and "nonJumpPath"
 		* then applies function "f" on each subtree at that level
 		*/
-		private function recurTreePath(tree:XML, path:String, f:Function, params:Array):void {	
-			if (path.length == 0) { //If already reached the desired level
-				f.call(null, tree, params);
-			} else if (path.length > 0) {
-				//Split one leg at a time from the path (the legs are separated by dots)
-				var dotIdx:int = path.indexOf(".");
-				var firstLeg:String = path.substring(0,dotIdx);
-				var remainingLegs:String = path.substring(dotIdx+1);
-				//Recursive call, pursuing one leg after the other, until the whole path has been consumed
-				var elementName:QName = new QName(tree.namespace(),firstLeg);
-				for each (var subTree:XML in tree.elements(elementName) ) {
-					recurTreePath(subTree, remainingLegs, f, params);
+		private function recurTreePath(tree:XML, jumpPath:String, nonJumpPath:String, f:Function, params:Array):void {	
+			var remainingLegs:String;
+			//Jump to the descendants specified in jumpPath
+			if (jumpPath.length > 0) {
+				remainingLegs = jumpPath.substring(jumpPath.indexOf(".")+1); //Cut away the first leg of jumpPath, i.e. the part before the first dot
+				for each ( var jumpedSubTree:XML in nextLevel(tree,jumpPath,true) ) {
+					recurTreePath(jumpedSubTree, remainingLegs, nonJumpPath, f, params); //Recursive call, will continue until jumpPath is consumed
+				}									
+			//If no jump to do, proceed with the nonJumpPath
+			} else if (nonJumpPath.length > 0) {
+				remainingLegs = nonJumpPath.substring(nonJumpPath.indexOf(".")+1); //Cut away the first leg of nonJumpPath, i.e. the part before the first dot
+				for each ( var subTree:XML in nextLevel(tree,nonJumpPath,false) ) {
+					recurTreePath(subTree, jumpPath, remainingLegs, f, params); //Recursive call, will continue until nonJumpPath is consumed
 				}
-			} else { //Should never happen
+			//If already reached the desired level
+			} else if (nonJumpPath.length == 0) {
+				f.call(null, tree, params); //Make the call
+			
+			} else { //Should never happen 
 				trace ("ERROR: Too short path in function KMLParser.recurTreePath");
 			}
 		}
@@ -105,7 +127,8 @@
 	    */
 		private function parseCountryPolygons(countryTree:XML, params:Array):void {
 			var countryCodeMarker:String = params[0];
-			var subCountryPath:String = params[1];
+			var jumpPath:String = params[1];
+			var nonJumpPath:String = params[2]; 
 			
 			//Get the country code from the XML
 			var elementName:QName = new QName(countryTree.namespace(),countryCodeMarker);
@@ -113,18 +136,9 @@
 			_longLatPolygons[countryCode]=new Array(0);
 			//Put countryCode into an Array "args"
 			//, so that it can be passed to function "parsePolygon"
-			var args:Array = new Array(2);
-			args[0] = countryCode;
+			var args:Array = [countryCode];
 			
-			//Do the first recursion step here, and use the function
-			//"XML.descendants" instead of "XML.elements"
-			var dotIdx:int = subCountryPath.indexOf(".");
-			var firstLeg:String = subCountryPath.substring(0,dotIdx);
-			var remainingLegs:String = subCountryPath.substring(dotIdx+1);
-			elementName = new QName(countryTree.namespace(),firstLeg);
-			for each (var polygon:XML in countryTree.descendants(elementName)) {
-				recurTreePath(polygon, remainingLegs, parsePolygon, args);
-			}
+			recurTreePath(countryTree, jumpPath, nonJumpPath, parsePolygon, args);
 		}
 		
 	   /* The function parsePolygonKML
@@ -133,13 +147,13 @@
 		* then continues down to level "subCountryPath" and
 		* fetches the coordinates for each country into global variable "_longLatPolygons"
 		*/
-		public function parsePolygonKML(kml:XML,pathToCountry:String, countryCodeMarker:String, subCountryPath:String):void {
+		public function parsePolygonKML(kml:XML, countryCodeMarker:String, pathToCountry:String, jumpPath:String, nonJumpPath:String):void {
 			//Put countryCodeMarker and subCountryPath into an Array "params"
 			//, so that they can be passed to function "parseCountryPolygons"
-			var params:Array = [countryCodeMarker,subCountryPath];
+			var params:Array = [countryCodeMarker,jumpPath,nonJumpPath];
 			
 			//For each subtree on the "pathToCountry" level, execute "parseCountryPolygons"
-			recurTreePath(kml, pathToCountry, parseCountryPolygons, params);
+			recurTreePath(kml, "", pathToCountry, parseCountryPolygons, params);
 		}
 
 	   /* The function parsePoint
@@ -166,7 +180,8 @@
 	    */
 		private function parseCountryBaryCenter(countryTree:XML, params:Array):void {
 			var countryCodeMarker:String = params[0];
-			var subCountryPath:String = params[1];
+			var jumpPath:String = params[1];
+			var nonJumpPath:String = params[2]; 
 			
 			//Get the country code from the XML
 			var elementName:QName = new QName(countryTree.namespace(),countryCodeMarker);
@@ -175,25 +190,24 @@
 			
 			//Put countryCode into an Array "args"
 			//, so that it can be passed to function "parsePolygon"
-			var args:Array = new Array(2);
-			args[0] = countryCode;
+			var args:Array = [countryCode];
 
-			recurTreePath(countryTree, subCountryPath, parsePoint, args);			
+			recurTreePath(countryTree, jumpPath, nonJumpPath, parsePoint, args);			
 		}
 		
 	   /* The function parseBaryCenterKML
 		* goes down through the KML tree and
 		* picks up the country code from each "countryCodeMarker" element at level "pathToCountry"
-		* then continues down to level "subCountryPath" and
+		* then continues down to level "jumpPath", then level "nonJumpPath" and then
 		* fetches the bary centre coordinates for each country into global variable "_longLatBaryCenters"
 		*/
-		public function parseBaryCenterKML(baryKml:XML,pathToCountry:String, countryCodeMarker:String, subCountryPath:String):void{
-			//Put countryCodeMarker and subCountryPath into an Array "params"
+		public function parseBaryCenterKML(baryKml:XML, countryCodeMarker:String, pathToCountry:String, jumpPath:String, nonJumpPath:String):void{
+			//Put countryCodeMarker, jumpPath and nonJumpPath into an Array "params"
 			//, so that they can be passed to function "parseCountryBaryCenter"
-			var params:Array = [countryCodeMarker,subCountryPath];
+			var params:Array = [countryCodeMarker,jumpPath,nonJumpPath];
 			
 			//For each subtree on the "pathToCountry" level, execute "parseCountryBaryCenter"
-			recurTreePath(baryKml, pathToCountry, parseCountryBaryCenter, params);
+			recurTreePath(baryKml, "", pathToCountry, parseCountryBaryCenter, params);
 		}
 
 	}
