@@ -20,6 +20,7 @@
 			import com.degrafa.paint.RadialGradientFill;
 			import com.degrafa.paint.GradientStop;
 			import birdeye.vis.source.kml.parser.KMLParser;
+			import birdeye.vis.trans.modifiers.NoncontiguousCartogram;
 			
 			public function get svgData():String
 			{
@@ -32,18 +33,17 @@
 			{
 				var wc:WorldCountries = new WorldCountries();
 				var countries:Array = wc.getCountriesListByRegion("World");
-				var kmlParser:KMLParser = new KMLParser();
-				kmlParser.parsePolygonKML(polygonKml, "ISO_3", "Document.Folder.Feature.","Polygon.","outerBoundaryIs.LinearRing.coordinates.");				
-				kmlParser.parseBaryCenterKML(baryCenterKml, "ISO_3", "Document.Folder.Feature.","","Point.coordinates.");				
+				var cartogram:NoncontiguousCartogram = new NoncontiguousCartogram();
 				var countriesData:ArrayCollection = new ArrayCollection();
 				for each (var country:String in countries)
 				{
+					var rdm:Number = Math.random() ;
 					var a:Array;
 					countriesData.addItem({
 						country: country,
-						poly: a = kmlParser.longLatPolygons[country],
-						center: kmlParser.longLatBaryCenters[country],//wc.getCountryCenter(country),
-						random: Math.random() * 100000
+						poly: a = cartogram.resizeCountry(wc.getCountryPolygon(country),wc.getCountryCenter(country),rdm),
+						center: wc.getCountryCenter(country),
+						random: rdm * 100000
 					});
 				}
 
