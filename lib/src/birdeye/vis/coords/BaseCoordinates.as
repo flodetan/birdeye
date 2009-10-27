@@ -91,6 +91,12 @@ package birdeye.vis.coords
 		{
 			return _sharedScales;
 		}
+		
+		override public function invalidateProperties() : void
+		{
+			super.invalidateProperties();
+		}
+		
 
 		override protected function commitProperties():void
 		{
