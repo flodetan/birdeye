@@ -68,8 +68,9 @@ package birdeye.vis.scales
 		public function set parent(val:IValidatingParent):void
 		{
 			_valParent = val;	
-			if (toBeInvalidated)
+			if (toBeInvalidated || invalidated)
 			{
+				invalidated = false;
 				invalidate();
 				toBeInvalidated = false;
 			}
