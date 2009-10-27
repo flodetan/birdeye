@@ -97,6 +97,7 @@
 		public function set subScale(val:IFactory):void
 		{
 			_subScale = val;
+			invalidate();
 		}
 		
 		public function get subScale():IFactory
@@ -214,7 +215,7 @@
 			{
 				super.commit();
 		
-				if (subScale)
+				if (subScale && _minMax)
 				{
 					_subScales = new Array(_minMax.length);
 					
