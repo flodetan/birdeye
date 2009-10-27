@@ -977,6 +977,7 @@ package birdeye.vis.guides.axis
 							minHeight = (_axisRendererHeight>0) ? 
 											_axisRendererHeight :
 											_padding + sizeLabel + 10 + maxLblSize * Math.sin(-_rotateLabels*Math.PI/180);
+							minWidth = sizeLabel + 20;
 							break;							
 						case LEFT:
 						case RIGHT:
@@ -984,6 +985,7 @@ package birdeye.vis.guides.axis
 							minWidth = (_axisRendererWidth>0) ?
 												_axisRendererWidth :
 												_padding + Math.max(5, maxLblSize * Math.cos(_rotateLabels*Math.PI/180));
+							minHeight = sizeLabel + 20;
 							break;
 					}
 
@@ -1069,14 +1071,20 @@ trace(getTimer(), "drawing axis");
 						// create label 
 						label = createLabelText("vertical", dataLabel, yPos);
 						label.fill = new SolidFill(colorLabel);
+						
+						checkLabelPosition(label, "vertical");
+						
 						gg.geometryCollection.addItem(label);
 					} else {
 						var labelRnd:DisplayObject = createLabelRenderer(dataLabel);
 						labelRnd.y = yPos - labelRnd.height/2;
+						
 						if (placement == LEFT)
 							labelRnd.x = width - thickWidth - (labelRnd.width);
 						else
 							labelRnd.x = thickWidth * sign;
+						
+						checkLabelPosition(labelRnd, "vertical");
 					}
 				}
 			} else {
@@ -1101,14 +1109,20 @@ trace(getTimer(), "drawing axis");
 						// create label 
 						label = createLabelText("horizontal", dataLabel, xPos);
 						label.fill = new SolidFill(colorLabel);
+						
+						checkLabelPosition(label, "horizontal");
+						
 						gg.geometryCollection.addItem(label);
 					} else {
 						labelRnd = createLabelRenderer(dataLabel);
 						labelRnd.x = xPos - labelRnd.width/2;
+						
 						if (placement == TOP)
 							labelRnd.y = height - thickWidth - (labelRnd.height);
 						else
 							labelRnd.y = thickWidth * sign;
+						
+						checkLabelPosition(labelRnd, "horizontal");
 					}
 				}
 			}
@@ -1271,6 +1285,21 @@ trace(getTimer(), "drawing axis");
 			if (_pointer)
 			{
 				this._pointer.visible = false;
+			}
+		}
+		
+		
+		protected function checkLabelPosition(label:Object, direction:String):void
+		{
+			if (direction == "vertical")
+			{
+				if(label.y < 0) label.y = 0;
+				if (label.y > (size - label.height)) label.y = size - label.height;
+			}
+			else if (direction ==  "horizontal")
+			{
+				if (label.x < 0) label.x = 0;
+				if (label.x > (size - label.width)) label.x = size - label.width;
 			}
 		}
 		
