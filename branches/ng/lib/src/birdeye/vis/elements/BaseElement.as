@@ -274,7 +274,44 @@ package birdeye.vis.elements
 			_showTipGeometry = val;
 			invalidatingDisplay();
 		}
-
+		
+		
+		private var _dataTipOffsetX:Number = -20;
+		/**
+		 * Set the x offset of the datatip
+		 * @default -20
+		 */ 
+		public function set dataTipOffsetX(val:Number):void
+		{
+			_dataTipOffsetX = val;
+			
+			invalidatingDisplay();
+		}
+		
+		public function get dataTipOffsetX():Number
+		{
+			return _dataTipOffsetX;	
+		}
+		
+		
+		private var _dataTipOffsetY:Number = 40;
+		/**
+		 * Set the y offset of the datatip
+		 * @default 400
+		 */ 
+		public function set dataTipOffsetY(val:Number):void
+		{
+			_dataTipOffsetY = val;
+			
+			invalidatingDisplay();
+		}
+		
+		public function get dataTipOffsetY():Number
+		{
+			return _dataTipOffsetY;	
+		}	
+		
+		
 		private var _colorScale:IScale;
 		/** Define an axis to set the colorField for data items.*/
 		public function set colorScale(val:IScale):void
@@ -1533,6 +1570,8 @@ package birdeye.vis.elements
  			if (visScene.showDataTips || visScene.showAllDataTips)
 			{ 
 				initGGToolTip();
+				if (isNaN(ttXoffset)) ttXoffset = _dataTipOffsetX;
+				if (isNaN(ttYoffset)) ttYoffset = _dataTipOffsetY;
 				ttGG.create(item, dataFields, xPos, yPos, zPos, radius, collisionIndex, shapes, ttXoffset, ttYoffset, true, showGeometry);
 			} else {
 				// if no tips than just add data info and location info needed for pointers
