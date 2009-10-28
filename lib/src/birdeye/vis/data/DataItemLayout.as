@@ -183,6 +183,16 @@ package birdeye.vis.data
 			
 			this.shapes = ttShapes;
 			
+			if (!isNaN(xOffSet))
+			{
+				_xTTOffset = xOffSet;	
+			}
+			
+			if (!isNaN(yOffset))
+			{
+				_yTTOffset = yOffset;
+			}
+			
 			if (isTooltip)
 			{
 				// if tip function is set, use it, otherwise use a default one
