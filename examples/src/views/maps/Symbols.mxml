@@ -9,6 +9,7 @@
 	xmlns:guides="birdeye.vis.guides.legend.*" creationComplete="init()" xmlns:axis="birdeye.vis.guides.axis.*">
 <mx:Script>
 		<![CDATA[
+			import birdeye.vis.data.Pair;
 			import birdeye.vis.data.UtilSVG;
 			import birdeye.vis.trans.modifiers.WhyattSimplification;
 			import birdeye.vis.trans.modifiers.Simplification;
