@@ -67,7 +67,6 @@
 			<composite:Composite label="Composite" width="100%" height="100%"/>
 			<svg:Svg label="SVG" width="100%" height="100%"/>
 			<recipes:Recipes label="Recipes" width="100%" height="100%"/>
-			<scales:ScaleGenerator label="Scale Generator" width="100%" height="100%" />
 			<about:About label="About..." width="100%" height="100%"/>
 		</mx:TabNavigator>
 		
