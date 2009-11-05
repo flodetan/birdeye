@@ -70,43 +70,18 @@
 			private function colorFunction(dataValue:*, min:Number, max:Number, _size:Number):*
 			{
 				var val:Number = Number(dataValue);
-				var fillGradients:Array;
-				var alphaGradients:Array;
-				var fill:com.degrafa.core.IGraphicsFill = new RadialGradientFill();
+				var color:Number = 0x005AFF;
 
 				if (val < 30000)
-				{
-					fillGradients = [0xE8480A, 0xE8800A]; 
-					alphaGradients = [.7, .5]; 
-				} else if (val < 50000)
-				{
-					fillGradients = [0xFF940D, 0xFFEB0D]; 
-					alphaGradients = [.7, .5]; 
-				} else if (val < 70000)
-				{
-					fillGradients = [0xFF0000, 0xFF2300]; 
-					alphaGradients = [.7, .5]; 
-				} else if (val < 90000)
-				{
-					fillGradients = [0xE80CDE, 0xE80CDE]; 
-					alphaGradients = [.7, .3]; 
-				} else 
-				{
-					fillGradients = [0x005AFF, 0x005AFF]; 
-					alphaGradients = [.7, .3]; 
-				} 
+					color = 0xE8480A; 
+				else if (val < 50000)
+					color = 0xFF940D; 
+				else if (val < 70000)
+					color = 0xFF0000; 
+				else if (val < 90000)
+					color = 0xE80CDE; 
 
-				var grStop:GradientStop = new GradientStop(fillGradients[0])
-				grStop.alpha = alphaGradients[0];
-				var g:Array = new Array();
-				g.push(grStop);
-
-				grStop = new GradientStop(fillGradients[1]);
-				grStop.alpha = alphaGradients[1];
-				g.push(grStop);
-
-				RadialGradientFill(fill).gradientStops = g;
-			 	return fill;
+			 	return color;
 			}
 		]]>
 	</mx:Script>
@@ -125,7 +100,7 @@
 <!-- 				<scales:Numeric id="col" f="colorFunction" />
 -->			</coords:scales>
 			<coords:elements>
-    		 	<elements:PolygonElement mouseClickFunction="clickF" extendMouseEvents="true" scale1="{long}" scale2="{lat}" polyDim="poly" colorScale="{col1}" colorField="random" />
+    		 	<elements:PolygonElement alphaFill="1" mouseClickFunction="clickF" extendMouseEvents="true" scale1="{long}" scale2="{lat}" polyDim="poly" colorScale="{col1}" colorField="random" />
 			 </coords:elements>
     	</coords:Cartesian>
     	<guides:Legend id="legend" dataProvider="{myMap}" direction="horizontal">
