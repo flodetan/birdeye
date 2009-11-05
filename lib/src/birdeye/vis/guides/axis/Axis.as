@@ -55,6 +55,7 @@ package birdeye.vis.guides.axis
 	
 	import mx.core.IDataRenderer;
 	import mx.core.IFactory;
+	import mx.logging.targets.MiniDebugTarget;
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
 	
@@ -290,8 +291,11 @@ package birdeye.vis.guides.axis
 		/** Set the angle rotation of labels.*/
 		public function set rotateLabels(val:Number):void
 		{
-			_rotateLabels = val;
-			invalidateDisplayList();
+			if (val != _rotateLabels)
+			{
+				_rotateLabels = val;
+				invalidateDisplayList();
+			}
 		}
 
 		protected var _rotateLabelsOn:String = "center";
@@ -966,6 +970,7 @@ package birdeye.vis.guides.axis
 				tmp.text = String(scale.completeDataValues[i]);
 				maxLblSize = Math.max(maxLblSize, tmp.textWidth);
 			}
+			
 			if (showAxis)
 			{
 					switch (placement)
@@ -1072,7 +1077,7 @@ trace(getTimer(), "drawing axis");
 						label = createLabelText("vertical", dataLabel, yPos);
 						label.fill = new SolidFill(colorLabel);
 						
-						checkLabelPosition(label, "vertical");
+						//checkLabelPosition(label, "vertical");
 						
 						gg.geometryCollection.addItem(label);
 					} else {
@@ -1084,7 +1089,7 @@ trace(getTimer(), "drawing axis");
 						else
 							labelRnd.x = thickWidth * sign;
 						
-						checkLabelPosition(labelRnd, "vertical");
+						//checkLabelPosition(labelRnd, "vertical");
 					}
 				}
 			} else {
@@ -1110,7 +1115,7 @@ trace(getTimer(), "drawing axis");
 						label = createLabelText("horizontal", dataLabel, xPos);
 						label.fill = new SolidFill(colorLabel);
 						
-						checkLabelPosition(label, "horizontal");
+						//checkLabelPosition(label, "horizontal");
 						
 						gg.geometryCollection.addItem(label);
 					} else {
@@ -1122,7 +1127,7 @@ trace(getTimer(), "drawing axis");
 						else
 							labelRnd.y = thickWidth * sign;
 						
-						checkLabelPosition(labelRnd, "horizontal");
+						//checkLabelPosition(labelRnd, "horizontal");
 					}
 				}
 			}
