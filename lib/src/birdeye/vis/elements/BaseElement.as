@@ -1600,7 +1600,7 @@ package birdeye.vis.elements
 		
 		protected var draggedItem:Object;
 		private var draggedItemPreviousTarget:DisplayObjectContainer;
-		private var isDraggingNow:Boolean = false;
+		protected var isDraggingNow:Boolean = false;
 	    protected var offsetX:Number, offsetY:Number;
 		/**
 		 * @Private 
@@ -1690,7 +1690,7 @@ package birdeye.vis.elements
 							
 							if (visScene.customTooltTipFunction != null)
 							{
-								myTT = visScene.customTooltTipFunction(gg);
+								myTT = visScene.customTooltTipFunction(gg.currentItem);
 								toolTip = myTT.text;
 							} else {
 								gg.showToolTip();
@@ -1703,7 +1703,7 @@ package birdeye.vis.elements
 				{
 					if (visScene.customTooltTipFunction != null)
 					{
-						myTT = visScene.customTooltTipFunction(extGG);
+						myTT = visScene.customTooltTipFunction(extGG.currentItem);
 			 			toolTip = myTT.text;
 					} else {
 						extGG.showToolTip();
