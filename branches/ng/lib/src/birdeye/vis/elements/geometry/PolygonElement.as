@@ -29,21 +29,23 @@ package birdeye.vis.elements.geometry
 {
 	import __AS3__.vec.Vector;
 	
-	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.data.Pair;
 	import birdeye.vis.elements.BaseElement;
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.scales.*;
 	import birdeye.vis.trans.projections.Projection;
 	
-	import com.degrafa.IGeometry;
-	import com.degrafa.core.IGraphicsFill;
-	import com.degrafa.geometry.Path;
-	import com.degrafa.paint.SolidFill;
-	
+	import flash.display.GraphicsPathCommand;
+	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.utils.getTimer;
+	
+	import mx.controls.ToolTip;
+	import mx.managers.ToolTipManager;
+	
+	import net.sakri.flash.fp10_3d.Mesh3D;
 
 	public class PolygonElement extends BaseElement
 	{
@@ -86,56 +88,37 @@ package birdeye.vis.elements.geometry
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
-			
-			_extendMouseEvents = true;
-
-			if (!isListeningMouseMove && visScene)
-			{
-				visScene.elementsContainer.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-				isListeningMouseMove = true;
-			}
 		}
 
-		protected var poly:Path;
+		protected var _extruded:Mesh3D;
+		
 		/** @Private 
 		 * Called by super.updateDisplayList when the element is ready for layout.*/
 		override public function drawElement():void
 		{
 			if (isReadyForLayout() && _invalidatedElementGraphic)
 			{
-trace(getTimer(), "drawing polygon ele");
+trace(getTimer(), "drawing BEST");
 var numCoords:Number = 0;
 				super.drawElement();
 				clearAll();
-
+				
 				var xPrev:Number, yPrev:Number;
 				var pos1:Number, pos2:Number;
 				var t:uint = 0;
 				
 				var fullPoly:Array;
 				var initiated:Boolean = false;
-				
-				dataFields["polyDim"] = _polyDim;
-				
 				var data:String;
-
+				
+				var pathCommands:Vector.<int>;
+				var pathPoints:Vector.<Point>;
+				
 				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
 				{
 					var currentItem:Object = _dataItems[cursorIndex];
 
 					fullPoly = currentItem[_polyDim] as Array;
-
-					if (colorScale)
-					{
-						var col:* = colorScale.getPosition(currentItem[colorField]);
-						if (col is Number)
-							fill = new SolidFill(col);
-						else if (col is IGraphicsFill)
-							fill = col;
-					} 
-
-					createTTGG(currentItem, dataFields, NaN, NaN, NaN, NaN, NaN, null, NaN, NaN, false);
-					ttGG.target = this;
 
 					if (fullPoly && fullPoly.length > 0)
 					{
@@ -156,22 +139,20 @@ var numCoords:Number = 0;
 									pos2 = scale2.getPosition(item);
 								
 								data = "M" + String(pos1) + "," + String(pos2) + " ";
+								pathCommands.push(GraphicsPathCommand.MOVE_TO);
+								pathPoints.push(new Point(pos1, pos2));
 							} else if (item[0] is Pair) {
+								var i:uint = 0;
+	
 								if (initiated)
 								{
 									data += "z";
-									poly = new Path(data);
-									poly.fill = fill;
-									poly.stroke = stroke;
-									ttGG.geometryCollection.addItemAt(poly,0);
 									svgData += data;
 								}
 								initiated = false;
 								
 								data = " ";
-								
-								var i:uint = 0;
-	
+								var vertices:Vector.<Number>;
 								for each (var pairs:Pair in item)
 								{
 									// data is composed by a set of arrays (Maps)
@@ -183,115 +164,167 @@ var numCoords:Number = 0;
 										pos2 = scale2.getPosition(pairs);
 									
 									if (i++ == 0)
+									{
+										pathCommands = new Vector.<int>();
+										vertices = new Vector.<Number>;
+										pathCommands.push(GraphicsPathCommand.MOVE_TO);
 										data = "M" + String(pos1) + "," + String(pos2) + " ";
-									else
+									} else {
+										pathCommands.push(GraphicsPathCommand.LINE_TO);
 										data += "L" + String(pos1) + "," + String(pos2) + " ";
+									}
+
+									vertices.push(pos1)
+									vertices.push(pos2);
 								}
 								data += "z";
-								poly = new Path(data);
-								poly.fill = fill;
-								poly.stroke = stroke; 
-								ttGG.geometryCollection.addItemAt(poly,0); 
-								
 								addSVGData('\n<path d="' + data + '"/>');
-							}
+
+								var sp:ExtendedSprite = new ExtendedSprite();
+								if (visScene.showDataTips)
+								{
+									sp.item = currentItem;
+									sp.addEventListener(MouseEvent.ROLL_OVER, createTip);
+									sp.addEventListener(MouseEvent.ROLL_OUT, destroyTip);
+								}
+
+								if (draggableItems)
+									sp.addEventListener(MouseEvent.MOUSE_DOWN, startDragging);
+
+								if (colorScale)
+									colorFill = colorScale.getPosition(currentItem[colorField]);
+
+								sp.graphics.lineStyle(alphaStroke, colorStroke, weightStroke);
+								sp.graphics.beginFill(colorFill, alphaFill);
+								sp.graphics.drawPath(pathCommands, vertices);
+								sp.graphics.endFill();
+								addChild(sp);
+//we must convert the array of points to a vertices vector
+ 							}
 						}
 					}
 				}
 
 				createSVG();
 				_invalidatedElementGraphic = false;
-trace(getTimer(), "drawing polygon ele Num coords ", numCoords);
+trace(getTimer(), "end drawing BEST");
+			}
+		}
+		
+		private var tip:ToolTip;
+		private function createTip(e:MouseEvent):void
+		{
+			var globalPosition:Point = localToGlobal(new Point(mouseX, mouseY)); 
+			if (visScene.customTooltTipFunction != null)
+			{
+				myTT = visScene.customTooltTipFunction(ExtendedSprite(e.target).item);
+				toolTip = myTT.text;
+trace ("created TIP", toolTip)
+			} else {
+				tip = ToolTipManager.createToolTip(visScene.dataTipFunction(ExtendedSprite(e.target).item, null), 
+													globalPosition.x, globalPosition.y) as ToolTip;
 			}
 		}
 
-		override protected function handleRollOver(e:MouseEvent):void 
+		private function destroyTip(e:MouseEvent):void
 		{
-			var extGG:DataItemLayout = DataItemLayout(e.target);
+			if (visScene.customTooltTipFunction)
+ 			{
+				toolTip = null;
+trace ("destroyed TIP", toolTip)
+			} else 
+ 				ToolTipManager.destroyToolTip(tip);
+		}
 
-			if (visScene.showDataTips) {
-				if (visScene.customTooltTipFunction != null)
+		/** Implement function to manage mouse click events.*/
+		override public function onMouseClick(e:MouseEvent):void
+		{
+			if (isDraggingNow) return;
+
+			if (e.target is ExtendedSprite)
+				mouseDoubleClickFunction(ExtendedSprite(e.target).item);
+		}
+
+		/** Implement function to manage mouse double click events.*/
+		override public function onMouseDoubleClick(e:MouseEvent):void
+		{
+			if (isDraggingNow) return;
+
+			if (e.target is ExtendedSprite)
+				mouseDoubleClickFunction(ExtendedSprite(e.target).item);
+		}
+
+		private var draggedPoly:ExtendedSprite;
+		override protected function startDragging(e:MouseEvent):void
+		{
+			if (e.target is ExtendedSprite)
+			{
+				draggedPoly = ExtendedSprite(e.target);
+				var itemX:Number = draggedPoly.x, itemY:Number = draggedPoly.y;
+				isDraggingNow = true;
+		    	offsetX = e.stageX - itemX;
+		    	offsetY = e.stageY - itemY;
+				stage.addEventListener(MouseEvent.MOUSE_UP, stopDragging);
+		    	stage.addEventListener(MouseEvent.MOUSE_MOVE, dragDataItem);
+		    	dispatchEvent(new Event("DraggingStarted")); // TODO: create specific event 
+			}
+		}
+		
+		/**
+		 * @Private 
+		 * Move the data item while the mouse moves 
+		*/
+	    override protected function dragDataItem(e:MouseEvent):void
+	    {
+	    	draggedPoly.x = e.stageX - offsetX;
+	    	draggedPoly.y = e.stageY - offsetY;
+trace (draggedPoly.x, draggedPoly.y);
+	    	dispatchEvent(new Event("ItemMoving"));
+	    	e.updateAfterEvent();
+	    }
+	    
+		/**
+		 * @Private 
+		 * Stop data item moving 
+		*/
+	    private function stopDragging(e:MouseEvent):void
+	    {
+	    	if (isDraggingNow)
+		    	isDraggingNow = false;
+
+	  		stage.removeEventListener(MouseEvent.MOUSE_UP, stopDragging);
+	    	stage.removeEventListener(MouseEvent.MOUSE_MOVE, dragDataItem)
+	    	dispatchEvent(new Event("DragComplete"));
+	    }
+
+		override public function clearAll():void
+		{
+			for (var i:Number = numChildren-1; i>0; i--)
+				if (getChildAt(i) is ExtendedSprite)
 				{
-					myTT = visScene.customTooltTipFunction(extGG);
-		 			toolTip = myTT.text;
-				} else {
-					extGG.posX = extGG.mouseX;
-					extGG.posY = extGG.mouseY;
-					extGG.showToolTip();
+					ExtendedSprite(getChildAt(i)).graphics.clear(); 
+					if (visScene.showDataTips)
+					{
+						ExtendedSprite(getChildAt(i)).removeEventListener(MouseEvent.ROLL_OVER, createTip);
+						ExtendedSprite(getChildAt(i)).removeEventListener(MouseEvent.ROLL_OUT, destroyTip);
+					}
+						
+					removeChildAt(i);
 				}
-			}
 		}
-
-		private function onMouseMove(e:MouseEvent):void 
-		{
-			var localPoint:Point, posX:Number, posY:Number;
-			
-			localPoint = new Point(visScene.elementsContainer.mouseX, visScene.elementsContainer.mouseY);
-			posY = localPoint.y;
-			posX = localPoint.x;
-
-			/*if (scale2 && scale2 is IAxis && IAxis(scale2).pointer)
-			{
-				IAxis(scale2).pointerY = posY;
-				IAxis(scale2).pointer.visible = true;
-			} 
-
-			if (scale1 && scale1 is IAxis && IAxis(scale1).pointer)
-			{
-				IAxis(scale1).pointerX = posX;
-				IAxis(scale1).pointer.visible = true;
-			}*/
-		}
-
 		// fieldID is the field that can be used to uniquely identify 
 		// adata item in the polygon (for ex. if the polygon is a country, 
 		// than it's ISO code, or country name)
 		override public function refresh(updatedDataItems:Vector.<Object>, field:Object = null, colorFieldValues:Array = null, fieldID:Object = null):void
 		{
-			if (updatedDataItems)
-				_dataItems = updatedDataItems;
-
-			// in the future this will reflect a more proper dataItems structure
-			var nGG:Number = (graphicsCollection.items) ? graphicsCollection.items.length : 0;
-			var tmpGG:DataItemLayout;
-			var tmpColor:Object;
-			var dataValue:Object;
-			var tmpGeometry:IGeometry;
-			
-			for (var i:Number = 0; i<nGG; i++)
-			{
-				if (graphicsCollection.items[i] is DataItemLayout)
-				{
-					tmpGG = graphicsCollection.items[i];
-					if (!tmpGG.currentItem) continue;
-					if (colorScale && colorField)
-					{
-						if (colorFieldValues && field == colorField)
-						{
-							dataValue = colorFieldValues[tmpGG.currentItem[fieldID]];
-							// update value in the data item 
-							tmpGG.currentItem[colorField] = dataValue;
-							if (!dataValue || dataValue == 0) 
-								dataValue = Numeric(colorScale).min;
-						} else
-							dataValue = tmpGG.currentItem[colorField];
-
-						tmpColor = colorScale.getPosition(dataValue); 
-
-						for (var j:uint = 0; j<tmpGG.geometryCollection.items.length; j++)
-						{
-							tmpGeometry = tmpGG.geometryCollection.items[j];
-							if (tmpGeometry is IGeometry)
-							{
-								if (tmpColor is Number)
-									tmpGeometry.fill = new SolidFill(tmpColor);
-								else if (tmpColor is IGraphicsFill)
-									tmpGeometry.fill = IGraphicsFill(tmpColor);
-							}
-						}
-					}
-				}
-			}
 		}
 	}
+}
+	import flash.display.Sprite;
+	import birdeye.vis.elements.BaseElement;
+	
+
+class ExtendedSprite extends Sprite
+{
+	public var item:Object;
 }
