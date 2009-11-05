@@ -45,8 +45,6 @@ package birdeye.vis.elements.geometry
 	import mx.controls.ToolTip;
 	import mx.managers.ToolTipManager;
 	
-	import net.sakri.flash.fp10_3d.Mesh3D;
-
 	public class PolygonElement extends BaseElement
 	{
 		private var _polyDim:String;
@@ -90,8 +88,6 @@ package birdeye.vis.elements.geometry
 			super.commitProperties();
 		}
 
-		protected var _extruded:Mesh3D;
-		
 		/** @Private 
 		 * Called by super.updateDisplayList when the element is ready for layout.*/
 		override public function drawElement():void
