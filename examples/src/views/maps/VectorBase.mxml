@@ -10,6 +10,8 @@
 <mx:Script>
 		<![CDATA[
 			import birdeye.vis.data.UtilSVG;
+			import birdeye.vis.trans.modifiers.WhyattSimplification;
+			import birdeye.vis.trans.modifiers.Simplification;
 			import mx.controls.Alert;
 			import birdeye.vis.data.DataItemLayout;
 			import birdeye.vis.data.dictionaries.WorldRegionTypes;
@@ -19,8 +21,6 @@
 			import com.degrafa.core.IGraphicsFill;
 			import com.degrafa.paint.RadialGradientFill;
 			import com.degrafa.paint.GradientStop;
-			import birdeye.vis.source.kml.parser.KMLParser;
-			import birdeye.vis.trans.modifiers.NoncontiguousCartogram;
 			
 			public function get svgData():String
 			{
@@ -31,23 +31,22 @@
 			public var dt:ArrayCollection = new ArrayCollection();
 			public function init():void
 			{
+				var ps:Simplification = new WhyattSimplification();
 				var wc:WorldCountries = new WorldCountries();
-				var countries:Array = wc.getCountriesListByRegion("World");
-				var cartogram:NoncontiguousCartogram = new NoncontiguousCartogram();
-				var countriesData:ArrayCollection = new ArrayCollection();
+				var countries:Array = wc.getCountriesListByRegion("Africa");
+				var simplifiedCountries:ArrayCollection = new ArrayCollection();
 				for each (var country:String in countries)
 				{
-					var rdm:Number = Math.random() ;
 					var a:Array;
-					countriesData.addItem({
+					simplifiedCountries.addItem({
 						country: country,
-						poly: a = cartogram.resizeCountry(wc.getCountryPolygon(country),wc.getCountryCenter(country),rdm),
+						poly: a = wc.getCountryPolygon(country),
 						center: wc.getCountryCenter(country),
-						random: rdm * 100000
+						random: Math.random() * 100000
 					});
 				}
 
-				dt = countriesData;
+				dt = simplifiedCountries;
 			}
 			
 			private function dtFunc(currDatatip:Object, dataFields:Array):String
@@ -57,53 +56,27 @@
 				tt += "\n Random data: " + currDatatip.random;
 				return  tt;
 			}
-			
-			private function colorFunction(dataValue:*, min:Number, max:Number, _size:Number):*
-			{
-				var fillGradients:Array;
-				var alphaGradients:Array;
-				var fill:com.degrafa.core.IGraphicsFill = new RadialGradientFill();
-
-				var grStop:GradientStop = new GradientStop(0x005AFF)
-				grStop.alpha = .7;
-				var g:Array = new Array();
-				g.push(grStop);
-
-				grStop = new GradientStop(0x005AFF);
-				grStop.alpha = .3;
-				g.push(grStop);
-
-				RadialGradientFill(fill).gradientStops = g;
-			 	return fill;
-			}
 		]]>
 	</mx:Script>
-	
-	
-	
-	<mx:XML id="polygonKml" source="data/worldmap.kml" />
-	<mx:XML id="baryCenterKml" source="data/baryCenters.kml" />
 	
 	<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([myMap.svgData], parentApplication.width, parentApplication.height))"/>
 	
 	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
-		<mx:Label text="Draggable countries ...."/>
+	<mx:Label text="Draggable countries ...."/>
     	<coords:Cartesian id="myMap" width="90%" height="90%" showDataTips="true" dataTipFunction="dtFunc">
     		<coords:transforms>
 					<trans:Projection id="myProj" proj="Miller cylindrical" latScale="{lat}" longScale="{long}"/>
 			</coords:transforms>
 			<coords:scales>
- 				<scales:Numeric id="lat" dataValues="{[-90,90]}" dataInterval="20"/>
- 				<scales:Numeric id="long" dataValues="{[-180,180]}" dataInterval="20" />
- 				<scales:Numeric id="col" f="colorFunction" />
+ 				<scales:Numeric id="lat" dataValues="{[45,-45]}" dataInterval="20"/>
+ 				<scales:Numeric id="long" dataValues="{[-80,80]}" dataInterval="20" />
 			</coords:scales>
 <!--			<coords:guides>
 				<axis:Axis scale="{lat}" placement="right" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb" />
 				<axis:Axis scale="{long}" placement="top" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb" />
 			</coords:guides>
 -->    		 <coords:elements>
-    		 	<elements:PolygonElement 
-    		 		colorStroke="0xffffff" draggableItems="true" dataProvider="{dt}" scale1="{long}" scale2="{lat}" polyDim="poly" colorScale="{col}" />
+    		 	<elements:PolygonElement draggableItems="true" dataProvider="{dt}" scale1="{long}" scale2="{lat}" polyDim="poly" colorFill="0x005AFF" alphaFill=".9"/>
 			 </coords:elements>
     	</coords:Cartesian>
     </mx:VBox>
