@@ -142,87 +142,58 @@ package birdeye.vis.trans.modifiers.neighbourhood
 			var xInnerEnd:Number;
 			var yInnerEnd:Number;
 			
-			if (xA1 <= xA2) { //find minX, maxX of line A
-				if (xB1 <= xB2) { //find minX, maxX of line B
-					//Determine innerStart, the leftmost point reached by both lines
-					if (xA1 >= xB1) {
-						xInnerStart = xA1; //The biggest of the two minX
-						yInnerStart = yA1;
-					} else { // xB1 > xA1
-						xInnerStart = xB1;  //The biggest of the two minX
-						yInnerStart = yB1;
-					}
-					//Determine innerEnd, the rightmost point reached by both lines
-					if (xA2 <= xB2) {
-						xInnerEnd = xA2; //The smallest of the two maxX
-						yInnerEnd = yA2;
-					} else { // xB2 < xA2
-						xInnerEnd = xB2;  //The smallest of the two minX
-						yInnerEnd = yB2;
-					}					
-				} else { //xB2 < xB1 
-					//Determine innerStart, the leftmost point reached by both lines
-					if (xA1 >= xB2) {
-						xInnerStart = xA1; //The biggest of the two minX
-						yInnerStart = yA1;
-					} else { // xB2 > xA1
-						xInnerStart = xB2;  //The biggest of the two minX
-						yInnerStart = yB2;
-					}
-					//Determine innerEnd, the rightmost point reached by both lines
-					if (xA2 <= xB1) {
-						xInnerEnd = xA2; //The smallest of the two maxX
-						yInnerEnd = yA2;
-					} else { // xB1 < xA2
-						xInnerEnd = xB1;  //The smallest of the two minX
-						yInnerEnd = yB1;
-					}									
-				}
-			} else { // xA2 < xA1
-				if (xB1 <= xB2) { //find minX, maxX of line B
-					//Determine innerStart, the leftmost point reached by both lines
-					if (xA2 >= xB1) {
-						xInnerStart = xA2; //The biggest of the two minX
-						yInnerStart = yA2;
-					} else { // xB1 > xA2
-						xInnerStart = xB1;  //The biggest of the two minX
-						yInnerStart = yB1;
-					}
-					//Determine innerEnd, the rightmost point reached by both lines
-					if (xA1 <= xB2) {
-						xInnerEnd = xA1; //The smallest of the two maxX
-						yInnerEnd = yA1;
-					} else { // xB2 < xA1
-						xInnerEnd = xB2;  //The smallest of the two minX
-						yInnerEnd = yB2;
-					}					
-				} else { //xB2 < xB1 
-					//Determine innerStart, the leftmost point reached by both lines
-					if (xA2 >= xB2) {
-						xInnerStart = xA2; //The biggest of the two minX
-						yInnerStart = yA2;
-					} else { // xB2 > xA2
-						xInnerStart = xB2;  //The biggest of the two minX
-						yInnerStart = yB2;
-					}
-					//Determine innerEnd, the rightmost point reached by both lines
-					if (xA1 <= xB1) {
-						xInnerEnd = xA1; //The smallest of the two maxX
-						yInnerEnd = yA1;
-					} else { // xB1 < xA1
-						xInnerEnd = xB1;  //The smallest of the two minX
-						yInnerEnd = yB1;
-					}					
-				}				
-			}
+			var xMin:Number = Math.min(xA1,xA2,xB1,xB2);
+			var xMax:Number = Math.max(xA1,xA2,xB1,xB2);
 			
+			//Determine innerStart, the leftmost point reached by both lines
+			if (xA1 == xMin || xA2 == xMin) { //If line A goes farthest left
+				//Then choose the leftmost point of line B
+				if (xB1 <= xB2) {
+					xInnerStart = xB1;
+					yInnerStart = yB1;
+				} else {
+					xInnerStart = xB2;
+					yInnerStart = yB2;					
+				}
+			} else { //If line B goes farthest left
+				//Then choose the leftmost point of line A
+				if (xA1 <= xA2) {
+					xInnerStart = xA1;
+					yInnerStart = yA1;
+				} else {
+					xInnerStart = xA2;
+					yInnerStart = yA2;					
+				}
+			}
+
+			//Determine innerEnd, the rightmost point reached by both lines
+			if (xA1 == xMax || xA2 == xMax) { //If line A goes farthest right
+				//Then choose the rightmost point of line B
+				if (xB1 <= xB2) {
+					xInnerEnd = xB2;
+					yInnerEnd = yB2;
+				} else {
+					xInnerEnd = xB1;
+					yInnerEnd = yB1;					
+				}
+			} else { //If line B goes farthest right
+				//Then choose the rightmost point of line A
+				if (xA1 <= xA2) {
+					xInnerEnd = xA2;
+					yInnerEnd = yA2;
+				} else {
+					xInnerEnd = xA1;
+					yInnerEnd = yA1;					
+				}
+			}
+
 			//Sanity check
 			if (xInnerStart <= xInnerEnd )
 			{
 				var commonLength:Number = Math.sqrt(Math.pow(xInnerEnd-xInnerStart,2)+Math.pow(yInnerEnd-yInnerStart,2));	
 				return commonLength
 			} else {
-				trace ("ERROR: NeighbourRegister.measureLineOverlap detected non-linearity. xA1 = " + xA1 + ", xA2 = " + xA2+ ", xB1 = " + xB1 + ", xB2 = " + xB2);
+				trace ("ERROR: NeighbourRegister.measureLineOverlap detected an impossibility: xA1 = " + xA1 + ", xA2 = " + xA2+ ", xB1 = " + xB1 + ", xB2 = " + xB2);
 				return 0;
 			}
 		}
