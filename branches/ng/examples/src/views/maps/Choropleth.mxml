@@ -34,7 +34,7 @@
 			public var ac:ArrayCollection = new ArrayCollection();
 			public function init():void
 			{
-				var wc:WorldCountriesPlus = new WorldCountriesPlus();
+				var wc:WorldCountries = new WorldCountries();
 				var countries:Array = wc.getCountriesListByRegion(WorldRegionTypes.REGION_WORLD);
 				var simplifiedCountries:ArrayCollection = new ArrayCollection();
 				for each (var country:String in countries)
@@ -42,7 +42,7 @@
 					var a:Array;
 					simplifiedCountries.addItem({
 						country: country,
-						poly: a = wc.getCountryPolygon(country, 90),
+						poly: a = wc.getCountryPolygon(country),
 						center: wc.getCountryCenter(country),
 						random: Math.random() * 100000
 					});
