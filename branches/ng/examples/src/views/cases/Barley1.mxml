@@ -107,7 +107,7 @@
         	</coords:elements>
         </coords:Cartesian>	
     </mx:VBox>
-    <source:CSVTXT id="csv" url="./views/cases/data/barley.csv" fieldSeperator=";" onLoadingCompleted="loadData()">
+    <source:CSVTXT id="csv" url="http://birdeye.googlecode.com/svn/branches/ng/examples/src/views/cases/data/barley.csv" fieldSeperator=";" onLoadingCompleted="loadData()">
     </source:CSVTXT>
 </mx:VBox>
 

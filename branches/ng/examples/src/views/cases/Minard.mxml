@@ -16,11 +16,18 @@
 		<![CDATA[
 			import birdeye.vis.data.UtilSVG;
 			private function colorFunction(dataValue:*, min:Number, max:Number, _size:Number):*
-				{
-					if (dataValue == "A")
-						return 0xDAA520;
-					return 0x666666;
-				}
+			{
+				if (dataValue == "A")
+					return 0xDAA520;
+				return 0x666666;
+			}
+			
+			private var loadersReady:Number = 0;
+			private function checkReadiness():void
+			{
+				if (++loadersReady == 2)
+					survChart.active = true;
+			}
 		]]>
 	</mx:Script>
 	
@@ -36,7 +43,7 @@
     	</mx:HBox>
     	
     	<!-- Survivor and City Chart -->
-    	<coords:Cartesian id="survChart" width="90%" height="90%">
+    	<coords:Cartesian id="survChart" width="90%" height="90%" active="false">
 			<coords:scales>
 				<scales:Linear id="lat" dataValues="{[53.8,55.9]}" dataInterval="1"/>
  				<scales:Linear id="size" scaleValues="{[5,50]}"/>
@@ -60,7 +67,7 @@
     	</coords:Cartesian>
     	
     	<!-- Tempurature Chart -->
-    	<coords:Cartesian id="tempChart" width="90%" height="30%">
+    	<coords:Cartesian id="tempChart" width="90%" height="30%" active="false">
     		<coords:scales>
  				<scales:Linear id="long" dataValues="{[23,39]}" dataInterval="2"/>
  				<scales:Linear id="temperature" dataValues="{[-40,5]}" dataInterval="10"/>
@@ -86,17 +93,20 @@
     	
     </mx:VBox>
 
-	<sources:CSVTXT id="csvTemp" fieldSeperator=";" url="views/cases/data/Minard-Temp.csv">
+	<sources:CSVTXT id="csvTemp" onLoadingCompleted="tempChart.active = true" 
+		fieldSeperator=";" url="http://birdeye.googlecode.com/svn/branches/ng/examples/src/views/cases/data/Minard-Temp.csv">
 		<sources:dataProviders>
 			<data:DataSet id="temperatures" fields="{['lont','temp','date']}"/>
 		</sources:dataProviders>
 	</sources:CSVTXT>
-	<sources:CSVTXT id="csvCities" fieldSeperator=";" url="views/cases/data/Minard-City.csv">
+	<sources:CSVTXT id="csvCities" onLoadingCompleted="checkReadiness()" 
+		fieldSeperator=";" url="http://birdeye.googlecode.com/svn/branches/ng/examples/src/views/cases/data/Minard-City.csv">
 		<sources:dataProviders>
 			<data:DataSet id="cities" fields="{['lonc','latc','city']}"/>
 		</sources:dataProviders>
 	</sources:CSVTXT>
-	<sources:CSVTXT id="csvSurv" fieldSeperator=";" url="views/cases/data/Minard-Survivors.csv">
+	<sources:CSVTXT id="csvSurv" onLoadingCompleted="checkReadiness()" 
+		fieldSeperator=";" url="http://birdeye.googlecode.com/svn/branches/ng/examples/src/views/cases/data/Minard-Survivors.csv">
 		<sources:dataProviders>
 			<data:DataSet id="survivors" fields="{['lonp','latp','survivors','direction','group']}"/>
 		</sources:dataProviders>
