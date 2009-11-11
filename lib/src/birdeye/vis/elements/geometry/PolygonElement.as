@@ -216,7 +216,7 @@ trace(getTimer(), "end drawing BEST");
 				myTT = visScene.customTooltTipFunction(ExtendedSprite(e.target).item);
 				toolTip = myTT.text;
 trace ("created TIP", toolTip)
-			} else {
+			} else if (visScene.dataTipFunction != null) {
 				tip = ToolTipManager.createToolTip(visScene.dataTipFunction(ExtendedSprite(e.target).item, null), 
 													globalPosition.x, globalPosition.y) as ToolTip;
 			}
@@ -228,7 +228,7 @@ trace ("created TIP", toolTip)
  			{
 				toolTip = null;
 trace ("destroyed TIP", toolTip)
-			} else 
+			} else if (visScene.dataTipFunction != null) 
  				ToolTipManager.destroyToolTip(tip);
 		}
 
