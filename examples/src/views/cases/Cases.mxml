@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="100%" 
+	backgroundColor="#3f3f3f"
+	xmlns:cases="views.cases.*"
+	 >
+	
+
+	<mx:TabNavigator id="nav" height="100%" width="100%" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" creationPolicy="auto">
+		<cases:Minard label="Napoleon March" width="100%" height="100%"/>
+		<cases:Barley1 label="Barley 1" width="100%" height="100%"/>
+		<cases:Barley2 label="Barley 2" width="100%" height="100%"/>
+	</mx:TabNavigator>
+</mx:VBox>
