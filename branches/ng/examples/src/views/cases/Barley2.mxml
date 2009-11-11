@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:coords="birdeye.vis.coords.*" width="100%" height="100%"
+	xmlns:line="birdeye.vis.recipes.cartesianCharts.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	xmlns:facets="birdeye.vis.facets.*"
+	backgroundColor="#3f3f3f" 
+	xmlns:axis="birdeye.vis.guides.axis.*" xmlns:source="birdeye.vis.source.csv.*" xmlns:grid="birdeye.vis.guides.grid.*">
+
+<mx:Script>
+		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
+			import __AS3__.vec.Vector;
+			
+			private static const INDEX_SITES:Number = 3;
+			private static const INDEX_YEARS:Number = 2;
+			private static const INDEX_VARIETY:Number = 1;
+			private static const INDEX_YELD:Number = 0;
+			private function loadData():void
+			{
+				var row:Array;
+				for (var i:Number = 0; i<csv.data.length; i++)
+				{
+					row = csv.getRecordSet(i);
+					if (sites.indexOf(row[INDEX_SITES]) == -1)
+						 sites.push(row[INDEX_SITES]);
+				}
+				createDT();
+			}
+
+			[Bindable]
+			private var dt:Vector.<Object>;
+			private var sites:Array = [];
+			private function createDT():void
+			{
+				var ac:Vector.<Object> = new Vector.<Object>();
+				for (var s:Number=0; s<sites.length; s++)
+				{
+					var newChartData:Vector.<Object> = new Vector.<Object>();
+ 					for each (var row:Object in csv.data)
+					{
+						if (row[INDEX_SITES] == sites[s])
+						{
+							var facetItem:Object = new Object();
+							facetItem[row[INDEX_YEARS].toString()] = Number(row[INDEX_YELD]);
+							facetItem["variety"] = row[INDEX_VARIETY];
+							newChartData.push(facetItem);
+						}
+					}
+					ac.push({
+						site: sites[s],
+						newChart: {scales: scales, showAxis: (s==0) ? true: false, ac: newChartData}
+					});
+				}
+				dt = ac;
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Object id="scales">
+		<mx:c>
+			<scales:Category id="c" categoryField="variety" />
+		</mx:c>
+		<mx:l>
+			<scales:Linear id="l" dataInterval="10"/>
+		</mx:l>
+	</mx:Object>
+	
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+		<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([cc4.svgData], parentApplication.width, parentApplication.height))"/>
+    	
+       	<coords:Cartesian id="cc4" width="100%" height="100%" showDataTips="true" dataProvider="{dt}">
+			<coords:scales>
+ 				<scales:Category id="c2" categoryField="site"  />
+			</coords:scales>
+			<coords:guides>
+				<grid:Grid scale2="{c2}" divideEnumerableScale="true"/>
+				<axis:Axis scale="{c2}" placement="right" colorLabel="0xbbbbbb" fontLabel="tahoma" weightPointer="3" sizeLabel="12" />
+			</coords:guides>
+    		 <coords:elements>
+    		 	<elements:PointElement scale2="{c2}" graphicRendererSize="0" dim2="site" 
+    		 		itemRenderer="views.cases.renderers.FacetBarleyRenderer1" dataField="newChart">
+        		 </elements:PointElement>
+        	</coords:elements>
+        </coords:Cartesian>	
+    </mx:VBox>
+    <legend:Legend direction="horizontal" width="100%" height="30" verticalAlign="middle" horizontalAlign="center">
+    	<legend:LegendItem text="1932" styleName="grad1" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer"/>
+    	<legend:LegendItem text="1931" styleName="grad4" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" />
+    </legend:Legend>
+    <source:CSVTXT id="csv" url="./views/cases/data/barley.csv" fieldSeperator=";" onLoadingCompleted="loadData()">
+    </source:CSVTXT>
+</mx:VBox>
+

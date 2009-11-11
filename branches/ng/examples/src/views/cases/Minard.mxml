@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:schema="birdeye.vis.elements.schema.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:trans="birdeye.vis.trans.projections.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
+	xmlns:axis="birdeye.vis.guides.axis.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	xmlns:sources="birdeye.vis.source.csv.*"
+	xmlns:data="birdeye.vis.data.*" backgroundColor="#333333"
+	width="100%" height="100%" xmlns:net="flash.net.*">
+	
+	<mx:Script>
+		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
+			private function colorFunction(dataValue:*, min:Number, max:Number, _size:Number):*
+				{
+					if (dataValue == "A")
+						return 0xDAA520;
+					return 0x666666;
+				}
+		]]>
+	</mx:Script>
+	
+	<mx:VBox id="svgSpace" width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" paddingTop="10" >
+    	
+    	<mx:HBox width="90%" height="50" verticalAlign="middle" horizontalAlign="center" borderColor="#666666" borderThickness="1" borderStyle="solid" >
+    		<mx:Label fontSize="14" text="Carte Figurative..." />
+			<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG(
+						[{data: survChart.svgData}, 
+						 {data: tempChart.svgData}], 
+						 parentApplication.width, 
+						 parentApplication.height))"/>
+    	</mx:HBox>
+    	
+    	<!-- Survivor and City Chart -->
+    	<coords:Cartesian id="survChart" width="90%" height="90%">
+			<coords:scales>
+				<scales:Linear id="lat" dataValues="{[53.8,55.9]}" dataInterval="1"/>
+ 				<scales:Linear id="size" scaleValues="{[5,50]}"/>
+				<scales:Numeric id="col" f="colorFunction" />
+			</coords:scales>
+			<coords:guides>
+				<axis:Axis scale="{lat}" placement="right" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<grid:Grid scale2="{long}" color="0xcccccc" divideEnumerableScale="true"/>
+			</coords:guides>
+    		 <coords:elements>
+    		 	<elements:PathElement dataProvider="{survivors.dataProvider}" extendMouseEvents="true"
+    		 		scale1="{long}" scale2="{lat}" alphaStroke="0" strokeAlpha="0"
+    		 		dim1="lonp" dim2="latp" styleName="grad1" fillAlpha="1"
+    		 		sizeScale="{size}" sizeField="survivors" 
+    		 		colorScale="{col}" colorField="direction"
+    		 		splitField="group"/>
+    		 	<elements:PointElement dataProvider="{cities.dataProvider}"
+    		 		scale1="{long}" scale2="{lat}" dim1="lonc" dim2="latc" 
+    		 		graphicRendererSize="0" sizeLabel="14" colorLabel="0xffffff" labelField="city" />
+			 </coords:elements>
+    	</coords:Cartesian>
+    	
+    	<!-- Tempurature Chart -->
+    	<coords:Cartesian id="tempChart" width="90%" height="30%">
+    		<coords:scales>
+ 				<scales:Linear id="long" dataValues="{[23,39]}" dataInterval="2"/>
+ 				<scales:Linear id="temperature" dataValues="{[-40,5]}" dataInterval="10"/>
+			</coords:scales>
+			<coords:guides>
+				<axis:Axis scale="{long}" placement="bottom"  colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{temperature}" placement="right" colorPointer="0xFF0000" strokeColor="0xcccccc" labelColor="0xcccccc" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<grid:Grid scale1="{temperature}" scale2="{long}" color="0xcccccc" divideEnumerableScale="true"/>
+			</coords:guides>
+    		 <coords:elements>
+    		 	<elements:LineElement dataProvider="{temperatures.dataProvider}" scale1="{long}" scale2="{temperature}" colorStroke="0xFFD700" weightStroke="2" dim1="lont" dim2="temp" 
+    		 		sizeLabel="14" colorLabel="0xffffff" labelField="date" />
+		 </coords:elements>
+    	</coords:Cartesian>
+    	<legend:Legend direction="horizontal" width="100%" height="20" horizontalAlign="center">
+    		<legend:LegendItem text="Advance" sizeRenderer="10" labelSize="14" labelColor="0xbbbbbb"
+    			itemRenderer="birdeye.vis.guides.renderers.RectangleRenderer" fillColor="0xDAA520"/>
+    		<legend:LegendItem text="Retreat" sizeRenderer="10" labelSize="14" labelColor="0xbbbbbb"
+    			itemRenderer="birdeye.vis.guides.renderers.RectangleRenderer" fillColor="0x666666"/>
+    		<legend:LegendItem text="Temperature" sizeRenderer="10" labelSize="14" labelColor="0xbbbbbb"
+    			itemRenderer="birdeye.vis.guides.renderers.LineRenderer" strokeWeight="2" strokeColor="0xFFD700"/>
+    	</legend:Legend>
+    	
+    </mx:VBox>
+
+	<sources:CSVTXT id="csvTemp" fieldSeperator=";" url="views/cases/data/Minard-Temp.csv">
+		<sources:dataProviders>
+			<data:DataSet id="temperatures" fields="{['lont','temp','date']}"/>
+		</sources:dataProviders>
+	</sources:CSVTXT>
+	<sources:CSVTXT id="csvCities" fieldSeperator=";" url="views/cases/data/Minard-City.csv">
+		<sources:dataProviders>
+			<data:DataSet id="cities" fields="{['lonc','latc','city']}"/>
+		</sources:dataProviders>
+	</sources:CSVTXT>
+	<sources:CSVTXT id="csvSurv" fieldSeperator=";" url="views/cases/data/Minard-Survivors.csv">
+		<sources:dataProviders>
+			<data:DataSet id="survivors" fields="{['lonp','latp','survivors','direction','group']}"/>
+		</sources:dataProviders>
+	</sources:CSVTXT>
+</mx:Canvas>
