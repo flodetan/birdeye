@@ -90,7 +90,7 @@
     	<legend:LegendItem text="1932" styleName="grad1" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer"/>
     	<legend:LegendItem text="1931" styleName="grad4" itemRenderer="birdeye.vis.guides.renderers.CircleRenderer" />
     </legend:Legend>
-    <source:CSVTXT id="csv" url="./views/cases/data/barley.csv" fieldSeperator=";" onLoadingCompleted="loadData()">
+    <source:CSVTXT id="csv" url="http://birdeye.googlecode.com/svn/branches/ng/examples/src/views/cases/data/barley.csv" fieldSeperator=";" onLoadingCompleted="loadData()">
     </source:CSVTXT>
 </mx:VBox>
 
