@@ -118,6 +118,8 @@ var numCoords:Number = 0;
 
 					if (fullPoly && fullPoly.length > 0)
 					{
+						pathCommands = new Vector.<int>();
+						vertices = new Vector.<Number>();
 						// we could achieve the following with a recursive function but it slows down 
 						// significantly the process.
 						for each (var item:Vector.<Pair> in fullPoly)
@@ -161,8 +163,6 @@ var numCoords:Number = 0;
 									
 									if (i++ == 0)
 									{
-										pathCommands = new Vector.<int>();
-										vertices = new Vector.<Number>;
 										pathCommands.push(GraphicsPathCommand.MOVE_TO);
 										data = "M" + String(pos1) + "," + String(pos2) + " ";
 									} else {
@@ -176,28 +176,28 @@ var numCoords:Number = 0;
 								data += "z";
 								addSVGData('\n<path d="' + data + '"/>');
 
-								var sp:ExtendedSprite = new ExtendedSprite();
-								if (visScene.showDataTips)
-								{
-									sp.item = currentItem;
-									sp.addEventListener(MouseEvent.ROLL_OVER, createTip);
-									sp.addEventListener(MouseEvent.ROLL_OUT, destroyTip);
-								}
-
-								if (draggableItems)
-									sp.addEventListener(MouseEvent.MOUSE_DOWN, startDragging);
-
-								if (colorScale)
-									colorFill = colorScale.getPosition(currentItem[colorField]);
-
-								sp.graphics.lineStyle(alphaStroke, colorStroke, weightStroke);
-								sp.graphics.beginFill(colorFill, alphaFill);
-								sp.graphics.drawPath(pathCommands, vertices);
-								sp.graphics.endFill();
-								addChild(sp);
 //we must convert the array of points to a vertices vector
  							}
 						}
+						var sp:ExtendedSprite = new ExtendedSprite();
+						if (visScene.showDataTips)
+						{
+							sp.item = currentItem;
+							sp.addEventListener(MouseEvent.ROLL_OVER, createTip);
+							sp.addEventListener(MouseEvent.ROLL_OUT, destroyTip);
+						}
+
+						if (draggableItems)
+							sp.addEventListener(MouseEvent.MOUSE_DOWN, startDragging);
+
+						if (colorScale)
+							colorFill = colorScale.getPosition(currentItem[colorField]);
+
+						sp.graphics.lineStyle(alphaStroke, colorStroke, weightStroke);
+						sp.graphics.beginFill(colorFill, alphaFill);
+						sp.graphics.drawPath(pathCommands, vertices);
+						sp.graphics.endFill();
+						addChild(sp);
 					}
 				}
 
