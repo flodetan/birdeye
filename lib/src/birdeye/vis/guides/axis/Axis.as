@@ -55,7 +55,6 @@ package birdeye.vis.guides.axis
 	
 	import mx.core.IDataRenderer;
 	import mx.core.IFactory;
-	import mx.logging.targets.MiniDebugTarget;
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
 	
@@ -173,6 +172,21 @@ package birdeye.vis.guides.axis
 		public function get labelRendererHeight():uint
 		{
 			return _labelRendererHeight;
+		}
+		
+		
+		protected var _labelFormatterFunction:Function;
+		/**
+		 * Set the function that is used to format the label on the axis
+		 */
+		public function set labelFormatterFunction(f:Function):void
+		{
+			_labelFormatterFunction = f;
+		}
+		
+		public function get labelFormatterFunction():Function
+		{
+			return _labelFormatterFunction;
 		}
 
 		private var _axisRenderer:IFactory;
@@ -971,6 +985,7 @@ package birdeye.vis.guides.axis
 				maxLblSize = Math.max(maxLblSize, tmp.textWidth);
 			}
 			
+			
 			if (showAxis)
 			{
 					switch (placement)
@@ -1137,6 +1152,8 @@ trace(getTimer(), "drawing axis");
 		{
 			var svgTextY:Number;
 			var label:RasterText;
+			var labelText:String = _labelFormatterFunction != null ? _labelFormatterFunction.call(null, dataLabel) : String(dataLabel);
+			
 			if (direction == "vertical")
 			{
  				label = new RasterText();
@@ -1145,7 +1162,7 @@ trace(getTimer(), "drawing axis");
  				//label.visible = true;
 				label.autoSize = TextFieldAutoSize.LEFT;
 				label.autoSizeField = true;
-				label.text = String(dataLabel);
+				label.text = labelText;
 				if (!isNaN(_rotateLabels) && _rotateLabels != 0)
 				{
 					var rot:RotateTransform = new RotateTransform();
@@ -1179,7 +1196,7 @@ trace(getTimer(), "drawing axis");
  				//label.visible = true;
 				label.autoSize = TextFieldAutoSize.LEFT;
 				label.autoSizeField = true;
-				label.text = String(dataLabel);
+				label.text = labelText;
 				label.y = thickWidth;
 				svgTextY = thickWidth + label.displayObject.height;
 
