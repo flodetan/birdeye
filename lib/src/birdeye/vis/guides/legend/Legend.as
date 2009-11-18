@@ -241,13 +241,12 @@ package birdeye.vis.guides.legend
 						for each (var o:Object in cc.completeDataValues)
 						{
 							surf = new Surface();
-							var gg:GeometryGroup = new GeometryGroup();
+							gg = new GeometryGroup();
 							gg.target = surf;
 							var color:uint = cc.getPosition(o);
 							
-							var renderer:IFactory = IElement(_dataProvider.elements[i]).graphicRenderer;
+							renderer = IElement(_dataProvider.elements[i]).graphicRenderer;
 
-			 				var geom:Geometry;
 			 				if (IElement(_dataProvider.elements[i]).source)
 			 				{
 			 					geom = new RasterRenderer(bounds, IElement(_dataProvider.elements[i]).source);
@@ -261,7 +260,7 @@ package birdeye.vis.guides.legend
 							geom.stroke = new SolidStroke(color);
 							gg.geometryCollection.addItem(geom);
 							
-							var label:TextRenderer = new TextRenderer(15);
+							label = new TextRenderer(15);
 							label.fontSize = sizeLabel;
 							label.fontFamily = fontLabel;
 							label.text = o.toString();
