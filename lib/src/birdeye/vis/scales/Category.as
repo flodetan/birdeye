@@ -289,10 +289,24 @@
 			switch (dimension)
 			{
 				case DIMENSION_1:
-					pos = ((dataProvider.indexOf(dataValue)+_initialOffset) / dataProvider.length) * size;
+					if (direction == BaseScale.POSITIVE || direction == null || direction == "")
+					{
+						pos = ((dataProvider.indexOf(dataValue)+_initialOffset) / dataProvider.length) * size;
+					}
+					else if (direction == BaseScale.NEGATIVE)
+					{
+						pos = size - ((dataProvider.indexOf(dataValue)+_initialOffset) / dataProvider.length) * size;
+					}
 					break;
 				case DIMENSION_2:
-					pos = size - ((dataProvider.indexOf(dataValue)+_initialOffset) / dataProvider.length) * size;
+					if (direction == BaseScale.POSITIVE || direction == null || direction == "")
+					{
+						pos = size -((dataProvider.indexOf(dataValue)+_initialOffset) / dataProvider.length) * size;
+					}
+					else if (direction == BaseScale.NEGATIVE)
+					{
+						pos = ((dataProvider.indexOf(dataValue)+_initialOffset) / dataProvider.length) * size;
+					}
 					break;
 				//case DIAGONAL:
 				//	pos = ((dataProvider.indexOf(dataValue)+_initialOffset) / dataProvider.length) * size;
