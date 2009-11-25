@@ -38,8 +38,10 @@ package birdeye.vis.elements.geometry
 	
 	import com.degrafa.GraphicPoint;
 	import com.degrafa.IGeometry;
+	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.splines.BezierSpline;
+	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
@@ -148,6 +150,15 @@ trace (getTimer(), "area ele");
 					
 					// create a separate GeometryGroup to manage interactivity and tooltips 
 					createTTGG(currentItem, dataFields, scaleResults[POS1], scaleResults[POS2], scaleResults[POS3relative], 3);
+					
+					if (colorScale)
+					{
+						var col:* = colorScale.getPosition(currentItem[colorField]);
+						if (col is Number)
+							fill = new SolidFill(col);
+						else if (col is IGraphicsFill)
+							fill = col;
+					} 
 
 					// in case the form is curve, it's used the BezeirSpline class to build the
 					// element shape. the shape is not attached to the gg, the gg is only used to 
