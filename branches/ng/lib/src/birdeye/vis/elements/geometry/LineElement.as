@@ -36,6 +36,7 @@ package birdeye.vis.elements.geometry
 	
 	import com.degrafa.GraphicPoint;
 	import com.degrafa.IGeometry;
+	import com.degrafa.core.IGraphicsStroke;
 	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.splines.BezierSpline;
 	import com.degrafa.paint.SolidStroke;
@@ -158,11 +159,32 @@ trace (getTimer(), "drawing line ele");
 						}
 					}
 
+					
 					if (sizeScale)
 					{
 						 var weight:Number = scaleResults[SIZE];
 						stroke = new SolidStroke(colorStroke, alphaStroke, weight);
 					}
+					
+					if (colorScale)
+					{
+						var col:* = colorScale.getPosition(currentItem[colorField]);
+						if (col is Number)
+						{
+							if (sizeScale)
+							{
+								stroke = new SolidStroke(col, alphaStroke, scaleResults[SIZE]);
+							}
+							else
+							{
+								stroke = new SolidStroke(col, alphaStroke,weightStroke);
+							}
+						}
+						else if (col is IGraphicsStroke)
+						{
+							stroke = col;
+						}
+					} 
 
 					// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
 					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
