@@ -70,6 +70,19 @@ package birdeye.vis.elements.geometry
 			invalidatingDisplay();
 		}
 		
+		private var _labelFontWeight:String = "bold";
+		[Inspectable(enumeration="bold,normal")]
+		public function set labelFontWeight(lw:String):void
+		{
+			_labelFontWeight = lw;
+			invalidatingDisplay();
+		}
+		
+		public function get labelFontWeight():String
+		{
+			return _labelFontWeight;
+		}
+		
 		public function WedgeElement()
 		{
 			super();
@@ -295,7 +308,7 @@ package birdeye.vis.elements.geometry
 							
 							trace("LABEL", labelTxt, labelPoint.x, labelPoint.y, startAngle + angle / 2);
 							
-							label.fontWeight = "bold";
+							label.fontWeight = _labelFontWeight;
 
 							addSVGData(label.svgData);
 							gg.geometryCollection.addItem(label); 
