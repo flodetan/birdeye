@@ -62,13 +62,6 @@ package birdeye.vis.elements.geometry
 			invalidatingDisplay();
 		}
 		
-		private var _radiusPercentOffset:Number;
-		public function set radiusPercentOffset(val:Number):void
-		{
-			_radiusPercentOffset = val;
-			invalidatingDisplay();
-		}
-		
 		private var _showPercent:Boolean;
 		[Inspectable(enumeration="true,false")]
 		public function set showPercent(val:Boolean):void
@@ -260,7 +253,7 @@ package birdeye.vis.elements.geometry
 		
 						gg.geometryCollection.addItemAt(arc,0); 
 						
-						if (labelField)
+						if (labelField || _showPercent || _showFieldName)
 						{
 							var xLlb:Number = xPos, yLlb:Number = yPos;
 							if (!isNaN(_radiusLabelOffset))
@@ -268,47 +261,47 @@ package birdeye.vis.elements.geometry
 								xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, visScene.origin);
 								yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, visScene.origin);
 							}
-							var label:TextRenderer = new TextRenderer(xLlb, yLlb, currentItem[labelField], new SolidFill(colorLabel),
-																	true, true, sizeLabel, fontLabel);
+							var labelTxt:String = "";
+							if (_showFieldName)
+							{
+								labelTxt = tmpDim1;
+							}
+							
+							if (labelField)
+							{
+								if (labelTxt != "") labelTxt += " ";
+								labelTxt += currentItem[labelField];
+							}
+							
+							if (_showPercent)
+							{
+								//TODO all percents can do 100.1% !!
+								if (labelTxt != "") labelTxt += " ";
+								
+								var perc:Number = Math.round(angle * 1000 / scale1.size) / 10;
+								
+								if (perc > 0)
+								{
+									labelTxt += perc + "%"; 
+								}
+							}
+							var label:TextRenderer = new TextRenderer(xLlb, yLlb, labelTxt, new SolidFill(colorLabel),
+																	false, true, sizeLabel, fontLabel);
+							
+							var labelPoint:Point = PolarCoordinateTransform.getLabelXY(label.textWidth, label.fontSize, startAngle + angle / 2);
+							
+							label.x -= labelPoint.x;
+							label.y -= labelPoint.y;
+							
+							trace("LABEL", labelTxt, labelPoint.x, labelPoint.y, startAngle + angle / 2);
 							
 							label.fontWeight = "bold";
 
 							addSVGData(label.svgData);
 							gg.geometryCollection.addItem(label); 
-						} else if (_showFieldName)
-						{
-							xLlb = xPos, yLlb = yPos;
-							if (!isNaN(_radiusLabelOffset))
-							{
-								xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusLabelOffset, visScene.origin);
-								yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusLabelOffset, visScene.origin);
-							}
-							label = new TextRenderer(xLlb, yLlb, tmpDim1, new SolidFill(colorLabel),
-																	true, true, sizeLabel, fontLabel);
-							label.fontWeight = "bold";
-							addSVGData(label.svgData);
-							gg.geometryCollection.addItem(label); 
 						}
 						
-						if (_showPercent) {
-							
-							
-							var xLlb:Number = xPos, yLlb:Number = yPos;
-							if (!isNaN(_radiusPercentOffset))
-							{
-								xLlb = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius + _radiusPercentOffset, visScene.origin);
-								yLlb = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius + _radiusPercentOffset, visScene.origin);
-							} 
-							var percentLabel:TextRenderer = new TextRenderer(xLlb, yLlb, Math.round(angle * 1000 / scale1.size) / 10 + "%", new SolidFill(colorLabel),
-																	true, true, sizeLabel, fontLabel);
-							percentLabel.fontWeight = "bold";
-														//TODO all percents can do 100.1% !!
-							
-							percentLabel.x = xLlb - (percentLabel.textWidth + 4)/2;
-							percentLabel.y = yLlb - (percentLabel.fontSize + 4)/2;
-							
-							gg.geometryCollection.addItem(percentLabel); 
-						}
+
 								
 						startAngle += angle;
 					}
