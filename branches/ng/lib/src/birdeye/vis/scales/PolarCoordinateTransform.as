@@ -85,16 +85,16 @@ package birdeye.vis.scales
 			
 			if( angle < 90 ) {
 				x = 0;
-				y = labelHeight;
+				y = 0;//labelHeight;
 			} else if( angle >= 90 && angle < 180 ) {
 				x = labelWidth;
-				y = labelHeight;
+				y = 0;//labelHeight;
 			} else if( angle >= 180 && angle < 270 ) {
 				x = labelWidth;
-				y = 0;
+				y = 0;//-labelHeight;
 			} else {
 				x = 0;
-				y = 0;
+				y = 0;//-labelHeight;
 			} 
 			
 			return new Point(x, y);
