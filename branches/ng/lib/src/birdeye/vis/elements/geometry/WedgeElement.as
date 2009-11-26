@@ -305,9 +305,7 @@ package birdeye.vis.elements.geometry
 							
 							label.x -= labelPoint.x;
 							label.y -= labelPoint.y;
-							
-							trace("LABEL", labelTxt, labelPoint.x, labelPoint.y, startAngle + angle / 2);
-							
+														
 							label.fontWeight = _labelFontWeight;
 
 							addSVGData(label.svgData);
