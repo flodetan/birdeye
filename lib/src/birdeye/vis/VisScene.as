@@ -403,7 +403,7 @@
 			_elements = val;
 			
 			for each (var element:IElement in _elements)
-				if (! element.visScene)
+				if (element.visScene != this)
 						element.visScene = this;
 			
 			invalidateProperties();
