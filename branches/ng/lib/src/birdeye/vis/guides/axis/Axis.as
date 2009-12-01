@@ -247,7 +247,7 @@ package birdeye.vis.guides.axis
 			}
 		}
 		
-		private var _padding:Number = 15;
+		protected var _padding:Number = 15;
 		/** Space left between multiple axes placed in the same location (left, top, bottom...).*/
 		public function set padding(val:Number):void
 		{
@@ -996,7 +996,7 @@ package birdeye.vis.guides.axis
 							//height = Math.max(5,maxLblSize * Math.sin(-_rotateLabels*Math.PI/180));
 							minHeight = (_axisRendererHeight>0) ? 
 											_axisRendererHeight :
-											_padding + sizeLabel + 10 + maxLblSize * Math.sin(-_rotateLabels*Math.PI/180);
+											_padding + sizeLabel + 10 + maxLblSize * Math.sin(_rotateLabels*Math.PI/180);
 							minWidth = sizeLabel + 20;
 							break;							
 						case LEFT:
@@ -1211,8 +1211,8 @@ trace(getTimer(), "drawing axis");
 							label.y += height*.9; 
 							break;
 						case BOTTOM:
-							_rotateLabelsOn = "topRight";
-							label.x = pos - (label.textWidth + 4)*.9; 
+							_rotateLabelsOn = "topLeft";
+							label.x = pos;
 							break;
 					}
 					rot.registrationPoint = _rotateLabelsOn;
