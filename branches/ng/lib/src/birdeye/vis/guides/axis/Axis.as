@@ -292,6 +292,17 @@ package birdeye.vis.guides.axis
 			return _size;
 		}
 		
+		// default value set by default style
+		protected var _thickWidth:Number = NaN; 
+		/**
+		 * The width of the thicks.
+		 * @default 5
+		 */
+		public function set thickWidth(val:Number):void
+		{
+			_thickWidth = val;
+		}
+		
 		protected var _alternateLabels:Number = 0;
 		/** Alternate labels positions to prevent overlapping. This sets the pixels distance among labels.
 		 * If placement is bottom/top, than the distance is considered vertically, otherwise it will be 
@@ -735,6 +746,14 @@ package birdeye.vis.guides.axis
 					this.weightPointer = getStyle("pointerWeight");
 				}
 			}
+			
+			if (styleProp == "thickWidth" || styleProp == null)
+			{
+				if (isNaN(_thickWidth) && getStyle("thickWidth") != this._thickWidth && getStyle("thickWidth") != undefined)
+				{
+					this.thickWidth = getStyle("thickWidth");
+				}
+			}
 
 		}
 		
@@ -758,6 +777,7 @@ package birdeye.vis.guides.axis
 				this.strokeColor = 0x000000;
 				this.strokeAlpha = 1;
 				this.strokeWeight = 1;
+				this.thickWidth = 5;
 
 				this.labelFont = "verdana";
 				this.labelSize = 8;
@@ -1022,7 +1042,7 @@ package birdeye.vis.guides.axis
 		/** @Private
 		 * Override this method to draw the axis depending on its type (linear, category, etc)
 		 */
-		protected var thickWidth:Number = 5; 
+
 		 
 		protected function drawAxes(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
 		{
@@ -1077,7 +1097,7 @@ trace(getTimer(), "drawing axis");
 						yPos = coordinates.origin.y - yPos;	
 					}
 
-					var tmpSVG:String = "M" + String(xMin + thickWidth * sign) + "," + String(yPos) + " " + 
+					var tmpSVG:String = "M" + String(xMin + _thickWidth * sign) + "," + String(yPos) + " " + 
 									"L" + String(xMax) + "," + String(yPos) + " ";
 		
 		 			thick = new Path(tmpSVG);
@@ -1100,9 +1120,9 @@ trace(getTimer(), "drawing axis");
 						labelRnd.y = yPos - labelRnd.height/2;
 						
 						if (placement == LEFT)
-							labelRnd.x = width - thickWidth - (labelRnd.width);
+							labelRnd.x = width - _thickWidth - (labelRnd.width);
 						else
-							labelRnd.x = thickWidth * sign;
+							labelRnd.x = _thickWidth * sign;
 						
 						//checkLabelPosition(labelRnd, "vertical");
 					}
@@ -1116,7 +1136,7 @@ trace(getTimer(), "drawing axis");
 					var xPos:Number = scale.getPosition(dataLabel);
 
 					// create thick line
-					tmpSVG = "M" + String(xPos) + "," + String(yMin + thickWidth * sign) + " " + 
+					tmpSVG = "M" + String(xPos) + "," + String(yMin + _thickWidth * sign) + " " + 
 									"L" + String(xPos) + "," + String(yMax) + " ";
 		
 		 			thick = new Path(tmpSVG);
@@ -1138,9 +1158,9 @@ trace(getTimer(), "drawing axis");
 						labelRnd.x = xPos - labelRnd.width/2;
 						
 						if (placement == TOP)
-							labelRnd.y = height - thickWidth - (labelRnd.height);
+							labelRnd.y = height - _thickWidth - (labelRnd.height);
 						else
-							labelRnd.y = thickWidth * sign;
+							labelRnd.y = _thickWidth * sign;
 						
 						//checkLabelPosition(labelRnd, "horizontal");
 					}
@@ -1184,9 +1204,9 @@ trace(getTimer(), "drawing axis");
 				svgTextY = pos + label.displayObject.height/2;
 				label.y = pos-(label.displayObject.height )/2;
 				if (placement == LEFT || placement == VERTICAL_CENTER)
-					label.x = width - thickWidth - (label.textWidth + 4);
+					label.x = width - _thickWidth - (label.textWidth + 4);
 				else
-					label.x = thickWidth * sign;
+					label.x = _thickWidth * sign;
 				
 			} else { // horizontal
 				// create label 
@@ -1197,8 +1217,8 @@ trace(getTimer(), "drawing axis");
 				label.autoSize = TextFieldAutoSize.LEFT;
 				label.autoSizeField = true;
 				label.text = labelText;
-				label.y = thickWidth;
-				svgTextY = thickWidth + label.displayObject.height;
+				label.y = _thickWidth;
+				svgTextY = _thickWidth + label.displayObject.height;
 
 				if (!isNaN(_rotateLabels) && _rotateLabels != 0)
 				{
