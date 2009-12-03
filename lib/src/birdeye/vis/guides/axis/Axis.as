@@ -1072,7 +1072,7 @@ package birdeye.vis.guides.axis
 			}
 		}
 		
-		private function drawLabels(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
+		protected function drawLabels(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
 		{
 trace(getTimer(), "drawing axis");
 			invalidated = false;
