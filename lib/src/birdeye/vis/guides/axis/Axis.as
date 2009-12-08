@@ -1168,7 +1168,7 @@ trace(getTimer(), "drawing axis");
 			}
 		}
 		
-		private function createLabelText(direction:String, dataLabel:Object, pos:Number):RasterText
+		protected function createLabelText(direction:String, dataLabel:Object, pos:Number):RasterText
 		{
 			var svgTextY:Number;
 			var label:RasterText;
@@ -1231,7 +1231,7 @@ trace(getTimer(), "drawing axis");
 							label.y += height*.9; 
 							break;
 						case BOTTOM:
-							_rotateLabelsOn = "topLeft";
+							_rotateLabelsOn = "centerLeft";
 							label.x = pos;
 							break;
 					}
@@ -1256,7 +1256,7 @@ trace(getTimer(), "drawing axis");
 			return label;
 		}
 		
-		private function createLabelRenderer(dataLabel:Object):DisplayObject
+		protected function createLabelRenderer(dataLabel:Object):DisplayObject
 		{
 			var lblRenderer:DisplayObject = labelRenderer.newInstance();
 			if (lblRenderer is IDataRenderer)
