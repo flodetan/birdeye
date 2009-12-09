@@ -145,9 +145,16 @@ package birdeye.vis.elements.geometry
 					tmpRadius = _innerRadius + radius/_total * visScene.thicknessRatio;
 				}
 	
-				var arcCenterX:Number = visScene.origin.x - radius;
-				var arcCenterY:Number = visScene.origin.y - radius;
-	
+				
+				
+				var arcCenterX:Number = 0; 
+				var arcCenterY:Number = 0;
+				
+				if (visScene != null && visScene.origin != null)
+				{
+					arcCenterX = visScene.origin.x - radius;
+					arcCenterY = visScene.origin.y - radius;
+				}	
 				var wSize:Number, hSize:Number;
 				wSize = hSize = radius*2;
 	
