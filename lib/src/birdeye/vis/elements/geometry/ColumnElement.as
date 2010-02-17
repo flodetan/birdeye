@@ -58,6 +58,39 @@ package birdeye.vis.elements.geometry
 			return "column";
 		}
 		
+		private var _maxColumnWidth:Number = NaN;
+		
+		/**
+		 * Set/get the maximum width a column can be.</br>
+		 * @default to NaN which means unlimited.</br>
+		 */
+		public function set maxColumnWidth(value:Number):void
+		{
+			_maxColumnWidth = value;
+		}
+		
+		public function get maxColumnWidth():Number
+		{
+			return _maxColumnWidth;	
+		}
+		
+		private var _clusterPadding:Number = 0;
+		
+		/**
+		 * Set/get the padding between the bars when they are clustered.
+		 * @default Default is 0, which means no padding.
+		 */
+		public function set clusterPadding(value:Number):void
+		{
+			_clusterPadding = value;
+		}
+		
+		public function get clusterPadding():Number
+		{
+			return _clusterPadding;
+		}
+		
+		
 		public function ColumnElement()
 		{
 			super();
@@ -217,6 +250,11 @@ trace (getTimer(), "drawing column ele");
 						{
 							continue;
 						}
+						
+						if (!isNaN(_maxColumnWidth)  && tmpSize > _maxColumnWidth)
+						{
+							tmpSize = _maxColumnWidth;
+						}
 
 						if (visScene.coordType == VisScene.CARTESIAN)
 						{
@@ -231,8 +269,8 @@ trace (getTimer(), "drawing column ele");
 									pos1 = pos1 - tmpSize/2;
 									break;
 								case CLUSTER:
-									pos1 = pos1 + tmpSize/2 - tmpSize/_total * (_stackPosition + 1);
-									colWidth = tmpSize/_total;
+									pos1 = pos1 + tmpSize/2 - (tmpSize/_total + _clusterPadding) * (_stackPosition + 1);
+									colWidth  = (tmpSize - (_total - 1)) / _total;
 									break;
 							}
 							
