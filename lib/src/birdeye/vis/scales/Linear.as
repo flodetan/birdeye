@@ -52,6 +52,8 @@
 		 * Override the XYZAxis getPostion method based on the linear scaling.*/
 		override public function getPosition(dataValue:*):*
 		{
+			if (dataValue == null) return NaN;
+			
 			var pos:Number = NaN;
 			if (! (isNaN(max) || isNaN(min)))
 				switch (dimension)

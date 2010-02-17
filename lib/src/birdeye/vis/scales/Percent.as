@@ -53,6 +53,8 @@ package birdeye.vis.scales
 
 		override public function getPosition(dataValue:*):*
 		{
+			if (dataValue == null) return NaN;
+			
 			if (isNaN(_size))
 				size = 100;
 			return size * Number(dataValue) / _totalPositiveValue;

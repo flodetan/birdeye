@@ -72,6 +72,8 @@
 		 * Override the XYZAxis getPostion method based on the log scaling.*/
 		override public function getPosition(dataValue:*):*
 		{
+			if (dataValue == null) return NaN;
+			
 			var pos:Number = NaN;
 			var logMin:Number = (min<=1) ? 0 : Math.log(min);
 			var logMax:Number = (max<=1) ? 0 : Math.log(max);

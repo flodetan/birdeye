@@ -276,6 +276,8 @@ package birdeye.vis.scales
 		 * This allows to define any type of scaling for a numeric axis.*/
 		override public function getPosition(dataValue:*):*
 		{
+			if (dataValue == null) return NaN;
+			
 			if (_function == null)
 			{
 				if (scaleType == BaseScale.CONSTANT)
