@@ -51,6 +51,39 @@ package birdeye.vis.elements.geometry
 		{
 			return "bar";
 		}
+		
+		private var _maxBarWidth:Number = NaN;
+		
+		/**
+		 * Set/get the maximum width a bar can be.</br>
+		 * @default to NaN which means unlimited.</br>
+		 */
+		public function set maxBarWidth(value:Number):void
+		{
+			_maxBarWidth = value;
+		}
+		
+		public function get maxBarWidth():Number
+		{
+			return _maxBarWidth;	
+		}
+		
+		private var _clusterPadding:Number = 0;
+		
+		/**
+		 * Set/get the padding between the bars when they are clustered.
+		 * @default Default is 0, which means no padding.
+		 */
+		public function set clusterPadding(value:Number):void
+		{
+			_clusterPadding = value;
+		}
+		
+		public function get clusterPadding():Number
+		{
+			return _clusterPadding;
+		}
+		
 
 		public function BarElement()
 		{
@@ -96,6 +129,8 @@ trace(getTimer(), "drawing bar");
 						size = scale2.size / 
 								(INumerableScale(scale2).max - INumerableScale(scale2).min) * visScene.thicknessRatio;
 				} 
+				
+				
 	
 				ggIndex = 0;
 	
@@ -129,8 +164,15 @@ trace(getTimer(), "drawing bar");
 							yPos = scale2.getPosition(currentItem[dim2]);
 		
 							if (isNaN(size))
+							{
 		 						size = scale2.dataInterval * visScene.thicknessRatio;
+							}
 						} 
+						
+						if (!isNaN(maxBarWidth) && size > maxBarWidth)
+						{
+							size = maxBarWidth;
+						}
 						
 						if (scale1)
 						{
@@ -161,8 +203,8 @@ trace(getTimer(), "drawing bar");
 								yPos = yPos - size/2;
 								break;
 							case CLUSTER:
-								yPos = yPos + size/2 - size/_total * (_stackPosition + 1);
-								barWidth  = size/_total;
+								yPos = yPos + size/2 - (size/_total + _clusterPadding) * (_stackPosition + 1);
+								barWidth  = (size - (_total - 1)) / _total;
 								break;
 						}
 						
@@ -178,8 +220,8 @@ trace(getTimer(), "drawing bar");
 								innerBase1 += currentItem[tmpDim1];
 								break;
 							case CLUSTER:
-								innerBarWidth = barWidth/tmpArray.length;
-								yPos = yPos + innerBarWidth * i;
+								innerBarWidth = (barWidth - (tmpArray.length - 1) * 5)/tmpArray.length;
+								yPos = yPos + (innerBarWidth + 5)* i;
 								break;
 						}
 							
