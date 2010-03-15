@@ -27,7 +27,7 @@
  
 package birdeye.vis.elements.geometry
 {
-	import birdeye.vis.data.DataItemLayout;
+	import birdeye.vis.control.ElementDrawerThread;
 	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.RasterRenderer;
@@ -122,6 +122,7 @@ package birdeye.vis.elements.geometry
 		}
 
 		private var plot:IGeometry;
+		
 		/** @Private 
 		 * Called by super.updateDisplayList when the series is ready for layout.*/
 		override public function drawElement():void
@@ -130,195 +131,186 @@ package birdeye.vis.elements.geometry
 			{
 trace (getTimer(), "drawing point ele");
 				super.drawElement();
-				clearAll();
 				
 				if (!graphicRenderer)
 					graphicRenderer = new ClassFactory(CircleRenderer);
-				
-				ggIndex = 0;
-				
-				var currentItem:Object;
 
-				y0 = getYMinPosition();
-				x0 = getYMinPosition();
-				
-				var widthAutosize:Number = NaN;
-				var heightAutosize:Number = NaN;
-				if (scale1 && scale1 is IEnumerableScale)
+					
+				if (itemRenderer != null)
 				{
-					widthAutosize = IEnumerableScale(scale1).size/IEnumerableScale(scale1).dataProvider.length - 10;					
-				} 
-				
-				if (scale2 && scale2 is IEnumerableScale)
-				{
-					heightAutosize = IEnumerableScale(scale2).size/IEnumerableScale(scale2).dataProvider.length - 10;
+					placeItemRenderers();	
 				}
 
-				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
+				if (graphicRenderer)
 				{
-	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
-						gg = graphicsCollection.items[ggIndex];
-					else
-					{
-						gg = new DataItemLayout();
-						graphicsCollection.addItem(gg);
-					}
-					gg.target = this;
-					ggIndex++;
+					plot = graphicRenderer.newInstance();
 					
-					currentItem = _dataItems[cursorIndex];
-					
-					scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
-															currentItem[colorField], currentItem[sizeField], currentItem);
-				
-					if (dim1 && currentItem[dim1] == undefined ||
-						dim2 && currentItem[dim2] == undefined ||
-						dim3 && currentItem[dim3] == undefined)
-						continue;
-
-					// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
-					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createTTGG(currentItem, dataFields, scaleResults[POS1], scaleResults[POS2], scaleResults[POS3relative], scaleResults[SIZE]);
+					var elThr:ElementDrawerThread = new ElementDrawerThread();
+					elThr.element = this;
+					elThr.data = createDrawingData();
 	
-					if (itemRenderer != null)
-					{
-						var itmDisplay:DisplayObject = itemRenderer.newInstance();
-						if (dataField && itmDisplay is IDataRenderer)
-							(itmDisplay as IDataRenderer).data = currentItem[dataField];
-						addChild(itmDisplay);
-
-						if (sizeScale && sizeField && scaleResults[SIZE] > 0)
-						{
-							itmDisplay.width = itmDisplay.height = scaleResults[SIZE];
-						}
-						else if (!isNaN(widthAutosize) && !isNaN(heightAutosize)) 
-						{
-							itmDisplay.height = heightAutosize;
-							itmDisplay.width = widthAutosize;
-						} 
-						else if (!isNaN(widthAutosize) && !scale2)
-						{
-							itmDisplay.height = this.height;
-							itmDisplay.width = widthAutosize;							
-						}
-						else if (!isNaN(heightAutosize) && !scale1)
-						{
-							itmDisplay.height = heightAutosize;
-							itmDisplay.width = this.width;
-						}							
-						else if (sizeRenderer > 0)
-						{
-							itmDisplay.width = itmDisplay.height = sizeRenderer;
-						}	
- 						else 
- 						{
-							if (rendererWidth > 0)
-								itmDisplay.width = rendererWidth;
-							if (rendererHeight > 0)
-								itmDisplay.height = rendererHeight;
-						}
-						
-						if (!isNaN(scaleResults[POS1]))
-						{
-							itmDisplay.x = scaleResults[POS1] - itmDisplay.width/2;
-						}
-						else
-						{
-							itmDisplay.x = 0;
-						}
-						
-						if (!isNaN(scaleResults[POS2]))
-						{
-							itmDisplay.y = scaleResults[POS2] - itmDisplay.height/2;
-						}
-						else
-						{
-							itmDisplay.y = 0;
-						}
-						
-						if (draggableItems)
-							itmDisplay.addEventListener(MouseEvent.MOUSE_DOWN, super.startDragging);
-					}
-					
-					if (dim3)
-					{
-						if (!isNaN(scaleResults[POS3]))
-						{
-							// why is this created again???
-							// is just setting the z value not enough?
-							gg = new DataItemLayout();
-							gg.target = this;
-							graphicsCollection.addItem(gg);
-							ttGG.z = gg.z = scaleResults[POS3];
-						} else
-							scaleResults[POS3] = 0;
-					}
-					
-					if (_extendMouseEvents)
-					{
-						gg = ttGG;
-						gg.target = this;
-					}
-
-
-					createPlotItems(currentItem, scaleResults);
-
-					if (dim3)
-					{
-						gg.z = scaleResults[POS3];
-						if (isNaN(scaleResults[POS3]))
-							scaleResults[POS3] = 0;
-					}
-				}
-				if (dim3)
-					zSort();
-	
-				createSVG();
+					elThr.start(0.8);
+				}				
 				_invalidatedElementGraphic = false;
 trace (getTimer(), "drawing point ele");
 	
 			}
 		}
-
-		private function createPlotItems(currentItem:Object, scaleResults:Object):void
+		
+		public function createDrawingData():Array
 		{
-			var bounds:Rectangle = new Rectangle(scaleResults[POS1] - scaleResults[SIZE], scaleResults[POS2] - scaleResults[SIZE], scaleResults[SIZE] * 2, scaleResults[SIZE] * 2);
-	
-			if (scaleResults[SIZE] > 0)
+			var drawingData:Array = new Array();
+			var currentItem:Object;
+			
+			y0 = getYMinPosition();
+			x0 = getYMinPosition();
+			
+			var widthAutosize:Number = NaN;
+			var heightAutosize:Number = NaN;
+			if (scale1 && scale1 is IEnumerableScale)
 			{
- 				if (_source)
- 				{
-					plot = new RasterRenderer(bounds, _source);
-					addSVGData((plot as IExportableSVG).svgData);
+				widthAutosize = IEnumerableScale(scale1).size/IEnumerableScale(scale1).dataProvider.length - 10;					
+			} 
+			
+			if (scale2 && scale2 is IEnumerableScale)
+			{
+				heightAutosize = IEnumerableScale(scale2).size/IEnumerableScale(scale2).dataProvider.length - 10;
+			}
+
+			for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
+			{
+				
+				currentItem = _dataItems[cursorIndex];
+				
+				scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
+					currentItem[colorField], currentItem[sizeField], currentItem);
+				
+				if (dim1 && currentItem[dim1] == undefined ||
+					dim2 && currentItem[dim2] == undefined ||
+					dim3 && currentItem[dim3] == undefined)
+					continue;
+				
+				var bounds:Rectangle = new Rectangle(scaleResults[POS1] - scaleResults[SIZE], scaleResults[POS2] - scaleResults[SIZE], scaleResults[SIZE] * 2, scaleResults[SIZE] * 2);
+	
+				var d:Object = new Object();
+				d.bounds = bounds;
+				d.fill = scaleResults[COLOR];
+				d.stroke = stroke;
+				
+				drawingData.push(d);
+				
+			}
+			
+			return drawingData;
+		}
+		
+		private function placeItemRenderers():void
+		{	
+			var currentItem:Object;
+			
+			y0 = getYMinPosition();
+			x0 = getYMinPosition();
+			
+			var widthAutosize:Number = NaN;
+			var heightAutosize:Number = NaN;
+			if (scale1 && scale1 is IEnumerableScale)
+			{
+				widthAutosize = IEnumerableScale(scale1).size/IEnumerableScale(scale1).dataProvider.length - 10;					
+			} 
+			
+			if (scale2 && scale2 is IEnumerableScale)
+			{
+				heightAutosize = IEnumerableScale(scale2).size/IEnumerableScale(scale2).dataProvider.length - 10;
+			}
+
+			for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
+			{
+				
+				currentItem = _dataItems[cursorIndex];
+				
+				scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
+					currentItem[colorField], currentItem[sizeField], currentItem);
+				
+				if (dim1 && currentItem[dim1] == undefined ||
+					dim2 && currentItem[dim2] == undefined ||
+					dim3 && currentItem[dim3] == undefined)
+					continue;
+				
+				var itmDisplay:DisplayObject = itemRenderer.newInstance();
+				if (dataField && itmDisplay is IDataRenderer)
+					(itmDisplay as IDataRenderer).data = currentItem[dataField];
+				addChild(itmDisplay);
+				
+				if (sizeScale && sizeField && scaleResults[SIZE] > 0)
+				{
+					itmDisplay.width = itmDisplay.height = scaleResults[SIZE];
+				}
+				else if (!isNaN(widthAutosize) && !isNaN(heightAutosize)) 
+				{
+					itmDisplay.height = heightAutosize;
+					itmDisplay.width = widthAutosize;
+				} 
+				else if (!isNaN(widthAutosize) && !scale2)
+				{
+					itmDisplay.height = this.height;
+					itmDisplay.width = widthAutosize;							
+				}
+				else if (!isNaN(heightAutosize) && !scale1)
+				{
+					itmDisplay.height = heightAutosize;
+					itmDisplay.width = this.width;
+				}							
+				else if (sizeRenderer > 0)
+				{
+					itmDisplay.width = itmDisplay.height = sizeRenderer;
+				}	
+				else 
+				{
+					if (rendererWidth > 0)
+						itmDisplay.width = rendererWidth;
+					if (rendererHeight > 0)
+						itmDisplay.height = rendererHeight;
+				}
+				
+				if (!isNaN(scaleResults[POS1]))
+				{
+					itmDisplay.x = scaleResults[POS1] - itmDisplay.width/2;
 				}
 				else
-				{					
- 					var tmp:Object = graphicRenderer.newInstance();
- 					plot = tmp as IGeometry;
- 					Geometry(plot).preDraw();
- 					if (plot is IBoundedRenderer)
- 					{
- 						(plot as IBoundedRenderer).bounds = bounds;
-						addSVGData((plot as IBoundedRenderer).svgData);
- 					} 
- 				} 
-				
-				if(plot)
 				{
-					plot.fill = scaleResults[COLOR];
-					plot.stroke = stroke;
-					gg.geometryCollection.addItemAt(plot,0); 
+					itmDisplay.x = 0;
 				}
+				
+				if (!isNaN(scaleResults[POS2]))
+				{
+					itmDisplay.y = scaleResults[POS2] - itmDisplay.height/2;
+				}
+				else
+				{
+					itmDisplay.y = 0;
+				}
+				
+				if (draggableItems)
+					itmDisplay.addEventListener(MouseEvent.MOUSE_DOWN, super.startDragging);
 			}
 		}
-
-		// Be sure to remove all children in case an item renderer is used
-		override public function clearAll():void
-		{
-			super.clearAll();
-			if (_itemRenderer)
-				for (var i:uint = 0; i<numChildren; )
-					removeChild(getChildAt(0));
+		
+		
+		public function drawDataPoint(d:Object):void
+		{	
+			if (plot is IBoundedRenderer)
+				{
+					(plot as IBoundedRenderer).bounds = d.bounds;
+					addSVGData((plot as IBoundedRenderer).svgData);
+					
+					plot.fill = d.fill;
+					plot.stroke = d.stroke;
+					
+					plot.draw(this.graphics, null);
+					
+				}
+			
 		}
+	
 	}
 }

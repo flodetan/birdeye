@@ -27,8 +27,6 @@
  
  package birdeye.vis
 {
-	import __AS3__.vec.Vector;
-	
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.guides.grid.Grid;
 	import birdeye.vis.interfaces.coords.ICoordinates;
@@ -264,7 +262,7 @@
 			return _scales;
 		}
 		
-		
+		protected var _guidesChanged:Boolean =false		
 		protected var _guides:Array; /* of IGuide */
 		/** Array of guides. */
 		[Inspectable(category="General", arrayType="birdeye.vis.interfaces.IGuide")]
@@ -272,6 +270,7 @@
 		public function set guides(val:Array):void
 		{
 			_guides = val;
+			_guidesChanged = true;
 			invalidateProperties();
 			invalidateDisplayList();
 		}
@@ -389,6 +388,7 @@
 		}
 		
 		protected var _elements:Array; // of IElement
+		protected var _elementsChanged:Boolean = false;
 		/** Array of elements, mandatory for any coords scene.
 		 * Each element must implement the IElement interface which defines 
 		 * methods that allow to set fields, basic styles, axes, dataproviders, renderers,
@@ -401,6 +401,7 @@
 		public function set elements(val:Array):void
 		{
 			_elements = val;
+			_elementsChanged = true;
 			
 			for each (var element:IElement in _elements)
 				if (element.visScene != this)

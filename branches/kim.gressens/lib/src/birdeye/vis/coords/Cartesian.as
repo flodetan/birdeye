@@ -337,16 +337,16 @@ package birdeye.vis.coords
 				switch (axis.placement)
 				{
 					case Axis.BOTTOM:
-						axis.drawGuide(new Rectangle(0,0, bottomContainer.width, bottomContainer.height));
+						axis.drawGuide(new Rectangle(0,0, bottomContainer.width , bottomContainer.height / bottomContainer.numChildren));
 						break;
 					case Axis.TOP:
-						axis.drawGuide(new Rectangle(0,0, topContainer.width, topContainer.height));
+						axis.drawGuide(new Rectangle(0,0, topContainer.width, topContainer.height / topContainer.numChildren));
 						break;
 					case Axis.LEFT:
-						axis.drawGuide(new Rectangle(0,0, leftContainer.width, leftContainer.height));
+						axis.drawGuide(new Rectangle(0,0, leftContainer.width / leftContainer.numChildren, leftContainer.height));
 						break;
 					case Axis.RIGHT:
-						axis.drawGuide(new Rectangle(0,0, rightContainer.width, rightContainer.height));
+						axis.drawGuide(new Rectangle(0,0, rightContainer.width / rightContainer.numChildren, rightContainer.height));
 				}
 							
 			}
@@ -355,18 +355,31 @@ package birdeye.vis.coords
 				guide.drawGuide(chartBounds);
 			}
 		}
+
+		
+		private var leftSize:Number = 0, oldLeftSize:Number = 0;
+		private var rightSize:Number = 0, oldRightSize:Number = 0;
+		private var topSize:Number = 0, oldTopSize:Number = 0;
+		private var bottomSize:Number = 0, oldBottomSize:Number = 0;
 		
 		/** @Private
 		 * Validate border containers sizes, that depend on the axes sizes that they contain.*/
-		override protected function validateBounds(unscaledWidth:Number, unscaledHeight:Number):void
+		override protected function validateBounds(unscaledWidth:Number, unscaledHeight:Number):Boolean
 		{
 			// validate bounds logic has changed as axes are not always added to containers
 			// they can draw to containers, without being added to them
 			// so this logic is reformed to loop axes and not containers containing them
-			var leftSize:Number = 0;
-			var rightSize:Number = 0;
-			var topSize:Number = 0;
-			var bottomSize:Number = 0;
+
+			oldLeftSize = leftSize;
+			oldBottomSize = bottomSize;
+			oldTopSize = topSize;
+			oldRightSize = rightSize;
+			
+			leftSize = 0;
+			rightSize = 0;
+			bottomSize = 0;
+			topSize = 0;
+			
 			
 			for each (var guide:IGuide in guides)
 			{
@@ -393,10 +406,33 @@ package birdeye.vis.coords
 				}
 			}
 			
-			leftContainer.width = leftSize;
-			rightContainer.width = rightSize;
-			bottomContainer.height = bottomSize;
-			topContainer.height = topSize;
+			var invalidated:Boolean = false;
+			
+			if (leftSize != oldLeftSize)
+			{
+				leftContainer.width = leftSize;
+				invalidated = true;
+			}
+			
+			if (rightSize != oldRightSize)
+			{
+				rightContainer.width = rightSize;
+				invalidated = true;
+			}
+			
+			if (topSize != oldTopSize)
+			{
+				topContainer.height = topSize;				
+				invalidated = true;
+			}
+			
+			if (bottomSize != oldBottomSize)
+			{
+				bottomContainer.height = bottomSize;
+				invalidated = true;
+			}
+			
+			return invalidated;
 		}
 
 		/**

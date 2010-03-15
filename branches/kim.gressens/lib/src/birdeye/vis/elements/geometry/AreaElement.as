@@ -131,15 +131,7 @@ trace (getTimer(), "area ele");
 				
 				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
 				{
-	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
-						gg = graphicsCollection.items[ggIndex];
-					else
-					{
-						gg = new DataItemLayout();
-						graphicsCollection.addItem(gg);
-					}
-					gg.target = this;
-					ggIndex++;
+	 			
 
 					var currentItem:Object = _dataItems[cursorIndex];
 					
@@ -248,7 +240,8 @@ trace (getTimer(), "area ele");
 						// the double point prevent from drawing a large final bezier curve
 						points.push(new GraphicPoint(width, y0-.0000000001));
 					}
-				} else if (visScene.coordType == VisScene.POLAR && data)
+				} 
+				else if (visScene.coordType == VisScene.POLAR && data)
 				{
 					data += "z";
 					addSVGData('\n<path d="' + data + '"/>');
@@ -267,5 +260,6 @@ trace (getTimer(), "area ele");
 trace (getTimer(), "area ele");
 			}
 		}
+
 	}
 }
