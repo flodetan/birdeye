@@ -27,8 +27,6 @@
  
 package birdeye.vis.coords
 {
-	import __AS3__.vec.Vector;
-	
 	import birdeye.vis.VisScene;
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.BaseElement;
@@ -100,15 +98,15 @@ package birdeye.vis.coords
 
 		override protected function commitProperties():void
 		{
-			if (active)
+			super.commitProperties();
+
+			if (active && dataItems)
 			{
-				super.commitProperties();
-				
-				removeAllElements();
 
 				nCursors = 0;
 				if (guides)
 				{
+					_guidesChanged = false;
 					placeGuides();
 				}	
 				// data structure to count different type of stackable elements		
@@ -116,6 +114,7 @@ package birdeye.vis.coords
 				
 				if (elements)
 				{
+					_elementsChanged = false;
 					placeElements();
 
 					var nCursors:uint = initElements(countStackableElements);
@@ -144,6 +143,8 @@ package birdeye.vis.coords
 			
 		}
 		
+		
+		protected var _drawGuides:Boolean = false;
 		/**
 		 * This function loops all guides,</br>
 		 * init's each guide</br>
@@ -158,6 +159,8 @@ package birdeye.vis.coords
 				placeGuide(guide);
 
 			}
+			
+			_drawGuides = true;
 		}
 		
 		/**
@@ -176,6 +179,7 @@ package birdeye.vis.coords
 		
 		// temporary data structure to keep track of stacked elements
 		protected var _stackedElements:Array = [];
+		protected var _drawElements:Boolean = false;
 		/**
 		 * This functions loops all elements,</br>
 		 * init's each element (by calling <code>initElement</code>)</br>
@@ -592,20 +596,35 @@ trace(getTimer(), "updateDisplaylist", unscaledWidth, unscaledHeight);
 
 				setActualSize(unscaledWidth, unscaledHeight);
 						
-				validateBounds(unscaledWidth, unscaledHeight);
+				var invalidated:Boolean = validateBounds(unscaledWidth, unscaledHeight);
 					
-				setBounds(unscaledWidth, unscaledHeight);
-					
-				updateElements(unscaledWidth, unscaledHeight);
-					
-				updateGuides(unscaledWidth, unscaledHeight);
+				if (invalidated || !chartBounds)
+				{
+					setBounds(unscaledWidth, unscaledHeight);
+				}
 				
-				if (invalidatedData && axesFeeded)
+				//if (_drawElements)
+				//{
+					updateElements(unscaledWidth, unscaledHeight);
+				//}
+				
+				if (_drawGuides)
+				{
+					updateGuides(unscaledWidth, unscaledHeight);
+				}
+				
+				if (axesFeeded && (invalidatedData || invalidated))
 				{
 					
-					drawGuides(unscaledWidth, unscaledHeight);
+					if (_drawElements)
+					{
+						drawElements(unscaledWidth, unscaledHeight);
+					}
 					
-					drawElements(unscaledWidth, unscaledHeight);
+					if (_drawGuides)
+					{
+						drawGuides(unscaledWidth, unscaledHeight);
+					}
 					
 					// listeners like legends will listen to this event
 					dispatchEvent(new Event("ProviderReady", true));
@@ -621,10 +640,11 @@ trace(getTimer(), "END updateDisplaylist", unscaledWidth, unscaledHeight);
 		 * Override this function to validate bounds.</br>
 		 * For example if you need place to set axes, this is the place to calculate their sizes.</br>
 		 */
-		protected function validateBounds(unscaledWidth:Number, unscaledHeight:Number):void
+		protected function validateBounds(unscaledWidth:Number, unscaledHeight:Number):Boolean
 		{
 			// nothing happens at this level, the whole area is used to create a visualization
 			
+			return false;
 		}
 		
 		/** 
@@ -658,6 +678,8 @@ trace(getTimer(), "END updateDisplaylist", unscaledWidth, unscaledHeight);
 			{
 				drawElement(element, unscaledWidth, unscaledHeight);
 			}
+			
+			_drawElements = false;
 		}
 		
 		protected function drawElement(element:IElement, unscaledWidth:Number, unscaledHeight:Number):void
@@ -684,6 +706,9 @@ trace(getTimer(), "END updateDisplaylist", unscaledWidth, unscaledHeight);
 			{
 				drawGuide(guide, unscaledWidth, unscaledHeight);
 			}
+			
+			_drawGuides = false;
+			_drawElements = true;
 		}
 		
 		protected function drawGuide(guide:IGuide, unscaledWidth:Number, unscaledHeight:Number):void

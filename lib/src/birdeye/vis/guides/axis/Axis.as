@@ -43,6 +43,7 @@ package birdeye.vis.guides.axis
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.RasterText;
+	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	import com.degrafa.transform.RotateTransform;
@@ -884,7 +885,9 @@ package birdeye.vis.guides.axis
 		private var xMin:Number = NaN, xMax:Number = NaN, yMin:Number = NaN, yMax:Number = NaN, sign:Number;
 		public function drawGuide(bounds:Rectangle):void
 		{
-			var w:Number = unscaledWidth, h:Number = unscaledHeight;
+			var w:Number = bounds.width, h:Number = bounds.height;
+			//var w:Number = unscaledWidth, h:Number = unscaledHeight;
+			
 			if (prevWidth != w || prevHeight != h)
 			{
 				prevWidth = w;
@@ -939,6 +942,7 @@ package birdeye.vis.guides.axis
 						';stroke-width:1;stroke-opacity:1;">\n' +
 						svgText + '\n<path d="' + _svgData + '"\n/>\n</g>' ;
 					gg.geometryCollection.addItem(_pointer);
+
 				//}
 			}
 		}
@@ -1016,7 +1020,7 @@ package birdeye.vis.guides.axis
 							//height = Math.max(5,maxLblSize * Math.sin(-_rotateLabels*Math.PI/180));
 							minHeight = (_axisRendererHeight>0) ? 
 											_axisRendererHeight :
-											_padding + sizeLabel + 10 + maxLblSize * Math.sin(_rotateLabels*Math.PI/180);
+											_padding + sizeLabel + 10 +  maxLblSize * Math.sin(_rotateLabels*Math.PI/180);
 							minWidth = sizeLabel + 20;
 							break;							
 						case LEFT:
@@ -1109,7 +1113,7 @@ trace(getTimer(), "drawing axis");
 					if (!_labelRenderer)
 					{
 						// create label 
-						label = createLabelText("vertical", dataLabel, yPos);
+						label = createLabelText("vertical", dataLabel, yPos, xMax);
 						label.fill = new SolidFill(colorLabel);
 						
 						//checkLabelPosition(label, "vertical");
@@ -1147,7 +1151,7 @@ trace(getTimer(), "drawing axis");
 					if (!_labelRenderer)
 					{
 						// create label 
-						label = createLabelText("horizontal", dataLabel, xPos);
+						label = createLabelText("horizontal", dataLabel, xPos, xMax);
 						label.fill = new SolidFill(colorLabel);
 						
 						//checkLabelPosition(label, "horizontal");
@@ -1168,7 +1172,7 @@ trace(getTimer(), "drawing axis");
 			}
 		}
 		
-		protected function createLabelText(direction:String, dataLabel:Object, pos:Number):RasterText
+		protected function createLabelText(direction:String, dataLabel:Object, pos:Number, width:Number):RasterText
 		{
 			var svgTextY:Number;
 			var label:RasterText;
