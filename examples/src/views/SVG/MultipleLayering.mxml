@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:guides="birdeye.vis.guides.legend.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
+	backgroundColor="#3f3f3f" 
+	creationComplete="createDT()"
+	width="100%" height="100%" horizontalAlign="center" xmlns:axis="birdeye.vis.guides.axis.*">
+	<mx:Script>
+		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
+			import mx.collections.ArrayCollection;
+			import birdeye.vis.elements.util.EffectsUtil;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+			private var regions:Array;
+			
+			private function createDT():void
+			{Layer1
+				regions = ["Region1","Region2"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var years:Array = ["1990", "1994"];
+				for (var i:Number = 0; i<regions.length; i++)
+				{
+					for (var j:Number = 0; j<years.length; j++)
+					{
+						var gold:Number = Math.round(Math.random() * 1000),
+							silver:Number = Math.round(Math.random() * 1000),
+							fourth:Number = Math.round(Math.random() * 1000),
+							bronze:Number = Math.round(Math.random() * 1000);
+						ac.addItem({
+							year: years[j],
+							region: regions[i],
+							newChart: {medals: ["gold", "silver", "bronze"], values: [gold, silver, bronze]}
+						});
+					}
+				}
+				dt = ac;
+			}
+		]]>
+	</mx:Script>
+	<mx:Button label="Generate" click="createDT()"/>
+	<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([pc3.svgData], parentApplication.width, parentApplication.height))"/>
+	<mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+		<coords:Cartesian id="pc3" width="100%" height="100%" dataProvider="{dt}">
+			<coords:scales>
+	 			<scales:Category id="l" categoryField="year"/>
+	 			<scales:Category id="c" categoryField="region" />
+			</coords:scales>
+			<coords:guides>
+				<axis:Axis scale="{c}" placement="right" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="12" sizePointer="12" />
+				<axis:Axis scale="{l}" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="12" sizePointer="12" />
+			</coords:guides>
+			 <coords:elements>
+			 	<elements:PointElement rendererWidth="300" rendererHeight="300" dataField="newChart" itemRenderer="views.SVG.Layer1" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" 
+			 		scale1="{l}" scale2="{c}" dim1="year" dim2="region" strokeAlpha="0" graphicRendererSize="0"/>
+			 </coords:elements>
+		</coords:Cartesian>
+	</mx:VBox>
+</mx:VBox>

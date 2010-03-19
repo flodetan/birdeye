@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:cartesian="views.cartesian.*" 
+	xmlns:polar="views.polar.*"
+	xmlns:micro="views.micro.*"
+	xmlns:maps="views.maps.*"
+	xmlns:graphs="views.graphs.*"
+	xmlns:composite="views.composite.*"
+	xmlns:svg="views.SVG.*"
+	xmlns:recipes="views.recipes.*"
+	xmlns:about="views.about.*"
+	backgroundGradientColors="[#222222, #222222]"
+	xmlns:facets="views.facets.*" xmlns:util="util.*"
+	initialize="initHandlers(event)"
+	xmlns:scales="views.scales.*" xmlns:cases="views.cases.*">
+
+	<mx:Style source="styles/darkroom.css" />
+
+	<mx:Script>
+	<![CDATA[
+		import birdeye.vis.scales.util.NumericUtil;
+		private function initHandlers(event:Event):void {
+			addEventListener(Event.ENTER_FRAME, update, false, 0, true);
+			
+			
+			var t:Object = NumericUtil.calculateIdealScale(15,104, true);
+			
+		}
+		
+		private function update(e:Event):void {
+			fpsCounter.update();
+		}
+	]]>
+	</mx:Script>
+	
+	<mx:Box width="100%" height="100%" 
+	horizontalAlign="center" verticalAlign="top" 
+	horizontalScrollPolicy="off" verticalScrollPolicy="off" >
+	<mx:Spacer height="5" />	
+	
+	<mx:HBox horizontalAlign="right" width="100%" paddingRight="100">
+		<mx:Button label="GC" click="System.gc()"/>
+		<util:FpsCounter id="fpsCounter" />
+	</mx:HBox>
+	
+	<mx:VBox width="70%" height="95%"
+		horizontalGap="0" 
+		paddingTop="5" paddingLeft="5" paddingRight="5" paddingBottom="5" 
+		horizontalScrollPolicy="off" verticalScrollPolicy="off" >
+	
+		<mx:HBox width="100%" height="55" 
+				horizontalAlign="left" verticalAlign="middle" 
+				horizontalScrollPolicy="off" verticalScrollPolicy="off" >
+				<mx:Image id="bdLogo" source="@Embed('assets/icons/logo.png')"/>
+				<mx:Label text="BIRDEYE the Declarative Visual Analytics Library" fontSize="14" />
+				<mx:Spacer width="100%" />
+		</mx:HBox>
+	
+		<mx:TabNavigator width="100%" height="100%" paddingLeft="5" paddingRight="5" paddingBottom="5" creationPolicy="auto">
+			<cartesian:Cartesian label="Cartesian" width="100%" height="100%"/>
+			<polar:Polar label="Polar" width="100%" height="100%"/>
+			<facets:Facets label="Facets" width="100%" height="100%" />
+<!--			<micro:Micro label="Micro" width="100%" height="100%"/>
+			<maps:Maps label="Maps" width="100%" height="100%"/>
+			<graphs:Graphs label="Graphs" width="100%" height="100%"/>
+			<composite:Composite label="Composite" width="100%" height="100%"/>
+			<svg:Svg label="SVG" width="100%" height="100%"/>
+			<cases:Cases label="Use cases" width="100%" height="100%"/>
+			<about:About label="About..." width="100%" height="100%"/>-->
+		</mx:TabNavigator>
+		
+		<mx:Label text="Last Update: 11 October 09" fontSize="10" color="#999999" />
+	
+	</mx:VBox>
+	</mx:Box>
+
+</mx:Application>

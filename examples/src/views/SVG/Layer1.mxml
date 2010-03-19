@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" implements="birdeye.vis.interfaces.data.IExportableSVG"
+	xmlns:series="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
+	backgroundAlpha="0"
+	verticalAlign="middle"
+	horizontalAlign="right"
+	xmlns:coords="birdeye.vis.coords.*" xmlns:axis="birdeye.vis.guides.axis.*">
+
+<mx:Script>
+		<![CDATA[
+			import birdeye.vis.interfaces.data.IExportableSVG;
+			import mx.collections.ArrayCollection;
+			import birdeye.vis.elements.util.EffectsUtil;
+						
+			[Bindable]
+			public var dt:ArrayCollection;;
+			
+			private var subject:Array;
+			
+			override public function set data(value:Object):void
+			{
+				super.data = value;
+				createDT1(data.medals, data.values);
+			} 
+			
+			public function get svgData():String
+			{
+				return sp.svgData;
+			}
+			
+			private function createDT1(subj:Array, vals:Array):void
+			{
+				var ac:ArrayCollection = new ArrayCollection();
+				ac.addItem({
+					subject: "Total medals",
+					total: vals[0]+ vals[1] + vals[2],
+					newChart: {medals: subj, values: vals}
+				});
+				dt = ac;
+			}
+		]]>
+	</mx:Script>
+	<coords:Cartesian id="sp" width="100%" height="100%" dataProvider="{dt}" showDataTips="true">
+		<coords:scales>
+		 	<scales:Category id="c" categoryField="subject" />
+		 	<scales:Linear id="l" dataValues="[0, 3000]"/>
+		</coords:scales>
+		<coords:guides>
+			<axis:Axis scale="{c}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="11" sizePointer="12" />
+			<axis:Axis scale="{l}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+		</coords:guides>
+		 <coords:elements>
+		 	<series:PointElement rendererWidth="100" rendererHeight="100" dataField="newChart" itemRenderer="views.SVG.Layer2" 
+		 		scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  
+		 		extendMouseEvents="true" dim1="subject" dim2="total" colorFill="0xff0000"/>
+		 </coords:elements>
+	</coords:Cartesian>
+</mx:VBox>

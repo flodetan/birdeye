@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" implements="birdeye.vis.interfaces.data.IExportableSVG"
+	width="100%" height="100%"
+	horizontalAlign="center" verticalAlign="middle"
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:trans="birdeye.vis.trans.projections.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:guides="birdeye.vis.guides.legend.*" creationComplete="init()" xmlns:axis="birdeye.vis.guides.axis.*">
+<mx:Script>
+		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
+			import birdeye.vis.trans.modifiers.WhyattSimplification;
+			import birdeye.vis.trans.modifiers.Simplification;
+			import mx.controls.Alert;
+			import birdeye.vis.data.DataItemLayout;
+			import birdeye.vis.data.dictionaries.WorldRegionTypes;
+			import birdeye.vis.data.dictionaries.WorldCountries;
+			import birdeye.vis.trans.projections.Projection;
+			import mx.collections.ArrayCollection;
+			import com.degrafa.core.IGraphicsFill;
+			import com.degrafa.paint.RadialGradientFill;
+			import com.degrafa.paint.GradientStop;
+			
+			public function get svgData():String
+			{
+				return myMap.svgData;
+			}
+
+			[Bindable]
+			public var dt:ArrayCollection = new ArrayCollection();
+			public function init():void
+			{
+				var ps:Simplification = new WhyattSimplification();
+				var wc:WorldCountries = new WorldCountries();
+				var countries:Array = wc.getCountriesListByRegion("Africa");
+				var simplifiedCountries:ArrayCollection = new ArrayCollection();
+				for each (var country:String in countries)
+				{
+					var a:Array;
+					simplifiedCountries.addItem({
+						country: country,
+						poly: a = wc.getCountryPolygon(country),
+						center: wc.getCountryCenter(country),
+						random: Math.random() * 100000
+					});
+				}
+
+				dt = simplifiedCountries;
+			}
+			
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String =  currDatatip.country;
+				tt += "\n Center: " + currDatatip.center;
+				tt += "\n Random data: " + currDatatip.random;
+				return  tt;
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([myMap.svgData], parentApplication.width, parentApplication.height))"/>
+	
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+	<mx:Label text="Draggable countries ...."/>
+    	<coords:Cartesian id="myMap" width="90%" height="90%" showDataTips="true" dataTipFunction="dtFunc">
+    		<coords:transforms>
+					<trans:Projection id="myProj" proj="Miller cylindrical" latScale="{lat}" longScale="{long}"/>
+			</coords:transforms>
+			<coords:scales>
+ 				<scales:Numeric id="lat" dataValues="{[45,-45]}" dataInterval="20"/>
+ 				<scales:Numeric id="long" dataValues="{[-80,80]}" dataInterval="20" />
+			</coords:scales>
+<!--			<coords:guides>
+				<axis:Axis scale="{lat}" placement="right" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb" />
+				<axis:Axis scale="{long}" placement="top" colorStroke="0x999999" colorPointer="0xff0000" colorLabel="0xbbbbbb" />
+			</coords:guides>
+-->    		 <coords:elements>
+    		 	<elements:PolygonElement draggableItems="true" dataProvider="{dt}" scale1="{long}" scale2="{lat}" polyDim="poly" colorFill="0x005AFF" alphaFill=".9"/>
+			 </coords:elements>
+    	</coords:Cartesian>
+    </mx:VBox>
+	
+</mx:VBox>

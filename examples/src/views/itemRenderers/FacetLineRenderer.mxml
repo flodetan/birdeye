@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" implements="birdeye.vis.interfaces.IExportableSVG"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
+	backgroundAlpha="0"
+	xmlns:coords="birdeye.vis.coords.*" xmlns:axis="birdeye.vis.guides.axis.*" xmlns:cartesian="views.cartesian.*">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import birdeye.vis.interfaces.IExportableSVG;
+						
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			private var subject:Array;
+
+			public function get svgData():String
+			{
+				return sp.svgData;
+			}
+			
+			override public function set data(value:Object):void
+			{
+				super.data = value;
+				dt = ArrayCollection(data);
+			} 
+		]]>
+	</mx:Script>
+ 	<coords:Cartesian id="sp" showDataTips="true" dataProvider="{dt}" width="100%" height="100%">
+	 	<coords:scales>
+	 	 	<scales:Category id="c" categoryField="variety" />
+		 	<scales:Linear id="l" direction="negative"/>       		 				
+	 	</coords:scales>
+	 	<coords:guides>
+	 		<axis:Axis scale="{c}" placement="right" colorLabel="0xbbbbbb" sizeLabel="8" />
+	 		<axis:Axis scale="{l}" placement="bottom" colorLabel="0xbbbbbb" sizeLabel="6" />	
+	 	</coords:guides>
+	 	<coords:elements>
+	 		<elements:LineElement id="a1" 
+	 			scale1="{l}" scale2="{c}" 
+	 			dim1="yeld" dim2="variety" styleName="solid1"/>
+	 	</coords:elements>
+	 </coords:Cartesian>
+</mx:VBox>

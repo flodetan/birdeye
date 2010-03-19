@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:polar="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	creationComplete="createDT()"
+	width="100%" height="100%" horizontalAlign="center">
+	
+<mx:Script>
+		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
+			import mx.collections.ArrayCollection;
+			import birdeye.vis.elements.util.EffectsUtil;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			[Bindable]
+			public var dt1:ArrayCollection;;
+
+			private var subject:Array;
+			
+			private var regions:Array = ["C1", "C2", "C3", "C4"];
+			private function createDT():void
+			{
+				var ac:ArrayCollection = new ArrayCollection();
+				var t1:Number, t2:Number, t3:Number;
+				for (var i:Number = 0; i<regions.length; i++)
+				{
+					ac.addItem({
+						region: regions[i],
+						GDP: t1 = Math.round(Math.random() * 1000),
+						Area: t2 = Math.round(Math.random() * 1000),
+						Density: t3 = Math.round(Math.random() * 1000),
+						total: t1+t2+t3
+					});
+				}
+				dt = ac;
+			}
+
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = "Angle. " + dataFields["dim1"] + ": " + currDatatip[dataFields["dim1"]];
+				if (dataFields["sizeField"] != null)
+					tt += '\n' + "Radius size: " + dataFields["sizeField"] + ": " + currDatatip[dataFields["sizeField"]];
+				return  tt;
+			}
+		]]>
+	</mx:Script>
+
+<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
+    <mx:Button label="Generate" click="createDT()"/>
+	<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([sb.svgData], parentApplication.width, parentApplication.height))"/>
+	<polar:Polar id="sb" dataProvider="{dt}" dataTipFunction="dtFunc" width="100%" height="100%" thicknessRatio=".95" collisionType="cluster">
+		<polar:scales>
+			<scales:Numeric id="l" scaleType="constant" />
+			<scales:Linear id="size" scaleValues="[0.5,1]"/>
+			<scales:PercentAngle id="t" size="360"/>
+			<scales:PercentAngle id="a" size="360"/>
+		</polar:scales>
+		<polar:elements>
+			<elements:WedgeElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{t}" scale2="{l}" styleName="grad1" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" radiusLabelOffset="-25" labelField="region" dim1="total" />
+			<elements:WedgeElement extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" scale1="{a}" scale2="{l}" sizeScale="{size}" sizeField="['GDP','Area','Density']" styleName="grad2" colorsStart="[0xE8480A,0xFF940D,0xFF0000,0xE80CDE]" colorsStop="[0xE8800A,0xFFEB0D,0xFF2300,0x8E0CE8]" dim1="{['Area','Density','GDP']}"/>
+		</polar:elements>
+	</polar:Polar>
+	
+</mx:VBox>
+
+</mx:Box>

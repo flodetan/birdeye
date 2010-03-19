@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="100%" 
+	backgroundColor="#3f3f3f"
+	xmlns:micro="views.micro.*" horizontalAlign="center" verticalAlign="middle"
+	xmlns:recipe="birdeye.vis.recipes.cartesianCharts.*"
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:guides="birdeye.vis.guides.legend.*"
+	creationComplete="createDT();">
+<mx:Script>
+		<![CDATA[
+			import com.degrafa.paint.SolidFill;
+			import birdeye.vis.scales.Linear;
+			import birdeye.vis.scales.Category;
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			private var dt:ArrayCollection;
+			[Bindable]
+			private var gridProvider:ArrayCollection;
+
+			private var subject:Array;
+			
+			private function createDT():void
+			{
+				var ac:ArrayCollection = new ArrayCollection();
+				subject = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "L", "M", "N"];
+				for (var i:Number = 0; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: Math.round(Math.random() *100 -50),
+						R2: Math.round(Math.random() *100),
+						R3: Math.round(Math.random() *100)
+					});
+				}
+				dt = ac;
+				
+				gridProvider = new ArrayCollection([
+				{
+					dataProvider: dt
+				}]);
+				
+			}
+			
+			private function colWL(dataValue:*, min:Number, max:Number, size:Number):*
+			{
+				var fill:Number = 0xff0000;
+				if (Number(dataValue) < 0)
+					fill = 0x00ff00;
+				
+				return new SolidFill(fill);
+			}
+
+			private function valWL(dataValue:*, min:Number, max:Number, size:Number):*
+			{
+				if (Number(dataValue) == -2)
+					return size/2;
+				else if (Number(dataValue) < 0)
+					return size;
+				else
+					return 0;
+			}
+		]]>
+	</mx:Script>
+	
+	
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="top" >
+    	<mx:Button label="Generate" click="createDT()"/>
+	    <mx:DataGrid selectable="false" rowCount="2" dataProvider="{gridProvider}" rowHeight="50">
+	        <mx:columns>
+	            <mx:DataGridColumn dataField="Area" itemRenderer="views.micro.renderers.MicroArea"/>
+	            <mx:DataGridColumn dataField="Line" itemRenderer="views.micro.renderers.MicroLine"/>
+	            <mx:DataGridColumn dataField="Column" itemRenderer="views.micro.renderers.MicroColumn"/>
+	            <mx:DataGridColumn dataField="WinLose" itemRenderer="views.micro.renderers.MicroWinLoose"/>
+	            <mx:DataGridColumn dataField="Plot" itemRenderer="views.micro.renderers.MicroPlot"/>
+	            <mx:DataGridColumn dataField="Bar" itemRenderer="views.micro.renderers.MicroBar"/>
+	       </mx:columns>
+	    </mx:DataGrid>
+		<mx:HBox width="100%" height="60%" horizontalAlign="center" verticalAlign="middle" >
+	    <mx:DataGrid selectable="false" rowCount="2" dataProvider="{gridProvider}" rowHeight="80">
+	        <mx:columns>
+	            <mx:DataGridColumn dataField="Polar Area" itemRenderer="views.micro.renderers.MicroPolarArea"/>
+	            <mx:DataGridColumn dataField="Column 1" itemRenderer="views.micro.renderers.MicroPolarColumn"/>
+	            <mx:DataGridColumn dataField="Column 2" itemRenderer="views.micro.renderers.MicroPolarColumn1"/>
+	            <mx:DataGridColumn dataField="Column Cluster" itemRenderer="views.micro.renderers.MicroPolarColumnCluster"/>
+	            <mx:DataGridColumn dataField="Column Stack" itemRenderer="views.micro.renderers.MicroPolarColumnStack"/>
+	            <mx:DataGridColumn dataField="Polar Composite" itemRenderer="views.micro.renderers.MicroPolarComposite"/>
+	            <mx:DataGridColumn dataField="Pie Stack" itemRenderer="views.micro.renderers.MicroPieStack"/>
+	       </mx:columns>
+	    </mx:DataGrid>
+		</mx:HBox>
+	</mx:VBox>
+</mx:VBox>

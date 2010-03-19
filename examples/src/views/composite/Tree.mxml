@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:composite="views.composite.*" 
+	xmlns:layouter="birdeye.vis.trans.graphs.layout.*"
+	creationComplete="graphView.generateTree()">
+	<composite:BasicGraphView id="graphView" width="100%" height="100%">
+		<composite:layouter>
+			<layouter:HierarchicalLayouter id="layout" autoFitEnabled="true" orientation="{HierarchicalLayouter.ORIENT_BOTTOM_UP}"/>
+		</composite:layouter>	
+	</composite:BasicGraphView>
+</mx:VBox>

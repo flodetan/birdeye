@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100" height="100"
+	xmlns:series="birdeye.vis.elements.geometry.*" implements="birdeye.vis.interfaces.data.IExportableSVG, birdeye.vis.interfaces.data.IVisualDataID"
+	xmlns:scales="birdeye.vis.scales.*" 
+	toolTip="Click to drag, Double click to set as root"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
+	backgroundAlpha="0" buttonMode="true"
+	verticalScrollPolicy="off"
+	horizontalScrollPolicy="off"
+	creationComplete="//createDT()"
+	xmlns:coords="birdeye.vis.coords.*" xmlns:axis="birdeye.vis.guides.axis.*">
+
+<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import birdeye.vis.elements.util.EffectsUtil;
+						
+			[Bindable]
+			private var _visualObjectID:String;
+			/** Identify this data item among the element ones.*/
+			public function set visualObjectID(val:String):void
+			{
+				_visualObjectID = val;
+			}
+			public function get visualObjectID():String
+			{
+				return _visualObjectID;
+			}
+	
+			public function get svgData():String
+			{
+				return sp.svgData;
+			}
+									
+			[Bindable]
+			public var dt:ArrayCollection;;
+			
+			[Bindable]
+			private var region:String;
+
+			private var subject:Array;
+			
+			override public function set data(value:Object):void
+			{
+				super.data = value;
+				if (value == null) {removeAllChildren(); width = height = 0; return;}
+				region = String(data.country);
+				createDT1(data.subjects, data.values);
+			} 
+			
+			private function createDT1(subj:Array, vals:Array):void
+			{
+				var ac:ArrayCollection = new ArrayCollection();
+				for (var i:Number = 0; i<subj.length; i++)
+				{
+					ac.addItem({
+						subject: subj[i],
+						gold: vals[0],
+						silver: vals[1],
+						bronze: vals[2]
+					});
+				}
+				dt = ac;
+			}
+			
+			private function createDT():void
+			{
+				subject = ["A", "B"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var r1:Number, r2:Number, r3:Number;
+				for (var i:Number = 0; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: r1=Math.round(Math.random() * 1000),
+						R2: r2=Math.round(Math.random() * 1000),
+						total: r1+r2+r3
+					});
+				}
+				dt = ac;
+			}
+			
+			private var originalWidth:Number, originalHeight:Number;
+			private var isFirst:Boolean = true;
+			private function reduceSize():void
+			{
+				if (isFirst) 
+				{
+					originalWidth = width;
+					originalHeight = height;
+				}
+				setActualSize(box.width, box.height);
+			}
+			
+			private function increaseSize():void
+			{
+				setActualSize(originalWidth, originalHeight);
+			}
+		]]>
+	</mx:Script>
+	<mx:CheckBox id="box" label="{region}" selected="true" click="sp.active = box.selected; if (box.selected) increaseSize() else reduceSize()"/>
+	<coords:Cartesian id="sp" width="100%" height="100%" dataProvider="{dt}" showDataTips="true" collisionType="cluster">
+		<coords:scales>
+		 	<scales:Category id="c" categoryField="subject" />
+		 	<scales:Linear id="l" numberOfIntervals="2"/>
+		</coords:scales>
+		<coords:guides>
+			<axis:Axis scale="{l}" placement="right" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+			<axis:Axis scale="{c}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="10" sizePointer="12" />
+ 			<grid:Grid scale1="{l}" scale2="{c}" />
+		</coords:guides>
+		 <coords:elements>
+		 	<series:ColumnElement scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  extendMouseEvents="true" dim1="subject" dim2="gold" colorFill="0xff0000"/>
+		 	<series:ColumnElement scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  extendMouseEvents="true" dim1="subject" dim2="silver" colorFill="0x00ff00"/>
+		 	<series:ColumnElement scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  extendMouseEvents="true" dim1="subject" dim2="bronze" colorFill="0x0000ff"/>
+		 </coords:elements>
+	</coords:Cartesian>
+</mx:VBox>
