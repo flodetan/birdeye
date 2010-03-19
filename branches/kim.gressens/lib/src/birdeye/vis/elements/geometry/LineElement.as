@@ -28,49 +28,52 @@
 package birdeye.vis.elements.geometry
 {
 	import birdeye.vis.VisScene;
-	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.guides.renderers.LineRenderer;
 	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.GraphicPoint;
-	import com.degrafa.IGeometry;
-	import com.degrafa.core.IGraphicsStroke;
 	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.splines.BezierSpline;
+	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.geom.Rectangle;
-	import flash.utils.getTimer;
 	
-	import mx.core.ClassFactory;
+	import org.greenthreads.IThread;
 
-	public class LineElement extends StackElement
+	public class LineElement extends StackElement implements IThread
 	{
 		private const CURVE:String = "curve";
 		
 		private var _form:String;
+		private var _formChanged:Boolean = true;
+		/** The form defines the shape type of the element, ("curve", "line").*/
 		[Inspectable(enumeration="curve,line")]
 		public function set form(val:String):void
 		{
 			_form = val;
-			invalidatingDisplay();
+			_formChanged = true;
+			
+			invalidateProperties();
 		}
 		public function get form():String
 		{
 			return _form;
 		}
 		
-		private var _tension:Number = 2;
+		private var _tension:Number = 4;
+		private var _tensionChanged:Boolean = false;
 		/** Set the tension of the curve form (values from 1 to 5). The higher, the closer to a line form. 
 		 * The lower, the more curved the final shape. */
 		public function set tension(val:Number):void
 		{
 			_tension = val;
-			invalidatingDisplay();
+			_tensionChanged = true;
+			
+			invalidateProperties();
 		}
-		
 		
 		
 		private var _autoClose:Boolean = true;
@@ -101,183 +104,245 @@ package birdeye.vis.elements.geometry
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
-			if (! graphicRenderer)
-				graphicRenderer = new ClassFactory(LineRenderer);
-		}
 
-		private var bzSplines:BezierSpline;
-		/** @Private 
-		 * Called by super.updateDisplayList when the series is ready for layout.*/
-		override public function drawElement():void
-		{
-			if (isReadyForLayout() && _invalidatedElementGraphic)
+			if (_formChanged)
 			{
-trace (getTimer(), "drawing line ele");
-				super.drawElement();
-				clearAll();
-				
-				if (bzSplines)
-					bzSplines.clearGraphicsTargets();
-				var xPrev:Number, yPrev:Number;
-				var pos1:Number, pos2:Number, zPos:Number;
-				var j:Number = 0;
-				
-				var y0:Number = getYMinPosition();
-				var x0:Number = getXMinPosition();
-
-				ggIndex = 0;
-	
-				var points:Array = [];
-				
-				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
-				{
-	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
-						gg = graphicsCollection.items[ggIndex];
-					else
-					{
-						gg = new DataItemLayout();
-						graphicsCollection.addItem(gg);
-					}
-					gg.target = this;
-					ggIndex++;
-
-					var currentItem:Object = _dataItems[cursorIndex];
-					
-					scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
-															currentItem[colorField], currentItem[sizeField], currentItem);
-					
-					if (isNaN(scaleResults[POS1]) || isNaN(scaleResults[POS2]))
-					{
-						continue;
-					}
-	
-					if (visScene.coordType == VisScene.POLAR)
-					{
-						if (j == 0)
-						{
-							var firstX:Number = scaleResults[POS1], firstY:Number = scaleResults[POS2];
-						}
-					}
-
-					
-					if (sizeScale)
-					{
-						 var weight:Number = scaleResults[SIZE];
-						stroke = new SolidStroke(colorStroke, alphaStroke, weight);
-					}
-					
-					if (colorScale)
-					{
-						var col:* = colorScale.getPosition(currentItem[colorField]);
-						if (col is Number)
-						{
-							if (sizeScale)
-							{
-								stroke = new SolidStroke(col, alphaStroke, scaleResults[SIZE]);
-							}
-							else
-							{
-								stroke = new SolidStroke(col, alphaStroke,weightStroke);
-							}
-						}
-						else if (col is IGraphicsStroke)
-						{
-							stroke = col;
-						}
-					} 
-
-					// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
-					// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-					createTTGG(currentItem, dataFields, scaleResults[POS1], scaleResults[POS2], scaleResults[POS3relative], 3);
-   	 
-					if (dim3)
-					{
-						if (!isNaN(scaleResults[POS3]))
-						{
-							gg = new DataItemLayout();
-							gg.target = this;
-							graphicsCollection.addItem(gg);
-							ttGG.z = gg.z = zPos;
-						} else
-							zPos = 0;
-					}
-					
-					if (_form == CURVE)
-					{
-						points.push(new GraphicPoint(scaleResults[POS1],scaleResults[POS2]));
-						if (isNaN(xPrev) && isNaN(yPrev) && visScene.coordType != VisScene.POLAR)
-							points.push(new GraphicPoint(scaleResults[POS1],scaleResults[POS2]));
-					} else if (j++ > 0)
-					{
-						if (!isNaN(xPrev) && !isNaN(yPrev) && !isNaN(scaleResults[POS1]) && !isNaN(scaleResults[POS2]))
-						{
-							var data:String = "M" + String(xPrev) + "," + String(yPrev) + " " +
-											"L" + String(scaleResults[POS1]) + "," + String(scaleResults[POS2]);
-							var line:Path= new Path(data);
-							addSVGData('\n<path d="' + data + '"/>');
-							line.fill = fill;
-							line.stroke = stroke;
-							gg.geometryCollection.addItemAt(line,0);
-							line = null;     
-						}
-					}
-	
-					if (_showGraphicRenderer)
-					{
-		 				var bounds:Rectangle = new Rectangle(scaleResults[POS1] - _rendererSize/2, scaleResults[POS2] - _rendererSize/2, _rendererSize, _rendererSize);
-						
-						var shape:IGeometry = graphicRenderer.newInstance();
-						if (shape is IBoundedRenderer)
-						{
-							(shape as IBoundedRenderer).bounds = bounds; 
-							addSVGData(IBoundedRenderer(shape).svgData);
-						}
-						shape.fill = fill;
-						shape.stroke = stroke;
-						gg.geometryCollection.addItem(shape);
-					}
-	
-					xPrev = scaleResults[POS1]; yPrev = scaleResults[POS2];
-					if (dim3)
-					{
-						gg.z = zPos;
-						if (isNaN(zPos))
-							zPos = 0;
-					}
-				}
-				
+				_formChanged = false;
 				if (_form == CURVE)
 				{
-					points.push(new GraphicPoint(scaleResults[POS1]+.0000001,scaleResults[POS2]));
-						
-					bzSplines = new BezierSpline(points);
- 					bzSplines.tension = _tension;
-					bzSplines.stroke = stroke;
-					bzSplines.graphicsTarget = [this];
-					if (visScene.coordType == VisScene.POLAR && autoClose)
-						bzSplines.autoClose = true;
+					_poly = null;
+					_bezierSpline = new BezierSpline();
+					_bezierSpline.tension = _tension;
+					_bezierSpline.autoClearGraphicsTarget = false;
+					
+					if (visScene && visScene.coordType == VisScene.POLAR)
+					{
+						_bezierSpline.autoClose = true;
+					}
+					else
+					{
+						_bezierSpline.autoClose = false;
+					}
+				}
+				else
+				{
+					_bezierSpline = null;
+					_poly = new Path();
+					_poly.autoClearGraphicsTarget = false;
 				}
 				
-				if (visScene.coordType == VisScene.POLAR && autoClose && !isNaN(firstX) && !isNaN(firstY) 
-					&& !isNaN(scaleResults[POS1]) && !isNaN(scaleResults[POS2]))
+				invalidatingDisplay();
+			}
+			
+			if (_tensionChanged)
+			{
+				if (_form == CURVE)
 				{
-						data = "M" + String(scaleResults[POS1]) + "," + String(scaleResults[POS2]) + " " +
-								"L" + String(firstX) + "," + String(firstY);
-						line = new Path(data);
-						addSVGData('\n<path d="' + data + '"/>');
-						line.fill = fill;
-						line.stroke = stroke;
-						gg.geometryCollection.addItemAt(line,0);
-						line = null;
+					_bezierSpline.tension = _tension;
+					invalidatingDisplay();
 				}
-	
-				if (dim3)
-					zSort();
-
-				createSVG();
-				_invalidatedElementGraphic = false;
-trace (getTimer(), "drawing line ele");
 			}
 		}
+		
+		override protected function createDefaultGraphicsRenderer() : void
+		{
+			_graphicsRendererInst = new LineRenderer();
+		}
+		
+		private var _bezierSpline:BezierSpline;
+		private var _poly:Path;
+		
+		private var _dataItemIndex:uint = 0;
+		private var _drawingData:Array;
+		
+		public function initializeDrawingData():Boolean
+		{
+			if (!(isReadyForLayout() && _invalidatedElementGraphic) )
+			{
+				return false;
+			}
+			
+			_dataItemIndex = 0;
+			this.graphics.clear();
+			
+			_drawingData = new Array();			
+			
+			for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
+			{
+				
+				var currentItem:Object = _dataItems[cursorIndex];
+				
+				scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
+					currentItem[colorField], currentItem[sizeField], currentItem);
+				
+				_drawingData.push(scaleResults);
+				
+			}
+			
+			return true;
+		}
+		
+		private var xPrev:Number, yPrev:Number;
+	
+		public function drawDataItem():Boolean
+		{
+			if (_dataItemIndex == 0 && _form == CURVE)
+			{
+				var points:Array = new Array();
+				
+				if (visScene.coordType == VisScene.CARTESIAN)
+				{
+					points.push(new GraphicPoint(_drawingData[0][POS1], _drawingData[0][POS2]));
+				}
+				
+				for each (var d:Object in _drawingData)
+				{
+					if (d[SIZE] && !isNaN(d[SIZE]))
+					{
+						stroke = new SolidStroke(colorStroke, alphaStroke, d[SIZE]);
+					}
+					
+					if (d[COLOR] && d[COLOR] is SolidFill)
+					{
+						var fi:SolidFill = d[COLOR] as SolidFill;
+						
+						if (d[SIZE] && !isNaN(d[SIZE]))
+						{
+							stroke = new SolidStroke(fi.color, alphaStroke, d[SIZE]);
+						}
+						else
+						{
+							stroke = new SolidStroke(fi.color, alphaStroke, weightStroke);
+						}
+					}
+					
+					points.push(new GraphicPoint(d[POS1], d[POS2]));
+				}
+
+				if (visScene.coordType == VisScene.CARTESIAN)
+				{
+					points.push(new GraphicPoint(_drawingData[_drawingData.length - 1][POS1]+.0000001, _drawingData[_drawingData.length - 1][POS2]));
+				}
+
+				_bezierSpline.points = points;
+				_bezierSpline.stroke = stroke;
+				_bezierSpline.preDraw();
+				_bezierSpline.draw(this.graphics, null);
+
+				
+			}
+			
+			if (_dataItemIndex == 0 &&  _form != CURVE && visScene.coordType == VisScene.POLAR)
+			{
+				// build the area in one go, it's one path
+				
+				var data:String;
+				
+				for each (var d:Object in _drawingData)
+				{
+					if (!data)
+					{
+						data = "M" + String(d[POS1]) + "," + String(d[POS2]) + " ";
+					}
+					else
+					{
+						data += "L" + String(d[POS1]) + "," + String(d[POS2]) + " ";	
+					}
+				}
+				
+				data += "z";
+				_poly.data = data;
+				_poly.stroke = stroke;
+				_poly.draw(this.graphics, null);
+			}
+			
+			if (_form != CURVE || _showGraphicRenderer)
+			{
+				if (_dataItemIndex < _drawingData.length)
+				{
+					var d:Object = _drawingData[_dataItemIndex];
+					
+					if (d[SIZE] && !isNaN(d[SIZE]))
+					{
+						stroke = new SolidStroke(colorStroke, alphaStroke, d[SIZE]);
+					}
+					
+					if (d[COLOR] && d[COLOR] is SolidFill)
+					{
+						var fi:SolidFill = d[COLOR] as SolidFill;
+						
+						if (d[SIZE] && !isNaN(d[SIZE]))
+						{
+							stroke = new SolidStroke(fi.color, alphaStroke, d[SIZE]);
+						}
+						else
+						{
+							stroke = new SolidStroke(fi.color, alphaStroke, weightStroke);
+						}
+					}
+					
+					if (_showGraphicRenderer && _graphicsRendererInst)
+					{
+						if (_graphicsRendererInst is IBoundedRenderer)
+						{
+							(_graphicsRendererInst as IBoundedRenderer).bounds = new Rectangle(d[POS1] - _rendererSize/2, d[POS2] - _rendererSize/2, _rendererSize, _rendererSize);;
+							
+						}
+						_graphicsRendererInst.fill = d.fill;
+						_graphicsRendererInst.stroke = stroke;
+						_graphicsRendererInst.draw(this.graphics, null);
+						
+					}
+					
+					if (_form != CURVE)
+					{
+						
+						if (_dataItemIndex == 0)
+						{
+							xPrev = d[POS1];
+							yPrev = d[POS2];
+							
+						}
+						else 
+						{
+							
+							// create the polygon only if there is more than 1 data value
+							// there cannot be an area with only the first data value 
+							if (!isNaN(xPrev) && !isNaN(yPrev)
+								&& !isNaN(d[POS2]) && !isNaN(d[POS1]))
+							{
+								var data:String;
+								data =  "M" + String(xPrev) + "," + String(yPrev) + " " +
+									"L" + String(d[POS1]) + "," + String(d[POS2]) + " ";
+								
+								_poly.data = data;
+								_poly.stroke = stroke;
+								
+								
+								_poly.draw(this.graphics, null);
+								
+							}
+							
+							xPrev = d[POS1];
+							yPrev = d[POS2];	
+							
+							
+						}
+					}
+					
+					
+					_dataItemIndex++;
+					
+					return true;
+				}
+				
+				
+				
+			}
+			
+			return false;
+			
+		}
+		
  	}
 }

@@ -29,8 +29,9 @@ package birdeye.vis.coords
 {
 	import birdeye.vis.VisScene;
 	import birdeye.vis.data.DataItemLayout;
-	import birdeye.vis.elements.BaseElement;
+	import birdeye.vis.elements.BaseDataElement;
 	import birdeye.vis.elements.collision.StackElement;
+	import birdeye.vis.interfaces.coords.IValidatingCoordinates;
 	import birdeye.vis.interfaces.elements.IElement;
 	import birdeye.vis.interfaces.elements.IStack;
 	import birdeye.vis.interfaces.guides.IGuide;
@@ -48,12 +49,17 @@ package birdeye.vis.coords
 	
 	import mx.core.UIComponent;
 	
+	import org.greenthreads.IGuideThread;
+	import org.greenthreads.IThread;
+	import org.greenthreads.ThreadProcessor;
 	
 	
-	public class BaseCoordinates extends VisScene 
+	
+	public class BaseCoordinates extends VisScene implements IValidatingCoordinates
 	{
 		public function BaseCoordinates()
 		{
+			super();		
 		}
 		
 		protected var _collisionType:String = StackElement.OVERLAID;
@@ -144,7 +150,44 @@ package birdeye.vis.coords
 		}
 		
 		
-		protected var _drawGuides:Boolean = false;
+		protected var _invalidatedElements:Array = [];
+		
+		public function invalidateElement(element:IElement=null):void
+		{
+			if (!element)
+			{
+				_invalidatedElements = elements.slice();
+			}
+			else
+			{
+				if (_invalidatedElements.indexOf(element) == -1)
+				{
+					_invalidatedElements.push(element);
+				}
+			}
+			
+			invalidateDisplayList();
+		}
+		
+		
+		protected var _invalidatedGuides:Array = [];
+		
+		public function invalidateGuide(guide:IGuide=null):void
+		{
+			if (!guide)
+			{
+				_invalidatedGuides = guides.slice();
+			}
+			else if (_invalidatedGuides.indexOf(guide) == -1)
+			{
+				_invalidatedGuides.push(guide);
+			}
+				
+			invalidateDisplayList();
+		}
+		
+				
+		
 		/**
 		 * This function loops all guides,</br>
 		 * init's each guide</br>
@@ -160,7 +203,8 @@ package birdeye.vis.coords
 
 			}
 			
-			_drawGuides = true;
+			invalidateGuide();
+			
 		}
 		
 		/**
@@ -169,12 +213,7 @@ package birdeye.vis.coords
 		 */		
 		protected function placeGuide(guide:IGuide):void
 		{
-			// at this level only the elementsContainer is known
-			// so that's where let the guide draw itself
-			if (guide.targets.lastIndexOf(elementsContainer) == -1)
-			{
-				guide.targets.push(elementsContainer);
-			}			
+		
 		}
 		
 		// temporary data structure to keep track of stacked elements
@@ -191,6 +230,8 @@ package birdeye.vis.coords
 			{	
 				placeElement(element);
 			}
+			
+			invalidateElement();
 			
 		}
 		
@@ -394,7 +435,7 @@ package birdeye.vis.coords
 			toReturn.indexDim = "dim1";
 			toReturn.valueDim = "dim2";
 			
-			if (stack.collisionScale == BaseElement.SCALE1)
+			if (stack.collisionScale == BaseDataElement.SCALE1)
 			{
 				toReturn.indexDim = "dim2";
 				toReturn.valueDim = "dim1";		
@@ -598,33 +639,24 @@ trace(getTimer(), "updateDisplaylist", unscaledWidth, unscaledHeight);
 						
 				var invalidated:Boolean = validateBounds(unscaledWidth, unscaledHeight);
 					
+				trace("Bounds are " + invalidated);
+				
 				if (invalidated || !chartBounds)
 				{
 					setBounds(unscaledWidth, unscaledHeight);
 				}
-				
-				//if (_drawElements)
-				//{
-					updateElements(unscaledWidth, unscaledHeight);
-				//}
-				
-				if (_drawGuides)
-				{
-					updateGuides(unscaledWidth, unscaledHeight);
-				}
+					
+				updateElements(unscaledWidth, unscaledHeight);
+
+				updateGuides(unscaledWidth, unscaledHeight);
 				
 				if (axesFeeded && (invalidatedData || invalidated))
 				{
-					
-					if (_drawElements)
-					{
-						drawElements(unscaledWidth, unscaledHeight);
-					}
-					
-					if (_drawGuides)
-					{
-						drawGuides(unscaledWidth, unscaledHeight);
-					}
+
+					drawElements(unscaledWidth, unscaledHeight);
+
+					drawGuides(unscaledWidth, unscaledHeight);
+
 					
 					// listeners like legends will listen to this event
 					dispatchEvent(new Event("ProviderReady", true));
@@ -636,15 +668,40 @@ trace(getTimer(), "END updateDisplaylist", unscaledWidth, unscaledHeight);
 			}
 		}
 		
+		private var oldWidth:Number = 0, oldHeight:Number = 0;
+		
 		/**
 		 * Override this function to validate bounds.</br>
 		 * For example if you need place to set axes, this is the place to calculate their sizes.</br>
 		 */
 		protected function validateBounds(unscaledWidth:Number, unscaledHeight:Number):Boolean
 		{
-			// nothing happens at this level, the whole area is used to create a visualization
+			var invalidated:Boolean = false;
 			
-			return false;
+			// nothing happens at this level, the whole area is used to create a visualization
+			if (unscaledHeight != oldHeight)
+			{
+				oldHeight = unscaledHeight;
+				invalidated = true;
+			}
+			
+			if (unscaledWidth != oldWidth)
+			{
+				oldWidth = unscaledWidth;
+				invalidated = true;
+			}
+			
+			if (invalidated)
+			{
+				// invalidate all elements
+				invalidateElement();
+				
+				// invalidate all guides
+				invalidateGuide();
+				
+			}
+			
+			return invalidated;
 		}
 		
 		/** 
@@ -674,17 +731,20 @@ trace(getTimer(), "END updateDisplaylist", unscaledWidth, unscaledHeight);
 		
 		protected function drawElements(unscaledWidth:Number, unscaledHeight:Number):void
 		{
-			for each (var element:IElement in elements)
-			{
-				drawElement(element, unscaledWidth, unscaledHeight);
-			}
+			var poppedElement:IThread = _invalidatedElements.pop();
 			
-			_drawElements = false;
+			while (poppedElement)
+			{
+				drawElement(poppedElement);
+				
+				poppedElement = _invalidatedElements.pop();
+				
+			} 
 		}
 		
-		protected function drawElement(element:IElement, unscaledWidth:Number, unscaledHeight:Number):void
+		protected function drawElement(element:IThread):void
 		{
-			element.draw();
+			ThreadProcessor.getInstance().addThread(element);
 		}
 		
 		protected function updateGuides(unscaledWidth:Number, unscaledHeight:Number):void
@@ -702,18 +762,27 @@ trace(getTimer(), "END updateDisplaylist", unscaledWidth, unscaledHeight);
 		
 		protected function drawGuides(unscaledWidth:Number, unscaledHeight:Number):void
 		{
-			for each (var guide:IGuide in guides)
+			var poppedGuide:IGuideThread = _invalidatedGuides.pop();
+			
+			while (poppedGuide)
 			{
-				drawGuide(guide, unscaledWidth, unscaledHeight);
+				drawGuide(poppedGuide, unscaledWidth, unscaledHeight);
+				
+				poppedGuide = _invalidatedGuides.pop();
 			}
 			
-			_drawGuides = false;
-			_drawElements = true;
 		}
 		
-		protected function drawGuide(guide:IGuide, unscaledWidth:Number, unscaledHeight:Number):void
+		protected function drawGuide(guide:IGuideThread, unscaledWidth:Number, unscaledHeight:Number):void
 		{
-			guide.drawGuide(new Rectangle(0,0, unscaledWidth, unscaledHeight));	
+			addGuideToThreads(guide, new Rectangle(0,0,unscaledWidth,unscaledHeight));
+		}
+		
+		protected function addGuideToThreads(guide:IGuideThread, bounds:Rectangle):void
+		{			
+			guide.bounds = bounds;
+
+			ThreadProcessor.getInstance().addThread(guide);
 		}
 		
 		protected function setMask():void
@@ -742,9 +811,6 @@ trace(getTimer(), "END updateDisplaylist", unscaledWidth, unscaledHeight);
 				for (var i:int = 0; i<nChildren; i++)
 				{
 					var child:DisplayObject = _elementsContainer.getChildAt(0); 
-					
-					if (child is IElement)
-						IElement(child).clearAll();
 						
 					if (child is IGuide)
 						IGuide(child).clearAll();

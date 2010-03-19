@@ -100,9 +100,6 @@ package birdeye.vis.elements.geometry {
 			return _svgData;
 		}
 
-		override protected function createGlobalGeometryGroup():void {
-			// do nothing: no need to create the global group 
-	    }
 
 		private var _node:IPositionableElement;
 

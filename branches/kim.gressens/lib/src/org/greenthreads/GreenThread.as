@@ -27,29 +27,36 @@ package org.greenthreads {
 		private var _maximum : Number = NaN;
 		private var _progress : Number = NaN;
 		private var _debug : Boolean;
+		private var _innerThread: IThread;
 		private var _statistics : ThreadStatistics;
 		
 		public function GreenThread( debug : Boolean = true ) {
 			_debug = debug;
 		}
 		
-		public final function start( share : Number = 0.99 ) : void {
-			ThreadProcessor.getInstance(share).addThread( this );
+		public function set innerThread(it:IThread):void
+		{
+			_innerThread = it;
+		}
+		
+		public function get innerThread():IThread
+		{
+			return _innerThread;
+		}
+		
+		
+		
+		public final function start( share : Number = 0.99 ) : Boolean {
 			if( debug ) {
 				_statistics = new ThreadStatistics();
 			}
-			initialize();
+			if (!_innerThread) throw new Error("No innerthread in greenthread.");
+			
+			return _innerThread.initializeDrawingData();
 		}
 
 		public final function stop() : void {
-			ThreadProcessor.getInstance().stop( this );
-		}
-		
-		protected function initialize() : void {
-		}
-		
-		protected function run() : Boolean {
-			return false;
+			ThreadProcessor.getInstance().stop( innerThread );
 		}
 		
 		public final function execute( processAllocation : Number ) : Boolean {
@@ -60,7 +67,7 @@ package org.greenthreads {
 				
 			    var loop : Boolean = true;
 				while( getTimer() - processStart < processAllocation && loop ) {
-					loop = run();
+					loop = _innerThread.drawDataItem();
 				} 
 			} catch( error:ScriptTimeoutError ) {
 				if( debug ) statistics.recordTimeout();

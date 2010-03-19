@@ -27,7 +27,7 @@
 
 package birdeye.vis.elements.events
 {
-	import birdeye.vis.interfaces.elements.IElement;
+	import birdeye.vis.interfaces.elements.IDataElement;
 
 	public class ElementDataItemsChangeEvent extends ElementEvent
 	{
@@ -37,7 +37,7 @@ package birdeye.vis.elements.events
 		private var _newDataItems:Vector.<Object>;
 		
 		public function ElementDataItemsChangeEvent(
-			element:IElement, oldDataItems:Vector.<Object>, newDataItems:Vector.<Object>)
+			element:IDataElement, oldDataItems:Vector.<Object>, newDataItems:Vector.<Object>)
 		{
 			super(TYPE, element);
 			_oldDataItems = oldDataItems;

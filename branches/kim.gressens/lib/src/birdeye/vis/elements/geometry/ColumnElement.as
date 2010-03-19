@@ -28,28 +28,19 @@
 package birdeye.vis.elements.geometry
 {
 	import birdeye.vis.VisScene;
-	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.collision.*;
-	import birdeye.vis.guides.renderers.ArcPath;
-	import birdeye.vis.guides.renderers.RasterRenderer;
 	import birdeye.vis.guides.renderers.RectangleRenderer;
 	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
-	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
-	import com.degrafa.IGeometry;
-	import com.degrafa.core.IGraphicsFill;
-	import com.degrafa.paint.SolidFill;
-	
 	import flash.geom.Rectangle;
-	import flash.utils.getTimer;
 	
-	import mx.core.ClassFactory;
+	import org.greenthreads.IThread;
 
-	public class ColumnElement extends StackElement 
+	public class ColumnElement extends StackElement implements IThread
 	{
 		private var _ggArray:Array;
 		
@@ -91,6 +82,38 @@ package birdeye.vis.elements.geometry
 		}
 		
 		
+		public static const DIRECTION_HORIZONTAL:String = "horizontal";
+		public static const DIRECTION_VERTICAL:String = "vertical";
+		public static const DIRECTION_AUTO:String = "auto";
+		
+		private var _direction:String = DIRECTION_VERTICAL;
+		
+		/**
+		 * Indicate of this column/bar is drawn horizontically or vertically.</br>
+		 * Automated is also a possibilit, and will determine the direction in an automated mode.</br>
+		 * @default auto
+		 */
+		[Inspectable(enumeration="auto,horizontal,vertical")]
+		public function set direction(d:String):void
+		{
+			_direction = d;
+			
+			if (_direction == DIRECTION_HORIZONTAL)
+			{
+				collisionScale = SCALE1;
+			}
+			else if (_direction == DIRECTION_VERTICAL)
+			{
+				collisionScale = SCALE2;
+			}
+		}
+		
+		public function get direction():String
+		{
+			return _direction;
+		}
+		
+		
 		public function ColumnElement()
 		{
 			super();
@@ -99,8 +122,6 @@ package birdeye.vis.elements.geometry
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
-			if (!graphicRenderer)
-				graphicRenderer = new ClassFactory(RectangleRenderer);
 
 			if (stackType == STACKED && visScene)
 			{
@@ -108,319 +129,205 @@ package birdeye.vis.elements.geometry
 					INumerableScale(scale2).max = Math.max(INumerableScale(scale2).max, visScene.maxStacked100);
 			}
 		}
-
-		private var poly:IGeometry;
-		/** @Private 
-		 * Called by super.updateDisplayList when the element is ready for layout.*/
-		override public function drawElement():void
+		
+		
+		override protected function createDefaultGraphicsRenderer() : void
 		{
-//			var renderer:ISeriesDataRenderer = new itemRenderer();
-			
-			if (isReadyForLayout() && _invalidatedElementGraphic)
+			_graphicsRendererInst = new RectangleRenderer();
+		}
+		
+		
+		private var _dataItemIndex:uint = 0;
+		private var _drawingData:Array;
+		
+		private var colWidth:Number = NaN;
+		private var innerColWidth:Number = NaN;
+
+		
+		public function initializeDrawingData():Boolean
+		{
+			if (!(isReadyForLayout() && _invalidatedElementGraphic) )
 			{
-trace (getTimer(), "drawing column ele");
-
-				super.drawElement();
-				clearAll();
-
-				var pos1:Number, pos2:Number, zPos:Number = NaN;
-				var j:Object;
+				return false;
+			}
+			
+			_dataItemIndex = 0;
+			this.graphics.clear();
+			
+			_drawingData = new Array();
+			
+			/*if (direction == DIRECTION_AUTO)
+			{
+				// automated detection of direction
+				if (scale1 && scale1 is IEnumerableScale && scale2 && scale2 is INumerableScale)
+				{
+					xDim = POS1;
+					yDim = POS2;
+				}
+				else if (scale1 && scale1 is INumerableScale && scale2 && scale2 is IEnumerableScale)
+				{
+					xDim = POS2;
+					yDim = POS1;
+				}
+				else
+				{
+					// defaults to vertical
+					xDim = POS1;
+					yDim = POS2;
+				}
+			}
+			else if (direction == DIRECTION_VERTICAL)
+			{
+				xDim = POS1;
+				yDim = POS2;
+			}
+			else if (direction == DIRECTION_HORIZONTAL)
+			{
+				xDim = POS2;
+				yDim = POS1;
+			}*/
+			
+			
+			
+			for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
+			{
+					
+				var currentItem:Object = _dataItems[cursorIndex];
 				
-				var baseScale2:Number = getDim2MinPosition(scale2);
-				var tmpSize:Number, colWidth:Number = 0; 
+				scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
+					currentItem[colorField], currentItem[sizeField], currentItem);
+				
+				_drawingData.push(scaleResults);
+				
+			}
+			
+			if (direction == DIRECTION_VERTICAL)
+			{
 				if (scale1)
 				{
 					if (scale1 is IEnumerableScale)
-						tmpSize = scale1.size/IEnumerableScale(scale1).dataProvider.length * visScene.thicknessRatio;
+					{
+						colWidth = scale1.size/IEnumerableScale(scale1).dataProvider.length * visScene.thicknessRatio;
+					}
 					else if (scale1 is INumerableScale)
-						tmpSize = scale1.size / 
-								(INumerableScale(scale1).max - INumerableScale(scale1).min) * visScene.thicknessRatio;
-
-					var constTmpSize:Number = tmpSize;
-				}
-	
-				ggIndex = 0;
- 	
-				if (visScene.coordType == VisScene.POLAR)
-				{
-					var arcSize:Number = NaN;
-			
-					var angleInterval:Number;
-					if (scale1) 
-						angleInterval = scale1.scaleInterval * visScene.thicknessRatio;
-						
-					switch (_stackType)
 					{
-						case CLUSTER:
-							arcSize = angleInterval/_total;
-							break;
-						case OVERLAID:
-						case STACKED:
-							arcSize = angleInterval;
-							break;
-					}
-					constTmpSize = arcSize;
-				}
-				
-				var tmpDim2:String;
-				var innerBase2:Number;
-				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
-				{
-	 				if (graphicsCollection.items && graphicsCollection.items.length>ggIndex)
-						gg = graphicsCollection.items[ggIndex];
-					else
-					{
-						gg = new DataItemLayout();
-						graphicsCollection.addItem(gg);
-					}
-					gg.target = this;
-					ggIndex++;
-
-					var currentItem:Object = _dataItems[cursorIndex];
-					
-					var tmpArray:Array = (dim2 is Array) ? dim2 as Array : [String(dim2)];
-					
-					innerBase2 = 0;
-					j = currentItem[dim1];
-
-					for (var i:Number = 0; i<tmpArray.length; i++)
-					{
-						tmpDim2 = tmpArray[i];
-						
-						if (scale1)
-						{
-							pos1 = scale1.getPosition(currentItem[dim1]);
-						}
-						
-						if (scale2)
-						{
-							
-							if (_stackType == STACKED)
-							{
-								baseScale2 = scale2.getPosition(baseValues[j] + innerBase2);
-								pos2 = scale2.getPosition(
-									baseValues[j] + Math.max(0,currentItem[tmpDim2] + innerBase2));
-							} else {
-								pos2 = scale2.getPosition(currentItem[tmpDim2] + innerBase2);
-							}
-							dataFields["dim2"] = tmpArray[i];
-						}
-						
-						if (scale1 is ISubScale && (scale1 as ISubScale).subScalesActive)
-						{
-							if (_stackType == STACKED)
-							{
-								baseScale2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(baseValues[j] + innerBase2);
-								pos2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(baseValues[j] + Math.max(0,currentItem[tmpDim2] + innerBase2));
-							} else {
-								baseScale2 = getDim2MinPosition((scale1 as ISubScale).subScales[currentItem[dim1]]);
-								pos2 = (scale1 as ISubScale).subScales[currentItem[dim1]].getPosition(currentItem[tmpDim2] + innerBase2);
-							}
-							
-						}
-						
-						var scale2RelativeValue:Number = NaN;
-		
-						// TODO: fix stacked100 on 3D
-						if (scale3)
-						{
-							zPos = scale3.getPosition(currentItem[dim3]);
-							scale2RelativeValue = scale3.size - zPos;
-						}
-		
-						if (colorScale)
-						{
-							var col:* = colorScale.getPosition(currentItem[colorField]);
-							if (col is Number)
-								fill = new SolidFill(col);
-							else if (col is IGraphicsFill)
-								fill = col;
-						} 
-		
-						if (sizeScale)
-						{
-							_graphicRendererSize = sizeScale.getPosition(currentItem[sizeField]);
-							if (visScene.coordType == VisScene.CARTESIAN)
-								tmpSize = constTmpSize * _graphicRendererSize;
-							else
-								arcSize = constTmpSize * _graphicRendererSize;
-						}
-						
-						if (isNaN(pos1) || isNaN(pos2))
-						{
-							continue;
-						}
-						
-						if (!isNaN(_maxColumnWidth)  && tmpSize > _maxColumnWidth)
-						{
-							tmpSize = _maxColumnWidth;
-						}
-
-						if (visScene.coordType == VisScene.CARTESIAN)
-						{
-							switch (_stackType)
-							{
-								case OVERLAID:
-									colWidth = tmpSize;
-									pos1 = pos1 - tmpSize/2;
-									break;
-								case STACKED:
-									colWidth = tmpSize;
-									pos1 = pos1 - tmpSize/2;
-									break;
-								case CLUSTER:
-									pos1 = pos1 + tmpSize/2 - (tmpSize/_total + _clusterPadding) * (_stackPosition + 1);
-									colWidth  = (tmpSize - (_total - 1)) / _total;
-									break;
-							}
-							
-							var innerColWidth:Number;
-							switch (_collisionType)
-							{
-								case OVERLAID:
-									innerColWidth = colWidth;
-									break;
-								case STACKED:
-									innerColWidth = colWidth;
-									baseScale2 = scale2.getPosition(innerBase2);
-									innerBase2 += currentItem[tmpDim2];
-									break;
-								case CLUSTER:
-									innerColWidth = colWidth/tmpArray.length;
-									pos1 = pos1 + innerColWidth * i;
-									break;
-							}
-							
-			 				var bounds:Rectangle = new Rectangle(pos1, pos2, innerColWidth, baseScale2 - pos2);
-							// scale2RelativeValue is sent instead of zPos, so that the axis pointer is properly
-							// positioned in the 'fake' z axis, which corresponds to a real y axis rotated by 90 degrees
-  							createTTGG(currentItem, dataFields, pos1 + innerColWidth/2, pos2, scale2RelativeValue, 
-  										3, i,null,NaN,NaN,true);
- 			 
-							if (dim3)
-							{
-								if (!isNaN(zPos))
-								{
-									gg = new DataItemLayout();
-									gg.target = this;
-									graphicsCollection.addItem(gg);
-/* 									ttGG.posZ = ttGG.z = gg.posZ = gg.z = zPos;
- */								} else
-									zPos = 0;
-							}
-			
-							if (ttGG && _extendMouseEvents)
-							{
-								gg = ttGG;
-								gg.target = this;
-							}
-							
- 			 				if (_source)
-								poly = new RasterRenderer(bounds, _source);
-			 				else 
-								poly = graphicRenderer.newInstance();
-			
-							if (poly is IBoundedRenderer)
-							{
-								(poly as IBoundedRenderer).bounds = bounds;
-								addSVGData((poly as IBoundedRenderer).svgData);
-							} 
-							poly.fill = fill;
-							poly.stroke = stroke;						
-							gg.geometryCollection.addItemAt(poly,0);  							
-						} else if (visScene.coordType == VisScene.POLAR)
-						{
-							var startAngle:Number; 
-							switch (_stackType) 
-							{
-								case CLUSTER:
-									startAngle = pos1 - angleInterval/2 + constTmpSize *_stackPosition;
-									break;
-								case OVERLAID:
-								case STACKED:
-									startAngle = pos1 - angleInterval/2;
-									break;
-							}
-							
-							var innerAngleSize:Number;
-
-							switch (_collisionType)
-							{
-								case OVERLAID:
-									innerAngleSize = arcSize;
-									startAngle = startAngle;
-									break;
-								case STACKED:
-									innerAngleSize = arcSize;
-									innerBase2 += currentItem[tmpDim2];
-									break;
-								case CLUSTER:
-									innerAngleSize = arcSize/tmpArray.length;
-									startAngle = startAngle + innerAngleSize * i;
-									break;
-							}
-							
-							var wSize:Number, hSize:Number;
-							wSize = hSize = pos2*2;
-			
-							var xPos:Number = PolarCoordinateTransform.getX(startAngle+innerAngleSize/2, pos2, visScene.origin);
-							var yPos:Number = PolarCoordinateTransform.getY(startAngle+innerAngleSize/2, pos2, visScene.origin); 
-		 					
-							createTTGG(currentItem, dataFields, xPos, yPos, NaN, _rendererSize, i);
- 							
-							if (ttGG && _extendMouseEvents)
-							{
-								gg = ttGG;
-								gg.target = this;
-							}
-								
-							var arc:IBoundedRenderer;
-							
-							arc = 
-								new ArcPath(baseScale2, pos2, startAngle, innerAngleSize, visScene.origin);
-								
-							addSVGData(arc.svgData);
-			
-							arc.fill = fill;
-							arc.stroke = stroke;
-							gg.geometryCollection.addItemAt(arc,0); 
-						}
-		
-						if (_showGraphicRenderer)
-						{
-							var shape:IGeometry = graphicRenderer.newInstance();
-							if (shape is IBoundedRenderer)
-							{
-								(shape as IBoundedRenderer).bounds = bounds;
-								addSVGData((shape as IBoundedRenderer).svgData);
-							} 
-							shape.fill = fill;
-							shape.stroke = stroke;
-							gg.geometryCollection.addItem(shape);
-						}
+						colWidth = scale1.size / (INumerableScale(scale1).max - INumerableScale(scale1).min) * visScene.thicknessRatio;
 					}
 				}
-	
-				if (dim3)
-					zSort();
-
-				createSVG();
-				_invalidatedElementGraphic = false;
-trace (getTimer(), "drawing column ele");
 			}
+			else if (direction == DIRECTION_HORIZONTAL)
+			{
+				if (scale2)
+				{
+					if (scale2 is IEnumerableScale)
+					{
+						colWidth = scale2.size/IEnumerableScale(scale2).dataProvider.length * visScene.thicknessRatio;
+					}
+					else if (scale2 is INumerableScale)
+					{
+						colWidth = scale2.size / (INumerableScale(scale2).max - INumerableScale(scale2).min) * visScene.thicknessRatio;
+					}
+				}
+			}
+			
+			if (!isNaN(_maxColumnWidth) && colWidth > _maxColumnWidth)
+			{
+				colWidth = _maxColumnWidth;
+			}
+			
+			innerColWidth = colWidth;
+			
+			if (visScene.coordType == VisScene.CARTESIAN)
+			{
+				if (_stackType == CLUSTER)
+				{
+					innerColWidth = (colWidth - _clusterPadding*(_total) ) / _total;	
+				}	
+				
+			}
+			
+			
+			
+			return true;
+			
 		}
 		
-		private function getDim2MinPosition(s2:IScale):Number
+		public function drawDataItem():Boolean
 		{
-			var pos2:Number;
-			if (s2 && s2 is INumerableScale)
+			if (_dataItemIndex < _drawingData.length)
 			{
-				if (!isNaN(_baseAt))
-					pos2 = s2.getPosition(_baseAt);
-				else
-					pos2 = s2.getPosition(INumerableScale(s2).min);
+				
+				var d:Object = _drawingData[_dataItemIndex++];
+
+				// save the tmp width
+				var tmpWidth:Number = innerColWidth;
+				
+				// if a size from a scale is present, use that to change the width of column
+				if (d[SIZE] && !isNaN(d[SIZE]))
+				{
+					tmpWidth = innerColWidth * d[SIZE];
+				}
+				
+				
+				// center the renderer using an offset
+				var pos1:Number = d[POS1];
+				var pos2:Number = d[POS2];
+				var barWidth:Number;
+				var barHeight:Number;
+				
+				switch(_stackType)
+				{
+					case OVERLAID:
+					case STACKED:
+						if (direction == DIRECTION_VERTICAL)
+						{
+							pos1 -= tmpWidth / 2;	
+						}
+						else if (direction == DIRECTION_HORIZONTAL)
+						{
+							pos2 -= tmpWidth / 2;
+						}
+						break;	
+					case CLUSTER:
+						if (direction == DIRECTION_VERTICAL)
+						{
+							pos1 += colWidth / 2 - (tmpWidth + clusterPadding) * (_stackPosition + 1);
+						}
+						else if (direction == DIRECTION_HORIZONTAL)
+						{
+							pos2 += colWidth / 2 - (tmpWidth + clusterPadding) * (_stackPosition + 1);
+						}
+						break;
+				}
+				
+				if (direction == DIRECTION_VERTICAL)
+				{
+					barWidth = tmpWidth;
+					barHeight = d[POS2+"base"] - d[POS2];
+				}
+				else if (direction == DIRECTION_HORIZONTAL)
+				{
+					barWidth = d[POS1+"base"] - d[POS1];
+					barHeight = tmpWidth; 
+				}
+				
+				if (_graphicsRendererInst)
+				{
+					if (_graphicsRendererInst is IBoundedRenderer)
+					{
+						(_graphicsRendererInst as IBoundedRenderer).bounds = new Rectangle(pos1, pos2, barWidth, barHeight);
+					}
+					
+					_graphicsRendererInst.fill = d[COLOR];
+					_graphicsRendererInst.stroke = stroke;
+					
+					_graphicsRendererInst.draw(this.graphics, null);
+				}
+				
+				return true;
 			}
-			return pos2;
+			
+			return false;
 		}
 	}
 }

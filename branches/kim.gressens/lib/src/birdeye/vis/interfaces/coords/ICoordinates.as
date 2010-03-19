@@ -27,7 +27,7 @@
  
 package birdeye.vis.interfaces.coords
 {
-	import birdeye.vis.interfaces.coords.IInteractive;
+	import birdeye.vis.interfaces.elements.IElement;
 	
 	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
@@ -49,5 +49,6 @@ package birdeye.vis.interfaces.coords
 		function get maxStacked100():Number;
 		
 		function get thicknessRatio():Number;
+		
 	}
 }

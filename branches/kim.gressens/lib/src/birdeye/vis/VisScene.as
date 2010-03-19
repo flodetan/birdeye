@@ -841,12 +841,9 @@
 		
 	    public function clearAll():void
 	    {
-	            if (elements && elements.length > 0)
-	                    for (var i:uint = 0; i<elements.length; i++)
-	                            IElement(elements[i]).clearAll();
 	            if (guides && guides.length > 0)
 	            {
-	            	for (i=0;i<guides.length;i++)
+	            	for (var i:int=0;i<guides.length;i++)
 	            	{
 	            		if (guides[i] is IGuide)
 	            		{

@@ -27,20 +27,20 @@
 
 package birdeye.vis.elements.events
 {
-	import birdeye.vis.interfaces.elements.IElement;
+	import birdeye.vis.interfaces.elements.IDataElement;
 	
 	import flash.events.Event;
 	
 	public class ElementEvent extends Event
 	{
-		private var _element:IElement;
+		private var _element:IDataElement;
 		
-		public function ElementEvent(type:String, element:IElement) {
+		public function ElementEvent(type:String, element:IDataElement) {
 			super(type);
 			_element = element;
 		}
 		
-		public function get element():IElement {
+		public function get element():IDataElement {
 			return _element;
 		}
 	}

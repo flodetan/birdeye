@@ -131,7 +131,7 @@ package birdeye.vis.coords
 			{
  				var nodeElement:IGraphLayoutableElement = validLayout.node as IGraphLayoutableElement;
  				UIComponent(nodeElement).setActualSize(width, height);
-				nodeElement.draw();
+				//nodeElement.draw();
  
 			}
 

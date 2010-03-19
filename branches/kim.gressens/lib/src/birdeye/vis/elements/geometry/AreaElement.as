@@ -28,28 +28,23 @@
 package birdeye.vis.elements.geometry
 {
 	import birdeye.vis.VisScene;
-	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.UpTriangleRenderer;
-	import birdeye.vis.interfaces.data.IExportableSVG;
 	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.GraphicPoint;
-	import com.degrafa.IGeometry;
-	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.splines.BezierSpline;
-	import com.degrafa.paint.SolidFill;
 	
 	import flash.geom.Rectangle;
-	import flash.utils.getTimer;
 	
-	import mx.core.ClassFactory;
+	import org.greenthreads.IThread;
 
-	public class AreaElement extends StackElement
-	{
+	public class AreaElement extends StackElement implements IThread
+	{		
+		
 		/** It overrides the get elementType to force the result to be "area".
 		 * elementType is used to provide the possibility of using stackable element
 		 * within any type of chart instead of only using them inside their own 
@@ -61,13 +56,19 @@ package birdeye.vis.elements.geometry
 
 		private const CURVE:String = "curve";
 
-		private var _form:String;
+		private var _form:String = "line" ;
+		private var _formChanged:Boolean = true;
 		/** The form defines the shape type of the element, ("curve", "line").*/
 		[Inspectable(enumeration="curve,line")]
 		public function set form(val:String):void
 		{
-			_form = val;
-			invalidatingDisplay();
+			if (val != _form)
+			{
+				_form = val;
+				_formChanged = true;
+				
+				invalidateProperties();
+			}
 		}
 		public function get form():String
 		{
@@ -75,26 +76,63 @@ package birdeye.vis.elements.geometry
 		}
 
 		private var _tension:Number = 4;
+		private var _tensionChanged:Boolean = false;
 		/** Set the tension of the curve form (values from 1 to 5). The higher, the closer to a line form. 
 		 * The lower, the more curved the final shape. */
 		public function set tension(val:Number):void
 		{
-			_tension = val;
-			invalidatingDisplay();
+			if (val != _tension)
+			{
+				_tension = val;
+				_tensionChanged = true;
+			
+				invalidateProperties();
+			}
 		}
 		
-		public function AreaElement()
-		{
-			super();
-		}
 
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
-			// select the item renderer (must be an IGeomentry)
-			if (! graphicRenderer)
-				graphicRenderer = new ClassFactory(UpTriangleRenderer);
-
+			
+			if (_formChanged)
+			{
+				_formChanged = false;
+				if (_form == CURVE)
+				{
+					_poly = null;
+					_bezierSpline = new BezierSpline();
+					_bezierSpline.tension = _tension;
+					_bezierSpline.autoClearGraphicsTarget = false;
+					
+					if (visScene && visScene.coordType == VisScene.POLAR)
+					{
+						_bezierSpline.autoClose = true;
+					}
+					else
+					{
+						_bezierSpline.autoClose = false;
+					}
+				}
+				else
+				{
+					_bezierSpline = null;
+					_poly = new Path();
+					_poly.autoClearGraphicsTarget = false;
+				}
+				
+				invalidatingDisplay();
+			}
+			
+			if (_tensionChanged)
+			{
+				_tensionChanged = false;
+				if (_form == CURVE)
+				{
+					_bezierSpline.tension = _tension;
+					invalidatingDisplay();
+				}
+			}
 			// doesn't need to call super.commitProperties(), since it doesn't need to listen
 			// to axes interval changes 
 			if (stackType == STACKED && visScene)
@@ -103,163 +141,185 @@ package birdeye.vis.elements.geometry
 					INumerableScale(scale2).max = Math.max(visScene.maxStacked100, INumerableScale(scale2).max);
 			}
 		}
-
-		protected var poly:Path;
-		private var bzSplines:BezierSpline;
-		/** @Private 
-		 * Called by super.updateDisplayList when the element is ready for layout.*/
-		override public function drawElement():void
-		{
-			if (isReadyForLayout() && _invalidatedElementGraphic)
-			{
-trace (getTimer(), "area ele");
-				super.drawElement();
-				clearAll();
-
-				if (bzSplines)
-					bzSplines.clearGraphicsTargets();
-				var xPrev:Number, yPrev:Number;
-				var pos1:Number, pos2:Number, zPos:Number;
-				var j:Object;
-				
-				y0 = getYMinPosition();
-				var y0Prev:Number;
-
-				ggIndex = 0;
-				
-				var points:Array = [];
-				
-				for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
-				{
-	 			
-
-					var currentItem:Object = _dataItems[cursorIndex];
-					
-					scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
-															currentItem[colorField], currentItem[sizeField], currentItem);
-					
-					j = currentItem[dim1];
-					
-					// create a separate GeometryGroup to manage interactivity and tooltips 
-					createTTGG(currentItem, dataFields, scaleResults[POS1], scaleResults[POS2], scaleResults[POS3relative], 3);
-					
-					if (colorScale)
-					{
-						var col:* = colorScale.getPosition(currentItem[colorField]);
-						if (col is Number)
-							fill = new SolidFill(col);
-						else if (col is IGraphicsFill)
-							fill = col;
-					} 
-
-					// in case the form is curve, it's used the BezeirSpline class to build the
-					// element shape. the shape is not attached to the gg, the gg is only used to 
-					// draw and manage the data items.
-					if (_form == CURVE)
-					{
-						if (isNaN(xPrev) && isNaN(yPrev) && visScene.coordType == VisScene.CARTESIAN)
-						{
-							// to bypass some limitation of the BezierSpline it's necessary
-							// to create a double initial point. this allows the bezier line
-							// to be drawn without risks of having a large initial curve
-							points.push(new GraphicPoint(0, y0));
-							// the basescale2 is used to have a closure between points at the same height
-							points.push(new GraphicPoint(0, y0));
-						}
-						points.push(new GraphicPoint(scaleResults[POS1],scaleResults[POS2]));
-					} else {
-						if (visScene.coordType == VisScene.POLAR)
-							if (!data)
-								data = "M" + String(scaleResults[POS1]) + "," + String(scaleResults[POS2]) + " ";
-							else
-								data += "L" + String(scaleResults[POS1]) + "," + String(scaleResults[POS2]) + " ";
 		
-						// create the polygon only if there is more than 1 data value
-						// there cannot be an area with only the first data value 
-						if (visScene.coordType == VisScene.CARTESIAN && !isNaN(xPrev) && !isNaN(yPrev) && !isNaN(y0Prev) 
-							&& !isNaN(scaleResults[POS1]) && !isNaN(scaleResults[POS2]))
-						{
-							var data:String;
-							data =  "M" + String(xPrev) + "," + String(y0Prev) + " " +
-									"L" + String(xPrev) + "," + String(yPrev) + " " +
-									"L" + String(scaleResults[POS1]) + "," + String(scaleResults[POS2]) + " " +
-									"L" + String(scaleResults[POS1]) + "," + String(y0) + " z";
-							addSVGData('\n<path d="' + data + '"/>');
-							poly = new Path(data);
-							poly.fill = fill;
-							poly.stroke = stroke;
-							gg.geometryCollection.addItemAt(poly,0);
-						}
-					}
-						
-					if (_showGraphicRenderer)
-					{
-		 				var bounds:Rectangle = new Rectangle(scaleResults[POS1] - _rendererSize/2, scaleResults[POS2] - _rendererSize/2, _rendererSize, _rendererSize);
-		 				
-						var shape:IGeometry = graphicRenderer.newInstance();
-						if (shape is IBoundedRenderer)
-						{
-							(shape as IBoundedRenderer).bounds = bounds; 
-							addSVGData(IExportableSVG(shape).svgData);
-						}
-
-						shape.fill = fill;
-						shape.stroke = stroke;
-						gg.geometryCollection.addItem(shape);
-					}
-	
-					// store previous data values coordinates, to rely them 
-					// to the next data value coordinates
-					y0Prev = y0;
-					xPrev = scaleResults[POS1]; yPrev = scaleResults[POS2];
-					
-					if (dim3)
-					{
-						gg.z = zPos;
-						if (isNaN(zPos))
-							zPos = 0;
-					}
-				}
-
-				if (_form == CURVE)
-				{
-					bzSplines = new BezierSpline(points);
- 					bzSplines.tension = _tension;
-					bzSplines.stroke = stroke;
-					bzSplines.fill = fill;
-					bzSplines.graphicsTarget = [this];
-					// if the coords are polar it's possible to autoclose the bezier shape
-					if (visScene.coordType == VisScene.POLAR)
-						bzSplines.autoClose = true;
-
-					// if the coords are cartesian we add a point with height resulted by baseScale2, in order 
-					// to insure a proper closure with the 1st point inserted
-					if (visScene.coordType == VisScene.CARTESIAN)
-					{
-						points.push(new GraphicPoint(width, y0));
-						// the double point prevent from drawing a large final bezier curve
-						points.push(new GraphicPoint(width, y0-.0000000001));
-					}
-				} 
-				else if (visScene.coordType == VisScene.POLAR && data)
-				{
-					data += "z";
-					addSVGData('\n<path d="' + data + '"/>');
-					poly = new Path(data);
-					poly.fill = fill;
-					poly.stroke = stroke;
-					gg.geometryCollection.addItem(poly);
-				}
-	
-				if (dim3)
-					zSort();
-
-				createSVG();
-				_invalidatedElementGraphic = false;
-				
-trace (getTimer(), "area ele");
-			}
+		override protected function createDefaultGraphicsRenderer() : void
+		{
+			_graphicsRendererInst = new UpTriangleRenderer();
+			(_graphicsRendererInst as UpTriangleRenderer).autoClearGraphicsTarget = false;
 		}
+		
+		
+		private var _drawingData:Array;
+		
+		public function initializeDrawingData():Boolean
+		{
+			if (!(isReadyForLayout()) )
+			{
+				return false;
+			}
+			
+			_dataItemIndex = 0;
+			this.graphics.clear();
+			
+			
+			_drawingData = new Array();
+			
+			for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
+			{				
+				var currentItem:Object = _dataItems[cursorIndex];
+				
+				scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
+					currentItem[colorField], currentItem[sizeField], currentItem);
+											
+				_drawingData.push(scaleResults);
+			}
+			
+			return true;
+				
+		}
+		
+		private var _bezierSpline:BezierSpline;
+		private var _poly:Path;
+		
+		private var _dataItemIndex:uint = 0;
+		private var xPrev:Number, yPrev:Number, y0Prev:Number;
+		
+		public function drawDataItem():Boolean
+		{
+			
+			// draw the data item
+			// if the form is a curve, we draw the curve in one piece
+			// if the form is not a curve, we can split it up
+			if (_dataItemIndex == 0 && _form == CURVE)
+			{
+				var points:Array = new Array();
 
+				if (visScene.coordType == VisScene.CARTESIAN)
+				{				
+					points.push(new GraphicPoint(0, _drawingData[0][POS2+"base"]));
+					points.push(new GraphicPoint(0, _drawingData[0][POS2+"base"]));
+				}
+				
+				for each(var d:Object in _drawingData)
+				{
+					points.push(new GraphicPoint(d[POS1], d[POS2]));
+				}
+				
+				if (visScene.coordType == VisScene.CARTESIAN)
+				{
+					// need to add double points at the end
+					points.push(new GraphicPoint(width, _drawingData[0][POS2+"base"]));
+					// the double point prevent from drawing a large final bezier curve
+					points.push(new GraphicPoint(width, _drawingData[0][POS2+"base"]-.0000000001));	
+				}
+				
+				
+				_bezierSpline.points = points;
+				_bezierSpline.fill = _drawingData[0][COLOR];
+				_bezierSpline.stroke = stroke;
+				_bezierSpline.preDraw();
+				_bezierSpline.draw(this.graphics, null);
+
+			}
+			
+			
+			if (_dataItemIndex == 0 &&  _form != CURVE && visScene.coordType == VisScene.POLAR)
+			{
+				// build the area in one go, it's one path
+				
+				var data:String;
+				
+				for each (var d:Object in _drawingData)
+				{
+					if (!data)
+					{
+						data = "M" + String(d[POS1]) + "," + String(d[POS2]) + " ";
+					}
+					else
+					{
+						data += "L" + String(d[POS1]) + "," + String(d[POS2]) + " ";	
+					}
+				}
+				
+				data += "z";
+				_poly.data = data;
+				_poly.fill = _drawingData[0][COLOR];
+				_poly.stroke = stroke;
+				_poly.draw(this.graphics, null);
+			}
+			
+			if (_form != CURVE || _showGraphicRenderer)
+			{
+				if (_dataItemIndex < _drawingData.length)
+				{
+					var d:Object = _drawingData[_dataItemIndex];
+					
+					if (_showGraphicRenderer && _graphicsRendererInst)
+					{
+						if (_graphicsRendererInst is IBoundedRenderer)
+						{
+							(_graphicsRendererInst as IBoundedRenderer).bounds = new Rectangle(d[POS1] - _rendererSize/2, d[POS2] - _rendererSize/2, _rendererSize, _rendererSize);;
+							
+						}
+						_graphicsRendererInst.fill = d.fill;
+						_graphicsRendererInst.stroke = stroke;
+						_graphicsRendererInst.draw(this.graphics, null);
+						
+					}
+					
+					if (_form != CURVE)
+					{
+		
+						if (_dataItemIndex == 0)
+						{
+							xPrev = d[POS1];
+							yPrev = d[POS2];
+							y0Prev = d[POS2+"base"];
+							
+						}
+						else 
+						{
+		
+							// create the polygon only if there is more than 1 data value
+							// there cannot be an area with only the first data value 
+							if (!isNaN(xPrev) && !isNaN(yPrev) && !isNaN(d[POS2+"base"]) 
+								&& !isNaN(d[POS2]) && !isNaN(d[POS2]))
+							{
+								var data:String;
+								data =  "M" + String(xPrev) + "," + String(y0Prev) + " " +
+									"L" + String(xPrev) + "," + String(yPrev) + " " +
+									"L" + String(d[POS1]) + "," + String(d[POS2]) + " " +
+									"L" + String(d[POS1]) + "," + String(d[POS2+"base"]) + " z";
+								
+								_poly.data = data;
+								_poly.fill = d[COLOR];
+								_poly.stroke = stroke;
+								
+								_poly.draw(this.graphics, null);
+		
+							}
+							
+							xPrev = d[POS1];
+							yPrev = d[POS2];	
+							y0Prev = d[POS2+"base"];
+		
+							
+						}
+					}
+					
+					
+					_dataItemIndex++;
+
+					return true;
+				}
+
+				
+				
+			}
+			
+			return false;
+			
+		}
+		
 	}
 }

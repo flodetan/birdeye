@@ -162,10 +162,6 @@ package birdeye.vis.elements.geometry {
 			draggableItems = true;
 		}
 
-		override protected function createGlobalGeometryGroup():void {
-			// do nothing: no need to create the global group 
-	    }
-
 		public function getItemIndexById(id:Object):int {
 			const items:Vector.<Object> = dataItems;
 			if (!items) return -1;
