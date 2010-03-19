@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:degrafa="com.degrafa.*"
+                xmlns:paint="com.degrafa.paint.*" 
+                xmlns:geometry="com.degrafa.geometry.*"
+                >
+	
+	<degrafa:Surface    verticalCenter="0"
+                        horizontalCenter="0">
+    
+        <!-- Creating fills. -->
+        <degrafa:fills>
+            <paint:RadialGradientFill   id="redGradient"
+                                        angle="45"
+                                        focalPointRatio=".5">
+                <paint:GradientStop alpha=".3"
+                                    ratio=".5"
+                                    color="#FF0000"/>
+                <paint:GradientStop alpha=".8"
+                                    ratio="1"
+                                    color="#FF2300"/>
+            </paint:RadialGradientFill>
+        </degrafa:fills>
+        
+        <!-- Creating a Geometry Group. -->
+        <degrafa:GeometryGroup>
+        
+            <!-- Creating a Circle. -->
+            <geometry:Circle    fill="{redGradient}"
+                                radius="20"/>
+            
+        </degrafa:GeometryGroup> 
+        
+    </degrafa:Surface>
+
+	
+</mx:Canvas>

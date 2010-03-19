@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:charts="birdeye.vis.recipes.cartesianCharts.*"
+	xmlns:series="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
+	backgroundColor="#3f3f3f" 
+	creationComplete="createDT()"
+	width="100%" height="100%" horizontalAlign="center" xmlns:coords="birdeye.vis.coords.*" xmlns:axis="birdeye.vis.guides.axis.*">
+
+<mx:Script>
+		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
+			import mx.collections.ArrayCollection;
+			import birdeye.vis.elements.util.EffectsUtil;
+						
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			private var subject:Array;
+			
+			private function createDT():void
+			{
+				subject = ["A", "B", "C", "D", "E", "F"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var r1:Number, r2:Number, r3:Number;
+				for (var i:Number = 0; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: r1=Math.round(Math.random() * 1000),
+						R2: r2=Math.round(Math.random() * 1000),
+						R3: r3=Math.round(Math.random() * 1000),
+						total: r1+r2+r3
+					});
+				}
+				dt = ac;
+			}
+
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = dataFields["dim1"] + ": " + currDatatip[dataFields["dim1"]];
+				tt += '\n' + "Y: " + dataFields["dim2"] + ": " + currDatatip[dataFields["dim2"]];
+				if (dataFields["sizeField"] != null)
+					tt += '\n' + "Size: " + dataFields["sizeField"] + ": " + currDatatip[dataFields["sizeField"]];
+				return  tt;
+			}
+		]]>
+	</mx:Script>
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+	<mx:Button label="Generate" click="createDT()"/>
+	<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([sp.svgData], parentApplication.width, parentApplication.height))"/>
+	<coords:Cartesian id="sp" width="90%" height="90%" dataTipFunction="dtFunc" dataProvider="{dt}" showDataTips="true" isMasked="false">
+		<coords:scales>
+		 	<scales:Category id="c" categoryField="subject" />
+		 	<scales:Linear id="l" />
+			<scales:Linear id="size" scaleValues="[5,30]" />
+		</coords:scales>
+		<coords:guides>
+			<axis:Axis scale="{c}" placement="bottom" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="15" sizePointer="12" />
+			<axis:Axis scale="{l}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+			<grid:Grid scale1="{l}" scale2="{c}" divideEnumerableScale="false"/>
+		</coords:guides>
+		 <coords:elements>
+		 	<series:PointElement scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" dim2="R1" graphicRenderer="birdeye.vis.guides.renderers.DownTriangleRenderer" styleName="grad1" displayName="R1"/>
+		 	<series:PointElement scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" dim2="R2" graphicRenderer="birdeye.vis.guides.renderers.ButterflyRenderer" styleName="grad3" displayName="R2"/>
+		 	<series:PointElement scale1="{c}" scale2="{l}"  mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"  extendMouseEvents="true" dim1="subject" sizeScale="{size}" sizeField="total" dim2="R3" graphicRenderer="birdeye.vis.guides.renderers.DiamondRenderer" styleName="grad5" displayName="R3"/>
+		 </coords:elements>
+	</coords:Cartesian>
+	<legend:Legend dataProvider="{sp}" direction="horizontal"/>
+	</mx:VBox>
+</mx:VBox>

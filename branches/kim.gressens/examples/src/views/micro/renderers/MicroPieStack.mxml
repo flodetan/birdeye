@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:mc="org.un.cava.birdeye.qavis.microcharts.*" paddingTop="0"
+	horizontalAlign="center" width="100%" height="100%"
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*">
+
+	<coords:Polar width="70%" height="100%" dataProvider="{data.dataProvider}" thicknessRatio=".8" showDataTips="true">
+		<coords:scales>
+			<scales:Numeric id="l" scaleType="constant" />
+			<scales:PercentAngle id="a" size="360"/>
+			<scales:PercentAngle id="b" size="360"/>
+		</coords:scales>
+		<coords:elements>
+			<elements:WedgeElement scale1="{a}" scale2="{l}" alpha=".6" styleName="grad4" extendMouseEvents="true" dim1="R3"/>
+			<elements:WedgeElement scale1="{b}" scale2="{l}" alpha=".7" labelField="subject" sizeLabel="8" colorLabel="0xbbbbbb" radiusLabelOffset="2" styleName="grad3" extendMouseEvents="true" dim1="R2"/>
+		</coords:elements>
+	</coords:Polar>
+</mx:HBox>

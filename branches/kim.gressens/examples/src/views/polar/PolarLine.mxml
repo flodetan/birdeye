@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:polar="birdeye.vis.coords.*"
+	xmlns:pseries="birdeye.vis.elements.geometry.*"
+	xmlns:cseries="birdeye.vis.elements.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	creationComplete="createDT()"
+	width="100%" height="100%" horizontalAlign="center" xmlns:axis1="birdeye.vis.guides.axis.*">
+	<mx:Script>
+		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+
+			private var subject:Array;
+			
+			private function createDT():void
+			{
+				subject = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var ac1:ArrayCollection = new ArrayCollection();
+				var run:uint = 0;
+				for (var i:Number = 0; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: Math.round(Math.random() *1000 / (run + 1)*3),
+						R2: Math.round(Math.random() *1000 / (run + 1)*3),
+						R3: Math.round(Math.random() *1000 / (run + 1)*3),
+						R4: Math.round(Math.random() *1000 / (run + 1)*3),
+						R5: Math.round(Math.random() *1000 / (run + 1)*3)
+					});
+					
+					if (i+1 == subject.length)
+					{
+						i = 0;
+						run++;
+					}
+					
+					if (run == 3)
+					{
+						break;
+					}
+				}
+				dt = ac;
+			}
+
+			private function changeForm(a:Array):void
+			{
+				for (var i:Number = 0; i<a.length; i++)
+					if (a[i].form == "curve")
+						a[i].form = "line";
+					else 
+						a[i].form = "curve";
+			}
+		]]>
+	</mx:Script>
+<mx:Fade id="fadeIn" alphaFrom="0" alphaTo="1" duration="1000"/>
+<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
+	<mx:HBox>
+		<mx:Button label="Generate" click="createDT()"/>
+		<mx:CheckBox label="Curve" selected="false" click="changeForm([a1,a2])"/>
+		<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([rd.svgData], parentApplication.width, parentApplication.height))"/>
+	</mx:HBox>
+		
+		<polar:Polar id="rd" showDataTips="true" dataProvider="{dt}" width="100%" height="100%">
+			<polar:scales>
+				<scales:CategoryAngle id="c" categoryField="subject" subScale="birdeye.vis.scales.Linear" shareSubScale="true"/>
+			</polar:scales>
+			<polar:guides>
+				<axis1:MultiAxis subScale="{c}" gridType="circle"  colorStroke="0x000000" colorLabel="0x000000" fontLabel="tahoma" sizeLabel="9" />
+			</polar:guides>
+			<polar:elements>
+				<pseries:LineElement id="a1" scale1="{c}" styleName="solid1" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" showGraphicRenderer="true" dim1="subject" dim2="R1" displayName="R1" autoClose="false"/>
+				<pseries:LineElement id="a2" scale1="{c}" styleName="solid2" graphicRenderer="birdeye.vis.guides.renderers.CircleRenderer" showGraphicRenderer="true" dim1="subject" dim2="R2" displayName="R2" autoClose="false"/>
+			</polar:elements>
+		</polar:Polar>
+		
+	<legend:Legend dataProvider="{rd}" direction="horizontal" />
+</mx:VBox>
+</mx:VBox>

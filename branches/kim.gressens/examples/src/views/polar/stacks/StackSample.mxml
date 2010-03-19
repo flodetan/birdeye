@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:polar="birdeye.vis.coords.*"
+	xmlns:pseries="birdeye.vis.elements.geometry.*"
+	xmlns:cseries="birdeye.vis.elements.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:axis="birdeye.vis.guides.axis.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	creationComplete="createDT(); createDT1();"
+	width="100%" height="100%" horizontalAlign="center" xmlns:axis1="birdeye.vis.guides.axis.*">
+	<mx:Script>
+		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
+			import mx.collections.ArrayCollection;
+			import birdeye.vis.elements.util.EffectsUtil;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+			[Bindable]
+			public var dt1:ArrayCollection;;
+
+			private var subject:Array;
+			
+			private function createDT():void
+			{
+				subject = ["A", "B", "C", "D", "E", "F"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var r1:Number, r2:Number, r3:Number, r4:Number, r5:Number;
+				for (var i:Number = 0; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: r1 = Math.round(Math.random() * 1000),
+						R2: r2 = Math.round(Math.random() * 1000),
+						R3: r3 = Math.round(Math.random() * 1000),
+						R4: r4 = Math.round(Math.random() * 1000),
+						R5: r5 = Math.round(Math.random() * 1000),
+						R6: Math.round(Math.random() * 1000),
+						R7: Math.round(Math.random() * 1000),
+						R8: Math.round(Math.random() * 1000)
+					});
+				}
+				dt = ac;
+			}
+
+			private function createDT1():void
+			{
+				subject = ["A1", "B1", "C1", "D", "E", "F"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var r1:Number, r2:Number, r3:Number, r4:Number, r5:Number;
+				for (var i:Number = 0; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: r1 = Math.round(Math.random() * 1000),
+						R2: r2 = Math.round(Math.random() * 1000),
+						R3: r3 = Math.round(Math.random() * 1000),
+						R4: r4 = Math.round(Math.random() * 1000),
+						R5: r5 = Math.round(Math.random() * 1000),
+						R6: Math.round(Math.random() * 1000),
+						R7: Math.round(Math.random() * 1000),
+						R8: Math.round(Math.random() * 1000)
+					});
+				}
+				dt1 = ac;
+			}
+
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = dataFields["dim1"] + ": " + currDatatip[dataFields["dim1"]];
+				tt += '\n' + dataFields["dim2"] + ": " + currDatatip[dataFields["dim2"]];
+				return  tt;
+			}
+
+			private function sizeFunc(dataValue:Object, min:Number, max:Number, size:Number):Number
+			{
+				return  Number(dataValue)/max * size;
+			}
+		]]>
+	</mx:Script>
+ <mx:Fade id="fadeIn" alphaFrom="0" alphaTo="1" duration="1000"/>
+<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
+	<mx:Button label="Generate" click="createDT()"/>
+	<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([rd.svgData], parentApplication.width, parentApplication.height))"/>
+	<polar:Polar id="rd" collisionType="cluster" showDataTips="true" thicknessRatio=".7" dataTipFunction="dtFunc" layout="radar" width="100%" height="100%">
+		<polar:scales>
+			<scales:CategoryAngle id="c" categoryField="subject" subScale="birdeye.vis.scales.Linear" />
+		</polar:scales>
+		<polar:guides>
+			<axis:MultiAxis subScale="{c}" colorStroke="0x000000" colorLabel="0x000000" fontLabel="tahoma" sizeLabel="9" />
+		</polar:guides>
+		<polar:elements>
+            <pseries:ColumnElement dataProvider="{dt}" scale1="{c}" extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad1" dim1="subject" dim2="R1" displayName="R1"/>
+            <pseries:ColumnElement dataProvider="{dt}" scale1="{c}" extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad2" dim1="subject" dim2="R2" displayName="R2"/>
+	        <pseries:ColumnElement dataProvider="{dt}" scale1="{c}" extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad3" dim1="subject" dim2="R3" displayName="R3"/>
+            <pseries:ColumnElement dataProvider="{dt}" scale1="{c}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="solid2" dim1="subject" collisionType="stack" dim2="['R1','R3','R5']" displayName="Mix1"/>
+            <pseries:ColumnElement dataProvider="{dt1}" scale1="{c}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" extendMouseEvents="true" styleName="grad4" dim1="subject" dim2="R4" displayName="R4"/>
+            <pseries:ColumnElement dataProvider="{dt1}" scale1="{c}" extendMouseEvents="true" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad5" dim1="subject" dim2="R5" displayName="R5"/>
+            <pseries:ColumnElement dataProvider="{dt1}" scale1="{c}" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" styleName="grad2" dim1="subject" collisionType="stack" dim2="['R1','R2']" displayName="Mix2"/>
+		</polar:elements>
+	</polar:Polar>
+	<legend:Legend dataProvider="{rd}" direction="horizontal"/>
+	
+</mx:VBox>
+</mx:VBox>

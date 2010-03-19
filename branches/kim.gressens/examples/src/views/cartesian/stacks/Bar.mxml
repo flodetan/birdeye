@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:guides="birdeye.vis.guides.legend.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
+	backgroundColor="#3f3f3f" 
+	creationComplete="createDT(); createDT1()"
+	width="100%" height="100%" horizontalAlign="center" xmlns:axis="birdeye.vis.guides.axis.*">
+	<mx:Script>
+		<![CDATA[
+			import birdeye.vis.data.UtilSVG;
+
+			import mx.collections.ArrayCollection;
+			import mx.core.IToolTip;
+			import mx.controls.Alert;
+			import birdeye.vis.data.DataItemLayout;
+			import birdeye.vis.elements.util.EffectsUtil;
+			
+			[Bindable]
+			public var dt:ArrayCollection;;
+			[Bindable]
+			public var dt1:ArrayCollection;;
+
+			private var subject:Array;
+			
+			private function createDT():void
+			{
+				subject = ["A", "B", "C", "D", "E", "F"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var R1:Number, R2:Number, R3:Number, R4:Number;
+				
+				for (var i:Number = 0; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: R1=Math.round(Math.random() * 1000),
+						R2: R2=Math.round(Math.random() * 1000),
+						R3: R3=Math.round(Math.random() * 1000),
+						R4: R4=Math.round(Math.random() * 1000)
+					});
+				}
+				dt = ac;
+			}
+
+			private function createDT1():void
+			{
+				subject = ["A1", "B1", "C1", "D", "E", "F"];
+				var ac:ArrayCollection = new ArrayCollection();
+				var R1:Number, R2:Number, R3:Number, R4:Number;
+				
+				for (var i:Number = 0; i<subject.length; i++)
+				{
+					ac.addItem({
+						subject: subject[i],
+						R1: R1=Math.round(Math.random() * 1000),
+						R2: R2=Math.round(Math.random() * 1000),
+						R3: R3=Math.round(Math.random() * 1000),
+						R4: R4=Math.round(Math.random() * 1000)
+					});
+				}
+				dt1 = ac;
+			}
+
+			private function dtFunc(currDatatip:Object, dataFields:Array):String
+			{
+				var tt:String = dataFields["dim1"] + ": " + currDatatip[dataFields["dim1"]];
+				tt += '\n' + dataFields["dim2"] + ": " + currDatatip[dataFields["dim2"]];
+				if (dataFields["sizeField"] != null)
+					tt += '\n' + dataFields["sizeField"] + ": " + currDatatip[dataFields["sizeField"]];
+				return  tt;
+			}
+            
+		]]>
+	</mx:Script>
+	<mx:Button label="Generate" click="createDT();createDT1()"/>
+	<mx:Button label="SVG export" click="(new FileReference()).save(UtilSVG.createSVG([bc.svgData, bc2.svgData], parentApplication.width, parentApplication.height))"/>
+	<mx:HBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
+	
+		<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
+		
+		<coords:Cartesian id="bc" width="90%" height="90%" showDataTips="true" collisionType="cluster" dataTipFunction="dtFunc">
+			<coords:scales>
+		    	<scales:Category id="c" categoryField="subject" />
+		    	<scales:Linear id="l" />
+			</coords:scales>
+			<coords:guides>
+				<axis:Axis scale="{c}" placement="left" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{l}" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+	 		</coords:guides>
+	    	 <coords:elements>
+			 	<elements:BarElement dataProvider="{dt}" scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="R1" styleName="grad1" dim2="subject" displayName="R1" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
+			 	<elements:BarElement dataProvider="{dt1}" scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="['R1','R4','R3']" collisionType="stack" styleName="grad4" dim2="subject" displayName="Mix" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
+			 	<elements:BarElement dataProvider="{dt1}" scale1="{l}" scale2="{c}" extendMouseEvents="true" dim1="['R4','R2','R3']" collisionType="cluster" dim2="subject" displayName="Mix" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects" />
+			 </coords:elements>
+		</coords:Cartesian>
+		<guides:Legend dataProvider="{bc}" direction="horizontal" />	
+	
+		</mx:VBox>
+		
+		<mx:VBox height="100%" width="100%" verticalAlign="middle" horizontalAlign="center" >
+		<coords:Cartesian id="bc2" width="90%" height="90%" showDataTips="true" collisionType="stack" dataTipFunction="dtFunc">
+			<coords:scales>
+		    		<scales:Category id="c1" categoryField="subject"  />
+		    		<scales:Linear id="l1" />
+			</coords:scales>
+			<coords:guides>
+				<axis:Axis scale="{c1}" placement="right" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12" />
+				<axis:Axis scale="{l1}" placement="top" colorPointer="0xFF0000" fontLabel="tahoma" weightPointer="3" sizeLabel="9" sizePointer="12"/>
+			</coords:guides>
+	    	 <coords:elements>
+			 	<elements:BarElement dataProvider="{dt}" scale1="{l1}" scale2="{c1}" extendMouseEvents="true" dim1="R1" styleName="grad1" dim2="subject" displayName="R1" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"/>
+			 	<elements:BarElement dataProvider="{dt}" scale1="{l1}" scale2="{c1}" extendMouseEvents="true" dim1="R2" styleName="grad2" dim2="subject" displayName="R2" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"/>
+			 	<elements:BarElement dataProvider="{dt1}" scale1="{l1}" scale2="{c1}" extendMouseEvents="true" dim1="R3" styleName="grad3" dim2="subject" displayName="R3" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"/>
+			 	<elements:BarElement dataProvider="{dt1}" scale1="{l1}" scale2="{c1}" extendMouseEvents="true" dim1="R4" styleName="grad4" dim2="subject" displayName="R4" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"/>
+			 	<elements:BarElement dataProvider="{dt1}" scale1="{l1}" scale2="{c1}" extendMouseEvents="true" collisionType="cluster" dim1="['R1','R4','R2']" styleName="grad5" dim2="subject" displayName="R4" mouseOverFunction="EffectsUtil.setGlowEffect" mouseOutFunction="EffectsUtil.removeEffects"/>
+			 </coords:elements>
+		</coords:Cartesian>
+		<guides:Legend dataProvider="{bc2}" direction="horizontal" />	
+		</mx:VBox>
+		
+	</mx:HBox>
+	
+</mx:VBox>

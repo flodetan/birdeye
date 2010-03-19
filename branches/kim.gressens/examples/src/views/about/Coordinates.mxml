@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" paddingLeft="150" paddingRight="150" paddingTop="50"  width="100%" height="100%">
+	
+	<mx:Label text="Coordinates 101" fontSize="14" />
+	<mx:TextArea editable="false" text="The coordinates system provides the logic for assigning numbers to a point in an n-dimensional space." wordWrap="true" width="100%" />	
+
+	<mx:Label text="How to use..." fontSize="14" />
+	<mx:TextArea editable="false" text="To specify a Cartesian coordinate system, use the following:" wordWrap="true" width="100%" />
+	
+	<mx:Text width="100%" color="yellow" >
+        <mx:htmlText>
+            <![CDATA[
+                <p>&lt; coords:Cartesian id= &quot; myCartesian &quot; width=&quot;90%&quot; height=&quot; 90% &quot; &gt;<br>
+                          ...scales, elements, guides, etc...<br>
+                &lt; /coords:Cartesian &gt;
+                </p>
+            ]]>
+        </mx:htmlText>
+    </mx:Text>
+
+	<mx:TextArea editable="false" text="where a Polar coordinate system is simply:" wordWrap="true" width="100%" />
+
+	<mx:Text width="100%" color="yellow" >
+        <mx:htmlText>
+            <![CDATA[
+                <p>&lt; coords:Polar id= &quot; myPolar &quot; width=&quot;90%&quot; height=&quot; 90% &quot; &gt;<br>
+                           ...scales, elements, guides, etc...<br>
+                &lt; /coords:Polar &gt;
+                </p>
+            ]]>
+        </mx:htmlText>
+    </mx:Text>
+	
+
+	
+</mx:VBox>

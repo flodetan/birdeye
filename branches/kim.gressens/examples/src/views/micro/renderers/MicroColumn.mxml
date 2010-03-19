@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:mc="org.un.cava.birdeye.qavis.microcharts.*" paddingTop="0"
+	horizontalAlign="center" width="100%" height="100%"
+	xmlns:coords="birdeye.vis.coords.*"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*">
+
+	<coords:Cartesian width="70%" height="100%" thicknessRatio="1" dataProvider="{data.dataProvider}" showDataTips="true" isMasked="false" collisionType="cluster">
+		<coords:scales>
+			<scales:Category id="cat3" categoryField="subject"/>
+			<scales:Linear id="lin3" />
+		</coords:scales>
+		 <coords:elements>
+		 	<elements:ColumnElement scale1="{cat3}" dim1="subject" scale2="{lin3}" dim2="R1" strokeAlpha="0" styleName="grad1"/>
+		 	<elements:ColumnElement scale1="{cat3}" dim1="subject" scale2="{lin3}" dim2="R2" strokeAlpha="0" styleName="grad2"/>
+		 </coords:elements>
+	</coords:Cartesian>
+</mx:HBox>

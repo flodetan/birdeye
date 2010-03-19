@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	backgroundColor="#3f3f3f"
+	width="100%" height="100%" 
+	xmlns:polar="views.polar.*"
+	xmlns:stack="views.polar.stacks.*"
+	 >
+	
+
+	<mx:TabNavigator id="nav" height="100%" width="100%" paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5" creationPolicy="auto">
+		<polar:RadarColumn label="Radar Column" width="100%" height="100%" />
+		<polar:RadarArea label="Radar Area" width="100%" height="100%" />
+		<polar:Plot label="Plot" width="100%" height="100%" />
+		<polar:RadarLine label="Radar Line" width="100%" height="100%" />
+		<polar:PolarLine label="Polar Line" width="100%" height="100%" />
+		<!--<polar:Pie label="Pie" width="100%" height="100%" />
+		<polar:Sunburst label="Sunburst" width="100%" height="100%" />
+		<polar:Coxcomb label="Coxcomb" width="100%" height="100%" />
+		<polar:Custom label="Custom" width="100%" height="100%" />
+		<polar:Composite label="Composite" width="100%" height="100%" />
+		<stack:StackSample label="Stacks with multiple providers" width="100%" height="100%"/>-->
+	</mx:TabNavigator>
+</mx:VBox>

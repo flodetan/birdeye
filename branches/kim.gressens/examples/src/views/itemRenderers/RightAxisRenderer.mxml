@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" implements="birdeye.vis.interfaces.data.IExportableSVG"
+	xmlns:elements="birdeye.vis.elements.geometry.*"
+	xmlns:scales="birdeye.vis.scales.*"
+	xmlns:legend="birdeye.vis.guides.legend.*"
+	xmlns:grid="birdeye.vis.guides.grid.*"
+	backgroundAlpha="0"
+	xmlns:coords="birdeye.vis.coords.*" xmlns:axis="birdeye.vis.guides.axis.*">
+
+<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import birdeye.vis.elements.util.EffectsUtil;
+			import birdeye.vis.interfaces.data.IExportableSVG;
+						
+			[Bindable]
+			public var dt:Object
+
+			public function get svgData():String
+			{
+				return sp.svgData;
+			}
+			override public function set data(value:Object):void
+			{
+				super.data = value;
+				dt = data;
+			} 
+		]]>
+	</mx:Script>
+	<coords:Cartesian id="sp" width="100%" height="100%" dataProvider="{dt}" showDataTips="true" thicknessRatio="1">
+		<coords:scales>
+ 			<scales:Linear id="l" />
+ 			<scales:Category id="c" categoryField="index" />
+		</coords:scales>
+		 <coords:elements>
+		 	<elements:BarElement mouseOverFunction="EffectsUtil.setGlowEffect" 
+		 		mouseOutFunction="EffectsUtil.removeEffects" 
+		 		scale1="{l}" scale2="{c}" dim1="silver" dim2="index" styleName="solid3"/>
+		 </coords:elements>
+	</coords:Cartesian>
+</mx:VBox>

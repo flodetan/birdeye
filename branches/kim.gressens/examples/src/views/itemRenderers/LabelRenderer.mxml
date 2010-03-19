@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Script>
+	<![CDATA[
+		import mx.controls.SWFLoader;
+
+		[Bindable]
+		[Embed(source="/assets/icons/raster.gif")]
+	 	public var rasterImage:Class;
+
+		[Bindable]
+		[Embed(source="/assets/icons/logo.png")]
+	 	public var logoImage:Class;
+
+		override public function set data(value:Object):void
+		{
+			super.data = value;
+			var img:SWFLoader = new SWFLoader();
+			img.percentWidth = img.percentHeight = 100;
+			addChild(img)
+			if (value == "cat1")
+				img.source = logoImage; 
+			else 
+				img.source = rasterImage 
+		} 
+	]]>
+</mx:Script>
+</mx:VBox>
