@@ -31,6 +31,26 @@ package org.greenthreads {
 		public function ThreadStatistics() {
 			times = [];
 			allocationDifferentials = [];
+			numCycles = 0;
+			numTimeouts = 0;
+			totalTime = 0;
+		}
+		
+		public function addStatistics(st:ThreadStatistics):void
+		{
+			this.numCycles += st.numCycles;
+			this.numTimeouts += st.numTimeouts;
+			this.totalTime += st.totalTime;
+			this.times = times.concat(st.times);
+			
+			var i:uint;
+			
+			var currentLength:int = this.allocationDifferentials.length;
+			
+			for (i = 0 ;i<st.allocationDifferentials.length;i++)
+			{
+				this.allocationDifferentials[currentLength + i] = st.allocationDifferentials[i];
+			}
 		}
 
 		public function startCycle() : void {

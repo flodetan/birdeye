@@ -105,17 +105,6 @@ package birdeye.vis.coords
 					{
 						elementsContainer.addChild(DisplayObject(guide));
 					}
-					else if (guide.targets.lastIndexOf(elementsContainer) == -1)
-					{
-						guide.targets.push(elementsContainer);
-					}
-				}
-			}
-			else
-			{
-				if (guide.targets.lastIndexOf(elementsContainer) == -1)
-				{
-					guide.targets.push(elementsContainer);
 				}
 			}	
 		}

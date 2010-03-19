@@ -36,14 +36,12 @@ package birdeye.vis.guides.axis
 	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.Category;
 	
-	import com.degrafa.GeometryComposition;
 	import com.degrafa.Surface;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
 	import com.degrafa.geometry.Line;
 	import com.degrafa.geometry.Path;
 	import com.degrafa.geometry.RasterText;
-	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	import com.degrafa.transform.RotateTransform;
@@ -58,6 +56,9 @@ package birdeye.vis.guides.axis
 	import mx.core.IFactory;
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
+	
+	import org.greenthreads.IGuideThread;
+	import org.greenthreads.ThreadProcessor;
 	
 	[Style(name="gradientColors",type="Array",inherit="no")]
 	[Style(name="gradientAlphas",type="Array",inherit="no")]
@@ -77,13 +78,10 @@ package birdeye.vis.guides.axis
 	[Style(name="pointerColor",type="uint",inherit="no")]
 	[Style(name="pointerSize",type="uint",inherit="no")]
 	[Style(name="pointerWeight",type="uint",inherit="no")]
-	public class Axis extends Surface implements IAxis
+	public class Axis extends Surface implements IAxis, IGuideThread
 	{
 		private var _scale:IScale;
-		
-		public var _targets:Array = new Array();
-		public var gg:GeometryComposition;
-		
+
 		protected var invalidated:Boolean = false;
 
 		/** Set the axis line color.*/
@@ -96,6 +94,12 @@ package birdeye.vis.guides.axis
 		public function Axis()
 		{
 			styleName = "Axis";
+		}
+		
+		
+		public function get priority():int
+		{
+			return ThreadProcessor.PRIORITY_GUIDE;
 		}
 
 		public function get parentContainer():Object
@@ -555,11 +559,6 @@ package birdeye.vis.guides.axis
 			return _showAxis;
 		}
 		
-		public function get targets():Array
-		{
-			return _targets;
-		}
-		
 		
 		public function get maxLabelSize():Number
 		{
@@ -633,9 +632,7 @@ package birdeye.vis.guides.axis
 			if (showAxis)
 			{
 				super.createChildren();
-				gg = new GeometryComposition();
-				targets.push(this);
-				gg.graphicsTarget = targets;
+
 				invalidateDisplayList();
 			}
 		}
@@ -795,32 +792,7 @@ package birdeye.vis.guides.axis
 		
 		public function clearAll():void
 		{
-			if (gg)
-			{
-				gg.geometry = [];
-				gg.geometryCollection.items = [];
-			}
-			
-			if (this.graphicsCollection.items)
-			{
-				var nElements:int = this.graphicsCollection.items.length;
-				if (nElements > 0)
-				{
-					for (var i:int = 0; i<nElements; i++)
-					{
-						if (this.graphicsCollection.items[i] is GeometryComposition)
-						{
-							GeometryComposition(this.graphicsCollection.items[i]).geometry = []; 
-							GeometryComposition(this.graphicsCollection.items[i]).geometryCollection.items = [];
-						}
-					}
-				} 
-			}
-
-			for (i = numChildren - 1; i >= 0; i--) {
-				removeChildAt(i);
-			}
-			invalidated = true;
+			this.graphics.clear();
 		}
 
 		private function refreshSize():void
@@ -881,12 +853,24 @@ package birdeye.vis.guides.axis
 				calculateMaxLabelSize();
  		}
 		
+		private var _bounds:Rectangle;
+		
+		public function set bounds(b:Rectangle):void
+		{
+			_bounds = b;
+		}
+		
+		public function get bounds():Rectangle
+		{
+			return _bounds;
+		}
+		
 		private var prevWidth:Number = NaN, prevHeight:Number = NaN;
-		private var xMin:Number = NaN, xMax:Number = NaN, yMin:Number = NaN, yMax:Number = NaN, sign:Number;
-		public function drawGuide(bounds:Rectangle):void
+		private var xMin:Number = NaN, xMax:Number = NaN, yMin:Number = NaN, yMax:Number = NaN, sign:Number;	
+		
+		public function initializeDrawingData():Boolean
 		{
 			var w:Number = bounds.width, h:Number = bounds.height;
-			//var w:Number = unscaledWidth, h:Number = unscaledHeight;
 			
 			if (prevWidth != w || prevHeight != h)
 			{
@@ -894,13 +878,28 @@ package birdeye.vis.guides.axis
 				prevHeight = h;
 				invalidated = true;
 			}
-
-			if (showAxis && invalidated)
+						
+			if (!(showAxis && invalidated))
 			{
-				clearAll();
-				svgText = _svgData = "";
+				return false;
+			}
+			
+			clearAll();
+			svgText = _svgData = "";
+			
+			_pointer = new Line();
+			
+			
+			return true;
+			
+		}
+		
+		var stdPath:Path = new Path();
+		
+		public function drawDataItem():Boolean
+		{
 
-				drawAxisLine(w,h)
+				drawAxisLine(prevWidth,prevHeight)
 	
 				//if (readyForLayout)
 				//{
@@ -908,43 +907,50 @@ package birdeye.vis.guides.axis
 					{
 						case BOTTOM:
 						case HORIZONTAL_CENTER:
-							xMin = 0; xMax = w;
+							xMin = 0; xMax = prevWidth;
 							yMin = 0; yMax = 0;
 							sign = 1;
-							_pointer = new Line(0,0, 0, sizePointer);
+							_pointer.x = 0;
+							_pointer.y = 0;
+							_pointer.width = 0;
+							_pointer.height = sizePointer;
 							break;
 						case TOP:
-							xMin = 0; xMax = w;
-							yMin = h; yMax = h;
+							xMin = 0; xMax = prevWidth;
+							yMin = prevHeight; yMax = prevHeight;
 							sign = -1;
-							_pointer = new Line(0,h-sizePointer, 0, h);
+							_pointer.x = 0 ;
+							_pointer.y = prevHeight - sizePointer;
+							_pointer.width = 0;
+							_pointer.height = prevHeight;
 							break;
 						case LEFT:
 						case VERTICAL_CENTER:
-							xMin = w; xMax = w;
-							yMin = 0; yMax = h;
+							xMin = prevWidth; xMax = prevWidth;
+							yMin = 0; yMax = prevHeight;
 							sign = -1;
-							_pointer = new Line(w-sizePointer,h, w, h);
+							_pointer.x = prevWidth - sizePointer;
+							_pointer.y = prevHeight;
+							_pointer.width = prevWidth;
+							_pointer.height = prevHeight;
 							break;
 						case RIGHT:
 						case DIAGONAL:							
 							xMin = 0; xMax = 0;
-							yMin = 0; yMax = h;
+							yMin = 0; yMax = prevHeight;
 							sign = 1;
-							_pointer = new Line(0,h, +sizePointer, h);
+							_pointer.x = 0;
+							_pointer.y = prevHeight;
+							_pointer.width = sizePointer;
+							_pointer.height = prevHeight;
 							break;
 					}
 					drawAxes(xMin, xMax, yMin, yMax, sign);
 					_pointer.stroke = new SolidStroke(colorPointer, 1, weightPointer);
 					_pointer.visible = false;
 
-					_svgData = '\n<g style="stroke:#000000' + 
-						';stroke-width:1;stroke-opacity:1;">\n' +
-						svgText + '\n<path d="' + _svgData + '"\n/>\n</g>' ;
-					gg.geometryCollection.addItem(_pointer);
-
-				//}
-			}
+			return false;
+			
 		}
 		/** @Private
 		 * Draw the axis depending on the current unscaled size and its placement
@@ -982,31 +988,35 @@ package birdeye.vis.guides.axis
 			
 			var tmpSVG:String = "M" + String(x0) + "," + String(y0) + " " + 
 							"L" + String(x1) + "," + String(y1) + " ";
-
-			var line:Path = new Path(tmpSVG);
+			
+			
 			_svgData += tmpSVG;
-			line.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
+			stdPath.data = tmpSVG;
+			stdPath.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 
-			gg.geometryCollection.addItem(line);
+			
+			stdPath.draw(this.graphics, null);
 
 		}
+		
+		
+		private var lblTester:RasterText = new RasterText();
 	
 		/** @Private
 		 * Calculate the maximum label size, necessary to define the needed 
 		 * width (for y axes) or height (for x axes) of the CategoryAxis.*/
 		protected function calculateMaxLabelSize():void
 		{
-			var tmp:RasterText = new RasterText();
-			tmp.fontFamily = fontLabel;
-			tmp.fontSize = sizeLabel;
-			tmp.autoSize = TextFieldAutoSize.LEFT;
-			tmp.autoSizeField = true;
+			lblTester.fontFamily = fontLabel;
+			lblTester.fontSize = sizeLabel;
+			lblTester.autoSize = TextFieldAutoSize.LEFT;
+			lblTester.autoSizeField = true;
 			
 			maxLblSize = 0;
 			for (var i:Number = 0;i<scale.completeDataValues.length;i++)
 			{
-				tmp.text = String(scale.completeDataValues[i]);
-				maxLblSize = Math.max(maxLblSize, tmp.textWidth);
+				lblTester.text = String(scale.completeDataValues[i]);
+				maxLblSize = Math.max(maxLblSize, lblTester.textWidth);
 			}
 			
 			
@@ -1104,11 +1114,10 @@ trace(getTimer(), "drawing axis");
 					var tmpSVG:String = "M" + String(xMin + _thickWidth * sign) + "," + String(yPos) + " " + 
 									"L" + String(xMax) + "," + String(yPos) + " ";
 		
-		 			thick = new Path(tmpSVG);
+		 			stdPath.data = tmpSVG;
 					_svgData += tmpSVG;
 
-					thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
-					gg.geometryCollection.addItem(thick);
+					stdPath.draw(this.graphics, null);
 		
 					if (!_labelRenderer)
 					{
@@ -1117,8 +1126,7 @@ trace(getTimer(), "drawing axis");
 						label.fill = new SolidFill(colorLabel);
 						
 						//checkLabelPosition(label, "vertical");
-						
-						gg.geometryCollection.addItem(label);
+						label.draw(this.graphics, null);
 					} else {
 						var labelRnd:DisplayObject = createLabelRenderer(dataLabel);
 						labelRnd.y = yPos - labelRnd.height/2;
@@ -1143,10 +1151,11 @@ trace(getTimer(), "drawing axis");
 					tmpSVG = "M" + String(xPos) + "," + String(yMin + _thickWidth * sign) + " " + 
 									"L" + String(xPos) + "," + String(yMax) + " ";
 		
-		 			thick = new Path(tmpSVG);
+		 			stdPath.data = tmpSVG;
+					
 					_svgData += tmpSVG;
-					thick.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
-					gg.geometryCollection.addItem(thick);
+					
+					stdPath.draw(this.graphics, null);
 
 					if (!_labelRenderer)
 					{
@@ -1155,8 +1164,7 @@ trace(getTimer(), "drawing axis");
 						label.fill = new SolidFill(colorLabel);
 						
 						//checkLabelPosition(label, "horizontal");
-						
-						gg.geometryCollection.addItem(label);
+						label.draw(this.graphics, null);
 					} else {
 						labelRnd = createLabelRenderer(dataLabel);
 						labelRnd.x = xPos - labelRnd.width/2;
@@ -1172,21 +1180,21 @@ trace(getTimer(), "drawing axis");
 			}
 		}
 		
+		private var defaultLabel:RasterText = new RasterText();
+		
 		protected function createLabelText(direction:String, dataLabel:Object, pos:Number, width:Number):RasterText
 		{
 			var svgTextY:Number;
-			var label:RasterText;
 			var labelText:String = _labelFormatterFunction != null ? _labelFormatterFunction.call(null, dataLabel) : String(dataLabel);
 			
 			if (direction == "vertical")
 			{
- 				label = new RasterText();
- 				label.fontFamily = fontLabel;
- 				label.fontSize = sizeLabel;
+				defaultLabel.fontFamily = fontLabel;
+				defaultLabel.fontSize = sizeLabel;
  				//label.visible = true;
-				label.autoSize = TextFieldAutoSize.LEFT;
-				label.autoSizeField = true;
-				label.text = labelText;
+				defaultLabel.autoSize = TextFieldAutoSize.LEFT;
+				defaultLabel.autoSizeField = true;
+				defaultLabel.text = labelText;
 				if (!isNaN(_rotateLabels) && _rotateLabels != 0)
 				{
 					var rot:RotateTransform = new RotateTransform();
@@ -1202,27 +1210,27 @@ trace(getTimer(), "drawing axis");
 					}
 					rot.registrationPoint = _rotateLabelsOn;
 					rot.angle = _rotateLabels;
-					label.transform = rot;
+					defaultLabel.transform = rot;
 				}
 				
-				svgTextY = pos + label.displayObject.height/2;
-				label.y = pos-(label.displayObject.height )/2;
+				svgTextY = pos + defaultLabel.displayObject.height/2;
+				defaultLabel.y = pos-(defaultLabel.displayObject.height )/2;
 				if (placement == LEFT || placement == VERTICAL_CENTER)
-					label.x = width - _thickWidth - (label.textWidth + 4);
+					defaultLabel.x = width - _thickWidth - (defaultLabel.textWidth + 4);
 				else
-					label.x = _thickWidth * sign;
+					defaultLabel.x = _thickWidth * sign;
 				
 			} else { // horizontal
 				// create label 
- 				label = new RasterText();
- 				label.fontFamily = fontLabel;
- 				label.fontSize = sizeLabel;
+				defaultLabel = new RasterText();
+				defaultLabel.fontFamily = fontLabel;
+				defaultLabel.fontSize = sizeLabel;
  				//label.visible = true;
-				label.autoSize = TextFieldAutoSize.LEFT;
-				label.autoSizeField = true;
-				label.text = labelText;
-				label.y = _thickWidth;
-				svgTextY = _thickWidth + label.displayObject.height;
+				defaultLabel.autoSize = TextFieldAutoSize.LEFT;
+				defaultLabel.autoSizeField = true;
+				defaultLabel.text = labelText;
+				defaultLabel.y = _thickWidth;
+				svgTextY = _thickWidth + defaultLabel.displayObject.height;
 
 				if (!isNaN(_rotateLabels) && _rotateLabels != 0)
 				{
@@ -1231,22 +1239,22 @@ trace(getTimer(), "drawing axis");
 					{
 						case TOP:
 							_rotateLabelsOn = "centerLeft";
-							label.x = pos;
-							label.y += height*.9; 
+							defaultLabel.x = pos;
+							defaultLabel.y += height*.9; 
 							break;
 						case BOTTOM:
 							_rotateLabelsOn = "centerLeft";
-							label.x = pos;
+							defaultLabel.x = pos;
 							break;
 					}
 					rot.registrationPoint = _rotateLabelsOn;
 					rot.angle = _rotateLabels;
-					label.transform = rot;
+					defaultLabel.transform = rot;
 				} else {
-					label.x = pos - (label.textWidth + 4)/2; 
+					defaultLabel.x = pos - (defaultLabel.textWidth + 4)/2; 
 					if (placement == TOP)
 					{
-						label.y += label.fontSize;
+						defaultLabel.y += defaultLabel.fontSize;
 					}
 				}
 			}
@@ -1254,10 +1262,10 @@ trace(getTimer(), "drawing axis");
 			svgText += '\n<text style="font-family: ' + fontLabel + 
 							'; font-size: ' + sizeLabel + 
 							'; stroke-width: 1; font-weight: 1;"' +
-							' x="' + label.x + '" ' + 
+							' x="' + defaultLabel.x + '" ' + 
 							'y="' + svgTextY + '">' + String(dataLabel) +
 							'\n</text>';
-			return label;
+			return defaultLabel;
 		}
 		
 		protected function createLabelRenderer(dataLabel:Object):DisplayObject

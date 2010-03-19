@@ -32,6 +32,7 @@ package birdeye.vis.elements.collision
 	import birdeye.vis.elements.geometry.*;
 	import birdeye.vis.interfaces.elements.IStack;
 	import birdeye.vis.interfaces.scales.INumerableScale;
+	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
@@ -75,7 +76,7 @@ package birdeye.vis.elements.collision
 			return _baseAt;
 		}
 		
-		public var _baseValues:Dictionary;
+		private var _baseValues:Dictionary;
 		public function set baseValues(val:Dictionary):void
 		{
 			_baseValues = val;
@@ -153,7 +154,7 @@ package birdeye.vis.elements.collision
 		{
 			var scaleResults:Object = new Object();
 			
-			scaleResults[SIZE] = _graphicRendererSize;
+			//scaleResults[SIZE] = _graphicRendererSize;
 			scaleResults[COLOR] = fill;
 
 			// if the Element has its own scale1, than get the dim1 coordinate
@@ -163,7 +164,7 @@ package birdeye.vis.elements.collision
 			{
 				if (scale1 is INumerableScale && _stackType == STACKED)
 				{
-					x0 = scale1.getPosition(baseValues[dim2]);
+					scaleResults[POS1+"base"] = scale1.getPosition(baseValues[dim2]);
 					if (!isNaN(dim1 as Number))
 					{
 						scaleResults[POS1] = scale1.getPosition(
@@ -174,6 +175,7 @@ package birdeye.vis.elements.collision
 						scaleResults[POS1] = NaN;
 					}
 				} else {
+					scaleResults[POS1+"base"] = getXMinPosition();
 					scaleResults[POS1] = scale1.getPosition(dim1);
 				}
 			}
@@ -195,7 +197,8 @@ package birdeye.vis.elements.collision
 				// data value
 				if (scale2 is INumerableScale && _stackType == STACKED)
 				{
-					y0 = scale2.getPosition(baseValues[dim1]);
+					scaleResults[POS2+"base"] = scale2.getPosition(baseValues[dim1]);
+					
 					if (!isNaN(dim2 as Number))
 					{
 						scaleResults[POS2] = scale2.getPosition(
@@ -210,6 +213,7 @@ package birdeye.vis.elements.collision
 				{
 					// if not stacked, than the dim2 coordinate is given by the scale2
 					scaleResults[POS2] = scale2.getPosition(dim2);
+					scaleResults[POS2+"base"] = getYMinPosition();
 				}
 			}
 					
@@ -291,6 +295,7 @@ package birdeye.vis.elements.collision
 		protected function getYMinPosition():Number
 		{
 			var yPos:Number;
+			
 			if (scale2 && scale2 is INumerableScale)
 			{
 				if (!isNaN(_baseAt))

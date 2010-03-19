@@ -27,15 +27,16 @@
  
 package birdeye.vis.data
 {
-	import birdeye.vis.elements.BaseElement;
+	import birdeye.vis.elements.BaseDataElement;
 	import birdeye.vis.interfaces.data.IVisualDataID;
 	
-	import com.degrafa.GeometryGroup;
 	import com.degrafa.IGeometry;
+	import com.degrafa.GeometryGroup;
 	import com.degrafa.core.IGraphicsFill;
 	import com.degrafa.core.IGraphicsStroke;
-	import com.degrafa.geometry.Geometry;
 	import com.degrafa.geometry.Line;
+	import com.degrafa.geometry.Geometry;
+
 	
 	import flash.geom.Point;
 	
@@ -209,7 +210,7 @@ package birdeye.vis.data
 			if (_dataTipPrefix) 
 				toolTip = _dataTipPrefix;
 			
-			var dimNames:Array = BaseElement.fieldsNames;
+			var dimNames:Array = BaseDataElement.fieldsNames;
 			
 			var isFirst:Boolean = true;
 

@@ -28,26 +28,32 @@
 package birdeye.vis.guides.grid
 {
 	import birdeye.vis.interfaces.coords.ICoordinates;
-	import birdeye.vis.interfaces.guides.IGuide;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.BaseScale;
 	
-	import com.degrafa.GeometryComposition;
+	import com.degrafa.Surface;
+	import com.degrafa.core.IGraphicsStroke;
 	import com.degrafa.geometry.Path;
 	import com.degrafa.paint.SolidStroke;
 	
 	import flash.geom.Rectangle;
-	import flash.utils.getTimer;
+	
+	import org.greenthreads.IGuideThread;
+	import org.greenthreads.ThreadProcessor;
 	
 	/**
 	 * Grid is a guide that draws a grid behind the visualization based on</br>
 	 * the scales that are given to the grid.</br>
 	 * The properties of the stroke that is used for the grid can easily be changed.</br>
 	 */
-	public class Grid extends GeometryComposition implements IGuide
+	public class Grid extends Surface implements IGuideThread
 	{
+		
 
+
+		public var stroke:IGraphicsStroke;
+		
 		public function Grid()
 		{
 			//autoClearGraphicsTarget = false;
@@ -57,6 +63,11 @@ package birdeye.vis.guides.grid
 		public function get parentContainer():Object
 		{
 			return parent as Object;
+		}
+		
+		public function get priority():int
+		{
+			return ThreadProcessor.PRIORITY_GUIDE;
 		}
 		
 		public function get position():String
@@ -124,11 +135,6 @@ package birdeye.vis.guides.grid
 			return _coordinates;
 		}
 		
-		public function get targets():Array
-		{
-			return this.graphicsTarget;
-		}
-		
 		
 		private var _divideEnumerableScale:Boolean = true;
 		
@@ -178,33 +184,111 @@ package birdeye.vis.guides.grid
 		public function get weight():Number
 		{
 			return stroke.weight;
+			//return NaN;
+		}
+		
+		private var _bounds:Rectangle;
+		
+		public function set bounds(b:Rectangle):void
+		{
+			_bounds = b;	
+		}
+		
+		public function get bounds():Rectangle
+		{
+			return _bounds;
+		}
+		
+		private var _drawingData:Object;
+		
+		public function initializeDrawingData():Boolean
+		{
+			clearAll();
+			
+			_drawingData = new Object();
+			var scaleData:Array = new Array();
+					
+			_drawingData.scale1 = createLineData(scale1, bounds);
+			_drawingData.scale2 = createLineData(scale2, bounds);
+			
+			currentScale = 0;
+			index = 0;
+			
+			item.stroke = this.stroke;
+
+			return true;
 		}
 		
 		
-		public function drawGuide(bounds:Rectangle):void
+		private var index:int = 0;
+		private var totalLength:int;
+		private var currentScale:int = 0;
+		
+		private var item:Path = new Path();
+		
+		public function drawDataItem():Boolean
+		{	
+			if (currentScale == 0)
+			{
+				if (_drawingData.scale1)
+				{
+					currentScale = 1;
+				}
+				else if (_drawingData.scale2)
+				{
+					currentScale = 2;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			
+			if (currentScale == 1 && index < _drawingData.scale1.length)
+			{
+				item.data = _drawingData.scale1[index];
+				item.draw(this.graphics, null);			
+			}
+			
+			if (currentScale == 2 && index < _drawingData.scale2.length)
+			{
+				item.data = _drawingData.scale2[index];
+				item.draw(this.graphics, null);
+			}
+			
+			index++;
+			
+			if (currentScale == 1 && _drawingData.scale1.length == index)
+			{
+				if (_drawingData.scale2)
+				{
+					index = 0;
+					currentScale++;
+				}
+				else
+				{
+					// done
+					return false;
+				}
+			}
+			
+			if (currentScale == 2 && _drawingData.scale2.length == index)
+			{
+				// done
+				return false;
+			}
+			
+			return true;
+		}
+		
+		private function createLineData(scale:IScale, bounds:Rectangle):Array
 		{
-
-trace(getTimer(), "drawing grid", this.id);
-			svgData = "";
-
-			var nbrOfItems:Number = drawLinesBasedOnScale(scale1, bounds);
-			nbrOfItems = drawLinesBasedOnScale(scale2, bounds, nbrOfItems);
-			// scale3 not implemented yet, not sure about how it works
-			
-			clearExcessGeometries(nbrOfItems);
-			
-trace(getTimer(), "end drawing grid", this.id);
-			svgData = '\n<g style="fill:none' + 
-					';fill-opacity:1;stroke:#000000' + 
-					';stroke-width:1;stroke-opacity:1;">\n' +
-					'<path d="' + svgData + '"\n/>\n</g>';
- 		}
- 		
- 		private function drawLinesBasedOnScale(scale:IScale, bounds:Rectangle, startIndex:Number=0):Number
- 		{
- 			if (scale && scale.completeDataValues && scale.completeDataValues.length > 0)
- 			{
- 				var offset:Number = 0;
+			var toReturn:Array;
+			if (scale && scale.completeDataValues && scale.completeDataValues.length > 0)
+			{
+				toReturn = new Array();
+				
+				var offset:Number = 0;
 				if (scale is IEnumerableScale && divideEnumerableScale)
 				{
 					offset = scale.size/scale.completeDataValues.length/2;
@@ -212,54 +296,32 @@ trace(getTimer(), "end drawing grid", this.id);
 				
 				for each (var dataLabel:Object in scale.completeDataValues)
 				{
-				
-					var item:Path= Path(this.geometryCollection.getItemAt(startIndex++));
+					
 					var position:Number = scale.getPosition(dataLabel) + offset;
-					if (!item)
-					{
-						trace("grid new item");
-						item = new Path();
-						item.stroke = stroke;
-						this.geometryCollection.addItem(item);
-					}
 					
 					var itemData:String = "";
 					
-		 			if (scale.dimension == BaseScale.DIMENSION_2)
-		 			{
-		 				// horizontal
-		 				itemData = "M" + String(0) + " " + String(position) + " " + 
-		 							"L" + String(bounds.width) + " " + String(position) + " ";
+					if (scale.dimension == BaseScale.DIMENSION_2)
+					{
+						// horizontal
+						itemData = "M" + String(0) + " " + String(position) + " " + 
+							"L" + String(bounds.width) + " " + String(position) + " ";
 					} else if (scale.dimension == BaseScale.DIMENSION_1)
 					{
 						// vertical
 						itemData = "M" + String(position) + " " + String(0) + " " + 
-		 							"L" + String(position) + " " + String(bounds.height) + " ";
-					}	
-					item.data = itemData;
-					
-					svgData += itemData;
+							"L" + String(position) + " " + String(bounds.height) + " ";
+					}
+					toReturn.push(itemData);
 				}
-				
- 			}
- 			
- 			return startIndex;
- 		}
- 		
- 		private function clearExcessGeometries(nbrOfItems:Number):void
- 		{
- 			while (this.geometryCollection.items.length > nbrOfItems)
- 			{
- 				this.geometryCollection.removeItemAt(nbrOfItems);
- 			}
- 		}
- 		
+			}
+			
+			return toReturn;
+		}
+		 		
  		public function clearAll():void
  		{
-			this.geometry = [];
-			this.geometryCollection.items = [];
-
-			invalidated = true;
+			this.graphics.clear();
 		}
 
 	}

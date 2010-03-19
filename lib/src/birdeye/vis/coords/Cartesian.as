@@ -47,6 +47,8 @@ package birdeye.vis.coords
 	import mx.core.Container;
 	import mx.core.UIComponent;
 	
+	import org.greenthreads.IGuideThread;
+	
 	/** A CartesianChart can be used to create any 2D or 3D cartesian charts available in the library
 	 * apart from those who might have specific features, like stackable element or data-sizable items.
 	 * Those specific features are managed directly by charts that extends the CartesianChart 
@@ -74,6 +76,7 @@ package birdeye.vis.coords
 	public class Cartesian extends BaseCoordinates implements ICoordinates
 	{
 
+		
 		private var _is3D:Boolean = false;
 		public function get is3D():Boolean
 		{
@@ -154,19 +157,11 @@ package birdeye.vis.coords
 							{
 								topContainer.addChild(DisplayObject(axis));
 							}
-							else
-							{
-								axis.targets.push(topContainer);
-							}
 							break; 
 						case Axis.BOTTOM:
 							if(axis is DisplayObject && !bottomContainer.contains(DisplayObject(axis)) && !DisplayObject(axis).parent)
 							{
 								bottomContainer.addChild(DisplayObject(axis));
-							}
-							else
-							{
-								axis.targets.push(bottomContainer);
 							}
 							break;
 							
@@ -175,19 +170,11 @@ package birdeye.vis.coords
 							{
 								leftContainer.addChild(DisplayObject(axis));
 							}
-							else
-							{
-								axis.targets.push(leftContainer);
-							}
 							break;
 						case Axis.RIGHT:
 							if(axis is DisplayObject && !rightContainer.contains(DisplayObject(axis)) && !DisplayObject(axis).parent)
 							{
 								rightContainer.addChild(DisplayObject(axis));
-							}
-							else
-							{
-								axis.targets.push(rightContainer);
 							}
 							break;
 					}
@@ -204,17 +191,6 @@ package birdeye.vis.coords
 						{
 							elementsContainer.addChild(DisplayObject(guide));
 						}
-						else if (guide.targets.lastIndexOf(elementsContainer) == -1)
-						{
-							guide.targets.push(elementsContainer);
-						}
-					}
-				}
-				else
-				{
-					if (guide.targets.lastIndexOf(elementsContainer) == -1)
-					{
-						guide.targets.push(elementsContainer);
 					}
 				}	
 			}
@@ -328,7 +304,7 @@ package birdeye.vis.coords
 			
 		}
 		
-		override protected function drawGuide(guide:IGuide, unscaledWidth:Number, unscaledHeight:Number):void
+		override protected function drawGuide(guide:IGuideThread, unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			if (guide is IAxis)
 			{
@@ -337,22 +313,22 @@ package birdeye.vis.coords
 				switch (axis.placement)
 				{
 					case Axis.BOTTOM:
-						axis.drawGuide(new Rectangle(0,0, bottomContainer.width , bottomContainer.height / bottomContainer.numChildren));
+						addGuideToThreads(guide, new Rectangle(0,0, bottomContainer.width , bottomContainer.height / bottomContainer.numChildren));
 						break;
 					case Axis.TOP:
-						axis.drawGuide(new Rectangle(0,0, topContainer.width, topContainer.height / topContainer.numChildren));
+						addGuideToThreads(guide, new Rectangle(0,0, topContainer.width, topContainer.height / topContainer.numChildren));
 						break;
 					case Axis.LEFT:
-						axis.drawGuide(new Rectangle(0,0, leftContainer.width / leftContainer.numChildren, leftContainer.height));
+						addGuideToThreads(guide, new Rectangle(0,0, leftContainer.width / leftContainer.numChildren, leftContainer.height));
 						break;
 					case Axis.RIGHT:
-						axis.drawGuide(new Rectangle(0,0, rightContainer.width / rightContainer.numChildren, rightContainer.height));
+						addGuideToThreads(guide,new Rectangle(0,0, rightContainer.width / rightContainer.numChildren, rightContainer.height));
 				}
 							
 			}
 			else
 			{
-				guide.drawGuide(chartBounds);
+				addGuideToThreads(guide,chartBounds);
 			}
 		}
 
@@ -361,7 +337,7 @@ package birdeye.vis.coords
 		private var rightSize:Number = 0, oldRightSize:Number = 0;
 		private var topSize:Number = 0, oldTopSize:Number = 0;
 		private var bottomSize:Number = 0, oldBottomSize:Number = 0;
-		
+
 		/** @Private
 		 * Validate border containers sizes, that depend on the axes sizes that they contain.*/
 		override protected function validateBounds(unscaledWidth:Number, unscaledHeight:Number):Boolean
@@ -411,28 +387,63 @@ package birdeye.vis.coords
 			if (leftSize != oldLeftSize)
 			{
 				leftContainer.width = leftSize;
+				
+				invalidateAxis(Axis.LEFT);
+				
 				invalidated = true;
 			}
 			
 			if (rightSize != oldRightSize)
 			{
 				rightContainer.width = rightSize;
+				
+				invalidateAxis(Axis.RIGHT);
+				
 				invalidated = true;
 			}
 			
 			if (topSize != oldTopSize)
 			{
 				topContainer.height = topSize;				
+				
+				invalidateAxis(Axis.TOP);
+				
 				invalidated = true;
 			}
 			
 			if (bottomSize != oldBottomSize)
 			{
 				bottomContainer.height = bottomSize;
+				
+				invalidateAxis(Axis.BOTTOM);
+				
 				invalidated = true;
 			}
 			
-			return invalidated;
+			if (invalidated)
+			{
+				// if one of the axis changes size, the elements also change size...
+				invalidateElement();
+			}
+			
+
+			
+			return super.validateBounds(unscaledWidth, unscaledHeight) || invalidated;
+		}
+		
+		
+		public function invalidateAxis(axisPlace:String):void
+		{
+			for each (var guide:IGuide in guides)
+			{
+				if (guide is IAxis)
+				{
+					if ((guide as IAxis).placement == axisPlace)
+					{
+						invalidateGuide(guide);
+					}
+				}
+			}
 		}
 
 		/**

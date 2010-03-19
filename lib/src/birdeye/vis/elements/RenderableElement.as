@@ -62,15 +62,6 @@ package birdeye.vis.elements
 			super();
 		}
 		
-		// Be sure to remove all children in case an item renderer is used
-		override public function clearAll():void
-		{
-			super.clearAll();
-			if (_itemRenderer)
-				for (var i:uint = 0; i<numChildren; )
-					removeChild(getChildAt(0));
-		}
-		
 		private var template:DisplayObject;
 		override protected function getRendererWidth(item:Object = null):Number
 		{

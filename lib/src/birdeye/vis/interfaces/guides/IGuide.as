@@ -5,18 +5,7 @@ package birdeye.vis.interfaces.guides
 	import flash.geom.Rectangle;
 	
 	public interface IGuide
-	{
-		
-		/** Draw the guide within the given bounds.
-		 * @param bounds the bounds wherein the guide can draw itself.
-		 */
-		function drawGuide(bounds:Rectangle):void
-						
-		/**
-		 * The targets where the guide draws itself to.
-		 */
-		function get targets():Array; 
-		
+	{	
 		/**
 		 * Set the coordinates system where this guide belongs too.
 		 */

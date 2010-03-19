@@ -23,12 +23,24 @@ package org.greenthreads {
 	
 	public class ThreadProcessor {
 		
+		public static const PRIORITY_GUIDE:int = 3;
+		public static const PRIORITY_ELEMENT:int = 2;
+		
+		
 		private static var _instance : ThreadProcessor;
 		private static const EPSILON : int = 1;
 		
 		private var frameRate : int;
 		private var _share : Number;
-		private var activeThreads : Array;
+		
+		private var newThreads:PriorityThreadQueue;
+		private var initedThreads:PriorityThreadQueue;
+		
+		private var consolidatedStatistics:ThreadStatistics;
+		
+		
+		protected var baseThread:GreenThread;
+		
 		private var errorTerm:int;
 		
 		public function ThreadProcessor( share : Number = 0.99 ) {
@@ -38,7 +50,10 @@ package org.greenthreads {
 				
 				this.frameRate = st.frameRate;
 				this.share = share;
-				this.activeThreads = null;
+				this.newThreads = new PriorityThreadQueue();
+				this.initedThreads = new PriorityThreadQueue();
+				this.baseThread = new GreenThread(true);
+				this.consolidatedStatistics = new ThreadStatistics();
 				_instance = this;
 			} else {
 				throw new Error("Error: Instantiation failed: Use ThreadProcessor.getInstance() instead of new.");
@@ -52,36 +67,57 @@ package org.greenthreads {
 			return _instance;
 		}
 		
-		public function addThread( thread : GreenThread ) : void {
-			if( !activeThreads ) {
-				activeThreads = [];
-				start();
+		public function addThread( thread : IThread ) : void 
+		{
+			if (!newThreads.contains(thread))
+			{
+				newThreads.push(thread);
 			}
-			activeThreads.push( thread );
+			
+			start();
 		}
+		
+		private var _isRunning:Boolean = false;
 		
 		private function start() : void {
-			Application.application.addEventListener( Event.ENTER_FRAME, doCycle );
+			if (!_isRunning)
+			{	
+				this.consolidatedStatistics = new ThreadStatistics();
+				_isRunning = true;
+				Application.application.addEventListener( Event.ENTER_FRAME, doCycle );
+			}
 		}
 		
-		public function stop( thread : GreenThread ) : void {
-			var index : int = activeThreads.indexOf( thread );
-			if( index >= 0 ) {
-				activeThreads.splice( index, 1 );
+		public function stop( thread : IThread ) : void 
+		{			
+			var index:int = initedThreads.indexOf(thread);
+			if (index >= 0)
+			{
+				initedThreads.splice(index, 1);
 			}
-			if( activeThreads.length == 0 ) {
+			
+			if (newThreads.length == 0 && initedThreads.length == 0)
+			{
 				stopAll();
 			}
 		}
 		
 		public function stopAll() : void {
-			activeThreads = null;
+			newThreads.splice(0);
+			initedThreads.splice(0);
+			_isRunning = false;
 			Application.application.removeEventListener( Event.ENTER_FRAME, doCycle );
+			
+			// debug
+			trace(this.consolidatedStatistics.print());
 		}
 		
 		private function doCycle( event : Event ) : void {
+			trace("Doing acycle");
 			var timeAllocation : int = share < 1.0 ? timerDelay * share + 1 : frameRate - share;
-			timeAllocation = Math.max(timeAllocation, EPSILON * activeThreads.length);
+			
+			// not needed, only run one thread at a time
+			//timeAllocation = Math.max(timeAllocation, EPSILON * activeThreads.length);
 
 			//if the error term is too large, skip a cycle
 			if( errorTerm > timeAllocation - 1 ) {
@@ -89,30 +125,73 @@ package org.greenthreads {
 				return;
 			}
 						
-			var cycleStart:int = getTimer();
-			
+			var cycleStart:int = getTimer();	
 			var cycleAllocation:int = timeAllocation - errorTerm;
-			var processAllocation:int = cycleAllocation / activeThreads.length;			
+	
+
+			var remainingTime:int = cycleAllocation;
+			var cycleTime:int = 0;
 			
-			//decrement for easy removal of processes from list
-			for( var i:int = activeThreads.length - 1; i > -1; i-- ) {
-				var process:GreenThread = activeThreads[ i ] as GreenThread;
-				if( !process.execute( processAllocation ) ) {
-					if( activeThreads ) {
-						//open up more allocation to remaining processes
-						processAllocation = cycleAllocation / activeThreads.length;
-					} else {
-						break;
+			while (remainingTime > 0)
+			{
+				var isNew:Boolean = getThread();
+
+				if (!baseThread.innerThread) break;
+				
+				if (isNew)
+				{
+					var isOK:Boolean = baseThread.start();
+					isNew = false;
+					
+					if (!isOK)
+					{
+						// thread can not start, remove it from queue
+						stop(baseThread.innerThread);
 					}
 				}
+				else if (!baseThread.execute(remainingTime) )
+				{
+					// done, next process
+					// print statistics
+					printDebug();
+				}
+				
+				// calculate the remainingTime
+				cycleTime = getTimer() - cycleStart;
+				remainingTime = remainingTime - cycleTime;
+			}
+		
+			//update the error term
+			errorTerm = ( errorTerm + remainingTime ) >> 1;
+		}
+		
+		/**
+		 * Set the new thread in the basethread</br>
+		 * Return true if it is a new thread, false otherwise</br>
+		 */
+		protected function getThread() : Boolean
+		{
+			if (initedThreads.length > 0)
+			{
+				baseThread.innerThread = initedThreads.front();
+				return false;
 			}
 			
-			//solve for cycle time
-			var cycleTime:int = getTimer() - cycleStart;
-			var delta:Number = cycleTime - timeAllocation;
+			if (newThreads.length == 0)
+			{
+				baseThread.innerThread = null;
+				stopAll();
+				return false;
+			}
 			
-			//update the error term
-			errorTerm = ( errorTerm + delta ) >> 1;
+			baseThread.innerThread = newThreads.pop();
+			initedThreads.push(baseThread.innerThread);
+			return true;
+		}
+
+		private function printDebug():void
+		{
+			consolidatedStatistics.addStatistics(baseThread.statistics);
 		}
 
 		public function get timerDelay() : Number {

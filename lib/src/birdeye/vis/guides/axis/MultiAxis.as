@@ -26,13 +26,16 @@ package birdeye.vis.guides.axis
 	
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
+	
+	import org.greenthreads.IGuideThread;
+	import org.greenthreads.ThreadProcessor;
 
 	/**
 	 * This is an axis which accepts a category scale and another scale.</br>
 	 * For each category in the category scale the subscale will be used to draw an axis at the specified</br>
 	 * angle of the categoryScale.
 	 */
-	public class MultiAxis extends Surface implements IAxis
+	public class MultiAxis extends Surface implements IAxis, IGuideThread
 	{
 		protected var gg:GeometryComposition;
 		
@@ -57,6 +60,12 @@ package birdeye.vis.guides.axis
 			return parent as Object;
 		}
 		
+		
+		public function get priority():int
+		{
+			return ThreadProcessor.PRIORITY_GUIDE;
+		}
+		
 		/**
 		 * @see birdeye.vis.interfaces.guides.IGuide#position
 		 */
@@ -78,16 +87,6 @@ package birdeye.vis.guides.axis
 		public function get gridType():String
 		{
 			return _gridType;
-		}
-		
-		private var _targets:Array = new Array();
-		
-		/**
-		 * @see birdeye.vis.interfaces.guides.IGuide#targets
-		 */
-		public function get targets():Array
-		{
-			return _targets;
 		}
 		
 		private var _subScale:ISubScale;
@@ -153,11 +152,7 @@ package birdeye.vis.guides.axis
 		 */
 		public function clearAll():void
 		{
-			if (gg)
-			{
-				gg.geometry = [];
-				gg.geometryCollection.items = [];
-			}
+			this.graphics.clear();
 		}
 		 
 		private var _coordinates:ICoordinates; 
@@ -185,15 +180,40 @@ package birdeye.vis.guides.axis
 			return _coordinates;
 		}
 		
-		override protected function createChildren():void
+		
+		private var scalePositions:Array;
+		private var dataLines:Array;
+		
+		public function initializeDrawingData():Boolean
 		{
+		
+			if (_subScale && _subScale.completeDataValues && _subScale.completeDataValues.length > 0)
+			{			
+				// there is a subscale
+				// create two data arrays
+				// one to describe all the scales
+				// one to describe the data lines
+				var dataLines:Array = new Array();
+				var scalePositions:Array = new Array();
+				
+				var categories:Array = _subScale.completeDataValues;
+				var nbrCategories:int = _subScale.completeDataValues.length;
+				
+				var web:Array = new Array();
+				
+				for (var i:int = 0; i<nbrCategories; i++)
+				{
+					var subSc:IScale = _subScale.subScales[categories[i]];
+					
+					var angle:int = _subScale.getPosition(categories[i]);
+					var endPosition:Point = PolarCoordinateTransform.getXY(angle,_size,coordinates.origin);
+					var endLinePosition:Point = PolarCoordinateTransform.getXY(angle,_size-5,coordinates.origin);
+					
+					scalePositions.push(endLinePosition);
 
-			super.createChildren();
-			gg = new GeometryComposition();
-			targets.push(this);
-			gg.graphicsTarget = targets;
-			invalidateDisplayList();
+			}
 		}
+		
 		
 		/**
 		 * @see birdeye.vis.interfaces.guides.IGuide#drawGuide
