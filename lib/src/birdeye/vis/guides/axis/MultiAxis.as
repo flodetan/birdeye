@@ -181,25 +181,20 @@ package birdeye.vis.guides.axis
 		}
 		
 		
-		private var scalePositions:Array;
-		private var dataLines:Array;
+		private var _drawingData:Array;
 		
 		public function initializeDrawingData():Boolean
-		{
-		
+		{	
 			if (_subScale && _subScale.completeDataValues && _subScale.completeDataValues.length > 0)
 			{			
 				// there is a subscale
 				// create two data arrays
 				// one to describe all the scales
 				// one to describe the data lines
-				var dataLines:Array = new Array();
-				var scalePositions:Array = new Array();
+				_drawingData = new Array();
 				
 				var categories:Array = _subScale.completeDataValues;
 				var nbrCategories:int = _subScale.completeDataValues.length;
-				
-				var web:Array = new Array();
 				
 				for (var i:int = 0; i<nbrCategories; i++)
 				{
@@ -209,9 +204,82 @@ package birdeye.vis.guides.axis
 					var endPosition:Point = PolarCoordinateTransform.getXY(angle,_size,coordinates.origin);
 					var endLinePosition:Point = PolarCoordinateTransform.getXY(angle,_size-5,coordinates.origin);
 					
-					scalePositions.push(endLinePosition);
-
+					var data:Object = new Object();
+					
+					data.end = endLinePosition;
+					
+					var categories:Array = new Array();
+					
+					for (var j:int=0;j<(subSc.completeDataValues.length - 1);j++)
+					{
+						var dataLabel:Object = subSc.completeDataValues[j];
+						var pos:Number = subSc.getPosition(dataLabel);
+						
+						var labelPosition:Point = PolarCoordinateTransform.getXY(angle,pos,coordinates.origin);
+						
+						var innerData:Object = new Object();
+						
+						innerData.point = labelPosition;
+						innerData.label = dataLabel;
+						
+						categories.push(innerData);
+					}
+					
+					data.categories = categories;
+					
+					_drawingData.push(data);
+				}
+				
+				return true;
 			}
+			
+			return false;
+		}
+		
+		private var index:int = 0;
+		private var subIndex:int = 0;
+		
+		private var stdLine:Line = new Line();
+		private var stdLabel:RasterText = new RasterText();
+		
+		
+		public function drawDataItem():Boolean
+		{
+			if (index < _drawingData)
+			{
+				var data:Object = _drawingData[index];
+				var categories:Array
+				
+				if (subIndex == 0)
+				{
+					// draw the axis line
+					stdLine.x = coordinates.origin.x;
+					stdLine.y = coordinates.origin.y;
+					stdLine.x1 = data.end.x;
+					stdLine.y1 = data.end.y;
+					stdLine.stroke = new SolidStroke(colorStroke, 1,1);
+					
+					stdLine.draw(this.graphics, null);
+					
+					subIndex++;
+				}
+				else if ((subIndex - 1) < categories.length)
+				{
+					// draw the web and the label
+					
+					subIndex++;
+				}
+				else
+				{
+					index++;
+					subIndex = 0;
+				}
+				
+				
+				return true;
+			}
+			
+			return false;
 		}
 		
 		
