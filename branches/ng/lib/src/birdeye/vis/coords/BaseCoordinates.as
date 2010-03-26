@@ -285,7 +285,7 @@ package birdeye.vis.coords
 			
 			// datastructure to keep track of the last processed stack element per
 			// category or angle or ... 
-			var lastProcessedStackElements:Array = new Array();
+			var lastProcessedStackElements:Dictionary = new Dictionary();
 			var position:uint = 0;
 			categoryMaxStacked100 = new Dictionary();
 			for each (stackElement in _stackedElements)
@@ -310,7 +310,7 @@ package birdeye.vis.coords
 		 * @param allElementsBaseValues Data structure to keep track of all the base values per element
 		 * @param lastProcessedStackElements Data structure to keep track of the last processed stack element per category or angle or...
 		 */
-		protected function initStackElement(stackElement:IStack, elementPosition:uint, allElementsBaseAndTopValues:Array, lastProcessedStackElements:Array):void
+		protected function initStackElement(stackElement:IStack, elementPosition:uint, allElementsBaseAndTopValues:Array, lastProcessedStackElements:Dictionary):void
 		{
 			 	
 			
