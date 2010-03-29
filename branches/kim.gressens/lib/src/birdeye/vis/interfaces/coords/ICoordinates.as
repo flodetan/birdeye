@@ -27,10 +27,12 @@
  
 package birdeye.vis.interfaces.coords
 {
-	import birdeye.vis.interfaces.elements.IElement;
+	import birdeye.vis.interfaces.interactivity.IInteractivityManager;
 	
 	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
+	
+	import mx.core.UIComponent;
 	
 	public interface ICoordinates extends IInteractive, IEventDispatcher
 	{
@@ -41,6 +43,10 @@ package birdeye.vis.interfaces.coords
 		function get origin():Point;
 
 		function set transforms(val:Array):void;
+		
+		function get interactivityManager():IInteractivityManager;
+		
+		function get tooltipLayer():UIComponent;
 
 		/** @Private
 		 * The maximum value among all elements stacked according to stacked100 type.

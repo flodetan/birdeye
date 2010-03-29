@@ -35,6 +35,7 @@ package birdeye.vis.coords
 	import birdeye.vis.interfaces.elements.IElement;
 	import birdeye.vis.interfaces.elements.IStack;
 	import birdeye.vis.interfaces.guides.IGuide;
+	import birdeye.vis.interfaces.interactivity.IInteractivityManager;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
@@ -57,10 +58,12 @@ package birdeye.vis.coords
 	
 	public class BaseCoordinates extends VisScene implements IValidatingCoordinates
 	{
-		public function BaseCoordinates()
+		public function BaseCoordinates(interactivityMgr:IInteractivityManager = null)
 		{
-			super();		
+			super(interactivityMgr);				
 		}
+
+		
 		
 		protected var _collisionType:String = StackElement.OVERLAID;
 		/** Set the type of stack, overlaid if the series are shown on top of the other, 
@@ -100,7 +103,6 @@ package birdeye.vis.coords
 		{
 			super.invalidateProperties();
 		}
-		
 
 		override protected function commitProperties():void
 		{
@@ -133,6 +135,8 @@ package birdeye.vis.coords
 					{
 						invalidatedData = false;
 					}
+					
+					placeTooltipLayer();
 				}
 				
 				if (invalidatedData)
@@ -215,6 +219,11 @@ package birdeye.vis.coords
 		{
 		
 		}
+		
+		
+
+		
+
 		
 		// temporary data structure to keep track of stacked elements
 		protected var _stackedElements:Array = [];
@@ -636,7 +645,13 @@ trace(getTimer(), "updateDisplaylist", unscaledWidth, unscaledHeight);
 				super.updateDisplayList(unscaledWidth, unscaledHeight);				
 
 				setActualSize(unscaledWidth, unscaledHeight);
-						
+				
+				if (this._tooltipLayer)
+				{	
+					this._tooltipLayer.width = unscaledWidth;
+					this._tooltipLayer.height = unscaledHeight;
+				}
+				
 				var invalidated:Boolean = validateBounds(unscaledWidth, unscaledHeight);
 					
 				trace("Bounds are " + invalidated);

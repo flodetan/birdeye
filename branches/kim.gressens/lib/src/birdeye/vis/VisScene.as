@@ -29,9 +29,11 @@
 {
 	import birdeye.vis.data.DataItemLayout;
 	import birdeye.vis.guides.grid.Grid;
+	import birdeye.vis.interactivity.InteractivityManager;
 	import birdeye.vis.interfaces.coords.ICoordinates;
 	import birdeye.vis.interfaces.elements.IElement;
 	import birdeye.vis.interfaces.guides.IGuide;
+	import birdeye.vis.interfaces.interactivity.IInteractivityManager;
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.interfaces.transforms.IGraphLayout;
@@ -46,6 +48,7 @@
 	import com.degrafa.paint.SolidFill;
 	
 	import flash.display.Shape;
+	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.xml.XMLNode;
@@ -56,6 +59,7 @@
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
 	import mx.core.IInvalidating;
+	import mx.core.UIComponent;
 
 	[Exclude(name="projections", kind="property")]
 	[Exclude(name="graphLayouts", kind="property")]
@@ -630,11 +634,47 @@
 		// UIComponent flow
 		
 		
-		public function VisScene():void
+		public function VisScene(interactivityMgr:IInteractivityManager = null):void
 		{
 			super();
 			doubleClickEnabled = true;
 
+			if (!interactivityMgr)
+			{
+				_interactivityManager = new InteractivityManager();
+				_interactivityManager.registerCoordinates(this);
+			}
+			else
+			{
+				_interactivityManager = interactivityMgr;
+			}
+		}
+		
+		
+		protected var _interactivityManager:IInteractivityManager;
+		
+		public function get interactivityManager():IInteractivityManager
+		{
+			return _interactivityManager;
+		}
+		
+		
+		protected var _tooltipLayer:UIComponent;
+		
+		protected function placeTooltipLayer():void
+		{
+			if (!_tooltipLayer)
+			{
+				_tooltipLayer = new UIComponent();
+				_elementsContainer.addChild(_tooltipLayer);
+				
+				this.dispatchEvent(new Event("tooltipLayerPlaced"));
+			}
+		}
+		
+		public function get tooltipLayer():UIComponent
+		{
+			return _tooltipLayer;
 		}
 		
 		protected var rectBackGround:RegularRectangle;
