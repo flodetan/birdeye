@@ -50,7 +50,7 @@ package birdeye.vis.elements
 		public static const SCALE1:String = "scale1";
 		public static const SCALE2:String = "scale2";
 		
-		protected var dataFields:Array;
+		public var dataFields:Array;
 
 	
 		public function BaseDataElement()

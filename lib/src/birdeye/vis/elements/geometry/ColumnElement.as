@@ -30,12 +30,14 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.VisScene;
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.RectangleRenderer;
+	import birdeye.vis.interactivity.geometry.InteractiveRectangle;
+	import birdeye.vis.interfaces.interactivity.IInteractiveGeometry;
 	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.INumerableScale;
-	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.*;
 	
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import org.greenthreads.IThread;
@@ -117,6 +119,8 @@ package birdeye.vis.elements.geometry
 		public function ColumnElement()
 		{
 			super();
+			
+			geometries = new Vector.<InteractiveRectangle>();
 		}
 		
 		override protected function commitProperties():void
@@ -252,12 +256,14 @@ package birdeye.vis.elements.geometry
 			
 		}
 		
+		protected var geometries:Vector.<InteractiveRectangle>;
+		
 		public function drawDataItem():Boolean
 		{
 			if (_dataItemIndex < _drawingData.length)
 			{
 				
-				var d:Object = _drawingData[_dataItemIndex++];
+				var d:Object = _drawingData[_dataItemIndex];
 
 				// save the tmp width
 				var tmpWidth:Number = innerColWidth;
@@ -313,21 +319,58 @@ package birdeye.vis.elements.geometry
 				
 				if (_graphicsRendererInst)
 				{
+					var bounds:Rectangle = new Rectangle(pos1, pos2, barWidth, barHeight);
+					
 					if (_graphicsRendererInst is IBoundedRenderer)
 					{
-						(_graphicsRendererInst as IBoundedRenderer).bounds = new Rectangle(pos1, pos2, barWidth, barHeight);
+						(_graphicsRendererInst as IBoundedRenderer).bounds = bounds;
 					}
+					
+					var geom:InteractiveRectangle;
+					
+					if (_dataItemIndex < geometries.length)
+					{
+						geom = geometries[_dataItemIndex];
+					}
+					else
+					{
+						// add a new one
+						geom = new InteractiveRectangle();
+						geom.element = this;
+						geometries.push(geom);
+						
+						this.visScene.interactivityManager.registerGeometry(geom);
+					}
+					
+					geom.baseGeometry = new Rectangle(pos1, pos2, barWidth, barHeight);		
+					geom.preferredTooltipPoint = new Point(pos1, pos2);
+					geom.data = _dataItems[_dataItemIndex];
 					
 					_graphicsRendererInst.fill = d[COLOR];
 					_graphicsRendererInst.stroke = stroke;
 					
 					_graphicsRendererInst.draw(this.graphics, null);
+					
+					_dataItemIndex++;
 				}
 				
 				return true;
 			}
 			
+			// check if there are geometries which are unnecessary
+			if (geometries.length > _drawingData.length)
+			{
+				// to many geometries, unregister some
+				while (geometries.length > _drawingData.length)
+				{
+					this.visScene.interactivityManager.unregisterGeometry(geometries.pop());
+				}
+			}
+			
 			return false;
 		}
+		
+		
+		
 	}
 }
