@@ -137,7 +137,7 @@ package birdeye.vis.elements.geometry
 		
 		private var _drawingData:Array;
 		
-		public function initializeDrawingData():Boolean
+		override public function preDraw():Boolean
 		{
 			if (!(isReadyForLayout() && _invalidatedElementGraphic) )
 			{
@@ -240,51 +240,42 @@ package birdeye.vis.elements.geometry
 				_drawingData.push(d);
 			}
 			
-			currentIndex = 0;
-			
-			return true;
+			return true && super.preDraw();
 		}
-		
-		private var currentIndex:int = 0;
 
-		public function drawDataItem() :Boolean
+		override public function drawDataItem() :Boolean
 		{
-			if (currentIndex < _drawingData.length)
-			{
-				var d:Object = _drawingData[currentIndex++];
+			var d:Object = _drawingData[_currentItemIndex];
 
-				if (_graphicsRendererInst is IBoundedRenderer)
-				{		
-					(_graphicsRendererInst as IBoundedRenderer).bounds = d.bounds;
-										
-					_graphicsRendererInst.fill = d.fill;
-					_graphicsRendererInst.stroke = d.stroke;
-					
-					_graphicsRendererInst.draw(this.graphics, null);
-					
-				}
+			if (_graphicsRendererInst is IBoundedRenderer)
+			{		
+				(_graphicsRendererInst as IBoundedRenderer).bounds = d.bounds;
+									
+				_graphicsRendererInst.fill = d.fill;
+				_graphicsRendererInst.stroke = d.stroke;
 				
+				_graphicsRendererInst.draw(this.graphics, null);
 				
-				if (_itemRenderer)
-				{
-					var itemInst:DisplayObject = _itemRenderer.newInstance();
-					
-					this.addChild(itemInst);
-					
-					if (itemInst is IDataRenderer)
-					{
-						(itemInst as IDataRenderer).data = d.data;
-					}
-					itemInst.x = d.x;
-					itemInst.y = d.y;
-					itemInst.width = d.width;
-					itemInst.height = d.height;
-				}
-				
-				return true;
 			}
 			
-			return false;
+			
+			if (_itemRenderer)
+			{
+				var itemInst:DisplayObject = _itemRenderer.newInstance();
+				
+				this.addChild(itemInst);
+				
+				if (itemInst is IDataRenderer)
+				{
+					(itemInst as IDataRenderer).data = d.data;
+				}
+				itemInst.x = d.x;
+				itemInst.y = d.y;
+				itemInst.width = d.width;
+				itemInst.height = d.height;
+			}
+			
+			return true && super.drawDataItem();
 		}
 	}
 }

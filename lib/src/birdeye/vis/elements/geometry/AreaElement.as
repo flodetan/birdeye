@@ -151,49 +151,33 @@ package birdeye.vis.elements.geometry
 		
 		private var _drawingData:Array;
 		
-		public function initializeDrawingData():Boolean
+		override public function preDraw():Boolean
 		{
 			if (!(isReadyForLayout()) )
 			{
 				return false;
 			}
-			
-			_dataItemIndex = 0;
+
 			this.graphics.clear();
 			
-			
-			_drawingData = new Array();
+			_drawingData = new Array();		
 			
 			for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
-			{				
+			{
+				
 				var currentItem:Object = _dataItems[cursorIndex];
 				
 				scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
 					currentItem[colorField], currentItem[sizeField], currentItem);
-											
+				
 				_drawingData.push(scaleResults);
+				
 			}
 			
-			return true;
-				
-		}
-		
-		private var _bezierSpline:BezierSpline;
-		private var _poly:Path;
-		
-		private var _dataItemIndex:uint = 0;
-		private var xPrev:Number, yPrev:Number, y0Prev:Number;
-		
-		public function drawDataItem():Boolean
-		{
-			
-			// draw the data item
-			// if the form is a curve, we draw the curve in one piece
-			// if the form is not a curve, we can split it up
-			if (_dataItemIndex == 0 && _form == CURVE)
+			if (_form == CURVE)
 			{
 				var points:Array = new Array();
-
+				
 				if (visScene.coordType == VisScene.CARTESIAN)
 				{				
 					points.push(new GraphicPoint(0, _drawingData[0][POS2+"base"]));
@@ -219,11 +203,10 @@ package birdeye.vis.elements.geometry
 				_bezierSpline.stroke = stroke;
 				_bezierSpline.preDraw();
 				_bezierSpline.draw(this.graphics, null);
-
+				
 			}
 			
-			
-			if (_dataItemIndex == 0 &&  _form != CURVE && visScene.coordType == VisScene.POLAR)
+			if (_form != CURVE && visScene.coordType == VisScene.POLAR)
 			{
 				// build the area in one go, it's one path
 				
@@ -248,75 +231,82 @@ package birdeye.vis.elements.geometry
 				_poly.draw(this.graphics, null);
 			}
 			
+			return true && super.preDraw();
+				
+		}
+		
+		private var _bezierSpline:BezierSpline;
+		private var _poly:Path;
+
+		private var xPrev:Number, yPrev:Number, y0Prev:Number;
+		override public function drawDataItem() : Boolean
+		{
+			
+			// draw the data item
+			// if the form is a curve, we draw the curve in one piece
+			// if the form is not a curve, we can split it up
+			
 			if (_form != CURVE || _showGraphicRenderer)
 			{
-				if (_dataItemIndex < _drawingData.length)
+				var d:Object = _drawingData[_currentItemIndex];
+				
+				if (_showGraphicRenderer && _graphicsRendererInst)
 				{
-					var d:Object = _drawingData[_dataItemIndex];
-					
-					if (_showGraphicRenderer && _graphicsRendererInst)
+					if (_graphicsRendererInst is IBoundedRenderer)
 					{
-						if (_graphicsRendererInst is IBoundedRenderer)
-						{
-							(_graphicsRendererInst as IBoundedRenderer).bounds = new Rectangle(d[POS1] - _rendererSize/2, d[POS2] - _rendererSize/2, _rendererSize, _rendererSize);;
-							
-						}
-						_graphicsRendererInst.fill = d.fill;
-						_graphicsRendererInst.stroke = stroke;
-						_graphicsRendererInst.draw(this.graphics, null);
+						(_graphicsRendererInst as IBoundedRenderer).bounds = new Rectangle(d[POS1] - _rendererSize/2, d[POS2] - _rendererSize/2, _rendererSize, _rendererSize);;
 						
 					}
+					_graphicsRendererInst.fill = d.fill;
+					_graphicsRendererInst.stroke = stroke;
+					_graphicsRendererInst.draw(this.graphics, null);
 					
-					if (_form != CURVE)
+				}
+				
+				if (_form != CURVE)
+				{
+	
+					if (_currentItemIndex == 0)
 					{
-		
-						if (_dataItemIndex == 0)
-						{
-							xPrev = d[POS1];
-							yPrev = d[POS2];
-							y0Prev = d[POS2+"base"];
-							
-						}
-						else 
-						{
-		
-							// create the polygon only if there is more than 1 data value
-							// there cannot be an area with only the first data value 
-							if (!isNaN(xPrev) && !isNaN(yPrev) && !isNaN(d[POS2+"base"]) 
-								&& !isNaN(d[POS2]) && !isNaN(d[POS2]))
-							{
-								var data:String;
-								data =  "M" + String(xPrev) + "," + String(y0Prev) + " " +
-									"L" + String(xPrev) + "," + String(yPrev) + " " +
-									"L" + String(d[POS1]) + "," + String(d[POS2]) + " " +
-									"L" + String(d[POS1]) + "," + String(d[POS2+"base"]) + " z";
-								
-								_poly.data = data;
-								_poly.fill = d[COLOR];
-								_poly.stroke = stroke;
-								
-								_poly.draw(this.graphics, null);
-		
-							}
-							
-							xPrev = d[POS1];
-							yPrev = d[POS2];	
-							y0Prev = d[POS2+"base"];
-		
-							
-						}
+						xPrev = d[POS1];
+						yPrev = d[POS2];
+						y0Prev = d[POS2+"base"];
+						
 					}
-					
-					
-					_dataItemIndex++;
-
-					return true;
+					else 
+					{
+	
+						// create the polygon only if there is more than 1 data value
+						// there cannot be an area with only the first data value 
+						if (!isNaN(xPrev) && !isNaN(yPrev) && !isNaN(d[POS2+"base"]) 
+							&& !isNaN(d[POS2]) && !isNaN(d[POS2]))
+						{
+							var data:String;
+							data =  "M" + String(xPrev) + "," + String(y0Prev) + " " +
+								"L" + String(xPrev) + "," + String(yPrev) + " " +
+								"L" + String(d[POS1]) + "," + String(d[POS2]) + " " +
+								"L" + String(d[POS1]) + "," + String(d[POS2+"base"]) + " z";
+							
+							_poly.data = data;
+							_poly.fill = d[COLOR];
+							_poly.stroke = stroke;
+							
+							_poly.draw(this.graphics, null);
+	
+						}
+						
+						xPrev = d[POS1];
+						yPrev = d[POS2];	
+						y0Prev = d[POS2+"base"];
+	
+						
+					}
 				}
 
-				
-				
+
+				return true && super.drawDataItem();
 			}
-			
+
 			return false;
 			
 		}

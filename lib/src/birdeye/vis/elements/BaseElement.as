@@ -64,6 +64,7 @@ package birdeye.vis.elements
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
 	
+	import org.greenthreads.IThread;
 	import org.greenthreads.ThreadProcessor;
 
 	[Style(name="rendererSize",type="Number",inherit="no")]
@@ -87,7 +88,7 @@ package birdeye.vis.elements
 	[Exclude(name="chart", kind="property")]
 	[Exclude(name="cursor", kind="property")]
 	
-	public class BaseElement extends BaseDataElement implements IElement
+	public class BaseElement extends BaseDataElement implements IElement, IThread
 	{
 		
 		protected var _showFieldName:Boolean = false;
@@ -651,12 +652,40 @@ package birdeye.vis.elements
 		{
 			
 		}
+
 		
+		// greentrheading
 		public function get priority():int
 		{
 			return ThreadProcessor.PRIORITY_ELEMENT;
 		}
-
+		
+		
+		public function preDraw():Boolean
+		{
+			_currentItemIndex = 0;
+			
+			return true;
+		}
+		
+		protected var _currentItemIndex:int = 0;
+		
+		public function drawDataItem():Boolean
+		{
+			return checkDrawableDataItems();
+		}
+		
+		protected function checkDrawableDataItems():Boolean
+		{
+			if (!_dataItems) return false;
+			_currentItemIndex++;
+			return _currentItemIndex < _dataItems.length;
+		}
+		
+		public function endDraw():void
+		{
+			
+		}
 		
 
 		// other methods

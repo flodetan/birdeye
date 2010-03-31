@@ -690,12 +690,22 @@
 				_elementsContainer.addChildAt(_maskShape, 0);
 				
 				ggBackGround = new GeometryGroup();
+				//ggBackGround.enableEvents = false;
 				addChildAt(ggBackGround, 0);
-				ggBackGround.target = this;
-				rectBackGround = new RegularRectangle(0,0,0, 0);
+				ggBackGround.target = _elementsContainer;
+				rectBackGround = new RegularRectangle(0,0,2000,2000);
 				rectBackGround.fill = new SolidFill(0x000000,0);
 				ggBackGround.geometryCollection.addItem(rectBackGround);
 			}
+			
+			
+			
+		/*elementsContainer.graphics.beginFill(0xffffff, 0.5);
+			elementsContainer.graphics.drawRect(0,0,2000, 2000);
+			elementsContainer.graphics.endFill();*/
+			
+			
+			
 		}
 		
 		override protected function commitProperties():void

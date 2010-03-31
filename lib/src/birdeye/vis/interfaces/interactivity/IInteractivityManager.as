@@ -8,6 +8,11 @@ package birdeye.vis.interfaces.interactivity
 	{
 		
 		/**
+		 * Get all interactive geometries.
+		 */
+		function allGeometries():Vector.<IInteractiveGeometry>;
+		
+		/**
 		 * Register an interactive geometry.
 		 */
 		function registerGeometry(geom:IInteractiveGeometry):void;

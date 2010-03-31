@@ -30,13 +30,9 @@ package birdeye.vis.interactivity.tooltips
 			
 			_im = coords.interactivityManager;
 
-			toolTipLabel = new Label();
-
 			if (_coords.tooltipLayer)
 			{
 				_stage = _coords.tooltipLayer;
-				
-				_stage.addChild(toolTipLabel);
 
 			}
 			else
@@ -51,23 +47,46 @@ package birdeye.vis.interactivity.tooltips
 		
 		private function onTooltipLayerPlaced(ev:Event):void
 		{
-			_stage = _coords.tooltipLayer;
-			_stage.addChild(toolTipLabel);
-			
+			_stage = _coords.tooltipLayer;			
 			_coords.removeEventListener("tooltipLayerPlaced", onTooltipLayerPlaced);
 		}
+		
+		protected var _labels:Object = new Object();
 		
 		
 		private function onMouseOver(event:InteractivityEvent):void
 		{
-			toolTipLabel.text = event.geometry.data[event.geometry.element.dim1] + " " + event.geometry.data[event.geometry.element.dim2]
-			toolTipLabel.x = event.geometry.preferredTooltipPoint.x;
-			toolTipLabel.y = event.geometry.preferredTooltipPoint.y;
+			var lbl:Label = _labels[event.geometry];
+			
+			if (!lbl)
+			{
+				lbl = new Label();
+				lbl.width = 50;
+				lbl.height = 150;
+				lbl.mouseEnabled = false;
+				_labels[event.geometry] = lbl;
+				
+				_stage.addChild(lbl);
+			}
+			
+			
+//			trace("Mouse over of ", event.geometry.data[event.geometry.element.dim1], event.geometry.data[event.geometry.element.dim2]);
+			lbl.text = event.geometry.data[event.geometry.element.dim1] + " " + event.geometry.data[event.geometry.element.dim2]
+			lbl.x = event.geometry.preferredTooltipPoint.x;
+			lbl.y = event.geometry.preferredTooltipPoint.y;
+			lbl.visible = true;
 		}
 		
 		private function onMouseOut(event:InteractivityEvent):void
 		{
-			trace("Mouse out of ", event.geometry.data[event.geometry.element.dim1], event.geometry.data[event.geometry.element.dim2]);
+			var lbl:Label = _labels[event.geometry];
+			
+			if (lbl && lbl.visible)
+			{
+				lbl.visible = false;
+			}
+	
+//			trace("Mouse out of ", event.geometry.data[event.geometry.element.dim1], event.geometry.data[event.geometry.element.dim2]);
 		}
 	}
 }

@@ -32,7 +32,6 @@ package birdeye.vis.elements.collision
 	import birdeye.vis.elements.geometry.*;
 	import birdeye.vis.interfaces.elements.IStack;
 	import birdeye.vis.interfaces.scales.INumerableScale;
-	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.interfaces.scales.ISubScale;
 	import birdeye.vis.scales.*;
 	
@@ -156,6 +155,14 @@ package birdeye.vis.elements.collision
 			
 			//scaleResults[SIZE] = _graphicRendererSize;
 			scaleResults[COLOR] = fill;
+			
+			// check if there are baseValues, if not, set them to zero
+			if (!baseValues)
+			{
+				baseValues = new Dictionary();
+				baseValues[dim2] = 0;
+				baseValues[dim1] = 0;
+			}
 
 			// if the Element has its own scale1, than get the dim1 coordinate
 			// position of the data value filtered by dim1 field. If it's stacked100 than 
@@ -241,13 +248,13 @@ package birdeye.vis.elements.collision
 					scaleResults[COLOR] = col;
 			} 
 
-			if (visScene.coordType == VisScene.POLAR)
+			/*if (visScene.coordType == VisScene.POLAR)
 			{
 				var xPos:Number = PolarCoordinateTransform.getX(scaleResults[POS1], scaleResults[POS2], visScene.origin);
 				var yPos:Number = PolarCoordinateTransform.getY(scaleResults[POS1], scaleResults[POS2], visScene.origin);
 				scaleResults[POS1] = xPos;
 				scaleResults[POS2] = yPos; 
-			}
+			}*/
 
 			if (sizeScale)
 			{

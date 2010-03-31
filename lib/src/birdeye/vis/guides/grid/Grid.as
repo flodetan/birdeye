@@ -201,7 +201,7 @@ package birdeye.vis.guides.grid
 		
 		private var _drawingData:Object;
 		
-		public function initializeDrawingData():Boolean
+		public function preDraw():Boolean
 		{
 			clearAll();
 			
@@ -279,6 +279,11 @@ package birdeye.vis.guides.grid
 			}
 			
 			return true;
+		}
+		
+		public function endDraw():void
+		{
+			
 		}
 		
 		private function createLineData(scale:IScale, bounds:Rectangle):Array

@@ -8,9 +8,11 @@ package org.greenthreads
 		 */
 		function get priority():int;
 		
-		function initializeDrawingData() : Boolean;
+		function preDraw() : Boolean;
 		
 		function drawDataItem() : Boolean;
+		
+		function endDraw() : void;
 		
 		
 		

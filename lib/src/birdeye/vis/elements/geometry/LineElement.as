@@ -152,17 +152,15 @@ package birdeye.vis.elements.geometry
 		private var _bezierSpline:BezierSpline;
 		private var _poly:Path;
 		
-		private var _dataItemIndex:uint = 0;
 		private var _drawingData:Array;
 		
-		public function initializeDrawingData():Boolean
+		override public function preDraw():Boolean
 		{
 			if (!(isReadyForLayout() && _invalidatedElementGraphic) )
 			{
 				return false;
 			}
-			
-			_dataItemIndex = 0;
+
 			this.graphics.clear();
 			
 			_drawingData = new Array();			
@@ -179,14 +177,7 @@ package birdeye.vis.elements.geometry
 				
 			}
 			
-			return true;
-		}
-		
-		private var xPrev:Number, yPrev:Number;
-	
-		public function drawDataItem():Boolean
-		{
-			if (_dataItemIndex == 0 && _form == CURVE)
+			if (_form == CURVE)
 			{
 				var points:Array = new Array();
 				
@@ -218,21 +209,21 @@ package birdeye.vis.elements.geometry
 					
 					points.push(new GraphicPoint(d[POS1], d[POS2]));
 				}
-
+				
 				if (visScene.coordType == VisScene.CARTESIAN)
 				{
 					points.push(new GraphicPoint(_drawingData[_drawingData.length - 1][POS1]+.0000001, _drawingData[_drawingData.length - 1][POS2]));
 				}
-
+				
 				_bezierSpline.points = points;
 				_bezierSpline.stroke = stroke;
 				_bezierSpline.preDraw();
 				_bezierSpline.draw(this.graphics, null);
-
+				
 				
 			}
 			
-			if (_dataItemIndex == 0 &&  _form != CURVE && visScene.coordType == VisScene.POLAR)
+			if (_form != CURVE && visScene.coordType == VisScene.POLAR)
 			{
 				// build the area in one go, it's one path
 				
@@ -256,87 +247,88 @@ package birdeye.vis.elements.geometry
 				_poly.draw(this.graphics, null);
 			}
 			
+			
+			return true && super.preDraw();
+		}
+		
+		private var xPrev:Number, yPrev:Number;
+	
+		override public function drawDataItem():Boolean
+		{
+				
 			if (_form != CURVE || _showGraphicRenderer)
 			{
-				if (_dataItemIndex < _drawingData.length)
+				var d:Object = _drawingData[_currentItemIndex];
+				
+				if (d[SIZE] && !isNaN(d[SIZE]))
 				{
-					var d:Object = _drawingData[_dataItemIndex];
+					stroke = new SolidStroke(colorStroke, alphaStroke, d[SIZE]);
+				}
+				
+				if (d[COLOR] && d[COLOR] is SolidFill)
+				{
+					var fi:SolidFill = d[COLOR] as SolidFill;
 					
 					if (d[SIZE] && !isNaN(d[SIZE]))
 					{
-						stroke = new SolidStroke(colorStroke, alphaStroke, d[SIZE]);
+						stroke = new SolidStroke(fi.color, alphaStroke, d[SIZE]);
 					}
-					
-					if (d[COLOR] && d[COLOR] is SolidFill)
+					else
 					{
-						var fi:SolidFill = d[COLOR] as SolidFill;
-						
-						if (d[SIZE] && !isNaN(d[SIZE]))
-						{
-							stroke = new SolidStroke(fi.color, alphaStroke, d[SIZE]);
-						}
-						else
-						{
-							stroke = new SolidStroke(fi.color, alphaStroke, weightStroke);
-						}
+						stroke = new SolidStroke(fi.color, alphaStroke, weightStroke);
 					}
-					
-					if (_showGraphicRenderer && _graphicsRendererInst)
-					{
-						if (_graphicsRendererInst is IBoundedRenderer)
-						{
-							(_graphicsRendererInst as IBoundedRenderer).bounds = new Rectangle(d[POS1] - _rendererSize/2, d[POS2] - _rendererSize/2, _rendererSize, _rendererSize);;
-							
-						}
-						_graphicsRendererInst.fill = d.fill;
-						_graphicsRendererInst.stroke = stroke;
-						_graphicsRendererInst.draw(this.graphics, null);
-						
-					}
-					
-					if (_form != CURVE)
-					{
-						
-						if (_dataItemIndex == 0)
-						{
-							xPrev = d[POS1];
-							yPrev = d[POS2];
-							
-						}
-						else 
-						{
-							
-							// create the polygon only if there is more than 1 data value
-							// there cannot be an area with only the first data value 
-							if (!isNaN(xPrev) && !isNaN(yPrev)
-								&& !isNaN(d[POS2]) && !isNaN(d[POS1]))
-							{
-								var data:String;
-								data =  "M" + String(xPrev) + "," + String(yPrev) + " " +
-									"L" + String(d[POS1]) + "," + String(d[POS2]) + " ";
-								
-								_poly.data = data;
-								_poly.stroke = stroke;
-								
-								
-								_poly.draw(this.graphics, null);
-								
-							}
-							
-							xPrev = d[POS1];
-							yPrev = d[POS2];	
-							
-							
-						}
-					}
-					
-					
-					_dataItemIndex++;
-					
-					return true;
 				}
 				
+				if (_showGraphicRenderer && _graphicsRendererInst)
+				{
+					if (_graphicsRendererInst is IBoundedRenderer)
+					{
+						(_graphicsRendererInst as IBoundedRenderer).bounds = new Rectangle(d[POS1] - _rendererSize/2, d[POS2] - _rendererSize/2, _rendererSize, _rendererSize);;
+						
+					}
+					_graphicsRendererInst.fill = d.fill;
+					_graphicsRendererInst.stroke = stroke;
+					_graphicsRendererInst.draw(this.graphics, null);
+					
+				}
 				
+				if (_form != CURVE)
+				{
+					
+					if (_currentItemIndex == 0)
+					{
+						xPrev = d[POS1];
+						yPrev = d[POS2];
+						
+					}
+					else 
+					{
+						
+						// create the polygon only if there is more than 1 data value
+						// there cannot be an area with only the first data value 
+						if (!isNaN(xPrev) && !isNaN(yPrev)
+							&& !isNaN(d[POS2]) && !isNaN(d[POS1]))
+						{
+							var data:String;
+							data =  "M" + String(xPrev) + "," + String(yPrev) + " " +
+								"L" + String(d[POS1]) + "," + String(d[POS2]) + " ";
+							
+							_poly.data = data;
+							_poly.stroke = stroke;
+							
+							
+							_poly.draw(this.graphics, null);
+							
+						}
+						
+						xPrev = d[POS1];
+						yPrev = d[POS2];	
+						
+						
+					}
+					
+					return true && super.drawDataItem();
+				}
 				
 			}
 			

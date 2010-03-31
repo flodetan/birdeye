@@ -99,9 +99,108 @@ package birdeye.vis.elements.geometry
 			if (! graphicRenderer)
 				graphicRenderer = new ClassFactory(CircleRenderer);
 		}
+		
+		protected var _drawingData:Array;
+		
+		override public function preDraw() : Boolean
+		{
+			if (!(isReadyForLayout()) )
+			{
+				return false;
+			}
+			
+			this.graphics.clear();
+			
+			_drawingData = new Array();		
+			
+			for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
+			{
+				
+				var currentItem:Object = _dataItems[cursorIndex];
+				
+				scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
+					currentItem[colorField], currentItem[sizeField], currentItem);
+				
+				_drawingData.push(scaleResults);
+				
+			}
+			
+			if (scale2)
+				radius = scale2.size;
+			
+			tmpRadius = radius;
+			if (_total>0)
+			{
+				_innerRadius = radius/_total * _stackPosition; 
+				tmpRadius = _innerRadius + radius/_total * visScene.thicknessRatio;
+			}
+			
+			
+			
+			var arcCenterX:Number = 0; 
+			var arcCenterY:Number = 0;
+			
+			if (visScene != null && visScene.origin != null)
+			{
+				arcCenterX = visScene.origin.x - radius;
+				arcCenterY = visScene.origin.y - radius;
+			}	
+			var wSize:Number, hSize:Number;
+			wSize = hSize = radius*2;
+			
+			var aAxis:IScale;
+			if (scale1)
+				aAxis = scale1;
+			
+			return true && super.preDraw();
+		}
+		
+		protected var tmpRadius:Number;
+		
+		protected var angle:Number, radius:Number = NaN;
+		
+		protected var startAngle:Number = 0; 
+		
+		protected var arcSize:Number = NaN;
+		
+		protected var arc:ArcPath = new ArcPath(NaN,NaN,NaN,NaN,null);
+		
+		override public function drawDataItem() : Boolean
+		{
+			var d:Object = _drawingData[_currentItemIndex];
+			if (isNaN(d[POS1])) return true && super.drawDataItem();
+			
+		
+			if (d[SIZE] && !isNaN(d[SIZE]))
+			{
+				_graphicRendererSize = d[SIZE];
+				tmpRadius = _innerRadius + radius/_total * visScene.thicknessRatio * _graphicRendererSize;
+			}
+			
+			var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius, visScene.origin);
+			var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius, visScene.origin); 
 
-		/** @Private 
-		 * Called by super.updateDisplayList when the series is ready for layout.*/
+				
+			if (_innerRadius > tmpRadius)
+				_innerRadius = tmpRadius;
+			
+			arc.setArcData(Math.max(0, _innerRadius), tmpRadius, startAngle, d[POS1], visScene.origin);
+			arc.fill = d[COLOR];
+			arc.stroke = stroke;
+			this.arc.draw(this.graphics, null);
+				
+			startAngle += d[POS1];
+			
+			return true && super.drawDataItem();
+		}
+		
+		override public function endDraw() : void
+		{
+			
+		}
+
+		/* @Private 
+		 * Called by super.updateDisplayList when the series is ready for layout.
 		override public function drawElement():void
 		{
 			if (isReadyForLayout() && _invalidatedElementGraphic)
@@ -338,6 +437,6 @@ package birdeye.vis.elements.geometry
 			}
 			createSVG();
 			_invalidatedElementGraphic = false;
-		}
+		}*/
 	}
 }
