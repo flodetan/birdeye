@@ -27,6 +27,7 @@
 
 package birdeye.vis.elements.geometry
 {
+	import birdeye.vis.VisScene;
 	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.interfaces.data.IExportableSVG;
@@ -169,6 +170,14 @@ package birdeye.vis.elements.geometry
 				scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
 					currentItem[colorField], currentItem[sizeField], currentItem);
 				
+				if (visScene.coordType == VisScene.POLAR)
+				{
+					var xPos:Number = PolarCoordinateTransform.getX(scaleResults[POS1], scaleResults[POS2], visScene.origin);
+					var yPos:Number = PolarCoordinateTransform.getY(scaleResults[POS1], scaleResults[POS2], visScene.origin);
+					scaleResults[POS1] = xPos;
+					scaleResults[POS2] = yPos; 
+				}
+				
 				if (dim1 && currentItem[dim1] == undefined ||
 					dim2 && currentItem[dim2] == undefined ||
 					dim3 && currentItem[dim3] == undefined)
@@ -176,6 +185,11 @@ package birdeye.vis.elements.geometry
 				
 				
 				var d:Object = new Object();
+				
+				if (!scaleResults[SIZE] || isNaN(scaleResults[SIZE]))
+				{
+					scaleResults[SIZE] = _graphicRendererSize;		
+				}
 				
 				// save bounds (for graphicRenderer)
 				d.bounds = new Rectangle(scaleResults[POS1] - scaleResults[SIZE], scaleResults[POS2] - scaleResults[SIZE], scaleResults[SIZE] * 2, scaleResults[SIZE] * 2);
@@ -247,15 +261,18 @@ package birdeye.vis.elements.geometry
 		{
 			var d:Object = _drawingData[_currentItemIndex];
 
-			if (_graphicsRendererInst is IBoundedRenderer)
-			{		
-				(_graphicsRendererInst as IBoundedRenderer).bounds = d.bounds;
-									
+			if (_graphicsRendererInst)
+			{
+				if (_graphicsRendererInst is IBoundedRenderer)
+				{		
+					(_graphicsRendererInst as IBoundedRenderer).bounds = d.bounds;
+				}										
+				
 				_graphicsRendererInst.fill = d.fill;
 				_graphicsRendererInst.stroke = d.stroke;
-				
+					
 				_graphicsRendererInst.draw(this.graphics, null);
-				
+					
 			}
 			
 			

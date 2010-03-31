@@ -170,6 +170,14 @@ package birdeye.vis.elements.geometry
 				scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
 					currentItem[colorField], currentItem[sizeField], currentItem);
 				
+				if (visScene.coordType == VisScene.POLAR)
+				{
+					var xPos:Number = PolarCoordinateTransform.getX(scaleResults[POS1], scaleResults[POS2], visScene.origin);
+					var yPos:Number = PolarCoordinateTransform.getY(scaleResults[POS1], scaleResults[POS2], visScene.origin);
+					scaleResults[POS1] = xPos;
+					scaleResults[POS2] = yPos; 
+				}
+				
 				_drawingData.push(scaleResults);
 				
 			}
