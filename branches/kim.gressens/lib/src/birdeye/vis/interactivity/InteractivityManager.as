@@ -25,6 +25,16 @@ package birdeye.vis.interactivity
 	 */
 	[Event(name="geometryMouseClick", type="birdeye.vis.interactivity.events.InteractivityEvent")]
 	
+	/**
+	 * Event is dispatched when a geometry is registered.
+	 */
+	[Event(name="geometryRegistered", type="birdeye.vis.interactivity.events.InteractivityEvent")]
+	
+	/**
+	 * Event is dispatched when a geometry is unregistered.
+	 */
+	[Event(name="geometryUnregistered", type="birdeye.vis.interactivity.events.InteractivityEvent")]
+	
 	public class InteractivityManager extends EventDispatcher implements IInteractivityManager
 	{
 			
@@ -41,6 +51,9 @@ package birdeye.vis.interactivity
 			if (geometries.indexOf(geom) < 0)
 			{
 				geometries.push(geom);
+				var ev:InteractivityEvent = new InteractivityEvent(InteractivityEvent.GEOMETRY_REGISTERED);
+				ev.geometry = geom;
+				this.dispatchEvent(ev);
 			}
 		}
 		
@@ -51,8 +64,19 @@ package birdeye.vis.interactivity
 			if (i >= 0)
 			{
 				geometries.splice(i, 1);
+				var ev:InteractivityEvent = new InteractivityEvent(InteractivityEvent.GEOMETRY_UNREGISTERED);
+				ev.geometry = geom;
+				this.dispatchEvent(ev);
+				
 			}
 				
+		}
+		
+		public function allGeometries():Vector.<IInteractiveGeometry>
+		{
+			// I know, this is not right, you're giving the inner geometries to the outer class
+			// but this is performance vs code quality, and in this case, I prefer performance
+			return geometries;
 		}
 		
 		protected var _coords:ICoordinates;
@@ -79,14 +103,21 @@ package birdeye.vis.interactivity
 				
 		public function mouseMove(event:MouseEvent):void
 		{
-			var p:Point = new Point(event.localX, event.localY);
+			//if (_coords.tooltipLayer != event.target) return;
+			var theSame:Boolean = _coords.tooltipLayer == event.target;
+			
+			var p:Point = new Point(event.stageX, event.stageY);
+			
+			var pLocal:Point = _coords.elementsContainer.globalToLocal(p);
 	
+//			trace("mouse move ", theSame , event.target, pLocal.x, pLocal.y);
+			
 			var length:int = geometries.length;
 		
 			// lenght outside of for loop and i++ in second part of for loop is for performance ...
 			for (var i:int=0;i<length;i++)
 			{
-				if (geometries[i].contains(p))
+				if (geometries[i].contains(pLocal))
 				{
 					if (_mousedOverGeometries.indexOf(geometries[i]) < 0)
 					{

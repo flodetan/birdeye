@@ -178,7 +178,7 @@ package birdeye.vis.coords
 		
 		public function invalidateGuide(guide:IGuide=null):void
 		{
-			if (!guide)
+			if (!guide && guides)
 			{
 				_invalidatedGuides = guides.slice();
 			}

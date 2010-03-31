@@ -180,10 +180,22 @@ package birdeye.vis.guides.axis
 			return _coordinates;
 		}
 		
+		private var _bounds:Rectangle;
+		
+		public function set bounds(b:Rectangle):void
+		{
+			_bounds = b;	
+		}
+		
+		public function get bounds():Rectangle
+		{
+			return this._bounds;	
+		}
+		
 		
 		private var _drawingData:Array;
 		
-		public function initializeDrawingData():Boolean
+		public function preDraw():Boolean
 		{	
 			if (_subScale && _subScale.completeDataValues && _subScale.completeDataValues.length > 0)
 			{			
@@ -208,7 +220,7 @@ package birdeye.vis.guides.axis
 					
 					data.end = endLinePosition;
 					
-					var categories:Array = new Array();
+					var innerCategories:Array = new Array();
 					
 					for (var j:int=0;j<(subSc.completeDataValues.length - 1);j++)
 					{
@@ -222,10 +234,10 @@ package birdeye.vis.guides.axis
 						innerData.point = labelPosition;
 						innerData.label = dataLabel;
 						
-						categories.push(innerData);
+						innerCategories.push(innerData);
 					}
 					
-					data.categories = categories;
+					data.categories = innerCategories;
 					
 					_drawingData.push(data);
 				}
@@ -245,10 +257,10 @@ package birdeye.vis.guides.axis
 		
 		public function drawDataItem():Boolean
 		{
-			if (index < _drawingData)
+			if (index < _drawingData.length)
 			{
 				var data:Object = _drawingData[index];
-				var categories:Array
+				var categories:Array= data.categories;
 				
 				if (subIndex == 0)
 				{
@@ -280,6 +292,11 @@ package birdeye.vis.guides.axis
 			}
 			
 			return false;
+		}
+		
+		public function endDraw() : void
+		{
+			
 		}
 		
 		

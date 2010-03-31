@@ -10,6 +10,9 @@ package birdeye.vis.interactivity.events
 		public static const GEOMETRY_MOUSE_CLICK:String = "geometryMouseClick";
 		public static const GEOMETRY_MOUSE_OUT:String = "geometryMouseOut";
 		
+		public static const GEOMETRY_REGISTERED:String = "geometryRegistered";
+		public static const GEOMETRY_UNREGISTERED:String = "geometryUnregistered";
+		
 		public var geometry:IInteractiveGeometry;
 		
 		public function InteractivityEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)

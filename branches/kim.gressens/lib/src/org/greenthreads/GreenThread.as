@@ -52,7 +52,7 @@ package org.greenthreads {
 			}
 			if (!_innerThread) throw new Error("No innerthread in greenthread.");
 			
-			return _innerThread.initializeDrawingData();
+			return _innerThread.preDraw();
 		}
 
 		public final function stop() : void {
@@ -78,6 +78,7 @@ package org.greenthreads {
 			if( debug ) statistics.endCycle( processAllocation );
 		
 			if( !loop ) {
+				_innerThread.endDraw();
 				dispatchProgress();
 				dispatchEvent( new Event( Event.COMPLETE ) );
 				//do any cleanup

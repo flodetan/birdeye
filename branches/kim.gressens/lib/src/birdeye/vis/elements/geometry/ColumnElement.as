@@ -31,7 +31,6 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.RectangleRenderer;
 	import birdeye.vis.interactivity.geometry.InteractiveRectangle;
-	import birdeye.vis.interfaces.interactivity.IInteractiveGeometry;
 	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
 	import birdeye.vis.interfaces.scales.INumerableScale;
@@ -42,7 +41,7 @@ package birdeye.vis.elements.geometry
 	
 	import org.greenthreads.IThread;
 
-	public class ColumnElement extends StackElement implements IThread
+	public class ColumnElement extends StackElement
 	{
 		private var _ggArray:Array;
 		
@@ -148,63 +147,15 @@ package birdeye.vis.elements.geometry
 		private var innerColWidth:Number = NaN;
 
 		
-		public function initializeDrawingData():Boolean
+		override public function preDraw():Boolean
 		{
-			if (!(isReadyForLayout() && _invalidatedElementGraphic) )
+			if (!(isReadyForLayout() && _invalidatedElementGraphic && _dataItems) )
 			{
 				return false;
 			}
 			
-			_dataItemIndex = 0;
 			this.graphics.clear();
-			
-			_drawingData = new Array();
-			
-			/*if (direction == DIRECTION_AUTO)
-			{
-				// automated detection of direction
-				if (scale1 && scale1 is IEnumerableScale && scale2 && scale2 is INumerableScale)
-				{
-					xDim = POS1;
-					yDim = POS2;
-				}
-				else if (scale1 && scale1 is INumerableScale && scale2 && scale2 is IEnumerableScale)
-				{
-					xDim = POS2;
-					yDim = POS1;
-				}
-				else
-				{
-					// defaults to vertical
-					xDim = POS1;
-					yDim = POS2;
-				}
-			}
-			else if (direction == DIRECTION_VERTICAL)
-			{
-				xDim = POS1;
-				yDim = POS2;
-			}
-			else if (direction == DIRECTION_HORIZONTAL)
-			{
-				xDim = POS2;
-				yDim = POS1;
-			}*/
-			
-			
-			
-			for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
-			{
-					
-				var currentItem:Object = _dataItems[cursorIndex];
-				
-				scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
-					currentItem[colorField], currentItem[sizeField], currentItem);
-				
-				_drawingData.push(scaleResults);
-				
-			}
-			
+
 			if (direction == DIRECTION_VERTICAL)
 			{
 				if (scale1)
@@ -250,124 +201,130 @@ package birdeye.vis.elements.geometry
 				
 			}
 			
-			
-			
-			return true;
+			return true && super.preDraw();
 			
 		}
 		
 		protected var geometries:Vector.<InteractiveRectangle>;
-		
-		public function drawDataItem():Boolean
+	
+		override public function drawDataItem():Boolean
 		{
-			if (_dataItemIndex < _drawingData.length)
+			
+			var currentItem:Object = _dataItems[_currentItemIndex];
+			
+			scaleResults = determinePositions(currentItem[dim1], currentItem[dim2], currentItem[dim3], 
+				currentItem[colorField], currentItem[sizeField], currentItem);
+	
+			// save the tmp width
+			var tmpWidth:Number = innerColWidth;
+			
+			// if a size from a scale is present, use that to change the width of column
+			if (scaleResults[SIZE] && !isNaN(scaleResults[SIZE]))
 			{
+				tmpWidth = innerColWidth * scaleResults[SIZE];
+			}
 				
-				var d:Object = _drawingData[_dataItemIndex];
-
-				// save the tmp width
-				var tmpWidth:Number = innerColWidth;
-				
-				// if a size from a scale is present, use that to change the width of column
-				if (d[SIZE] && !isNaN(d[SIZE]))
-				{
-					tmpWidth = innerColWidth * d[SIZE];
-				}
-				
-				
-				// center the renderer using an offset
-				var pos1:Number = d[POS1];
-				var pos2:Number = d[POS2];
-				var barWidth:Number;
-				var barHeight:Number;
-				
-				switch(_stackType)
-				{
-					case OVERLAID:
-					case STACKED:
-						if (direction == DIRECTION_VERTICAL)
-						{
-							pos1 -= tmpWidth / 2;	
-						}
-						else if (direction == DIRECTION_HORIZONTAL)
-						{
-							pos2 -= tmpWidth / 2;
-						}
-						break;	
-					case CLUSTER:
-						if (direction == DIRECTION_VERTICAL)
-						{
-							pos1 += colWidth / 2 - (tmpWidth + clusterPadding) * (_stackPosition + 1);
-						}
-						else if (direction == DIRECTION_HORIZONTAL)
-						{
-							pos2 += colWidth / 2 - (tmpWidth + clusterPadding) * (_stackPosition + 1);
-						}
-						break;
-				}
-				
-				if (direction == DIRECTION_VERTICAL)
-				{
-					barWidth = tmpWidth;
-					barHeight = d[POS2+"base"] - d[POS2];
-				}
-				else if (direction == DIRECTION_HORIZONTAL)
-				{
-					barWidth = d[POS1+"base"] - d[POS1];
-					barHeight = tmpWidth; 
-				}
-				
-				if (_graphicsRendererInst)
-				{
-					var bounds:Rectangle = new Rectangle(pos1, pos2, barWidth, barHeight);
-					
-					if (_graphicsRendererInst is IBoundedRenderer)
+			
+			// center the renderer using an offset
+			var pos1:Number = scaleResults[POS1];
+			var pos2:Number = scaleResults[POS2];
+			var barWidth:Number;
+			var barHeight:Number;
+			
+			switch(_stackType)
+			{
+				case OVERLAID:
+				case STACKED:
+					if (direction == DIRECTION_VERTICAL)
 					{
-						(_graphicsRendererInst as IBoundedRenderer).bounds = bounds;
+						pos1 -= tmpWidth / 2;	
 					}
-					
-					var geom:InteractiveRectangle;
-					
-					if (_dataItemIndex < geometries.length)
+					else if (direction == DIRECTION_HORIZONTAL)
 					{
-						geom = geometries[_dataItemIndex];
+						pos2 -= tmpWidth / 2;
 					}
-					else
+					break;	
+				case CLUSTER:
+					if (direction == DIRECTION_VERTICAL)
 					{
-						// add a new one
-						geom = new InteractiveRectangle();
-						geom.element = this;
-						geometries.push(geom);
-						
-						this.visScene.interactivityManager.registerGeometry(geom);
+						pos1 += colWidth / 2 - (tmpWidth + clusterPadding) * (_stackPosition + 1);
 					}
-					
-					geom.baseGeometry = new Rectangle(pos1, pos2, barWidth, barHeight);		
-					geom.preferredTooltipPoint = new Point(pos1, pos2);
-					geom.data = _dataItems[_dataItemIndex];
-					
-					_graphicsRendererInst.fill = d[COLOR];
-					_graphicsRendererInst.stroke = stroke;
-					
-					_graphicsRendererInst.draw(this.graphics, null);
-					
-					_dataItemIndex++;
-				}
-				
-				return true;
+					else if (direction == DIRECTION_HORIZONTAL)
+					{
+						pos2 += colWidth / 2 - (tmpWidth + clusterPadding) * (_stackPosition + 1);
+					}
+					break;
 			}
 			
+			if (direction == DIRECTION_VERTICAL)
+			{
+				barWidth = tmpWidth;
+				barHeight = scaleResults[POS2+"base"] - scaleResults[POS2];
+			}
+			else if (direction == DIRECTION_HORIZONTAL)
+			{
+				barWidth = scaleResults[POS1+"base"] - scaleResults[POS1];
+				barHeight = tmpWidth; 
+			}
+			
+			if (_graphicsRendererInst)
+			{
+				var bounds:Rectangle = new Rectangle(pos1, pos2, barWidth, barHeight);
+				
+				if (_graphicsRendererInst is IBoundedRenderer)
+				{
+					(_graphicsRendererInst as IBoundedRenderer).bounds = bounds;
+				}
+				
+				var geom:InteractiveRectangle;
+				
+				var isNew:Boolean = false;
+				
+				if (_currentItemIndex < geometries.length)
+				{
+					geom = geometries[_currentItemIndex];
+				}
+				else
+				{
+					// add a new one
+					geom = new InteractiveRectangle();
+					geom.element = this;
+					geometries.push(geom);
+					isNew = true;
+				}
+				
+				geom.baseGeometry = new Rectangle(pos1, pos2, barWidth, barHeight);		
+				geom.preferredTooltipPoint = new Point(pos1, pos2);
+				geom.data = _dataItems[_currentItemIndex];
+
+				if (isNew)
+				{						
+					this.visScene.interactivityManager.registerGeometry(geom);
+				}
+				
+				_graphicsRendererInst.fill = scaleResults[COLOR];
+				_graphicsRendererInst.stroke = stroke;
+				
+				_graphicsRendererInst.draw(this.graphics, null);
+			}
+				
+			return true && super.drawDataItem();
+		
+		}
+		
+		override public function endDraw():void
+		{
+			super.endDraw();
+			
 			// check if there are geometries which are unnecessary
-			if (geometries.length > _drawingData.length)
+			if (geometries.length > _dataItems.length)
 			{
 				// to many geometries, unregister some
-				while (geometries.length > _drawingData.length)
+				while (geometries.length > _dataItems.length)
 				{
 					this.visScene.interactivityManager.unregisterGeometry(geometries.pop());
 				}
 			}
-			
-			return false;
 		}
 		
 		

@@ -868,7 +868,7 @@ package birdeye.vis.guides.axis
 		private var prevWidth:Number = NaN, prevHeight:Number = NaN;
 		private var xMin:Number = NaN, xMax:Number = NaN, yMin:Number = NaN, yMax:Number = NaN, sign:Number;	
 		
-		public function initializeDrawingData():Boolean
+		public function preDraw():Boolean
 		{
 			var w:Number = bounds.width, h:Number = bounds.height;
 			
@@ -952,6 +952,12 @@ package birdeye.vis.guides.axis
 			return false;
 			
 		}
+		
+		public function endDraw():void
+		{
+			
+		}
+		
 		/** @Private
 		 * Draw the axis depending on the current unscaled size and its placement
 		 */
