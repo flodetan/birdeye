@@ -109,6 +109,8 @@ package birdeye.vis.elements.geometry
 			{
 				_itemRendererChanged = false;
 				
+				trimItemRendererPool(0);
+				
 				invalidatingDisplay();
 				
 			}
@@ -278,10 +280,7 @@ package birdeye.vis.elements.geometry
 			
 			if (_itemRenderer)
 			{
-				var itemInst:DisplayObject = _itemRenderer.newInstance();
-				
-				this.addChild(itemInst);
-				
+				var itemInst:DisplayObject = getItemRenderer(_currentItemIndex);
 				if (itemInst is IDataRenderer)
 				{
 					(itemInst as IDataRenderer).data = d.data;
@@ -293,6 +292,46 @@ package birdeye.vis.elements.geometry
 			}
 			
 			return true && super.drawDataItem();
+		}
+		
+		override public function endDraw():void
+		{
+			// trim the itemRenderers
+			trimItemRendererPool(_currentItemIndex);
+		}
+		
+		protected var _itemRendererPool:Vector.<DisplayObject> = new Vector.<DisplayObject>();
+		
+		protected function getItemRenderer(itemIndex:int):DisplayObject
+		{
+			if (itemIndex < _itemRendererPool.length)
+			{
+				return _itemRendererPool[itemIndex];		
+			}
+			else
+			{
+				// create new
+				var itemInst:DisplayObject = _itemRenderer.newInstance();				
+				this.addChild(itemInst);
+				_itemRendererPool.push(itemInst);
+				
+				return itemInst;
+			}
+		}
+		
+		protected function trimItemRendererPool(length:int):void
+		{
+			while (_itemRendererPool.length > length)
+			{
+				var itm:DisplayObject = _itemRendererPool.pop();
+				
+				if (itm is VisScene)
+				{
+					(itm as VisScene).clearAll();
+				}
+				
+				this.removeChild(itm);
+			}
 		}
 	}
 }
