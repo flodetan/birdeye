@@ -687,6 +687,11 @@ package birdeye.vis.elements
 			
 		}
 		
+		public function clear():void
+		{
+			this.graphics.clear();
+		}
+		
 
 		// other methods
 

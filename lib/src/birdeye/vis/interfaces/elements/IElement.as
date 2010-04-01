@@ -96,5 +96,7 @@ package birdeye.vis.interfaces.elements
 		function get x():Number;
 		/** Return the y position of this guide.*/
 		function get y():Number;
+		
+		function clear():void;
 	}
 }

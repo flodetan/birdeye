@@ -891,16 +891,32 @@
 		
 	    public function clearAll():void
 	    {
-	            if (guides && guides.length > 0)
-	            {
-	            	for (var i:int=0;i<guides.length;i++)
-	            	{
-	            		if (guides[i] is IGuide)
-	            		{
-	            			(guides[i] as IGuide).clearAll();
-	            		}
-	            	}
-	            }
+			
+			if (elements)
+			{
+				var elLength:int = elements.length;
+
+				for (var j:int=0;j<elLength;j++)
+				{
+					if (elements[i] is IElement)
+					{
+						(elements[i] as IElement).clear();
+					}
+				}
+			}
+		
+            if (guides)
+            {
+				var gLength:int = guides.length;
+
+            	for (var i:int=0;i<gLength;i++)
+            	{
+            		if (guides[i] is IGuide)
+            		{
+            			(guides[i] as IGuide).clearAll();
+            		}
+            	}
+            }
 	    }
 	}  
 }
