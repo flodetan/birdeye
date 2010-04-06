@@ -47,6 +47,7 @@
 	import com.degrafa.geometry.RegularRectangle;
 	import com.degrafa.paint.SolidFill;
 	
+	import flash.display.DisplayObject;
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.geom.Point;
@@ -404,6 +405,8 @@
         [ArrayElementType("birdeye.vis.interfaces.elements.IElement")]
 		public function set elements(val:Array):void
 		{
+			clearCurrentElements();
+			
 			_elements = val;
 			_elementsChanged = true;
 			
@@ -675,6 +678,23 @@
 		public function get tooltipLayer():UIComponent
 		{
 			return _tooltipLayer;
+		}
+		
+		
+		protected function clearCurrentElements():void
+		{
+			if (_elements)
+			{
+				for each (var el:IElement in _elements)
+				{
+					el.clear();
+					
+					if (this.elementsContainer.contains(el as DisplayObject))
+					{
+						this.elementsContainer.removeChild(el as DisplayObject);
+					}
+				}
+			}
 		}
 		
 		protected var rectBackGround:RegularRectangle;
