@@ -160,7 +160,15 @@ package birdeye.vis.elements.collision
 			if (!baseValues)
 			{
 				baseValues = new Dictionary();
+			}
+			
+			if (!baseValues[dim2])
+			{
 				baseValues[dim2] = 0;
+			}
+			
+			if (!baseValues[dim1])
+			{	
 				baseValues[dim1] = 0;
 			}
 

@@ -1107,6 +1107,16 @@ package birdeye.vis.guides.axis
 				maxLblSize = Math.max(maxLblSize, lblTester.textWidth);
 			}
 			
+			var totalLength:Number = scale.completeDataValues.length * innerScale.completeDataValues.length;
+			
+			if ((placement == TOP || placement == BOTTOM || placement == HORIZONTAL_CENTER) 
+				&& (this.size / totalLength < maxLblSize))
+			{
+				if (this._rotateLabels != 90)
+				{
+					this._rotateLabels = 90;
+				}
+			}
 			
 			if (showAxis)
 			{
@@ -1194,14 +1204,20 @@ package birdeye.vis.guides.axis
 			if (xMin == xMax)
 			{
 				
-				
-				for (var i:uint = 0; i<scale.completeDataValues.length; i += completeValuesInterval)
+				var outerLength:Number = scale.completeDataValues.length;
+				var innerLength:Number = innerScale.completeDataValues.length;
+							
+				for (var i:uint = 0; i<outerLength; i += completeValuesInterval)
 				{	
 					var currentPos:Number = scale.getPosition(scale.completeDataValues[i]);
 					
-					for (var j:uint = 0;j<innerScale.completeDataValues.length;j++)
+					
+					for (var j:uint = 0;j<innerLength;j++)
 					{
-						
+						if (j == (innerLength - 1) && i  > 0)
+						{
+							continue;
+						}
 						var dataLabel:Object = innerScale.completeDataValues[j];
 						
 						// create thick line
@@ -1322,8 +1338,8 @@ package birdeye.vis.guides.axis
 					defaultLabel.transform = rot;
 				}
 				
-				svgTextY = pos; //+ defaultLabel.displayObject.height/2;
-				defaultLabel.y = pos;//-(defaultLabel.displayObject.height )/2;
+				svgTextY = pos + defaultLabel.displayObject.height/2;
+				defaultLabel.y = pos - (defaultLabel.displayObject.height )/2;
 				if (placement == LEFT || placement == VERTICAL_CENTER)
 					defaultLabel.x = width - _thickWidth - (defaultLabel.textWidth + 4);
 				else
@@ -1339,7 +1355,7 @@ package birdeye.vis.guides.axis
 				defaultLabel.autoSizeField = true;
 				defaultLabel.text = labelText;
 				defaultLabel.y = _thickWidth;
-				svgTextY = _thickWidth;// + defaultLabel.displayObject.height;
+				svgTextY = _thickWidth + defaultLabel.displayObject.height;
 				
 				if (!isNaN(_rotateLabels) && _rotateLabels != 0)
 				{

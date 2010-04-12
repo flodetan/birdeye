@@ -35,6 +35,10 @@ package birdeye.vis.interfaces.guides
 		/** Set the axis placement.*/
 		function set placement(val:String):void
 		function get placement():String
+			
+			
+		function get minWidth():Number;
+		function get minHeight():Number;
 
 
 		function set size(val:Number):void
