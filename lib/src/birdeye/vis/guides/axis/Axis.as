@@ -635,22 +635,8 @@ package birdeye.vis.guides.axis
 		 */
 		private var _coordinates:ICoordinates;
 		public function set coordinates(val:ICoordinates):void
-		{
-			// first remove old event listeners if they exist
-			if (_coordinates)
-			{
-				_coordinates.removeEventListener(ElementRollOutEvent.ELEMENT_ROLL_OUT, onElementRollOut);
-				_coordinates.removeEventListener(ElementRollOverEvent.ELEMENT_ROLL_OVER, onElementRollOver);
-			}
-			
-			_coordinates = val;
-			
-			// add the new event listeners
-			if (_coordinates)
-			{
-				_coordinates.addEventListener(ElementRollOverEvent.ELEMENT_ROLL_OVER, onElementRollOver);
-				_coordinates.addEventListener(ElementRollOutEvent.ELEMENT_ROLL_OUT, onElementRollOut);
-			}		
+		{			
+			_coordinates = val;		
 		}
 		
 		public function get coordinates():ICoordinates
@@ -1002,26 +988,26 @@ package birdeye.vis.guides.axis
 			{
 				case BOTTOM:
 				case HORIZONTAL_CENTER:
-					x0 = 0; x1 = w;
+					x0 = 0; x1 = size;
 					y0 = 0; y1 = 0;
 					break;
 				case TOP:
-					x0 = 0; x1 = w;
+					x0 = 0; x1 = size;
 					y0 = h; y1 = h;
 					break;
 				case LEFT:
 				case VERTICAL_CENTER:
 					x0 = w; x1 = w;
-					y0 = 0; y1 = h;
+					y0 = 0; y1 = size;
 					break;
 				case RIGHT:
  				case DIAGONAL:
 					x0 = 0; x1 = 0;
-					y0 = 0; y1 = h;
+					y0 = 0; y1 = size;
 					break;
  				case DIAGONAL:
 					x0 = 0; x1 = 0;
-					y0 = 0; y1 = h;
+					y0 = 0; y1 = size;
 					break;
 			}
 			
@@ -1030,6 +1016,7 @@ package birdeye.vis.guides.axis
 			
 			
 			_svgData += tmpSVG;
+			trace("LINE SVG is ", tmpSVG);
 			stdPath.data = tmpSVG;
 			stdPath.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 
@@ -1331,61 +1318,6 @@ trace(getTimer(), "drawing axis");
 					DisplayObject(lblRenderer).height = labelRendererHeight;
 			}
 			return lblRenderer;
-		}
-		
-		private function onElementRollOver(e:ElementRollOverEvent):void
-		{
-			if (_pointer)
-			{
-				var pos:Object;
-				if (scale == e.scale1)
-				{
-					pos = e.pos1;	
-				}
-				else if (scale == e.scale2)
-				{
-					pos = e.pos2;
-				}
-				else if (scale == e.scale3)
-				{
-					pos = e.pos3;
-				}
-				else
-				{
-					return;
-				}
-					
-				switch (placement)
-				{
-					case Axis.BOTTOM:
-					case Axis.HORIZONTAL_CENTER:
-					case Axis.TOP:
-						pointerX = scale.getPosition(pos);
-						_pointer.visible = true;
-						break;
-					case Axis.LEFT:
-					case Axis.VERTICAL_CENTER:
-					case Axis.RIGHT:
-						var posY:Number = scale.getPosition(pos);
-						if (coordinates && coordinates.origin)
-						{
-							posY = coordinates.origin.y - posY;
-						}
-
-						pointerY = posY;
-						_pointer.visible = true;
-						break;
-
-				}
-			}
-		}
-		
-		private function onElementRollOut(e:ElementRollOutEvent):void
-		{
-			if (_pointer)
-			{
-				this._pointer.visible = false;
-			}
 		}
 		
 		

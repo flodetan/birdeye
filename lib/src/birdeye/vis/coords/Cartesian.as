@@ -297,16 +297,16 @@ package birdeye.vis.coords
 				switch (axis.placement)
 				{
 					case Axis.BOTTOM:
-						addGuideToThreads(guide, new Rectangle(0,0, bottomContainer.width , bottomContainer.height / bottomContainer.numChildren));
+						addGuideToThreads(guide, new Rectangle(0,0, bottomContainer.width , axis.minHeight));
 						break;
 					case Axis.TOP:
-						addGuideToThreads(guide, new Rectangle(0,0, topContainer.width, topContainer.height / topContainer.numChildren));
+						addGuideToThreads(guide, new Rectangle(0,0, topContainer.width, axis.minHeight));
 						break;
 					case Axis.LEFT:
-						addGuideToThreads(guide, new Rectangle(0,0, leftContainer.width / leftContainer.numChildren, leftContainer.height));
+						addGuideToThreads(guide, new Rectangle(0,0, axis.minWidth, leftContainer.height));
 						break;
 					case Axis.RIGHT:
-						addGuideToThreads(guide,new Rectangle(0,0, rightContainer.width / rightContainer.numChildren, rightContainer.height));
+						addGuideToThreads(guide,new Rectangle(0,0, axis.minWidth, rightContainer.height));
 				}
 							
 			}
@@ -346,21 +346,20 @@ package birdeye.vis.coords
 				if (guide is IAxis)
 				{
 					var axis:IAxis = guide as IAxis;
-					var axisUI:UIComponent = guide as UIComponent;
 										
 					switch (axis.placement)
 					{
 						case Axis.BOTTOM:
-							bottomSize += axisUI.minHeight;
+							bottomSize += axis.minHeight;
 							break;
 						case Axis.TOP:
-							topSize += axisUI.minHeight;
+							topSize += axis.minHeight;
 							break;
 						case Axis.RIGHT:
-							rightSize += axisUI.minWidth;
+							rightSize += axis.minWidth;
 							break;
 						case Axis.LEFT:
-							leftSize += axisUI.minWidth;
+							leftSize += axis.minWidth;
 							break;
 					}
 				}
