@@ -31,6 +31,8 @@
 	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.interfaces.scales.ISubScale;
 	
+	import flash.events.Event;
+	
 	import mx.core.IFactory;
 	
 	[Exclude(name="scaleType", kind="property")]
@@ -54,8 +56,12 @@
 		private var _dataProvider:Array = [];
 		public function set dataProvider(val:Array):void
 		{
-			_dataProvider = val;
-			invalidate();
+			if (val != _dataProvider)
+			{
+				_dataProvider = val;
+				this.dispatchEvent(new Event("completeDataValuesChanged"));
+				invalidate();
+			}
 		}
 		public function get dataProvider():Array
 		{
@@ -67,6 +73,7 @@
 		 * For a numeric scale this is min and max and everything in between.</br>
 		 * For a category scale this is identical to dataValues.</br>
 		 */
+		[Bindable(event="completeDataValuesChanged")]
 		public function get completeDataValues():Array
 		{
 			return this.dataProvider;

@@ -30,9 +30,12 @@ package birdeye.vis.scales
 	import birdeye.vis.interfaces.validation.IValidatingParent;
 	import birdeye.vis.interfaces.validation.IValidatingScale;
 	
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	
 
 
-	public class BaseScale implements IValidatingScale
+	public class BaseScale extends EventDispatcher implements IValidatingScale
 	{
 		/** Scale type: Linear */
 		public static const LINEAR:String = "linear";
@@ -250,10 +253,16 @@ package birdeye.vis.scales
 
 		
 		protected var _size:Number;
+		[Bindable(event="sizeChanged")]
 		public function set size(val:Number):void
 		{
-			_size = val;
-			
+			if (val != _size)
+			{
+				
+				_size = val;
+				
+				this.dispatchEvent(new Event("sizeChanged"));
+			}			
 			//invalidate();
 		}
 		

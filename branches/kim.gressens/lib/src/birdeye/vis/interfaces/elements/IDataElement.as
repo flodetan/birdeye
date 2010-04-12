@@ -49,10 +49,6 @@ package birdeye.vis.interfaces.elements
 		function set dim2(val:Object):void;
 		function get dim2():Object;
 		
-		/** Set the dim3 to filter vertical data values.*/
-		function set dim3(val:String):void;
-		function get dim3():String;
-		
 		/** Set the scale for dim1.*/
 		function set scale1(val:IScale):void;
 		function get scale1():IScale;
@@ -61,18 +57,11 @@ package birdeye.vis.interfaces.elements
 		function set scale2(val:IScale):void;
 		function get scale2():IScale;
 		
-		/** Set the scale for dim3.*/
-		function set scale3(val:IScale):void;
-		function get scale3():IScale;
-		
 		function get maxDim1Value():Number;
 		function get minDim1Value():Number;
 		
 		function get maxDim2Value():Number;
 		function get minDim2Value():Number;
-		
-		function get maxDim3Value():Number;
-		function get minDim3Value():Number;
 		
 		function get totalDim1PositiveValue():Number;
 		

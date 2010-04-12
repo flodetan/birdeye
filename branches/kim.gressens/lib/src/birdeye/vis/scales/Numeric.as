@@ -30,6 +30,8 @@ package birdeye.vis.scales
 	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.scales.util.NumericScaleDefinition;
 	import birdeye.vis.scales.util.NumericUtil;
+	
+	import flash.events.Event;
 
 	public class Numeric extends BaseScale  implements INumerableScale
 	{
@@ -50,6 +52,7 @@ package birdeye.vis.scales
 		 * For a numeric scale this is min and max and everything in between.</br>
 		 * For a category scale this is identical to dataValues.</br>
 		 */
+		[Bindable(event="completeDataValuesChanged")]
 		public function get completeDataValues():Array
 		{
 			var toReturn:Array = new Array();
@@ -188,6 +191,8 @@ package birdeye.vis.scales
 						}
 					}
 				}
+				
+				this.dispatchEvent(new Event("completeDataValuesChanged"));
 			}
 		}
 		

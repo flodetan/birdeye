@@ -15,11 +15,14 @@ package birdeye.vis.elements
 	import flash.utils.Dictionary;
 	import flash.xml.XMLNode;
 	
+	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.CursorBookmark;
 	import mx.collections.ICollectionView;
 	import mx.collections.IViewCursor;
 	import mx.collections.XMLListCollection;
+	
+	import org.greenthreads.ThreadProcessor;
 	
 	/**
 	 * This class defines the basic data elements for an element.</br>
@@ -385,6 +388,12 @@ package birdeye.vis.elements
 		{
 			_scale1 = val;				
 			
+			if (_scale1)
+			{
+				BindingUtils.bindSetter(redraw, _scale1, "completeDataValues");
+				BindingUtils.bindSetter(redraw, _scale1, "size");
+			}
+			
 			invalidateProperties();
 			invalidatingDisplay();
 		}
@@ -398,6 +407,12 @@ package birdeye.vis.elements
 		{
 			_scale2 = val;
 			
+			if (_scale2)
+			{
+				BindingUtils.bindSetter(redraw, _scale2, "completeDataValues");
+				BindingUtils.bindSetter(redraw, _scale2, "size");
+			}
+
 			invalidateProperties();
 			invalidatingDisplay();
 		}
@@ -406,20 +421,11 @@ package birdeye.vis.elements
 			return _scale2;
 		}
 		
-		private var _scale3:IScale;
-		public function set scale3(val:IScale):void
-		{
-			_scale3 = val;
-			
-			invalidateProperties();
-			invalidatingDisplay();
-		}
-		public function get scale3():IScale
-		{
-			return _scale3;
-		}
 		
-		
+		protected function redraw(o:Object):void
+		{
+
+		}
 		
 		/*
 		* INNER DATA Centric getters and setters
@@ -433,8 +439,8 @@ package birdeye.vis.elements
 			if (items !== oldVal) {
 				_dataItems = items;
 				initDataItemsById();
-				_maxDim1Value = _maxDim2Value = _maxDim3Value = _totalDim1PositiveValue = NaN;
-				_minDim1Value = _minDim2Value = _minDim3Value = NaN;
+				_maxDim1Value = _maxDim2Value = _totalDim1PositiveValue = NaN;
+				_minDim1Value = _minDim2Value = NaN;
 				_minColorValue = _maxColorValue = _minSizeValue = _maxSizeValue = NaN;
 				dispatchEvent(new ElementDataItemsChangeEvent(this, oldVal, items));
 				invalidateProperties();
@@ -477,23 +483,7 @@ package birdeye.vis.elements
 				_minDim2Value = getMinValue(dim2);
 			return _minDim2Value;
 		}
-		
-		protected var _maxDim3Value:Number = NaN;
-		public function get maxDim3Value():Number
-		{
-			if (! (scale3 is IEnumerableScale) && isNaN(_maxDim3Value))
-				_maxDim3Value = getMaxValue(dim3);
-			return _maxDim3Value;
-		}
-		
-		private var _minDim3Value:Number = NaN;
-		public function get minDim3Value():Number
-		{
-			if (! (scale3 is IEnumerableScale) && isNaN(_minDim3Value))
-				_minDim3Value = getMinValue(dim3);
-			return _minDim3Value;
-		}
-		
+
 		private var _totalDim1PositiveValue:Number = NaN;
 		public function get totalDim1PositiveValue():Number
 		{
