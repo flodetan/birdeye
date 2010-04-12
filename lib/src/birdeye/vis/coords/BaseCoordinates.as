@@ -493,7 +493,6 @@ package birdeye.vis.coords
 			{				
 				if (element.scale1) updateScale(element.scale1, element, elementsMinMax, "Dim1");
 				if (element.scale2) updateScale(element.scale2, element, elementsMinMax, "Dim2");
-				if (element.scale3) updateScale(element.scale3, element, elementsMinMax, "Dim3");
 				if (element.colorScale) updateScale(element.colorScale, element, elementsMinMax, "Color");
 				if (element.sizeScale) updateScale(element.sizeScale, element, elementsMinMax, "Size");					
 			}

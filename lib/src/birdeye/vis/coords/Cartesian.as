@@ -153,26 +153,26 @@ package birdeye.vis.coords
 					switch (axis.placement)
 					{
 						case Axis.TOP:
-							if(axis is DisplayObject && !topContainer.contains(DisplayObject(axis)) && !DisplayObject(axis).parent)
+							if(axis is DisplayObject && !topContainer.contains(DisplayObject(axis)))
 							{
 								topContainer.addChild(DisplayObject(axis));
 							}
 							break; 
 						case Axis.BOTTOM:
-							if(axis is DisplayObject && !bottomContainer.contains(DisplayObject(axis)) && !DisplayObject(axis).parent)
+							if(axis is DisplayObject && !bottomContainer.contains(DisplayObject(axis)))
 							{
 								bottomContainer.addChild(DisplayObject(axis));
 							}
 							break;
 							
 						case Axis.LEFT:
-							if(axis is DisplayObject && !leftContainer.contains(DisplayObject(axis)) && !DisplayObject(axis).parent)
+							if(axis is DisplayObject && !leftContainer.contains(DisplayObject(axis)))
 							{
 								leftContainer.addChild(DisplayObject(axis));
 							}
 							break;
 						case Axis.RIGHT:
-							if(axis is DisplayObject && !rightContainer.contains(DisplayObject(axis)) && !DisplayObject(axis).parent)
+							if(axis is DisplayObject && !rightContainer.contains(DisplayObject(axis)))
 							{
 								rightContainer.addChild(DisplayObject(axis));
 							}
@@ -199,22 +199,6 @@ package birdeye.vis.coords
 		override protected function initElement(element:IElement, countStackableElements:Array):uint
 		{
 			var nCursors:uint = super.initElement(element, countStackableElements);
-
-			var tmpScale3:IScale = element.scale3 as IScale;
-			if (tmpScale3)
-			{
-					
-				// this will be replaced by a depth property 
- 				IScale(tmpScale3).size = width; 
- 				// the Scale3 is in reality an Scale2 which is rotated of 90 degrees
- 				// on its X coordinate. This will be replaced by a real z axis, when 
- 				// FP will provide methods to draw real 3d lines
-				zContainer.rotationX = -90;
-				
-				// this adjusts the positioning of the axis after the rotation
-				zContainer.z = width;
-				_is3D = true;
- 			}
  			
  			return nCursors;
 				

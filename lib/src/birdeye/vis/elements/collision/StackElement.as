@@ -225,19 +225,6 @@ package birdeye.vis.elements.collision
 			}
 					
 			var scale2RelativeValue:Number = NaN;
-
-			if (scale3)
-			{
-				scaleResults[POS3] = scale3.getPosition(dim3);
-				// since there is no method yet to draw a real z axis 
-				// we create an y axis and rotate it to properly visualize 
-				// a 'fake' z axis. however zPos over this y axis corresponds to 
-				// the axis height - zPos, because the y axis in Flex is 
-				// up side down. this trick allows to visualize the y axis as
-				// if it would be a z. when there will be a 3d line class, it will 
-				// be replaced
-				scaleResults[POS3relative] = scale3.size - scaleResults[POS3];
-			} 
 			
 			if (colorScale)
 			{

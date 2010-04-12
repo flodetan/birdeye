@@ -593,6 +593,14 @@ package birdeye.vis.elements
 
 		}
 
+		override protected function redraw(o:Object):void
+		{
+			if (o != null)
+			{
+				ThreadProcessor.getInstance().addThread(this);
+			}
+		}
+		
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
@@ -1373,7 +1381,6 @@ package birdeye.vis.elements
 			rollOverE.dim3 = tmpDim3
 			rollOverE.scale1 = scale1;
 			rollOverE.scale2 = scale2;
-			rollOverE.scale3 = scale3;
 			
 			if (extGG.currentItem)
 			{

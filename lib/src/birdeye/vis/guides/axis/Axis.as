@@ -47,11 +47,14 @@ package birdeye.vis.guides.axis
 	import com.degrafa.transform.RotateTransform;
 	
 	import flash.display.DisplayObject;
+	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
 	import flash.utils.getTimer;
 	
+	import mx.binding.utils.BindingUtils;
+	import mx.binding.utils.ChangeWatcher;
 	import mx.core.IDataRenderer;
 	import mx.core.IFactory;
 	import mx.styles.CSSStyleDeclaration;
@@ -238,8 +241,23 @@ package birdeye.vis.guides.axis
 		
 		private var _thickAlignment:String = "left";
 		
+		private var compDVCW:ChangeWatcher;
+		private var sizeCW:ChangeWatcher;
+		
 		public function set scale(s:IScale):void
 		{
+			if (s == _scale) return;
+			
+			if (compDVCW)
+			{
+				compDVCW.unwatch();
+			}
+			
+			if (sizeCW)
+			{
+				sizeCW.unwatch();
+			}
+			
 			_scale = s;
 			
 			if (_scale is Category)
@@ -249,6 +267,20 @@ package birdeye.vis.guides.axis
 			else
 			{
 				_thickAlignment = "left";
+			}
+			
+			if (_scale && _scale is IEventDispatcher)
+			{
+				compDVCW = BindingUtils.bindSetter(redraw, _scale, "completeDataValues");
+				sizeCW = BindingUtils.bindSetter(redraw, _scale, "size");
+			}
+		}
+		
+		private function redraw(o:Object):void
+		{
+			if (o != null && this.initialized)
+			{
+				ThreadProcessor.getInstance().addThread(this);
 			}
 		}
 		
@@ -865,26 +897,27 @@ package birdeye.vis.guides.axis
 			return _bounds;
 		}
 		
-		private var prevWidth:Number = NaN, prevHeight:Number = NaN;
 		private var xMin:Number = NaN, xMax:Number = NaN, yMin:Number = NaN, yMax:Number = NaN, sign:Number;	
 		
 		public function preDraw():Boolean
 		{
-			var w:Number = bounds.width, h:Number = bounds.height;
+			clearAll();	
 			
-			if (prevWidth != w || prevHeight != h)
+			calculateMaxLabelSize();
+			
+			if (!bounds || !scale || scale.completeDataValues.length == 0 || isNaN(scale.size))
 			{
-				prevWidth = w;
-				prevHeight = h;
-				invalidated = true;
+				return false;
 			}
+			
+			invalidated = true;
 						
 			if (!(showAxis && invalidated))
 			{
 				return false;
 			}
 			
-			clearAll();
+
 			svgText = _svgData = "";
 			
 			_pointer = new Line();
@@ -899,7 +932,7 @@ package birdeye.vis.guides.axis
 		public function drawDataItem():Boolean
 		{
 
-				drawAxisLine(prevWidth,prevHeight)
+				drawAxisLine(bounds.width,bounds.height)
 	
 				//if (readyForLayout)
 				//{
@@ -907,7 +940,7 @@ package birdeye.vis.guides.axis
 					{
 						case BOTTOM:
 						case HORIZONTAL_CENTER:
-							xMin = 0; xMax = prevWidth;
+							xMin = 0; xMax = bounds.width;
 							yMin = 0; yMax = 0;
 							sign = 1;
 							_pointer.x = 0;
@@ -916,33 +949,33 @@ package birdeye.vis.guides.axis
 							_pointer.height = sizePointer;
 							break;
 						case TOP:
-							xMin = 0; xMax = prevWidth;
-							yMin = prevHeight; yMax = prevHeight;
+							xMin = 0; xMax = bounds.width;
+							yMin = bounds.height; yMax = bounds.height;
 							sign = -1;
 							_pointer.x = 0 ;
-							_pointer.y = prevHeight - sizePointer;
+							_pointer.y = bounds.height - sizePointer;
 							_pointer.width = 0;
-							_pointer.height = prevHeight;
+							_pointer.height = bounds.height;
 							break;
 						case LEFT:
 						case VERTICAL_CENTER:
-							xMin = prevWidth; xMax = prevWidth;
-							yMin = 0; yMax = prevHeight;
+							xMin = bounds.width; xMax = bounds.width;
+							yMin = 0; yMax = bounds.height;
 							sign = -1;
-							_pointer.x = prevWidth - sizePointer;
-							_pointer.y = prevHeight;
-							_pointer.width = prevWidth;
-							_pointer.height = prevHeight;
+							_pointer.x = bounds.width - sizePointer;
+							_pointer.y = bounds.height;
+							_pointer.width = bounds.width;
+							_pointer.height = bounds.height;
 							break;
 						case RIGHT:
 						case DIAGONAL:							
 							xMin = 0; xMax = 0;
-							yMin = 0; yMax = prevHeight;
+							yMin = 0; yMax = bounds.height;
 							sign = 1;
 							_pointer.x = 0;
-							_pointer.y = prevHeight;
+							_pointer.y = bounds.height;
 							_pointer.width = sizePointer;
-							_pointer.height = prevHeight;
+							_pointer.height = bounds.height;
 							break;
 					}
 					drawAxes(xMin, xMax, yMin, yMax, sign);
@@ -1013,6 +1046,14 @@ package birdeye.vis.guides.axis
 		 * width (for y axes) or height (for x axes) of the CategoryAxis.*/
 		protected function calculateMaxLabelSize():void
 		{
+			if (!scale || scale.completeDataValues.length == 0)
+			{
+				minWidth = 0;
+				minHeight = 0;
+				maxLblSize = 0;
+				return;
+			}
+			
 			lblTester.fontFamily = fontLabel;
 			lblTester.fontSize = sizeLabel;
 			lblTester.autoSize = TextFieldAutoSize.LEFT;
@@ -1021,7 +1062,8 @@ package birdeye.vis.guides.axis
 			maxLblSize = 0;
 			for (var i:Number = 0;i<scale.completeDataValues.length;i++)
 			{
-				lblTester.text = String(scale.completeDataValues[i]);
+				var dataLabel:Object = scale.completeDataValues[i];
+				lblTester.text = _labelFormatterFunction != null ? _labelFormatterFunction.call(null, dataLabel) : String(dataLabel);
 				maxLblSize = Math.max(maxLblSize, lblTester.textWidth);
 			}
 			
@@ -1066,8 +1108,6 @@ package birdeye.vis.guides.axis
 		 
 		protected function drawAxes(xMin:Number, xMax:Number, yMin:Number, yMax:Number, sign:Number):void
 		{
-			if (scale && scale.completeDataValues.length > 0 && isNaN(maxLblSize) && placement && size > 0)
-				calculateMaxLabelSize();
 			
 			if (invalidated)
 			{	

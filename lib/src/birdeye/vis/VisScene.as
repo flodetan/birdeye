@@ -891,7 +891,6 @@
 				{
 					resetScale(IElement(_elements[i]).scale1);
 					resetScale(IElement(_elements[i]).scale2);
-					resetScale(IElement(_elements[i]).scale3);
 					resetScale(IElement(_elements[i]).colorScale);
 					resetScale(IElement(_elements[i]).sizeScale);
 				}	

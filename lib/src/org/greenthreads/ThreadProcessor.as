@@ -20,6 +20,7 @@ package org.greenthreads {
 	import flash.utils.getTimer;
 	
 	import mx.core.Application;
+	import mx.managers.CursorManager;
 	
 	public class ThreadProcessor {
 		
@@ -82,6 +83,7 @@ package org.greenthreads {
 		private function start() : void {
 			if (!_isRunning)
 			{	
+				CursorManager.setBusyCursor();
 				this.consolidatedStatistics = new ThreadStatistics();
 				_isRunning = true;
 				Application.application.addEventListener( Event.ENTER_FRAME, doCycle );
@@ -107,6 +109,8 @@ package org.greenthreads {
 			initedThreads.splice(0);
 			_isRunning = false;
 			Application.application.removeEventListener( Event.ENTER_FRAME, doCycle );
+			
+			CursorManager.removeBusyCursor();
 			
 			// debug
 			trace(this.consolidatedStatistics.print());
