@@ -1,6 +1,7 @@
 package birdeye.vis.interfaces.interactivity
 {
 	import birdeye.vis.interfaces.coords.ICoordinates;
+	import birdeye.vis.interfaces.elements.IElement;
 	
 	import flash.events.IEventDispatcher;
 
@@ -28,5 +29,15 @@ package birdeye.vis.interfaces.interactivity
 		 */
 		function registerCoordinates(coords:ICoordinates):void;
 		
+		/**
+		 * Get the interactive geometries for a specific dimension
+		 */
+		function getGeometriesForSpecificDimension(dim:Object, dimValue:Object):Vector.<IInteractiveGeometry>;
+
+		/**
+		 * Get the interactive geometries for a specific element.
+		 */
+		function getGeometriesForSpecificElement(el:IElement):Vector.<IInteractiveGeometry>;
+
 	}
 }

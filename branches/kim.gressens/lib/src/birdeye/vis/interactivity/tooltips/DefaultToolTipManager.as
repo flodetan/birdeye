@@ -13,9 +13,9 @@ package birdeye.vis.interactivity.tooltips
 	{
 		private var _im:IInteractivityManager;
 		
-		private var _stage:UIComponent;
+		protected var _stage:UIComponent;
 		
-		private var _coords:ICoordinates;
+		protected var _coords:ICoordinates;
 		
 		private var toolTipLabel:Label;
 		
@@ -53,17 +53,23 @@ package birdeye.vis.interactivity.tooltips
 		
 		protected var _labels:Object = new Object();
 		
-		
-		private function onMouseOver(event:InteractivityEvent):void
+		protected function labelFunction(o:Object):String
 		{
-			var lbl:Label = _labels[event.geometry];
+			return String(o);
+		}
+		
+		
+		protected function onMouseOver(event:InteractivityEvent):void
+		{
+			trace("onMouseOver: " + event.geometry);
+			var lbl:Tooltip = _labels[event.geometry];
 			
 			if (!lbl)
 			{
-				lbl = new Label();
-				lbl.width = 50;
-				lbl.height = 150;
+				trace("new label");
+				lbl = new Tooltip();
 				lbl.mouseEnabled = false;
+				lbl.mouseChildren = false;
 				_labels[event.geometry] = lbl;
 				
 				_stage.addChild(lbl);
@@ -71,15 +77,15 @@ package birdeye.vis.interactivity.tooltips
 			
 			
 //			trace("Mouse over of ", event.geometry.data[event.geometry.element.dim1], event.geometry.data[event.geometry.element.dim2]);
-			lbl.text = event.geometry.data[event.geometry.element.dim1] + " " + event.geometry.data[event.geometry.element.dim2]
-			lbl.x = event.geometry.preferredTooltipPoint.x;
-			lbl.y = event.geometry.preferredTooltipPoint.y;
+			lbl.text = labelFunction(event.geometry.data[event.geometry.element.dim2]);
+			lbl.x = event.geometry.preferredTooltipPoint.x - 25; // center tooltip
+			lbl.y = event.geometry.preferredTooltipPoint.y - 8;
 			lbl.visible = true;
 		}
 		
-		private function onMouseOut(event:InteractivityEvent):void
+		protected function onMouseOut(event:InteractivityEvent):void
 		{
-			var lbl:Label = _labels[event.geometry];
+			var lbl:Tooltip = _labels[event.geometry];
 			
 			if (lbl && lbl.visible)
 			{

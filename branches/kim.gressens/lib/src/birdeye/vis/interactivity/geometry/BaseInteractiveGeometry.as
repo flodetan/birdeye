@@ -5,8 +5,17 @@ package birdeye.vis.interactivity.geometry
 	
 	import flash.geom.Point;
 	
+	import mx.utils.UIDUtil;
+	
 	public class BaseInteractiveGeometry implements IInteractiveGeometry
 	{
+		public function BaseInteractiveGeometry()
+		{
+			this.id = UIDUtil.createUID();
+		}
+		
+		public var id:String;
+		
 				
 		private var _data:Object;
 		
@@ -48,6 +57,11 @@ package birdeye.vis.interactivity.geometry
 		public function contains(p:Point):Boolean
 		{
 			return false;
+		}
+		
+		public function toString():String
+		{
+			return this.id;
 		}
 	}
 }

@@ -33,6 +33,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.guides.renderers.ArcPath;
 	import birdeye.vis.guides.renderers.CircleRenderer;
 	import birdeye.vis.guides.renderers.TextRenderer;
+	import birdeye.vis.interactivity.geometry.InteractiveArcPath;
 	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
 	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.*;
@@ -111,6 +112,9 @@ package birdeye.vis.elements.geometry
 			
 			this.graphics.clear();
 			
+			geomIndex = 0;
+			startAngle = 0;
+			
 			_drawingData = new Array();		
 			
 			for (var cursorIndex:uint = 0; cursorIndex<_dataItems.length; cursorIndex++)
@@ -176,15 +180,13 @@ package birdeye.vis.elements.geometry
 				_graphicRendererSize = d[SIZE];
 				tmpRadius = _innerRadius + radius/_total * visScene.thicknessRatio * _graphicRendererSize;
 			}
-			
-			var xPos:Number = PolarCoordinateTransform.getX(startAngle + angle/2, tmpRadius, visScene.origin);
-			var yPos:Number = PolarCoordinateTransform.getY(startAngle + angle/2, tmpRadius, visScene.origin); 
-
-				
+							
 			if (_innerRadius > tmpRadius)
 				_innerRadius = tmpRadius;
 			
-			arc.setArcData(Math.max(0, _innerRadius), tmpRadius, startAngle, d[POS1], visScene.origin);
+			var r:Number = Math.max(0, _innerRadius);
+			initInteractivePath(r, tmpRadius, startAngle, d[POS1], visScene.origin);
+			arc.setArcData(r, tmpRadius, startAngle, d[POS1], visScene.origin);
 			arc.fill = d[COLOR];
 			arc.stroke = stroke;
 			this.arc.draw(this.graphics, null);
@@ -196,8 +198,57 @@ package birdeye.vis.elements.geometry
 		
 		override public function endDraw() : void
 		{
-			
+			// check if there are geometries which are unnecessary
+			if (geometries.length > _dataItems.length)
+			{
+				// to many geometries, unregister some
+				while (geometries.length > _dataItems.length)
+				{
+					this.visScene.interactivityManager.unregisterGeometry(geometries.pop());
+				}
+			}
 		}
+		
+		protected var geomIndex:int = 0;
+		protected var geometries:Vector.<InteractiveArcPath> = new Vector.<InteractiveArcPath>();
+
+		
+		protected function initInteractivePath(r:Number, R:Number, startAngle:Number, arcAngle:Number, center:Point) :void
+		{
+			var geom:InteractiveArcPath;
+						
+			if (geomIndex < geometries.length)
+			{
+				geom = geometries[geomIndex];
+				geom.reset();
+			}
+			else
+			{
+				// add a new one
+				geom = new InteractiveArcPath();
+				geom.element = this;
+				geometries.push(geom);
+			}
+
+			geom.setArcData(r, R, startAngle, arcAngle, center);
+			
+			var xPos:Number = PolarCoordinateTransform.getX(startAngle + arcAngle/2, R, center);
+			var yPos:Number = PolarCoordinateTransform.getY(startAngle + arcAngle/2, R, center);
+			geom.preferredTooltipPoint = new Point(xPos, yPos);
+
+			
+			geom.data = _dataItems[geomIndex];
+			
+			//if (isNew)
+			//{						
+			this.visScene.interactivityManager.registerGeometry(geom);
+			//}
+			
+			
+			geomIndex++;
+		}
+		
+		
 
 		/* @Private 
 		 * Called by super.updateDisplayList when the series is ready for layout.
