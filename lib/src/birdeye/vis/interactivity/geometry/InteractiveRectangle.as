@@ -24,9 +24,10 @@ package birdeye.vis.interactivity.geometry
 			{
 				return false;
 			}
-			//trace("Checking", p.x, p.y, " on " , baseGeom.bottom, baseGeom.top, baseGeom.left, baseGeom.right);
+			trace("Checking", p.x, p.y, " on " , baseGeom.x, baseGeom.y, baseGeom.width, baseGeom.height);
 			
 			return this.baseGeom.containsPoint(p);
+			
 		}
 	}
 }

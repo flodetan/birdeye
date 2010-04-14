@@ -271,7 +271,8 @@ package birdeye.vis.elements.geometry
 			}
 			else if (direction == DIRECTION_HORIZONTAL)
 			{
-				barWidth = scaleResults[POS1+"base"] - scaleResults[POS1];
+				barWidth = scaleResults[POS1] - scaleResults[POS1+"base"];
+				pos1 -= barWidth;
 				barHeight = tmpWidth; 
 			}
 			
@@ -301,14 +302,21 @@ package birdeye.vis.elements.geometry
 					isNew = true;
 				}
 				
-				geom.baseGeometry = new Rectangle(pos1, pos2, barWidth, barHeight);		
-				geom.preferredTooltipPoint = new Point(pos1, pos2);
+				geom.baseGeometry = new Rectangle(pos1, pos2, barWidth, barHeight);
+				if (direction == DIRECTION_HORIZONTAL)
+				{
+					geom.preferredTooltipPoint = new Point(pos1+barWidth+30, pos2 + barHeight / 2);
+				}
+				else if (direction == DIRECTION_VERTICAL)
+				{
+					geom.preferredTooltipPoint = new Point(pos1 + barWidth / 2, pos2 - 10);					
+				}
 				geom.data = _dataItems[_currentItemIndex];
 
-				if (isNew)
-				{						
+				//if (isNew)
+				//{						
 					this.visScene.interactivityManager.registerGeometry(geom);
-				}
+				//}
 				
 				_graphicsRendererInst.fill = scaleResults[COLOR];
 				_graphicsRendererInst.stroke = stroke;

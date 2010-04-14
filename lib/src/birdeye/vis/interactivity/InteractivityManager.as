@@ -2,6 +2,8 @@ package birdeye.vis.interactivity
 {
 	import birdeye.vis.interactivity.events.InteractivityEvent;
 	import birdeye.vis.interfaces.coords.ICoordinates;
+	import birdeye.vis.interfaces.coords.IInteractive;
+	import birdeye.vis.interfaces.elements.IElement;
 	import birdeye.vis.interfaces.interactivity.IInteractiveGeometry;
 	import birdeye.vis.interfaces.interactivity.IInteractivityManager;
 	
@@ -79,6 +81,43 @@ package birdeye.vis.interactivity
 			return geometries;
 		}
 		
+		
+		public function getGeometriesForSpecificDimension(dim:Object, dimValue:Object):Vector.<IInteractiveGeometry>
+		{
+			var toReturn:Vector.<IInteractiveGeometry> = new Vector.<IInteractiveGeometry>();
+			
+			for each (var geom:IInteractiveGeometry in geometries)
+			{
+				if (geom.element == dimValue)
+				{
+					toReturn.push(geom);
+				}
+				
+			}
+			
+			return toReturn;
+			
+			
+		}
+
+		public function getGeometriesForSpecificElement(el:IElement):Vector.<IInteractiveGeometry>
+		{
+			var toReturn:Vector.<IInteractiveGeometry> = new Vector.<IInteractiveGeometry>();
+			
+			for each (var geom:IInteractiveGeometry in geometries)
+			{
+				if (geom.element == el)
+				{
+					toReturn.push(geom);
+				}
+				
+			}
+			
+			return toReturn;
+			
+			
+		}
+		
 		protected var _coords:ICoordinates;
 		
 		public function registerCoordinates(coords:ICoordinates):void
@@ -100,30 +139,30 @@ package birdeye.vis.interactivity
 		
 		protected var _mousedOverGeometries:Vector.<IInteractiveGeometry>
 		
+		
+		protected var _closestGeom:IInteractiveGeometry;
+		protected var _closestDistance:Number;
 				
 		public function mouseMove(event:MouseEvent):void
-		{
-			//if (_coords.tooltipLayer != event.target) return;
-			var theSame:Boolean = _coords.tooltipLayer == event.target;
-			
+		{			
 			var p:Point = new Point(event.stageX, event.stageY);
 			
 			var pLocal:Point = _coords.elementsContainer.globalToLocal(p);
 	
-//			trace("mouse move ", theSame , event.target, pLocal.x, pLocal.y);
-			
 			var length:int = geometries.length;
-		
+			var ev:InteractivityEvent;
 			// lenght outside of for loop and i++ in second part of for loop is for performance ...
 			for (var i:int=0;i<length;i++)
 			{
-				if (geometries[i].contains(pLocal))
+				var geom:IInteractiveGeometry = geometries[i];
+				
+				if (geom.contains(pLocal))
 				{
 					if (_mousedOverGeometries.indexOf(geometries[i]) < 0)
 					{
 						_mousedOverGeometries.push(geometries[i]);
 						
-						var ev:InteractivityEvent = new InteractivityEvent(InteractivityEvent.GEOMETRY_MOUSE_OVER);
+						ev = new InteractivityEvent(InteractivityEvent.GEOMETRY_MOUSE_OVER);
 						ev.geometry = geometries[i];
 						this.dispatchEvent(ev);
 					}
@@ -136,9 +175,9 @@ package birdeye.vis.interactivity
 					
 					if (index >= 0)
 					{
-						var ev:InteractivityEvent = new InteractivityEvent(InteractivityEvent.GEOMETRY_MOUSE_OUT);
+						ev = new InteractivityEvent(InteractivityEvent.GEOMETRY_MOUSE_OUT);
 						ev.geometry = _mousedOverGeometries[index];
-						
+												
 						_mousedOverGeometries.splice(index, 1);
 						
 						this.dispatchEvent(ev);
@@ -168,6 +207,8 @@ package birdeye.vis.interactivity
 					}
 				}
 			}
+			
+			trace("COMPLETE MOUSE OUT");
 		}
 		
 		

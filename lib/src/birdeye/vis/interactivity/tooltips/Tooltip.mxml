@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:degrafa="http://www.degrafa.com/2007" width="50" height="15" >
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			public var text:String;
+		]]>
+	</mx:Script>
+	
+	
+	<degrafa:GeometryComposition graphicsTarget="{[this]}">
+		<degrafa:RoundedRectangle width="50" height="15" cornerRadius="3" >
+			<degrafa:fill>
+				<degrafa:SolidFill color="0xFFFFFF" />
+			</degrafa:fill>
+			<degrafa:stroke>
+				<degrafa:SolidStroke color="0xFFFFFF" weight="2" />
+			</degrafa:stroke>
+		</degrafa:RoundedRectangle>
+	
+		<degrafa:RasterText id="rastText" x="2" fontFamily="DIN Medium" fontSize="10" textColor="0x505760" align="center" text="{text}" width="50" height="15"/>
+			
+	</degrafa:GeometryComposition>
+	
+</mx:Canvas>

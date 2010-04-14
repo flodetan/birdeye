@@ -30,6 +30,7 @@ package birdeye.vis.elements.geometry
 	import birdeye.vis.VisScene;
 	import birdeye.vis.elements.collision.StackElement;
 	import birdeye.vis.guides.renderers.LineRenderer;
+	import birdeye.vis.interactivity.geometry.InteractivePath;
 	import birdeye.vis.interfaces.renderers.IBoundedRenderer;
 	import birdeye.vis.scales.*;
 	
@@ -39,6 +40,7 @@ package birdeye.vis.elements.geometry
 	import com.degrafa.paint.SolidFill;
 	import com.degrafa.paint.SolidStroke;
 	
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import org.greenthreads.IThread;
@@ -255,6 +257,10 @@ package birdeye.vis.elements.geometry
 				_poly.draw(this.graphics, null);
 			}
 			
+			upperPoints = new Vector.<Point>();
+			lowerPoints = new Vector.<Point>();
+			geomIndex = 0;
+			
 			
 			return true && super.preDraw();
 		}
@@ -262,11 +268,14 @@ package birdeye.vis.elements.geometry
 		private var xPrev:Number, yPrev:Number;
 	
 		override public function drawDataItem():Boolean
-		{
+		{				
+			var d:Object = _drawingData[_currentItemIndex];
+
+			addPoint(d);
+			initInteractivePath();
 				
 			if (_form != CURVE || _showGraphicRenderer)
 			{
-				var d:Object = _drawingData[_currentItemIndex];
 				
 				if (d[SIZE] && !isNaN(d[SIZE]))
 				{
@@ -342,6 +351,152 @@ package birdeye.vis.elements.geometry
 			
 			return false;
 			
+		}
+		
+		private var upperPoints:Vector.<Point>;
+		private var lowerPoints:Vector.<Point>;
+		protected var geometries:Vector.<InteractivePath> = new Vector.<InteractivePath>;
+		protected var geomIndex:int = 0;
+		
+		protected function addPoint(scaleResult:Object):void
+		{
+			upperPoints.push(new Point(scaleResult[POS1] , scaleResult[POS2]));
+			lowerPoints.splice(0, 0, new Point(scaleResult[POS1], scaleResult[POS2]));
+			
+			if (upperPoints.length > 3)
+			{
+				upperPoints.shift();
+			}
+			
+			if (lowerPoints.length > 3)
+			{
+				lowerPoints.pop();
+			}
+			
+		}
+		
+		protected function initInteractivePath(isEnd:Boolean=false):void
+		{
+			if (upperPoints.length < 2) return;			
+			var geom:InteractivePath;
+			
+			var isNew:Boolean = false;
+			
+			if (geomIndex < geometries.length)
+			{
+				geom = geometries[geomIndex];
+				geom.reset();
+			}
+			else
+			{
+				// add a new one
+				geom = new InteractivePath();
+				geom.element = this;
+				geometries.push(geom);
+				isNew = true;
+			}
+			
+			var highestIndex:int = -1;
+			var lowestY:Number = Number.MAX_VALUE;
+			var i:uint = 0;
+			for each (var p:Point in upperPoints)
+			{
+				var p2:Point = new Point(p.x, p.y - 50);
+				if (p.y < lowestY)
+				{
+					lowestY = p.y;
+					highestIndex = i;
+				}
+				
+				geom.addPoint(p2);
+				i++;
+			}
+			
+			for each (p in lowerPoints)
+			{
+				var p2:Point = new Point(p.x, p.y + 50);
+				geom.addPoint(p2);
+			}
+			
+			var up:Point = new Point(upperPoints[0].x, upperPoints[0].y - 50);
+			geom.addPoint(up);
+			
+			if (upperPoints.length == 2)
+			{
+				if (!isEnd)
+				{
+					geom.preferredTooltipPoint = upperPoints[0];
+					
+					if (highestIndex == 0)
+					{
+						geom.preferredTooltipPoint.y -= 10;
+					}
+					else if (highestIndex == 1)
+					{
+						geom.preferredTooltipPoint.y += 10;
+					}
+				}
+				else
+				{
+					geom.preferredTooltipPoint = upperPoints[1];
+					
+					if (highestIndex == 0)
+					{
+						geom.preferredTooltipPoint.y += 10;
+					}
+					else if (highestIndex == 1)
+					{
+						geom.preferredTooltipPoint.y -= 10;
+					}
+					
+				}
+			}
+			else if (upperPoints.length == 3)
+			{
+				geom.preferredTooltipPoint = upperPoints[1];
+				
+				if (highestIndex == 1)
+				{
+					geom.preferredTooltipPoint.y -= 10;
+				}
+				else if (highestIndex == 0 || highestIndex == 2)
+				{
+					geom.preferredTooltipPoint.y += 10;
+				}
+				
+			}
+			
+			geom.data = _dataItems[geomIndex];
+			
+			//if (isNew)
+			//{						
+			this.visScene.interactivityManager.registerGeometry(geom);
+			//}
+			
+			
+			geomIndex++;
+		}
+		
+		override public function endDraw():void
+		{
+			super.endDraw();
+			
+			if (upperPoints.length > 2)
+			{
+				upperPoints.shift();
+				lowerPoints.pop();
+			}
+			initInteractivePath(true);
+			
+			// check if there are geometries which are unnecessary
+			if (geometries.length > _dataItems.length)
+			{
+				// to many geometries, unregister some
+				while (geometries.length > _dataItems.length)
+				{
+					this.visScene.interactivityManager.unregisterGeometry(geometries.pop());
+				}
+			}
 		}
 		
  	}

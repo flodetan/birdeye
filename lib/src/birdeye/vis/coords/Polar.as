@@ -83,9 +83,17 @@ package birdeye.vis.coords
 		{
 			super();
 			coordType = VisScene.POLAR;
-			_elementsContainer = this;
+			//elementsContainer = this;
 
 		}
+		
+		override protected function createChildren():void
+		{
+			super.createChildren();
+
+			addChild(_elementsContainer);
+		}
+
 		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{

@@ -46,7 +46,7 @@ package birdeye.vis.guides.renderers
 			this.setArcData(r, R, startAngle, arcAngle, center);
 		}
 		
-		public function setArcData(r:Number, R:Number, startAngle:Number, arcAngle:Number, center:Point)
+		public function setArcData(r:Number, R:Number, startAngle:Number, arcAngle:Number, center:Point):void
 		{
 			if (isNaN(r) || isNaN(startAngle) || isNaN(arcAngle) || !center) return;
 			var data:String;
