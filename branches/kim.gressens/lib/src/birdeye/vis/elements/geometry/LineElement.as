@@ -233,30 +233,6 @@ package birdeye.vis.elements.geometry
 				
 			}
 			
-			if (_form != CURVE && visScene.coordType == VisScene.POLAR)
-			{
-				// build the area in one go, it's one path
-				
-				var data:String;
-				
-				for each (var d:Object in _drawingData)
-				{
-					if (!data)
-					{
-						data = "M" + String(d[POS1]) + "," + String(d[POS2]) + " ";
-					}
-					else
-					{
-						data += "L" + String(d[POS1]) + "," + String(d[POS2]) + " ";	
-					}
-				}
-				
-				data += "z";
-				_poly.data = data;
-				_poly.stroke = stroke;
-				_poly.draw(this.graphics, null);
-			}
-			
 			upperPoints = new Vector.<Point>();
 			lowerPoints = new Vector.<Point>();
 			geomIndex = 0;
@@ -271,6 +247,13 @@ package birdeye.vis.elements.geometry
 		{				
 			var d:Object = _drawingData[_currentItemIndex];
 
+			if (_form != CURVE && visScene.coordType == VisScene.POLAR && _currentItemIndex == 0)
+			{
+				// add a point previous, because we're closing the line
+				var dt:Object = _drawingData[_drawingData.length - 1];
+				addPoint(dt);
+			}
+			
 			addPoint(d);
 			initInteractivePath();
 				
@@ -377,7 +360,9 @@ package birdeye.vis.elements.geometry
 		
 		protected function initInteractivePath(isEnd:Boolean=false):void
 		{
-			if (upperPoints.length < 2) return;			
+			if (upperPoints.length < 2) return;
+			if (upperPoints.length == 2 && (_form != CURVE && visScene.coordType == VisScene.POLAR && !isEnd)) return;
+			
 			var geom:InteractivePath;
 			
 			var isNew:Boolean = false;
@@ -453,6 +438,7 @@ package birdeye.vis.elements.geometry
 			}
 			else if (upperPoints.length == 3)
 			{
+				
 				geom.preferredTooltipPoint = upperPoints[1];
 				
 				if (highestIndex == 1)
@@ -463,7 +449,6 @@ package birdeye.vis.elements.geometry
 				{
 					geom.preferredTooltipPoint.y += 10;
 				}
-				
 			}
 			
 			geom.data = _dataItems[geomIndex];
@@ -481,11 +466,25 @@ package birdeye.vis.elements.geometry
 		{
 			super.endDraw();
 			
-			if (upperPoints.length > 2)
+			if (_form != CURVE && visScene.coordType == VisScene.POLAR)
+			{
+				// build the area in one go, it's one path
+				
+				var data:String = "M" + String(_drawingData[0][POS1]) + "," + String(_drawingData[0][POS2]) + " ";
+				data += "L" + String(xPrev) + "," + String(yPrev) + " ";	
+				data += "z";
+				_poly.data = data;
+				_poly.stroke = stroke;
+				_poly.draw(this.graphics, null);
+				
+				addPoint(_drawingData[0]);
+			} 
+			else if (upperPoints.length > 2)
 			{
 				upperPoints.shift();
 				lowerPoints.pop();
-			}
+			}			
+			
 			initInteractivePath(true);
 			
 			// check if there are geometries which are unnecessary
