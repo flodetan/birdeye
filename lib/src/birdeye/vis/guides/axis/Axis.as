@@ -1016,7 +1016,6 @@ package birdeye.vis.guides.axis
 			
 			
 			_svgData += tmpSVG;
-			trace("LINE SVG is ", tmpSVG);
 			stdPath.data = tmpSVG;
 			stdPath.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
 
