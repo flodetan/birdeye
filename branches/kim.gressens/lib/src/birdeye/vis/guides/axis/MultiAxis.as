@@ -53,6 +53,18 @@ package birdeye.vis.guides.axis
 			styleName = "MultiAxis";
 			stroke = new SolidStroke(0x000000, 1, 1);
 			fill = new SolidFill(0x000000, 1);
+			
+			stdLabel.fontFamily = fontLabel;
+			stdLabel.fontSize = sizeLabel;
+			stdLabel.autoSize = TextFieldAutoSize.LEFT;
+			stdLabel.autoSizeField = true;
+			
+			stdCircle.stroke = new SolidStroke(0x000000, .15);
+			stdCircle.fill = null;
+			
+			stdPoly.stroke = new SolidStroke(0x000000, .15);
+			stdPoly.fill = null;
+
 		}
 		
 		public function get parentContainer():Object
@@ -157,22 +169,8 @@ package birdeye.vis.guides.axis
 		 
 		private var _coordinates:ICoordinates; 
 		public function set coordinates(val:ICoordinates):void
-		{
-			// first remove old event listeners if they exist
-			if (_coordinates)
-			{
-				_coordinates.removeEventListener(ElementRollOutEvent.ELEMENT_ROLL_OUT, onElementRollOut);
-				_coordinates.removeEventListener(ElementRollOverEvent.ELEMENT_ROLL_OVER, onElementRollOver);
-			}
-			
+		{	
 			_coordinates = val;
-			
-			// add the new event listeners
-			if (_coordinates)
-			{
-				_coordinates.addEventListener(ElementRollOverEvent.ELEMENT_ROLL_OVER, onElementRollOver);
-				_coordinates.addEventListener(ElementRollOutEvent.ELEMENT_ROLL_OUT, onElementRollOut);
-			}
 		}
 		
 		public function get coordinates():ICoordinates
@@ -204,9 +202,10 @@ package birdeye.vis.guides.axis
 				// one to describe all the scales
 				// one to describe the data lines
 				_drawingData = new Array();
-				
+				web =  new Array();
 				var categories:Array = _subScale.completeDataValues;
 				var nbrCategories:int = _subScale.completeDataValues.length;
+				
 				
 				for (var i:int = 0; i<nbrCategories; i++)
 				{
@@ -219,6 +218,7 @@ package birdeye.vis.guides.axis
 					var data:Object = new Object();
 					
 					data.end = endLinePosition;
+					data.label = categories[i];
 					
 					var innerCategories:Array = new Array();
 					
@@ -231,6 +231,7 @@ package birdeye.vis.guides.axis
 						
 						var innerData:Object = new Object();
 						
+						innerData.radius = pos;
 						innerData.point = labelPosition;
 						innerData.label = dataLabel;
 						
@@ -253,8 +254,11 @@ package birdeye.vis.guides.axis
 		
 		private var stdLine:Line = new Line();
 		private var stdLabel:RasterText = new RasterText();
+		private var stdCircle:Circle = new Circle();
+		private var stdPoly:Polygon = new Polygon();
 		
 		
+		protected var web:Array = new Array();
 		public function drawDataItem():Boolean
 		{
 			if (index < _drawingData.length)
@@ -273,11 +277,59 @@ package birdeye.vis.guides.axis
 					
 					stdLine.draw(this.graphics, null);
 					
+					// add axis' name					
+					stdLabel.text = data.label;
+					stdLabel.x = data.end.x - (stdLabel.textWidth + 4)/2;
+					stdLabel.y = data.end.y - (stdLabel.fontSize + 4)/2;
+					
+					stdLabel.draw(this.graphics, null);
+					
 					subIndex++;
 				}
-				else if ((subIndex - 1) < categories.length)
+				else if ((subIndex - 1) < categories.length )
 				{
-					// draw the web and the label
+					
+					
+					var d:Object = categories[(subIndex - 1)];
+					// draw the web or circle
+					if (_gridType == MultiAxis.GRID_WEB)
+					{
+						if (!web[(subIndex - 1)])
+						{
+							web[(subIndex - 1)] = "";
+						}
+						web[(subIndex - 1)] += String(d.point.x) + "," + String(d.point.y) + " ";			
+					}
+					else if (_gridType == MultiAxis.GRID_CIRCLE && index == 0)
+					{
+						stdCircle.radius = d.radius;
+						stdCircle.centerX = coordinates.origin.x;
+						stdCircle.centerY = coordinates.origin.y;
+						
+						stdCircle.draw(this.graphics, null);
+					}		
+					
+					
+					if (index == 0 || !subScale.shareSubScale)
+					{
+						// draw the labels on the axis
+						var dataLabel:Object = d.label;
+						
+						if (dataLabel is Number)
+						{
+							stdLabel.text = String(Math.round(dataLabel as Number));
+						}
+						else
+						{
+							stdLabel.text = String(dataLabel);
+						}
+						
+						stdLabel.x = d.point.x - (stdLabel.textWidth + 4)/2;
+						stdLabel.y = d.point.y;
+						
+						stdLabel.draw(this.graphics, null);
+					}
+					
 					
 					subIndex++;
 				}
@@ -296,199 +348,16 @@ package birdeye.vis.guides.axis
 		
 		public function endDraw() : void
 		{
-			
-		}
-		
-		
-		/**
-		 * @see birdeye.vis.interfaces.guides.IGuide#drawGuide
-		 */
-		public function drawGuide(bounds:Rectangle):void
-		{
-			//if (invalidated)
-			//{
-			if (_subScale && _subScale.completeDataValues && _subScale.completeDataValues.length > 0)
+			// draw lines between axes (the web)
+			if (_gridType == MultiAxis.GRID_WEB)
 			{
-				clearAll();
-				
-				svgData = "";
-
-				stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
-				fill = new SolidFill(colorFill, alphaFill);
-				
-				var categories:Array = _subScale.completeDataValues;
-				var nbrCategories:int = _subScale.completeDataValues.length;
-				
-				var web:Array = new Array();
-				
-				for (var i:int = 0; i<nbrCategories; i++)
+				for (var i:int=0;i<web.length;i++)
 				{
-					var subSc:IScale = _subScale.subScales[categories[i]];
-	
-					var angle:int = _subScale.getPosition(categories[i]);
-					var endPosition:Point = PolarCoordinateTransform.getXY(angle,_size,coordinates.origin);
-					
-					// draw a line a bit shorter to allow the label of the axis to be seen
-					// TODO set the label a bit further instead of shortening the line?
-					var endLinePosition:Point = PolarCoordinateTransform.getXY(angle,_size-5,coordinates.origin);
-					var tmpSVG:String = "M" + String(coordinates.origin.x) + "," + String(coordinates.origin.y) + " " + 
-									"L" + String(endLinePosition.x) + "," + String(endLinePosition.y) + " ";
-
-					var line:Path = new Path(tmpSVG);
-					svgData += '\n<path d="' + tmpSVG + '"\n/>';
-					line.stroke = new SolidStroke(colorStroke, 1,1);					
-					gg.geometryCollection.addItem(line);
-					
-					if (showPointer)
-					{
-						_pointer = new Line();
-						_pointer.stroke = new SolidStroke(colorPointer, 1, weightPointer);
-						_pointer.visible = false;
-						gg.geometryCollection.addItem(_pointer);
-					}
-										
-					
-					// add 0,20,40,...,100
-					for (var j:int=0;j<(subSc.completeDataValues.length - 1);j++)
-					{
-						var dataLabel:Object = subSc.completeDataValues[j];
-						var pos:Number = subSc.getPosition(dataLabel);
-		
-		 				var labelPosition:Point = PolarCoordinateTransform.getXY(angle,pos,coordinates.origin);
-		 				
-		 				if (!web[j])
-		 				{
-		 					web[j] = "";
-		 				}
-		 				web[j] += String(labelPosition.x) + "," + String(labelPosition.y) + " ";
-		 				
-		 				// only one set of denominations needed if we share subscales
-						if (i > 0 && (subScale as ISubScale).shareSubScale) continue;
-
-
-						label = new RasterText();
-	 					
-		 				label.fontFamily = fontLabel;
-		 				label.fontSize = sizeLabel;
-		 				label.visible = true;
-						label.autoSize = TextFieldAutoSize.LEFT;
-						label.autoSizeField = true;
-						
-						if (dataLabel is Number)
-	 					{
-	 						label.text = String(Math.round(dataLabel as Number));
-	 					}
-	 					else
-	 					{
-	 						label.text = String(dataLabel);
-	 					}
-	 					
-						//label.stroke = stroke;
-						label.fill = new SolidFill(colorLabel);
-		
-						label.x = labelPosition.x - (label.textWidth + 4)/2;
-						label.y = labelPosition.y;
-						
-						svgData += '\n<text style="font-family: ' + fontLabel + 
-										'; font-size: ' + sizeLabel + 
-										'; stroke-width: 1' + ';"' +
-										' x="' + label.x + '" ' + 
-										'y="' + label.y + '">' + String(dataLabel) +
-										'\n</text>';
-	
-						gg.geometryCollection.addItem(label);
-						
-						if (_gridType == MultiAxis.GRID_CIRCLE && i == 0)
-						{
-							var circle:Circle = new Circle();
-
-							svgData += '\n<circle cx="' + coordinates.origin.x + 
-										'" cy="' + coordinates.origin.y + 
-										'" r="' + pos + 
-										'" style="stroke-opacity:.15;"\n/>';
-
-							circle.stroke = new SolidStroke(0x000000, .15);
-							circle.fill = null;
-							circle.radius = pos;
-							circle.centerX = coordinates.origin.x;
-							circle.centerY = coordinates.origin.y;
-							
-							gg.geometryCollection.addItem(circle);
-						}
-						
-	 				} 
-	 				
-	 				// add axis' name					
-					var label:RasterText = new RasterText();
- 					label.fontFamily = fontLabel;
- 					label.fontSize = sizeLabel;
- 					label.visible = true;
-					label.autoSize = TextFieldAutoSize.LEFT;
-					label.autoSizeField = true;
-					label.text = String(categories[i]);
-					
-					label.fill = new SolidFill(colorLabel);
-
-					label.x = endPosition.x - (label.textWidth + 4)/2;
-					label.y = endPosition.y - (label.fontSize + 4)/2;
-					
-					gg.geometryCollection.addItem(label);
+					stdPoly.data = web[i];
+					stdPoly.draw(this.graphics, null);
 				}
-				
-				// draw lines between axes (the web)
-				if (_gridType == MultiAxis.GRID_WEB)
-				{
-					var webStroke:SolidStroke = new SolidStroke(0x000000, .15);
-					for (i=0;i<web.length;i++)
-					{
-							var poly:Polygon = new Polygon();
-							poly.data = web[i];
-							svgData += '\n<polygon points="' + web[i] + 
-										'" style="stroke-opacity:.15;"\n/>';
-							poly.stroke = webStroke;
-							poly.fill = new SolidFill(0x000000, 0);					
-							gg.geometryCollection.addItem(poly);
-					}
-				}
-			//}
-				svgData = '\n<g style="fill:none' + 
-						';fill-opacity:1;stroke:#000000' + 
-						';stroke-width:1;stroke-opacity:1;">' + 
-						svgData + ';\n/>\n</g>';
 			}
 		}
-		
-		private function onElementRollOver(e:ElementRollOverEvent):void
-		{
-			
-			if (_pointer)
-			{
-				
-				var angle:Number = subScale.getPosition(e.pos1);
-				var pos2:Number = subScale.subScales[e.pos1].getPosition(e.pos2);
-				var pos2pt:Point = PolarCoordinateTransform.getXY(angle,pos2, coordinates.origin);
-
-				
-				var posMinPt:Point =  PolarCoordinateTransform.getXY((angle+90)%360,_sizePointer/2,pos2pt);
-				var posMaxPt:Point = PolarCoordinateTransform.getXY((angle-90)%360,_sizePointer/2, pos2pt);
-				
-				_pointer.x = posMinPt.x;
-				_pointer.y = posMinPt.y;
-				_pointer.x1 = posMaxPt.x;
-				_pointer.y1 = posMaxPt.y;
-				
-				_pointer.visible = true;
-			}
-		}
-		
-		private function onElementRollOut(e:ElementRollOutEvent):void
-		{
-			if (_pointer)
-			{
-				_pointer.visible = false;
-			}
-		}
-		
 		
 		private var _alphaFill:Number;
 		/** Set the fill alpha.*/
@@ -619,6 +488,7 @@ package birdeye.vis.guides.axis
 		public function set fontLabel(val:String):void
 		{
 			_fontLabel = val;
+			stdLabel.fontFamily = val;
 		}
 		public function get fontLabel():String
 		{
@@ -630,6 +500,7 @@ package birdeye.vis.guides.axis
 		public function set sizeLabel(val:Number):void
 		{
 			_sizeLabel = val;
+			stdLabel.fontSize = sizeLabel;
 		}
 		public function get sizeLabel():Number
 		{
@@ -641,6 +512,7 @@ package birdeye.vis.guides.axis
 		public function set colorLabel(val:Number):void
 		{
 			_colorLabel = val;
+			stdLabel.fill = new SolidFill(val);
 		}
 		public function get colorLabel():Number
 		{
