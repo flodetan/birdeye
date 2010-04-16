@@ -28,6 +28,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
+	import flash.utils.setTimeout;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
@@ -192,7 +193,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			var cyclefinished:Boolean;
 			
 			if(!_disableAnimation) {
-			
+
 				/* indicate an animation in progress */
 				_animInProgress = true;
 				 
@@ -208,28 +209,44 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 						cyclefinished = interpolatePolarCoords();
 						break;
 				}
+				
+				/* make sure the edges are redrawn */
+				_layoutChanged = true;
+				//_vgraph.dispatchEvent(new MouseEvent("forceRedrawEvent"));
+				//_vgraph.invalidateDisplayList();
+				_vgraph.redrawEdges();
+	
+				/* check if we ran out of anim cycles, but are not finished */
+				if (cyclefinished) {
+					//LogUtil.debug(_LOG, "Achieved final node positions, terminating animation...");
+					_animInProgress = false;
+				} else if(_animStep >= _ANIMATIONSTEPS) {
+					LogUtil.info(_LOG, "Exceeded animation steps, setting nodes to final positions...");
+					applyTargetToNodes(_vgraph.visibleVNodes);
+					_animInProgress = false;
+				} else {
+					++_animStep;
+					startAnimTimer();
+				}
+			
 			} else {
 				cyclefinished = setCoords();
-			}
-			
-			/* make sure the edges are redrawn */
-			_layoutChanged = true;
-			//_vgraph.dispatchEvent(new MouseEvent("forceRedrawEvent"));
-			//_vgraph.invalidateDisplayList();
-			_vgraph.redrawEdges();
-
-			/* check if we ran out of anim cycles, but are not finished */
-			if (cyclefinished) {
-				//LogUtil.debug(_LOG, "Achieved final node positions, terminating animation...");
-				_animInProgress = false;
-			} else if(_animStep >= _ANIMATIONSTEPS) {
-				LogUtil.info(_LOG, "Exceeded animation steps, setting nodes to final positions...");
-				applyTargetToNodes(_vgraph.visibleVNodes);
-				_animInProgress = false;
-			} else {
-				++_animStep;
-				startAnimTimer();
-			}
+				if(cyclefinished == false)
+				{
+					//if we havent completed successfully
+					//due to not being fully initialized try
+					//again in 1 mili seconds
+					setTimeout(startAnimation,1);
+				}
+				else
+				{
+					/* make sure the edges are redrawn */
+					_layoutChanged = true;
+					//_vgraph.dispatchEvent(new MouseEvent("forceRedrawEvent"));
+					//_vgraph.invalidateDisplayList();
+					_vgraph.redrawEdges();
+				}
+			} 
 		}
 
 		/**
@@ -368,7 +385,6 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			var i:int;
 			var currPoint:Point;
 			var deltaPoint:Point;
-			var stepPoint:Point;
 			var targetPoint:Point;
 			var cyclefinished:Boolean;
 			
@@ -386,21 +402,15 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				}
 				
 				n = vn.node;
-
 				/* get relative target coordinates in cartesian form */
-				targetPoint = _currentDrawing.getRelCartCoordinates(n);
-
+				targetPoint = _currentDrawing.getAbsCartCoordinates(n);
+				
 				/* when we get the current values, we have to make sure
 				 * that we convert the coordinates into relative ones,
 				 * i.e. we need to subtract the origin */
 				n.vnode.refresh();
 				currPoint = new Point(vn.x, vn.y);
-				currPoint = currPoint.subtract(_currentDrawing.originOffset);
 				
-				if(_currentDrawing.centeredLayout) {
-					currPoint = currPoint.subtract(_currentDrawing.centerOffset);
-				}
-
 				/* check if we are already done or not */
 				if(!GraphicUtils.equal(currPoint, targetPoint)) {
 					cyclefinished = false;
@@ -409,19 +419,11 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				deltaPoint = new Point( (targetPoint.x - currPoint.x) * _animStep / _ANIMATIONSTEPS,
 					(targetPoint.y - currPoint.y) * _animStep / _ANIMATIONSTEPS);
 				
-				stepPoint = currPoint.add(deltaPoint);
-								
-				/* adjust the origin */
-				stepPoint = stepPoint.add(_currentDrawing.originOffset);
-				
-				/* here we may need to add the center offset */
-				if(_currentDrawing.centeredLayout) {
-					stepPoint = stepPoint.add(_currentDrawing.centerOffset);
-				}
-								
+				currPoint = currPoint.add(deltaPoint);
+							
 				/* set into the vnode */
-				vn.x = stepPoint.x;
-				vn.y = stepPoint.y;
+				vn.x = currPoint.x;
+				vn.y = currPoint.y;
 				
 				/* commit, i.e. move the node */
 				vn.commit();
@@ -437,34 +439,29 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			var visVNodes:Dictionary;
 			var vn:IVisualNode;
 			var n:INode;
-			var i:int;
 			var targetPoint:Point;
-			
-
+						
 			/* careful for invisible nodes, the values are not
 			 * calculated (obviously), so we need to make sure
 			 * to exclude them */
 			visVNodes = _vgraph.visibleVNodes;
 			for each(vn in visVNodes) {
-				
 				/* should be visible otherwise somethings wrong */
 				if(!vn.isVisible) {
 					throw Error("received invisible vnode from list of visible vnodes");
 				}
 				
-				n = vn.node;
-
-				/* get relative target coordinates in cartesian form */
-				targetPoint = _currentDrawing.getRelCartCoordinates(n);
-				
-				/* adjust the origin */
-				targetPoint = targetPoint.add(_currentDrawing.originOffset);
-				
-				/* here we may need to add the center offset */
-				if(_currentDrawing.centeredLayout) {
-					targetPoint = targetPoint.add(_currentDrawing.centerOffset);
+				/* check if we are already done or not */
+				if(vn.view.initialized == false ) {
+					return false;
 				}
-								
+			}
+			for each(vn in visVNodes) {
+				
+				n = vn.node;
+				/* get relative target coordinates in cartesian form */
+				targetPoint = _currentDrawing.getAbsCartCoordinates(n);
+							
 				/* set into the vnode */
 				vn.x = targetPoint.x;
 				vn.y = targetPoint.y;
