@@ -489,7 +489,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* _canvas = new Canvas(); */
 			/* _canvas.setStyle("backgroundColor", 0xFFFFFF);
 			_canvas.setStyle("backgroundAlpha", 0.0000001); */
-			_canvas.setStyle("backgroundColor", 0xFF0000);
 			//this.addChild(_canvas);
 
 			_canvas.addChild(_drawingSurface);
