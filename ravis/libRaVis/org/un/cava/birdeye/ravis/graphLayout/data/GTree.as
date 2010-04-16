@@ -27,8 +27,6 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 	
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
-	
-	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	/**
 	 * This class represents a spanning
 	 * tree, rooted in the given root node
@@ -76,7 +74,9 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		 * we create a flag for that, which has to be
 		 * set in the constructor */
 		protected var _restrictToVisible:Boolean;
-
+		
+		/* this stores the leaf nodes*/
+		protected var _nodesWithoutLinkToNextLevel:Dictionary;
 
 		/**
 		 * Constructor to create a new GTree object, the tree will not immediately
@@ -250,6 +250,18 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		
 		/**
 		 * @inheritDoc
+		 */ 
+		public function getNodesWithoutLinkToNextLevel():Array {
+			var retVal:Array = new Array();
+			for each(var node:INode in _nodesWithoutLinkToNextLevel)
+			{
+				retVal.push(node);
+			}
+			return retVal;;
+		}
+		
+		/**
+		 * @inheritDoc
 		 * 
 		 * @internal
 		 * this basically calls the number of children
@@ -306,13 +318,12 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 			/* we create this as a dummy parent node, but it should
 			 * never be accessed */
 			var dummyParent:INode = new Node(0,"dummyNode",null,null);
-			
+
 			var u:INode,v:INode;
 			var i:int,j:int;
 			var childcount:int;
 			
 			//LogUtil.debug(_LOG, "initTree1: walking tree with root:"+_root.id);
-			
 			initMaps();
 
 			/* root is the 1st child (i.e. 0th) and an only child */
@@ -383,8 +394,35 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 				/* only here we now know the number of childen
 				 * in childcount so we need to set it here */
 				_nodeNoChildrenMap[u] = childcount;
-				
 			}
+			
+			for each(var node:INode in _graph.nodes) {
+				var linksToNextLevel:Boolean = false;
+				
+				var level:Number = _distanceMap[node];
+				for each(var n2:INode in node.successors) {
+					if(level < _distanceMap[n2]) {
+						linksToNextLevel = true;
+						break;
+					}
+				}
+				
+				if(linksToNextLevel) {
+					continue;
+				}
+				
+				for each(var n3:INode in node.predecessors) {
+					if(level < _distanceMap[n3]) {
+						linksToNextLevel = true;
+						break;
+					}
+				}
+				
+				if(linksToNextLevel == false) {
+					_nodesWithoutLinkToNextLevel[node] = node;
+				}
+			}
+			
 			/* reset the dummy to null */
 			_parentMap[_root] = null;
 			
@@ -444,6 +482,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 			_parentMap = new Dictionary;
 			_childrenMap = new Dictionary;
 			_distanceMap = new Dictionary;
+			_nodesWithoutLinkToNextLevel = new Dictionary();
 			
 			_amountNodesWithDistance = new Array;
 			

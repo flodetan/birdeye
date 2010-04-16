@@ -82,6 +82,9 @@ package org.un.cava.birdeye.ravis.components.renderers {
 			//this.addEventListener(FlexEvent.INIT_COMPLETE,adjustCoordinates);
 			
 			super();
+			useHandCursor = true;
+			buttonMode = true;
+			mouseChildren = false;
 		}
 			
 		/**
