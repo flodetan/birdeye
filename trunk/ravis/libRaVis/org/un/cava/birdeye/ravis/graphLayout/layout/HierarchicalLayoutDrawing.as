@@ -25,8 +25,8 @@
 package org.un.cava.birdeye.ravis.graphLayout.layout {
 	
 	import flash.utils.Dictionary;
+	
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
-	import flash.geom.Point;
 	
 	/**
 	 * This class holds all the parameters needed
@@ -58,7 +58,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		/**
 		 * The constructor just initializes the internal data structures.
 		 * */
-		public function HierarchicalLayoutDrawing():void {
+		public function HierarchicalLayoutDrawing() {
 			super();
 			_modifiers = new Dictionary;
 			_changes = new Dictionary;

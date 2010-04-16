@@ -65,7 +65,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		/**
 		 * The constructor just initializes the internal data structures.
 		 * */
-		public function BaseLayoutDrawing():void {
+		public function BaseLayoutDrawing() {
 			
 			_nodePolarRs = new Dictionary;
 			_nodePolarPhis = new Dictionary;

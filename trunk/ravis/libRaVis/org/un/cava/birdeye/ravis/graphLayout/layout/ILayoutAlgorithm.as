@@ -47,6 +47,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	 * */
 	public interface ILayoutAlgorithm extends IEventDispatcher {
 		
+		function get preArrangeGraphFunction():Function;
+		function set preArrangeGraphFunction(value:Function):void;
 		/**
 		 * Assign a VisualGraph object to the layouter,
 		 * every layouter will need one to work, some may

@@ -1332,7 +1332,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			
 			while(curTreeRoot)
 			{
-				for each (var nextTreeRoot:INode in curTreeRoot.successors)
+				for each (var nextTreeRoot2:INode in curTreeRoot.successors)
 					arrTreeRoots.push(nextTreeRoot)
 				removeNode(curTreeRoot.vnode);
 				

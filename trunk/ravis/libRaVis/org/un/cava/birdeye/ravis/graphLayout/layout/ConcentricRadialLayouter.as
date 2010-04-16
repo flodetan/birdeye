@@ -87,7 +87,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * already a VisualGraph object, but this can also be set later.
 		 * @param vg The VisualGraph object on which this layouter should work on.
 		 * */
-		public function ConcentricRadialLayouter(vg:IVisualGraph = null):void {
+		public function ConcentricRadialLayouter(vg:IVisualGraph = null) {
 		
 			super(vg);
 			

@@ -43,7 +43,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		/**
 		 * The constructor just initializes the internal data structures.
 		 * */
-		public function ConcentricRadialLayoutDrawing():void {
+		public function ConcentricRadialLayoutDrawing() {
 			super();
 			_nodeAngularWidths = new Dictionary;
 		}

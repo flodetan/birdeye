@@ -29,7 +29,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import flash.utils.Timer;
 	
 	import mx.core.UIComponent;
-		
+	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 	import org.un.cava.birdeye.ravis.utils.LogUtil;
@@ -73,7 +73,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		
 		/* for dragging and dropping */
 		protected var _dragNode:IVisualNode = null;
-
+		
+		
 		/**
 		 * The constructor only initialises the data structures and presets
 		 * some parameters.
@@ -143,6 +144,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			if(_timer != null) {
 				_timer.stop();
 			}
+			
 			return layoutIteration();
 		}
 		
@@ -210,10 +212,14 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			if(_timer == null) {
 				_timer = new Timer(_timerDelay, _TIMERREPCOUNT);
 				_timer.addEventListener(TimerEvent.TIMER_COMPLETE, timerFired);
+				if(preArrangeGraphFunction != null) {
+					preArrangeGraphFunction(_graph);
+				}
 			} else {
 				_timer.stop();
 				_timer.reset();
 			}
+			
 			//if (_timerDelay > _TIMERDELAY) _timer.delay = _timerDelay + 10;
 			_timer.start();
 		}
@@ -247,6 +253,6 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 */
 		protected function calculateLayout():void {
 			/* NOP */
-		}
+		} 
 	}
 }

@@ -103,7 +103,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		protected var _directional:Boolean;
 		/* if directional we could have a walking direction for the
 		 * spanning tree */
-		protected var _walkingDirection:int = WALK_FORWARD;
+		protected var _walkingDirection:int = WALK_BOTH;
 
 		
 		/** 
@@ -148,7 +148,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		 * @param xmlsource an XML object that contains node and edge items that define the graph.
 		 * @param xmlnames an optional Array that contains XML tag and attribute names that define the graph. 
 		 * */
-		public function Graph(id:String, directional:Boolean = false, xmlsource:XML = null):void {
+		public function Graph(id:String, directional:Boolean = false, xmlsource:XML = null) {
 			if(id == null)
 				throw Error("id string must not be null")
 			if(id.length == 0)

@@ -197,7 +197,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * The constructor only initialises the data structures and presets
 		 * some parameters.
 		 * */
-		public function ForceDirectedLayouter(vg:IVisualGraph = null):void {
+		public function ForceDirectedLayouter(vg:IVisualGraph = null) {
 			super(vg);
 			resetAll();
 			
@@ -329,6 +329,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			if(_rigidity != _newRigidity) {
 				_rigidity = _newRigidity;
 			}
+			
 			/* 6. update repulsion and scroll, if autoFit is enabled */
 			if(_autoFitEnabled) {
 				adjustRepulsion();
@@ -581,9 +582,9 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 					
 					/* change only if substantial */
 					if (Math.abs(deltaCoverage) > 1.0)
-						_repulsionFactor = Math.max(_MIN_REPULSION, 
-																				Math.min(_repulsionFactor + deltaCoverage, 
-																								 _MAX_REPULSION) );
+						_repulsionFactor =Math.max(_MIN_REPULSION,
+											Math.min(_repulsionFactor + deltaCoverage, 
+												_MAX_REPULSION));
 				}
 			}
 			//LogUtil.debug(_LOG, "FD af Coverage:" + _coverage + " repulsionFactor:" + _repulsionFactor);

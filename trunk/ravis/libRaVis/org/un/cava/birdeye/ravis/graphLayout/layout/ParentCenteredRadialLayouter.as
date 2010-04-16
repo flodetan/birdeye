@@ -62,7 +62,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * The constructor only initialises some data structures.
 		 * @inheritDoc
 		 * */
-		public function ParentCenteredRadialLayouter(vg:IVisualGraph = null):void {
+		public function ParentCenteredRadialLayouter(vg:IVisualGraph = null) {
 			super(vg);
 			animationType = ANIM_RADIAL; // inherited
 			initModel();

@@ -69,7 +69,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * and the graphics object.
 		 * @param g The graphics object to draw on.
 		 * */
-		public function FlowEdgeRenderer(g:Graphics):void {
+		public function FlowEdgeRenderer(g:Graphics) {
 			super(g);
 			relativeEdgeMagnitude = 1000;
 			maxBaseWidth = 100;

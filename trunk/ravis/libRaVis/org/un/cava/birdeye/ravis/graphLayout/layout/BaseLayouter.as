@@ -62,7 +62,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * The default margin to be considered when using
 		 * autoFit.
 		 * */
-		public static const DEFAULT_MARGIN:Number = 30;
+		 public static const DEFAULT_MARGIN:Number = 30; 
 		
 		/**
 		 * If set to true, animation is disabled and direct
@@ -108,13 +108,18 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * this holds the data for a layout drawing.
 		 * */
 		private var _currentDrawing:BaseLayoutDrawing;
-
+		
+		/** 
+		 * function used to arrage the data before the layout starts 
+		 */
+		private var _preArrageGraphFunction:Function;
+		
 		/**
 		 * The constructor initializes the layouter and may assign
 		 * already a VisualGraph object, but this can also be set later.
 		 * @param vg The VisualGraph object on which this layouter should work on.
 		 * */
-		public function BaseLayouter(vg:IVisualGraph = null):void {
+		public function BaseLayouter(vg:IVisualGraph = null) {
 			
 			_vgraph = vg;
 			if(vg) {
@@ -353,6 +358,20 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		
 		private function forceRedraw(e:MouseEvent):void {
 			e.updateAfterEvent();
+		}
+		
+		/**
+		 * Function used to arrange nodes right before a group of iterations is about to kick
+		 * off
+		 * 
+		 * Signature: function(value:Graph):void
+		 */ 
+		public function get preArrangeGraphFunction():Function { 
+			return _preArrageGraphFunction; 
+		}
+		
+		public function set preArrangeGraphFunction(value:Function):void {
+			_preArrageGraphFunction = value;
 		}
 	}
 }

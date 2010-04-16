@@ -24,7 +24,6 @@
  */
 package org.un.cava.birdeye.ravis.graphLayout.visual
 {
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
@@ -95,7 +94,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		 * @param data The VisualNode's associated data object.
 		 * @param mv Indicator if the node is moveable (currently ignored).
 		 * */
-		public function VisualNode(vg:IVisualGraph, node:INode, id:int, view:UIComponent = null, data:Object = null, mv:Boolean = true):void {
+		public function VisualNode(vg:IVisualGraph, node:INode, id:int, view:UIComponent = null, data:Object = null, mv:Boolean = true) {
 			_vgraph = vg;
 			_node = node;
 			_id = id;
@@ -304,6 +303,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		 * */
 		public function get moveable():Boolean {
 			return _moveable;
+		}
+		
+		public function set moveable(value:Boolean):void {
+			_moveable = value;
 		}
 	
 		/**
