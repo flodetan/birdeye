@@ -84,8 +84,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 */ 
 		public var verticalPadding:Number = 0;
 		
-		/* this holds the data for the Hierarchical layout drawing */
-		private var _currentDrawing:HierarchicalLayoutDrawing;
+		/** this holds the data for the Hierarchical layout drawing */
+		protected var _currentDrawing:HierarchicalLayoutDrawing;
 		
 		/* this is the distance between nodes within a layer
 		 * typically x distance if top-bottom orientation
@@ -789,86 +789,32 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		/**
 		 * Centers the diagram to the page
 		 */
-		private function centerDiagram():void {
+		protected function centerDiagram():void {
 			
-			//if we have no graph or no drawing this
-			//method will error
-			if(_graph == null || _currentDrawing == null)
-			{
-				return;
-			}
-			
-			//this rect holds the bounds of the diagram
-			var diagramBounds:Rectangle = new Rectangle();
-			
-			//these hold the max x and y values which will be translated to width and height
-			var maxX:Number = 0;
-			var maxY:Number = 0;
-			
-			//get all diagram locations to construct the bounds
-			for each(var node:INode in _graph.nodes) {
-				var nodePos:Point = _currentDrawing.getAbsCartCoordinates(node);
-				
-				if(nodePos.x < diagramBounds.x) {
-					diagramBounds.x = nodePos.x ;
-				}
-				
-				if(nodePos.y < diagramBounds.y) {
-					diagramBounds.y = nodePos.y;
-				}
-				
-				if(nodePos.x > maxX) {
-					maxX = nodePos.x;
-				}
-				
-				if(nodePos.y > maxY) {
-					maxY = nodePos.y;
-				}
-			}
-			diagramBounds.width = maxX - diagramBounds.x + horizontalPadding;
-			diagramBounds.height = maxY - diagramBounds.y + verticalPadding;
-			
-			//do this so that for diagrams with no height or width
-			//it is place in the center
-			if(diagramBounds.height == 0)
-			{
-				diagramBounds.height = _vgraph.height;
-			}
-			
-			if(diagramBounds.width == 0)
-			{
-				diagramBounds.width = _vgraph.width;
-			}
-			
-			//tell the drawing to make sure its centered
-			_currentDrawing.centeredLayout = true;
-			
-			//shift the made diagram into the center of the screen
-		 	switch(_orientation) {
-				case ORIENT_LEFT_RIGHT:
-					_currentDrawing.centerOffset = new Point(_vgraph.width/2 - (diagramBounds.width - diagramBounds.x)/2,
-						(diagramBounds.height - diagramBounds.y)/2);
-					break;
-					
-				case ORIENT_RIGHT_LEFT:
-					_currentDrawing.centerOffset = new Point(_vgraph.width - (_vgraph.width - diagramBounds.width)/2,
-						(diagramBounds.height - diagramBounds.y)/2);
-					break;
-					
+			switch(_orientation) {
 				case ORIENT_TOP_DOWN:
-					_currentDrawing.centerOffset = new Point((diagramBounds.width - diagramBounds.x)/2,
-						_vgraph.height/2 - (diagramBounds.height - diagramBounds.y)/2);
+					_currentDrawing.centerOffset = new Point((_vgraph.width / 2), DEFAULT_MARGIN + layerMargin);
 					break;
-				
+
 				case ORIENT_BOTTOM_UP:
-					_currentDrawing.centerOffset = new Point((diagramBounds.width - diagramBounds.x)/2,
-						_vgraph.height - (_vgraph.height - diagramBounds.height)/2);
+					_currentDrawing.centerOffset =
+						new Point((_vgraph.width / 2), (_vgraph.height - DEFAULT_MARGIN - layerMargin));
 					break;
-				
+
+				case ORIENT_LEFT_RIGHT:
+					_currentDrawing.centerOffset = new Point(DEFAULT_MARGIN + layerMargin, (_vgraph.height / 2) - DEFAULT_MARGIN);
+					break;
+
+				case ORIENT_RIGHT_LEFT:
+					_currentDrawing.centerOffset =
+						new Point((_vgraph.width - DEFAULT_MARGIN - layerMargin), (_vgraph.height / 2) - DEFAULT_MARGIN);
+					break;
+
 				default:
-					throw Error("Invalid orientation value found in internal variable");		
-			
-			}	
+					throw Error("Invalid orientation value found in internal variable");
+			}
+
+			_currentDrawing.centeredLayout = true;	
 		}
 	}
 }
