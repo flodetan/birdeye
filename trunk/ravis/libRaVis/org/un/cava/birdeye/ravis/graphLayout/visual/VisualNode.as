@@ -32,6 +32,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 	import mx.core.UIComponent;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 	
 	/**
@@ -330,6 +331,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		 * @inheritDoc
 		 * */			
 		public function commit():void {
+			if(view.initialized == false)
+			{
+				view.callLater(commit);
+				return;
+			}
+			
 			/* if we have the centered orientation we apply
 			 * some corrections */
 			if(_centered) {
@@ -339,7 +346,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 				this.viewX = _x;
 				this.viewY = _y;
 			}
-			
+
 			if(this.view is IEventDispatcher) {
 				(this.view as IEventDispatcher).dispatchEvent(new VGraphEvent(VGraphEvent.VNODE_UPDATED));
 			}

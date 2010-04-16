@@ -483,19 +483,20 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			_edgeRenderer = new BaseEdgeRenderer(_drawingSurface.graphics);
 			
 			/* initialize the canvas, we are our own canvas obviously */
-			//_canvas = this;
+			_canvas = this;
 			
 			/* Fix ScrollBar problem*/
-			_canvas = new Canvas();
-			_canvas.setStyle("backgroundColor", 0xFFFFFF);
-			_canvas.setStyle("backgroundAlpha", 0.0000001);
-			this.addChild(_canvas);
+			/* _canvas = new Canvas(); */
+			/* _canvas.setStyle("backgroundColor", 0xFFFFFF);
+			_canvas.setStyle("backgroundAlpha", 0.0000001); */
+			_canvas.setStyle("backgroundColor", 0xFF0000);
+			//this.addChild(_canvas);
 
 			_canvas.addChild(_drawingSurface);
 			
 			/* disable scrollbars */
-			_canvas.verticalScrollPolicy = "off";
-			_canvas.horizontalScrollPolicy = "off";
+			/* _canvas.verticalScrollPolicy = "off";
+			_canvas.horizontalScrollPolicy = "off"; */
 			
 			/* add event handlers for background drag/drop i.e. scrolling */
 			_canvas.addEventListener(MouseEvent.MOUSE_DOWN,backgroundDragBegin);
@@ -2210,6 +2211,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * */
 		protected function backgroundDragBegin(event:MouseEvent):void {
 		
+			if(event.target != this)
+			{
+				return;
+			}
+			
 			var mycomponent:UIComponent;
 			const mpoint:Point = globalMousePosition();
 		
@@ -2248,6 +2254,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* There is mouse move event so listen to mouse up event */
 			_canvas.addEventListener(MouseEvent.MOUSE_UP,dragEnd);
+			_canvas.addEventListener(MouseEvent.ROLL_OUT,dragEnd);
 		}
 		
 		/**
@@ -2303,7 +2310,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			var mycomp:UIComponent;
 			var myback:DisplayObject;
 			var myvnode:IVisualNode;
-
+			
+			_canvas.removeEventListener(MouseEvent.ROLL_OUT,dragEnd);
 			_canvas.removeEventListener(MouseEvent.MOUSE_UP,dragEnd);
 
 			if(_backgroundDragInProgress) {
