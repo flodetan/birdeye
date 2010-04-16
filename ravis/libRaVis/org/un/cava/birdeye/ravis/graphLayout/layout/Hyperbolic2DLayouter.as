@@ -138,7 +138,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		/*********************************************
 		* Initialization - Constructors, resets
 		* ********************************************/
-		public function Hyperbolic2DLayouter(vg:IVisualGraph = null):void {
+		public function Hyperbolic2DLayouter(vg:IVisualGraph = null) {
 			super(vg);
 			resetAll();
 			

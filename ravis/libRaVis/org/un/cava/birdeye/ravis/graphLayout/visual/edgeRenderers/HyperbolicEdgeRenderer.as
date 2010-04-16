@@ -53,7 +53,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * @param g The graphics object to draw on.
 		 * @param projector The projector object, to be taken from the corresponding layouter.
 		 */
-		public function HyperbolicEdgeRenderer(g:Graphics,projector:IProjector):void {
+		public function HyperbolicEdgeRenderer(g:Graphics,projector:IProjector) {
 			super(g);
 			_projector = projector;
 		}

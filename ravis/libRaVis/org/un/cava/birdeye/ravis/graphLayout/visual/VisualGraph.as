@@ -43,6 +43,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	import org.un.cava.birdeye.ravis.graphLayout.data.*;
 	import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent;
 	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 
@@ -53,6 +54,28 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	 *  @eventType org.un.cava.birdeye.ravis.utils.events.VGraphEvent
 	 */
 	[Event(name=VGraphEvent.VGRAPH_CHANGED, type="org.un.cava.birdeye.ravis.utils.events.VGraphEvent")]
+	
+	/**
+	 *  Dispatched when a drag event starts
+	 *
+	 *  @eventType org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent
+	 */
+	[Event(name="nodeDragStart", type="org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent")]
+	
+	/**
+	 *  Dispatched when a drag event ends
+	 *
+	 *  @eventType org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent
+	 */
+	[Event(name="nodeDragEnd", type="org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent")]
+	
+	/**
+	 *  Dispatched when a node is clicked it is totally independant of drags, this means you 
+	 *  do not have to use double clicks to handle expanding or resetting the root
+	 *
+	 *  @eventType org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent
+	 */
+	[Event(name="nodeClick", type="org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent")]
 
 	/**
 	 * This component can visualize and layout a graph data structure in 
@@ -71,6 +94,18 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		
 		private static const _LOG:String = "graphLayout.visual.VisualGraph";		
 		
+		/**
+		 * Function that is passed to a layouter which is used to manually arrange
+		 * the nodes before the graph is drawn
+		 * 
+		 * function(graph:IGraph):void
+		 */ 
+		private var _preArrangeGraphFunction:Function;
+		
+		/**
+		 * Used to determine if a node has been moved or if it was just a click
+		 */ 
+		private var _nodeMovedInDrag:Boolean = false;
 		/**
 		 * This flag for draw() specifies that the linklength
 		 * shall be reset to 100 when calling draw();
@@ -299,7 +334,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * Controls the maximum distance from the root that a node
 		 * can have to still be visible.
 		 * */
-		protected var _maxVisibleDistance:uint = uint.MAX_VALUE;
+		protected var _maxVisibleDistance:uint = int.MAX_VALUE;
 
 		/**
 		 * This object hash contains all node ids 
@@ -414,7 +449,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * required. Currently it does neither set a Graph object, nor a 
 		 * Layouter object. Reasonable defaults may be added as an option.
 		 * */
-		public function VisualGraph():void {
+		public function VisualGraph() {
 			
 			/* call super class constructor */
 			super();
@@ -461,9 +496,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* add event handlers for background drag/drop i.e. scrolling */
 			_canvas.addEventListener(MouseEvent.MOUSE_DOWN,backgroundDragBegin);
-			
-			/* Optimize drag and drop, Only add event listener for mouse up if there is mouse move event. */
-			//_canvas.addEventListener(MouseEvent.MOUSE_UP,dragEnd);
 			
 			_origin = new Point(0,0);
 		}
@@ -650,7 +682,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				_layouter.resetAll(); // to stop any pending animations
 			}
 			_layouter = l;
-			
+			if(_layouter != null) {
+				_layouter.preArrangeGraphFunction = preArrangeGraphFunction;
+			}
 			/* need to signal control components possibly */
 			this.dispatchEvent(new VGraphEvent(VGraphEvent.LAYOUTER_CHANGED));
 		}
@@ -783,7 +817,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		/**
 		 * @inheritDoc
 		 * */
-		[Bindable]
+		/* [Bindable]  */
 		public function get currentRootVNode():IVisualNode {
 			return _currentRootVNode;
 		}
@@ -799,25 +833,39 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 
 				/* now update the history with the new node */
 				_currentVNodeHistory.unshift(_currentRootVNode);
-				
+			}	
 				//LogUtil.debug(_LOG, "node:"+_currentRootVNode.id+" added to history");
-				
-				/* if we are currently limiting node visibility,
-				 * update the set of visible nodes since we 
-				 * have changed the root, the spanning tree has changed
-				 * and thus the set of visible nodes */
-				if(_visibilityLimitActive) {
-					setDistanceLimitedNodeIds(_graph.getTree(_currentRootVNode.node).
-						getLimitedNodes(_maxVisibleDistance));
-					updateVisibility();
-				} else {
-					/* if we do not limit visibility, we still need
-					 * to force a new layout and redraw()
-					 * (in the other case, this is done by updateVisibility()) */
-					// disabled to remove implicit call to
-					// draw();
-				}
+			
+			//we always need to the following because:
+			//the _currentRootVNode can be set when you 
+			//create a node. Then if you set a custom renderer for nodes
+			//every node is made to be invisible, and because this stuff
+			//following hasn't been called it stays that way and is not deployed 
+			
+			/* if we are currently limiting node visibility,
+			 * update the set of visible nodes since we 
+			 * have changed the root, the spanning tree has changed
+			 * and thus the set of visible nodes */
+			if(_visibilityLimitActive) {
+				setDistanceLimitedNodeIds(_graph.getTree(_currentRootVNode.node).
+					getLimitedNodes(_maxVisibleDistance));
+				updateVisibility();
+			} else {					
+				//if the visibility limit is not active, get all the nodes
+				setDistanceLimitedNodeIds(getNodesAsDictionary());
+				updateVisibility();
 			}
+			
+		}
+		
+		private function getNodesAsDictionary():Dictionary {
+			var retVal:Dictionary = new Dictionary();
+			for each(var node:INode in _graph.nodes)
+			{
+				retVal[node] = node;
+			}
+			
+			return retVal;
 		}		
 
 		public function set scrollBackgroundInDrag(f:Boolean):void {
@@ -827,6 +875,17 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		public function set moveNodeInDrag(f:Boolean):void {
 			_moveNodeInDrag = f;
 		}
+		
+		public function get preArrangeGraphFunction():Function { return _preArrangeGraphFunction; }
+		public function set preArrangeGraphFunction(value:Function):void
+		{
+			_preArrangeGraphFunction = value;
+			
+			if(_layouter) {
+				layouter.preArrangeGraphFunction = value;
+			}
+		}
+		
 		/**
 		 * @inheritDoc
 		 * */
@@ -1705,17 +1764,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			mycomponent.x = _canvas.width / 2.0;
 			mycomponent.y = _canvas.height / 2.0;
 			
-			/* in Ivan's code it was like this:
-			mycomponent.x = origin.x + _canvas.width / 2.0;
-			mycomponent.y = origin.y + _canvas.height / 2.0;
-			*/
-			
 			/* add event handlers for dragging and double click */			
 			mycomponent.doubleClickEnabled = true;
 			mycomponent.addEventListener(MouseEvent.DOUBLE_CLICK, nodeDoubleClick);
-			mycomponent.addEventListener(MouseEvent.MOUSE_DOWN,nodeMouseDown);
-			/* Optimize drag and drop, Only add event listener for mouse up if there is mouse move event. */
-			//mycomponent.addEventListener(MouseEvent.MOUSE_UP, dragEnd);
+			mycomponent.addEventListener(MouseEvent.MOUSE_DOWN, nodeMouseDown);
+			mycomponent.addEventListener(MouseEvent.CLICK,nodeMouseClick);
 
 			/* enable bitmap cachine if required */
 			mycomponent.cacheAsBitmap = cacheRendererObjects;
@@ -1779,6 +1832,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				/* remove event mouse listeners */
 				component.removeEventListener(MouseEvent.DOUBLE_CLICK,nodeDoubleClick);
 				component.removeEventListener(MouseEvent.MOUSE_DOWN,nodeMouseDown);
+				component.removeEventListener(MouseEvent.CLICK,nodeMouseClick);
 				component.removeEventListener(MouseEvent.MOUSE_UP, dragEnd);
 				
 				/* get the associated VNode and remove the view from it
@@ -1930,14 +1984,43 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		}
 
 		/**
-		 * This is the event handler for a single click 
+		 * This is the event handler for a mouse down event on a node
 		 * event. Currently does only one thing:
 		 * - Starts a drag operation of this node.
 		 * @param e The associated event.
 		 * */
 		protected function nodeMouseDown(e:MouseEvent):void {
+			_nodeMovedInDrag = false;
 			dragBegin(e);
 		}
+		
+		/**
+		 * This is the event handler for a mouse click on a node
+		 * The purpose of this event is to broadcast that a node has
+		 * been clicked on by a user, it has no other internal function
+		 * 
+		 * @param e The associated event
+		 */ 
+		 protected function nodeMouseClick(e:MouseEvent):void {
+		 	if(e.currentTarget is UIComponent) {
+				
+				var ecomponent:UIComponent = (e.currentTarget as UIComponent);
+				
+				if(_nodeMovedInDrag)
+				{
+					return;	
+				}
+				
+				/* get the associated VNode of the view */
+				var evnode:IVisualNode = _viewToVNodeMap[ecomponent];
+				
+				
+				
+				/* stop propagation to prevent a concurrent backgroundDrag */
+				e.stopImmediatePropagation();
+		 		dispatchEvent(new VisualNodeEvent(VisualNodeEvent.CLICK,evnode.node));
+		 	}
+		 }
 		
 		/**
 		 * Start a drag operation. This sets the drag node and
@@ -2016,6 +2099,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 					// ecomponent.stage.addEventListener(MouseEvent.MOUSE_UP, dragEnd);
 					
 					/* and inform the layouter about the dragEvent */
+					dispatchEvent(new VisualNodeEvent(VisualNodeEvent.DRAG_START,evnode.node));
 					_layouter.dragEvent(event, evnode);
 				} else {
 					throw Error("Event Component was not in the viewToVNode Map");
@@ -2059,8 +2143,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				//sp.y = event.stageY / scaleY - _drag_y_offsetMap[sp];
 				sp.x = event.stageX / (scaleX*_canvas.scaleX) - _drag_x_offsetMap[sp];
 				sp.y = event.stageY / (scaleY*_canvas.scaleY) - _drag_y_offsetMap[sp];
-
-
+				_nodeMovedInDrag = true;
 				/* bounds code, currently unused 
 				if ( bounds != null ) {
 					if ( sp.x < bounds.left ) {
@@ -2197,28 +2280,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				
 				/* get the background drag object, which is usually
 				 * the canvasm so we just set it to this */
-				//myback = (event.currentTarget as DisplayObject);
 				myback = (this as DisplayObject);
-				
-				/*
-				if(myback == (this as DisplayObject)) {
-					LogUtil.debug(_LOG, "we found ourselves as the background object GREAT");
-				} else {
-					LogUtil.debug(_LOG, "we got something else as the background, HMPF");
-				}
-				*/
-				
-				/* no longer needed
-				if(myback == null) {
-					/* this can happen if we let go of the button
-					 * outside of the window *
-					LogUtil.debug(_LOG, "dragEnd: background drop event target was no DisplayObject but "+event.currentTarget.toString());
-				}
-				*/
 				
 				/* unregister event handler */				
 				myback.removeEventListener(MouseEvent.MOUSE_MOVE,backgroundDragContinue);
-				// myback.removeEventListener(MouseEvent.MOUSE_MOVE,dragEnd);
 				
 				/* and inform the layouter about the dropEvent */
 				if(_layouter) {
@@ -2238,7 +2303,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				}
 				
 				/* remove the event listeners */
-				//mycomp.stage.removeEventListener(MouseEvent.MOUSE_DOWN, dragEnd);
 				// HACK: I have to check the stage because there are eventual components not added to the display list
 				if (mycomp.stage != null)
 				{
@@ -2250,16 +2314,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				if(_layouter) {
 					_layouter.dropEvent(event, myvnode);
 				}
+				dispatchEvent(new VisualNodeEvent(VisualNodeEvent.DRAG_END,myvnode.node));
 				/* reset the dragComponent */
 				_dragComponent = null;
-				
-			}
-			
-			/* and stop propagation, as otherwise we could get the
-			 * event multiple times */
-			 
-			/* it's no need stop this event with new implmentation */ 
-			//event.stopImmediatePropagation();			
+			}	
 		}
 		
 		/**
@@ -2336,7 +2394,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			var vno:IVisualNode;
 			
 			var newVisibleNodes:Dictionary;
-			var toInvisibleNodes:Dictionary;
+			var potentialInvisibleNodes:Dictionary;
 			
 			/* since a layouter that uses timer based iterations
 			 * might find itself on a changing node set, we need
@@ -2352,9 +2410,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* create a copy of the currently visible 
 			 * node set, as the set for nodes to potentially
 			 * turned invisible */
-			toInvisibleNodes = new Dictionary;
+			potentialInvisibleNodes = new Dictionary;
 			for each(vn in _visibleVNodes) {
-				toInvisibleNodes[vn] = vn;
+				potentialInvisibleNodes[vn] = vn;
 			}
 			
 			/* now populate the set of nodes which should be
@@ -2401,12 +2459,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * are the nodes that should remain visible, so they
 			 * must not be turned invisible and should also not
 			 * be turned visible again. */
-			for each(vn in toInvisibleNodes) {
+			for each(vn in potentialInvisibleNodes) {
 				if(newVisibleNodes[vn] != null) {
 					/* this is a common node, remove it from
 					 * both dictionaries 
 					 */
-					delete toInvisibleNodes[vn];
+					delete potentialInvisibleNodes[vn];
 					delete newVisibleNodes[vn];
 				} 
 			}
@@ -2414,7 +2472,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* now finally turn all toInvisibleNodes invisible
 			 * likewise any edge adjacent to an invisible node
 			 * will become invisible */
-			for each(vn in toInvisibleNodes) {
+			for each(vn in potentialInvisibleNodes) {
 				setNodeVisibility(vn, false);
 			}
 			
@@ -2424,7 +2482,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			}
 			
 			/* and now walk again to update the edges */
-			for each(vn in toInvisibleNodes) {
+			for each(vn in potentialInvisibleNodes) {
 				updateConnectedEdgesVisibility(vn);
 			}
 			

@@ -79,7 +79,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * @param lStyle The line style of the edge, must be an object as associative mapping containing Graphics.lineStyle() parameters.
 		 * @see flash.display.Graphics.lineStyle()
 		 * */
-		public function VisualEdge(vg:IVisualGraph, edge:IEdge, id:int, data:Object = null, lview:UIComponent = null, lStyle:Object = null):void {
+		public function VisualEdge(vg:IVisualGraph, edge:IEdge, id:int, data:Object = null, lview:UIComponent = null, lStyle:Object = null) {
 			_vgraph = vg;
 			_edge = edge;
 			_id = id;

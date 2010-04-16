@@ -53,8 +53,8 @@
 					node.data.name = txtLabel.text;
 					node.data.nodeColor = clrColor.selectedColor;
 					
-					var tmpStr:String = txtNote.text; 
-					node.data.desc = tmpStr;
+					var tmpStr2:String = txtNote.text; 
+					node.data.desc = tmpStr2;
 				
 				}
 				if (node.vnode.view)

@@ -339,6 +339,10 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 		public function get moveable():Boolean {
 			return _moveable;
 		}
+		
+		public function set moveable(value:Boolean):void {
+			_moveable = value;
+		}
 	
 		/**
 		 * @inheritDoc

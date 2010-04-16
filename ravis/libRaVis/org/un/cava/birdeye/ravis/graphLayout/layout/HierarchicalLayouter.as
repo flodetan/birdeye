@@ -71,7 +71,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		/**
 		 * Allows to specify an extra margin if required.
 		 * */
-		public var layerMargin:Number = 0;
+		public var layerMargin:Number = 0; 
 		
 		/* this holds the data for the Hierarchical layout drawing */
 		private var _currentDrawing:HierarchicalLayoutDrawing;
@@ -107,7 +107,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * The constructor only initialises some data structures.
 		 * @inheritDoc
 		 * */
-		public function HierarchicalLayouter(vg:IVisualGraph = null):void {
+		public function HierarchicalLayouter(vg:IVisualGraph = null) {
 			super(vg);
 			animationType = ANIM_STRAIGHT; // inherited
 			initModel();
@@ -376,11 +376,11 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			nochild = _stree.getNoChildren(v);
 			vindex = _stree.getChildIndex(v);
-			
+
 			if(nochild == 0) {
 				/* if v's childindex is > 0 then there is a 
 				 * node with a smaller one, i.e. one on the left and we need to space it */
-				if(vindex > 0) {
+				if(vindex > 0) { 
 					/* get the left sibling by getting the vindex - 1'th child of
 					 * it's parent */
 					sibling = _stree.getIthChildPerNode(_stree.parents[v],vindex - 1);
@@ -392,7 +392,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 					_currentDrawing.setPrelim(v, prelimsib + spacing(sibling, v));
 				} else {
 					_currentDrawing.setPrelim(v,0);
-				}
+				}  
 			} else {
 				/* init to the first (0th, leftmost) child of v, 
 				 * may be modified by apportion() */
@@ -482,7 +482,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			/* if we have a left sibling w */
 			vindex = _stree.getChildIndex(v);
 			if(vindex > 0) {
-				w = _stree.getIthChildPerNode(_stree.parents[v], vindex - 1);
+				w = _stree.getIthChildPerNode(_stree.parents[v], vindex  - 1 );
 				
 				vinsideright = v;
 				voutsideright = v;
@@ -728,6 +728,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				default:
 					throw Error("Invalid orientation value found in internal variable");
 			}
+
 			_currentDrawing.centeredLayout = true;
 		}
 		
@@ -770,20 +771,20 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		private function calculateAutoFit():void {
 			
 			if(_stree.maxDepth > 0) {
+
 				switch(_orientation) {
 					case ORIENT_LEFT_RIGHT:
 					case ORIENT_RIGHT_LEFT:
-						_layerDistance = (_vgraph.width - 2 * (DEFAULT_MARGIN + layerMargin))  / _stree.maxDepth;
-						_defaultNodeDistance = (_vgraph.height - 2 * DEFAULT_MARGIN) / _stree.maxNumberPerLayer;
+						_layerDistance = (_vgraph.width - 2 * (DEFAULT_MARGIN + layerMargin))  / (_stree.maxDepth + 1);
+						_defaultNodeDistance = (_vgraph.height - 2 * DEFAULT_MARGIN) / (_stree.maxNumberPerLayer + 1);
 						break;
 					case ORIENT_TOP_DOWN:
 					case ORIENT_BOTTOM_UP:
-						_layerDistance = (_vgraph.height - 2 * (DEFAULT_MARGIN + layerMargin))  / _stree.maxDepth;
-						_defaultNodeDistance = (_vgraph.width - 2 * DEFAULT_MARGIN) / _stree.maxNumberPerLayer;
+						_layerDistance = (_vgraph.height - 2 * (DEFAULT_MARGIN + layerMargin))  / (_stree.maxDepth + 1);
+						_defaultNodeDistance = (_vgraph.width - 2 * DEFAULT_MARGIN) / (_stree.maxNumberPerLayer + 1);
 						break;
 					default:
-						throw Error("Invalid orientation value found in internal variable");
-					
+						throw Error("Invalid orientation value found in internal variable");					
 				}
 				/*
 				LogUtil.debug(_LOG, "h:"+_vgraph.height+" w:"+_vgraph.width+" md:"+_stree.maxDepth+

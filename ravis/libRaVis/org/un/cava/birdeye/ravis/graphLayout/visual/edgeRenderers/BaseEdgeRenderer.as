@@ -53,7 +53,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * Constructor sets the graphics object (required).
 		 * @param g The graphics object to be used.
 		 * */
-		public function BaseEdgeRenderer(g:Graphics):void {
+		public function BaseEdgeRenderer(g:Graphics) {
 			_g = g;
 		}
 		

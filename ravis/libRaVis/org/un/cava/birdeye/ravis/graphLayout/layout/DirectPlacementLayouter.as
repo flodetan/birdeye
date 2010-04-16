@@ -65,7 +65,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * The constructor only initialises some data structures.
 		 * @inheritDoc
 		 * */
-		public function DirectPlacementLayouter(vg:IVisualGraph = null):void {
+		public function DirectPlacementLayouter(vg:IVisualGraph = null) {
 			super(vg);
 			
 			_relativeHeight = 1000;

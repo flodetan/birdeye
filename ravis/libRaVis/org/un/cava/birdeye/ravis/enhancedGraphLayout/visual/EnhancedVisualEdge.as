@@ -88,7 +88,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual {
 		 * @see flash.display.Graphics.lineStyle()
 		 * */
 		public function EnhancedVisualEdge(vg:IVisualGraph, edge:IEdge, id:int, data:Object = null, lview:UIComponent = null, lStyle:Object = null,
-			fromControlView:UIComponent = null, toControlView:UIComponent = null):void {
+			fromControlView:UIComponent = null, toControlView:UIComponent = null) {
 			_vgraph = vg;
 			_edge = edge;
 			_id = id;

@@ -86,7 +86,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		 * @param graph The graph that this tree is a subset of.
 		 * @param restrict A flag to indicate that the resulting tree should be restricted to currently invisible nodes.
 		 * */
-		public function GTree(root:INode, graph:IGraph, restrict:Boolean = false):void {
+		public function GTree(root:INode, graph:IGraph, restrict:Boolean = false) {
 			_parentMap = null;
 			_childrenMap = null;
 			_distanceMap = null;

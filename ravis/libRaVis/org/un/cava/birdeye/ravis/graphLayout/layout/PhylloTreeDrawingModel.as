@@ -63,7 +63,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		/**
 		 * The constructor only initializes the datastructures.
 		 * */
-		public function PhylloTreeDrawingModel():void {
+		public function PhylloTreeDrawingModel() {
 			
 			super();
 			

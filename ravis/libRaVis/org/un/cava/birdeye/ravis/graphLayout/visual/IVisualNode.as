@@ -127,10 +127,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		/**
 		 * This specifies if a node is moveable. This is currently
 		 * not used by any layouter and thus not effective.
-		 * Do not use for now!
+		 * Useable by ForceDirectedLayouter Only!
 	     * */
 		function get moveable():Boolean;
-
+		function set moveable(value:Boolean):void
 		/**
 		 * A layouter can optionally set an orientation angle 
 		 * paramter in the node. Right now we hardcode this as

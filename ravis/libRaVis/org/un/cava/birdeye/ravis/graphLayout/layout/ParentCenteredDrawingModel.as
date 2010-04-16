@@ -64,7 +64,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		/**
 		 * The constructor only initializes the datastructures.
 		 * */
-		public function ParentCenteredDrawingModel():void {
+		public function ParentCenteredDrawingModel() {
 			
 			super();
 			

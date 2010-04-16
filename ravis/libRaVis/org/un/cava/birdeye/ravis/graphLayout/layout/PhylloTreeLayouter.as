@@ -62,7 +62,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * The constructor only initialises some data structures.
 		 * @inheritDoc
 		 * */
-		public function PhylloTreeLayouter(vg:IVisualGraph = null):void {
+		public function PhylloTreeLayouter(vg:IVisualGraph = null) {
 			super(vg);
 			animationType = ANIM_RADIAL;
 			initModel();

@@ -78,7 +78,8 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
 		public var baseEdgeDis:Number = 30;
 		public var isFixBaseEdge:Boolean = true;
 		public var hitSize:Number = 6;
-		public function EdgeDrawer(g:Graphics):void {
+		
+		public function EdgeDrawer(g:Graphics) {
 			super(g);
 		}
 		

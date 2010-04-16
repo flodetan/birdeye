@@ -23,13 +23,13 @@
  * THE SOFTWARE.
  */
 package org.un.cava.birdeye.ravis.graphLayout.layout {
-	import flash.accessibility.AccessibilityProperties;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	
-	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
-  	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	
 /**
  * This is an implementation of an Inverted Self Organizing Map (ISOM) 
@@ -47,7 +47,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	 /*********************************************
 		* CONSTANTS
 		*********************************************/
-		
+		private static const _LOG:String = "graphLayout.layout.ISOMLayouter";
 		/**
 		 * @internal
 		 * This defines the Rectangular random distribution. */
@@ -237,9 +237,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				last_x = min_x + (max_x - min_x) * Math.random();
 				last_y = min_y + (max_y - min_y) * Math.random();
 			} while (!insideDistribution(last_x,last_y));
-      winner = closestNode(last_x, last_y);
+      		winner = closestNode(last_x, last_y);
 			//LogUtil.debug(_LOG, "*> Winner is = " + winner.node.stringid);
-			
 			// add winner to the queue
 			distanceMap[winner] = [0];
 			visitedMap[winner] = [true];
@@ -332,6 +331,10 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			var vn:IVisualNode;
 			
 			for each(vn in allVisVNodes) {
+				/* we have to do this to prevent this method from returning null*/
+				if(bestNode == null) {
+					bestNode = vn;	
+				}
 				//LogUtil.debug(_LOG, "$> " + vn.x + ", " + vn.y);
 				if (insideDistribution(vn.x, vn.y)) {
 					dx = vn.x - x;
@@ -434,7 +437,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 								x_translat = vn_i.x - old.x;
 								y_translat = vn_i.y - old.y;
 								translation = Math.sqrt(x_translat*x_translat + y_translat*y_translat);
-								clip_factor = 1 - (tabooDist - dist) / translation;
+								//dont want to divide by zero
+								clip_factor = translation == 0 ? 1 : 1 - (tabooDist - dist) / translation;
 								
 								vn_i.x = old.x + clip_factor*x_translat;
 								vn_i.y = old.y + clip_factor*y_translat;
