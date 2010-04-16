@@ -38,6 +38,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	import mx.core.UIComponent;
 	import mx.effects.Effect;
 	import mx.events.EffectEvent;
+	import mx.managers.CursorManager;
 	import mx.utils.ObjectUtil;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.data.*;
@@ -94,6 +95,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		
 		private static const _LOG:String = "graphLayout.visual.VisualGraph";		
 		
+		[Embed('/org/un/cava/birdeye/ravis/assets/cursors/openhand.png')]
+		private static const HAND_CURSOR:Class;
 		/**
 		 * Function that is passed to a layouter which is used to manually arrange
 		 * the nodes before the graph is drawn
@@ -496,8 +499,38 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* add event handlers for background drag/drop i.e. scrolling */
 			_canvas.addEventListener(MouseEvent.MOUSE_DOWN,backgroundDragBegin);
+			_canvas.addEventListener(MouseEvent.MOUSE_OVER,mouseOverHandler);
+			_canvas.addEventListener(MouseEvent.MOUSE_OUT,mouseOutHandler); 
 			
 			_origin = new Point(0,0);
+		}
+		
+		private function mouseOverHandler(e:MouseEvent):void
+		{
+			//if we mouse over an edge return
+			if(e.target == _drawingSurface)
+			{
+				return;
+			}
+
+			if(e.target == _canvas)
+			{
+				CursorManager.setCursor(HAND_CURSOR);
+			}
+		}
+		
+		private function mouseOutHandler(e:MouseEvent):void
+		{
+			//if we mouse out of an edge return
+			if(e.target == _drawingSurface)
+			{
+				return;
+			}
+			
+			if(e.target == _canvas)
+			{
+				CursorManager.removeAllCursors();
+			}
 		}
 		
 		/**
@@ -981,7 +1014,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * the Graph and a VEdge for every Edge in the Graph.
 		 * Careful, this currently does not check if the VGraph
 		 * was already initialised and it does not purge anything.
-		 * Things could break of used on an already initialized VGraph.
+		 * Things could break if used on an already initialized VGraph.
 		 * */
 		public function initFromGraph():void {
 			

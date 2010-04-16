@@ -25,6 +25,7 @@
 package org.un.cava.birdeye.ravis.graphLayout.layout {
 
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
@@ -73,6 +74,16 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		public var layerMargin:Number = 0; 
 		
+		/**
+		 * Used when centering the diagram
+		 */ 
+		public var horizontalPadding:Number = 0;
+		
+		/**
+		 * Used when centering the diagram
+		 */ 
+		public var verticalPadding:Number = 0;
+		
 		/* this holds the data for the Hierarchical layout drawing */
 		private var _currentDrawing:HierarchicalLayoutDrawing;
 		
@@ -102,7 +113,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		
 		/* enables interleaved spread of nodes if _siblingSpreadEnabled is true */
 		private var _interleaveSiblings:Boolean;
-		
+	
 		/**
 		 * The constructor only initialises some data structures.
 		 * @inheritDoc
@@ -131,7 +142,13 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			/* invalidate all trees in the graph */
 			_stree = null;
-			_graph.purgeTrees();
+			
+			/* handles if we have been reset when 
+			we do not have a graph */
+			if(_graph)
+			{
+				_graph.purgeTrees();
+			}
 			
 			initModel();
 		}
@@ -209,7 +226,11 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			/* and now the second */
 			secondWalk(_root, -_currentDrawing.getPrelim(_root));
-		
+			
+			//now we fit the diagram to the center of the screen
+			if(_autoFitEnabled) {
+				centerDiagram();
+			}
 			/* reset animation cycle */
 			resetAnimation();
 			
@@ -219,7 +240,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			_layoutChanged = true;
 			return rv;
 		}
-	
+
 		/**
 		 * @inheritDoc
 		 * */
@@ -333,7 +354,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				case ORIENT_TOP_DOWN:
 				case ORIENT_BOTTOM_UP:
 					_orientation = o;
-					adjustCenter();
+					centerDiagram()
 					
 					/* do a redraw */
 					layoutPass();
@@ -695,41 +716,11 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		private function initModel():void {		
 			_currentDrawing = null;
-			_currentDrawing = new HierarchicalLayoutDrawing;
-			
+			_currentDrawing = new HierarchicalLayoutDrawing();
 			/* set in super class */
 			super.currentDrawing = _currentDrawing;
 			
 			_currentDrawing.originOffset = _vgraph.origin;
-			
-			adjustCenter();
-		}
-		
-		/**
-		 * @internal
-		 * This method adjusts the reference center depending
-		 * on the current orientation */
-		private function adjustCenter():void {
-			switch(_orientation) {
-				case ORIENT_TOP_DOWN:
-					_currentDrawing.centerOffset = new Point((_vgraph.width / 2), DEFAULT_MARGIN + layerMargin);
-					break;
-				case ORIENT_BOTTOM_UP:
-					_currentDrawing.centerOffset =
-						new Point((_vgraph.width / 2), (_vgraph.height - DEFAULT_MARGIN - layerMargin));
-					break;
-				case ORIENT_LEFT_RIGHT:
-					_currentDrawing.centerOffset = new Point(DEFAULT_MARGIN + layerMargin, (_vgraph.height / 2) - DEFAULT_MARGIN);
-					break;
-				case ORIENT_RIGHT_LEFT:
-					_currentDrawing.centerOffset =
-						new Point((_vgraph.width - DEFAULT_MARGIN - layerMargin), (_vgraph.height / 2) - DEFAULT_MARGIN);
-					break;
-				default:
-					throw Error("Invalid orientation value found in internal variable");
-			}
-
-			_currentDrawing.centeredLayout = true;
 		}
 		
 		
@@ -771,17 +762,17 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		private function calculateAutoFit():void {
 			
 			if(_stree.maxDepth > 0) {
-
+				var leafNodesLength:int = _stree.getNodesWithoutLinkToNextLevel().length;
 				switch(_orientation) {
 					case ORIENT_LEFT_RIGHT:
 					case ORIENT_RIGHT_LEFT:
 						_layerDistance = (_vgraph.width - 2 * (DEFAULT_MARGIN + layerMargin))  / (_stree.maxDepth + 1);
-						_defaultNodeDistance = (_vgraph.height - 2 * DEFAULT_MARGIN) / (_stree.maxNumberPerLayer + 1);
+						_defaultNodeDistance = (_vgraph.height - 2 * DEFAULT_MARGIN) / (leafNodesLength + 1);
 						break;
 					case ORIENT_TOP_DOWN:
 					case ORIENT_BOTTOM_UP:
 						_layerDistance = (_vgraph.height - 2 * (DEFAULT_MARGIN + layerMargin))  / (_stree.maxDepth + 1);
-						_defaultNodeDistance = (_vgraph.width - 2 * DEFAULT_MARGIN) / (_stree.maxNumberPerLayer + 1);
+						_defaultNodeDistance = (_vgraph.width - 2 * DEFAULT_MARGIN) / (leafNodesLength + 1);
 						break;
 					default:
 						throw Error("Invalid orientation value found in internal variable");					
@@ -793,6 +784,91 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			} else {
 				//LogUtil.debug(_LOG, "TreeMaxDepth:"+_stree.maxDepth+" is 0");
 			}
+		}
+		
+		/**
+		 * Centers the diagram to the page
+		 */
+		private function centerDiagram():void {
+			
+			//if we have no graph or no drawing this
+			//method will error
+			if(_graph == null || _currentDrawing == null)
+			{
+				return;
+			}
+			
+			//this rect holds the bounds of the diagram
+			var diagramBounds:Rectangle = new Rectangle();
+			
+			//these hold the max x and y values which will be translated to width and height
+			var maxX:Number = 0;
+			var maxY:Number = 0;
+			
+			//get all diagram locations to construct the bounds
+			for each(var node:INode in _graph.nodes) {
+				var nodePos:Point = _currentDrawing.getAbsCartCoordinates(node);
+				
+				if(nodePos.x < diagramBounds.x) {
+					diagramBounds.x = nodePos.x ;
+				}
+				
+				if(nodePos.y < diagramBounds.y) {
+					diagramBounds.y = nodePos.y;
+				}
+				
+				if(nodePos.x > maxX) {
+					maxX = nodePos.x;
+				}
+				
+				if(nodePos.y > maxY) {
+					maxY = nodePos.y;
+				}
+			}
+			diagramBounds.width = maxX - diagramBounds.x + horizontalPadding;
+			diagramBounds.height = maxY - diagramBounds.y + verticalPadding;
+			
+			//do this so that for diagrams with no height or width
+			//it is place in the center
+			if(diagramBounds.height == 0)
+			{
+				diagramBounds.height = _vgraph.height;
+			}
+			
+			if(diagramBounds.width == 0)
+			{
+				diagramBounds.width = _vgraph.width;
+			}
+			
+			//tell the drawing to make sure its centered
+			_currentDrawing.centeredLayout = true;
+			
+			//shift the made diagram into the center of the screen
+		 	switch(_orientation) {
+				case ORIENT_LEFT_RIGHT:
+					_currentDrawing.centerOffset = new Point(_vgraph.width/2 - (diagramBounds.width - diagramBounds.x)/2,
+						(diagramBounds.height - diagramBounds.y)/2);
+					break;
+					
+				case ORIENT_RIGHT_LEFT:
+					_currentDrawing.centerOffset = new Point(_vgraph.width - (_vgraph.width - diagramBounds.width)/2,
+						(diagramBounds.height - diagramBounds.y)/2);
+					break;
+					
+				case ORIENT_TOP_DOWN:
+					_currentDrawing.centerOffset = new Point((diagramBounds.width - diagramBounds.x)/2,
+						_vgraph.height/2 - (diagramBounds.height - diagramBounds.y)/2);
+					break;
+				
+				case ORIENT_BOTTOM_UP:
+					_currentDrawing.centerOffset = new Point((diagramBounds.width - diagramBounds.x)/2,
+						_vgraph.height - (_vgraph.height - diagramBounds.height)/2);
+					break;
+				
+				default:
+					throw Error("Invalid orientation value found in internal variable");		
+			
+			}	
 		}
 	}
 }

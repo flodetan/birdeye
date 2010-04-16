@@ -164,6 +164,10 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		function getNumberNodesWithDistance(d:uint):uint;
 		
 		/**
+		 * This returns all nodes that dont have a connection to any level larger then them
+		 */ 
+		function getNodesWithoutLinkToNextLevel():Array;
+		/**
 		 * This is the maximum number of nodes at any
 		 * distance, i.e. the maximum over all distances
 		 * of getNumberNodesWithDistance().
