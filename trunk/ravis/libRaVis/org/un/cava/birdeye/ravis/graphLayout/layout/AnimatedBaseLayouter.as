@@ -215,7 +215,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				//_vgraph.dispatchEvent(new MouseEvent("forceRedrawEvent"));
 				//_vgraph.invalidateDisplayList();
 				_vgraph.redrawEdges();
-	
+				_vgraph.refresh();
 				/* check if we ran out of anim cycles, but are not finished */
 				if (cyclefinished) {
 					//LogUtil.debug(_LOG, "Achieved final node positions, terminating animation...");
@@ -231,6 +231,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			} else {
 				cyclefinished = setCoords();
+				_vgraph.refresh();
 				if(cyclefinished == false)
 				{
 					//if we havent completed successfully
