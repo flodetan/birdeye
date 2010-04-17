@@ -1326,6 +1326,14 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* this forces the next call of updateDisplayList()
 			 * to redraw all edges */
 			_forceUpdateEdges = true;
+			
+			for each(var node:INode in _graph.nodes)
+			{
+				if(node.vnode !=null && node.vnode.view != null)
+				{
+					node.vnode.view.invalidateDisplayList();
+				}
+			}
 			//_canvas.invalidateDisplayList();
 			this.invalidateDisplayList();
 		}
