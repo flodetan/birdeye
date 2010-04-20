@@ -370,6 +370,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			if(_centered) {
 				this.viewX = _x - (this.view.width / 2.0);
 				this.viewY = _y - (this.view.height / 2.0);
+				
 			} else {
 				this.viewX = _x;
 				this.viewY = _y;

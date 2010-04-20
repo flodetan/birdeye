@@ -32,7 +32,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 	import mx.core.UIComponent;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
-	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 	
 	/**
@@ -201,8 +200,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 				throw Error("VNode "+_id+": set x tried to set NaN");
 			}
 		}
-
-
+		
 		/**
 		 * @inheritDoc
 		 * */		
@@ -331,7 +329,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		 * @inheritDoc
 		 * */			
 		public function commit():void {
-			if(view.initialized == false)
+			if(view && view.initialized == false)
 			{
 				view.callLater(commit);
 				return;
@@ -342,6 +340,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 			if(_centered) {
 				this.viewX = _x - (this.view.width / 2.0);
 				this.viewY = _y - (this.view.height / 2.0);
+				
 			} else {
 				this.viewX = _x;
 				this.viewY = _y;

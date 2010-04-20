@@ -41,6 +41,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	import mx.managers.CursorManager;
 	import mx.utils.ObjectUtil;
 	
+	import org.un.cava.birdeye.ravis.distortions.IDistortion;
 	import org.un.cava.birdeye.ravis.graphLayout.data.*;
 	import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
@@ -97,6 +98,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		
 		[Embed('/org/un/cava/birdeye/ravis/assets/cursors/openhand.png')]
 		private static const HAND_CURSOR:Class;
+		
+		public var distortion:IDistortion;
 		/**
 		 * Function that is passed to a layouter which is used to manually arrange
 		 * the nodes before the graph is drawn
@@ -105,6 +108,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 */ 
 		private var _preArrangeGraphFunction:Function;
 		
+		private var _handCursorID:int;
 		/**
 		 * Used to determine if a node has been moved or if it was just a click
 		 */ 
@@ -306,18 +310,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			joints:null,
 			miterLimit:3
 		}
-		/* currently inactive *
-		protected var _defaultDistEdgeSettings:Object = {
-			thickness:1,
-			alpha:1.0,
-			color:0xff0000,
-			pixelhinting:false,
-			scaleMode:"normal",
-			caps:null,
-			joints:null,
-			miterLimit:3
-		}
-		*/
 
 		/* The visibility of nodes can be controlled in a few ways.
 		 * The principal limit is to restrict nodes to only be visible if they
@@ -486,10 +478,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			_canvas = this;
 			
 			/* Fix ScrollBar problem*/
-			/* _canvas = new Canvas(); */
-			/* _canvas.setStyle("backgroundColor", 0xFFFFFF);
-			_canvas.setStyle("backgroundAlpha", 0.0000001); */
-			//this.addChild(_canvas);
+			/* _canvas = new Canvas();
+			_canvas.setStyle("backgroundColor", 0xFFFFFF);
+			_canvas.setStyle("backgroundAlpha", 0.0000001);
+			_canvas.percentWidth = 100;
+			_canvas.percentHeight = 100;
+			this.addChild(_canvas); */
 
 			_canvas.addChild(_drawingSurface);
 			
@@ -499,38 +493,31 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* add event handlers for background drag/drop i.e. scrolling */
 			_canvas.addEventListener(MouseEvent.MOUSE_DOWN,backgroundDragBegin);
-			_canvas.addEventListener(MouseEvent.MOUSE_OVER,mouseOverHandler);
-			_canvas.addEventListener(MouseEvent.MOUSE_OUT,mouseOutHandler); 
+			_canvas.addEventListener(MouseEvent.MOUSE_MOVE,mouseMoveHandler);
+			_canvas.addEventListener(MouseEvent.ROLL_OVER,rollOverHandler);
+			_canvas.addEventListener(MouseEvent.ROLL_OUT,rollOutHandler); 
 			
 			_origin = new Point(0,0);
 		}
 		
-		private function mouseOverHandler(e:MouseEvent):void
+		private function mouseMoveHandler(e:MouseEvent):void
 		{
-			//if we mouse over an edge return
-			if(e.target == _drawingSurface)
+			if(distortion && layouter.animInProgress == false)
 			{
-				return;
-			}
-
-			if(e.target == _canvas)
-			{
-				CursorManager.setCursor(HAND_CURSOR);
+				var dp:Point = new Point(e.stageX,e.stageY);
+				dp = dp.subtract(localToGlobal(new Point(x,y)));
+				distortion.distort(dp);
 			}
 		}
 		
-		private function mouseOutHandler(e:MouseEvent):void
+		private function rollOverHandler(e:MouseEvent):void
 		{
-			//if we mouse out of an edge return
-			if(e.target == _drawingSurface)
-			{
-				return;
-			}
-			
-			if(e.target == _canvas)
-			{
-				CursorManager.removeAllCursors();
-			}
+			_handCursorID = CursorManager.setCursor(HAND_CURSOR,3);
+		}
+		
+		private function rollOutHandler(e:MouseEvent):void
+		{
+			CursorManager.removeCursor(_handCursorID);
 		}
 		
 		/**
@@ -1327,15 +1314,16 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * to redraw all edges */
 			_forceUpdateEdges = true;
 			
-			for each(var node:INode in _graph.nodes)
-			{
-				if(node.vnode !=null && node.vnode.view != null)
-				{
+			if(_graph == null) {
+				return;
+			}
+			
+			for each(var node:INode in _graph.nodes) {
+				if(node.vnode !=null && node.vnode.view != null) {
 					node.vnode.view.invalidateDisplayList();
 				}
 			}
-			//_canvas.invalidateDisplayList();
-			this.invalidateDisplayList();
+			_canvas.invalidateDisplayList();
 		}
 
 		/**
@@ -1539,7 +1527,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 
 			/* now set the vnode in the node */
 			n.vnode = vnode;
-			
 			/* add the node to the hash to keep track */
 			_vnodes[vnode] = vnode;
 			
@@ -1809,6 +1796,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			mycomponent.doubleClickEnabled = true;
 			mycomponent.addEventListener(MouseEvent.DOUBLE_CLICK, nodeDoubleClick);
 			mycomponent.addEventListener(MouseEvent.MOUSE_DOWN, nodeMouseDown);
+			mycomponent.addEventListener(MouseEvent.ROLL_OVER, nodeRollOver);
+			mycomponent.addEventListener(MouseEvent.ROLL_OUT, nodeRollOut);
 			mycomponent.addEventListener(MouseEvent.CLICK,nodeMouseClick);
 
 			/* enable bitmap cachine if required */
@@ -1842,6 +1831,14 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			refresh();
 			
 			return mycomponent;
+		}
+		
+		private function nodeRollOver(e:MouseEvent):void {
+			CursorManager.removeCursor(_handCursorID);
+		}
+		
+		private function nodeRollOut(e:MouseEvent):void {
+			_handCursorID = CursorManager.setCursor(HAND_CURSOR,3);
 		}
 		
 		/**
@@ -2218,11 +2215,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * */
 		protected function backgroundDragBegin(event:MouseEvent):void {
 		
-			if(event.target != this)
-			{
-				return;
-			}
-			
 			var mycomponent:UIComponent;
 			const mpoint:Point = globalMousePosition();
 		
