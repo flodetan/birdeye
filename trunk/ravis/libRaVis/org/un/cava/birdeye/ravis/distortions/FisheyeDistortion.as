@@ -21,11 +21,11 @@ package org.un.cava.birdeye.ravis.distortions
     	private var _graph:IVisualGraph;
     	
 		public function FisheyeDistortion(graph:IVisualGraph,
-			dx:Number=4, dy:Number=4, ds:Number=2) {
+			dx:Number=4, dy:Number=4, ds:Number=0) {
 				
-			distortX = true;
-			distortY = false;
-			distortSize = false;
+			distortX = dx > 0;
+			distortY = dy > 0;
+			distortSize = ds>0;
 			
 			_graph = graph;
 			_dx = dx;

@@ -56,6 +56,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		* CONSTANTS
 		* ********************************************/
 		
+		private var _animationInProgress:Boolean;
 		/**
 		 * @internal
 		 * Timing related constants.
@@ -144,7 +145,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			if(_timer != null) {
 				_timer.stop();
 			}
-			
+			_animationInProgress = true;
 			return layoutIteration();
 		}
 		
@@ -194,6 +195,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				//LogUtil.debug(_LOG, "Iteration computation time = " + _timerDelay);
 				restartTimer();
 			} else {
+				_animationInProgress = false;
 				LogUtil.debug(_LOG, "Achieved steady node state, terminating iterations...");
 			}
 			
@@ -254,5 +256,10 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		protected function calculateLayout():void {
 			/* NOP */
 		} 
+		
+		override public function get animInProgress():Boolean
+		{
+			return _animationInProgress;
+		}
 	}
 }
