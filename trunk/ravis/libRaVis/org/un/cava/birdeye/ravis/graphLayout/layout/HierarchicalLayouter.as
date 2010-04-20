@@ -720,7 +720,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			/* set in super class */
 			super.currentDrawing = _currentDrawing;
 			
-			_currentDrawing.originOffset = _vgraph.origin;
+			//_currentDrawing.originOffset = _vgraph.origin;
 		}
 		
 		

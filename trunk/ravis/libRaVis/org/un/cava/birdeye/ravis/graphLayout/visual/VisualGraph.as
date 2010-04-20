@@ -487,9 +487,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 
 			_canvas.addChild(_drawingSurface);
 			
-			/* disable scrollbars */
-			/* _canvas.verticalScrollPolicy = "off";
-			_canvas.horizontalScrollPolicy = "off"; */
+			_canvas.horizontalScrollPolicy = "off";
+			_canvas.verticalScrollPolicy = "off"; 
 			
 			/* add event handlers for background drag/drop i.e. scrolling */
 			_canvas.addEventListener(MouseEvent.MOUSE_DOWN,backgroundDragBegin);
@@ -517,6 +516,16 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		
 		private function rollOutHandler(e:MouseEvent):void
 		{
+			if(distortion)
+			{
+				draw();
+			}
+			/* for each(var node:IVisualNode in visibleVNodes)
+			{
+				node.refresh();
+				//node.commit();
+			}
+			redrawEdges(); */
 			CursorManager.removeCursor(_handCursorID);
 		}
 		
