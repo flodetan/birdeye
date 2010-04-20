@@ -29,6 +29,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	
+	import org.un.cava.birdeye.ravis.distortions.IDistortion;
 	import org.un.cava.birdeye.ravis.graphLayout.data.Graph;
 	import org.un.cava.birdeye.ravis.graphLayout.data.IGTree;
 	import org.un.cava.birdeye.ravis.graphLayout.data.IGraph;

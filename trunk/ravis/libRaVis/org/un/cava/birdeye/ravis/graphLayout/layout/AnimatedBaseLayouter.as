@@ -212,8 +212,6 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				
 				/* make sure the edges are redrawn */
 				_layoutChanged = true;
-				//_vgraph.dispatchEvent(new MouseEvent("forceRedrawEvent"));
-				//_vgraph.invalidateDisplayList();
 				_vgraph.redrawEdges();
 				_vgraph.refresh();
 				/* check if we ran out of anim cycles, but are not finished */
