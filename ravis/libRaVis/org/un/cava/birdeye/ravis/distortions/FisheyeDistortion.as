@@ -46,6 +46,8 @@ package org.un.cava.birdeye.ravis.distortions
 		
 		public function distortNode(node:IVisualNode,distortionPoint:Point):void
 		{
+			node.moveable = true;
+			
 			if (distortX) 
 			{
 				node.viewX = xDistort(node.x,distortionPoint.x); 	
