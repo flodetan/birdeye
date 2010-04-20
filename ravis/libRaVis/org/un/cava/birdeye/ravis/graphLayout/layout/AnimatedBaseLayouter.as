@@ -229,7 +229,6 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			} else {
 				cyclefinished = setCoords();
-				_vgraph.refresh();
 				if(cyclefinished == false)
 				{
 					//if we havent completed successfully
@@ -241,6 +240,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				{
 					/* make sure the edges are redrawn */
 					_layoutChanged = true;
+					_vgraph.refresh();
 					//_vgraph.dispatchEvent(new MouseEvent("forceRedrawEvent"));
 					//_vgraph.invalidateDisplayList();
 					_vgraph.redrawEdges();

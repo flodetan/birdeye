@@ -520,13 +520,15 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			{
 				draw();
 			}
-			/* for each(var node:IVisualNode in visibleVNodes)
-			{
-				node.refresh();
-				//node.commit();
-			}
-			redrawEdges(); */
 			CursorManager.removeCursor(_handCursorID);
+		}
+		
+		public function releaseNodes():void
+		{
+			for each(var node:IVisualNode in visibleVNodes)
+			{
+				node.moveable = true;
+			}
 		}
 		
 		/**
