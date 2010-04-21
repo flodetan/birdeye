@@ -351,8 +351,8 @@ package birdeye.vis.elements.geometry
 		
 		protected function addPoint(scaleResult:Object):void
 		{
-			upperPoints.push(new Point(scaleResult[POS1], scaleResult[POS2]));
-			lowerPoints.splice(0, 0, new Point(scaleResult[POS1], scaleResult[POS2 + "base"]));
+			upperPoints.push(transformToTooltipCoordinate(new Point(scaleResult[POS1], scaleResult[POS2])));
+			lowerPoints.splice(0, 0, transformToTooltipCoordinate(new Point(scaleResult[POS1], scaleResult[POS2 + "base"])));
 			
 			if (upperPoints.length > 3)
 			{

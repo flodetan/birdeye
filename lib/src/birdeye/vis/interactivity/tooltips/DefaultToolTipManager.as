@@ -1,5 +1,6 @@
 package birdeye.vis.interactivity.tooltips
 {
+	import birdeye.vis.interactivity.InteractivityManager;
 	import birdeye.vis.interactivity.events.InteractivityEvent;
 	import birdeye.vis.interfaces.coords.ICoordinates;
 	import birdeye.vis.interfaces.interactivity.IInteractivityManager;
@@ -23,7 +24,7 @@ package birdeye.vis.interactivity.tooltips
 		{
 			if (!coords) 
 			{
-				throw new Error("DefaultTooTipManager can not work without an interactivity manager or stager.");
+				throw new Error("DefaultTooTipManager can not work without a coordinates system.");
 			}
 			
 			_coords = coords;
@@ -51,22 +52,45 @@ package birdeye.vis.interactivity.tooltips
 			_coords.removeEventListener("tooltipLayerPlaced", onTooltipLayerPlaced);
 		}
 		
-		protected var _labels:Object = new Object();
-		
-		protected function labelFunction(o:Object):String
+		public function release():void
 		{
-			return String(o);
+			if (_im)
+			{
+				_im.removeEventListener(InteractivityEvent.GEOMETRY_MOUSE_OVER, onMouseOver);
+				_im.removeEventListener(InteractivityEvent.GEOMETRY_MOUSE_OUT, onMouseOut);
+			}
+			
+			if (_coords)
+			{
+				_coords.removeEventListener("tooltipLayerPlaced", onTooltipLayerPlaced);
+			}
 		}
 		
+		protected var _labels:Object = new Object();
+		
+		protected var _labelDimension:Object = "dim2";
+		
+		public function set labelDimension(dim:Object):void
+		{
+			_labelDimension = dim;
+		}
+		
+		public function get labelDimension():Object
+		{
+			return _labelDimension;
+		}
+		
+		protected function labelFunction(o:Object, dim:Object):String
+		{
+			return String(o[dim]);
+		}
 		
 		protected function onMouseOver(event:InteractivityEvent):void
 		{
-			trace("onMouseOver: " + event.geometry);
 			var lbl:Tooltip = _labels[event.geometry];
 			
 			if (!lbl)
 			{
-				trace("new label");
 				lbl = new Tooltip();
 				lbl.mouseEnabled = false;
 				lbl.mouseChildren = false;
@@ -77,7 +101,7 @@ package birdeye.vis.interactivity.tooltips
 			
 			
 //			trace("Mouse over of ", event.geometry.data[event.geometry.element.dim1], event.geometry.data[event.geometry.element.dim2]);
-			lbl.text = labelFunction(event.geometry.data[event.geometry.element.dim2]);
+			lbl.text = labelFunction(event.geometry.data, event.geometry.element[_labelDimension]);
 			lbl.x = event.geometry.preferredTooltipPoint.x - 25; // center tooltip
 			lbl.y = event.geometry.preferredTooltipPoint.y - 8;
 			lbl.visible = true;

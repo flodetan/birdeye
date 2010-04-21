@@ -58,9 +58,9 @@ package birdeye.vis.coords
 	
 	public class BaseCoordinates extends VisScene implements IValidatingCoordinates
 	{
-		public function BaseCoordinates(interactivityMgr:IInteractivityManager = null)
+		public function BaseCoordinates()
 		{
-			super(interactivityMgr);				
+			super();				
 		}
 
 		
@@ -309,7 +309,7 @@ package birdeye.vis.coords
 		{
 			if (!_elementsContainer.contains(DisplayObject(element)) )
 			{
-				_elementsContainer.addChild(DisplayObject(element));
+				_elementsContainer.addChildAt(DisplayObject(element),0);
 			}
 		}
 		

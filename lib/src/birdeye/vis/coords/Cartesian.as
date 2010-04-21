@@ -34,6 +34,7 @@ package birdeye.vis.coords
 	import birdeye.vis.interfaces.elements.IElement;
 	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.interfaces.guides.IGuide;
+	import birdeye.vis.interfaces.interactivity.IInteractivityManager;
 	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.*;
 	
@@ -84,10 +85,9 @@ package birdeye.vis.coords
 		}
 
 		// UIComponent flow
-
-		public function Cartesian() 
+		public function Cartesian()
 		{
-			super();
+			super();				
 			coordType = VisScene.CARTESIAN;
 		}
 		

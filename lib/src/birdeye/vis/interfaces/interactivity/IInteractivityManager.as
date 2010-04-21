@@ -18,6 +18,11 @@ package birdeye.vis.interfaces.interactivity
 		 */
 		function registerGeometry(geom:IInteractiveGeometry):void;
 		
+		/**
+		 * Unregister all geometries.
+		 */
+		function unregisterAll():void;
+		
 		
 		/**
 		 * Unregister a given geometry.
@@ -30,10 +35,21 @@ package birdeye.vis.interfaces.interactivity
 		function registerCoordinates(coords:ICoordinates):void;
 		
 		/**
+		 * Unregister the coordinates where the elements are drawn.
+		 */
+		function unregisterCoordinates():void;
+		
+		/**
 		 * Get the interactive geometries for a specific dimension
 		 */
-		function getGeometriesForSpecificDimension(dim:Object, dimValue:Object):Vector.<IInteractiveGeometry>;
+		function getGeometriesForSpecificDimensions(dims:Array, dimValues:Array):Vector.<IInteractiveGeometry>;
 
+
+		/**
+		 * Get the interactive geometries for a specific element dimension
+		 */
+		function getGeometriesForSpecificElementDimensions(dims:Array, dimValues:Array):Vector.<IInteractiveGeometry>;
+		
 		/**
 		 * Get the interactive geometries for a specific element.
 		 */

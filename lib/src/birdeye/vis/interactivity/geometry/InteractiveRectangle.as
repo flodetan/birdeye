@@ -24,7 +24,7 @@ package birdeye.vis.interactivity.geometry
 			{
 				return false;
 			}
-			trace("Checking", p.x, p.y, " on " , baseGeom.x, baseGeom.y, baseGeom.width, baseGeom.height);
+			//trace("Checking", p.x, p.y, " on " , baseGeom.x, baseGeom.y, baseGeom.width, baseGeom.height);
 			
 			return this.baseGeom.containsPoint(p);
 			

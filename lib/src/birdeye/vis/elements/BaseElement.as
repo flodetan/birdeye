@@ -60,6 +60,7 @@ package birdeye.vis.elements
 	
 	import mx.core.IFactory;
 	import mx.core.IToolTip;
+	import mx.core.UIComponent;
 	import mx.events.ToolTipEvent;
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
@@ -714,7 +715,18 @@ package birdeye.vis.elements
 		}
 		
 
-
+		/**
+		 * Make sure that the given location in the elementscontainer is transformed to the right x,y</br>
+		 * for the tooltiplayer (can be different coordinate systems.
+		 */
+		protected function transformToTooltipCoordinate(p:Point):Point
+		{
+			var elC:UIComponent = this.visScene.elementsContainer;
+			// get the tooltiplayer
+			var ttl:UIComponent = this.visScene.tooltipLayer;
+			
+			return ttl.globalToContent(elC.contentToGlobal(p));
+		}
 
 		
 
