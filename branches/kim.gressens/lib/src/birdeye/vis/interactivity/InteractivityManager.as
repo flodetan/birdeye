@@ -74,6 +74,11 @@ package birdeye.vis.interactivity
 				
 		}
 		
+		public function unregisterAll():void
+		{
+			geometries = new Vector.<IInteractiveGeometry>();
+		}
+		
 		public function allGeometries():Vector.<IInteractiveGeometry>
 		{
 			// I know, this is not right, you're giving the inner geometries to the outer class
@@ -82,13 +87,47 @@ package birdeye.vis.interactivity
 		}
 		
 		
-		public function getGeometriesForSpecificDimension(dim:Object, dimValue:Object):Vector.<IInteractiveGeometry>
+		public function getGeometriesForSpecificDimensions(dims:Array, dimValues:Array):Vector.<IInteractiveGeometry>
 		{
 			var toReturn:Vector.<IInteractiveGeometry> = new Vector.<IInteractiveGeometry>();
 			
-			for each (var geom:IInteractiveGeometry in geometries)
+			var dimsLength:int = dims.length;
+			
+			for each(var geom:IInteractiveGeometry in geometries)
 			{
-				if (geom.element == dimValue)
+				for (var i:int = 0; i<dimsLength;i++)
+				{
+					if (geom.data[dims[i]] == dimValues[i])
+					{	
+						toReturn.push(geom);
+					}
+				}
+								
+			}
+			
+			return toReturn;
+			
+		}
+		
+		public function getGeometriesForSpecificElementDimensions(dims:Array, dimValues:Array):Vector.<IInteractiveGeometry>
+		{
+			var toReturn:Vector.<IInteractiveGeometry> = new Vector.<IInteractiveGeometry>();
+			
+			var dimsLength:int = dims.length;
+		
+			for each(var geom:IInteractiveGeometry in geometries)
+			{
+				var match:Boolean = true;
+				for (var i:int = 0; i<dimsLength;i++)
+				{
+					if (geom.data[geom.element[dims[i]]] != dimValues[i])
+					{	
+						match = false;
+						break;
+					}
+				}
+				
+				if (match)
 				{
 					toReturn.push(geom);
 				}
@@ -96,7 +135,6 @@ package birdeye.vis.interactivity
 			}
 			
 			return toReturn;
-			
 			
 		}
 
@@ -122,11 +160,7 @@ package birdeye.vis.interactivity
 		
 		public function registerCoordinates(coords:ICoordinates):void
 		{
-			if (_coords && _coords.elementsContainer)
-			{
-				_coords.elementsContainer.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
-				_coords.elementsContainer.removeEventListener(MouseEvent.MOUSE_OUT, mouseOut);
-			}
+			unregisterCoordinates();
 			
 			_coords = coords;
 			
@@ -134,6 +168,15 @@ package birdeye.vis.interactivity
 			{
 				_coords.elementsContainer.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);	
 				_coords.elementsContainer.addEventListener(MouseEvent.MOUSE_OUT, mouseOut);
+			}
+		}
+		
+		public function unregisterCoordinates():void
+		{
+			if (_coords && _coords.elementsContainer)
+			{
+				_coords.elementsContainer.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
+				_coords.elementsContainer.removeEventListener(MouseEvent.MOUSE_OUT, mouseOut);
 			}
 		}
 		
@@ -207,8 +250,6 @@ package birdeye.vis.interactivity
 					}
 				}
 			}
-			
-			trace("COMPLETE MOUSE OUT");
 		}
 		
 		

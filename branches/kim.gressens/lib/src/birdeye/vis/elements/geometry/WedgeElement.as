@@ -230,11 +230,11 @@ package birdeye.vis.elements.geometry
 				geometries.push(geom);
 			}
 
-			geom.setArcData(r, R, startAngle, arcAngle, center);
+			geom.setArcData(r, R, startAngle, arcAngle, transformToTooltipCoordinate(center));
 			
 			var xPos:Number = PolarCoordinateTransform.getX(startAngle + arcAngle/2, R, center);
 			var yPos:Number = PolarCoordinateTransform.getY(startAngle + arcAngle/2, R, center);
-			geom.preferredTooltipPoint = new Point(xPos, yPos);
+			geom.preferredTooltipPoint = transformToTooltipCoordinate(new Point(xPos, yPos));
 
 			
 			geom.data = _dataItems[geomIndex];

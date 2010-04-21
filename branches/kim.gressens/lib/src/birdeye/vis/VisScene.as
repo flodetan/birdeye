@@ -637,20 +637,12 @@
 		// UIComponent flow
 		
 		
-		public function VisScene(interactivityMgr:IInteractivityManager = null):void
+		public function VisScene():void
 		{
 			super();
 			doubleClickEnabled = true;
 
-			if (!interactivityMgr)
-			{
-				_interactivityManager = new InteractivityManager();
-				_interactivityManager.registerCoordinates(this);
-			}
-			else
-			{
-				_interactivityManager = interactivityMgr;
-			}
+			interactivityManager = new InteractivityManager();
 		}
 		
 		
@@ -659,6 +651,32 @@
 		public function get interactivityManager():IInteractivityManager
 		{
 			return _interactivityManager;
+		}
+		
+		/**
+		 * Sets the interactivity manager.
+		 * This MUST happen just after the constructor is called. As it listens
+		 * for elements that are registered.</br>
+		 * Setting this at a later stage will have wierd results.
+		 */
+		public function set interactivityManager(im:IInteractivityManager):void
+		{
+			if (im)
+			{
+				if (_interactivityManager)
+				{
+					_interactivityManager.unregisterCoordinates();
+					_interactivityManager = null;
+					_interactivityManager = im;			
+				}
+				else
+				{
+					_interactivityManager = im;			
+					_interactivityManager.registerCoordinates(this);					
+				}
+				
+				
+			}
 		}
 		
 		
@@ -672,6 +690,15 @@
 				_elementsContainer.addChild(_tooltipLayer);
 				
 				this.dispatchEvent(new Event("tooltipLayerPlaced"));
+			}
+		}
+		
+		public function set tooltipLayer(layer:UIComponent):void
+		{
+			if (layer && !_tooltipLayer)
+			{
+				_tooltipLayer = layer;
+				this.dispatchEvent(new Event("tooltipLayerPlaced"));	
 			}
 		}
 		

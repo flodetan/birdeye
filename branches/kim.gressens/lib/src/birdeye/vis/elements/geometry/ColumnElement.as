@@ -28,6 +28,7 @@
 package birdeye.vis.elements.geometry
 {
 	import birdeye.vis.VisScene;
+	import birdeye.vis.data.Pair;
 	import birdeye.vis.elements.collision.*;
 	import birdeye.vis.guides.renderers.RectangleRenderer;
 	import birdeye.vis.interactivity.geometry.InteractiveRectangle;
@@ -38,6 +39,8 @@ package birdeye.vis.elements.geometry
 	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	
+	import mx.core.UIComponent;
 	
 	import org.greenthreads.IThread;
 
@@ -285,6 +288,7 @@ package birdeye.vis.elements.geometry
 					(_graphicsRendererInst as IBoundedRenderer).bounds = bounds;
 				}
 				
+				
 				var geom:InteractiveRectangle;
 				
 				var isNew:Boolean = false;
@@ -302,19 +306,23 @@ package birdeye.vis.elements.geometry
 					isNew = true;
 				}
 				
-				geom.baseGeometry = new Rectangle(pos1, pos2, barWidth, barHeight);
+				
+				var loc:Point = transformToTooltipCoordinate(new Point(pos1, pos2));
+				
+				geom.baseGeometry = new Rectangle(loc.x, loc.y, barWidth, barHeight);
 				if (direction == DIRECTION_HORIZONTAL)
 				{
-					geom.preferredTooltipPoint = new Point(pos1+barWidth+30, pos2 + barHeight / 2);
+					geom.preferredTooltipPoint = transformToTooltipCoordinate(new Point(pos1+barWidth+30, pos2 + barHeight / 2));
 				}
 				else if (direction == DIRECTION_VERTICAL)
 				{
-					geom.preferredTooltipPoint = new Point(pos1 + barWidth / 2, pos2 - 10);					
+					geom.preferredTooltipPoint = transformToTooltipCoordinate(new Point(pos1 + barWidth / 2, pos2 - 10));					
 				}
+
 				geom.data = _dataItems[_currentItemIndex];
 
 				//if (isNew)
-				//{						
+				//{	
 					this.visScene.interactivityManager.registerGeometry(geom);
 				//}
 				
@@ -343,6 +351,8 @@ package birdeye.vis.elements.geometry
 			}
 		}
 		
+		
+
 		
 		
 	}

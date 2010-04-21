@@ -191,10 +191,27 @@ package birdeye.vis.guides.axis
 		}
 		
 		
+		protected var _labelFormatterFunction:Function;
+		/**
+		 * Set the function that is used to format the label on the axis
+		 */
+		public function set labelFormatterFunction(f:Function):void
+		{
+			_labelFormatterFunction = f;
+		}
+		
+		public function get labelFormatterFunction():Function
+		{
+			return _labelFormatterFunction;
+		}
+		
+		
 		private var _drawingData:Array;
 		
 		public function preDraw():Boolean
 		{	
+			if (isNaN(_size) || size <= 0 || !coordinates || !coordinates.origin) return false;
+			
 			if (_subScale && _subScale.completeDataValues && _subScale.completeDataValues.length > 0)
 			{			
 				// there is a subscale
@@ -216,7 +233,7 @@ package birdeye.vis.guides.axis
 					var endLinePosition:Point = PolarCoordinateTransform.getXY(angle,_size-5,coordinates.origin);
 					
 					var data:Object = new Object();
-					
+										
 					data.end = endLinePosition;
 					data.label = categories[i];
 					
@@ -315,14 +332,7 @@ package birdeye.vis.guides.axis
 						// draw the labels on the axis
 						var dataLabel:Object = d.label;
 						
-						if (dataLabel is Number)
-						{
-							stdLabel.text = String(Math.round(dataLabel as Number));
-						}
-						else
-						{
-							stdLabel.text = String(dataLabel);
-						}
+						stdLabel.text = _labelFormatterFunction != null ? _labelFormatterFunction.call(null, dataLabel) : String(dataLabel);
 						
 						stdLabel.x = d.point.x - (stdLabel.textWidth + 4)/2;
 						stdLabel.y = d.point.y;
