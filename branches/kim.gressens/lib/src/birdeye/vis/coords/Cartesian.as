@@ -359,6 +359,7 @@ package birdeye.vis.coords
 							rightSize += axis.minWidth;
 							break;
 						case Axis.LEFT:
+							trace("Left size axis is " + leftSize);
 							leftSize += axis.minWidth;
 							break;
 					}

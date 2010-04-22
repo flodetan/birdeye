@@ -27,6 +27,7 @@
 
 package birdeye.vis.guides.axis
 {
+	import birdeye.vis.coords.BaseCoordinates;
 	import birdeye.vis.elements.events.ElementRollOutEvent;
 	import birdeye.vis.elements.events.ElementRollOverEvent;
 	import birdeye.vis.guides.axis.Axis;
@@ -321,10 +322,12 @@ package birdeye.vis.guides.axis
 		
 		private function redraw(o:Object):void
 		{
-			if (o != null && this.initialized)
+			if (o != null)
 			{
-				trace("CALLED REDRAW IN AXIS REPEATER");
-				ThreadProcessor.getInstance().addThread(this);
+				if (this.coordinates)
+				{
+					(this.coordinates as BaseCoordinates).invalidateGuide();
+				}
 			}
 		}
 		
@@ -1087,9 +1090,11 @@ package birdeye.vis.guides.axis
 		{
 			if (!scale || scale.completeDataValues.length == 0 || !innerScale || innerScale.completeDataValues.length == 0)
 			{
+
 				minWidth = 0;
 				minHeight = 0;
 				maxLblSize = 0;
+	
 				return;
 			}
 			
