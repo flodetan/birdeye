@@ -9,17 +9,14 @@
 	
 	
 	<degrafa:GeometryComposition graphicsTarget="{[this]}">
-		<degrafa:RoundedRectangle width="50" height="15" cornerRadius="3" >
+		<degrafa:RoundedRectangle width="58" height="15" cornerRadius="2" >
 			<degrafa:fill>
-				<degrafa:SolidFill color="0xFFFFFF" />
+				<degrafa:SolidFill color="0xFFFFFF" alpha="0.6" />
 			</degrafa:fill>
-			<degrafa:stroke>
-				<degrafa:SolidStroke color="0xFFFFFF" weight="2" />
-			</degrafa:stroke>
 		</degrafa:RoundedRectangle>
-	
-		<degrafa:RasterText id="rastText" x="2" fontFamily="DIN Medium" fontSize="10" textColor="0x505760" align="center" text="{text}" width="50" height="15"/>
-			
+		
+		<degrafa:RasterText x="2" fontFamily="DIN Medium" fontSize="10" textColor="0x333333" align="center" text="{text}" width="50" height="15"/>
+		
 	</degrafa:GeometryComposition>
 	
 </mx:Canvas>

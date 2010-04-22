@@ -44,7 +44,7 @@ package org.greenthreads {
 		
 		private var errorTerm:int;
 		
-		public function ThreadProcessor( share : Number = 0.99 ) {
+		public function ThreadProcessor( share : Number = 960 ) {
 			if( !_instance ) {
 				var app:Application = Application.application as Application;
 				var st:Stage = app.systemManager.stage;
@@ -61,7 +61,7 @@ package org.greenthreads {
 			}
 		}
 		
-		public static function getInstance( share : Number = 0.99 ) : ThreadProcessor {
+		public static function getInstance( share : Number = 960 ) : ThreadProcessor {
 			if( !_instance ) {
 				_instance = new ThreadProcessor( share );
 			}
@@ -79,6 +79,11 @@ package org.greenthreads {
 		}
 		
 		private var _isRunning:Boolean = false;
+		
+		public function get isRunning():Boolean
+		{
+			return _isRunning;
+		}
 		
 		private function start() : void {
 			if (!_isRunning)
@@ -114,10 +119,14 @@ package org.greenthreads {
 			
 			// debug
 			trace(this.consolidatedStatistics.print());
+			
+			if (this.consolidatedStatistics.numCycles > 0)
+			{
+				Application.application.dispatchEvent(new ThreadProcessorEvent(ThreadProcessorEvent.THREAD_PROCESSOR_FINSIHED));
+			}
 		}
 		
 		private function doCycle( event : Event ) : void {
-			trace("Doing acycle");
 			var timeAllocation : int = share < 1.0 ? timerDelay * share + 1 : frameRate - share;
 			
 			// not needed, only run one thread at a time

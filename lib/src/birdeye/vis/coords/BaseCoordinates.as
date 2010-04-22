@@ -526,11 +526,13 @@ package birdeye.vis.coords
 				{
 					var catElements:Array = [];
 					var j:uint = 0;
+					var oldJ:uint = 0;
 					
 					if (IEnumerableScale(scale).dataProvider)
 					{
 						catElements = IEnumerableScale(scale).dataProvider;
 						j = catElements.length;
+						oldJ = catElements.length;
 					}
 						
 					for (var cursIndex:uint = 0; cursIndex<element.dataItems.length; cursIndex++)
@@ -572,7 +574,7 @@ package birdeye.vis.coords
 					}
 							
 					// set the elements propery of the CategoryAxis owned by the current element
-					if (catElements.length > 0)
+					if (catElements.length > oldJ)
 						IEnumerableScale(scale).dataProvider = catElements;
 	
 				} 
