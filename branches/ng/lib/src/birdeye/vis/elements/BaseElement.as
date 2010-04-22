@@ -706,6 +706,11 @@ package birdeye.vis.elements
 		  		{
 			  		_cursor = ICollectionView(_dataProvider).createCursor();
 		  		}
+		  		else 
+		  		{
+		  			_cursor = null;
+		  			dataItems = null;
+		  		}
 			}
 	  		// in case the chart is cartesian, we must invalidate 
 	  		// also the chart properties and display list
