@@ -215,8 +215,7 @@ package birdeye.vis.coords
 			UIComponent(element).validateProperties();
 			// if element dataprovider doesn' exist or it refers to the
 			// chart dataProvider, than set its cursor to this chart cursor (this.cursor)
-			if (dataItems && (! element.dataProvider 
-							|| element.dataProvider == this.dataProvider))
+			if (! element.dataProvider || element.dataProvider == this.dataProvider)
 				element.dataItems = dataItems;
 				
 			if (element is IStack)

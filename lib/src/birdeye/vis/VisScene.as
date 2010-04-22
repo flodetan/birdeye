@@ -515,6 +515,11 @@
 		  		{
 		  			_cursor = ICollectionView(_dataProvider).createCursor();
 		  		}
+		  		else 
+		  		{
+		  			_cursor = null;
+		  			_dataItems = null;
+		  		}
 			}
 	  			
   			axesFeeded = false;
