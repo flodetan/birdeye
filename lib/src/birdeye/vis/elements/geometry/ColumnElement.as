@@ -312,11 +312,11 @@ package birdeye.vis.elements.geometry
 				geom.baseGeometry = new Rectangle(loc.x, loc.y, barWidth, barHeight);
 				if (direction == DIRECTION_HORIZONTAL)
 				{
-					geom.preferredTooltipPoint = transformToTooltipCoordinate(new Point(pos1+barWidth+30, pos2 + barHeight / 2));
+					geom.preferredTooltipPoint = transformToTooltipCoordinate(new Point(pos1+barWidth/2, pos2 + barHeight / 2));
 				}
 				else if (direction == DIRECTION_VERTICAL)
 				{
-					geom.preferredTooltipPoint = transformToTooltipCoordinate(new Point(pos1 + barWidth / 2, pos2 - 10));					
+					geom.preferredTooltipPoint = transformToTooltipCoordinate(new Point(pos1 + barWidth / 2, pos2 + barHeight / 2));					
 				}
 
 				geom.data = _dataItems[_currentItemIndex];
