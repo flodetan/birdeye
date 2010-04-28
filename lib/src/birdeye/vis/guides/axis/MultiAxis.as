@@ -210,6 +210,9 @@ package birdeye.vis.guides.axis
 		
 		public function preDraw():Boolean
 		{	
+			index = 0;
+			subIndex = 0;
+			
 			if (isNaN(_size) || size <= 0 || !coordinates || !coordinates.origin) return false;
 			
 			if (_subScale && _subScale.completeDataValues && _subScale.completeDataValues.length > 0)
