@@ -6,7 +6,7 @@ package birdeye.vis.interactivity.tooltips
 	
 	import mx.controls.Label;
 	
-	public class ElementToolTipManager extends DefaultToolTipManager
+	public class ElementToolTipManager extends BaseToolTipManager
 	{
 		public function ElementToolTipManager(coords:ICoordinates)
 		{
@@ -33,20 +33,9 @@ package birdeye.vis.interactivity.tooltips
 			{
 				_groupDimensions = dimensions;
 				_groupType = type;
-				hideLabels();
+				changeAllLabels(false);
 			}
 				
-		}
-		
-		protected function hideLabels():void
-		{
-			for each (var t:Tooltip in _labels)
-			{
-				if (t.visible)
-				{
-					t.visible = false;
-				}
-			}
 		}
 		
 		override protected function onMouseOver(event:InteractivityEvent):void
@@ -70,28 +59,7 @@ package birdeye.vis.interactivity.tooltips
 				
 			}
 			
-			for each (var geom:IInteractiveGeometry in geoms)
-			{
-				var lbl:Tooltip = _labels[geom];
-				
-				if (!lbl)
-				{
-					lbl = new Tooltip();
-					lbl.mouseEnabled = false;
-					lbl.mouseChildren = false;
-					_labels[geom] = lbl;
-					
-					_stage.addChild(lbl);
-				}
-								
-				lbl.text = labelFunction(geom.data, geom.element[_labelDimension]);
-				if (lbl.text != null && lbl.text != "null")
-				{
-					lbl.x = geom.preferredTooltipPoint.x - 25; // center tooltip
-					lbl.y = geom.preferredTooltipPoint.y - 8;
-					lbl.visible = true;
-				}
-			}
+			changeLabels(geoms, true);
 		}
 		
 		override protected function onMouseOut(event:InteractivityEvent):void
@@ -115,16 +83,8 @@ package birdeye.vis.interactivity.tooltips
 								
 			}	
 			
-			for each (var geom:IInteractiveGeometry in geoms)
-			{
-
-				var lbl:Tooltip = _labels[geom];
-			
-				if (lbl && lbl.visible)
-				{
-					lbl.visible = false;
-				}
-			}	
+			changeLabels(geoms, false);
+	
 			//			trace("Mouse out of ", event.geometry.data[event.geometry.element.dim1], event.geometry.data[event.geometry.element.dim2]);
 		}
 		
