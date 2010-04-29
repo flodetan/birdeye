@@ -1114,12 +1114,22 @@ package birdeye.vis.guides.axis
 			
 			var totalLength:Number = scale.completeDataValues.length * innerScale.completeDataValues.length;
 			
-			if ((placement == TOP || placement == BOTTOM || placement == HORIZONTAL_CENTER) 
-				&& (this.size / totalLength < maxLblSize))
+			if (placement == TOP || placement == BOTTOM)
 			{
-				if (this._rotateLabels != 90)
+				if (this.size / totalLength < maxLblSize)
 				{
-					this._rotateLabels = 90;
+					if (placement == BOTTOM && this._rotateLabels != 90)
+					{
+						this._rotateLabels = 90;
+					}
+					else if (placement == TOP && this._rotateLabels != 270)
+					{
+						this._rotateLabels = 270;
+					}
+				}
+				else
+				{
+					this._rotateLabels = 0;
 				}
 			}
 			
@@ -1133,7 +1143,7 @@ package birdeye.vis.guides.axis
 						//height = Math.max(5,maxLblSize * Math.sin(-_rotateLabels*Math.PI/180));
 						minHeight = (_axisRendererHeight>0) ? 
 						_axisRendererHeight :
-						_padding + sizeLabel + 10 +  maxLblSize * Math.sin(_rotateLabels*Math.PI/180);
+						_padding + sizeLabel + 10 +  maxLblSize * Math.abs(Math.sin(_rotateLabels*Math.PI/180));
 						minWidth = sizeLabel + 20;
 						break;							
 					case LEFT:

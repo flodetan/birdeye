@@ -62,6 +62,9 @@ package birdeye.vis.coords
 		{
 			super();				
 		}
+		
+		
+
 
 		
 		
@@ -705,6 +708,14 @@ trace(getTimer(), "END updateDisplaylist", unscaledWidth, unscaledHeight);
 			{
 				oldWidth = unscaledWidth;
 				invalidated = true;
+			}
+			
+			if (maximumElementCanvasSize)
+			{
+				this.elementsContainer.width = maximumElementCanvasSize.width;
+				this.elementsContainer.height = maximumElementCanvasSize.height;
+				this.elementsContainer.setStyle("verticalCenter", 0);
+				this.elementsContainer.setStyle("horizontalCenter", 0);
 			}
 			
 			if (invalidated)
