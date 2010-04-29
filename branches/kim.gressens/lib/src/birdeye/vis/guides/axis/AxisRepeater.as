@@ -35,6 +35,7 @@ package birdeye.vis.guides.axis
 	import birdeye.vis.interfaces.data.IExportableSVG;
 	import birdeye.vis.interfaces.guides.IAxis;
 	import birdeye.vis.interfaces.scales.IEnumerableScale;
+	import birdeye.vis.interfaces.scales.INumerableScale;
 	import birdeye.vis.interfaces.scales.IScale;
 	import birdeye.vis.scales.Category;
 	
@@ -625,6 +626,20 @@ package birdeye.vis.guides.axis
 			return _showAxis;
 		}
 		
+		protected var _showAxisLine:Boolean = true;
+		/** Show the axis line layout. */
+		[Inspectable(enumeration="true,false")]
+		public function set showAxisLine(val:Boolean):void
+		{
+			_showAxisLine = val;
+			invalidateDisplayList();
+		}
+		public function get showAxisLine():Boolean
+		{
+			return _showAxisLine;
+		}
+		
+		
 		
 		public function get maxLabelSize():Number
 		{
@@ -978,44 +993,26 @@ package birdeye.vis.guides.axis
 					xMin = 0; xMax = bounds.width;
 					yMin = 0; yMax = 0;
 					sign = 1;
-					_pointer.x = 0;
-					_pointer.y = 0;
-					_pointer.width = 0;
-					_pointer.height = sizePointer;
 					break;
 				case TOP:
 					xMin = 0; xMax = bounds.width;
 					yMin = bounds.height; yMax = bounds.height;
 					sign = -1;
-					_pointer.x = 0 ;
-					_pointer.y = bounds.height - sizePointer;
-					_pointer.width = 0;
-					_pointer.height = bounds.height;
 					break;
 				case LEFT:
 				case VERTICAL_CENTER:
 					xMin = bounds.width; xMax = bounds.width;
 					yMin = 0; yMax = bounds.height;
 					sign = -1;
-					_pointer.x = bounds.width - sizePointer;
-					_pointer.y = bounds.height;
-					_pointer.width = bounds.width;
-					_pointer.height = bounds.height;
 					break;
 				case RIGHT:
 				case DIAGONAL:							
 					xMin = 0; xMax = 0;
 					yMin = 0; yMax = bounds.height;
 					sign = 1;
-					_pointer.x = 0;
-					_pointer.y = bounds.height;
-					_pointer.width = sizePointer;
-					_pointer.height = bounds.height;
 					break;
 			}
 			drawAxes(xMin, xMax, yMin, yMax, sign);
-			_pointer.stroke = new SolidStroke(colorPointer, 1, weightPointer);
-			_pointer.visible = false;
 			
 			return false;
 			
@@ -1031,53 +1028,56 @@ package birdeye.vis.guides.axis
 		 */
 		protected function drawAxisLine(w:Number, h:Number):void
 		{
-			var x0:Number, x1:Number, y0:Number, y1:Number;
 			
-			var innerScaleSize:Number = innerScale.size;
-			
-			for (var i:int=0;i<scale.completeDataValues.length;i++)
+			if (showAxisLine)
 			{
-				var pos:Number = scale.getPosition(scale.completeDataValues[i]);
+				var x0:Number, x1:Number, y0:Number, y1:Number;
 				
-				switch (placement)
+				var innerScaleSize:Number = innerScale.size;
+				
+				for (var i:int=0;i<scale.completeDataValues.length;i++)
 				{
-					case BOTTOM:
-					case HORIZONTAL_CENTER:
-						x0 = pos - innerScaleSize / 2; x1 = pos + innerScaleSize / 2;
-						y0 = 0; y1 = 0;
-						break;
-					case TOP:
-						x0 = pos - innerScaleSize / 2; x1 =  pos + innerScaleSize / 2;
-						y0 = h; y1 = h;
-						break;
-					case LEFT:
-					case VERTICAL_CENTER:
-						x0 = w; x1 = w;
-						y0 = pos - innerScaleSize / 2; y1 = pos + innerScaleSize / 2;
-						break;
-					case RIGHT:
-					case DIAGONAL:
-						x0 = 0; x1 = 0;
-						y0 = pos - innerScaleSize / 2; y1 = pos + innerScaleSize / 2;
-						break;
-					case DIAGONAL:
-						x0 = 0; x1 = 0;
-						y0 = pos - innerScaleSize / 2; y1 = pos + innerScaleSize / 2;
-						break;
+					var pos:Number = scale.getPosition(scale.completeDataValues[i]);
+					
+					switch (placement)
+					{
+						case BOTTOM:
+						case HORIZONTAL_CENTER:
+							x0 = pos - innerScaleSize / 2; x1 = pos + innerScaleSize / 2;
+							y0 = 0; y1 = 0;
+							break;
+						case TOP:
+							x0 = pos - innerScaleSize / 2; x1 =  pos + innerScaleSize / 2;
+							y0 = h; y1 = h;
+							break;
+						case LEFT:
+						case VERTICAL_CENTER:
+							x0 = w; x1 = w;
+							y0 = pos - innerScaleSize / 2; y1 = pos + innerScaleSize / 2;
+							break;
+						case RIGHT:
+						case DIAGONAL:
+							x0 = 0; x1 = 0;
+							y0 = pos - innerScaleSize / 2; y1 = pos + innerScaleSize / 2;
+							break;
+						case DIAGONAL:
+							x0 = 0; x1 = 0;
+							y0 = pos - innerScaleSize / 2; y1 = pos + innerScaleSize / 2;
+							break;
+					}
+					
+					var tmpSVG:String = "M" + String(x0) + "," + String(y0) + " " + 
+						"L" + String(x1) + "," + String(y1) + " ";
+					
+					
+					_svgData += tmpSVG;
+					stdPath.data = tmpSVG;
+					stdPath.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
+					
+					
+					stdPath.draw(this.graphics, null);
 				}
-				
-				var tmpSVG:String = "M" + String(x0) + "," + String(y0) + " " + 
-					"L" + String(x1) + "," + String(y1) + " ";
-				
-				
-				_svgData += tmpSVG;
-				stdPath.data = tmpSVG;
-				stdPath.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
-				
-				
-				stdPath.draw(this.graphics, null);
 			}
-			
 		}
 		
 		
@@ -1229,7 +1229,7 @@ package birdeye.vis.guides.axis
 					
 					for (var j:uint = 0;j<innerLength;j++)
 					{
-						if (j == (innerLength - 1) && i  > 0)
+						if ((innerScale is INumerableScale) && j == (innerLength - 1) && i  > 0)
 						{
 							continue;
 						}
@@ -1243,13 +1243,15 @@ package birdeye.vis.guides.axis
 							yPos = coordinates.origin.y - yPos;	
 						}
 						
-						var tmpSVG:String = "M" + String(xMin + _thickWidth * sign) + "," + String(yPos) + " " + 
-							"L" + String(xMax) + "," + String(yPos) + " ";
-						
-						stdPath.data = tmpSVG;
-						_svgData += tmpSVG;
-						
-						stdPath.draw(this.graphics, null);
+						if (showAxisLine)
+						{
+							var tmpSVG:String = "M" + String(xMin + _thickWidth * sign) + "," + String(yPos) + " " + 
+								"L" + String(xMax) + "," + String(yPos) + " ";
+							
+							stdPath.data = tmpSVG;
+							
+							stdPath.draw(this.graphics, null);
+						}
 						
 						if (!_labelRenderer)
 						{

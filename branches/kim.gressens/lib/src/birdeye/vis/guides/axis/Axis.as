@@ -595,6 +595,19 @@ package birdeye.vis.guides.axis
 			return _showAxis;
 		}
 		
+		protected var _showAxisLine:Boolean = true;
+		/** Show the axis line layout. */
+		[Inspectable(enumeration="true,false")]
+		public function set showAxisLine(val:Boolean):void
+		{
+			_showAxisLine = val;
+			invalidateDisplayList();
+		}
+		public function get showAxisLine():Boolean
+		{
+			return _showAxisLine;
+		}
+		
 		
 		public function get maxLabelSize():Number
 		{
@@ -986,46 +999,48 @@ package birdeye.vis.guides.axis
 		 */
 		protected function drawAxisLine(w:Number, h:Number):void
 		{
-			var x0:Number, x1:Number, y0:Number, y1:Number;
-			
-			switch (placement)
+			if (showAxisLine)
 			{
-				case BOTTOM:
-				case HORIZONTAL_CENTER:
-					x0 = 0; x1 = size;
-					y0 = 0; y1 = 0;
-					break;
-				case TOP:
-					x0 = 0; x1 = size;
-					y0 = h; y1 = h;
-					break;
-				case LEFT:
-				case VERTICAL_CENTER:
-					x0 = w; x1 = w;
-					y0 = 0; y1 = size;
-					break;
-				case RIGHT:
- 				case DIAGONAL:
-					x0 = 0; x1 = 0;
-					y0 = 0; y1 = size;
-					break;
- 				case DIAGONAL:
-					x0 = 0; x1 = 0;
-					y0 = 0; y1 = size;
-					break;
+				var x0:Number, x1:Number, y0:Number, y1:Number;
+				
+				switch (placement)
+				{
+					case BOTTOM:
+					case HORIZONTAL_CENTER:
+						x0 = 0; x1 = size;
+						y0 = 0; y1 = 0;
+						break;
+					case TOP:
+						x0 = 0; x1 = size;
+						y0 = h; y1 = h;
+						break;
+					case LEFT:
+					case VERTICAL_CENTER:
+						x0 = w; x1 = w;
+						y0 = 0; y1 = size;
+						break;
+					case RIGHT:
+	 				case DIAGONAL:
+						x0 = 0; x1 = 0;
+						y0 = 0; y1 = size;
+						break;
+	 				case DIAGONAL:
+						x0 = 0; x1 = 0;
+						y0 = 0; y1 = size;
+						break;
+				}
+				
+				var tmpSVG:String = "M" + String(x0) + "," + String(y0) + " " + 
+								"L" + String(x1) + "," + String(y1) + " ";
+				
+				
+				_svgData += tmpSVG;
+				stdPath.data = tmpSVG;
+				stdPath.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
+	
+				
+				stdPath.draw(this.graphics, null);
 			}
-			
-			var tmpSVG:String = "M" + String(x0) + "," + String(y0) + " " + 
-							"L" + String(x1) + "," + String(y1) + " ";
-			
-			
-			_svgData += tmpSVG;
-			stdPath.data = tmpSVG;
-			stdPath.stroke = new SolidStroke(colorStroke, alphaStroke, weightStroke);
-
-			
-			stdPath.draw(this.graphics, null);
-
 		}
 		
 		
@@ -1147,14 +1162,17 @@ trace(getTimer(), "drawing axis");
 						yPos = coordinates.origin.y - yPos;	
 					}
 
-					var tmpSVG:String = "M" + String(xMin + _thickWidth * sign) + "," + String(yPos) + " " + 
-									"L" + String(xMax) + "," + String(yPos) + " ";
-		
-		 			stdPath.data = tmpSVG;
-					_svgData += tmpSVG;
-
-					stdPath.draw(this.graphics, null);
-		
+					
+					if (_showAxisLine)
+					{
+						var tmpSVG:String = "M" + String(xMin + _thickWidth * sign) + "," + String(yPos) + " " + 
+										"L" + String(xMax) + "," + String(yPos) + " ";
+			
+			 			stdPath.data = tmpSVG;
+	
+						stdPath.draw(this.graphics, null);
+					}
+					
 					if (!_labelRenderer)
 					{
 						// create label 
