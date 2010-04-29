@@ -421,6 +421,23 @@
 		{
 			return _elements;
 		}
+		
+		
+		
+		private var _maximumElementCanvasSize:Rectangle;
+		
+		/**
+		 * Sets the maximum width and height that the element canvas can reach.
+		 */
+		public function set maximumElementCanvasSize(size:Rectangle):void
+		{
+			_maximumElementCanvasSize = size;	
+		}
+		
+		public function get maximumElementCanvasSize():Rectangle
+		{
+			return _maximumElementCanvasSize;
+		}
 
 		private var _percentHeight:Number = NaN;
 		override public function set percentHeight(val:Number):void

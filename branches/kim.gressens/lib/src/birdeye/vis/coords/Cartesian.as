@@ -28,6 +28,7 @@
 package birdeye.vis.coords
 {	
 	import birdeye.vis.VisScene;
+	import birdeye.vis.elements.geometry.TextElement;
 	import birdeye.vis.guides.axis.Axis;
 	import birdeye.vis.interfaces.*;
 	import birdeye.vis.interfaces.coords.ICoordinates;
@@ -208,15 +209,34 @@ package birdeye.vis.coords
 		
 		override protected function setBounds(unscaledWidth:Number, unscaledHeight:Number):void
 		{
-			leftContainer.move(0, topContainer.height);
-			topContainer.move(leftContainer.width, 0);
-			bottomContainer.move(leftContainer.width, unscaledHeight - bottomContainer.height);
-			rightContainer.move(unscaledWidth - rightContainer.width, topContainer.height);
+			var top:Number = 0, left:Number = 0, right:Number = 0, bottom:Number=0;
+			
+			if (maximumElementCanvasSize)
+			{
+				var topAndBottom:Number = unscaledHeight - maximumElementCanvasSize.height;	
+				var leftAndRight:Number = unscaledWidth - maximumElementCanvasSize.width;
+				
+				if (topAndBottom > 0)
+				{
+					bottom = top = (unscaledHeight - maximumElementCanvasSize.height - topContainer.height - bottomContainer.height) / 2;
+				}
+				
+				if (leftAndRight > 0)
+				{
+					left = right = (unscaledWidth - maximumElementCanvasSize.width - leftContainer.width - rightContainer.width) / 2;
+				}
+			}
+			
+			
+			leftContainer.move(left, top + topContainer.height);
+			topContainer.move(left + leftContainer.width, top);
+			bottomContainer.move(left + leftContainer.width, (unscaledHeight - bottomContainer.height - bottom));
+			rightContainer.move(unscaledWidth - rightContainer.width - left, top + topContainer.height);
 
 			chartBounds = new Rectangle(leftContainer.x + leftContainer.width, 
 										topContainer.y + topContainer.height,
-										unscaledWidth - (leftContainer.width + rightContainer.width),
-										unscaledHeight - (topContainer.height + bottomContainer.height));
+										unscaledWidth - (leftContainer.width + rightContainer.width + left + right),
+										unscaledHeight - (topContainer.height + bottomContainer.height + top + bottom));
 										
 			topContainer.width = bottomContainer.width = chartBounds.width;
 
@@ -339,8 +359,7 @@ package birdeye.vis.coords
 			rightSize = 0;
 			bottomSize = 0;
 			topSize = 0;
-			
-			
+						
 			for each (var guide:IGuide in guides)
 			{
 				if (guide is IAxis)
@@ -365,6 +384,9 @@ package birdeye.vis.coords
 					}
 				}
 			}
+			
+			
+			
 			
 			var invalidated:Boolean = false;
 			
