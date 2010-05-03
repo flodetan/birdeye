@@ -54,6 +54,7 @@ package birdeye.vis.guides.axis
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormatAlign;
 	import flash.utils.getTimer;
 	
 	import mx.binding.utils.BindingUtils;
@@ -679,6 +680,18 @@ package birdeye.vis.guides.axis
 			return _placement;
 		}
 		
+		private var _uom:String = null;
+		
+		public function set uom(s:String):void
+		{
+			_uom = s;
+		}
+		
+		public function get uom():String
+		{
+			return _uom;
+		}
+		
 		/**
 		 * @see birdeye.vis.interfaces.guides.IGuide#coordinates
 		 */
@@ -1226,6 +1239,18 @@ package birdeye.vis.guides.axis
 				{	
 					var currentPos:Number = scale.getPosition(scale.completeDataValues[i]);
 					
+					if (i == 0 && uom != null && uom != "")
+					{
+						label = createLabelText("vertical", uom, currentPos - size /2, xMax);
+						label.align = TextFormatAlign.LEFT;
+						//label.visible = true;
+						label.autoSize = TextFieldAutoSize.RIGHT;
+						label.autoSizeField = true;
+						if (placement == LEFT || placement == VERTICAL_CENTER)
+							label.x = 0;
+						label.draw(this.graphics, null);
+						
+					}
 					
 					for (var j:uint = 0;j<innerLength;j++)
 					{
