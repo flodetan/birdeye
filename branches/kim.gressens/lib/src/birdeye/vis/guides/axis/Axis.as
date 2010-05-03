@@ -52,6 +52,7 @@ package birdeye.vis.guides.axis
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormatAlign;
 	import flash.utils.getTimer;
 	
 	import mx.binding.utils.BindingUtils;
@@ -647,6 +648,18 @@ package birdeye.vis.guides.axis
 			return _placement;
 		}
 		
+		private var _uom:String = null;
+		
+		public function set uom(s:String):void
+		{
+			_uom = s;
+		}
+		
+		public function get uom():String
+		{
+			return _uom;
+		}
+		
 		/**
 		 * @see birdeye.vis.interfaces.guides.IGuide#coordinates
 		 */
@@ -1192,6 +1205,19 @@ trace(getTimer(), "drawing axis");
 						
 						//checkLabelPosition(labelRnd, "vertical");
 					}
+					
+					if (i == (scale.completeDataValues.length - 1) && uom != null && uom != "")
+					{
+						label = createLabelText("vertical", uom, yPos, xMax);
+						label.align = TextFormatAlign.LEFT;
+						//label.visible = true;
+						label.autoSize = TextFieldAutoSize.RIGHT;
+						label.autoSizeField = true;
+						if (placement == LEFT || placement == VERTICAL_CENTER)
+						label.x = 0;
+						label.draw(this.graphics, null);
+					
+					}
 				}
 			} else {
 			// horizontal orientation
@@ -1240,6 +1266,8 @@ trace(getTimer(), "drawing axis");
 		{
 			var svgTextY:Number;
 			var labelText:String = _labelFormatterFunction != null ? _labelFormatterFunction.call(null, dataLabel) : String(dataLabel);
+			
+			defaultLabel.align = TextFormatAlign.CENTER;
 			
 			if (direction == "vertical")
 			{
