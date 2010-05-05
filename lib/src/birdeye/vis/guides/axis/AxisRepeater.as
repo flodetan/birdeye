@@ -1405,9 +1405,10 @@ package birdeye.vis.guides.axis
 					switch (placement)
 					{
 						case TOP:
-							_rotateLabelsOn = "centerLeft";
-							defaultLabel.x = pos;
-							defaultLabel.y += height*.9; 
+							_rotateLabelsOn = "centerRight";
+							defaultLabel.x = pos - 60;
+							//defaultLabel.y += 10;
+							//defaultLabel.y += height/2; 
 							break;
 						case BOTTOM:
 							_rotateLabelsOn = "centerLeft";

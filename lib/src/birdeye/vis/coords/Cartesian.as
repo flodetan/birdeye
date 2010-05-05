@@ -40,14 +40,18 @@ package birdeye.vis.coords
 	import birdeye.vis.scales.*;
 	
 	import com.degrafa.Surface;
+	import com.degrafa.geometry.RasterText;
+	import com.degrafa.paint.SolidFill;
 	
 	import flash.display.DisplayObject;
 	import flash.geom.Rectangle;
+	import flash.text.TextFieldAutoSize;
 	
 	import mx.containers.HBox;
 	import mx.containers.VBox;
 	import mx.core.Container;
 	import mx.core.UIComponent;
+	import mx.effects.DefaultListEffect;
 	
 	import org.greenthreads.IGuideThread;
 	
@@ -77,7 +81,19 @@ package birdeye.vis.coords
 	[Exclude(name="elementsContainer", kind="property")]
 	public class Cartesian extends BaseCoordinates implements ICoordinates
 	{
-
+		
+		private var _topLeftText:String;
+		
+		public function set topLeftText(s:String):void
+		{
+			_topLeftText = s;
+		}
+		
+		public function get topLeftText():String
+		{
+			return _topLeftText;
+		}
+		
 		
 		private var _is3D:Boolean = false;
 		public function get is3D():Boolean
@@ -206,11 +222,11 @@ package birdeye.vis.coords
 		}
 			
 		// other methods
+		protected var top:Number = 0, left:Number = 0, right:Number = 0, bottom:Number=0;
 		
+	
 		override protected function setBounds(unscaledWidth:Number, unscaledHeight:Number):void
 		{
-			var top:Number = 0, left:Number = 0, right:Number = 0, bottom:Number=0;
-			
 			if (maximumElementCanvasSize)
 			{
 				var topAndBottom:Number = unscaledHeight - maximumElementCanvasSize.height;	
@@ -260,6 +276,24 @@ package birdeye.vis.coords
 				else
 					transform.matrix3D = null;
  			}
+			
+			
+			this.graphics.clear();
+			
+			if (_topLeftText != null && _topLeftText != "")
+			{
+				defaultLabel.fontFamily = "DIN Medium";
+				defaultLabel.fill = new SolidFill(0x505760);
+				defaultLabel.fontSize = 10;
+				defaultLabel.autoSize = TextFieldAutoSize.LEFT;
+				defaultLabel.autoSizeField = true;
+				defaultLabel.text = _topLeftText;
+				defaultLabel.y = top + topContainer.height - defaultLabel.displayObject.height /2 - 22;
+				defaultLabel.x = left + leftContainer.width - defaultLabel.textWidth  - 22;
+	
+				defaultLabel.draw(this.graphics, null);
+			}
+			
 		}
 		
 		override protected function updateElement(element:IElement, unscaledWidth:Number, unscaledHeight:Number):void
@@ -306,6 +340,14 @@ package birdeye.vis.coords
 				}
 			}
 			
+		}
+		
+		private var defaultLabel:RasterText = new RasterText();
+		
+		override protected function drawGuides(unscaledWidth:Number, unscaledHeight:Number):void
+		{
+			super.drawGuides(unscaledWidth, unscaledHeight);
+
 		}
 		
 		override protected function drawGuide(guide:IGuideThread, unscaledWidth:Number, unscaledHeight:Number):void
@@ -378,7 +420,6 @@ package birdeye.vis.coords
 							rightSize += axis.minWidth;
 							break;
 						case Axis.LEFT:
-							trace("Left size axis is " + leftSize);
 							leftSize += axis.minWidth;
 							break;
 					}
