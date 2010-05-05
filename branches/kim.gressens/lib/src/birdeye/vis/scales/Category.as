@@ -293,6 +293,8 @@
 		{
 			var pos:Number = NaN;
 			
+			if (dataValue == null) return pos;
+			
 			switch (dimension)
 			{
 				case DIMENSION_1:

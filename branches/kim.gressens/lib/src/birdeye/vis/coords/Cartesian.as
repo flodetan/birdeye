@@ -243,6 +243,13 @@ package birdeye.vis.coords
 				}
 			}
 			
+			if (_topLeftText != null && _topLeftText != "")
+			{
+				if (left == 0)
+				{
+					left = 30;
+				}
+			}
 			
 			leftContainer.move(left, top + topContainer.height);
 			topContainer.move(left + leftContainer.width, top);
