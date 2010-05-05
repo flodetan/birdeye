@@ -21,6 +21,7 @@ package birdeye.vis.elements.geometry
 			stdLabel.fontSize = 10;
 			stdLabel.textColor = 0x333333;
 			stdLabel.align = "center";
+			stdLabel.gridFitType = "pixel";
 		}
 		
 		public var dataField:Object = "result0";
@@ -152,7 +153,7 @@ package birdeye.vis.elements.geometry
 				}
 				else
 				{
-					d.y = 0;
+					d.y = d.height / 2;
 				}
 				
 				_drawingData.push(d);

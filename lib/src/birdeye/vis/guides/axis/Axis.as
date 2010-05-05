@@ -1085,6 +1085,25 @@ package birdeye.vis.guides.axis
 				maxLblSize = Math.max(maxLblSize, lblTester.textWidth);
 			}
 			
+			if (placement == TOP || placement == BOTTOM)
+			{
+				if (this.size / scale.completeDataValues.length < maxLblSize)
+				{
+					if (placement == BOTTOM && this._rotateLabels != 90)
+					{
+						this._rotateLabels = 90;
+					}
+					else if (placement == TOP && this._rotateLabels != 270)
+					{
+						this._rotateLabels = 270;
+					}
+				}
+				else
+				{
+					this._rotateLabels = 0;
+				}
+			}
+			
 			
 			if (showAxis)
 			{
