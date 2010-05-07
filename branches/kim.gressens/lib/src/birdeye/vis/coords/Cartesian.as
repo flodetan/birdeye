@@ -109,6 +109,13 @@ package birdeye.vis.coords
 			super();				
 			coordType = VisScene.CARTESIAN;
 			
+			defaultLabel = new RasterText();
+			defaultLabel.fontFamily = "DIN Medium";
+			defaultLabel.fill = new SolidFill(0x505760);
+			defaultLabel.fontSize = _sizeText;
+			defaultLabel.autoSize = TextFieldAutoSize.LEFT;
+			defaultLabel.autoSizeField = true;
+			
 			this.styleName = "Cartesian";
 		}
 		
@@ -293,13 +300,8 @@ package birdeye.vis.coords
 			
 			if (_topLeftText != null && _topLeftText != "")
 			{
-				defaultLabel.fontFamily = "DIN Medium";
-				defaultLabel.fill = new SolidFill(0x505760);
-				defaultLabel.fontSize = _sizeText;
-				defaultLabel.autoSize = TextFieldAutoSize.LEFT;
-				defaultLabel.autoSizeField = true;
 				defaultLabel.text = _topLeftText;
-				defaultLabel.y = top + topContainer.height - defaultLabel.displayObject.height - 4;// /2 - _sizeText;
+				defaultLabel.y = top + topContainer.height - defaultLabel.displayObject.height - topLeftTextBottomPadding;// /2 - _sizeText;
 				defaultLabel.x = left + leftContainer.width - defaultLabel.textWidth  - _sizeText * 2;
 	
 				defaultLabel.draw(this.graphics, null);
@@ -353,7 +355,7 @@ package birdeye.vis.coords
 			
 		}
 		
-		private var defaultLabel:RasterText = new RasterText();
+		private var defaultLabel:RasterText;
 		
 		override protected function drawGuides(unscaledWidth:Number, unscaledHeight:Number):void
 		{
@@ -587,6 +589,7 @@ package birdeye.vis.coords
 			{
 				
 				this.sizeText = 10;
+				this.topLeftTextBottomPadding = 5;
 				
 				this.stylesChanged = true;
 			} 
@@ -604,6 +607,14 @@ package birdeye.vis.coords
 					this.sizeText = getStyle("textSize");
 				}
 			}
+			
+			if (styleProp == "topLeftTextBottomPadding" || styleProp == null)
+			{
+				if (!topLeftTextBottomPadding && getStyle("topLeftTextBottomPadding") != this.topLeftTextBottomPadding && getStyle("topLeftTextBottomPadding") != undefined)
+				{
+					this.topLeftTextBottomPadding = getStyle("topLeftTextBottomPadding");
+				}
+			}
 		}
 		
 		
@@ -618,6 +629,18 @@ package birdeye.vis.coords
 		public function get sizeText():Number
 		{
 			return _sizeText;
+		}
+		
+		protected var _topLeftTextBottomPadding:Number = NaN;
+		
+		public function set topLeftTextBottomPadding(val:Number):void
+		{
+			_topLeftTextBottomPadding = val;
+		}
+		
+		public function get topLeftTextBottomPadding():Number
+		{
+			return _topLeftTextBottomPadding;
 		}
 	}
 }
