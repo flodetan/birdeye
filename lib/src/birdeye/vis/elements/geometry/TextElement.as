@@ -10,11 +10,16 @@ package birdeye.vis.elements.geometry
 	
 	import flash.geom.Rectangle;
 	
+	import mx.styles.CSSStyleDeclaration;
+	import mx.styles.StyleManager;
+	
 	public class TextElement extends BaseElement
 	{
 		public function TextElement()
 		{
 			super();
+
+			this.styleName = "TextElement";
 			
 			stdLabel = new RasterText();
 			stdLabel.fontFamily = "DIN Medium";
@@ -135,8 +140,8 @@ package birdeye.vis.elements.geometry
 				d.fill = scaleResults[COLOR];
 				d.stroke = stroke;				
 				
-				d.width = 60;
-				d.height = 15;
+				d.width = this.sizeText * 6;
+				d.height = this.sizeText * 1.5;
 
 				if (!isNaN(scaleResults[POS1]))
 				{
@@ -179,5 +184,56 @@ package birdeye.vis.elements.geometry
 			
 			return true && super.drawDataItem();
 		}
+		
+		
+		/*
+		style data
+		*/
+		private var stylesChanged:Boolean = false;
+		initializeStyles();
+		public static function initializeStyles():void
+		{
+			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("TextElement");
+			if(!selector)
+			{
+				selector = new CSSStyleDeclaration();
+			}
+			selector.defaultFactory = function():void
+			{
+
+				this.sizeText = 10;
+				
+				this.stylesChanged = true;
+			} 
+			StyleManager.setStyleDeclaration("TextElement", selector, true);
+		}
+		
+		override public function styleChanged(styleProp:String):void
+		{
+			super.styleChanged(styleProp);
+			
+			if (styleProp == "textSize" || styleProp == null)
+			{
+				if (!sizeText && getStyle("textSize") != this.sizeText && getStyle("textSize") != undefined)
+				{
+					this.sizeText = getStyle("textSize");
+				}
+			}
+		}
+		
+		
+		protected var _sizeText:Number = NaN;
+		/** Set the font size of the label to be used for the axis.*/
+		public function set sizeText(val:Number):void
+		{
+			_sizeText= val;
+			this.stdLabel.fontSize = _sizeText;
+			invalidateDisplayList();
+		}
+		public function get sizeText():Number
+		{
+			return _sizeText;
+		}
+
 	}
 }
