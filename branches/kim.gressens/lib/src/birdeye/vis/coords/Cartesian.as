@@ -251,7 +251,7 @@ package birdeye.vis.coords
 			{
 				if (left == 0)
 				{
-					left = 30;
+					left = _sizeText * 3;
 				}
 			}
 			
@@ -299,8 +299,8 @@ package birdeye.vis.coords
 				defaultLabel.autoSize = TextFieldAutoSize.LEFT;
 				defaultLabel.autoSizeField = true;
 				defaultLabel.text = _topLeftText;
-				defaultLabel.y = top + topContainer.height - defaultLabel.displayObject.height /2 - 22;
-				defaultLabel.x = left + leftContainer.width - defaultLabel.textWidth  - 22;
+				defaultLabel.y = top + topContainer.height - defaultLabel.displayObject.height - 4;// /2 - _sizeText;
+				defaultLabel.x = left + leftContainer.width - defaultLabel.textWidth  - _sizeText * 2;
 	
 				defaultLabel.draw(this.graphics, null);
 			}
