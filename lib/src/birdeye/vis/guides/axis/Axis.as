@@ -1341,7 +1341,7 @@ trace(getTimer(), "drawing axis");
 						case TOP:
 							_rotateLabelsOn = "centerLeft";
 							defaultLabel.x = pos;
-							defaultLabel.y += height*.45; 
+							defaultLabel.y = height - _thickWidth - (defaultLabel.displayObject.height);; 
 							break;
 						case BOTTOM:
 							_rotateLabelsOn = "centerLeft";
