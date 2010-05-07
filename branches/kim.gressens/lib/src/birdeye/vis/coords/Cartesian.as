@@ -52,6 +52,8 @@ package birdeye.vis.coords
 	import mx.core.Container;
 	import mx.core.UIComponent;
 	import mx.effects.DefaultListEffect;
+	import mx.styles.CSSStyleDeclaration;
+	import mx.styles.StyleManager;
 	
 	import org.greenthreads.IGuideThread;
 	
@@ -106,6 +108,8 @@ package birdeye.vis.coords
 		{
 			super();				
 			coordType = VisScene.CARTESIAN;
+			
+			this.styleName = "Cartesian";
 		}
 		
 		private var leftContainer:Container, rightContainer:Container;
@@ -291,7 +295,7 @@ package birdeye.vis.coords
 			{
 				defaultLabel.fontFamily = "DIN Medium";
 				defaultLabel.fill = new SolidFill(0x505760);
-				defaultLabel.fontSize = 10;
+				defaultLabel.fontSize = _sizeText;
 				defaultLabel.autoSize = TextFieldAutoSize.LEFT;
 				defaultLabel.autoSizeField = true;
 				defaultLabel.text = _topLeftText;
@@ -564,6 +568,56 @@ package birdeye.vis.coords
 				bottomContainer.removeAllChildren();
 			}
 
+		}
+		
+		
+		/*
+		style data
+		*/
+		private var stylesChanged:Boolean = false;
+		initializeStyles();
+		public static function initializeStyles():void
+		{
+			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("Cartesian");
+			if(!selector)
+			{
+				selector = new CSSStyleDeclaration();
+			}
+			selector.defaultFactory = function():void
+			{
+				
+				this.sizeText = 10;
+				
+				this.stylesChanged = true;
+			} 
+			StyleManager.setStyleDeclaration("Cartesian", selector, true);
+		}
+		
+		override public function styleChanged(styleProp:String):void
+		{
+			super.styleChanged(styleProp);
+			
+			if (styleProp == "textSize" || styleProp == null)
+			{
+				if (!sizeText && getStyle("textSize") != this.sizeText && getStyle("textSize") != undefined)
+				{
+					this.sizeText = getStyle("textSize");
+				}
+			}
+		}
+		
+		
+		protected var _sizeText:Number = NaN;
+		/** Set the font size of the label to be used for the axis.*/
+		public function set sizeText(val:Number):void
+		{
+			_sizeText= val;
+			this.defaultLabel.fontSize = _sizeText;
+			invalidateDisplayList();
+		}
+		public function get sizeText():Number
+		{
+			return _sizeText;
 		}
 	}
 }

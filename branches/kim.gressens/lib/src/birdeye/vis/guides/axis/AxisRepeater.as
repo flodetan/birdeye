@@ -1405,8 +1405,9 @@ package birdeye.vis.guides.axis
 					switch (placement)
 					{
 						case TOP:
-							_rotateLabelsOn = "centerRight";
-							defaultLabel.x = pos - 60;
+							_rotateLabelsOn = "centerLeft";
+							defaultLabel.x = pos; //- defaultLabel.textWidth;
+							defaultLabel.y = height - _thickWidth - (defaultLabel.displayObject.height);
 							//defaultLabel.y += 10;
 							//defaultLabel.y += height/2; 
 							break;
@@ -1420,9 +1421,10 @@ package birdeye.vis.guides.axis
 					defaultLabel.transform = rot;
 				} else {
 					defaultLabel.x = pos - (defaultLabel.textWidth + 4)/2; 
+					
 					if (placement == TOP)
 					{
-						defaultLabel.y += defaultLabel.fontSize;
+						defaultLabel.y = height - _thickWidth - (defaultLabel.displayObject.height);
 					}
 				}
 			}

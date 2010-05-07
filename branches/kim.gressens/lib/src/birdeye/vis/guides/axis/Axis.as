@@ -1115,7 +1115,7 @@ package birdeye.vis.guides.axis
 							//height = Math.max(5,maxLblSize * Math.sin(-_rotateLabels*Math.PI/180));
 							minHeight = (_axisRendererHeight>0) ? 
 											_axisRendererHeight :
-											_padding + sizeLabel + 10 +  maxLblSize * Math.sin(_rotateLabels*Math.PI/180);
+											_padding + sizeLabel + 10 +  maxLblSize * Math.abs(Math.sin(_rotateLabels*Math.PI/180));
 							minWidth = sizeLabel + 20;
 							break;							
 						case LEFT:
@@ -1123,7 +1123,7 @@ package birdeye.vis.guides.axis
 						case VERTICAL_CENTER:				
 							minWidth = (_axisRendererWidth>0) ?
 												_axisRendererWidth :
-												_padding + Math.max(5, maxLblSize * Math.cos(_rotateLabels*Math.PI/180));
+												_padding + Math.max(5, maxLblSize * Math.abs(Math.cos(_rotateLabels*Math.PI/180)));
 							minHeight = sizeLabel + 20;
 							break;
 					}
@@ -1341,7 +1341,7 @@ trace(getTimer(), "drawing axis");
 						case TOP:
 							_rotateLabelsOn = "centerLeft";
 							defaultLabel.x = pos;
-							defaultLabel.y += height*.9; 
+							defaultLabel.y += height*.45; 
 							break;
 						case BOTTOM:
 							_rotateLabelsOn = "centerLeft";
@@ -1353,9 +1353,11 @@ trace(getTimer(), "drawing axis");
 					defaultLabel.transform = rot;
 				} else {
 					defaultLabel.x = pos - (defaultLabel.textWidth + 4)/2; 
+					
+					
 					if (placement == TOP)
 					{
-						defaultLabel.y += defaultLabel.fontSize;
+						defaultLabel.y = height - _thickWidth - (defaultLabel.displayObject.height);
 					}
 				}
 			}

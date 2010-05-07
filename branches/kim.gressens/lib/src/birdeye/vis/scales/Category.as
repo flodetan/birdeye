@@ -203,7 +203,6 @@
 					}
 					else
 					{
-						trace(_minMax[cat].max, "max is now ", Math.max(_minMax[cat].max, minMaxData[cat].max)); 
 						_minMax[cat].max = Math.max(_minMax[cat].max, minMaxData[cat].max);
 						_minMax[cat].min = Math.min(_minMax[cat].min, minMaxData[cat].min);
 					}
