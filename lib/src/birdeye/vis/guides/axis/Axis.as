@@ -943,7 +943,7 @@ package birdeye.vis.guides.axis
 			
 		}
 		
-		var stdPath:Path = new Path();
+		protected var stdPath:Path = new Path();
 		
 		public function drawDataItem():Boolean
 		{
@@ -1323,7 +1323,6 @@ trace(getTimer(), "drawing axis");
 				
 			} else { // horizontal
 				// create label 
-				defaultLabel = new RasterText();
 				defaultLabel.fontFamily = fontLabel;
 				defaultLabel.fontSize = sizeLabel;
  				//label.visible = true;
