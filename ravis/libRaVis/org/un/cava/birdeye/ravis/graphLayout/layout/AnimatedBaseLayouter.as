@@ -414,7 +414,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				}
 				
 				n = vn.node;
-				/* get relative target coordinates in cartesian form */
+				/* get abs target coordinates in cartesian form */
 				targetPoint = _currentDrawing.getAbsCartCoordinates(n);
 				
 				/* when we get the current values, we have to make sure
