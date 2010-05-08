@@ -51,7 +51,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * says update the node renderers everything X'th animation step. This is a performance
 		 * optimization for diagrams with complicated node renderers 
 		 */ 
-		private const _ANIMREFRESHINTERVAL:Number = 5;
+		private const _ANIMREFRESHINTERVAL:Number = 20;
 		/**
 		 * constant to define the radial animation type, which
 		 * interpolates node's polar coordinates.

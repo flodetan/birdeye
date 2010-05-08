@@ -2329,8 +2329,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			_dragCursorStartY = mpoint.y;
 			
 			/* make sure edges are redrawn */
-			//_drawingSurface.invalidateDisplayList();
-			refresh();
+            redrawEdges();
 		}
 
 
