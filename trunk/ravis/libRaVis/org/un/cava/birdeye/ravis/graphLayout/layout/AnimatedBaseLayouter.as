@@ -238,6 +238,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				}
 				else
 				{
+					_animInProgress = false;
 					/* make sure the edges are redrawn */
 					_layoutChanged = true;
 					_vgraph.refresh();
