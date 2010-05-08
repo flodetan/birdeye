@@ -115,7 +115,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		 * @param sid The node's string id.
 		 * @return The node if one was found, null otherwise.
 		 * */
-		function nodeByStringId(sid:String):INode;
+		function nodeByStringId(sid:String,caseSensitive:Boolean=true):INode;
 		
 		/**
 		 * A lookup to find a node by it's (int) id.

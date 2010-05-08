@@ -25,10 +25,10 @@
 
 package org.un.cava.birdeye.ravis.graphLayout.data {
 
-	import org.un.cava.birdeye.ravis.utils.LogUtil;
-	
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
+	
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	
 	/**
 	 * Graph implements a graph datastructure G(V,E)
@@ -275,10 +275,20 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		/**
 		 * @inheritDoc
 		 * */
-		public function nodeByStringId(sid:String):INode {
-			if(_nodesByStringId.hasOwnProperty(sid)) {
-				return _nodesByStringId[sid];
+		public function nodeByStringId(sid:String,caseSensitive:Boolean=true):INode {
+			if(caseSensitive) {
+				if(_nodesByStringId.hasOwnProperty(sid)) {
+					return _nodesByStringId[sid];
+				} else {
+					return null;
+				}
 			} else {
+				for (var ident:String in _nodesByStringId) {
+					if(ident.toLowerCase() == sid.toLowerCase()){
+						return _nodesByStringId[ident];
+					}
+				}
+				
 				return null;
 			}
 		}
