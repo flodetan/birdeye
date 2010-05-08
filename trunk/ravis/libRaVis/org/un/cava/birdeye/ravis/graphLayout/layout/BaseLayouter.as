@@ -29,7 +29,6 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	
-	import org.un.cava.birdeye.ravis.distortions.IDistortion;
 	import org.un.cava.birdeye.ravis.graphLayout.data.Graph;
 	import org.un.cava.birdeye.ravis.graphLayout.data.IGTree;
 	import org.un.cava.birdeye.ravis.graphLayout.data.IGraph;
@@ -58,12 +57,6 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * height cannot be determined yet.
 		 * */
 		public static const MINIMUM_NODE_WIDTH:Number = 5;
-		
-		/**
-		 * The default margin to be considered when using
-		 * autoFit.
-		 * */
-		 public static const DEFAULT_MARGIN:Number = 30; 
 		
 		/**
 		 * If set to true, animation is disabled and direct
@@ -109,7 +102,13 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * this holds the data for a layout drawing.
 		 * */
 		private var _currentDrawing:BaseLayoutDrawing;
-
+        
+        /**
+         * The default margin to be considered when using
+         * autoFit.
+         * */
+         private var _margin:Number = 30; 
+         
 		/**
 		 * The constructor initializes the layouter and may assign
 		 * already a VisualGraph object, but this can also be set later.
@@ -126,6 +125,14 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			/* this is required to smooth the animation */
 			_vgraph.addEventListener("forceRedrawEvent",forceRedraw);
+		}
+		
+		public function get margin():Number {
+			return _margin;
+		}
+		
+		public function set margin(value:Number):void {
+			_margin = value;
 		}
 
 		/**

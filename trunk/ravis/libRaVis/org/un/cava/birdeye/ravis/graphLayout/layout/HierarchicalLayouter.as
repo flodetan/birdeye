@@ -687,7 +687,6 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 					result = new Point(breadth, depth);
 					break;
 				case ORIENT_BOTTOM_UP:
-					//result = new Point(breadth - DEFAULT_MARGIN, _vgraph.height - depth - (2 * DEFAULT_MARGIN));
 					result = new Point(breadth, -depth);
 					break;
 				case ORIENT_LEFT_RIGHT:
@@ -766,13 +765,13 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				switch(_orientation) {
 					case ORIENT_LEFT_RIGHT:
 					case ORIENT_RIGHT_LEFT:
-						_layerDistance = (_vgraph.width - 2 * (DEFAULT_MARGIN + layerMargin))  / (_stree.maxDepth + 1);
-						_defaultNodeDistance = (_vgraph.height - 2 * DEFAULT_MARGIN) / (leafNodesLength + 1);
+						_layerDistance = (_vgraph.width - 2 * (margin + layerMargin))  / (_stree.maxDepth + 1);
+						_defaultNodeDistance = (_vgraph.height - 2 * margin) / (leafNodesLength + 1);
 						break;
 					case ORIENT_TOP_DOWN:
 					case ORIENT_BOTTOM_UP:
-						_layerDistance = (_vgraph.height - 2 * (DEFAULT_MARGIN + layerMargin))  / (_stree.maxDepth + 1);
-						_defaultNodeDistance = (_vgraph.width - 2 * DEFAULT_MARGIN) / (leafNodesLength + 1);
+						_layerDistance = (_vgraph.height - 2 * (margin + layerMargin))  / (_stree.maxDepth + 1);
+						_defaultNodeDistance = (_vgraph.width - 2 * margin) / (leafNodesLength + 1);
 						break;
 					default:
 						throw Error("Invalid orientation value found in internal variable");					
@@ -793,21 +792,21 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			switch(_orientation) {
 				case ORIENT_TOP_DOWN:
-					_currentDrawing.centerOffset = new Point((_vgraph.width / 2), DEFAULT_MARGIN + layerMargin);
+					_currentDrawing.centerOffset = new Point((_vgraph.width / 2), margin + layerMargin);
 					break;
 
 				case ORIENT_BOTTOM_UP:
 					_currentDrawing.centerOffset =
-						new Point((_vgraph.width / 2), (_vgraph.height - DEFAULT_MARGIN - layerMargin));
+						new Point((_vgraph.width / 2), (_vgraph.height - margin - layerMargin));
 					break;
 
 				case ORIENT_LEFT_RIGHT:
-					_currentDrawing.centerOffset = new Point(DEFAULT_MARGIN + layerMargin, (_vgraph.height / 2) - DEFAULT_MARGIN);
+					_currentDrawing.centerOffset = new Point(margin + layerMargin, (_vgraph.height / 2) - margin);
 					break;
 
 				case ORIENT_RIGHT_LEFT:
 					_currentDrawing.centerOffset =
-						new Point((_vgraph.width - DEFAULT_MARGIN - layerMargin), (_vgraph.height / 2) - DEFAULT_MARGIN);
+						new Point((_vgraph.width - margin - layerMargin), (_vgraph.height / 2) - margin);
 					break;
 
 				default:

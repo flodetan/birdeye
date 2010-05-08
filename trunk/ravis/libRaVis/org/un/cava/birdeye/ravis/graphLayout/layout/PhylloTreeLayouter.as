@@ -600,7 +600,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			var maxlen:Number;
 			
-			maxlen = Math.min(_vgraph.width,_vgraph.height) - DEFAULT_MARGIN;
+			maxlen = Math.min(_vgraph.width,_vgraph.height) - margin;
 						
 			_rootR = 2 * maxlen * Math.pow(0.6,_vgraph.maxVisibleDistance + 1);
 
