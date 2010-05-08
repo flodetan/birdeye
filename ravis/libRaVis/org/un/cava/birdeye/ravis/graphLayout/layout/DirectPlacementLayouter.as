@@ -116,9 +116,9 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			}
 			else {
 				placeNodes();
+                super.layoutPass();
 			}
 
-			_vgraph.invalidateDisplayList();
 			_layoutChanged = true;
 			return true;
 		}
