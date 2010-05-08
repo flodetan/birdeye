@@ -239,7 +239,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 					if(vn.data.hasOwnProperty("y") && vn.data.y is Number) {
 						node_y = vn.data.y;
 					} else {
-						LogUtil.warn(_LOG, "Node:"+vn.id+" associated XML object does not have y attribute, => 0.0");
+						LogUtil.warn(_LOG, "Node:"+vn.id+" associated Data object does not have y attribute, => 0.0");
 						node_y = 0.0;
 					}
 				}
@@ -249,7 +249,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				//LogUtil.debug(_LOG, "target for node:"+vn.id+" = " + target.toString());
 				
 				/* apply the relative origin */
-				target.add(_relativeOrigin);
+				target = target.add(_relativeOrigin);
 				//LogUtil.debug(_LOG, "target2 for node:"+vn.id+" = " + target.toString());
 
 				
