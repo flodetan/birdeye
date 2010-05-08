@@ -1316,6 +1316,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
          * */
 		public function redrawNodes():void
 		{
+            if(_graph == null) {
+                LogUtil.debug(_LOG, "_graph object in VisualGraph is null");
+                return;
+            }
+            
 		    for each(var node:INode in _graph.nodes) {
                 if(node.vnode !=null && node.vnode.view != null) {
                     node.vnode.view.invalidateDisplayList();
