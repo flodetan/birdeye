@@ -152,10 +152,10 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			last_x = 0;
 			last_y = 0;
-			min_x = DEFAULT_MARGIN; 
-			min_y = DEFAULT_MARGIN; 
-			max_x = _vgraph.width - DEFAULT_MARGIN; 
-			max_y = _vgraph.height - DEFAULT_MARGIN;
+			min_x = margin; 
+			min_y = margin; 
+			max_x = _vgraph.width - margin; 
+			max_y = _vgraph.height - margin;
     }
 
 		override public function refreshInit():void {

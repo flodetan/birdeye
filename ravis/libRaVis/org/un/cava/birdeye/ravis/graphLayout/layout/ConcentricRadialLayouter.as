@@ -271,7 +271,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			r = Math.min(_vgraph.width, _vgraph.height) / 2.0;
 			
 			if(_maxDepth > 0) {
-				_radiusInc = (r - (2 *DEFAULT_MARGIN)) / _maxDepth;
+				_radiusInc = (r - (2 *margin)) / _maxDepth;
 			}
 		}
 		

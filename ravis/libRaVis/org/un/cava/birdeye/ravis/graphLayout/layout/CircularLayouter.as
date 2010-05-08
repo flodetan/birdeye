@@ -237,7 +237,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * Do all the calculations required for autoFit
 		 * */
 		private function calculateAutoFit():void {
-			_radius = Math.min(_vgraph.width,_vgraph.height) / 2.0 - DEFAULT_MARGIN;
+			_radius = Math.min(_vgraph.width,_vgraph.height) / 2.0 - margin;
 		}
 	}
 }

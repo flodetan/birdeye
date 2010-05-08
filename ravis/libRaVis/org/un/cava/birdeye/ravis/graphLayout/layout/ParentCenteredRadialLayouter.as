@@ -57,7 +57,6 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		
 		/* this holds the data for the ParentCentered layout drawing */
 		private var _currentDrawing:ParentCenteredDrawingModel;
-		
 		/**
 		 * The constructor only initialises some data structures.
 		 * @inheritDoc
@@ -603,8 +602,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				len = _currentDrawing.getRelCartCoordinates(vn.node).length;
 				maxlen = Math.max(maxlen,len);
 			}
-			
-			lenlimit = (Math.min(_vgraph.width,_vgraph.height) - DEFAULT_MARGIN) / 2;
+
+			lenlimit = (Math.min(_vgraph.width,_vgraph.height) - margin) / 2;
 			
 			_rootR = currentRootR * (lenlimit / maxlen);
 			

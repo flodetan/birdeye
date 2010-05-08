@@ -290,8 +290,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 
 				/* adjust nodes */
 				for each(vn in visVNodes) {
-					vn.x = vn.x * ((_vgraph.width - (2 * DEFAULT_MARGIN) - max_label_width) / max_x_dist);
-					vn.y = vn.y * ((_vgraph.height - (2 * DEFAULT_MARGIN) - max_label_height) / max_y_dist);
+					vn.x = vn.x * ((_vgraph.width - (2 * margin) - max_label_width) / max_x_dist);
+					vn.y = vn.y * ((_vgraph.height - (2 * margin) - max_label_height) / max_y_dist);
 				}
 			}
 			
