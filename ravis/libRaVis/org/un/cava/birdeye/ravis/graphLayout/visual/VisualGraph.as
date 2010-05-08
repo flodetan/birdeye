@@ -474,7 +474,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* set the drawing surface for the edges */
 			_drawingSurface = new UIComponent();
-			
+			_drawingSurface.percentWidth = 100;
+			_drawingSurface.percentHeight = 100;
 			/* set an edge renderer, for now we use the Default,
 			 * but at a later stage this could be set externally */
 			_edgeRenderer = new BaseEdgeRenderer(_drawingSurface.graphics);
