@@ -27,9 +27,11 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	
-	import org.un.cava.birdeye.ravis.utils.LogUtil;
+	import mx.core.UIComponent;
+	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	
 	/**
 	 * This layouter does not use any algorithm for node placement,
@@ -42,9 +44,6 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	public class DirectPlacementLayouter extends BaseLayouter implements ILayoutAlgorithm {
 		
 		private static const _LOG:String = "graphLayout.layout.DirectPlacementLayouter";
-		
-		/* this holds the data for the Hierarchical layout drawing */
-		//XXX probably not needed private var _currentDrawing:HierarchicalLayoutDrawing;
 		
 		/* hold the relative height and width of the specified coordinates */
 		private var _relativeHeight:Number;
@@ -60,6 +59,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * @default false
 		 * */
 		public var centeredLayout:Boolean;
+		
 		
 		/**
 		 * The constructor only initialises some data structures.
@@ -94,7 +94,6 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		override public function layoutPass():Boolean {
 			
 			//LogUtil.debug(_LOG, "layoutPass called");
-			
 			if(!_vgraph) {
 				LogUtil.warn(_LOG, "No Vgraph set in DPLayouter, aborting");
 				return false;
@@ -109,12 +108,29 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			if(_graph.noNodes < 1) {
 				return false;
 			}
+			
+			var notReadyRenderer:UIComponent = getFirstUninitializedNode();
+			if(notReadyRenderer) {
+				notReadyRenderer.callLater(layoutPass);
+				return false;
+			}
+			else {
+				placeNodes();
+			}
 
-			/* now place the nodes according to their specified coordinates */
-			placeNodes();
-		
+			_vgraph.invalidateDisplayList();
 			_layoutChanged = true;
 			return true;
+		}
+		
+		private function getFirstUninitializedNode():UIComponent{
+			for each(var node:IVisualNode in _vgraph.visibleVNodes) {
+				if(node.view.initialized == false) {
+					return node.view;
+				}
+			}
+			
+			return null;
 		}
 	
 		/**
@@ -194,19 +210,38 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			/* place visible nodes */
 			for each(vn in visVNodes) {
 				
-				/* check for x and y attributes */
-				if((vn.data as XML).attribute("x").length() > 0) {
-					node_x = Number(vn.data.@x);
-				} else {
-					LogUtil.warn(_LOG, "Node:"+vn.id+" associated XML object does not have x attribute, => 0.0");
-					node_x = 0.0;
+				if(vn.data is XML)
+				{
+					/* check for x and y attributes */
+					if((vn.data as XML).attribute("x").length() > 0) {
+						node_x = Number(vn.data.@x);
+					} else {
+						LogUtil.warn(_LOG, "Node:"+vn.id+" associated XML object does not have x attribute, => 0.0");
+						node_x = 0.0;
+					}
+					
+					if((vn.data as XML).attribute("y").length() > 0) {
+						node_y = Number(vn.data.@y);
+					} else {
+						LogUtil.warn(_LOG, "Node:"+vn.id+" associated XML object does not have y attribute, => 0.0");
+						node_y = 0.0;
+					}
 				}
-				
-				if((vn.data as XML).attribute("y").length() > 0) {
-					node_y = Number(vn.data.@y);
-				} else {
-					LogUtil.warn(_LOG, "Node:"+vn.id+" associated XML object does not have y attribute, => 0.0");
-					node_y = 0.0;
+				else
+				{
+					if(vn.data.hasOwnProperty("x") && vn.data.x is Number) {
+						node_x = vn.data.x;
+					} else {
+						LogUtil.warn(_LOG, "Node:"+vn.id+" associated Data object does not have x attribute as Number, => 0.0");
+						node_x = 0.0;
+					}
+					
+					if(vn.data.hasOwnProperty("y") && vn.data.y is Number) {
+						node_y = vn.data.y;
+					} else {
+						LogUtil.warn(_LOG, "Node:"+vn.id+" associated XML object does not have y attribute, => 0.0");
+						node_y = 0.0;
+					}
 				}
 				
 				//LogUtil.debug(_LOG, "using rel width:"+_relativeWidth+" rh:"+_relativeHeight);

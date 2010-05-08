@@ -214,9 +214,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			if(_timer == null) {
 				_timer = new Timer(_timerDelay, _TIMERREPCOUNT);
 				_timer.addEventListener(TimerEvent.TIMER_COMPLETE, timerFired);
-				if(preArrangeGraphFunction != null) {
-					preArrangeGraphFunction(_graph);
-				}
+				//TODO: Put preArrageFunction here
 			} else {
 				_timer.stop();
 				_timer.reset();

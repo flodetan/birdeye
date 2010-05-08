@@ -485,7 +485,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 					
 					/* now scroll */
 					if((t_dx != 0) || (t_dy != 0)) {
-						_vgraph.scroll(t_dx, t_dy);
+						_vgraph.scroll(t_dx, t_dy,false);
 						_layoutChanged = true;
 					}
 				}

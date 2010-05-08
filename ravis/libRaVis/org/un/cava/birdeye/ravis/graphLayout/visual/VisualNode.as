@@ -333,7 +333,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 			{
 				view.callLater(commit);
 				return;
-			}
+			}  
 			
 			/* if we have the centered orientation we apply
 			 * some corrections */

@@ -45,6 +45,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	import org.un.cava.birdeye.ravis.graphLayout.data.*;
 	import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualGraphEvent;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent;
 	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
@@ -78,6 +79,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	 *  @eventType org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent
 	 */
 	[Event(name="nodeClick", type="org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent")]
+	
+	/**
+	 *  Dispatched when a the background is done dragging i
+	 *
+	 *  @eventType org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualGraphEvent
+	 */
+	[Event(name="backgroundDragEnd", type="org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualGraphEvent")]
 
 	/**
 	 * This component can visualize and layout a graph data structure in 
@@ -99,16 +107,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		[Embed('/org/un/cava/birdeye/ravis/assets/cursors/openhand.png')]
 		private static const HAND_CURSOR:Class;
 		
-		public var distortion:IDistortion;
 		/**
-		 * Function that is passed to a layouter which is used to manually arrange
-		 * the nodes before the graph is drawn
-		 * 
-		 * function(graph:IGraph):void
-		 */ 
-		private var _preArrangeGraphFunction:Function;
+		 * Distortion to be applied on mouse over 
+		 **/
+		public var distortion:IDistortion;
 		
-		private var _handCursorID:int;
+		private var _mouseDownLocation:Point
 		/**
 		 * Used to determine if a node has been moved or if it was just a click
 		 */ 
@@ -511,7 +515,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		
 		private function rollOverHandler(e:MouseEvent):void
 		{
-			_handCursorID = CursorManager.setCursor(HAND_CURSOR,3);
+			CursorManager.setCursor(HAND_CURSOR,3);
 		}
 		
 		private function rollOutHandler(e:MouseEvent):void
@@ -520,7 +524,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			{
 				draw();
 			}
-			CursorManager.removeCursor(_handCursorID);
+			CursorManager.removeAllCursors();
 		}
 		
 		public function releaseNodes():void
@@ -713,9 +717,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				_layouter.resetAll(); // to stop any pending animations
 			}
 			_layouter = l;
-			if(_layouter != null) {
-				_layouter.preArrangeGraphFunction = preArrangeGraphFunction;
-			}
 			/* need to signal control components possibly */
 			this.dispatchEvent(new VGraphEvent(VGraphEvent.LAYOUTER_CHANGED));
 		}
@@ -907,16 +908,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			_moveNodeInDrag = f;
 		}
 		
-		public function get preArrangeGraphFunction():Function { return _preArrangeGraphFunction; }
-		public function set preArrangeGraphFunction(value:Function):void
-		{
-			_preArrangeGraphFunction = value;
-			
-			if(_layouter) {
-				layouter.preArrangeGraphFunction = value;
-			}
-		}
-		
 		/**
 		 * @inheritDoc
 		 * */
@@ -997,7 +988,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			_canvas.scaleX = s;
 			_canvas.scaleY = s;
 			/* scroll to the center */
-			scroll(center.x * (1 - s / s0) / s, center.y * (1 - s / s0) / s);
+			scroll(center.x * (1 - s / s0) / s, center.y * (1 - s / s0) / s,false);
 			/* redraw the edges */
 			refresh();
 			/* remember the set value, this is probably unnecesary
@@ -1290,7 +1281,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		/**
 		 * @inheritDoc
 		 * */
-		public function scroll(deltaX:Number, deltaY:Number):void {
+		public function scroll(deltaX:Number, deltaY:Number, reset:Boolean):void {
 			
 			var i:uint;
 			var children:Array;
@@ -1310,6 +1301,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				}
 			}
 			
+			if(reset) {
+				_origin = new Point(0,0);
+			}
 			/* adjust the current origin of the canvas
 			 * (not 100% sure if this is a good idea but seems
 			 * to work) XXX */
@@ -1334,13 +1328,33 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 					node.vnode.view.invalidateDisplayList();
 				}
 			}
-			_canvas.invalidateDisplayList();
+			//we want this because we have our own 
+			//specific display list things in updateDisplayList
+			this.invalidateDisplayList();
 		}
 
 		/**
 		 * @inheritDoc
 		 * */
 		public function draw(flags:uint = 0):void {	
+			
+			var afterLayoutPass:Function = function():void
+			{
+				/* after the layout was done, the layout has
+				 * probably changed again, the layouter will have
+				 * itself set to that, but has maybe not
+				 * invalidated the display list, so we make sure it
+				 * happens here (may not always be necessary) */
+				_canvas.invalidateDisplayList();
+				
+				/* dispatch this change event, so some UI items
+				 * in the application can poll for updated values
+				 * for labels or something.
+				 * XXX To do: specify a subtype for more specific changes
+				 */
+				 
+				dispatchEvent(new VGraphEvent(VGraphEvent.VGRAPH_CHANGED));
+			}
 			
 			/* first refresh does layoutChanges to true and
 			 * invalidate display list */
@@ -1355,32 +1369,21 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* we need to do some sanity checks, e.g. if the canvas window
 			 * size was reduced to 0 or linklength 0 or similar things,
 			 * the layouter might crash */
-			
-			/* then force a layout pass in the layouter */
-			if(_layouter && 
-				_currentRootVNode &&
-				(_graph.noNodes > 0) &&
-				(this.width > 0) &&
-				(this.height > 0) &&
-				(_layouter.linkLength > 0)
-				) {
-				_layouter.layoutPass();
+			if(_layouter == null ||
+			   _currentRootVNode == null ||
+			   _graph.noNodes == 0 ||
+			   width == 0 ||
+			   height == 0 ||
+			   _layouter.linkLength <= 0)
+			{
+				afterLayoutPass();
+				return;	
 			}
 			
-			/* after the layout was done, the layout has
-			 * probably changed again, the layouter will have
-			 * itself set to that, but has maybe not
-			 * invalidated the display list, so we make sure it
-			 * happens here (may not always be necessary) */
-			_canvas.invalidateDisplayList();
-			
-			/* dispatch this change event, so some UI items
-			 * in the application can poll for updated values
-			 * for labels or something.
-			 * XXX To do: specify a subtype for more specific changes
-			 */
-			 
-			dispatchEvent(new VGraphEvent(VGraphEvent.VGRAPH_CHANGED));
+			//if the sanity checks have passed check to make sure each visible node
+			//has an intialized node renderer, if not call back later
+			_layouter.layoutPass();
+			afterLayoutPass();
 		}
 
 		/**
@@ -1507,6 +1510,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 					/* reset the flags */
 					_forceUpdateEdges = false;
 					_layouter.layoutChanged = false;
+				}
+			}
+			
+			//this forces the node renderers to redraw nicely
+			for each(var node:IVisualNode in visibleVNodes) {
+				if(node.view) {
+					node.view.invalidateDisplayList();
 				}
 			}
 		}
@@ -1845,11 +1855,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		}
 		
 		private function nodeRollOver(e:MouseEvent):void {
-			CursorManager.removeCursor(_handCursorID);
+			CursorManager.removeAllCursors()
 		}
 		
 		private function nodeRollOut(e:MouseEvent):void {
-			_handCursorID = CursorManager.setCursor(HAND_CURSOR,3);
+			CursorManager.setCursor(HAND_CURSOR,3);
 		}
 		
 		/**
@@ -2238,7 +2248,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* this should be the canvas, i.e. "this" */
 			//mycomponent = (event.currentTarget as UIComponent);
-			mycomponent = (this as UIComponent);
+			/* mycomponent = (this as UIComponent); */
 			
 			/* check for validity */
 			/* not needed any more 
@@ -2246,27 +2256,25 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				throw Error("Got backgroundDragBegin without UIComponent target!");
 			}
 			*/
-			
 			/* set the progress flag and save the starting coordinates */
 			_backgroundDragInProgress = true;
-			
 			_dragCursorStartX = mpoint.x;
 			_dragCursorStartY = mpoint.y;
+			_mouseDownLocation = mpoint;
 			
 			/* register the backgroundDrag listener to react to
 			 * the mouse movements */
-			mycomponent.addEventListener(MouseEvent.MOUSE_MOVE, backgroundDragContinue);
+			_canvas.addEventListener(MouseEvent.MOUSE_MOVE, backgroundDragContinue);
+			_canvas.addEventListener(MouseEvent.MOUSE_UP,dragEnd);
+			_canvas.addEventListener(MouseEvent.ROLL_OUT,dragEnd);
 			
 			/* and inform the layouter about the dragEvent */
 			if(_layouter) {
 				_layouter.bgDragEvent(event);
 			}
 			
-			/* There is mouse move event so listen to mouse up event */
-			_canvas.addEventListener(MouseEvent.MOUSE_UP,dragEnd);
-			_canvas.addEventListener(MouseEvent.ROLL_OUT,dragEnd);
 		}
-		
+
 		/**
 		 * This does the actual background drag by having
 		 * all UIComponents move to follow the mouse
@@ -2292,7 +2300,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				deltaY /= (scaleY*_canvas.scaleY);
 
 				/* scroll all objects by this offset */
-				scroll(deltaX, deltaY);
+				scroll(deltaX, deltaY,false);
 			}
 			/* and inform the layouter about the dragEvent */
 			if(_layouter) {
@@ -2317,6 +2325,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * */
 		protected function dragEnd(event:MouseEvent):void {
 			
+			const mpoint:Point = globalMousePosition();
+			
 			var mycomp:UIComponent;
 			var myback:DisplayObject;
 			var myvnode:IVisualNode;
@@ -2339,6 +2349,17 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				/* and inform the layouter about the dropEvent */
 				if(_layouter) {
 					_layouter.bgDropEvent(event);
+				}
+				
+				if(event.type == MouseEvent.ROLL_OUT) {
+					CursorManager.removeAllCursors();
+				}
+				
+				//dispatch the drag event only if we have moved somewhere
+				if(_mouseDownLocation && 
+				   Math.abs(mpoint.x - _mouseDownLocation.x) > 2 ||
+				   Math.abs(mpoint.y - _mouseDownLocation.y) > 2) {
+					dispatchEvent(new VisualGraphEvent(VisualGraphEvent.BACKGROUND_DRAG_END));
 				}
 			} else {
 				
