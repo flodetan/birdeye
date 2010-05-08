@@ -313,6 +313,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * Scrolls all objects according to the specified coordinates
 		 * (used as an offset).
 		 * */
-		function scroll(sx:Number, sy:Number):void;
+		function scroll(sx:Number, sy:Number, reset:Boolean):void;
 	}
 }

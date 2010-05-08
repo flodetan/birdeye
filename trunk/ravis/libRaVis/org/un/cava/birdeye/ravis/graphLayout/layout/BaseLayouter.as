@@ -109,12 +109,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * this holds the data for a layout drawing.
 		 * */
 		private var _currentDrawing:BaseLayoutDrawing;
-		
-		/** 
-		 * function used to arrage the data before the layout starts 
-		 */
-		private var _preArrageGraphFunction:Function;
-		
+
 		/**
 		 * The constructor initializes the layouter and may assign
 		 * already a VisualGraph object, but this can also be set later.
@@ -359,20 +354,6 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		
 		private function forceRedraw(e:MouseEvent):void {
 			e.updateAfterEvent();
-		}
-		
-		/**
-		 * Function used to arrange nodes right before a group of iterations is about to kick
-		 * off
-		 * 
-		 * Signature: function(value:Graph):void
-		 */ 
-		public function get preArrangeGraphFunction():Function { 
-			return _preArrageGraphFunction; 
-		}
-		
-		public function set preArrangeGraphFunction(value:Function):void {
-			_preArrageGraphFunction = value;
 		}
 	}
 }

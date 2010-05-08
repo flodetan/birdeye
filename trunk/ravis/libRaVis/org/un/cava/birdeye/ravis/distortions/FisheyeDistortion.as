@@ -64,7 +64,6 @@ package org.un.cava.birdeye.ravis.distortions
 				if(node.data.centerVariable)
 				{
 					var s:Number = sizeDistort(bb,node.x,node.y,distortionPoint);
-					trace(s + " " + bb + " " + node.viewX + " " + distortionPoint);
 				}
 			}
 		}
