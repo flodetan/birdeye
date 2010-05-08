@@ -98,7 +98,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		override public function layoutPass():Boolean {
 			//LogUtil.debug(_LOG, "layoutPass called");
-			
+			super.layoutPass();
+            
 			if(!_vgraph) {
 				LogUtil.warn(_LOG, "No Vgraph set in CircularLayouter, aborting...");
 				return false;

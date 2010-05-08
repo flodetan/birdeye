@@ -140,6 +140,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		override public function layoutPass():Boolean {
 			
+            super.layoutPass();
+            
 			/* if we have a current timer running, stop it
 			 * to avoid mutiple unnecessary calls */
 			if(_timer != null) {

@@ -140,7 +140,10 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * animating the nodes moving into the new position.
 		 * */
 		override public function layoutPass():Boolean {
-		 	var rv:Boolean;
+		 	
+            super.layoutPass();
+            
+            var rv:Boolean;
 			var i:int;
 			var n:INode;
 			var nodes:Array;

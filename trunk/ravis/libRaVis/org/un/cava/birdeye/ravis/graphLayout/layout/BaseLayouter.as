@@ -35,6 +35,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualGraphEvent;
 	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	
 	/**
@@ -241,12 +242,12 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		}
 		
 		/**
-		 * This is a NOP in the BaseLayouter class and always returns true.
+		 * This always returns true, dispatches the graph updated event.
 		 * 
 		 * @inheritDoc
 		 * */
 		public function layoutPass():Boolean {
-		 	/* NOP */
+            dispatchEvent(new VisualGraphEvent(VisualGraphEvent.GRAPH_UPDATED));
 		 	return true;
 		}
 		

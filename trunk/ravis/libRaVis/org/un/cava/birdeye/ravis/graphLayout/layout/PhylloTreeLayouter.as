@@ -87,7 +87,9 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * @return Currently the return value is not set or used.
 		 * */
 		override public function layoutPass():Boolean {
-
+            
+            super.layoutPass();
+            
 			var i:int;
 			var n:INode;
 			var visVNodes:Dictionary;

@@ -33,6 +33,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualGraphEvent;
 	import org.un.cava.birdeye.ravis.utils.Geometry;
 	import org.un.cava.birdeye.ravis.utils.GraphicUtils;
 	import org.un.cava.birdeye.ravis.utils.LogUtil;
@@ -203,7 +204,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 
 				/* indicate an animation in progress */
 				_animInProgress = true;
-				 
+
 				switch(_animationType) {
 					case ANIM_RADIAL:
 						cyclefinished = interpolatePolarCoords();
@@ -219,7 +220,9 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				
 				/* make sure the edges are redrawn */
                 _layoutChanged = true;
-                    
+                if(_animStep == 0) {
+                    dispatchEvent(new VisualGraphEvent(VisualGraphEvent.BEGIN_ANIMATION));   
+                }    
 				if(_animStep % _ANIMREFRESHINTERVAL == 0 || cyclefinished) {
 				    _vgraph.refresh();
 				}
@@ -228,6 +231,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				if (cyclefinished) {
 					//LogUtil.debug(_LOG, "Achieved final node positions, terminating animation...");
 					_animInProgress = false;
+                    dispatchEvent(new VisualGraphEvent(VisualGraphEvent.END_ANIMATION));
 				} else if(_animStep >= _ANIMATIONSTEPS) {
 					LogUtil.info(_LOG, "Exceeded animation steps, setting nodes to final positions...");
 					applyTargetToNodes(_vgraph.visibleVNodes);
