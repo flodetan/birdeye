@@ -93,7 +93,6 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			var vn:IVisualNode;
 			var cindex:int;
 			var nsiblings:int;
-			var rv:Boolean;
 			var children:Array;
 			
 			//LogUtil.info(_LOG, "layoutPass called");
@@ -170,7 +169,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			startAnimation();		
 		
 			_layoutChanged = true;
-			return rv;
+			return true;
 		}
 	
 		/**

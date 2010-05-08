@@ -285,16 +285,14 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
         protected var _forceUpdateEdges:Boolean = false;
         
         /**
+         * Flag to force a redraw of all nodes even if the layout
+         * has not changed
+         * */
+        protected var _forceUpdateNodes:Boolean = false;
+        /**
          * Specify whether edge labels should be displayed or not
          * */
         protected var _displayEdgeLabels:Boolean = true;
-        
-        /* Spring Graph also allowed a specification of an IViewFactory
-         * which is a custom implementation of a factory that returns
-         * UIComponents to be used as a view for a node.
-         * Currently not implemented, nor needed.
-        protected var _viewFactory:IViewFactory = null;
-         */
 
 		/**
 		 * We keep the default parameters
@@ -1312,23 +1310,30 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			_origin.offset(deltaX,deltaY);
 			//LogUtil.debug(_LOG, "Setting new origin to:"+_origin.toString());
 		}
+		
+		/**
+         * @inheritDoc
+         * */
+		public function redrawNodes():void
+		{
+		    for each(var node:INode in _graph.nodes) {
+                if(node.vnode !=null && node.vnode.view != null) {
+                    node.vnode.view.invalidateDisplayList();
+                }
+            }
+		}
 
 		/**
 		 * @inheritDoc
 		 * */
 		public function refresh():void {
 			/* this forces the next call of updateDisplayList()
-			 * to redraw all edges */
+			 * to redraw all edges and all nodes*/
 			_forceUpdateEdges = true;
+			_forceUpdateNodes = true;
 			
 			if(_graph == null) {
 				return;
-			}
-			
-			for each(var node:INode in _graph.nodes) {
-				if(node.vnode !=null && node.vnode.view != null) {
-					node.vnode.view.invalidateDisplayList();
-				}
 			}
 			//we want this because we have our own 
 			//specific display list things in updateDisplayList
@@ -1507,20 +1512,29 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			_canvas.invalidateDisplayList();
 			/* now add part to redraw edges */
 			if(_layouter) {
-				if(_forceUpdateEdges || _layouter.layoutChanged) {
+			    
+			    if(_layouter.layoutChanged) {
+			        redrawEdges();
+			        redrawNodes();
+			        
+			        _forceUpdateNodes = false;
+			        _forceUpdateEdges = false;
+                    _layouter.layoutChanged = false;
+			    }
+			    
+				if(_forceUpdateEdges) {
 					redrawEdges();
 					/* reset the flags */
 					_forceUpdateEdges = false;
-					_layouter.layoutChanged = false;
 				}
+				
+				if(_forceUpdateNodes) {
+                    redrawNodes();
+                    /* reset the flags */
+                    _forceUpdateNodes = false;
+                }
 			}
 			
-			//this forces the node renderers to redraw nicely
-			for each(var node:IVisualNode in visibleVNodes) {
-				if(node.view) {
-					node.view.invalidateDisplayList();
-				}
-			}
 		}
 
 		/* private methods */

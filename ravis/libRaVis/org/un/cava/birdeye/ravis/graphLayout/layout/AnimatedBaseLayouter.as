@@ -46,6 +46,13 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		private static const _LOG:String = "graphLayout.layout.AnimatedBaseLayouter";
 		
 		/**
+		 *  @internal
+		 * Constant to define how often to redraw the node renderers during a redraw.  It
+		 * says update the node renderers everything X'th animation step. This is a performance
+		 * optimization for diagrams with complicated node renderers 
+		 */ 
+		private const _ANIMREFRESHINTERVAL:Number = 5;
+		/**
 		 * constant to define the radial animation type, which
 		 * interpolates node's polar coordinates.
 		 * */
@@ -211,9 +218,12 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				}
 				
 				/* make sure the edges are redrawn */
-				_layoutChanged = true;
-				_vgraph.redrawEdges();
-				_vgraph.refresh();
+                _layoutChanged = true;
+                    
+				if(_animStep % _ANIMREFRESHINTERVAL == 0 || cyclefinished) {
+				    _vgraph.refresh();
+				}
+				
 				/* check if we ran out of anim cycles, but are not finished */
 				if (cyclefinished) {
 					//LogUtil.debug(_LOG, "Achieved final node positions, terminating animation...");
@@ -242,9 +252,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 					/* make sure the edges are redrawn */
 					_layoutChanged = true;
 					_vgraph.refresh();
-					//_vgraph.dispatchEvent(new MouseEvent("forceRedrawEvent"));
-					//_vgraph.invalidateDisplayList();
-					_vgraph.redrawEdges();
+					//_vgraph.redrawNodes();
 				}
 			} 
 		}

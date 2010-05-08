@@ -55,12 +55,6 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
         protected var _nodeLabelRendererFactory:IFactory = null;
         
         /**
-         * Flag to force a redraw of all node even if the layout
-         * has not changed
-         * */
-        protected var _forceUpdateNodes:Boolean = false;
-        
-        /**
          * Specify whether node labels should be displayed or not
          * */
         protected var _displayNodeLabels:Boolean = true;
