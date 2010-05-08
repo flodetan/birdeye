@@ -77,6 +77,7 @@
     <classEntry path="org.un.cava.birdeye.ravis.graphLayout.data.INode"/>
     <classEntry path="org.un.cava.birdeye.ravis.graphLayout.data.Node"/>
     <classEntry path="org.un.cava.birdeye.ravis.graphLayout.layout.AnimatedBaseLayouter"/>
+    <classEntry path="org.un.cava.birdeye.ravis.graphLayout.layout.AnimatedDirectPlacementLayouter"/>
     <classEntry path="org.un.cava.birdeye.ravis.graphLayout.layout.BaseLayoutDrawing"/>
     <classEntry path="org.un.cava.birdeye.ravis.graphLayout.layout.BaseLayouter"/>
     <classEntry path="org.un.cava.birdeye.ravis.graphLayout.layout.CircularLayouter"/>

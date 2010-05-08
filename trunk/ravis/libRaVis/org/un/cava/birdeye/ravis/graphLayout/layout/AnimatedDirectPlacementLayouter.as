@@ -41,9 +41,9 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	 * calculated by autofit) to put the specified coordinates into
 	 * perspective.
 	 * */
-	public class DirectPlacementLayouter extends BaseLayouter implements ILayoutAlgorithm {
+	public class AnimatedDirectPlacementLayouter extends AnimatedBaseLayouter implements ILayoutAlgorithm {
 		
-		private static const _LOG:String = "graphLayout.layout.DirectPlacementLayouter";
+		private static const _LOG:String = "graphLayout.layout.AnimatedDirectPlacementLayouter";
 		
 		/* hold the relative height and width of the specified coordinates */
 		private var _relativeHeight:Number;
@@ -52,6 +52,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		/* a specified relative origin, defaults to (0,0); */
 		private var _relativeOrigin:Point;
 		
+        private var _currentDrawing:BaseLayoutDrawing;
 		/**
 		 * defines if the vgraph's center offset should be applied.
 		 * Set it to true if your coordinates assume a centered origin
@@ -65,9 +66,9 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * The constructor only initialises some data structures.
 		 * @inheritDoc
 		 * */
-		public function DirectPlacementLayouter(vg:IVisualGraph = null) {
+		public function AnimatedDirectPlacementLayouter(vg:IVisualGraph = null) {
 			super(vg);
-			
+			animationType = ANIM_STRAIGHT;
 			_relativeHeight = 1000;
 			_relativeWidth = 1000;
 			_relativeOrigin = new Point(0,0);
@@ -92,7 +93,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * @return Currently the return value is not set or used.
 		 * */
 		override public function layoutPass():Boolean {
-			
+            
 			//LogUtil.debug(_LOG, "layoutPass called");
 			if(!_vgraph) {
 				LogUtil.warn(_LOG, "No Vgraph set in DPLayouter, aborting");
@@ -115,8 +116,16 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				return false;
 			}
 			else {
-                super.layoutPass();
+                
+                _currentDrawing = new BaseLayoutDrawing();
+                super.currentDrawing = _currentDrawing;
 				placeNodes();
+                /* reset animation cycle */
+                resetAnimation();
+                
+                /* start the animation, does also the commit */
+                startAnimation();
+                super.layoutPass();
 			}
 
 			_layoutChanged = true;
@@ -189,12 +198,15 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		private function placeNodes():void {
 			
+            var nodePostions:Dictionary = new Dictionary();
 			var visVNodes:Dictionary;
 			var vn:IVisualNode;
 			var node_x:Number;
 			var node_y:Number;
 			var target:Point;
-			
+			var oldLocation:Point;
+            var newLocation:Point;
+            
 			/* those are needed for autofit */
 			var smallest_x:Number = Infinity;
 			var largest_x:Number = -Infinity;
@@ -255,8 +267,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				
 				/* set the coordinates in the VNode, this won't be
 				 * applied until commit() is called */
-				vn.x = target.x;
-				vn.y = target.y;
+                _currentDrawing.setCartCoordinates(vn.node,target);
 				
 				/* if autofit is enabled, we need to track
 				 * the largest distances */
@@ -290,21 +301,28 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 
 				/* adjust nodes */
 				for each(vn in visVNodes) {
-					vn.x = vn.x * ((_vgraph.width - (2 * margin) - max_label_width) / max_x_dist);
-					vn.y = vn.y * ((_vgraph.height - (2 * margin) - max_label_height) / max_y_dist);
+                    oldLocation = _currentDrawing.getAbsCartCoordinates(vn.node);
+                    newLocation = new Point();
+                    newLocation.x = oldLocation.x * ((_vgraph.width - (2 * margin) - max_label_width) / max_x_dist);
+                    newLocation.y = oldLocation.y * ((_vgraph.height - (2 * margin) - max_label_height) / max_y_dist);
+                    _currentDrawing.setCartCoordinates(vn.node,newLocation);
 				}
 			}
 			
-			/* final round, to apply the vgraph origin and to call commit */
+			/* final round, to apply the vgraph origin */
 			for each(vn in visVNodes) {
-				vn.x = vn.x + _vgraph.origin.x;
-				vn.y = vn.y + _vgraph.origin.y;
+                
+                oldLocation = _currentDrawing.getAbsCartCoordinates(vn.node);
+                newLocation = new Point();
+                
+                newLocation.x = oldLocation.x + _vgraph.origin.x;
+                newLocation.y = oldLocation.y + _vgraph.origin.y;
 				
 				if(centeredLayout) {
-					vn.x = vn.x + _vgraph.center.x;
-					vn.y = vn.y + _vgraph.center.y;	
+                    newLocation.x = newLocation.x + _vgraph.center.x;
+                    newLocation.y = newLocation.y + _vgraph.center.y;	
 				}
-				vn.commit();
+                _currentDrawing.setCartCoordinates(vn.node,newLocation);
 			}
 		}
 	}
