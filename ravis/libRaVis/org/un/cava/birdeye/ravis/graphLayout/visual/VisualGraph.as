@@ -112,6 +112,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 **/
 		public var distortion:IDistortion;
 		
+		private var _nodeMouseDownLocation:Point;
 		private var _mouseDownLocation:Point
 		/**
 		 * Used to determine if a node has been moved or if it was just a click
@@ -2158,6 +2159,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 					// ecomponent.stage.addEventListener(MouseEvent.MOUSE_UP, dragEnd);
 					
 					/* and inform the layouter about the dragEvent */
+					_nodeMouseDownLocation = globalMousePosition();
 					dispatchEvent(new VisualNodeEvent(VisualNodeEvent.DRAG_START,evnode.node));
 					_layouter.dragEvent(event, evnode);
 				} else {
@@ -2386,7 +2388,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				if(_layouter) {
 					_layouter.dropEvent(event, myvnode);
 				}
-				dispatchEvent(new VisualNodeEvent(VisualNodeEvent.DRAG_END,myvnode.node));
+				
+				if(_nodeMouseDownLocation && 
+				   Math.abs(mpoint.x - _nodeMouseDownLocation.x) > 2 ||
+				   Math.abs(mpoint.y - _nodeMouseDownLocation.y) > 2) {
+					dispatchEvent(new VisualNodeEvent(VisualNodeEvent.DRAG_END,myvnode.node));
+				}
 				/* reset the dragComponent */
 				_dragComponent = null;
 			}	
