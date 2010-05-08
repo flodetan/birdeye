@@ -77,11 +77,6 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		/**
 		 * Used when centering the diagram
 		 */ 
-		public var horizontalPadding:Number = 0;
-		
-		/**
-		 * Used when centering the diagram
-		 */ 
 		public var verticalPadding:Number = 0;
 		
 		/** this holds the data for the Hierarchical layout drawing */
@@ -228,9 +223,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			secondWalk(_root, -_currentDrawing.getPrelim(_root));
 			
 			//now we fit the diagram to the center of the screen
-			if(_autoFitEnabled) {
-				centerDiagram();
-			}
+			centerDiagram();
+			
 			/* reset animation cycle */
 			resetAnimation();
 			
@@ -801,12 +795,12 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 					break;
 
 				case ORIENT_LEFT_RIGHT:
-					_currentDrawing.centerOffset = new Point(margin + layerMargin, (_vgraph.height / 2) - margin);
+					_currentDrawing.centerOffset = new Point(margin + layerMargin, (_vgraph.height / 2) - margin/2);
 					break;
 
 				case ORIENT_RIGHT_LEFT:
 					_currentDrawing.centerOffset =
-						new Point((_vgraph.width - margin - layerMargin), (_vgraph.height / 2) - margin);
+						new Point((_vgraph.width - margin - layerMargin), (_vgraph.height / 2) - margin/2);
 					break;
 
 				default:

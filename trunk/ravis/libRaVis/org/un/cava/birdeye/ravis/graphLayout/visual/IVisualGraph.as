@@ -301,6 +301,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		/**
 		 * This forces a redraw of all edges */
 		function redrawEdges():void;
+		
+		/**
+         * This forces a redraw of all nodes and their renderers */
+		function redrawNodes():void;
 
 		/**
 		 * Calculate and return the current bounding box of all visible nodes.
