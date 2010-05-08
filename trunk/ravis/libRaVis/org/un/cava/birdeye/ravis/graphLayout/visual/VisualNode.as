@@ -329,7 +329,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		 * @inheritDoc
 		 * */			
 		public function commit():void {
-			if(view && view.initialized == false)
+			
+			if(view == null)
+			{
+				return;
+			}
+			
+			if(view.initialized == false)
 			{
 				view.callLater(commit);
 				return;
