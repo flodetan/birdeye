@@ -66,16 +66,16 @@ package birdeye.vis.guides.renderers
 			}
 			
 			// move to 1st inner point
-			data = "M" + String(rP1.x) + " " + String(rP1.y) + " ";
+			data = "M" + String(rP2.x) + " " + String(rP2.y) + " ";
 			
 			// arc to 2nd inner point with radius = r
-			data+= "A" + String(r) + " " + String(r) + " 0 " + arcFlag + " 0 " + String(rP2.x) + " " + String(rP2.y);
+			data+= "A" + String(r) + " " + String(r) + " 0 " + arcFlag + " 0 " + String(rP1.x) + " " + String(rP1.y);
 			
 			// line to 2nd outer point
-			data+= "L" + String(RP2.x) + " " + String(RP2.y) + " ";
+			data+= "L" + String(RP1.x) + " " + String(RP1.y) + " ";
 			
 			// arc to 1st outer point with radius = R and close the path
-			data+= "A" + String(R) + " " + String(R) + " 0 " + arcFlag + " 1 " + String(RP1.x) + " " + String(RP1.y) + " z";
+			data+= "A" + String(R) + " " + String(R) + " 0 " + arcFlag + " 1 " + String(RP2.x) + " " + String(RP2.y) + " z";
 			
 			this.data = data;
 		}

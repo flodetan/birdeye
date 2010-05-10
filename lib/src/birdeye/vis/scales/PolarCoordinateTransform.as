@@ -40,8 +40,8 @@ package birdeye.vis.scales
 		{
 			var x1:Number, y1:Number;
 			
-			x1 = Math.cos(angle * Math.PI / 180) * radius;
-			y1 = -Math.sin(angle * Math.PI / 180) * radius;
+			x1 = Math.sin(angle * Math.PI / 180) * radius;
+			y1 = -Math.cos(angle * Math.PI / 180) * radius;
 
 			if (origin)
 			{
@@ -57,7 +57,7 @@ package birdeye.vis.scales
 		{
 			var x1:Number;
 			
-			x1 = Math.cos(angle * Math.PI / 180) * radius;
+			x1 = Math.sin(angle * Math.PI / 180) * radius;
 
 			if (origin)
 				x1 += origin.x;
@@ -70,7 +70,7 @@ package birdeye.vis.scales
 		{
 			var y1:Number;
 			
-			y1 = -Math.sin(angle * Math.PI / 180) * radius;
+			y1 = -Math.cos(angle * Math.PI / 180) * radius;
 
 			if (origin)
 				y1 += origin.y;
