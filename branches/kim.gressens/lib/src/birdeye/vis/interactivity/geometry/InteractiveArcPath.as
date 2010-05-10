@@ -44,7 +44,7 @@ package birdeye.vis.interactivity.geometry
 			}
 			
 			// ok is in the same range, is the angle ok?
-			var radAngle:Number = Math.atan2(center.x - p.x, center.y - p.y );
+			var radAngle:Number = Math.atan2(p.y - center.y,p.x - center.x );
 			
 			radAngle += Math.PI / 2;
 			
