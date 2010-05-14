@@ -44,12 +44,9 @@ package org.greenthreads {
 		
 		private var errorTerm:int;
 		
-		public function ThreadProcessor( share : Number = 960 ) {
+		public function ThreadProcessor( share : Number = 0.9 ) {
 			if( !_instance ) {
-				var app:Application = Application.application as Application;
-				var st:Stage = app.systemManager.stage;
-				
-				this.frameRate = st.frameRate;
+				this.frameRate = 20; // we want to render at a framerate of 20 frames / second
 				this.share = share;
 				this.newThreads = new PriorityThreadQueue();
 				this.initedThreads = new PriorityThreadQueue();
@@ -61,7 +58,7 @@ package org.greenthreads {
 			}
 		}
 		
-		public static function getInstance( share : Number = 960 ) : ThreadProcessor {
+		public static function getInstance( share : Number = 0.9 ) : ThreadProcessor {
 			if( !_instance ) {
 				_instance = new ThreadProcessor( share );
 			}
