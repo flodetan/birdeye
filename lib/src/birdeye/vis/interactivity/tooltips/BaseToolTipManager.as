@@ -158,10 +158,9 @@ package birdeye.vis.interactivity.tooltips
 				{
 					lbl.visible = false;
 				}
-				else
+				else if (visible)
 				{
-					
-					if (!lbl && visible)
+					if (!lbl)
 					{
 						lbl = new Tooltip();
 						lbl.mouseEnabled = false;
@@ -170,10 +169,7 @@ package birdeye.vis.interactivity.tooltips
 						
 						_stage.addChild(lbl);
 					}
-					
-					
-					
-					
+										
 					lbl.text = createLabel(geom.data, geom.element[_labelDimension]);
 					if (lbl.text != null && lbl.text != "null")
 					{
