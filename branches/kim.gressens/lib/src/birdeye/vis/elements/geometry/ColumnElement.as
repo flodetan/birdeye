@@ -118,6 +118,25 @@ package birdeye.vis.elements.geometry
 		}
 		
 		
+		private var _tooltipLocation:String = "center";
+		
+		/**
+		 * Set the preferred tooltiplocation</br>
+		 * Center or Top
+		 */
+		[Inspectable(enumeration="center","top")]
+		public function set tooltipLocation(ttl:String):void
+		{
+			_tooltipLocation = ttl;	
+		}
+		
+		public function get tooltipLocation():String
+		{
+			return _tooltipLocation;
+		}
+		
+		
+		
 		public function ColumnElement()
 		{
 			super();
@@ -312,11 +331,25 @@ package birdeye.vis.elements.geometry
 				geom.baseGeometry = new Rectangle(loc.x, loc.y, barWidth, barHeight);
 				if (direction == DIRECTION_HORIZONTAL)
 				{
-					geom.preferredTooltipPoint = transformToTooltipCoordinate(new Point(pos1+barWidth/2, pos2 + barHeight / 2));
+					if (tooltipLocation == "center")
+					{
+						geom.preferredTooltipPoint = transformToTooltipCoordinate(new Point(pos1+barWidth/2, pos2 + barHeight / 2));
+					}
+					else if (tooltipLocation == "top")
+					{
+						geom.preferredTooltipPoint = transformToTooltipCoordinate(new Point(pos1+barWidth+30, pos2 + barHeight / 2));
+					}
 				}
 				else if (direction == DIRECTION_VERTICAL)
 				{
-					geom.preferredTooltipPoint = transformToTooltipCoordinate(new Point(pos1 + barWidth / 2, pos2 + barHeight / 2));					
+					if (tooltipLocation == "center")
+					{
+						geom.preferredTooltipPoint = transformToTooltipCoordinate(new Point(pos1 + barWidth / 2, pos2 + barHeight / 2));					
+					}
+					else if (tooltipLocation == "top")
+					{
+						geom.preferredTooltipPoint = transformToTooltipCoordinate(new Point(pos1 + barWidth / 2, pos2 - 10));
+					}
 				}
 
 				geom.data = _dataItems[_currentItemIndex];
