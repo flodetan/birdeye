@@ -337,8 +337,8 @@ package birdeye.vis.guides.axis
 						
 						stdLabel.text = _labelFormatterFunction != null ? _labelFormatterFunction.call(null, dataLabel) : String(dataLabel);
 						
-						stdLabel.x = d.point.x - (stdLabel.textWidth + 4)/2;
-						stdLabel.y = d.point.y;
+						stdLabel.x = d.point.x - (stdLabel.textWidth + 4);
+						stdLabel.y = d.point.y - stdLabel.height / 2;
 						
 						stdLabel.draw(this.graphics, null);
 					}
