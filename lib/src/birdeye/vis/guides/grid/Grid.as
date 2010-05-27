@@ -286,7 +286,7 @@ package birdeye.vis.guides.grid
 			
 		}
 		
-		private function createLineData(scale:IScale, bounds:Rectangle):Array
+		protected function createLineData(scale:IScale, bounds:Rectangle):Array
 		{
 			var toReturn:Array;
 			if (scale && scale.completeDataValues && scale.completeDataValues.length > 0)
