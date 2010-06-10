@@ -75,7 +75,7 @@ package birdeye.vis.coords
 	{
 
 		private var _is3D:Boolean = false;
-		public function get is3D():Boolean
+		override public function get is3D():Boolean
 		{
 			return _is3D;
 		}
