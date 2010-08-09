@@ -118,7 +118,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.nodeRenderers
 			
 			if (TypeUtil.isFalse(visible))	
 			{
-				trace("Node Label is invisible " + node.data);
+
 			}
 			else
 			{

@@ -21,9 +21,12 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	
 	public class EnhancedVisualGraph extends VisualGraph
 	{
+        private static var _LOG:String = "graphLayout.visual.EnhancedVisualGraph";
+        
 		protected var _viewToVEdgeRendererMap:Dictionary;
 		
 		protected var _enableDefaultDoubleClick:Boolean = true;
@@ -459,13 +462,11 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			
 			if (_moveNodeInDrag == false)
 				return;
-				
-			//trace("DragBegin was called...");
-			
+							
 			/* if there is an animation in progress, we ignore
 			 * the drag attempt */
 			if(_layouter && _layouter.animInProgress) {
-				trace("Animation in progress, drag attempt ignored");
+				LogUtil.info(_LOG,"Animation in progress, drag attempt ignored");
 				return;
 			}
 			
@@ -583,13 +584,11 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			
 			if (_moveEdgeInDrag == false)
 				return;
-				
-			//trace("DragBegin was called...");
-			
+							
 			/* if there is an animation in progress, we ignore
 			 * the drag attempt */
 			if(_layouter && _layouter.animInProgress) {
-				trace("Animation in progress, drag attempt ignored");
+				LogUtil.info(_LOG,"Animation in progress, drag attempt ignored");
 				return;
 			}
 			
@@ -660,7 +659,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			
 			/* Sometimes we get spurious events */
 			if(_dragComponent == null) {
-				trace("received handleDrag event but _dragComponent is null, ignoring");
+				LogUtil.info(_LOG,"received handleDrag event but _dragComponent is null, ignoring");
 				return;
 			}
 			
@@ -737,7 +736,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			
 			/* Sometimes we get spurious events */
 			if(_dragControlComponent == null) {
-				trace("received handleDrag event but _dragComponent is null, ignoring");
+				LogUtil.info(_LOG,"received handleDrag event but _dragComponent is null, ignoring");
 				return;
 			}
 			
@@ -793,9 +792,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				
 				eRendererComp['toDistance'] += dTo;
 			}
-			//trace("Drag position: " + _drag_y_offsetMap[sp] + " y = " + sp.y + 
-					//	" renderer x,y,w,h = " + eRendererComp.x + ',' + eRendererComp.y + ',' + eRendererComp.width + ',' + eRendererComp.height);
-					
+
 			/* bounds code, currently unused 
 			if ( bounds != null ) {
 				if ( sp.x < bounds.left ) {
@@ -850,22 +847,6 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				 * the canvasm so we just set it to this */
 				//myback = (event.currentTarget as DisplayObject);
 				myback = (this as DisplayObject);
-				
-				/*
-				if(myback == (this as DisplayObject)) {
-					trace("we found ourselves as the background object GREAT");
-				} else {
-					trace("we got something else as the background, HMPF");
-				}
-				*/
-				
-				/* no longer needed
-				if(myback == null) {
-					/* this can happen if we let go of the button
-					 * outside of the window *
-					trace("dragEnd: background drop event target was no DisplayObject but "+event.currentTarget.toString());
-				}
-				*/
 				
 				/* unregister event handler */				
 				myback.removeEventListener(MouseEvent.MOUSE_MOVE,backgroundDragContinue);
@@ -958,22 +939,6 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				//myback = (event.currentTarget as DisplayObject);
 				myback = (this as DisplayObject);
 				
-				/*
-				if(myback == (this as DisplayObject)) {
-					trace("we found ourselves as the background object GREAT");
-				} else {
-					trace("we got something else as the background, HMPF");
-				}
-				*/
-				
-				/* no longer needed
-				if(myback == null) {
-					/* this can happen if we let go of the button
-					 * outside of the window *
-					trace("dragEnd: background drop event target was no DisplayObject but "+event.currentTarget.toString());
-				}
-				*/
-				
 				/* unregister event handler */				
 				myback.removeEventListener(MouseEvent.MOUSE_MOVE,backgroundDragContinue);
 				// myback.removeEventListener(MouseEvent.MOUSE_MOVE,dragEnd);
@@ -992,7 +957,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				/* But sometimes the dragComponent was already null, 
 				 * in this case we have to ignore the thing. */
 				if(sp == null) {
-					trace("dragEnd: received dragEnd but _dragComponent was null, ignoring");
+					LogUtil.info(_LOG,"dragEnd: received dragEnd but _dragComponent was null, ignoring");
 					return;
 				}
 				

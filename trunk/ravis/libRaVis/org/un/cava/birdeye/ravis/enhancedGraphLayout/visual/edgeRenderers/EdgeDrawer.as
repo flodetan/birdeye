@@ -139,7 +139,6 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
 			
 			if (TypeUtil.isFalse(visible) || TypeUtil.isFalse(fromVisible) || TypeUtil.isFalse(toVisible))	
 			{
-				//trace("Edge is invisible " + edge.node1.stringid + ' --> ' + edge.node2.stringid);
 				return;
 			}
 			
@@ -181,8 +180,6 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
 				if (isFullyLeftOfPt(toPt, fromPt))
 					numNodeLeft++;
 			}
-
-			//trace('OUT EDGE LENGTH ' + fromNode.successors.length + ' ABOVE ' + numNodeAbove + ' BELOW ' + numNodeBelow + ' LEFT ' + numNodeLeft + ' RIGHT ' + numNodeRight); 
 			
 			var vg:IVisualGraph = edge.vedge.vgraph;
 			
