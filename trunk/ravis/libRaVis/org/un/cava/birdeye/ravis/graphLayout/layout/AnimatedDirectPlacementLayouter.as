@@ -28,6 +28,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import flash.utils.Dictionary;
 	
 	import mx.core.UIComponent;
+	import mx.events.FlexEvent;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
@@ -112,7 +113,11 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			var notReadyRenderer:UIComponent = getFirstUninitializedNode();
 			if(notReadyRenderer) {
-				notReadyRenderer.callLater(layoutPass);
+                if(notReadyRenderer.hasEventListener(FlexEvent.CREATION_COMPLETE) == false) {
+    				notReadyRenderer.addEventListener(FlexEvent.CREATION_COMPLETE,function(e:FlexEvent):void {
+                       layoutPass(); 
+                    });
+                }
 				return false;
 			}
 			else {
