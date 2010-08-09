@@ -48,8 +48,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * The default radius increase between
 		 * the concentric circles.
 		 * */
-		public static const DEFAULT_RADIUS:Number = 50;
-		
+		public var defaultRadius:Number = 50;
+		public var minRadius:Number = 0;
 		/**
 		 * @internal
 		 * we need a previous root for the animation */
@@ -96,7 +96,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			_currentDrawing = null;
 			
-			_radiusInc = DEFAULT_RADIUS;
+            radiusInc = defaultRadius;
 			_previousRoot = null;
 			_theta1 = 0;
 			_theta2 = _theta1 + 360;
@@ -107,6 +107,13 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			initDrawing();
 		}
+        
+        private function get radiusInc():Number {
+            return _radiusInc;
+        }
+        private function set radiusInc(value:Number):void {
+            _radiusInc = Math.max(value,minRadius);
+        }
 
 		/**
 		 * @inheritDoc
@@ -122,14 +129,14 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		[Bindable]
 		override public function set linkLength(r:Number):void {
-			_radiusInc = r;
+			radiusInc = r;
 		}
 		
 		/**
 		 * @private
 		 * */
 		override public function get linkLength():Number {
-			return _radiusInc;
+			return radiusInc;
 		}
 
 		/**
@@ -210,7 +217,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			/* do a static layout pass */
 			if(_maxDepth > 0) {
-				calculateStaticLayout(_root,_radiusInc,_theta1,_theta2);
+				calculateStaticLayout(_root,radiusInc,_theta1,_theta2);
 			}
 			
 			/* now if we have no previous drawing we can just
@@ -274,7 +281,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			r = Math.min(_vgraph.width, _vgraph.height) / 2.0;
 			
 			if(_maxDepth > 0) {
-				_radiusInc = (r - (2 *margin)) / _maxDepth;
+				radiusInc = (r - (2 *margin)) / _maxDepth;
 			}
 		}
 		
@@ -337,7 +344,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				/* in another implementation this divided the real
 				 * diameter by d not by d times the radiusINcrement
 				 * which yields way too large values */
-				diameter = Math.sqrt(nw*nw + nh*nh) / (d * _radiusInc);
+				diameter = Math.sqrt(nw*nw + nh*nh) / (d * radiusInc);
 			}
 			
 			/* diameter is an angular width value in radians,
@@ -548,7 +555,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				/* do we need to recurse, 
 				 * we just recurse if the node has children */
 				if(_stree.getNoChildren(cn) > 0) {
-					calculateStaticLayout(cn, r+_radiusInc, 
+					calculateStaticLayout(cn, r+radiusInc, 
 						theta1 + (nfrac * dtheta),
 						theta1 + ((nfrac + cfrac) * dtheta));
 				}
