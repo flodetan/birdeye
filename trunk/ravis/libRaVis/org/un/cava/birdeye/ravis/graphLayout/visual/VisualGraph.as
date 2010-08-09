@@ -2102,7 +2102,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				
 				/* stop propagation to prevent a concurrent backgroundDrag */
 				e.stopImmediatePropagation();
-		 		dispatchEvent(new VisualNodeEvent(VisualNodeEvent.CLICK,evnode.node));
+		 		dispatchEvent(new VisualNodeEvent(VisualNodeEvent.CLICK,evnode.node,e.ctrlKey));
 		 	}
 		 }
 		
@@ -2184,7 +2184,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 					
 					/* and inform the layouter about the dragEvent */
 					_nodeMouseDownLocation = globalMousePosition();
-					dispatchEvent(new VisualNodeEvent(VisualNodeEvent.DRAG_START,evnode.node));
+					dispatchEvent(new VisualNodeEvent(VisualNodeEvent.DRAG_START,evnode.node,event.ctrlKey));
 					_layouter.dragEvent(event, evnode);
 				} else {
 					throw Error("Event Component was not in the viewToVNode Map");
@@ -2415,7 +2415,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				if(_nodeMouseDownLocation && 
 				   Math.abs(mpoint.x - _nodeMouseDownLocation.x) > 2 ||
 				   Math.abs(mpoint.y - _nodeMouseDownLocation.y) > 2) {
-					dispatchEvent(new VisualNodeEvent(VisualNodeEvent.DRAG_END,myvnode.node));
+					dispatchEvent(new VisualNodeEvent(VisualNodeEvent.DRAG_END,myvnode.node,event.ctrlKey));
 				}
 				/* reset the dragComponent */
 				_dragComponent = null;
