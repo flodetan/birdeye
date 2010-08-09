@@ -363,6 +363,17 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 		 * */
 		public function refresh():void {
 			
+            if(view == null)
+            {
+                return;
+            }
+            
+            if(view.initialized == false)
+            {
+                view.callLater(refresh);
+                return;
+            }  
+            
 			/* have to recompensate for centered */
 			if(_centered) {
 				_x = this.viewX + (this.view.width / 2.0);
