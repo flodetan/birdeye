@@ -11,16 +11,18 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.events
 		public static const DRAG_END:String = "nodeDragEnd";
 		
 		public var node:INode;
+        public var ctrlKey:Boolean;
 		
-		public function VisualNodeEvent(type:String, node:INode, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function VisualNodeEvent(type:String, node:INode, ctrlKey:Boolean, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
 			this.node = node;
+            this.ctrlKey = ctrlKey;
 		}
 		
 		public override function clone():Event
 		{
-			return new VisualNodeEvent(type,node,bubbles,cancelable);
+			return new VisualNodeEvent(type,node,ctrlKey, bubbles,cancelable);
 		}
 		
 	}
