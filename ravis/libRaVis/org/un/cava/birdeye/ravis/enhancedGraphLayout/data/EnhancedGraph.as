@@ -3,10 +3,12 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.data
 	import org.un.cava.birdeye.ravis.graphLayout.data.Graph;
 	import org.un.cava.birdeye.ravis.graphLayout.data.IEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	import org.un.cava.birdeye.ravis.utils.TypeUtil;
 	
 	public class EnhancedGraph extends Graph
 	{
+        private static const _LOG:String = "graphLayout.data.EnhancedGraph";
 		public var data:Object;
 		
 		public function EnhancedGraph(id:String, directional:Boolean = false, xmlsource:XML = null):void {
@@ -51,17 +53,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.data
 			for each (var nodeVO:Object in arrElements)
 			{
 				nodeId = nodeVO.id;
-				/* This is for Sub-Graph 
-				if (nodeVO[UnitGraph.DEFAULTNAME_NODE] && nodeVO[UnitGraph.DEFAULTNAME_NODE].length > 0)
-				{
-					var graph:UnitGraph = new UnitGraph(nodeId, true, null);
-					graph.initFromVO(nodeVO);
-					fromNode = createNode(nodeId, graph);
-				}
-				else */
-				{
-					fromNode = createNode(nodeId, nodeVO);
-				}
+				fromNode = createNode(nodeId, nodeVO);
 			}
 			
 			for each (var edgeVO:Object in arrEdges)
@@ -77,16 +69,15 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.data
 				 * the edge */
 				if(fromNode == null) 
 				{
-					trace("Node id: "+fromNodeId+" not found, link not done");
+                    LogUtil.warn(_LOG,"Node id: "+fromNodeId+" not found, link not done");
 					continue;
 				}
 				if(toNode == null) 
 				{
-					trace("Node id: "+toNodeId+" not found, link not done");
+                    LogUtil.warn(_LOG,"Node id: "+toNodeId+" not found, link not done");
 					continue;
 				}
 				link(fromNode,toNode,edgeVO);
-				//trace("Current nr of edges:"+_edges.length);
 			}
 		}
 		

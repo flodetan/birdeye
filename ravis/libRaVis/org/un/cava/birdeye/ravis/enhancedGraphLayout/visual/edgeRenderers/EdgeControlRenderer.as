@@ -120,7 +120,6 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 			
 			if (TypeUtil.isFalse(visible) || TypeUtil.isFalse(fromVisible) || TypeUtil.isFalse(toVisible))	
 			{
-				//trace("Edge is invisible " + edge.node1.stringid + ' --> ' + edge.node2.stringid);
 				this.visible = false;
 				this.includeInLayout = false;
 				this.enabled = false;

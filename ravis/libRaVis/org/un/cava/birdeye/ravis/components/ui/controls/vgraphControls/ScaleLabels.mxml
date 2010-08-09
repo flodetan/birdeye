@@ -68,12 +68,15 @@
 
 	<mx:Script>
 		<![CDATA[
-			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
-			import mx.core.Container;
-			import mx.core.UIComponent;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
-			import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
+            import mx.core.Container;
+            import mx.core.UIComponent;
+            
+            import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
+            import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
+            import org.un.cava.birdeye.ravis.utils.LogUtil;
+            import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			
+            private static const _LOG:String = "vgraphControls.ScaleLabels";
 			private var _vgraph:VisualGraph;
 
 			/**
@@ -101,7 +104,7 @@
 				var child:UIComponent;
 
 				if(_vgraph == null) {
-					trace("Cannot update Scale of VGraph, no valid vgraph!");
+					LogUtil.info(_LOG,"Cannot update Scale of VGraph, no valid vgraph!");
 					return;
 				}
 	
@@ -120,7 +123,7 @@
 				if(_vgraph.layouter != null) {
 					_vgraph.layouter.layoutChanged = true;
 				} else {
-					trace("Cannot notify null layouter of layout change due to scaling.");
+                    LogUtil.info(_LOG,"Cannot notify null layouter of layout change due to scaling.");
 				}
 				_vgraph.draw();
 			}
@@ -135,7 +138,7 @@
 				var children:Array;
 
 				if(_vgraph == null) {
-					trace("Cannot refresh ScaleSlider of VGraph, no valid vgraph!");
+                    LogUtil.info(_LOG,"Cannot refresh ScaleSlider of VGraph, no valid vgraph!");
 					return;
 				}	
 									
@@ -149,7 +152,7 @@
 						/* and we can abort here */
 						return;
 					}
-					trace("VGraph has no child except drawing surface, no reference for scale refresh");
+                    LogUtil.info(_LOG,"VGraph has no child except drawing surface, no reference for scale refresh");
 				}
 			}
 			
