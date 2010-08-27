@@ -5,6 +5,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.events
 	public class VisualGraphEvent extends Event
 	{
 		public static const BACKGROUND_DRAG_END:String = "backgroundDragEnd";
+        public static const BACKGROUND_CLICK:String = "backgroundClick";
         public static const BEGIN_ANIMATION:String = "beginAnimation";
         public static const END_ANIMATION:String = "endAnimation";
         public static const GRAPH_UPDATED:String = "graphUpdated";

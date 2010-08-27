@@ -80,13 +80,27 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	 *  @eventType org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent
 	 */
 	[Event(name="nodeClick", type="org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent")]
+    
+    /**
+     *  Dispatched when a node is double clicked it is totally independant of drags.
+     *
+     *  @eventType org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent
+     */
+    [Event(name="nodeDoubleClick", type="org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent")]
 	
 	/**
-	 *  Dispatched when a the background is done dragging i
+	 *  Dispatched when the background is done dragging.
 	 *
 	 *  @eventType org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualGraphEvent
 	 */
 	[Event(name="backgroundDragEnd", type="org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualGraphEvent")]
+    
+    /**
+     *  Dispatched when the background has been clicked but no nodes selected, and no drag occured
+     *
+     *  @eventType org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualGraphEvent
+     */
+    [Event(name="backgroundClick", type="org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualGraphEvent")]
 
 	/**
 	 * This component can visualize and layout a graph data structure in 
@@ -2038,7 +2052,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		protected function nodeDoubleClick(e:MouseEvent):void {
 			var comp:UIComponent;
 			var vnode:IVisualNode;
-			
+
 			/* get the view object that was klicked on (actually
 			 * the one that has the event handler registered, which
 			 * is the VNode's view */
@@ -2047,6 +2061,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* get the associated VNode */
 			vnode = lookupNode(comp);
 			
+            var evt:VisualNodeEvent = new VisualNodeEvent(VisualNodeEvent.DOUBLE_CLICK, vnode.node,e.ctrlKey);
+            dispatchEvent(evt);
 			//LogUtil.debug(_LOG, "double click!");
 			
 			/* Now we change the root node, we go through
@@ -2260,6 +2276,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			 * the drag attempt */
 			if(_layouter && _layouter.animInProgress) {
 				LogUtil.info(_LOG, "Animation in progress, drag attempt ignored");
+                dispatchEvent(new VisualGraphEvent(VisualGraphEvent.BACKGROUND_CLICK));
 				return;
 			}
 			
@@ -2376,7 +2393,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				   Math.abs(mpoint.x - _mouseDownLocation.x) > 2 ||
 				   Math.abs(mpoint.y - _mouseDownLocation.y) > 2) {
 					dispatchEvent(new VisualGraphEvent(VisualGraphEvent.BACKGROUND_DRAG_END));
-				}
+				}else{
+                    dispatchEvent(new VisualGraphEvent(VisualGraphEvent.BACKGROUND_CLICK));                    
+                }
 			} else {
 				
 				/* if it was no background drag, the component
