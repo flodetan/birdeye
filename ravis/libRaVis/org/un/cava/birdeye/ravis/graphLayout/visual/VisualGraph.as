@@ -49,6 +49,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	import org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent;
 	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
+	import org.un.cava.birdeye.ravis.utils.geom.PoincareIsometry;
 
 
 	/**
@@ -480,14 +481,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			/* initialize the canvas, we are our own canvas obviously */
 			_canvas = this;
-			
-			/* Fix ScrollBar problem*/
-			/* _canvas = new Canvas();
-			_canvas.setStyle("backgroundColor", 0xFFFFFF);
-			_canvas.setStyle("backgroundAlpha", 0.0000001);
-			_canvas.percentWidth = 100;
-			_canvas.percentHeight = 100;
-			this.addChild(_canvas); */
 
 			_canvas.addChild(_drawingSurface);
 			
@@ -2142,22 +2135,18 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				if(evnode != null) {
 					if(!dragLockCenter) {
 						// lockCenter is false, use the mouse coordinates at the point
-						pt = ecomponent.localToGlobal(new Point(ecomponent.mouseX, ecomponent.mouseY));
+						pt = new Point(ecomponent.mouseX, ecomponent.mouseY);
 					} else {
 						// lockCenter is true, ignore the mouse coordinates
-						// and use (0,0) instead as the point
-						//TODO: change to the components`s center instead
-						pt = ecomponent.localToGlobal(new Point(0,0));
+						pt = new Point(ecomponent.width/2,ecomponent.height/2);
 					}
 			
 					/* Save the offset values in the map 
 					 * so we can compute x and y correctly in case
 					 * we use lockCenter */
-					
-					//_drag_x_offsetMap[ecomponent] = pt.x / scaleX - ecomponent.x;
-					//_drag_y_offsetMap[ecomponent] = pt.y / scaleY - ecomponent.y;
-					_drag_x_offsetMap[ecomponent] = pt.x / (scaleX*_canvas.scaleX) - ecomponent.x;
-					_drag_y_offsetMap[ecomponent] = pt.y / (scaleY*_canvas.scaleY) - ecomponent.y;
+
+                    _drag_x_offsetMap[ecomponent] = pt.x
+					_drag_y_offsetMap[ecomponent] = pt.y;
 					
 
 					/* now we would need to set the bounds
@@ -2166,7 +2155,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 					_drag_boundsMap[ecomponent] = rectangle;
 					 */
 					
-					/* Registeran eventListener with the component's stage that
+					/* Register an eventListener with the component's stage that
 					 * handles any mouse move. This wires the component
 					 * to the mouse. On every mouse move, the event handler
 					 * is called, which updates its coordinates.
@@ -2190,7 +2179,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 					throw Error("Event Component was not in the viewToVNode Map");
 				}
 			} else {
-				throw Error("MouseEvent target was no UIComponent");
+				throw Error("MouseEvent target was not UIComponent");
 			}
 		}
 
@@ -2220,15 +2209,17 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			/* bounds are not implemented:
 			bounds = _drag_boundsMap[sp];
 			*/
+            
 			if (_moveNodeInDrag) {
 				/* update the coordinates with the current
 				 * event's stage coordinates (i.e. current mouse position),
 				 * modified by the lock-center offset */
-				//sp.x = event.stageX / scaleX - _drag_x_offsetMap[sp];
-				//sp.y = event.stageY / scaleY - _drag_y_offsetMap[sp];
-				sp.x = event.stageX / (scaleX*_canvas.scaleX) - _drag_x_offsetMap[sp];
-				sp.y = event.stageY / (scaleY*_canvas.scaleY) - _drag_y_offsetMap[sp];
+                //lp is the mouse coords in _canvas terms
+                
+				sp.x = mouseX - _drag_x_offsetMap[sp];
+				sp.y = mouseY - _drag_y_offsetMap[sp];
 				_nodeMovedInDrag = true;
+                
 				/* bounds code, currently unused 
 				if ( bounds != null ) {
 					if ( sp.x < bounds.left ) {
@@ -2320,10 +2311,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				deltaX = mpoint.x - _dragCursorStartX;
 				deltaY = mpoint.y - _dragCursorStartY;
 			 
-				//deltaX /= scaleX
-				//deltaY /= scaleY
-				deltaX /= (scaleX*_canvas.scaleX);
-				deltaY /= (scaleY*_canvas.scaleY);
+				deltaX /= scaleX
+				deltaY /= scaleY
+				/*deltaX /= (scaleX*_canvas.scaleX);
+				deltaY /= (scaleY*_canvas.scaleY);*/
 
 				/* scroll all objects by this offset */
 				scroll(deltaX, deltaY,false);
