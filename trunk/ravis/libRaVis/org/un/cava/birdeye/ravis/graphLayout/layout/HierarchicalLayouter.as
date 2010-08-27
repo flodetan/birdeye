@@ -69,23 +69,13 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		public static const ORIENT_BOTTOM_UP:uint = 3;
 		
-		/**
-		 * Allows to specify an extra margin if required.
-		 * */
-		public var layerMargin:Number = 0; 
-		
-		/**
-		 * Used when centering the diagram
-		 */ 
-		public var verticalPadding:Number = 0;
-		
 		/** this holds the data for the Hierarchical layout drawing */
 		protected var _currentDrawing:HierarchicalLayoutDrawing;
 		
 		/* this is the distance between nodes within a layer
 		 * typically x distance if top-bottom orientation
 		 * it may be preset by autofit */
-		private var _defaultNodeDistance:Number;
+		protected var _breadth:Number;
 		
 		/* set to true if you want node sizes to be taken
 		 * into account */
@@ -94,7 +84,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		/* this is the distance between layers, or typically
 		 * the y distance if top-bottom orientation.
 		 * Again it may be set by autofit */
-		private var _layerDistance:Number;
+		protected var _linkLength:Number;
 		
 		/* this holds the actual orientation */
 		private var _orientation:uint;
@@ -118,8 +108,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			animationType = ANIM_STRAIGHT; // inherited
 			initModel();
 			
-			_defaultNodeDistance = 10;
-			_layerDistance = 10;
+			_breadth = 10;
+			_linkLength = 10;
 			_orientation = ORIENT_TOP_DOWN;
 			//_orientation = ORIENT_BOTTOM_UP;
 			_siblingSpreadEnabled = true;
@@ -242,13 +232,13 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		[Bindable]
 		override public function get linkLength():Number {
-			return _layerDistance / 10;
+			return _linkLength / 10;
 		}
 		/**
 		 * @private
 		 * */
-		override public function set linkLength(rr:Number):void {
-			_layerDistance = rr * 10;
+		override public function set linkLength(value:Number):void {
+			_linkLength = value * 10;
 		}
 
 		/**
@@ -256,14 +246,14 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * Typical range 0 .. 100 should be ok.
 		 * */
 		public function set breadth(b:Number):void {
-			_defaultNodeDistance = b;
+			_breadth = b;
 		}
 
 		/**
 		 * @private
 		 * */
 		public function get breadth():Number {
-			return _defaultNodeDistance;
+			return _breadth;
 		}		
 
 		/**
@@ -671,7 +661,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			/* the depth value is the depth from the root times
 			 * the layerDistance. */
-			depth = _stree.getDistance(v) * _layerDistance;
+			depth = _stree.getDistance(v) * _linkLength;
 			breadth = _currentDrawing.getPrelim(v) + m;
 			
 			if(_siblingSpreadEnabled) {
@@ -729,7 +719,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		private function spacing(l:INode, r:INode):Number {
 			
 			var result:Number;
-			result = _defaultNodeDistance;
+			result = _breadth;
 			
 			/* we assume that both INodes, l and r have a vnode and a view */
 			if(_honorNodeSize) {
@@ -754,28 +744,13 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * do autofitting the layer distance. The node distance cannot
 		 * be pre-computed, so we leave it alone.
 		 * */
-		private function calculateAutoFit():void {
+		protected function calculateAutoFit():void {
 			
 			if(_stree.maxDepth > 0) {
 				var leafNodesLength:int = _stree.getNodesWithoutLinkToNextLevel().length;
-				switch(_orientation) {
-					case ORIENT_LEFT_RIGHT:
-					case ORIENT_RIGHT_LEFT:
-						_layerDistance = (_vgraph.width - 2 * (margin + layerMargin))  / (_stree.maxDepth + 1);
-						_defaultNodeDistance = (_vgraph.height - 2 * margin) / (leafNodesLength + 1);
-						break;
-					case ORIENT_TOP_DOWN:
-					case ORIENT_BOTTOM_UP:
-						_layerDistance = (_vgraph.height - 2 * (margin + layerMargin))  / (_stree.maxDepth + 1);
-						_defaultNodeDistance = (_vgraph.width - 2 * margin) / (leafNodesLength + 1);
-						break;
-					default:
-						throw Error("Invalid orientation value found in internal variable");					
-				}
-				/*
-				LogUtil.debug(_LOG, "h:"+_vgraph.height+" w:"+_vgraph.width+" md:"+_stree.maxDepth+
-					" mnpl:"+_stree.maxNumberPerLayer+" ld:"+_layerDistance+" nd:"+_defaultNodeDistance);
-				*/
+                _linkLength = (_vgraph.width - 2 * margin)  / (_stree.maxDepth + 1);
+                _breadth = (_vgraph.height - 2 * margin) / (leafNodesLength + 1);
+
 			} else {
 				//LogUtil.debug(_LOG, "TreeMaxDepth:"+_stree.maxDepth+" is 0");
 			}
@@ -788,21 +763,23 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			switch(_orientation) {
 				case ORIENT_TOP_DOWN:
-					_currentDrawing.centerOffset = new Point((_vgraph.width / 2), margin + layerMargin);
+					_currentDrawing.centerOffset = 
+                        new Point( (_vgraph.width / 2), margin);
 					break;
 
 				case ORIENT_BOTTOM_UP:
 					_currentDrawing.centerOffset =
-						new Point((_vgraph.width / 2), (_vgraph.height - margin - layerMargin));
+						new Point( (_vgraph.width / 2), (_vgraph.height - margin) );
 					break;
 
 				case ORIENT_LEFT_RIGHT:
-					_currentDrawing.centerOffset = new Point(margin + layerMargin, (_vgraph.height / 2) - margin/2);
+					_currentDrawing.centerOffset = 
+                        new Point(margin, (_vgraph.height/2) );
 					break;
 
 				case ORIENT_RIGHT_LEFT:
 					_currentDrawing.centerOffset =
-						new Point((_vgraph.width - margin - layerMargin), (_vgraph.height / 2) - margin/2);
+						new Point((_vgraph.width - margin), (_vgraph.height/2) );
 					break;
 
 				default:

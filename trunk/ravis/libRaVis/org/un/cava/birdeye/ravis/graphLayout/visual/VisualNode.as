@@ -32,6 +32,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 	import mx.core.UIComponent;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 	
 	/**
@@ -39,6 +40,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 	 * */
 	public class VisualNode extends EventDispatcher implements IVisualNode, IDataRenderer {
 		
+        private static const _LOG:String = "graphLayout.visual.VisualNode";
 		/* The associated VisualGraph */
 		private var _vgraph:IVisualGraph;
 		
@@ -197,7 +199,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 			if(!isNaN(n)) {
 				_x = n;
 			} else {
-				throw Error("VNode "+_id+": set x tried to set NaN");
+                LogUtil.error(_LOG,"VNode "+_id+": set x tried to set NaN");
+				//throw Error("VNode "+_id+": set x tried to set NaN");
 			}
 		}
 		
@@ -215,7 +218,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 			if(!isNaN(n)) {
 				_y = n;
 			} else {
-				throw Error("VNode "+_id+": set y tried to set NaN");
+                LogUtil.error(_LOG,"VNode "+_id+": set y tried to set NaN");
+				//throw Error("VNode "+_id+": set y tried to set NaN");
 			}
 		}
 
@@ -235,7 +239,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 					this.view.x = n;
 				}
 			} else {
-				throw Error("VNode "+_id+": set viewX tried to set NaN");
+                LogUtil.error(_LOG,"VNode "+_id+": set viewX tried to set NaN");
+				//throw Error("VNode "+_id+": set viewX tried to set NaN");
 			}
 		}
 		
@@ -256,7 +261,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
 					this.view.y = n;
 				}
 			} else {
-				throw Error("VNode "+_id+": set viewY tried to set NaN");
+                LogUtil.error(_LOG,"VNode "+_id+": set viewY tried to set NaN");
+				//throw Error("VNode "+_id+": set viewY tried to set NaN");
 			}
 		}
 
