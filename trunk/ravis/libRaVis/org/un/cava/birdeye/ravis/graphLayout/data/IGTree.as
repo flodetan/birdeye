@@ -174,5 +174,11 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		 * @see getNumberNodesWithDistance
 		 * */
 		function get maxNumberPerLayer():uint;
+        
+        /**
+         * @private
+         * */
+        function get walkingDirection():int;
+
 	}
 }

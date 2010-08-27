@@ -42,7 +42,25 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 	public class GTree extends EventDispatcher implements IGTree {
 		
 		private static const _LOG:String = "graphLayout.data.GTree";
-			
+		
+        /**
+         * If building a spanning tree, walk only forward.
+         * */
+        public static const WALK_FORWARDS:int = 0;
+        
+        /**
+         * If building a spanning tree, walk only backwards.
+         * */
+        public static const WALK_BACKWARDS:int = 1;
+        
+        /**
+         * If building a spanning tree, walk only both
+         * directions
+         * */
+        public static const WALK_BOTH:int = 2;
+        
+        protected var _walkingDirection:int = WALK_BOTH;
+        
 		protected var _graph:IGraph;
 		protected var _root:INode;
 
@@ -86,7 +104,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		 * @param graph The graph that this tree is a subset of.
 		 * @param restrict A flag to indicate that the resulting tree should be restricted to currently invisible nodes.
 		 * */
-		public function GTree(root:INode, graph:IGraph, restrict:Boolean = false) {
+		public function GTree(root:INode, graph:IGraph, restrict:Boolean = false, direction:int = GTree.WALK_BOTH) {
 			_parentMap = null;
 			_childrenMap = null;
 			_distanceMap = null;
@@ -94,6 +112,8 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 			_nodeNoChildrenMap = null;
 			_amountNodesWithDistance = null;
 			
+            _walkingDirection = direction;
+            
 			_maxNumberPerLayer = 0;
 			
 			_root = root;
@@ -157,6 +177,20 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		public function get maxNumberPerLayer():uint {
 			return _maxNumberPerLayer;
 		}
+        
+        /**
+         * @inheritDoc
+         * */
+        public function set walkingDirection(d:int):void {
+            _walkingDirection = d;
+        }
+        
+        /**
+         * @private
+         * */
+        public function get walkingDirection():int {
+            return _walkingDirection;
+        }
 		
 		
 		/**
@@ -311,8 +345,6 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		 * */ 
 		public function initTree():Dictionary {
 			
-			var walkingDirection:int = _graph.walkingDirection;
-			
 			var queue:Array = new Array();
 			
 			/* we create this as a dummy parent node, but it should
@@ -350,13 +382,13 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 				var nodesToWalk : Array = null
 				switch(walkingDirection)
 				{
-					case Graph.WALK_FORWARD:
+					case WALK_FORWARDS:
 						nodesToWalk = u.successors
 						break
-					case Graph.WALK_BACKWARDS:
+					case WALK_BACKWARDS:
 						nodesToWalk = u.predecessors
 						break
-					case Graph.WALK_BOTH:
+					case WALK_BOTH:
 						nodesToWalk = u.successors.concat(u.predecessors)
 						break
 					default:
