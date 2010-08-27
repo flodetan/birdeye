@@ -88,29 +88,6 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		function get nodeSortFunction():Function;
 
 		/**
-		 * This determines the walking direction when building
-		 * a spanning tree. Possible values are
-		 * Graph.WALK_FORWARD
-		 * Graph.WALK_BACKWARDS
-		 * Graph.WALK_BOTH
-		 * All make only sense in a directional graph.
-		 * Forward means we follow edges in its regular direction
-		 * from the root node.
-		 * Backwards means, we follow edges back from the root
-		 * node (e.g. the root is a sink with multiple sources)
-		 * Both obviously means both.
-		 * 
-		 * This property will be queried by GTree to determine the
-		 * walking direction set.
-		 * */
-		function set walkingDirection(d:int):void;
-
-		/**
-		 * @private
-		 * */
-		function get walkingDirection():int;
-
-		/**
 		 * A lookup to find a node by it's string id.
 		 * @param sid The node's string id.
 		 * @return The node if one was found, null otherwise.
@@ -177,7 +154,7 @@ package org.un.cava.birdeye.ravis.graphLayout.data {
 		 * @param nocache If set, always a new tree will be created and returned and the cache will be untouched.
 		 * @return The a GTree object that contains the tree.
 		 * */
-		function getTree(n:INode,restr:Boolean = false, nocache:Boolean = false):IGTree;
+		function getTree(n:INode,restr:Boolean = false, nocache:Boolean = false, direction:int = 2):IGTree;
 		
 		/**
 		 * Under certain circumstances all cached trees need
