@@ -49,6 +49,10 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * the concentric circles.
 		 * */
 		public var defaultRadius:Number = 50;
+        
+        /**
+        * Smallest allowable radius
+        */ 
 		public var minRadius:Number = 0;
 		/**
 		 * @internal
@@ -276,7 +280,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * this autofit method sets the radius increment
 		 * so that it should fit into the screen
 		 * */
-		private function autoFit():void {
+		protected function autoFit():void {
 			var r:Number;
 			r = Math.min(_vgraph.width, _vgraph.height) / 2.0;
 			
