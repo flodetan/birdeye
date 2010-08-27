@@ -7,6 +7,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.events
 	public class VisualNodeEvent extends Event
 	{
 		public static const CLICK:String = "nodeClick";
+        public static const DOUBLE_CLICK:String = "nodeDoubleClick";
 		public static const DRAG_START:String = "nodeDragStart";
 		public static const DRAG_END:String = "nodeDragEnd";
 		
