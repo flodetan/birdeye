@@ -25,29 +25,29 @@
 package org.un.cava.birdeye.ravis.graphLayout.layout {
 	
 	import flash.display.DisplayObject;
-	import flash.events.TimerEvent;
-	import flash.utils.Dictionary;
 	import flash.events.MouseEvent;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
+	import flash.utils.Dictionary;
 	import flash.utils.Timer;
+	
 	import mx.core.UIComponent;
-		
+	
 	import org.un.cava.birdeye.ravis.graphLayout.data.INode;
-	import org.un.cava.birdeye.ravis.graphLayout.visual.VisualNode;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
-	
+	import org.un.cava.birdeye.ravis.graphLayout.visual.VisualNode;
+	import org.un.cava.birdeye.ravis.utils.GraphicUtils;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	import org.un.cava.birdeye.ravis.utils.geom.ComplexNumber;
 	import org.un.cava.birdeye.ravis.utils.geom.ComplexVector;
-	import org.un.cava.birdeye.ravis.utils.geom.IPoint;
-	import org.un.cava.birdeye.ravis.utils.geom.IVector;
 	import org.un.cava.birdeye.ravis.utils.geom.IIsometry;
+	import org.un.cava.birdeye.ravis.utils.geom.IPoint;
 	import org.un.cava.birdeye.ravis.utils.geom.IProjector;
+	import org.un.cava.birdeye.ravis.utils.geom.IVector;
 	import org.un.cava.birdeye.ravis.utils.geom.PoincareIsometry;
 	import org.un.cava.birdeye.ravis.utils.geom.PoincareModel;
 	import org.un.cava.birdeye.ravis.utils.geom.PoincareProjector;
-	import org.un.cava.birdeye.ravis.utils.LogUtil;
-	import org.un.cava.birdeye.ravis.utils.GraphicUtils;
 
 	/**
 	 * This is an implementation of the Hyperbolic 2D layouting algorithm.<br>
@@ -329,8 +329,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				newNodePos = _projector.project(_nodePositions[k] as IPoint, _vgraph as DisplayObject);
 				// DEBUG - CHECK:
 				if (isNaN(newNodePos.x)) {
-					trace ("HyperbolicLayout: Projected position for " + (_nodeIndex[k] as VisualNode).node.stringid + " = " + newNodePos);
-					trace ("  Node Position in Model = " + (_nodePositions[k] as IPoint).toString());
+					LogUtil.debug(_LOG, "HyperbolicLayout: Projected position for " + (_nodeIndex[k] as VisualNode).node.stringid + " = " + newNodePos);
+                    LogUtil.debug(_LOG, "  Node Position in Model = " + (_nodePositions[k] as IPoint).toString());
 				}
 				(_nodeIndex[k] as VisualNode).x = newNodePos.x;
 				(_nodeIndex[k] as VisualNode).y = newNodePos.y;

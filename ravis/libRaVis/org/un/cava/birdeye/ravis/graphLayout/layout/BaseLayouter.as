@@ -142,7 +142,11 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		public function resetAll():void {
 			_layoutChanged = true;
 		}
-
+        
+        public function get vgraph():IVisualGraph { 
+            return _vgraph;
+        }
+        
 		/**
 		 * @inheritDoc
 		 * @throws An error if the vgraph was already set.

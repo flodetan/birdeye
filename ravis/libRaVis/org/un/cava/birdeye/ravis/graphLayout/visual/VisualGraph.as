@@ -2533,7 +2533,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		
 				/* this is mapping in the tree that provides a parent
 				 * for each single node in the tree 
-				 * we need this to find the trace to the root */
+				 * we need this to find the way to the root */
 				treeparents = _graph.getTree(_currentRootVNode.node).parents;
 				
 				for each(vn in _currentVNodeHistory) {
