@@ -339,13 +339,17 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
             case ORIENT_TOP_DOWN:
             case ORIENT_BOTTOM_UP:
                 _orientation = o;
-                centerDiagram()
-                
-                /* do a redraw */
-                layoutPass();
                 break;
             default:
                 LogUtil.warn(_LOG, "orientation:"+o+" not supported");
+            }
+            
+            if(_vgraph.layouter == this)
+            {
+                centerDiagram()
+            
+                /* do a redraw */
+                layoutPass();
             }
         }
         
