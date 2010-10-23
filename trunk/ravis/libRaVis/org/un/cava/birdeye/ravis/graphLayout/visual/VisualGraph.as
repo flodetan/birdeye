@@ -1334,6 +1334,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             
 		    for each(var node:INode in _graph.nodes) {
                 if(node.vnode !=null && node.vnode.view != null) {
+                    node.vnode.refresh();
                     node.vnode.view.invalidateDisplayList();
                 }
             }
@@ -1353,7 +1354,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			}
 			//we want this because we have our own 
 			//specific display list things in updateDisplayList
-			this.invalidateDisplayList();
+			invalidateDisplayList();
 		}
 
 		/**
@@ -1361,14 +1362,14 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * */
 		public function draw(flags:uint = 0):void {	
 			
-			var afterLayoutPass:Function = function():void
+			var completeFunction:Function = function():void
 			{
 				/* after the layout was done, the layout has
 				 * probably changed again, the layouter will have
 				 * itself set to that, but has maybe not
 				 * invalidated the display list, so we make sure it
 				 * happens here (may not always be necessary) */
-				_canvas.invalidateDisplayList();
+				invalidateDisplayList();
 				
 				/* dispatch this change event, so some UI items
 				 * in the application can poll for updated values
@@ -1399,14 +1400,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			   height == 0 ||
 			   _layouter.linkLength <= 0)
 			{
-				afterLayoutPass();
+				completeFunction();
 				return;	
 			}
 			
-			//if the sanity checks have passed check to make sure each visible node
-			//has an intialized node renderer, if not call back later
 			_layouter.layoutPass();
-			afterLayoutPass();
+			completeFunction();
 		}
 
 		/**
@@ -1524,31 +1523,31 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			/* call the original function */
 			super.updateDisplayList(unscaledWidth,unscaledHeight);
-			/* invalidate edge and node in _canvas*/
-			_canvas.invalidateDisplayList();
+
 			/* now add part to redraw edges */
 			if(_layouter) {
 			    
 			    if(_layouter.layoutChanged) {
-			        redrawEdges();
-			        redrawNodes();
+			        
+                    redrawEdges();
+                    redrawNodes();
 			        
 			        _forceUpdateNodes = false;
 			        _forceUpdateEdges = false;
                     _layouter.layoutChanged = false;
 			    }
 			    
+                if(_forceUpdateNodes) {
+                    redrawNodes();
+                    /* reset the flags */
+                    _forceUpdateNodes = false;
+                }
+                
 				if(_forceUpdateEdges) {
 					redrawEdges();
 					/* reset the flags */
 					_forceUpdateEdges = false;
 				}
-				
-				if(_forceUpdateNodes) {
-                    redrawNodes();
-                    /* reset the flags */
-                    _forceUpdateNodes = false;
-                }
 			}
 			
 		}
@@ -1747,13 +1746,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			var vn1:IVisualNode;
 			var vn2:IVisualNode;
-			var color:int;
 			var vedge:IVisualEdge;
-			
-			/*
-			var d:Date = new Date();
-			LogUtil.debug(_LOG, "redrawing edges at:"+d.toTimeString());
-			*/
+            
 			
 			/* make sure we have a graph */
 			if(_graph == null) {
@@ -1772,7 +1766,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 				vn1 = vedge.edge.node1.vnode;
 				vn2 = vedge.edge.node2.vnode;
 				
-				/* all nodes should be visible, so we make an assertion
+                /* all nodes should be visible, so we make an assertion
 				 * here */
 				if(!vn1.isVisible || !vn2.isVisible) {
 					LogUtil.warn(_LOG, "Edge:"+vedge.id.toString()+
@@ -1781,14 +1775,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 					throw Error("One of the nodes of the checked edge is not visible, but should be!");
 				}
 
-				/* Change: we do not pass the nodes or the vnodes, but the
-				 * edge. The reason is that the edge can have properties
-				 * assigned with it that affect the drawing. */
+
 				_edgeRenderer.draw(vedge);
 			}
-			// we are done, so we reset the indicator
-			// we already did that in the outer method 
-			//_layouter.layoutChanged = false;
 		}
 
 		/**
