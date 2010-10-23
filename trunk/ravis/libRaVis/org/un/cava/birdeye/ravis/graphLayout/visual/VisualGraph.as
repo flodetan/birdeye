@@ -1318,7 +1318,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             
             /* we have to force the edges to redraw so they match the nodes*/
             _forceUpdateEdges = true;
-            invalidateDisplayList();
+            //invalidateDisplayList();
 			//LogUtil.debug(_LOG, "Setting new origin to:"+_origin.toString());
 		}
 		
@@ -2335,7 +2335,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			_dragCursorStartY = mpoint.y;
 			
 			/* make sure edges are redrawn */
-            redrawEdges();
+            _forceUpdateEdges = true;
+            //invalidateDisplayList();
 		}
 
 
