@@ -984,25 +984,20 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		/**
 		 * @private
 		 * */
-		public function set scale(s:Number):void {
-			/* get the current value */
-			const s0:Number = _canvas.scaleX;
-			/* set the new value */
-			
-			/* Fix Scaling problem (Scrollbar shouldn't scale with graph)*/	
-			//scaleX = s;
-			//scaleY = s;
-			_canvas.scaleX = s;
-			_canvas.scaleY = s;
-			/* scroll to the center */
-			scroll(center.x * (1 - s / s0) / s, center.y * (1 - s / s0) / s,false);
-			/* redraw the edges */
-			refresh();
-			/* remember the set value, this is probably unnecesary
-			 * since the getter could just return the value of scaleX
-			 * but anyway */
-			_scale = s;
-		}
+        public function set scale(s:Number):void {
+                        
+            var w:Number = width - width/s;
+            var h:Number = height - height/s;
+            
+            scroll(-w/2 - _origin.x,-h/2 - _origin.y,false);
+            scaleX = s;
+            scaleY = s;
+            _scale = s;
+            
+            _forceUpdateEdges = true;
+            refresh();
+        }
+
 
 		/**
 		 * This initialises a VGraph from a Graph object.
