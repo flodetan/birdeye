@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<actionScriptProperties mainApplicationPath="LibRaVis.as" projectUUID="da710b23-da76-480c-9f22-7622e08ac5cc" version="6">
+<actionScriptProperties analytics="false" mainApplicationPath="LibRaVis.as" projectUUID="da710b23-da76-480c-9f22-7622e08ac5cc" version="6">
   <compiler additionalCompilerArguments="" autoRSLOrdering="true" copyDependentFiles="false" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
     <compilerSourcePath/>
     <libraryPath defaultLinkType="1">
@@ -13,4 +13,3 @@
   <modules/>
   <buildCSSFiles/>
 </actionScriptProperties>
-
