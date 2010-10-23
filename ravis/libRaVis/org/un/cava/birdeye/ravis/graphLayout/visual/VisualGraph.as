@@ -1342,7 +1342,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             * to redraw all edges and all nodes*/
             _forceUpdateEdges = true;
             _forceUpdateNodes = true;
-            
             if(_graph == null) {
                 return;
             }
@@ -1514,6 +1513,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
          * 
          * @inheritDoc
          * */
+        
         override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
             /* call the original function */
             super.updateDisplayList(unscaledWidth,unscaledHeight);
@@ -1533,13 +1533,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
                 
                 if(_forceUpdateNodes) {
                     redrawNodes();
-                    /* reset the flags */
                     _forceUpdateNodes = false;
                 }
                 
                 if(_forceUpdateEdges) {
                     redrawEdges();
-                    /* reset the flags */
                     _forceUpdateEdges = false;
                 }
             }
@@ -1737,11 +1735,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
          * @inheritDoc
          * */
         public function redrawEdges():void {
-            
+
             var vn1:IVisualNode;
             var vn2:IVisualNode;
             var vedge:IVisualEdge;
-            
             
             /* make sure we have a graph */
             if(_graph == null) {
@@ -1756,22 +1753,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             /* now walk through all currently visible egdes */
             for each(vedge in _visibleVEdges) {
                 
-                /* get the two nodes attached to the edge */
-                vn1 = vedge.edge.node1.vnode;
-                vn2 = vedge.edge.node2.vnode;
-                
-                /* all nodes should be visible, so we make an assertion
-                * here */
-                if(!vn1.isVisible || !vn2.isVisible) {
-                    LogUtil.warn(_LOG, "Edge:"+vedge.id.toString()+
-                        " Node1:"+vn1.id.toString()+" vis:"+vn1.isVisible.toString()+
-                        " Node2:"+vn2.id.toString()+" vis:"+vn2.isVisible.toString());
-                    throw Error("One of the nodes of the checked edge is not visible, but should be!");
-                }
-                
-                
                 _edgeRenderer.draw(vedge);
             }
+            
         }
         
         /**
@@ -2240,8 +2224,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             _layouter.dragContinue(event, myvnode);
             
             /* make sure flashplayer does an update after the event */
-            refresh();
-            event.updateAfterEvent();			
+            _forceUpdateEdges = true;
+            invalidateDisplayList();
+            //refresh();
+            //event.updateAfterEvent();			
         }
         
         /**
