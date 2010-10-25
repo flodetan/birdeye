@@ -9,6 +9,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.events
         public static const BEGIN_ANIMATION:String = "beginAnimation";
         public static const END_ANIMATION:String = "endAnimation";
         public static const GRAPH_UPDATED:String = "graphUpdated";
+        
+        public static const GRAPH_SCALED:String = "graphScaled";
 		
 		public function VisualGraphEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{

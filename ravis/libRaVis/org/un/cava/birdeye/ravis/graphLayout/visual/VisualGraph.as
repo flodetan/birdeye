@@ -26,6 +26,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
     
     import flash.display.DisplayObject;
     import flash.display.Graphics;
+    import flash.events.Event;
     import flash.events.MouseEvent;
     import flash.geom.Point;
     import flash.geom.Rectangle;
@@ -93,6 +94,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
      *  @eventType org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualGraphEvent
      */
     [Event(name="backgroundDragEnd", type="org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualGraphEvent")]
+    
+    /**
+     *  Dispatched when the background is done dragging.
+     *
+     *  @eventType org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualGraphEvent
+     */
+    [Event(name="graphScaled", type="org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualGraphEvent")]
     
     /**
      *  Dispatched when the background has been clicked but no nodes selected, and no drag occured
@@ -987,14 +995,14 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
                         
             var w:Number = width - width/s;
             var h:Number = height - height/s;
-                        
-            scroll(-w/2 - _origin.x,-h/2 - _origin.y,false);
+            
+            //the scroll takes care of the refresh            
+            scroll(-w/2 - _origin.x ,-h/2 - _origin.y, false);
             scaleX = s;
             scaleY = s;
             _scale = s;
             
-            _forceUpdateEdges = true;
-            refresh();
+            dispatchEvent(new VisualGraphEvent(VisualGraphEvent.GRAPH_SCALED));
         }
         
         
@@ -1270,11 +1278,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             * unlinking the nodes */
             _graph.removeEdge(e);
             
-            //LogUtil.debug(_LOG, "removed edge: "+e.id+" : "+n1.id+" and "+n2.id);			
-            
-            /* again a full redraw is required */
-            //draw();
-            /* no just refresh the edges */
             refresh();
         }
         
@@ -1284,36 +1287,25 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
          * */
         public function scroll(deltaX:Number, deltaY:Number, reset:Boolean):void {
             
-            var i:uint;
-            var children:Array;
-            var view:UIComponent;
-            
-            children = _canvas.getChildren();
-            
-            /* we walk through all children of the canvas, which
-            * are not the drawing surface and which are UIComponents
-            * (they should be all node views) and move them according
-            * to the scroll offset */
-            for each(view in children) {
-                if(view != _drawingSurface) {
-                    //LogUtil.debug(_LOG, "scrolling view of:"+(view as IDataRenderer).data.id);
-                    view.x += deltaX;
-                    view.y += deltaY;
-                }
+            //set the x and y of each node with the diff
+            // do not commit the change because
+            // we want it to change the same time as the arrows do
+            for each(var node:INode in _graph.nodes)
+            {
+                node.vnode.x += deltaX;
+                node.vnode.y += deltaY;
             }
             
+            //if we are resetting the origin do that
             if(reset) {
                 _origin = new Point(0,0);
             }
-            /* adjust the current origin of the canvas
-            * (not 100% sure if this is a good idea but seems
-            * to work) XXX */
+            
+            //update the origin with the new delta
             _origin.offset(deltaX,deltaY);
             
-            /* we have to force the edges to redraw so they match the nodes*/
-            _forceUpdateEdges = true;
-            //invalidateDisplayList();
-            //LogUtil.debug(_LOG, "Setting new origin to:"+_origin.toString());
+            //redraw everything on the next updateDisplayList
+            refresh();
         }
         
         /**
@@ -1328,7 +1320,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             
             for each(var node:INode in _graph.nodes) {
                 if(node.vnode !=null && node.vnode.view != null) {
-                    node.vnode.refresh();
+                    node.vnode.commit();
                     node.vnode.view.invalidateDisplayList();
                 }
             }
@@ -1735,7 +1727,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
          * @inheritDoc
          * */
         public function redrawEdges():void {
-
+            
             var vn1:IVisualNode;
             var vn2:IVisualNode;
             var vedge:IVisualEdge;
