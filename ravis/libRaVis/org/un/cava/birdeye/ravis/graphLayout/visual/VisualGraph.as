@@ -2165,15 +2165,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
          * @param event The MouseMove event that has been triggered.
          */
         protected function handleDrag(event:MouseEvent):void {
-            var myvnode:IVisualNode;
-            var sp:UIComponent;
-            
-            //var bounds:Rectangle;
-            
-            /* we set our Component to be the saved
-            * dragComponent, because we cannot access it
-            * through the event. */
-            sp = _dragComponent;
+            var myvnode:IVisualNode = _viewToVNodeMap[_dragComponent];
             
             /* Sometimes we get spurious events */
             if(_dragComponent == null) {
@@ -2181,45 +2173,17 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
                 return;
             }
             
-            /* bounds are not implemented:
-            bounds = _drag_boundsMap[sp];
-            */
-            
             if (_moveNodeInDrag) {
-                /* update the coordinates with the current
-                * event's stage coordinates (i.e. current mouse position),
-                * modified by the lock-center offset */
-                //lp is the mouse coords in _canvas terms
                 
-                sp.x = mouseX - _drag_x_offsetMap[sp];
-                sp.y = mouseY - _drag_y_offsetMap[sp];
+                myvnode.viewX = mouseX - _drag_x_offsetMap[_dragComponent];
+                myvnode.viewY = mouseY - _drag_y_offsetMap[_dragComponent];
+                myvnode.refresh();
                 _nodeMovedInDrag = true;
-                
-                /* bounds code, currently unused 
-                if ( bounds != null ) {
-                if ( sp.x < bounds.left ) {
-                sp.x = bounds.left;
-                } else if ( sp.x > bounds.right ) {
-                sp.x = bounds.right;
-                }	
-                if ( sp.y < bounds.top ) {
-                sp.y = bounds.top;	
-                } else if ( sp.y > bounds.bottom ) {
-                sp.y = bounds.bottom;	
-                }
-                }
-                */
             }
             
-            /* and inform the layouter about the dragEvent */
-            myvnode = _viewToVNodeMap[_dragComponent];
             _layouter.dragContinue(event, myvnode);
             
-            /* make sure flashplayer does an update after the event */
-            _forceUpdateEdges = true;
-            invalidateDisplayList();
-            //refresh();
-            //event.updateAfterEvent();			
+            refresh();
         }
         
         /**
@@ -2240,17 +2204,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
                 dispatchEvent(new VisualGraphEvent(VisualGraphEvent.BACKGROUND_CLICK));
                 return;
             }
-            
-            /* this should be the canvas, i.e. "this" */
-            //mycomponent = (event.currentTarget as UIComponent);
-            /* mycomponent = (this as UIComponent); */
-            
-            /* check for validity */
-            /* not needed any more 
-            if(mycomponent == null) {
-            throw Error("Got backgroundDragBegin without UIComponent target!");
-            }
-            */
+
             /* set the progress flag and save the starting coordinates */
             _backgroundDragInProgress = true;
             _dragCursorStartX = mpoint.x;
