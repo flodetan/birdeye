@@ -74,10 +74,10 @@ package birdeye.vis.coords
 	public class Cartesian extends BaseCoordinates implements ICoordinates
 	{
 
-		private var _is3D:Boolean = false;
-		override public function get is3D():Boolean
+		private var _is3DCoords:Boolean = false;
+		public function get is3DCoords():Boolean
 		{
-			return _is3D;
+			return _is3DCoords;
 		}
 
 		// UIComponent flow
@@ -237,7 +237,7 @@ package birdeye.vis.coords
 				
 				// this adjusts the positioning of the axis after the rotation
 				zContainer.z = width;
-				_is3D = true;
+				_is3DCoords = true;
  			}
  			
  			return nCursors;
@@ -275,7 +275,7 @@ package birdeye.vis.coords
 				_elementsContainer.move(chartBounds.x, chartBounds.y);
 				_elementsContainer.setActualSize(chartBounds.width, chartBounds.height);
  	
-				if (_is3D)
+				if (_is3DCoords)
 					rotationY = 42;
 				else
 					transform.matrix3D = null;
