@@ -25,43 +25,43 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 	
 	public class EnhancedVisualGraph extends VisualGraph
 	{
-        private static var _LOG:String = "graphLayout.visual.EnhancedVisualGraph";
-        
+		private static var _LOG:String = "graphLayout.visual.EnhancedVisualGraph";
+		
 		protected var _viewToVEdgeRendererMap:Dictionary;
 		
 		protected var _enableDefaultDoubleClick:Boolean = true;
 		
 		protected var _enableDragNodeWithSubTree:Boolean = false;
 		
-        /**
-         * This is the current Edge Control component that is dragged by the mouse.
-         * */
+		/**
+		 * This is the current Edge Control component that is dragged by the mouse.
+		 * */
 		protected var _dragControlComponent:UIComponent;
 		
 		
-        /**
-         * Also allow the specification of an IFactory for edge
-         * controls.
-         * */
-        protected var _edgeControlRendererFactory:IFactory = null;
-
-        /**
-         * Specify whether edge labels should be displayed or not
-         * */
-        protected var _displayEdgeControls:Boolean = true;
-        
- 
-         /**
-         * Also allow the specification of an IFactory for node
-         * labels.
-         * */
-        protected var _nodeLabelRendererFactory:IFactory = null;
-        
-        /**
-         * Specify whether node labels should be displayed or not
-         * */
-        protected var _displayNodeLabels:Boolean = true;
-        
+		/**
+		 * Also allow the specification of an IFactory for edge
+		 * controls.
+		 * */
+		protected var _edgeControlRendererFactory:IFactory = null;
+		
+		/**
+		 * Specify whether edge labels should be displayed or not
+		 * */
+		protected var _displayEdgeControls:Boolean = true;
+		
+		
+		/**
+		 * Also allow the specification of an IFactory for node
+		 * labels.
+		 * */
+		protected var _nodeLabelRendererFactory:IFactory = null;
+		
+		/**
+		 * Specify whether node labels should be displayed or not
+		 * */
+		protected var _displayNodeLabels:Boolean = true;
+		
 		public function EnhancedVisualGraph()
 		{
 			super();
@@ -73,12 +73,12 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 		 * */
 		public function set edgeControlRenderer(ecr:IFactory):void {
 			/* if the factory was changed, then we have to remove all
-			 * instances of vedgeViews to have them updated */
+			* instances of vedgeViews to have them updated */
 			if(ecr != _edgeLabelRendererFactory) {
 				/* set all edges invisible, this should delete all instances
-				 * of view components */
+				* of view components */
 				setAllEdgesInVisible();
-			
+				
 				/* set the new renderer */
 				_edgeControlRendererFactory = ecr;	
 				
@@ -99,12 +99,12 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 		 * */
 		public function set nodeLabelRenderer(elr:IFactory):void {
 			/* if the factory was changed, then we have to remove all
-			 * instances of vedgeViews to have them updated */
+			* instances of vedgeViews to have them updated */
 			if(elr != _nodeLabelRendererFactory) {
 				/* set all edges invisible, this should delete all instances
-				 * of view components */
+				* of view components */
 				setAllInVisible();
-			
+				
 				/* set the new renderer */
 				_nodeLabelRendererFactory = elr;	
 				
@@ -112,14 +112,14 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				updateVisibility();
 			}
 		}
-			
+		
 		/**
 		 * @private
 		 * */
 		public function get nodeLabelRenderer():IFactory {
 			return _nodeLabelRendererFactory;
 		}
-
+		
 		/**
 		 * @inheritDoc
 		 * */
@@ -135,7 +135,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				updateEdgeVisibility();
 			}
 		}
-
+		
 		/**
 		 * @private
 		 * */
@@ -158,7 +158,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				updateVisibility();
 			}
 		}
-
+		
 		/**
 		 * @private
 		 * */
@@ -207,7 +207,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				}
 			}
 		}
-
+		
 		/**
 		 * Creates VNode and requires a Graph node to associate
 		 * it with. Originally also created the view, but we no
@@ -220,17 +220,17 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			var vnode:IVisualNode;
 			
 			/* as an id we use the id of the graph node for simplicity
-			 * for now, it is not really used separately anywhere
-			 * we also use the graph data object as our data object.
-			 * the view is set to null and remains so. */
+			* for now, it is not really used separately anywhere
+			* we also use the graph data object as our data object.
+			* the view is set to null and remains so. */
 			vnode = new EnhancedVisualNode(this, n, n.id, null, n.data);
 			
 			/* if the node should be visible by default 
-			 * we need to make sure that the view is created */
+			* we need to make sure that the view is created */
 			if(newNodesDefaultVisible) {
 				setNodeVisibility(vnode, true);
 			}
-
+			
 			/* now set the vnode in the node */
 			n.vnode = vnode;
 			
@@ -246,8 +246,8 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			var vn:IVisualNode;
 			
 			/* if there is an effect, start the effect and register a
-			 * handler that actually calls this method again, but
-			 * with honorEffect set to false */
+			* handler that actually calls this method again, but
+			* with honorEffect set to false */
 			if(honorEffect && (removeItemEffect != null)) {
 				super.removeNodeView(component, honorEffect);
 			} else {
@@ -270,9 +270,9 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			{
 				var labelView:UIComponent;
 				labelView = IEnhancedVisualNode(vn).labelView;
-			
+				
 				IEnhancedVisualNode(vn).labelView = null;
-			
+				
 				if (labelView != null && labelView.parent) {
 					labelView.parent.removeChild(labelView);	
 				}
@@ -280,7 +280,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			
 			super.removeVNode(vn);			
 		}
-
+		
 		/**
 		 * Creates a VEdge from a graph Edge.
 		 * @param e The Graph Edge.
@@ -296,7 +296,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			var attr:XML;
 			var attname:String;
 			var attrs:Array;
-		
+			
 			/* create a copy of the default style */
 			lStyle = ObjectUtil.copy(_defaultEdgeStyle);
 			
@@ -329,8 +329,8 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			n2 = e.node2;
 			
 			/* if both nodes are visible, the edge should
-			 * be made visible, which may also create a label
-			 */
+			* be made visible, which may also create a label
+			*/
 			if(n1.vnode.isVisible && n2.vnode.isVisible) {
 				setEdgeVisibility(vedge, true);
 			}
@@ -340,8 +340,8 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			
 			return vedge;
 		}
-
-
+		
+		
 		/**
 		 * Create a "view" object (UIComponent) for the given node and
 		 * return it. These methods are only exported to be used by
@@ -351,29 +351,29 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 		 * @return The created view object.
 		 * */
 		protected override function createVNodeComponent(vn:IVisualNode):UIComponent {
-	
+			
 			var mycomponent:UIComponent = null;
 			var mylabelcomponent:UIComponent = null;
-						/////////////////////////////////////////////////////
+			/////////////////////////////////////////////////////
 			
 			if((_nodeLabelRendererFactory != null) && (vn is IEnhancedVisualNode) && (_edgeRendererFactory is IControllableEdgeRenderer)) {
 				mylabelcomponent = _nodeLabelRendererFactory.newInstance();
 				/* assigns the edge to the IDataRenderer part of the view
-				 * this is important to access the data object of the VEdge
-				 * which contains information for rendering. */		
+				* this is important to access the data object of the VEdge
+				* which contains information for rendering. */		
 				if(mylabelcomponent is IDataRenderer) {
 					(mylabelcomponent as IDataRenderer).data = vn;
 				}
 				
 				mylabelcomponent.x = this.width / 2.0;
 				mylabelcomponent.y = this.height / 2.0;
-			
+				
 				/* enable bitmap cachine if required */
 				mylabelcomponent.cacheAsBitmap = cacheRendererObjects;
 				/* add the component to its parent component
-				 * this can create problems, we have to see where we
-				 * check for all children
-				 * Add after the edges layer, but below all other elements such as nodes */
+				* this can create problems, we have to see where we
+				* check for all children
+				* Add after the edges layer, but below all other elements such as nodes */
 				this.addChildAt(mylabelcomponent, 0);
 				IEnhancedVisualNode(vn).labelView = mylabelcomponent;
 			}	
@@ -413,14 +413,14 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 					_viewToVEdgeRendererMap[fromControl] = mycomponent;
 					_viewToVEdgeRendererMap[toControl] = mycomponent;
 					
-                    if(ve.edgeView)
-                        ve.edgeView.invalidateDisplayList();
+					if(ve.edgeView)
+						ve.edgeView.invalidateDisplayList();
 				}
 			}
 			
 			return mycomponent;
 		}		
-
+		
 		/**
 		 * Remove a "view" object (UIComponent) for the given edge.
 		 * @param component The UIComponent to be removed.
@@ -447,14 +447,14 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 					}
 				}
 			}
-
+			
 			super.removeVEdgeLabelView(component);
 		}
-
+		
 		protected function edgeMouseDown(e:MouseEvent):void{
 			dragControlBegin(e);
 		}
-
+		
 		/**
 		 * Start a drag operation. This sets the drag node and
 		 * registeres a 'MouseMove' event handler with the
@@ -472,9 +472,9 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			
 			if (_moveNodeInDrag == false)
 				return;
-							
+			
 			/* if there is an animation in progress, we ignore
-			 * the drag attempt */
+			* the drag attempt */
 			if(_layouter && _layouter.animInProgress) {
 				LogUtil.info(_LOG,"Animation in progress, drag attempt ignored");
 				return;
@@ -496,10 +496,10 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 					
 					/* if (ElectricalGraph.isConnected(node) == false)
 					{
-						var dragSource:DragSource = new DragSource();
-						dragSource.addData(node, 'node');
-						DragManager.doDrag(ecomponent, dragSource, event);
-						return;
+					var dragSource:DragSource = new DragSource();
+					dragSource.addData(node, 'node');
+					DragManager.doDrag(ecomponent, dragSource, event);
+					return;
 					} */
 					
 					if(!dragLockCenter) {
@@ -511,10 +511,10 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 						//TODO: change to the components`s center instead
 						pt = ecomponent.localToGlobal(new Point(0,0));
 					}
-			
+					
 					/* Save the offset values in the map 
-					 * so we can compute x and y correctly in case
-					 * we use lockCenter */
+					* so we can compute x and y correctly in case
+					* we use lockCenter */
 					var nodeComponent:UIComponent;
 					var enode:INode = evnode.node;
 					
@@ -530,7 +530,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 							{
 								arrTreeNodes.addItem(curTreeRoot);
 								for each (var nextTreeRoot:INode in curTreeRoot.successors)
-									arrTreeRoots.push(nextTreeRoot);
+								arrTreeRoots.push(nextTreeRoot);
 							}
 							curTreeRoot = arrTreeRoots.pop();
 						}
@@ -550,23 +550,23 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 						}
 					}
 					
-                    
+					
 					/* now we would need to set the bounds
-					 * rectangle in _drag_boundsMap, but this is
-					 * currently not implemented *
+					* rectangle in _drag_boundsMap, but this is
+					* currently not implemented *
 					_drag_boundsMap[ecomponent] = rectangle;
-					 */
+					*/
 					
 					/* Registeran eventListener with the component's stage that
-					 * handles any mouse move. This wires the component
-					 * to the mouse. On every mouse move, the event handler
-					 * is called, which updates its coordinates.
-					 * We need to save the drag component, since we have to 
-					 * register the event handler with the stage, not the component
-					 * itself. But from the stage we have no way to get back to
-					 * the component or the VNode in case of the mouse move or 
-					 * drop event. 
-					 */
+					* handles any mouse move. This wires the component
+					* to the mouse. On every mouse move, the event handler
+					* is called, which updates its coordinates.
+					* We need to save the drag component, since we have to 
+					* register the event handler with the stage, not the component
+					* itself. But from the stage we have no way to get back to
+					* the component or the VNode in case of the mouse move or 
+					* drop event. 
+					*/
 					_dragComponent = ecomponent;
 					ecomponent.stage.addEventListener(MouseEvent.MOUSE_MOVE, handleDrag);
 					this.addEventListener(MouseEvent.MOUSE_UP,dragEnd);
@@ -591,9 +591,9 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			
 			if (_moveEdgeInDrag == false)
 				return;
-							
+			
 			/* if there is an animation in progress, we ignore
-			 * the drag attempt */
+			* the drag attempt */
 			if(_layouter && _layouter.animInProgress) {
 				LogUtil.info(_LOG,"Animation in progress, drag attempt ignored");
 				return;
@@ -608,29 +608,29 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				event.stopImmediatePropagation();
 				
 				pt = ecomponent.localToGlobal(new Point(0,0));
-		
+				
 				/* Save the offset values in the map 
-				 * so we can compute x and y correctly in case
-				 * we use lockCenter */
+				* so we can compute x and y correctly in case
+				* we use lockCenter */
 				_drag_x_offsetMap[ecomponent] = pt.x / (scaleX*this.scaleX) - ecomponent.x;
 				_drag_y_offsetMap[ecomponent] = pt.y / (scaleY*this.scaleY) - ecomponent.y;
 				
 				/* now we would need to set the bounds
-				 * rectangle in _drag_boundsMap, but this is
-				 * currently not implemented *
+				* rectangle in _drag_boundsMap, but this is
+				* currently not implemented *
 				_drag_boundsMap[ecomponent] = rectangle;
-				 */
+				*/
 				
 				/* Registeran eventListener with the component's stage that
-				 * handles any mouse move. This wires the component
-				 * to the mouse. On every mouse move, the event handler
-				 * is called, which updates its coordinates.
-				 * We need to save the drag component, since we have to 
-				 * register the event handler with the stage, not the component
-				 * itself. But from the stage we have no way to get back to
-				 * the component or the VNode in case of the mouse move or 
-				 * drop event. 
-				 */
+				* handles any mouse move. This wires the component
+				* to the mouse. On every mouse move, the event handler
+				* is called, which updates its coordinates.
+				* We need to save the drag component, since we have to 
+				* register the event handler with the stage, not the component
+				* itself. But from the stage we have no way to get back to
+				* the component or the VNode in case of the mouse move or 
+				* drop event. 
+				*/
 				_dragControlComponent = ecomponent;
 				ecomponent.stage.addEventListener(MouseEvent.MOUSE_MOVE, handleDragControl);
 				this.addEventListener(MouseEvent.MOUSE_UP,dragControlEnd);
@@ -651,17 +651,13 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			var myvnode:IVisualNode;
 			var sp:UIComponent;
 			
-			if (_moveNodeInDrag == false) {
-				if (_moveGraphInDrag == false) {
-					//this.parent.dispatchEvent(event);
-				}	
+			if (_moveNodeInDrag == false) {	
 				return;
 			}
-			//var bounds:Rectangle;
 			
 			/* we set our Component to be the saved
-			 * dragComponent, because we cannot access it
-			 * through the event. */
+			* dragComponent, because we cannot access it
+			* through the event. */
 			sp = _dragComponent;
 			
 			/* Sometimes we get spurious events */
@@ -670,13 +666,9 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				return;
 			}
 			
-			/* bounds are not implemented:
-			bounds = _drag_boundsMap[sp];
-			*/
-			
 			/* update the coordinates with the current
-			 * event's stage coordinates (i.e. current mouse position),
-			 * modified by the lock-center offset */
+			* event's stage coordinates (i.e. current mouse position),
+			* modified by the lock-center offset */
 			
 			var ptrObj:Object;
 			for (ptrObj in _drag_x_offsetMap)
@@ -689,22 +681,6 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				sp = ptrObj as UIComponent;
 				sp.y = event.stageY / (scaleY*this.scaleY) - _drag_y_offsetMap[sp];
 			}
-			
-			
-			/* bounds code, currently unused 
-			if ( bounds != null ) {
-				if ( sp.x < bounds.left ) {
-					sp.x = bounds.left;
-				} else if ( sp.x > bounds.right ) {
-					sp.x = bounds.right;
-				}	
-				if ( sp.y < bounds.top ) {
-					sp.y = bounds.top;	
-				} else if ( sp.y > bounds.bottom ) {
-					sp.y = bounds.bottom;	
-				}
-			}
-			*/
 			
 			/* and inform the layouter about the dragEvent */
 			for (ptrObj in _drag_x_offsetMap)
@@ -727,17 +703,14 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			var controlType:int;
 			var layoutOrientation:int;
 			
-			if (_moveEdgeInDrag == false) {
-				if (_moveGraphInDrag == false) {
-					//this.parent.dispatchEvent(event);
-				}	
+			if (_moveEdgeInDrag == false) {	
 				return;
 			}
 			//var bounds:Rectangle;
 			
 			/* we set our Component to be the saved
-			 * dragComponent, because we cannot access it
-			 * through the event. */
+			* dragComponent, because we cannot access it
+			* through the event. */
 			sp = _dragControlComponent;
 			eRendererComp = _viewToVEdgeRendererMap[sp];
 			
@@ -749,13 +722,9 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			
 			sp['isDragging'] = true;
 			
-			/* bounds are not implemented:
-			bounds = _drag_boundsMap[sp];
-			*/
-			
 			/* update the coordinates with the current
-			 * event's stage coordinates (i.e. current mouse position),
-			 * modified by the lock-center offset */
+			* event's stage coordinates (i.e. current mouse position),
+			* modified by the lock-center offset */
 			
 			layoutOrientation = eRendererComp['layoutOrientation'];
 			controlType = sp['type'];
@@ -799,40 +768,25 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				
 				eRendererComp['toDistance'] += dTo;
 			}
-
-			/* bounds code, currently unused 
-			if ( bounds != null ) {
-				if ( sp.x < bounds.left ) {
-					sp.x = bounds.left;
-				} else if ( sp.x > bounds.right ) {
-					sp.x = bounds.right;
-				}	
-				if ( sp.y < bounds.top ) {
-					sp.y = bounds.top;	
-				} else if ( sp.y > bounds.bottom ) {
-					sp.y = bounds.bottom;	
-				}
-			}
-			*/
 			
 			/* make sure flashplayer does an update after the event */
 			refresh();
 			event.updateAfterEvent();			
 		}
 		
-				/**
+		/**
 		 * This handles a background drag (i.e. scroll). The
 		 * event listener is usually registered with the canvas,
 		 * i.e. this object.
 		 * @param event The triggered event.
 		 * */
 		protected override function backgroundDragBegin(event:MouseEvent):void {
-		
+			
 			if (_moveGraphInDrag == false)
 				return;
 			super.backgroundDragBegin(event);
 		}
-
+		
 		/**
 		 * This method handles the drop event (usually MOUSE_UP).
 		 * It stops any dragging in progress (including background drag)
@@ -851,7 +805,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				_backgroundDragInProgress = false;
 				
 				/* get the background drag object, which is usually
-				 * the canvasm so we just set it to this */
+				* the canvasm so we just set it to this */
 				//myback = (event.currentTarget as DisplayObject);
 				myback = (this as DisplayObject);
 				
@@ -929,7 +883,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			}
 			
 			/* and stop propagation, as otherwise we could get the
-			 * event multiple times */
+			* event multiple times */
 			//event.stopImmediatePropagation();			
 		}
 		
@@ -942,7 +896,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				_backgroundDragInProgress = false;
 				
 				/* get the background drag object, which is usually
-				 * the canvasm so we just set it to this */
+				* the canvasm so we just set it to this */
 				//myback = (event.currentTarget as DisplayObject);
 				myback = (this as DisplayObject);
 				
@@ -957,12 +911,12 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			} else {
 				
 				/* if it was no background drag, the component
-				 * is the saved dragComponent */
+				* is the saved dragComponent */
 				var sp:UIComponent = _dragControlComponent;
 				var mycomp:UIComponent;
 				var myvedge:IVisualEdge;
 				/* But sometimes the dragComponent was already null, 
-				 * in this case we have to ignore the thing. */
+				* in this case we have to ignore the thing. */
 				if(sp == null) {
 					LogUtil.info(_LOG,"dragEnd: received dragEnd but _dragComponent was null, ignoring");
 					return;
@@ -979,8 +933,8 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				*/
 				
 				/* update the coordinates with the current
-				 * event's stage coordinates (i.e. current mouse position),
-				 * modified by the lock-center offset */
+				* event's stage coordinates (i.e. current mouse position),
+				* modified by the lock-center offset */
 				
 				var layoutOrientation:int = eRendererComp['layoutOrientation'];
 				var controlType:uint = sp['type'];
@@ -1028,7 +982,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 						eRendererComp['toDistance'] += dTo;
 					}
 				}
-					/* reset the dragComponent */
+				/* reset the dragComponent */
 				var ptrObj:Object;
 				for (ptrObj in _drag_x_offsetMap)
 				{
@@ -1054,7 +1008,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			}
 			
 			/* and stop propagation, as otherwise we could get the
-			 * event multiple times */
+			* event multiple times */
 			//event.stopImmediatePropagation();			
 		}
 		
@@ -1084,7 +1038,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 		{
 			return _enableDragNodeWithSubTree;
 		}
-			
+		
 		public function set enableDragNodeWithSubTree(value:Boolean):void
 		{
 			_enableDragNodeWithSubTree = value;
@@ -1100,12 +1054,12 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			
 			if (_graph == null)
 				return null;
-				
+			
 			node = _graph.createNode(sid, data);
 			
 			vnode = createVNode(node);
 			setNodeVisibility(vnode, true);
-		
+			
 			return vnode;
 		}
 		
@@ -1119,7 +1073,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			
 			if (_graph == null)
 				return false;
-				
+			
 			node = _graph.createNode(sid, data);
 			vnode = createVNode(node);
 			setNodeVisibility(vnode, true);
@@ -1158,11 +1112,11 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			
 			node = _graph.createNode(sid, data);
 			node.data['id'] = node.stringid;
-
+			
 			vnode = createVNode(node);
 			setNodeVisibility(vnode, true);
 			var nodeID:String = node.stringid;
-							
+			
 			edgeData = new Object();
 			edgeData.fromID = fromNode.stringid;
 			edgeData.toID = node.stringid;
@@ -1254,7 +1208,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 					}
 				}
 			}
-
+			
 			removeNode(vnode);
 			draw();
 			return true;
@@ -1267,14 +1221,14 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 		{
 			if ((isRootNodeRemovable == false) && (node.vnode == currentRootVNode))
 				return false;
-				
+			
 			var arrTreeRoots:Array = [node];
 			var curTreeRoot:INode = arrTreeRoots.pop();
 			
 			while(curTreeRoot)
 			{
 				for each (var nextTreeRoot:INode in curTreeRoot.successors)
-					arrTreeRoots.push(nextTreeRoot)
+				arrTreeRoots.push(nextTreeRoot)
 				removeNode(curTreeRoot.vnode);
 				
 				curTreeRoot = arrTreeRoots.pop();
@@ -1292,14 +1246,14 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 		{
 			var arrTreeRoots:Array = new Array();
 			for each (var nextTreeRoot:INode in node.successors)
-				arrTreeRoots.push(nextTreeRoot);
-				
+			arrTreeRoots.push(nextTreeRoot);
+			
 			var curTreeRoot:INode = arrTreeRoots.pop();
 			
 			while(curTreeRoot)
 			{
 				for each (var nextTreeRoot2:INode in curTreeRoot.successors)
-					arrTreeRoots.push(nextTreeRoot)
+				arrTreeRoots.push(nextTreeRoot)
 				removeNode(curTreeRoot.vnode);
 				
 				curTreeRoot = arrTreeRoots.pop();
@@ -1344,9 +1298,9 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			for each(var e:IEdge in _graph.edges) {
 				setEdgeVisibility(e.vedge, true);
 			}
-								
+			
 			var enode:INode = vn.node;
-					
+			
 			var arrTreeNodes:ArrayCollection = new ArrayCollection();
 			var arrTreeRoots:Array = [enode];
 			var curTreeRoot:INode = arrTreeRoots.pop();
