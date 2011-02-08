@@ -123,7 +123,6 @@
     <classEntry path="org.un.cava.birdeye.ravis.utils.TypeUtil"/>
     <classEntry path="org.un.cava.birdeye.ravis.utils.events.VGraphEvent"/>
     <classEntry path="org.un.cava.birdeye.ravis.utils.events.VGraphRendererEvent"/>
-    <classEntry path="org.un.cava.birdeye.ravis.utils.events.VNodeMouseEvent"/>
     <classEntry path="org.un.cava.birdeye.ravis.utils.geom.BaseModel"/>
     <classEntry path="org.un.cava.birdeye.ravis.utils.geom.ComplexNumber"/>
     <classEntry path="org.un.cava.birdeye.ravis.utils.geom.ComplexVector"/>
@@ -136,6 +135,7 @@
     <classEntry path="org.un.cava.birdeye.ravis.utils.geom.PoincareModel"/>
     <classEntry path="org.un.cava.birdeye.ravis.utils.geom.PoincareProjector"/>
     <classEntry path="org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.CenterWeightedCircularEdgeRenderer"/>
+    <classEntry path="org.un.cava.birdeye.ravis.utils.GraphicsWrapper"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
