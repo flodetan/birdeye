@@ -9,13 +9,13 @@
 <body>
 <script type="text/javascript" language="javascript" src="../../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
 <!--
-				asdocTitle = 'org.un.cava.birdeye.ravis.graphLayout.layout Package - API Documentation';
+				asdocTitle = 'org.un.cava.birdeye.ravis.graphLayout.layout Package - RaVis';
 				var baseRef = '../../../../../../../';
 				window.onload = configPage;
 			--></script>
 <table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
 <tr>
-<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/graphLayout/layout/package-detail.html&amp;org/un/cava/birdeye/ravis/graphLayout/layout/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
+<td align="left" class="titleTableTitle">RaVis</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/graphLayout/layout/package-detail.html&amp;org/un/cava/birdeye/ravis/graphLayout/layout/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
 </tr>
 <tr class="titleTableRow2">
 <td align="left" id="subTitle" class="titleTableSubTitle">Package&nbsp;org.un.cava.birdeye.ravis.graphLayout.layout</td><td align="right" id="subNav" class="titleTableSubNav"><a href="package-detail.html#interfaceSummary">Interfaces</a>&nbsp;| <a href="package-detail.html#classSummary">Classes</a></td>
@@ -62,65 +62,71 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Pa
   for animation, since they are typically common in layouters.</td>
 </tr>
 <tr class="prow0">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="AnimatedDirectPlacementLayouter.html">AnimatedDirectPlacementLayouter</a></td><td class="summaryTableLastCol">
+     This layouter does not use any algorithm for node placement,
+     but relys on coordinate information (x,y-coordinates) specified
+     in each nodes associated XML object.</td>
+</tr>
+<tr class="prow1">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="BaseLayoutDrawing.html">BaseLayoutDrawing</a></td><td class="summaryTableLastCol">
   This is a base class to hold layout drawing information
   like target coordinates for all nodes, access to polar and
   cartesian versions of those coordinates and an origin offset.</td>
 </tr>
-<tr class="prow1">
+<tr class="prow0">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="BaseLayouter.html">BaseLayouter</a></td><td class="summaryTableLastCol">
   This is an base class to various layout implementations
   it does not really do any layouting but implements
   everything required by the Interface.</td>
 </tr>
-<tr class="prow0">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="CircularLayouter.html">CircularLayouter</a></td><td class="summaryTableLastCol">
-  This is an implementation of the circular layout -
-  all visible nodes are arranged in a circle
-  
-  </td>
-</tr>
 <tr class="prow1">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="CircularLayouter.html">CircularLayouter</a></td><td class="summaryTableLastCol">
+     This is an implementation of the circular layout -
+     all visible nodes are arranged in a circle
+     
+     </td>
+</tr>
+<tr class="prow0">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="ConcentricRadialLayoutDrawing.html">ConcentricRadialLayoutDrawing</a></td><td class="summaryTableLastCol">
   This class holds all the parameters needed
   for a drawing representation of a graph drawing
   with a Concentric Radial Layout and corresponding access methods
   It actually represents a calculated layout.</td>
 </tr>
-<tr class="prow0">
+<tr class="prow1">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="ConcentricRadialLayouter.html">ConcentricRadialLayouter</a></td><td class="summaryTableLastCol">
   This is an implementation of the generic radial
   layout algorithm that uses concentric rings
   for the distance.</td>
 </tr>
-<tr class="prow1">
+<tr class="prow0">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="DirectPlacementLayouter.html">DirectPlacementLayouter</a></td><td class="summaryTableLastCol">
   This layouter does not use any algorithm for node placement,
   but relys on coordinate information (x,y-coordinates) specified
   in each nodes associated XML object.</td>
 </tr>
-<tr class="prow0">
+<tr class="prow1">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="ForceDirectedLayouter.html">ForceDirectedLayouter</a></td><td class="summaryTableLastCol">
   This is an implementation of the ForceDirected/SpringGraph
   Layouting algorithm.</td>
 </tr>
-<tr class="prow1">
+<tr class="prow0">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="HierarchicalLayoutDrawing.html">HierarchicalLayoutDrawing</a></td><td class="summaryTableLastCol">
   This class holds all the parameters needed
   for a drawing representation of a graph drawing
   with a Hierarchical Layout according to 
   </td>
 </tr>
-<tr class="prow0">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="HierarchicalLayouter.html">HierarchicalLayouter</a></td><td class="summaryTableLastCol">
-  This layouter implements the drawing of generalized trees
-  in a hierarchical fashion using the algorithm by
-  Christoph Buchheim, Michael Juenger and Sebastian Leipert
-  presented in their paper 
-  "Improving Walker's Algorithm to run in linear time"
-  </td>
-</tr>
 <tr class="prow1">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="HierarchicalLayouter.html">HierarchicalLayouter</a></td><td class="summaryTableLastCol">
+     This layouter implements the drawing of generalized trees
+     in a hierarchical fashion using the algorithm by
+     Christoph Buchheim, Michael Juenger and Sebastian Leipert
+     presented in their paper 
+     "Improving Walker's Algorithm to run in linear time"
+     </td>
+</tr>
+<tr class="prow0">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="Hyperbolic2DLayouter.html">Hyperbolic2DLayouter</a></td><td class="summaryTableLastCol">
   This is an implementation of the Hyperbolic 2D layouting algorithm.<br>
   For this iterative layout, most of default mouse behavior, namely:<br>
@@ -128,35 +134,35 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Pa
   (2) node drag-drop<br>
   should be turned-off in <code>VisualGraph</code>.</td>
 </tr>
-<tr class="prow0">
+<tr class="prow1">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="ISOMLayouter.html">ISOMLayouter</a></td><td class="summaryTableLastCol">
  This is an implementation of an Inverted Self Organizing Map (ISOM) 
  layout.</td>
 </tr>
-<tr class="prow1">
+<tr class="prow0">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="IterativeBaseLayouter.html">IterativeBaseLayouter</a></td><td class="summaryTableLastCol">
   This is a base class of an Iterative Layouting algorithm.</td>
 </tr>
-<tr class="prow0">
+<tr class="prow1">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="ParentCenteredDrawingModel.html">ParentCenteredDrawingModel</a></td><td class="summaryTableLastCol">
   This class holds all the parameters needed
   for a drawing representation of a graph drawing
   with a Parent-Centered Radial Layout
   i.e.</td>
 </tr>
-<tr class="prow1">
+<tr class="prow0">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="ParentCenteredRadialLayouter.html">ParentCenteredRadialLayouter</a></td><td class="summaryTableLastCol">
   This is an implementation of the 
   parent centered radial layouter
   as described in the 2006 paper by
   Andy Pavlo, Christopher Homan and Jon Schull.</td>
 </tr>
-<tr class="prow0">
+<tr class="prow1">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="PhylloTreeDrawingModel.html">PhylloTreeDrawingModel</a></td><td class="summaryTableLastCol">
   This class is similar to the parent centered layout drawing
   model.</td>
 </tr>
-<tr class="prow1">
+<tr class="prow0">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="PhylloTreeLayouter.html">PhylloTreeLayouter</a></td><td class="summaryTableLastCol">
   This is an modification of the 
   parent centered radial layoute that draws the

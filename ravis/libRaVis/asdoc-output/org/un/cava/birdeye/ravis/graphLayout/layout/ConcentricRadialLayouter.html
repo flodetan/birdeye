@@ -4,19 +4,19 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print">
-<meta content="ConcentricRadialLayouter,org.un.cava.birdeye.ravis.graphLayout.layout.ConcentricRadialLayouter,DEFAULT_RADIUS,linkLength,layoutPass,resetAll,setAngularBounds" name="keywords">
+<meta content="ConcentricRadialLayouter,org.un.cava.birdeye.ravis.graphLayout.layout.ConcentricRadialLayouter,defaultRadius,minRadius,zoomToFit,linkLength,autoFit,doZoomToFit,layoutPass,resetAll,setAngularBounds" name="keywords">
 <title>org.un.cava.birdeye.ravis.graphLayout.layout.ConcentricRadialLayouter</title>
 </head>
 <body>
 <script type="text/javascript" language="javascript" src="../../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
 <!--
-				asdocTitle = 'ConcentricRadialLayouter - API Documentation';
+				asdocTitle = 'ConcentricRadialLayouter - RaVis';
 				var baseRef = '../../../../../../../';
 				window.onload = configPage;
 			--></script>
 <table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
 <tr>
-<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/graphLayout/layout/ConcentricRadialLayouter.html&amp;org/un/cava/birdeye/ravis/graphLayout/layout/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
+<td align="left" class="titleTableTitle">RaVis</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/graphLayout/layout/ConcentricRadialLayouter.html&amp;org/un/cava/birdeye/ravis/graphLayout/layout/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
 </tr>
 <tr class="titleTableRow2">
 <td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;ConcentricRadialLayouter</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a>&nbsp;| <a href="#constantSummary">Constants</a></td>
@@ -84,6 +84,16 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
 </tr>
 <tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#bounds">bounds</a> : Rectangle<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#defaultRadius">defaultRadius</a> : Number = 50<div class="summaryTableDescription">
+   The default radius increase between
+   the concentric circles.</div>
+</td><td class="summaryTableOwnerCol">ConcentricRadialLayouter</td>
+</tr>
+<tr class="hideInheritedProperty">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#disableAnimation">disableAnimation</a> : Boolean<div class="summaryTableDescription">
    
    If set to true, animation is disabled and direct
@@ -114,13 +124,23 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol">ConcentricRadialLayouter</td>
 </tr>
 <tr class="hideInheritedProperty">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#vgraph">vgraph</a> : <a href="../visual/IVisualGraph.html">IVisualGraph</a>
-<div class="summaryTableDescription">
-   
-   Assign a VisualGraph object to the layouter,
-   every layouter will need one to work, some may
-   also offer to set it in their constructor.</div>
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#margin">margin</a> : Number<div class="summaryTableDescription"></div>
 </td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#minRadius">minRadius</a> : Number = 0<div class="summaryTableDescription">
+        Smallest allowable radius
+        </div>
+</td><td class="summaryTableOwnerCol">ConcentricRadialLayouter</td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#vgraph">vgraph</a> : <a href="../visual/IVisualGraph.html">IVisualGraph</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#zoomToFit">zoomToFit</a> : Boolean<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">ConcentricRadialLayouter</td>
 </tr>
 </table>
 </div>
@@ -156,6 +176,10 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="hideInheritedProtectedProperty">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#_autoFitEnabled">_autoFitEnabled</a> : Boolean = false<div class="summaryTableDescription">
    The indicator if AutoFit should currently be used or not.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#_bounds">_bounds</a> : Rectangle<div class="summaryTableDescription"></div>
 </td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
 </tr>
 <tr class="hideInheritedProtectedProperty">
@@ -327,7 +351,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <a onclick="javascript:setInheritedVisible(true,'ProtectedMethod');" href="#protectedMethodSummary" class="showHideLink"><img src="../../../../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Protected Methods</a>
 </div>
 </div>
-<table id="summaryTableProtectedMethod" class="summaryTable hideInheritedProtectedMethod" cellpadding="3" cellspacing="0">
+<table id="summaryTableProtectedMethod" class="summaryTable " cellpadding="3" cellspacing="0">
 <tr>
 <th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
 </tr>
@@ -343,11 +367,26 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="hideInheritedProtectedMethod">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="BaseLayouter.html#applyTargetToNodes()">applyTargetToNodes</a>(vns:Dictionary):void</div>
+<a class="signatureLink" href="BaseLayouter.html#applyTargetToNodes()">applyTargetToNodes</a>(vns:Array):void</div>
 <div class="summaryTableDescription">
    Applies the target coordinates to all nodes that
    are in the Dictionary object passed as argument.</div>
 </td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#autoFit()">autoFit</a>():void</div>
+<div class="summaryTableDescription">
+   </div>
+</td><td class="summaryTableOwnerCol">ConcentricRadialLayouter</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#doZoomToFit()">doZoomToFit</a>():void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">ConcentricRadialLayouter</td>
 </tr>
 <tr class="hideInheritedProtectedMethod">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
@@ -416,7 +455,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <a onclick="javascript:setInheritedVisible(true,'Constant');" href="#constantSummary" class="showHideLink"><img src="../../../../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Public Constants</a>
 </div>
 </div>
-<table id="summaryTableConstant" class="summaryTable " cellpadding="3" cellspacing="0">
+<table id="summaryTableConstant" class="summaryTable hideInheritedConstant" cellpadding="3" cellspacing="0">
 <tr>
 <th>&nbsp;</th><th colspan="2">Constant</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
 </tr>
@@ -431,18 +470,6 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
    constant to define the radial animation type, which
    interpolates node's polar coordinates.</div>
 </td><td class="summaryTableOwnerCol"><a href="AnimatedBaseLayouter.html">AnimatedBaseLayouter</a></td>
-</tr>
-<tr class="hideInheritedConstant">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#DEFAULT_MARGIN">DEFAULT_MARGIN</a> : Number = 30<div class="summaryTableDescription">[static]
-   The default margin to be considered when using
-   autoFit.</div>
-</td><td class="summaryTableOwnerCol"><a href="BaseLayouter.html">BaseLayouter</a></td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#DEFAULT_RADIUS">DEFAULT_RADIUS</a> : Number = 50<div class="summaryTableDescription">[static]
-   The default radius increase between
-   the concentric circles.</div>
-</td><td class="summaryTableOwnerCol">ConcentricRadialLayouter</td>
 </tr>
 <tr class="hideInheritedConstant">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseLayouter.html#MINIMUM_NODE_HEIGHT">MINIMUM_NODE_HEIGHT</a> : Number = 5<div class="summaryTableDescription">[static]
@@ -465,10 +492,21 @@ showHideInherited();
 <div class="MainContent">
 <a name="propertyDetail"></a>
 <div class="detailSectionHeader">Property detail</div>
+<a name="defaultRadius"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">defaultRadius</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var defaultRadius:Number = 50</code><p>
+   The default radius increase between
+   the concentric circles.
+   </p></div>
 <a name="linkLength"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
-<td class="detailHeaderName">linkLength</td><td class="detailHeaderType">property</td>
+<td class="detailHeaderName">linkLength</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
 </tr>
 </table>
 <div class="detailBody">
@@ -485,6 +523,30 @@ showHideInherited();
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function get linkLength():Number</code>
 <br>
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function set linkLength(value:Number):void</code>
+<br>
+</div>
+<a name="minRadius"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">minRadius</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var minRadius:Number = 0</code><p>
+        Smallest allowable radius
+        </p></div>
+<a name="zoomToFit"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">zoomToFit</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>zoomToFit:Boolean</code>&nbsp;&nbsp;[read-write]<span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get zoomToFit():Boolean</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set zoomToFit(value:Boolean):void</code>
 <br>
 </div>
 <a name="constructorDetail"></a>
@@ -509,10 +571,28 @@ showHideInherited();
 </div>
 <a name="methodDetail"></a>
 <div class="detailSectionHeader">Method detail</div>
+<a name="autoFit()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">autoFit</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function autoFit():void</code><p>
+   </p></div>
+<a name="doZoomToFit()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">doZoomToFit</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function doZoomToFit():void</code>
+</div>
 <a name="layoutPass()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
-<td class="detailHeaderName">layoutPass</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+<td class="detailHeaderName">layoutPass</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
 </tr>
 </table>
 <div class="detailBody">
@@ -573,19 +653,6 @@ showHideInherited();
 </tr>
 </table>
 </div>
-<a name="constantDetail"></a>
-<div class="detailSectionHeader">Constant detail</div>
-<a name="DEFAULT_RADIUS"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">DEFAULT_RADIUS</td><td class="detailHeaderType">constant</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public static const DEFAULT_RADIUS:Number = 50</code><p>
-   The default radius increase between
-   the concentric circles.
-   </p></div>
 <br>
 <br>
 <hr>

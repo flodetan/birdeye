@@ -4,19 +4,19 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print">
-<meta content="Graph,org.un.cava.birdeye.ravis.graphLayout.data.Graph,DEFAULTNAME_EDGE,DEFAULTNAME_FROMID,DEFAULTNAME_NODE,DEFAULTNAME_TOID,WALK_BACKWARDS,WALK_BOTH,WALK_FORWARD,_currentEdgeId,_currentNodeId,_directional,_edges,_id,_nodeSortFunction,_nodes,_nodesById,_nodesByStringId,_numberOfEdges,_numberOfNodes,_treeMap,_walkingDirection,_xmlData,edges,id,isDirectional,noEdges,noNodes,nodes,xmlData,nodeSortFunction,walkingDirection,createGraph,createNode,getEdge,getTree,initFromXML,link,nodeById,nodeByStringId,purgeGraph,purgeTrees,removeEdge,removeNode,unlink" name="keywords">
+<meta content="Graph,org.un.cava.birdeye.ravis.graphLayout.data.Graph,DEFAULTNAME_EDGE,DEFAULTNAME_FROMID,DEFAULTNAME_NODE,DEFAULTNAME_TOID,_currentEdgeId,_currentNodeId,_directional,_edges,_id,_nodeSortFunction,_nodes,_nodesById,_nodesByStringId,_numberOfEdges,_numberOfNodes,_treeMap,_xmlData,edges,id,isDirectional,noEdges,noNodes,nodes,xmlData,nodeSortFunction,createGraph,createNode,getEdge,getTree,initFromXML,link,nodeById,nodeByStringId,purgeGraph,purgeTrees,removeEdge,removeNode,unlink" name="keywords">
 <title>org.un.cava.birdeye.ravis.graphLayout.data.Graph</title>
 </head>
 <body>
 <script type="text/javascript" language="javascript" src="../../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
 <!--
-				asdocTitle = 'Graph - API Documentation';
+				asdocTitle = 'Graph - RaVis';
 				var baseRef = '../../../../../../../';
 				window.onload = configPage;
 			--></script>
 <table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
 <tr>
-<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/graphLayout/data/Graph.html&amp;org/un/cava/birdeye/ravis/graphLayout/data/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
+<td align="left" class="titleTableTitle">RaVis</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/graphLayout/data/Graph.html&amp;org/un/cava/birdeye/ravis/graphLayout/data/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
 </tr>
 <tr class="titleTableRow2">
 <td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;Graph</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a>&nbsp;| <a href="#constantSummary">Constants</a></td>
@@ -43,15 +43,18 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr>
 <td class="classHeaderTableLabel">Implements</td><td><a href="IGraph.html">IGraph</a></td>
 </tr>
+<tr>
+<td class="classHeaderTableLabel">Subclasses</td><td><a href="../../enhancedGraphLayout/data/EnhancedGraph.html">EnhancedGraph</a></td>
+</tr>
 </table>
 <p></p>
-  Graph implements a graph datastructure G(V,E)
-  with vertices V and edges E, except that we call the
-  vertices nodes, which is here more in line with similar
-  implementations. A graph may be associated with a 
-  VisualGraph object, which can visualize graph components
-  in Flash.
-  <p></p>
+     Graph implements a graph datastructure G(V,E)
+     with vertices V and edges E, except that we call the
+     vertices nodes, which is here more in line with similar
+     implementations. A graph may be associated with a 
+     VisualGraph object, which can visualize graph components
+     in Flash.
+     <p></p>
 <p>
 <span class="classHeaderTableLabel">See also</span>
 </p>
@@ -72,57 +75,50 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#edges">edges</a> : Array<div class="summaryTableDescription">[read-only]
-   
+         
    An Array that contains all edges of the graph.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#id">id</a> : String<div class="summaryTableDescription">[read-only]
-   
+         
    The id (or name) of the graph
    </div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#isDirectional">isDirectional</a> : Boolean<div class="summaryTableDescription">[read-only]
-    
+          
    Indicator if the graph is directional or not.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#nodes">nodes</a> : Array<div class="summaryTableDescription">[read-only]
-   
+         
    An Array that contains all nodes of the graph.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#nodeSortFunction">nodeSortFunction</a> : Function<div class="summaryTableDescription">
-   
+         
    Provide a method to sort nodes in a graph.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#noEdges">noEdges</a> : int<div class="summaryTableDescription">[read-only]
-   
+         
    The number of edges in the graph.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#noNodes">noNodes</a> : int<div class="summaryTableDescription">[read-only]
-   
+         
    The number of nodes in the graph.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#walkingDirection">walkingDirection</a> : int<div class="summaryTableDescription">
-   
-   This determines the walking direction when building
-   a spanning tree.</div>
-</td><td class="summaryTableOwnerCol">Graph</td>
-</tr>
-<tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#xmlData">xmlData</a> : XML<div class="summaryTableDescription">[read-only]
-   
+         
    Return a reference to the XML graph
    structure that was used to initialise the graph.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
@@ -142,7 +138,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_currentNodeId">_currentNodeId</a> : int<div class="summaryTableDescription"> 
-   </div>
+         </div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
@@ -155,7 +151,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_id">_id</a> : String<div class="summaryTableDescription">
-   </div>
+         </div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
@@ -172,7 +168,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_nodeSortFunction">_nodeSortFunction</a> : Function = null<div class="summaryTableDescription">
-   </div>
+         </div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
@@ -181,16 +177,12 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_numberOfNodes">_numberOfNodes</a> : int<div class="summaryTableDescription">
-   </div>
+         </div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_treeMap">_treeMap</a> : Dictionary<div class="summaryTableDescription">
-   </div>
-</td><td class="summaryTableOwnerCol">Graph</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_walkingDirection">_walkingDirection</a> : int = 0<div class="summaryTableDescription"></div>
+         </div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
@@ -211,8 +203,8 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <div class="summarySignature">
 <a class="signatureLink" href="#Graph()">Graph</a>(id:String, directional:Boolean = false, xmlsource:XML = null)</div>
 <div class="summaryTableDescription">
-   Constructor method that creates the graph and can
-   initialise it directly from an XML object, if one is specified.</div>
+         Constructor method that creates the graph and can
+         initialise it directly from an XML object, if one is specified.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
@@ -221,7 +213,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <a class="signatureLink" href="#createGraph()">createGraph</a>(id:String, directional:Boolean, xmlsource:XML):<a href="../data/IGraph.html">IGraph</a>
 </div>
 <div class="summaryTableDescription">[static]
-   A static factory method to create new graphs, but requires an xmlsource to be specified.</div>
+         A static factory method to create new graphs, but requires an xmlsource to be specified.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
@@ -230,7 +222,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <a class="signatureLink" href="#createNode()">createNode</a>(sid:String = "", o:Object = null):<a href="../data/INode.html">INode</a>
 </div>
 <div class="summaryTableDescription">
-   
+         
    Creates a graph node in the graph, optionally takes a string
    id for the node and an object to associate the node with.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
@@ -241,17 +233,17 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <a class="signatureLink" href="#getEdge()">getEdge</a>(n1:<a href="INode.html">INode</a>, n2:<a href="INode.html">INode</a>):<a href="../data/IEdge.html">IEdge</a>
 </div>
 <div class="summaryTableDescription">
-   
+         
    Find an edge between two nodes.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#getTree()">getTree</a>(n:<a href="INode.html">INode</a>, restr:Boolean = false, nocache:Boolean = false):<a href="../data/IGTree.html">IGTree</a>
+<a class="signatureLink" href="#getTree()">getTree</a>(n:<a href="INode.html">INode</a>, restr:Boolean = false, nocache:Boolean = false, direction:int):<a href="../data/IGTree.html">IGTree</a>
 </div>
 <div class="summaryTableDescription">
-   
+         
    returns the current BFS tree of the graph, rooted in the given node,
    optionally the tree is restricted to only contain currently visible
    nodes.</div>
@@ -262,7 +254,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <div class="summarySignature">
 <a class="signatureLink" href="#initFromXML()">initFromXML</a>(xml:XML):void</div>
 <div class="summaryTableDescription">
-   
+         
       Creates a graph from XML.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
@@ -272,7 +264,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <a class="signatureLink" href="#link()">link</a>(node1:<a href="INode.html">INode</a>, node2:<a href="INode.html">INode</a>, o:Object = null):<a href="../data/IEdge.html">IEdge</a>
 </div>
 <div class="summaryTableDescription">
-   
+         
    Link two nodes together (i.e.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
@@ -282,17 +274,17 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <a class="signatureLink" href="#nodeById()">nodeById</a>(id:int):<a href="../data/INode.html">INode</a>
 </div>
 <div class="summaryTableDescription">
-   
+         
    A lookup to find a node by it's (int) id.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#nodeByStringId()">nodeByStringId</a>(sid:String):<a href="../data/INode.html">INode</a>
+<a class="signatureLink" href="#nodeByStringId()">nodeByStringId</a>(sid:String, caseSensitive:Boolean = true):<a href="../data/INode.html">INode</a>
 </div>
 <div class="summaryTableDescription">
-   
+         
    A lookup to find a node by it's string id.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
@@ -301,7 +293,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <div class="summarySignature">
 <a class="signatureLink" href="#purgeGraph()">purgeGraph</a>():void</div>
 <div class="summaryTableDescription">
-   
+         
    Remove all edges and nodes from the Graph.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
@@ -310,7 +302,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <div class="summarySignature">
 <a class="signatureLink" href="#purgeTrees()">purgeTrees</a>():void</div>
 <div class="summaryTableDescription">
-   
+         
    Under certain circumstances all cached trees need
    to be purged.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
@@ -320,7 +312,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <div class="summarySignature">
 <a class="signatureLink" href="#removeEdge()">removeEdge</a>(e:<a href="IEdge.html">IEdge</a>):void</div>
 <div class="summaryTableDescription">
-   
+         
    Removes an edge between two nodes.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
@@ -329,7 +321,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <div class="summarySignature">
 <a class="signatureLink" href="#removeNode()">removeNode</a>(n:<a href="INode.html">INode</a>):void</div>
 <div class="summaryTableDescription">
-   
+         
    Removes a node from the graph.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
@@ -338,7 +330,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <div class="summarySignature">
 <a class="signatureLink" href="#unlink()">unlink</a>(node1:<a href="INode.html">INode</a>, node2:<a href="INode.html">INode</a>):void</div>
 <div class="summaryTableDescription">
-   
+         
    Unlink two nodes, effectively removing the edge between
    them.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
@@ -354,39 +346,22 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#DEFAULTNAME_EDGE">DEFAULTNAME_EDGE</a> : String = "Edge"<div class="summaryTableDescription">[static]
-   The default XML tagname of an XML item that defines an edge.</div>
+         The default XML tagname of an XML item that defines an edge.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#DEFAULTNAME_FROMID">DEFAULTNAME_FROMID</a> : String = "fromID"<div class="summaryTableDescription">[static]
-   The default XML attribute of an XML edge item that describes the from node.</div>
+         The default XML attribute of an XML edge item that describes the from node.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#DEFAULTNAME_NODE">DEFAULTNAME_NODE</a> : String = "Node"<div class="summaryTableDescription">[static]
-   The default XML tagname of an XML item that defines a node.</div>
+         The default XML tagname of an XML item that defines a node.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#DEFAULTNAME_TOID">DEFAULTNAME_TOID</a> : String = "toID"<div class="summaryTableDescription">[static]
-   The default XML attribute of an XML edge item that describes the to node.</div>
-</td><td class="summaryTableOwnerCol">Graph</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#WALK_BACKWARDS">WALK_BACKWARDS</a> : int = 1<div class="summaryTableDescription">[static]
-   If building a spanning tree, walk only backwards.</div>
-</td><td class="summaryTableOwnerCol">Graph</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#WALK_BOTH">WALK_BOTH</a> : int = 2<div class="summaryTableDescription">[static]
-   If building a spanning tree, walk only both
-   directions
-   </div>
-</td><td class="summaryTableOwnerCol">Graph</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#WALK_FORWARD">WALK_FORWARD</a> : int = 0<div class="summaryTableDescription">[static]
-   If building a spanning tree, walk only forward.</div>
+         The default XML attribute of an XML edge item that describes the to node.</div>
 </td><td class="summaryTableOwnerCol">Graph</td>
 </tr>
 </table>
@@ -415,7 +390,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>protected var _currentNodeId:int</code><p> 
-   </p></div>
+         </p></div>
 <a name="_directional"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -442,7 +417,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>edges:Array</code>&nbsp;&nbsp;[read-only]<p>
-   
+         
    An Array that contains all edges of the graph.
    </p><span class="label">Implementation</span>
 <br>
@@ -457,7 +432,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>protected var _id:String</code><p>
-   </p></div>
+         </p></div>
 <a name="id"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -466,7 +441,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>id:String</code>&nbsp;&nbsp;[read-only]<p>
-   
+         
    The id (or name) of the graph
    </p><span class="label">Implementation</span>
 <br>
@@ -481,7 +456,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>isDirectional:Boolean</code>&nbsp;&nbsp;[read-only]<p>
-    
+          
    Indicator if the graph is directional or not.
    </p><span class="label">Implementation</span>
 <br>
@@ -505,7 +480,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>nodes:Array</code>&nbsp;&nbsp;[read-only]<p>
-   
+         
    An Array that contains all nodes of the graph.
    </p><span class="label">Implementation</span>
 <br>
@@ -538,7 +513,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>protected var _nodeSortFunction:Function = null</code><p>
-   </p></div>
+         </p></div>
 <a name="nodeSortFunction"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -547,7 +522,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>nodeSortFunction:Function</code>&nbsp;&nbsp;[read-write]<p>
-   
+         
    Provide a method to sort nodes in a graph.
    This can be used by GTree when building
    a spanning tree.
@@ -568,7 +543,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>noEdges:int</code>&nbsp;&nbsp;[read-only]<p>
-   
+         
    The number of edges in the graph.
    </p><span class="label">Implementation</span>
 <br>
@@ -583,7 +558,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>noNodes:int</code>&nbsp;&nbsp;[read-only]<p>
-   
+         
    The number of nodes in the graph.
    </p><span class="label">Implementation</span>
 <br>
@@ -607,7 +582,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>protected var _numberOfNodes:int</code><p>
-   </p></div>
+         </p></div>
 <a name="_treeMap"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -616,46 +591,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>protected var _treeMap:Dictionary</code><p>
-   </p></div>
-<a name="_walkingDirection"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">_walkingDirection</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>protected var _walkingDirection:int = 0</code>
-</div>
-<a name="walkingDirection"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">walkingDirection</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>walkingDirection:int</code>&nbsp;&nbsp;[read-write]<p>
-   
-   This determines the walking direction when building
-   a spanning tree. Possible values are
-   Graph.WALK_FORWARD
-   Graph.WALK_BACKWARDS
-   Graph.WALK_BOTH
-   All make only sense in a directional graph.
-   Forward means we follow edges in its regular direction
-   from the root node.
-   Backwards means, we follow edges back from the root
-   node (e.g. the root is a sink with multiple sources)
-   Both obviously means both.
-   
-   This property will be queried by GTree to determine the
-   walking direction set.
-   </p><span class="label">Implementation</span>
-<br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get walkingDirection():int</code>
-<br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set walkingDirection(value:int):void</code>
-<br>
-</div>
+         </p></div>
 <a name="_xmlData"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -673,7 +609,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>xmlData:XML</code>&nbsp;&nbsp;[read-only]<p>
-   
+         
    Return a reference to the XML graph
    structure that was used to initialise the graph.
    </p><span class="label">Implementation</span>
@@ -691,28 +627,28 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public function Graph(id:String, directional:Boolean = false, xmlsource:XML = null)</code><p>
-   Constructor method that creates the graph and can
-   initialise it directly from an XML object, if one is specified.
-   
-   </p><span class="label">Parameters</span>
+         Constructor method that creates the graph and can
+         initialise it directly from an XML object, if one is specified.
+         
+         </p><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
 <td width="20px"></td><td><code><span class="label">id</span>:String</code> &mdash; The id (or rather name) of the graph. Every graph has to have one.
-   </td>
+         </td>
 </tr>
 <tr>
 <td class="paramSpacer">&nbsp;</td>
 </tr>
 <tr>
 <td width="20px"></td><td><code><span class="label">directional</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash; Indicator if the graph is directional or not. Directional graphs have not been tested so far.
-   </td>
+         </td>
 </tr>
 <tr>
 <td class="paramSpacer">&nbsp;</td>
 </tr>
 <tr>
 <td width="20px"></td><td><code><span class="label">xmlsource</span>:XML</code> (default = <code>null</code>)<code></code> &mdash; an XML object that contains node and edge items that define the graph.
-   </td>
+         </td>
 </tr>
 </table>
 </div>
@@ -726,27 +662,27 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public static function createGraph(id:String, directional:Boolean, xmlsource:XML):<a href="../data/IGraph.html">IGraph</a></code><p>
-   A static factory method to create new graphs, but requires an xmlsource to be specified.
-   
-   </p><span class="label">Parameters</span>
+         A static factory method to create new graphs, but requires an xmlsource to be specified.
+         
+         </p><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
 <td width="20px"></td><td><code><span class="label">id</span>:String</code> &mdash; The id (or rather name) of the graph. Every graph has to have one.
-   </td>
+         </td>
 </tr>
 <tr>
 <td class="paramSpacer">&nbsp;</td>
 </tr>
 <tr>
 <td width="20px"></td><td><code><span class="label">directional</span>:Boolean</code> &mdash; Indicator if the graph is directional or not. Directional graphs have not been tested so far.
-   </td>
+         </td>
 </tr>
 <tr>
 <td class="paramSpacer">&nbsp;</td>
 </tr>
 <tr>
 <td width="20px"></td><td><code><span class="label">xmlsource</span>:XML</code> &mdash; an XML object that contains node and edge items that define the graph.
-   </td>
+         </td>
 </tr>
 </table>
 <p></p>
@@ -755,7 +691,7 @@ showHideInherited();
 <tr>
 <td width="20"></td><td><code><a href="../data/IGraph.html">IGraph</a></code> &mdash; 
                         the created Graph object (i.e. an object that implements the IGraph interface.
-   
+         
                         
                      </td>
 </tr>
@@ -765,7 +701,7 @@ showHideInherited();
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
 <td width="20"></td><td><code></code> &mdash; of the xmlsource is null.
-   </td>
+         </td>
 </tr>
 </table>
 </div>
@@ -777,7 +713,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public function createNode(sid:String = "", o:Object = null):<a href="../data/INode.html">INode</a></code><p>
-   
+         
    Creates a graph node in the graph, optionally takes a string
    id for the node and an object to associate the node with.
    </p><span class="label">Parameters</span>
@@ -814,7 +750,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public function getEdge(n1:<a href="INode.html">INode</a>, n2:<a href="INode.html">INode</a>):<a href="../data/IEdge.html">IEdge</a></code><p>
-   
+         
    Find an edge between two nodes.
    </p><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
@@ -849,8 +785,8 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public function getTree(n:<a href="INode.html">INode</a>, restr:Boolean = false, nocache:Boolean = false):<a href="../data/IGTree.html">IGTree</a></code><p>
-   
+<code>public function getTree(n:<a href="INode.html">INode</a>, restr:Boolean = false, nocache:Boolean = false, direction:int):<a href="../data/IGTree.html">IGTree</a></code><p>
+         
    returns the current BFS tree of the graph, rooted in the given node,
    optionally the tree is restricted to only contain currently visible
    nodes. 
@@ -879,6 +815,12 @@ showHideInherited();
 <td width="20px"></td><td><code><span class="label">nocache</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash; If set, always a new tree will be created and returned and the cache will be untouched.
    </td>
 </tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">direction</span>:int</code></td>
+</tr>
 </table>
 <p></p>
 <span class="label">Returns</span>
@@ -900,7 +842,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public function initFromXML(xml:XML):void</code><p>
-   
+         
       Creates a graph from XML.
       The XML you provide should contain 2 kinds of elements<br>
        &lt;Node id="xxx" anything-else..../&gt;<br>
@@ -928,7 +870,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public function link(node1:<a href="INode.html">INode</a>, node2:<a href="INode.html">INode</a>, o:Object = null):<a href="../data/IEdge.html">IEdge</a></code><p>
-   
+         
    Link two nodes together (i.e. create an edge). If the graph is NOT directional
    the same edge will be incoming and outgoing for both nodes. If the nodes are
    already linked, it will just return the existing edge between them.
@@ -973,7 +915,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public function nodeById(id:int):<a href="../data/INode.html">INode</a></code><p>
-   
+         
    A lookup to find a node by it's (int) id.
    </p><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
@@ -1001,14 +943,20 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public function nodeByStringId(sid:String):<a href="../data/INode.html">INode</a></code><p>
-   
+<code>public function nodeByStringId(sid:String, caseSensitive:Boolean = true):<a href="../data/INode.html">INode</a></code><p>
+         
    A lookup to find a node by it's string id.
    </p><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
 <td width="20px"></td><td><code><span class="label">sid</span>:String</code> &mdash; The node's string id.
    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">caseSensitive</span>:Boolean</code> (default = <code>true</code>)<code></code></td>
 </tr>
 </table>
 <p></p>
@@ -1031,7 +979,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public function purgeGraph():void</code><p>
-   
+         
    Remove all edges and nodes from the Graph.
    </p></div>
 <a name="purgeTrees()"></a>
@@ -1042,7 +990,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public function purgeTrees():void</code><p>
-   
+         
    Under certain circumstances all cached trees need
    to be purged.
    </p></div>
@@ -1054,7 +1002,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public function removeEdge(e:<a href="IEdge.html">IEdge</a>):void</code><p>
-   
+         
    Removes an edge between two nodes.
    </p><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
@@ -1072,7 +1020,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public function removeNode(n:<a href="INode.html">INode</a>):void</code><p>
-   
+         
    Removes a node from the graph. If the node is part of any edge,
    and error is thrown (i.e. edges must be removed/nodes unlinked first).
    </p><span class="label">Parameters</span>
@@ -1091,7 +1039,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public function unlink(node1:<a href="INode.html">INode</a>, node2:<a href="INode.html">INode</a>):void</code><p>
-   
+         
    Unlink two nodes, effectively removing the edge between
    them.
    </p><span class="label">Parameters</span>
@@ -1119,8 +1067,8 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public static const DEFAULTNAME_EDGE:String = "Edge"</code><p>
-   The default XML tagname of an XML item that defines an edge.
-   </p></div>
+         The default XML tagname of an XML item that defines an edge.
+         </p></div>
 <a name="DEFAULTNAME_FROMID"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -1129,8 +1077,8 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public static const DEFAULTNAME_FROMID:String = "fromID"</code><p>
-   The default XML attribute of an XML edge item that describes the from node.
-   </p></div>
+         The default XML attribute of an XML edge item that describes the from node.
+         </p></div>
 <a name="DEFAULTNAME_NODE"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -1139,8 +1087,8 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public static const DEFAULTNAME_NODE:String = "Node"</code><p>
-   The default XML tagname of an XML item that defines a node.
-   </p></div>
+         The default XML tagname of an XML item that defines a node.
+         </p></div>
 <a name="DEFAULTNAME_TOID"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -1149,40 +1097,8 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public static const DEFAULTNAME_TOID:String = "toID"</code><p>
-   The default XML attribute of an XML edge item that describes the to node.
-   </p></div>
-<a name="WALK_BACKWARDS"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">WALK_BACKWARDS</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public static const WALK_BACKWARDS:int = 1</code><p>
-   If building a spanning tree, walk only backwards.
-   </p></div>
-<a name="WALK_BOTH"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">WALK_BOTH</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public static const WALK_BOTH:int = 2</code><p>
-   If building a spanning tree, walk only both
-   directions
-   </p></div>
-<a name="WALK_FORWARD"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">WALK_FORWARD</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public static const WALK_FORWARD:int = 0</code><p>
-   If building a spanning tree, walk only forward.
-   (This is the default)
-   </p></div>
+         The default XML attribute of an XML edge item that describes the to node.
+         </p></div>
 <br>
 <br>
 <hr>

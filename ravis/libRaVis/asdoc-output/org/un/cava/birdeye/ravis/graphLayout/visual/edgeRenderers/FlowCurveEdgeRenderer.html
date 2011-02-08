@@ -10,13 +10,13 @@
 <body>
 <script type="text/javascript" language="javascript" src="../../../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
 <!--
-				asdocTitle = 'FlowCurveEdgeRenderer - API Documentation';
+				asdocTitle = 'FlowCurveEdgeRenderer - RaVis';
 				var baseRef = '../../../../../../../../';
 				window.onload = configPage;
 			--></script>
 <table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
 <tr>
-<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../../all-classes.html')" href="../../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../../all-classes.html')" href="../../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../../index-list.html')" href="../../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../../index.html?org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/FlowCurveEdgeRenderer.html&amp;org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../../images/logo.jpg"></td>
+<td align="left" class="titleTableTitle">RaVis</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../../all-classes.html')" href="../../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../../all-classes.html')" href="../../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../../index-list.html')" href="../../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../../index.html?org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/FlowCurveEdgeRenderer.html&amp;org/un/cava/birdeye/ravis/graphLayout/visual/edgeRenderers/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../../images/logo.jpg"></td>
 </tr>
 <tr class="titleTableRow2">
 <td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;FlowCurveEdgeRenderer</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a>&nbsp;| <a href="#constantSummary">Constants</a></td>
@@ -38,7 +38,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <td class="classHeaderTableLabel">Class</td><td class="classSignature">public class FlowCurveEdgeRenderer</td>
 </tr>
 <tr>
-<td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">FlowCurveEdgeRenderer <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../../../../../images/inherit-arrow.gif"> <a href="BaseEdgeRenderer.html">BaseEdgeRenderer</a></td>
+<td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">FlowCurveEdgeRenderer <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../../../../../images/inherit-arrow.gif"> <a href="BaseEdgeRenderer.html">BaseEdgeRenderer</a> <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../../../../../images/inherit-arrow.gif"> mx.core.UIComponent</td>
 </tr>
 </table>
 <p></p>
@@ -81,9 +81,11 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol">FlowCurveEdgeRenderer</td>
 </tr>
 <tr class="hideInheritedProperty">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseEdgeRenderer.html#graphics">graphics</a> : Graphics<div class="summaryTableDescription">
-   
-   </div>
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseEdgeRenderer.html#data">data</a> : Object<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="BaseEdgeRenderer.html">BaseEdgeRenderer</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseEdgeRenderer.html#fuzzFactor">fuzzFactor</a> : Number = 8<div class="summaryTableDescription"></div>
 </td><td class="summaryTableOwnerCol"><a href="BaseEdgeRenderer.html">BaseEdgeRenderer</a></td>
 </tr>
 <tr class="">
@@ -115,7 +117,13 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
 </tr>
 <tr class="hideInheritedProtectedProperty">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseEdgeRenderer.html#_g">_g</a> : Graphics<div class="summaryTableDescription"></div>
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseEdgeRenderer.html#g">g</a> : <a href="../../../utils/GraphicsWrapper.html">GraphicsWrapper</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="BaseEdgeRenderer.html">BaseEdgeRenderer</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="BaseEdgeRenderer.html#vedge">vedge</a> : <a href="../../visual/IVisualEdge.html">IVisualEdge</a>
+<div class="summaryTableDescription"></div>
 </td><td class="summaryTableOwnerCol"><a href="BaseEdgeRenderer.html">BaseEdgeRenderer</a></td>
 </tr>
 </table>
@@ -138,25 +146,16 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#FlowCurveEdgeRenderer()">FlowCurveEdgeRenderer</a>(g:Graphics)</div>
+<a class="signatureLink" href="#FlowCurveEdgeRenderer()">FlowCurveEdgeRenderer</a>()</div>
 <div class="summaryTableDescription">
    The constructor just initialises some default values
    and the graphics object.</div>
 </td><td class="summaryTableOwnerCol">FlowCurveEdgeRenderer</td>
 </tr>
-<tr class="hideInheritedMethod">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="BaseEdgeRenderer.html#applyLineStyle()">applyLineStyle</a>(ve:<a href="../../visual/IVisualEdge.html">IVisualEdge</a>):void</div>
-<div class="summaryTableDescription">
-   Applies the linestyle stored in the passed visual Edge
-   object to the Graphics object of the renderer.</div>
-</td><td class="summaryTableOwnerCol"><a href="BaseEdgeRenderer.html">BaseEdgeRenderer</a></td>
-</tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#draw()">draw</a>(vedge:<a href="../IVisualEdge.html">IVisualEdge</a>):void</div>
+<a class="signatureLink" href="#draw()">draw</a>():void</div>
 <div class="summaryTableDescription">
    The draw method here draws a bent curve of a certain
    thickness, depending on the flow and the parameters of
@@ -166,23 +165,53 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#labelCoordinates()">labelCoordinates</a>(vedge:<a href="../IVisualEdge.html">IVisualEdge</a>):Point</div>
+<a class="signatureLink" href="#labelCoordinates()">labelCoordinates</a>():Point</div>
 <div class="summaryTableDescription">
    This takes the "outer" one of the curves which are part of the
    curved flow and places the label more or less on the middle
    
    
-   
-   Returns the coordinates of the label for the given edge.</div>
+   </div>
 </td><td class="summaryTableOwnerCol">FlowCurveEdgeRenderer</td>
 </tr>
 <tr class="hideInheritedMethod">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="BaseEdgeRenderer.html#markPoint()">markPoint</a>(p:Point):void</div>
+<a class="signatureLink" href="BaseEdgeRenderer.html#render()">render</a>(force:Boolean = false):void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="BaseEdgeRenderer.html">BaseEdgeRenderer</a></td>
+</tr>
+</table>
+</div>
+<a name="protectedMethodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Protected Methods</div>
+<div class="showHideLinks">
+<div class="hideInheritedProtectedMethod" id="hideInheritedProtectedMethod">
+<a onclick="javascript:setInheritedVisible(false,'ProtectedMethod');" href="#protectedMethodSummary" class="showHideLink"><img src="../../../../../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Protected Methods</a>
+</div>
+<div class="showInheritedProtectedMethod" id="showInheritedProtectedMethod">
+<a onclick="javascript:setInheritedVisible(true,'ProtectedMethod');" href="#protectedMethodSummary" class="showHideLink"><img src="../../../../../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Protected Methods</a>
+</div>
+</div>
+<table id="summaryTableProtectedMethod" class="summaryTable hideInheritedProtectedMethod" cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="hideInheritedProtectedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseEdgeRenderer.html#applyLineStyle()">applyLineStyle</a>():void</div>
 <div class="summaryTableDescription">
-   This is a helper function for debugging, it marks
-   the given spot with a small circle.</div>
+   Applies the linestyle stored in the passed visual Edge
+   object to the Graphics object of the renderer.</div>
+</td><td class="summaryTableOwnerCol"><a href="BaseEdgeRenderer.html">BaseEdgeRenderer</a></td>
+</tr>
+<tr class="hideInheritedProtectedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="BaseEdgeRenderer.html#updateDisplayList()">updateDisplayList</a>(unscaledWidth:Number, unscaledHeight:Number):void</div>
+<div class="summaryTableDescription"></div>
 </td><td class="summaryTableOwnerCol"><a href="BaseEdgeRenderer.html">BaseEdgeRenderer</a></td>
 </tr>
 </table>
@@ -274,17 +303,10 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public function FlowCurveEdgeRenderer(g:Graphics)</code><p>
+<code>public function FlowCurveEdgeRenderer()</code><p>
    The constructor just initialises some default values
    and the graphics object.
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">g</span>:Graphics</code> &mdash; The graphics object to be used.
-   </td>
-</tr>
-</table>
-</div>
+   </p></div>
 <a name="methodDetail"></a>
 <div class="detailSectionHeader">Method detail</div>
 <a name="draw()"></a>
@@ -294,29 +316,12 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public override function draw(vedge:<a href="../IVisualEdge.html">IVisualEdge</a>):void</code><p>
+<code>public override function draw():void</code><p>
    The draw method here draws a bent curve of a certain
    thickness, depending on the flow and the parameters of
    this renderer.
    
-   
-   The draw function, i.e. the main function to be used.
-   Draws a straight line from one node of the edge to the other.
-   The edge style can be specified as XML attributes to the Edge XML Tag
-   
-   
-   Draws an edge.
-   Colours and linestyle can be provided through the XML object associated
-   with the (v)edge.
-   flexible.
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">vedge</span>:<a href="../IVisualEdge.html">IVisualEdge</a></code> &mdash; The edge to draw, it needs to provide all the information required, i.e. locations.
-   </td>
-</tr>
-</table>
-</div>
+   </p></div>
 <a name="labelCoordinates()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -324,23 +329,12 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public override function labelCoordinates(vedge:<a href="../IVisualEdge.html">IVisualEdge</a>):Point</code><p>
+<code>public override function labelCoordinates():Point</code><p>
    This takes the "outer" one of the curves which are part of the
    curved flow and places the label more or less on the middle
    
    
-   
-   Returns the coordinates of the label for the given edge.
-   Different edge renderers might want to specify a different
-   place where to put the label.
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">vedge</span>:<a href="../IVisualEdge.html">IVisualEdge</a></code> &mdash; The Edge where the label coordinates should refer to.
-   </td>
-</tr>
-</table>
-<p></p>
+   </p><p></p>
 <span class="label">Returns</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>

@@ -10,13 +10,13 @@
 <body>
 <script type="text/javascript" language="javascript" src="../../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
 <!--
-				asdocTitle = 'RendererIconFactory - API Documentation';
+				asdocTitle = 'RendererIconFactory - RaVis';
 				var baseRef = '../../../../../../../';
 				window.onload = configPage;
 			--></script>
 <table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
 <tr>
-<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/components/renderers/RendererIconFactory.html&amp;org/un/cava/birdeye/ravis/components/renderers/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
+<td align="left" class="titleTableTitle">RaVis</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/components/renderers/RendererIconFactory.html&amp;org/un/cava/birdeye/ravis/components/renderers/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
 </tr>
 <tr class="titleTableRow2">
 <td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;RendererIconFactory</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#methodSummary">Methods</a></td>
@@ -55,7 +55,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#createIcon()">createIcon</a>(type:String, size:int, color:int = 0):UIComponent</div>
+<a class="signatureLink" href="#createIcon()">createIcon</a>(type:String, size:int = -1, color:int = 0):UIComponent</div>
 <div class="summaryTableDescription">[static]
    This method generates an icon based on the
    type and returns it as an UIComponent.</div>
@@ -83,7 +83,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#getUrlbasedIcon()">getUrlbasedIcon</a>(url:String, size:int):Image</div>
+<a class="signatureLink" href="#getUrlbasedIcon()">getUrlbasedIcon</a>(url:String):Image</div>
 <div class="summaryTableDescription">[static]
    returns an image object with the source set
    to the url provided.</div>
@@ -105,7 +105,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public static function createIcon(type:String, size:int, color:int = 0):UIComponent</code><p>
+<code>public static function createIcon(type:String, size:int = -1, color:int = 0):UIComponent</code><p>
    This method generates an icon based on the
    type and returns it as an UIComponent.
    
@@ -126,7 +126,7 @@ showHideInherited();
 <td class="paramSpacer">&nbsp;</td>
 </tr>
 <tr>
-<td width="20px"></td><td><code><span class="label">size</span>:int</code> &mdash; The size of the icon (as a square)
+<td width="20px"></td><td><code><span class="label">size</span>:int</code> (default = <code>-1</code>)<code></code> &mdash; The size of the icon (as a square)
    </td>
 </tr>
 <tr>
@@ -227,20 +227,13 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public static function getUrlbasedIcon(url:String, size:int):Image</code><p>
+<code>public static function getUrlbasedIcon(url:String):Image</code><p>
    returns an image object with the source set
    to the url provided.
    </p><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
 <td width="20px"></td><td><code><span class="label">url</span>:String</code> &mdash; The URL string where to access the image.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">size</span>:int</code> &mdash; The size, the image will be renderered as a square.
    </td>
 </tr>
 </table>
