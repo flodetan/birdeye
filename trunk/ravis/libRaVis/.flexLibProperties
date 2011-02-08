@@ -135,6 +135,7 @@
     <classEntry path="org.un.cava.birdeye.ravis.utils.geom.PoincareIsometry"/>
     <classEntry path="org.un.cava.birdeye.ravis.utils.geom.PoincareModel"/>
     <classEntry path="org.un.cava.birdeye.ravis.utils.geom.PoincareProjector"/>
+    <classEntry path="org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.CenterWeightedCircularEdgeRenderer"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
