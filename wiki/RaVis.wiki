@@ -17,16 +17,12 @@ Logging support has been added conforming to [http://livedocs.adobe.com/flex/3/h
 27 March 2008:
 All code and development migrated from flexvizgraphlib project.
 
-== Status ==
-
-Stable: Project is at RC2; 27 May 2008
-
 == Demos ==
   * Example code how to use the library can be found [http://birdeye.googlecode.com/svn/trunk/ravis/RaVisExamples/ here].
 
-  * You can download a precompiled snapshot of the library [http://birdeye.googlecode.com/svn/trunk/ravis/libRaVis/released-binaries here].
+  * You can download a precompiled snapshot of the library (flex3 folder for Flex 3, flex4 for Flex 4) [http://birdeye.googlecode.com/svn/trunk/ravis/libRaVis/released-binaries here].
 
-  * Try the RaVis Explorer: [http://birdeye.googlecode.com/svn/trunk/ravis/RaVisExamples/example-binaries/RaVisExplorer.html here] (work in progress)
+  * Try the RaVis Explorer: [http://birdeye.googlecode.com/svn/trunk/ravis/RaVisExamples/example-binaries/RaVisExplorer.html here]
 
 == Enhancements ==
   * Useful Enhancement from Hung LE (letronghung@gmail.com). In this enhancements, I do some implementations to improve the Ravis Library for some requests from another members. These enhancements will be useful in your self business
