@@ -187,7 +187,7 @@ package org.un.cava.birdeye.ravis.components.renderers {
 
 			lb = new LinkButton();
 			
-			lb.width = 100;
+			//lb.width = 100;
 
 			lb.toolTip = "Click to View Details";
 			lb.setStyle("fontWeight","normal");
@@ -208,8 +208,8 @@ package org.un.cava.birdeye.ravis.components.renderers {
 			ll = new Label();
 
 			/* some hardcoded values for now */
-			ll.width = 75;
-			ll.height = 11;
+			/*ll.width = 75;
+			ll.height = 11;*/
 			ll.setStyle("textAlign","center");
 			ll.setStyle("fontSize",10);
 			

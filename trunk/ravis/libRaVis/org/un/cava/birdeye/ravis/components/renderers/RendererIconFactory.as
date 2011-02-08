@@ -59,7 +59,7 @@ package org.un.cava.birdeye.ravis.components.renderers {
 		 * @param color The color of the icon (if a primitive)
 		 * @returns The icon as UIComponent
 		 * */
-		public static function createIcon(type:String, size:int, color:int = 0):UIComponent {
+		public static function createIcon(type:String, size:int=-1, color:int = 0):UIComponent {
 			
 			var icon:UIComponent;
 			var pattern:RegExp;
@@ -97,11 +97,11 @@ package org.un.cava.birdeye.ravis.components.renderers {
 					icon = getPrimitiveIcon(suffix,size,color);
 					break;
 				case "url":
-					icon = getUrlbasedIcon(suffix,size);
+					icon = getUrlbasedIcon(suffix);
 					break;
 				default:
 					LogUtil.warn(_LOG, "Unknown icon prefix:"+prefix+" ,defaulting to URL based");
-					icon = getUrlbasedIcon(suffix,size);
+					icon = getUrlbasedIcon(suffix);
 					break;
 			}
 			return icon;
@@ -153,10 +153,10 @@ package org.un.cava.birdeye.ravis.components.renderers {
 		 * @param size The size, the image will be renderered as a square.
 		 * @returns The Image object of the icon.
 		 * */
-		public static function getUrlbasedIcon(url:String,size:int):Image {
+		public static function getUrlbasedIcon(url:String):Image {
 			var img:Image = new Image();
-			img.height = size;
-			img.width = size;
+			/*img.height = size;
+			img.width = size;*/
 			img.source = url;
 			return img;
 		}
