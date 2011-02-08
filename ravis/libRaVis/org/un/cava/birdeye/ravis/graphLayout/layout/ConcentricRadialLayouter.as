@@ -85,7 +85,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * this holds the data for a layout drawing.
 		 * */
 		private var _currentDrawing:ConcentricRadialLayoutDrawing;
-
+        
+        private var _zoomToFit:Boolean;
 		/**
 		 * The constructor initializes the layouter and may assign
 		 * already a VisualGraph object, but this can also be set later.
@@ -128,6 +129,13 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			_graph.purgeTrees();
 		}
 		
+        public function get zoomToFit():Boolean {
+            return _zoomToFit;
+        }
+        
+        public function set zoomToFit(value:Boolean):void {
+            _zoomToFit = value;
+        }
 		/**
 		 * @inheritDoc
 		 * */
@@ -228,8 +236,10 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			 * apply the result and display it
 			 * if we do have (but maybe even if we don't have)
 			 * we interpolate the polar coordinates of the nodes */
-			
-			
+			if(_zoomToFit){
+                doZoomToFit();
+            }
+                
 			resetAnimation();
 			
 			/* start the animation by interpolating polar coordinates */
@@ -238,6 +248,32 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			_layoutChanged = true;
 			return rv;
 		}
+        
+        
+        protected function doZoomToFit():void 
+        {
+            _currentDrawing.centeredLayout = false;
+            var offset:Point = new Point(-bounds.x/2,-bounds.y/2);
+            _currentDrawing.originOffset = offset;
+            
+            var wF:Number = (vgraph.width - margin)/(bounds.width);
+            var hF:Number = (vgraph.height - margin)/(bounds.height);
+            var sF:Number = Math.min(wF,hF);
+            var newS:Number = Math.min(1, sF);
+            vgraph.scale = newS;
+            
+            var setupsCenter:Point = new Point(bounds.width/2 , bounds.height/2);
+            var ourCenter:Point = new Point(vgraph.width/newS/2, vgraph.height/newS/2);
+            
+            var transformPoint:Point = setupsCenter.subtract(ourCenter);
+            for each(var node:INode in _graph.nodes)
+            {
+                var p:Point = _currentDrawing.getAbsCartCoordinates(node);
+                p.x -= transformPoint.x;
+                p.y -= transformPoint.y;
+                _currentDrawing.setCartCoordinates(node,p);
+            } 
+        }
 		
 		/**
 		 * Presets the angular bounds of the layout, if desired.
