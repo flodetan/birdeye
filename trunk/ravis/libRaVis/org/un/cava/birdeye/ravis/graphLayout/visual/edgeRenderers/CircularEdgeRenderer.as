@@ -61,6 +61,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			/* calculate the midpoint used as curveTo anchor point */
 			var anchor:Point = getEdgeAnchor(vedge);
 			
+            var thickness:Number = vedge.lineStyle.thickness;
 			/* apply the line style */
 			applyLineStyle(vedge);
 			
@@ -70,10 +71,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			
 			//_g.curveTo(centreX, centreY, toX, toY);
 			_g.curveTo(
-				anchor.x,
-				anchor.y,
-				toNode.viewCenter.x,
-				toNode.viewCenter.y
+				anchor.x ,
+				anchor.y ,
+				toNode.viewCenter.x ,
+				toNode.viewCenter.y 
 			);
 			
 			//_g.endFill();
@@ -92,14 +93,16 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * @inheritDoc
 		 * */
 		override public function labelCoordinates(vedge:IVisualEdge):Point {
-			/* first get the corresponding visual object */
-			var fromPoint:Point = new Point(vedge.edge.node1.vnode.viewCenter.x,
-								vedge.edge.node1.vnode.viewCenter.y);
-			var toPoint:Point = new Point(vedge.edge.node2.vnode.viewCenter.x,
-								vedge.edge.node2.vnode.viewCenter.y);
+			
+            var thickness:Number = vedge.lineStyle.thickness;
+            /* first get the corresponding visual object */
+			var fromPoint:Point = new Point(vedge.edge.node1.vnode.viewCenter.x + thickness,
+								vedge.edge.node1.vnode.viewCenter.y + thickness);
+			var toPoint:Point = new Point(vedge.edge.node2.vnode.viewCenter.x + thickness,
+								vedge.edge.node2.vnode.viewCenter.y + thickness);
 			
 			/* calculate the midpoint used as curveTo anchor point */
-			var anchor:Point = getLabelAnchor(vedge);
+			var anchor:Point = getLabelAnchor(vedge).add(new Point(thickness,thickness));
 			return Geometry.bezierPoint(fromPoint,anchor,toPoint,0.5);
 		}
         
