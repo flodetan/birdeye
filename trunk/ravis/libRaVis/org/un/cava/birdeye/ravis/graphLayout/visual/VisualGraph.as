@@ -401,6 +401,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
          * are the same VNode.
          * */
         protected var _visibleVNodes:Dictionary;
+        protected var _visibleVNodesList:Array;
         
         /**
          * The number of currently visible VNodes.
@@ -414,6 +415,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
          * with VEdges and the values are the same VEdge objects.
          * */
         protected var _visibleVEdges:Dictionary;
+        protected var _visibleVEdgesList:Array;
         
         /* root nodes, distinguished nodes and history */
         
@@ -502,7 +504,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             _edgeViewToVEdgeMap = new Dictionary;
             
             _visibleVNodes = new Dictionary;
+            _visibleVNodesList = new Array;
             _visibleVEdges = new Dictionary;
+            _visibleVEdgesList = new Array;
             
             _noVisibleVNodes = 0;
             _visibilityLimitActive = true;
@@ -785,8 +789,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
         /**
          * @inheritDoc
          * */
-        public function get visibleVNodes():Dictionary {
-            return _visibleVNodes;
+        public function get visibleVNodes():Array {
+            return _visibleVNodesList.sortOn("id");
         }
         
         /**
@@ -799,8 +803,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
         /**
          * @inheritDoc
          * */
-        public function get visibleVEdges():Dictionary {
-            return _visibleVEdges;
+        public function get visibleVEdges():Array {
+            return _visibleVNodesList.sortOn("id");
         }
         
         /**
@@ -1573,8 +1577,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             
             /* remove from the visible vnode map if present */
             if(_visibleVNodes[vn] != undefined) {
-                delete _visibleVNodes[vn];
-                --_noVisibleVNodes;
+                
+                deleteVisibleVNode(vn);
             }
             
             /* remove from tracking hash */
@@ -1582,6 +1586,27 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             
             /* this should clean up all references to this VNode
             * thus freeing it for garbage collection */
+        }
+        
+        private function deleteVisibleVNode(vn:IVisualNode):void
+        {
+            vn.isVisible = false;
+            delete _visibleVNodes[vn];
+            var newVisibleVNodes:Array = new Array();
+            for each(var node:IVisualNode in _visibleVNodesList)
+            {
+                if(node != vn)
+                    newVisibleVNodes.push(node);
+            }
+            
+            _visibleVNodesList = newVisibleVNodes;
+            
+            /* remove the view if there is one */
+            if(vn.view != null) {
+                removeNodeView(vn.view, false);
+            }
+            
+            --_noVisibleVNodes;
         }
         
         /**
@@ -2613,6 +2638,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             
             /* recreate those, this is cheaper probably */
             _visibleVNodes = new Dictionary;
+            _visibleVNodesList = new Array;
             _noVisibleVNodes = 0;
             
             for each(n in _graph.nodes) {
@@ -2621,7 +2647,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             
             /* same for edges */
             _visibleVEdges = new Dictionary;
-            
+            _visibleVNodesList = new Array;
             for each(e in _graph.edges) {
                 setEdgeVisibility(e.vedge, true);
             }
@@ -2692,6 +2718,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
                 vn.isVisible = true;
                 /* add it to the hash of currently visible nodes */
                 _visibleVNodes[vn] = vn;
+                
+                if(_visibleVNodesList.indexOf(vn) == -1)
+                    _visibleVNodesList.push(vn);
                 /* increase the counter */
                 ++_noVisibleVNodes;
                 
@@ -2702,17 +2731,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
                 comp.visible = true;
                 
             } else { // i.e. set to invisible 
-                /* render node invisible, thus potentially destroying its view */
-                vn.isVisible = false;
-                /* remove it from the hash */
-                delete _visibleVNodes[vn];
-                /* decrease the counter */
-                --_noVisibleVNodes;
-                
-                /* remove the view if there is one */
-                if(vn.view != null) {
-                    removeNodeView(vn.view, false);
-                }
+
+                deleteVisibleVNode(vn);
             }
         }
         
@@ -2739,6 +2759,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
                 /* add it to the hash of currently visible nodes */
                 _visibleVEdges[ve] = ve;
                 
+                if(_visibleVEdgesList.indexOf(ve) == -1)
+                    _visibleVEdgesList.push(ve);
+                
                 /* check if there is no view and we need one */
                 if(_displayEdgeLabels && ve.labelView == null) {
                     labelComp = createVEdgeLabelView(ve);
@@ -2753,18 +2776,33 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             } else { // i.e. set to invisible 
                 /* render node invisible, thus potentially destroying its view */
                 ve.isVisible = false;
-                /* remove it from the hash */
-                delete _visibleVEdges[ve];
                 
-                /* remove the view if there is one */
-                if(ve.labelView != null) {
-                    removeVEdgeLabelView(ve.labelView);
-                }
-                
-                if(ve.edgeView != null) {
-                    removeVEdgeView(ve.edgeView);
-                }
+                deleteVisibleVEdge(ve);
             }
+        }
+        
+        private function deleteVisibleVEdge(ve:IVisualEdge):void
+        {
+            ve.isVisible = false;
+            
+            var newEdgeList:Array = new Array();
+            for each(var e:IVisualEdge in _visibleVEdgesList)
+            {
+                if(e != ve)
+                    newEdgeList.push(e);
+            }
+            _visibleVEdgesList = newEdgeList;
+            
+            /* remove the view if there is one */
+            if(ve.labelView != null) {
+                removeVEdgeLabelView(ve.labelView);
+            }
+            
+            if(ve.edgeView != null) {
+                removeVEdgeView(ve.edgeView);
+            }
+            /* remove it from the hash */
+            delete _visibleVEdges[ve];
         }
         
         /**

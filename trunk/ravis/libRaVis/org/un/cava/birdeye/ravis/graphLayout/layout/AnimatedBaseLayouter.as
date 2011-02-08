@@ -278,7 +278,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * the same function again for the next animation step.
 		 * */
 		protected function interpolatePolarCoords():Boolean {
-			var visVNodes:Dictionary;
+			var visVNodes:Array;
 			var vn:IVisualNode;
 			var n:INode;
 			var i:int;
@@ -391,7 +391,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * @see interpolatePolarCoords()
 		 * */
 		protected function interpolateCartCoords():Boolean {
-			var visVNodes:Dictionary;
+			var visVNodes:Array;
 			var vn:IVisualNode;
 			var n:INode;
 			var i:int;
@@ -448,7 +448,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * Will be used if the disableAnimation flag is set.
 		 * */
 		protected function setCoords():Boolean {
-			var visVNodes:Dictionary;
+			var visVNodes:Array;
 			var vn:IVisualNode;
 			var n:INode;
 			var targetPoint:Point;

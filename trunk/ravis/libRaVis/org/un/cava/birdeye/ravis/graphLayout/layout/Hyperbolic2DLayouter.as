@@ -193,7 +193,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		
 		/* Calculation step of the layout */
 		override protected function calculateLayout():void {
-			var allVisVNodes:Dictionary = _vgraph.visibleVNodes;
+			var allVisVNodes:Array = _vgraph.visibleVNodes;
 			var vn:IVisualNode;
 			var totalNodes:Number = _vgraph.noVisibleVNodes;
 			var k:int;

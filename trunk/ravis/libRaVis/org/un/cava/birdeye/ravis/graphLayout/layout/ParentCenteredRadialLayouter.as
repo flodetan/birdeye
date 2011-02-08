@@ -589,7 +589,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			var lenlimit:Number;
 			var len:Number;
 			var currentRootR:Number;
-			var visVNodes:Dictionary;
+			var visVNodes:Array;
 			var vn:IVisualNode;
 			
 			maxlen = 0;
