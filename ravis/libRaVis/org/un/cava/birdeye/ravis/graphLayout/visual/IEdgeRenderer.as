@@ -27,34 +27,22 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 	import flash.display.Graphics;
 	import flash.geom.Point;
 	
+	import mx.core.IDataRenderer;
+	import mx.core.IUIComponent;
+	
 	/**
 	 * Interface for any Edge renderers,
 	 * basically this is very simple as it just
 	 * requires a draw() method.
 	 * */
-	public interface IEdgeRenderer {
+	public interface IEdgeRenderer extends IDataRenderer, IUIComponent {
 		
-        function get graph():IVisualGraph;
-        
-        function clear():void;
-        
 		/**
 		 * Draws an edge.
 		 * Colours and linestyle can be provided through the XML object associated
 		 * with the (v)edge.
 		 * flexible.
-		 * @param vedge The edge to draw, it needs to provide all the information required, i.e. locations.
 		 * */
-		function draw(vedge:IVisualEdge):void;
-		
-		/**
-		 * Returns the coordinates of the label for the given edge.
-		 * Different edge renderers might want to specify a different
-		 * place where to put the label.
-		 * @param edge The Edge where the label coordinates should refer to.
-		 * @returns The coordinates where the edge renderer wants to place the label
-		 * */
-		function labelCoordinates(vedge:IVisualEdge):Point;
-		
+		function render(force:Boolean=false):void;
 	}
 }

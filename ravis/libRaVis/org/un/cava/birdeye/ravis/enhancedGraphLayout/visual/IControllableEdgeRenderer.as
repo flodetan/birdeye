@@ -6,8 +6,8 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 	
 	public interface IControllableEdgeRenderer
 	{
-		function fromControlCoordinates(vedge:IVisualEdge):Point;
+		function fromControlCoordinates():Point;
 		
-		function toControlCoordinates(vedge:IVisualEdge):Point;
+		function toControlCoordinates():Point;
 	}
 }

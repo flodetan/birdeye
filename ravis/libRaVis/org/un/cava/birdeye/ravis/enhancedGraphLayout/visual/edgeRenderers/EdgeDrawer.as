@@ -76,32 +76,32 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
         public var isFixBaseEdge:Boolean = true;
         public var hitSize:Number = 6;
         
-        public function EdgeDrawer(g:IVisualGraph) {
-            super(g);
+        public function EdgeDrawer() {
+            super();
         }
         
-        protected function drawLine(x1:Number, y1:Number, x2:Number, y2:Number, g:GraphicsWrapper):void
+        protected function drawLine(x1:Number, y1:Number, x2:Number, y2:Number):void
         {
             g.lineStyle(hitSize, this.color, 0.01);
-            moveTo(g, x1, y1);
-            lineTo(g, x2, y2);
+            moveTo(x1, y1);
+            lineTo(x2, y2);
             g.lineStyle(1, this.color, 1);
-            moveTo(g, x1, y1);
-            lineTo(g, x2, y2);
+            moveTo(x1, y1);
+            lineTo(x2, y2);
         }
         
-        protected function lineTo(g:GraphicsWrapper, ptx:Number, pty:Number):void
+        protected function lineTo(ptx:Number, pty:Number):void
         {
             var pos:Point = new Point(ptx, pty);
-            pos = graph.localToGlobal(pos);
+            pos = vedge.vgraph.localToGlobal(pos);
             pos = labelView.globalToLocal(pos);
             g.lineTo(pos.x, pos.y);
         }
         
-        protected function moveTo(g:GraphicsWrapper, ptx:Number, pty:Number):void
+        protected function moveTo(ptx:Number, pty:Number):void
         {
             var pos:Point = new Point(ptx, pty);
-            pos = graph.localToGlobal(pos);
+            pos = vedge.vgraph.localToGlobal(pos);
             pos = labelView.globalToLocal(pos);
             g.moveTo(pos.x, pos.y);
         }
@@ -109,7 +109,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
         protected function positionComponent(component:DisplayObject, ptx:Number, pty:Number):void
         {
             var pos:Point = new Point(ptx, pty);
-            pos = graph.localToGlobal(pos);
+            pos = vedge.vgraph.localToGlobal(pos);
             pos = labelView.globalToLocal(pos);
             component.x = pos.x;
             component.y = pos.y;
@@ -123,7 +123,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
          * 
          * @inheritDoc
          * */
-        public override function draw(vedge:IVisualEdge):void {
+        public override function draw():void {
             
             var edge:IEdge = vedge.edge;
             
@@ -139,12 +139,12 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
                 return;
             }
             
-            calculateLayoutOrientation(vedge);
-            baseEdgePosition = calculateBaseEdgePosition(vedge);
-            redraw(vedge);	
+            calculateLayoutOrientation();
+            baseEdgePosition = calculateBaseEdgePosition();
+            redraw();	
         }
         
-        protected function calculateBaseEdgePosition(vedge:IVisualEdge):int
+        protected function calculateBaseEdgePosition():int
         {
             var edge:IEdge = vedge.edge;
             var fromNode:INode = edge.node1;
@@ -228,7 +228,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
             return -1;
         }
         
-        protected function calculateLayoutOrientation(vedge:IVisualEdge):void
+        protected function calculateLayoutOrientation():void
         {
             if (vedge.vgraph.layouter is HierarchicalLayouter)
             {
@@ -236,9 +236,8 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
             }
         }
         
-        protected function redraw(vedge:IVisualEdge):void {
+        protected function redraw():void {
             
-            var g:GraphicsWrapper = graphicsForEdge(vedge);
             var edge:IEdge = vedge.edge;
             var edgeVO:Object = edge.data;
             var toPositionStrID:String;
@@ -288,7 +287,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
                 toDistance = castedComp.toDistance;
             }
             
-            g = new GraphicsWrapper(labelView.graphics);
+            var g:GraphicsWrapper = new GraphicsWrapper(labelView.graphics);
             g.fuzzFactor = hitSize;
             g.clear();
             /* now we actually draw */
@@ -308,7 +307,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
             }
             
             var midPt:Point = new Point();
-            baseEdgePosition = calculateBaseEdgePosition(vedge);
+            baseEdgePosition = calculateBaseEdgePosition();
             /* calculate the midpoint */
             
             var pt1:Point = new Point();
@@ -622,12 +621,12 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
                 midPt.y = (pt3.y + pt4.y)/2;
             }
             
-            drawLine(pt1.x, pt1.y, pt2.x, pt2.y, g);
-            drawLine(pt2.x, pt2.y, pt3.x, pt3.y, g);
-            drawLine(pt3.x, pt3.y, pt4.x, pt4.y, g);
+            drawLine(pt1.x, pt1.y, pt2.x, pt2.y);
+            drawLine(pt2.x, pt2.y, pt3.x, pt3.y);
+            drawLine(pt3.x, pt3.y, pt4.x, pt4.y);
             if (toDistance != 0)
             {
-                drawLine(pt4.x, pt4.y, finalPt.x, finalPt.y, g);
+                drawLine(pt4.x, pt4.y, finalPt.x, finalPt.y);
             }
             
             if(arrowPosition == "type1"){
@@ -641,17 +640,17 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
                         }
                         else
                         {
-                            drawArrow(pt1.x, pt1.y, pt2.x, pt2.y, g);
+                            drawArrow(pt1.x, pt1.y, pt2.x, pt2.y);
                         }
                     }
                     else
                     {
-                        drawArrow(pt2.x, pt2.y, pt4.x, pt4.y, g);
+                        drawArrow(pt2.x, pt2.y, pt4.x, pt4.y);
                     }
                 }
                 else
                 {
-                    drawArrow(pt3.x, pt3.y, pt4.x, pt4.y, g);
+                    drawArrow(pt3.x, pt3.y, pt4.x, pt4.y);
                 }				
             }
             if (arrowPosition == "type2")
@@ -673,15 +672,15 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
                         }
                         else
                         {
-                            drawArrow(pt1.x, pt1.y, pt2.x, pt2.y, g);
+                            drawArrow(pt1.x, pt1.y, pt2.x, pt2.y);
                         }
                     }
                     else
-                        drawArrow(pt2.x, pt2.y, pt4.x, pt4.y, g);
+                        drawArrow(pt2.x, pt2.y, pt4.x, pt4.y);
                 }
                 else
                 {
-                    drawArrow(pt3.x, pt3.y, pt4.x, pt4.y, g);
+                    drawArrow(pt3.x, pt3.y, pt4.x, pt4.y);
                 }				
             }
             
@@ -706,15 +705,15 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
                         }
                         else
                         {
-                            drawArrow(pt1.x, pt1.y, pt2.x, pt2.y, g);
+                            drawArrow(pt1.x, pt1.y, pt2.x, pt2.y);
                         }
                     }
                     else
-                        drawArrow(pt2.x, pt2.y, pt4.x, pt4.y, g);
+                        drawArrow(pt2.x, pt2.y, pt4.x, pt4.y);
                 }
                 else
                 {
-                    drawArrow(pt3.x, pt3.y, pt4.x, pt4.y, g);
+                    drawArrow(pt3.x, pt3.y, pt4.x, pt4.y);
                 }
                 
             }
@@ -731,34 +730,34 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
                         else
                         {
                             //drawArrow(pt1.x, pt1.y, pt2.x, pt2.y);
-                            moveTo(g,pt5.x ,pt5.y);
-                            lineTo(g,pt4.x, pt4.y);
-                            moveTo(g,pt5.x ,pt5.y);
-                            lineTo(g,pt41.x, pt41.y);
-                            moveTo(g,pt5.x ,pt5.y);
-                            lineTo(g,pt42.x, pt42.y);
+                            moveTo(pt5.x ,pt5.y);
+                            lineTo(pt4.x, pt4.y);
+                            moveTo(pt5.x ,pt5.y);
+                            lineTo(pt41.x, pt41.y);
+                            moveTo(pt5.x ,pt5.y);
+                            lineTo(pt42.x, pt42.y);
                         }
                     }
                     else
                         //drawArrow(pt2.x, pt2.y, pt4.x, pt4.y);
                     {
-                        moveTo(g,pt5.x ,pt5.y);
-                        lineTo(g,pt4.x, pt4.y);
-                        moveTo(g,pt5.x ,pt5.y);
-                        lineTo(g,pt41.x, pt41.y);
-                        moveTo(g,pt5.x ,pt5.y);
-                        lineTo(g,pt42.x, pt42.y);							
+                        moveTo(pt5.x ,pt5.y);
+                        lineTo(pt4.x, pt4.y);
+                        moveTo(pt5.x ,pt5.y);
+                        lineTo(pt41.x, pt41.y);
+                        moveTo(pt5.x ,pt5.y);
+                        lineTo(pt42.x, pt42.y);							
                     }
                 }
                 else
                 {
                     //drawArrow(pt3.x, pt3.y, pt4.x, pt4.y);
-                    moveTo(g,pt5.x ,pt5.y);
-                    lineTo(g,pt4.x, pt4.y);
-                    moveTo(g,pt5.x ,pt5.y);
-                    lineTo(g,pt41.x, pt41.y);
-                    moveTo(g,pt5.x ,pt5.y);
-                    lineTo(g,pt42.x, pt42.y);			
+                    moveTo(pt5.x ,pt5.y);
+                    lineTo(pt4.x, pt4.y);
+                    moveTo(pt5.x ,pt5.y);
+                    lineTo(pt41.x, pt41.y);
+                    moveTo(pt5.x ,pt5.y);
+                    lineTo(pt42.x, pt42.y);			
                 }				
             }
             
@@ -779,7 +778,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
             return ({x: _loc3, y: _loc2});
         }
         
-        protected function drawArrow(fromX:Number, fromY:Number, toX:Number, toY:Number, g:GraphicsWrapper):void{
+        protected function drawArrow(fromX:Number, fromY:Number, toX:Number, toY:Number):void{
             
             if (enableArrow == false)
                 return;
@@ -806,11 +805,11 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
             var arrowLine1:Object = this.calculatePoint(toX, toY, arrowLength, 180 - Math.atan(dXY) * 5.729578E+001 - arrowOS);
             var arrowLine2:Object = this.calculatePoint(toX, toY, arrowLength, 180 - Math.atan(dXY) * 5.729578E+001 + arrowOS);   		
             
-            moveTo(g, toX, toY);
+            moveTo(toX, toY);
             g.beginFill(color,1);
-            lineTo(g, arrowLine1.x, arrowLine1.y);            
-            lineTo(g, arrowLine2.x, arrowLine2.y);
-            lineTo(g, toX, toY);
+            lineTo(arrowLine1.x, arrowLine1.y);            
+            lineTo(arrowLine2.x, arrowLine2.y);
+            lineTo(toX, toY);
             g.endFill(); 
             
         }
@@ -850,136 +849,136 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers {
         }  
         
         //from the right side of obj1 to the left side of obj2
-        private function rightToLeft(obj1:IVisualNode, obj2:IVisualNode, g:GraphicsWrapper):void {
-            moveTo(g, obj1.view.x + obj1.view.width, obj1.view.y + (obj1.view.height/2));
+        private function rightToLeft(obj1:IVisualNode, obj2:IVisualNode):void {
+            moveTo(obj1.view.x + obj1.view.width, obj1.view.y + (obj1.view.height/2));
             if(edgeClass == 'type1') {
                 if (baseEdgePosition == BASE_EDGE_LEFT)
                 {
-                    lineTo(g, (obj1.view.x + obj1.view.width) + 20 - arrowLength , obj1.view.y + (obj1.view.height/2));
-                    lineTo(g, (obj1.view.x + obj1.view.width) + 20 - arrowLength , obj2.view.y + (obj2.view.height/2));
-                    lineTo(g, obj2.view.x - arrowLength+1, obj2.view.y + (obj2.view.height/2));
+                    lineTo((obj1.view.x + obj1.view.width) + 20 - arrowLength , obj1.view.y + (obj1.view.height/2));
+                    lineTo((obj1.view.x + obj1.view.width) + 20 - arrowLength , obj2.view.y + (obj2.view.height/2));
+                    lineTo(obj2.view.x - arrowLength+1, obj2.view.y + (obj2.view.height/2));
                 }
                 else
                 {
                     
                 }
-                drawArrow((obj1.view.x + obj1.view.width) + .5*(obj2.view.x - (obj1.view.x + obj1.view.width)) - arrowLength, obj2.view.y + (obj2.view.height/2), obj2.view.x, obj2.view.y + (obj2.view.height/2), g);
+                drawArrow((obj1.view.x + obj1.view.width) + .5*(obj2.view.x - (obj1.view.x + obj1.view.width)) - arrowLength, obj2.view.y + (obj2.view.height/2), obj2.view.x, obj2.view.y + (obj2.view.height/2));
             }else if(edgeClass == 'type2'){
-                lineTo(g, (obj1.view.x + obj1.view.width) + .5*(obj2.view.x - (obj1.view.x + obj1.view.width)) - arrowLength, obj2.view.y + (obj2.view.height/2));
-                lineTo(g, obj2.view.x - arrowLength+1, obj2.view.y + (obj2.view.height/2));
-                drawArrow((obj1.view.x + obj1.view.width) + .5*(obj2.view.x - (obj1.view.x + obj1.view.width)) - arrowLength, obj2.view.y + (obj2.view.height/2), obj2.view.x, obj2.view.y + (obj2.view.height/2), g);
+                lineTo((obj1.view.x + obj1.view.width) + .5*(obj2.view.x - (obj1.view.x + obj1.view.width)) - arrowLength, obj2.view.y + (obj2.view.height/2));
+                lineTo(obj2.view.x - arrowLength+1, obj2.view.y + (obj2.view.height/2));
+                drawArrow((obj1.view.x + obj1.view.width) + .5*(obj2.view.x - (obj1.view.x + obj1.view.width)) - arrowLength, obj2.view.y + (obj2.view.height/2), obj2.view.x, obj2.view.y + (obj2.view.height/2));
                 
             }
             else {
-                lineTo(g, obj2.view.x - arrowLength+1, obj2.view.y + (obj2.view.height/2));	
-                drawArrow(obj1.view.x + obj1.view.width, obj1.view.y + (obj1.view.height/2), obj2.view.x, obj2.view.y + (obj2.view.height/2), g);
+                lineTo(obj2.view.x - arrowLength+1, obj2.view.y + (obj2.view.height/2));	
+                drawArrow(obj1.view.x + obj1.view.width, obj1.view.y + (obj1.view.height/2), obj2.view.x, obj2.view.y + (obj2.view.height/2));
             }
         }
         
         //from the left side of obj1 to the right side of obj2
-        private function leftToRight(obj1:IVisualNode, obj2:IVisualNode, g:GraphicsWrapper):void {
-            moveTo(g, obj1.view.x , obj1.view.y + (obj1.view.height/2));
+        private function leftToRight(obj1:IVisualNode, obj2:IVisualNode):void {
+            moveTo(obj1.view.x , obj1.view.y + (obj1.view.height/2));
             if(edgeClass == 'type1'){
                 if (baseEdgePosition == BASE_EDGE_RIGHT)
                 {
-                    lineTo(g, (obj2.view.x + obj2.view.width) , obj1.view.y + (obj1.view.height/2));
-                    lineTo(g, (obj2.view.x + obj2.view.width) , obj2.view.y + (obj2.view.height/2));
-                    lineTo(g, (obj2.view.x + obj2.view.width) + arrowLength-1, obj2.view.y + obj2.view.height/2);
+                    lineTo((obj2.view.x + obj2.view.width) , obj1.view.y + (obj1.view.height/2));
+                    lineTo((obj2.view.x + obj2.view.width) , obj2.view.y + (obj2.view.height/2));
+                    lineTo((obj2.view.x + obj2.view.width) + arrowLength-1, obj2.view.y + obj2.view.height/2);
                 }
                 else
                 {
                     
                 }
                 
-                drawArrow((obj2.view.x + obj2.view.width) + .5*(obj1.view.x - (obj2.view.x + obj2.view.width)) + arrowLength, obj2.view.y + (obj2.view.height/2), (obj2.view.x + obj2.view.width), obj2.view.y + obj2.view.height/2, g);		
+                drawArrow((obj2.view.x + obj2.view.width) + .5*(obj1.view.x - (obj2.view.x + obj2.view.width)) + arrowLength, obj2.view.y + (obj2.view.height/2), (obj2.view.x + obj2.view.width), obj2.view.y + obj2.view.height/2);		
             }else if(edgeClass == 'type2'){
-                lineTo(g, (obj2.view.x + obj2.view.width) + .5*(obj1.view.x - (obj2.view.x + obj2.view.width)) + arrowLength, obj2.view.y + (obj2.view.height/2));
-                lineTo(g, (obj2.view.x + obj2.view.width) + arrowLength-1, obj2.view.y + obj2.view.height/2);
+                lineTo((obj2.view.x + obj2.view.width) + .5*(obj1.view.x - (obj2.view.x + obj2.view.width)) + arrowLength, obj2.view.y + (obj2.view.height/2));
+                lineTo((obj2.view.x + obj2.view.width) + arrowLength-1, obj2.view.y + obj2.view.height/2);
                 
-                drawArrow((obj2.view.x + obj2.view.width) + .5*(obj1.view.x - (obj2.view.x + obj2.view.width)) + arrowLength, obj2.view.y + (obj2.view.height/2), (obj2.view.x + obj2.view.width), obj2.view.y + obj2.view.height/2, g);		
+                drawArrow((obj2.view.x + obj2.view.width) + .5*(obj1.view.x - (obj2.view.x + obj2.view.width)) + arrowLength, obj2.view.y + (obj2.view.height/2), (obj2.view.x + obj2.view.width), obj2.view.y + obj2.view.height/2);		
             }
             else{
-                lineTo(g, (obj2.view.x + obj2.view.width) + arrowLength-1, obj2.view.y + obj2.view.height/2);
-                drawArrow(obj1.view.x, obj1.view.y + (obj1.view.height/2), (obj2.view.x + obj2.view.width), obj2.view.y + obj2.view.height/2, g);
+                lineTo((obj2.view.x + obj2.view.width) + arrowLength-1, obj2.view.y + obj2.view.height/2);
+                drawArrow(obj1.view.x, obj1.view.y + (obj1.view.height/2), (obj2.view.x + obj2.view.width), obj2.view.y + obj2.view.height/2);
             }
             
         }
         
         //from the top of obj1 to the bottom of obj2
-        private function topToBottom(obj1:IVisualNode, obj2:IVisualNode, g:GraphicsWrapper):void {
-            moveTo(g, obj1.view.x + (obj1.view.width/2), obj1.view.y);
+        private function topToBottom(obj1:IVisualNode, obj2:IVisualNode):void {
+            moveTo(obj1.view.x + (obj1.view.width/2), obj1.view.y);
             if(edgeClass == 'type1'){
                 if (baseEdgePosition == BASE_EDGE_BELOW)
                 {
-                    lineTo(g, obj1.view.x + (obj1.view.width/2), obj1.view.y - 20);
-                    lineTo(g, obj2.view.x+(obj2.view.width/2), obj1.view.y - 20);
-                    lineTo(g, obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height)+ arrowLength-1); 
+                    lineTo(obj1.view.x + (obj1.view.width/2), obj1.view.y - 20);
+                    lineTo(obj2.view.x+(obj2.view.width/2), obj1.view.y - 20);
+                    lineTo(obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height)+ arrowLength-1); 
                 }
                 else
                 {
-                    lineTo(g, obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height)+ arrowLength-1); 
+                    lineTo(obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height)+ arrowLength-1); 
                 }
-                drawArrow(obj2.view.x+(obj2.view.width/2), obj1.view.y + .5*((obj2.view.y + obj2.view.height) - obj1.view.y), obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height), g);			
+                drawArrow(obj2.view.x+(obj2.view.width/2), obj1.view.y + .5*((obj2.view.y + obj2.view.height) - obj1.view.y), obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height));			
             }else if(edgeClass == 'type2'){
-                lineTo(g, obj2.view.x+(obj2.view.width/2), obj1.view.y + .5*((obj2.view.y + obj2.view.height) - obj1.view.y));
-                lineTo(g, obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height)+ arrowLength-1);
-                drawArrow(obj2.view.x+(obj2.view.width/2), obj1.view.y + .5*((obj2.view.y + obj2.view.height) - obj1.view.y), obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height), g);			
+                lineTo(obj2.view.x+(obj2.view.width/2), obj1.view.y + .5*((obj2.view.y + obj2.view.height) - obj1.view.y));
+                lineTo(obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height)+ arrowLength-1);
+                drawArrow(obj2.view.x+(obj2.view.width/2), obj1.view.y + .5*((obj2.view.y + obj2.view.height) - obj1.view.y), obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height));			
             }
             else{
-                lineTo(g, obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height)+ arrowLength-1);
-                drawArrow(obj1.view.x + (obj1.view.width/2), obj1.view.y, obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height), g);
+                lineTo(obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height)+ arrowLength-1);
+                drawArrow(obj1.view.x + (obj1.view.width/2), obj1.view.y, obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height));
             }
             
         }
         
         //from the bottom of obj1 to the top of obj2
-        private function bottomToTop(obj1:IVisualNode, obj2:IVisualNode, g:GraphicsWrapper):void {
-            moveTo(g, obj1.view.x + (obj1.view.width/2), obj1.view.y + obj1.view.height);
+        private function bottomToTop(obj1:IVisualNode, obj2:IVisualNode):void {
+            moveTo(obj1.view.x + (obj1.view.width/2), obj1.view.y + obj1.view.height);
             if(edgeClass == 'type1') {
                 if (baseEdgePosition == BASE_EDGE_ABOVE)
                 {
-                    lineTo(g, obj1.view.x + (obj1.view.width/2), (obj1.view.y + obj1.view.height) + 20);
-                    lineTo(g, obj2.view.x + (obj2.view.width/2), (obj1.view.y + obj1.view.height) + 20);
-                    lineTo(g, obj2.view.x + (obj2.view.width/2), obj2.view.y - arrowLength+1);
+                    lineTo(obj1.view.x + (obj1.view.width/2), (obj1.view.y + obj1.view.height) + 20);
+                    lineTo(obj2.view.x + (obj2.view.width/2), (obj1.view.y + obj1.view.height) + 20);
+                    lineTo(obj2.view.x + (obj2.view.width/2), obj2.view.y - arrowLength+1);
                 }
                 else
                 {
-                    lineTo(g, obj2.view.x + (obj2.view.width/2), obj2.view.y - arrowLength+1);
+                    lineTo(obj2.view.x + (obj2.view.width/2), obj2.view.y - arrowLength+1);
                 }
-                drawArrow(obj2.view.x + (obj2.view.width/2), (obj1.view.y + obj1.view.height) + .5*(obj2.view.y - (obj1.view.y + obj1.view.height)), obj2.view.x + (obj2.view.width/2), obj2.view.y, g);
+                drawArrow(obj2.view.x + (obj2.view.width/2), (obj1.view.y + obj1.view.height) + .5*(obj2.view.y - (obj1.view.y + obj1.view.height)), obj2.view.x + (obj2.view.width/2), obj2.view.y);
             }
             else if(edgeClass == 'type2'){
-                lineTo(g, obj1.view.x + (obj1.view.width/2), (obj1.view.y + obj1.view.height));
-                lineTo(g, obj2.view.x + (obj2.view.width/2), (obj1.view.y + obj1.view.height) + .5*(obj2.view.y - (obj1.view.y + obj1.view.height)));
-                lineTo(g, obj2.view.x + (obj2.view.width/2), obj2.view.y - arrowLength+1);
+                lineTo(obj1.view.x + (obj1.view.width/2), (obj1.view.y + obj1.view.height));
+                lineTo(obj2.view.x + (obj2.view.width/2), (obj1.view.y + obj1.view.height) + .5*(obj2.view.y - (obj1.view.y + obj1.view.height)));
+                lineTo(obj2.view.x + (obj2.view.width/2), obj2.view.y - arrowLength+1);
                 
-                drawArrow(obj2.view.x + (obj2.view.width/2), (obj1.view.y + obj1.view.height) + .5*(obj2.view.y - (obj1.view.y + obj1.view.height)), obj2.view.x + (obj2.view.width/2), obj2.view.y, g);
+                drawArrow(obj2.view.x + (obj2.view.width/2), (obj1.view.y + obj1.view.height) + .5*(obj2.view.y - (obj1.view.y + obj1.view.height)), obj2.view.x + (obj2.view.width/2), obj2.view.y);
             }
             else {
-                lineTo(g, obj2.view.x + (obj2.view.width/2), obj2.view.y - arrowLength+1);
-                drawArrow(obj1.view.x + (obj1.view.width/2), obj1.view.y + obj1.view.height, obj2.view.x + (obj2.view.width/2), obj2.view.y, g);
+                lineTo(obj2.view.x + (obj2.view.width/2), obj2.view.y - arrowLength+1);
+                drawArrow(obj1.view.x + (obj1.view.width/2), obj1.view.y + obj1.view.height, obj2.view.x + (obj2.view.width/2), obj2.view.y);
             }
         }
         
         //from the center of _obj1 to the center of _obj2
-        private function centerToCenter(obj1:IVisualNode, obj2:IVisualNode, g:GraphicsWrapper):void {
-            moveTo(g, obj1.view.x + (obj1.view.width/2), obj1.view.y + (obj1.view.height/2));
-            lineTo(g, obj2.view.x + (obj2.view.width/2), obj2.view.y + (obj2.view.height/2));
-            drawArrow(obj1.view.x + (obj1.view.width/2), obj1.view.y + obj1.view.height, obj2.view.x + (obj2.view.width/2), obj2.view.y, g);
+        private function centerToCenter(obj1:IVisualNode, obj2:IVisualNode):void {
+            moveTo(obj1.view.x + (obj1.view.width/2), obj1.view.y + (obj1.view.height/2));
+            lineTo(obj2.view.x + (obj2.view.width/2), obj2.view.y + (obj2.view.height/2));
+            drawArrow(obj1.view.x + (obj1.view.width/2), obj1.view.y + obj1.view.height, obj2.view.x + (obj2.view.width/2), obj2.view.y);
         }			  
         
-        public function fromControlCoordinates(vedge:IVisualEdge):Point {
+        public function fromControlCoordinates():Point {
             return Geometry.midPointOfLine(
                 vedge.edge.node1.vnode.viewCenter,
                 vedge.edge.node2.vnode.viewCenter
             );
         }
         
-        public function toControlCoordinates(vedge:IVisualEdge):Point {
+        public function toControlCoordinates():Point {
             return Geometry.midPointOfLine(
                 vedge.edge.node1.vnode.viewCenter,
                 vedge.edge.node2.vnode.viewCenter
             );
-        }		 							
+        }
     }
 }

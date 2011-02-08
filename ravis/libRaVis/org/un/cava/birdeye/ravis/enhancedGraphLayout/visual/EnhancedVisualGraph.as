@@ -226,7 +226,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			return vnode;
 		}
 		
-		protected override function removeComponent(component:UIComponent, honorEffect:Boolean = true):void {
+		protected override function removeNodeView(component:UIComponent, honorEffect:Boolean = true):void {
 			
 			var vn:IVisualNode;
 			
@@ -234,10 +234,10 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			 * handler that actually calls this method again, but
 			 * with honorEffect set to false */
 			if(honorEffect && (removeItemEffect != null)) {
-				super.removeComponent(component, honorEffect);
+				super.removeNodeView(component, honorEffect);
 			} else {
-				vn = _viewToVNodeMap[component];
-				super.removeComponent(component, honorEffect);
+				vn = _nodeViewToVNodeMap[component];
+				super.removeNodeView(component, honorEffect);
 				var labelView:UIComponent = IEnhancedVisualNode(vn).labelView;
 				if (labelView && labelView.parent){
 					labelView.parent.removeChild(labelView);
@@ -341,7 +341,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			var mylabelcomponent:UIComponent = null;
 						/////////////////////////////////////////////////////
 			
-			if((_nodeLabelRendererFactory != null) && (vn is IEnhancedVisualNode) && (_edgeRenderer is IControllableEdgeRenderer)) {
+			if((_nodeLabelRendererFactory != null) && (vn is IEnhancedVisualNode) && (_edgeRendererFactory is IControllableEdgeRenderer)) {
 				mylabelcomponent = _nodeLabelRendererFactory.newInstance();
 				/* assigns the edge to the IDataRenderer part of the view
 				 * this is important to access the data object of the VEdge
@@ -350,8 +350,8 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 					(mylabelcomponent as IDataRenderer).data = vn;
 				}
 				
-				mylabelcomponent.x = _canvas.width / 2.0;
-				mylabelcomponent.y = _canvas.height / 2.0;
+				mylabelcomponent.x = this.width / 2.0;
+				mylabelcomponent.y = this.height / 2.0;
 			
 				/* enable bitmap cachine if required */
 				mylabelcomponent.cacheAsBitmap = cacheRendererObjects;
@@ -359,7 +359,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				 * this can create problems, we have to see where we
 				 * check for all children
 				 * Add after the edges layer, but below all other elements such as nodes */
-				_canvas.addChildAt(mylabelcomponent, 0);
+				this.addChildAt(mylabelcomponent, 0);
 				IEnhancedVisualNode(vn).labelView = mylabelcomponent;
 			}	
 			
@@ -372,8 +372,8 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 		 * @param ve The edge to replace/add a view object.
 		 * @return The created view object.
 		 * */
-		protected override function createVEdgeView(ve:IVisualEdge):UIComponent {
-			var mycomponent:UIComponent = super.createVEdgeView(ve);
+		protected override function createVEdgeLabelView(ve:IVisualEdge):UIComponent {
+			var mycomponent:UIComponent = super.createVEdgeLabelView(ve);
 			if(_edgeLabelRendererFactory != null) {
 				var fromControl:UIComponent;
 				var toControl:UIComponent
@@ -398,13 +398,8 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 					_viewToVEdgeRendererMap[fromControl] = mycomponent;
 					_viewToVEdgeRendererMap[toControl] = mycomponent;
 					
-					if(_edgeRenderer != null) {
-						IControlableVisualEdge(ve).setEdgeFromControlCoordinates(IControllableEdgeRenderer(_edgeRenderer).fromControlCoordinates(ve));
-						IControlableVisualEdge(ve).setEdgeToControlCoordinates(IControllableEdgeRenderer(_edgeRenderer).toControlCoordinates(ve));
-					} else {
-						IControlableVisualEdge(ve).setEdgeFromControlCoordinates(new Point(_canvas.width / 2.0, _canvas.height / 2.0));
-						IControlableVisualEdge(ve).setEdgeToControlCoordinates(new Point(_canvas.width / 2.0, _canvas.height / 2.0));
-					}
+                    if(ve.edgeView)
+                        ve.edgeView.invalidateDisplayList();
 				}
 			}
 			
@@ -415,7 +410,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 		 * Remove a "view" object (UIComponent) for the given edge.
 		 * @param component The UIComponent to be removed.
 		 * */
-		protected override function removeVEdgeView(component:UIComponent):void {
+		protected override function removeVEdgeLabelView(component:UIComponent):void {
 			
 			/* remove the  control component from it's parent (which should be the canvas) */
 			if(component.parent != null) {
@@ -438,7 +433,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				}
 			}
 
-			super.removeVEdgeView(component);
+			super.removeVEdgeLabelView(component);
 		}
 
 		protected function edgeMouseDown(e:MouseEvent):void{
@@ -476,7 +471,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				ecomponent = (event.currentTarget as UIComponent);
 				
 				/* get the associated VNode of the view */
-				evnode = _viewToVNodeMap[ecomponent];
+				evnode = _nodeViewToVNodeMap[ecomponent];
 				
 				/* stop propagation to prevent a concurrent backgroundDrag */
 				event.stopImmediatePropagation();
@@ -535,15 +530,12 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 						nodeComponent = movedNode.vnode.view;
 						if (nodeComponent)
 						{
-							_drag_x_offsetMap[nodeComponent] = pt.x / (scaleX*_canvas.scaleX) - nodeComponent.x;
-							_drag_y_offsetMap[nodeComponent] = pt.y / (scaleY*_canvas.scaleY) - nodeComponent.y;
+							_drag_x_offsetMap[nodeComponent] = pt.x / (scaleX*this.scaleX) - nodeComponent.x;
+							_drag_y_offsetMap[nodeComponent] = pt.y / (scaleY*this.scaleY) - nodeComponent.y;
 						}
 					}
 					
-					
-					//_drag_x_offsetMap[ecomponent] = pt.x / (scaleX*_canvas.scaleX) - ecomponent.x;
-					//_drag_y_offsetMap[ecomponent] = pt.y / (scaleY*_canvas.scaleY) - ecomponent.y;
-			
+                    
 					/* now we would need to set the bounds
 					 * rectangle in _drag_boundsMap, but this is
 					 * currently not implemented *
@@ -562,7 +554,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 					 */
 					_dragComponent = ecomponent;
 					ecomponent.stage.addEventListener(MouseEvent.MOUSE_MOVE, handleDrag);
-					_canvas.addEventListener(MouseEvent.MOUSE_UP,dragEnd);
+					this.addEventListener(MouseEvent.MOUSE_UP,dragEnd);
 					/* also register a drop event listener */
 					// ecomponent.stage.addEventListener(MouseEvent.MOUSE_UP, dragEnd);
 					
@@ -605,8 +597,8 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				/* Save the offset values in the map 
 				 * so we can compute x and y correctly in case
 				 * we use lockCenter */
-				_drag_x_offsetMap[ecomponent] = pt.x / (scaleX*_canvas.scaleX) - ecomponent.x;
-				_drag_y_offsetMap[ecomponent] = pt.y / (scaleY*_canvas.scaleY) - ecomponent.y;
+				_drag_x_offsetMap[ecomponent] = pt.x / (scaleX*this.scaleX) - ecomponent.x;
+				_drag_y_offsetMap[ecomponent] = pt.y / (scaleY*this.scaleY) - ecomponent.y;
 				
 				/* now we would need to set the bounds
 				 * rectangle in _drag_boundsMap, but this is
@@ -626,7 +618,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				 */
 				_dragControlComponent = ecomponent;
 				ecomponent.stage.addEventListener(MouseEvent.MOUSE_MOVE, handleDragControl);
-				_canvas.addEventListener(MouseEvent.MOUSE_UP,dragControlEnd);
+				this.addEventListener(MouseEvent.MOUSE_UP,dragControlEnd);
 				/* also register a drop event listener */
 				// ecomponent.stage.addEventListener(MouseEvent.MOUSE_UP, dragEnd);
 			} else {
@@ -675,12 +667,12 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			for (ptrObj in _drag_x_offsetMap)
 			{
 				sp = ptrObj as UIComponent;
-				sp.x = event.stageX / (scaleX*_canvas.scaleX) - _drag_x_offsetMap[sp];	
+				sp.x = event.stageX / (scaleX*this.scaleX) - _drag_x_offsetMap[sp];	
 			}
 			for (ptrObj in _drag_y_offsetMap)
 			{
 				sp = ptrObj as UIComponent;
-				sp.y = event.stageY / (scaleY*_canvas.scaleY) - _drag_y_offsetMap[sp];
+				sp.y = event.stageY / (scaleY*this.scaleY) - _drag_y_offsetMap[sp];
 			}
 			
 			
@@ -703,7 +695,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			for (ptrObj in _drag_x_offsetMap)
 			{
 				sp = ptrObj as UIComponent;
-				myvnode = _viewToVNodeMap[sp];
+				myvnode = _nodeViewToVNodeMap[sp];
 				if (myvnode is IEnhancedVisualNode)
 					IEnhancedVisualNode(myvnode).setNodeLabelCoordinates();
 				_layouter.dragContinue(event, myvnode);
@@ -760,14 +752,14 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 					(layoutOrientation == HierarchicalLayouter.ORIENT_RIGHT_LEFT))
 				{
 					oldPos = sp.x;
-					sp.x = event.stageX / (scaleX*_canvas.scaleX) - _drag_x_offsetMap[sp];
+					sp.x = event.stageX / (scaleX*this.scaleX) - _drag_x_offsetMap[sp];
 					dFrom = (sp.x - oldPos);
 				}
 				else if ((layoutOrientation == HierarchicalLayouter.ORIENT_BOTTOM_UP) ||
 					(layoutOrientation == HierarchicalLayouter.ORIENT_TOP_DOWN))
 				{
 					oldPos = sp.y;
-					sp.y = event.stageY / (scaleY*_canvas.scaleY) - _drag_y_offsetMap[sp];
+					sp.y = event.stageY / (scaleY*this.scaleY) - _drag_y_offsetMap[sp];
 					dFrom = (sp.y - oldPos);
 				}
 				eRendererComp['fromDistance'] += dFrom;
@@ -779,14 +771,14 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 					(layoutOrientation == HierarchicalLayouter.ORIENT_TOP_DOWN))
 				{
 					oldPos = sp.x
-					sp.x = event.stageX / (scaleX*_canvas.scaleX) - _drag_x_offsetMap[sp];
+					sp.x = event.stageX / (scaleX*this.scaleX) - _drag_x_offsetMap[sp];
 					dTo = (sp.x - oldPos);
 				}
 				else if ((layoutOrientation == HierarchicalLayouter.ORIENT_LEFT_RIGHT) ||
 					(layoutOrientation == HierarchicalLayouter.ORIENT_RIGHT_LEFT))
 				{
 					oldPos = sp.y
-					sp.y = event.stageY / (scaleY*_canvas.scaleY) - _drag_y_offsetMap[sp];
+					sp.y = event.stageY / (scaleY*this.scaleY) - _drag_y_offsetMap[sp];
 					dTo = (sp.y - oldPos);
 				}
 				
@@ -837,7 +829,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			var mycomp:UIComponent;
 			var myback:DisplayObject;
 			var myvnode:IVisualNode;
-			_canvas.removeEventListener(MouseEvent.MOUSE_UP,dragEnd);
+			this.removeEventListener(MouseEvent.MOUSE_UP,dragEnd);
 			if(_backgroundDragInProgress) {
 				
 				/* if it was a background drag we stop it here */
@@ -873,7 +865,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 					for (ptrObj in _drag_y_offsetMap)
 					{
 						mycomp = ptrObj as UIComponent;
-						myvnode = _viewToVNodeMap[mycomp];
+						myvnode = _nodeViewToVNodeMap[mycomp];
 						if(_layouter) 
 						{
 							_layouter.dropEvent(event, myvnode);
@@ -928,7 +920,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 		
 		protected function dragControlEnd(event:MouseEvent):void {
 			
-			_canvas.removeEventListener(MouseEvent.MOUSE_UP,dragControlEnd);
+			this.removeEventListener(MouseEvent.MOUSE_UP,dragControlEnd);
 			if(_backgroundDragInProgress) {
 				var myback:DisplayObject;
 				/* if it was a background drag we stop it here */
@@ -962,7 +954,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				}
 				
 				var eRendererComp:EdgeRenderer = _viewToVEdgeRendererMap[sp];
-				myvedge = _viewToVEdgeMap[eRendererComp];
+				myvedge = _edgeLabelViewToVEdgeMap[eRendererComp];
 				/* remove the event listeners */
 				//mycomp.stage.removeEventListener(MouseEvent.MOUSE_DOWN, dragEnd);
 				// HACK: I have to check the stage because there are eventual components not added to the display list
@@ -988,14 +980,14 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 							(layoutOrientation == HierarchicalLayouter.ORIENT_RIGHT_LEFT))
 						{
 							oldPos = sp.x;
-							sp.x = event.stageX / (scaleX*_canvas.scaleX) - _drag_x_offsetMap[sp];
+							sp.x = event.stageX / (scaleX*this.scaleX) - _drag_x_offsetMap[sp];
 							dFrom = (sp.x - oldPos);
 						}
 						else if ((layoutOrientation == HierarchicalLayouter.ORIENT_BOTTOM_UP) ||
 							(layoutOrientation == HierarchicalLayouter.ORIENT_TOP_DOWN))
 						{
 							oldPos = sp.y;
-							sp.y = event.stageY / (scaleY*_canvas.scaleY) - _drag_y_offsetMap[sp];
+							sp.y = event.stageY / (scaleY*this.scaleY) - _drag_y_offsetMap[sp];
 							dFrom = (sp.y - oldPos);
 						}
 						eRendererComp['fromDistance'] += dFrom;
@@ -1007,14 +999,14 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 							(layoutOrientation == HierarchicalLayouter.ORIENT_TOP_DOWN))
 						{
 							oldPos = sp.x
-							sp.x = event.stageX / (scaleX*_canvas.scaleX) - _drag_x_offsetMap[sp];
+							sp.x = event.stageX / (scaleX*this.scaleX) - _drag_x_offsetMap[sp];
 							dTo = (sp.x - oldPos);
 						}
 						else if ((layoutOrientation == HierarchicalLayouter.ORIENT_LEFT_RIGHT) ||
 							(layoutOrientation == HierarchicalLayouter.ORIENT_RIGHT_LEFT))
 						{
 							oldPos = sp.y
-							sp.y = event.stageY / (scaleY*_canvas.scaleY) - _drag_y_offsetMap[sp];
+							sp.y = event.stageY / (scaleY*this.scaleY) - _drag_y_offsetMap[sp];
 							dTo = (sp.y - oldPos);
 						}
 						
@@ -1040,7 +1032,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				_dragControlComponent = null;
 				sp['isDragging'] = false;
 				
-				_canvas.removeEventListener(MouseEvent.MOUSE_UP,dragControlEnd);
+				this.removeEventListener(MouseEvent.MOUSE_UP,dragControlEnd);
 				if (isDragging)
 					this.dispatchEvent(new VGEdgeEvent(VGEdgeEvent.VG_EDGE_CONTROL_END_DRAG, myvedge.edge, event));
 				

@@ -97,8 +97,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * and the graphics object.
 		 * @param g The graphics object to be used.
 		 * */
-		public function FlowCurveEdgeRenderer(g:IVisualGraph) {
-			super(g);
+		public function FlowCurveEdgeRenderer() {
+			super();
 			relativeEdgeMagnitude = 1000;
 			maxBaseWidth = 100;
 			bendingDegree = 100;
@@ -112,7 +112,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * 
 		 * @inheritDoc
 		 * */
-		override public function draw(vedge:IVisualEdge):void {
+		override public function draw():void {
 
 			var fromNode:IVisualNode;
 			var toNode:IVisualNode;
@@ -127,7 +127,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			var basedirectionAngle:Number;
 			var baseWidth:Number;
 			
-            var g:GraphicsWrapper = graphicsForEdge(vedge);
 			/* first get the corresponding nodes */
 			fromNode = vedge.edge.node1.vnode;
 			toNode = vedge.edge.node2.vnode;
@@ -178,7 +177,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			//LogUtil.warn(_LOG, "base2:"+base2.toString());
 
 			/* apply the line style */
-			applyLineStyle(vedge);
+			applyLineStyle();
 			
 			/* now we draw the first curve with base 1 to target */
 			g.beginFill(uint(vedge.lineStyle.color));
@@ -204,7 +203,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */
 			if(vedge.vgraph.displayEdgeLabels) {
-				vedge.setEdgeLabelCoordinates(labelCoordinates(vedge));
+				vedge.setEdgeLabelCoordinates(labelCoordinates());
 			}
 		}
 		
@@ -214,7 +213,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * 
 		 * @inheritDoc
 		 * */
-		override public function labelCoordinates(vedge:IVisualEdge):Point {
+		override public function labelCoordinates():Point {
 
 			var fromNode:IVisualNode;
 			var toNode:IVisualNode;

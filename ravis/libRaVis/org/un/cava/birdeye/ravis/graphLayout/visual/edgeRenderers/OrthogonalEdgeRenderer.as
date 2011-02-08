@@ -54,8 +54,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * Constructor sets the graphics object (required).
 		 * @param g The graphics object to be used.
 		 * */
-		public function OrthogonalEdgeRenderer(g:IVisualGraph) {
-			super(g);
+		public function OrthogonalEdgeRenderer() {
+			super();
 		}
 		
 		/**
@@ -65,9 +65,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * 
 		 * @inheritDoc
 		 * */
-		override public function draw(vedge:IVisualEdge):void {
+		override public function draw():void {
 			
-            var g:GraphicsWrapper = graphicsForEdge(vedge);
 			/* first get the corresponding visual object */
 			var fromNode:IVisualNode = vedge.edge.node1.vnode;
 			var toNode:IVisualNode = vedge.edge.node2.vnode;
@@ -84,7 +83,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			
 
 			/* apply the line style */
-			applyLineStyle(vedge);
+			applyLineStyle();
 			
 			if(isFullyLeftOf(fromNode, toNode)) {
 				if(isFullyAbove(fromNode, toNode)) {
@@ -121,7 +120,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */
 			if(vedge.vgraph.displayEdgeLabels) {
-				vedge.setEdgeLabelCoordinates(labelCoordinates(vedge));
+				vedge.setEdgeLabelCoordinates(labelCoordinates());
 			}
 			
 		}
@@ -246,6 +245,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			g.moveTo(obj1.view.x + (obj1.view.width/2), obj1.view.y + (obj1.view.height/2));
 			g.lineTo(obj2.view.x + (obj2.view.width/2), obj2.view.y + (obj2.view.height/2));
 			drawArrow(obj1.view.x + (obj1.view.width/2), obj1.view.y + obj1.view.height, obj2.view.x + (obj2.view.width/2), obj2.view.y,g);
-		}			   							
+		}
+        
+        protected override function get g():GraphicsWrapper
+        {
+            var r:GraphicsWrapper = super.g;
+            r.disable = true;
+            return r;
+        }
 	}
 }

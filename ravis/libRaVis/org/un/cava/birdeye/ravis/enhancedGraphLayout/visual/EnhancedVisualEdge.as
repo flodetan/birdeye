@@ -76,6 +76,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual {
 		 * and will be reversed during refresh() */
 		private var _centered:Boolean;
 		
+        private var _edgeView:UIComponent;
 		/**
 		 * The constructor initialiazes the edge and must be preset with almost
 		 * all parameters. 
@@ -278,5 +279,13 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual {
 				}
 			}
 		}
+        
+        public function get edgeView():UIComponent{
+            return _edgeView;
+        }
+        
+        public function set edgeView(value:UIComponent):void {
+            _edgeView = value;
+        }
 	}
 }

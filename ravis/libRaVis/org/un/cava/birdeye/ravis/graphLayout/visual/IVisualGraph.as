@@ -73,12 +73,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * allow drawing of edges in a customised way.
 		 * The edgeRenderer has to implement the IEdgeRenderer interface.
 		 * */
-		function set edgeRenderer(er:IEdgeRenderer):void;
+		function set edgeRendererFactory(er:IFactory):void;
 		
 		/**
 		 * @private
 		 * */
-		function get edgeRenderer():IEdgeRenderer;
+		function get edgeRendererFactory():IFactory;
 		
 		/**
 		 * Allow to provide an EdgeLabelRenderer in order to
@@ -219,8 +219,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * */
 		function set scale(s:Number):void;
 		
-        function getEdgeContext(vedge:IVisualEdge):UIComponent;
-        
 		/**
 		 * Initializes the VisualGraph from its currently set Graph object,
 		 * basically removing all existing VNodes and VEdges and
@@ -301,5 +299,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * (used as an offset).
 		 * */
 		function scroll(sx:Number, sy:Number, reset:Boolean):void;
+        
+        function calcNodesBoundingBox():Rectangle;
 	}
 }

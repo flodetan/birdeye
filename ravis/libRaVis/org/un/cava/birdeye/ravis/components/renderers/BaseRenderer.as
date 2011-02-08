@@ -39,7 +39,7 @@ package org.un.cava.birdeye.ravis.components.renderers {
 	import mx.core.ContainerCreationPolicy;
 	import mx.core.IDataRenderer;
 	import mx.events.FlexEvent;
-
+	
 	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	
 	/**
@@ -76,12 +76,11 @@ package org.un.cava.birdeye.ravis.components.renderers {
 		 * Base Constructor
 		 * */
 		public function BaseRenderer() {
-			//super();
-			this.creationPolicy = ContainerCreationPolicy.ALL;
-			this.addEventListener(FlexEvent.CREATION_COMPLETE,initComponent);
-			//this.addEventListener(FlexEvent.INIT_COMPLETE,adjustCoordinates);
-			
-			super();
+
+			addEventListener(FlexEvent.CREATION_COMPLETE,initComponent);
+            
+            super();
+            
 			useHandCursor = true;
 			buttonMode = true;
 			mouseChildren = false;
@@ -129,7 +128,6 @@ package org.un.cava.birdeye.ravis.components.renderers {
 		 * after reception of the creation complete event.
 		 * This method should be overriden by NodeRenderers
 		 * which are more specific.
-		 * @param e the creation complete event (unused).
 		 * */
 		protected function initComponent(e:Event):void {
 			
@@ -160,24 +158,6 @@ package org.un.cava.birdeye.ravis.components.renderers {
 			sp.height = 18;
 			this.addChild(sp);
 		}
-
-		/**
-		 * This method is required to readjust the coordinates
-		 * after initialised if we have a centered renderer
-		 * parent object.
-		 * This should only be called through the initComponent
-		 * event handler.
-		 * */
-		/*
-		protected function adjustCoordinates(e:Event):void {
-			if(this.data is IVisualItem) {
-				if((this.data as IVisualItem).centered) {
-					this.x -= (this.width / 2.0);
-					this.y -= (this.height / 2.0);
-				}
-			}
-		}
-		*/
 
 		/**
 		 * this methods initialises and adds a 

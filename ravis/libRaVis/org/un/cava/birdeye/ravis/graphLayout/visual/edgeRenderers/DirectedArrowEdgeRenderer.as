@@ -42,7 +42,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	 * */
 	public class DirectedArrowEdgeRenderer extends BaseEdgeRenderer {
 		
-		
 		/**
 		 * The size of the arrowhead in pixel. The distance of the
 		 * two points defining the base of the arrowhead.
@@ -58,8 +57,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * Constructor sets the graphics object (required).
 		 * @param g The graphics object to be used.
 		 * */
-		public function DirectedArrowEdgeRenderer(g:IVisualGraph) {
-			super(g);
+		public function DirectedArrowEdgeRenderer() {
+			super();
 		}
 		
 		/**
@@ -70,9 +69,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * 
 		 * @inheritDoc
 		 * */
-		override public function draw(vedge:IVisualEdge):void {
+		override public function draw():void {
 			
-            var g:GraphicsWrapper = graphicsForEdge(vedge);
 			/* first get the corresponding visual object */
 			var fromNode:IVisualNode = vedge.edge.node1.vnode;
 			var toNode:IVisualNode = vedge.edge.node2.vnode;
@@ -87,7 +85,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			var edgeAngle:Number;
 			
 			/* apply the line style */
-			applyLineStyle(vedge);
+			applyLineStyle();
 			
 			/* calculate the base bidpoint which is on
 			 * the same vector defined between the two endpoints
@@ -129,7 +127,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */
 			if(vedge.vgraph.displayEdgeLabels) {
-				vedge.setEdgeLabelCoordinates(labelCoordinates(vedge));
+				vedge.setEdgeLabelCoordinates(labelCoordinates());
 			}
 		}
 	}

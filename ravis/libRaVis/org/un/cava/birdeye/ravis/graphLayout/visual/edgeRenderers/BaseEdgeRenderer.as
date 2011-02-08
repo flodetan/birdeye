@@ -11,7 +11,7 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be included in
+ * The abovedge copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
@@ -43,54 +43,36 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	 * This is the default edge renderer, which draws the edges
 	 * as straight lines from one node to another.
 	 * */
-	public class BaseEdgeRenderer implements IEdgeRenderer {
+	public class BaseEdgeRenderer extends UIComponent implements IEdgeRenderer {
 		
 		private static const _LOG:String = "graphLayout.visual.edgeRenderers.BaseEdgeRenderer";
-		
-        private var _edgeMap:Dictionary;
-        
-        private var _graph:IVisualGraph;
         
         public var fuzzFactor:Number = 8;
         
-		public function BaseEdgeRenderer(graph:IVisualGraph) {
-            _graph = graph;
-            _edgeMap = new Dictionary;
+        protected var vedge:IVisualEdge;
+        
+        private var _g:GraphicsWrapper;
+        
+		public function BaseEdgeRenderer() {
+
 		}
+        
+        protected override function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
+            super.updateDisplayList(unscaledWidth,unscaledHeight);
+            
+            graphics.clear();
+            if(vedge)
+                draw();
+        }
 	    
-        public function get graph():IVisualGraph { 
-            return _graph; 
-        }
-        
-        public function clear():void {
-            _edgeMap = new Dictionary;
-        }
-        
-        protected function graphicsForEdge(vedge:IVisualEdge):GraphicsWrapper {
-            
-            if(_edgeMap[vedge] == null)
-                _edgeMap[vedge] = new GraphicsWrapper(_graph.getEdgeContext(vedge).graphics);
-            
-            _edgeMap[vedge].fuzzFactor = fuzzFactor
-            return _edgeMap[vedge];
-        }
-        
-		/**
-		 * The draw function, i.e. the main function to be used.
-		 * Draws a straight line from one node of the edge to the other.
-		 * The edge style can be specified as XML attributes to the Edge XML Tag
-		 * 
-		 * @inheritDoc
-		 * */
-		public function draw(vedge:IVisualEdge):void {
+		public function draw():void {
 			
 			/* first get the corresponding visual object */
 			var fromNode:IVisualNode = vedge.edge.node1.vnode;
 			var toNode:IVisualNode = vedge.edge.node2.vnode;
 			
-            var g:GraphicsWrapper = graphicsForEdge(vedge);
 			/* apply the line style */
-			applyLineStyle(vedge);
+			applyLineStyle();
 			
 			/* now we actually draw */
 			g.beginFill(uint(vedge.lineStyle.color));
@@ -101,7 +83,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */
 			if(vedge.vgraph.displayEdgeLabels) {
-				vedge.setEdgeLabelCoordinates(labelCoordinates(vedge));
+                vedge.setEdgeLabelCoordinates(labelCoordinates());
 			}
 		}
 		
@@ -111,34 +93,61 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * In this simple implementation we put the label into the
 		 * middle of the straight line between the two nodes.
 		 * */
-		public function labelCoordinates(vedge:IVisualEdge):Point {
+		public function labelCoordinates():Point {
 			return Geometry.midPointOfLine(
-				vedge.edge.node1.vnode.viewCenter,
-				vedge.edge.node2.vnode.viewCenter
+                vedge.edge.node1.vnode.viewCenter,
+                vedge.edge.node2.vnode.viewCenter
 			);
 		}
 		
 		/**
 		 * Applies the linestyle stored in the passed visual Edge
 		 * object to the Graphics object of the renderer.
-		 * @param ve The VisualEdge object that the line style is taken from.
 		 * */
-		public function applyLineStyle(ve:IVisualEdge):void {
+		protected function applyLineStyle():void {
 			
-            var g:GraphicsWrapper = graphicsForEdge(ve);
-            
-			if(ve.lineStyle != null) {
+			if(vedge &&
+                vedge.lineStyle != null) {
 				g.lineStyle(
-					Number(ve.lineStyle.thickness),
-					uint(ve.lineStyle.color),
-					Number(ve.lineStyle.alpha),
-					Boolean(ve.lineStyle.pixelHinting),
-					String(ve.lineStyle.scaleMode),
-					String(ve.lineStyle.caps),
-					String(ve.lineStyle.joints),
-					Number(ve.lineStyle.miterLimits)
+					Number(vedge.lineStyle.thickness),
+					uint(vedge.lineStyle.color),
+					Number(vedge.lineStyle.alpha),
+					Boolean(vedge.lineStyle.pixelHinting),
+					String(vedge.lineStyle.scaleMode),
+					String(vedge.lineStyle.caps),
+					String(vedge.lineStyle.joints),
+					Number(vedge.lineStyle.miterLimits)
 				);
 			}
 		}
+        
+        protected function get g():GraphicsWrapper
+        {
+            if(_g == null)
+                _g = new GraphicsWrapper(graphics);
+            
+            _g.fuzzFactor = fuzzFactor;
+            return _g;
+        }
+        
+        public function render(force:Boolean=false):void
+        {
+            if(force)
+            {
+                graphics.clear();
+                if(vedge)
+                    draw();   
+            }
+            else
+            {
+                invalidateDisplayList();
+            }
+        }
+        
+        public function get data():Object { return vedge; }
+        public function set data(value:Object):void
+        {
+            vedge = value as IVisualEdge;
+        }
 	}
 }

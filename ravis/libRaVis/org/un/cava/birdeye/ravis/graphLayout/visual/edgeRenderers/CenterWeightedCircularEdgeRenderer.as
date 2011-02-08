@@ -9,20 +9,17 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers
     
     public class CenterWeightedCircularEdgeRenderer extends CircularEdgeRenderer
     {
-        public function CenterWeightedCircularEdgeRenderer(g:IVisualGraph)
-        {
-            super(g);
+        public function CenterWeightedCircularEdgeRenderer() {
+            super();
         }
         
-        protected override function getEdgeAnchor(vedge:IVisualEdge):Point
-        {
+        protected override function getEdgeAnchor():Point {
             var bounds:Rectangle = vedge.vgraph.layouter.bounds;
             var anchor:Point = new Point(bounds.x + bounds.width/2, bounds.y + bounds.height/2);
             return anchor;
         }
         
-        protected override function getLabelAnchor(vedge:IVisualEdge):Point
-        {
+        protected override function getLabelAnchor():Point {
             var bounds:Rectangle = vedge.vgraph.layouter.bounds;
             var anchor:Point = new Point(bounds.x + bounds.width/2, bounds.y + bounds.height/2);
             return anchor;

@@ -28,6 +28,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	import flash.display.Graphics;
 	import flash.geom.Point;
 	
+	import org.un.cava.birdeye.ravis.graphLayout.layout.Hyperbolic2DLayouter;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
@@ -47,17 +48,14 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	 */
 	public class HyperbolicEdgeRenderer extends BaseEdgeRenderer {
 		
-		private var _projector:IProjector;
-		
 		/**
 		 * Constructor of the Edge Renderer that sets the projector and the
 		 * graphics object to draw on.
 		 * @param g The graphics object to draw on.
 		 * @param projector The projector object, to be taken from the corresponding layouter.
 		 */
-		public function HyperbolicEdgeRenderer(g:IVisualGraph,projector:IProjector) {
-			super(g);
-			_projector = projector;
+		public function HyperbolicEdgeRenderer() {
+			super();
 		}
 		
 		/**
@@ -66,7 +64,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * 
 		 * @inheritDoc
 		 * */
-		override public function draw(vedge:IVisualEdge):void {
+		override public function draw():void {
 
 			var fromNode:IVisualNode;
 			var toNode:IVisualNode;
@@ -77,7 +75,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			var toX:Number;
 			var toY:Number;
 			
-            var g:GraphicsWrapper = graphicsForEdge(vedge);
+            if(projector == null)
+                return;
+            
 			/* first get the corresponding nodes */
 			fromNode = vedge.edge.node1.vnode;
 			toNode = vedge.edge.node2.vnode;
@@ -90,11 +90,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			
 			
 			/* apply the line style */
-			applyLineStyle(vedge);
+			applyLineStyle();
 			
 			
 			// Method 2: Using circular arcs		
-			var center:Point = _projector.getCenter(fromX, fromY, toX, toY, (vedge.vgraph as DisplayObject));
+			var center:Point = projector.getCenter(fromX, fromY, toX, toY, (vedge.vgraph as DisplayObject));
 			if (center == null) {// diameter - just draw a straight line
 				g.moveTo(fromX, fromY);
 				g.lineTo(toX, toY);
@@ -122,8 +122,16 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */
 			if(vedge.vgraph.displayEdgeLabels) {
-				vedge.setEdgeLabelCoordinates(labelCoordinates(vedge));
+				vedge.setEdgeLabelCoordinates(labelCoordinates());
 			}
 		}
+        
+        protected function get projector():IProjector
+        {
+            if(vedge.vgraph.layouter is Hyperbolic2DLayouter)
+                return Hyperbolic2DLayouter(vedge.vgraph.layouter).projector;
+            
+            return null;
+        }
 	}
 }
