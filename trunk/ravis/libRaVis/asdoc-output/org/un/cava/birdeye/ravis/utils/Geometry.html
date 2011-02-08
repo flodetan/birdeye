@@ -10,13 +10,13 @@
 <body>
 <script type="text/javascript" language="javascript" src="../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
 <!--
-				asdocTitle = 'Geometry - API Documentation';
+				asdocTitle = 'Geometry - RaVis';
 				var baseRef = '../../../../../../';
 				window.onload = configPage;
 			--></script>
 <table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
 <tr>
-<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../all-classes.html')" href="../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../all-classes.html')" href="../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../index-list.html')" href="../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../index.html?org/un/cava/birdeye/ravis/utils/Geometry.html&amp;org/un/cava/birdeye/ravis/utils/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../images/logo.jpg"></td>
+<td align="left" class="titleTableTitle">RaVis</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../all-classes.html')" href="../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../all-classes.html')" href="../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../index-list.html')" href="../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../index.html?org/un/cava/birdeye/ravis/utils/Geometry.html&amp;org/un/cava/birdeye/ravis/utils/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../images/logo.jpg"></td>
 </tr>
 <tr class="titleTableRow2">
 <td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;Geometry</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#methodSummary">Methods</a></td>
@@ -73,7 +73,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#bezierPoint()">bezierPoint</a>(ps:Point, pc:Point, pe:Point, t:Number):Point</div>
+<a class="signatureLink" href="#bezierPoint()">bezierPoint</a>(p0:Point, p1:Point, p2:Point, t:Number):Point</div>
 <div class="summaryTableDescription">[static]
    Calculates the point on a quadratic bezier curve
    at the given position t with 0 <= t <= 1
@@ -253,7 +253,7 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public static function bezierPoint(ps:Point, pc:Point, pe:Point, t:Number):Point</code><p>
+<code>public static function bezierPoint(p0:Point, p1:Point, p2:Point, t:Number):Point</code><p>
    Calculates the point on a quadratic bezier curve
    at the given position t with 0 <= t <= 1
    (t = 0 being the starting anchor point and
@@ -261,21 +261,21 @@ showHideInherited();
    </p><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
-<td width="20px"></td><td><code><span class="label">ps</span>:Point</code> &mdash; Starting Point of the curve.
+<td width="20px"></td><td><code><span class="label">p0</span>:Point</code> &mdash; Starting Point of the curve.
    </td>
 </tr>
 <tr>
 <td class="paramSpacer">&nbsp;</td>
 </tr>
 <tr>
-<td width="20px"></td><td><code><span class="label">pc</span>:Point</code> &mdash; Control Point of the curve.
+<td width="20px"></td><td><code><span class="label">p1</span>:Point</code> &mdash; Control Point of the curve.
    </td>
 </tr>
 <tr>
 <td class="paramSpacer">&nbsp;</td>
 </tr>
 <tr>
-<td width="20px"></td><td><code><span class="label">pe</span>:Point</code> &mdash; Ending Point of the curve.
+<td width="20px"></td><td><code><span class="label">p2</span>:Point</code> &mdash; Ending Point of the curve.
    </td>
 </tr>
 <tr>

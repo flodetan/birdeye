@@ -1,0 +1,480 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../../../../print.css" type="text/css" media="print">
+<meta content="EnhancedVisualEdge,org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.EnhancedVisualEdge,centered,data,edge,edgeView,fromControl,id,isVisible,labelView,toControl,vgraph,lineStyle,setEdgeFromControlCoordinates,setEdgeLabelCoordinates,setEdgeToControlCoordinates" name="keywords">
+<title>org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.EnhancedVisualEdge</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'EnhancedVisualEdge - RaVis';
+				var baseRef = '../../../../../../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">RaVis</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../all-classes.html')" href="../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../index-list.html')" href="../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../index.html?org/un/cava/birdeye/ravis/enhancedGraphLayout/visual/EnhancedVisualEdge.html&amp;org/un/cava/birdeye/ravis/enhancedGraphLayout/visual/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;EnhancedVisualEdge</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class EnhancedVisualEdge"); titleBar_setSubNav(false,true,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">org.un.cava.birdeye.ravis.enhancedGraphLayout.visual</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class EnhancedVisualEdge</td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">EnhancedVisualEdge <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../../../../images/inherit-arrow.gif"> flash.events.EventDispatcher</td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Implements</td><td><a href="IControllableVisualEdge.html">IControllableVisualEdge</a>, <a href="../../graphLayout/visual/IVisualEdge.html">IVisualEdge</a>, mx.core.IDataRenderer</td>
+</tr>
+</table>
+<p></p>
+  A visual edge is just a representation of a graph edge
+  in the VisualGraph context. However, right now the only
+  feature a VisualEdge has is a reference to its Graph Edge
+  and a data object to support it's drawing features.
+  There is a small possibility that this class will be removed.
+  <p></p>
+<br>
+<hr>
+</div>
+<a name="propertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Properties</div>
+<table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#centered">centered</a> : Boolean<div class="summaryTableDescription">
+   
+   Property to indicate if the node should be
+   centered around it's geometrical center (i.e.</div>
+</td><td class="summaryTableOwnerCol">EnhancedVisualEdge</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#data">data</a> : Object<div class="summaryTableDescription">
+   Access to the data object.</div>
+</td><td class="summaryTableOwnerCol">EnhancedVisualEdge</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#edge">edge</a> : <a href="../../graphLayout/data/IEdge.html">IEdge</a>
+<div class="summaryTableDescription">[read-only]
+   Access to the associated Graph Edge.</div>
+</td><td class="summaryTableOwnerCol">EnhancedVisualEdge</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#edgeView">edgeView</a> : UIComponent<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">EnhancedVisualEdge</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#fromControl">fromControl</a> : UIComponent<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">EnhancedVisualEdge</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#id">id</a> : int<div class="summaryTableDescription">[read-only]
+   Access to the id of the VEdge
+   </div>
+</td><td class="summaryTableOwnerCol">EnhancedVisualEdge</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#isVisible">isVisible</a> : Boolean<div class="summaryTableDescription">
+   Access to the indicator if the node is currently
+   visible or not.</div>
+</td><td class="summaryTableOwnerCol">EnhancedVisualEdge</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#labelView">labelView</a> : UIComponent<div class="summaryTableDescription">
+   
+   Access to an associated UIComponent to
+   display a label.</div>
+</td><td class="summaryTableOwnerCol">EnhancedVisualEdge</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#lineStyle">lineStyle</a> : Object<div class="summaryTableDescription">
+   
+   </div>
+</td><td class="summaryTableOwnerCol">EnhancedVisualEdge</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#toControl">toControl</a> : UIComponent<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">EnhancedVisualEdge</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#vgraph">vgraph</a> : <a href="../../graphLayout/visual/IVisualGraph.html">IVisualGraph</a>
+<div class="summaryTableDescription">[read-only]
+   Access to the associated VisualGraph.</div>
+</td><td class="summaryTableOwnerCol">EnhancedVisualEdge</td>
+</tr>
+</table>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#EnhancedVisualEdge()">EnhancedVisualEdge</a>(vg:<a href="../../graphLayout/visual/IVisualGraph.html">IVisualGraph</a>, edge:<a href="../../graphLayout/data/IEdge.html">IEdge</a>, id:int, data:Object = null, lview:UIComponent = null, lStyle:Object = null, fromControlView:UIComponent = null, toControlView:UIComponent = null)</div>
+<div class="summaryTableDescription">
+   The constructor initialiazes the edge and must be preset with almost
+   all parameters.</div>
+</td><td class="summaryTableOwnerCol">EnhancedVisualEdge</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#setEdgeFromControlCoordinates()">setEdgeFromControlCoordinates</a>(p:Point):void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">EnhancedVisualEdge</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#setEdgeLabelCoordinates()">setEdgeLabelCoordinates</a>(p:Point):void</div>
+<div class="summaryTableDescription">
+   
+   Applies the provided coordinates to edges label (if present).</div>
+</td><td class="summaryTableOwnerCol">EnhancedVisualEdge</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#setEdgeToControlCoordinates()">setEdgeToControlCoordinates</a>(p:Point):void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">EnhancedVisualEdge</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="propertyDetail"></a>
+<div class="detailSectionHeader">Property detail</div>
+<a name="centered"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">centered</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>centered:Boolean</code>&nbsp;&nbsp;[read-write]<p>
+   
+   Property to indicate if the node should be
+   centered around it's geometrical center (i.e.
+   the center of it's view) or if it's origin would
+   be the usual upper left corner. The value will
+   be applied by the commit() and refresh() methods.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get centered():Boolean</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set centered(value:Boolean):void</code>
+<br>
+</div>
+<a name="data"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">data</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>data:Object</code>&nbsp;&nbsp;[read-write]<p>
+   Access to the data object.
+   </p><p>This property can be used as the source for data binding.</p>
+<span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get data():Object</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set data(value:Object):void</code>
+<br>
+</div>
+<a name="edge"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">edge</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>edge:<a href="../../graphLayout/data/IEdge.html">IEdge</a></code>&nbsp;&nbsp;[read-only]<p>
+   Access to the associated Graph Edge.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get edge():<a href="../../graphLayout/data/IEdge.html">IEdge</a></code>
+<br>
+</div>
+<a name="edgeView"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">edgeView</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>edgeView:UIComponent</code>&nbsp;&nbsp;[read-write]<span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get edgeView():UIComponent</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set edgeView(value:UIComponent):void</code>
+<br>
+</div>
+<a name="fromControl"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">fromControl</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>fromControl:UIComponent</code>&nbsp;&nbsp;[read-write]<span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get fromControl():UIComponent</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set fromControl(value:UIComponent):void</code>
+<br>
+</div>
+<a name="id"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">id</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>id:int</code>&nbsp;&nbsp;[read-only]<p>
+   Access to the id of the VEdge
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get id():int</code>
+<br>
+</div>
+<a name="isVisible"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">isVisible</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>isVisible:Boolean</code>&nbsp;&nbsp;[read-write]<p>
+   Access to the indicator if the node is currently
+   visible or not. If this is set to false, any
+   associated view will be removed in order to 
+   save resources.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get isVisible():Boolean</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set isVisible(value:Boolean):void</code>
+<br>
+</div>
+<a name="labelView"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">labelView</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>labelView:UIComponent</code>&nbsp;&nbsp;[read-write]<p>
+   
+   Access to an associated UIComponent to
+   display a label.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get labelView():UIComponent</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set labelView(value:UIComponent):void</code>
+<br>
+</div>
+<a name="lineStyle"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">lineStyle</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>lineStyle:Object</code>&nbsp;&nbsp;[read-write]<p>
+   
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get lineStyle():Object</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set lineStyle(value:Object):void</code>
+<br>
+</div>
+<a name="toControl"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">toControl</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>toControl:UIComponent</code>&nbsp;&nbsp;[read-write]<span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get toControl():UIComponent</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set toControl(value:UIComponent):void</code>
+<br>
+</div>
+<a name="vgraph"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">vgraph</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>vgraph:<a href="../../graphLayout/visual/IVisualGraph.html">IVisualGraph</a></code>&nbsp;&nbsp;[read-only]<p>
+   Access to the associated VisualGraph.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get vgraph():<a href="../../graphLayout/visual/IVisualGraph.html">IVisualGraph</a></code>
+<br>
+</div>
+<a name="constructorDetail"></a>
+<div class="detailSectionHeader">Constructor detail</div>
+<a name="EnhancedVisualEdge()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">EnhancedVisualEdge</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">constructor</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function EnhancedVisualEdge(vg:<a href="../../graphLayout/visual/IVisualGraph.html">IVisualGraph</a>, edge:<a href="../../graphLayout/data/IEdge.html">IEdge</a>, id:int, data:Object = null, lview:UIComponent = null, lStyle:Object = null, fromControlView:UIComponent = null, toControlView:UIComponent = null)</code><p>
+   The constructor initialiazes the edge and must be preset with almost
+   all parameters. 
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">vg</span>:<a href="../../graphLayout/visual/IVisualGraph.html">IVisualGraph</a></code> &mdash; The associated VisualGraph.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">edge</span>:<a href="../../graphLayout/data/IEdge.html">IEdge</a></code> &mdash; The associated Graph Edge.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">id</span>:int</code> &mdash; The internal id of this VisualEdge.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">data</span>:Object</code> (default = <code>null</code>)<code></code> &mdash; The associated data Object.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">lview</span>:UIComponent</code> (default = <code>null</code>)<code></code> &mdash; The associated label view.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">lStyle</span>:Object</code> (default = <code>null</code>)<code></code> &mdash; The line style of the edge, must be an object as associative mapping containing Graphics.lineStyle() parameters.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">fromControlView</span>:UIComponent</code> (default = <code>null</code>)<code></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">toControlView</span>:UIComponent</code> (default = <code>null</code>)<code></code></td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">flash.display.Graphics.lineStyle()</div>
+</div>
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="setEdgeFromControlCoordinates()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">setEdgeFromControlCoordinates</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function setEdgeFromControlCoordinates(p:Point):void</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">p</span>:Point</code></td>
+</tr>
+</table>
+</div>
+<a name="setEdgeLabelCoordinates()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">setEdgeLabelCoordinates</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function setEdgeLabelCoordinates(p:Point):void</code><p>
+   
+   Applies the provided coordinates to edges label (if present).
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">p</span>:Point</code> &mdash; The Point with the target coordinates.
+   </td>
+</tr>
+</table>
+</div>
+<a name="setEdgeToControlCoordinates()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">setEdgeToControlCoordinates</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function setEdgeToControlCoordinates(p:Point):void</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">p</span>:Point</code></td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->

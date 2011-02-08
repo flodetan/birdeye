@@ -10,13 +10,13 @@
 <body>
 <script type="text/javascript" language="javascript" src="../../../../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
 <!--
-				asdocTitle = 'BirdEyeZoom - API Documentation';
+				asdocTitle = 'BirdEyeZoom - RaVis';
 				var baseRef = '../../../../../../../../../';
 				window.onload = configPage;
 			--></script>
 <table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
 <tr>
-<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../../../all-classes.html')" href="../../../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../../../all-classes.html')" href="../../../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../../../index-list.html')" href="../../../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../../../index.html?org/un/cava/birdeye/ravis/components/ui/controls/vgraphControls/BirdEyeZoom.html&amp;org/un/cava/birdeye/ravis/components/ui/controls/vgraphControls/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../../../images/logo.jpg"></td>
+<td align="left" class="titleTableTitle">RaVis</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../../../../all-classes.html')" href="../../../../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../../../all-classes.html')" href="../../../../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../../../../index-list.html')" href="../../../../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../../../../index.html?org/un/cava/birdeye/ravis/components/ui/controls/vgraphControls/BirdEyeZoom.html&amp;org/un/cava/birdeye/ravis/components/ui/controls/vgraphControls/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../../../../images/logo.jpg"></td>
 </tr>
 <tr class="titleTableRow2">
 <td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;BirdEyeZoom</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td>
@@ -81,8 +81,11 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#updateVScale()">updateVScale</a>():void</div>
-<div class="summaryTableDescription"></div>
+<a class="signatureLink" href="#updateVScale()">updateVScale</a>(event:MouseEvent):void</div>
+<div class="summaryTableDescription"> 
+    update the scale of the VGraph, thus creating a BirdEye zoom effect
+    this function can be passed a MouseEvent to handle scrollwheel zooming
+    </div>
 </td><td class="summaryTableOwnerCol">BirdEyeZoom</td>
 </tr>
 </table>
@@ -133,7 +136,16 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public function updateVScale():void</code>
+<code>public function updateVScale(event:MouseEvent):void</code><p> 
+    update the scale of the VGraph, thus creating a BirdEye zoom effect
+    this function can be passed a MouseEvent to handle scrollwheel zooming
+    </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">event</span>:MouseEvent</code> &mdash; A MouseEvent.MOUSE_WHEEL
+    </td>
+</tr>
+</table>
 </div>
 <br>
 <br>
