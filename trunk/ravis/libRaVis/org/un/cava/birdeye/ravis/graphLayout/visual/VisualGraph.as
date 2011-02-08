@@ -1752,7 +1752,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			for each(vedge in _edgeViewToVEdgeMap)
 			{
-				//IEdgeRenderer(vedge.edgeView).data = vedge;
 				IEdgeRenderer(vedge.edgeView).render();
 			}
 			

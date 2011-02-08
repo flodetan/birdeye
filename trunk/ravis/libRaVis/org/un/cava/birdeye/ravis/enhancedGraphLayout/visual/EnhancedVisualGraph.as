@@ -6,8 +6,10 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 	import flash.utils.Dictionary;
 	
 	import mx.collections.ArrayCollection;
+	import mx.containers.Canvas;
 	import mx.core.IDataRenderer;
 	import mx.core.IFactory;
+	import mx.core.ScrollPolicy;
 	import mx.core.UIComponent;
 	import mx.utils.ObjectUtil;
 	
@@ -21,6 +23,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualGraphEvent;
 	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	
 	public class EnhancedVisualGraph extends VisualGraph
@@ -176,39 +179,6 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 		}
 		
 		/**
-		 * This calls the base updateDisplayList() method of the
-		 * Canvas and in addition redraws all edges if the layouter
-		 * indicates that the layout has changed.
-		 * 
-		 * @inheritDoc
-		 * */
-		protected override function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
-			/* call the original function */
-			super.updateDisplayList(unscaledWidth,unscaledHeight);
-			/* now add part to redraw edges */
-			if(_layouter) {
-				if (_forceUpdateNodes)  {
-					_forceUpdateNodes = false;
-				}
-			}
-		}
-		
-		public override function redrawNodes():void
-		{
-			if(_graph == null) {
-				LogUtil.debug(_LOG, "_graph object in VisualGraph is null");
-				return;
-			}
-			
-			for each(var node:INode in _graph.nodes) {
-				if(node.vnode !=null && node.vnode.view != null) {
-					node.vnode.refresh();
-					node.vnode.view.invalidateDisplayList();
-				}
-			}
-		}
-		
-		/**
 		 * Creates VNode and requires a Graph node to associate
 		 * it with. Originally also created the view, but we no
 		 * longer do that directly but only on demand.
@@ -356,7 +326,9 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			var mylabelcomponent:UIComponent = null;
 			/////////////////////////////////////////////////////
 			
-			if((_nodeLabelRendererFactory != null) && (vn is IEnhancedVisualNode) && (_edgeRendererFactory is IControllableEdgeRenderer)) {
+			if((_nodeLabelRendererFactory != null) && 
+				(vn is IEnhancedVisualNode) && 
+				(_edgeRendererFactory is IControllableEdgeRenderer)) {
 				mylabelcomponent = _nodeLabelRendererFactory.newInstance();
 				/* assigns the edge to the IDataRenderer part of the view
 				* this is important to access the data object of the VEdge
@@ -374,7 +346,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				* this can create problems, we have to see where we
 				* check for all children
 				* Add after the edges layer, but below all other elements such as nodes */
-				this.addChildAt(mylabelcomponent, 0);
+				nodeLayer.addChildAt(mylabelcomponent, 0);
 				IEnhancedVisualNode(vn).labelView = mylabelcomponent;
 			}	
 			
@@ -392,7 +364,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			if(_edgeLabelRendererFactory != null) {
 				var fromControl:UIComponent;
 				var toControl:UIComponent
-				if ((_edgeControlRendererFactory != null) && (ve is IControlableVisualEdge)) {
+				if ((_edgeControlRendererFactory != null) && (ve is IControllableVisualEdge)) {
 					fromControl = _edgeControlRendererFactory.newInstance();
 					fromControl['type'] = EdgeControlRenderer.FROM_CONTROL;
 					toControl = _edgeControlRendererFactory.newInstance();
@@ -404,8 +376,8 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 					}
 					fromControl.cacheAsBitmap = cacheRendererObjects;
 					toControl.cacheAsBitmap = cacheRendererObjects;
-					IControlableVisualEdge(ve).fromControl = fromControl;
-					IControlableVisualEdge(ve).toControl = toControl;
+					IControllableVisualEdge(ve).fromControl = fromControl;
+					IControllableVisualEdge(ve).toControl = toControl;
 					Object(mycomponent).fromControl = fromControl;
 					Object(mycomponent).toControl = toControl;
 					fromControl.addEventListener(MouseEvent.MOUSE_DOWN, edgeMouseDown);
@@ -687,6 +659,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			{
 				sp = ptrObj as UIComponent;
 				myvnode = _nodeViewToVNodeMap[sp];
+				myvnode.refresh();
 				if (myvnode is IEnhancedVisualNode)
 					IEnhancedVisualNode(myvnode).setNodeLabelCoordinates();
 				_layouter.dragContinue(event, myvnode);
@@ -770,8 +743,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			}
 			
 			/* make sure flashplayer does an update after the event */
-			refresh();
-			event.updateAfterEvent();			
+			refresh();			
 		}
 		
 		/**
@@ -1000,7 +972,6 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 				}
 				_dragControlComponent = null;
 				sp['isDragging'] = false;
-				
 				this.removeEventListener(MouseEvent.MOUSE_UP,dragControlEnd);
 				if (isDragging)
 					this.dispatchEvent(new VGEdgeEvent(VGEdgeEvent.VG_EDGE_CONTROL_END_DRAG, myvedge.edge, event));

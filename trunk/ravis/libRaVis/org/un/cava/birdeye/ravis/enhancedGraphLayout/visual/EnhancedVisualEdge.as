@@ -41,7 +41,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual {
 	 * and a data object to support it's drawing features.
 	 * There is a small possibility that this class will be removed.
 	 * */
-	public class EnhancedVisualEdge extends EventDispatcher implements IVisualEdge, IControlableVisualEdge, IDataRenderer {
+	public class EnhancedVisualEdge extends EventDispatcher implements IVisualEdge, IControllableVisualEdge, IDataRenderer {
 		
 		/* internal id of the edge */
 		private var _id:int;
