@@ -26,7 +26,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	
 	import flash.display.Graphics;
 	import flash.geom.Point;
-	import flash.geom.Rectangle;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
@@ -60,10 +59,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			var toNode:IVisualNode = vedge.edge.node2.vnode;
 			
 			/* calculate the midpoint used as curveTo anchor point */
-            
-            var bounds:Rectangle = vedge.vgraph.layouter.bounds;
-            
-			var anchor:Point = new Point(bounds.x + bounds.width/2, bounds.y + bounds.height/2);
+			var anchor:Point = getEdgeAnchor(vedge);
 			
 			/* apply the line style */
 			applyLineStyle(vedge);
@@ -103,11 +99,40 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 								vedge.edge.node2.vnode.viewCenter.y);
 			
 			/* calculate the midpoint used as curveTo anchor point */
-			var anchor:Point = new Point(
-				(fromPoint.x + vedge.vgraph.center.x) / 2.0,
-				(fromPoint.y + vedge.vgraph.center.y) / 2.0
-				);
+			var anchor:Point = getLabelAnchor(vedge);
 			return Geometry.bezierPoint(fromPoint,anchor,toPoint,0.5);
 		}
+        
+        protected function getEdgeAnchor(vedge:IVisualEdge):Point
+        {
+            /* first get the corresponding visual object */
+            var fromNode:IVisualNode = vedge.edge.node1.vnode;
+            var toNode:IVisualNode = vedge.edge.node2.vnode;
+            
+            /* calculate the midpoint used as curveTo anchor point */
+            var anchor:Point = new Point(
+                (fromNode.viewCenter.x + vedge.vgraph.center.x) / 2.0,
+                (fromNode.viewCenter.y + vedge.vgraph.center.y) / 2.0
+            );
+            
+            return anchor;
+        }
+        
+        protected function getLabelAnchor(vedge:IVisualEdge):Point
+        {
+            /* first get the corresponding visual object */
+            var fromPoint:Point = new Point(vedge.edge.node1.vnode.viewCenter.x,
+                vedge.edge.node1.vnode.viewCenter.y);
+            var toPoint:Point = new Point(vedge.edge.node2.vnode.viewCenter.x,
+                vedge.edge.node2.vnode.viewCenter.y);
+            
+            /* calculate the midpoint used as curveTo anchor point */
+            var anchor:Point = new Point(
+                (fromPoint.x + vedge.vgraph.center.x) / 2.0,
+                (fromPoint.y + vedge.vgraph.center.y) / 2.0
+            );
+            
+            return anchor;
+        }
 	}
 }
