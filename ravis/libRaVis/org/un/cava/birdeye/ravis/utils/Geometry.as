@@ -173,7 +173,7 @@ package org.un.cava.birdeye.ravis.utils {
 		 * @param t The point on the curve that we want. 0 <= t <= 1
 		 * @returns The point B(t).
 		 * */
-		public static function bezierPoint(ps:Point, pc:Point, pe:Point, t:Number):Point {
+		public static function bezierPoint(p0:Point, p1:Point, p2:Point, t:Number):Point {
 			/* we calculate x and y separately */
 			var x:Number;
 			var y:Number;
@@ -183,9 +183,9 @@ package org.un.cava.birdeye.ravis.utils {
 				return new Point(0,0);
 			}
 			
-			x = Math.pow((1-t),2)*ps.x + 2*t*(1-t)*pc.x + Math.pow(t,2)*pe.x;
-			y = Math.pow((1-t),2)*ps.y + 2*t*(1-t)*pc.y + Math.pow(t,2)*pe.y;
-			
+			x = (Math.pow(1-t,2) * p0.x) + (2*(1-t) * t * p1.x) + (Math.pow(t,2) * p2.x);
+			y = (Math.pow(1-t,2) * p0.y) + (2*(1-t) * t * p1.y) + (Math.pow(t,2) * p2.y);
+
 			return new Point(x,y);	
 		}
 		
