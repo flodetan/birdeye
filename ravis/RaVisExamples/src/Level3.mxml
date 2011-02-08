@@ -129,7 +129,7 @@
         borderColor="#333333" paddingBottom="5" horizontalGap="5">
         <mx:Canvas id="graphCnvs" width="100%" height="100%"  >		
             <ravis:VisualGraph id="vgraph" width="100%" height="100%" 
-                paddingBottom="5" left="0" right="0" top="0" bottom="0"
+                left="0" right="0" top="0" bottom="5"
                 backgroundColor="#FFFFFF" alpha="1"
                 itemRenderer="renderers.nodes.mxml.eventNodeRenderer"
                 edgeLabelRenderer="renderers.edgelabels.mxml.shapeEdgeLabelRenderer" 
