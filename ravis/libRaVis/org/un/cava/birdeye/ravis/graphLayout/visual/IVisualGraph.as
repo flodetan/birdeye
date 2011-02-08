@@ -134,7 +134,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * nodes, but only a few of them are visible at a time. Layouters
 		 * typically will only layout the currently visible nodes.
 		 * */
-		function get visibleVNodes():Dictionary;
+		function get visibleVNodes():Array;
 		
 		/**
 		 * Returns the number of currently visible nodes.
@@ -148,7 +148,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * the layouter only needs to consider the currently visible
 		 * edges.
 		 * */
-		function get visibleVEdges():Dictionary;
+		function get visibleVEdges():Array;
 
 		/**
 		 * This property controls whether to show the history of

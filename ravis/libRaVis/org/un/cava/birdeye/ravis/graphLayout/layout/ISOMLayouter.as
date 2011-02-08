@@ -182,7 +182,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				var randomNodePosition:int = Math.round(_vgraph.noVisibleVNodes * Math.random());
 						
 				/* Find random node from all currently visible VNodes */
-				var allVisVNodes:Dictionary = _vgraph.visibleVNodes;
+				var allVisVNodes:Array = _vgraph.visibleVNodes;
 				var vn:IVisualNode;
 				var randomNode:IVisualNode;
 				var count:int = 0;
@@ -220,7 +220,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			var visitedMap:Dictionary = new Dictionary();
 			var distanceMap:Dictionary = new Dictionary();
 			
-			var allVisVNodes:Dictionary = _vgraph.visibleVNodes;
+			var allVisVNodes:Array = _vgraph.visibleVNodes;
 			var vn:IVisualNode;
 			var j:int;
 			
@@ -327,7 +327,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			var dist:Number;
 			var bestDistance:Number = Number.MAX_VALUE;
 			var bestNode:IVisualNode = null;
-			var allVisVNodes:Dictionary = _vgraph.visibleVNodes;
+			var allVisVNodes:Array = _vgraph.visibleVNodes;
 			var vn:IVisualNode;
 			
 			for each(vn in allVisVNodes) {
@@ -409,7 +409,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * OBSOLETE: This checks if any node violates the taboo
 		 * distance of any other node */
     private function tabooCheck(visited:Dictionary):void {
-			var allVisVNodes:Dictionary = _vgraph.visibleVNodes;
+			var allVisVNodes:Array = _vgraph.visibleVNodes;
 			var vn_i:IVisualNode;
 			var vn_j:IVisualNode;
 			

@@ -196,14 +196,13 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
             var vn:IVisualNode;
             var ni:INode;
             
-            var visVNodes:Dictionary;
+            var visVNodes:Array;
             var i:int;
             
             visVNodes = _vgraph.visibleVNodes;
             var nn:int = _vgraph.noVisibleVNodes;
             i = 1;
             for each(vn in visVNodes) {
-                
                 /* position only visible nodes */
                 if(vn == null) {
                     throw Error("Node was null");

@@ -382,7 +382,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * The items are expected to be VNodes (as typically
 		 * a list of currently visible VNodes is passed).
 		 * */ 
-		protected function applyTargetToNodes(vns:Dictionary):void {
+		protected function applyTargetToNodes(vns:Array):void {
 			var vn:IVisualNode;
 			for each(vn in vns) {			
 				/* should be visible otherwise somethings wrong */

@@ -189,7 +189,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		private function placeNodes():void {
 			
-			var visVNodes:Dictionary;
+			var visVNodes:Array;
 			var vn:IVisualNode;
 			var node_x:Number;
 			var node_y:Number;
