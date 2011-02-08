@@ -63,8 +63,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
          * Constructor sets the graphics object (required).
          * @param g The graphics object to be used.
          * */
-        public function DirectedArrowScalingEdgeRenderer(g:IVisualGraph) {
-            super(g);
+        public function DirectedArrowScalingEdgeRenderer() {
+            super();
         }
         
         /**
@@ -75,9 +75,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
          * 
          * @inheritDoc
          * */
-        override public function draw(vedge:IVisualEdge):void {
+        override public function draw():void {
             
-            var g:GraphicsWrapper = graphicsForEdge(vedge);
             /* first get the corresponding visual object */
             var fromNode:IVisualNode = vedge.edge.node1.vnode;
             var toNode:IVisualNode = vedge.edge.node2.vnode;
@@ -92,7 +91,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
             var edgeAngle:Number;
             
             /* apply the line style */
-            applyLineStyle(vedge);
+            applyLineStyle();
             
             /* calculate the base bidpoint which is on
             * the same vector defined between the two endpoints

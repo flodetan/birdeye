@@ -53,8 +53,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * Constructor sets the graphics object (required).
 		 * @param g The graphics object to be used.
 		 * */
-		public function DirectedBalloonEdgeRenderer(g:IVisualGraph) {
-			super(g);
+		public function DirectedBalloonEdgeRenderer() {
+			super();
 		}
 		
 		/**
@@ -65,15 +65,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * 
 		 * @inheritDoc
 		 * */
-		override public function draw(vedge:IVisualEdge):void {
+		override public function draw():void {
 			
 			/* first get the corresponding visual object */
-			/**
-			 * 
-			 */
 			var fromNode:IVisualNode = vedge.edge.node1.vnode;
 			var toNode:IVisualNode = vedge.edge.node2.vnode;
-            var g:GraphicsWrapper = graphicsForEdge(vedge);
             
 			var fP:Point = fromNode.viewCenter;
 			var tP:Point = toNode.viewCenter;
@@ -82,7 +78,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			var anchor:Point = Geometry.midPointOfLine(fP,tP);
 			
 			/* apply the line style */
-			applyLineStyle(vedge);
+			applyLineStyle();
 			
 			/* now we actually draw */
 			g.beginFill(uint(vedge.lineStyle.color));
@@ -112,7 +108,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */
 			if(vedge.vgraph.displayEdgeLabels) {
-				vedge.setEdgeLabelCoordinates(labelCoordinates(vedge));
+				vedge.setEdgeLabelCoordinates(labelCoordinates());
 			}
 		}
 		
@@ -122,7 +118,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * 
 		 * @inheritDoc
 		 * */
-		override public function labelCoordinates(vedge:IVisualEdge):Point {
+		override public function labelCoordinates():Point {
 			/* first get the corresponding visual object */
 			var fromPoint:Point = new Point(vedge.edge.node1.vnode.viewCenter.x,
 								vedge.edge.node1.vnode.viewCenter.y);
