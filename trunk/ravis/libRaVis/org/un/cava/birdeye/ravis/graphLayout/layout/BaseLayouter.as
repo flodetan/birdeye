@@ -27,6 +27,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.data.Graph;
@@ -109,7 +110,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
          * autoFit.
          * */
          private var _margin:Number = 30; 
-         
+        
+         protected var _bounds:Rectangle;
 		/**
 		 * The constructor initializes the layouter and may assign
 		 * already a VisualGraph object, but this can also be set later.
@@ -124,8 +126,9 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 				_graph = new Graph("dummyID");
 			}
 			
-			/* this is required to smooth the animation */
-			_vgraph.addEventListener("forceRedrawEvent",forceRedraw);
+            /* this is required to smooth the animation */
+            if(_vgraph)
+			    _vgraph.addEventListener("forceRedrawEvent",forceRedraw);
 		}
 		
 		public function get margin():Number {
@@ -251,10 +254,42 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * @inheritDoc
 		 * */
 		public function layoutPass():Boolean {
+            _bounds = null;
             dispatchEvent(new VisualGraphEvent(VisualGraphEvent.GRAPH_UPDATED));
 		 	return true;
 		}
-		
+        
+        private function calculateBounds():Rectangle
+        {
+            var retVal:Rectangle = new Rectangle(NaN,NaN,NaN,NaN);
+            for each(var node:INode in _graph.nodes)
+            {
+                var p:Point = _currentDrawing.getAbsCartCoordinates(node);
+                if(p.x > retVal.right || isNaN(retVal.right))
+                    retVal.right = p.x;
+                
+                if(p.y > retVal.bottom || isNaN(retVal.bottom))
+                    retVal.bottom = p.y;
+                
+                if(p.x < retVal.left || isNaN(retVal.left))
+                    retVal.left = p.x;
+                
+                if(p.y < retVal.top || isNaN(retVal.top))
+                    retVal.top = p.y;
+            }
+            
+            return retVal;
+        }
+        
+        public function get bounds():Rectangle
+        {
+            if(_bounds)
+                return _bounds;
+            
+            _bounds = calculateBounds();
+            return _bounds;
+        }
+        
 		/**
 		 * This is a NOP for this layouter.
 		 * @inheritDoc
@@ -268,8 +303,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * @inheritDoc
 		 * */
 		public function dragEvent(event:MouseEvent, vn:IVisualNode):void {
-			/* NOP */
-			// LogUtil.debug(_LOG, "Node: " + vn.node.stringid + " started DRAG");
+            _bounds = null;
 		}
 		
 		/**
@@ -277,8 +311,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * @inheritDoc
 		 * */
 		public function dragContinue(event:MouseEvent, vn:IVisualNode):void {
-			/* NOP */
 			// LogUtil.debug(_LOG, "Node: " + vn.node.stringid + " being DRAGGED...");
+            _bounds = null;
 		}
 		
 		/**
@@ -286,8 +320,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * @inheritDoc
 		 * */
 		public function dropEvent(event:MouseEvent, vn:IVisualNode):void {
-			/* NOP */
-			// LogUtil.debug(_LOG, "Node: " + vn.node.stringid + " DROPPED");
+            _bounds = null;
 		}
 		
 		/**
@@ -295,8 +328,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * @inheritDoc
 		 * */
 		public function bgDragEvent(event:MouseEvent):void {
-			/* NOP */
-			//LogUtil.debug(_LOG, "Canvas started DRAG");
+            _bounds = null;
 		}
 
 		/**
@@ -304,8 +336,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * @inheritDoc
 		 * */
 		public function bgDragContinue(event:MouseEvent):void {
-			/* NOP */
-			//LogUtil.debug(_LOG, "Canvas being DRAGGED...");
+            _bounds = null;
 		}
 		
 		/**
@@ -313,8 +344,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * @inheritDoc
 		 * */
 		public function bgDropEvent(event:MouseEvent):void {
-			/* NOP */
-			//LogUtil.debug(_LOG, "Canvas DROPPED");
+            _bounds = null;
 		}
 		
 		/**
@@ -365,7 +395,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		}
 		
 		private function forceRedraw(e:MouseEvent):void {
-			e.updateAfterEvent();
+			//e.updateAfterEvent();
 		}
 	}
 }

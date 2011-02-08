@@ -25,6 +25,7 @@
 package org.un.cava.birdeye.ravis.graphLayout.layout {
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
+	import flash.geom.Rectangle;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.data.IGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
@@ -47,6 +48,8 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 	 * */
 	public interface ILayoutAlgorithm extends IEventDispatcher {
 		
+        function get bounds():Rectangle
+        
 		function get margin():Number
 		function set margin(value:Number):void
 		
