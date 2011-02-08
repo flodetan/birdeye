@@ -35,7 +35,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual {
 	 * basically this is very simple as it just
 	 * requires a draw() method.
 	 * */
-	public interface IControlableVisualEdge {
+	public interface IControllableVisualEdge {
 		
 		function get fromControl():UIComponent;
 		

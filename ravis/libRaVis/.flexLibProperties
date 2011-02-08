@@ -58,7 +58,7 @@
     <classEntry path="org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.EnhancedVisualEdge"/>
     <classEntry path="org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.EnhancedVisualGraph"/>
     <classEntry path="org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.EnhancedVisualNode"/>
-    <classEntry path="org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.IControlableVisualEdge"/>
+    <classEntry path="org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.IControllableVisualEdge"/>
     <classEntry path="org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.IControllableEdgeRenderer"/>
     <classEntry path="org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.IEnhancedVisualNode"/>
     <classEntry path="org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.INodeRenderer"/>
