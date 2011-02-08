@@ -149,7 +149,6 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
          * Centers the diagram to the page
          */
         protected function centerDiagram():void {
-            var bounds:Rectangle = calculateBounds();
             var offset:Point = new Point(-bounds.x/2,-bounds.y/2);
             _currentDrawing.centeredLayout = false;
             _currentDrawing.originOffset = offset;
@@ -170,27 +169,6 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
                 p.y -= transformPoint.y;
                 _currentDrawing.setCartCoordinates(node,p);
             } 
-        }
-        
-        private function calculateBounds():Rectangle {
-            var retVal:Rectangle = new Rectangle(NaN,NaN,NaN,NaN);
-            for each(var node:INode in _graph.nodes)
-            {
-                var p:Point = _currentDrawing.getAbsCartCoordinates(node);
-                if(p.x > retVal.right || isNaN(retVal.right))
-                    retVal.right = p.x;
-                
-                if(p.y > retVal.bottom || isNaN(retVal.bottom))
-                    retVal.bottom = p.y;
-                
-                if(p.x < retVal.left || isNaN(retVal.left))
-                    retVal.left = p.x;
-                
-                if(p.y < retVal.top || isNaN(retVal.top))
-                    retVal.top = p.y;
-            }
-            
-            return retVal;
         }
         
         private function getFirstUninitializedNode():UIComponent{
