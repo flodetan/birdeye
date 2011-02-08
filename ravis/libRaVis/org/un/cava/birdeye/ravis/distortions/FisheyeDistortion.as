@@ -34,7 +34,7 @@ package org.un.cava.birdeye.ravis.distortions
 		}
 
 		public function distort(distortionPoint:Point):void {
-			_bounds = _graph.getBounds(DisplayObject(_graph));
+			_bounds = _graph.layouter.bounds;
 			for each(var node:IVisualNode in _graph.visibleVNodes)
 			{
 				var p:Point = node.view.globalToLocal(distortionPoint);
