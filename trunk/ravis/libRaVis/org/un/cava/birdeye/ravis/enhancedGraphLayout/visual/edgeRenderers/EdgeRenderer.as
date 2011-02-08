@@ -62,7 +62,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers
 		
 		private function editEdgeItemClick(event:ContextMenuEvent):void
 		{
-			var popUp:EdgeProperty = PopUpManager.createPopUp(Application.application as DisplayObject, EdgeProperty, true) as EdgeProperty;
+			var popUp:EdgeProperty = PopUpManager.createPopUp(root, EdgeProperty, true) as EdgeProperty;
 			PopUpManager.centerPopUp(popUp);
 			popUp.data = IVisualEdge(this.data).edge;
 			
