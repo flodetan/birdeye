@@ -26,6 +26,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	
 	import flash.display.Graphics;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
@@ -59,10 +60,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			var toNode:IVisualNode = vedge.edge.node2.vnode;
 			
 			/* calculate the midpoint used as curveTo anchor point */
-			var anchor:Point = new Point(
-				(fromNode.viewCenter.x + vedge.vgraph.center.x) / 2.0,
-				(fromNode.viewCenter.y + vedge.vgraph.center.y) / 2.0
-				);
+            
+            var bounds:Rectangle = vedge.vgraph.layouter.bounds;
+            
+			var anchor:Point = new Point(bounds.x + bounds.width/2, bounds.y + bounds.height/2);
 			
 			/* apply the line style */
 			applyLineStyle(vedge);
