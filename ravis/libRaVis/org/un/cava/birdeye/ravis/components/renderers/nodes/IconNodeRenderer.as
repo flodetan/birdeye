@@ -70,20 +70,5 @@ package org.un.cava.birdeye.ravis.components.renderers.nodes {
 			/* now the link button */
 			initLinkButton();
 		}
-		
-		/**
-		 * We want to use a different effect here, so we
-		 * override the initialisation.
-		 * */
-		/* we first test if it does not work with the
-		 * plain ole zoom 
-		override protected function initZoom():void {
-			_zoom = new Resize();
-			_zoom.widthFrom = 32;
-			_zoom.heightFrom = 32;
-			_zoom.widthTo = 64;
-			_zoom.heightTo = 64;
-		}
-		*/
 	}
 }
