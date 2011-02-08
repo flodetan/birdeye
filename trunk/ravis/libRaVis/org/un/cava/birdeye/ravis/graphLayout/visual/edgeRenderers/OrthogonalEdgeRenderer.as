@@ -28,7 +28,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	import flash.geom.Point;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+	import org.un.cava.birdeye.ravis.utils.GraphicsWrapper;
 
 
 	/**
@@ -52,7 +54,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * Constructor sets the graphics object (required).
 		 * @param g The graphics object to be used.
 		 * */
-		public function OrthogonalEdgeRenderer(g:Graphics) {
+		public function OrthogonalEdgeRenderer(g:IVisualGraph) {
 			super(g);
 		}
 		
@@ -65,6 +67,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * */
 		override public function draw(vedge:IVisualEdge):void {
 			
+            var g:GraphicsWrapper = graphicsForEdge(vedge);
 			/* first get the corresponding visual object */
 			var fromNode:IVisualNode = vedge.edge.node1.vnode;
 			var toNode:IVisualNode = vedge.edge.node2.vnode;
@@ -85,34 +88,34 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			
 			if(isFullyLeftOf(fromNode, toNode)) {
 				if(isFullyAbove(fromNode, toNode)) {
-					bottomToTop(fromNode, toNode);					
+					bottomToTop(fromNode, toNode, g);					
 				}
 				else if(isFullyBelow(fromNode, toNode)) {
-					topToBottom(fromNode, toNode);
+					topToBottom(fromNode, toNode, g);
 				}
 				else {			
-					rightToLeft(fromNode, toNode);
+					rightToLeft(fromNode, toNode, g);
 				}
 			}
 			else if(isFullyRightOf(fromNode, toNode)) {
 				if(isFullyAbove(fromNode, toNode)) {
-					bottomToTop(fromNode, toNode);
+					bottomToTop(fromNode, toNode,g);
 				}
 				else if(isFullyBelow(fromNode, toNode)) {						
-					topToBottom(fromNode, toNode);
+					topToBottom(fromNode, toNode,g);
 				}
 				else {
-					leftToRight(fromNode, toNode);
+					leftToRight(fromNode, toNode,g);
 				}			
 			}
 			else if(isFullyAbove(fromNode, toNode)) {
-				bottomToTop(fromNode, toNode);
+				bottomToTop(fromNode, toNode,g);
 			}
 			else if(isFullyBelow(fromNode, toNode)) {
-				topToBottom(fromNode, toNode);
+				topToBottom(fromNode, toNode,g);
 			}
 			else {
-				centerToCenter(fromNode, toNode);
+				centerToCenter(fromNode, toNode,g);
 			}				
 	
 			/* if the vgraph currently displays edgeLabels, then
@@ -134,7 +137,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			return ({x: _loc3, y: _loc2});
 		}
      
-     	private function drawArrow(fromX:int, fromY:int, toX:int, toY:int):void{
+     	private function drawArrow(fromX:int, fromY:int, toX:int, toY:int, g:GraphicsWrapper):void{
      		
      		var arrowLength:Number = 10;
      		var dXY:Number = (fromY - toY) / (fromX - toX);
@@ -152,12 +155,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	        var arrowLine1:Object = this.calculatePoint(toX, toY, arrowLength, 180 - Math.atan(dXY) * 5.729578E+001 - arrowOS);
 	        var arrowLine2:Object = this.calculatePoint(toX, toY, arrowLength, 180 - Math.atan(dXY) * 5.729578E+001 + arrowOS);   		
      		
-     		_g.moveTo(toX, toY);
-     		_g.beginFill(_color,1);
-            _g.lineTo(arrowLine1.x, arrowLine1.y);            
-            _g.lineTo(arrowLine2.x, arrowLine2.y);
-            _g.lineTo(toX, toY);
-            _g.endFill();
+     		g.moveTo(toX, toY);
+     		g.beginFill(_color,1);
+            g.lineTo(arrowLine1.x, arrowLine1.y);            
+            g.lineTo(arrowLine2.x, arrowLine2.y);
+            g.lineTo(toX, toY);
+            g.endFill();
      	}
      			     	
 		//checks if obj1 is fully above obj2 (this includes the space for the arrow)
@@ -177,72 +180,72 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			return (obj1.view.x + obj1.view.width + arrowLength) < obj2.view.x;
 		}  
 		//from the right side of obj1 to the left side of obj2
-		private function rightToLeft(obj1:IVisualNode, obj2:IVisualNode):void {
-			_g.moveTo(obj1.view.x + obj1.view.width, obj1.view.y + (obj1.view.height/2));
+		private function rightToLeft(obj1:IVisualNode, obj2:IVisualNode, g:GraphicsWrapper):void {
+			g.moveTo(obj1.view.x + obj1.view.width, obj1.view.y + (obj1.view.height/2));
 			if(_type == 'orthogonal') {
-				_g.lineTo((obj1.view.x + obj1.view.width) + .5*(obj2.view.x - (obj1.view.x + obj1.view.width)) - arrowLength, obj1.view.y + (obj1.view.height/2));
-				_g.lineTo((obj1.view.x + obj1.view.width) + .5*(obj2.view.x - (obj1.view.x + obj1.view.width)) - arrowLength, obj2.view.y + (obj2.view.height/2));
-				_g.lineTo(obj2.view.x - arrowLength+1, obj2.view.y + (obj2.view.height/2));
-				drawArrow((obj1.view.x + obj1.view.width) + .5*(obj2.view.x - (obj1.view.x + obj1.view.width)) - arrowLength, obj2.view.y + (obj2.view.height/2), obj2.view.x, obj2.view.y + (obj2.view.height/2));
+				g.lineTo((obj1.view.x + obj1.view.width) + .5*(obj2.view.x - (obj1.view.x + obj1.view.width)) - arrowLength, obj1.view.y + (obj1.view.height/2));
+				g.lineTo((obj1.view.x + obj1.view.width) + .5*(obj2.view.x - (obj1.view.x + obj1.view.width)) - arrowLength, obj2.view.y + (obj2.view.height/2));
+				g.lineTo(obj2.view.x - arrowLength+1, obj2.view.y + (obj2.view.height/2));
+				drawArrow((obj1.view.x + obj1.view.width) + .5*(obj2.view.x - (obj1.view.x + obj1.view.width)) - arrowLength, obj2.view.y + (obj2.view.height/2), obj2.view.x, obj2.view.y + (obj2.view.height/2),g);
 			}
 			else {
-				_g.lineTo(obj2.view.x - arrowLength+1, obj2.view.y + (obj2.view.height/2));	
-				drawArrow(obj1.view.x + obj1.view.width, obj1.view.y + (obj1.view.height/2), obj2.view.x, obj2.view.y + (obj2.view.height/2));
+				g.lineTo(obj2.view.x - arrowLength+1, obj2.view.y + (obj2.view.height/2));	
+				drawArrow(obj1.view.x + obj1.view.width, obj1.view.y + (obj1.view.height/2), obj2.view.x, obj2.view.y + (obj2.view.height/2),g);
 			}
 		}
 		
 		//from the left side of obj1 to the right side of obj2
-		private function leftToRight(obj1:IVisualNode, obj2:IVisualNode):void {
-			_g.moveTo(obj1.view.x, obj1.view.y + (obj1.view.height/2));
+		private function leftToRight(obj1:IVisualNode, obj2:IVisualNode, g:GraphicsWrapper):void {
+			g.moveTo(obj1.view.x, obj1.view.y + (obj1.view.height/2));
 			if(_type == 'orthogonal'){
-				_g.lineTo((obj2.view.x + obj2.view.width) + .5*(obj1.view.x - (obj2.view.x + obj2.view.width)) + arrowLength, obj1.view.y + (obj1.view.height/2));
-				_g.lineTo((obj2.view.x + obj2.view.width) + .5*(obj1.view.x - (obj2.view.x + obj2.view.width)) + arrowLength, obj2.view.y + (obj2.view.height/2));
-				_g.lineTo((obj2.view.x + obj2.view.width) + arrowLength-1, obj2.view.y + obj2.view.height/2);
-				drawArrow((obj2.view.x + obj2.view.width) + .5*(obj1.view.x - (obj2.view.x + obj2.view.width)) + arrowLength, obj2.view.y + (obj2.view.height/2), (obj2.view.x + obj2.view.width), obj2.view.y + obj2.view.height/2);		
+				g.lineTo((obj2.view.x + obj2.view.width) + .5*(obj1.view.x - (obj2.view.x + obj2.view.width)) + arrowLength, obj1.view.y + (obj1.view.height/2));
+				g.lineTo((obj2.view.x + obj2.view.width) + .5*(obj1.view.x - (obj2.view.x + obj2.view.width)) + arrowLength, obj2.view.y + (obj2.view.height/2));
+				g.lineTo((obj2.view.x + obj2.view.width) + arrowLength-1, obj2.view.y + obj2.view.height/2);
+				drawArrow((obj2.view.x + obj2.view.width) + .5*(obj1.view.x - (obj2.view.x + obj2.view.width)) + arrowLength, obj2.view.y + (obj2.view.height/2), (obj2.view.x + obj2.view.width), obj2.view.y + obj2.view.height/2,g);		
 			}
 			else{
-				_g.lineTo((obj2.view.x + obj2.view.width) + arrowLength-1, obj2.view.y + obj2.view.height/2);
-				drawArrow(obj1.view.x, obj1.view.y + (obj1.view.height/2), (obj2.view.x + obj2.view.width), obj2.view.y + obj2.view.height/2);
+				g.lineTo((obj2.view.x + obj2.view.width) + arrowLength-1, obj2.view.y + obj2.view.height/2);
+				drawArrow(obj1.view.x, obj1.view.y + (obj1.view.height/2), (obj2.view.x + obj2.view.width), obj2.view.y + obj2.view.height/2,g);
 			}
 
 		}
 		
 		//from the top of obj1 to the bottom of obj2
-		private function topToBottom(obj1:IVisualNode, obj2:IVisualNode):void {
-			_g.moveTo(obj1.view.x + (obj1.view.width/2), obj1.view.y);
+		private function topToBottom(obj1:IVisualNode, obj2:IVisualNode, g:GraphicsWrapper):void {
+			g.moveTo(obj1.view.x + (obj1.view.width/2), obj1.view.y);
 			if(_type == 'orthogonal'){
-				_g.lineTo(obj1.view.x + (obj1.view.width/2), obj1.view.y + .5*((obj2.view.y + obj2.view.height) - obj1.view.y));
-				_g.lineTo(obj2.view.x+(obj2.view.width/2), obj1.view.y + .5*((obj2.view.y + obj2.view.height) - obj1.view.y));
-				_g.lineTo(obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height)+ arrowLength-1);
-				drawArrow(obj2.view.x+(obj2.view.width/2), obj1.view.y + .5*((obj2.view.y + obj2.view.height) - obj1.view.y), obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height));			
+				g.lineTo(obj1.view.x + (obj1.view.width/2), obj1.view.y + .5*((obj2.view.y + obj2.view.height) - obj1.view.y));
+				g.lineTo(obj2.view.x+(obj2.view.width/2), obj1.view.y + .5*((obj2.view.y + obj2.view.height) - obj1.view.y));
+				g.lineTo(obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height)+ arrowLength-1);
+				drawArrow(obj2.view.x+(obj2.view.width/2), obj1.view.y + .5*((obj2.view.y + obj2.view.height) - obj1.view.y), obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height),g);			
 			}
 			else{
-				_g.lineTo(obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height)+ arrowLength-1);
-				drawArrow(obj1.view.x + (obj1.view.width/2), obj1.view.y, obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height));
+				g.lineTo(obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height)+ arrowLength-1);
+				drawArrow(obj1.view.x + (obj1.view.width/2), obj1.view.y, obj2.view.x+(obj2.view.width/2), (obj2.view.y + obj2.view.height),g);
 			}
 			
 		}
 		
 		//from the bottom of obj1 to the top of obj2
-		private function bottomToTop(obj1:IVisualNode, obj2:IVisualNode):void {
-			_g.moveTo(obj1.view.x + (obj1.view.width/2), obj1.view.y + obj1.view.height);
+		private function bottomToTop(obj1:IVisualNode, obj2:IVisualNode, g:GraphicsWrapper):void {
+			g.moveTo(obj1.view.x + (obj1.view.width/2), obj1.view.y + obj1.view.height);
 			if(_type == 'orthogonal') {
-				_g.lineTo(obj1.view.x + (obj1.view.width/2), (obj1.view.y + obj1.view.height) + .5*(obj2.view.y - (obj1.view.y + obj1.view.height)));
-				_g.lineTo(obj2.view.x + (obj2.view.width/2), (obj1.view.y + obj1.view.height) + .5*(obj2.view.y - (obj1.view.y + obj1.view.height)));
-				_g.lineTo(obj2.view.x + (obj2.view.width/2), obj2.view.y - arrowLength+1);
-				drawArrow(obj2.view.x + (obj2.view.width/2), (obj1.view.y + obj1.view.height) + .5*(obj2.view.y - (obj1.view.y + obj1.view.height)), obj2.view.x + (obj2.view.width/2), obj2.view.y);
+				g.lineTo(obj1.view.x + (obj1.view.width/2), (obj1.view.y + obj1.view.height) + .5*(obj2.view.y - (obj1.view.y + obj1.view.height)));
+				g.lineTo(obj2.view.x + (obj2.view.width/2), (obj1.view.y + obj1.view.height) + .5*(obj2.view.y - (obj1.view.y + obj1.view.height)));
+				g.lineTo(obj2.view.x + (obj2.view.width/2), obj2.view.y - arrowLength+1);
+				drawArrow(obj2.view.x + (obj2.view.width/2), (obj1.view.y + obj1.view.height) + .5*(obj2.view.y - (obj1.view.y + obj1.view.height)), obj2.view.x + (obj2.view.width/2), obj2.view.y,g);
 			}
 			else {
-				_g.lineTo(obj2.view.x + (obj2.view.width/2), obj2.view.y - arrowLength+1);
-				drawArrow(obj1.view.x + (obj1.view.width/2), obj1.view.y + obj1.view.height, obj2.view.x + (obj2.view.width/2), obj2.view.y);
+				g.lineTo(obj2.view.x + (obj2.view.width/2), obj2.view.y - arrowLength+1);
+				drawArrow(obj1.view.x + (obj1.view.width/2), obj1.view.y + obj1.view.height, obj2.view.x + (obj2.view.width/2), obj2.view.y,g);
 			}
 		}
 		
 		//from the center of _obj1 to the center of _obj2
-		private function centerToCenter(obj1:IVisualNode, obj2:IVisualNode):void {
-			_g.moveTo(obj1.view.x + (obj1.view.width/2), obj1.view.y + (obj1.view.height/2));
-			_g.lineTo(obj2.view.x + (obj2.view.width/2), obj2.view.y + (obj2.view.height/2));
-			drawArrow(obj1.view.x + (obj1.view.width/2), obj1.view.y + obj1.view.height, obj2.view.x + (obj2.view.width/2), obj2.view.y);
+		private function centerToCenter(obj1:IVisualNode, obj2:IVisualNode, g:GraphicsWrapper):void {
+			g.moveTo(obj1.view.x + (obj1.view.width/2), obj1.view.y + (obj1.view.height/2));
+			g.lineTo(obj2.view.x + (obj2.view.width/2), obj2.view.y + (obj2.view.height/2));
+			drawArrow(obj1.view.x + (obj1.view.width/2), obj1.view.y + obj1.view.height, obj2.view.x + (obj2.view.width/2), obj2.view.y,g);
 		}			   							
 	}
 }

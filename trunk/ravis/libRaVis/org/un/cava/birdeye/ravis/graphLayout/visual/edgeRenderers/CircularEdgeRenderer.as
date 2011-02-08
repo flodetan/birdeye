@@ -28,8 +28,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	import flash.geom.Point;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 	import org.un.cava.birdeye.ravis.utils.Geometry;
+	import org.un.cava.birdeye.ravis.utils.GraphicsWrapper;
 
 
 	/**
@@ -42,7 +44,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * Constructor sets the graphics object (required).
 		 * @param g The graphics object to be used.
 		 * */
-		public function CircularEdgeRenderer(g:Graphics) {
+		public function CircularEdgeRenderer(g:IVisualGraph) {
 			super(g);
 		}
 		
@@ -57,7 +59,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			/* first get the corresponding visual object */
 			var fromNode:IVisualNode = vedge.edge.node1.vnode;
 			var toNode:IVisualNode = vedge.edge.node2.vnode;
-			
+			var g:GraphicsWrapper = graphicsForEdge(vedge);
 			/* calculate the midpoint used as curveTo anchor point */
 			var anchor:Point = getEdgeAnchor(vedge);
 			
@@ -66,18 +68,15 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			applyLineStyle(vedge);
 			
 			/* now we actually draw */
-			//_g.beginFill(uint(vedge.lineStyle.color));
-			_g.moveTo(fromNode.viewCenter.x, fromNode.viewCenter.y);			
+			g.moveTo(fromNode.viewCenter.x, fromNode.viewCenter.y);			
 			
 			//_g.curveTo(centreX, centreY, toX, toY);
-			_g.curveTo(
+			g.curveTo(
 				anchor.x ,
 				anchor.y ,
 				toNode.viewCenter.x ,
 				toNode.viewCenter.y 
 			);
-			
-			//_g.endFill();
 			
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */

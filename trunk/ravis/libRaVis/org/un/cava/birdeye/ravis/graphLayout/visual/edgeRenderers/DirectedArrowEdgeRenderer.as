@@ -28,8 +28,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	import flash.geom.Point;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 	import org.un.cava.birdeye.ravis.utils.Geometry;
+	import org.un.cava.birdeye.ravis.utils.GraphicsWrapper;
 
 
 	/**
@@ -56,7 +58,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * Constructor sets the graphics object (required).
 		 * @param g The graphics object to be used.
 		 * */
-		public function DirectedArrowEdgeRenderer(g:Graphics) {
+		public function DirectedArrowEdgeRenderer(g:IVisualGraph) {
 			super(g);
 		}
 		
@@ -70,6 +72,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * */
 		override public function draw(vedge:IVisualEdge):void {
 			
+            var g:GraphicsWrapper = graphicsForEdge(vedge);
 			/* first get the corresponding visual object */
 			var fromNode:IVisualNode = vedge.edge.node1.vnode;
 			var toNode:IVisualNode = vedge.edge.node2.vnode;
@@ -115,13 +118,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			rArrowBase.offset(mArrowBase.x,mArrowBase.y);
 			
 			/* now we actually draw */
-			_g.beginFill(uint(vedge.lineStyle.color));
-			_g.moveTo(fP.x, fP.y);
-			_g.lineTo(tP.x, tP.y);
-			_g.lineTo(lArrowBase.x, lArrowBase.y);
-			_g.lineTo(rArrowBase.x, rArrowBase.y);
-			_g.lineTo(tP.x, tP.y);
-			_g.endFill();
+			g.beginFill(uint(vedge.lineStyle.color));
+			g.moveTo(fP.x, fP.y);
+			g.lineTo(tP.x, tP.y);
+			g.lineTo(lArrowBase.x, lArrowBase.y);
+			g.lineTo(rArrowBase.x, rArrowBase.y);
+			g.lineTo(tP.x, tP.y);
+			g.endFill();
 			
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */

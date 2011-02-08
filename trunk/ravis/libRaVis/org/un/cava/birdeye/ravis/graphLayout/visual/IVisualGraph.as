@@ -51,21 +51,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		/**
 		 * @private
 		 * */
-		function set graph(g:IGraph):void;
+		function set graph(g:IGraph):void
 		
-		/**
-		 * provide access to the graphics object of
-		 * the drawing surface for the edge drawing, needed
-		 * by edge renderers.
-		 * @returns The graphics object of the drawing surface.
-		 * */
-		function get edgeDrawGraphics():Graphics;
-		
-		/**
-		 * provide access to the drawing surface.
-		 * This is important as it should not be scaled.
-		 * */
-		function get drawingSurface():UIComponent;
 		
 		/**
 		 * Allow the provision of an ItemRenderer (which is
@@ -232,6 +219,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * */
 		function set scale(s:Number):void;
 		
+        function getEdgeContext(vedge:IVisualEdge):UIComponent;
+        
 		/**
 		 * Initializes the VisualGraph from its currently set Graph object,
 		 * basically removing all existing VNodes and VEdges and
@@ -306,12 +295,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
          * This forces a redraw of all nodes and their renderers */
 		function redrawNodes():void;
 
-		/**
-		 * Calculate and return the current bounding box of all visible nodes.
-		 * This is required by some layouters.
-		 * @return The bounding box rectangle of all visible nodes.
-		 * */
-		function calcNodesBoundingBox():Rectangle;
 
 		/**
 		 * Scrolls all objects according to the specified coordinates

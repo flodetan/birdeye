@@ -28,9 +28,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	import flash.geom.Point;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
-	import org.un.cava.birdeye.ravis.utils.LogUtil;
 	import org.un.cava.birdeye.ravis.utils.Geometry;
+	import org.un.cava.birdeye.ravis.utils.GraphicsWrapper;
+	import org.un.cava.birdeye.ravis.utils.LogUtil;
 
 
 	/**
@@ -69,7 +71,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * and the graphics object.
 		 * @param g The graphics object to draw on.
 		 * */
-		public function FlowEdgeRenderer(g:Graphics) {
+		public function FlowEdgeRenderer(g:IVisualGraph) {
 			super(g);
 			relativeEdgeMagnitude = 1000;
 			maxBaseWidth = 100;
@@ -97,6 +99,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			var basedirectionAngle:Number;
 			var baseWidth:Number;
 			
+            var g:GraphicsWrapper = graphicsForEdge(vedge);
 			/* first get the corresponding nodes */
 			fromNode = vedge.edge.node1.vnode;
 			toNode = vedge.edge.node2.vnode;
@@ -144,22 +147,22 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			applyLineStyle(vedge);
 			
 			/* now we draw the first curve with base 1 to target */
-			_g.beginFill(uint(vedge.lineStyle.color));
-			_g.moveTo(source.x, source.y);
-			_g.curveTo(
+			g.beginFill(uint(vedge.lineStyle.color));
+			g.moveTo(source.x, source.y);
+			g.curveTo(
 				base1.x,
 				base1.y,
 				target.x,
 				target.y
 			);
 			
-			_g.curveTo(
+			g.curveTo(
 				base2.x,
 				base2.y,
 				source.x,
 				source.y
 			);
-			_g.endFill();
+			g.endFill();
 
 			
 			/* if the vgraph currently displays edgeLabels, then
