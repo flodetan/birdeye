@@ -49,21 +49,23 @@
 	
 	<mx:Script>	
 		<![CDATA[
-			import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
-			import mx.events.ListEvent;
-			import mx.utils.ObjectUtil;
-			import org.un.cava.birdeye.ravis.utils.LogUtil;
-			import org.un.cava.birdeye.ravis.graphLayout.layout.Hyperbolic2DLayouter;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.IEdgeRenderer;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedArrowEdgeRenderer;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedBalloonEdgeRenderer;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.FlowCurveEdgeRenderer;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.FlowEdgeRenderer;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.OrthogonalEdgeRenderer;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.CircularEdgeRenderer;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.HyperbolicEdgeRenderer;
+            import mx.events.ListEvent;
+            import mx.utils.ObjectUtil;
+            
+            import org.un.cava.birdeye.ravis.graphLayout.layout.Hyperbolic2DLayouter;
+            import org.un.cava.birdeye.ravis.graphLayout.visual.IEdgeRenderer;
+            import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
+            import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
+            import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
+            import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.CircularEdgeRenderer;
+            import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedArrowEdgeRenderer;
+            import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedBalloonEdgeRenderer;
+            import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.FlowCurveEdgeRenderer;
+            import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.FlowEdgeRenderer;
+            import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.HyperbolicEdgeRenderer;
+            import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.OrthogonalEdgeRenderer;
+            import org.un.cava.birdeye.ravis.utils.LogUtil;
+            import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
 			
 		  private static const _LOG:String = "components.ui.controls.vgraphControls.EdgeRendererSelector";
 			private var _vgraph:VisualGraph;
@@ -110,13 +112,13 @@
 			public function changeEdgeRenderer():void {
 				
 				var er:String;
-				var g:Graphics;
+				var g:IVisualGraph;
 				
 				if(_vgraph == null) {
 					LogUtil.warn(_LOG, "Cannot change EdgeRenderer, no valid vgraph!");
 					return;
 				}
-				g = _vgraph.edgeDrawGraphics;
+				g = _vgraph;
 				
 				/* get the currently selected EdgeRenderer */
 				er = this.selectedItem as String;

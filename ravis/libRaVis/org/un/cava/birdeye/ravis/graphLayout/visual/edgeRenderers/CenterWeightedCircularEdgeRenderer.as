@@ -5,10 +5,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers
     import flash.geom.Rectangle;
     
     import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
+    import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
     
     public class CenterWeightedCircularEdgeRenderer extends CircularEdgeRenderer
     {
-        public function CenterWeightedCircularEdgeRenderer(g:Graphics)
+        public function CenterWeightedCircularEdgeRenderer(g:IVisualGraph)
         {
             super(g);
         }

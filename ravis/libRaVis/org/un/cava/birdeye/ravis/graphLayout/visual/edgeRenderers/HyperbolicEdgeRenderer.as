@@ -29,8 +29,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	import flash.geom.Point;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 	import org.un.cava.birdeye.ravis.utils.GraphicUtils;
+	import org.un.cava.birdeye.ravis.utils.GraphicsWrapper;
 	import org.un.cava.birdeye.ravis.utils.geom.IProjector;
 
 
@@ -53,7 +55,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * @param g The graphics object to draw on.
 		 * @param projector The projector object, to be taken from the corresponding layouter.
 		 */
-		public function HyperbolicEdgeRenderer(g:Graphics,projector:IProjector) {
+		public function HyperbolicEdgeRenderer(g:IVisualGraph,projector:IProjector) {
 			super(g);
 			_projector = projector;
 		}
@@ -75,6 +77,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			var toX:Number;
 			var toY:Number;
 			
+            var g:GraphicsWrapper = graphicsForEdge(vedge);
 			/* first get the corresponding nodes */
 			fromNode = vedge.edge.node1.vnode;
 			toNode = vedge.edge.node2.vnode;
@@ -90,54 +93,28 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			applyLineStyle(vedge);
 			
 			
-			/*
-			// Method 1: Original Hypergraph implementation
-			// Using piecewise projections (as line segments)
-			var disp:DisplayObject = vedge.vgraph as DisplayObject;
-			
-			var fromPoint:Point = new Point(fromX, fromY);
-			var toPoint:Point = new Point(toX, toY);
-			
-			var tempPoint:Point;
-			var i:int;
-			var fromIPoint:IPoint = _projector.unProject(fromPoint, disp);
-			var toIPoint:IPoint = _projector..unProject(toPoint, disp);
-			
-			var segments:Array = _projector.getLineSegments(fromIPoint, toIPoint, disp);
-			var numSegments:int = segments.length;
-			
-			// now we actually draw
-			//g.beginFill(0);
-			g.moveTo(fromX, fromY);
-			for (i = 1; i < numSegments; i++) {
-				tempPoint = segments[i] as Point;
-				g.lineTo(tempPoint.x, tempPoint.y);
-			}
-			//g.endFill();
-			*/
-			
 			// Method 2: Using circular arcs		
 			var center:Point = _projector.getCenter(fromX, fromY, toX, toY, (vedge.vgraph as DisplayObject));
 			if (center == null) {// diameter - just draw a straight line
-				_g.moveTo(fromX, fromY);
-				_g.lineTo(toX, toY);
+				g.moveTo(fromX, fromY);
+				g.lineTo(toX, toY);
 			} else {
 				var angle:Number = GraphicUtils.getAngle(fromX, fromY, toX, toY, center.x, center.y);
 				var testPoint1:Point = GraphicUtils.getRotation(angle, center.x, center.y, fromX, fromY);
 				var testPoint2:Point = GraphicUtils.getRotation(angle, center.x, center.y, toX, toY);
 				// Rotation check - the second point must be equal to the rotated point
 				if (GraphicUtils.equal(testPoint1, new Point(toX,toY))) {
-					GraphicUtils.drawArc(_g, angle, center.x, center.y, fromX, fromY);
+					GraphicUtils.drawArc(g, angle, center.x, center.y, fromX, fromY);
 				} else if (GraphicUtils.equal(testPoint2, new Point(fromX, fromY))) {
-					GraphicUtils.drawArc(_g, angle, center.x, center.y, toX, toY);
+					GraphicUtils.drawArc(g, angle, center.x, center.y, toX, toY);
 				} else {// Rare case - arc angle greater than PI/2
 					angle = Math.PI - angle;
 					testPoint1 = GraphicUtils.getRotation(angle, center.x, center.y, fromX, fromY);
 					testPoint2 = GraphicUtils.getRotation(angle, center.x, center.y, toX, toY);
 					if (GraphicUtils.equal(testPoint1, new Point(toX,toY))) {
-						GraphicUtils.drawArc(_g, angle, center.x, center.y, fromX, fromY);
+						GraphicUtils.drawArc(g, angle, center.x, center.y, fromX, fromY);
 					} else if (GraphicUtils.equal(testPoint2, new Point(fromX, fromY))) {
-						GraphicUtils.drawArc(_g, angle, center.x, center.y, toX, toY);
+						GraphicUtils.drawArc(g, angle, center.x, center.y, toX, toY);
 					}
 				}
 			}

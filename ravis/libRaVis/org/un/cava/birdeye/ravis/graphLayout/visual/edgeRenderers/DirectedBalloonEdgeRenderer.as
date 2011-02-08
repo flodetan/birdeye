@@ -28,8 +28,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	import flash.geom.Point;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 	import org.un.cava.birdeye.ravis.utils.Geometry;
+	import org.un.cava.birdeye.ravis.utils.GraphicsWrapper;
 
 
 	/**
@@ -51,7 +53,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * Constructor sets the graphics object (required).
 		 * @param g The graphics object to be used.
 		 * */
-		public function DirectedBalloonEdgeRenderer(g:Graphics) {
+		public function DirectedBalloonEdgeRenderer(g:IVisualGraph) {
 			super(g);
 		}
 		
@@ -71,7 +73,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			 */
 			var fromNode:IVisualNode = vedge.edge.node1.vnode;
 			var toNode:IVisualNode = vedge.edge.node2.vnode;
-			
+            var g:GraphicsWrapper = graphicsForEdge(vedge);
+            
 			var fP:Point = fromNode.viewCenter;
 			var tP:Point = toNode.viewCenter;
 			
@@ -82,29 +85,29 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			applyLineStyle(vedge);
 			
 			/* now we actually draw */
-			_g.beginFill(uint(vedge.lineStyle.color));
-			_g.moveTo(fP.x, fP.y);			
+			g.beginFill(uint(vedge.lineStyle.color));
+			g.moveTo(fP.x, fP.y);			
 			
 			/* bezier curve style */
-			_g.curveTo(fP.x - balloonWidth, fP.y - balloonWidth, anchor.x, anchor.y);
-			_g.endFill();
-			_g.beginFill(uint(vedge.lineStyle.color));
-			_g.moveTo(fP.x, fP.y);
-			_g.curveTo(fP.x + balloonWidth, fP.y + balloonWidth, anchor.x, anchor.y);
-			_g.endFill();
-			_g.beginFill(uint(vedge.lineStyle.color));
-			_g.moveTo(fP.x, fP.y);
-			_g.curveTo(fP.x - balloonWidth, fP.y + balloonWidth, anchor.x, anchor.y);
-			_g.endFill();
-			_g.beginFill(uint(vedge.lineStyle.color));
-			_g.moveTo(fP.x, fP.y);
-			_g.curveTo(fP.x + balloonWidth, fP.y - balloonWidth, anchor.x, anchor.y);
-			_g.endFill();
-			_g.beginFill(uint(vedge.lineStyle.color));
-			_g.moveTo(anchor.x, anchor.y);
+			g.curveTo(fP.x - balloonWidth, fP.y - balloonWidth, anchor.x, anchor.y);
+			g.endFill();
+			g.beginFill(uint(vedge.lineStyle.color));
+			g.moveTo(fP.x, fP.y);
+			g.curveTo(fP.x + balloonWidth, fP.y + balloonWidth, anchor.x, anchor.y);
+			g.endFill();
+			g.beginFill(uint(vedge.lineStyle.color));
+			g.moveTo(fP.x, fP.y);
+			g.curveTo(fP.x - balloonWidth, fP.y + balloonWidth, anchor.x, anchor.y);
+			g.endFill();
+			g.beginFill(uint(vedge.lineStyle.color));
+			g.moveTo(fP.x, fP.y);
+			g.curveTo(fP.x + balloonWidth, fP.y - balloonWidth, anchor.x, anchor.y);
+			g.endFill();
+			g.beginFill(uint(vedge.lineStyle.color));
+			g.moveTo(anchor.x, anchor.y);
 			
-			_g.lineTo(toNode.viewCenter.x, toNode.viewCenter.y);
-			_g.endFill();
+			g.lineTo(toNode.viewCenter.x, toNode.viewCenter.y);
+			g.endFill();
 		
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */

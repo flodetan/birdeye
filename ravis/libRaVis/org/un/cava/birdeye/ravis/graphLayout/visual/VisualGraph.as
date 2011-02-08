@@ -46,6 +46,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
     import org.un.cava.birdeye.ravis.graphLayout.data.*;
     import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
     import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
+    import org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualEdgeEvent;
     import org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualGraphEvent;
     import org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent;
     import org.un.cava.birdeye.ravis.utils.LogUtil;
@@ -80,6 +81,27 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
      *  @eventType org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent
      */
     [Event(name="nodeClick", type="org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualNodeEvent")]
+    
+    /**
+     *  Dispatched when an edge has been rolled over
+     *
+     *  @eventType org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualEdgeEvent
+     */
+    [Event(name="edgeRollOver", type="org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualEdgeEvent")]
+    
+    /**
+     *  Dispatched when an edge has been rolled out
+     *
+     *  @eventType org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualEdgeEvent
+     */
+    [Event(name="edgeRollOut", type="org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualEdgeEvent")]
+    
+    /**
+     *  Dispatched when an edge has been clicked
+     *
+     *  @eventType org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualEdgeEvent
+     */
+    [Event(name="edgeClick", type="org.un.cava.birdeye.ravis.graphLayout.visual.events.VisualEdgeEvent")]
     
     /**
      *  Dispatched when a node is double clicked it is totally independant of drags.
@@ -168,11 +190,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
          * */
         protected var _layouter:ILayoutAlgorithm;
         
-        /**
-         * This is a drawing surface to draw the edges on. It is only
-         * used for the edges and is added as a child to the canvas.
-         * */
-        protected var _drawingSurface:UIComponent; 
         
         /**
          * for cleanup we also need a reference source for
@@ -180,6 +197,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
          * */
         protected var _vnodes:Dictionary;
         protected var _vedges:Dictionary;
+        
+        protected var _edgeContexts:Dictionary;
+        protected var _reverseEdgeContexts:Dictionary;
         
         /**
          * Every visual node is associated with an UIComponent that 
@@ -482,6 +502,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             /* initialise view/ItemRenderer and visibility mapping */
             _vnodes = new Dictionary;
             _vedges = new Dictionary;
+            _edgeContexts = new Dictionary;
+            _reverseEdgeContexts = new Dictionary;
             _viewToVNodeMap = new Dictionary;
             _viewToVEdgeMap = new Dictionary;
             _visibleVNodes = new Dictionary;
@@ -492,18 +514,12 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             /* init the history array */
             _currentVNodeHistory = new Array;
             
-            /* set the drawing surface for the edges */
-            _drawingSurface = new UIComponent();
-            _drawingSurface.percentWidth = 100;
-            _drawingSurface.percentHeight = 100;
             /* set an edge renderer, for now we use the Default,
             * but at a later stage this could be set externally */
-            _edgeRenderer = new BaseEdgeRenderer(_drawingSurface.graphics);
+            _edgeRenderer = new BaseEdgeRenderer(this);
             
             /* initialize the canvas, we are our own canvas obviously */
             _canvas = this;
-            
-            _canvas.addChild(_drawingSurface);
             
             _canvas.horizontalScrollPolicy = "off";
             _canvas.verticalScrollPolicy = "off"; 
@@ -574,6 +590,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
                 _prevNodeIDsWithinDistanceLimit = null;
                 _noNodesWithinDistance = 0;
                 
+                _edgeRenderer.clear();
+                
                 /* this may have been removed already before */
                 if(_layouter) {
                     _layouter.resetAll();
@@ -612,24 +630,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
          * */
         public function get graph():IGraph {
             return _graph;
-        }
-        
-        /**
-         * @inheritDoc
-         * */
-        public function get edgeDrawGraphics():Graphics {
-            if(_drawingSurface) {
-                return _drawingSurface.graphics;
-            } else {
-                return null;
-            }
-        }
-        
-        /**
-         * @inheritDoc
-         * */
-        public function get drawingSurface():UIComponent {
-            return _drawingSurface;
         }
         
         /**
@@ -1038,77 +1038,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
          * */
         public function clearHistory():void {
             _currentVNodeHistory = new Array();
-        }
-        
-        
-        
-        /**
-         * @inheritDoc
-         * */
-        public function calcNodesBoundingBox():Rectangle {
-            
-            var children:Array;
-            var result:Rectangle;
-            
-            /* get all children of our canvas, these should only
-            * be node views and the edge drawing surface. */
-            children = _canvas.getChildren();
-            
-            /* init the rectangle with some large values. 
-            * Originally I wanted to use Number.MAX_VALUE / Number.MIN_VALUE but
-            * ran into serious numerical problems, thus 
-            * we use +/- 999999 for now, although this is 
-            * more like a hack.
-            * Note that the coordinates are reversed, i.e. the origin of the rectangle
-            * has been pushed to the far bottom right, and the height and width
-            * are negative */
-            result = new Rectangle(999999, 999999, -999999, -999999);
-            
-            //LogUtil.debug(_LOG, "THIS CANVAS currently HAS:"+children.length+" children!!");
-            
-            /* if there are no children at all, there may be something
-            * wrong as it should at least contain the drawing surface */
-            if(children.length == 0) {
-                LogUtil.warn(_LOG, "Canvas has no children, not even the drawing surface!");
-                return null;
-            }
-            
-            /* The children should only be the visible node's views and
-            * the drawing surface for the edges, so we
-            * add a safeguard here to see of these are actually much more */
-            
-            /* since the edge labels were introduced this no longer works
-            * because we also need to count each displayed edge label
-            * but we have no counter yet for that, so the check is commented
-            * for now
-            if(children.length > _noVisibleVNodes + 1) {
-            throw Error("Children are more than visible nodes plus drawing surface");
-            }
-            */
-            
-            /* now walk through all children, which are UIComponents
-            * and not our drawing surface and expand the result rectangle */
-            for(var i:int = 0;i < children.length; ++i) {
-                
-                var view:UIComponent = (children[i] as UIComponent);
-                
-                /* only consider currently visible views */
-                if(view.visible) {
-                    if(view != _drawingSurface) {
-                        result.left = Math.min(result.left, view.x);
-                        result.right = Math.max(result.right, view.x + view.width);
-                        result.top = Math.min(result.top, view.y);
-                        result.bottom = Math.max(result.bottom, view.y+view.height);
-                    } else {
-                        if(children.length == 1) {
-                            /* only child is the drawing surface, we return an empty Rectangle
-                            * anchored in the middle */
-                            return new Rectangle(_canvas.width / 2, _canvas.height / 2, 0, 0);
-                        }
-                    }
-                }
-            }
-            return result;
         }
         
         /** 
@@ -1608,6 +1537,10 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             * thus freeing it for garbage collection */
         }
         
+        public function getEdgeContext(vedge:IVisualEdge):UIComponent {
+            
+            return _edgeContexts[vedge];
+        }
         
         /**
          * Creates a VEdge from a graph Edge.
@@ -1646,6 +1579,18 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             n1 = e.node1;
             n2 = e.node2;
             
+            var edgeContext:UIComponent = new UIComponent();
+            edgeContext.percentWidth = 100;
+            edgeContext.percentHeight = 100;
+            //edgeContext. = vedge;
+            edgeContext.useHandCursor = true;
+            edgeContext.buttonMode = true;
+            edgeContext.mouseChildren = false;
+            edgeContext.addEventListener(MouseEvent.ROLL_OVER,edgeRollOver);
+            edgeContext.addEventListener(MouseEvent.ROLL_OUT,edgeRollOut);
+            edgeContext.addEventListener(MouseEvent.CLICK,edgeClicked);
+            addChild(edgeContext);
+
             /* if both nodes are visible, the edge should
             * be made visible, which may also create a label
             */
@@ -1655,8 +1600,53 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             
             /* add to tracking hash */
             _vedges[vedge] = vedge;
-            
+            _edgeContexts[vedge] = edgeContext;
+            _reverseEdgeContexts[edgeContext] = vedge;
             return vedge;
+        }
+        
+        protected function edgeClicked(e:MouseEvent):void
+        {
+            var t:UIComponent = e.target as UIComponent;
+            if(t == null)
+                return;
+            
+            var edge:IVisualEdge = _reverseEdgeContexts[t];
+            
+            if(edge == null)
+                return;
+            
+            dispatchEvent(new VisualEdgeEvent(VisualEdgeEvent.CLICK,edge.edge,e.ctrlKey));
+        }
+        
+        protected function edgeRollOver(e:MouseEvent):void
+        {
+            CursorManager.removeAllCursors();
+            var t:UIComponent = e.target as UIComponent;
+            if(t == null)
+                return;
+            
+            var edge:IVisualEdge = _reverseEdgeContexts[t];
+            
+            if(edge == null)
+                return;
+            
+            dispatchEvent(new VisualEdgeEvent(VisualEdgeEvent.ROLL_OVER,edge.edge,e.ctrlKey));
+        }
+        
+        protected function edgeRollOut(e:MouseEvent):void
+        {
+            CursorManager.setCursor(HAND_CURSOR,3);
+            var t:UIComponent = e.target as UIComponent;
+            if(t == null)
+                return;
+            
+            var edge:IVisualEdge = _reverseEdgeContexts[t];
+            
+            if(edge == null)
+                return;
+            
+            dispatchEvent(new VisualEdgeEvent(VisualEdgeEvent.ROLL_OUT,edge.edge,e.ctrlKey));
         }
         
         /**
@@ -1677,8 +1667,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             /* remove the reference from the real edge */
             ve.edge.vedge = null;
             
+            var c:UIComponent = _edgeContexts[ve];
             /* remove from tracking hash */
             delete _vedges[ve];
+            delete _edgeContexts[ve];
+            delete _reverseEdgeContexts[c];
             
             /* that should actually do */
         }
@@ -1738,9 +1731,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
                 return;
             }
             
-            /* clear the drawing surface and remove previous
-            * edges */
-            _drawingSurface.graphics.clear();
+            for each(var context:UIComponent in _edgeContexts){
+                context.graphics.clear();
+            }
             
             /* now walk through all currently visible egdes */
             for each(vedge in _visibleVEdges) {
@@ -1934,7 +1927,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             * this can create problems, we have to see where we
             * check for all children
             * Add after the edges layer, but below all other elements such as nodes */
-            _canvas.addChildAt(mycomponent, 1);
+            _canvas.addChild(mycomponent);
             
             /* register it the view in the vedge and the mapping */
             /*

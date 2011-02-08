@@ -26,13 +26,17 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 	
 	import flash.display.Graphics;
 	import flash.geom.Point;
+	import flash.utils.Dictionary;
 	
 	import mx.core.UIComponent;
 	
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IEdgeRenderer;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualEdge;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
 	import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+	import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 	import org.un.cava.birdeye.ravis.utils.Geometry;
+	import org.un.cava.birdeye.ravis.utils.GraphicsWrapper;
 	import org.un.cava.birdeye.ravis.utils.LogUtil;
 
 	/**
@@ -43,35 +47,34 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		
 		private static const _LOG:String = "graphLayout.visual.edgeRenderers.BaseEdgeRenderer";
 		
-		/* since the graphics object would hardly change
-		 * we can implement it as an attribute
-		 */
-		
-		protected var _g:Graphics;
-		
-		/**
-		 * Constructor sets the graphics object (required).
-		 * @param g The graphics object to be used.
-		 * */
-		public function BaseEdgeRenderer(g:Graphics) {
-			_g = g;
+        private var _edgeMap:Dictionary;
+        
+        private var _graph:IVisualGraph;
+        
+        public var fuzzFactor:Number = 8;
+        
+		public function BaseEdgeRenderer(graph:IVisualGraph) {
+            _graph = graph;
+            _edgeMap = new Dictionary;
 		}
-		
-		/**
-		 * @inheritDoc
-		 * */
-		public function get graphics():Graphics {
-			return _g;
-		}
-		
-		/**
-		 * @private
-		 * */
-		public function set graphics(g:Graphics):void {
-			_g = g;
-		}
-		
-		
+	    
+        public function get graph():IVisualGraph { 
+            return _graph; 
+        }
+        
+        public function clear():void {
+            _edgeMap = new Dictionary;
+        }
+        
+        protected function graphicsForEdge(vedge:IVisualEdge):GraphicsWrapper {
+            
+            if(_edgeMap[vedge] == null)
+                _edgeMap[vedge] = new GraphicsWrapper(_graph.getEdgeContext(vedge).graphics);
+            
+            _edgeMap[vedge].fuzzFactor = fuzzFactor
+            return _edgeMap[vedge];
+        }
+        
 		/**
 		 * The draw function, i.e. the main function to be used.
 		 * Draws a straight line from one node of the edge to the other.
@@ -85,20 +88,20 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 			var fromNode:IVisualNode = vedge.edge.node1.vnode;
 			var toNode:IVisualNode = vedge.edge.node2.vnode;
 			
+            var g:GraphicsWrapper = graphicsForEdge(vedge);
 			/* apply the line style */
 			applyLineStyle(vedge);
 			
 			/* now we actually draw */
-			_g.beginFill(uint(vedge.lineStyle.color));
-			_g.moveTo(fromNode.viewCenter.x, fromNode.viewCenter.y);			
-			_g.lineTo(toNode.viewCenter.x, toNode.viewCenter.y);
-			_g.endFill();
+			g.beginFill(uint(vedge.lineStyle.color));
+			g.moveTo(fromNode.viewCenter.x, fromNode.viewCenter.y);			
+			g.lineTo(toNode.viewCenter.x, toNode.viewCenter.y);
+			g.endFill();
 				
 			/* if the vgraph currently displays edgeLabels, then
 			 * we need to update their coordinates */
 			if(vedge.vgraph.displayEdgeLabels) {
 				vedge.setEdgeLabelCoordinates(labelCoordinates(vedge));
-				//LogUtil.debug(_LOG, "BER: drawing edgelabel at:"+labelCoordinates(vedge).toString());
 			}
 		}
 		
@@ -121,9 +124,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 		 * @param ve The VisualEdge object that the line style is taken from.
 		 * */
 		public function applyLineStyle(ve:IVisualEdge):void {
-			/* apply the style to the drawing */
+			
+            var g:GraphicsWrapper = graphicsForEdge(ve);
+            
 			if(ve.lineStyle != null) {
-				_g.lineStyle(
+				g.lineStyle(
 					Number(ve.lineStyle.thickness),
 					uint(ve.lineStyle.color),
 					Number(ve.lineStyle.alpha),
@@ -135,17 +140,5 @@ package org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers {
 				);
 			}
 		}
-		
-		/**
-		 * This is a helper function for debugging, it marks
-		 * the given spot with a small circle.
-		 * @param p The location to be marked given as a Point.
-		 * */
-		public function markPoint(p:Point):void {
-			//_g.beginFill(0);
-			_g.drawCircle(p.x,p.y,10);
-			//_g.endFill();
-		}
-		
 	}
 }

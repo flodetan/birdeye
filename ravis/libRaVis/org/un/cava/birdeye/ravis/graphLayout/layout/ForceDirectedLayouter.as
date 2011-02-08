@@ -562,7 +562,7 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			
 			// TO-DO: Should it be called here or with actual scrolling? How often?
 			/* bounding box of nodes */
-			_viewbounds = _vgraph.calcNodesBoundingBox();
+			_viewbounds = bounds;
 			
 			/* the viewbounds describe the current bounding box of
 			 * all nodes */

@@ -128,7 +128,7 @@ package org.un.cava.birdeye.ravis.utils {
 		 * O = [centerX, centerY]<br>
 		 * P = [startX, startY]<br>
 		 */
-		public static function drawArc(g:Graphics, angleDelta:Number,
+		public static function drawArc(g:GraphicsWrapper, angleDelta:Number,
 									  centerX:Number, centerY:Number,
 									  startX:Number, startY:Number):void {
 			
