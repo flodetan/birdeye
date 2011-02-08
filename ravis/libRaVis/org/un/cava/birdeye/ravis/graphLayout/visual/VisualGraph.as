@@ -520,7 +520,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             this.clipContent = true;
             
             /* add event handlers for background drag/drop i.e. scrolling */
-            this.addEventListener(MouseEvent.MOUSE_DOWN,backgroundDragBegin);
+            this.addEventListener(MouseEvent.MOUSE_DOWN,backgroundDragBegin,false, int.MIN_VALUE);
             this.addEventListener(MouseEvent.MOUSE_MOVE,mouseMoveHandler);
             this.addEventListener(MouseEvent.ROLL_OVER,rollOverHandler);
             this.addEventListener(MouseEvent.ROLL_OUT,rollOutHandler); 
@@ -1635,6 +1635,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
         
         protected function edgeClicked(e:MouseEvent):void
         {
+            e.stopImmediatePropagation();
+            _backgroundDragInProgress = false;
             var t:UIComponent = e.target as UIComponent;
             if(t == null)
                 return;
@@ -1644,7 +1646,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             if(edge == null)
                 return;
             
-            dispatchEvent(new VisualEdgeEvent(VisualEdgeEvent.CLICK,edge.edge,e.ctrlKey));
+            dispatchEvent(new VisualEdgeEvent(VisualEdgeEvent.CLICK,edge,e.ctrlKey));
         }
         
         protected function edgeRollOver(e:MouseEvent):void
@@ -1659,7 +1661,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             if(edge == null)
                 return;
             
-            dispatchEvent(new VisualEdgeEvent(VisualEdgeEvent.ROLL_OVER,edge.edge,e.ctrlKey));
+            dispatchEvent(new VisualEdgeEvent(VisualEdgeEvent.ROLL_OVER,edge,e.ctrlKey));
         }
         
         protected function edgeRollOut(e:MouseEvent):void
@@ -1674,7 +1676,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
             if(edge == null)
                 return;
             
-            dispatchEvent(new VisualEdgeEvent(VisualEdgeEvent.ROLL_OUT,edge.edge,e.ctrlKey));
+            dispatchEvent(new VisualEdgeEvent(VisualEdgeEvent.ROLL_OUT,edge,e.ctrlKey));
         }
         
         /**
@@ -2235,7 +2237,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
          * */
         protected function backgroundDragBegin(event:MouseEvent):void {
             
-            var mycomponent:UIComponent;
+            var mycomponent:UIComponent = event.target as UIComponent;
+            
+            if(_edgeViewToVEdgeMap[mycomponent] != null ||
+               _edgeLabelViewToVEdgeMap[mycomponent] != null ||
+               _nodeViewToVNodeMap[mycomponent] != null)
+                return;
+            
             const mpoint:Point = globalMousePosition();
             
             /* if there is an animation in progress, we ignore
