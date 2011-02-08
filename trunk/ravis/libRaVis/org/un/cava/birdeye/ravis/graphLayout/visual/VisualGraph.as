@@ -1029,11 +1029,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
          * @private
          * */
         public function set scale(s:Number):void {
-                        
+                        
             var w:Number = width - width/s;
             var h:Number = height - height/s;
             
-            //the scroll takes care of the refresh            
+            //the scroll takes care of the refresh            
             scroll(-w/2 - _origin.x ,-h/2 - _origin.y, false);
             
             nodeLayer.scaleX = s;
