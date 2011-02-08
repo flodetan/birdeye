@@ -57,21 +57,17 @@ LEVEL 4
 	<mx:Script>
 		<![CDATA[
 
-       		import org.un.cava.birdeye.ravis.graphLayout.data.INode;
-			import org.un.cava.birdeye.ravis.graphLayout.data.IGraph;
-			import org.un.cava.birdeye.ravis.graphLayout.data.Graph;			
-			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualNode;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualGraph;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.IEdgeRenderer;
-			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
-			import org.un.cava.birdeye.ravis.graphLayout.layout.ConcentricRadialLayouter;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedBalloonEdgeRenderer;
-			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
-			
-			// These are the item renderers
-			import renderers.nodes.mxml.eventNodeRenderer;
-			import renderers.edgelabels.mxml.shapeEdgeLabelRenderer;
+       		import org.un.cava.birdeye.ravis.graphLayout.data.Graph;
+       		import org.un.cava.birdeye.ravis.graphLayout.data.IGraph;
+       		import org.un.cava.birdeye.ravis.graphLayout.layout.ConcentricRadialLayouter;
+       		import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
+       		import org.un.cava.birdeye.ravis.graphLayout.visual.IEdgeRenderer;
+       		import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
+       		import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
+       		import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedBalloonEdgeRenderer;
+       		
+       		import renderers.edgelabels.mxml.shapeEdgeLabelRenderer;
+       		import renderers.nodes.mxml.eventNodeRenderer;
 
 			// graph datastructure object
 			private var graph:IGraph;
@@ -107,7 +103,7 @@ LEVEL 4
 				layouter.autoFitEnabled = true;
 				
 				/* set the layouter */
-				vgraph.edgeRenderer = new DirectedBalloonEdgeRenderer(vgraph.edgeDrawGraphics);
+				vgraph.edgeRendererFactory = new ClassFactory(DirectedBalloonEdgeRenderer);
 				
 				/* set the visibility limit options, default 2 
 				* a.k.a degrees of separation */
