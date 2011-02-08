@@ -118,7 +118,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.nodeRenderers
 		
 		private function editNodeItemClick(event:ContextMenuEvent):void
 		{
-			var popUp:NodeProperty = PopUpManager.createPopUp(Application.application as DisplayObject, NodeProperty, true) as NodeProperty;
+			var popUp:NodeProperty = PopUpManager.createPopUp(root, NodeProperty, true) as NodeProperty;
 			PopUpManager.centerPopUp(popUp);
 			popUp.data = IVisualNode(this.data).node;
 			
