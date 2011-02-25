@@ -137,8 +137,11 @@
 					return;
 				}
 				
-				elrClassName = ObjectUtil.getClassInfo(_vgraph.edgeLabelRenderer).name;
-				elrClassName = elrClassName.replace(/org.un.cava.birdeye.ravis.components.renderers.edges::/,"");
+                if(!_vgraph || !_vgraph.edgeLabelRenderer)
+                    return;
+                
+				elrClassName = ObjectUtil.getClassInfo(_vgraph.edgeLabelRenderer.newInstance()).name;
+				elrClassName = elrClassName.replace(/org.un.cava.birdeye.ravis.components.renderers.edgeLabels::/,"");
 				
 				switch(elrClassName) {
 					case "DefaultEdgeLabelRenderer":
