@@ -1457,7 +1457,6 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			_clippingMask.graphics.drawRect(0,0,unscaledWidth,unscaledHeight);
 			_clippingMask.graphics.endFill();
 			
-			
 			/* now add part to redraw edges */
 			if(_layouter) {
 				
@@ -1957,9 +1956,9 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * @param ve The edge to replace/add a view object.
 		 * @return The created view object.
 		 * */
-		protected function createVEdgeView(ve:IVisualEdge):UIComponent {
+		protected function createVEdgeView(ve:IVisualEdge):IEdgeRenderer {
 			
-			var mycomponent:UIComponent = null;
+			var mycomponent:IEdgeRenderer = null;
 			
 			if(_edgeRendererFactory != null) {
 				mycomponent = edgeRendererFactory.newInstance();
@@ -1971,8 +1970,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			mycomponent.percentWidth = 100;
 			mycomponent.percentHeight = 100;
 			
-			mycomponent.useHandCursor = true;
-			mycomponent.buttonMode = true;
+			UIComponent(mycomponent).useHandCursor = true;
+            UIComponent(mycomponent).buttonMode = true;
 			
 			mycomponent.addEventListener(MouseEvent.CLICK,edgeClicked,false,0,true);
 			mycomponent.addEventListener(MouseEvent.ROLL_OVER,edgeRollOver,false,0,true);
@@ -1992,7 +1991,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			* this can create problems, we have to see where we
 			* check for all children
 			* Add after the edges layer, but below all other elements such as nodes */
-			edgeLayer.addChild(mycomponent);
+			edgeLayer.addChild(DisplayObject(mycomponent));
 			
 			ve.edgeView = mycomponent;
 			_edgeViewToVEdgeMap[mycomponent] = ve;
@@ -2008,13 +2007,13 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * Remove a "view" object (UIComponent) for the given edge.
 		 * @param component The UIComponent to be removed.
 		 * */
-		protected function removeVEdgeView(component:UIComponent):void {
+		protected function removeVEdgeView(component:IEdgeRenderer):void {
 			
 			var ve:IVisualEdge;
 			
 			/* remove the component from it's parent (which should be the canvas) */
 			if(component.parent != null) {
-				component.parent.removeChild(component);
+				component.parent.removeChild(DisplayObject(component));
 			}
 			
 			/* get the associated VEdge and remove the view from it
@@ -2217,7 +2216,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 			
 			_layouter.dragContinue(event, myvnode);
 			
-			refresh();
+			//refresh();
 		}
 		
 		/**
@@ -2712,7 +2711,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		protected function setEdgeVisibility(ve:IVisualEdge, visible:Boolean):void {
 			
 			var labelComp:UIComponent;
-			var edgeComp:UIComponent;
+			var edgeComp:IEdgeRenderer;
 			
 			/* was there actually a change, if not issue a warning */
 			if(ve.isVisible == visible) {

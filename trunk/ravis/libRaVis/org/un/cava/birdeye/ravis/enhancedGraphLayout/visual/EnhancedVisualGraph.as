@@ -386,7 +386,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 					_viewToVEdgeRendererMap[toControl] = mycomponent;
 					
 					if(ve.edgeView)
-						ve.edgeView.invalidateDisplayList();
+						ve.edgeView.render();
 				}
 			}
 			

@@ -28,9 +28,11 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
     import flash.events.IEventDispatcher;
     import flash.geom.Point;
     
+    import mx.collections.ArrayCollection;
     import mx.core.IDataRenderer;
     import mx.core.UIComponent;
     
+    import org.un.cava.birdeye.ravis.graphLayout.data.IEdge;
     import org.un.cava.birdeye.ravis.graphLayout.data.INode;
     import org.un.cava.birdeye.ravis.utils.LogUtil;
     import org.un.cava.birdeye.ravis.utils.events.VGraphEvent;
@@ -336,9 +338,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
         public function commit():void {
             
             if(view == null)
-            {
                 return;
-            }
             
             if(view.initialized == false)
             {
@@ -357,6 +357,8 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
                 this.viewY = _y;
             }
             
+            updateReleatedEdges();
+            
             if(this.view is IEventDispatcher) {
                 (this.view as IEventDispatcher).dispatchEvent(new VGraphEvent(VGraphEvent.VNODE_UPDATED));
             }
@@ -369,9 +371,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
         public function refresh():void {
             
             if(view == null)
-            {
                 return;
-            }
             
             if(view.initialized == false)
             {
@@ -387,6 +387,37 @@ package org.un.cava.birdeye.ravis.graphLayout.visual
                 _x = this.viewX;
                 _y = this.viewY;
             }
+            
+            updateReleatedEdges();
+
+        }
+        
+        public function updateReleatedEdges():void
+        {
+            for each(var edge:IVisualEdge in vedges)
+            {
+                edge.edgeView.render();
+            }
+        }
+        
+        public function get vedges():ArrayCollection
+        {
+            var edge:IEdge;
+            var retVal:ArrayCollection = new ArrayCollection();
+            
+            for each(edge in node.inEdges)
+            {
+                if(!retVal.contains(edge.vedge))
+                    retVal.addItem(edge.vedge);
+            }
+            
+            for each(edge in node.outEdges)
+            {
+                if(!retVal.contains(edge.vedge))
+                    retVal.addItem(edge.vedge);
+            }
+            
+            return retVal;
         }
     }
 }
