@@ -328,7 +328,7 @@ package org.un.cava.birdeye.ravis.enhancedGraphLayout.visual
 			
 			if((_nodeLabelRendererFactory != null) && 
 				(vn is IEnhancedVisualNode) && 
-				(_edgeRendererFactory is IControllableEdgeRenderer)) {
+				(_edgeRendererFactory.newInstance() is IControllableEdgeRenderer)) {
 				mylabelcomponent = _nodeLabelRendererFactory.newInstance();
 				/* assigns the edge to the IDataRenderer part of the view
 				* this is important to access the data object of the VEdge
