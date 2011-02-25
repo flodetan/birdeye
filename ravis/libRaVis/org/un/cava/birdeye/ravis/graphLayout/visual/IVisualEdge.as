@@ -74,7 +74,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * */
 		function set lineStyle(ls:Object):void;
         
-        function get edgeView():UIComponent;
-        function set edgeView(value:UIComponent):void
+        function get edgeView():IEdgeRenderer;
+        function set edgeView(value:IEdgeRenderer):void
 	}
 }
