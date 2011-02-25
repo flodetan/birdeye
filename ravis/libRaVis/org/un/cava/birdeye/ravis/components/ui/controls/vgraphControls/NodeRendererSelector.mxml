@@ -166,7 +166,9 @@
 					return;
 				}
 				
-				nlrClassName = ObjectUtil.getClassInfo(_vgraph.itemRenderer).name;
+                if(!_vgraph || !_vgraph.itemRenderer)
+                    return;
+				nlrClassName = ObjectUtil.getClassInfo(_vgraph.itemRenderer.newInstance()).name;
 				nlrClassName = nlrClassName.replace(/org.un.cava.birdeye.ravis.components.renderers.nodes::/,"");
 				
 				switch(nlrClassName) {

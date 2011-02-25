@@ -467,6 +467,14 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 		 * */
 		private function scrollToFit():void {
 			
+            _viewbounds = _vgraph.calcNodesBoundingBox();
+            
+            if(isNaN(_viewbounds.left) ||
+                isNaN(_viewbounds.right) ||
+                isNaN(_viewbounds.top) ||
+                isNaN(_viewbounds.bottom))
+                return;
+            
 			/* the viewbounds describe the current bounding box of
 			 * all nodes */
 			if(_viewbounds) {
@@ -564,6 +572,12 @@ package org.un.cava.birdeye.ravis.graphLayout.layout {
 			/* bounding box of nodes */
 			_viewbounds = _vgraph.calcNodesBoundingBox();
 			
+            if(isNaN(_viewbounds.left) ||
+                isNaN(_viewbounds.right) ||
+                isNaN(_viewbounds.top) ||
+                isNaN(_viewbounds.bottom))
+                return;
+            
 			/* the viewbounds describe the current bounding box of
 			 * all nodes */
 			if(_viewbounds) {
