@@ -804,7 +804,7 @@ package org.un.cava.birdeye.ravis.graphLayout.visual {
 		 * @inheritDoc
 		 * */
 		public function get visibleVEdges():Array {
-			return _visibleVNodesList.sortOn("id");
+			return _visibleVEdgesList.sortOn("id");
 		}
 		
 		/**
